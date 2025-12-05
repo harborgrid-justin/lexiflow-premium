@@ -1,0 +1,109 @@
+
+import React, { useState } from 'react';
+import { Filter, Layout, Plus, Loader2 } from 'lucide-react';
+import { Button } from '../common/Button';
+import { SearchToolbar } from '../common/SearchToolbar';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { OppositionSidebar } from './opposition/OppositionSidebar';
+import { OppositionList, OppositionEntity } from './opposition/OppositionList';
+import { OppositionDetail } from './opposition/OppositionDetail';
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+interface OppositionManagerProps {
+  caseId?: string;
+}
+
+export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) => {
+  const { theme } = useTheme();
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedEntity, setSelectedEntity] = useState<OppositionEntity | null>(null);
+  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
+
+  // Performance Engine: useQuery
+  const { data: oppositionData = [], isLoading } = useQuery<OppositionEntity[]>(
+      [STORES.OPPOSITION, caseId || 'all'],
+      () => DataService.warRoom.getOpposition(caseId)
+  );
+
+  const filteredEntities = oppositionData.filter(ent => {
+    const matchesCategory = activeCategory === 'All' || 
+                            (activeCategory === 'Counsel' && (ent.role === 'Lead Counsel' || ent.role === 'Co-Counsel')) ||
+                            (activeCategory === 'Parties' && ent.role === 'Defendant') ||
+                            (activeCategory === 'Experts' && ent.role === 'Opposing Expert');
+    const matchesSearch = ent.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          ent.firm.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const handleSelectEntity = (entity: OppositionEntity) => {
+    setSelectedEntity(entity);
+    setIsInspectorOpen(true);
+  };
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
+
+  return (
+    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+      {/* Header Toolbar */}
+      <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
+        <div className="flex items-center gap-4 flex-1">
+            <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Opposition Intel</h3>
+            <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
+            <SearchToolbar 
+                value={searchTerm} 
+                onChange={setSearchTerm} 
+                placeholder="Search counsel, parties, experts..." 
+                className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
+            />
+        </div>
+        <div className="flex gap-2">
+            <Button variant="secondary" icon={Filter} onClick={() => {}} className="hidden sm:flex">Filter</Button>
+            <Button 
+                variant={isInspectorOpen ? "primary" : "secondary"} 
+                icon={Layout} 
+                onClick={() => setIsInspectorOpen(!isInspectorOpen)}
+                className="hidden sm:flex"
+            >
+                Inspector
+            </Button>
+            <Button variant="primary" icon={Plus}>Add Profile</Button>
+        </div>
+      </div>
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Sidebar */}
+        <OppositionSidebar 
+            activeCategory={activeCategory} 
+            onSelectCategory={setActiveCategory}
+            counts={{
+                all: oppositionData.length,
+                counsel: oppositionData.filter(e => e.role.includes('Counsel')).length,
+                parties: oppositionData.filter(e => e.role === 'Defendant').length,
+                experts: oppositionData.filter(e => e.role === 'Opposing Expert').length
+            }}
+        />
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-hidden flex flex-col relative">
+            <OppositionList 
+                entities={filteredEntities} 
+                onSelect={handleSelectEntity}
+                selectedId={selectedEntity?.id}
+            />
+        </div>
+
+        {/* Right Inspector Panel */}
+        {isInspectorOpen && selectedEntity && (
+            <OppositionDetail 
+                entity={selectedEntity} 
+                onClose={() => setIsInspectorOpen(false)}
+            />
+        )}
+      </div>
+    </div>
+  );
+};

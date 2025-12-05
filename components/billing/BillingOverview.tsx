@@ -1,0 +1,174 @@
+
+import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { DollarSign, AlertCircle, Users, Calculator, Briefcase, TrendingUp } from 'lucide-react';
+import { DataService } from '../../services/dataService';
+import { Card } from '../common/Card';
+import { MetricCard, Currency } from '../common/Primitives';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { Client } from '../../types';
+import { useQuery } from '../../services/queryClient';
+
+interface BillingOverviewProps {
+  onNavigate?: (view: string) => void;
+}
+
+export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
+  const { theme, mode } = useTheme();
+  
+  // Enterprise Data Access: Parallel Queries
+  const { data: wipData = [] } = useQuery(
+      ['billing', 'wipStats'],
+      DataService.billing.getWIPStats
+  );
+  
+  const { data: realizationData = [] } = useQuery(
+      ['billing', 'realization'],
+      DataService.billing.getRealizationStats
+  );
+  
+  const { data: topClients = [] } = useQuery(
+      ['billing', 'topAccounts'],
+      DataService.billing.getTopAccounts
+  );
+
+  const totalWip = wipData.reduce((acc: number, curr: any) => acc + curr.wip, 0);
+
+  // Chart Colors based on Theme
+  const chartColors = {
+    billed: mode === 'dark' ? '#334155' : '#cbd5e1', // Slate 200/700
+    wip: '#3b82f6', // Blue 600
+    collected: '#10b981', // Emerald 500
+    writeoff: '#ef4444', // Red 500
+    grid: mode === 'dark' ? '#334155' : '#e2e8f0',
+    text: mode === 'dark' ? '#94a3b8' : '#64748b'
+  };
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      {/* KPI Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MetricCard
+            label="Total WIP (Unbilled)"
+            value={<Currency value={totalWip} />}
+            icon={DollarSign}
+            trend="+12% MoM"
+            trendUp={true}
+            className="border-l-4 border-l-blue-600"
+        />
+        <MetricCard
+            label="Realization Rate"
+            value="92.4%"
+            icon={Calculator}
+            trend="Target: 90%"
+            trendUp={true}
+            className="border-l-4 border-l-emerald-500"
+        />
+        <MetricCard
+            label="Outstanding (60+ Days)"
+            value={<Currency value={12450} />}
+            icon={AlertCircle}
+            trend="3 Invoices Overdue"
+            trendUp={false}
+            className="border-l-4 border-l-rose-500"
+        />
+      </div>
+
+      {/* Main Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card title="WIP vs Billed (Top Clients)" subtitle="Revenue potential by client">
+          <div className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartColors.grid}/>
+                <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    fontSize={12} 
+                    tick={{fill: chartColors.text}} 
+                    dy={10}
+                />
+                <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    fontSize={12} 
+                    tick={{fill: chartColors.text}}
+                    tickFormatter={(val) => `$${val/1000}k`}
+                />
+                <Tooltip 
+                    cursor={{fill: mode === 'dark' ? '#1e293b' : '#f8fafc'}}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                />
+                <Legend iconType="circle" />
+                <Bar dataKey="billed" stackId="a" fill={chartColors.billed} name="Billed" radius={[0, 0, 4, 4]} />
+                <Bar dataKey="wip" stackId="a" fill={chartColors.wip} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        <Card title="Realization Breakdown" subtitle="Collection efficiency analysis">
+            <div className="h-72 flex flex-col items-center justify-center relative">
+                <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                        <Pie 
+                            data={realizationData} 
+                            innerRadius={70} 
+                            outerRadius={100} 
+                            paddingAngle={5} 
+                            dataKey="value"
+                            stroke="none"
+                        >
+                            {realizationData.map((e: any, index: number) => (
+                                <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartColors.collected : chartColors.writeoff} />
+                            ))}
+                        </Pie>
+                        <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}/>
+                        <Legend verticalAlign="bottom" height={36} iconType="circle"/>
+                    </PieChart>
+                </ResponsiveContainer>
+                {/* Center Text */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center -mt-4">
+                    <p className={cn("text-3xl font-bold", theme.text.primary)}>92%</p>
+                    <p className={cn("text-xs uppercase", theme.text.tertiary)}>Collected</p>
+                </div>
+            </div>
+        </Card>
+      </div>
+
+      {/* Top Accounts */}
+      <div className={cn("rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+            <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
+                <Users className={cn("h-5 w-5 mr-2", theme.primary.text)}/> Top Revenue Accounts
+            </h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x dark:divide-slate-700 divide-slate-200">
+             {topClients.map((client: any) => (
+                 <div 
+                    key={client.id} 
+                    className={cn("flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer")}
+                    onClick={() => onNavigate && onNavigate('accounts')}
+                 >
+                    <div className="flex items-center gap-3">
+                        <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm bg-blue-100 text-blue-700")}>
+                            {client.name.substring(0, 2)}
+                        </div>
+                        <div>
+                            <p className={cn("font-bold text-sm", theme.text.primary)}>{client.name}</p>
+                            <p className={cn("text-xs", theme.text.secondary)}>{client.industry}</p>
+                        </div>
+                    </div>
+                    <div className="text-right">
+                        <p className={cn("font-mono font-bold text-sm", theme.text.primary)}><Currency value={client.totalBilled} hideSymbol={false}/></p>
+                        <span className={cn("text-[10px] font-bold text-green-600")}>Active</span>
+                    </div>
+                 </div>
+             ))}
+        </div>
+      </div>
+    </div>
+  );
+};

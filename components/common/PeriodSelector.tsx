@@ -1,0 +1,54 @@
+
+import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
+export interface PeriodOption {
+  value: string;
+  label: string;
+}
+
+interface PeriodSelectorProps {
+  periods?: PeriodOption[];
+  selected: string;
+  onChange: (value: string) => void;
+  className?: string;
+}
+
+const DEFAULT_PERIODS: PeriodOption[] = [
+  { value: '30d', label: 'Last 30 Days' },
+  { value: 'QTD', label: 'Quarter to Date' },
+  { value: 'YTD', label: 'Year to Date' },
+  { value: 'ALL', label: 'All Time' },
+];
+
+export const PeriodSelector: React.FC<PeriodSelectorProps> = ({ 
+  periods = DEFAULT_PERIODS, 
+  selected, 
+  onChange, 
+  className = '' 
+}) => {
+  const { theme } = useTheme();
+
+  return (
+    <div className={cn("inline-flex p-1 rounded-lg border", theme.surface, theme.border.default, className)}>
+      {periods.map((period) => {
+        const isActive = selected === period.value;
+        return (
+          <button
+            key={period.value}
+            onClick={() => onChange(period.value)}
+            className={cn(
+              "px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200",
+              isActive 
+                ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") 
+                : cn("text-slate-500 hover:text-slate-700", `hover:${theme.surfaceHighlight}`)
+            )}
+          >
+            {period.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+};

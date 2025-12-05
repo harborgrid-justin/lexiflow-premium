@@ -1,0 +1,114 @@
+
+import React, { useState, useEffect } from 'react';
+import { ShieldAlert, Eye, EyeOff, Check, AlertTriangle } from 'lucide-react';
+import { Button } from '../../common/Button';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+interface PIIPanelProps {
+  content: string;
+  onApplyRedactions: (redactedContent: string) => void;
+}
+
+interface PIIEntity {
+  id: string;
+  type: 'SSN' | 'Email' | 'Phone' | 'CreditCard';
+  value: string;
+  index: number;
+  ignored: boolean;
+}
+
+export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }) => {
+  const { theme } = useTheme();
+  const [entities, setEntities] = useState<PIIEntity[]>([]);
+  const [isScanning, setIsScanning] = useState(true);
+
+  useEffect(() => {
+    // Simulate PII Scan with regex
+    const scan = () => {
+        const findings: PIIEntity[] = [];
+        // Mock findings based on content patterns (using simple heuristics for demo)
+        const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/g;
+        const phoneRegex = /\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g;
+        
+        let match;
+        while ((match = emailRegex.exec(content)) !== null) {
+            findings.push({ id: `pii-${match.index}`, type: 'Email', value: match[0], index: match.index, ignored: false });
+        }
+        while ((match = phoneRegex.exec(content)) !== null) {
+            findings.push({ id: `pii-${match.index}`, type: 'Phone', value: match[0], index: match.index, ignored: false });
+        }
+
+        // Add some mock SSNs if none found just for demo visual
+        if (findings.length === 0) {
+            findings.push({ id: 'mock-1', type: 'SSN', value: '***-**-1234', index: 0, ignored: false });
+            findings.push({ id: 'mock-2', type: 'CreditCard', value: '****-****-****-4242', index: 0, ignored: false });
+        }
+
+        setEntities(findings);
+        setIsScanning(false);
+    };
+    setTimeout(scan, 1000);
+  }, [content]);
+
+  const handleToggleIgnore = (id: string) => {
+      setEntities(prev => prev.map(e => e.id === id ? { ...e, ignored: !e.ignored } : e));
+  };
+
+  const handleRedactAll = () => {
+      // In a real app, this would perform string replacement on the actual content
+      // For the demo, we just trigger the callback
+      onApplyRedactions("Redacted Content");
+  };
+
+  return (
+    <div className={cn("w-80 border-l flex flex-col bg-slate-50", theme.border.default)}>
+        <div className="p-4 border-b flex justify-between items-center bg-white">
+            <h3 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
+                <ShieldAlert className="h-4 w-4 mr-2 text-amber-600"/> PII Detection
+            </h3>
+            <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">
+                {entities.filter(e => !e.ignored).length} Found
+            </span>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {isScanning ? (
+                <div className="text-center py-8 text-slate-400">
+                    Scanning document...
+                </div>
+            ) : (
+                entities.map(entity => (
+                    <div key={entity.id} className={cn("p-3 rounded border bg-white transition-opacity", entity.ignored ? "opacity-50" : "shadow-sm", theme.border.default)}>
+                        <div className="flex justify-between items-start mb-1">
+                            <span className={cn("text-[10px] font-bold uppercase tracking-wide px-1.5 rounded border", 
+                                entity.type === 'SSN' ? "bg-red-50 text-red-700 border-red-100" : 
+                                entity.type === 'CreditCard' ? "bg-purple-50 text-purple-700 border-purple-100" : 
+                                "bg-blue-50 text-blue-700 border-blue-100"
+                            )}>
+                                {entity.type}
+                            </span>
+                            <button onClick={() => handleToggleIgnore(entity.id)} className="text-slate-400 hover:text-slate-600">
+                                {entity.ignored ? <EyeOff className="h-4 w-4"/> : <Eye className="h-4 w-4"/>}
+                            </button>
+                        </div>
+                        <p className={cn("font-mono text-sm", entity.ignored ? "line-through text-slate-400" : theme.text.primary)}>
+                            {entity.value}
+                        </p>
+                    </div>
+                ))
+            )}
+        </div>
+
+        <div className="p-4 border-t bg-white space-y-3">
+            <div className="flex items-start gap-2 text-xs text-slate-500">
+                <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0"/>
+                <p>Redaction is permanent. A new version of the document will be created.</p>
+            </div>
+            <Button variant="primary" className="w-full bg-slate-900 hover:bg-slate-800" onClick={handleRedactAll} disabled={isScanning}>
+                Redact Selected
+            </Button>
+        </div>
+    </div>
+  );
+};

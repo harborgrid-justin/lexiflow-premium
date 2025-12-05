@@ -1,0 +1,131 @@
+
+import React from 'react';
+import { Modal } from '../common/Modal';
+import { Button } from '../common/Button';
+import { Badge } from '../common/Badge';
+import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag } from 'lucide-react';
+import { DocketEntry } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
+interface DocketEntryModalProps {
+  entry: DocketEntry | null;
+  onClose: () => void;
+  onViewOnTimeline: (caseId: string) => void;
+  renderLinkedText: (text: string) => React.ReactNode;
+  isOrbital?: boolean;
+}
+
+export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({ 
+  entry, onClose, onViewOnTimeline, renderLinkedText, isOrbital = false 
+}) => {
+  const { theme } = useTheme();
+  
+  if (!entry) return null;
+
+  const content = (
+      <div className="p-6">
+        <div className={cn("flex justify-between items-start mb-6 border-b pb-4", theme.border.light)}>
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className={cn("text-xl font-bold", theme.text.primary)}>Internal Seq #{entry.sequenceNumber}</span>
+              {entry.pacerSequenceNumber && (
+                  <span className={cn("text-sm font-mono px-2 py-0.5 border rounded bg-slate-50 text-slate-600")}>
+                      PACER #{entry.pacerSequenceNumber}
+                  </span>
+              )}
+              <Badge variant="neutral">{entry.type}</Badge>
+              {entry.isSealed && <Badge variant="error"><Lock className="h-3 w-3 mr-1"/> Sealed</Badge>}
+            </div>
+            <p className={cn("text-sm", theme.text.secondary)}>Filed on {entry.date} by <strong>{entry.filedBy}</strong></p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="ghost" icon={Printer}>Print</Button>
+            <Button variant="outline" icon={Download}>Download PDF</Button>
+          </div>
+        </div>
+
+        {/* Structured Data Visualization */}
+        {entry.structuredData && (
+            <div className={cn("mb-6 p-4 rounded-lg border border-blue-100 bg-blue-50/30", theme.border.default)}>
+                <h4 className={cn("text-xs font-bold uppercase mb-3 flex items-center text-blue-700")}>
+                    <Database className="h-3 w-3 mr-2"/> Structured Analysis
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Action</span>
+                        <span className="font-medium text-slate-800">{entry.structuredData.actionType}</span>
+                    </div>
+                    <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Target/Doc</span>
+                        <span className="font-medium text-slate-800">{entry.structuredData.documentTitle}</span>
+                    </div>
+                    <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Verb</span>
+                        <span className="font-medium text-blue-600 bg-blue-50 px-1.5 rounded">{entry.structuredData.actionVerb}</span>
+                    </div>
+                    <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Filer Entity</span>
+                        <span className="font-medium text-slate-800">{entry.structuredData.filer}</span>
+                    </div>
+                </div>
+                {entry.structuredData.additionalText && (
+                    <div className="mt-3 pt-3 border-t border-blue-100">
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Metadata</span>
+                        <p className="text-xs text-slate-600">{entry.structuredData.additionalText}</p>
+                    </div>
+                )}
+            </div>
+        )}
+
+        <div className={cn("p-4 rounded-lg border mb-6", theme.surfaceHighlight, theme.border.default)}>
+          <h4 className={cn("text-sm font-bold mb-2", theme.text.primary)}>Full Text</h4>
+          <p className={cn("text-sm leading-relaxed", theme.text.secondary)}>{renderLinkedText(entry.title)}</p>
+          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description)}</p>}
+        </div>
+
+        {/* Auto-generated Tags or Rules */}
+        <div className="mb-6 flex gap-2">
+            {entry.type === 'Motion' && <span className="text-xs border px-2 py-1 rounded flex items-center gap-1 bg-slate-50"><Tag className="h-3 w-3"/> Needs Response</span>}
+            {entry.type === 'Order' && <span className="text-xs border border-red-200 bg-red-50 text-red-700 px-2 py-1 rounded flex items-center gap-1"><Scale className="h-3 w-3"/> Ruling</span>}
+        </div>
+
+        {entry.triggersDeadlines && entry.triggersDeadlines.length > 0 && (
+          <div className="mb-6">
+            <h4 className={cn("text-sm font-bold mb-3 flex items-center", theme.text.primary)}><Scale className="h-4 w-4 mr-2"/> Rules Engine: Triggered Events</h4>
+            <div className="space-y-2">
+              {entry.triggersDeadlines.map(dl => (
+                <div key={dl.id} className={cn("flex justify-between items-center p-3 border rounded-lg shadow-sm", theme.surface, theme.border.default)}>
+                  <div className="flex items-center gap-3">
+                    <Calendar className={cn("h-5 w-5", dl.status === 'Satisfied' ? theme.status.success.text : theme.status.warning.text)}/>
+                    <div>
+                      <p className={cn("font-bold text-sm", theme.text.primary)}>{dl.title}</p>
+                      <p className={cn("text-xs", theme.text.secondary)}>Pursuant to {dl.ruleReference}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={cn("font-mono text-sm font-bold", theme.text.primary)}>{dl.date}</p>
+                    <span className={cn("text-[10px] uppercase font-bold", dl.status === 'Satisfied' ? theme.status.success.text : theme.status.warning.text)}>{dl.status}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className={cn("flex justify-end pt-4 gap-2 border-t", theme.border.light)}>
+          <Button variant="secondary" onClick={onClose}>Close</Button>
+          <Button variant="primary" icon={ExternalLink} onClick={() => { onClose(); onViewOnTimeline(entry.caseId); }}>View on Timeline</Button>
+        </div>
+      </div>
+  );
+
+  // If Orbital, return just content, otherwise wrap in Modal
+  if (isOrbital) return content;
+
+  return (
+    <Modal isOpen={true} onClose={onClose} title="Docket Entry Details" size="lg">
+      {content}
+    </Modal>
+  );
+};

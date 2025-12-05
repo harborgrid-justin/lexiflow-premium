@@ -1,0 +1,155 @@
+
+import React from 'react';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/common/Table';
+import { Badge } from '../../../components/common/Badge';
+import { Button } from '../../../components/common/Button';
+import { Gavel, Calendar, FileText, MessageSquare, GitBranch, Users } from 'lucide-react';
+import { Motion } from '../../../types';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+interface MotionListProps {
+  motions: Motion[];
+  onTaskClick: (motion: Motion) => void;
+}
+
+export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) => {
+  const { theme } = useTheme();
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Draft': return 'neutral';
+      case 'Filed': return 'info';
+      case 'Hearing Set': return 'warning';
+      case 'Decided': return 'success';
+      default: return 'neutral';
+    }
+  };
+
+  const getConferralBadge = (status?: string) => {
+      switch(status) {
+          case 'Agreed': return <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold border border-green-200">Agreed</span>;
+          case 'Impasse': return <span className="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold border border-red-200">Impasse</span>;
+          case 'Scheduled': return <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold border border-blue-200">Scheduled</span>;
+          default: return <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold border border-amber-200">Required</span>;
+      }
+  };
+
+  return (
+    <>
+      {/* Desktop Table View */}
+      <div className="hidden md:block">
+        <TableContainer>
+          <TableHeader>
+            <TableHead>Motion Title</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Hearing</TableHead>
+            <TableHead>Rules</TableHead>
+            <TableHead>Meet & Confer</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableHeader>
+          <TableBody>
+            {motions.map(motion => (
+              <TableRow key={motion.id}>
+                <TableCell className={cn("font-medium flex items-center", theme.text.primary)}>
+                  <Gavel className={cn("h-4 w-4 mr-2", theme.text.tertiary)} />
+                  <div>
+                      {motion.title}
+                      {motion.documents && motion.documents.length > 0 && (
+                          <div className="text-[10px] text-blue-600 flex items-center mt-0.5">
+                              <FileText className="h-3 w-3 mr-1"/> {motion.documents.length} Exhibits Linked
+                          </div>
+                      )}
+                  </div>
+                </TableCell>
+                <TableCell>{motion.type}</TableCell>
+                <TableCell>
+                  <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>
+                </TableCell>
+                <TableCell>
+                  {motion.hearingDate ? (
+                    <span className="flex items-center text-red-600 font-medium text-xs">
+                      <Calendar className="h-3 w-3 mr-1" /> {motion.hearingDate}
+                    </span>
+                  ) : '-'}
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1 max-w-[150px]">
+                    {motion.linkedRules && motion.linkedRules.length > 0 ? motion.linkedRules.map(r => (
+                      <span key={r} className={cn("text-[9px] border px-1 rounded", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>{r}</span>
+                    )) : '-'}
+                  </div>
+                </TableCell>
+                <TableCell>
+                    <div className="flex flex-col gap-1">
+                        {getConferralBadge(motion.conferralStatus)}
+                        <button className="text-[10px] text-blue-600 hover:underline flex items-center">
+                            <MessageSquare className="h-3 w-3 mr-1"/> Log Session
+                        </button>
+                    </div>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button size="sm" variant="ghost" className="text-indigo-600" onClick={() => onTaskClick(motion)} icon={GitBranch}>To Workflow</Button>
+                    <Button size="sm" variant="ghost" className="text-blue-600">Details</Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+            {motions.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className={cn("text-center py-8 italic", theme.text.tertiary)}>No active motions.</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </TableContainer>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {motions.map(motion => (
+          <div key={motion.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
+            <div className="flex justify-between items-start mb-2">
+              <h4 className={cn("font-bold text-sm flex items-center gap-2", theme.text.primary)}>
+                <Gavel className="h-4 w-4 text-blue-500" />
+                {motion.title}
+              </h4>
+              <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>
+            </div>
+            <div className={cn("text-xs mb-3", theme.text.secondary)}>{motion.type} • Filed: {motion.filingDate || 'Draft'}</div>
+            
+            <div className={cn("flex justify-between items-center mb-3 p-2 rounded", theme.surfaceHighlight)}>
+                <div className="flex items-center text-xs">
+                    <Users className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
+                    <span className={cn("mr-2", theme.text.secondary)}>Conferral:</span>
+                    {getConferralBadge(motion.conferralStatus)}
+                </div>
+            </div>
+
+            {motion.hearingDate && (
+              <div className={cn("p-3 rounded border space-y-2 mb-3", theme.surfaceHighlight, theme.border.light)}>
+                <div className="flex items-center justify-between text-xs">
+                  <span className={cn("font-medium flex items-center", theme.text.secondary)}><Calendar className="h-3 w-3 mr-1"/> Hearing</span>
+                  <span className={cn("font-bold", theme.text.primary)}>{motion.hearingDate}</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className={theme.text.secondary}>Opposition Due</span>
+                  <span className={cn("font-mono", theme.text.primary)}>{motion.oppositionDueDate}</span>
+                </div>
+              </div>
+            )}
+            
+            <div className={cn("flex justify-end gap-2 pt-2 border-t", theme.border.light)}>
+              <Button size="sm" variant="outline" className="flex-1" icon={GitBranch} onClick={() => onTaskClick(motion)}>To Workflow</Button>
+              <Button size="sm" variant="outline" className="flex-1">Details</Button>
+            </div>
+          </div>
+        ))}
+        {motions.length === 0 && (
+          <div className={cn("text-center py-8 italic rounded-lg", theme.surfaceHighlight, theme.text.tertiary)}>No active motions.</div>
+        )}
+      </div>
+    </>
+  );
+};

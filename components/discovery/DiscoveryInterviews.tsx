@@ -1,0 +1,69 @@
+
+import React, { useState } from 'react';
+import { CustodianInterview } from '../../types';
+import { DataService } from '../../services/dataService';
+import { Button } from '../common/Button';
+import { MessageSquare, Plus } from 'lucide-react';
+import { InterviewList } from './interviews/InterviewList';
+import { InterviewModal } from './interviews/InterviewModal';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+export const DiscoveryInterviews: React.FC = () => {
+  const { theme } = useTheme();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Enterprise Data Access
+  const { data: interviews = [] } = useQuery<CustodianInterview[]>(
+      [STORES.DISCOVERY_EXT_INT, 'all'],
+      () => DataService.discovery.getInterviews()
+  );
+
+  const { mutate: createInterview } = useMutation(
+      DataService.discovery.createInterview,
+      {
+          invalidateKeys: [[STORES.DISCOVERY_EXT_INT, 'all']],
+          onSuccess: () => setIsModalOpen(false)
+      }
+  );
+
+  const handleCreate = (newInterview: Partial<CustodianInterview>) => {
+      if (!newInterview.custodianName) return;
+      createInterview({
+          id: `INT-${Date.now()}`,
+          caseId: 'C-2024-001', // Mock default
+          custodianName: newInterview.custodianName,
+          department: newInterview.department || 'General',
+          status: 'Scheduled',
+          interviewDate: newInterview.interviewDate,
+          notes: newInterview.notes
+      });
+  };
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+            <div>
+                <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
+                    <MessageSquare className="h-5 w-5 mr-2 text-blue-600"/> Custodian Interviews
+                </h3>
+                <p className={cn("text-sm", theme.text.secondary)}>Track interviews to identify data sources and preservation scope.</p>
+            </div>
+            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Log Interview</Button>
+        </div>
+
+        <InterviewList 
+          interviews={interviews} 
+          onManage={(interview) => console.log('Manage', interview)} 
+        />
+
+        <InterviewModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          onSave={handleCreate} 
+        />
+    </div>
+  );
+};

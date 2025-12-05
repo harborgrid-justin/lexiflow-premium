@@ -1,0 +1,178 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import { DataService } from '../services/dataService';
+import { Conversation, Message, Attachment } from '../types';
+
+export { Conversation, Message, Attachment };
+
+export const useSecureMessenger = () => {
+  const [view, setView] = useState<'chats' | 'contacts' | 'files' | 'archived'>('chats');
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [contactsList, setContactsList] = useState<any[]>([]);
+  const [activeConvId, setActiveConvId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [inputText, setInputText] = useState('');
+  const [pendingAttachments, setPendingAttachments] = useState<Attachment[]>([]);
+  const [isPrivilegedMode, setIsPrivilegedMode] = useState(false);
+
+  // Initial Data Fetch
+  useEffect(() => {
+      const loadData = async () => {
+          const [convs, conts] = await Promise.all([
+              DataService.messenger.getConversations(),
+              DataService.messenger.getContacts()
+          ]);
+          setConversations(convs);
+          setContactsList(conts);
+      };
+      loadData();
+  }, []);
+
+  const sortedConversations = useMemo(() => {
+    return [...conversations].sort((a, b) => {
+      const lastMsgA = a.messages[a.messages.length - 1];
+      const lastMsgB = b.messages[b.messages.length - 1];
+      // Handle potential empty messages array although robust data usually has one
+      const timeA = lastMsgA ? new Date(lastMsgA.timestamp).getTime() : 0;
+      const timeB = lastMsgB ? new Date(lastMsgB.timestamp).getTime() : 0;
+      return timeB - timeA;
+    });
+  }, [conversations]);
+
+  const filteredConversations = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return sortedConversations.filter(c => 
+      c.name.toLowerCase().includes(term) || 
+      c.role.toLowerCase().includes(term) ||
+      c.messages.some(m => m.text.toLowerCase().includes(term))
+    );
+  }, [sortedConversations, searchTerm]);
+
+  const contacts = useMemo(() => {
+      return contactsList.filter(c => 
+          c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+          c.role.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+  }, [contactsList, searchTerm]);
+
+  const allFiles = useMemo(() => {
+      const files: Attachment[] = [];
+      conversations.forEach(c => {
+          c.messages.forEach(m => {
+              if (m.attachments) {
+                  m.attachments.forEach(a => {
+                      files.push({
+                          ...a,
+                          sender: m.senderId === 'me' ? 'Me' : c.name,
+                          date: m.timestamp
+                      });
+                  });
+              }
+          });
+      });
+      return files.filter(f => f.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [conversations, searchTerm]);
+
+  const activeConversation = conversations.find(c => c.id === activeConvId);
+
+  const handleSelectConversation = (id: string) => {
+    if (activeConvId === id) return;
+
+    if (activeConvId) {
+      setConversations(prev => prev.map(c => 
+        c.id === activeConvId ? { ...c, draft: inputText } : c
+      ));
+    }
+
+    const targetConv = conversations.find(c => c.id === id);
+    setInputText(targetConv?.draft || '');
+    setPendingAttachments([]);
+    setIsPrivilegedMode(targetConv?.role.includes('Client') || false);
+    setActiveConvId(id);
+
+    setConversations(prev => prev.map(c => 
+      c.id === id ? { ...c, unread: 0 } : c
+    ));
+  };
+
+  const handleSendMessage = async () => {
+    if ((!inputText.trim() && pendingAttachments.length === 0) || !activeConvId) return;
+    
+    const newMessage: Message = {
+      id: `new-${Date.now()}`,
+      senderId: 'me',
+      text: inputText,
+      timestamp: new Date().toISOString(),
+      status: 'sent',
+      isPrivileged: isPrivilegedMode,
+      attachments: pendingAttachments.length > 0 ? [...pendingAttachments] : undefined
+    };
+
+    // Optimistic UI Update
+    setConversations(prev => prev.map(c => {
+      if (c.id === activeConvId) {
+        return {
+          ...c,
+          messages: [...c.messages, newMessage],
+          draft: '',
+        };
+      }
+      return c;
+    }));
+
+    // Persist
+    await DataService.messenger.sendMessage(activeConvId, newMessage);
+
+    setInputText('');
+    setPendingAttachments([]);
+
+    // Simulate delivery status updates for demo feel
+    setTimeout(() => {
+        setConversations(prev => prev.map(c => 
+            c.id === activeConvId 
+            ? { ...c, messages: c.messages.map(m => m.id === newMessage.id ? { ...m, status: 'delivered' as const } : m) } 
+            : c
+        ));
+    }, 1000);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+          const file = e.target.files[0];
+          const newAtt: Attachment = {
+              name: file.name,
+              type: file.type.includes('image') ? 'image' : 'doc',
+              size: '1.2 MB'
+          };
+          setPendingAttachments([...pendingAttachments, newAtt]);
+      }
+  };
+
+  const formatTime = (isoString: string) => {
+      const date = new Date(isoString);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  return {
+    view,
+    setView,
+    conversations,
+    activeConvId,
+    setActiveConvId,
+    searchTerm,
+    setSearchTerm,
+    inputText,
+    setInputText,
+    pendingAttachments,
+    setPendingAttachments,
+    isPrivilegedMode,
+    setIsPrivilegedMode,
+    activeConversation,
+    filteredConversations,
+    handleSelectConversation,
+    handleSendMessage,
+    handleFileSelect,
+    formatTime,
+    contacts,
+    allFiles
+  };
+};

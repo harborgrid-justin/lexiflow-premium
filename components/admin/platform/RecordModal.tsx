@@ -1,0 +1,52 @@
+
+import React, { useState, useEffect } from 'react';
+import { Modal } from '../../common/Modal';
+import { Button } from '../../common/Button';
+import { Save } from 'lucide-react';
+
+interface RecordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  item: any;
+  onSave: (item: any) => void;
+}
+
+export const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, title, item, onSave }) => {
+  const [formData, setFormData] = useState<any>({});
+
+  useEffect(() => {
+    if (item) setFormData({ ...item });
+  }, [item]);
+
+  const renderFormFields = () => {
+    if (!formData) return null;
+    return Object.keys(formData).map(key => {
+      if (key === 'id' || key === 'parties' || key === 'versions' || key === 'matters') return null;
+      return (
+        <div key={key} className="mb-4">
+          <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">{key}</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
+            value={formData[key] || ''}
+            onChange={e => setFormData({ ...formData, [key]: e.target.value })}
+          />
+        </div>
+      );
+    });
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title={title}>
+      <div className="p-6">
+        <div className="grid grid-cols-1 gap-1 max-h-[60vh] overflow-y-auto">
+          {renderFormFields()}
+        </div>
+        <div className="pt-4 flex justify-end gap-3 border-t mt-4">
+          <Button variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button variant="primary" icon={Save} onClick={() => onSave(formData)}>Save Changes</Button>
+        </div>
+      </div>
+    </Modal>
+  );
+};

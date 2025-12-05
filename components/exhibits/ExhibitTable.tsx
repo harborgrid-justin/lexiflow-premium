@@ -1,0 +1,142 @@
+
+import React from 'react';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { Badge } from '../common/Badge';
+import { TrialExhibit } from '../../types';
+import { FileIcon } from '../common/Primitives';
+import { Button } from '../common/Button';
+import { Eye, Edit2, Sticker } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { VirtualList } from '../common/VirtualList';
+import { useWindow } from '../../context/WindowContext';
+import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+
+interface ExhibitTableProps {
+  exhibits: TrialExhibit[];
+  viewMode: 'list' | 'grid';
+}
+
+export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }) => {
+  const { theme } = useTheme();
+  const { openWindow } = useWindow();
+
+  const getPartyColor = (party: string) => {
+      switch(party) {
+          case 'Plaintiff': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+          case 'Defense': return 'bg-blue-100 text-blue-800 border-blue-200';
+          case 'Joint': return 'bg-purple-100 text-purple-800 border-purple-200';
+          default: return 'bg-slate-100 text-slate-800 border-slate-200';
+      }
+  };
+
+  const getStatusVariant = (status: string) => {
+      switch(status) {
+          case 'Admitted': return 'success';
+          case 'Excluded': return 'error';
+          case 'Marked': return 'warning';
+          default: return 'neutral';
+      }
+  };
+
+  const handleViewExhibit = (ex: TrialExhibit) => {
+      const winId = `exhibit-${ex.id}`;
+      openWindow(
+          winId,
+          `Exhibit ${ex.exhibitNumber}`,
+          <div className="h-full bg-white">
+             <DocumentPreviewPanel 
+                document={{
+                    id: ex.id,
+                    title: ex.title,
+                    type: ex.fileType,
+                    content: ex.description || '',
+                    uploadDate: ex.dateMarked,
+                    lastModified: ex.dateMarked,
+                    tags: ex.tags || [],
+                    versions: [],
+                    caseId: ex.caseId,
+                    status: ex.status
+                }}
+                onViewHistory={() => {}}
+                isOrbital={true}
+             />
+          </div>
+      );
+  };
+
+  if (viewMode === 'grid') {
+      return (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {exhibits.map(ex => (
+                  <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface, theme.border.default)}>
+                      <div className={cn("aspect-square flex items-center justify-center relative bg-slate-50 border-b", theme.border.light)}>
+                          <FileIcon type={ex.fileType} className="h-16 w-16 opacity-30"/>
+                          <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party))}>
+                              {ex.exhibitNumber}
+                          </div>
+                          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
+                              <Button size="sm" variant="secondary" icon={Eye} onClick={() => handleViewExhibit(ex)}>View</Button>
+                          </div>
+                      </div>
+                      <div className="p-3">
+                          <h4 className={cn("font-bold text-sm truncate mb-1", theme.text.primary)} title={ex.title}>{ex.title}</h4>
+                          <div className="flex justify-between items-center">
+                              <span className={cn("text-xs", theme.text.secondary)}>{ex.witness}</span>
+                              <Badge variant={getStatusVariant(ex.status) as any} className="text-[10px] px-1.5 py-0">{ex.status}</Badge>
+                          </div>
+                      </div>
+                  </div>
+              ))}
+          </div>
+      );
+  }
+
+  const renderRow = (ex: TrialExhibit) => (
+      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 hover:bg-slate-50 transition-colors", theme.border.light)}>
+            <div className="w-[15%]">
+                <span className={cn("font-mono font-bold text-sm px-2 py-1 rounded border", getPartyColor(ex.party))}>
+                    {ex.exhibitNumber}
+                </span>
+            </div>
+            <div className="w-[30%] flex items-center gap-2">
+                <FileIcon type={ex.fileType} className="h-4 w-4 opacity-70 shrink-0"/>
+                <div className="min-w-0">
+                    <p className={cn("font-medium text-sm truncate", theme.text.primary)}>{ex.title}</p>
+                    <p className={cn("text-xs truncate max-w-[200px]", theme.text.tertiary)}>{ex.description}</p>
+                </div>
+            </div>
+            <div className="w-[15%] text-sm text-slate-600">{ex.party}</div>
+            <div className="w-[15%] text-xs font-mono text-slate-500">{ex.dateMarked}</div>
+            <div className="w-[15%] text-sm text-slate-600">{ex.witness || '-'}</div>
+            <div className="w-[10%] flex justify-end">
+                <Badge variant={getStatusVariant(ex.status) as any}>{ex.status}</Badge>
+            </div>
+            <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={(e) => { e.stopPropagation(); handleViewExhibit(ex); }} className="text-slate-400 hover:text-blue-600"><Eye className="h-4 w-4"/></button>
+            </div>
+      </div>
+  );
+
+  return (
+    <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-white">
+        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50 shrink-0", theme.border.default, theme.text.secondary)}>
+            <div className="w-[15%]">Exhibit #</div>
+            <div className="w-[30%]">Description</div>
+            <div className="w-[15%]">Party</div>
+            <div className="w-[15%]">Date Marked</div>
+            <div className="w-[15%]">Witness</div>
+            <div className="w-[10%] text-right">Status</div>
+        </div>
+        <div className="flex-1 relative">
+            <VirtualList 
+                items={exhibits}
+                height="100%"
+                itemHeight={60}
+                renderItem={renderRow}
+                emptyMessage="No exhibits found."
+            />
+        </div>
+    </div>
+  );
+};

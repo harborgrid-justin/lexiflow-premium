@@ -1,0 +1,61 @@
+
+import React from 'react';
+import { Users, Briefcase, Gavel, Microscope, AlertTriangle } from 'lucide-react';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+interface OppositionSidebarProps {
+  activeCategory: string;
+  onSelectCategory: (category: string) => void;
+  counts: { all: number; counsel: number; parties: number; experts: number };
+}
+
+export const OppositionSidebar: React.FC<OppositionSidebarProps> = ({ activeCategory, onSelectCategory, counts }) => {
+  const { theme } = useTheme();
+
+  const categories = [
+    { id: 'All', label: 'All Entities', icon: Users, count: counts.all },
+    { id: 'Counsel', label: 'Opposing Counsel', icon: Gavel, count: counts.counsel },
+    { id: 'Parties', label: 'Parties', icon: Briefcase, count: counts.parties },
+    { id: 'Experts', label: 'Experts', icon: Microscope, count: counts.experts },
+  ];
+
+  return (
+    <div className={cn("w-64 border-r flex flex-col shrink-0 bg-slate-50/50 hidden md:flex", theme.border.default)}>
+        <div className="p-4 border-b border-slate-200">
+            <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Categories</h4>
+            <div className="space-y-1">
+                {categories.map(cat => (
+                    <button
+                        key={cat.id}
+                        onClick={() => onSelectCategory(cat.id)}
+                        className={cn(
+                            "w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex justify-between items-center",
+                            activeCategory === cat.id ? cn(theme.surfaceHighlight, theme.primary.text, "shadow-sm border border-slate-200") : theme.text.secondary
+                        )}
+                    >
+                        <div className="flex items-center">
+                            <cat.icon className={cn("h-4 w-4 mr-3 opacity-70")}/>
+                            {cat.label}
+                        </div>
+                        <span className={cn("text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600")}>
+                            {cat.count}
+                        </span>
+                    </button>
+                ))}
+            </div>
+        </div>
+        
+        <div className="p-4">
+            <div className={cn("p-3 rounded-lg border bg-red-50 border-red-100 text-red-800")}>
+                <h4 className="text-xs font-bold uppercase mb-2 flex items-center">
+                    <AlertTriangle className="h-3 w-3 mr-1"/> Intelligence
+                </h4>
+                <p className="text-xs leading-relaxed">
+                    Opposing counsel has a high settlement rate (85%) when faced with aggressive discovery motions.
+                </p>
+            </div>
+        </div>
+    </div>
+  );
+};

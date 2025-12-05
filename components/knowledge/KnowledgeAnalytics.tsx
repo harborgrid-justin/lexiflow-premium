@@ -1,0 +1,128 @@
+
+import React from 'react';
+import { Card } from '../common/Card';
+import { MetricCard } from '../common/Primitives';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { BookOpen, Users, TrendingUp, Search } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+
+export const KnowledgeAnalytics: React.FC = () => {
+  const { theme } = useTheme();
+  
+  // Enterprise Data Access
+  const { data: analytics = { usage: [], topics: [] } } = useQuery(
+      ['knowledge', 'analytics'],
+      DataService.knowledge.getAnalytics
+  );
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <MetricCard 
+                label="Article Views (Wk)" 
+                value="663" 
+                icon={BookOpen} 
+                trend="+12%"
+                trendUp={true}
+                className="border-l-4 border-l-blue-600"
+            />
+            <MetricCard 
+                label="Active Contributors" 
+                value="24" 
+                icon={Users} 
+                className="border-l-4 border-l-purple-600"
+            />
+            <MetricCard 
+                label="Search Queries" 
+                value="1,204" 
+                icon={Search} 
+                trend="+5%"
+                trendUp={true}
+                className="border-l-4 border-l-emerald-600"
+            />
+            <MetricCard 
+                label="Engagement Rate" 
+                value="42%" 
+                icon={TrendingUp} 
+                className="border-l-4 border-l-amber-500"
+            />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card title="Knowledge Consumption">
+                <div className="h-72 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={analytics.usage} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                            <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
+                            <YAxis fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
+                            <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                            <Bar dataKey="views" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={40} />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </Card>
+
+            <Card title="Popular Topics">
+                <div className="h-72 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie 
+                                data={analytics.topics} 
+                                innerRadius={60} 
+                                outerRadius={80} 
+                                paddingAngle={5} 
+                                dataKey="value"
+                            >
+                                {analytics.topics.map((entry: any, index: number) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}/>
+                            <Legend verticalAlign="bottom" height={36}/>
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+            </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card title="Top Articles" className="lg:col-span-2">
+                <div className={cn("space-y-3", theme.text.secondary)}>
+                    {[
+                        { title: 'California Employment Litigation Playbook', views: 245, author: 'Sarah Miller' },
+                        { title: 'Standard Billing Codes & Rates 2024', views: 180, author: 'Finance Team' },
+                        { title: 'Remote Deposition Protocols', views: 120, author: 'James Doe' },
+                    ].map((article, i) => (
+                        <div key={i} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+                            <div>
+                                <p className={cn("font-medium text-sm", theme.text.primary)}>{article.title}</p>
+                                <p className="text-xs">Author: {article.author}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className={cn("font-bold", theme.primary.text)}>{article.views}</p>
+                                <p className="text-[10px] uppercase">Views</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            <Card title="Pending Review">
+                <div className="space-y-4">
+                    <div className={cn("p-4 border border-l-4 border-l-amber-500 rounded-lg bg-amber-50", theme.border.default)}>
+                        <h4 className="text-sm font-bold text-amber-900 mb-1">Outdated Content</h4>
+                        <p className="text-xs text-amber-800">3 articles flagged for review due to regulatory updates in 2024.</p>
+                    </div>
+                    <div className={cn("p-4 border border-l-4 border-l-blue-500 rounded-lg bg-blue-50", theme.border.default)}>
+                        <h4 className="text-sm font-bold text-blue-900 mb-1">New Drafts</h4>
+                        <p className="text-xs text-blue-800">5 new practice guides submitted by associates awaiting partner approval.</p>
+                    </div>
+                </div>
+            </Card>
+        </div>
+    </div>
+  );
+};

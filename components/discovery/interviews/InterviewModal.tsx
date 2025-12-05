@@ -1,0 +1,55 @@
+
+import React, { useState } from 'react';
+import { Modal } from '../../../components/common/Modal';
+import { Input, TextArea } from '../../../components/common/Inputs';
+import { Button } from '../../../components/common/Button';
+import { CustodianInterview } from '../../../types';
+
+interface InterviewModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (interview: Partial<CustodianInterview>) => void;
+}
+
+export const InterviewModal: React.FC<InterviewModalProps> = ({ isOpen, onClose, onSave }) => {
+  const [interview, setInterview] = useState<Partial<CustodianInterview>>({});
+
+  const handleSave = () => {
+    onSave(interview);
+    setInterview({}); // Reset after save
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Schedule Interview">
+      <div className="p-6 space-y-4">
+        <Input 
+          label="Custodian Name" 
+          value={interview.custodianName || ''} 
+          onChange={e => setInterview({...interview, custodianName: e.target.value})} 
+          placeholder="e.g. John Doe"
+        />
+        <Input 
+          label="Department" 
+          value={interview.department || ''} 
+          onChange={e => setInterview({...interview, department: e.target.value})} 
+          placeholder="e.g. Engineering"
+        />
+        <Input 
+          label="Date" 
+          type="date" 
+          value={interview.interviewDate || ''} 
+          onChange={e => setInterview({...interview, interviewDate: e.target.value})}
+        />
+        <TextArea 
+          label="Notes / Agenda" 
+          value={interview.notes || ''} 
+          onChange={e => setInterview({...interview, notes: e.target.value})} 
+          placeholder="Topics to discuss..."
+        />
+        <div className="flex justify-end pt-4">
+          <Button variant="primary" onClick={handleSave}>Save Schedule</Button>
+        </div>
+      </div>
+    </Modal>
+  );
+};

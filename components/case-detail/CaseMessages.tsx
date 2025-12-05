@@ -1,0 +1,134 @@
+
+import React, { useState } from 'react';
+import { Case } from '../../types';
+import { Send, Paperclip, Lock, Shield, FileText } from 'lucide-react';
+import { Button } from '../common/Button';
+import { UserAvatar } from '../common/UserAvatar';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
+interface CaseMessagesProps {
+  caseData: Case;
+}
+
+interface Message {
+  id: string;
+  sender: string;
+  role: string;
+  text: string;
+  timestamp: string;
+  isPrivileged: boolean;
+  attachments?: string[];
+}
+
+export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
+  const { theme } = useTheme();
+  const [inputText, setInputText] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'm1', sender: 'Alexandra H.', role: 'Senior Partner',
+      text: `Team, regarding ${caseData.title}, we need to expedite the discovery review. The judge is pushing for a conference next week.`,
+      timestamp: 'Yesterday 09:30 AM', isPrivileged: true
+    },
+    {
+      id: 'm2', sender: 'Sarah Jenkins', role: 'Paralegal',
+      text: 'Understood. I have uploaded the latest production set to the Discovery center. Waiting on OCR.',
+      timestamp: 'Yesterday 10:15 AM', isPrivileged: true, attachments: ['Production_Set_004.pdf']
+    },
+    {
+      id: 'm3', sender: 'John Doe', role: 'Client',
+      text: 'I found the old email archives you asked for. How should I send them securely?',
+      timestamp: 'Today 08:00 AM', isPrivileged: true
+    }
+  ]);
+
+  const handleSend = () => {
+    if (!inputText.trim()) return;
+    const newMsg: Message = {
+      id: `m-${Date.now()}`,
+      sender: 'Me',
+      role: 'Attorney',
+      text: inputText,
+      timestamp: 'Just now',
+      isPrivileged: true
+    };
+    setMessages([...messages, newMsg]);
+    setInputText('');
+  };
+
+  return (
+    <div className={cn("flex flex-col h-[500px] md:h-[600px] max-h-[80vh] rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+      {/* Thread Header */}
+      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surfaceHighlight)}>
+        <div>
+          <h3 className={cn("font-bold flex items-center gap-2", theme.text.primary)}>
+            <Lock className="h-4 w-4 text-blue-600"/> Case Communication Thread
+          </h3>
+          <p className={cn("text-xs", theme.text.secondary)}>Participants: Firm Staff, Client ({caseData.client})</p>
+        </div>
+        <div className={cn("text-xs px-3 py-1 rounded-full flex items-center font-semibold border", theme.status.warning.bg, theme.status.warning.text, theme.status.warning.border)}>
+           <Shield className="h-3 w-3 mr-1"/> Attorney-Client Privileged
+        </div>
+      </div>
+
+      {/* Messages Area */}
+      <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surfaceHighlight)}>
+        {messages.map((msg) => {
+          const isMe = msg.sender === 'Me';
+          return (
+            <div key={msg.id} className={`flex gap-4 ${isMe ? 'flex-row-reverse' : ''}`}>
+              <UserAvatar name={msg.sender} className="mt-1 shrink-0"/>
+              <div className={`max-w-[75%] md:max-w-[70%] ${isMe ? 'items-end' : 'items-start'} flex flex-col min-w-0`}>
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                   <span className={cn("text-xs font-bold", theme.text.primary)}>{msg.sender}</span>
+                   <span className={cn("text-xs", theme.text.tertiary)}>{msg.role} • {msg.timestamp}</span>
+                </div>
+                <div className={cn(
+                    "p-4 rounded-2xl text-sm shadow-sm relative break-words whitespace-pre-wrap w-full",
+                    isMe 
+                        ? cn(theme.primary.DEFAULT, theme.text.inverse, "rounded-tr-none") 
+                        : cn(theme.surface, theme.text.primary, theme.border.default, "border rounded-tl-none")
+                )}>
+                   {msg.text}
+                   {msg.attachments && (
+                     <div className="mt-3 space-y-1">
+                       {msg.attachments.map(att => (
+                         <div key={att} className="flex items-center p-2 bg-black/10 rounded text-xs font-medium">
+                            <FileText className="h-3 w-3 mr-2"/> {att}
+                         </div>
+                       ))}
+                     </div>
+                   )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Input Area */}
+      <div className={cn("p-4 border-t shrink-0", theme.surface, theme.border.default)}>
+         <div className="flex items-center gap-3">
+            <button className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}>
+                <Paperclip className="h-5 w-5"/>
+            </button>
+            <div className="flex-1 relative">
+                <input 
+                  className={cn("w-full border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none", theme.surfaceHighlight, theme.text.primary)}
+                  placeholder="Type a secure message..."
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                />
+            </div>
+            <Button variant="primary" className="rounded-full px-4" onClick={handleSend}>
+                <Send className="h-4 w-4 mr-2"/> Send
+            </Button>
+         </div>
+         <p className={cn("text-center text-[10px] mt-2", theme.text.tertiary)}>
+            Messages are end-to-end encrypted. Do not share credentials.
+         </p>
+      </div>
+    </div>
+  );
+};

@@ -1,0 +1,78 @@
+
+import React from 'react';
+import { Bell, Check, X } from 'lucide-react';
+import { DataService } from '../../services/dataService';
+import { SystemNotification } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+export const NotificationCenter: React.FC = () => {
+  const { theme } = useTheme();
+
+  // Performance Engine: useQuery with Polling
+  const { data: notifications = [] } = useQuery<SystemNotification[]>(
+      [STORES.NOTIFICATIONS, 'all'],
+      DataService.notifications.getAll,
+      { staleTime: 5000 } // Poll/Refresh often
+  );
+
+  const { mutate: markRead } = useMutation(
+      async (id: string) => {
+          await DataService.notifications.markRead(id);
+          return id;
+      },
+      {
+          onSuccess: (id) => {
+              const current = queryClient.getQueryState<SystemNotification[]>([STORES.NOTIFICATIONS, 'all'])?.data || [];
+              const updated = current.map(n => n.id === id ? { ...n, read: true } : n);
+              queryClient.setQueryData([STORES.NOTIFICATIONS, 'all'], updated);
+          }
+      }
+  );
+
+  const { mutate: dismiss } = useMutation(
+    async (id: string) => {
+        // In real app, delete from DB. Here just optimistic filter.
+        return id;
+    },
+    {
+        onSuccess: (id) => {
+            const current = queryClient.getQueryState<SystemNotification[]>([STORES.NOTIFICATIONS, 'all'])?.data || [];
+            const updated = current.filter(n => n.id !== id);
+            queryClient.setQueryData([STORES.NOTIFICATIONS, 'all'], updated);
+        }
+    }
+  );
+
+  return (
+    <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+      <div className={cn("p-3 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <h4 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
+          <Bell className={cn("h-4 w-4 mr-2", theme.primary.text)} /> Notifications
+        </h4>
+        <span className={cn("text-xs font-bold px-1.5 rounded", theme.primary.light, theme.primary.text)}>{notifications.filter(n => !n.read).length}</span>
+      </div>
+      <div className="divide-y max-h-64 overflow-y-auto custom-scrollbar">
+        {notifications.length === 0 && (
+            <div className={cn("p-4 text-center text-xs italic", theme.text.tertiary)}>No new notifications.</div>
+        )}
+        {notifications.map(n => (
+          <div key={n.id} className={cn("p-3 transition-colors group flex justify-between items-start", n.read ? "opacity-60" : "", `hover:${theme.surfaceHighlight}`)}>
+            <div className="flex-1">
+                <p className={cn("text-xs mb-1", theme.text.primary)}>{n.text}</p>
+                <span className={cn("text-[10px]", theme.text.tertiary)}>{n.time}</span>
+            </div>
+            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                {!n.read && (
+                    <button onClick={() => markRead(n.id)} className="p-1 hover:bg-green-100 text-green-600 rounded" title="Mark Read"><Check className="h-3 w-3"/></button>
+                )}
+                <button onClick={() => dismiss(n.id)} className="p-1 hover:bg-red-100 text-red-600 rounded" title="Dismiss"><X className="h-3 w-3"/></button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

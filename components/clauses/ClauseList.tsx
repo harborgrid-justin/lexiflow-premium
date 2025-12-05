@@ -1,12 +1,13 @@
 
 import React, { useState, useMemo, useTransition } from 'react';
 import { Clause } from '../../types';
-import { ShieldAlert, FileText, History, Filter, Star, Copy, Check, Loader2 } from 'lucide-react';
+import { ShieldAlert, FileText, History, Filter, Star, Copy, Check, Loader2, Book } from 'lucide-react';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { Button } from '../common/Button';
+import { EmptyState } from '../common/EmptyState';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
@@ -118,7 +119,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
                 value={searchTerm} 
                 onChange={handleSearchChange}
                 placeholder="Search clauses by name, content, or category..."
-                className="border-0 shadow-none p-0"
+                className="border-none shadow-none p-0"
             />
         </div>
         <div className="flex items-center gap-2 w-full md:w-auto">
@@ -140,10 +141,15 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
       </div>
 
       <div className="flex-1 min-h-0">
-        {filteredClauses.length === 0 ? (
-             <div className={cn("col-span-full py-12 text-center border-2 border-dashed rounded-lg h-full flex items-center justify-center", theme.border.default, theme.text.tertiary)}>
-                <p>No clauses found matching your filters.</p>
-             </div>
+        {isLoading ? (
+            <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin h-6 w-6 text-blue-600"/></div>
+        ) : filteredClauses.length === 0 ? (
+            <EmptyState 
+              icon={Book}
+              title="No Clauses Found"
+              description="No clauses match your current filter criteria. Try broadening your search."
+              action={<Button variant="secondary" onClick={() => { setSearchTerm(''); setFilterRisk('All'); }}>Clear Filters</Button>}
+            />
         ) : (
             <VirtualList 
                 items={filteredClauses}

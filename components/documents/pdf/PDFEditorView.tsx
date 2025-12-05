@@ -1,0 +1,121 @@
+
+import React, { useState, useEffect } from 'react';
+import { LegalDocument } from '../../../types';
+import { DataService } from '../../../services/dataService';
+import { DocumentService } from '../../../services/documentService';
+import { PDFViewer } from '../../common/PDFViewer';
+import { AcrobatToolbar, PDFTool } from '../../document/preview/AcrobatToolbar';
+import { InteractiveOverlay } from '../../document/preview/InteractiveOverlay';
+import { Modal } from '../../common/Modal';
+import { SignaturePad } from '../../common/SignaturePad';
+import { Button } from '../../common/Button';
+import { FileText, Loader2 } from 'lucide-react';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+export const PDFEditorView: React.FC = () => {
+    const { theme } = useTheme();
+    const [documents, setDocuments] = useState<LegalDocument[]>([]);
+    const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // PDF viewer state
+    const [activeTool, setActiveTool] = useState<PDFTool>('select');
+    const [scale, setScale] = useState(1.0);
+    const [rotation, setRotation] = useState(0);
+    const [pageNum, setPageNum] = useState(1);
+    const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
+    const [signModalOpen, setSignModalOpen] = useState(false);
+    const [activeField, setActiveField] = useState<any>(null);
+
+    useEffect(() => {
+        const loadDocs = async () => {
+            setIsLoading(true);
+            const allDocs = await DataService.documents.getAll();
+            const pdfDocs = allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf'));
+            setDocuments(pdfDocs);
+            if (pdfDocs.length > 0) {
+                setSelectedDoc(pdfDocs[0]);
+            }
+            setIsLoading(false);
+        };
+        loadDocs();
+    }, []);
+
+    useEffect(() => {
+        if (selectedDoc) {
+            const loadUrl = async () => {
+                const url = await DocumentService.getDocumentUrl(selectedDoc.id);
+                setPreviewUrl(url);
+            };
+            loadUrl();
+        }
+        return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
+    }, [selectedDoc]);
+    
+    const handleFieldClick = (field: any) => {
+        if (field.type === 'signature' || field.type === 'initials') {
+            setActiveField(field);
+            setSignModalOpen(true);
+        }
+    };
+    
+    const handleSignatureSave = (signed: boolean) => {
+        if (signed && activeField) {
+            activeField.value = "Signed by User";
+            setSignModalOpen(false);
+            setActiveField(null);
+        }
+    };
+
+    return (
+        <div className="flex h-full">
+            {/* Document List Sidebar */}
+            <div className={cn("w-72 border-r flex flex-col shrink-0", theme.border.default, theme.surfaceHighlight)}>
+                <div className={cn("p-4 border-b font-bold", theme.text.primary)}>PDF Documents</div>
+                <div className="flex-1 overflow-y-auto">
+                    {isLoading ? <Loader2 className="animate-spin m-4"/> : documents.map(doc => (
+                        <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
+                            "w-full text-left p-3 border-b text-sm transition-colors",
+                            theme.border.light,
+                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface}`
+                        )}>
+                            <div className="font-medium truncate">{doc.title}</div>
+                            <div className={cn("text-xs opacity-70", selectedDoc?.id === doc.id ? "" : theme.text.secondary)}>{doc.fileSize}</div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+            {/* Editor View */}
+            <div className={cn("flex-1 flex flex-col", theme.surface)}>
+                {selectedDoc ? (
+                    <>
+                        <AcrobatToolbar 
+                            activeTool={activeTool} setActiveTool={setActiveTool}
+                            scale={scale} setScale={setScale}
+                            rotation={rotation} setRotation={setRotation}
+                            pageNum={pageNum} setPageNum={setPageNum}
+                            totalPages={10} // Mock
+                        />
+                        <div className="flex-1 relative bg-slate-200 dark:bg-slate-800 overflow-auto">
+                            <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
+                                <InteractiveOverlay activeTool={activeTool} dimensions={pageDims} onFieldClick={handleFieldClick} />
+                            </PDFViewer>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex items-center justify-center text-slate-400">Select a document to begin.</div>
+                )}
+            </div>
+            {/* Modals */}
+             <Modal isOpen={signModalOpen} onClose={() => setSignModalOpen(false)} title="Sign Document" size="sm">
+                <div className="p-6">
+                    <p className={cn("text-sm mb-4", theme.text.secondary)}>Draw your signature below to sign this field.</p>
+                    <SignaturePad value={false} onChange={handleSignatureSave} label="Draw Signature" subtext="I certify this signature is valid."/>
+                    <div className="mt-4 flex justify-end"> <Button variant="secondary" onClick={() => setSignModalOpen(false)}>Cancel</Button> </div>
+                </div>
+            </Modal>
+        </div>
+    );
+};

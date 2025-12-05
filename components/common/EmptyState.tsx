@@ -16,11 +16,17 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, descr
   const { theme } = useTheme();
   
   return (
-    <div className={cn("flex flex-col items-center justify-center py-12 text-center", className)}>
-      <div className={cn("p-4 rounded-full mb-4 border", theme.surfaceHighlight, theme.border.default)}>
-        <Icon className={cn("h-8 w-8 opacity-50", theme.text.tertiary)} />
+    <div className={cn(
+      "flex flex-col items-center justify-center py-12 text-center h-full w-full", 
+      "border-2 border-dashed rounded-xl",
+      theme.border.default,
+      theme.text.tertiary,
+      className
+    )}>
+      <div className={cn("p-4 rounded-full mb-4", theme.surfaceHighlight)}>
+        <Icon className={cn("h-12 w-12 opacity-40", theme.text.tertiary)} />
       </div>
-      <h3 className={cn("text-lg font-medium mb-1", theme.text.primary)}>{title}</h3>
+      <h3 className={cn("text-lg font-semibold mb-1", theme.text.primary)}>{title}</h3>
       <p className={cn("text-sm max-w-sm mb-6", theme.text.secondary)}>{description}</p>
       {action}
     </div>

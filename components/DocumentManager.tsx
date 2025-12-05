@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { 
   Folder, Clock, Star, FileText, LayoutTemplate, 
-  PenTool, Share2, CheckCircle 
+  PenTool, Share2, CheckCircle, FileSignature, Edit, Eraser, Cpu
 } from 'lucide-react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
@@ -15,8 +15,12 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { DocumentExplorer } from './documents/DocumentExplorer';
 import { DocumentTemplates } from './documents/DocumentTemplates';
 import { RecentFiles } from './documents/RecentFiles';
+import { PDFEditorView } from './documents/pdf/PDFEditorView';
+import { RedactionStudioView } from './documents/pdf/RedactionStudioView';
+import { FormsSigningView } from './documents/pdf/FormsSigningView';
+import { BatchProcessingView } from './documents/pdf/BatchProcessingView';
 
-type DocView = 'browse' | 'recent' | 'favorites' | 'templates' | 'drafts' | 'pending' | 'shared';
+type DocView = 'browse' | 'recent' | 'favorites' | 'templates' | 'drafts' | 'pending' | 'shared' | 'editor' | 'redaction' | 'signing' | 'batch';
 
 interface DocumentManagerProps {
   currentUserRole?: UserRole;
@@ -50,6 +54,17 @@ const PARENT_TABS = [
     subTabs: [
       { id: 'pending', label: 'Pending Review', icon: Clock },
       { id: 'shared', label: 'Shared with Client', icon: Share2 },
+    ]
+  },
+  {
+    id: 'pdf_platform',
+    label: 'PDF Platform',
+    icon: FileSignature,
+    subTabs: [
+      { id: 'editor', label: 'Interactive Editor', icon: Edit },
+      { id: 'redaction', label: 'Redaction Studio', icon: Eraser },
+      { id: 'signing', label: 'Forms & Signing', icon: FileSignature },
+      { id: 'batch', label: 'Batch Processing', icon: Cpu },
     ]
   }
 ];
@@ -89,6 +104,14 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ currentUserRol
               return <div className={cn("p-12 text-center text-sm", theme.text.tertiary)}>All documents are approved.</div>;
           case 'shared':
               return <div className={cn("p-12 text-center text-sm", theme.text.tertiary)}>No documents currently shared externally.</div>;
+          case 'editor':
+              return <PDFEditorView />;
+          case 'redaction':
+              return <RedactionStudioView />;
+          case 'signing':
+              return <FormsSigningView />;
+          case 'batch':
+              return <BatchProcessingView />;
           default:
               return <DocumentExplorer currentUserRole={currentUserRole} />;
       }
@@ -128,25 +151,23 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ currentUserRol
         </div>
 
         {/* Sub-Navigation (Pills) - Touch Scroll */}
-        {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
-                {activeParentTab.subTabs.map(tab => (
-                    <button 
-                        key={tab.id} 
-                        onClick={() => setActiveTab(tab.id as DocView)} 
-                        className={cn(
-                            "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                            activeTab === tab.id 
-                                ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
-                        )}
-                    >
-                        <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
-                        {tab.label}
-                    </button>
-                ))}
-            </div>
-        )}
+        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
+            {activeParentTab.subTabs.map(tab => (
+                <button 
+                    key={tab.id} 
+                    onClick={() => setActiveTab(tab.id as DocView)} 
+                    className={cn(
+                        "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
+                        activeTab === tab.id 
+                            ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
+                            : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
+                    )}
+                >
+                    <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
+                    {tab.label}
+                </button>
+            ))}
+        </div>
       </div>
 
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">

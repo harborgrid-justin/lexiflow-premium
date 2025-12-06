@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card } from '../common/Card';
 import { UserAvatar } from '../common/UserAvatar';
@@ -6,10 +7,11 @@ import { FileText, CheckCircle, Clock, ArrowLeft, Plus, Link as LinkIcon, AlertC
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Modal } from '../common/Modal';
+import { WarRoomData } from '../../types';
 
 interface WitnessPrepProps {
     caseId: string;
-    warRoomData: any;
+    warRoomData: WarRoomData;
     initialWitnessId?: string | null;
     onClearSelection?: () => void;
 }
@@ -19,7 +21,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
   const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(initialWitnessId || null);
   
   const witnesses = useMemo(() => {
-      return (warRoomData.witnesses || []).map((p: any) => ({
+      return (warRoomData.witnesses || []).map((p) => ({
           id: p.id,
           name: p.name,
           role: p.role,
@@ -38,7 +40,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
       if (initialWitnessId) setSelectedWitnessId(initialWitnessId);
   }, [initialWitnessId]);
 
-  const activeWitness = witnesses.find((w: any) => w.id === selectedWitnessId);
+  const activeWitness = witnesses.find((w) => w.id === selectedWitnessId);
 
   const handleCloseDetail = () => {
       setSelectedWitnessId(null);
@@ -96,7 +98,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
   return (
     <div className="space-y-6 animate-fade-in">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {witnesses.map((w: any) => (
+            {witnesses.map((w) => (
                 <Card key={w.id} noPadding className={cn("flex flex-col border-l-4 cursor-pointer hover:shadow-md transition-all border-l-slate-300")}>
                     <div className="p-5 flex justify-between items-start" onClick={() => setSelectedWitnessId(w.id)}>
                         <div className="flex items-center gap-4">

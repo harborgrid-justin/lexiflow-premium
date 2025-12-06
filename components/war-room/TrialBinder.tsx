@@ -4,10 +4,11 @@ import { Folder, FileText, ChevronRight, Gavel, BookOpen, Plus, File, Scale, Mor
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
+import { WarRoomData } from '../../types';
 
 interface TrialBinderProps {
   caseId: string;
-  warRoomData: any;
+  warRoomData: WarRoomData;
 }
 
 interface BinderSection {
@@ -23,9 +24,9 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
 
   // Memoize sections to prevent expensive re-mapping on every render
   const sections: BinderSection[] = useMemo(() => {
-      const motions = (warRoomData.motions || []).map((m: any) => ({ ...m, docType: 'Motion', date: m.filingDate }));
-      const orders = (warRoomData.docket || []).filter((d: any) => d.type === 'Order').map((d: any) => ({ ...d, docType: 'Order' }));
-      const filings = (warRoomData.docket || []).filter((d: any) => d.type === 'Filing').map((d: any) => ({ ...d, docType: 'Filing' }));
+      const motions = (warRoomData.motions || []).map((m) => ({ ...m, docType: 'Motion', date: m.filingDate }));
+      const orders = (warRoomData.docket || []).filter((d) => d.type === 'Order').map((d) => ({ ...d, docType: 'Order' }));
+      const filings = (warRoomData.docket || []).filter((d) => d.type === 'Filing').map((d) => ({ ...d, docType: 'Filing' }));
 
       return [
         { id: 'motions', title: 'Motions & Pleadings', icon: Gavel, documents: motions },

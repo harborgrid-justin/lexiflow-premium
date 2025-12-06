@@ -7,10 +7,23 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { WarRoomData, LegalDocument, EvidenceItem, Motion } from '../../types';
 
 interface EvidenceWallProps {
   caseId: string;
-  warRoomData: any;
+  warRoomData: WarRoomData;
+}
+
+interface WallItem {
+    id: string;
+    title: string;
+    type: string;
+    status: string;
+    hot: boolean;
+    party: string;
+    num: string;
+    desc?: string;
+    original: LegalDocument | EvidenceItem | Motion;
 }
 
 export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData }) => {
@@ -21,8 +34,8 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   const [isPending, startTransition] = useTransition();
 
   // Memoize heavy mapping logic
-  const combinedItems = useMemo(() => {
-      const docs = (warRoomData.documents || []).map((d: any) => ({
+  const combinedItems = useMemo<WallItem[]>(() => {
+      const docs = (warRoomData.documents || []).map((d) => ({
           id: d.id,
           title: d.title,
           type: d.type,
@@ -34,7 +47,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
           original: d
       }));
 
-      const ev = (warRoomData.evidence || []).map((e: any) => ({
+      const ev = (warRoomData.evidence || []).map((e) => ({
           id: e.id,
           title: e.title,
           type: e.type,
@@ -46,7 +59,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
           original: e
       }));
       
-      const motions = (warRoomData.motions || []).map((m: any) => ({
+      const motions = (warRoomData.motions || []).map((m) => ({
           id: m.id,
           title: m.title,
           type: 'Motion',
@@ -74,7 +87,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
       });
   };
 
-  const handleViewItem = (item: any) => {
+  const handleViewItem = (item: WallItem) => {
       const winId = `ev-wall-${item.id}`;
       openWindow(
           winId,
@@ -100,8 +113,8 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
       );
   };
 
-  const filteredExhibits = combinedItems.filter((ex: any) => {
-      const matchesSearch = ex.title.toLowerCase().includes(searchTerm.toLowerCase()) || ex.desc?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredExhibits = combinedItems.filter((ex) => {
+      const matchesSearch = ex.title.toLowerCase().includes(searchTerm.toLowerCase()) || (ex.desc && ex.desc.toLowerCase().includes(searchTerm.toLowerCase()));
       if (!matchesSearch) return false;
 
       if (filter === 'All') return true;
@@ -142,7 +155,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
         </div>
 
         <div className={cn("grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto pb-4 content-start", isPending ? "opacity-70 transition-opacity" : "")}>
-            {filteredExhibits.map((ex: any) => (
+            {filteredExhibits.map((ex) => (
                 <div key={ex.id} className={cn("group relative flex flex-col rounded-xl border shadow-sm transition-all hover:shadow-md cursor-pointer", theme.surface, theme.border.default, ex.hot ? "ring-2 ring-red-500/20" : "")}>
                     <div className={cn("aspect-[4/3] bg-slate-100 rounded-t-xl flex items-center justify-center relative overflow-hidden", theme.surfaceHighlight)}>
                         {getTypeIcon(ex.type)}

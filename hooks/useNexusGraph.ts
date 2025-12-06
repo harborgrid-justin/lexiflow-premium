@@ -1,11 +1,11 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { NexusPhysics, SerializedNode, NODE_STRIDE } from '../utils/nexusPhysics';
+import { NexusPhysics, SerializedNode, NODE_STRIDE, NexusLink } from '../utils/nexusPhysics';
 
 export const useNexusGraph = (containerRef: React.RefObject<HTMLDivElement>, initialData: { nodes: any[], links: any[] }) => {
   const physicsState = useRef({
     buffer: new Float32Array(0),
-    links: [] as any[],
+    links: [] as NexusLink[],
     idMap: new Map<string, number>(),
     count: 0,
     alpha: 0,
@@ -25,13 +25,25 @@ export const useNexusGraph = (containerRef: React.RefObject<HTMLDivElement>, ini
 
     const { buffer, idMap, meta } = NexusPhysics.initSystem(initialData.nodes, width, height);
     
+    // Ensure links have valid indices
+    const processedLinks: NexusLink[] = initialData.links
+        .map(l => {
+            const sIdx = idMap.get(l.source);
+            const tIdx = idMap.get(l.target);
+            if (sIdx !== undefined && tIdx !== undefined) {
+                return {
+                    sourceIndex: sIdx,
+                    targetIndex: tIdx,
+                    strength: l.strength
+                };
+            }
+            return null;
+        })
+        .filter((l): l is NexusLink => l !== null);
+
     physicsState.current = {
         buffer,
-        links: initialData.links.map(l => ({
-            sourceIndex: idMap.get(l.source),
-            targetIndex: idMap.get(l.target),
-            strength: l.strength
-        })).filter(l => l.sourceIndex !== undefined && l.targetIndex !== undefined),
+        links: processedLinks,
         idMap,
         count: meta.length,
         alpha: 1,

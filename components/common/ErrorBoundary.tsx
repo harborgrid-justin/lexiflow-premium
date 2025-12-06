@@ -17,17 +17,14 @@ interface State {
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      aiResolution: null,
-      isResolving: false,
-      debugInfo: null,
-      isCopied: false,
-    };
-  }
+  public state: State = {
+    hasError: false,
+    error: null,
+    aiResolution: null,
+    isResolving: false,
+    debugInfo: null,
+    isCopied: false,
+  };
 
   public static getDerivedStateFromError(error: Error): Partial<State> {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };

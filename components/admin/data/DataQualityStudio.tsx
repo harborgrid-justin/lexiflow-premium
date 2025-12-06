@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Check, Trash2, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2 } from 'lucide-react';
 import { Card } from '../../common/Card';
@@ -7,6 +8,7 @@ import { cn } from '../../../utils/cn';
 import { VirtualList } from '../../common/VirtualList';
 import { Modal } from '../../common/Modal';
 import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
+import { DataProfiler } from './quality/DataProfiler';
 import { Button } from '../../common/Button';
 
 interface DataQualityStudioProps {
@@ -242,12 +244,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
             )}
 
             {activeTab === 'profiler' && (
-                <div className={cn("h-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl", theme.border.default, theme.text.tertiary)}>
-                    <FileSearch className="h-16 w-16 mb-4 opacity-30"/>
-                    <h3 className={cn("text-lg font-bold", theme.text.secondary)}>Column Distribution Profiler</h3>
-                    <p className="text-sm max-w-md text-center mt-2">Select a table schema to visualize value distributions, null counts, and cardinality.</p>
-                    <Button variant="outline" className="mt-6">Select Dataset</Button>
-                </div>
+                <DataProfiler />
             )}
         </div>
 

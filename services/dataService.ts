@@ -8,6 +8,7 @@ import { DiscoveryService } from './discoveryService';
 import { DocketRepository } from './domains/DocketDomain';
 import { AdminService } from './domains/AdminDomain';
 import { CorrespondenceService } from './domains/CommunicationDomain';
+import { DataQualityService } from './domains/DataQualityDomain';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -42,6 +43,7 @@ export const DataService = {
   discovery: DiscoveryService,
   admin: AdminService,
   correspondence: CorrespondenceService,
+  quality: new DataQualityService(), // New Domain Added
 
   // Standard Repositories
   tasks: new class extends Repository<WorkflowTask> { 

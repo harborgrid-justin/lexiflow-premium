@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
-import { GitMerge, RefreshCw, Clock, Activity, CheckCircle, XCircle, Play, FileText, ChevronRight, Database, Cloud, Server, Settings, Plus, ArrowLeft } from 'lucide-react';
+import { GitMerge, RefreshCw, Clock, Activity, CheckCircle, XCircle, Play, FileText, ChevronRight, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
 
 interface PipelineJob {
     id: string;
@@ -22,12 +24,11 @@ export const PipelineMonitor: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'monitor' | 'connectors'>('monitor');
   const [selectedJob, setSelectedJob] = useState<PipelineJob | null>(null);
   
-  const [pipelines, setPipelines] = useState<PipelineJob[]>([
-      { id: 'p1', name: 'PACER Sync (Hourly)', status: 'Running', lastRun: '2 mins ago', duration: '45s', volume: '12MB', schedule: 'Hourly (00:00)', logs: ['[INFO] Connecting to PACER API...', '[INFO] Auth Success', '[INFO] Fetching updates...', '[WARN] Rate limit approaching'] },
-      { id: 'p2', name: 'Email Archival', status: 'Idle', lastRun: '15 mins ago', duration: '1m 20s', volume: '250MB', schedule: 'Continuous', logs: ['[INFO] Monitoring Exchange...', '[INFO] 150 items archived'] },
-      { id: 'p3', name: 'Data Warehouse ETL', status: 'Failed', lastRun: '4 hours ago', duration: 'Failed', volume: '0KB', schedule: 'Daily (02:00)', logs: ['[INFO] Starting batch load', '[ERROR] Connection Timeout: Warehouse DB unavailble'] },
-      { id: 'p4', name: 'Search Indexing', status: 'Success', lastRun: '10 mins ago', duration: '5m', volume: '45MB', schedule: 'Every 15m', logs: ['[INFO] Reindexing elastic', '[INFO] Success'] },
-  ]);
+  // Integrated Data Query
+  const { data: pipelines = [], isLoading, refetch } = useQuery<PipelineJob[]>(
+      ['admin', 'pipelines'],
+      DataService.admin.getPipelines as any
+  );
 
   const connectors = [
       { id: 'c1', name: 'PostgreSQL Production', type: 'Database', status: 'Healthy', icon: Database, color: 'text-blue-600' },
@@ -37,12 +38,12 @@ export const PipelineMonitor: React.FC = () => {
       { id: 'c5', name: 'Redis Cache', type: 'Cache', status: 'Degraded', icon: Database, color: 'text-red-600' },
   ];
 
+  // Note: Mutation would typically go here for 'Run'
   const handleRun = (id: string) => {
-      setPipelines(prev => prev.map(p => p.id === id ? { ...p, status: 'Running', logs: ['[INFO] Manual Trigger initiated...', ...p.logs] } : p));
-      setTimeout(() => {
-          setPipelines(prev => prev.map(p => p.id === id ? { ...p, status: 'Success', lastRun: 'Just now' } : p));
-      }, 2000);
+      alert(`Triggered run for pipeline ${id}`);
   };
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className={cn("flex flex-col h-full", theme.background)}>
@@ -53,7 +54,7 @@ export const PipelineMonitor: React.FC = () => {
                     <p className={cn("text-sm", theme.text.secondary)}>Data Orchestration & Connectivity</p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" icon={RefreshCw}>Refresh</Button>
+                    <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
                     {activeTab === 'connectors' && <Button variant="primary" icon={Plus}>Add Connection</Button>}
                 </div>
             </div>
@@ -122,7 +123,7 @@ export const PipelineMonitor: React.FC = () => {
                     theme.surface,
                     selectedJob ? "translate-x-0" : "translate-x-full lg:translate-x-0 lg:hidden"
                 )}>
-                    {selectedJob && (
+                    {selectedJob ? (
                         <>
                             <div className={cn("p-6 border-b flex justify-between items-start", theme.border.default, theme.surfaceHighlight)}>
                                 <div>
@@ -174,6 +175,10 @@ export const PipelineMonitor: React.FC = () => {
                                 </div>
                             </div>
                         </>
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-slate-400">
+                             <p>Select a pipeline to view details.</p>
+                        </div>
                     )}
                 </div>
             </div>

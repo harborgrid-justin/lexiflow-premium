@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Check, Trash2, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2 } from 'lucide-react';
+import { Sparkles, Check, Trash2, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2, Loader2 } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { Tabs } from '../../common/Tabs';
 import { useTheme } from '../../../context/ThemeContext';
@@ -10,6 +10,8 @@ import { Modal } from '../../common/Modal';
 import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
 import { DataProfiler } from './quality/DataProfiler';
 import { Button } from '../../common/Button';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
 
 interface DataQualityStudioProps {
     initialTab?: string;
@@ -39,12 +41,17 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
-  // --- MOCK DATA ---
-  const [anomalies, setAnomalies] = useState<Anomaly[]>([
-      { id: 1, table: 'Parties', field: 'phone', issue: 'Invalid Format', count: 142, sample: '123-456', status: 'Detected' },
-      { id: 2, table: 'Cases', field: 'status', issue: 'Unknown Enum', count: 5, sample: 'Pending Review (Legacy)', status: 'Detected' },
-      { id: 3, table: 'Documents', field: 'size', issue: 'Missing Value', count: 450, sample: 'null', status: 'Detected' },
-  ]);
+  // Integrated Data Query
+  const { data: fetchedAnomalies = [], isLoading } = useQuery<Anomaly[]>(
+      ['admin', 'anomalies'],
+      DataService.admin.getAnomalies as any
+  );
+  
+  const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
+
+  useEffect(() => {
+      if (fetchedAnomalies.length > 0) setAnomalies(fetchedAnomalies);
+  }, [fetchedAnomalies]);
 
   const [rules, setRules] = useState<QualityRule[]>([
       { 
@@ -119,7 +126,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   };
 
   const renderAnomalyRow = (a: Anomaly) => (
-      <div key={a.id} className={cn("flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b last:border-0 transition-colors gap-3", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+      <div key={a.id} className={cn("flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b last:border-0 transition-colors gap-3", theme.border.light, `hover:${theme.surfaceHighlight}`)} style={{ height: 'auto', minHeight: '73px' }}>
          <div className="flex items-start sm:items-center gap-4 flex-1">
              <div className={cn("p-2 rounded-full shrink-0", a.status === 'Fixed' ? cn(theme.status.success.bg, theme.status.success.text) : cn(theme.status.warning.bg, theme.status.warning.text))}>
                  {a.status === 'Fixed' ? <CheckCircle2 className="h-5 w-5"/> : <AlertOctagon className="h-5 w-5"/>}
@@ -141,6 +148,8 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
          </div>
       </div>
   );
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className="flex flex-col h-full min-h-0">

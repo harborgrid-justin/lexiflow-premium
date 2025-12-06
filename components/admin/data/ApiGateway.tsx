@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
-import { Key, Radio, Activity, Plus, Trash2, Copy } from 'lucide-react';
+import { Key, Radio, Activity, Plus, Trash2, Copy, Loader2 } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
 
 interface ApiKey {
     id: string;
@@ -16,25 +18,37 @@ interface ApiKey {
 
 export const ApiGateway: React.FC = () => {
   const { theme } = useTheme();
-  const [keys, setKeys] = useState<ApiKey[]>([
-      { id: 'k1', name: 'Production App', prefix: 'pk_live_...', created: '2023-11-01', status: 'Active' },
-      { id: 'k2', name: 'Dev Environment', prefix: 'pk_test_...', created: '2024-01-15', status: 'Active' },
-  ]);
+  
+  // Integrated Data Query
+  const { data: fetchedKeys = [], isLoading } = useQuery<ApiKey[]>(
+      ['admin', 'apikeys'],
+      DataService.admin.getApiKeys as any
+  );
+  
+  // Local state to handle optimistic updates for this demo view
+  const [localKeys, setLocalKeys] = useState<ApiKey[]>([]);
+  
+  // Sync prop to local state
+  React.useEffect(() => {
+      if (fetchedKeys.length > 0) setLocalKeys(fetchedKeys);
+  }, [fetchedKeys]);
 
   const handleCreateKey = () => {
       const newKey: ApiKey = {
           id: `k-${Date.now()}`,
-          name: `New Key ${keys.length + 1}`,
+          name: `New Key ${localKeys.length + 1}`,
           prefix: 'pk_live_...',
           created: new Date().toLocaleDateString(),
           status: 'Active'
       };
-      setKeys([...keys, newKey]);
+      setLocalKeys([...localKeys, newKey]);
   };
 
   const handleRevoke = (id: string) => {
-      setKeys(keys.map(k => k.id === id ? { ...k, status: 'Revoked' } : k));
+      setLocalKeys(localKeys.map(k => k.id === id ? { ...k, status: 'Revoked' } : k));
   };
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto">
@@ -62,7 +76,7 @@ export const ApiGateway: React.FC = () => {
                     <div className={cn("p-3 rounded-full", theme.status.warning.bg, theme.status.warning.text)}><Key className="h-6 w-6"/></div>
                     <div>
                         <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Active Keys</p>
-                        <p className={cn("text-2xl font-bold", theme.text.primary)}>{keys.filter(k => k.status === 'Active').length}</p>
+                        <p className={cn("text-2xl font-bold", theme.text.primary)}>{localKeys.filter(k => k.status === 'Active').length}</p>
                     </div>
                 </div>
             </Card>
@@ -75,7 +89,7 @@ export const ApiGateway: React.FC = () => {
                     <Button size="sm" variant="primary" icon={Plus} onClick={handleCreateKey}>Create Key</Button>
                 </div>
                 <div className="space-y-3">
-                    {keys.map(key => (
+                    {localKeys.map(key => (
                         <div key={key.id} className={cn("p-3 border rounded-lg flex items-center justify-between transition-colors", key.status === 'Revoked' ? cn("opacity-60", theme.surfaceHighlight) : theme.surface, theme.border.default)}>
                             <div>
                                 <div className="flex items-center gap-2">

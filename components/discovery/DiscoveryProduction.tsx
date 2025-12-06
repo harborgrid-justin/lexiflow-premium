@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowLeft, Upload, FileText, Check, Settings, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
 import { Button } from '../common/Button';

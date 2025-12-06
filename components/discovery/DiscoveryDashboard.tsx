@@ -1,18 +1,17 @@
-
 import React from 'react';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
+import { Badge } from '../common/Badge';
 import { ArrowRight, Database, FileText, CheckCircle, Scale, AlertTriangle } from 'lucide-react';
-import { DataService } from '../../../services/dataService';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
+import { DataService } from '../../services/dataService';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 import { DiscoveryMetrics } from './dashboard/DiscoveryMetrics';
 import { DiscoveryCharts } from './dashboard/DiscoveryCharts';
-import { DiscoveryView } from '../../DiscoveryPlatform';
-import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../../types';
+import { DiscoveryView } from '../DiscoveryPlatform';
+import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../types';
 
 interface DiscoveryDashboardProps {
     onNavigate: (view: DiscoveryView, id?: string) => void;

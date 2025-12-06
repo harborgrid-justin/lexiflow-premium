@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Network, Database, FileText, ArrowRight, X, User, Clock, Code, RefreshCw, ZoomIn, ZoomOut, Play, Pause, Layers, Search } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -5,6 +6,7 @@ import { cn } from '../../../utils/cn';
 import { NexusPhysics, NODE_STRIDE } from '../../../utils/nexusPhysics';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
+import { ImpactAnalysis } from './lineage/ImpactAnalysis';
 
 interface LineageGraphProps {
     initialTab?: string;
@@ -208,12 +210,12 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
             )}
 
             {activeTab === 'impact' && (
-                <div className={cn("p-6 flex items-center justify-center h-full", theme.text.tertiary)}>
-                    <div className="text-center">
-                        <Layers className="h-16 w-16 mx-auto mb-4 opacity-20"/>
-                        <h3 className={cn("text-lg font-bold", theme.text.secondary)}>Impact Analysis</h3>
-                        <p className="text-sm mt-2">Select a node in the graph to view downstream dependencies.</p>
-                    </div>
+                <ImpactAnalysis />
+            )}
+
+            {activeTab === 'history' && (
+                <div className={cn("p-6 text-center text-slate-400 italic")}>
+                    No recent lineage changes detected.
                 </div>
             )}
         </div>

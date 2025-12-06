@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, BookOpen, Info, Maximize2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
@@ -7,6 +8,7 @@ import { VirtualList } from '../../common/VirtualList';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { useWindow } from '../../../../context/WindowContext';
 import { Button } from '../../common/Button';
+import { AccessRequestManager } from './catalog/AccessRequestManager';
 
 interface DataCatalogProps {
     initialTab?: string;
@@ -156,11 +158,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
             )}
 
             {activeTab === 'requests' && (
-                <div className={cn("flex flex-col items-center justify-center h-full p-6 text-center", theme.text.tertiary)}>
-                    <Key className="h-16 w-16 mb-4 opacity-20"/>
-                    <h3 className={cn("text-lg font-bold", theme.text.secondary)}>Access Request Portal</h3>
-                    <p className="text-sm max-w-md mt-2">Manage pending requests for restricted datasets. No active requests.</p>
-                </div>
+                <AccessRequestManager />
             )}
         </div>
     </div>

@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { Shield, CheckCircle, XCircle, Lock, Plus, Save } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 
 export const SecurityMatrix: React.FC = () => {

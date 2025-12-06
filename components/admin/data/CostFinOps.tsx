@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DollarSign, TrendingDown, AlertTriangle } from 'lucide-react';
 import { Card } from '../../common/Card';

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, RefreshCw, Scale, Lock, Edit2, Plus, Users, Save, CheckCircle, X, FileText } from 'lucide-react';
 import { Card } from '../../common/Card';
@@ -7,6 +8,7 @@ import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
+import { AccessGovernance } from './governance/AccessGovernance';
 
 interface GovernanceConsoleProps {
     initialTab?: string;
@@ -152,11 +154,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
             )}
 
             {activeTab === 'access' && (
-                <div className={cn("text-center py-12 border-2 border-dashed rounded-lg", theme.border.default, theme.text.tertiary)}>
-                    <Users className="h-12 w-12 mx-auto mb-3 opacity-20"/>
-                    <p>Identity & Access Governance Module</p>
-                    <p className="text-sm mt-2">Review permissions, roles, and separation of duties.</p>
-                </div>
+                <AccessGovernance />
             )}
         </div>
 

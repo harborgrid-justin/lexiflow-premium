@@ -7,6 +7,8 @@ import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { SchemaVisualizer } from './schema/SchemaVisualizer';
 import { SchemaCodeEditor } from './schema/SchemaCodeEditor';
+import { MigrationHistory } from './schema/MigrationHistory';
+import { SchemaSnapshots } from './schema/SchemaSnapshots';
 import { Button } from '../../common/Button';
 
 interface SchemaArchitectProps {
@@ -146,8 +148,8 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         <div className={cn("flex-1 overflow-hidden relative", theme.background)}>
             {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
             {activeTab === 'code' && <SchemaCodeEditor ddl={generatedDDL} />}
-            {activeTab === 'history' && <div className="p-6 text-center text-sm text-slate-400">No migration history available</div>}
-            {activeTab === 'snapshots' && <div className="p-6 text-center text-sm text-slate-400">No snapshots available</div>}
+            {activeTab === 'history' && <MigrationHistory />}
+            {activeTab === 'snapshots' && <SchemaSnapshots />}
         </div>
 
         {/* Column Edit/Add Modal */}

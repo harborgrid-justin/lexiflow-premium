@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, BookOpen, Info, Maximize2 } from 'lucide-react';
+import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, BookOpen, Info, Maximize2, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
@@ -9,6 +9,8 @@ import { SearchToolbar } from '../../common/SearchToolbar';
 import { useWindow } from '../../../../context/WindowContext';
 import { Button } from '../../common/Button';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
+import { DataService } from '../../../../services/dataService';
+import { useQuery } from '../../../../services/queryClient';
 
 interface DataCatalogProps {
     initialTab?: string;
@@ -22,15 +24,11 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Mock Domains
-  const domains = [
-      { name: 'Client Master', count: 12, desc: 'Authoritative source for client entities.' },
-      { name: 'Case Facts', count: 8, desc: 'Litigation details and metadata.' },
-      { name: 'Financial Ledger', count: 24, desc: 'Billing, expenses, and trust accounting.' },
-      { name: 'Document Metadata', count: 45, desc: 'File properties and version history.' },
-      { name: 'Entity Graph', count: 6, desc: 'Relationship mapping nodes.' },
-      { name: 'Communications', count: 15, desc: 'Email and secure message logs.' }
-  ];
+  // Integrated Data Query
+  const { data: domains = [], isLoading } = useQuery<any[]>(
+      ['admin', 'catalog_domains'],
+      DataService.admin.getDataDomains as any
+  );
 
   const dictionaryItems = Array.from({ length: 50 }, (_, i) => ({
       id: `field-${i}`,
@@ -62,6 +60,8 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
           </div>
       </div>
   );
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className={cn("flex flex-col h-full", isOrbital ? cn(theme.surface) : "")}>

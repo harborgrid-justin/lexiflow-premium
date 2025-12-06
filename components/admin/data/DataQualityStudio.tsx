@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Check, Trash2, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2 } from 'lucide-react';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
+import { Card } from '../../../common/Card';
+import { Tabs } from '../../../common/Tabs';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { VirtualList } from '../../common/VirtualList';
-import { Modal } from '../../common/Modal';
+import { VirtualList } from '../../../common/VirtualList';
+import { Modal } from '../../../common/Modal';
 import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
+import { Button } from '../../../common/Button';
 
 interface DataQualityStudioProps {
     initialTab?: string;
@@ -120,13 +119,13 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   const renderAnomalyRow = (a: Anomaly) => (
       <div key={a.id} className={cn("flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b last:border-0 transition-colors gap-3", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
          <div className="flex items-start sm:items-center gap-4 flex-1">
-             <div className={cn("p-2 rounded-full shrink-0", a.status === 'Fixed' ? "bg-green-100 text-green-600" : "bg-amber-50 text-amber-600")}>
+             <div className={cn("p-2 rounded-full shrink-0", a.status === 'Fixed' ? cn(theme.status.success.bg, theme.status.success.text) : cn(theme.status.warning.bg, theme.status.warning.text))}>
                  {a.status === 'Fixed' ? <CheckCircle2 className="h-5 w-5"/> : <AlertOctagon className="h-5 w-5"/>}
              </div>
              <div className="min-w-0">
                  <h4 className={cn("font-bold text-sm flex items-center gap-2 truncate", theme.text.primary)}>
                      {a.table}.{a.field}
-                     {a.status === 'Fixing' && <RefreshCw className="h-3 w-3 animate-spin text-blue-600"/>}
+                     {a.status === 'Fixing' && <RefreshCw className={cn("h-3 w-3 animate-spin", theme.primary.text)}/>}
                  </h4>
                  <p className={cn("text-xs truncate", theme.text.secondary)}>{a.issue} • <span className={cn("font-mono px-1 rounded", theme.surfaceHighlight)}>{a.count} rows</span></p>
              </div>
@@ -136,7 +135,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
              {a.status === 'Detected' && (
                  <Button size="sm" variant="outline" icon={Check} onClick={() => handleFix(a.id)}>Fix</Button>
              )}
-             {a.status === 'Fixed' && <span className="text-xs font-bold text-green-600 uppercase">Resolved</span>}
+             {a.status === 'Fixed' && <span className={cn("text-xs font-bold uppercase", theme.status.success.text)}>Resolved</span>}
          </div>
       </div>
   );
@@ -151,7 +150,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                 </div>
                 <div className="flex gap-2">
                     {isScanning && (
-                         <div className="flex items-center text-xs font-bold text-blue-600 mr-4">
+                         <div className={cn("flex items-center text-xs font-bold mr-4", theme.primary.text)}>
                              <RefreshCw className="h-3 w-3 animate-spin mr-2"/> Scanning: {scanProgress}%
                          </div>
                     )}
@@ -172,15 +171,15 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                         <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
                             <p className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>Overall Health</p>
                             <div className="flex items-center mt-2">
-                                <div className="text-3xl font-bold text-green-600 mr-3">94%</div>
-                                <span className="text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200">Good</span>
+                                <div className={cn("text-3xl font-bold mr-3", theme.status.success.text)}>94%</div>
+                                <span className={cn("text-xs font-bold px-2 py-0.5 rounded border", theme.status.success.bg, theme.status.success.text, theme.status.success.border)}>Good</span>
                             </div>
                         </div>
                         <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
                              <p className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>Critical Errors</p>
                              <div className="flex items-center mt-2">
-                                <div className="text-3xl font-bold text-red-600 mr-3">{anomalies.filter(a => a.status === 'Detected').length}</div>
-                                <span className="text-xs text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">Action Required</span>
+                                <div className={cn("text-3xl font-bold mr-3", theme.status.error.text)}>{anomalies.filter(a => a.status === 'Detected').length}</div>
+                                <span className={cn("text-xs font-bold px-2 py-0.5 rounded border", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}>Action Required</span>
                              </div>
                         </div>
                         <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
@@ -217,7 +216,11 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <h5 className={cn("font-bold text-sm", theme.text.primary)}>{rule.name}</h5>
-                                        <span className={cn("text-[10px] px-1.5 rounded uppercase font-bold", rule.severity === 'Critical' ? "bg-red-100 text-red-700" : rule.severity === 'High' ? "bg-orange-100 text-orange-700" : "bg-blue-100 text-blue-700")}>{rule.severity}</span>
+                                        <span className={cn("text-[10px] px-1.5 rounded uppercase font-bold", 
+                                            rule.severity === 'Critical' ? cn(theme.status.error.bg, theme.status.error.text) :
+                                            rule.severity === 'High' ? cn(theme.status.warning.bg, theme.status.warning.text) :
+                                            cn(theme.status.info.bg, theme.status.info.text)
+                                        )}>{rule.severity}</span>
                                     </div>
                                     <div className="flex gap-2 items-center flex-wrap">
                                         <code className={cn("text-xs px-2 py-1 rounded font-mono", theme.surfaceHighlight, theme.text.secondary)}>
@@ -227,8 +230,8 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 self-end sm:self-auto">
-                                    <div className={cn("w-10 h-5 rounded-full p-1 cursor-pointer transition-colors", rule.enabled ? "bg-green-500" : "bg-slate-300")}>
-                                        <div className={cn("w-3 h-3 bg-white rounded-full shadow-sm transition-transform", rule.enabled ? "translate-x-5" : "")}></div>
+                                    <div className={cn("w-10 h-5 rounded-full p-1 cursor-pointer transition-colors", rule.enabled ? theme.status.success.text.replace('text-', 'bg-') : cn(theme.status.neutral.bg, "dark:bg-slate-700"))}>
+                                        <div className={cn("w-3 h-3 rounded-full shadow-sm transition-transform", theme.surface, rule.enabled ? "translate-x-5" : "")}></div>
                                     </div>
                                     <Button size="sm" variant="ghost" icon={Edit2} onClick={() => handleEditRule(rule)} />
                                 </div>

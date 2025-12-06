@@ -1,0 +1,60 @@
+import React from 'react';
+import { Card } from '../../common/Card';
+import { Button } from '../../common/Button';
+import { FileWarning, FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { STORES } from '../../../services/db';
+import { EvidenceItem } from '../../../types';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+export const HearsayAnalyzer: React.FC = () => {
+    const { theme } = useTheme();
+    const { data: evidence = [] } = useQuery<EvidenceItem[]>(
+        [STORES.EVIDENCE, 'all'],
+        DataService.evidence.getAll
+    );
+    
+    // Mock analysis results
+    const statements = [
+        { id: 1, text: '"He told me the car was red."', exception: 'Not Hearsay (Effect on Listener)', status: 'Analyzed' },
+        { id: 2, text: '"Ouch, my leg hurts!"', exception: 'FRE 803(2) Excited Utterance', status: 'Analyzed' },
+        { id: 3, text: '"Per the report, sales declined."', exception: 'None', status: 'Objectionable' },
+    ];
+
+    return (
+        <div className="space-y-6">
+            <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surface, theme.border.default)}>
+                <FileText className={cn("h-5 w-5", theme.text.secondary)}/>
+                <select className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
+                    <option value="">Select Document to Analyze...</option>
+                    {evidence.map(e => <option key={e.id} value={e.id}>{e.title}</option>)}
+                </select>
+                <Button icon={Wand2}>AI Scan Document</Button>
+            </div>
+            
+            <Card title="Hearsay Statements Identified">
+                {statements.map(stmt => (
+                    <div key={stmt.id} className={cn("p-3 border-b last:border-0", theme.border.light)}>
+                        <p className={cn("italic text-sm", theme.text.primary)}>"{stmt.text}"</p>
+                        <div className="flex justify-between items-center mt-2">
+                            <select className={cn("text-xs p-1 border rounded", theme.surfaceHighlight, theme.border.default)}>
+                                <option>{stmt.exception}</option>
+                                <option>FRE 803(1) Present Sense Impression</option>
+                                <option>FRE 803(3) Then-Existing Condition</option>
+                            </select>
+                            <span className={cn(
+                                "flex items-center text-xs font-bold",
+                                stmt.status === 'Analyzed' ? theme.status.success.text : theme.status.error.text
+                            )}>
+                                {stmt.status === 'Analyzed' ? <CheckCircle className="h-3 w-3 mr-1"/> : <AlertTriangle className="h-3 w-3 mr-1"/>}
+                                {stmt.status}
+                            </span>
+                        </div>
+                    </div>
+                ))}
+            </Card>
+        </div>
+    );
+};

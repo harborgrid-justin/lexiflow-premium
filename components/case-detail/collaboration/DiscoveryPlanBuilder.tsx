@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { JointPlan, PlanSection } from '../../../types';
-import { Card } from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
-import { Badge } from '../../../components/common/Badge';
+import { Card } from '../../common/Card';
+import { Button } from '../../common/Button';
+import { Badge } from '../../common/Badge';
 import { FileText, CheckCircle, AlertCircle, Edit2, Save, Download, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';

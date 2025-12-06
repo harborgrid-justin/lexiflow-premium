@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { LegalEntity, EntityRelationship } from '../../types';
 import { DataService } from '../../services/dataService';

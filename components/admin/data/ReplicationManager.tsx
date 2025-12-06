@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
 import { Repeat, Globe, CheckCircle, ArrowRight, AlertTriangle, Power, ShieldAlert } from 'lucide-react';
 import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Modal } from '../../common/Modal';
+import { Button } from '../../common/Button';
 
 export const ReplicationManager: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const [isFailoverModalOpen, setIsFailoverModalOpen] = useState(false);
   const [primaryRegion, setPrimaryRegion] = useState('US-East');
   const [replicaStatus, setReplicaStatus] = useState<'Syncing' | 'Promoting' | 'Active'>('Syncing');
@@ -22,9 +21,6 @@ export const ReplicationManager: React.FC = () => {
       }, 2000);
   };
 
-  const dotColor = mode === 'dark' ? '#334155' : '#cbd5e1';
-  const globeBg = mode === 'dark' ? 'bg-slate-900' : 'bg-slate-100';
-
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto">
         <div className="flex justify-between items-center">
@@ -33,20 +29,20 @@ export const ReplicationManager: React.FC = () => {
         </div>
         
         <div className={cn("relative h-96 rounded-xl p-8 overflow-hidden flex items-center justify-center border shadow-2xl", theme.surface, theme.border.default)}>
-            <div className="absolute inset-0 opacity-20" style={{backgroundImage: `radial-gradient(${dotColor} 1px, transparent 1px)`, backgroundSize: '20px 20px'}}></div>
+            <div className={cn("absolute inset-0 opacity-20", "bg-[radial-gradient(var(--border-light)_1px,transparent_1px)] [background-size:20px_20px]")}></div>
             
             <div className="flex items-center gap-16 relative z-10">
                 <div className="text-center group">
                     <div className={cn(
                         "w-24 h-24 rounded-full flex items-center justify-center shadow-lg mb-4 transition-all duration-500",
                         primaryRegion === 'US-East' 
-                            ? "bg-blue-600 shadow-blue-500/50 scale-110 border-4 border-blue-400" 
-                            : cn(globeBg, "border-2", theme.border.default)
+                            ? cn(theme.primary.DEFAULT, "shadow-blue-500/50 scale-110 border-4 border-blue-400") 
+                            : cn(theme.surfaceHighlight, "border-2", theme.border.default)
                     )}>
-                        <Globe className={cn("h-12 w-12", primaryRegion === 'US-East' ? "text-white" : theme.text.tertiary)}/>
+                        <Globe className={cn("h-12 w-12", primaryRegion === 'US-East' ? theme.text.inverse : theme.text.tertiary)}/>
                     </div>
                     <p className={cn("font-bold text-lg", theme.text.primary)}>US-East</p>
-                    <p className={cn("text-xs mt-1 font-mono uppercase tracking-wide", primaryRegion === 'US-East' ? "text-green-500" : theme.text.secondary)}>
+                    <p className={cn("text-xs mt-1 font-mono uppercase tracking-wide", primaryRegion === 'US-East' ? theme.status.success.text : theme.text.secondary)}>
                         {primaryRegion === 'US-East' ? 'Primary (Read/Write)' : 'Replica (Read-Only)'}
                     </p>
                 </div>
@@ -56,7 +52,7 @@ export const ReplicationManager: React.FC = () => {
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 animate-shimmer" style={{backgroundSize: '200% 100%'}}></div>
                     </div>
                     <span className={cn("text-xs text-center flex items-center justify-center px-3 py-1 rounded-full border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
-                        <ArrowRight className="h-3 w-3 mr-1 text-green-500"/> 12ms Lag
+                        <ArrowRight className={cn("h-3 w-3 mr-1", theme.status.success.text)}/> 12ms Lag
                     </span>
                 </div>
 
@@ -64,13 +60,13 @@ export const ReplicationManager: React.FC = () => {
                     <div className={cn(
                         "w-24 h-24 rounded-full flex items-center justify-center shadow-lg mb-4 transition-all duration-500",
                         primaryRegion === 'EU-West' 
-                            ? "bg-blue-600 shadow-blue-500/50 scale-110 border-4 border-blue-400" 
-                            : cn(globeBg, "border-2", theme.border.default)
+                            ? cn(theme.primary.DEFAULT, "shadow-blue-500/50 scale-110 border-4 border-blue-400") 
+                            : cn(theme.surfaceHighlight, "border-2", theme.border.default)
                     )}>
-                        <Globe className={cn("h-12 w-12", primaryRegion === 'EU-West' ? "text-white" : theme.text.tertiary)}/>
+                        <Globe className={cn("h-12 w-12", primaryRegion === 'EU-West' ? theme.text.inverse : theme.text.tertiary)}/>
                     </div>
                     <p className={cn("font-bold text-lg", theme.text.primary)}>EU-West</p>
-                    <p className={cn("text-xs mt-1 font-mono uppercase tracking-wide", primaryRegion === 'EU-West' ? "text-green-500" : theme.text.secondary)}>
+                    <p className={cn("text-xs mt-1 font-mono uppercase tracking-wide", primaryRegion === 'EU-West' ? theme.status.success.text : theme.text.secondary)}>
                         {primaryRegion === 'EU-West' ? 'Primary (Read/Write)' : 'Replica (Read-Only)'}
                     </p>
                 </div>
@@ -80,7 +76,7 @@ export const ReplicationManager: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="border-t-4 border-t-green-500">
                 <p className={cn("text-xs uppercase font-bold mb-1", theme.text.secondary)}>Sync Status</p>
-                <p className="text-xl font-bold text-green-600 flex items-center"><CheckCircle className="h-5 w-5 mr-2"/> Active</p>
+                <p className={cn("text-xl font-bold flex items-center", theme.status.success.text)}><CheckCircle className="h-5 w-5 mr-2"/> Active</p>
                 <p className={cn("text-xs mt-2", theme.text.secondary)}>Wal-G streaming active.</p>
             </Card>
             <Card className="border-t-4 border-t-blue-500">
@@ -95,11 +91,11 @@ export const ReplicationManager: React.FC = () => {
             </Card>
         </div>
 
-        <div className="p-4 rounded-lg border bg-amber-50 border-amber-200 flex items-start gap-4">
-            <ShieldAlert className="h-6 w-6 text-amber-600 shrink-0 mt-1"/>
+        <div className={cn("p-4 rounded-lg border flex items-start gap-4", theme.status.warning.bg, theme.status.warning.border)}>
+            <ShieldAlert className={cn("h-6 w-6 shrink-0 mt-1", theme.status.warning.text)}/>
             <div>
-                <h4 className="font-bold text-amber-900">Disaster Recovery Protocol</h4>
-                <p className="text-sm text-amber-800 mt-1">
+                <h4 className={cn("font-bold text-sm", theme.status.warning.text)}>Disaster Recovery Protocol</h4>
+                <p className={cn("text-sm mt-1", theme.status.warning.text)}>
                     Automatic failover is enabled for Region US-East. In the event of 3 consecutive health check failures, traffic will route to EU-West. 
                     RPO (Recovery Point Objective): 5 seconds. RTO (Recovery Time Objective): 30 seconds.
                 </p>
@@ -108,8 +104,8 @@ export const ReplicationManager: React.FC = () => {
 
         <Modal isOpen={isFailoverModalOpen} onClose={() => setIsFailoverModalOpen(false)} title="Confirm Region Failover" size="sm">
             <div className="p-6 text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Power className="h-8 w-8 text-red-600"/>
+                <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4", theme.status.error.bg)}>
+                    <Power className={cn("h-8 w-8", theme.status.error.text)}/>
                 </div>
                 <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>Promote {primaryRegion === 'US-East' ? 'EU-West' : 'US-East'} to Primary?</h3>
                 <p className={cn("text-sm mb-6", theme.text.secondary)}>

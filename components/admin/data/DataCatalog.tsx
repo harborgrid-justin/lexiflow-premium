@@ -1,13 +1,12 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, BookOpen, Info, Maximize2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
-import { VirtualList } from '../../common/VirtualList';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { useWindow } from '../../../context/WindowContext';
+import { useTheme } from '../../../../context/ThemeContext';
+import { cn } from '../../../../utils/cn';
+import { Tabs } from '../../../common/Tabs';
+import { VirtualList } from '../../../common/VirtualList';
+import { SearchToolbar } from '../../../common/SearchToolbar';
+import { useWindow } from '../../../../context/WindowContext';
+import { Button } from '../../../common/Button';
 
 interface DataCatalogProps {
     initialTab?: string;
@@ -55,7 +54,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
           <div className={cn("w-[15%] text-xs font-mono", theme.text.tertiary)}>{item.type}</div>
           <div className={cn("flex-1 text-sm truncate pr-4", theme.text.secondary)}>{item.desc}</div>
           <div className="w-[15%]">
-              <span className={cn("text-[10px] uppercase font-bold px-2 py-0.5 rounded border", item.classification === 'Confidential' ? "bg-red-50 text-red-700 border-red-100" : cn(theme.surfaceHighlight, theme.border.default, theme.text.secondary))}>
+              <span className={cn("text-[10px] uppercase font-bold px-2 py-0.5 rounded border", item.classification === 'Confidential' ? cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border) : cn(theme.surfaceHighlight, theme.border.default, theme.text.secondary))}>
                   {item.classification}
               </span>
           </div>
@@ -63,10 +62,13 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
   );
 
   return (
-    <div className={cn("flex flex-col h-full", isOrbital ? "bg-white dark:bg-slate-900" : "")}>
+    <div className={cn("flex flex-col h-full", isOrbital ? cn(theme.surface) : "")}>
         <div className={cn("px-6 pt-6 border-b shrink-0", theme.border.default)}>
             <div className="flex justify-between items-center mb-4">
-                <h3 className={cn("text-xl font-bold", theme.text.primary)}>Enterprise Data Catalog</h3>
+                <div>
+                    <h3 className={cn("text-xl font-bold", theme.text.primary)}>Enterprise Data Catalog</h3>
+                    <p className={cn("text-sm", theme.text.secondary)}>Discover, understand, and govern your firm's data.</p>
+                </div>
                 <div className="flex gap-2 items-center">
                     <div className="relative w-64 hidden md:block">
                         <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search assets..." className="border-none shadow-none p-0 bg-transparent"/>
@@ -94,7 +96,12 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                                 <div 
                                     key={i} 
                                     onClick={() => setSelectedDomain(domain.name)}
-                                    className={cn("p-5 rounded-lg border transition-all cursor-pointer group relative overflow-hidden hover:shadow-md", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}
+                                    className={cn(
+                                        "p-5 rounded-lg border transition-all cursor-pointer group relative overflow-hidden hover:shadow-md",
+                                        theme.surface,
+                                        theme.border.default,
+                                        `hover:${theme.primary.border}`
+                                    )}
                                 >
                                     <div className="flex items-center gap-3 mb-3">
                                         <div className={cn("p-2 rounded-lg transition-colors", theme.primary.light, theme.primary.text)}>

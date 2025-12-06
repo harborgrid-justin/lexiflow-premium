@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';

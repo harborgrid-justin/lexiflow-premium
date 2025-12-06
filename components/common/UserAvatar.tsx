@@ -2,12 +2,13 @@
 import React from 'react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
+import { User } from '../../types';
 
 interface UserAvatarProps {
   name: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
-  indicatorStatus?: 'online' | 'offline' | 'busy' | 'away';
+  indicatorStatus?: User['status'];
 }
 
 export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', className = '', indicatorStatus }) => {

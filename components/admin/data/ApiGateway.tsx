@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Key, Radio, Activity, Plus, Trash2, Copy } from 'lucide-react';
 import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { Button } from '../../common/Button';
 
 interface ApiKey {
     id: string;
@@ -41,7 +40,7 @@ export const ApiGateway: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-indigo-500/10 text-indigo-600 rounded-full"><Activity className="h-6 w-6"/></div>
+                    <div className={cn("p-3 rounded-full", theme.status.info.bg, theme.status.info.text)}><Activity className="h-6 w-6"/></div>
                     <div>
                         <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Requests (24h)</p>
                         <p className={cn("text-2xl font-bold", theme.text.primary)}>1.2M</p>
@@ -50,7 +49,7 @@ export const ApiGateway: React.FC = () => {
             </Card>
             <Card>
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-green-500/10 text-green-600 rounded-full"><Radio className="h-6 w-6"/></div>
+                    <div className={cn("p-3 rounded-full", theme.status.success.bg, theme.status.success.text)}><Radio className="h-6 w-6"/></div>
                     <div>
                         <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Avg Latency</p>
                         <p className={cn("text-2xl font-bold", theme.text.primary)}>45ms</p>
@@ -58,8 +57,8 @@ export const ApiGateway: React.FC = () => {
                 </div>
             </Card>
             <Card>
-                <div className="flex items-center gap-4">
-                    <div className="p-3 bg-amber-500/10 text-amber-600 rounded-full"><Key className="h-6 w-6"/></div>
+                <div className={cn("flex items-center gap-4")}>
+                    <div className={cn("p-3 rounded-full", theme.status.warning.bg, theme.status.warning.text)}><Key className="h-6 w-6"/></div>
                     <div>
                         <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Active Keys</p>
                         <p className={cn("text-2xl font-bold", theme.text.primary)}>{keys.filter(k => k.status === 'Active').length}</p>
@@ -80,14 +79,14 @@ export const ApiGateway: React.FC = () => {
                             <div>
                                 <div className="flex items-center gap-2">
                                     <span className={cn("font-bold text-sm", theme.text.primary)}>{key.name}</span>
-                                    {key.status === 'Revoked' && <span className="text-[10px] bg-red-500/10 text-red-600 px-1.5 rounded font-bold border border-red-500/20">REVOKED</span>}
+                                    {key.status === 'Revoked' && <span className={cn("text-[10px] px-1.5 rounded font-bold border", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}>REVOKED</span>}
                                 </div>
                                 <div className={cn("font-mono text-xs mt-1", theme.text.secondary)}>{key.prefix}••••••••</div>
                             </div>
                             <div className="flex gap-2">
-                                <button className={cn("p-1.5 hover:text-blue-600", theme.text.tertiary)} title="Copy"><Copy className="h-4 w-4"/></button>
+                                <button className={cn("p-1.5", theme.text.tertiary, `hover:${theme.primary.text}`)} title="Copy"><Copy className="h-4 w-4"/></button>
                                 {key.status === 'Active' && (
-                                    <button className={cn("p-1.5 hover:text-red-600", theme.text.tertiary)} onClick={() => handleRevoke(key.id)} title="Revoke"><Trash2 className="h-4 w-4"/></button>
+                                    <button className={cn("p-1.5", theme.text.tertiary, `hover:${theme.status.error.text}`)} onClick={() => handleRevoke(key.id)} title="Revoke"><Trash2 className="h-4 w-4"/></button>
                                 )}
                             </div>
                         </div>
@@ -107,11 +106,14 @@ export const ApiGateway: React.FC = () => {
                     ].map((ep, i) => (
                         <div key={i} className={cn("flex items-center justify-between p-3 rounded border", theme.surfaceHighlight, theme.border.light)}>
                             <div className="flex items-center gap-4">
-                                <span className={`font-bold w-12 ${ep.method === 'GET' ? 'text-blue-600' : ep.method === 'POST' ? 'text-green-600' : 'text-amber-600'}`}>{ep.method}</span>
+                                <span className={cn("font-bold w-12",
+                                    ep.method === 'GET' ? theme.status.info.text : 
+                                    ep.method === 'POST' ? theme.status.success.text : theme.status.warning.text
+                                )}>{ep.method}</span>
                                 <span className={theme.text.primary}>{ep.path}</span>
                             </div>
                             <div className={cn("flex items-center gap-4", theme.text.secondary)}>
-                                <span className="bg-green-500/10 text-green-700 px-2 py-0.5 rounded text-xs font-bold border border-green-500/20">{ep.status}</span>
+                                <span className={cn("px-2 py-0.5 rounded text-xs font-bold border", theme.status.success.bg, theme.status.success.text, theme.status.success.border)}>{ep.status}</span>
                                 <span>{ep.time}</span>
                             </div>
                         </div>

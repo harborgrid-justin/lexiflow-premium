@@ -245,7 +245,7 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           )
       ))}
       
-      {!isOrbitalEnabled && windows.some(w => w.isOpen && !w.isMinimized) && createPortal(
+      {!isOrbitalEnabled && windows.some(w => w.isOpen && !w.isMinimized) && portalRoot && createPortal(
           <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-[1px] z-[1000] transition-opacity" />,
           portalRoot
       )}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Users, DollarSign, Briefcase, TrendingUp, ArrowUpRight, Activity } from 'lucide-react';
 import { MetricCard } from '../common/Primitives';

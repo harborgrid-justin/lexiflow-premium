@@ -9,9 +9,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { EvidenceItem } from '../../types';
+import { ViewMode } from '../../hooks/useEvidenceVault';
 
 interface EvidenceDashboardProps {
-  onNavigate: (view: string) => void;
+  onNavigate: (view: ViewMode) => void;
 }
 
 export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate }) => {

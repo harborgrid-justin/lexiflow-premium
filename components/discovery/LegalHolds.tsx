@@ -7,10 +7,11 @@ import { AlertCircle, Plus, User, Building2, Calendar } from 'lucide-react';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { LegalHold } from '../../types';
 
 export const LegalHolds: React.FC = () => {
   const { theme } = useTheme();
-  const [holds, setHolds] = useState<any[]>([]);
+  const [holds, setHolds] = useState<LegalHold[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -37,7 +38,7 @@ export const LegalHolds: React.FC = () => {
 
        {/* Desktop View */}
        <div className="hidden md:block">
-         <TableContainer>
+         <TableContainer responsive="card">
             <TableHeader>
               <TableHead>Custodian</TableHead>
               <TableHead>Department</TableHead>

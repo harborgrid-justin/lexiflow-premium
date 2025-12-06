@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent } from '../../types';
 import { CaseOverview } from './CaseOverview';
@@ -18,7 +17,7 @@ import { CaseArgumentManager } from './CaseArgumentManager';
 import { CaseRiskManager } from './CaseRiskManager';
 import { CasePlanning } from './CasePlanning';
 import { CaseProjects } from './CaseProjects';
-import { CaseCollaboration } from './CaseCollaboration';
+import { CaseCollaboration } from './collaboration/CaseCollaboration';
 import { NexusGraph } from '../visual/NexusGraph';
 
 interface CaseDetailContentProps {
@@ -48,8 +47,9 @@ interface CaseDetailContentProps {
   onDocumentCreated: (d: LegalDocument) => void;
   onDraft: () => void;
   setDraftPrompt: (s: string) => void;
-  setBillingEntries: (entries: TimeEntry[]) => void;
+  setBillingEntries: (updater: (prev: TimeEntry[]) => TimeEntry[]) => void;
   setDocuments: (docs: LegalDocument[]) => void;
+  onNodeClick: (node: any) => void; // For Nexus Graph
 }
 
 export const CaseDetailContent: React.FC<CaseDetailContentProps> = (props) => {
@@ -57,7 +57,7 @@ export const CaseDetailContent: React.FC<CaseDetailContentProps> = (props) => {
 
   switch (activeTab) {
     case 'Overview': return <CaseOverview caseData={{...caseData, parties}} onTimeEntryAdded={props.onTimeEntryAdded} onNavigateToCase={props.onNavigateToCase} />;
-    case 'Nexus': return <NexusGraph caseData={caseData} parties={parties} evidence={evidence} />;
+    case 'Nexus': return <NexusGraph caseData={caseData} parties={parties} evidence={evidence} onNodeClick={props.onNodeClick} />;
     case 'Parties': return <CaseParties parties={parties} onUpdate={props.onUpdateParties} />;
     case 'Timeline': return <CaseTimeline events={timelineEvents} onEventClick={props.onTimelineClick} />;
     case 'Arguments': return <CaseArgumentManager caseData={caseData} evidence={evidence} />;

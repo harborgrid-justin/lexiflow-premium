@@ -42,7 +42,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
               "px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200",
               isActive 
                 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") 
-                : cn("text-slate-500 hover:text-slate-700", `hover:${theme.surfaceHighlight}`)
+                : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.text.primary}`)
             )}
           >
             {period.label}

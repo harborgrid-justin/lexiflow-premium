@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Search, Plus, User, Filter, Download } from 'lucide-react';
 import { ConflictCheck } from '../../types';
@@ -24,12 +23,12 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
-         <div>
-            <h3 className={cn("font-bold text-lg", theme.text.primary)}>Conflict Checks</h3>
-            <p className={cn("text-sm", theme.text.secondary)}>Search history and run new clearance reports.</p>
-         </div>
-         <Button variant="primary" icon={Plus}>Run New Check</Button>
+      <div className={cn("flex flex-col md:flex-row justify-between items-start md:items-center p-4 rounded-lg border gap-4", theme.surfaceHighlight, theme.border.default)}>
+        <div>
+          <h3 className={cn("font-bold", theme.text.primary)}>Conflict Checks</h3>
+          <p className={cn("text-sm", theme.text.secondary)}>Search history and run new clearance reports.</p>
+        </div>
+        <Button variant="primary" icon={Plus}>Run New Check</Button>
       </div>
 
       <SearchToolbar 
@@ -44,7 +43,7 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
         }
       />
       
-      <TableContainer>
+      <TableContainer responsive="card">
          <TableHeader>
            <TableHead>Entity Name</TableHead>
            <TableHead>Date Checked</TableHead>

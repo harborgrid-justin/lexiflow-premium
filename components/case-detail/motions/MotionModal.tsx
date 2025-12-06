@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
-import { Modal } from '../../../components/common/Modal';
-import { Input } from '../../../components/common/Inputs';
-import { Button } from '../../../components/common/Button';
-import { RuleSelector } from '../../../components/common/RuleSelector';
+import { Modal } from '../../common/Modal';
+import { Input } from '../../common/Inputs';
+import { Button } from '../../common/Button';
+import { RuleSelector } from '../../common/RuleSelector';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
 import { Motion, MotionType, LegalDocument } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';

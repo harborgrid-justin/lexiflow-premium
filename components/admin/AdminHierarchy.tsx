@@ -56,7 +56,7 @@ export const AdminHierarchy: React.FC = () => {
   // Auto-select first org on load
   React.useEffect(() => {
       if (orgs.length > 0 && !selectedOrgId) setSelectedOrgId(orgs[0].id);
-  }, [orgs]);
+  }, [orgs, selectedOrgId]);
 
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
 
@@ -84,7 +84,7 @@ export const AdminHierarchy: React.FC = () => {
                 >
                     <div className="flex justify-between items-start">
                         <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg shrink-0 ${org.type === 'LawFirm' ? 'bg-slate-900 text-white' : org.type === 'Corporate' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'}`}>
+                            <div className={`p-2 rounded-lg shrink-0 ${org.type === 'LawFirm' ? cn(theme.primary.DEFAULT, theme.text.inverse) : org.type === 'Corporate' ? cn(theme.primary.light, theme.primary.text) : 'bg-slate-100 text-slate-600'}`}>
                             {org.type === 'LawFirm' ? <Shield className="h-5 w-5"/> : org.type === 'Corporate' ? <Building2 className="h-5 w-5"/> : <Globe className="h-5 w-5"/>}
                             </div>
                             <div><h4 className={cn("font-bold text-sm", theme.text.primary)}>{org.name}</h4><p className={cn("text-xs truncate max-w-[150px]", theme.text.secondary)}>{org.domain}</p></div>
@@ -136,7 +136,7 @@ export const AdminHierarchy: React.FC = () => {
                         <td className="px-4 py-3"><div className="flex items-center"><UserAvatar name={user.name} size="sm" className="mr-3"/><div><div className={cn("text-sm font-medium", theme.text.primary)}>{user.name}</div><div className={cn("text-xs", theme.text.secondary)}>{user.email}</div></div></div></td>
                         <td className="px-4 py-3"><div className={cn("text-xs font-medium", theme.text.primary)}>{user.role}</div></td>
                         <td className="px-4 py-3"><span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${user.userType === 'Internal' ? 'bg-purple-50 text-purple-700 border-purple-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>{user.userType || 'Internal'}</span></td>
-                        <td className="px-4 py-3 text-right"><span className="flex items-center justify-end text-xs text-green-600 font-medium"><span className="w-1.5 h-1.5 bg-green-50 rounded-full mr-1.5"></span> Active</span></td>
+                        <td className="px-4 py-3 text-right"><span className="flex items-center justify-end text-xs text-green-600 font-medium"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Active</span></td>
                         </tr>
                     ))}
                     </tbody>

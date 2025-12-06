@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
-import { Case, TimeEntry } from '../../types';
+import { Case, TimeEntry, TimeEntryPayload } from '../../types';
 import { Users } from 'lucide-react';
-import { Button } from '../../components/common/Button';
+import { Button } from '../common/Button';
 import { MatterInfo } from './overview/MatterInfo';
 import { ActiveWorkstreams } from './overview/ActiveWorkstreams';
 import { OverviewSidebar } from './overview/OverviewSidebar';
 import { CaseOverviewStats } from './overview/CaseOverviewStats';
 import { CaseOverviewModals } from './overview/CaseOverviewModals';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/common/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
@@ -43,8 +42,8 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
 
   const activeProjects = caseData.projects?.filter(p => p.status === 'Active') || [];
   
-  const handleSaveTime = (rawEntry: any) => {
-      const newEntry: TimeEntry = { id: `t-${Date.now()}`, ...rawEntry };
+  const handleSaveTime = (rawEntry: TimeEntryPayload) => {
+      const newEntry: TimeEntry = { id: `t-${Date.now()}`, userId: 'current-user', ...rawEntry };
       
       // Use SyncContext for offline-tolerant submission
       performMutation(
@@ -114,7 +113,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
                     </h3>
                     <Button variant="ghost" size="sm" className={theme.primary.text}>View All</Button>
                 </div>
-                <TableContainer className="shadow-none border-0 rounded-none">
+                <TableContainer responsive="card" className="shadow-none border-0 rounded-none">
                     <TableHeader><TableHead>Role</TableHead><TableHead>Entity Name</TableHead><TableHead>Type</TableHead></TableHeader>
                     <TableBody>
                         {caseData.parties?.slice(0, 4).map(p => (

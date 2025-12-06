@@ -1,4 +1,3 @@
-
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseService } from './domains/CaseDomain';
@@ -21,7 +20,7 @@ import {
   User, FirmExpense, TrialExhibit, Citation, BriefAnalysisSession,
   LegalEntity, EntityRelationship, Clause, WorkflowTemplateData,
   WikiArticle, Precedent, QAItem, LegalRule, SystemNotification,
-  CalendarEventItem, Client, Conversation, Message
+  CalendarEventItem, Client, Conversation, Message, Case, LegalDocument, DocketEntry, EvidenceItem
 } from '../types';
 
 import { MOCK_METRICS } from '../data/models/marketingMetric';
@@ -46,6 +45,10 @@ export const DataService = {
   tasks: new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
       getByCaseId = async (caseId: string) => this.getByIndex('caseId', caseId);
+      countByCaseId = async (caseId: string): Promise<number> => {
+        const tasks = await this.getByCaseId(caseId);
+        return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
+      }
   }(),
   projects: new class extends Repository<Project> { 
       constructor() { super(STORES.PROJECTS); } 
@@ -100,7 +103,13 @@ export const DataService = {
             conv.messages.push(message);
             return db.put(STORES.CONVERSATIONS, conv);
         }
-    }
+    },
+    countUnread: async (caseId: string): Promise<number> => {
+        // NOTE: Conversations are not linked to cases in the current data model.
+        // This returns a global unread count for the user for demonstration purposes.
+        const convs = await db.getAll<Conversation>(STORES.CONVERSATIONS);
+        return convs.reduce((sum, c) => sum + (c.unread || 0), 0);
+    },
   },
 
   collaboration: {
@@ -119,14 +128,14 @@ export const DataService = {
 
   warRoom: {
       getData: async (caseId: string) => {
-          const c = await db.get<any>(STORES.CASES, caseId);
+          const c = await db.get<Case>(STORES.CASES, caseId);
           if (!c) throw new Error('Case not found');
           const [documents, motions, docket, evidence, tasks] = await Promise.all([
-               db.getByIndex<any>(STORES.DOCUMENTS, 'caseId', caseId),
-               db.getByIndex<any>(STORES.MOTIONS, 'caseId', caseId),
-               db.getByIndex<any>(STORES.DOCKET, 'caseId', caseId),
-               db.getByIndex<any>(STORES.EVIDENCE, 'caseId', caseId),
-               db.getByIndex<any>(STORES.TASKS, 'caseId', caseId)
+               db.getByIndex<LegalDocument>(STORES.DOCUMENTS, 'caseId', caseId),
+               db.getByIndex<Motion>(STORES.MOTIONS, 'caseId', caseId),
+               db.getByIndex<DocketEntry>(STORES.DOCKET, 'caseId', caseId),
+               db.getByIndex<EvidenceItem>(STORES.EVIDENCE, 'caseId', caseId),
+               db.getByIndex<WorkflowTask>(STORES.TASKS, 'caseId', caseId)
           ]);
           return { case: c, witnesses: c.parties || [], documents, motions, docket, evidence, tasks };
       },

@@ -1,5 +1,5 @@
 
-import { TimeEntry, Client, Invoice } from '../../types';
+import { TimeEntry, Client, Invoice, WIPStat, RealizationStat } from '../../types';
 import { db, STORES } from '../db';
 import { MOCK_TIME_ENTRIES } from '../../data/mockBilling';
 
@@ -13,7 +13,7 @@ export const BillingService = {
     addTimeEntry: async (entry: TimeEntry) => {
         return db.put(STORES.BILLING, entry);
     },
-    getWIPStats: async () => {
+    getWIPStats: async (): Promise<WIPStat[]> => {
          const [clients, entries] = await Promise.all([
              db.getAll<Client>(STORES.CLIENTS),
              db.getAll<TimeEntry>(STORES.BILLING)
@@ -31,11 +31,11 @@ export const BillingService = {
              };
          });
     },
-    getRealizationStats: async () => {
+    getRealizationStats: async (): Promise<RealizationStat[]> => {
         await delay(50);
         return [ { name: 'Billed', value: 85, color: '#10b981' }, { name: 'Write-off', value: 15, color: '#ef4444' } ];
     },
-    getTopAccounts: async () => {
+    getTopAccounts: async (): Promise<Client[]> => {
         const clients = await db.getAll<Client>(STORES.CLIENTS);
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     },

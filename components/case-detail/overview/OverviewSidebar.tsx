@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'lucide-react';
 import { Case } from '../../../types';

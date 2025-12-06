@@ -1,26 +1,20 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { Gavel, Clock, Scale } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
-import { JudgeProfile } from '../../types';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { JudgeProfile, JudgeMotionStat } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useChartTheme } from '../common/ChartHelpers';
 
 interface JudgeAnalyticsProps {
   judge: JudgeProfile;
-  stats: any[];
+  stats: JudgeMotionStat[];
 }
 
 export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) => {
-  const { theme, mode } = useTheme();
-
-  const chartColors = {
-    text: mode === 'dark' ? '#94a3b8' : '#64748b',
-    grid: mode === 'dark' ? '#334155' : '#e2e8f0',
-    tooltipBg: mode === 'dark' ? '#1e293b' : '#ffffff',
-    tooltipBorder: mode === 'dark' ? '#334155' : '#e2e8f0'
-  };
+  const { theme } = useTheme();
+  const chartTheme = useChartTheme();
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
@@ -61,28 +55,23 @@ export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) 
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke={chartColors.grid}/>
+              <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke={chartTheme.grid}/>
               <XAxis type="number" domain={[0, 100]} hide/>
               <YAxis 
                 dataKey="name" 
                 type="category" 
                 width={120} 
-                tick={{fontSize: 11, fill: chartColors.text}}
+                tick={{fontSize: 11, fill: chartTheme.text}}
                 axisLine={false}
                 tickLine={false}
               />
               <Tooltip 
                 cursor={{fill: 'transparent'}}
-                contentStyle={{ 
-                    backgroundColor: chartColors.tooltipBg, 
-                    borderColor: chartColors.tooltipBorder, 
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                }}
+                contentStyle={chartTheme.tooltipStyle}
               />
               <Legend verticalAlign="bottom" height={36}/>
-              <Bar dataKey="grant" name="Granted %" stackId="a" fill="#10b981" radius={[0, 0, 0, 0]} barSize={24} />
-              <Bar dataKey="deny" name="Denied %" stackId="a" fill="#ef4444" radius={[0, 4, 4, 0]} barSize={24} />
+              <Bar dataKey="grant" name="Granted %" stackId="a" fill={chartTheme.colors.emerald} radius={[0, 0, 0, 0]} barSize={24} />
+              <Bar dataKey="deny" name="Denied %" stackId="a" fill={chartTheme.colors.rose} radius={[0, 4, 4, 0]} barSize={24} />
             </BarChart>
           </ResponsiveContainer>
         </div>

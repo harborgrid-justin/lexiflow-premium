@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Risk, RiskLevel, RiskCategory, RiskStatus } from '../../../types';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
@@ -8,6 +7,7 @@ import { RiskMatrix } from './RiskMatrix';
 import { GeminiService } from '../../../services/geminiService';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { Modal } from '../../common/Modal';
 
 interface RiskDetailProps {
   risk: Risk;

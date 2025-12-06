@@ -1,5 +1,4 @@
-
-import React, { useMemo, useCallback, useState, useEffect } from 'react';
+import React, { useMemo, useCallback, useState, useEffect, Suspense } from 'react';
 import { EvidenceInventory } from './evidence/EvidenceInventory';
 import { EvidenceDetail } from './evidence/EvidenceDetail';
 import { EvidenceIntake } from './evidence/EvidenceIntake';
@@ -7,10 +6,22 @@ import { EvidenceDashboard } from './evidence/EvidenceDashboard';
 import { EvidenceCustodyLog } from './evidence/EvidenceCustodyLog';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
-import { LayoutDashboard, Box, Link, Plus, ScanLine, Search, ShieldCheck } from 'lucide-react';
+import { 
+  LayoutDashboard, Box, Link, Plus, ScanLine, Search, ShieldCheck, Scale,
+  Fingerprint, Filter as FilterIcon, FileWarning, UserCheck, Copy
+} from 'lucide-react';
 import { useEvidenceVault, ViewMode } from '../hooks/useEvidenceVault';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
+import { LazyLoader } from './common/LazyLoader';
+
+// FRE Workbench Components
+const AuthenticationManager = React.lazy(() => import('./evidence/fre/AuthenticationManager').then(m => ({ default: m.AuthenticationManager })));
+const RelevanceAnalysis = React.lazy(() => import('./evidence/fre/RelevanceAnalysis').then(m => ({ default: m.RelevanceAnalysis })));
+const HearsayAnalyzer = React.lazy(() => import('./evidence/fre/HearsayAnalyzer').then(m => ({ default: m.HearsayAnalyzer })));
+const ExpertEvidenceManager = React.lazy(() => import('./evidence/fre/ExpertEvidenceManager').then(m => ({ default: m.ExpertEvidenceManager })));
+const OriginalsManager = React.lazy(() => import('./evidence/fre/OriginalsManager').then(m => ({ default: m.OriginalsManager })));
+
 
 interface EvidenceVaultProps {
   onNavigateToCase?: (caseId: string) => void;
@@ -18,23 +29,25 @@ interface EvidenceVaultProps {
 }
 
 const PARENT_TABS = [
-  {
-    id: 'vault', label: 'Vault', icon: Box,
+  { id: 'vault', label: 'Vault', icon: Box,
     subTabs: [
       { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
       { id: 'inventory', label: 'Inventory Index', icon: Box },
+      { id: 'intake', label: 'New Intake', icon: Plus },
     ]
   },
-  {
-    id: 'chain', label: 'Chain of Custody', icon: Link,
+  { id: 'fre', label: 'FRE Workbench', icon: Scale,
+    subTabs: [
+      { id: 'authentication', label: 'Authentication (901/902)', icon: Fingerprint },
+      { id: 'relevance', label: 'Relevance (401/403)', icon: FilterIcon },
+      { id: 'hearsay', label: 'Hearsay Analysis (801)', icon: FileWarning },
+      { id: 'experts', label: 'Expert Evidence (702)', icon: UserCheck },
+      { id: 'originals', label: 'Originals (1002)', icon: Copy },
+    ]
+  },
+  { id: 'chain', label: 'Chain of Custody', icon: Link,
     subTabs: [
       { id: 'custody', label: 'Custody Logs', icon: Link },
-    ]
-  },
-  {
-    id: 'ops', label: 'Operations', icon: ScanLine,
-    subTabs: [
-      { id: 'intake', label: 'New Intake', icon: Plus },
     ]
   }
 ];
@@ -109,6 +122,11 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
             onComplete={handleIntakeComplete}
           />
       );
+      case 'authentication': return <AuthenticationManager />;
+      case 'relevance': return <RelevanceAnalysis />;
+      case 'hearsay': return <HearsayAnalyzer />;
+      case 'experts': return <ExpertEvidenceManager />;
+      case 'originals': return <OriginalsManager />;
       default: return <EvidenceDashboard onNavigate={(v) => setView(v as ViewMode)} />;
     }
   };
@@ -120,9 +138,9 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
             title="Evidence Vault" 
             subtitle="Secure Chain of Custody & Forensic Asset Management."
             actions={
-              <div className="flex gap-2">
-                 <Button variant="secondary" icon={Search} onClick={() => setView('inventory')}>Search Vault</Button>
-                 <Button variant="primary" icon={Plus} onClick={() => setView('intake')}>Log New Item</Button>
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                 <Button variant="secondary" icon={Search} onClick={() => setView('inventory')} className="w-full sm:w-auto justify-center">Search Vault</Button>
+                 <Button variant="primary" icon={Plus} onClick={() => setView('intake')} className="w-full sm:w-auto justify-center">Log New Item</Button>
               </div>
             }
         />
@@ -146,7 +164,7 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
             ))}
         </div>
 
-        {/* Sub-Navigation (Pills) - Touch Scroll */}
+        {/* Sub-Navigation (Pills) */}
         <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
                 <button 
@@ -167,7 +185,9 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
         </div>
 
       <div className={cn("flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar touch-auto")}>
-        {renderContent()}
+        <Suspense fallback={<LazyLoader message="Loading Module..." />}>
+            {renderContent()}
+        </Suspense>
       </div>
     </div>
   );

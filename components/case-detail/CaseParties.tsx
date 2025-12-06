@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Party } from '../../types';
 import { MOCK_ORGS } from '../../data/mockHierarchy';
@@ -121,7 +120,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                 </div>
             )}
             
-            <TableContainer>
+            <TableContainer responsive="card">
                 <TableHeader>
                     <TableHead>Entity Name</TableHead>
                     <TableHead>Role</TableHead>

@@ -124,8 +124,19 @@ class QueryClient {
   }
 
   // Optimistic update
-  setQueryData<T>(key: QueryKey, data: T) {
+  setQueryData<T>(key: QueryKey, updater: T | ((oldData: T | undefined) => T | undefined)) {
       const hashedKey = this.hashKey(key);
+      const oldState = this.cache.get(hashedKey);
+      const oldData = oldState ? (oldState.data as T | undefined) : undefined;
+      const data =
+        typeof updater === 'function'
+          ? (updater as (oldData: T | undefined) => T | undefined)(oldData)
+          : updater;
+      
+      if (typeof data === 'undefined') {
+          return;
+      }
+
       const state: QueryState<T> = { data, status: 'success', error: null, dataUpdatedAt: Date.now() };
       this.cache.set(hashedKey, state);
       this.notify(hashedKey, state);
@@ -144,6 +155,7 @@ interface UseQueryOptions<T> {
   staleTime?: number;
   enabled?: boolean;
   onSuccess?: (data: T) => void;
+  refetchOnWindowFocus?: boolean;
 }
 
 export function useQuery<T>(
@@ -151,7 +163,7 @@ export function useQuery<T>(
   fn: QueryFunction<T>, 
   options: UseQueryOptions<T> = {}
 ) {
-  const { staleTime = 60000, enabled = true, onSuccess } = options;
+  const { staleTime = 60000, enabled = true, onSuccess, refetchOnWindowFocus = true } = options;
   
   // Hash key once for stability across renders
   const hashedKey = queryClient['hashKey'](key);
@@ -164,21 +176,20 @@ export function useQuery<T>(
   const hasFetched = useRef(false);
 
   const refetch = useCallback(() => {
+     if (!enabled) return Promise.reject(new Error("Query is not enabled."));
      return queryClient.fetch(key, fn, staleTime, true);
-  }, [hashedKey, staleTime]); // Depend on hashed key string
+  }, [key, fn, staleTime, enabled]);
 
   useEffect(() => {
     if (!enabled) return;
 
     const unsubscribe = queryClient.subscribe(key, (newState) => {
       setState(newState);
-      // If state became stale (dataUpdatedAt = 0) via invalidation, trigger refetch
       if (newState.status === 'success' && newState.dataUpdatedAt === 0) {
           queryClient.fetch(key, fn, staleTime, true);
       }
     });
 
-    // Trigger fetch
     queryClient.fetch(key, fn, staleTime).then((data) => {
        if (onSuccess && !hasFetched.current) {
          onSuccess(data);
@@ -186,8 +197,27 @@ export function useQuery<T>(
        }
     }).catch(() => {});
 
-    return unsubscribe;
-  }, [hashedKey, enabled, staleTime]);
+    // --- NEW: Refetch on window focus ---
+    let focusHandler: () => void;
+    if (refetchOnWindowFocus && enabled) {
+        focusHandler = () => {
+            const queryState = queryClient.getQueryState(key);
+            if (queryState && Date.now() - queryState.dataUpdatedAt > staleTime) {
+                refetch();
+            }
+        };
+        window.addEventListener('focus', focusHandler);
+        window.addEventListener('visibilitychange', focusHandler);
+    }
+    
+    return () => {
+        unsubscribe();
+        if (focusHandler) {
+            window.removeEventListener('focus', focusHandler);
+            window.removeEventListener('visibilitychange', focusHandler);
+        }
+    };
+  }, [hashedKey, enabled, staleTime, fn, onSuccess, refetchOnWindowFocus, refetch]);
 
   return { 
     ...state, 

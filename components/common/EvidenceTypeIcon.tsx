@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Box, Activity, FileText, Fingerprint } from 'lucide-react';
+import { EvidenceType } from '../../types';
 
 interface EvidenceTypeIconProps {
-  type: string;
+  type: EvidenceType;
   className?: string;
 }
 

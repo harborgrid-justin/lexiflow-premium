@@ -1,16 +1,16 @@
-
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { PageHeader } from './common/PageHeader';
+import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
+import { PageHeader } from '../common/PageHeader';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { BarChart3, Gavel, Users, TrendingUp, BrainCircuit, Download, Search } from 'lucide-react';
-import { Button } from './common/Button';
+import { Button } from '../common/Button';
 import { DataService } from '../../services/dataService';
+import { LazyLoader } from '../common/LazyLoader';
 
 // Sub-components
-import { JudgeAnalytics } from './analytics/JudgeAnalytics';
-import { CounselAnalytics } from './analytics/CounselAnalytics';
-import { CasePrediction } from './analytics/CasePrediction';
+const JudgeAnalytics = React.lazy(() => import('./JudgeAnalytics'));
+const CounselAnalytics = React.lazy(() => import('./CounselAnalytics'));
+const CasePrediction = React.lazy(() => import('./CasePrediction'));
 
 // Mock Data (Still needed for stats until backend supports full analytics)
 import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../../data/mockAnalytics';
@@ -141,29 +141,13 @@ export const AnalyticsDashboard: React.FC = () => {
 
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
         <div className="h-full overflow-y-auto custom-scrollbar">
-            {renderContent()}
+            <Suspense fallback={<LazyLoader message="Loading Analytics Module..." />}>
+                {renderContent()}
+            </Suspense>
         </div>
-      </div>
-
-      {/* Mobile Bottom Navigation Bar */}
-      <div className={cn("md:hidden fixed bottom-0 left-0 right-0 border-t flex justify-around items-center p-2 z-40 pb-safe safe-area-inset-bottom", theme.surface, theme.border.default)}>
-          {PARENT_TABS.map(parent => {
-              const isActive = activeParentTab.id === parent.id;
-              return (
-                  <button 
-                    key={parent.id} 
-                    onClick={() => handleParentTabChange(parent.id)}
-                    className={cn(
-                        "flex flex-col items-center justify-center p-2 rounded-lg flex-1 transition-all",
-                        isActive ? theme.primary.text : theme.text.tertiary
-                    )}
-                  >
-                      <parent.icon className={cn("h-6 w-6 mb-1", isActive ? "fill-current opacity-20" : "")}/>
-                      <span className="text-[10px] font-medium">{parent.label}</span>
-                  </button>
-              );
-          })}
       </div>
     </div>
   );
 };
+
+export default AnalyticsDashboard;

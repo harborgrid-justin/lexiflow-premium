@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useDeferredValue } from 'react';
 import { LegalDocument, DocumentVersion } from '../types';
 import { DataService } from '../services/dataService';
@@ -51,7 +50,7 @@ export const useDocumentManager = () => {
 
   const handleRestore = async (version: DocumentVersion) => {
     if (!selectedDocForHistory) return;
-    const updates = { content: version.contentSnapshot || '', lastModified: new Date().toISOString().split('T')[0] };
+    const updates: Partial<LegalDocument> = { content: version.contentSnapshot || '', lastModified: new Date().toISOString().split('T')[0] };
     updateDocument(selectedDocForHistory.id, updates);
     setSelectedDocForHistory(null);
   };

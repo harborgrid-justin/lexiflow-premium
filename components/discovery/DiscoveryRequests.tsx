@@ -10,9 +10,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
+import { DiscoveryView } from '../DiscoveryPlatform';
 
 interface DiscoveryRequestsProps {
-  onNavigate: (view: any, id?: string) => void;
+  onNavigate: (view: DiscoveryView, id?: string) => void;
   items?: DiscoveryRequest[];
 }
 
@@ -76,7 +77,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
              <div className="w-[10%] flex justify-end gap-2" onClick={e => e.stopPropagation()}>
                  <Button size="sm" variant="ghost" className={theme.text.secondary} icon={CheckSquare} onClick={(e) => handleCreateTask(req, e)} title="Create Task" />
                  {req.type === 'Production' && (
-                    <Button size="sm" variant="outline" icon={Upload} onClick={() => onNavigate('production', req.id)} title="Produce">
+                    <Button size="sm" variant="outline" icon={Upload} onClick={() => onNavigate('production_wizard', req.id)} title="Produce">
                     </Button>
                  )}
                  <Button size="sm" variant="ghost" icon={Wand2} onClick={() => onNavigate('response', req.id)} title="Draft Response">
@@ -110,7 +111,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
             </div>
         </div>
 
-        {/* Mobile Card View (Not Virtualized for Simplicity on Mobile Layout) */}
+        {/* Mobile Card View */}
         <div className="md:hidden space-y-4">
             {items.map((req) => {
                 const daysLeft = getDaysRemaining(req.dueDate);
@@ -143,7 +144,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
                         <div className="flex justify-end gap-2" onClick={e => e.stopPropagation()}>
                             <Button size="sm" variant="ghost" icon={CheckSquare} onClick={(e) => handleCreateTask(req, e)}>Task</Button>
                             {req.type === 'Production' && (
-                                <Button size="sm" variant="outline" icon={Upload} onClick={() => onNavigate('production', req.id)}>
+                                <Button size="sm" variant="outline" icon={Upload} onClick={() => onNavigate('production_wizard', req.id)}>
                                 Produce
                                 </Button>
                             )}

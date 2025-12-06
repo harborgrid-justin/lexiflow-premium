@@ -4,7 +4,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { PATHS } from '../../constants/paths';
 import { useAutoTimeCapture } from '../../hooks/useAutoTimeCapture';
-import { MobileBottomNav } from './MobileBottomNav';
 
 interface AppShellProps {
   sidebar: React.ReactNode;
@@ -59,17 +58,9 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
         </header>
         
         {/* Main Content - strict overflow handling */}
-        <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate">
+        <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate pb-0">
             {children}
         </main>
-        
-        {onNavigate && activeView && (
-          <MobileBottomNav 
-            activeView={activeView}
-            onNavigate={onNavigate}
-            onToggleSidebar={() => setIsSidebarOpen(true)}
-          />
-        )}
       </div>
     </div>
   );

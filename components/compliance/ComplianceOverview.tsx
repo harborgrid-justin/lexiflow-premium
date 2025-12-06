@@ -1,15 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity, TrendingUp } from 'lucide-react';
+import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import { MetricCard } from '../common/Primitives';
 import { Card } from '../common/Card';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { DataService } from '../../services/dataService';
+import { useChartTheme } from '../common/ChartHelpers';
 
 export const ComplianceOverview: React.FC = () => {
   const { theme } = useTheme();
+  const chartTheme = useChartTheme();
   const [riskData, setRiskData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any>({ high: 0, missingDocs: 0, violations: 0 });
 
@@ -77,7 +78,7 @@ export const ComplianceOverview: React.FC = () => {
                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                             </Pie>
-                            <Tooltip />
+                            <Tooltip contentStyle={chartTheme.tooltipStyle}/>
                             <Legend verticalAlign="bottom" height={36}/>
                         </PieChart>
                     </ResponsiveContainer>

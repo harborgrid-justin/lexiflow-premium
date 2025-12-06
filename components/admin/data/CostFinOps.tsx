@@ -1,10 +1,10 @@
-
 import React from 'react';
-import { DollarSign, TrendingDown, Server, AlertTriangle } from 'lucide-react';
+import { DollarSign, TrendingDown, AlertTriangle } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { useChartTheme } from '../../common/ChartHelpers';
 
 const costData = [
     { name: 'Compute', cost: 1200 },
@@ -25,14 +25,8 @@ const forecastData = [
 ];
 
 export const CostFinOps: React.FC = () => {
-  const { theme, mode } = useTheme();
-  
-  const chartColors = {
-    text: mode === 'dark' ? '#94a3b8' : '#64748b',
-    grid: mode === 'dark' ? '#334155' : '#e2e8f0',
-    tooltipBg: mode === 'dark' ? '#1e293b' : '#ffffff',
-    tooltipBorder: mode === 'dark' ? '#334155' : '#e2e8f0'
-  };
+  const { theme } = useTheme();
+  const chartTheme = useChartTheme();
 
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full">
@@ -56,14 +50,14 @@ export const CostFinOps: React.FC = () => {
                 <div className="h-80 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={costData}>
-                            <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} stroke={chartColors.text} />
-                            <YAxis axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} fontSize={12} stroke={chartColors.text} />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} stroke={chartTheme.text} />
+                            <YAxis axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} fontSize={12} stroke={chartTheme.text} />
                             <Tooltip 
                                 formatter={(v) => `$${v}`} 
-                                cursor={{fill: mode === 'dark' ? '#334155' : '#f1f5f9'}} 
-                                contentStyle={{backgroundColor: chartColors.tooltipBg, borderColor: chartColors.tooltipBorder, color: mode === 'dark' ? '#f8fafc' : '#1e293b'}}
+                                cursor={{fill: chartTheme.grid}} 
+                                contentStyle={chartTheme.tooltipStyle}
                             />
-                            <Bar dataKey="cost" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={50} />
+                            <Bar dataKey="cost" fill={chartTheme.colors.purple} radius={[4, 4, 0, 0]} barSize={50} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -75,16 +69,16 @@ export const CostFinOps: React.FC = () => {
                         <AreaChart data={forecastData}>
                             <defs>
                                 <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                                    <stop offset="5%" stopColor={chartTheme.colors.blue} stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor={chartTheme.colors.blue} stopOpacity={0}/>
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartColors.grid}/>
-                            <XAxis dataKey="day" axisLine={false} tickLine={false} fontSize={12} stroke={chartColors.text} />
-                            <YAxis axisLine={false} tickLine={false} fontSize={12} stroke={chartColors.text} />
-                            <Tooltip contentStyle={{backgroundColor: chartColors.tooltipBg, borderColor: chartColors.tooltipBorder, color: mode === 'dark' ? '#f8fafc' : '#1e293b'}} />
-                            <Area type="monotone" dataKey="actual" stroke="#3b82f6" fillOpacity={1} fill="url(#colorActual)" />
-                            <Area type="monotone" dataKey="forecast" stroke="#94a3b8" strokeDasharray="5 5" fill="none" />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid}/>
+                            <XAxis dataKey="day" axisLine={false} tickLine={false} fontSize={12} stroke={chartTheme.text} />
+                            <YAxis axisLine={false} tickLine={false} fontSize={12} stroke={chartTheme.text} />
+                            <Tooltip contentStyle={chartTheme.tooltipStyle} />
+                            <Area type="monotone" dataKey="actual" stroke={chartTheme.colors.blue} fillOpacity={1} fill="url(#colorActual)" />
+                            <Area type="monotone" dataKey="forecast" stroke={chartTheme.colors.slate} strokeDasharray="5 5" fill="none" />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>

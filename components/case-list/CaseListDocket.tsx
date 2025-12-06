@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useEffect } from 'react';
 import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'lucide-react';
 import { Button } from '../common/Button';
@@ -93,7 +92,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
           <Button variant="primary" size="sm" icon={Plus}>Add Entry</Button>
         </div>
       </div>
-      <TableContainer className="rounded-none border-0 shadow-none">
+      <TableContainer responsive="card" className="rounded-none border-0 shadow-none">
         <TableHeader>
           <TableHead>Date</TableHead>
           <TableHead>Time</TableHead>

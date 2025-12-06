@@ -70,6 +70,7 @@ export const tokens = {
     sticky: 'z-30',
     header: 'z-50',
     orbital: 'z-[60]',
+    modalBackdrop: 'z-[4999]',
     modal: 'z-[5000]',
     toast: 'z-[6000]',
     tooltip: 'z-[7000]',

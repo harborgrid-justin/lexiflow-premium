@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { RiskLevel } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';

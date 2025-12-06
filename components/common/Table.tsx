@@ -1,15 +1,54 @@
-
 import React, { memo } from 'react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
 
-export const TableContainer = memo(function TableContainer({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+export const TableContainer = memo(function TableContainer({ children, className = '', responsive }: { children: React.ReactNode; className?: string; responsive?: 'card' }) {
   const { theme } = useTheme();
+  
+  let finalChildren = children;
+
+  if (responsive === 'card') {
+    const childrenArray = React.Children.toArray(children);
+    const header = childrenArray.find(c => (c as React.ReactElement).type === TableHeader) as React.ReactElement | undefined;
+    const body = childrenArray.find(c => (c as React.ReactElement).type === TableBody) as React.ReactElement | undefined;
+    const others = childrenArray.filter(c => (c as React.ReactElement).type !== TableHeader && (c as React.ReactElement).type !== TableBody);
+
+    if (header && body) {
+        const headerCells = React.Children.toArray(header.props.children);
+        const headerLabels = headerCells.map(th => {
+            const child = (th as React.ReactElement).props.children;
+            if (typeof child === 'string') return child;
+            // Attempt to get text from a simple element, otherwise ignore
+            if (React.isValidElement(child) && typeof child.props.children === 'string') {
+                return child.props.children;
+            }
+            return '';
+        });
+
+        const newBody = React.cloneElement(
+            body,
+            {},
+            React.Children.map(body.props.children, (row: React.ReactNode) => {
+                if (!React.isValidElement(row)) return row;
+                return React.cloneElement(
+                    row as React.ReactElement,
+                    {},
+                    React.Children.map((row as React.ReactElement).props.children, (cell: React.ReactNode, cellIndex: number) => {
+                        if (!React.isValidElement(cell)) return cell;
+                        return React.cloneElement(cell as React.ReactElement, { 'data-label': headerLabels[cellIndex] || '' });
+                    })
+                );
+            })
+        );
+        finalChildren = [header, newBody, ...others].filter(Boolean);
+    }
+  }
+
   return (
     <div className={cn(theme.surface, theme.border.default, "rounded-lg border shadow-sm overflow-hidden flex flex-col", className)}>
       <div className="overflow-x-auto flex-1 w-full">
-        <table className={cn("min-w-full divide-y", theme.border.default)}>
-          {children}
+        <table className={cn("min-w-full", responsive === 'card' ? 'responsive-card-table' : `divide-y ${theme.border.default}`)}>
+          {finalChildren}
         </table>
       </div>
     </div>
@@ -40,7 +79,7 @@ export const TableRow = memo(function TableRow({ children, className = '', ...pr
     <tr 
       className={cn(`hover:${theme.surfaceHighlight} transition-colors group`, className)} 
       {...props}
-      style={{ 'contentVisibility': 'auto' } as any} 
+      style={{ contentVisibility: 'auto' } as React.CSSProperties} 
     >
       {children}
     </tr>

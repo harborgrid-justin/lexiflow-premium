@@ -25,7 +25,6 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
 
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        // Conflict 6: Use fractional height for precision
         setContainerHeight(entry.contentRect.height);
       }
     });
@@ -41,7 +40,6 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
   
   const overscan = 5; 
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  // Conflict 6: Ensure safeHeight isn't 0 to avoid rendering nothing
   const safeHeight = containerHeight || 600; 
   const visibleNodeCount = Math.ceil(safeHeight / itemHeight) + 2 * overscan;
   const endIndex = Math.min(items.length, startIndex + visibleNodeCount);
@@ -60,7 +58,6 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
-    // Conflict 10: Sync scroll state via RAF for smoothness
     requestAnimationFrame(() => {
         setScrollTop(currentScrollTop);
     });

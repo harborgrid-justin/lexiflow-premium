@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, FileText, ChevronRight, Check, Save, Wand2, Activity, Minus } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
@@ -8,6 +7,8 @@ import { DataService } from '../services/dataService';
 import { useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useNotify } from '../hooks/useNotify';
+import { useTheme } from '../context/ThemeContext';
+import { cn } from '../utils/cn';
 
 interface DocumentAssemblyProps {
   onClose: () => void;
@@ -17,6 +18,7 @@ interface DocumentAssemblyProps {
 }
 
 export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, caseTitle, onSave, windowId }) => {
+  const { theme } = useTheme();
   const [step, setStep] = useState(1);
   const [template, setTemplate] = useState('');
   const [formData, setFormData] = useState({ recipient: '', date: '', mainPoint: '' });
@@ -78,18 +80,18 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
   };
 
   return (
-    <div className="flex flex-col h-full bg-white text-slate-900">
-        <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 drag-handle cursor-move">
-          <h3 className="text-lg font-bold text-slate-900 flex items-center">
-            <Wand2 className="mr-2 h-5 w-5 text-purple-600" /> Document Ghostwriter
+    <div className={cn("flex flex-col h-full", theme.surface, theme.text.primary)}>
+        <div className={cn("p-4 border-b flex justify-between items-center drag-handle cursor-move", theme.border.default, theme.surfaceHighlight)}>
+          <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>
+            <Wand2 className="mr-2 h-5 w-5 text-purple-600 dark:text-purple-400" /> Document Ghostwriter
           </h3>
           <div className="flex items-center gap-2">
             {windowId && (
-                <button onClick={handleMinimize} className="p-1 hover:bg-slate-200 rounded text-slate-500 transition-colors">
+                <button onClick={handleMinimize} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface}`)}>
                     <Minus className="h-5 w-5" />
                 </button>
             )}
-            <button onClick={onClose} className="p-1 hover:bg-slate-200 rounded text-slate-500 transition-colors">
+            <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface}`)}>
                 <X className="h-5 w-5" />
             </button>
           </div>
@@ -101,9 +103,9 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
               <h4 className="text-base font-semibold">Select a Template</h4>
               {['NDA', 'Engagement Letter', 'Motion to Dismiss', 'Settlement Agreement'].map(t => (
                 <button key={t} onClick={() => { setTemplate(t); setStep(2); }} 
-                  className="w-full text-left p-4 rounded-lg border border-slate-200 hover:border-purple-500 hover:bg-purple-50 transition-all flex justify-between items-center group">
-                  <span className="font-medium text-slate-700 group-hover:text-purple-700">{t}</span>
-                  <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-purple-500" />
+                  className={cn("w-full text-left p-4 rounded-lg border hover:border-purple-500 dark:hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all flex justify-between items-center group", theme.border.default)}>
+                  <span className={cn("font-medium text-slate-700 dark:text-slate-300 group-hover:text-purple-700 dark:group-hover:text-purple-300")}>{t}</span>
+                  <ChevronRight className="h-4 w-4 text-slate-300 dark:text-slate-600 group-hover:text-purple-500 dark:group-hover:text-purple-400" />
                 </button>
               ))}
             </div>
@@ -112,11 +114,11 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
           {step === 2 && (
             <div className="space-y-4">
               <h4 className="text-base font-semibold">Configure {template}</h4>
-              <input placeholder="Recipient Name" className="w-full p-3 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none" 
+              <input placeholder="Recipient Name" className={cn("w-full p-3 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none", theme.surface, theme.border.default)}
                 value={formData.recipient} onChange={e => setFormData({...formData, recipient: e.target.value})} />
-              <input placeholder="Key Terms / Main Point" className="w-full p-3 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none" 
+              <input placeholder="Key Terms / Main Point" className={cn("w-full p-3 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none", theme.surface, theme.border.default)}
                 value={formData.mainPoint} onChange={e => setFormData({...formData, mainPoint: e.target.value})} />
-              <button onClick={generate} className="w-full py-3 bg-purple-600 text-white rounded-md font-medium hover:bg-purple-700 flex justify-center transition-colors shadow-md">
+              <button onClick={generate} className="w-full py-3 bg-purple-600 dark:bg-purple-500 text-white rounded-md font-medium hover:bg-purple-700 dark:hover:bg-purple-600 flex justify-center transition-colors shadow-md">
                  Start Generation
               </button>
             </div>
@@ -134,13 +136,13 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
               
               <div className="flex-1 relative">
                   <textarea 
-                    className="w-full h-full p-6 bg-slate-50 border rounded-md font-mono text-sm min-h-[350px] resize-none outline-none focus:ring-2 focus:ring-purple-500 shadow-inner" 
+                    className={cn("w-full h-full p-6 border rounded-md font-mono text-sm min-h-[350px] resize-none outline-none focus:ring-2 focus:ring-purple-500 shadow-inner", theme.surfaceHighlight, theme.border.default)}
                     value={result} 
                     readOnly 
                   />
                   {isStreaming && (
                       <div className="absolute bottom-4 right-4">
-                          <div className="h-2 w-2 bg-purple-600 rounded-full animate-ping"></div>
+                          <div className="h-2 w-2 bg-purple-600 dark:bg-purple-400 rounded-full animate-ping"></div>
                       </div>
                   )}
               </div>
@@ -148,7 +150,7 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
               <button 
                 onClick={handleSave} 
                 disabled={isStreaming || isSaving}
-                className="w-full py-3 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-purple-600 dark:bg-purple-500 text-white rounded-md font-medium hover:bg-purple-700 dark:hover:bg-purple-600 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                  <Save className="h-4 w-4 mr-2"/> {isSaving ? 'Saving...' : 'Save to Case Documents'}
               </button>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
 import { WorkflowStage, WorkflowTask } from '../../../types';
@@ -37,7 +36,7 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                                 {stage.status === 'Completed' ? <CheckCircle className="h-5 w-5"/> : index + 1}
                             </div>
                             <div>
-                                <h4 className={cn("font-bold text-lg", isActive ? "text-blue-900" : theme.text.primary)}>{stage.title}</h4>
+                                <h4 className={cn("font-bold text-lg", isActive ? "text-blue-900 dark:text-blue-200" : theme.text.primary)}>{stage.title}</h4>
                                 <div className={cn("flex items-center gap-2 text-xs", theme.text.secondary)}>
                                     <span className={cn("px-2 py-0.5 rounded-full", isActive ? "bg-blue-100 text-blue-700" : "bg-slate-100")}>{stage.status}</span>
                                     <span>• {stage.tasks.length} tasks</span>

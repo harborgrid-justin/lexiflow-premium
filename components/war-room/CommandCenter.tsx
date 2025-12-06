@@ -1,10 +1,12 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { MetricCard } from '../common/Primitives';
-import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertTriangle } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { DataService } from '../../services/dataService';
 
 interface CommandCenterProps {
   caseId: string;
@@ -15,12 +17,16 @@ interface CommandCenterProps {
 export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomData, onNavigate }) => {
   const { theme } = useTheme();
   
+  // New Live Data
+  const { data: sanctions = [] } = useQuery<any[]>([STORES.SANCTIONS, 'all'], DataService.discovery.getSanctions);
+  
   // Derive stats from passed data
   const exhibitsTotal = warRoomData.evidence?.length || 0;
   const exhibitsAdmitted = warRoomData.evidence?.filter((e: any) => e.status === 'Admitted').length || 0;
   const witnessCount = warRoomData.witnesses?.length || 0;
   const tasksDue = warRoomData.tasks?.filter((t: any) => t.priority === 'High' && t.status !== 'Done').length || 0;
   const recentDocket = warRoomData.docket?.slice().reverse().slice(0, 5) || [];
+  const sanctionsCount = sanctions.length;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -55,13 +61,25 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                     className="border-l-4 border-l-purple-600 h-full hover:shadow-md transition-all"
                 />
             </div>
-            <MetricCard 
-                label="Pending Tasks" 
-                value={tasksDue} 
-                icon={AlertCircle} 
-                trend="High Priority"
-                className="border-l-4 border-l-amber-500 h-full"
-            />
+            
+            {sanctionsCount > 0 ? (
+                 <MetricCard 
+                    label="Active Sanctions" 
+                    value={sanctionsCount} 
+                    icon={AlertTriangle} 
+                    trend="Discovery Dispute"
+                    className="border-l-4 border-l-red-600 h-full"
+                    trendUp={false}
+                />
+            ) : (
+                <MetricCard 
+                    label="Pending Tasks" 
+                    value={tasksDue} 
+                    icon={AlertCircle} 
+                    trend="High Priority"
+                    className="border-l-4 border-l-amber-500 h-full"
+                />
+            )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

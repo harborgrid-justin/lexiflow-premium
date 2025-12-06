@@ -1,0 +1,58 @@
+import React from 'react';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
+import { Badge } from '../../common/Badge';
+import { Button } from '../../common/Button';
+import { Copy, CheckCircle, AlertTriangle, FileText, Plus } from 'lucide-react';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { STORES } from '../../../services/db';
+import { EvidenceItem } from '../../../types';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+export const OriginalsManager: React.FC = () => {
+    const { theme } = useTheme();
+    const { data: evidence = [] } = useQuery<EvidenceItem[]>(
+        [STORES.EVIDENCE, 'all'],
+        DataService.evidence.getAll
+    );
+
+    return (
+        <div className="space-y-6">
+            <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface, theme.border.default)}>
+                <Copy className={cn("h-5 w-5 mt-0.5 shrink-0", theme.text.secondary)}/>
+                <div>
+                    <h4 className="font-bold text-sm">FRE 1002: Requirement of the Original</h4>
+                    <p className="text-xs mt-1">Track original documents vs. duplicates and log justifications for admissibility under FRE 1003 & 1004.</p>
+                </div>
+            </div>
+
+            <TableContainer>
+                <TableHeader>
+                    <TableHead>Evidence</TableHead>
+                    <TableHead>Format</TableHead>
+                    <TableHead>Admissibility Justification</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                </TableHeader>
+                <TableBody>
+                    {evidence.map(item => (
+                        <TableRow key={item.id}>
+                            <TableCell className={cn("font-medium", theme.text.primary)}>{item.title}</TableCell>
+                            <TableCell>
+                                <Badge variant={item.isOriginal ? 'success' : 'warning'}>
+                                    {item.isOriginal ? 'Original' : 'Duplicate'}
+                                </Badge>
+                            </TableCell>
+                            <TableCell className={cn("text-xs italic", theme.text.secondary)}>
+                                {!item.isOriginal && 'Original lost not in bad faith.'}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                {!item.isOriginal && <Button variant="ghost" size="sm" icon={Plus}>Log Justification</Button>}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </TableContainer>
+        </div>
+    );
+};

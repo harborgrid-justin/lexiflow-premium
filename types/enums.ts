@@ -1,3 +1,4 @@
+
 export enum CaseStatus {
   PreFiling = 'Pre-Filing',
   Discovery = 'Discovery',
@@ -24,12 +25,14 @@ export type CommunicationType = 'Letter' | 'Email' | 'Fax' | 'Notice' | 'Memo';
 export type CommunicationDirection = 'Inbound' | 'Outbound';
 
 export type ServiceStatus = 'Draft' | 'Out for Service' | 'Attempted' | 'Served' | 'Non-Est' | 'Filed';
+export type ServiceMethod = 'Process Server' | 'Mail';
 
 export type ExhibitStatus = 'Marked' | 'Offered' | 'Admitted' | 'Excluded' | 'Withdrawn';
 export type ExhibitParty = 'Plaintiff' | 'Defense' | 'Joint' | 'Court';
 
 export type MotionType = 'Dismiss' | 'Summary Judgment' | 'Compel Discovery' | 'In Limine' | 'Continuance' | 'Sanctions';
 export type MotionStatus = 'Draft' | 'Filed' | 'Opposition Served' | 'Reply Served' | 'Hearing Set' | 'Submitted' | 'Decided' | 'Withdrawn';
+export type MotionOutcome = 'Granted' | 'Denied' | 'Withdrawn' | 'Moot';
 
 export type DocketEntryType = 'Filing' | 'Order' | 'Notice' | 'Minute Entry' | 'Exhibit' | 'Hearing';
 
@@ -41,3 +44,11 @@ export type AdmissibilityStatus = 'Admissible' | 'Challenged' | 'Inadmissible' |
 
 export type ConferralResult = 'Agreed' | 'Impasse' | 'Partial Agreement' | 'Pending';
 export type ConferralMethod = 'Email' | 'Phone' | 'In-Person' | 'Video Conference';
+
+export type TaskStatus = 'Pending' | 'In Progress' | 'Review' | 'Done' | 'Completed';
+export type StageStatus = 'Pending' | 'Active' | 'Completed';
+
+export type LegalRuleType = 'FRE' | 'FRCP' | 'FRAP' | 'Local' | 'State';
+
+export type EntityType = 'Individual' | 'Corporation' | 'Court' | 'Government' | 'Vendor' | 'Law Firm';
+export type EntityRole = 'Client' | 'Opposing Counsel' | 'Judge' | 'Expert' | 'Witness' | 'Staff' | 'Prospect';

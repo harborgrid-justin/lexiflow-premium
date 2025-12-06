@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Card } from '../../common/Card';
@@ -22,22 +21,24 @@ export const TrustLedger: React.FC = () => {
 
   return (
     <div className="space-y-6">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 flex flex-col md:flex-row justify-between items-center shadow-sm">
+        <div className={cn("rounded-lg p-6 flex flex-col md:flex-row justify-between items-center shadow-sm border", theme.status.success.bg, theme.status.success.border)}>
             <div className="flex items-start gap-4">
-                <div className="p-3 bg-green-100 rounded-full text-green-700"><Landmark className="h-8 w-8"/></div>
+                <div className={cn("p-3 rounded-full bg-white/50 dark:bg-emerald-900/50", theme.status.success.text)}>
+                  <Landmark className="h-8 w-8"/>
+                </div>
                 <div>
-                    <h3 className="text-xl font-bold text-green-900">Total Trust Liability (IOLTA)</h3>
-                    <p className="text-sm text-green-700 mt-1 max-w-lg">Client funds held in trust. Strictly regulated by State Bar. Daily reconciliation required.</p>
+                    <h3 className={cn("text-xl font-bold", theme.status.success.text)}>Total Trust Liability (IOLTA)</h3>
+                    <p className={cn("text-sm mt-1 max-w-lg", theme.status.success.text)}>{'Client funds held in trust. Strictly regulated by State Bar. Daily reconciliation required.'}</p>
                 </div>
             </div>
             <div className="text-right mt-4 md:mt-0">
-                <p className="text-4xl font-mono font-bold text-green-800 tracking-tight">${totalLiability.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
-                <p className="text-xs text-green-600 font-bold uppercase mt-1 flex items-center justify-end"><FileText className="h-3 w-3 mr-1"/> Reconciled: Today 09:00 AM</p>
+                <p className={cn("text-4xl font-mono font-bold tracking-tight", theme.status.success.text)}>{`$${totalLiability.toLocaleString(undefined, {minimumFractionDigits: 2})}`}</p>
+                <p className={cn("text-xs font-bold uppercase mt-1 flex items-center justify-end", theme.status.success.text)}><FileText className="h-3 w-3 mr-1"/> Reconciled: Today 09:00 AM</p>
             </div>
         </div>
 
         <Card title="Client Trust Ledgers" noPadding>
-            <TableContainer className="shadow-none border-0 rounded-none">
+            <TableContainer responsive="card" className="shadow-none border-0 rounded-none">
                 <TableHeader>
                     <TableHead>Client</TableHead>
                     <TableHead>Matter Reference</TableHead>

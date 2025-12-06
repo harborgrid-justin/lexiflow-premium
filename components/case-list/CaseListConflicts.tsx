@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { ShieldAlert, Search, AlertCircle, ArrowRight } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { Case } from '../../types';
+import { Button } from '../common/Button';
 
 interface CaseListConflictsProps {
   onSelectCase?: (c: Case) => void;
@@ -40,7 +40,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
           )} 
           placeholder="Enter name or entity..." 
         />
-        <button className={cn("absolute right-2 top-2 bottom-2 text-white px-6 rounded-full font-medium transition-colors", theme.primary.DEFAULT, theme.primary.hover)}>Search</button>
+        <Button variant="primary" className="absolute right-2 top-2 bottom-2 px-6 rounded-full font-medium transition-colors">Search</Button>
       </div>
       <div className={cn("p-4 rounded-lg border", theme.status.warning.bg, theme.status.warning.border)}>
         <h4 className={cn("font-bold text-sm mb-2 flex items-center", theme.status.warning.text)}><AlertCircle className="h-4 w-4 mr-2"/> Recent Potential Hits</h4>

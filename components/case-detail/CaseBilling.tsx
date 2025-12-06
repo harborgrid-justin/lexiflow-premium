@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TimeEntry, BillingModel } from '../../types';
 import { Download, Clock, DollarSign, TrendingUp, AlertCircle } from 'lucide-react';
@@ -69,49 +68,45 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                 action={<Button size="sm" variant="outline" icon={Download}>Export LEDES</Button>}
                 noPadding
             >
-                <div className="overflow-x-auto">
-                    <table className={cn("min-w-full divide-y", theme.border.default)}>
-                        <thead className={cn(theme.surfaceHighlight)}>
-                            <tr>
-                                <th className={cn("px-6 py-3 text-left text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>Date</th>
-                                <th className={cn("px-6 py-3 text-left text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>Description</th>
-                                <th className={cn("px-6 py-3 text-right text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>Rate</th>
-                                <th className={cn("px-6 py-3 text-right text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>Hours</th>
-                                <th className={cn("px-6 py-3 text-right text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>Total</th>
-                                <th className={cn("px-6 py-3 text-center text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody className={cn("divide-y", theme.border.light, theme.surface)}>
-                            {entries.length > 0 ? entries.map((e, idx) => (
-                                <tr key={e.id} className={cn("transition-colors group", `hover:${theme.surfaceHighlight}`)}>
-                                    <td className={cn("px-6 py-3 whitespace-nowrap text-sm font-mono", theme.text.secondary)}>{e.date}</td>
-                                    <td className={cn("px-6 py-3 text-sm font-medium", theme.text.primary)}>{e.description}</td>
-                                    <td className={cn("px-6 py-3 whitespace-nowrap text-sm text-right font-mono", theme.text.secondary)}>${e.rate}/hr</td>
-                                    <td className={cn("px-6 py-3 whitespace-nowrap text-sm text-right font-bold", theme.text.primary)}>{(e.duration/60).toFixed(1)}</td>
-                                    <td className={cn("px-6 py-3 whitespace-nowrap text-sm text-right font-mono", theme.text.primary)}>${e.total.toFixed(2)}</td>
-                                    <td className="px-6 py-3 whitespace-nowrap text-center">
-                                        <Badge variant={e.status === 'Billed' ? 'success' : 'warning'}>{e.status}</Badge>
-                                    </td>
-                                </tr>
-                            )) : (
-                                <tr>
-                                    <td colSpan={6} className={cn("px-6 py-12 text-center italic", theme.text.tertiary)}>
-                                        No time entries recorded for this matter.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                        {entries.length > 0 && (
-                            <tfoot className={cn("border-t", theme.border.default, theme.surfaceHighlight)}>
-                                <tr>
-                                    <td colSpan={4} className={cn("px-6 py-3 text-right text-xs font-bold uppercase", theme.text.secondary)}>Ledger Total</td>
-                                    <td className={cn("px-6 py-3 text-right text-sm font-mono font-bold", theme.text.primary)}>${(unbilledTotal + billedTotal).toFixed(2)}</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
+                <TableContainer responsive="card">
+                    <TableHeader>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Rate</TableHead>
+                        <TableHead>Hours</TableHead>
+                        <TableHead>Total</TableHead>
+                        <TableHead>Status</TableHead>
+                    </TableHeader>
+                    <TableBody>
+                        {entries.length > 0 ? entries.map((e) => (
+                            <TableRow key={e.id}>
+                                <TableCell className={cn("font-mono", theme.text.secondary)}>{e.date}</TableCell>
+                                <TableCell className={cn("font-medium", theme.text.primary)}>{e.description}</TableCell>
+                                <TableCell className={cn("text-right font-mono", theme.text.secondary)}>${e.rate}/hr</TableCell>
+                                <TableCell className={cn("text-right font-bold", theme.text.primary)}>{(e.duration/60).toFixed(1)}</TableCell>
+                                <TableCell className={cn("text-right font-mono", theme.text.primary)}>${e.total.toFixed(2)}</TableCell>
+                                <TableCell className="text-center">
+                                    <Badge variant={e.status === 'Billed' ? 'success' : 'warning'}>{e.status}</Badge>
+                                </TableCell>
+                            </TableRow>
+                        )) : (
+                            <TableRow>
+                                <TableCell colSpan={6} className={cn("px-6 py-12 text-center italic", theme.text.tertiary)}>
+                                    No time entries recorded for this matter.
+                                </TableCell>
+                            </TableRow>
                         )}
-                    </table>
-                </div>
+                    </TableBody>
+                    {entries.length > 0 && (
+                        <tfoot className={cn("border-t", theme.border.default, theme.surfaceHighlight)}>
+                            <tr>
+                                <td colSpan={4} data-label="" className={cn("px-6 py-3 text-right text-xs font-bold uppercase", theme.text.secondary)}>Ledger Total</td>
+                                <td data-label="Total" className={cn("px-6 py-3 text-right text-sm font-mono font-bold", theme.text.primary)}>${(unbilledTotal + billedTotal).toFixed(2)}</td>
+                                <td data-label=""></td>
+                            </tr>
+                        </tfoot>
+                    )}
+                </TableContainer>
             </Card>
         </div>
     );

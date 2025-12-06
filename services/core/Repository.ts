@@ -31,15 +31,18 @@ export abstract class Repository<T extends BaseEntity> {
     }
 
     getAll = async (): Promise<T[]> => {
-        return db.getAll<T>(this.storeName);
+        const all = await db.getAll<T>(this.storeName);
+        return all.filter(item => !item.deletedAt);
     }
 
     getById = async (id: string): Promise<T | undefined> => {
-        return db.get<T>(this.storeName, id);
+        const item = await db.get<T>(this.storeName, id);
+        return item && !item.deletedAt ? item : undefined;
     }
 
     getByIndex = async (indexName: string, value: string): Promise<T[]> => {
-        return db.getByIndex<T>(this.storeName, indexName, value);
+        const items = await db.getByIndex<T>(this.storeName, indexName, value);
+        return items.filter(item => !item.deletedAt);
     }
 
     add = async (item: T): Promise<T> => {
@@ -76,12 +79,11 @@ export abstract class Repository<T extends BaseEntity> {
     }
 
     delete = async (id: string): Promise<void> => {
-        const current = await this.getById(id);
-        if (current) {
+        const current = await db.get<T>(this.storeName, id); // Use db.get to find item even if soft-deleted
+        if (current && !current.deletedAt) {
             const deleted = { ...current, deletedAt: new Date().toISOString() };
             await db.put(this.storeName, deleted);
             await this.logAction(`DELETE_${this.storeName.toUpperCase().slice(0, -1)}`, id, 'Soft Delete');
         }
-        return db.delete(this.storeName, id);
     }
 }

@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Wand2, RotateCcw } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
 import { EditorToolbar } from './common/EditorToolbar';
+import { useTheme } from '../context/ThemeContext';
+import { cn } from '../utils/cn';
 
 interface AdvancedEditorProps {
   initialContent: string;
@@ -13,6 +15,7 @@ interface AdvancedEditorProps {
 
 export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, onSave, placeholder, onInsertRequest }) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
   const [showAiToolbar, setShowAiToolbar] = useState(false);
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
   const [aiPrompt, setAiPrompt] = useState('');
@@ -144,17 +147,17 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
   }, []);
 
   return (
-    <div className="flex flex-col h-full border border-slate-200 rounded-lg bg-white shadow-sm overflow-hidden">
+    <div className={cn("flex flex-col h-full border rounded-lg shadow-sm overflow-hidden", theme.border.default, theme.surface)}>
       <EditorToolbar 
         wordCount={wordCount}
         onCmd={execCmd}
         onSave={onSave ? () => onSave(editorRef.current?.innerHTML || '') : undefined}
       />
 
-      <div className="relative flex-1 bg-white overflow-hidden group">
+      <div className="relative flex-1 overflow-hidden group">
          <div 
             ref={editorRef}
-            className="h-full w-full p-8 outline-none overflow-y-auto prose prose-slate max-w-none focus:bg-slate-50/10 transition-colors"
+            className={cn("h-full w-full p-8 outline-none overflow-y-auto prose prose-slate max-w-none transition-colors", `focus:${theme.surfaceHighlight}`)}
             contentEditable
             onMouseUp={handleSelection}
             onKeyUp={handleSelection}
@@ -164,7 +167,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
          />
          
          {!wordCount && placeholder && (
-            <div className="absolute top-8 left-8 text-slate-300 pointer-events-none text-lg">
+            <div className={cn("absolute top-8 left-8 pointer-events-none text-lg", theme.text.tertiary)}>
                 {placeholder}
             </div>
          )}

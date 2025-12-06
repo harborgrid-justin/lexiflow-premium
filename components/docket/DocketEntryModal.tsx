@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
@@ -30,7 +29,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
             <div className="flex items-center gap-3 mb-2">
               <span className={cn("text-xl font-bold", theme.text.primary)}>Internal Seq #{entry.sequenceNumber}</span>
               {entry.pacerSequenceNumber && (
-                  <span className={cn("text-sm font-mono px-2 py-0.5 border rounded bg-slate-50 text-slate-600")}>
+                  <span className={cn("text-sm font-mono px-2 py-0.5 border rounded", theme.surfaceHighlight, theme.text.secondary)}>
                       PACER #{entry.pacerSequenceNumber}
                   </span>
               )}
@@ -47,32 +46,32 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
 
         {/* Structured Data Visualization */}
         {entry.structuredData && (
-            <div className={cn("mb-6 p-4 rounded-lg border border-blue-100 bg-blue-50/30", theme.border.default)}>
-                <h4 className={cn("text-xs font-bold uppercase mb-3 flex items-center text-blue-700")}>
+            <div className={cn("mb-6 p-4 rounded-lg border", theme.status.info.bg, theme.status.info.border)}>
+                <h4 className={cn("text-xs font-bold uppercase mb-3 flex items-center", theme.status.info.text)}>
                     <Database className="h-3 w-3 mr-2"/> Structured Analysis
                 </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Action</span>
-                        <span className="font-medium text-slate-800">{entry.structuredData.actionType}</span>
+                        <span className={cn("block text-[10px] font-bold uppercase", theme.text.secondary)}>Action</span>
+                        <span className={cn("font-medium", theme.text.primary)}>{entry.structuredData.actionType}</span>
                     </div>
                     <div>
-                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Target/Doc</span>
-                        <span className="font-medium text-slate-800">{entry.structuredData.documentTitle}</span>
+                        <span className={cn("block text-[10px] font-bold uppercase", theme.text.secondary)}>Target/Doc</span>
+                        <span className={cn("font-medium", theme.text.primary)}>{entry.structuredData.documentTitle}</span>
                     </div>
                     <div>
-                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Verb</span>
-                        <span className="font-medium text-blue-600 bg-blue-50 px-1.5 rounded">{entry.structuredData.actionVerb}</span>
+                        <span className={cn("block text-[10px] font-bold uppercase", theme.text.secondary)}>Verb / Action</span>
+                        <span className={cn("font-medium px-1.5 rounded", theme.primary.text, theme.primary.light)}>{entry.structuredData.actionVerb}</span>
                     </div>
                     <div>
-                        <span className="block text-[10px] font-bold text-slate-400 uppercase">Filer Entity</span>
-                        <span className="font-medium text-slate-800">{entry.structuredData.filer}</span>
+                        <span className={cn("block text-[10px] font-bold uppercase", theme.text.secondary)}>Filer Entity</span>
+                        <span className={cn("font-medium", theme.text.primary)}>{entry.structuredData.filer}</span>
                     </div>
                 </div>
                 {entry.structuredData.additionalText && (
-                    <div className="mt-3 pt-3 border-t border-blue-100">
-                        <span className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Metadata</span>
-                        <p className="text-xs text-slate-600">{entry.structuredData.additionalText}</p>
+                    <div className={cn("mt-3 pt-3 border-t", theme.border.light)}>
+                        <span className={cn("block text-[10px] font-bold uppercase mb-1", theme.text.secondary)}>Metadata</span>
+                        <p className={cn("text-xs", theme.text.secondary)}>{entry.structuredData.additionalText}</p>
                     </div>
                 )}
             </div>
@@ -86,8 +85,8 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
 
         {/* Auto-generated Tags or Rules */}
         <div className="mb-6 flex gap-2">
-            {entry.type === 'Motion' && <span className="text-xs border px-2 py-1 rounded flex items-center gap-1 bg-slate-50"><Tag className="h-3 w-3"/> Needs Response</span>}
-            {entry.type === 'Order' && <span className="text-xs border border-red-200 bg-red-50 text-red-700 px-2 py-1 rounded flex items-center gap-1"><Scale className="h-3 w-3"/> Ruling</span>}
+            {entry.type === 'Motion' && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surfaceHighlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
+            {entry.type === 'Order' && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}><Scale className="h-3 w-3"/> Ruling</span>}
         </div>
 
         {entry.triggersDeadlines && entry.triggersDeadlines.length > 0 && (

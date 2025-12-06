@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LegalArgument, RiskStatus } from '../../../types';
 import { TextArea } from '../../common/Inputs';

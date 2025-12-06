@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -44,7 +43,7 @@ export const DocketCalendar: React.FC = () => {
     <div className={cn("flex flex-col h-full rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
       <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
         <div className="flex items-center gap-4">
-          <div className={cn("p-2 rounded-lg border shadow-sm bg-white", theme.border.default)}>
+          <div className={cn("p-2 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
             <Calendar className={cn("h-6 w-6", theme.primary.text)} />
           </div>
           <div>
@@ -54,22 +53,22 @@ export const DocketCalendar: React.FC = () => {
             <p className={cn("text-xs", theme.text.secondary)}>Automated deadlines from Docket filings</p>
           </div>
         </div>
-        <div className="flex gap-1 bg-white p-1 rounded-md border border-slate-200">
-          <button onClick={prevMonth} className="p-1 hover:bg-slate-100 rounded"><ChevronLeft className="h-5 w-5 text-slate-600" /></button>
-          <button onClick={() => setCurrentDate(new Date())} className="px-3 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded">Today</button>
-          <button onClick={nextMonth} className="p-1 hover:bg-slate-100 rounded"><ChevronRight className="h-5 w-5 text-slate-600" /></button>
+        <div className={cn("flex gap-1 p-1 rounded-md border", theme.surface, theme.border.default)}>
+          <button onClick={prevMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={() => setCurrentDate(new Date())} className={cn("px-3 text-sm font-medium rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>Today</button>
+          <button onClick={nextMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}><ChevronRight className="h-5 w-5" /></button>
         </div>
       </div>
 
-      <div className="flex-1 bg-slate-100 p-px grid grid-cols-7 gap-px overflow-y-auto">
+      <div className={cn("flex-1 p-px grid grid-cols-7 gap-px overflow-y-auto", theme.surfaceHighlight)}>
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="bg-slate-50 p-2 text-center text-xs font-bold text-slate-500 uppercase tracking-wider sticky top-0 z-10 border-b">
+          <div key={day} className={cn("p-2 text-center text-xs font-bold uppercase tracking-wider sticky top-0 z-10 border-b", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
             {day}
           </div>
         ))}
         
         {paddingDays.map(i => (
-          <div key={`pad-${i}`} className="bg-slate-50 min-h-[120px] opacity-50" />
+          <div key={`pad-${i}`} className={cn("min-h-[120px] opacity-50", theme.surfaceHighlight)} />
         ))}
 
         {daysArray.map(day => {
@@ -77,15 +76,15 @@ export const DocketCalendar: React.FC = () => {
           const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
           
           return (
-            <div key={day} className={cn("bg-white p-2 min-h-[120px] group transition-colors hover:bg-blue-50/30", isToday && "bg-blue-50/50")}>
+            <div key={day} className={cn("p-2 min-h-[120px] flex flex-col transition-colors group relative", theme.surface, `hover:${theme.surfaceHighlight}`, isToday && cn(theme.primary.light, "bg-opacity-50"))}>
               <div className="flex justify-between items-start mb-2">
                 <span className={cn(
-                  "text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full",
-                  isToday ? "bg-blue-600 text-white shadow-sm" : "text-slate-700"
+                  "text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full transition-colors",
+                  isToday ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-md") : theme.text.primary
                 )}>
                   {day}
                 </span>
-                {deadlines.length > 0 && <span className="text-[10px] font-bold text-slate-400">{deadlines.length} events</span>}
+                {deadlines.length > 0 && <span className={cn("text-[10px] font-bold", theme.text.tertiary)}>{deadlines.length} events</span>}
               </div>
               
               <div className="space-y-1">
@@ -95,8 +94,8 @@ export const DocketCalendar: React.FC = () => {
                     className={cn(
                       "text-[10px] p-1.5 rounded border mb-1 cursor-pointer truncate transition-all hover:shadow-md",
                       dl.status === 'Satisfied' 
-                        ? "bg-green-50 border-green-200 text-green-700" 
-                        : "bg-amber-50 border-amber-200 text-amber-700"
+                        ? cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text) 
+                        : cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text)
                     )}
                     title={`${dl.title} - ${dl.caseId}`}
                   >

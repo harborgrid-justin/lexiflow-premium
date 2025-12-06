@@ -44,25 +44,25 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     { 
       id: 'schema', label: 'Schema Architect', icon: Database,
       children: [
-        { id: 'designer', label: 'Visual Designer', icon: Table },
-        { id: 'migrations', label: 'Migrations', icon: Code },
-        { id: 'snapshots', label: 'Snapshots', icon: History }
+        { id: 'schema-designer', label: 'Visual Designer', icon: Table },
+        { id: 'schema-migrations', label: 'Migrations', icon: Code },
+        { id: 'schema-snapshots', label: 'Snapshots', icon: History }
       ]
     },
     { 
       id: 'query', label: 'SQL Workbench', icon: Terminal,
       children: [
-        { id: 'editor', label: 'Query Editor', icon: Code },
-        { id: 'history', label: 'History', icon: History },
-        { id: 'saved', label: 'Saved Queries', icon: Book }
+        { id: 'query-editor', label: 'Query Editor', icon: Code },
+        { id: 'query-history', label: 'History', icon: History },
+        { id: 'query-saved', label: 'Saved Queries', icon: Book }
       ]
     },
     { 
       id: 'pipeline', label: 'ETL Pipelines', icon: GitMerge,
       children: [
-        { id: 'dag', label: 'DAG Monitor', icon: Activity },
-        { id: 'jobs', label: 'Job History', icon: Activity },
-        { id: 'connectors', label: 'Connectors', icon: Network }
+        { id: 'pipeline-dag', label: 'DAG Monitor', icon: Activity },
+        { id: 'pipeline-jobs', label: 'Job History', icon: Activity },
+        { id: 'pipeline-connectors', label: 'Connectors', icon: Network }
       ]
     },
     { 
@@ -99,37 +99,25 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     { 
       id: 'security', label: 'Row Security', icon: Lock,
       children: [
-        { id: 'policies', label: 'RLS Policies', icon: FileText },
-        { id: 'roles', label: 'DB Roles', icon: ShieldCheck }
+        { id: 'security-policies', label: 'RLS Policies', icon: FileText },
+        { id: 'security-roles', label: 'DB Roles', icon: ShieldCheck }
       ]
     },
     { id: 'replication', label: 'Replication', icon: Repeat },
-    { 
-      id: 'api', label: 'API Gateway', icon: Radio,
-      children: [
-        { id: 'endpoints', label: 'Endpoints', icon: Globe },
-        { id: 'keys', label: 'API Keys', icon: Key }
-      ]
-    },
+    { id: 'api', label: 'API Gateway', icon: Radio },
     { id: 'backup', label: 'Vault & Recovery', icon: Archive },
-    { 
-      id: 'cost', label: 'FinOps', icon: DollarSign,
-      children: [
-        { id: 'spend', label: 'Spend Analysis', icon: BarChart2 },
-        { id: 'budgets', label: 'Budgets', icon: Calculator }
-      ]
-    },
+    { id: 'cost', label: 'FinOps', icon: DollarSign },
   ];
 
   return (
-    <div className={cn("w-64 flex flex-col border-r shrink-0", theme.surface, theme.border.default)}>
-      <div className={cn("p-4 border-b", theme.border.default, theme.surfaceHighlight)}>
+    <div className={cn("w-full h-full flex flex-col shrink-0", theme.surface)}>
+      <div className={cn("p-4 border-b shrink-0", theme.border.default, theme.surfaceHighlight)}>
         <h3 className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>Data Platform</h3>
         <p className={cn("text-xs mt-1 font-mono flex items-center gap-1", theme.text.tertiary)}>
           <Server className="h-3 w-3"/> v2.5 Enterprise
         </p>
       </div>
-      <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+      <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">
         {menu.map(item => {
           const hasChildren = item.children && item.children.length > 0;
           const isExpanded = expanded[item.id];
@@ -183,7 +171,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
           );
         })}
       </nav>
-      <div className={cn("p-4 border-t", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("p-4 border-t shrink-0", theme.border.default, theme.surfaceHighlight)}>
         <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
             <span className={cn("text-xs font-mono", theme.text.secondary)}>Cluster Healthy</span>

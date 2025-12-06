@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { LegalEntity } from '../../types';
 import { Card } from '../common/Card';

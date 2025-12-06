@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ArrowLeft, MapPin, ArrowUpRight, Calendar, Users } from 'lucide-react';
+import { ArrowLeft, MapPin, ArrowUpRight, Calendar, Users, CheckSquare, MessageCircle } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Case } from '../../types';
@@ -8,6 +7,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
 import { ClientPortalModal } from '../ClientPortalModal';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
 
 interface CaseDetailHeaderProps {
   caseData: Case;
@@ -20,6 +21,10 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({
 }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
+
+  // Enterprise Feature: Live data in header
+  const { data: openTasks } = useQuery(['tasks', caseData.id, 'count'], () => DataService.tasks.countByCaseId(caseData.id));
+  const { data: unreadMessages } = useQuery(['messages', caseData.id, 'count'], () => DataService.messenger.countUnread(caseData.id));
 
   const handleOpenPortal = () => {
       const winId = `portal-${caseData.clientId}`;
@@ -60,13 +65,19 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({
                             </div>
                         </div>
                         <div className="flex items-center gap-3 shrink-0">
-                            <div className="text-right hidden xl:block">
-                                <p className={cn("text-[10px] uppercase font-bold tracking-wider", theme.text.tertiary)}>Matter Value</p>
-                                <p className={cn("text-lg font-mono font-bold", theme.text.primary)}>
-                                    ${(caseData.value || 0).toLocaleString()}
-                                </p>
+                            <div className="hidden md:flex gap-3">
+                                {typeof openTasks === 'number' && openTasks > 0 && (
+                                    <span className="flex items-center text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-200">
+                                        <CheckSquare className="h-3 w-3 mr-1"/> {openTasks} Open Tasks
+                                    </span>
+                                )}
+                                {typeof unreadMessages === 'number' && unreadMessages > 0 && (
+                                    <span className="flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded border border-rose-200">
+                                        <MessageCircle className="h-3 w-3 mr-1"/> {unreadMessages} Unread
+                                    </span>
+                                )}
                             </div>
-                            <Button variant="outline" size="sm" className="hidden sm:flex" icon={ArrowUpRight} onClick={handleOpenPortal}>Open in Portal</Button>
+                            <Button variant="outline" size="sm" className="hidden sm:flex" icon={ArrowUpRight} onClick={handleOpenPortal}>Client Portal</Button>
                             <button 
                                 className={cn("lg:hidden p-2 rounded-full", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}
                                 onClick={onShowTimeline}

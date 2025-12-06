@@ -104,6 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
                         </h3>
                         <div className="space-y-0.5">
                             {items.map(item => {
+                                if (!item.icon) return null;
                                 const Icon = item.icon;
                                 const isActive = activeView === item.id;
                                 return (

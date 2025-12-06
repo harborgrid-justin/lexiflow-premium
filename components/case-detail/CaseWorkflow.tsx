@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { WorkflowStage, WorkflowTask } from '../../types';
+import { WorkflowStage, WorkflowTask, StageStatus } from '../../types';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '../common/Button';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
@@ -31,11 +30,11 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
         const allDone = newTasks.every(t => t.status === 'Done');
         const anyInProgress = newTasks.some(t => t.status === 'In Progress');
         
-        let newStageStatus: string = stage.status;
+        let newStageStatus: StageStatus = stage.status as StageStatus;
         if (allDone) newStageStatus = 'Completed';
         else if (anyInProgress || newTasks.some(t => t.status === 'Done')) newStageStatus = 'Active';
 
-        return { ...stage, tasks: newTasks as WorkflowTask[], status: newStageStatus };
+        return { ...stage, tasks: newTasks, status: newStageStatus };
     }));
   };
 

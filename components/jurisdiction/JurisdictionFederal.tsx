@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
@@ -68,7 +67,7 @@ export const JurisdictionFederal: React.FC = () => {
         </div>
       </div>
 
-      <TableContainer>
+      <TableContainer responsive="card">
         <TableHeader>
           <TableHead>Court Name</TableHead>
           <TableHead>Circuit / District</TableHead>

@@ -1,131 +1,165 @@
-
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { Search, History, Bookmark, Settings, Globe, BookOpen } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
+import React, { useState, useEffect, Suspense } from 'react';
+import { 
+  Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp, 
+  BrainCircuit, Map, Calculator, FileText, Bookmark, Library
+} from 'lucide-react';
+import { LazyLoader } from './common/LazyLoader';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { DataService } from '../services/dataService';
+import { JudgeProfile, Clause } from '../types';
+import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 
-// Sub-components
-import { ActiveResearch } from './research/ActiveResearch';
-import { ResearchHistory } from './research/ResearchHistory';
-import { SavedAuthorities } from './research/SavedAuthorities';
-import { JurisdictionSettings } from './research/JurisdictionSettings';
+// --- Lazy Loaded Components ---
+const WikiView = React.lazy(() => import('./knowledge/WikiView'));
+const PrecedentsView = React.lazy(() => import('./knowledge/PrecedentsView'));
+const QAView = React.lazy(() => import('./knowledge/QAView'));
+const KnowledgeAnalytics = React.lazy(() => import('./knowledge/KnowledgeAnalytics'));
+const ClauseList = React.lazy(() => import('./clauses/ClauseList'));
+const ClauseHistoryModal = React.lazy(() => import('./ClauseHistoryModal'));
+const JudgeAnalytics = React.lazy(() => import('./analytics/JudgeAnalytics'));
+const CounselAnalytics = React.lazy(() => import('./analytics/CounselAnalytics'));
+const CasePrediction = React.lazy(() => import('./analytics/CasePrediction'));
+const SettlementCalculator = React.lazy(() => import('./analytics/SettlementCalculator'));
+const RuleBookViewer = React.lazy(() => import('./rules/RuleBookViewer'));
+const StandingOrders = React.lazy(() => import('./rules/StandingOrders'));
+const LocalRulesMap = React.lazy(() => import('./rules/LocalRulesMap'));
+const CitationLibrary = React.lazy(() => import('./citation/CitationLibrary'));
+const BriefAnalyzer = React.lazy(() => import('./citation/BriefAnalyzer'));
 
-type ResearchView = 'active' | 'history' | 'saved' | 'settings';
+import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
 
-interface ResearchToolProps {
-    initialTab?: ResearchView;
-}
+const UniversalSearch = () => {
+    const { theme } = useTheme();
+    return (
+        <div className={cn("h-full flex flex-col items-center justify-center text-center p-8", theme.text.tertiary)}>
+            <div className={cn("p-6 rounded-full mb-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 border", theme.border.default)}>
+                <BrainCircuit className="h-16 w-16 opacity-50 text-blue-600"/>
+            </div>
+            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Universal Knowledge Graph</h2>
+            <p className="max-w-md mt-2 mb-8">Perform semantic searches across case law, firm wikis, clauses, and predictive analytics with a single natural language query.</p>
+            <div className={cn("w-full max-w-xl p-4 rounded-lg border bg-opacity-50 flex items-center gap-3", theme.surfaceHighlight, theme.border.default)}>
+                <Search className="h-5 w-5 opacity-50"/>
+                <span className="text-sm opacity-50">Search all firm intelligence...</span>
+            </div>
+        </div>
+    );
+};
 
-const PARENT_TABS = [
+const TAB_CONFIG = [
   {
-    id: 'research', label: 'Research', icon: Search,
+    id: 'intel', label: 'Intelligence', icon: BrainCircuit,
     subTabs: [
-      { id: 'active', label: 'Active Session', icon: Search },
+      { id: 'search_home', label: 'Universal Search', icon: Search },
+      { id: 'analytics_judge', label: 'Judge Analytics', icon: Gavel },
+      { id: 'analytics_counsel', label: 'Opposing Counsel', icon: Users },
+      { id: 'analytics_prediction', label: 'Case Outcome', icon: TrendingUp },
     ]
   },
   {
-    id: 'library', label: 'Library', icon: BookOpen,
+    id: 'authority', label: 'Legal Authority', icon: Scale,
     subTabs: [
-      { id: 'history', label: 'History', icon: History },
-      { id: 'saved', label: 'Saved Authorities', icon: Bookmark },
+      { id: 'authority_fre', label: 'Evidence (FRE)', icon: BookOpen },
+      { id: 'authority_frcp', label: 'Civil Proc. (FRCP)', icon: BookOpen },
+      { id: 'authority_local', label: 'Local Rules', icon: Map },
+      { id: 'authority_standing', label: 'Standing Orders', icon: Gavel },
+      { id: 'authority_citations', label: 'Citation Library', icon: Bookmark },
     ]
   },
   {
-    id: 'config', label: 'Configuration', icon: Settings,
+    id: 'knowledge', label: 'Firm Knowledge', icon: Library,
     subTabs: [
-      { id: 'settings', label: 'Jurisdiction', icon: Globe },
+      { id: 'knowledge_wiki', label: 'Practice Wiki', icon: FileText },
+      { id: 'knowledge_precedents', label: 'Precedents', icon: ScrollText },
+      { id: 'knowledge_qa', label: 'Firm Q&A', icon: Users },
+      { id: 'knowledge_analytics', label: 'Usage Stats', icon: BarChart3 },
+    ]
+  },
+  {
+    id: 'tools', label: 'Drafting Tools', icon: ScrollText,
+    subTabs: [
+      { id: 'drafting_clauses', label: 'Clause Library', icon: ScrollText },
+      { id: 'drafting_analyzer', label: 'Brief Analyzer', icon: BrainCircuit },
+      { id: 'analytics_settlement', label: 'Settlement Calc', icon: Calculator },
     ]
   }
 ];
 
-export const ResearchTool: React.FC<ResearchToolProps> = ({ initialTab }) => {
+export const ResearchTool: React.FC<{ initialTab?: string }> = ({ initialTab }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<ResearchView>('active');
+  const [activeView, setActiveView] = useSessionStorage<string>('research_active_view', initialTab || 'search_home');
+  const [selectedClause, setSelectedClause] = useState<Clause | null>(null);
+  const [judges, setJudges] = useState<JudgeProfile[]>([]);
+  const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
   useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
-  }, [initialTab]);
-
-  const activeParentTab = useMemo(() => 
-    PARENT_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || PARENT_TABS[0],
-  [activeTab]);
-
-  const handleParentTabChange = useCallback((parentId: string) => {
-    const parent = PARENT_TABS.find(p => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id as ResearchView);
+    if (activeView.startsWith('analytics_')) {
+        const loadJudges = async () => {
+            const data = await DataService.analytics.getJudgeProfiles();
+            setJudges(data);
+            if (data.length > 0 && !selectedJudgeId) setSelectedJudgeId(data[0].id);
+        };
+        loadJudges();
     }
-  }, []);
+  }, [activeView, selectedJudgeId]);
 
   const renderContent = () => {
-    switch (activeTab) {
-      case 'active': return <ActiveResearch />;
-      case 'history': return <ResearchHistory />;
-      case 'saved': return <SavedAuthorities />;
-      case 'settings': return <JurisdictionSettings />;
-      default: return <ActiveResearch />;
+    switch (activeView) {
+        case 'search_home': return <UniversalSearch />;
+        case 'analytics_judge': {
+            const currentJudge = judges.find(j => j.id === selectedJudgeId) || judges[0];
+            return (
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-2">
+                        <label className={cn("text-sm font-medium", theme.text.secondary)}>Select Judge:</label>
+                        <select 
+                            className={cn("p-2 rounded border text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                            value={selectedJudgeId} onChange={(e) => setSelectedJudgeId(e.target.value)}
+                        >
+                            {judges.map(j => <option key={j.id} value={j.id}>{j.name} ({j.court})</option>)}
+                        </select>
+                    </div>
+                    {currentJudge && <JudgeAnalytics judge={currentJudge} stats={MOCK_JUDGE_STATS} />}
+                </div>
+            );
+        }
+        case 'analytics_counsel': return <CounselAnalytics counsel={MOCK_COUNSEL[0]} />;
+        case 'analytics_prediction': return <CasePrediction outcomeData={MOCK_OUTCOME_DATA} />;
+        case 'authority_fre': return <RuleBookViewer type="FRE" title="Federal Rules of Evidence" />;
+        case 'authority_frcp': return <RuleBookViewer type="FRCP" title="Federal Rules of Civil Procedure" />;
+        case 'authority_local': return <div className="h-full"><LocalRulesMap /></div>;
+        case 'authority_standing': return <StandingOrders />;
+        case 'authority_citations': return <CitationLibrary onSelect={() => {}} />;
+        case 'knowledge_wiki': return <WikiView />;
+        case 'knowledge_precedents': return <div className="h-full overflow-y-auto p-1"><PrecedentsView /></div>;
+        case 'knowledge_qa': return <div className="h-full overflow-y-auto p-1"><QAView /></div>;
+        case 'knowledge_analytics': return <div className="h-full overflow-y-auto p-1"><KnowledgeAnalytics /></div>;
+        case 'drafting_clauses': return <ClauseList onSelectClause={setSelectedClause} />;
+        case 'drafting_analyzer': return <BriefAnalyzer />;
+        case 'analytics_settlement': return <SettlementCalculator />;
+        default: return <UniversalSearch />;
     }
   };
 
   return (
-    <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-      <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-          title="Legal Research Center" 
-          subtitle="AI-powered case law analysis, citation verification, and legislative tracking."
-          actions={
-            <Button variant="outline" size="sm" icon={History} onClick={() => setActiveTab('history')}>Recent</Button>
-          }
-        />
-
-        {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
-            {PARENT_TABS.map(parent => (
-                <button
-                    key={parent.id}
-                    onClick={() => handleParentTabChange(parent.id)}
-                    className={cn(
-                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                        activeParentTab.id === parent.id 
-                            ? cn("border-current", theme.primary.text)
-                            : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
-                    )}
-                >
-                    <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {parent.label}
-                </button>
-            ))}
-        </div>
-
-        {/* Sub-Navigation (Pills) - Touch Scroll */}
-        {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
-                {activeParentTab.subTabs.map(tab => (
-                    <button 
-                        key={tab.id} 
-                        onClick={() => setActiveTab(tab.id as ResearchView)} 
-                        className={cn(
-                            "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                            activeTab === tab.id 
-                                ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
-                        )}
-                    >
-                        <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
-                        {tab.label}
-                    </button>
-                ))}
-            </div>
-        )}
-      </div>
-
-      <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
-        <div className="h-full overflow-y-auto custom-scrollbar touch-auto">
-            {renderContent()}
-        </div>
-      </div>
-    </div>
+    <>
+      {selectedClause && (
+          <Suspense fallback={null}>
+              <ClauseHistoryModal clause={selectedClause} onClose={() => setSelectedClause(null)} />
+          </Suspense>
+      )}
+      <TabbedPageLayout
+        pageTitle="Research & Knowledge Center"
+        pageSubtitle="Unified intelligence hub for legal authority, firm knowledge, and strategic analysis."
+        tabConfig={TAB_CONFIG}
+        activeTabId={activeView}
+        onTabChange={setActiveView}
+      >
+          <Suspense fallback={<LazyLoader message="Loading Module..." />}>
+              {renderContent()}
+          </Suspense>
+      </TabbedPageLayout>
+    </>
   );
 };

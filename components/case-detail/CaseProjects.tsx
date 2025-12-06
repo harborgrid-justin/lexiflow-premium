@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Project, WorkflowTask } from '../../types';
 import { Plus, Briefcase } from 'lucide-react';

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card } from '../common/Card';
 import { Input } from '../common/Inputs';
@@ -7,9 +6,11 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useChartTheme } from '../common/ChartHelpers';
 
 export const SettlementCalculator: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
+  const chartTheme = useChartTheme();
   const [low, setLow] = useState(500000);
   const [high, setHigh] = useState(1500000);
   const [liabilityProb, setLiabilityProb] = useState(75);
@@ -142,24 +143,19 @@ export const SettlementCalculator: React.FC = () => {
               <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartTheme.colors.emerald} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={chartTheme.colors.emerald} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="range" fontSize={10} tickLine={false} axisLine={false} stroke={theme.text.secondary.replace('text-', '')} />
+                <XAxis dataKey="range" fontSize={10} tickLine={false} axisLine={false} stroke={chartTheme.text} />
                 <YAxis hide />
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={mode === 'dark' ? '#334155' : '#e2e8f0'} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                 <Tooltip 
-                  cursor={{stroke: '#10b981', strokeWidth: 1}}
-                  contentStyle={{ 
-                      backgroundColor: mode === 'dark' ? '#1e293b' : '#ffffff',
-                      borderColor: mode === 'dark' ? '#334155' : '#e2e8f0',
-                      borderRadius: '8px', 
-                      color: mode === 'dark' ? '#f8fafc' : '#1e293b'
-                  }}
+                  cursor={{stroke: chartTheme.colors.emerald, strokeWidth: 1}}
+                  contentStyle={chartTheme.tooltipStyle}
                 />
-                <Area type="monotone" dataKey="count" stroke="#10b981" fillOpacity={1} fill="url(#colorCount)" />
-                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke="red" strokeDasharray="3 3" label="EV" />
+                <Area type="monotone" dataKey="count" stroke={chartTheme.colors.emerald} fillOpacity={1} fill="url(#colorCount)" />
+                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke={chartTheme.colors.rose} strokeDasharray="3 3" label="EV" />
               </AreaChart>
             </ResponsiveContainer>
          </div>

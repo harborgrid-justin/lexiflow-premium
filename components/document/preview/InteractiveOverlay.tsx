@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { X, Move } from 'lucide-react';
 import { PDFTool } from './AcrobatToolbar';
@@ -15,7 +14,7 @@ interface Drawing {
   opacity: number;
 }
 
-interface Field {
+export interface Field {
   id: string;
   type: 'signature' | 'date' | 'initials' | 'text';
   x: number;
@@ -27,16 +26,22 @@ interface InteractiveOverlayProps {
   activeTool: PDFTool;
   dimensions: { width: number; height: number };
   onFieldClick: (field: Field) => void;
+  existingFields?: Field[];
+  onFieldsUpdate?: (fields: Field[]) => void;
 }
 
 export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({ 
-  activeTool, dimensions, onFieldClick 
+  activeTool, dimensions, onFieldClick, existingFields = [], onFieldsUpdate 
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [drawings, setDrawings] = useState<Drawing[]>([]);
-  const [fields, setFields] = useState<Field[]>([]);
+  const [fields, setFields] = useState<Field[]>(existingFields);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPath, setCurrentPath] = useState<Point[]>([]);
+
+  useEffect(() => {
+    setFields(existingFields);
+  }, [existingFields]);
 
   // Initialize Canvas Context for Drawing
   useEffect(() => {
@@ -91,7 +96,9 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
         y: pos.y - 20,
         value: activeTool === 'date' ? new Date().toLocaleDateString() : ''
       };
-      setFields([...fields, newField]);
+      const updatedFields = [...fields, newField];
+      setFields(updatedFields);
+      if (onFieldsUpdate) onFieldsUpdate(updatedFields);
     }
   };
 
@@ -132,7 +139,9 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
   };
 
   const handleDeleteField = (id: string) => {
-      setFields(fields.filter(f => f.id !== id));
+      const updatedFields = fields.filter(f => f.id !== id);
+      setFields(updatedFields);
+      if (onFieldsUpdate) onFieldsUpdate(updatedFields);
   };
 
   return (
@@ -155,7 +164,9 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
                     key={field.id}
                     className={cn(
                         "absolute pointer-events-auto border-2 border-blue-500 bg-blue-50/80 rounded flex items-center justify-center group cursor-pointer shadow-lg transition-transform hover:scale-105",
-                        field.type === 'signature' ? "w-40 h-16" : "w-32 h-10"
+                        field.type === 'signature' ? "w-40 h-16" :
+                        field.type === 'text' ? "w-48 h-8" :
+                        "w-32 h-10"
                     )}
                     style={{ left: field.x, top: field.y }}
                     onClick={() => onFieldClick(field)}

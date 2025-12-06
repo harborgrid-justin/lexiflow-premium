@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { MetricCard } from '../common/Primitives';
@@ -8,13 +7,16 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { useChartTheme } from '../common/ChartHelpers';
 
 export const KnowledgeAnalytics: React.FC = () => {
   const { theme } = useTheme();
+  const chartTheme = useChartTheme();
   
   // Enterprise Data Access
   const { data: analytics = { usage: [], topics: [] } } = useQuery(
-      ['knowledge', 'analytics'],
+      [STORES.QA, 'analytics'], // Updated key
       DataService.knowledge.getAnalytics
   );
 
@@ -56,10 +58,10 @@ export const KnowledgeAnalytics: React.FC = () => {
                 <div className="h-72 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={analytics.usage} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-                            <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
-                            <YAxis fontSize={12} tickLine={false} axisLine={false} tick={{fill: '#94a3b8'}} />
-                            <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                            <Bar dataKey="views" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={40} />
+                            <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{fill: chartTheme.text}} />
+                            <YAxis fontSize={12} tickLine={false} axisLine={false} tick={{fill: chartTheme.text}} />
+                            <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={chartTheme.tooltipStyle} />
+                            <Bar dataKey="views" fill={chartTheme.colors.blue} radius={[4, 4, 0, 0]} barSize={40} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -80,7 +82,7 @@ export const KnowledgeAnalytics: React.FC = () => {
                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                             </Pie>
-                            <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}/>
+                            <Tooltip contentStyle={chartTheme.tooltipStyle}/>
                             <Legend verticalAlign="bottom" height={36}/>
                         </PieChart>
                     </ResponsiveContainer>
@@ -113,8 +115,8 @@ export const KnowledgeAnalytics: React.FC = () => {
             <Card title="Pending Review">
                 <div className="space-y-4">
                     <div className={cn("p-4 border border-l-4 border-l-amber-500 rounded-lg bg-amber-50", theme.border.default)}>
-                        <h4 className="text-sm font-bold text-amber-900 mb-1">Outdated Content</h4>
-                        <p className="text-xs text-amber-800">3 articles flagged for review due to regulatory updates in 2024.</p>
+                        <h4 className="text-sm font-bold text-amber-800 mb-1">Outdated Content</h4>
+                        <p className="text-xs text-amber-700">3 articles flagged for review due to regulatory updates in 2024.</p>
                     </div>
                     <div className={cn("p-4 border border-l-4 border-l-blue-500 rounded-lg bg-blue-50", theme.border.default)}>
                         <h4 className="text-sm font-bold text-blue-900 mb-1">New Drafts</h4>

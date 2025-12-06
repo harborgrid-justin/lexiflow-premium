@@ -3,7 +3,7 @@ import React, { useState, useCallback, Suspense, useTransition, useEffect } from
 import { Sidebar } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { AppHeader } from './components/layout/AppHeader';
-import { AppView, User } from './types';
+import { AppView, User, Case } from './types';
 import { MOCK_USERS } from './data/models/user';
 import { LazyLoader } from './components/common/LazyLoader';
 import { ThemeProvider } from './context/ThemeContext';
@@ -32,19 +32,19 @@ initializeModules();
 
 // Inner App Component to access Context
 const InnerApp: React.FC = () => {
-  const [activeView, setActiveView] = useSessionStorage<AppView>('lexiflow_active_view', PATHS.DASHBOARD);
-  const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>('lexiflow_selected_case_id', '1:24-cv-01442-LMB-IDD');
-  const [selectedCase, setSelectedCase] = useState<any | null>(null);
+  const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
+  const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, '1:24-cv-01442-LMB-IDD');
+  const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const { addToast } = useToast();
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [globalSearch, setGlobalSearch] = useState('');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
 
-  const currentUser = MOCK_USERS[currentUserIndex];
+  const currentUser: User = MOCK_USERS[currentUserIndex];
 
   // Load case data on mount if ID exists in storage
   useEffect(() => {
@@ -65,7 +65,7 @@ const InnerApp: React.FC = () => {
     } else {
       setSelectedCase(null);
     }
-  }, [selectedCaseId]);
+  }, [selectedCaseId, setSelectedCaseId]);
 
   // --- NAVIGATION HANDLERS ---
 
@@ -83,7 +83,7 @@ const InnerApp: React.FC = () => {
     });
   }, [setSelectedCaseId, addToast]);
   
-  const handleSelectCase = useCallback((c: any) => {
+  const handleSelectCase = useCallback((c: Case) => {
     if (!c) return;
     startTransition(() => {
       setSelectedCase(c);
@@ -105,7 +105,7 @@ const InnerApp: React.FC = () => {
   const handleSearchResultClick = useCallback((result: GlobalSearchResult) => {
     startTransition(() => {
       if (result.type === 'case') {
-        handleSelectCase(result.data);
+        handleSelectCase(result.data as Case);
       } else if (result.type === 'client') {
         setActiveView(PATHS.CRM);
         setSelectedCase(null);
@@ -265,7 +265,7 @@ const App: React.FC = () => {
 
     if (!isReady) {
         return (
-            <div className="flex items-center justify-center h-screen bg-slate-50">
+            <div className="flex items-center justify-center h-[100dvh]">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="animate-spin h-10 w-10 text-blue-600"/>
                     <p className="text-sm font-medium text-slate-500 animate-pulse">Initializing Secure Data Layer...</p>

@@ -1,11 +1,11 @@
-
 import React, { useCallback } from 'react';
-import { Case } from '../../types';
-import { User, ArrowUp, ArrowDown, Eye, Edit } from 'lucide-react';
+import { Case, CaseStatus } from '../../types';
+import { 
+  Briefcase, User, ArrowUp, ArrowDown, Eye, Filter
+} from 'lucide-react';
 import { Badge } from '../common/Badge';
-import { Currency, LoadingSpinner } from '../common/Primitives';
+import { Currency } from '../common/Primitives';
 import { useSort } from '../../hooks/useSort';
-import { CaseListToolbar } from './CaseListToolbar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
@@ -14,6 +14,11 @@ import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
+import { EmptyState } from '../common/EmptyState';
+import { Button } from '../common/Button';
+import { FilterPanel } from '../common/FilterPanel';
+import { SearchInput, Input } from '../common/Inputs';
+import { useToggle } from '../../hooks/useToggle';
 
 interface CaseListActiveProps {
   filteredCases: Case[];
@@ -21,21 +26,25 @@ interface CaseListActiveProps {
   setStatusFilter: (s: string) => void;
   typeFilter: string;
   setTypeFilter: (s: string) => void;
+  searchTerm: string;
+  setSearchTerm: (s: string) => void;
+  dateFrom: string;
+  setDateFrom: (d: string) => void;
+  dateTo: string;
+  setDateTo: (d: string) => void;
   resetFilters: () => void;
   onSelectCase: (c: Case) => void;
 }
 
 export const CaseListActive: React.FC<CaseListActiveProps> = ({
   filteredCases,
-  statusFilter,
-  setStatusFilter,
-  typeFilter,
-  setTypeFilter,
-  resetFilters,
-  onSelectCase
+  statusFilter, setStatusFilter, typeFilter, setTypeFilter,
+  searchTerm, setSearchTerm, dateFrom, setDateFrom, dateTo, setDateTo,
+  resetFilters, onSelectCase
 }) => {
   const { theme } = useTheme();
   const notify = useNotify();
+  const { isOpen: showFilters, toggle: toggleFilters } = useToggle(false);
   
   const { items: sortedCases, requestSort, sortConfig } = useSort<Case>(filteredCases, 'filingDate', 'desc');
 
@@ -82,7 +91,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   );
 
   // Virtualized Row Renderer (Desktop)
-  const renderRow = (c: Case) => (
+  const renderDesktopRow = (c: Case) => (
     <div className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6", theme.border.light)}>
        <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
           <span 
@@ -111,15 +120,70 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
     </div>
   );
 
+  // Virtualized Row Renderer (Mobile)
+  const renderMobileRow = (c: Case) => (
+    <div className="px-1 py-1.5 h-[104px]">
+        <SwipeableItem 
+            key={c.id}
+            onSwipeLeft={() => handleArchiveCase(c)}
+            onSwipeRight={() => handleFlagCase(c)}
+            leftActionLabel="Archive"
+            rightActionLabel="Flag"
+        >
+            <div 
+            onClick={() => onSelectCase(c)}
+            className={cn(
+                "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden h-full",
+                theme.surface, theme.border.default
+            )}
+            >
+            <div className={cn("absolute left-0 top-0 bottom-0 w-1", c.status === 'Trial' ? "bg-amber-500" : c.status === 'Discovery' ? "bg-blue-500" : "bg-slate-300")}></div>
+            <h4 className={cn("font-bold text-lg mb-1 leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
+            <div className="flex items-center justify-between pl-2 mt-2">
+                <Badge variant="neutral">{c.status}</Badge>
+                <Currency value={c.value} className="font-bold text-sm" />
+            </div>
+            </div>
+        </SwipeableItem>
+    </div>
+  );
+
   return (
     <div className="space-y-4 h-full flex flex-col">
-      <CaseListToolbar 
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        typeFilter={typeFilter}
-        setTypeFilter={setTypeFilter}
-        resetFilters={resetFilters}
-      />
+      <div className="flex justify-between items-center shrink-0">
+        <h2 className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>Active Matters</h2>
+        <Button variant="outline" icon={Filter} onClick={toggleFilters}>
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+        </Button>
+      </div>
+
+      <FilterPanel isOpen={showFilters} onClose={toggleFilters} onClear={resetFilters}>
+          <SearchInput 
+              placeholder="Search title, client, ID..." 
+              value={searchTerm} 
+              onChange={e => setSearchTerm(e.target.value)} 
+              className="md:col-span-2"
+          />
+          <div>
+              <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                  <option value="All">All Statuses</option>
+                  {Object.values(CaseStatus).map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+          </div>
+          <div>
+              <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
+                  <option value="All">All Types</option>
+                  <option value="Litigation">Litigation</option>
+                  <option value="Appeal">Appeal</option>
+                  <option value="M&A">M&A</option>
+                  <option value="IP">IP</option>
+              </select>
+          </div>
+          <Input type="date" label="Filed After" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
+          <Input type="date" label="Filed Before" value={dateTo} onChange={e => setDateTo(e.target.value)} />
+      </FilterPanel>
 
       {/* Desktop Virtual Table View */}
       <div className="hidden md:flex flex-1 min-h-0 flex-col border rounded-lg overflow-hidden shadow-sm bg-white">
@@ -133,46 +197,33 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
         </div>
         <div className="flex-1 bg-white relative">
             {filteredCases.length === 0 ? (
-                 <div className={cn("flex items-center justify-center h-full text-sm", theme.text.tertiary)}>
-                    No cases found matching your filters.
+                <div className="p-8 h-full">
+                    <EmptyState 
+                        icon={Briefcase}
+                        title="No Matters Found"
+                        description="No cases match your current filter criteria. Try broadening your search or resetting the filters."
+                        action={<Button variant="secondary" onClick={resetFilters}>Clear Filters</Button>}
+                    />
                  </div>
             ) : (
                 <VirtualList 
                   items={sortedCases} 
                   height="100%" 
                   itemHeight={64} 
-                  renderItem={renderRow} 
+                  renderItem={renderDesktopRow} 
                 />
             )}
         </div>
       </div>
 
-      {/* Mobile Card View */}
-      <div className="md:hidden space-y-3 pb-20 overflow-y-auto">
-        {sortedCases.map((c) => (
-          <SwipeableItem 
-            key={c.id}
-            onSwipeLeft={() => handleArchiveCase(c)}
-            onSwipeRight={() => handleFlagCase(c)}
-            leftActionLabel="Archive"
-            rightActionLabel="Flag"
-          >
-              <div 
-                onClick={() => onSelectCase(c)}
-                className={cn(
-                    "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden",
-                    theme.surface, theme.border.default
-                )}
-              >
-                <div className={cn("absolute left-0 top-0 bottom-0 w-1", c.status === 'Trial' ? "bg-amber-500" : c.status === 'Discovery' ? "bg-blue-500" : "bg-slate-300")}></div>
-                <h4 className={cn("font-bold text-lg mb-1 leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
-                <div className="flex items-center justify-between pl-2 mt-2">
-                    <Badge variant="neutral">{c.status}</Badge>
-                    <Currency value={c.value} className="font-bold text-sm" />
-                </div>
-              </div>
-          </SwipeableItem>
-        ))}
+      {/* Mobile Virtualized Card View */}
+      <div className="md:hidden flex-1 min-h-0 relative -mx-1">
+         <VirtualList 
+            items={sortedCases}
+            height="100%"
+            itemHeight={104}
+            renderItem={renderMobileRow}
+         />
       </div>
     </div>
   );

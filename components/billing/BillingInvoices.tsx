@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -106,7 +105,7 @@ export const BillingInvoices: React.FC = () => {
             }
         />
 
-        <TableContainer>
+        <TableContainer responsive="card">
             <TableHeader>
                 <TableHead>Invoice ID</TableHead>
                 <TableHead>Client / Matter</TableHead>

@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { LegalEntity } from '../../types';
 import { useTheme } from '../../context/ThemeContext';

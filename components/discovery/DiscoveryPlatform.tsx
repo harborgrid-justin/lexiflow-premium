@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
 import { DiscoveryRequest } from '../../types';
 import { 
   MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
@@ -10,8 +10,10 @@ import {
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery, queryClient } from '../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { useNotify } from '../../hooks/useNotify';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 import { DiscoveryDashboard } from './discovery/DiscoveryDashboard';
 import { DiscoveryRequests } from './discovery/DiscoveryRequests';
@@ -63,7 +65,8 @@ const PARENT_TABS = [
 
 export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<DiscoveryView>('dashboard');
+  const notify = useNotify();
+  const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>('discovery_active_tab', 'dashboard');
   const [contextId, setContextId] = useState<string | null>(null);
 
   // Enterprise Query: Requests are central to many sub-views
@@ -72,9 +75,16 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
       () => DataService.discovery.getRequests()
   );
 
+  const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
+      DataService.discovery.syncDeadlines,
+      {
+          onSuccess: () => notify.success("Synced discovery deadlines with court calendar.")
+      }
+  );
+
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
-  }, [initialTab]);
+  }, [initialTab, setActiveTab]);
 
   const activeParentTab = useMemo(() => 
     PARENT_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || PARENT_TABS[0],
@@ -85,7 +95,7 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
     if (parent && parent.subTabs.length > 0) {
       setActiveTab(parent.subTabs[0].id as DiscoveryView);
     }
-  }, []);
+  }, [setActiveTab]);
   
   const handleNavigate = (targetView: DiscoveryView, id?: string) => {
     if (id) setContextId(id);
@@ -150,7 +160,7 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
             subtitle="Manage Requests, Legal Holds, and FRCP Compliance."
             actions={
             <div className="flex gap-2">
-                <Button variant="secondary" icon={Clock} onClick={() => alert("Syncing Court Deadlines...")}>Sync Deadlines</Button>
+                <Button variant="secondary" icon={Clock} onClick={() => syncDeadlines(undefined)} isLoading={isSyncing}>Sync Deadlines</Button>
                 <Button variant="primary" icon={Plus} onClick={() => alert("New Request Wizard")}>Create Request</Button>
             </div>
             }
@@ -177,7 +187,7 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
 
         {/* Sub-Navigation (Pills) */}
         {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (
                     <button 
                         key={tab.id} 

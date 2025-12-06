@@ -5,7 +5,10 @@ import { EvidenceItem, ChainOfCustodyEvent } from '../types';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 
-export type ViewMode = 'dashboard' | 'inventory' | 'custody' | 'intake' | 'detail';
+export type ViewMode = 
+  'dashboard' | 'inventory' | 'custody' | 'intake' | 'detail' | 
+  'authentication' | 'relevance' | 'hearsay' | 'experts' | 'originals';
+  
 export type DetailTab = 'overview' | 'custody' | 'admissibility' | 'forensics';
 
 export interface EvidenceFilters {

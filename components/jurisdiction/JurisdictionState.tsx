@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
@@ -39,7 +38,7 @@ export const JurisdictionState: React.FC = () => {
         }
       />
 
-      <TableContainer>
+      <TableContainer responsive="card">
         <TableHeader>
           <TableHead>State</TableHead>
           <TableHead>Court System</TableHead>

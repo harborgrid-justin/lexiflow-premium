@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '../types';
 import { GeminiService } from '../services/geminiService';
@@ -123,14 +122,12 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
     setTimeout(() => setGeneratingWorkflow(false), 1500);
   };
 
-  const setDocumentsWrapper = (newDocs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])) => {
-     // This is a compatibility wrapper for components expecting setState
-     // Ideally, we perform mutations, but for local UI updates without refetch:
-     queryClient.setQueryData([STORES.DOCUMENTS, caseData.id], newDocs);
+  const setDocumentsWrapper = (updater: LegalDocument[] | ((prev: LegalDocument[] | undefined) => LegalDocument[])) => {
+     queryClient.setQueryData<LegalDocument[]>([STORES.DOCUMENTS, caseData.id], updater);
   };
   
-  const setBillingWrapper = (newEntries: TimeEntry[]) => {
-      queryClient.setQueryData([STORES.BILLING, caseData.id], newEntries);
+  const setBillingWrapper = (updater: TimeEntry[] | ((prev: TimeEntry[] | undefined) => TimeEntry[])) => {
+      queryClient.setQueryData<TimeEntry[]>([STORES.BILLING, caseData.id], updater);
   };
 
   // Compatibility wrappers for the existing UI that expects addProject callbacks

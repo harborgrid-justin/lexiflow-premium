@@ -1,16 +1,18 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { Case, TimelineEvent, EvidenceItem } from '../../types';
-import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseDetailContent } from './CaseDetailContent';
-import { CaseTimeline } from './CaseTimeline';
+import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
+import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
+import { CaseDetailContent } from './case-detail/CaseDetailContent';
+import { CaseTimeline } from './case-detail/CaseTimeline';
 import { useCaseDetail } from '../../hooks/useCaseDetail';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { CASE_DETAIL_TABS } from './CaseDetailConfig';
+import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
-import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
+import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
+import { HolographicRouting } from '../../services/holographicRouting';
+import { NexusInspector } from '../visual/NexusInspector';
 
 interface CaseDetailProps {
   caseData: Case;
@@ -27,6 +29,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
   const [showMobileTimeline, setShowMobileTimeline] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [caseEvidence, setCaseEvidence] = useState<EvidenceItem[]>([]);
+  const [nexusInspectorItem, setNexusInspectorItem] = useState<NexusNodeData | null>(null);
 
   useEffect(() => {
       const loadEvidence = async () => {
@@ -39,54 +42,12 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
   // Handle Holographic Routing / Deep Linking
   useEffect(() => {
       if (initialTab) {
-          const lower = initialTab.toLowerCase();
-          const map: Record<string, string> = {
-              'docket': 'Timeline',
-              'calendar': 'Timeline',
-              'tasks': 'Workflow',
-              'workflow': 'Workflow',
-              'intake': 'Overview',
-              'conflicts': 'Risk',
-              'resources': 'Overview',
-              'trust': 'Billing',
-              'experts': 'Strategy',
-              'reporters': 'Discovery',
-              'closing': 'Overview',
-              'archived': 'Overview',
-              'evidence': 'Evidence',
-              'witnesses': 'Parties',
-              'parties': 'Parties',
-              'binder': 'Documents',
-              'documents': 'Documents',
-              'discovery': 'Discovery',
-              'requests': 'Discovery',
-              'depositions': 'Discovery',
-              'interviews': 'Discovery',
-              'motions': 'Motions',
-              'filings': 'Motions',
-              'orders': 'Motions',
-              'billing': 'Billing',
-              'invoices': 'Billing',
-              'strategy': 'Strategy',
-              'arguments': 'Arguments',
-              'risk': 'Risk',
-              'planning': 'Planning',
-              'projects': 'Projects',
-              'collaboration': 'Collaboration',
-              'drafting': 'Drafting',
-              'review': 'Contract Review',
-              'nexus': 'Nexus'
-          };
-          
-          if (map[lower]) {
-              hookData.setActiveTab(map[lower]);
-          } else {
-              // Fallback: check if initialTab matches a tab ID directly (case insensitive)
-              const directMatch = CASE_DETAIL_TABS.flatMap(g => g.subTabs).find(t => t.id.toLowerCase() === lower);
-              if (directMatch) hookData.setActiveTab(directMatch.id);
+          const resolvedTab = HolographicRouting.resolveTab('cases', initialTab);
+          if (resolvedTab) {
+              hookData.setActiveTab(resolvedTab);
           }
       }
-  }, [initialTab]);
+  }, [initialTab, hookData.setActiveTab]);
 
   // Derived state for parent tab using shared config
   const activeParentTab = useMemo(() => 
@@ -97,8 +58,14 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
     const parent = CASE_DETAIL_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
         hookData.setActiveTab(parent.subTabs[0].id);
+        setNexusInspectorItem(null); // Close inspector on tab change
     }
   }, [hookData]);
+  
+  const handleSubTabChange = (tabId: string) => {
+      hookData.setActiveTab(tabId);
+      setNexusInspectorItem(null); // Close inspector on sub-tab change
+  };
 
   const handleTimelineClick = (event: TimelineEvent) => {
       setShowMobileTimeline(false);
@@ -181,7 +148,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
             {activeParentTab.subTabs.map(tab => (
                 <button 
                     key={tab.id} 
-                    onClick={() => hookData.setActiveTab(tab.id)} 
+                    onClick={() => handleSubTabChange(tab.id)} 
                     className={cn(
                         "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
                         hookData.activeTab === tab.id 
@@ -197,38 +164,33 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden min-h-0">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
-            {/* Left Timeline Widget (Desktop Only) - Only show on Overview */}
-            {hookData.activeTab === 'Overview' && (
-              <div className={cn("hidden lg:block lg:col-span-3 h-full overflow-hidden border-r", theme.border.default)}>
-                  <CaseTimeline events={hookData.timelineEvents} onEventClick={handleTimelineClick} />
-              </div>
-            )}
+      <div className="flex-1 overflow-hidden min-h-0 flex">
+          <div className={cn("flex-1 overflow-hidden min-h-0 transition-all duration-300", nexusInspectorItem ? 'pr-4' : 'pr-0')}>
+                <div className={cn("h-full overflow-y-auto scroll-smooth", 'px-6')}>
+                    <CaseDetailContent 
+                        {...hookData} 
+                        caseData={caseData}
+                        evidence={caseEvidence}
+                        onTimeEntryAdded={(e) => hookData.setBillingEntries(prev => prev ? [e, ...prev] : [e])}
+                        onNavigateToCase={onSelectCase}
+                        onUpdateParties={hookData.setParties}
+                        onTimelineClick={handleTimelineClick}
+                        onAddProject={hookData.addProject}
+                        onAddTask={hookData.addTaskToProject}
+                        onUpdateTask={hookData.updateProjectTaskStatus}
+                        onGenerateWorkflow={hookData.handleGenerateWorkflow}
+                        onAnalyzeDoc={hookData.handleAnalyze}
+                        onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
+                        onDraft={hookData.handleDraft}
+                        onNodeClick={setNexusInspectorItem}
+                    />
+                </div>
+          </div>
 
-            {/* Main Content Area */}
-            <div className={cn(
-                "h-full overflow-y-auto pb-24 md:pb-6 scroll-smooth", 
-                hookData.activeTab === 'Overview' ? 'lg:col-span-9' : 'lg:col-span-12 px-6'
-            )}>
-                <CaseDetailContent 
-                    {...hookData} 
-                    caseData={caseData}
-                    evidence={caseEvidence}
-                    onTimeEntryAdded={(e) => hookData.setBillingEntries([e, ...hookData.billingEntries])}
-                    onNavigateToCase={onSelectCase}
-                    onUpdateParties={hookData.setParties}
-                    onTimelineClick={handleTimelineClick}
-                    onAddProject={hookData.addProject}
-                    onAddTask={hookData.addTaskToProject}
-                    onUpdateTask={hookData.updateProjectTaskStatus}
-                    onGenerateWorkflow={hookData.handleGenerateWorkflow}
-                    onAnalyzeDoc={hookData.handleAnalyze}
-                    onDocumentCreated={(d) => { hookData.setDocuments([...hookData.documents, d]); hookData.setActiveTab('Documents'); }}
-                    onDraft={hookData.handleDraft}
-                />
-            </div>
-        </div>
+          {/* Nexus Inspector Panel */}
+          <div className={cn("transition-all duration-300 overflow-hidden", nexusInspectorItem ? 'w-96' : 'w-0')}>
+              <NexusInspector item={nexusInspectorItem} onClose={() => setNexusInspectorItem(null)} />
+          </div>
       </div>
 
       {/* Mobile Bottom Action Bar */}

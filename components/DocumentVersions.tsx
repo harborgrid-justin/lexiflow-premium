@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { LegalDocument, DocumentVersion, UserRole } from '../types';
-import { History, RotateCcw, AlertTriangle } from 'lucide-react';
+import { History, RotateCcw, AlertTriangle, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 
@@ -27,7 +27,12 @@ export const DocumentVersions: React.FC<DocumentVersionsProps> = ({ document, us
             </h3>
             <p className={cn("text-sm", theme.text.secondary)}>{document.title}</p>
           </div>
-          <button onClick={onClose} className={cn("hover:text-slate-600", theme.text.tertiary)}>Close</button>
+          <button 
+            onClick={onClose} 
+            className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.text.primary}`)}
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
         
         <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">

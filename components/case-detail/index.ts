@@ -16,5 +16,5 @@ export * from './CaseArgumentManager';
 export * from './CaseRiskManager';
 export * from './CasePlanning';
 export * from './CaseProjects';
-export * from './CaseCollaboration';
+export * from './collaboration/CaseCollaboration';
 export * from './CaseDetailHeader';

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -62,8 +63,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
     observer.observe(containerRef.current);
     // Initial set
-    // FIX: Corrected function call from non-existent 'setContainerHeight' to 'setContainerWidth'.
-    setContainerWidth(containerRef.current.clientWidth);
+    if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth);
+    }
 
     return () => {
         observer.disconnect();

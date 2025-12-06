@@ -1,4 +1,3 @@
-
 import React, { memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card } from '../common/Card';
@@ -7,6 +6,7 @@ import { Badge } from '../common/Badge';
 import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useChartTheme } from '../common/ChartHelpers';
 
 interface DashboardAnalyticsProps {
   activeProjects: any[];
@@ -14,16 +14,16 @@ interface DashboardAnalyticsProps {
 }
 
 export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProjects, chartData }) => {
-  const { theme, mode } = useTheme();
-  // We use hex codes for charts as Recharts doesn't support Tailwind classes directly in all props
-  const CHART_COLORS = ['#3b82f6', '#6366f1', '#8b5cf6', '#10b981', '#f59e0b'];
-
-  const chartColors = {
-    grid: mode === 'dark' ? '#334155' : '#e2e8f0',
-    text: mode === 'dark' ? '#94a3b8' : '#64748b',
-    tooltipBg: mode === 'dark' ? '#1e293b' : '#ffffff',
-    tooltipBorder: mode === 'dark' ? '#334155' : '#e2e8f0'
-  };
+  const { theme } = useTheme();
+  const chartTheme = useChartTheme();
+  
+  const CHART_COLORS = [
+      chartTheme.colors.blue, 
+      chartTheme.colors.purple, // Indigo replacement
+      chartTheme.colors.purple, 
+      chartTheme.colors.emerald, 
+      chartTheme.colors.amber
+  ];
 
   return (
     <div className="xl:col-span-2 space-y-6">
@@ -31,17 +31,12 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
             <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartColors.grid} />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: chartColors.text, fontSize: 12}} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{fill: chartColors.text, fontSize: 12}} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} dy={10} />
+                    <YAxis axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
                     <Tooltip 
-                      cursor={{fill: mode === 'dark' ? '#334155' : '#f8fafc'}}
-                      contentStyle={{ 
-                          backgroundColor: chartColors.tooltipBg, 
-                          borderColor: chartColors.tooltipBorder, 
-                          borderRadius: '8px',
-                          color: mode === 'dark' ? '#f8fafc' : '#1e293b'
-                      }}
+                      cursor={{fill: theme.surfaceHighlight}}
+                      contentStyle={chartTheme.tooltipStyle}
                     />
                     <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
                     {chartData.map((entry, index) => (

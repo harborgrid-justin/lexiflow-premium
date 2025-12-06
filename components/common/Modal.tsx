@@ -5,7 +5,6 @@ import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
 import { useScrollLock } from '../../hooks/useScrollLock';
-// FIX: Import 'tokens' to get z-index values.
 import { tokens } from '../../theme/tokens';
 
 interface ModalProps {
@@ -48,7 +47,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
     >
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200" 
+        className={cn("fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", tokens.zIndex.modalBackdrop)} 
         aria-hidden="true"
         onClick={onClose}
       />
@@ -77,7 +76,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
         </div>
 
         {/* Content */}
-        <div className={cn("flex-1 overflow-y-auto p-0 md:p-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent", theme.text.primary)}>
+        <div className={cn("flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent", theme.text.primary)}>
           {children}
         </div>
 

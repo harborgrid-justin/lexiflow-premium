@@ -1,7 +1,7 @@
-
 import React, { useState, useRef } from 'react';
 import { Trash2, Archive, Check } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SwipeableItemProps {
   children: React.ReactNode;
@@ -20,10 +20,11 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
   onSwipeRight,
   leftActionLabel = 'Archive',
   rightActionLabel = 'Action',
-  leftActionColor = 'bg-red-500',
-  rightActionColor = 'bg-green-500',
+  leftActionColor = 'bg-rose-500 dark:bg-rose-600',
+  rightActionColor = 'bg-emerald-500 dark:bg-emerald-600',
   disabled = false
 }) => {
+  const { theme } = useTheme();
   const [offsetX, setOffsetX] = useState(0);
   const startX = useRef(0);
   const currentX = useRef(0);
@@ -71,7 +72,7 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
   return (
     <div className="relative overflow-hidden rounded-xl touch-pan-y">
       {/* Background Actions */}
-      <div className="absolute inset-0 flex justify-between items-center px-4 text-white font-bold text-xs z-0">
+      <div className={cn("absolute inset-0 flex justify-between items-center px-4 font-bold text-xs z-0", theme.text.inverse)}>
         <div className={cn("absolute left-0 top-0 bottom-0 w-full flex items-center justify-start pl-4 transition-opacity", rightActionColor, offsetX > 0 ? 'opacity-100' : 'opacity-0')}>
            <Check className="h-5 w-5 mr-2" /> {rightActionLabel}
         </div>
@@ -82,7 +83,7 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
 
       {/* Foreground Content */}
       <div
-        className="relative z-10 bg-white transition-transform duration-200 ease-out"
+        className={cn("relative z-10 transition-transform duration-200 ease-out", theme.surface)}
         style={{ transform: `translateX(${offsetX}px)` }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}

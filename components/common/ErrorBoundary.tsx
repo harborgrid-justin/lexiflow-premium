@@ -1,5 +1,6 @@
 import React, { ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
+import { GeminiService } from '../../services/geminiService';
 
 interface Props {
   children?: ReactNode;
@@ -9,56 +10,152 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+  aiResolution: string | null;
+  isResolving: boolean;
+  debugInfo: string | null;
+  isCopied: boolean;
 }
 
-// FIX: Extend React.Component to make this a valid class component with state and props.
 export class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false,
-    error: null
+    error: null,
+    aiResolution: null,
+    isResolving: false,
+    debugInfo: null,
+    isCopied: false,
   };
 
-  public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+  public static getDerivedStateFromError(error: Error): Partial<State> {
+    return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound, resolving errors where `setState` was not found on the component instance.
+  public componentDidCatch = (error: Error, errorInfo: ErrorInfo) => {
+    // Construct debug information
+    const debugInfo = `
+--- LexiFlow Error Report ---
+Timestamp: ${new Date().toISOString()}
+URL: ${window.location.href}
+
+-- Error --
+Name: ${error.name}
+Message: ${error.message}
+Stack Trace:
+${error.stack}
+
+-- Component Stack --
+${errorInfo.componentStack}
+
+-- Browser & Environment --
+User Agent: ${navigator.userAgent}
+Platform: ${navigator.platform}
+Viewport: ${window.innerWidth}x${window.innerHeight}
+---------------------------
+    `.trim();
+
+    // Log structured data to the console
+    console.groupCollapsed("ErrorBoundary: Detailed Debug Information");
+    console.log(`Timestamp: ${new Date().toISOString()}`);
+    console.log(`URL: ${window.location.href}`);
+    console.error("Error Object:", error);
+    console.log("Component Stack:", errorInfo.componentStack);
+    console.log("Browser:", {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        viewport: `${window.innerWidth}x${window.innerHeight}`
+    });
+    console.groupEnd();
+    
+    this.setState({ isResolving: true, debugInfo });
+
+    GeminiService.getResolutionForError(error.message)
+      .then(resolution => {
+        this.setState({ aiResolution: resolution, isResolving: false });
+      })
+      .catch(e => {
+        this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
+      });
   }
 
-  public handleReset = () => {
-    this.setState({ hasError: false, error: null });
+  private handleReset = () => {
     window.location.reload();
-  };
+  }
+  
+  private handleCopyDebugInfo = () => {
+    if (this.state.debugInfo && !this.state.isCopied) {
+        navigator.clipboard.writeText(this.state.debugInfo).then(() => {
+            this.setState({ isCopied: true });
+            setTimeout(() => {
+                this.setState({ isCopied: false });
+            }, 2000);
+        }).catch(err => {
+            console.error("Failed to copy debug info:", err);
+        });
+    }
+  }
 
-  public render() {
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound, resolving errors where `props` was not found on the component instance.
+  public render = () => {
     if (this.state.hasError) {
-      if (this.props.fallback) return this.props.fallback;
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
 
       return (
-        <div className="flex flex-col items-center justify-center h-full min-h-[400px] w-full bg-slate-50 p-8 text-center rounded-lg border border-slate-200">
-          <div className="bg-red-100 p-4 rounded-full mb-4">
-            <AlertTriangle className="h-10 w-10 text-red-600" />
+        <div className="flex flex-col items-center justify-center h-full min-h-[400px] w-full bg-slate-50 dark:bg-slate-900 p-8 text-center rounded-lg border border-slate-200 dark:border-slate-800">
+          <div className="bg-rose-50 dark:bg-rose-950/50 p-4 rounded-full mb-4">
+            <AlertTriangle className="h-10 w-10 text-rose-700 dark:text-rose-400" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Module Error</h2>
-          <p className="text-sm text-slate-600 mb-6 max-w-md">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">Module Error</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 max-w-md">
             The application encountered an unexpected error in this component. 
             <br/>
-            <span className="font-mono text-xs bg-slate-200 px-1 rounded mt-2 inline-block text-slate-700">
-              {this.state.error?.message || 'Unknown Error'}
+            <span className="font-mono text-xs bg-slate-200 dark:bg-slate-700 px-1 rounded mt-2 inline-block text-slate-700 dark:text-slate-300">
+              {this.state.error ? this.state.error.message : 'Unknown Error'}
             </span>
           </p>
-          <div className="flex gap-3">
+
+          <div className="mt-6 w-full max-w-md text-left">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300">
+                <Sparkles className="h-4 w-4 text-purple-500" />
+                AI-Powered Analysis
+            </h3>
+            <div className="mt-2 p-4 text-xs rounded-lg border bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 min-h-[50px]">
+                {this.state.isResolving ? (
+                    <div className="flex items-center gap-2 animate-pulse">
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        Analyzing error...
+                    </div>
+                ) : (
+                    this.state.aiResolution || "No analysis available."
+                )}
+            </div>
+          </div>
+
+          <div className="mt-4 w-full max-w-md text-left text-xs p-3 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
+            <strong>Note for Developers:</strong> If the error mentions "Failed to resolve module specifier", it indicates a path alias issue during script loading. This Error Boundary cannot catch module-level errors. This build has been refactored to use relative paths exclusively to prevent this. Ensure your local configuration is up to date and no path aliases remain.
+          </div>
+
+          <div className="flex gap-3 mt-8">
             <button 
               onClick={() => window.location.href = '/'}
-              className="flex items-center px-4 py-2 bg-white border border-slate-300 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+              className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
             >
               <Home className="h-4 w-4 mr-2" />
               Dashboard
             </button>
             <button 
+              onClick={this.handleCopyDebugInfo}
+              disabled={this.state.isCopied}
+              className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-70"
+            >
+                {this.state.isCopied ? <Check className="h-4 w-4 mr-2 text-green-600"/> : <Clipboard className="h-4 w-4 mr-2" />}
+                {this.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
+            </button>
+            <button 
               onClick={this.handleReset}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"
+              className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
               Reload Application

@@ -7,10 +7,11 @@ import { Wand2, Plus, Shield, Mail } from 'lucide-react';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { PrivilegeLogEntry } from '../../types';
 
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();
-  const [logItems, setLogItems] = useState<any[]>([]);
+  const [logItems, setLogItems] = useState<PrivilegeLogEntry[]>([]);
 
   useEffect(() => {
       const load = async () => {
@@ -35,7 +36,7 @@ export const PrivilegeLog: React.FC = () => {
 
       {/* Desktop View */}
       <div className="hidden md:block">
-        <TableContainer>
+        <TableContainer responsive="card">
           <TableHeader>
             <TableHead>Doc ID</TableHead>
             <TableHead>Date</TableHead>

@@ -1,19 +1,28 @@
-
 import React from 'react';
-import { MOCK_DISCOVERY } from '../../data/mockDiscovery';
 import { DiscoveryRequests } from '../discovery/DiscoveryRequests';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { DataService } from '../../services/dataService';
+import { DiscoveryRequest } from '../../types';
+import { Loader2 } from 'lucide-react';
 
 interface CaseDiscoveryProps {
   caseId: string;
 }
 
 export const CaseDiscovery: React.FC<CaseDiscoveryProps> = ({ caseId }) => {
-  const caseRequests = MOCK_DISCOVERY.filter(r => r.caseId === caseId);
+  // Use useQuery to fetch case-specific discovery requests
+  const { data: caseRequests = [], isLoading } = useQuery<DiscoveryRequest[]>(
+    [STORES.REQUESTS, caseId],
+    () => DataService.discovery.getRequests(caseId)
+  );
 
   const handleNavigate = (view: string, id?: string) => {
       const req = caseRequests.find(r => r.id === id);
       alert(`Action: ${view} for request: ${req?.title || id}`);
   };
+
+  if (isLoading) return <div className="flex justify-center items-center p-8"><Loader2 className="animate-spin h-6 w-6"/></div>;
 
   return (
     <div className="space-y-4">

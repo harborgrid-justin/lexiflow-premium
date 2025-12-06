@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';

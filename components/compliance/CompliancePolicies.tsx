@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FileText, Download, Eye, Calendar, Loader2 } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
@@ -60,7 +59,7 @@ export const CompliancePolicies: React.FC = () => {
             <Button variant="outline">Upload New Version</Button>
         </div>
 
-        <TableContainer>
+        <TableContainer responsive="card">
             <TableHeader>
                 <TableHead>Policy Name</TableHead>
                 <TableHead>Version</TableHead>

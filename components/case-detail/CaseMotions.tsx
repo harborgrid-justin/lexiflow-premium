@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Motion, MotionStatus, MotionType, LegalDocument } from '../../types';
 import { Button } from '../common/Button';

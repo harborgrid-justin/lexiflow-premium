@@ -1,16 +1,16 @@
-
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
 import { Modal } from './common/Modal';
 import { Button } from './common/Button';
 import { Input, TextArea } from './common/Inputs';
+import { TimeEntryPayload } from '../types';
 
 interface TimeEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
   caseId?: string;
-  onSave: (entry: any) => void;
+  onSave: (entry: TimeEntryPayload) => void;
 }
 
 export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose, caseId, onSave }) => {

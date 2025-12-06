@@ -1,4 +1,3 @@
-
 import { 
   LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale, 
   Calendar, Book, DollarSign, Users, BarChart3, Settings, 
@@ -31,26 +30,18 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   { id: PATHS.WORKFLOWS, label: 'Workflows', icon: GitBranch, category: 'Case Work' },
 
   // LITIGATION TOOLS
+  { id: PATHS.RESEARCH, label: 'Research & Knowledge', icon: Search, category: 'Litigation Tools' },
   { id: PATHS.WAR_ROOM, label: 'War Room', icon: Target, category: 'Litigation Tools' },
   { id: PATHS.DISCOVERY, label: 'Discovery Center', icon: FileQuestion, category: 'Litigation Tools' },
   { id: PATHS.EVIDENCE, label: 'Evidence Vault', icon: Fingerprint, category: 'Litigation Tools' },
   { id: PATHS.EXHIBITS, label: 'Exhibit Pro', icon: StickyNote, category: 'Litigation Tools' },
-  { id: PATHS.RESEARCH, label: 'Legal Research', icon: Search, category: 'Litigation Tools' },
-  { id: PATHS.CITATIONS, label: 'Citation Manager', icon: Library, category: 'Litigation Tools' },
-  { id: PATHS.JURISDICTION, label: 'Jurisdiction', icon: Globe, category: 'Litigation Tools' },
-
+  
   // OPERATIONS
   { id: PATHS.DATA_PLATFORM, label: 'Data Platform', icon: Database, category: 'Operations' },
   { id: PATHS.ENTITIES, label: 'Entity Director', icon: Network, category: 'Operations' },
   { id: PATHS.PRACTICE, label: 'Firm Operations', icon: Building2, category: 'Operations' },
   { id: PATHS.BILLING, label: 'Billing & Finance', icon: DollarSign, category: 'Operations' },
   { id: PATHS.CRM, label: 'Client CRM', icon: Users, category: 'Operations' },
-
-  // KNOWLEDGE
-  { id: PATHS.RULES_ENGINE, label: 'Legal Authority', icon: Gavel, category: 'Knowledge' },
-  { id: PATHS.LIBRARY, label: 'Knowledge Base', icon: Book, category: 'Knowledge' },
-  { id: PATHS.CLAUSES, label: 'Clause Library', icon: ScrollText, category: 'Knowledge' },
-  { id: PATHS.ANALYTICS, label: 'Analytics', icon: BarChart3, category: 'Knowledge' },
 
   // ADMIN
   { id: PATHS.COMPLIANCE, label: 'Compliance', icon: ShieldCheck, category: 'Admin', requiresAdmin: true },

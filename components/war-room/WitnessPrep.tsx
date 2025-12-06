@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card } from '../common/Card';
 import { UserAvatar } from '../common/UserAvatar';

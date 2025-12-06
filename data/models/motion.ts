@@ -67,7 +67,7 @@ export const MOCK_MOTIONS: Motion[] = [
     title: 'Motion to Affirm Decision', 
     type: 'Dismiss', 
     status: 'Decided', 
-    outcome: 'Denied (Moot)', 
+    outcome: 'Moot', 
     filingDate: '2025-05-30', 
     documents: ['1001779538'], 
     assignedAttorney: 'Appellee Counsel' 

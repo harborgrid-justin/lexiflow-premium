@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LegalEntity } from '../../types';
 import { NexusGraph } from '../visual/NexusGraph';

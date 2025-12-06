@@ -1,5 +1,4 @@
-
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Plus, Filter, CheckSquare } from 'lucide-react';
@@ -10,7 +9,7 @@ import { EvidenceTypeIcon } from '../common/EvidenceTypeIcon';
 import { FilterPanel } from '../common/FilterPanel';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { VirtualList } from '../common/VirtualList';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 
 interface EvidenceInventoryProps {
   items: EvidenceItem[];
@@ -39,44 +38,6 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
     });
   };
 
-  const renderRow = (item: EvidenceItem) => (
-      <div 
-        key={item.id} 
-        onClick={() => onItemClick(item)} 
-        className={cn(
-            "flex items-center border-b h-[72px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group",
-            theme.border.light
-        )}
-      >
-          <div className="w-[15%] font-mono font-medium text-slate-500">{item.id}</div>
-          <div className="w-[30%]">
-                <div className="flex items-center">
-                    <div className={cn("mr-3 p-1.5 rounded border", theme.surfaceHighlight, theme.border.default)}><EvidenceTypeIcon type={item.type}/></div>
-                    <div className="min-w-0">
-                        <div className={cn("font-medium truncate", theme.text.primary)}>{item.title}</div>
-                        <div className={cn("text-xs truncate text-slate-400")}>{item.description}</div>
-                    </div>
-                </div>
-          </div>
-          <div className="w-[10%]">
-              <span className={cn("text-xs px-2 py-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
-                  {item.type}
-              </span>
-          </div>
-          <div className="w-[15%] text-sm text-slate-600 truncate">{item.custodian}</div>
-          <div className="w-[10%] text-sm text-slate-600">{item.collectionDate}</div>
-          <div className="w-[10%]">
-                <Badge variant={item.admissibility === 'Admissible' ? 'success' : item.admissibility === 'Challenged' ? 'warning' : 'neutral'}>
-                    {item.admissibility}
-                </Badge>
-          </div>
-          <div className="w-[10%] flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-                <Button size="sm" variant="ghost" className={theme.text.tertiary} icon={CheckSquare} onClick={() => setTaskModalEvidence(item)} title="Create Task" />
-                <Button size="sm" variant="ghost" className={theme.primary.text} onClick={() => onItemClick(item)}>Manage</Button>
-          </div>
-      </div>
-  );
-
   return (
     <div className="space-y-4 h-full flex flex-col">
       {taskModalEvidence && (
@@ -93,13 +54,13 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-2 shrink-0">
         <div>
           <h2 className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>Inventory Index</h2>
-          <p className={cn("mt-1", theme.text.secondary)}>Master Chain of Custody & Asset Tracking</p>
+          <p className={cn("mt-1 text-sm", theme.text.secondary)}>Master Chain of Custody & Asset Tracking</p>
         </div>
-        <div className="flex gap-2">
-            <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
+        <div className="flex gap-2 w-full md:w-auto">
+            <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)} className="w-full md:w-auto justify-center">
                 {showFilters ? 'Hide Filters' : 'Filters'}
             </Button>
-            <Button variant="primary" icon={Plus} onClick={onIntakeClick}>Log New Item</Button>
+            <Button variant="primary" icon={Plus} onClick={onIntakeClick} className="w-full md:w-auto justify-center">Log New Item</Button>
         </div>
       </div>
 
@@ -119,27 +80,55 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
           </label>
       </FilterPanel>
 
-      <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col bg-white", theme.border.default)}>
-          <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50", theme.border.default, theme.text.secondary)}>
-              <div className="w-[15%]">Evidence ID</div>
-              <div className="w-[30%]">Description</div>
-              <div className="w-[10%]">Type</div>
-              <div className="w-[15%]">Custodian</div>
-              <div className="w-[10%]">Date</div>
-              <div className="w-[10%]">Status</div>
-              <div className="w-[10%] text-right">Action</div>
-          </div>
-          
-          <div className="flex-1 relative">
-            <VirtualList 
-                items={filteredItems}
-                height="100%"
-                itemHeight={72}
-                renderItem={renderRow}
-                emptyMessage="No evidence found matching your criteria."
-            />
-          </div>
-      </div>
+      <TableContainer responsive="card" className="flex-1 min-h-0">
+        <TableHeader>
+          <TableHead>Evidence ID</TableHead>
+          <TableHead>Description</TableHead>
+          <TableHead>Type</TableHead>
+          <TableHead>Custodian</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Action</TableHead>
+        </TableHeader>
+        <TableBody>
+          {filteredItems.length === 0 ? (
+            <TableRow>
+                <TableCell colSpan={7} className="text-center py-12 italic text-slate-500">
+                    No evidence found matching your criteria.
+                </TableCell>
+            </TableRow>
+          ) : (
+            filteredItems.map(item => (
+                <TableRow key={item.id} onClick={() => onItemClick(item)}>
+                    <TableCell className={cn("font-mono", theme.text.secondary)}>{item.id}</TableCell>
+                    <TableCell>
+                        <div className="flex items-center">
+                            <div className={cn("mr-3 p-1.5 rounded border self-start md:self-center", theme.surfaceHighlight, theme.border.default)}><EvidenceTypeIcon type={item.type}/></div>
+                            <div className="min-w-0">
+                                <div className={cn("font-medium", theme.text.primary)}>{item.title}</div>
+                                <div className={cn("text-xs text-slate-400 md:truncate")}>{item.description}</div>
+                            </div>
+                        </div>
+                    </TableCell>
+                    <TableCell>{item.type}</TableCell>
+                    <TableCell>{item.custodian}</TableCell>
+                    <TableCell>{item.collectionDate}</TableCell>
+                    <TableCell>
+                        <Badge variant={item.admissibility === 'Admissible' ? 'success' : item.admissibility === 'Challenged' ? 'warning' : 'neutral'}>
+                            {item.admissibility}
+                        </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                        <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                            <Button size="sm" variant="ghost" className={theme.text.tertiary} icon={CheckSquare} onClick={() => setTaskModalEvidence(item)} title="Create Task" />
+                            <Button size="sm" variant="ghost" className={theme.primary.text} onClick={() => onItemClick(item)}>Manage</Button>
+                        </div>
+                    </TableCell>
+                </TableRow>
+            ))
+          )}
+        </TableBody>
+      </TableContainer>
     </div>
   );
 };

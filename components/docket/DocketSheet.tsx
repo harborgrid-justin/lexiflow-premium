@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Plus, Trash2, Lock, Eye, CheckSquare, Layers, Calendar as CalendarIcon, FileText, Gavel } from 'lucide-react';
 import { Button } from '../common/Button';
@@ -157,8 +156,8 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
               />
             </div>
           ) : (
-            <div className={cn("flex-1 overflow-auto p-0", theme.surfaceHighlight)}>
-                <div className={cn("p-4 border-b flex justify-between items-center bg-white sticky top-0 z-10", theme.border.default)}>
+            <div className={cn("flex-1 overflow-auto p-0", theme.surface)}>
+                <div className={cn("p-4 border-b flex justify-between items-center sticky top-0 z-10", theme.surfaceHighlight, theme.border.default)}>
                     <div>
                         <h3 className={cn("font-bold text-lg", theme.text.primary)}>Case Docket</h3>
                         <p className={cn("text-xs", theme.text.secondary)}>Viewing: {activeCase?.title}</p>

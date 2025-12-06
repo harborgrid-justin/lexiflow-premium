@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { LegalEntity } from '../../types';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';

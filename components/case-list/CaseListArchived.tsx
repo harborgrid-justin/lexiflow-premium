@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
@@ -39,7 +38,7 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
       <div className={cn("p-4 rounded text-center text-sm border", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
         Showing cases closed in the last 12 months. Older cases are in Cold Storage.
       </div>
-      <TableContainer>
+      <TableContainer responsive="card">
         <TableHeader>
           <TableHead>Closed Date</TableHead>
           <TableHead>Matter</TableHead>

@@ -1,24 +1,25 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { DollarSign, AlertCircle, Users, Calculator, Briefcase, TrendingUp } from 'lucide-react';
+import { DollarSign, AlertCircle, Users, Calculator } from 'lucide-react';
 import { DataService } from '../../services/dataService';
 import { Card } from '../common/Card';
 import { MetricCard, Currency } from '../common/Primitives';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Client } from '../../types';
 import { useQuery } from '../../services/queryClient';
+import { useChartTheme } from '../common/ChartHelpers';
+import { WIPStat } from '../../types';
 
 interface BillingOverviewProps {
   onNavigate?: (view: string) => void;
 }
 
 export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
+  const chartTheme = useChartTheme();
   
   // Enterprise Data Access: Parallel Queries
-  const { data: wipData = [] } = useQuery(
+  const { data: wipData = [] } = useQuery<WIPStat[]>(
       ['billing', 'wipStats'],
       DataService.billing.getWIPStats
   );
@@ -34,16 +35,6 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
   );
 
   const totalWip = wipData.reduce((acc: number, curr: any) => acc + curr.wip, 0);
-
-  // Chart Colors based on Theme
-  const chartColors = {
-    billed: mode === 'dark' ? '#334155' : '#cbd5e1', // Slate 200/700
-    wip: '#3b82f6', // Blue 600
-    collected: '#10b981', // Emerald 500
-    writeoff: '#ef4444', // Red 500
-    grid: mode === 'dark' ? '#334155' : '#e2e8f0',
-    text: mode === 'dark' ? '#94a3b8' : '#64748b'
-  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -81,29 +72,29 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartColors.grid}/>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid}/>
                 <XAxis 
                     dataKey="name" 
                     axisLine={false} 
                     tickLine={false} 
                     fontSize={12} 
-                    tick={{fill: chartColors.text}} 
+                    tick={{fill: chartTheme.text}} 
                     dy={10}
                 />
                 <YAxis 
                     axisLine={false} 
                     tickLine={false} 
                     fontSize={12} 
-                    tick={{fill: chartColors.text}}
+                    tick={{fill: chartTheme.text}}
                     tickFormatter={(val) => `$${val/1000}k`}
                 />
                 <Tooltip 
-                    cursor={{fill: mode === 'dark' ? '#1e293b' : '#f8fafc'}}
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    cursor={{fill: chartTheme.grid}}
+                    contentStyle={chartTheme.tooltipStyle}
                 />
                 <Legend iconType="circle" />
-                <Bar dataKey="billed" stackId="a" fill={chartColors.billed} name="Billed" radius={[0, 0, 4, 4]} />
-                <Bar dataKey="wip" stackId="a" fill={chartColors.wip} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.slate} name="Billed" radius={[0, 0, 4, 4]} />
+                <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.blue} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -122,10 +113,10 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                             stroke="none"
                         >
                             {realizationData.map((e: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartColors.collected : chartColors.writeoff} />
+                                <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartTheme.colors.emerald : chartTheme.colors.rose} />
                             ))}
                         </Pie>
-                        <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}/>
+                        <Tooltip contentStyle={chartTheme.tooltipStyle}/>
                         <Legend verticalAlign="bottom" height={36} iconType="circle"/>
                     </PieChart>
                 </ResponsiveContainer>

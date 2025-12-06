@@ -26,6 +26,12 @@ export interface SerializedNode {
   type: 'party' | 'org' | 'evidence' | 'root';
 }
 
+export interface NexusLink {
+    sourceIndex: number;
+    targetIndex: number;
+    strength: number;
+}
+
 export const NexusPhysics = {
   MIN_ALPHA,
 
@@ -75,7 +81,7 @@ export const NexusPhysics = {
    */
   simulate: (
     buffer: Float32Array, 
-    links: { sourceIndex: number; targetIndex: number; strength: number }[], 
+    links: NexusLink[], 
     count: number, 
     width: number, 
     height: number, 

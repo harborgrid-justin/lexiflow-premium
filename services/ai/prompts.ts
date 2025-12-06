@@ -44,5 +44,11 @@ export const Prompts = {
       "suggestions": ["specific advice 1", "specific advice 2"],
       "missingAuthority": ["Suggested Case 1", "Suggested Statute 2"]
     }
-  `
+  `,
+
+  ErrorResolution: (errorMessage: string) => 
+    `An enterprise legal React application built with TypeScript threw an error: "${errorMessage}". 
+    Explain the likely technical cause in 1-2 sentences. 
+    Then, provide a concise, user-friendly suggestion for what might be happening and what they could try. 
+    Format the output as plain text. Do not use markdown.`
 };

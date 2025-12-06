@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from 'react';
 import { Badge } from '../common/Badge';
 import { LegalEntity } from '../../types';

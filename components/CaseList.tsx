@@ -1,42 +1,44 @@
-
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { Case } from '../types';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
+import { Case, ParsedDocket, CaseStatus, AppView } from '../types';
 import { 
   Briefcase, UserPlus, ShieldAlert, Users, Calendar, CheckSquare,
   DollarSign, Gavel, Mic2, FileCheck, Archive, FileInput,
   LayoutDashboard, Layers, Plus
 } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
 import { useCaseList } from '../hooks/useCaseList';
-import { 
-  CaseListActive, CaseListIntake, CaseListDocket, CaseListResources,
-  CaseListTrust, CaseListExperts, CaseListConflicts, CaseListTasks,
-  CaseListReporters, CaseListClosing, CaseListArchived
-} from './case-list';
 import { DocketImportModal } from './DocketImportModal';
 import { CreateCaseModal } from './case-list/CreateCaseModal';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
 import { DataService } from '../services/dataService';
 import { useNotify } from '../hooks/useNotify';
 import { useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
+import { LazyLoader } from './common/LazyLoader';
+
+// Lazy load sub-components for better performance
+const CaseListActive = lazy(() => import('./case-list/CaseListActive').then(m => ({ default: m.CaseListActive })));
+const CaseListIntake = lazy(() => import('./case-list/CaseListIntake').then(m => ({ default: m.CaseListIntake })));
+const CaseListDocket = lazy(() => import('./case-list/CaseListDocket').then(m => ({ default: m.CaseListDocket })));
+const CaseListTasks = lazy(() => import('./case-list/CaseListTasks').then(m => ({ default: m.CaseListTasks })));
+const CaseListConflicts = lazy(() => import('./case-list/CaseListConflicts').then(m => ({ default: m.CaseListConflicts })));
+const CaseListResources = lazy(() => import('./case-list/CaseListResources').then(m => ({ default: m.CaseListResources })));
+const CaseListTrust = lazy(() => import('./case-list/CaseListTrust').then(m => ({ default: m.CaseListTrust })));
+const CaseListExperts = lazy(() => import('./case-list/CaseListExperts').then(m => ({ default: m.CaseListExperts })));
+const CaseListReporters = lazy(() => import('./case-list/CaseListReporters').then(m => ({ default: m.CaseListReporters })));
+const CaseListClosing = lazy(() => import('./case-list/CaseListClosing').then(m => ({ default: m.CaseListClosing })));
+const CaseListArchived = lazy(() => import('./case-list/CaseListArchived').then(m => ({ default: m.CaseListArchived })));
+
 
 interface CaseListProps {
   onSelectCase: (c: Case) => void;
-  initialTab?: CaseView;
+  initialTab?: string;
 }
 
-type CaseView = 
-  'active' | 'docket' | 'tasks' | 'intake' | 'conflicts' | 
-  'resources' | 'trust' | 'experts' | 'reporters' | 'closing' | 'archived';
-
-const PARENT_TABS = [
+const TAB_CONFIG: TabConfigItem[] = [
   {
-    id: 'work',
-    label: 'Case Work',
-    icon: Briefcase,
+    id: 'work', label: 'Case Work', icon: Briefcase,
     subTabs: [
       { id: 'active', label: 'Matters', icon: LayoutDashboard },
       { id: 'docket', label: 'Docket', icon: Calendar },
@@ -44,9 +46,7 @@ const PARENT_TABS = [
     ]
   },
   {
-    id: 'pipeline',
-    label: 'Pipeline',
-    icon: Layers,
+    id: 'pipeline', label: 'Pipeline', icon: Layers,
     subTabs: [
       { id: 'intake', label: 'Intake', icon: UserPlus },
       { id: 'conflicts', label: 'Conflicts', icon: ShieldAlert },
@@ -54,9 +54,7 @@ const PARENT_TABS = [
     ]
   },
   {
-    id: 'resources',
-    label: 'Resources',
-    icon: Users,
+    id: 'resources', label: 'Resources', icon: Users,
     subTabs: [
       { id: 'resources', label: 'Staffing', icon: Users },
       { id: 'experts', label: 'Experts', icon: Gavel },
@@ -64,9 +62,7 @@ const PARENT_TABS = [
     ]
   },
   {
-    id: 'admin',
-    label: 'Admin',
-    icon: DollarSign,
+    id: 'admin', label: 'Admin', icon: DollarSign,
     subTabs: [
       { id: 'trust', label: 'Trust', icon: DollarSign },
       { id: 'archived', label: 'Archive', icon: Archive },
@@ -75,55 +71,23 @@ const PARENT_TABS = [
 ];
 
 export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
-  const { theme } = useTheme();
   const notify = useNotify();
-  const {
-    isModalOpen,
-    setIsModalOpen,
-    statusFilter,
-    setStatusFilter,
-    typeFilter,
-    setTypeFilter,
-    filteredCases,
-    resetFilters
-  } = useCaseList();
+  const { filteredCases, ...filterProps } = useCaseList();
 
-  const [view, setView] = useState<CaseView>('active');
+  const [activeTab, setActiveTab] = useSessionStorage<string>('case_list_active_view', initialTab || 'active');
   const [isDocketModalOpen, setIsDocketModalOpen] = useState(false);
-
-  // Holographic Routing
-  useEffect(() => {
-      if (initialTab) setView(initialTab);
-  }, [initialTab]);
-
-  // Derived state for parent tab
-  const activeParentTab = useMemo(() => 
-    PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || PARENT_TABS[0],
-  [view]);
-
-  const handleParentTabChange = useCallback((parentId: string) => {
-    const parent = PARENT_TABS.find(p => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
-      setView(parent.subTabs[0].id as CaseView);
-    }
-  }, []);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { mutate: importDocketData } = useMutation(
-    async (data: any) => {
-       // Assume new case is created from import
+    async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
            id: data.caseInfo?.id || `IMP-${Date.now()}`,
            title: data.caseInfo?.title || 'Imported Matter',
-           matterType: 'Litigation',
-           status: 'Discovery',
-           client: 'Imported Client',
-           value: 0,
-           description: 'Imported via Docket XML',
-           filingDate: new Date().toISOString().split('T')[0],
+           matterType: 'Litigation', status: CaseStatus.Discovery, client: 'Imported Client', value: 0,
+           description: 'Imported via Docket XML', filingDate: new Date().toISOString().split('T')[0],
            ...data.caseInfo
        };
        await DataService.cases.add(newCase);
-       // Import entries
        await DataService.cases.importDocket(newCase.id, data);
        return newCase;
     },
@@ -144,94 +108,47 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
           onSuccess: () => {
               notify.success("New matter created successfully");
               queryClient.invalidate([STORES.CASES, 'all']);
-              setIsModalOpen(false);
+              setIsCreateModalOpen(false);
           }
       }
   );
 
-  // Declarative view mapping for better organization and performance
-  const viewContentMap = useMemo(() => ({
-    active: (
-      <CaseListActive 
-        filteredCases={filteredCases}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        typeFilter={typeFilter}
-        setTypeFilter={setTypeFilter}
-        resetFilters={resetFilters}
-        onSelectCase={onSelectCase}
-      />
-    ),
-    intake: <CaseListIntake />,
-    docket: <CaseListDocket onSelectCase={onSelectCase} />,
-    tasks: <CaseListTasks onSelectCase={onSelectCase} />,
-    conflicts: <CaseListConflicts onSelectCase={onSelectCase} />,
-    resources: <CaseListResources />,
-    trust: <CaseListTrust />,
-    experts: <CaseListExperts />,
-    reporters: <CaseListReporters />,
-    closing: <CaseListClosing />,
-    archived: <CaseListArchived onSelectCase={onSelectCase} />,
-  }), [filteredCases, statusFilter, typeFilter, onSelectCase, resetFilters, setStatusFilter, setTypeFilter]);
+  const renderContent = () => {
+    switch(activeTab) {
+      case 'active': return <CaseListActive filteredCases={filteredCases} {...filterProps} onSelectCase={onSelectCase} />;
+      case 'intake': return <CaseListIntake />;
+      case 'docket': return <CaseListDocket onSelectCase={c => onSelectCase(c as Case)} />;
+      case 'tasks': return <CaseListTasks onSelectCase={c => onSelectCase(c as Case)} />;
+      case 'conflicts': return <CaseListConflicts onSelectCase={c => onSelectCase(c as Case)} />;
+      case 'resources': return <CaseListResources />;
+      case 'trust': return <CaseListTrust />;
+      case 'experts': return <CaseListExperts />;
+      case 'reporters': return <CaseListReporters />;
+      case 'closing': return <CaseListClosing />;
+      case 'archived': return <CaseListArchived onSelectCase={c => onSelectCase(c as Case)} />;
+      default: return <CaseListActive filteredCases={filteredCases} {...filterProps} onSelectCase={onSelectCase} />;
+    }
+  };
 
   return (
-    <div className={cn("flex flex-col h-full relative pb-20 md:pb-0", theme.background)}>
-      <div className="px-6 pt-6 pb-2 shrink-0">
-        <PageHeader 
-          title="Case Management" 
-          subtitle="Manage matters, intake, and firm operations."
-          actions={
-            <div className="flex gap-2">
-              <Button variant="secondary" icon={FileInput} onClick={() => setIsDocketModalOpen(true)}>Import Docket</Button>
-              <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>New Matter</Button>
-            </div>
-          }
-        />
-
-        {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
-            {PARENT_TABS.map(parent => (
-                <button
-                    key={parent.id}
-                    onClick={() => handleParentTabChange(parent.id)}
-                    className={cn(
-                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                        activeParentTab.id === parent.id 
-                            ? cn("border-current", theme.primary.text)
-                            : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
-                    )}
-                >
-                    <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {parent.label}
-                </button>
-            ))}
-        </div>
-
-        {/* Sub-Navigation (Pills) - Touch Scroll */}
-        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
-            {activeParentTab.subTabs.map(tab => (
-                <button 
-                    key={tab.id} 
-                    onClick={() => setView(tab.id as CaseView)} 
-                    className={cn(
-                        "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                        view === tab.id 
-                            ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                            : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
-                    )}
-                >
-                    <tab.icon className={cn("h-3.5 w-3.5", view === tab.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {tab.label}
-                </button>
-            ))}
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
-        <div className="h-full overflow-y-auto custom-scrollbar touch-auto">
-            {viewContentMap[view]}
-        </div>
-      </div>
+    <>
+      <TabbedPageLayout
+        pageTitle="Case Management"
+        pageSubtitle="Manage matters, intake, and firm operations."
+        pageActions={
+          <div className="flex gap-2">
+            <Button variant="secondary" icon={FileInput} onClick={() => setIsDocketModalOpen(true)}>Import Docket</Button>
+            <Button variant="primary" icon={Plus} onClick={() => setIsCreateModalOpen(true)}>New Matter</Button>
+          </div>
+        }
+        tabConfig={TAB_CONFIG}
+        activeTabId={activeTab}
+        onTabChange={setActiveTab}
+      >
+        <Suspense fallback={<LazyLoader message="Loading Module..." />}>
+          {renderContent()}
+        </Suspense>
+      </TabbedPageLayout>
 
       <DocketImportModal 
         isOpen={isDocketModalOpen} 
@@ -240,11 +157,11 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
       />
 
       <CreateCaseModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
         onSave={createCase}
       />
-    </div>
+    </>
   );
 };
 

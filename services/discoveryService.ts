@@ -1,5 +1,9 @@
 
-import { Deposition, ESISource, ProductionSet, CustodianInterview, DiscoveryRequest } from '../types';
+import { 
+    Deposition, ESISource, ProductionSet, CustodianInterview, 
+    DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
+    Examination, Vendor, Transcript, SanctionMotion, StipulationRequest 
+} from '../types';
 import { db, STORES } from './db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -56,19 +60,58 @@ export const DiscoveryService = {
         return db.put(STORES.DISCOVERY_EXT_INT, interview);
     },
 
-    // Requests (Enhanced)
+    // Requests (Rule 33/34/36)
     getRequests: async (caseId?: string) => {
         const requests = await db.getAll<DiscoveryRequest>(STORES.REQUESTS);
         return caseId ? requests.filter(r => r.caseId === caseId) : requests;
+    },
+    addRequest: async (req: DiscoveryRequest) => {
+        return db.put(STORES.REQUESTS, req);
     },
     updateRequestStatus: async (id: string, status: string) => {
         const request = await db.get<DiscoveryRequest>(STORES.REQUESTS, id);
         if (!request) throw new Error("Request not found");
         return db.put(STORES.REQUESTS, { ...request, status: status as any });
     },
+
+    // --- NEW MODULES ---
+
+    // Rule 35 Examinations
+    getExaminations: async (caseId?: string) => {
+        const exams = await db.getAll<Examination>(STORES.EXAMINATIONS);
+        return caseId ? exams.filter(e => e.caseId === caseId) : exams;
+    },
+    addExamination: async (exam: Examination) => db.put(STORES.EXAMINATIONS, exam),
+
+    // Rule 32 Transcripts
+    getTranscripts: async (caseId?: string) => {
+        const trans = await db.getAll<Transcript>(STORES.TRANSCRIPTS);
+        return caseId ? trans.filter(t => t.caseId === caseId) : trans;
+    },
+    addTranscript: async (transcript: Transcript) => db.put(STORES.TRANSCRIPTS, transcript),
+
+    // Rule 28 Vendors
+    getVendors: async () => db.getAll<Vendor>(STORES.VENDORS),
+    addVendor: async (vendor: Vendor) => db.put(STORES.VENDORS, vendor),
+
+    // Rule 37 Sanctions
+    getSanctions: async (caseId?: string) => {
+        const sancs = await db.getAll<SanctionMotion>(STORES.SANCTIONS);
+        return caseId ? sancs.filter(s => s.caseId === caseId) : sancs;
+    },
+    addSanctionMotion: async (motion: SanctionMotion) => db.put(STORES.SANCTIONS, motion),
+
+    // Rule 29 Stipulations
+    getStipulations: async (caseId?: string) => {
+        const stips = await db.getAll<StipulationRequest>(STORES.STIPULATIONS);
+        return caseId ? stips.filter(s => s.caseId === caseId) : stips;
+    },
+    addStipulation: async (stip: StipulationRequest) => db.put(STORES.STIPULATIONS, stip),
+
     
-    getLegalHolds: async () => db.getAll<any>(STORES.LEGAL_HOLDS),
-    getPrivilegeLog: async () => db.getAll<any>(STORES.PRIVILEGE_LOG),
+    // Common
+    getLegalHolds: async () => db.getAll<LegalHold>(STORES.LEGAL_HOLDS),
+    getPrivilegeLog: async () => db.getAll<PrivilegeLogEntry>(STORES.PRIVILEGE_LOG),
 
     syncDeadlines: async () => { await delay(1000); },
     startCollection: async (id: string) => { await delay(500); return "job-123"; },

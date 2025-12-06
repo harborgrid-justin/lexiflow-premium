@@ -30,6 +30,12 @@ export const STORES = {
   DISCOVERY_EXT_PROD: 'discovery_productions',
   DISCOVERY_EXT_INT: 'discovery_interviews',
   REQUESTS: 'discovery_requests',
+  // New Discovery Stores
+  EXAMINATIONS: 'discovery_examinations',
+  VENDORS: 'discovery_vendors',
+  TRANSCRIPTS: 'discovery_transcripts',
+  SANCTIONS: 'discovery_sanctions',
+  //
   CONFLICTS: 'conflicts',
   WALLS: 'ethical_walls',
   LOGS: 'audit_logs',
@@ -59,7 +65,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 10;
+  private dbVersion = 12; // Incremented version for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -96,6 +102,9 @@ export class DatabaseManager {
             if (!store.indexNames.contains('caseId')) store.createIndex('caseId', 'caseId', { unique: false });
           }
         });
+        if (!db.objectStoreNames.contains('files')) {
+            db.createObjectStore('files');
+        }
       };
 
       request.onsuccess = (event) => {
@@ -209,6 +218,7 @@ export class DatabaseManager {
       return new Promise((resolve, reject) => {
           if (!this.db) return reject("DB not ready");
           if (!this.db.objectStoreNames.contains('files')) {
+              console.error("File store not found, cannot save file.");
               return resolve();
           }
           const tx = this.db.transaction(['files'], 'readwrite');

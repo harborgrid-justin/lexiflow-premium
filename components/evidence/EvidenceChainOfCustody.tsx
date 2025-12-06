@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '../common/Button';
 import { User, Layers, Plus, ShieldCheck, AlertOctagon, Link } from 'lucide-react';
@@ -67,22 +66,22 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h3 className={cn("text-lg font-bold", theme.text.primary)}>Chain of Custody Log</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Chronological history of evidence handling.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full md:w-auto">
             <Button 
                 variant={verifyStatus === 'valid' ? 'outline' : 'secondary'} 
                 icon={verifyStatus === 'valid' ? ShieldCheck : Link}
                 onClick={verifyChainIntegrity}
                 isLoading={verifyStatus === 'verifying'}
-                className={verifyStatus === 'valid' ? "text-green-600 border-green-200 bg-green-50" : ""}
+                className={cn("flex-1", verifyStatus === 'valid' ? "text-green-600 border-green-200 bg-green-50" : "")}
             >
                 {verifyStatus === 'idle' ? 'Verify Chain' : verifyStatus === 'verifying' ? 'Hashing...' : verifyStatus === 'valid' ? 'Integrity Valid' : 'Chain Broken'}
             </Button>
-            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Record Event</Button>
+            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)} className="flex-1">Record Event</Button>
         </div>
       </div>
       
@@ -104,7 +103,8 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
         {selectedItem.chainOfCustody.map((event, idx) => (
           <div key={event.id} className="relative pl-8">
             <div className={cn(
-                "absolute -left-[9px] top-0 h-4 w-4 rounded-full border-2 border-white",
+                "absolute -left-[9px] top-0 h-4 w-4 rounded-full border-2",
+                theme.surface === 'bg-white' ? 'border-white' : 'border-slate-900',
                 idx === 0 ? "bg-green-500 ring-4 ring-green-100" : "bg-slate-300"
             )}></div>
             

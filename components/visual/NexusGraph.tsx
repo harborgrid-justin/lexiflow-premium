@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { NODE_STRIDE } from '../../utils/nexusPhysics';
+import { NODE_STRIDE, NexusLink } from '../../utils/nexusPhysics';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Case, Party, EvidenceItem } from '../../types';
@@ -11,9 +11,10 @@ interface NexusGraphProps {
   caseData: Case;
   parties: Party[];
   evidence: EvidenceItem[];
+  onNodeClick: (node: any) => void;
 }
 
-export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evidence }) => {
+export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evidence, onNodeClick }) => {
   const { theme, mode } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.8);
@@ -24,7 +25,9 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
       if (!containerRef.current) return;
       const observer = new ResizeObserver((entries) => {
           const entry = entries[0];
-          setDimensions({ width: entry.contentRect.width, height: entry.contentRect.height });
+          if (entry) {
+            setDimensions({ width: entry.contentRect.width, height: entry.contentRect.height });
+          }
       });
       observer.observe(containerRef.current);
       return () => observer.disconnect();
@@ -32,14 +35,17 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
 
   const graphData = useMemo(() => {
     const nodes = [
-        { id: 'root', type: 'root', label: caseData.title.substring(0, 20) + '...' },
-        ...parties.map(p => ({ id: p.id, type: p.type === 'Corporation' ? 'org' : 'party', label: p.name })),
-        ...evidence.map(e => ({ id: e.id, type: 'evidence', label: e.title.substring(0, 15) + '...' }))
+        { id: 'root', type: 'root', label: caseData.title ? caseData.title.substring(0, 20) + '...' : 'Untitled Case', original: caseData },
+        ...parties.map(p => ({ id: p.id, type: p.type === 'Corporation' ? 'org' : 'party', label: p.name, original: p })),
+        ...evidence.map(e => ({ id: e.id, type: 'evidence', label: e.title.substring(0, 15) + '...', original: e }))
     ];
-    const links = [
-        ...parties.map(p => ({ source: 'root', target: p.id, strength: 0.8 })),
-        ...evidence.map(e => ({ source: 'root', target: e.id, strength: 0.3 }))
-    ];
+    const links: NexusLink[] = [
+        // We calculate source/target indexes later in useNexusGraph
+        // Here we pass raw IDs for preprocessing
+        ...parties.map(p => ({ sourceIndex: -1, targetIndex: -1, strength: 0.8, sourceId: 'root', targetId: p.id })),
+        ...evidence.map(e => ({ sourceIndex: -1, targetIndex: -1, strength: 0.3, sourceId: 'root', targetId: e.id }))
+    ].map(l => ({ sourceIndex: 0, targetIndex: 0, strength: l.strength, source: l.sourceId, target: l.targetId })); // Temporary mapping to match hook expected format
+
     return { nodes, links };
   }, [caseData, parties, evidence]);
 
@@ -82,9 +88,9 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
   }, [isStable, nodesMeta]);
 
   const getStroke = (type: string) => {
-      if (type === 'party') return '#3b82f6';
-      if (type === 'org') return '#8b5cf6';
-      if (type === 'evidence') return '#f59e0b';
+      if (type === 'party') return theme.primary.text.replace('text-', 'text-');
+      if (type === 'org') return 'purple';
+      if (type === 'evidence') return 'amber';
       return mode === 'dark' ? '#f8fafc' : '#1e293b';
   };
 
@@ -100,9 +106,24 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
                     {physicsState.current.links.map((_, i) => (
                         <line key={`link-${i}`} ref={el => { if(el) linkRefs.current[i] = el; }} stroke={mode === 'dark' ? '#475569' : '#cbd5e1'} strokeWidth="1.5" strokeOpacity="0.4" />
                     ))}
-                    {nodesMeta.map((node) => (
-                        <g key={node.id} ref={el => { if (el) domRefs.current.set(node.id, el); }} className="cursor-pointer hover:opacity-80">
-                            <circle r={node.type === 'root' ? 40 : node.type === 'org' ? 30 : 18} fill={node.type === 'root' ? getStroke('root') : (mode === 'dark' ? '#0f172a' : "white")} stroke={getStroke(node.type)} strokeWidth={node.type === 'root' ? 0 : 3} />
+                    {nodesMeta.map((node, i) => (
+                        <g 
+                          key={node.id} 
+                          ref={el => { if (el) domRefs.current.set(node.id, el); }} 
+                          className="cursor-pointer hover:opacity-80"
+                          onClick={() => onNodeClick(graphData.nodes[i])}
+                        >
+                            <circle 
+                                r={node.type === 'root' ? 40 : node.type === 'org' ? 30 : 18} 
+                                fill={node.type === 'root' ? getStroke('root') : (mode === 'dark' ? '#0f172a' : "white")} 
+                                stroke={
+                                  node.type === 'party' ? 'hsl(var(--blue-500))' :
+                                  node.type === 'org' ? 'hsl(var(--purple-500))' :
+                                  node.type === 'evidence' ? 'hsl(var(--amber-500))' :
+                                  getStroke(node.type)
+                                }
+                                strokeWidth={node.type === 'root' ? 0 : 3} 
+                            />
                             <text y={node.type === 'root' ? 46 : 32} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
                         </g>
                     ))}

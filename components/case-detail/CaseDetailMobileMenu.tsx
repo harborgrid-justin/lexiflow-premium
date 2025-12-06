@@ -20,13 +20,13 @@ export const CaseDetailMobileMenu: React.FC<CaseDetailMobileMenuProps> = ({ isOp
         <div className={cn("rounded-xl shadow-2xl w-[90%] max-w-sm p-4 animate-in slide-in-from-bottom duration-200 space-y-2", theme.surface)} onClick={e => e.stopPropagation()}>
             <h4 className={cn("text-sm font-bold uppercase tracking-wide mb-3 px-2", theme.text.secondary)}>Quick Actions</h4>
             <button onClick={() => onNavigate('Documents')} className={cn("w-full flex items-center p-3 rounded-lg border font-medium", theme.surface, theme.border.default, theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
-                <FileText className="h-5 w-5 mr-3 text-blue-600"/> Upload Document
+                <FileText className={cn("h-5 w-5 mr-3", theme.primary.text)}/> Upload Document
             </button>
             <button onClick={() => onNavigate('Billing')} className={cn("w-full flex items-center p-3 rounded-lg border font-medium", theme.surface, theme.border.default, theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
-                <Clock className="h-5 w-5 mr-3 text-green-600"/> Log Billable Time
+                <Clock className={cn("h-5 w-5 mr-3", theme.status.success.text)}/> Log Billable Time
             </button>
             <button onClick={() => onNavigate('Workflow')} className={cn("w-full flex items-center p-3 rounded-lg border font-medium", theme.surface, theme.border.default, theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
-                <Plus className="h-5 w-5 mr-3 text-purple-600"/> Add Task
+                <Plus className={cn("h-5 w-5 mr-3", "text-purple-600 dark:text-purple-400")}/> Add Task
             </button>
             <button onClick={onClose} className={cn("w-full p-3 rounded-lg font-bold mt-2", theme.surfaceHighlight, theme.text.secondary)}>
                 Cancel

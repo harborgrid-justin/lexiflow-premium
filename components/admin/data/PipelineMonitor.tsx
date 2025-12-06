@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { GitMerge, RefreshCw, Clock, Activity, CheckCircle, XCircle, Play, FileText, ChevronRight, Database, Cloud, Server, Settings, Plus, ArrowLeft } from 'lucide-react';
-import { Button } from '../../common/Button';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Tabs } from '../../common/Tabs';
+import { useTheme } from '../../../../context/ThemeContext';
+import { cn } from '../../../../utils/cn';
+import { Tabs } from '../../../common/Tabs';
+import { Button } from '../../../common/Button';
 
 interface PipelineJob {
     id: string;

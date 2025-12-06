@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -73,6 +72,10 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     setContent(prev => prev + clauseHtml);
   };
 
+  const handleAiAssist = () => {
+    setDraftPrompt(`For the case "${caseTitle}", draft a standard motion to compel discovery regarding ...`);
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full relative">
       {selectedClauseHistory && (
@@ -81,7 +84,9 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
 
       <div className="lg:col-span-2 flex flex-col h-full space-y-4">
         <div className={cn("p-2 rounded-lg border shadow-sm flex gap-2 items-center", theme.surface, theme.border.default)}>
-             <div className="bg-purple-100 p-2 rounded-md"><Wand2 className="h-5 w-5 text-purple-600"/></div>
+             <button onClick={handleAiAssist} className="bg-purple-100 p-2 rounded-md hover:bg-purple-200 transition-colors" title="AI Assist">
+                <Wand2 className="h-5 w-5 text-purple-600"/>
+             </button>
              <input 
                 value={draftPrompt}
                 onChange={(e) => setDraftPrompt(e.target.value)}

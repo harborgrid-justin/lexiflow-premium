@@ -131,7 +131,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
              <ShieldCheck className={cn("h-4 w-4 mr-1", logAsEvidence ? "text-blue-600" : theme.text.tertiary)}/>
              Log as Evidence
           </label>
-          <button onClick={handleOpenWizard} className="flex-1 md:flex-none flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm hover:shadow">
+          <button onClick={handleOpenWizard} className={cn("flex-1 md:flex-none flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm hover:shadow", theme.primary.DEFAULT, theme.text.inverse, theme.primary.hover)}>
             <Wand2 className="h-4 w-4 mr-2" /> Assemble Doc
           </button>
           <button 

@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { AppView, User } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';
@@ -7,7 +6,7 @@ import { LazyLoader } from '../common/LazyLoader';
 import { HelpCircle, Lock } from 'lucide-react';
 
 // Lazy Load CaseDetail specifically as it's a heavy component often used
-const CaseDetail = React.lazy(() => import('../case-detail/CaseDetail').then(m => ({ default: m.CaseDetail as React.ComponentType<any> })));
+const CaseDetail = React.lazy(() => import('../CaseDetail').then(m => ({ default: m.CaseDetail as React.ComponentType<any> })));
 
 interface AppContentRendererProps {
   activeView: AppView;
@@ -84,7 +83,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     }
     
     if (activeView === PATHS.BILLING) {
-      dynamicProps.navigateTo = (v: string) => setActiveView(v);
+      dynamicProps.navigateTo = (v: string) => setActiveView(v as AppView);
     }
     
     if (activeView === PATHS.DOCUMENTS || activeView === PATHS.JURISDICTION) {

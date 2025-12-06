@@ -1,5 +1,5 @@
-
 import { DataService } from './dataService';
+import { Case, Client, WorkflowTask, EvidenceItem, User } from '../types';
 
 export type SearchResultType = 'case' | 'document' | 'client' | 'task' | 'evidence' | 'user';
 
@@ -8,7 +8,7 @@ export interface GlobalSearchResult {
   type: SearchResultType;
   title: string;
   subtitle: string;
-  data: any;
+  data: Case | Client | WorkflowTask | EvidenceItem | User;
 }
 
 export const SearchService = {

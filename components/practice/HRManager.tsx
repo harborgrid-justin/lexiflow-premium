@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { UserAvatar } from '../common/UserAvatar';
@@ -100,7 +99,7 @@ export const HRManager: React.FC = () => {
         />
       </div>
 
-      <TableContainer>
+      <TableContainer responsive="card">
         <TableHeader>
           <TableHead>Employee</TableHead>
           <TableHead>Role</TableHead>

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
@@ -142,9 +141,9 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                   )}
 
                   {wizard.currentStep === 2 && (
-                    <div className="grid grid-cols-2 gap-6 animate-in fade-in slide-in-from-right-4">
-                      <div className="col-span-2">
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Evidence Title</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in fade-in slide-in-from-right-4">
+                      <div className="sm:col-span-2">
+                        <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Evidence Title</label>
                         <input 
                             type="text" 
                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)} 
@@ -154,7 +153,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Evidence Type</label>
+                        <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Evidence Type</label>
                         <select 
                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)}
                             value={type}
@@ -166,7 +165,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Lifecycle ID (UUID)</label>
+                        <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Lifecycle ID (UUID)</label>
                         <input 
                             type="text" 
                             disabled 
@@ -174,8 +173,8 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                             value={generatedData.uuid || 'Pending generation...'}
                         />
                       </div>
-                      <div className="col-span-2">
-                          <label className="block text-sm font-medium text-slate-700 mb-1">Description & Context</label>
+                      <div className="sm:col-span-2">
+                          <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Description & Context</label>
                           <textarea 
                              className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)} 
                              rows={4} 
@@ -184,8 +183,8 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                              placeholder="Describe the item..."
                           ></textarea>
                       </div>
-                      <div>
-                          <label className="block text-sm font-medium text-slate-700 mb-1">Custodian</label>
+                      <div className="sm:col-span-2">
+                          <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Custodian</label>
                           <input 
                              type="text" 
                              className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)} 
@@ -194,15 +193,15 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                              onChange={(e) => setCustodian(e.target.value)}
                           />
                       </div>
-                      <div className="col-span-2">
-                          <label className="block text-sm font-medium text-slate-700 mb-1">Auto-Tags</label>
+                      <div className="sm:col-span-2">
+                          <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Auto-Tags</label>
                           <TagInput 
                             tags={generatedData.tags || []} 
                             onAdd={(t) => setGeneratedData({...generatedData, tags: [...(generatedData.tags || []), t]})}
                             onRemove={(t) => setGeneratedData({...generatedData, tags: generatedData.tags?.filter(tag => tag !== t)})}
                           />
                       </div>
-                      <div className="col-span-2 pt-4 flex justify-end gap-3">
+                      <div className="sm:col-span-2 pt-4 flex justify-end gap-3">
                           <Button variant="secondary" onClick={wizard.back}>Back</Button>
                           <Button variant="primary" disabled={!file || processing} onClick={handleFinish}>Log Item & Print Label</Button>
                       </div>

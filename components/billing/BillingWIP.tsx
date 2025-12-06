@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -109,7 +108,7 @@ export const BillingWIP: React.FC = () => {
             }
         />
 
-        <TableContainer>
+        <TableContainer responsive="card">
             <TableHeader>
                 <TableHead className="w-10">
                     <input 

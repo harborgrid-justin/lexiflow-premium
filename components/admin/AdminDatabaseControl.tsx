@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -33,14 +32,14 @@ export const AdminDatabaseControl: React.FC = () => {
     if (activeView.startsWith('lineage')) return <LineageGraph initialTab={activeView.replace('lineage-', '')} />;
     if (activeView.startsWith('governance')) return <GovernanceConsole initialTab={activeView.replace('governance-', '')} />;
     if (activeView.startsWith('catalog')) return <DataCatalog initialTab={activeView.replace('catalog-', '')} />;
+    if (activeView.startsWith('schema')) return <SchemaArchitect initialTab={activeView.replace('schema-', '')} />;
+    if (activeView.startsWith('pipeline')) return <PipelineMonitor initialTab={activeView.replace('pipeline-', '')} />;
+    if (activeView.startsWith('query')) return <QueryConsole initialTab={activeView.replace('query-', '')} />;
+    if (activeView.startsWith('security')) return <SecurityMatrix initialTab={activeView.replace('security-', '')} />;
 
     switch (activeView) {
       case 'overview': return <PlatformOverview />;
-      case 'schema': return <SchemaArchitect />;
-      case 'pipeline': return <PipelineMonitor />;
       case 'backup': return <BackupVault />;
-      case 'query': return <QueryConsole />;
-      case 'security': return <SecurityMatrix />;
       case 'api': return <ApiGateway />;
       case 'replication': return <ReplicationManager />;
       case 'cost': return <CostFinOps />;

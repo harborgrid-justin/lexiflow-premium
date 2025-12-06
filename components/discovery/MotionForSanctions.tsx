@@ -1,0 +1,101 @@
+
+import React, { useState } from 'react';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
+import { Badge } from '../common/Badge';
+import { Gavel, AlertTriangle, Plus, FileWarning } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { SanctionMotion } from '../../types';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { Modal } from '../common/Modal';
+import { Input, TextArea } from '../common/Inputs';
+
+export const MotionForSanctions: React.FC = () => {
+  const { theme } = useTheme();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
+
+  const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
+      [STORES.SANCTIONS, 'all'],
+      () => DataService.discovery.getSanctions()
+  );
+
+  const { mutate: addSanction } = useMutation(
+      DataService.discovery.addSanctionMotion,
+      {
+          invalidateKeys: [[STORES.SANCTIONS, 'all']],
+          onSuccess: () => { setIsModalOpen(false); setNewMotion({}); }
+      }
+  );
+
+  const handleSave = () => {
+      if (!newMotion.title) return;
+      addSanction({
+          id: `sanc-${Date.now()}`,
+          caseId: 'General',
+          title: newMotion.title,
+          ruleBasis: newMotion.ruleBasis as any || 'Rule 37(a)',
+          status: 'Draft',
+          relatedRequestId: newMotion.relatedRequestId || '',
+          description: newMotion.description || ''
+      } as SanctionMotion);
+  };
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+        <div className={cn("p-6 rounded-lg border bg-red-50 border-red-200 flex justify-between items-center")}>
+             <div>
+                 <h3 className="text-lg font-bold text-red-900 flex items-center">
+                     <Gavel className="h-5 w-5 mr-2"/> Motion for Sanctions (Rule 37)
+                 </h3>
+                 <p className="text-sm text-red-800">Track enforcement actions for discovery non-compliance.</p>
+             </div>
+             <Button variant="danger" icon={Plus} onClick={() => setIsModalOpen(true)}>File Motion</Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {sanctions.map(s => (
+                <Card key={s.id} className="border-l-4 border-l-red-500">
+                    <div className="flex justify-between items-start mb-2">
+                        <Badge variant="error">{s.ruleBasis}</Badge>
+                        <span className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>{s.status}</span>
+                    </div>
+                    <h4 className={cn("font-bold text-lg mb-2", theme.text.primary)}>{s.title}</h4>
+                    <p className={cn("text-sm mb-4", theme.text.secondary)}>{s.description}</p>
+                    <div className={cn("pt-4 border-t flex justify-end gap-2", theme.border.light)}>
+                        <Button size="sm" variant="outline">View Brief</Button>
+                        <Button size="sm" variant="ghost" className="text-red-600">Delete</Button>
+                    </div>
+                </Card>
+            ))}
+            {sanctions.length === 0 && (
+                <div className="col-span-2 text-center py-12 border-2 border-dashed rounded-lg text-slate-400">
+                    <FileWarning className="h-12 w-12 mx-auto mb-3 opacity-20"/>
+                    <p>No sanctions motions filed.</p>
+                </div>
+            )}
+        </div>
+
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Draft Sanctions Motion">
+            <div className="p-6 space-y-4">
+                <Input label="Motion Title" value={newMotion.title || ''} onChange={e => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
+                <div>
+                    <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Basis</label>
+                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)} value={newMotion.ruleBasis} onChange={e => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
+                        <option value="Rule 37(a)">Rule 37(a) - Compel</option>
+                        <option value="Rule 37(b)">Rule 37(b) - Failure to Comply with Order</option>
+                        <option value="Rule 37(c)">Rule 37(c) - Failure to Disclose/Admit</option>
+                    </select>
+                </div>
+                <TextArea label="Argument Summary" value={newMotion.description || ''} onChange={e => setNewMotion({...newMotion, description: e.target.value})} rows={4} placeholder="Describe the violation..."/>
+                <div className="flex justify-end pt-4">
+                    <Button variant="danger" onClick={handleSave}>Create Draft</Button>
+                </div>
+            </div>
+        </Modal>
+    </div>
+  );
+};

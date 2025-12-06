@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 
 export const useSelection = <T extends Record<string, any>>(items: T[], idKey: keyof T = 'id' as keyof T) => {
@@ -5,9 +6,8 @@ export const useSelection = <T extends Record<string, any>>(items: T[], idKey: k
   const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
 
   const toggleSelection = useCallback((id: string, originalEvent?: React.MouseEvent | React.ChangeEvent) => {
-    // Handle Range Selection (Shift Key)
-    // @ts-ignore - Check for shiftKey existence on generic event
-    if (originalEvent && originalEvent.nativeEvent && (originalEvent.nativeEvent as any).shiftKey && lastSelectedId) {
+    // Handle Range Selection (Shift Key). Type-safe check for shiftKey property.
+    if (originalEvent && 'shiftKey' in originalEvent && originalEvent.shiftKey && lastSelectedId) {
         const lastIndex = items.findIndex(item => String(item[idKey]) === lastSelectedId);
         const currentIndex = items.findIndex(item => String(item[idKey]) === id);
 

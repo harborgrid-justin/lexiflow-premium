@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AuditLogEntry } from '../../types';
 import { Clock, User, Activity, Download, Filter, Shield, ShieldCheck, Link, AlertOctagon, Loader2, LayoutList, GitCommit, RefreshCw, Skull, Terminal, ArrowRight } from 'lucide-react';
@@ -131,6 +130,34 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = ({ logs }) => {
     );
   };
 
+  const renderMobileRow = (l: ChainedLogEntry, idx: number) => {
+    const isBroken = verifyResult && !verifyResult.isValid && idx === verifyResult.brokenIndex;
+    return (
+        <div className="px-2 py-1.5 h-[120px]">
+            <div key={l.id} onClick={() => openBlockInspector(l)} className={cn("p-4 rounded-lg shadow-sm border h-full flex flex-col justify-between", theme.surface, isBroken ? 'border-red-300 bg-red-50' : theme.border.default)}>
+                 <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center gap-2">
+                        <User className="h-3 w-3"/>
+                        <span className={cn("font-medium text-sm", theme.text.primary)}>{l.user}</span>
+                    </div>
+                    <Badge variant={l.action.includes('DELETE') || l.action === 'UNAUTHORIZED_ACCESS' ? 'error' : l.action.includes('EXPORT') ? 'warning' : 'neutral'}>
+                        {l.action}
+                    </Badge>
+                </div>
+                <p className={cn("text-xs font-mono truncate", theme.text.secondary)} title={l.resource}>{l.resource}</p>
+                <div className={cn("flex justify-between items-center text-[10px] text-slate-500 mt-3 border-t pt-2", theme.border.light)}>
+                    <span>{l.timestamp}</span>
+                    {isBroken ? (
+                         <span className="flex items-center justify-end text-xs text-red-600 font-bold"><AlertOctagon className="h-3 w-3 mr-1"/> INVALID</span>
+                     ) : (
+                         <span className="flex items-center justify-end text-[10px] text-green-600 font-bold"><Link className="h-3 w-3 mr-1"/> CHAINED</span>
+                     )}
+                </div>
+            </div>
+        </div>
+    );
+  };
+
   return (
     <div className={cn("flex flex-col h-full rounded-lg border overflow-hidden", theme.surface, theme.border.default)}>
       <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surfaceHighlight, theme.border.default)}>
@@ -162,7 +189,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = ({ logs }) => {
             <LedgerVisualizer chain={localLogs} integrityReport={verifyResult} />
         ) : (
             <div className={cn("flex flex-col h-full", theme.surface)}>
-                <div className={cn("flex items-center px-4 py-2 border-b font-bold text-xs uppercase tracking-wider", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                <div className={cn("hidden md:flex items-center px-4 py-2 border-b font-bold text-xs uppercase tracking-wider", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
                     <div className="w-[15%]">Hash</div>
                     <div className="w-[20%]">Timestamp</div>
                     <div className="w-[15%]">Actor</div>
@@ -171,12 +198,22 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = ({ logs }) => {
                     <div className="w-[15%] text-right">Status</div>
                 </div>
                 <div className="flex-1 relative">
-                    <VirtualList 
-                        items={localLogs}
-                        height="100%"
-                        itemHeight={48}
-                        renderItem={renderRow}
-                    />
+                    <div className="hidden md:block h-full">
+                        <VirtualList 
+                            items={localLogs}
+                            height="100%"
+                            itemHeight={48}
+                            renderItem={renderRow}
+                        />
+                    </div>
+                     <div className="md:hidden h-full">
+                        <VirtualList
+                            items={localLogs}
+                            height="100%"
+                            itemHeight={120}
+                            renderItem={renderMobileRow}
+                        />
+                    </div>
                 </div>
             </div>
         )}

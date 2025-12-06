@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ProductionSet } from '../../types';
 import { DataService } from '../../services/dataService';

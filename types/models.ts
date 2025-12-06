@@ -120,7 +120,7 @@ export interface ESISource extends BaseEntity { caseId: string; name: string; ty
 export interface ProductionSet extends BaseEntity { caseId: string; name: string; date: string; batesRange: string; docCount: number; size: string; format: string; status: string; }
 export interface CustodianInterview extends BaseEntity { caseId: string; custodianName: string; department: string; status: string; interviewDate?: string; notes?: string; relevantSources?: string[]; legalHoldId?: string; }
 
-// New Discovery Entities (Full Implementation)
+// New Discovery Entities
 export interface Examination extends BaseEntity { caseId: string; examinee: string; type: 'Physical' | 'Mental'; doctorName: string; date: string; status: 'Scheduled' | 'Report Received' | 'Disputed'; goodCause: string; reportDate?: string; }
 export interface Vendor extends BaseEntity { name: string; serviceType: 'Court Reporting' | 'Videography' | 'Forensics' | 'Translation'; contactName: string; phone: string; email: string; status: 'Preferred' | 'Active' | 'Blocked'; rating: number; }
 export interface Transcript extends BaseEntity { caseId: string; deponent: string; date: string; fileId?: string; isFinal: boolean; wordCount: number; linkedDepositionId?: string; }
@@ -197,6 +197,46 @@ export interface EntityRelationship extends BaseEntity {
   startDate?: string;
   endDate?: string;
   active: boolean;
+}
+
+// Data Quality & Cleansing
+export interface DataAnomaly {
+    id: number;
+    table: string;
+    field: string;
+    issue: string;
+    count: number;
+    sample: string;
+    status: 'Detected' | 'Fixing' | 'Fixed' | 'Ignored';
+    severity: 'Low' | 'Medium' | 'High' | 'Critical';
+}
+
+export interface CleansingRule {
+    id: string;
+    name: string;
+    targetField: string;
+    operation: 'Trim' | 'Uppercase' | 'FormatPhone' | 'FormatDate' | 'RemoveSpecialChars' | 'CustomRegex';
+    parameters?: any;
+    isActive: boolean;
+}
+
+export interface DedupeCluster {
+    id: string;
+    masterId: string; // The ID of the record to keep
+    duplicates: {
+        id: string;
+        name: string;
+        similarityScore: number;
+        fieldMatch: string;
+    }[];
+    status: 'Pending' | 'Merged' | 'Ignored';
+}
+
+export interface QualityMetricHistory {
+    date: string;
+    score: number;
+    issuesFound: number;
+    issuesFixed: number;
 }
 
 // For Discovery Platform

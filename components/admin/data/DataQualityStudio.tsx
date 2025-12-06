@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Check, Trash2, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2 } from 'lucide-react';
-import { Card } from '../../../common/Card';
-import { Tabs } from '../../../common/Tabs';
+import { Card } from '../../common/Card';
+import { Tabs } from '../../common/Tabs';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { VirtualList } from '../../../common/VirtualList';
-import { Modal } from '../../../common/Modal';
+import { VirtualList } from '../../common/VirtualList';
+import { Modal } from '../../common/Modal';
 import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
-import { Button } from '../../../common/Button';
+import { Button } from '../../common/Button';
 
 interface DataQualityStudioProps {
     initialTab?: string;

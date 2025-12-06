@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 
@@ -16,7 +16,7 @@ interface State {
   isCopied: boolean;
 }
 
-export class ErrorBoundary extends React.Component<Props, State> {
+export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
     error: null,
@@ -30,8 +30,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound, resolving errors where `setState` was not found on the component instance.
-  public componentDidCatch = (error: Error, errorInfo: ErrorInfo) => {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Construct debug information
     const debugInfo = `
 --- LexiFlow Error Report ---
@@ -95,8 +94,7 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
     }
   }
 
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound, resolving errors where `props` was not found on the component instance.
-  public render = () => {
+  public render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;

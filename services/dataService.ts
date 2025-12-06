@@ -1,3 +1,4 @@
+
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseService } from './domains/CaseDomain';
@@ -20,7 +21,8 @@ import {
   User, FirmExpense, TrialExhibit, Citation, BriefAnalysisSession,
   LegalEntity, EntityRelationship, Clause, WorkflowTemplateData,
   WikiArticle, Precedent, QAItem, LegalRule, SystemNotification,
-  CalendarEventItem, Client, Conversation, Message, Case, LegalDocument, DocketEntry, EvidenceItem
+  CalendarEventItem, Client, Conversation, Message, Case, LegalDocument, DocketEntry, EvidenceItem,
+  WarRoomData
 } from '../types';
 
 import { MOCK_METRICS } from '../data/models/marketingMetric';
@@ -127,7 +129,7 @@ export const DataService = {
   },
 
   warRoom: {
-      getData: async (caseId: string) => {
+      getData: async (caseId: string): Promise<WarRoomData> => {
           const c = await db.get<Case>(STORES.CASES, caseId);
           if (!c) throw new Error('Case not found');
           const [documents, motions, docket, evidence, tasks] = await Promise.all([

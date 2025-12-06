@@ -37,7 +37,8 @@ export interface Message { id: string; senderId: string; text: string; timestamp
 export interface Conversation { id: string; name: string; role: string; isExternal: boolean; unread: number; status: 'online' | 'offline' | 'away'; draft?: string; messages: Message[]; }
 
 // Case Management
-export interface Party extends BaseEntity { name: string; role: string; type: 'Individual' | 'Corporation' | 'Government'; contact?: string; counsel?: string; partyGroup?: string; linkedOrgId?: string; address?: string; phone?: string; email?: string; representationType?: string; attorneys?: any[]; pacerData?: any; }
+export interface Attorney { name: string; firm?: string; email?: string; phone?: string; address?: string; type?: string; }
+export interface Party extends BaseEntity { name: string; role: string; type: 'Individual' | 'Corporation' | 'Government'; contact?: string; counsel?: string; partyGroup?: string; linkedOrgId?: string; address?: string; phone?: string; email?: string; representationType?: string; attorneys?: Attorney[]; pacerData?: any; }
 export interface Case extends BaseEntity { title: string; client: string; clientId?: string; matterType: MatterType; matterSubType?: string; status: CaseStatus; filingDate: string; description?: string; value?: number; jurisdiction?: string; court?: string; judge?: string; magistrateJudge?: string; opposingCounsel?: string; origCaseNumber?: string; origCourt?: string; origJudgmentDate?: string; noticeOfAppealDate?: string; ownerId?: string; ownerOrgId?: string; linkedCaseIds?: string[]; leadCaseId?: string; isConsolidated?: boolean; associatedCases?: any[]; parties?: Party[]; citations?: Citation[]; arguments?: LegalArgument[]; defenses?: Defense[]; dateTerminated?: string; natureOfSuit?: string; pacerData?: any; billingModel?: BillingModel; projects?: Project[]; }
 export interface CasePhase { id: string; caseId: string; name: string; startDate: string; duration: number; status: string; color?: string; }
 export interface ParsedDocket {
@@ -246,5 +247,16 @@ export interface NexusNodeData {
     id: string;
     type: 'root' | 'org' | 'party' | 'evidence';
     label: string;
-    original: Case | Party | EvidenceItem;
+    original: Case | Party | EvidenceItem | object;
+}
+
+// War Room Aggregate Data
+export interface WarRoomData {
+    case: Case;
+    witnesses: Party[];
+    documents: LegalDocument[];
+    motions: Motion[];
+    docket: DocketEntry[];
+    evidence: EvidenceItem[];
+    tasks: WorkflowTask[];
 }

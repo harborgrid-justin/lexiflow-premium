@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '../common/Card';
 import { MetricCard } from '../common/Primitives';
@@ -7,10 +8,11 @@ import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { DataService } from '../../services/dataService';
+import { WarRoomData, WorkflowTask, DocketEntry, Motion } from '../../types';
 
 interface CommandCenterProps {
   caseId: string;
-  warRoomData: any;
+  warRoomData: WarRoomData;
   onNavigate: (view: any, context?: any) => void;
 }
 
@@ -22,9 +24,9 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
   
   // Derive stats from passed data
   const exhibitsTotal = warRoomData.evidence?.length || 0;
-  const exhibitsAdmitted = warRoomData.evidence?.filter((e: any) => e.status === 'Admitted').length || 0;
+  const exhibitsAdmitted = warRoomData.evidence?.filter((e) => e.status === 'Admitted').length || 0;
   const witnessCount = warRoomData.witnesses?.length || 0;
-  const tasksDue = warRoomData.tasks?.filter((t: any) => t.priority === 'High' && t.status !== 'Done').length || 0;
+  const tasksDue = warRoomData.tasks?.filter((t) => t.priority === 'High' && t.status !== 'Done').length || 0;
   const recentDocket = warRoomData.docket?.slice().reverse().slice(0, 5) || [];
   const sanctionsCount = sanctions.length;
 
@@ -95,7 +97,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                         <div className="space-y-2">
                             <h4 className={cn("font-bold text-sm uppercase text-slate-500 mb-2")}>Recent Docket Activity</h4>
                             {recentDocket.length === 0 && <p className="text-xs text-slate-400 italic">No recent docket entries.</p>}
-                            {recentDocket.map((item: any) => (
+                            {recentDocket.map((item) => (
                                 <div 
                                     key={item.id} 
                                     className={cn(
@@ -117,7 +119,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                 <Card title="Pending Motions">
                     <div className="space-y-3">
                         {warRoomData.motions && warRoomData.motions.length > 0 ? (
-                            warRoomData.motions.filter((m: any) => m.status !== 'Decided').slice(0, 3).map((m: any) => (
+                            warRoomData.motions.filter((m) => m.status !== 'Decided').slice(0, 3).map((m) => (
                                 <div 
                                     key={m.id}
                                     className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors", theme.surfaceHighlight, theme.border.default)}
@@ -141,7 +143,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
             <div className="space-y-6">
                 <Card title="Key Parties">
                     <div className="space-y-4">
-                        {warRoomData.witnesses?.slice(0, 4).map((member: any, i: number) => (
+                        {warRoomData.witnesses?.slice(0, 4).map((member, i) => (
                             <div key={i} className="flex items-center justify-between">
                                 <div className="flex items-center gap-3 overflow-hidden">
                                     <div className={cn("w-2 h-2 rounded-full shrink-0", member.type === 'Corporation' ? 'bg-blue-500' : 'bg-green-500')}></div>
@@ -157,7 +159,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
 
                 <Card title="Active Tasks">
                     <div className="space-y-2">
-                        {warRoomData.tasks?.slice(0, 5).map((task: any, i: number) => (
+                        {warRoomData.tasks?.slice(0, 5).map((task, i) => (
                             <div key={i} className={cn("flex items-start gap-3 p-2 hover:bg-slate-50 rounded transition-colors cursor-pointer group")}>
                                 <CheckSquare className="h-4 w-4 mt-0.5 text-slate-400 group-hover:text-blue-600 shrink-0"/>
                                 <span className={cn("text-sm truncate", theme.text.secondary, "group-hover:text-slate-900")}>{task.title}</span>

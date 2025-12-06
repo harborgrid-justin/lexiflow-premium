@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -46,7 +47,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
           return colDef;
       }).join(',\n');
-      const indexes = t.columns.filter(c => c.index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
+      const indexes = t.columns.filter(c => (c as any).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   
@@ -104,7 +105,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   const handleCreateTable = () => {
     const name = prompt("Enter new table name:");
     if (name) {
-        setTables(prev => [...prev, { name, x: 200, y: 200, columns: [{ name: 'id', type: 'UUID', pk: true }] }]);
+        setTables(prev => [...prev, { name, x: 200, y: 200, columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true, fk: undefined }] }]);
     }
   };
   

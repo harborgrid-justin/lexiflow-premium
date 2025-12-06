@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, BookOpen, Info, Maximize2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { Tabs } from '../../../common/Tabs';
-import { VirtualList } from '../../../common/VirtualList';
-import { SearchToolbar } from '../../../common/SearchToolbar';
+import { Tabs } from '../../common/Tabs';
+import { VirtualList } from '../../common/VirtualList';
+import { SearchToolbar } from '../../common/SearchToolbar';
 import { useWindow } from '../../../../context/WindowContext';
-import { Button } from '../../../common/Button';
+import { Button } from '../../common/Button';
 
 interface DataCatalogProps {
     initialTab?: string;

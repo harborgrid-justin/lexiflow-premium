@@ -2,12 +2,12 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Play, Eraser, Save, Database, Table, Clock, Star, MoreVertical, Download, Terminal, Search, Folder, Share2, AlignLeft, Bot, Eye, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { Tabs } from '../../../common/Tabs';
+import { Tabs } from '../../common/Tabs';
 import { Modal } from '../../common/Modal';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { CopyButton } from '../../../common/CopyButton';
+import { CopyButton } from '../../common/CopyButton';
 import { useNotify } from '../../../../hooks/useNotify';
-import { Button } from '../../../common/Button';
+import { Button } from '../../common/Button';
 
 const MOCK_SCHEMA = {
   cases: { desc: 'Core table for all legal matters.', columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' }] },

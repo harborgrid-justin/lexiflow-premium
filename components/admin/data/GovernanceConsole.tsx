@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, RefreshCw, Scale, Lock, Edit2, Plus, Users, Save, CheckCircle, X, FileText } from 'lucide-react';
-import { Card } from '../../../common/Card';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { Card } from '../../common/Card';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
 import { Modal } from '../../common/Modal';
-import { Input, TextArea } from '../../../common/Inputs';
-import { Tabs } from '../../../common/Tabs';
-import { Button } from '../../../common/Button';
+import { Input, TextArea } from '../../common/Inputs';
+import { Tabs } from '../../common/Tabs';
+import { Button } from '../../common/Button';
 
 interface GovernanceConsoleProps {
     initialTab?: string;

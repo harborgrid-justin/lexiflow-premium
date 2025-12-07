@@ -19,6 +19,7 @@ import { CostFinOps } from './data/CostFinOps';
 import { DataLakeExplorer } from './data/DataLakeExplorer';
 import { useWindow } from '../../context/WindowContext';
 import { Maximize2, Menu, X } from 'lucide-react';
+import { TabStrip } from '../common/RefactoredCommon';
 
 export type PlatformView = string; // Relaxed type for sub-routes
 
@@ -98,6 +99,7 @@ export const AdminDatabaseControl: React.FC = () => {
                 <Maximize2 className="h-4 w-4"/>
             </button>
         </div>
+        
         {renderContent()}
       </div>
     </div>

@@ -1,10 +1,11 @@
+
 import React, { useMemo, useState } from 'react';
 import { Badge } from '../common/Badge';
 import { LegalEntity } from '../../types';
-import { Building2, User, Gavel, Briefcase, Search } from 'lucide-react';
+import { Building2, User, Gavel, Briefcase } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { SearchToolbar } from '../common/SearchToolbar';
+import { SearchInputBar } from '../common/RefactoredCommon';
 import { VirtualList } from '../common/VirtualList';
 
 interface EntityGridProps {
@@ -75,9 +76,15 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
   return (
     <div className="space-y-4 h-full flex flex-col">
         <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm shrink-0", theme.surface, theme.border.default)}>
-            <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search entities..." className="border-none shadow-none p-0"/>
+            <div className="w-full max-w-md">
+                <SearchInputBar 
+                    value={searchTerm} 
+                    onChange={(e) => setSearchTerm(e.target.value)} 
+                    placeholder="Search entities..." 
+                />
+            </div>
             <select 
-                className={cn("p-2 border rounded text-sm outline-none bg-transparent", theme.border.default, theme.text.primary)}
+                className={cn("p-2 border rounded text-sm outline-none bg-transparent ml-4", theme.border.default, theme.text.primary)}
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
             >

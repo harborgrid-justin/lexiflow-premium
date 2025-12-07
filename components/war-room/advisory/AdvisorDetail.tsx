@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Advisor } from './AdvisorList';
-import { X, FileText, Download, DollarSign, Clock, CheckCircle } from 'lucide-react';
+import { X, FileText, Download, Clock, CheckCircle } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { InfoGrid, SectionTitle } from '../../common/RefactoredCommon';
 
 interface AdvisorDetailProps {
   advisor: Advisor;
@@ -18,7 +18,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
   return (
     <div className={cn("w-96 border-l flex flex-col bg-white shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center bg-slate-50/50", theme.border.default)}>
-            <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Advisor Profile</h4>
+            <SectionTitle className="mb-0">Advisor Profile</SectionTitle>
             <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
         </div>
 
@@ -36,7 +36,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Deliverables</h4>
+                <SectionTitle className="border-b pb-2">Deliverables</SectionTitle>
                 <div className="space-y-3">
                     <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors hover:border-blue-300 cursor-pointer", theme.surface, theme.border.default)}>
                         <FileText className="h-5 w-5 text-red-500 shrink-0"/>
@@ -57,18 +57,12 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Financials</h4>
-                <div className="grid grid-cols-2 gap-4">
-                    <div className={cn("p-3 rounded bg-slate-50 border border-slate-100")}>
-                        <p className="text-xs text-slate-500 mb-1">Retainer</p>
-                        <p className="text-lg font-mono font-bold text-slate-800">$10,000</p>
-                    </div>
-                    <div className={cn("p-3 rounded bg-slate-50 border border-slate-100")}>
-                        <p className="text-xs text-slate-500 mb-1">Incurred</p>
-                        <p className="text-lg font-mono font-bold text-blue-600">$4,500</p>
-                    </div>
-                </div>
-                <div className="text-xs text-slate-500 flex items-center justify-center">
+                <SectionTitle className="border-b pb-2">Financials</SectionTitle>
+                <InfoGrid items={[
+                    { label: "Retainer", value: "$10,000" },
+                    { label: "Incurred", value: "$4,500" }
+                ]} />
+                <div className="text-xs text-slate-500 flex items-center justify-center pt-2">
                     <Clock className="h-3 w-3 mr-1"/> Last Invoice: 12 days ago
                 </div>
             </div>

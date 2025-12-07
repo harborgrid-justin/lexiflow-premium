@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, AlertTriangle, FileSearch, RefreshCw, Scale, Lock, Edit2, Plus, Users, Save, CheckCircle, X, FileText } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2, Plus, FileText } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Modal } from '../../common/Modal';
-import { Input, TextArea } from '../../common/Inputs';
+import { Input } from '../../common/Inputs';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
 import { AccessGovernance } from './governance/AccessGovernance';
+import { CentredLoader, ModalFooter } from '../../common/RefactoredCommon';
 
 interface GovernanceConsoleProps {
     initialTab?: string;
@@ -71,6 +72,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {activeTab === 'overview' && (
                 <>
+                    {/* ... (Metrics Grid) ... */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, "bg-emerald-500/10 border-emerald-500/20")}>
                             <div>
@@ -163,10 +165,10 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
             <Modal isOpen={true} onClose={() => setEditingRule(null)} title="Edit Rule">
                 <div className="p-6 space-y-4">
                     <Input label="Rule Name" value={editingRule.name} onChange={e => setEditingRule({...editingRule, name: e.target.value})}/>
-                    <div className="flex justify-end gap-2 mt-4">
+                    <ModalFooter>
                          <Button variant="secondary" onClick={() => setEditingRule(null)}>Cancel</Button>
                          <Button variant="primary" onClick={() => setEditingRule(null)}>Save</Button>
-                    </div>
+                    </ModalFooter>
                 </div>
             </Modal>
         )}

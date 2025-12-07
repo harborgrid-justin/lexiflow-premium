@@ -6,6 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, A
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useChartTheme } from '../../common/ChartHelpers';
+import { MetricTile } from '../../common/RefactoredCommon';
 
 const costData = [
     { name: 'Compute', cost: 1200 },
@@ -32,18 +33,18 @@ export const CostFinOps: React.FC = () => {
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full">
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-             <Card>
-                 <p className={cn("text-xs uppercase font-bold mb-1", theme.text.secondary)}>Total Monthly Spend</p>
-                 <p className={cn("text-3xl font-bold flex items-center", theme.text.primary)}><DollarSign className="h-6 w-6"/> 6,050</p>
-             </Card>
-             <Card>
-                 <p className={cn("text-xs uppercase font-bold mb-1", theme.text.secondary)}>Forecast (EOM)</p>
-                 <p className="text-3xl font-bold text-blue-600">$6,200</p>
-             </Card>
-             <Card>
-                 <p className={cn("text-xs uppercase font-bold mb-1", theme.text.secondary)}>Savings Opportunity</p>
-                 <p className="text-3xl font-bold text-green-600 flex items-center"><TrendingDown className="h-6 w-6 mr-2"/> $450</p>
-             </Card>
+             <MetricTile 
+                label="Total Monthly Spend" 
+                value={<span className="flex items-center"><DollarSign className="h-6 w-6"/> 6,050</span>} 
+             />
+             <MetricTile 
+                label="Forecast (EOM)" 
+                value={<span className="text-blue-600">$6,200</span>} 
+             />
+             <MetricTile 
+                label="Savings Opportunity" 
+                value={<span className="text-green-600 flex items-center"><TrendingDown className="h-6 w-6 mr-2"/> $450</span>} 
+             />
          </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

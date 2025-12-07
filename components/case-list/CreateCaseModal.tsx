@@ -8,6 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '../../data/jurisdictionData';
 import { Globe, Scale, Shield, FilePlus, Building2 } from 'lucide-react';
+import { ModalFooter } from '../common/RefactoredCommon';
 
 interface CreateCaseModalProps {
   isOpen: boolean;
@@ -337,12 +338,12 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
             />
         </div>
         
-        <div className={cn("flex justify-end pt-4 gap-3 border-t mt-2", theme.border.light)}>
+        <ModalFooter>
             <Button variant="secondary" onClick={onClose}>Cancel</Button>
             <Button variant="primary" onClick={handleSave}>
                 {isPreFiling ? 'Create Matter' : 'File Case'}
             </Button>
-        </div>
+        </ModalFooter>
       </div>
     </Modal>
   );

@@ -15,6 +15,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { PreviewHeader } from './preview/PreviewHeader';
 import { PreviewContent } from './preview/PreviewContent';
 import { PIIPanel } from './preview/PIIPanel';
+import { useBlobRegistry } from '../../hooks/useBlobRegistry';
 
 interface DocumentPreviewPanelProps {
   document: LegalDocument | null;
@@ -33,6 +34,9 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
   const notify = useNotify();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isRedactionMode, setIsRedactionMode] = useState(false);
+  
+  // Systems Engineering: Integrated Memory Management
+  const { register, revoke } = useBlobRegistry();
 
   // Mutation for Redaction
   const { mutate: performRedaction, isLoading: isRedacting } = useMutation(
@@ -47,17 +51,24 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
   );
 
   useEffect(() => {
+      let isMounted = true;
       if (document && document.tags.includes('Local')) {
           const loadBlob = async () => {
-              const url = await DocumentService.getDocumentUrl(document.id);
-              setPreviewUrl(url);
+              // Retrieve raw blob from IndexedDB
+              const blob = await DataService.documents.getFile(document.id); // Assuming DataService exposes this via DocumentService logic
+              
+              if (isMounted && blob) {
+                  // Create managed URL
+                  const url = register(blob);
+                  setPreviewUrl(url);
+              }
           };
           loadBlob();
       } else {
           setPreviewUrl(null); 
       }
-      return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
-  }, [document]);
+      return () => { isMounted = false; };
+  }, [document, register]); // Registry handles cleanup automatically
 
   const handleToggleEncryption = () => {
     if (!document || !onUpdate) return;
@@ -82,7 +93,6 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
 
   const handleApplyRedactions = (maskedContent: string) => {
       if (!document) return;
-      // In a real app we would pass the coordinates or the masked string
       performRedaction(document.id);
   };
 

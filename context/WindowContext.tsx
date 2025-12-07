@@ -187,6 +187,8 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                     ? "rounded-lg border border-slate-200 dark:border-slate-700" 
                     : "inset-4 md:inset-8 rounded-xl border border-slate-200 dark:border-slate-700 ring-1 ring-black/5 animate-in zoom-in-95" 
                 }`}
+                // Systems Optimization: CSS Containment
+                // isolate layout, style, and paint to prevents reflows of the entire document
                 style={isOrbitalEnabled ? { 
                     zIndex: win.zIndex,
                     width: `${win.size.width}px`,
@@ -194,9 +196,12 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                     top: win.position.y,
                     left: win.position.x,
                     maxWidth: '95vw',
-                    maxHeight: '95vh'
+                    maxHeight: '95vh',
+                    contain: 'strict', // HIGH IMPACT PERFORMANCE
+                    contentVisibility: 'auto' // Skip rendering off-screen content
                 } : {
                     zIndex: win.zIndex + 2000, 
+                    contain: 'strict'
                 }}
                 onMouseDown={() => bringToFront(win.id)}
             >

@@ -4,29 +4,43 @@ import { ModuleRegistry } from '../services/moduleRegistry';
 import { NAVIGATION_ITEMS } from '../constants/navConfig';
 import { PATHS } from '../constants/paths';
 
-// Lazy Imports
-const Dashboard = React.lazy(() => import('../components/Dashboard'));
-const CaseList = React.lazy(() => import('../components/CaseList'));
-const DocketManager = React.lazy(() => import('../components/DocketManager'));
-const CorrespondenceManager = React.lazy(() => import('../components/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));
-const MasterWorkflow = React.lazy(() => import('../components/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
-const DocumentManager = React.lazy(() => import('../components/DocumentManager'));
-const WarRoom = React.lazy(() => import('../components/WarRoom').then(m => ({ default: m.WarRoom })));
-const ExhibitManager = React.lazy(() => import('../components/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
-const DiscoveryPlatform = React.lazy(() => import('../components/DiscoveryPlatform').then(m => ({ default: m.DiscoveryPlatform })));
-const EvidenceVault = React.lazy(() => import('../components/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
-const ResearchTool = React.lazy(() => import('../components/ResearchTool').then(m => ({ default: m.ResearchTool })));
-const FirmOperations = React.lazy(() => import('../components/FirmOperations').then(m => ({ default: m.FirmOperations })));
-const BillingDashboard = React.lazy(() => import('../components/BillingDashboard'));
-const ClientCRM = React.lazy(() => import('../components/ClientCRM'));
-const ComplianceDashboard = React.lazy(() => import('../components/ComplianceDashboard'));
-const AdminPanel = React.lazy(() => import('../components/AdminPanel').then(m => ({ default: m.AdminPanel })));
-const SecureMessenger = React.lazy(() => import('../components/SecureMessenger').then(m => ({ default: m.SecureMessenger })));
-const EntityDirector = React.lazy(() => import('../components/EntityDirector').then(m => ({ default: m.EntityDirector })));
-const AdminDatabaseControl = React.lazy(() => import('../components/admin/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
-const AnalyticsDashboard = React.lazy(() => import('../components/AnalyticsDashboard'));
-const JurisdictionManager = React.lazy(() => import('../components/JurisdictionManager'));
-const CalendarView = React.lazy(() => import('../components/CalendarView').then(m => ({ default: m.CalendarView })));
+// Advanced Factory Type that includes a preload method
+type PreloadableComponent<T extends React.ComponentType<any>> = React.LazyExoticComponent<T> & {
+    preload: () => Promise<any>;
+};
+
+// Helper to attach preload capability to lazy imports
+function lazyWithPreload<T extends React.ComponentType<any>>(
+    factory: () => Promise<{ default: T }>
+): PreloadableComponent<T> {
+    const Component = React.lazy(factory) as PreloadableComponent<T>;
+    Component.preload = factory;
+    return Component;
+}
+
+// Lazy Imports with Preloading
+const Dashboard = lazyWithPreload(() => import('../components/Dashboard'));
+const CaseList = lazyWithPreload(() => import('../components/CaseList'));
+const DocketManager = lazyWithPreload(() => import('../components/DocketManager'));
+const CorrespondenceManager = lazyWithPreload(() => import('../components/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));
+const MasterWorkflow = lazyWithPreload(() => import('../components/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
+const DocumentManager = lazyWithPreload(() => import('../components/DocumentManager'));
+const WarRoom = lazyWithPreload(() => import('../components/WarRoom').then(m => ({ default: m.WarRoom })));
+const ExhibitManager = lazyWithPreload(() => import('../components/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
+const DiscoveryPlatform = lazyWithPreload(() => import('../components/DiscoveryPlatform').then(m => ({ default: m.DiscoveryPlatform })));
+const EvidenceVault = lazyWithPreload(() => import('../components/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
+const ResearchTool = lazyWithPreload(() => import('../components/ResearchTool').then(m => ({ default: m.ResearchTool })));
+const FirmOperations = lazyWithPreload(() => import('../components/FirmOperations').then(m => ({ default: m.FirmOperations })));
+const BillingDashboard = lazyWithPreload(() => import('../components/BillingDashboard'));
+const ClientCRM = lazyWithPreload(() => import('../components/ClientCRM'));
+const ComplianceDashboard = lazyWithPreload(() => import('../components/ComplianceDashboard'));
+const AdminPanel = lazyWithPreload(() => import('../components/AdminPanel').then(m => ({ default: m.AdminPanel })));
+const SecureMessenger = lazyWithPreload(() => import('../components/SecureMessenger').then(m => ({ default: m.SecureMessenger })));
+const EntityDirector = lazyWithPreload(() => import('../components/EntityDirector').then(m => ({ default: m.EntityDirector })));
+const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
+const AnalyticsDashboard = lazyWithPreload(() => import('../components/AnalyticsDashboard'));
+const JurisdictionManager = lazyWithPreload(() => import('../components/JurisdictionManager'));
+const CalendarView = lazyWithPreload(() => import('../components/CalendarView').then(m => ({ default: m.CalendarView })));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,

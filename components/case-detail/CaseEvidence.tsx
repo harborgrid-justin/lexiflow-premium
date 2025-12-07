@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EvidenceInventory } from '../evidence/EvidenceInventory';
 import { useQuery } from '../../services/queryClient';
@@ -32,7 +31,7 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-slate-900">Case Evidence</h3>
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Case Evidence</h3>
       {caseEvidence.length === 0 ? (
         <p className="text-slate-500 italic">No evidence logged for this case.</p>
       ) : (

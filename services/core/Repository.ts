@@ -1,5 +1,4 @@
-
-import { BaseEntity, AuditLogEntry } from '../../types';
+import { BaseEntity, AuditLogEntry, UUID, UserId } from '../../types';
 import { db, STORES } from '../db';
 import { ChainService } from '../chainService';
 
@@ -67,7 +66,8 @@ export abstract class Repository<T extends BaseEntity> {
     protected logAction = async (action: string, resourceId: string, details: string, previousValue?: any, newValue?: any) => {
         const entry: Omit<AuditLogEntry, 'id'> = {
             timestamp: new Date().toISOString(),
-            userId: 'current-user', 
+// FIX: Cast string to branded type UserId
+            userId: 'current-user' as UserId, 
             user: 'Current User',
             action: action,
             resource: `${this.storeName}/${resourceId}`,
@@ -123,7 +123,7 @@ export abstract class Repository<T extends BaseEntity> {
             createdAt: now,
             updatedAt: now,
             version: 1,
-            createdBy: 'current-user'
+            createdBy: 'current-user' as any
         };
         
         await db.put(this.storeName, entity);
@@ -155,7 +155,7 @@ export abstract class Repository<T extends BaseEntity> {
             ...updates,
             updatedAt: new Date().toISOString(),
             version: (current.version || 1) + 1,
-            updatedBy: 'current-user'
+            updatedBy: 'current-user' as any
         };
 
         await db.put(this.storeName, updated);

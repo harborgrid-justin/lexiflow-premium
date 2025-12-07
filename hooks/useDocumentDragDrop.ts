@@ -1,9 +1,9 @@
-
 import React, { useState, useRef } from 'react';
 import { DocumentService } from '../services/documentService';
 import { useNotify } from './useNotify';
 import { queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+import { CaseId } from '../types';
 
 export const useDocumentDragDrop = (currentFolder: string) => {
     const [isDragging, setIsDragging] = useState(false);
@@ -37,7 +37,8 @@ export const useDocumentDragDrop = (currentFolder: string) => {
                 for (let i = 0; i < e.dataTransfer.files.length; i++) {
                     await DocumentService.uploadDocument(e.dataTransfer.files[i], {
                         sourceModule: currentFolder === 'root' ? 'General' : currentFolder as any,
-                        caseId: 'General'
+// FIX: Cast string to branded type CaseId
+                        caseId: 'General' as CaseId
                     });
                 }
                 queryClient.invalidate([STORES.DOCUMENTS, 'all']);

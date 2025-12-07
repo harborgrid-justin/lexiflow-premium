@@ -1,5 +1,4 @@
-
-import { TimeEntry, Client, Invoice, WIPStat, RealizationStat } from '../../types';
+import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID } from '../../types';
 import { db, STORES } from '../db';
 import { MOCK_TIME_ENTRIES } from '../../data/mockBilling';
 
@@ -45,10 +44,11 @@ export const BillingService = {
     getInvoices: async () => {
         const invoices = await db.getAll<Invoice>(STORES.INVOICES);
         if (invoices.length === 0) {
+// FIX: Cast IDs to UUID
              return [
-                { id: 'INV-2024-001', client: 'TechCorp Industries', matter: 'Martinez v. TechCorp', date: '2024-03-01', dueDate: '2024-03-31', amount: 15450.00, status: 'Sent', items: [] },
-                { id: 'INV-2024-002', client: 'OmniGlobal', matter: 'Merger Acquisition', date: '2024-02-15', dueDate: '2024-03-15', amount: 42000.50, status: 'Paid', items: [] },
-                { id: 'INV-2024-003', client: 'StartUp Inc', matter: 'Series A Funding', date: '2024-01-10', dueDate: '2024-02-10', amount: 8500.00, status: 'Overdue', items: [] },
+                { id: 'INV-2024-001' as UUID, client: 'TechCorp Industries', matter: 'Martinez v. TechCorp', date: '2024-03-01', dueDate: '2024-03-31', amount: 15450.00, status: 'Sent', items: [] },
+                { id: 'INV-2024-002' as UUID, client: 'OmniGlobal', matter: 'Merger Acquisition', date: '2024-02-15', dueDate: '2024-03-15', amount: 42000.50, status: 'Paid', items: [] },
+                { id: 'INV-2024-003' as UUID, client: 'StartUp Inc', matter: 'Series A Funding', date: '2024-01-10', dueDate: '2024-02-10', amount: 8500.00, status: 'Overdue', items: [] },
             ];
         }
         return invoices;
@@ -61,10 +61,11 @@ export const BillingService = {
         dueDate.setDate(now.getDate() + 30);
 
         const invoice: Invoice = {
-            id: `INV-${Date.now()}`,
+// FIX: Cast string to branded type UUID
+            id: `INV-${Date.now()}` as UUID,
             client: clientName,
             matter: caseId,
-            caseId: caseId,
+            caseId: caseId as any,
             date: now.toISOString().split('T')[0],
             dueDate: dueDate.toISOString().split('T')[0],
             amount: totalAmount,

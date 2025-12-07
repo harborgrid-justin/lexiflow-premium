@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
 import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../../types';
@@ -12,10 +11,8 @@ interface WorkflowTimelineProps {
   onNavigateToModule?: (module: string) => void;
 }
 
-// FIX: Corrected component signature to accept the correct props and remove unused ones.
 export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onToggleTask, onNavigateToModule }) => {
   const { theme } = useTheme();
-  // FIX: Added missing state for managing expanded stages.
   const [expandedStage, setExpandedStage] = useState<string | null>(stages.find(s => s.status === 'Active')?.id || null);
 
 return (
@@ -28,7 +25,6 @@ return (
                     {/* Stage Header */}
                     <div 
                         className={cn("p-4 flex items-center justify-between cursor-pointer rounded-t-xl transition-colors", `hover:${theme.surfaceHighlight}`)}
-                        // FIX: Use the state setter for expanded stage.
                         onClick={() => setExpandedStage(isExpanded ? null : stage.id)}
                     >
                         <div className="flex items-center gap-4">
@@ -42,7 +38,7 @@ return (
                             <div>
                                 <h4 className={cn("font-bold text-lg", isActive ? "text-blue-900 dark:text-blue-200" : theme.text.primary)}>{stage.title}</h4>
                                 <div className={cn("flex items-center gap-2 text-xs", theme.text.secondary)}>
-                                    <span className={cn("px-2 py-0.5 rounded-full", isActive ? "bg-blue-100 text-blue-700" : "bg-slate-100")}>{stage.status}</span>
+                                    <span className={cn("px-2 py-0.5 rounded-full", isActive ? "bg-blue-100 text-blue-700" : "bg-slate-100 dark:bg-slate-800")}>{stage.status}</span>
                                     <span>• {stage.tasks.length} tasks</span>
                                 </div>
                             </div>
@@ -59,7 +55,6 @@ return (
                             {stage.tasks.map((task) => (
                                 <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface, theme.border.default, "hover:border-blue-300")}>
                                     <button 
-                                        // FIX: Call the onToggleTask prop passed from the parent component.
                                         onClick={() => onToggleTask(stage.id, task.id)}
                                         className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                             task.status === 'Done' 

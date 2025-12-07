@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Motion, MotionStatus, MotionType, LegalDocument } from '../../types';
+import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '../../types';
 import { Button } from '../common/Button';
 import { Plus, RefreshCw } from 'lucide-react';
 import { TaskCreationModal } from '../common/TaskCreationModal';
@@ -52,8 +52,10 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   const handleSave = (motionData: Partial<Motion>) => {
     if (!motionData.title) return;
     const motion: Motion = {
-      id: `mot-${Date.now()}`,
-      caseId,
+// FIX: Cast string to branded type MotionId
+      id: `mot-${Date.now()}` as MotionId,
+// FIX: Cast string to branded type CaseId
+      caseId: caseId as CaseId,
       title: motionData.title,
       type: motionData.type as MotionType,
       status: motionData.status as MotionStatus,

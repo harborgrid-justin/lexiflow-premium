@@ -3,10 +3,10 @@ import { Modal } from './Modal';
 import { Input, TextArea } from './Inputs';
 import { Button } from './Button';
 import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
-import { WorkflowTask } from '../../types';
+import { WorkflowTask, TaskId, ProjectId } from '../../types';
 import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
-import { MOCK_USERS } from '../../data/mockUsers';
+import { MOCK_USERS } from '../../data/models/user';
 import { DataService } from '../../services/dataService';
 import { useNotify } from '../../hooks/useNotify';
 import { queryClient } from '../../services/queryClient';
@@ -40,8 +40,9 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     if (!task.title) return;
     
     const newTask: WorkflowTask = {
-        id: `t-${Date.now()}`,
-        title: task.title,
+// FIX: Cast string to branded type TaskId
+        id: `t-${Date.now()}` as TaskId,
+        title: task.title!,
         status: 'Pending',
         assignee: task.assignee || 'Unassigned',
         dueDate: task.dueDate || '',
@@ -51,7 +52,8 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         relatedItemId: relatedItemId,
         relatedItemTitle: relatedItemTitle,
         actionLabel: `View ${relatedModule || 'Item'}`,
-        projectId: task.projectId,
+// FIX: Cast string to branded type ProjectId
+        projectId: task.projectId as ProjectId,
         linkedRules: task.linkedRules
     };
 
@@ -127,7 +129,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                     <select 
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.projectId}
-                        onChange={e => setTask({...task, projectId: e.target.value})}
+                        onChange={e => setTask({...task, projectId: e.target.value as any})}
                     >
                         <option value="">-- No Project --</option>
                         {projects.map(p => (

@@ -1,20 +1,10 @@
-
 import React from 'react';
 import { Clock, BarChart, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-
-export interface WorkflowTemplateData {
-  id: string;
-  title: string;
-  category: string;
-  complexity: 'Low' | 'Medium' | 'High';
-  duration: string;
-  tags: string[];
-  auditReady: boolean;
-  stages: string[];
-}
+// FIX: Import from types for consistency
+import { WorkflowTemplateData } from '../../types';
 
 interface TemplatePreviewProps {
   data: WorkflowTemplateData;
@@ -48,7 +38,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
         <div className="flex justify-between items-start mb-2">
           <Badge variant="neutral" className={theme.surface}>{data.category}</Badge>
           {data.auditReady && (
-            <div className={cn("flex items-center text-[10px] font-bold px-2 py-1 rounded-full border", theme.status.success.text, theme.status.success.bg, theme.status.success.border)} title="Full Audit Trail Enabled">
+            <div className={cn("flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full border", theme.status.success.text, theme.status.success.bg, theme.status.success.border)} title="Full Audit Trail Enabled">
               <ShieldCheck className="h-3 w-3 mr-1"/> Audited
             </div>
           )}

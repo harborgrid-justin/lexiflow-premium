@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
@@ -160,8 +159,9 @@ export const GeminiService = {
              
              const sources: SearchResult[] = [];
              if (response.candidates && response.candidates[0]?.groundingMetadata?.groundingChunks) {
-                 const chunks = response.candidates[0].groundingMetadata.groundingChunks as unknown as GroundingChunk[];
-                 chunks.forEach((c) => {
+// FIX: Cast groundingChunks to the correct type to iterate safely.
+                 const chunks = response.candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
+                 chunks.forEach((c: any) => {
                      if (c.web) {
                          sources.push({
                             id: crypto.randomUUID(),

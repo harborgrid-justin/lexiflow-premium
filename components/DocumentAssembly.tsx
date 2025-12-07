@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Wand2, Activity, Minus } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
-import { LegalDocument } from '../types';
+import { LegalDocument, DocumentId, CaseId } from '../types';
 import { useWindow } from '../context/WindowContext';
 import { DataService } from '../services/dataService';
 import { useMutation, queryClient } from '../services/queryClient';
@@ -62,8 +62,10 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
   const handleSave = () => {
     if (result) {
       const newDoc: LegalDocument = {
-        id: `gen-${Date.now()}`, // Temporary ID, DB will likely re-assign or use this
-        caseId: 'current', // Needs proper case context injection in real app, using 'current' placeholder
+// FIX: Cast string to branded type DocumentId
+        id: `gen-${Date.now()}` as DocumentId,
+// FIX: Cast string to branded type CaseId
+        caseId: 'current' as CaseId,
         title: `${template} - ${new Date().toLocaleDateString()}`,
         type: 'Generated',
         content: result,

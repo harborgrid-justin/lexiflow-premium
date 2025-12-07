@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, lazy, Suspense } from 'react';
-import { LegalDocument, EvidenceItem, WorkflowTask } from '../../types';
+import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../types';
 import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { useTheme } from '../../context/ThemeContext';
@@ -68,7 +67,8 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         const file = e.target.files[0];
         // Upload to IDB via DocumentService
         const savedDoc = await DocumentService.uploadDocument(file, {
-          caseId: documents.length > 0 ? documents[0].caseId : 'General',
+// FIX: Cast string to branded type CaseId
+          caseId: (documents.length > 0 ? documents[0].caseId : 'General') as CaseId,
           sourceModule: 'General',
           tags: logAsEvidence ? ['Evidence'] : []
         });
@@ -76,8 +76,9 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         if (logAsEvidence) {
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
-            id: `ev-${Date.now()}`,
-            trackingUuid: crypto.randomUUID(),
+// FIX: Cast string to branded type EvidenceId
+            id: `ev-${Date.now()}` as EvidenceId,
+            trackingUuid: crypto.randomUUID() as any,
             caseId: savedDoc.caseId,
             title: savedDoc.title,
             type: 'Document',

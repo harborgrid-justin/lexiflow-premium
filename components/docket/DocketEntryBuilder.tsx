@@ -1,8 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
-import { DocketEntry, DocketEntryType, WorkflowTask } from '../../types';
+import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId } from '../../types';
 import { Input, TextArea } from '../common/Inputs';
 import { Button } from '../common/Button';
+import { RuleSelector } from '../common/RuleSelector';
+import { UserSelect } from '../common/UserSelect';
 import { FileText, Save, CheckSquare } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -77,13 +78,15 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
     // Auto-Create Task Logic
     if (createReviewTask && initialData?.caseId) {
         const task: WorkflowTask = {
-            id: `t-${Date.now()}`,
+// FIX: Cast string to branded type TaskId
+            id: `t-${Date.now()}` as TaskId,
             title: `Review Docket Entry: ${entry.title}`,
             status: 'Pending',
             assignee: 'Current User',
             dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Due in 2 days
             priority: 'High',
-            caseId: initialData.caseId,
+// FIX: Cast string to branded type CaseId
+            caseId: initialData.caseId as CaseId,
             description: `Review newly filed docket entry: ${previewText}`,
             relatedModule: 'Motions', // Assuming it relates to motion practice
             actionLabel: 'Open Docket'

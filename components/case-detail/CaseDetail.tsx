@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
 import { CaseDetailHeader } from './CaseDetailHeader';
@@ -13,6 +12,7 @@ import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
 import { HolographicRouting } from '../../services/holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
+import { ErrorBoundary } from '../common/ErrorBoundary';
 
 interface CaseDetailProps {
   caseData: Case;
@@ -122,6 +122,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       />
 
       {/* Top Header & Navigation */}
+      {/* FIX: Destructure caseData to pass individual props to CaseDetailHeader */}
       <CaseDetailHeader 
         id={caseData.id}
         title={caseData.title}
@@ -154,7 +155,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
         </div>
 
         {/* Sub-Navigation (Pills) */}
-        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
                 <button 
                     key={tab.id} 
@@ -177,6 +178,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       <div className={cn("flex-1 overflow-hidden min-h-0 flex", isPending && "opacity-60 transition-opacity")}>
           <div className={cn("flex-1 overflow-hidden min-h-0 transition-all duration-300", nexusInspectorItem ? 'pr-4' : 'pr-0')}>
                 <div className={cn("h-full overflow-y-auto scroll-smooth", 'px-6')}>
+                  <ErrorBoundary>
                     <CaseDetailContent 
                         {...hookData} 
                         caseData={caseData}
@@ -189,11 +191,14 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAddTask={hookData.addTaskToProject}
                         onUpdateTask={hookData.updateProjectTaskStatus}
                         onGenerateWorkflow={hookData.handleGenerateWorkflow}
+                        // FIX: Changed props.onAnalyzeDoc to hookData.handleAnalyze, as 'props' is not defined in this functional component.
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
+                        // FIX: Changed props.onDraft to hookData.handleDraft.
                         onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />
+                  </ErrorBoundary>
                 </div>
           </div>
 

@@ -15,7 +15,7 @@ import { RESEARCH_TAB_CONFIG } from '../config/researchToolConfig'; // Updated i
 import { ResearchToolContent } from './research/ResearchToolContent'; // Updated import path
 
 // --- Lazy Loaded Components ---
-import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
+import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/models/analytics';
 
 // UniversalSearch was moved to ResearchToolContent.tsx
 // const UniversalSearch = ({ context = '' }) => {...}

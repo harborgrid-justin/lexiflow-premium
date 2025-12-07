@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { UserRole, LegalDocument } from '../../types';
 import { DocumentVersions } from '../DocumentVersions';
 import { useDocumentManager } from '../../hooks/useDocumentManager';
@@ -18,6 +17,7 @@ import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useDocumentDragDrop } from '../../hooks/useDocumentDragDrop';
 import { VirtualGrid } from '../common/VirtualGrid';
+// Fix: Added missing import for DocumentGridCard
 import { DocumentGridCard } from './DocumentGridCard';
 
 interface DocumentExplorerProps {
@@ -95,6 +95,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
                     />
                 ) : (
                     <div className={cn("h-full p-4", theme.surfaceHighlight)}>
+                        {/* FIX: Property 'height' is missing in type '{ items: any; itemHeight: number; itemWidth: number; renderItem: (doc: LegalDocument) => any; gap: number; emptyMessage: string; }' but required in type 'VirtualGridProps<LegalDocument>'. */}
                         <VirtualGrid 
                             items={filtered} 
                             height="100%"

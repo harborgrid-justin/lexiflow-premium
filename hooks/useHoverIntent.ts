@@ -1,4 +1,3 @@
-
 import { useRef, useCallback } from 'react';
 
 interface HoverIntentOptions<T> {
@@ -8,6 +7,8 @@ interface HoverIntentOptions<T> {
 
 export const useHoverIntent = <T>({ onHover, timeout = 200 }: HoverIntentOptions<T>) => {
   const timer = useRef<number | null>(null);
+  const onHoverRef = useRef(onHover);
+  onHoverRef.current = onHover;
 
   const clearTimer = () => {
     if (timer.current) {
@@ -19,9 +20,9 @@ export const useHoverIntent = <T>({ onHover, timeout = 200 }: HoverIntentOptions
   const onMouseEnter = useCallback((item: T) => {
     clearTimer();
     timer.current = window.setTimeout(() => {
-      onHover(item);
+      onHoverRef.current(item);
     }, timeout);
-  }, [onHover, timeout]);
+  }, [timeout]);
 
   const onMouseLeave = useCallback(() => {
     clearTimer();

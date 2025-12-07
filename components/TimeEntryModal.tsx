@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
-import { Modal } from '../common/Modal'; // Fixed import path
+import { Modal } from './common/Modal';
 import { Button } from './common/Button';
 import { Input, TextArea } from './common/Inputs';
 import { TimeEntryPayload } from '../types';

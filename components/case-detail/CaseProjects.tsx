@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Project, WorkflowTask } from '../../types';
+import { Project, WorkflowTask, ProjectId, CaseId } from '../../types';
 import { Plus, Briefcase } from 'lucide-react';
 import { Button } from '../common/Button';
 import { TaskCreationModal } from '../common/TaskCreationModal';
@@ -44,8 +44,10 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
     if (!newProjectData.title) return;
     
     const project: Project = {
-      id: `proj-${Date.now()}`,
-      caseId: initialProjects[0]?.caseId || 'General', // Fallback
+// FIX: Cast string to branded type ProjectId
+      id: `proj-${Date.now()}` as ProjectId,
+// FIX: Cast string to branded type CaseId
+      caseId: (initialProjects[0]?.caseId || 'General') as CaseId,
       title: newProjectData.title,
       description: newProjectData.description,
       status: newProjectData.status as any,

@@ -4,6 +4,7 @@ import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
 import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema } from "./ai/schemas";
 import { safeParseJSON } from "../utils/apiUtils";
+// FIX: Import GroundingChunk type
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk } from '../types/ai';
 
 export * from '../types/ai';

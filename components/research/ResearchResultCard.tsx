@@ -5,6 +5,7 @@ import { ExternalLink } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useReadAnalytics } from '../../hooks/useReadAnalytics';
 
 interface ResearchResultCardProps {
     source: SearchResult;
@@ -13,14 +14,20 @@ interface ResearchResultCardProps {
 
 export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, onView }) => {
     const { theme } = useTheme();
+    const { ref, isRead, duration } = useReadAnalytics(source.id, {
+        thresholdMs: 2000, // Mark as "read" after 2 seconds
+        onRead: (id, readDuration) => console.log(`[Analytics] User read search result ${id} for ${readDuration}ms`)
+    });
 
     return (
         <div 
+            ref={ref}
             className={cn(
-                "p-4 rounded-lg border transition-colors shadow-sm flex flex-col group cursor-pointer",
+                "p-4 rounded-lg border transition-all shadow-sm flex flex-col group cursor-pointer",
                 theme.surface,
                 theme.border.default,
-                `hover:${theme.primary.border}`
+                `hover:${theme.primary.border}`,
+                isRead && 'border-green-200 dark:border-green-800'
             )}
             onClick={onView}
         >
@@ -28,7 +35,10 @@ export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, 
                 <div className={cn("text-sm font-bold hover:underline line-clamp-1 flex items-center", theme.primary.text)}>
                     {source.title} <ExternalLink className="h-3 w-3 ml-2 opacity-50"/>
                 </div>
-                <Badge variant="neutral">Web Source</Badge>
+                <div className="flex items-center gap-2">
+                    {isRead && <Badge variant="success">Viewed</Badge>}
+                    <Badge variant="neutral">Web Source</Badge>
+                </div>
             </div>
             <p className={cn("text-xs mt-1 line-clamp-1 font-mono", theme.text.tertiary)}>{source.url}</p>
             <p className={cn("text-xs mt-2 line-clamp-2", theme.text.secondary)}>{source.snippet}</p>

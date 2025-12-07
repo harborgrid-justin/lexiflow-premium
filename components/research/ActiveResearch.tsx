@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { GeminiService } from '../../services/geminiService';
-import { ResearchSession } from '../../types';
+// FIX: Import UserId type
+import { ResearchSession, UserId } from '../../types';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
@@ -26,7 +27,8 @@ export const ActiveResearch: React.FC = () => {
     
     const newSession: ResearchSession = {
       id: Date.now().toString(),
-      userId: 'current-user', 
+      // FIX: Cast string to branded type UserId
+      userId: 'current-user' as UserId, 
       query,
       response: result.text,
       sources: result.sources,

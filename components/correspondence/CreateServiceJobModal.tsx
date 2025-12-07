@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
-import { ServiceJob } from '../../types';
+// FIX: Import UserId type
+import { ServiceJob, UserId } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -48,7 +49,8 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
       const newJob: ServiceJob = {
           id: `srv-${Date.now()}`,
           caseId: formData.caseId,
-          requestorId: 'current-user', 
+          // FIX: Cast string to branded type UserId
+          requestorId: 'current-user' as UserId, 
           documentTitle: formData.documentTitle,
           targetPerson: formData.targetPerson,
           targetAddress: formData.targetAddress || '',

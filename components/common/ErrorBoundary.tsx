@@ -58,21 +58,19 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.log("Component Stack:", errorInfo.componentStack);
     console.groupEnd();
     
-// FIX: Add 'this' to access component state and methods
+    // FIX: Correctly call setState on the component instance.
     this.setState({ isResolving: true, debugInfo });
 
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
-// FIX: Add 'this' to access component state and methods
+        // FIX: Correctly call setState on the component instance inside the promise handler.
         if (this.state.hasError) {
-// FIX: Add 'this' to access component state and methods
             this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
-// FIX: Add 'this' to access component state and methods
+         // FIX: Correctly call setState on the component instance inside the promise handler.
          if (this.state.hasError) {
-// FIX: Add 'this' to access component state and methods
             this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
          }
       });
@@ -86,10 +84,10 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo).then(() => {
-// FIX: Add 'this' to access component state and methods
+                // FIX: Correctly call setState on the component instance.
                 this.setState({ isCopied: true });
                 setTimeout(() => {
-// FIX: Add 'this' to access component state and methods
+                    // FIX: Correctly call setState on the component instance.
                     this.setState({ isCopied: false });
                 }, 2000);
             }).catch(err => {
@@ -100,11 +98,10 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
   }
 
   public render = (): ReactNode => {
-// FIX: Add 'this' to access component state and methods
+    // FIX: Correctly access props via 'this.props'.
     if (this.state.hasError) {
-// FIX: Add 'this' to access component state and methods
       if (this.props.fallback) {
-// FIX: Add 'this' to access component state and methods
+        // FIX: Correctly access props via 'this.props'.
         return this.props.fallback;
       }
 
@@ -171,7 +168,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
-// FIX: Add 'this' to access component state and methods
+    // FIX: Correctly access props via 'this.props'.
     return this.props.children;
   }
 }

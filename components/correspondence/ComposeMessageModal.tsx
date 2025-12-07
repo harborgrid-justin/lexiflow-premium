@@ -5,7 +5,8 @@ import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
 import { UserSelect } from '../common/UserSelect';
 import { Send, Paperclip, Wand2 } from 'lucide-react';
-import { CommunicationItem, CommunicationType } from '../../types';
+// FIX: Import UserId type
+import { CommunicationItem, CommunicationType, UserId } from '../../types';
 import { MOCK_USERS } from '../../data/models/user';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -81,7 +82,8 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       const newMessage: CommunicationItem = {
           id: `comm-${Date.now()}`,
           caseId: formData.caseId,
-          userId: 'current-user', // Replace with auth context
+          // FIX: Cast string to branded type UserId
+          userId: 'current-user' as UserId, // Replace with auth context
           subject: formData.subject,
           date: new Date().toISOString().split('T')[0],
           type: formData.type as CommunicationType,

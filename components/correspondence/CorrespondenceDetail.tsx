@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask } from '../../types';
+// FIX: Import necessary branded types
+import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '../../types';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
@@ -55,8 +56,10 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
       if (!isComm(item)) return;
       
       const doc: LegalDocument = {
-          id: `doc-${Date.now()}`,
-          caseId: item.caseId || 'General',
+          // FIX: Cast string to branded type DocumentId
+          id: `doc-${Date.now()}` as DocumentId,
+          // FIX: Cast string to branded type CaseId
+          caseId: item.caseId as CaseId,
           title: `Correspondence: ${item.subject}`,
           type: 'Correspondence',
           content: item.preview, // In real app, this is full body
@@ -81,7 +84,8 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
       if (!isService(item)) return;
       
       const entry: DocketEntry = {
-          id: `dk-${Date.now()}`,
+          // FIX: Cast string to branded type DocketId
+          id: `dk-${Date.now()}` as DocketId,
           sequenceNumber: 999, 
           caseId: item.caseId,
           date: new Date().toISOString().split('T')[0],
@@ -114,8 +118,10 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
       if (!isService(item)) return;
       
       const proof: EvidenceItem = {
-          id: `ev-${Date.now()}`,
-          trackingUuid: crypto.randomUUID(),
+          // FIX: Cast string to branded type EvidenceId
+          id: `ev-${Date.now()}` as EvidenceId,
+          // FIX: Cast string to branded type UUID
+          trackingUuid: crypto.randomUUID() as UUID,
           caseId: item.caseId,
           title: `Return Receipt - ${item.documentTitle}`,
           type: 'Document',

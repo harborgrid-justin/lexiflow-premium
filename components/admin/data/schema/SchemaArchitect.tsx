@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
@@ -9,7 +10,7 @@ import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
 import { Button } from '../../../common/Button';
 import { SchemaVisualizer } from './SchemaVisualizer';
-import { TableData, TableColumn } from './schemaTypes'; // Import types
+import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 
 interface SchemaArchitectProps {
@@ -54,7 +55,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
           return colDef;
       }).join(',\n');
-      const indexes = t.columns.filter(c => c.index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
+      const indexes = t.columns.filter(c => (c as any).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   

@@ -1,66 +1,243 @@
 
-import React from 'react';
-import { Archive, Download, Clock, RefreshCw, HardDrive } from 'lucide-react';
+import React, { useState } from 'react';
+import { Archive, Download, Clock, RefreshCw, HardDrive, Database, ShieldCheck, AlertCircle, Play, Server, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
+import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
+import { Modal } from '../../common/Modal';
+import { MetricTile, StatusBadge } from '../../common/RefactoredCommon';
+import { TableContainer, TableHeader, TableHead, TableBody, TableRow, TableCell } from '../../common/Table';
+import { useNotify } from '../../../hooks/useNotify';
 
 export const BackupVault: React.FC = () => {
   const { theme } = useTheme();
+  const notify = useNotify();
+  const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState(false);
+  const [restoreModalOpen, setRestoreModalOpen] = useState<BackupSnapshot | null>(null);
+
+  // Queries
+  const { data: snapshots = [], isLoading: isLoadingSnapshots } = useQuery<BackupSnapshot[]>(
+      ['backup', 'snapshots'],
+      DataService.backup.getSnapshots
+  );
+
+  const { data: stats, isLoading: isLoadingStats } = useQuery<ArchiveStats>(
+      ['backup', 'archiveStats'],
+      DataService.backup.getArchiveStats
+  );
+
+  // Mutations
+  const { mutate: createSnapshot, isLoading: isCreating } = useMutation(
+      DataService.backup.createSnapshot,
+      {
+          onSuccess: (snap) => {
+              notify.success(`Snapshot ${snap.name} created successfully.`);
+              setIsSnapshotModalOpen(false);
+              queryClient.invalidate(['backup', 'snapshots']);
+          },
+          onError: () => notify.error("Failed to create snapshot.")
+      }
+  );
+
+  const { mutate: restoreSnapshot, isLoading: isRestoring } = useMutation(
+      DataService.backup.restoreSnapshot,
+      {
+          onSuccess: () => {
+              notify.success("System restoration initiated. You will be notified upon completion.");
+              setRestoreModalOpen(null);
+          },
+          onError: () => notify.error("Restore failed. Check system logs.")
+      }
+  );
+
+  const handleSnapshot = (type: SnapshotType) => {
+      createSnapshot(type);
+  };
+
+  const getSnapshotIcon = (type: SnapshotType) => {
+      if (type === 'Full') return <Database className="h-4 w-4 text-purple-600" />;
+      return <Clock className="h-4 w-4 text-blue-600" />;
+  };
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl mx-auto">
-        <div className={cn("p-6 rounded-xl border flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+    <div className="p-6 space-y-6 max-w-6xl mx-auto h-full overflow-y-auto">
+        {/* Header Actions */}
+        <div className={cn("p-6 rounded-xl border flex flex-col md:flex-row justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
             <div>
-                <h3 className={cn("text-lg font-bold", theme.text.primary)}>Automated Snapshots</h3>
-                <p className={cn("text-sm", theme.text.secondary)}>Point-in-time recovery for entire cluster. Retention: 30 Days.</p>
+                <h3 className={cn("text-lg font-bold flex items-center gap-2", theme.text.primary)}>
+                    <ShieldCheck className="h-5 w-5 text-green-600"/> Automated Recovery Vault
+                </h3>
+                <p className={cn("text-sm", theme.text.secondary)}>Point-in-time recovery for entire cluster. RPO: 15min / RTO: 30min.</p>
             </div>
-            <Button variant="primary" icon={RefreshCw}>Trigger Snapshot</Button>
+            <div className="flex gap-2">
+                <Button variant="outline" icon={RefreshCw} onClick={() => queryClient.invalidate(['backup'])}>Refresh</Button>
+                <Button variant="primary" icon={Play} onClick={() => setIsSnapshotModalOpen(true)}>Trigger Snapshot</Button>
+            </div>
         </div>
 
+        {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <MetricTile 
+                label="Latest Recovery Point" 
+                value={snapshots.length > 0 ? new Date(snapshots[0].created).toLocaleTimeString() : 'N/A'} 
+                icon={Clock} 
+                trend="Healthy"
+                trendUp={true}
+            />
+            <MetricTile 
+                label="Cold Storage Usage" 
+                value={stats?.totalSize || '...'} 
+                icon={HardDrive} 
+                trend={`${stats?.objectCount.toLocaleString()} Objects`}
+            />
+            <MetricTile 
+                label="Monthly Cost" 
+                value={`$${stats?.monthlyCost.toFixed(2)}`} 
+                icon={Database} 
+                trend="Optimized"
+                trendUp={true}
+            />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Snapshots Table */}
             <div className="col-span-2 space-y-4">
-                <h4 className={cn("text-sm font-bold uppercase border-b pb-2", theme.text.secondary, theme.border.default)}>Recovery Points</h4>
-                {[
-                    { id: 'snap-001', date: 'Today, 02:00 AM', size: '4.2 GB', type: 'Incremental' },
-                    { id: 'snap-002', date: 'Yesterday, 02:00 AM', size: '4.1 GB', type: 'Incremental' },
-                    { id: 'snap-full', date: 'Sunday, 02:00 AM', size: '145 GB', type: 'Full' },
-                ].map(snap => (
-                    <div key={snap.id} className={cn("flex items-center justify-between p-4 border rounded-lg shadow-sm transition-colors cursor-pointer", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}>
-                        <div className="flex items-center gap-4">
-                            <div className="p-2 bg-blue-500/10 text-blue-600 rounded-lg"><Archive className="h-5 w-5"/></div>
-                            <div>
-                                <p className={cn("font-bold text-sm", theme.text.primary)}>{snap.id}</p>
-                                <p className={cn("text-xs flex items-center gap-2", theme.text.secondary)}>
-                                    <Clock className="h-3 w-3"/> {snap.date} • {snap.type}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <span className={cn("font-mono text-sm", theme.text.secondary)}>{snap.size}</span>
-                            <Button size="sm" variant="outline" icon={Download}>Restore</Button>
-                        </div>
-                    </div>
-                ))}
+                <h4 className={cn("text-sm font-bold uppercase border-b pb-2", theme.text.secondary, theme.border.default)}>Active Recovery Points</h4>
+                <div className={cn("rounded-lg border overflow-hidden", theme.border.default)}>
+                    <TableContainer responsive="card" className="border-0 shadow-none rounded-none">
+                        <TableHeader>
+                            <TableHead>Snapshot ID</TableHead>
+                            <TableHead>Type</TableHead>
+                            <TableHead>Created At</TableHead>
+                            <TableHead>Size</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableHeader>
+                        <TableBody>
+                            {isLoadingSnapshots ? (
+                                <TableRow><TableCell colSpan={6} className="text-center py-8">Loading snapshots...</TableCell></TableRow>
+                            ) : snapshots.map(snap => (
+                                <TableRow key={snap.id}>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <div className={cn("p-2 rounded-lg bg-slate-100 dark:bg-slate-800")}>
+                                                {getSnapshotIcon(snap.type)}
+                                            </div>
+                                            <div>
+                                                <p className={cn("font-bold text-sm", theme.text.primary)}>{snap.name}</p>
+                                                <p className={cn("text-xs font-mono", theme.text.tertiary)}>{snap.id}</p>
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>{snap.type}</TableCell>
+                                    <TableCell className={cn("text-xs", theme.text.secondary)}>{new Date(snap.created).toLocaleString()}</TableCell>
+                                    <TableCell className="font-mono text-xs">{snap.size}</TableCell>
+                                    <TableCell><StatusBadge status={snap.status}/></TableCell>
+                                    <TableCell className="text-right">
+                                        <div className="flex justify-end gap-2">
+                                            <Button size="sm" variant="ghost" icon={Download}>Get</Button>
+                                            <Button size="sm" variant="secondary" icon={Archive} onClick={() => setRestoreModalOpen(snap)}>Restore</Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </TableContainer>
+                </div>
             </div>
             
-            <div className="space-y-4">
-                 <h4 className={cn("text-sm font-bold uppercase border-b pb-2", theme.text.secondary, theme.border.default)}>Cold Storage</h4>
-                 <div className={cn("p-4 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
-                     <div className="flex items-center gap-3 mb-3">
-                         <HardDrive className={cn("h-6 w-6", theme.text.tertiary)}/>
-                         <div>
-                             <p className={cn("font-bold text-sm", theme.text.primary)}>Glacier Archive</p>
-                             <p className={cn("text-xs", theme.text.secondary)}>Long-term retention</p>
+            {/* Cold Storage & Info */}
+            <div className="space-y-6">
+                 <div className={cn("p-4 border rounded-lg", theme.surface, theme.border.default)}>
+                     <h4 className={cn("text-sm font-bold uppercase mb-4", theme.text.secondary)}>Archival Storage (Glacier)</h4>
+                     <div className="space-y-4">
+                         <div className="flex items-center gap-3">
+                             <Server className={cn("h-8 w-8 text-blue-500")}/>
+                             <div>
+                                 <p className={cn("font-bold", theme.text.primary)}>{stats?.glacierTier}</p>
+                                 <p className={cn("text-xs", theme.text.secondary)}>Retention: {stats?.retentionPolicy}</p>
+                             </div>
+                         </div>
+                         <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                             <div className="h-full bg-blue-500 w-3/4"></div>
+                         </div>
+                         <div className="flex justify-between text-xs text-slate-500">
+                             <span>Used: 75%</span>
+                             <span>Quota: 20 TB</span>
                          </div>
                      </div>
-                     <div className={cn("space-y-2 text-xs", theme.text.secondary)}>
-                         <div className="flex justify-between"><span>Total Size</span><span className={cn("font-mono", theme.text.primary)}>12 TB</span></div>
-                         <div className="flex justify-between"><span>Cost/Mo</span><span className={cn("font-mono", theme.text.primary)}>$45.00</span></div>
-                     </div>
+                 </div>
+
+                 <div className={cn("p-4 border rounded-lg bg-amber-50 border-amber-200")}>
+                    <div className="flex items-start gap-3">
+                        <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0"/>
+                        <div>
+                            <h5 className="text-sm font-bold text-amber-800">Disaster Recovery Protocol</h5>
+                            <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                                In case of regional failure, use the <strong className="font-semibold">Replication Manager</strong> to promote the EU-West replica. Restoring from a snapshot here is for data corruption incidents only.
+                            </p>
+                        </div>
+                    </div>
                  </div>
             </div>
         </div>
+
+        {/* Create Modal */}
+        <Modal isOpen={isSnapshotModalOpen} onClose={() => setIsSnapshotModalOpen(false)} title="Trigger Manual Snapshot">
+            <div className="p-6">
+                <p className={cn("text-sm mb-4", theme.text.secondary)}>
+                    Manual snapshots are retained for 90 days by default. Choose snapshot type:
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                    <button 
+                        onClick={() => handleSnapshot('Incremental')}
+                        className={cn("p-4 border rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all text-left group", theme.border.default)}
+                    >
+                        <div className="flex items-center gap-2 mb-2 font-bold group-hover:text-blue-700">
+                            <Clock className="h-5 w-5"/> Incremental
+                        </div>
+                        <p className="text-xs text-slate-500">Fast. Captures changes since last backup. Low storage impact.</p>
+                    </button>
+                    <button 
+                         onClick={() => handleSnapshot('Full')}
+                         className={cn("p-4 border rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all text-left group", theme.border.default)}
+                    >
+                        <div className="flex items-center gap-2 mb-2 font-bold group-hover:text-purple-700">
+                            <Database className="h-5 w-5"/> Full Backup
+                        </div>
+                        <p className="text-xs text-slate-500">Complete cluster copy. High storage impact. Use for major milestones.</p>
+                    </button>
+                </div>
+                {isCreating && <div className="mt-4 text-center text-sm text-blue-600 animate-pulse">Initiating snapshot task...</div>}
+            </div>
+        </Modal>
+
+        {/* Restore Confirm Modal */}
+        <Modal isOpen={!!restoreModalOpen} onClose={() => setRestoreModalOpen(null)} title="Confirm System Restore" size="sm">
+            <div className="p-6">
+                <div className="bg-red-50 border border-red-200 rounded p-4 mb-4 flex items-start gap-3">
+                    <AlertCircle className="h-6 w-6 text-red-600 shrink-0"/>
+                    <div>
+                        <h4 className="text-sm font-bold text-red-800">Warning: Destructive Action</h4>
+                        <p className="text-xs text-red-700 mt-1">
+                            Restoring from <strong>{restoreModalOpen?.id}</strong> will overwrite current data. Any changes made after {restoreModalOpen && new Date(restoreModalOpen.created).toLocaleString()} will be lost.
+                        </p>
+                    </div>
+                </div>
+                <p className={cn("text-sm mb-6", theme.text.secondary)}>
+                    Are you sure you want to proceed with the restoration of the <strong>{restoreModalOpen?.name}</strong> snapshot?
+                </p>
+                <div className="flex justify-end gap-3">
+                    <Button variant="secondary" onClick={() => setRestoreModalOpen(null)}>Cancel</Button>
+                    <Button variant="danger" onClick={() => restoreModalOpen && restoreSnapshot(restoreModalOpen.id)} isLoading={isRestoring}>
+                        {isRestoring ? 'Restoring...' : 'Confirm Restore'}
+                    </Button>
+                </div>
+            </div>
+        </Modal>
     </div>
   );
 };

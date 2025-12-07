@@ -253,6 +253,28 @@ export interface DataDictionaryItem extends BaseEntity {
     dataQualityScore: number; // 0-100
 }
 
+// Backup & Recovery
+export type SnapshotType = 'Full' | 'Incremental' | 'Differential';
+export type SnapshotStatus = 'Completed' | 'In Progress' | 'Failed';
+
+export interface BackupSnapshot extends BaseEntity {
+    name: string;
+    type: SnapshotType;
+    status: SnapshotStatus;
+    size: string;
+    created: string;
+    retention: string;
+    region: string;
+}
+
+export interface ArchiveStats {
+    totalSize: string;
+    objectCount: number;
+    monthlyCost: number;
+    retentionPolicy: string;
+    glacierTier: string;
+}
+
 // For Discovery Platform
 export interface PrivilegeLogEntry extends BaseEntity {
   date: string;

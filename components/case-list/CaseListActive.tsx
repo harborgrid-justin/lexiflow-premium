@@ -1,9 +1,9 @@
+
 import React, { useCallback } from 'react';
 import { Case, CaseStatus } from '../../types';
 import { 
   Briefcase, User, ArrowUp, ArrowDown, Eye, Filter
 } from 'lucide-react';
-import { Badge } from '../common/Badge';
 import { Currency } from '../common/Primitives';
 import { useSort } from '../../hooks/useSort';
 import { useTheme } from '../../context/ThemeContext';
@@ -14,11 +14,11 @@ import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
-import { EmptyState } from '../common/EmptyState';
 import { Button } from '../common/Button';
 import { FilterPanel } from '../common/FilterPanel';
 import { SearchInput, Input } from '../common/Inputs';
 import { useToggle } from '../../hooks/useToggle';
+import { StatusBadge, EmptyListState } from '../common/RefactoredCommon';
 
 interface CaseListActiveProps {
   filteredCases: Case[];
@@ -103,16 +103,14 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
           </span>
           <span className={cn("text-xs font-mono mt-0.5 opacity-70", theme.text.secondary)}>{c.id}</span>
        </div>
-       <div className="w-[15%]"><Badge variant="neutral">{c.matterType}</Badge></div>
+       <div className="w-[15%]"><StatusBadge status={c.matterType} /></div>
        <div className="w-[20%] flex items-center text-sm text-slate-500 min-w-0 pr-2">
           <User className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0"/>
           <span className="truncate" title={c.client}>{c.client}</span>
        </div>
        <div className="w-[15%]"><Currency value={c.value} className={cn("font-medium text-sm", theme.text.primary)} /></div>
        <div className="w-[10%]">
-          <Badge variant={c.status === 'Trial' ? 'warning' : c.status === 'Discovery' ? 'info' : 'neutral'}>
-            {c.status}
-          </Badge>
+          <StatusBadge status={c.status} />
        </div>
        <div className="w-[5%] flex justify-end items-center gap-1">
             <button onClick={() => onSelectCase(c)} className={actionBtnClass} title="View Details"><Eye className="h-4 w-4"/></button>
@@ -140,7 +138,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
             <div className={cn("absolute left-0 top-0 bottom-0 w-1", c.status === 'Trial' ? "bg-amber-500" : c.status === 'Discovery' ? "bg-blue-500" : "bg-slate-300")}></div>
             <h4 className={cn("font-bold text-lg mb-1 leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
             <div className="flex items-center justify-between pl-2 mt-2">
-                <Badge variant="neutral">{c.status}</Badge>
+                <StatusBadge status={c.status} />
                 <Currency value={c.value} className="font-bold text-sm" />
             </div>
             </div>
@@ -198,11 +196,10 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
         <div className="flex-1 bg-white relative">
             {filteredCases.length === 0 ? (
                 <div className="p-8 h-full">
-                    <EmptyState 
+                    <EmptyListState 
                         icon={Briefcase}
-                        title="No Matters Found"
-                        description="No cases match your current filter criteria. Try broadening your search or resetting the filters."
-                        action={<Button variant="secondary" onClick={resetFilters}>Clear Filters</Button>}
+                        label="No Matters Found"
+                        message="No cases match your current filter criteria. Try broadening your search or resetting the filters."
                     />
                  </div>
             ) : (

@@ -1,16 +1,16 @@
 
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Badge } from '../common/Badge';
 import { TrialExhibit } from '../../types';
 import { FileIcon } from '../common/Primitives';
 import { Button } from '../common/Button';
-import { Eye, Edit2, Sticker } from 'lucide-react';
+import { Eye, Layers } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { StatusBadge, EmptyListState } from '../common/RefactoredCommon';
 
 interface ExhibitTableProps {
   exhibits: TrialExhibit[];
@@ -27,15 +27,6 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
           case 'Defense': return 'bg-blue-100 text-blue-800 border-blue-200';
           case 'Joint': return 'bg-purple-100 text-purple-800 border-purple-200';
           default: return 'bg-slate-100 text-slate-800 border-slate-200';
-      }
-  };
-
-  const getStatusVariant = (status: string) => {
-      switch(status) {
-          case 'Admitted': return 'success';
-          case 'Excluded': return 'error';
-          case 'Marked': return 'warning';
-          default: return 'neutral';
       }
   };
 
@@ -66,6 +57,8 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
   };
 
   if (viewMode === 'grid') {
+      if (exhibits.length === 0) return <EmptyListState label="No exhibits found" icon={Layers} />;
+
       return (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {exhibits.map(ex => (
@@ -83,7 +76,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
                           <h4 className={cn("font-bold text-sm truncate mb-1", theme.text.primary)} title={ex.title}>{ex.title}</h4>
                           <div className="flex justify-between items-center">
                               <span className={cn("text-xs", theme.text.secondary)}>{ex.witness}</span>
-                              <Badge variant={getStatusVariant(ex.status) as any} className="text-[10px] px-1.5 py-0">{ex.status}</Badge>
+                              <StatusBadge status={ex.status} className="text-[10px] px-1.5 py-0" />
                           </div>
                       </div>
                   </div>
@@ -110,7 +103,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
             <div className="w-[15%] text-xs font-mono text-slate-500">{ex.dateMarked}</div>
             <div className="w-[15%] text-sm text-slate-600">{ex.witness || '-'}</div>
             <div className="w-[10%] flex justify-end">
-                <Badge variant={getStatusVariant(ex.status) as any}>{ex.status}</Badge>
+                <StatusBadge status={ex.status} />
             </div>
             <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={(e) => { e.stopPropagation(); handleViewExhibit(ex); }} className="text-slate-400 hover:text-blue-600"><Eye className="h-4 w-4"/></button>
@@ -129,13 +122,16 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
             <div className="w-[10%] text-right">Status</div>
         </div>
         <div className="flex-1 relative">
-            <VirtualList 
-                items={exhibits}
-                height="100%"
-                itemHeight={60}
-                renderItem={renderRow}
-                emptyMessage="No exhibits found."
-            />
+             {exhibits.length === 0 ? (
+                 <EmptyListState label="No exhibits found" icon={Layers} />
+             ) : (
+                <VirtualList 
+                    items={exhibits}
+                    height="100%"
+                    itemHeight={60}
+                    renderItem={renderRow}
+                />
+             )}
         </div>
     </div>
   );

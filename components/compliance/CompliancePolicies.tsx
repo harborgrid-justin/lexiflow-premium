@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { FileText, Download, Eye, Calendar, Loader2 } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
@@ -10,6 +11,7 @@ import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { ActionRow } from '../common/RefactoredCommon';
 
 export const CompliancePolicies: React.FC = () => {
   const { theme } = useTheme();
@@ -51,13 +53,12 @@ export const CompliancePolicies: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
-            <div>
-                <h3 className={cn("font-bold text-lg", theme.text.primary)}>Regulatory Policies</h3>
-                <p className={cn("text-sm", theme.text.secondary)}>Firm-wide compliance documents and SOPs.</p>
-            </div>
+        <ActionRow 
+            title="Regulatory Policies" 
+            subtitle="Firm-wide compliance documents and SOPs."
+        >
             <Button variant="outline">Upload New Version</Button>
-        </div>
+        </ActionRow>
 
         <TableContainer responsive="card">
             <TableHeader>

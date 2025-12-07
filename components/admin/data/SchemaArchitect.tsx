@@ -15,6 +15,24 @@ interface SchemaArchitectProps {
   initialTab?: string;
 }
 
+// FIX: Define explicit types for table and column state to resolve inference errors.
+interface TableColumn {
+  name: string;
+  type: string;
+  pk?: boolean;
+  notNull?: boolean;
+  unique?: boolean;
+  fk?: string;
+  index?: boolean;
+}
+
+interface TableData {
+  name: string;
+  x: number;
+  y: number;
+  columns: TableColumn[];
+}
+
 export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = 'designer' }) => {
   const { theme, mode } = useTheme();
   
@@ -33,7 +51,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     setActiveTab(mapInitialTabToState(initialTab));
   }, [initialTab]);
   
-  const [tables, setTables] = useState([
+  const [tables, setTables] = useState<TableData[]>([
       { name: 'cases', x: 50, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' } ] },
       { name: 'documents', x: 450, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },
       { name: 'clients', x: 50, y: 400, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'name', type: 'VARCHAR(255)', notNull: true }, { name: 'industry', type: 'VARCHAR(100)'} ]}
@@ -98,7 +116,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     setTables(prev => prev.map(t => t.name === oldName ? { ...t, name: newName } : t));
     setTables(prev => prev.map(t => ({
         ...t,
-        columns: t.columns.map(c => c.fk?.startsWith(oldName + '.') ? { ...c, fk: c.fk.replace(oldName, newName) } : c)
+        columns: t.columns.map(c => (c.fk && c.fk.startsWith(oldName + '.')) ? { ...c, fk: c.fk.replace(oldName, newName) } : c)
     })));
   };
   
@@ -111,7 +129,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   const handleCreateTable = () => {
     const name = prompt("Enter new table name:");
     if (name) {
-        setTables(prev => [...prev, { name, x: 200, y: 200, columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true, fk: undefined }] }]);
+        setTables(prev => [...prev, { name, x: 200, y: 200, columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }] }]);
     }
   };
   

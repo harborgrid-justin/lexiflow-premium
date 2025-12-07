@@ -43,7 +43,7 @@ export const CostFinOps: React.FC = () => {
              />
              <MetricTile 
                 label="Savings Opportunity" 
-                value={<span className="text-green-600 flex items-center"><TrendingDown className="h-6 w-6 mr-2"/> $450</span>} 
+                value={<span className="text-green-600 flex items-center"><TrendingDown className="h-6 w-6 mr-2"/> $45,100</span>} 
              />
          </div>
 

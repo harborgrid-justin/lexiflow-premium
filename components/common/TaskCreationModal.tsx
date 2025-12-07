@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { Input, TextArea } from './Inputs';
@@ -8,6 +7,9 @@ import { WorkflowTask } from '../../types';
 import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
 import { MOCK_USERS } from '../../data/mockUsers';
+import { DataService } from '../../services/dataService';
+import { useNotify } from '../../hooks/useNotify';
+import { queryClient } from '../../services/queryClient';
 
 interface TaskCreationModalProps {
   isOpen: boolean;
@@ -23,6 +25,7 @@ interface TaskCreationModalProps {
 export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({ 
   isOpen, onClose, initialTitle, relatedModule, relatedItemId, relatedItemTitle, projects = [], onSave 
 }) => {
+  const notify = useNotify();
   const [task, setTask] = useState<Partial<WorkflowTask>>({
     title: initialTitle || '',
     priority: 'Medium',
@@ -33,7 +36,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     linkedRules: []
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!task.title) return;
     
     const newTask: WorkflowTask = {
@@ -55,8 +58,10 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     if (onSave) {
         onSave(newTask);
     } else {
-        alert("Task created and added to global workflow queue.");
-        console.log("New Task Created:", newTask);
+        await DataService.tasks.add(newTask);
+        queryClient.invalidate('tasks');
+        queryClient.invalidate(['dashboard', 'stats']);
+        notify.success("Task created and added to global workflow queue.");
     }
     onClose();
   };

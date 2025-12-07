@@ -63,7 +63,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {exhibits.map(ex => (
                   <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface, theme.border.default)}>
-                      <div className={cn("aspect-square flex items-center justify-center relative bg-slate-50 border-b", theme.border.light)}>
+                      <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surfaceHighlight, theme.border.light)}>
                           <FileIcon type={ex.fileType} className="h-16 w-16 opacity-30"/>
                           <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party))}>
                               {ex.exhibitNumber}
@@ -86,7 +86,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
   }
 
   const renderRow = (ex: TrialExhibit) => (
-      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 hover:bg-slate-50 transition-colors", theme.border.light)}>
+      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 transition-colors", theme.surface, theme.border.light, `hover:${theme.surfaceHighlight}`)}>
             <div className="w-[15%]">
                 <span className={cn("font-mono font-bold text-sm px-2 py-1 rounded border", getPartyColor(ex.party))}>
                     {ex.exhibitNumber}
@@ -99,9 +99,9 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
                     <p className={cn("text-xs truncate max-w-[200px]", theme.text.tertiary)}>{ex.description}</p>
                 </div>
             </div>
-            <div className="w-[15%] text-sm text-slate-600">{ex.party}</div>
-            <div className="w-[15%] text-xs font-mono text-slate-500">{ex.dateMarked}</div>
-            <div className="w-[15%] text-sm text-slate-600">{ex.witness || '-'}</div>
+            <div className={cn("w-[15%] text-sm", theme.text.secondary)}>{ex.party}</div>
+            <div className={cn("w-[15%] text-xs font-mono", theme.text.secondary)}>{ex.dateMarked}</div>
+            <div className={cn("w-[15%] text-sm", theme.text.secondary)}>{ex.witness || '-'}</div>
             <div className="w-[10%] flex justify-end">
                 <StatusBadge status={ex.status} />
             </div>
@@ -112,8 +112,8 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
   );
 
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-white">
-        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50 shrink-0", theme.border.default, theme.text.secondary)}>
+    <div className={cn("flex flex-col h-full border rounded-lg overflow-hidden", theme.surface, theme.border.default)}>
+        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
             <div className="w-[15%]">Exhibit #</div>
             <div className="w-[30%]">Description</div>
             <div className="w-[15%]">Party</div>

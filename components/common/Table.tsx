@@ -1,3 +1,4 @@
+
 import React, { memo } from 'react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
@@ -9,33 +10,33 @@ export const TableContainer = memo(function TableContainer({ children, className
 
   if (responsive === 'card') {
     const childrenArray = React.Children.toArray(children);
-    const header = childrenArray.find(c => (c as React.ReactElement).type === TableHeader) as React.ReactElement | undefined;
-    const body = childrenArray.find(c => (c as React.ReactElement).type === TableBody) as React.ReactElement | undefined;
-    const others = childrenArray.filter(c => (c as React.ReactElement).type !== TableHeader && (c as React.ReactElement).type !== TableBody);
+    const header = childrenArray.find(c => React.isValidElement(c) && c.type === TableHeader) as React.ReactElement | undefined;
+    const body = childrenArray.find(c => React.isValidElement(c) && c.type === TableBody) as React.ReactElement | undefined;
+    const others = childrenArray.filter(c => React.isValidElement(c) && c.type !== TableHeader && c.type !== TableBody);
 
     if (header && body) {
-        const headerCells = React.Children.toArray(header.props.children);
+        const headerCells = React.Children.toArray((header as React.ReactElement<{ children: React.ReactNode }>).props.children);
         const headerLabels = headerCells.map(th => {
-            const child = (th as React.ReactElement).props.children;
+            const child = React.isValidElement(th) ? (th as React.ReactElement<{ children: React.ReactNode }>).props.children : null;
             if (typeof child === 'string') return child;
-            // Attempt to get text from a simple element, otherwise ignore
-            if (React.isValidElement(child) && typeof child.props.children === 'string') {
-                return child.props.children;
+            if (React.isValidElement(child) && typeof (child as React.ReactElement<{ children: React.ReactNode }>).props.children === 'string') {
+                return (child as React.ReactElement<{ children: React.ReactNode }>).props.children;
             }
             return '';
         });
 
         const newBody = React.cloneElement(
-            body,
+            body as React.ReactElement,
             {},
-            React.Children.map(body.props.children, (row: React.ReactNode) => {
+            React.Children.map((body as React.ReactElement<{ children: React.ReactNode }>).props.children, (row: React.ReactNode) => {
                 if (!React.isValidElement(row)) return row;
                 return React.cloneElement(
                     row as React.ReactElement,
                     {},
-                    React.Children.map((row as React.ReactElement).props.children, (cell: React.ReactNode, cellIndex: number) => {
+                    React.Children.map((row as React.ReactElement<{ children: React.ReactNode }>).props.children, (cell: React.ReactNode, cellIndex: number) => {
                         if (!React.isValidElement(cell)) return cell;
-                        return React.cloneElement(cell as React.ReactElement, { 'data-label': headerLabels[cellIndex] || '' });
+                        // FIX: Use computed property name to correctly pass 'data-label' prop and avoid TypeScript error.
+                        return React.cloneElement(cell as React.ReactElement, { ['data-label']: headerLabels[cellIndex] || '' });
                     })
                 );
             })

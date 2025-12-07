@@ -1,4 +1,3 @@
-
 import React, { useMemo, useEffect, useState } from 'react';
 import { Scale, X, ChevronDown, LogOut, Settings, User as UserIcon, Layers, Monitor } from 'lucide-react';
 import { User as UserType, AppView, NavCategory, ModuleDefinition } from '../types';
@@ -10,6 +9,7 @@ import { queryClient } from '../services/queryClient';
 import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
 import { PATHS } from '../constants/paths';
+import { useHoverIntent } from '../hooks/useHoverIntent';
 
 // Data Prefetch Map: Maps routes to their data dependencies
 const PREFETCH_MAP: Record<string, { key: any[], fn: () => Promise<any> }> = {
@@ -69,29 +69,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
 
     return groups;
   }, [visibleItems]);
-
-  const handlePreload = (item: ModuleDefinition) => {
-      // 1. Code Splitting Prefetch
-      // Cast to any to access the preload method attached in config/modules.tsx
-      const component = item.component as any;
-      if (component && component.preload) {
-          component.preload();
-      }
-
-      // 2. Data Prefetching
-      const prefetchConfig = PREFETCH_MAP[item.id];
-      if (prefetchConfig) {
-          // This ensures data is fetching while the user is still moving the mouse to click
-          queryClient.fetch(prefetchConfig.key, prefetchConfig.fn);
-      }
-  };
+  
+  const { hoverHandlers } = useHoverIntent({
+      onHover: (item: ModuleDefinition) => {
+          // 1. Code Splitting Prefetch
+          const component = item.component as any;
+          if (component && component.preload) {
+              component.preload();
+          }
+          // 2. Data Prefetching
+          const prefetchConfig = PREFETCH_MAP[item.id];
+          if (prefetchConfig) {
+              queryClient.fetch(prefetchConfig.key, prefetchConfig.fn);
+          }
+      },
+      timeout: 200 // Only prefetch if user hovers for 200ms
+  });
 
   return (
     <>
       {/* Mobile Backdrop Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          className={cn("fixed inset-0 backdrop-blur-sm z-40 md:hidden transition-opacity", theme.backdrop)}
           onClick={onClose}
         />
       )}
@@ -142,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
                                     <button
                                         key={item.id}
                                         onClick={() => setActiveView(item.id)}
-                                        onMouseEnter={() => handlePreload(item)} // Trigger Code & Data Prefetch
+                                        {...hoverHandlers(item)} // Smart Prefetching
                                         className={cn(
                                             "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                                             isActive 

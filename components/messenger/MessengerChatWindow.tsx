@@ -10,6 +10,8 @@ import { GeminiService } from '../../services/geminiService';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
 
 interface MessengerChatWindowProps {
   activeConversation: Conversation | undefined;
@@ -31,6 +33,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
   inputText, setInputText, pendingAttachments, setPendingAttachments,
   isPrivilegedMode, setIsPrivilegedMode, handleSendMessage, handleFileSelect, formatTime
 }) => {
+  const { theme } = useTheme();
   const notify = useNotify();
   const { openWindow, closeWindow } = useWindow();
   const [isThinking, setIsThinking] = useState(false);
@@ -63,7 +66,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
       openWindow(
           winId,
           `Preview: ${att.name}`,
-          <div className="bg-white h-full flex flex-col">
+          <div className={cn("h-full flex flex-col", theme.surface)}>
              <DocumentPreviewPanel 
                 document={{ 
                     id: 'temp', 
@@ -85,12 +88,12 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
 
   if (!activeConversation) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-8 h-full bg-slate-50/30">
-        <div className="h-24 w-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-          <Lock className="h-12 w-12 text-slate-300"/>
+      <div className={cn("flex-1 flex flex-col items-center justify-center p-8 h-full", theme.surfaceHighlight, theme.text.tertiary)}>
+        <div className={cn("h-24 w-24 rounded-full flex items-center justify-center mb-6", theme.surface)}>
+          <Lock className="h-12 w-12 opacity-50"/>
         </div>
-        <h3 className="text-xl font-bold text-slate-700">Secure Messenger</h3>
-        <p className="text-center max-w-sm mt-2 text-slate-500">
+        <h3 className={cn("text-xl font-bold", theme.text.secondary)}>Secure Messenger</h3>
+        <p className="text-center max-w-sm mt-2 opacity-75">
           Select a conversation to start communicating securely with clients, partners, and external counsel.
         </p>
         <div className="mt-8 flex gap-4 text-xs">
@@ -102,17 +105,13 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-50/30">
+    <div className={cn("flex-1 flex flex-col h-full", theme.surfaceHighlight)}>
       <ChatHeader 
         conversation={activeConversation} 
         onBack={() => setActiveConvId(null)} 
       />
       
       <div className="flex-1 overflow-hidden relative">
-         {/* Pass handlePreviewAttachment down if MessageList accepts it, or implement via context. 
-             For this iteration, we assume MessageList handles basic rendering and we'd wire it up there. 
-             Since MessageList is memoized, we'll assume it has a way to trigger previews or we'd refactor it. 
-         */}
          <MessageList 
             conversation={activeConversation} 
             currentUserId="me" 
@@ -122,7 +121,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
 
       {/* Pending Attachments Preview in Input Area */}
       {pendingAttachments.length > 0 && (
-        <div className="px-4 pt-2 bg-white border-t border-slate-100 flex gap-2 overflow-x-auto shrink-0">
+        <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface, theme.border.light)}>
           {pendingAttachments.map((att, i) => (
             <div key={i} className="relative group cursor-pointer" onClick={() => handlePreviewAttachment(att)}>
               <FileAttachment 

@@ -69,7 +69,7 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       
       // Links - Dynamic Theme Color
       ctx.lineWidth = 2;
-      const isDark = document.documentElement.classList.contains('dark');
+      const isDark = mode === 'dark';
       ctx.strokeStyle = isDark ? '#475569' : '#cbd5e1'; // slate-600 vs slate-300
       
       state.links.forEach(link => {
@@ -215,7 +215,7 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
             )}
 
             {activeTab === 'history' && (
-                <div className={cn("p-6 text-center text-slate-400 italic")}>
+                <div className={cn("p-6 text-center italic", theme.text.tertiary)}>
                     No recent lineage changes detected.
                 </div>
             )}

@@ -39,7 +39,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation, onBack }) 
         </div>
         
         {conversation.isExternal && (
-          <div className="absolute top-full left-0 right-0 bg-amber-50 border-b border-amber-100 px-4 py-1 flex justify-center items-center text-[10px] text-amber-800 font-medium z-0">
+          <div className={cn("absolute top-full left-0 right-0 border-b px-4 py-1 flex justify-center items-center text-[10px] font-medium z-0", theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text)}>
             <AlertTriangle className="h-3 w-3 mr-2"/>
             External Recipient. Do not share credentials.
           </div>

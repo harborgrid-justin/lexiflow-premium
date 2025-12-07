@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent } from '../../types';
+import React, { Suspense, lazy } from 'react';
+import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent, NexusNodeData } from '../../types';
 import { CaseOverview } from './CaseOverview';
 import { CaseDocuments } from './CaseDocuments';
 import { CaseWorkflow } from './CaseWorkflow';
@@ -19,11 +18,13 @@ import { CaseRiskManager } from './CaseRiskManager';
 import { CasePlanning } from './CasePlanning';
 import { CaseProjects } from './CaseProjects';
 import { CaseCollaboration } from './collaboration/CaseCollaboration';
-import { NexusGraph } from '../visual/NexusGraph';
 import { ExhibitManager } from '../ExhibitManager'; // Integrated Exhibit Pro
 import { EvidenceVault } from '../EvidenceVault';   // Integrated Evidence Vault
 import { ResearchTool } from '../ResearchTool';     // Integrated Research
 import { WarRoom } from '../WarRoom'; // Integration Point
+import { LazyLoader } from '../common/LazyLoader';
+
+const NexusGraph = lazy(() => import('../visual/NexusGraph').then(m => ({ default: m.NexusGraph })));
 
 interface CaseDetailContentProps {
   activeTab: string;
@@ -63,7 +64,11 @@ export const CaseDetailContent: React.FC<CaseDetailContentProps> = (props) => {
   switch (activeTab) {
     // --- OVERVIEW ---
     case 'Overview': return <CaseOverview caseData={{...caseData, parties}} onTimeEntryAdded={props.onTimeEntryAdded} onNavigateToCase={props.onNavigateToCase} />;
-    case 'Nexus': return <NexusGraph caseData={caseData} parties={parties} evidence={evidence} onNodeClick={props.onNodeClick} />;
+    case 'Nexus': return (
+      <Suspense fallback={<LazyLoader message="Loading Nexus Graph..." />}>
+        <NexusGraph caseData={caseData} parties={parties} evidence={evidence} onNodeClick={props.onNodeClick} />
+      </Suspense>
+    );
     case 'Parties': return <CaseParties parties={parties} onUpdate={props.onUpdateParties} />;
     case 'Timeline': return <CaseTimeline events={timelineEvents} onEventClick={props.onTimelineClick} />;
     

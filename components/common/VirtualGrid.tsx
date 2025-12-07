@@ -11,10 +11,11 @@ interface VirtualGridProps<T> {
   className?: string;
   emptyMessage?: string;
   gap?: number;
+  height: number | string;
 }
 
 export function VirtualGrid<T>({ 
-  items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16 
+  items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height 
 }: VirtualGridProps<T>) {
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);

@@ -1,9 +1,11 @@
-import React, { Suspense, lazy } from 'react';
+
+import React, { Suspense, lazy, useTransition } from 'react';
 import { Download, Plus, Calendar, Clock, Users, Gavel, AlertTriangle, Settings, RefreshCw, Layers } from 'lucide-react';
 import { Button } from './common/Button';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
+import { cn } from '../utils/cn';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./calendar/CalendarMaster').then(m => ({ default: m.CalendarMaster })));
@@ -42,7 +44,14 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const CalendarView: React.FC = () => {
-  const [activeTab, setActiveTab] = useSessionStorage<string>('calendar_active_tab', 'master');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('calendar_active_tab', 'master');
+  
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -72,7 +81,9 @@ export const CalendarView: React.FC = () => {
         onTabChange={setActiveTab}
     >
         <Suspense fallback={<LazyLoader message="Loading Calendar Module..."/>}>
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
             {renderContent()}
+          </div>
         </Suspense>
     </TabbedPageLayout>
   );

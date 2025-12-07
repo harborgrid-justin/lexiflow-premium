@@ -160,11 +160,11 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                 <div className={cn("p-2 text-xs font-bold uppercase tracking-wider flex items-center border-b", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
                                     <FileText className="h-3 w-3 mr-2"/> Live Logs
                                 </div>
-                                <div className="flex-1 bg-[#1e1e1e] p-4 overflow-y-auto font-mono text-xs text-slate-300 leading-relaxed">
+                                <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface, theme.text.primary)}>
                                     {selectedJob.logs.map((log, i) => (
-                                        <div key={i} className="mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2">
-                                            <span className="text-slate-500 mr-2">{new Date().toLocaleTimeString()}</span>
-                                            <span className={log.includes('[ERROR]') ? 'text-red-400' : log.includes('[WARN]') ? 'text-amber-400' : 'text-green-400'}>
+                                        <div key={i} className={cn("mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2")}>
+                                            <span className={cn("mr-2", theme.text.tertiary)}>{new Date().toLocaleTimeString()}</span>
+                                            <span className={log.includes('[ERROR]') ? theme.status.error.text : log.includes('[WARN]') ? theme.status.warning.text : theme.status.success.text}>
                                                 {log}
                                             </span>
                                         </div>
@@ -174,7 +174,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                             </div>
                         </>
                     ) : (
-                        <div className="flex items-center justify-center h-full text-slate-400">
+                        <div className={cn("flex items-center justify-center h-full", theme.text.tertiary)}>
                              <p>Select a pipeline to view details.</p>
                         </div>
                     )}
@@ -200,10 +200,10 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                             
                             <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.light)}>
                                 <span className={cn(
-                                    "text-xs font-bold px-2 py-0.5 rounded-full",
-                                    conn.status === 'Healthy' ? "bg-green-100 text-green-700" : 
-                                    conn.status === 'Syncing' ? "bg-blue-100 text-blue-700" :
-                                    "bg-red-100 text-red-700"
+                                    "text-xs font-bold px-2 py-0.5 rounded-full border",
+                                    conn.status === 'Healthy' ? cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border) : 
+                                    conn.status === 'Syncing' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
+                                    cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border)
                                 )}>{conn.status}</span>
                                 <span className={cn("text-xs", theme.text.tertiary)}>Last sync: 5m ago</span>
                             </div>

@@ -97,7 +97,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Mobile Header Toggle */}
-        <div className="md:hidden p-4 border-b flex justify-between items-center bg-inherit">
+        <div className={cn("md:hidden p-4 border-b flex justify-between items-center", theme.background, theme.border.default)}>
             <button onClick={() => setIsMobileMenuOpen(true)} className={cn("p-2 rounded-md", theme.surfaceHighlight)}>
                 <Menu className={cn("h-5 w-5", theme.text.primary)} />
             </button>
@@ -106,7 +106,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
         </div>
 
         <div className="absolute top-4 right-4 z-10 hidden md:block">
-            <button onClick={handleUndock} className="p-2 bg-white/80 backdrop-blur border rounded-lg hover:bg-white shadow-sm transition-all text-slate-500 hover:text-blue-600" title="Open in Window">
+            <button onClick={handleUndock} className={cn("p-2 backdrop-blur border rounded-lg shadow-sm transition-all", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.text.primary}`)} title="Open in Window">
                 <Maximize2 className="h-4 w-4"/>
             </button>
         </div>

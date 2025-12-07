@@ -103,7 +103,7 @@ export const DataProfiler: React.FC = () => {
                             </ResponsiveContainer>
                         </div>
                     </div>
-                    <div className={cn("p-3 border-t bg-slate-50/50 flex gap-4 text-xs", theme.border.default)}>
+                    <div className={cn("p-3 border-t flex gap-4 text-xs", theme.border.default, theme.surfaceHighlight)}>
                          {profile.nulls === 0 ? (
                              <div className="flex items-center text-green-600"><CheckCircle2 className="h-3 w-3 mr-1"/> Completeness Check Passed</div>
                          ) : (

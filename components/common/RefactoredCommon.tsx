@@ -12,7 +12,7 @@ export const StatusBadge: React.FC<{ status: string, className?: string }> = ({ 
   const s = String(status).toLowerCase();
   
   if (['active', 'completed', 'paid', 'cleared', 'success', 'admitted', 'served', 'final', 'connected', 'good', 'healthy'].includes(s)) variant = 'success';
-  else if (['pending', 'draft', 'review', 'in progress', 'scheduled', 'marked', 'syncing', 'staging'].includes(s)) variant = 'warning';
+  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress', 'scheduled', 'marked', 'syncing', 'staging'].includes(s)) variant = 'warning';
   else if (['overdue', 'breached', 'critical', 'high', 'failed', 'error', 'excluded', 'blocked', 'revoked', 'suspended', 'degraded'].includes(s)) variant = 'error';
   else if (['discovery', 'open', 'info', 'processing', 'appealing', 'litigation'].includes(s)) variant = 'info';
 
@@ -20,12 +20,15 @@ export const StatusBadge: React.FC<{ status: string, className?: string }> = ({ 
 };
 
 // 2. CentredLoader: Standard full-container loading spinner
-export const CentredLoader: React.FC<{ className?: string, message?: string }> = ({ className, message }) => (
-  <div className={cn("flex h-full w-full items-center justify-center p-8 flex-col gap-2", className)}>
-    <Loader2 className="animate-spin text-blue-600 h-8 w-8"/>
-    {message && <span className="text-xs text-slate-500">{message}</span>}
-  </div>
-);
+export const CentredLoader: React.FC<{ className?: string, message?: string }> = ({ className, message }) => {
+  const { theme } = useTheme();
+  return (
+    <div className={cn("flex h-full w-full items-center justify-center p-8 flex-col gap-2", className)}>
+      <Loader2 className={cn("animate-spin h-8 w-8", theme.primary.text)}/>
+      {message && <span className={cn("text-xs", theme.text.secondary)}>{message}</span>}
+    </div>
+  );
+};
 
 // 3. EmptyListState: Consistent empty state messaging
 export const EmptyListState: React.FC<{ label: string, message?: string, icon?: React.ElementType }> = ({ label, message, icon: Icon }) => {
@@ -109,10 +112,10 @@ export const ModalFooter: React.FC<{ children: React.ReactNode }> = ({ children 
 };
 
 // 10. MetricTile: Simplified metric card for dense grids
-export const MetricTile: React.FC<{ label: string, value: string | number | React.ReactNode, icon?: any, trend?: string, trendUp?: boolean }> = ({ label, value, icon: Icon, trend, trendUp }) => {
+export const MetricTile: React.FC<{ label: string, value: string | number | React.ReactNode, icon?: any, trend?: string, trendUp?: boolean, className?: string }> = ({ label, value, icon: Icon, trend, trendUp, className }) => {
     const { theme } = useTheme();
     return (
-        <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col justify-between h-full", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col justify-between h-full", theme.surface, theme.border.default, className)}>
              <div className="flex justify-between items-start">
                  <div>
                     <p className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>{label}</p>

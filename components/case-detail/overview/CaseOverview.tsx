@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Case, TimeEntry, TimeEntryPayload } from '../../types';
+import { Case, TimeEntry, TimeEntryPayload, Party } from '../../../types';
 import { Users } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { MatterInfo } from './MatterInfo';
@@ -8,10 +9,12 @@ import { OverviewSidebar } from './OverviewSidebar';
 import { CaseOverviewStats } from './CaseOverviewStats';
 import { CaseOverviewModals } from './CaseOverviewModals';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { useSync } from '../../context/SyncContext';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { DataService } from '../../../services/dataService';
+import { useSync } from '../../../context/SyncContext';
+import { useQuery } from '../../../services/queryClient';
+import { STORES } from '../../../services/db';
 
 interface CaseOverviewProps {
   caseData: Case;
@@ -28,6 +31,12 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
   
   const [linkedCases, setLinkedCases] = useState<Case[]>([]);
   const [availableCases, setAvailableCases] = useState<Case[]>([]);
+  
+  const { data: parties = [] } = useQuery<Party[]>(
+      [STORES.CASES, caseData.id, 'parties'],
+      () => DataService.cases.getParties(caseData.id),
+      { initialData: caseData.parties || [] }
+  );
 
   useEffect(() => {
     const loadRelated = async () => {
@@ -52,7 +61,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
           () => DataService.billing.addTimeEntry(newEntry)
       );
       
-      // Optimistically update UI
+      // Optimistically update UI immediately
       onTimeEntryAdded(newEntry);
   };
 
@@ -116,7 +125,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
                 <TableContainer responsive="card" className="shadow-none border-0 rounded-none">
                     <TableHeader><TableHead>Role</TableHead><TableHead>Entity Name</TableHead><TableHead>Type</TableHead></TableHeader>
                     <TableBody>
-                        {caseData.parties?.slice(0, 4).map(p => (
+                        {parties.slice(0, 4).map(p => (
                             <TableRow key={p.id}>
                                 <TableCell className={cn("text-sm font-medium", theme.text.primary)}>{p.role}</TableCell>
                                 <TableCell className={cn("text-sm", theme.text.secondary)}>{p.name}</TableCell>
@@ -125,7 +134,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
                         ))}
                     </TableBody>
                 </TableContainer>
-                {(!caseData.parties || caseData.parties.length === 0) && <div className={cn("text-center py-4 italic text-sm", theme.text.tertiary)}>No parties listed.</div>}
+                {(!parties || parties.length === 0) && <div className={cn("text-center py-4 italic text-sm", theme.text.tertiary)}>No parties listed.</div>}
             </div>
         </div>
 

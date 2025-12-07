@@ -17,21 +17,17 @@ export const SchemaCodeEditor: React.FC<SchemaCodeEditorProps> = ({ ddl }) => {
   const commentColor = mode === 'dark' ? 'text-green-500' : 'text-green-600';
   const stringColor = mode === 'dark' ? 'text-amber-400' : 'text-amber-600';
 
-  const editorBg = mode === 'dark' ? "bg-[#1e293b]" : "bg-slate-50";
-  const headerBg = mode === 'dark' ? "bg-slate-800" : "bg-slate-100";
-  const textColor = mode === 'dark' ? "text-slate-300" : "text-slate-800";
-
   return (
     <div className="h-full p-6">
-        <div className={cn("h-full rounded-lg border shadow-inner flex flex-col overflow-hidden", theme.border.default, editorBg)}>
-            <div className={cn("px-4 py-2 border-b flex justify-between items-center", theme.border.default, headerBg)}>
+        <div className={cn("h-full rounded-lg border shadow-inner flex flex-col overflow-hidden", theme.border.default, theme.surface)}>
+            <div className={cn("px-4 py-2 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
                 <span className={cn("text-xs font-mono", theme.text.secondary)}>schema.sql</span>
                 <div className="flex gap-2 items-center">
                     <span className="text-xs text-green-500 flex items-center"><div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>Valid</span>
                     <CopyButton text={ddl} label="Copy DDL"/>
                 </div>
             </div>
-            <pre className={cn("flex-1 p-4 font-mono text-sm overflow-auto leading-relaxed selection:bg-blue-500/30", textColor)}>
+            <pre className={cn("flex-1 p-4 font-mono text-sm overflow-auto leading-relaxed selection:bg-blue-500/30", theme.text.primary)}>
                 <code dangerouslySetInnerHTML={{ 
                     __html: ddl
                         .replace(/--.*/g, `<span class="${commentColor}">$&</span>`)

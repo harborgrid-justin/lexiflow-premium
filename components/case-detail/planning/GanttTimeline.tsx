@@ -6,6 +6,7 @@ import { cn } from '../../../utils/cn';
 import { useWindow } from '../../../context/WindowContext';
 import { Badge } from '../../common/Badge';
 import { useGanttDrag } from '../../../hooks/useGanttDrag';
+import { GanttHelpers } from '../../../utils/ganttHelpers';
 
 interface GanttTimelineProps {
   phases: CasePhase[];
@@ -32,49 +33,23 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
       onTaskUpdate: onUpdateTask 
   });
 
-  const getTaskStyle = (task: WorkflowTask) => {
-      const due = new Date(task.dueDate).getTime();
-      let start;
-      
-      if (task.startDate) {
-          start = new Date(task.startDate).getTime();
-      } else {
-          // Default to 5 days duration if no start date
-          start = due - (5 * 24 * 60 * 60 * 1000);
-      }
-
-      const viewStart = viewStartDate.getTime();
-      const durationMs = due - start;
-      const durationDays = Math.max(1, durationMs / (1000 * 60 * 60 * 24));
-
-      const left = (start - viewStart) / (1000 * 60 * 60 * 24) * pixelsPerDay;
-      const width = durationDays * pixelsPerDay;
-
-      return { 
-          left: `${Math.max(-100, left)}px`, // Allow slightly offscreen to left
-          width: `${Math.max(20, width)}px`,
-          display: (left + width < 0) ? 'none' : 'flex' // Optimization
-      };
-  };
-
   const renderTimeScale = () => {
-      const days = [];
-      const now = new Date(viewStartDate);
-      // Render 90 days buffer
-      for(let i=0; i < 90; i++) {
-          const d = new Date(now);
-          d.setDate(d.getDate() + i * (zoom === 'Month' ? 30 : 7));
-          days.push(
-              <div 
+      const step = zoom === 'Month' ? 30 : 7;
+      const days = GanttHelpers.generateTimeScale(viewStartDate, 90, step);
+
+      return (
+        <div className="flex h-8 border-b">
+          {days.map((d, i) => (
+             <div 
                 key={i} 
                 className={cn("border-r text-[10px] font-bold uppercase p-2 flex-shrink-0 text-slate-400 select-none", theme.border.default)}
-                style={{ width: pixelsPerDay * (zoom === 'Month' ? 30 : 7) }}
+                style={{ width: pixelsPerDay * step }}
               >
-                  {d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                  {d.label}
               </div>
-          );
-      }
-      return <div className="flex h-8 border-b">{days}</div>;
+          ))}
+        </div>
+      );
   };
 
   return (
@@ -116,7 +91,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                                               task.priority === 'High' ? "bg-red-500 border-red-600" :
                                               "bg-blue-500 border-blue-600"
                                           )}
-                                          style={getTaskStyle(task)}
+                                          style={GanttHelpers.getTaskStyle(task, viewStartDate, pixelsPerDay)}
                                           onMouseDown={(e) => onMouseDown(e, task.id, 'move')}
                                           onMouseEnter={() => onHoverTask(task.id)}
                                           onMouseLeave={() => onHoverTask(null)}

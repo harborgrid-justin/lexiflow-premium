@@ -6,7 +6,7 @@ import { LazyLoader } from '../common/LazyLoader';
 import { HelpCircle, Lock } from 'lucide-react';
 
 // Lazy Load CaseDetail specifically as it's a heavy component often used
-const CaseDetail = React.lazy(() => import('../CaseDetail').then(m => ({ default: m.CaseDetail as React.ComponentType<any> })));
+const CaseDetail = React.lazy(() => import('../CaseDetail').then(m => ({ default: m.CaseDetail })));
 
 interface AppContentRendererProps {
   activeView: AppView;

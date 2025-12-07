@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, Suspense, useTransition } from 'react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
 import { Globe, Scale, Building2, Shield, Users, Map as MapIcon, Plus, Gavel } from 'lucide-react';
@@ -29,7 +29,14 @@ const TABS = [
 
 export const JurisdictionManager: React.FC = () => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<JurisdictionView>('federal');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useState<JurisdictionView>('federal');
+
+  const setActiveTab = (tab: JurisdictionView) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -75,7 +82,9 @@ export const JurisdictionManager: React.FC = () => {
 
       <div className="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar">
         <Suspense fallback={<LazyLoader message="Loading Jurisdiction Data..." />}>
-          {renderContent()}
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+          </div>
         </Suspense>
       </div>
     </div>

@@ -17,7 +17,7 @@ interface CommandCenterProps {
 }
 
 export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomData, onNavigate }) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   
   // New Live Data
   const { data: sanctions = [] } = useQuery<any[]>([STORES.SANCTIONS, 'all'], DataService.discovery.getSanctions);
@@ -89,14 +89,14 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
             <div className="lg:col-span-2 space-y-6">
                 <Card title="Case Briefing" subtitle={`Recent Activity for ${caseId}`}>
                     <div className="space-y-4">
-                        <div className={cn("p-4 rounded-lg border-l-4 border-l-blue-500 bg-blue-50 border-blue-100 border text-sm text-blue-900", theme.border.default)}>
+                        <div className={cn("p-4 rounded-lg border-l-4 border-l-blue-500 bg-blue-50 border-blue-100 border text-sm text-blue-900", mode === 'dark' ? "bg-blue-900/20 border-blue-800 text-blue-200" : "")}>
                             <h4 className="font-bold mb-1">Strategy Focus</h4>
                             <p>{warRoomData.case.description || 'No strategy description available.'}</p>
                         </div>
                         
                         <div className="space-y-2">
-                            <h4 className={cn("font-bold text-sm uppercase text-slate-500 mb-2")}>Recent Docket Activity</h4>
-                            {recentDocket.length === 0 && <p className="text-xs text-slate-400 italic">No recent docket entries.</p>}
+                            <h4 className={cn("font-bold text-sm uppercase mb-2", theme.text.secondary)}>Recent Docket Activity</h4>
+                            {recentDocket.length === 0 && <p className={cn("text-xs italic", theme.text.tertiary)}>No recent docket entries.</p>}
                             {recentDocket.map((item) => (
                                 <div 
                                     key={item.id} 
@@ -105,10 +105,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                                         theme.surface, theme.border.default
                                     )}
                                 >
-                                    <div className="w-24 font-mono text-xs font-bold text-slate-500 shrink-0">{item.date}</div>
+                                    <div className={cn("w-24 font-mono text-xs font-bold shrink-0", theme.text.secondary)}>{item.date}</div>
                                     <div className="flex-1 min-w-0">
                                         <div className={cn("font-medium text-sm truncate", theme.text.primary)} title={item.title}>{item.title}</div>
-                                        <div className="text-xs text-slate-400 truncate">{item.description}</div>
+                                        <div className={cn("text-xs truncate", theme.text.tertiary)}>{item.description}</div>
                                     </div>
                                 </div>
                             ))}
@@ -122,18 +122,18 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                             warRoomData.motions.filter((m) => m.status !== 'Decided').slice(0, 3).map((m) => (
                                 <div 
                                     key={m.id}
-                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors", theme.surfaceHighlight, theme.border.default)}
+                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer transition-colors", theme.surfaceHighlight, theme.border.default, `hover:${theme.surface}`)}
                                     onClick={() => onNavigate('binder')}
                                 >
                                     <div>
-                                        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">{m.type}</span>
+                                        <span className={cn("text-xs font-bold px-2 py-0.5 rounded border mb-1 inline-block", theme.primary.light, theme.primary.text, theme.primary.border)}>{m.type}</span>
                                         <p className={cn("text-sm font-bold mt-1", theme.text.primary)}>{m.title}</p>
                                     </div>
-                                    <span className="text-xs text-slate-500">{m.status}</span>
+                                    <span className={cn("text-xs", theme.text.secondary)}>{m.status}</span>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-sm text-slate-400 italic text-center py-4">No pending motions.</p>
+                            <p className={cn("text-sm italic text-center py-4", theme.text.tertiary)}>No pending motions.</p>
                         )}
                     </div>
                 </Card>
@@ -160,13 +160,13 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                 <Card title="Active Tasks">
                     <div className="space-y-2">
                         {warRoomData.tasks?.slice(0, 5).map((task, i) => (
-                            <div key={i} className={cn("flex items-start gap-3 p-2 hover:bg-slate-50 rounded transition-colors cursor-pointer group")}>
-                                <CheckSquare className="h-4 w-4 mt-0.5 text-slate-400 group-hover:text-blue-600 shrink-0"/>
-                                <span className={cn("text-sm truncate", theme.text.secondary, "group-hover:text-slate-900")}>{task.title}</span>
+                            <div key={i} className={cn("flex items-start gap-3 p-2 rounded transition-colors cursor-pointer group", `hover:${theme.surfaceHighlight}`)}>
+                                <CheckSquare className={cn("h-4 w-4 mt-0.5 shrink-0 group-hover:text-blue-600", theme.text.tertiary)}/>
+                                <span className={cn("text-sm truncate", theme.text.secondary, "group-hover:text-slate-900 dark:group-hover:text-slate-100")}>{task.title}</span>
                             </div>
                         ))}
                         {(!warRoomData.tasks || warRoomData.tasks.length === 0) && (
-                             <p className="text-xs text-slate-400 italic">No active tasks.</p>
+                             <p className={cn("text-xs italic", theme.text.tertiary)}>No active tasks.</p>
                         )}
                     </div>
                 </Card>

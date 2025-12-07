@@ -28,7 +28,7 @@ export const SchemaSnapshots: React.FC = () => {
                             <div className={cn("p-2 rounded-lg bg-blue-100 text-blue-600")}>
                                 <Database className="h-6 w-6"/>
                             </div>
-                            <span className={cn("text-xs font-mono px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-500")}>{snap.size}</span>
+                            <span className={cn("text-xs font-mono px-2 py-1 rounded", theme.surfaceHighlight, theme.text.secondary)}>{snap.size}</span>
                         </div>
                         <h4 className={cn("font-bold text-base mb-1", theme.text.primary)}>{snap.name}</h4>
                         <p className={cn("text-xs font-mono text-slate-400 mb-4")}>{snap.id}</p>

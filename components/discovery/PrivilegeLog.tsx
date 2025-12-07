@@ -1,24 +1,25 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Wand2, Plus, Shield, Mail } from 'lucide-react';
+import { Wand2, Plus, Shield, Mail, Loader2 } from 'lucide-react';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { PrivilegeLogEntry } from '../../types';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();
-  const [logItems, setLogItems] = useState<PrivilegeLogEntry[]>([]);
+  
+  const { data: logItems = [], isLoading } = useQuery<PrivilegeLogEntry[]>(
+      [STORES.PRIVILEGE_LOG, 'all'],
+      DataService.discovery.getPrivilegeLog
+  );
 
-  useEffect(() => {
-      const load = async () => {
-          const data = await DataService.discovery.getPrivilegeLog();
-          setLogItems(data);
-      };
-      load();
-  }, []);
+  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className="animate-fade-in space-y-4">

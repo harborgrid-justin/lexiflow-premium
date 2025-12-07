@@ -20,9 +20,9 @@ export const GraphOverlay: React.FC<GraphOverlayProps> = ({ scale, setScale, onR
     <>
         {/* Controls */}
         <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
-            <div className={cn("rounded-lg shadow-sm border p-1 flex flex-col", theme.surface, theme.border.default)}>
-                <button onClick={() => setScale(s => Math.min(s + 0.1, 3))} className={cn("p-2 rounded hover:bg-slate-100 text-slate-600")} title="Zoom In"><ZoomIn className="h-4 w-4"/></button>
-                <button onClick={() => setScale(s => Math.max(s - 0.1, 0.1))} className={cn("p-2 rounded hover:bg-slate-100 text-slate-600")} title="Zoom Out"><ZoomOut className="h-4 w-4"/></button>
+            <div className={cn("rounded-lg shadow-sm border p-1 flex flex-col bg-opacity-90 backdrop-blur-sm", theme.surface, theme.border.default)}>
+                <button onClick={() => setScale(s => Math.min(s + 0.1, 3))} className={cn("p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300")} title="Zoom In"><ZoomIn className="h-4 w-4"/></button>
+                <button onClick={() => setScale(s => Math.max(s - 0.1, 0.1))} className={cn("p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300")} title="Zoom Out"><ZoomOut className="h-4 w-4"/></button>
             </div>
             <Button size="sm" variant="primary" icon={RefreshCw} className="shadow-lg w-10 h-10 p-0 flex items-center justify-center rounded-lg" onClick={onReheat} title="Re-run Physics" />
         </div>
@@ -44,7 +44,7 @@ export const GraphOverlay: React.FC<GraphOverlayProps> = ({ scale, setScale, onR
         </div>
 
         {/* Legend */}
-        <div className={cn("absolute bottom-4 left-4 z-10 p-3 rounded-lg border shadow-md text-xs space-y-2 pointer-events-none select-none backdrop-blur-md", theme.surface, theme.border.default)}>
+        <div className={cn("absolute bottom-4 left-4 z-10 p-3 rounded-lg border shadow-md text-xs space-y-2 pointer-events-none select-none backdrop-blur-md bg-opacity-90", theme.surface, theme.border.default)}>
             <div className={cn("font-bold uppercase mb-1 tracking-wider text-[10px]", theme.text.tertiary)}>Entity Types</div>
             <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-slate-800 border border-slate-600"></div> Case / Root</div>
             <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-blue-500"></div> Individual</div>

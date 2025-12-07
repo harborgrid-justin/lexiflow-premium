@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card } from '../common/Card';
 import { Input } from '../common/Inputs';
@@ -7,6 +8,8 @@ import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useChartTheme } from '../common/ChartHelpers';
+import { SimulationEngine } from '../../utils/simulationEngine';
+import { Scheduler } from '../../utils/scheduler';
 
 export const SettlementCalculator: React.FC = () => {
   const { theme } = useTheme();
@@ -21,58 +24,15 @@ export const SettlementCalculator: React.FC = () => {
 
   const runSimulation = () => {
     setIsCalculating(true);
-    setTimeout(() => {
-      const data: number[] = [];
-      for (let i = 0; i < iterations; i++) {
-        // Simple Monte Carlo: Liability Check -> Damage Range
-        const isLiable = Math.random() * 100 < liabilityProb;
-        if (isLiable) {
-          // Box-Muller transform for normal distribution skew within range
-          const u = 1 - Math.random();
-          const v = Math.random();
-          const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-          
-          const mean = (high + low) / 2;
-          const stdDev = (high - low) / 4; // Assume 95% falls within range
-          let val = mean + z * stdDev;
-          
-          // Clamp
-          val = Math.max(low * 0.8, Math.min(high * 1.2, val));
-          data.push(val);
-        } else {
-          data.push(0);
-        }
-      }
-      
-      data.sort((a, b) => a - b);
-      
-      // Calculate Metrics
-      const sum = data.reduce((a, b) => a + b, 0);
-      const ev = sum / iterations;
-      const p25 = data[Math.floor(iterations * 0.25)];
-      const p75 = data[Math.floor(iterations * 0.75)];
-      
-      // Build Histogram Data for Chart
-      const buckets = 20;
-      const minVal = 0;
-      const maxVal = high * 1.2;
-      const bucketSize = (maxVal - minVal) / buckets;
-      
-      const histData = Array.from({ length: buckets }, (_, i) => {
-        const start = minVal + i * bucketSize;
-        const end = start + bucketSize;
-        const count = data.filter(v => v >= start && v < end).length;
-        return {
-          range: `$${(start/1000).toFixed(0)}k`,
-          count: count,
-          value: start
-        };
-      });
-
-      setResults(histData);
-      setMetrics({ ev, p25, p75 });
-      setIsCalculating(false);
-    }, 800);
+    
+    // Offload heavy calculation to scheduler to unblock UI
+    Scheduler.scheduleTask(() => {
+        return SimulationEngine.runSettlementSimulation({ low, high, liabilityProb, iterations });
+    }).then(simulationResults => {
+        setResults(simulationResults.results);
+        setMetrics({ ev: simulationResults.ev, p25: simulationResults.p25, p75: simulationResults.p75 });
+        setIsCalculating(false);
+    });
   };
 
   // Initial run

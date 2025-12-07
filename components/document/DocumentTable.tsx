@@ -67,8 +67,6 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({
       />
   );
   
-  // Grid View Content... (not included for brevity, no changes needed there)
-
   return (
     <div className={cn("flex-1 overflow-hidden flex flex-col", theme.surface, isPending ? "opacity-70 transition-opacity" : "")}>
         <div className={cn("flex items-center px-4 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>

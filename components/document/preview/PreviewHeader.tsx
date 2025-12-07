@@ -17,7 +17,7 @@ export const PreviewHeader: React.FC<PreviewHeaderProps> = ({ document, onCloseM
     return (
         <div className={cn("p-5 border-b relative shrink-0", theme.border.default, theme.surface)}>
             <div className="md:hidden absolute top-3 right-3">
-                <button onClick={onCloseMobile} className="p-2 bg-slate-100 rounded-full"><ChevronDown className="h-5 w-5 text-slate-600"/></button>
+                <button onClick={onCloseMobile} className={cn("p-2 rounded-full", theme.surfaceHighlight, theme.text.secondary)}><ChevronDown className="h-5 w-5"/></button>
             </div>
             {document.isEncrypted && (
               <div className="absolute top-0 right-0 p-2 hidden md:block">
@@ -27,7 +27,7 @@ export const PreviewHeader: React.FC<PreviewHeaderProps> = ({ document, onCloseM
             <div className="flex items-start gap-3">
                 <div className={cn("p-3 border rounded-lg shadow-sm relative", theme.surfaceHighlight, theme.border.default)}>
                     <FileIcon type={document.type} className="h-8 w-8"/>
-                    {document.isEncrypted && <div className="absolute -bottom-1 -right-1 bg-white rounded-full"><Lock className="h-3 w-3 text-amber-500"/></div>}
+                    {document.isEncrypted && <div className={cn("absolute -bottom-1 -right-1 rounded-full", theme.surface)}><Lock className="h-3 w-3 text-amber-500"/></div>}
                 </div>
                 <div className="flex-1 min-w-0 pr-8 md:pr-0">
                     <h3 className={cn("font-bold text-sm line-clamp-2 leading-snug", theme.text.primary)}>{document.title}</h3>

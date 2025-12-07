@@ -3,6 +3,7 @@ import { DataService } from '../services/dataService';
 import { Case } from '../types';
 import { useQuery } from '../services/queryClient';
 import { STORES } from '../services/db';
+import { useDebounce } from './useDebounce';
 
 export const useCaseList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,6 +12,8 @@ export const useCaseList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const { 
     data: cases = [], 
@@ -24,17 +27,18 @@ export const useCaseList = () => {
 
   const filteredCases = useMemo(() => {
     if (!cases) return [];
+    const lowerSearch = debouncedSearchTerm.toLowerCase();
     return cases.filter(c => {
       const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
       const matchesType = typeFilter === 'All' || c.matterType === typeFilter;
-      const matchesSearch = searchTerm === '' || 
-        c.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        c.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = lowerSearch === '' || 
+        c.title.toLowerCase().includes(lowerSearch) || 
+        c.client.toLowerCase().includes(lowerSearch) ||
+        c.id.toLowerCase().includes(lowerSearch);
       const matchesDate = (!dateFrom || c.filingDate >= dateFrom) && (!dateTo || c.filingDate <= dateTo);
       return matchesStatus && matchesType && matchesSearch && matchesDate;
     });
-  }, [cases, statusFilter, typeFilter, searchTerm, dateFrom, dateTo]);
+  }, [cases, statusFilter, typeFilter, debouncedSearchTerm, dateFrom, dateTo]);
 
   const resetFilters = () => {
     setStatusFilter('All');

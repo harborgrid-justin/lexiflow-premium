@@ -92,7 +92,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
       openWindow(
           winId,
           `Evidence Preview: ${item.title}`,
-          <div className="h-full bg-white">
+          <div className={cn("h-full", theme.background)}>
               <DocumentPreviewPanel 
                  document={{
                      id: item.id,
@@ -138,14 +138,14 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
                 {isPending && <div className="absolute right-12 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
             </div>
             
-            <div className={cn("flex bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
+            <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
                 {['All', 'Hot Docs', 'Admitted', 'Motions'].map(f => (
                     <button
                         key={f}
                         onClick={() => handleFilterClick(f)}
                         className={cn(
                             "px-3 py-1.5 text-xs font-medium rounded-md transition-all",
-                            filter === f ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700"
+                            filter === f ? cn(theme.surface, theme.text.primary, "shadow") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
                         )}
                     >
                         {f}
@@ -157,14 +157,14 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
         <div className={cn("grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto pb-4 content-start", isPending ? "opacity-70 transition-opacity" : "")}>
             {filteredExhibits.map((ex) => (
                 <div key={ex.id} className={cn("group relative flex flex-col rounded-xl border shadow-sm transition-all hover:shadow-md cursor-pointer", theme.surface, theme.border.default, ex.hot ? "ring-2 ring-red-500/20" : "")}>
-                    <div className={cn("aspect-[4/3] bg-slate-100 rounded-t-xl flex items-center justify-center relative overflow-hidden", theme.surfaceHighlight)}>
+                    <div className={cn("aspect-[4/3] rounded-t-xl flex items-center justify-center relative overflow-hidden", theme.surfaceHighlight)}>
                         {getTypeIcon(ex.type)}
                         {ex.hot && <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">HOT</span>}
                         
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
                              <div className="flex gap-2">
-                                <button onClick={(e) => { e.stopPropagation(); handleViewItem(ex); }} className="p-2 bg-white rounded-full text-slate-700 hover:text-blue-600 shadow-lg" title="View"><Eye className="h-4 w-4"/></button>
-                                <button className="p-2 bg-white rounded-full text-slate-700 hover:text-blue-600 shadow-lg" title="Open"><ArrowUpRight className="h-4 w-4"/></button>
+                                <button onClick={(e) => { e.stopPropagation(); handleViewItem(ex); }} className={cn("p-2 rounded-full shadow-lg", theme.surface, theme.text.primary, `hover:${theme.primary.text}`)} title="View"><Eye className="h-4 w-4"/></button>
+                                <button className={cn("p-2 rounded-full shadow-lg", theme.surface, theme.text.primary, `hover:${theme.primary.text}`)} title="Open"><ArrowUpRight className="h-4 w-4"/></button>
                              </div>
                              <div className="flex gap-2 mt-2">
                                 <button className="px-3 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full shadow hover:bg-blue-700 flex items-center" title="Add to Binder">
@@ -175,20 +175,20 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
                     </div>
                     <div className="p-3">
                         <div className="flex justify-between items-start mb-1">
-                            <span className={cn("font-mono text-[10px] font-bold px-1.5 rounded border bg-slate-50 text-slate-600")}>{ex.num.substring(0, 8)}</span>
+                            <span className={cn("font-mono text-[10px] font-bold px-1.5 rounded border", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>{ex.num.substring(0, 8)}</span>
                             {ex.status === 'Admitted' && <CheckCircle className="h-3.5 w-3.5 text-green-500"/>}
                             {ex.status === 'Excluded' && <AlertTriangle className="h-3.5 w-3.5 text-red-500"/>}
                         </div>
                         <h4 className={cn("font-bold text-sm line-clamp-2 leading-tight mb-2", theme.text.primary)}>{ex.title}</h4>
                         <div className="flex justify-between items-center text-xs">
-                            <span className={cn("text-slate-500")}>{ex.type}</span>
-                            <span className={cn("font-medium", (ex.status === 'Admitted' || ex.status === 'Filed') ? 'text-green-600' : 'text-slate-400')}>{ex.status}</span>
+                            <span className={cn(theme.text.tertiary)}>{ex.type}</span>
+                            <span className={cn("font-medium", (ex.status === 'Admitted' || ex.status === 'Filed') ? 'text-green-600' : theme.text.secondary)}>{ex.status}</span>
                         </div>
                     </div>
                 </div>
             ))}
             
-            <div className={cn("border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-6 text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-colors cursor-pointer", theme.border.default)}>
+            <div className={cn("border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-6 transition-colors cursor-pointer", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`)}>
                 <span className="text-2xl font-light mb-2">+</span>
                 <span className="text-xs font-medium">Add Evidence</span>
             </div>

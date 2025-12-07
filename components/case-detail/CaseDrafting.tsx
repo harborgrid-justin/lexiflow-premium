@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 import { Clause } from '../../types';
 import { AdvancedEditor } from '../AdvancedEditor';
 import { DataService } from '../../services/dataService';
-import { ClauseHistoryModal } from '../ClauseHistoryModal';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+const ClauseHistoryModal = lazy(() => import('../ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
 interface CaseDraftingProps {
   caseTitle: string;
@@ -79,7 +80,9 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full relative">
       {selectedClauseHistory && (
-        <ClauseHistoryModal clause={selectedClauseHistory} onClose={() => setSelectedClauseHistory(null)} />
+        <Suspense fallback={null}>
+          <ClauseHistoryModal clause={selectedClauseHistory} onClose={() => setSelectedClauseHistory(null)} />
+        </Suspense>
       )}
 
       <div className="lg:col-span-2 flex flex-col h-full space-y-4">

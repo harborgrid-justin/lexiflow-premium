@@ -1,6 +1,8 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { DataService } from '../services/dataService';
 import { Conversation, Message, Attachment } from '../types';
+import { Scheduler } from '../utils/scheduler';
 
 export { Conversation, Message, Attachment };
 
@@ -8,6 +10,7 @@ export const useSecureMessenger = () => {
   const [view, setView] = useState<'chats' | 'contacts' | 'files' | 'archived'>('chats');
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [contactsList, setContactsList] = useState<any[]>([]);
+  const [allFiles, setAllFiles] = useState<Attachment[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [inputText, setInputText] = useState('');
@@ -26,6 +29,28 @@ export const useSecureMessenger = () => {
       };
       loadData();
   }, []);
+
+  // Deferred calculation for allFiles to improve performance
+  useEffect(() => {
+    Scheduler.defer(() => {
+        const files: Attachment[] = [];
+        conversations.forEach(c => {
+            c.messages.forEach(m => {
+                if (m.attachments) {
+                    m.attachments.forEach(a => {
+                        files.push({
+                            ...a,
+                            sender: m.senderId === 'me' ? 'Me' : c.name,
+                            date: m.timestamp
+                        });
+                    });
+                }
+            });
+        });
+        const filtered = files.filter(f => f.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        setAllFiles(filtered);
+    });
+  }, [conversations, searchTerm]);
 
   const sortedConversations = useMemo(() => {
     return [...conversations].sort((a, b) => {
@@ -53,24 +78,6 @@ export const useSecureMessenger = () => {
           c.role.toLowerCase().includes(searchTerm.toLowerCase())
       );
   }, [contactsList, searchTerm]);
-
-  const allFiles = useMemo(() => {
-      const files: Attachment[] = [];
-      conversations.forEach(c => {
-          c.messages.forEach(m => {
-              if (m.attachments) {
-                  m.attachments.forEach(a => {
-                      files.push({
-                          ...a,
-                          sender: m.senderId === 'me' ? 'Me' : c.name,
-                          date: m.timestamp
-                      });
-                  });
-              }
-          });
-      });
-      return files.filter(f => f.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [conversations, searchTerm]);
 
   const activeConversation = conversations.find(c => c.id === activeConvId);
 

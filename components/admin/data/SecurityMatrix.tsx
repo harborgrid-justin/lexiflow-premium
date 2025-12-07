@@ -43,7 +43,7 @@ export const SecurityMatrix: React.FC<SecurityMatrixProps> = ({ initialTab = 'ma
             </div>
         </div>
 
-        <div className={cn("flex-1 overflow-hidden p-6 bg-slate-50/50", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-hidden p-6", theme.surfaceHighlight)}>
             {activeView === 'matrix' ? (
                 <AccessMatrix />
             ) : (

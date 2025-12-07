@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { LegalEntity, EntityRelationship } from '../../types';
 import { DataService } from '../../services/dataService';
@@ -31,7 +32,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
 
   if (isLoadingEntity || !entity) {
       return (
-          <div className="h-full flex items-center justify-center bg-white border-l">
+          <div className={cn("h-full flex items-center justify-center border-l", theme.surface, theme.border.default)}>
               <div className="animate-pulse flex flex-col items-center">
                   <div className="h-16 w-16 bg-slate-200 rounded-full mb-4"></div>
                   <div className="h-4 w-32 bg-slate-200 rounded"></div>
@@ -41,7 +42,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
   }
 
   return (
-    <div className={cn("h-full flex flex-col bg-white border-l shadow-xl", theme.border.default)}>
+    <div className={cn("h-full flex flex-col border-l shadow-xl", theme.surface, theme.border.default)}>
         {/* Header */}
         <div className={cn("p-6 border-b", theme.surfaceHighlight, theme.border.default)}>
             <div className="flex justify-between items-start mb-4">
@@ -50,16 +51,16 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
             </div>
             <div className="flex gap-2 mb-4">
                 {entity.roles.map(r => <span key={r} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-bold uppercase">{r}</span>)}
-                <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs border">{entity.type}</span>
+                <span className={cn("px-2 py-0.5 rounded text-xs border", theme.surface, theme.border.default, theme.text.secondary)}>{entity.type}</span>
             </div>
-            <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+            <div className={cn("flex flex-wrap gap-4 text-sm", theme.text.secondary)}>
                 {entity.city && <span className="flex items-center"><MapPin className="h-3 w-3 mr-1"/> {entity.city}, {entity.state}</span>}
                 {entity.email && <span className="flex items-center"><Mail className="h-3 w-3 mr-1"/> {entity.email}</span>}
             </div>
         </div>
 
         {/* Tabs */}
-        <div className="px-4 border-b">
+        <div className={cn("px-4 border-b", theme.border.default)}>
             <Tabs 
                 tabs={['overview', 'relationships', 'matters', 'docs']} 
                 activeTab={activeTab} 
@@ -75,9 +76,9 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
                     <div className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
                         <h4 className={cn("font-bold text-sm mb-3 uppercase tracking-wide", theme.text.secondary)}>Contact Information</h4>
                         <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div><span className="block text-xs text-slate-400 uppercase">Phone</span> {entity.phone || '-'}</div>
-                            <div><span className="block text-xs text-slate-400 uppercase">Website</span> {entity.website || '-'}</div>
-                            <div className="col-span-2"><span className="block text-xs text-slate-400 uppercase">Address</span> {entity.address || '-'}</div>
+                            <div><span className={cn("block text-xs uppercase", theme.text.tertiary)}>Phone</span> <span className={theme.text.primary}>{entity.phone || '-'}</span></div>
+                            <div><span className={cn("block text-xs uppercase", theme.text.tertiary)}>Website</span> <span className={theme.text.primary}>{entity.website || '-'}</span></div>
+                            <div className="col-span-2"><span className={cn("block text-xs uppercase", theme.text.tertiary)}>Address</span> <span className={theme.text.primary}>{entity.address || '-'}</span></div>
                         </div>
                     </div>
 
@@ -98,7 +99,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
                     {relationships.map(rel => (
                         <div key={rel.id} className={cn("p-3 rounded border flex items-center justify-between", theme.surface, theme.border.default)}>
                             <div className="flex items-center gap-3">
-                                <Link className="h-4 w-4 text-slate-400"/>
+                                <Link className={cn("h-4 w-4", theme.text.tertiary)}/>
                                 <div>
                                     <p className={cn("text-sm font-bold", theme.text.primary)}>{rel.type.replace('_', ' ')}</p>
                                     <p className={cn("text-xs", theme.text.secondary)}>{rel.description} ({rel.active ? 'Current' : 'Past'})</p>
@@ -107,18 +108,18 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
                             <Button size="sm" variant="ghost">View</Button>
                         </div>
                     ))}
-                    {relationships.length === 0 && <div className="text-center text-slate-400 py-8 text-sm">No mapped relationships.</div>}
+                    {relationships.length === 0 && <div className={cn("text-center py-8 text-sm", theme.text.tertiary)}>No mapped relationships.</div>}
                     <Button variant="outline" className="w-full border-dashed" icon={Link}>Add Connection</Button>
                 </div>
             )}
 
             {activeTab === 'matters' && (
                 <div className="space-y-3 animate-in fade-in">
-                     <div className="p-3 rounded border flex items-center gap-3">
+                     <div className={cn("p-3 rounded border flex items-center gap-3", theme.surface, theme.border.default)}>
                         <Briefcase className="h-5 w-5 text-blue-500"/>
                         <div>
-                            <p className="text-sm font-bold">Martinez v. TechCorp</p>
-                            <p className="text-xs text-slate-500">Role: Defendant</p>
+                            <p className={cn("text-sm font-bold", theme.text.primary)}>Martinez v. TechCorp</p>
+                            <p className={cn("text-xs", theme.text.secondary)}>Role: Defendant</p>
                         </div>
                      </div>
                 </div>

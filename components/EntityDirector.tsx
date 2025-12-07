@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { Network, Users, Share2, ShieldAlert, Map as MapIcon, Search, Plus, BarChart3, Database, Building, Briefcase, Import } from 'lucide-react';
+
+import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
+import { Network, Users, Share2, ShieldAlert, Map as MapIcon, Search, Plus, BarChart3, Database, Building, Briefcase, Import, GraduationCap, Scale, FileCheck, DollarSign } from 'lucide-react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
 import { useTheme } from '../context/ThemeContext';
@@ -9,20 +10,30 @@ import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
 import { LegalEntity } from '../types';
 import { useWindow } from '../context/WindowContext'; // Holographic DOM
+import { LazyLoader } from './common/LazyLoader';
 
 // Sub-components
-import { EntityGrid } from './entities/EntityGrid';
-import { EntityNetwork } from './entities/EntityNetwork';
-import { EntityOrgChart } from './entities/EntityOrgChart';
-import { EntityProfile } from './entities/EntityProfile';
-import { ConflictCheckPanel } from './entities/ConflictCheckPanel';
-import { EntityAnalytics } from './entities/EntityAnalytics';
-import { EntityIngestion } from './entities/EntityIngestion';
-import { EntityGovernance } from './entities/EntityGovernance';
-import { EntityVendorOps } from './entities/EntityVendorOps';
-import { EntityMap } from './entities/EntityMap';
+const EntityGrid = React.lazy(() => import('./entities/EntityGrid').then(m => ({ default: m.EntityGrid })));
+const EntityNetwork = React.lazy(() => import('./entities/EntityNetwork').then(m => ({ default: m.EntityNetwork })));
+const EntityOrgChart = React.lazy(() => import('./entities/EntityOrgChart').then(m => ({ default: m.EntityOrgChart })));
+const EntityProfile = React.lazy(() => import('./entities/EntityProfile').then(m => ({ default: m.EntityProfile })));
+const ConflictCheckPanel = React.lazy(() => import('./entities/ConflictCheckPanel').then(m => ({ default: m.ConflictCheckPanel })));
+const EntityAnalytics = React.lazy(() => import('./entities/EntityAnalytics').then(m => ({ default: m.EntityAnalytics })));
+const EntityIngestion = React.lazy(() => import('./entities/EntityIngestion').then(m => ({ default: m.EntityIngestion })));
+const EntityGovernance = React.lazy(() => import('./entities/EntityGovernance').then(m => ({ default: m.EntityGovernance })));
+const EntityVendorOps = React.lazy(() => import('./entities/EntityVendorOps').then(m => ({ default: m.EntityVendorOps })));
+const EntityMap = React.lazy(() => import('./entities/EntityMap').then(m => ({ default: m.EntityMap })));
+const UboRegister = React.lazy(() => import('./entities/ubo/UboRegister').then(m => ({ default: m.UboRegister })));
+const KycManager = React.lazy(() => import('./entities/ubo/KycManager').then(m => ({ default: m.KycManager })));
+const PerformanceScorecards = React.lazy(() => import('./entities/counsel/PerformanceScorecards').then(m => ({ default: m.PerformanceScorecards })));
+const RateNegotiation = React.lazy(() => import('./entities/counsel/RateNegotiation').then(m => ({ default: m.RateNegotiation })));
+const AlumniDirectory = React.lazy(() => import('./entities/talent/AlumniDirectory').then(m => ({ default: m.AlumniDirectory })));
 
-type DirectorView = 'directory' | 'network' | 'hierarchy' | 'conflicts' | 'map' | 'analytics' | 'ingestion' | 'governance' | 'vendors';
+type DirectorView = 
+  | 'directory' | 'network' | 'hierarchy' | 'conflicts' | 'map' | 'analytics' | 'ingestion' | 'governance' | 'vendors'
+  | 'ubo_register' | 'kyc_docs' 
+  | 'oc_scorecards' | 'oc_rates'
+  | 'talent_alumni';
 
 interface EntityDirectorProps {
     initialTab?: DirectorView;
@@ -38,6 +49,26 @@ const PARENT_TABS = [
     ]
   },
   {
+    id: 'compliance', label: 'Corporate Structure', icon: ShieldAlert,
+    subTabs: [
+      { id: 'ubo_register', label: 'Beneficial Ownership', icon: Network },
+      { id: 'kyc_docs', label: 'KYC & Due Diligence', icon: FileCheck },
+    ]
+  },
+  {
+    id: 'counsel', label: 'Outside Counsel', icon: Scale,
+    subTabs: [
+      { id: 'oc_scorecards', label: 'Performance', icon: BarChart3 },
+      { id: 'oc_rates', label: 'Rate Cards', icon: DollarSign },
+    ]
+  },
+  {
+    id: 'talent', label: 'Talent Network', icon: GraduationCap,
+    subTabs: [
+      { id: 'talent_alumni', label: 'Alumni Directory', icon: Users },
+    ]
+  },
+  {
     id: 'intel', label: 'Intelligence', icon: Network,
     subTabs: [
       { id: 'network', label: 'Relationship Graph', icon: Network },
@@ -47,7 +78,7 @@ const PARENT_TABS = [
     ]
   },
   {
-    id: 'risk', label: 'Risk & Data', icon: ShieldAlert,
+    id: 'risk', label: 'Risk & Data', icon: Database,
     subTabs: [
       { id: 'conflicts', label: 'Conflict Check', icon: ShieldAlert },
       { id: 'ingestion', label: 'Data Ingestion', icon: Import },
@@ -86,10 +117,12 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
       openWindow(
           winId,
           `Profile: ${entity.name}`,
-          <EntityProfile 
-             entityId={entity.id} 
-             onClose={() => closeWindow(winId)} 
-          />
+          <Suspense fallback={<LazyLoader message="Loading Profile..." />}>
+            <EntityProfile 
+              entityId={entity.id} 
+              onClose={() => closeWindow(winId)} 
+            />
+          </Suspense>
       );
   };
 
@@ -126,13 +159,13 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
         />
 
         {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
+        <div className={cn("hidden md:flex space-x-6 border-b mb-4 overflow-x-auto no-scrollbar", theme.border.default)}>
             {PARENT_TABS.map(parent => (
                 <button
                     key={parent.id}
                     onClick={() => handleParentTabChange(parent.id)}
                     className={cn(
-                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
+                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2 whitespace-nowrap",
                         activeParentTab.id === parent.id 
                             ? cn("border-current", theme.primary.text)
                             : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
@@ -168,15 +201,24 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
 
       <div className="flex-1 overflow-hidden flex relative">
          <div className={cn("flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar", activeTab === 'map' ? 'p-0' : '')}>
-            {activeTab === 'directory' && <EntityGrid entities={entities} onSelect={handleSelectEntity} />}
-            {activeTab === 'network' && <EntityNetwork entities={entities} />}
-            {activeTab === 'hierarchy' && <EntityOrgChart entities={entities} onSelect={handleSelectEntity} />}
-            {activeTab === 'conflicts' && <ConflictCheckPanel entities={entities} />}
-            {activeTab === 'map' && <EntityMap entities={entities} />}
-            {activeTab === 'analytics' && <EntityAnalytics entities={entities} />}
-            {activeTab === 'ingestion' && <EntityIngestion />}
-            {activeTab === 'governance' && <EntityGovernance entities={entities} onSelect={handleSelectEntity} />}
-            {activeTab === 'vendors' && <EntityVendorOps entities={entities} onSelect={handleSelectEntity} />}
+            <Suspense fallback={<LazyLoader message="Loading Module..." />}>
+              {activeTab === 'directory' && <EntityGrid entities={entities} onSelect={handleSelectEntity} />}
+              {activeTab === 'network' && <EntityNetwork entities={entities} />}
+              {activeTab === 'hierarchy' && <EntityOrgChart entities={entities} onSelect={handleSelectEntity} />}
+              {activeTab === 'conflicts' && <ConflictCheckPanel entities={entities} />}
+              {activeTab === 'map' && <EntityMap entities={entities} />}
+              {activeTab === 'analytics' && <EntityAnalytics entities={entities} />}
+              {activeTab === 'ingestion' && <EntityIngestion />}
+              {activeTab === 'governance' && <EntityGovernance entities={entities} onSelect={handleSelectEntity} />}
+              {activeTab === 'vendors' && <EntityVendorOps entities={entities} onSelect={handleSelectEntity} />}
+              
+              {/* New Modules */}
+              {activeTab === 'ubo_register' && <UboRegister entities={entities} onSelect={handleSelectEntity} />}
+              {activeTab === 'kyc_docs' && <KycManager entities={entities} />}
+              {activeTab === 'oc_scorecards' && <PerformanceScorecards entities={entities} />}
+              {activeTab === 'oc_rates' && <RateNegotiation entities={entities} />}
+              {activeTab === 'talent_alumni' && <AlumniDirectory entities={entities} />}
+            </Suspense>
          </div>
       </div>
     </div>

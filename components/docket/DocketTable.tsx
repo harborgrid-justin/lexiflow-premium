@@ -41,11 +41,11 @@ export const DocketTable: React.FC<DocketTableProps> = ({
           const { actionType, actionVerb, documentTitle, filer, additionalText } = entry.structuredData;
           return (
               <span className="text-sm">
-                  <span className="font-semibold text-blue-700">{actionType}</span>
-                  {documentTitle && <span className="font-bold text-slate-800"> {documentTitle}</span>}
-                  {actionVerb && <span className="text-slate-500"> {actionVerb}</span>}
-                  {filer && <span className="text-slate-600 italic"> by {filer}</span>}
-                  {additionalText && <span className="text-slate-500"> - {additionalText}</span>}
+                  <span className="font-semibold text-blue-700 dark:text-blue-400">{actionType}</span>
+                  {documentTitle && <span className={cn("font-bold", theme.text.primary)}> {documentTitle}</span>}
+                  {actionVerb && <span className={theme.text.secondary}> {actionVerb}</span>}
+                  {filer && <span className={cn("italic", theme.text.secondary)}> by {filer}</span>}
+                  {additionalText && <span className={theme.text.tertiary}> - {additionalText}</span>}
               </span>
           );
       }
@@ -56,9 +56,10 @@ export const DocketTable: React.FC<DocketTableProps> = ({
     <div 
         key={entry.id}
         className={cn(
-            "flex items-center border-b hover:bg-slate-50 transition-colors cursor-pointer px-6",
+            "flex items-center border-b transition-colors cursor-pointer px-6",
             theme.border.light,
-            theme.surface
+            theme.surface,
+            `hover:${theme.surfaceHighlight}`
         )}
         style={{ height: 72 }}
         onClick={() => onSelectEntry(entry)}
@@ -101,7 +102,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
                     {renderDescription(entry)}
                   </div>
                 </div>
-                {(!entry.structuredData) && <p className={cn("text-xs text-slate-500 truncate pl-6", theme.text.secondary)}>{entry.description}</p>}
+                {(!entry.structuredData) && <p className={cn("text-xs truncate pl-6", theme.text.secondary)}>{entry.description}</p>}
               </div>
         </div>
 
@@ -131,9 +132,9 @@ export const DocketTable: React.FC<DocketTableProps> = ({
   );
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className={cn("flex flex-col h-full", theme.surface)}>
         {/* Header */}
-        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50", theme.border.default, theme.text.secondary)}>
+        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
             <div className="w-20 shrink-0">Seq / Pacer</div>
             <div className="w-24 shrink-0">Date</div>
             {showCaseColumn && <div className="w-32 shrink-0 px-2">Case Ref</div>}
@@ -156,7 +157,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
                             onLoadMore={onLoadMore}
                             hasMore={hasMore}
                             isLoading={isLoadingMore}
-                            className="border-t bg-slate-50/30"
+                            className={cn("border-t", theme.surfaceHighlight)}
                         />
                     ) : undefined
                 }

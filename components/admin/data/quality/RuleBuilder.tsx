@@ -119,7 +119,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                             className={cn(
                                                 "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                                 rule.severity === s 
-                                                    ? "bg-blue-50 border-blue-500 text-blue-700"
+                                                    ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
                                                     : theme.border.default
                                             )}
                                         >
@@ -193,8 +193,8 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                     <h4 className={cn("font-bold text-xs uppercase mb-3 flex items-center", theme.text.secondary)}>
                         <Code className="h-4 w-4 mr-2"/> Generated Query
                     </h4>
-                    <div className="bg-slate-900 rounded-lg p-4 border border-slate-700 overflow-x-auto">
-                        <pre className="text-xs font-mono text-blue-300 leading-relaxed whitespace-pre-wrap">
+                    <div className={cn("rounded-lg p-4 border overflow-x-auto", theme.surface, theme.border.default)}>
+                        <pre className={cn("text-xs font-mono leading-relaxed whitespace-pre-wrap", theme.text.primary)}>
                             {generatedSQL}
                         </pre>
                     </div>
@@ -222,13 +222,13 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                     <CheckCircle className="h-8 w-8"/>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 w-full">
-                                    <div className="p-3 bg-green-50 border border-green-100 rounded-lg">
-                                        <span className="block text-lg font-bold text-green-700">{testStats.passed}</span>
-                                        <span className="text-xs text-green-600 uppercase">Passed</span>
+                                    <div className={cn("p-3 border rounded-lg", theme.status.success.bg, theme.status.success.border)}>
+                                        <span className={cn("block text-lg font-bold", theme.status.success.text)}>{testStats.passed}</span>
+                                        <span className={cn("text-xs uppercase", theme.status.success.text)}>Passed</span>
                                     </div>
-                                    <div className="p-3 bg-red-50 border border-red-100 rounded-lg">
-                                        <span className="block text-lg font-bold text-red-700">{testStats.failed}</span>
-                                        <span className="text-xs text-red-600 uppercase">Failed</span>
+                                    <div className={cn("p-3 border rounded-lg", theme.status.error.bg, theme.status.error.border)}>
+                                        <span className={cn("block text-lg font-bold", theme.status.error.text)}>{testStats.failed}</span>
+                                        <span className={cn("text-xs uppercase", theme.status.error.text)}>Failed</span>
                                     </div>
                                 </div>
                                 <Button variant="ghost" size="sm" onClick={handleTest}>Run Again</Button>

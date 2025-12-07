@@ -1,23 +1,22 @@
-
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Target, Monitor, Layers, FileText, Gavel, Users, Mic2, Shield, CheckCircle, Briefcase, Swords, ChevronDown } from 'lucide-react';
 import { Button } from './common/Button';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { DataService } from '../services/dataService';
 import { Case } from '../types';
-
-// Sub-components
-import { CommandCenter } from './war-room/CommandCenter';
-import { EvidenceWall } from './war-room/EvidenceWall';
-import { WitnessPrep } from './war-room/WitnessPrep';
-import { TrialBinder } from './war-room/TrialBinder';
-import { AdvisoryBoard } from './war-room/AdvisoryBoard';
-import { OppositionManager } from './war-room/OppositionManager';
-import { WarRoomSidebar } from './war-room/WarRoomSidebar';
 import { LazyLoader } from './common/LazyLoader';
 import { useQuery } from '../services/queryClient';
 import { STORES } from '../services/db';
+
+// Sub-components
+const CommandCenter = lazy(() => import('./war-room/CommandCenter').then(m => ({ default: m.CommandCenter })));
+const EvidenceWall = lazy(() => import('./war-room/EvidenceWall').then(m => ({ default: m.EvidenceWall })));
+const WitnessPrep = lazy(() => import('./war-room/WitnessPrep').then(m => ({ default: m.WitnessPrep })));
+const TrialBinder = lazy(() => import('./war-room/TrialBinder').then(m => ({ default: m.TrialBinder })));
+const AdvisoryBoard = lazy(() => import('./war-room/AdvisoryBoard').then(m => ({ default: m.AdvisoryBoard })));
+const OppositionManager = lazy(() => import('./war-room/OppositionManager').then(m => ({ default: m.OppositionManager })));
+const WarRoomSidebar = lazy(() => import('./war-room/WarRoomSidebar').then(m => ({ default: m.WarRoomSidebar })));
 
 type WarRoomView = 'command' | 'evidence' | 'witnesses' | 'binder' | 'advisory' | 'opposition';
 
@@ -175,7 +174,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                             </select>
                             <ChevronDown className={cn("absolute right-0 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)}/>
                         </div>
-                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded bg-slate-100 border", theme.text.tertiary)}>{currentCaseId}</span>
+                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded border", theme.surfaceHighlight, theme.text.tertiary, theme.border.default)}>{currentCaseId}</span>
                     </div>
                 )}
             </div>
@@ -227,9 +226,13 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
       </div>
 
       <div className={cn("flex-1 flex overflow-hidden border-t", theme.border.default)}>
-        <WarRoomSidebar caseData={trialData.case} />
+        <Suspense fallback={<div className="w-64 border-r hidden md:block bg-slate-50/50"></div>}>
+            <WarRoomSidebar caseData={trialData.case} />
+        </Suspense>
         <div className={cn("flex-1 overflow-y-auto px-6 py-6 custom-scrollbar")}>
-            {renderContent()}
+            <Suspense fallback={<LazyLoader message="Loading War Room Module..." />}>
+                {renderContent()}
+            </Suspense>
         </div>
       </div>
     </div>

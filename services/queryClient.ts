@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 type QueryKey = string | readonly unknown[];
@@ -189,6 +188,8 @@ interface UseQueryOptions<T> {
   enabled?: boolean;
   onSuccess?: (data: T) => void;
   refetchOnWindowFocus?: boolean;
+  // FIX: Add initialData property to allow seeding queries with initial data.
+  initialData?: T;
 }
 
 export function useQuery<T>(
@@ -196,14 +197,19 @@ export function useQuery<T>(
   fn: QueryFunction<T>, 
   options: UseQueryOptions<T> = {}
 ) {
-  const { staleTime = 60000, enabled = true, onSuccess, refetchOnWindowFocus = true } = options;
+  const { staleTime = 60000, enabled = true, onSuccess, refetchOnWindowFocus = true, initialData } = options;
   
   // Hash key once for stability across renders
   const hashedKey = queryClient['hashKey'](key);
 
   const [state, setState] = useState<QueryState<T>>(() => {
     const cached = queryClient.getQueryState<T>(key);
-    return cached || { data: undefined, status: 'idle', error: null, dataUpdatedAt: 0 };
+    // FIX: Use initialData if provided and no cached data exists.
+    if (cached) return cached;
+    if (initialData !== undefined) {
+      return { data: initialData, status: 'success', error: null, dataUpdatedAt: Date.now() };
+    }
+    return { data: undefined, status: 'idle', error: null, dataUpdatedAt: 0 };
   });
 
   const hasFetched = useRef(false);
@@ -240,6 +246,7 @@ export function useQuery<T>(
             }
         };
         window.addEventListener('focus', focusHandler);
+        // FIX: Add visibilitychange listener for better tab switching detection
         window.addEventListener('visibilitychange', focusHandler);
     }
     
@@ -247,6 +254,7 @@ export function useQuery<T>(
         unsubscribe();
         if (focusHandler) {
             window.removeEventListener('focus', focusHandler);
+            // FIX: Remove visibilitychange listener on cleanup
             window.removeEventListener('visibilitychange', focusHandler);
         }
     };

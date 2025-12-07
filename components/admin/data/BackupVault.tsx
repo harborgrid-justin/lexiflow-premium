@@ -123,7 +123,7 @@ export const BackupVault: React.FC = () => {
                                 <TableRow key={snap.id}>
                                     <TableCell>
                                         <div className="flex items-center gap-3">
-                                            <div className={cn("p-2 rounded-lg bg-slate-100 dark:bg-slate-800")}>
+                                            <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
                                                 {getSnapshotIcon(snap.type)}
                                             </div>
                                             <div>
@@ -161,22 +161,22 @@ export const BackupVault: React.FC = () => {
                                  <p className={cn("text-xs", theme.text.secondary)}>Retention: {stats?.retentionPolicy}</p>
                              </div>
                          </div>
-                         <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                         <div className={cn("h-2 w-full rounded-full overflow-hidden", theme.border.default)}>
                              <div className="h-full bg-blue-500 w-3/4"></div>
                          </div>
-                         <div className="flex justify-between text-xs text-slate-500">
+                         <div className={cn("flex justify-between text-xs", theme.text.secondary)}>
                              <span>Used: 75%</span>
                              <span>Quota: 20 TB</span>
                          </div>
                      </div>
                  </div>
 
-                 <div className={cn("p-4 border rounded-lg bg-amber-50 border-amber-200")}>
+                 <div className={cn("p-4 border rounded-lg", theme.status.warning.bg, theme.status.warning.border)}>
                     <div className="flex items-start gap-3">
-                        <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0"/>
+                        <AlertCircle className={cn("h-5 w-5 mt-0.5 shrink-0", theme.status.warning.text)}/>
                         <div>
-                            <h5 className="text-sm font-bold text-amber-800">Disaster Recovery Protocol</h5>
-                            <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                            <h5 className={cn("text-sm font-bold", theme.status.warning.text)}>Disaster Recovery Protocol</h5>
+                            <p className={cn("text-xs mt-1 leading-relaxed", theme.status.warning.text)}>
                                 In case of regional failure, use the <strong className="font-semibold">Replication Manager</strong> to promote the EU-West replica. Restoring from a snapshot here is for data corruption incidents only.
                             </p>
                         </div>
@@ -218,11 +218,11 @@ export const BackupVault: React.FC = () => {
         {/* Restore Confirm Modal */}
         <Modal isOpen={!!restoreModalOpen} onClose={() => setRestoreModalOpen(null)} title="Confirm System Restore" size="sm">
             <div className="p-6">
-                <div className="bg-red-50 border border-red-200 rounded p-4 mb-4 flex items-start gap-3">
-                    <AlertCircle className="h-6 w-6 text-red-600 shrink-0"/>
+                <div className={cn("border rounded p-4 mb-4 flex items-start gap-3", theme.status.error.bg, theme.status.error.border)}>
+                    <AlertCircle className={cn("h-6 w-6 shrink-0", theme.status.error.text)}/>
                     <div>
-                        <h4 className="text-sm font-bold text-red-800">Warning: Destructive Action</h4>
-                        <p className="text-xs text-red-700 mt-1">
+                        <h4 className={cn("text-sm font-bold", theme.status.error.text)}>Warning: Destructive Action</h4>
+                        <p className={cn("text-xs mt-1", theme.status.error.text)}>
                             Restoring from <strong>{restoreModalOpen?.id}</strong> will overwrite current data. Any changes made after {restoreModalOpen && new Date(restoreModalOpen.created).toLocaleString()} will be lost.
                         </p>
                     </div>

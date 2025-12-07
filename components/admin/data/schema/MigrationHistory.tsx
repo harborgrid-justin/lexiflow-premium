@@ -21,12 +21,13 @@ export const MigrationHistory: React.FC = () => {
                 {migrations.map((mig, idx) => (
                     <div key={mig.id} className="flex gap-4">
                         <div className="flex flex-col items-center">
-                            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center border-2 z-10 bg-white dark:bg-slate-900", 
+                            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center border-2 z-10", 
+                                theme.surface,
                                 mig.status === 'Applied' ? "border-green-500 text-green-500" : "border-red-500 text-red-500"
                             )}>
                                 {mig.status === 'Applied' ? <CheckCircle className="h-4 w-4"/> : <XCircle className="h-4 w-4"/>}
                             </div>
-                            {idx !== migrations.length - 1 && <div className={cn("w-0.5 flex-1 bg-slate-200 dark:bg-slate-700 -mb-4")}></div>}
+                            {idx !== migrations.length - 1 && <div className={cn("w-0.5 flex-1 -mb-4", theme.surfaceHighlight)}></div>}
                         </div>
                         <div className={cn("flex-1 p-4 rounded-lg border shadow-sm mb-4", theme.surface, theme.border.default)}>
                             <div className="flex justify-between items-start mb-2">

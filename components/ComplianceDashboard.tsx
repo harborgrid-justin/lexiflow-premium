@@ -1,9 +1,11 @@
-import React, { Suspense, lazy } from 'react';
+
+import React, { Suspense, lazy, useTransition } from 'react';
 import { LayoutDashboard, ShieldAlert, Lock, ScrollText, Download } from 'lucide-react';
 import { Button } from './common/Button';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
+import { cn } from '../utils/cn';
 
 // Sub-components
 const ComplianceOverview = lazy(() => import('./compliance/ComplianceOverview').then(m => ({ default: m.ComplianceOverview })));
@@ -40,7 +42,14 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initialTab }) => {
-  const [activeTab, setActiveTab] = useSessionStorage<string>('compliance_active_tab', initialTab || 'overview');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('compliance_active_tab', initialTab || 'overview');
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -62,7 +71,9 @@ export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initia
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Compliance Module..." />}>
-        {renderContent()}
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+        </div>
       </Suspense>
     </TabbedPageLayout>
   );

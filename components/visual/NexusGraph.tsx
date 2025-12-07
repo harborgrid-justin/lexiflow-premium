@@ -6,6 +6,7 @@ import { cn } from '../../utils/cn';
 import { Case, Party, EvidenceItem } from '../../types';
 import { GraphOverlay } from './GraphOverlay';
 import { useNexusGraph } from '../../hooks/useNexusGraph';
+import { useChartTheme } from '../common/ChartHelpers';
 
 interface NexusGraphProps {
   caseData: Case;
@@ -16,11 +17,12 @@ interface NexusGraphProps {
 
 export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evidence, onNodeClick }) => {
   const { theme, mode } = useTheme();
+  const chartTheme = useChartTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.8);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   
-  // Conflict 12: Resize Observer for precise dimensions
+  // Resize Observer for precise dimensions
   useEffect(() => {
       if (!containerRef.current) return;
       const observer = new ResizeObserver((entries) => {
@@ -88,10 +90,10 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
   }, [isStable, nodesMeta]);
 
   const getStroke = (type: string) => {
-      if (type === 'party') return theme.primary.text.replace('text-', 'text-');
-      if (type === 'org') return 'purple';
-      if (type === 'evidence') return 'amber';
-      return mode === 'dark' ? '#f8fafc' : '#1e293b';
+      if (type === 'party') return chartTheme.colors.blue;
+      if (type === 'org') return chartTheme.colors.purple;
+      if (type === 'evidence') return chartTheme.colors.amber;
+      return mode === 'dark' ? '#f8fafc' : '#1e293b'; // Root default
   };
 
   return (
@@ -116,12 +118,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
                             <circle 
                                 r={node.type === 'root' ? 40 : node.type === 'org' ? 30 : 18} 
                                 fill={node.type === 'root' ? getStroke('root') : (mode === 'dark' ? '#0f172a' : "white")} 
-                                stroke={
-                                  node.type === 'party' ? 'hsl(var(--blue-500))' :
-                                  node.type === 'org' ? 'hsl(var(--purple-500))' :
-                                  node.type === 'evidence' ? 'hsl(var(--amber-500))' :
-                                  getStroke(node.type)
-                                }
+                                stroke={getStroke(node.type)}
                                 strokeWidth={node.type === 'root' ? 0 : 3} 
                             />
                             <text y={node.type === 'root' ? 46 : 32} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>

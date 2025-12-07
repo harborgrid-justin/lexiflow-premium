@@ -14,7 +14,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   renderCell,
   onDateClick
 }) => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   
   const { daysArray, paddingDays, month, year, daysInMonth, startDayOfWeek } = useMemo(() => {
     const y = currentDate.getFullYear();
@@ -38,8 +38,6 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
     return day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
   };
 
-  const gridBg = mode === 'dark' ? 'bg-slate-800' : 'bg-slate-200';
-
   return (
     <div className={cn("flex flex-col h-full rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
       {/* Day Headers */}
@@ -52,7 +50,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
       </div>
 
       {/* Grid Cells */}
-      <div className={cn("flex-1 grid grid-cols-7 auto-rows-fr gap-px", theme.border.default, gridBg)}>
+      <div className={cn("flex-1 grid grid-cols-7 auto-rows-fr gap-px", theme.border.default, theme.surfaceHighlight)}>
         {/* Previous Month Padding */}
         {paddingDays.map((_, i) => (
           <div key={`padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surfaceHighlight)} />
@@ -71,7 +69,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
                 "p-2 min-h-[120px] flex flex-col transition-colors group relative",
                 theme.surface,
                 `hover:${theme.surfaceHighlight}`,
-                today ? cn(theme.primary.light, "bg-opacity-30") : ""
+                today ? cn(theme.primary.light, "ring-1 ring-inset", theme.primary.border) : ""
               )}
             >
               <div className="flex justify-between items-start mb-1">

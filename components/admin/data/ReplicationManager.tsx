@@ -8,7 +8,7 @@ import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
 
 export const ReplicationManager: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const [isFailoverModalOpen, setIsFailoverModalOpen] = useState(false);
   const [primaryRegion, setPrimaryRegion] = useState('US-East');
   const [replicaStatus, setReplicaStatus] = useState<'Syncing' | 'Promoting' | 'Active'>('Syncing');
@@ -31,6 +31,8 @@ export const ReplicationManager: React.FC = () => {
       }, 2000);
   };
 
+  const gridColor = mode === 'dark' ? '#334155' : '#e2e8f0';
+
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto">
         <div className="flex justify-between items-center">
@@ -39,7 +41,13 @@ export const ReplicationManager: React.FC = () => {
         </div>
         
         <div className={cn("relative h-96 rounded-xl p-8 overflow-hidden flex items-center justify-center border shadow-2xl", theme.surface, theme.border.default)}>
-            <div className={cn("absolute inset-0 opacity-20", "bg-[radial-gradient(var(--border-light)_1px,transparent_1px)] [background-size:20px_20px]")}></div>
+            <div 
+                className="absolute inset-0 opacity-20"
+                style={{
+                    backgroundImage: `radial-gradient(${gridColor} 1px, transparent 1px)`,
+                    backgroundSize: '20px 20px'
+                }}
+            ></div>
             
             <div className="flex items-center gap-16 relative z-10">
                 <div className="text-center group">

@@ -1,17 +1,17 @@
 
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
+import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
+import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../types';
 import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
 import { CaseDetailContent } from './case-detail/CaseDetailContent';
 import { CaseTimeline } from './case-detail/CaseTimeline';
-import { useCaseDetail } from '../../hooks/useCaseDetail';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { useCaseDetail } from '../hooks/useCaseDetail';
+import { useTheme } from '../context/ThemeContext';
+import { cn } from '../utils/cn';
+import { DataService } from '../services/dataService';
 import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
-import { HolographicRouting } from '../../services/holographicRouting';
+import { HolographicRouting } from '../services/holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
 
 interface CaseDetailProps {
@@ -26,6 +26,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
   // Initialize hook with the deep-linked tab to prevent flashes
   const hookData = useCaseDetail(caseData, initialTab);
   
+  const [isPending, startTransition] = useTransition();
   const [showMobileTimeline, setShowMobileTimeline] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [caseEvidence, setCaseEvidence] = useState<EvidenceItem[]>([]);
@@ -44,7 +45,9 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       if (initialTab) {
           const resolvedTab = HolographicRouting.resolveTab('cases', initialTab);
           if (resolvedTab) {
-              hookData.setActiveTab(resolvedTab);
+              startTransition(() => {
+                hookData.setActiveTab(resolvedTab);
+              });
           }
       }
   }, [initialTab, hookData.setActiveTab]);
@@ -57,36 +60,36 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = CASE_DETAIL_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
-        hookData.setActiveTab(parent.subTabs[0].id);
+        startTransition(() => {
+          hookData.setActiveTab(parent.subTabs[0].id);
+        });
         setNexusInspectorItem(null); // Close inspector on tab change
     }
   }, [hookData]);
   
   const handleSubTabChange = (tabId: string) => {
-      hookData.setActiveTab(tabId);
+      startTransition(() => {
+        hookData.setActiveTab(tabId);
+      });
       setNexusInspectorItem(null); // Close inspector on sub-tab change
   };
 
   const handleTimelineClick = (event: TimelineEvent) => {
       setShowMobileTimeline(false);
-      switch(event.type) {
-          case 'motion':
-          case 'hearing':
-              hookData.setActiveTab('Motions');
-              break;
-          case 'document':
-              hookData.setActiveTab('Documents');
-              break;
-          case 'task':
-              hookData.setActiveTab('Workflow');
-              break;
-          case 'billing':
-              hookData.setActiveTab('Billing');
-              break;
-          case 'milestone':
-          case 'planning':
-              hookData.setActiveTab('Planning');
-              break;
+      const tabMap: Record<string, string> = {
+        'motion': 'Motions',
+        'hearing': 'Motions',
+        'document': 'Documents',
+        'task': 'Workflow',
+        'billing': 'Billing',
+        'milestone': 'Planning',
+        'planning': 'Planning'
+      };
+      
+      if (tabMap[event.type]) {
+          startTransition(() => {
+            hookData.setActiveTab(tabMap[event.type]);
+          });
       }
   };
 
@@ -111,14 +114,22 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
         isOpen={showMobileMenu}
         onClose={() => setShowMobileMenu(false)}
         onNavigate={(tab) => {
-            hookData.setActiveTab(tab);
+            startTransition(() => {
+                hookData.setActiveTab(tab);
+            });
             setShowMobileMenu(false);
         }}
       />
 
       {/* Top Header & Navigation */}
+      {/* FIX: Destructure caseData to pass individual props to CaseDetailHeader */}
       <CaseDetailHeader 
-        caseData={caseData} 
+        id={caseData.id}
+        title={caseData.title}
+        status={caseData.status}
+        client={caseData.client}
+        clientId={caseData.clientId}
+        jurisdiction={caseData.jurisdiction}
         onBack={onBack} 
         onShowTimeline={() => setShowMobileTimeline(true)}
       />
@@ -164,7 +175,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden min-h-0 flex">
+      <div className={cn("flex-1 overflow-hidden min-h-0 flex", isPending && "opacity-60 transition-opacity")}>
           <div className={cn("flex-1 overflow-hidden min-h-0 transition-all duration-300", nexusInspectorItem ? 'pr-4' : 'pr-0')}>
                 <div className={cn("h-full overflow-y-auto scroll-smooth", 'px-6')}>
                     <CaseDetailContent 
@@ -179,8 +190,10 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAddTask={hookData.addTaskToProject}
                         onUpdateTask={hookData.updateProjectTaskStatus}
                         onGenerateWorkflow={hookData.handleGenerateWorkflow}
+                        // FIX: Changed props.onAnalyzeDoc to hookData.handleAnalyze, as 'props' is not defined in this functional component.
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
+                        // FIX: Changed props.onDraft to hookData.handleDraft.
                         onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />

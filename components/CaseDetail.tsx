@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Case, TimelineEvent, EvidenceItem } from '../types';
 import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
@@ -116,8 +117,14 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       />
 
       {/* Top Header & Navigation */}
+      {/* FIX: Destructure caseData to pass individual props to CaseDetailHeader */}
       <CaseDetailHeader 
-        caseData={caseData} 
+        id={caseData.id}
+        title={caseData.title}
+        status={caseData.status}
+        client={caseData.client}
+        clientId={caseData.clientId}
+        jurisdiction={caseData.jurisdiction}
         onBack={onBack} 
         onShowTimeline={() => setShowMobileTimeline(true)}
       />

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   StickyNote, Filter, Layers, Users, Printer, Plus, Search, 
   BarChart2, PenTool, Layout, Grid, List, Loader2 
@@ -15,7 +15,6 @@ import { TrialExhibit } from '../types';
 import { DataService } from '../services/dataService';
 import { useQuery, useMutation } from '../services/queryClient';
 import { STORES } from '../services/db';
-import { useWorkerSearch } from '../hooks/useWorkerSearch';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';
@@ -28,9 +27,9 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
   const [filterParty, setFilterParty] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [showFilters, setShowFilters] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
 
   // Enterprise Data Access
+  // Using caseId in query key ensures React Query manages cache independently per case
   const { data: exhibits = [] } = useQuery<TrialExhibit[]>(
       [STORES.EXHIBITS, caseId || 'all'],
       DataService.exhibits.getAll
@@ -60,20 +59,12 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
       addExhibit(newExhibit);
   };
 
-  // 1. Category Filter (Cheap)
-  const contextFiltered = useMemo(() => {
-      return exhibits.filter(ex => {
-          const matchParty = filterParty === 'All' || ex.party === filterParty;
-          const matchCase = caseId ? ex.caseId === caseId : true;
-          return matchParty && matchCase;
-      });
-  }, [exhibits, filterParty, caseId]);
-
-  // 2. Search (Expensive / Worker)
-  const { filteredItems: filteredExhibits, isSearching } = useWorkerSearch({
-      items: contextFiltered,
-      query: searchTerm,
-      fields: ['title', 'description', 'exhibitNumber', 'witness']
+  // Filter exhibits locally if the service returns all (fallback) 
+  // though DataService could be optimized to filter server-side
+  const filteredExhibits = exhibits.filter(ex => {
+      const matchParty = filterParty === 'All' || ex.party === filterParty;
+      const matchCase = caseId ? ex.caseId === caseId : true;
+      return matchParty && matchCase;
   });
 
   return (
@@ -152,7 +143,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                             >
                                 {p} Exhibits
                                 <span className={cn("text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600")}>
-                                    {p === 'All' ? exhibits.length : exhibits.filter(e => e.party === p).length}
+                                    {p === 'All' ? filteredExhibits.length : filteredExhibits.filter(e => e.party === p).length}
                                 </span>
                             </button>
                         ))}
@@ -174,18 +165,15 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
         {/* Main Content Area */}
         <div className={cn("flex-1 overflow-y-auto p-6 custom-scrollbar", theme.surface)}>
             {activeTab === 'list' && (
-                <div className="space-y-4 h-full flex flex-col">
+                <div className="space-y-4">
                     {/* List Toolbar */}
-                    <div className="flex justify-between items-center mb-4 shrink-0">
+                    <div className="flex justify-between items-center mb-4">
                         <div className="relative w-72">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
                             <input 
                                 className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface, theme.border.default)}
                                 placeholder="Search exhibits..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                            {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
                         </div>
                         <div className="flex gap-2">
                             <div className={cn("flex bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
@@ -196,9 +184,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                         </div>
                     </div>
 
-                    <div className="flex-1 min-h-0 relative">
-                        <ExhibitTable exhibits={filteredExhibits} viewMode={viewMode} />
-                    </div>
+                    <ExhibitTable exhibits={filteredExhibits} viewMode={viewMode} />
                 </div>
             )}
 

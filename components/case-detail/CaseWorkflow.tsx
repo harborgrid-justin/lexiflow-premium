@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { WorkflowStage, WorkflowTask, StageStatus } from '../../types';
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../types';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '../common/Button';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
@@ -23,8 +24,9 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
     setStages(prevStages => prevStages.map(stage => {
         if (stage.id !== stageId) return stage;
         
+        // FIX: Explicitly cast status to TaskStatus to resolve type mismatch.
         const newTasks = stage.tasks.map(task => 
-            task.id === taskId ? { ...task, status: task.status === 'Done' ? 'Pending' : 'Done' } : task
+            task.id === taskId ? { ...task, status: (task.status === 'Done' ? 'Pending' : 'Done') as TaskStatus } : task
         );
         
         const allDone = newTasks.every(t => t.status === 'Done');

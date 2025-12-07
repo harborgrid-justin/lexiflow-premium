@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { DiscoveryRequest } from '../../types';
 import { Card } from '../common/Card';
@@ -65,7 +66,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                 </div>
            </div>
            <div className="flex gap-2">
-               <div className={cn("flex items-center gap-2 px-3 py-1 bg-red-50 text-red-700 rounded border border-red-200 text-xs font-bold")}>
+               <div className={cn("flex items-center gap-2 px-3 py-1 rounded border text-xs font-bold", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}>
                    <AlertTriangle className="h-4 w-4"/> Sanctions Available
                </div>
            </div>
@@ -83,11 +84,11 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                                onClick={() => toggleRequest(req.id)}
                                className={cn(
                                    "p-3 rounded border cursor-pointer transition-all",
-                                   selectedRequests.includes(req.id) ? "bg-red-50 border-red-300" : cn(theme.surface, theme.border.default)
+                                   selectedRequests.includes(req.id) ? cn(theme.status.error.bg, theme.status.error.border) : cn(theme.surface, theme.border.default)
                                )}
                            >
                                <div className="flex items-start gap-3">
-                                   <div className={cn("mt-0.5", selectedRequests.includes(req.id) ? "text-red-600" : "text-slate-300")}>
+                                   <div className={cn("mt-0.5", selectedRequests.includes(req.id) ? theme.status.error.text : theme.text.tertiary)}>
                                        <CheckSquare className="h-4 w-4" />
                                    </div>
                                    <div>
@@ -112,7 +113,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                            <label className={cn("text-xs font-bold", theme.text.primary)}>Conference Date</label>
                            <input 
                                type="date" 
-                               className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)}
+                               className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)}
                                value={meetConferDate}
                                onChange={(e) => setMeetConferDate(e.target.value)}
                            />
@@ -123,7 +124,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
 
                <Button 
                    variant="primary" 
-                   className="w-full bg-red-600 hover:bg-red-700 border-red-600 text-white" 
+                   className={cn("w-full", theme.status.error.bg, theme.status.error.border, theme.status.error.text, `hover:${theme.status.error.bg}`)} // Red button for aggressive action
                    icon={isGenerating ? undefined : Wand2}
                    disabled={isGenerating}
                    onClick={handleGenerate}
@@ -133,17 +134,17 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
            </div>
 
            {/* Right: Preview */}
-           <div className={cn("flex-1 p-8 bg-slate-50 overflow-y-auto")}>
+           <div className={cn("flex-1 p-8 overflow-y-auto", theme.surfaceHighlight)}>
                {draft ? (
-                   <div className="max-w-3xl mx-auto bg-white shadow-lg p-10 min-h-[800px] border border-slate-200">
+                   <div className={cn("max-w-3xl mx-auto shadow-lg p-10 min-h-[800px] border", theme.surface, theme.border.default)}>
                         <div dangerouslySetInnerHTML={{ __html: draft }} className={cn("prose max-w-none font-serif text-sm leading-loose", theme.text.primary)} />
-                        <div className="mt-8 pt-8 border-t flex justify-end gap-3">
+                        <div className={cn("mt-8 pt-8 border-t flex justify-end gap-3", theme.border.light)}>
                             <Button variant="secondary">Save as Draft</Button>
                             <Button variant="primary" icon={Gavel}>File with Court</Button>
                         </div>
                    </div>
                ) : (
-                   <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                   <div className={cn("flex flex-col items-center justify-center h-full", theme.text.tertiary)}>
                        <Gavel className="h-16 w-16 mb-4 opacity-20"/>
                        <p className="font-medium">Configure options to generate motion.</p>
                        <p className="text-sm mt-2 max-w-xs text-center">Ensures compliance with FRCP 37 requirements including certification of conferral.</p>

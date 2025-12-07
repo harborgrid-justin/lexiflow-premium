@@ -48,7 +48,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <div className="flex items-center gap-2">
             <label className={cn("flex items-center text-xs cursor-pointer select-none", theme.text.secondary)}>
               <div 
-                className={cn("w-8 h-4 rounded-full p-0.5 transition-colors mr-2", isPrivilegedMode ? 'bg-amber-500' : 'bg-slate-300')} 
+                className={cn("w-8 h-4 rounded-full p-0.5 transition-colors mr-2", isPrivilegedMode ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-600')} 
                 onClick={() => setIsPrivilegedMode(!isPrivilegedMode)}
               >
                 <div className={cn("w-3 h-3 bg-white rounded-full shadow-sm transform transition-transform", isPrivilegedMode ? 'translate-x-4' : 'translate-x-0')}></div>
@@ -61,7 +61,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                 <button 
                     onClick={onAiAssist}
                     disabled={isAiThinking}
-                    className={cn("text-[10px] flex items-center px-2 py-1 rounded bg-purple-50 text-purple-600 border border-purple-100 hover:bg-purple-100 transition-colors", isAiThinking ? "opacity-70" : "")}
+                    className={cn("text-[10px] flex items-center px-2 py-1 rounded border transition-colors", "bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-100", isAiThinking ? "opacity-70" : "")}
                 >
                     {isAiThinking ? <Loader2 className="h-3 w-3 animate-spin mr-1"/> : <Sparkles className="h-3 w-3 mr-1"/>}
                     {isAiThinking ? 'Thinking...' : 'Smart Reply'}
@@ -81,7 +81,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             <Paperclip className="h-5 w-5"/>
           </button>
           <input 
-            className={cn("flex-1 bg-transparent border-none outline-none text-sm px-2 placeholder:text-slate-400", theme.text.primary)}
+            className={cn("flex-1 bg-transparent border-none outline-none text-sm px-2 placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
             placeholder={`Message ${recipientName}...`}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -91,7 +91,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onClick={onSend}
             disabled={!inputText.trim() && pendingAttachments.length === 0}
             className={cn("p-2 rounded-full transition-all", 
-                inputText.trim() || pendingAttachments.length > 0 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") : cn("bg-slate-200 dark:bg-slate-700", theme.text.tertiary)
+                inputText.trim() || pendingAttachments.length > 0 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") : cn(theme.surface, theme.text.tertiary, theme.border.default, "border")
             )}
           >
             <Send className="h-5 w-5 ml-0.5"/>

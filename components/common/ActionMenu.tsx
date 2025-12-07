@@ -55,7 +55,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
                   className={cn(
                     "w-full text-left px-4 py-2 text-xs flex items-center gap-2 transition-colors",
                     action.variant === 'danger' 
-                      ? "text-red-600 hover:bg-red-50" 
+                      ? cn(theme.status.error.text, `hover:${theme.status.error.bg}`)
                       : cn(theme.text.primary, `hover:${theme.surfaceHighlight}`)
                   )}
                   role="menuitem"

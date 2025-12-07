@@ -1,5 +1,6 @@
+
 import React, { Suspense, lazy } from 'react';
-import { Users, TrendingUp, Building2, Briefcase, Laptop, Wallet } from 'lucide-react';
+import { Users, TrendingUp, Building2, Briefcase, Laptop, Wallet, BookOpen, ShieldAlert, MapPin, Target, ShoppingCart } from 'lucide-react';
 import { Button } from './common/Button';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
@@ -11,7 +12,14 @@ const FinancialCenter = lazy(() => import('./practice/FinancialCenter').then(m =
 const MarketingDashboard = lazy(() => import('./practice/MarketingDashboard').then(m => ({ default: m.MarketingDashboard })));
 const AssetManager = lazy(() => import('./practice/AssetManager').then(m => ({ default: m.AssetManager })));
 
-type OperationView = 'hr' | 'assets' | 'finance' | 'marketing';
+// New Enterprise Modules
+const KnowledgeCenter = lazy(() => import('./practice/KnowledgeCenter').then(m => ({ default: m.KnowledgeCenter })));
+const VendorProcurement = lazy(() => import('./practice/VendorProcurement').then(m => ({ default: m.VendorProcurement })));
+const FacilitiesManager = lazy(() => import('./practice/FacilitiesManager').then(m => ({ default: m.FacilitiesManager })));
+const SecurityOps = lazy(() => import('./practice/SecurityOps').then(m => ({ default: m.SecurityOps })));
+const StrategyBoard = lazy(() => import('./practice/StrategyBoard').then(m => ({ default: m.StrategyBoard })));
+
+type OperationView = 'hr' | 'assets' | 'finance' | 'marketing' | 'knowledge' | 'procurement' | 'facilities' | 'security' | 'strategy';
 
 interface FirmOperationsProps {
     initialTab?: OperationView;
@@ -22,14 +30,24 @@ const TAB_CONFIG: TabConfigItem[] = [
     id: 'admin', label: 'Administration', icon: Building2,
     subTabs: [
       { id: 'hr', label: 'HR & Staffing', icon: Users },
+      { id: 'facilities', label: 'Facilities', icon: MapPin },
       { id: 'assets', label: 'IT & Assets', icon: Laptop },
     ]
   },
   {
-    id: 'performance', label: 'Firm Performance', icon: TrendingUp,
+    id: 'performance', label: 'Performance', icon: TrendingUp,
     subTabs: [
       { id: 'finance', label: 'Banking & Ledger', icon: Wallet },
       { id: 'marketing', label: 'Marketing & ROI', icon: TrendingUp },
+      { id: 'strategy', label: 'Strategic Planning', icon: Target },
+    ]
+  },
+  {
+    id: 'governance', label: 'Governance', icon: ShieldAlert,
+    subTabs: [
+      { id: 'security', label: 'Security Ops', icon: ShieldAlert },
+      { id: 'procurement', label: 'Vendor & Contracts', icon: ShoppingCart },
+      { id: 'knowledge', label: 'Knowledge Mgmt', icon: BookOpen },
     ]
   }
 ];
@@ -43,6 +61,11 @@ export const FirmOperations: React.FC<FirmOperationsProps> = ({ initialTab }) =>
       case 'assets': return <AssetManager />;
       case 'finance': return <FinancialCenter />;
       case 'marketing': return <MarketingDashboard />;
+      case 'knowledge': return <KnowledgeCenter />;
+      case 'procurement': return <VendorProcurement />;
+      case 'facilities': return <FacilitiesManager />;
+      case 'security': return <SecurityOps />;
+      case 'strategy': return <StrategyBoard />;
       default: return <HRManager />;
     }
   };

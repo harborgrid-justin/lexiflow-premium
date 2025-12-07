@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '../../../common/Card';
 import { Button } from '../../../common/Button';
@@ -82,17 +83,17 @@ export const StandardizationConsole: React.FC = () => {
                         onClick={() => toggleRule(rule.id)}
                     >
                         <div className="flex justify-between items-start mb-3">
-                            <div className={cn("p-2 rounded-lg bg-slate-100 dark:bg-slate-800")}>
+                            <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
                                 {getIcon(rule.operation)}
                             </div>
-                            <div className={cn("w-10 h-5 rounded-full p-1 transition-colors", rule.isActive ? "bg-blue-600" : "bg-slate-300")}>
+                            <div className={cn("w-10 h-5 rounded-full p-1 transition-colors", rule.isActive ? "bg-blue-600" : theme.border.default)}>
                                 <div className={cn("w-3 h-3 bg-white rounded-full shadow-sm transition-transform", rule.isActive ? "translate-x-5" : "")}></div>
                             </div>
                         </div>
                         
                         <h4 className={cn("font-bold text-sm mb-1", theme.text.primary)}>{rule.name}</h4>
                         <div className={cn("flex items-center gap-2 text-xs", theme.text.secondary)}>
-                            <span className={cn("font-mono bg-slate-100 dark:bg-slate-800 px-1.5 rounded")}>{rule.targetField}</span>
+                            <span className={cn("font-mono px-1.5 rounded", theme.surfaceHighlight)}>{rule.targetField}</span>
                             <span>•</span>
                             <span>{rule.operation}</span>
                         </div>

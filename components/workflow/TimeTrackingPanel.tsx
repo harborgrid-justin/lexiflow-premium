@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, StopCircle, Clock } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { TimeEntry } from '../../types';
+import { TimeEntry, UUID, CaseId, UserId } from '../../types';
 import { useNotify } from '../../hooks/useNotify';
 
 export const TimeTrackingPanel: React.FC = () => {
@@ -43,9 +42,12 @@ export const TimeTrackingPanel: React.FC = () => {
       
       const durationMinutes = Math.ceil(seconds / 60);
       const entry: TimeEntry = {
-          id: `t-${Date.now()}`,
-          caseId: 'General', // Default to General if no case context available in this panel
-          userId: 'current-user',
+// FIX: Cast string to branded type UUID
+          id: `t-${Date.now()}` as UUID,
+// FIX: Cast string to branded type CaseId
+          caseId: 'General' as CaseId,
+// FIX: Cast string to branded type UserId
+          userId: 'current-user' as UserId,
           date: new Date().toISOString().split('T')[0],
           duration: durationMinutes,
           description: 'General Administrative Task (Auto-Logged)',

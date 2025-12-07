@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Server, HardDrive } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -52,6 +51,7 @@ export const AdminDataRegistry: React.FC<AdminDataRegistryProps> = ({ dataFiles 
         </div>
       </div>
       <div className="flex-1 overflow-auto p-4">
+        {/* FIX: Add missing height prop */}
         <VirtualGrid
             items={dataFiles}
             itemHeight={80} 

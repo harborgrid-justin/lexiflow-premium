@@ -1,27 +1,11 @@
-
 import React, { useState } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
+// FIX: Correct import path
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-
-// Shared interfaces mirroring SchemaArchitect
-export interface TableColumn {
-  name: string;
-  type: string;
-  pk?: boolean;
-  notNull?: boolean;
-  unique?: boolean;
-  fk?: string;
-  index?: boolean;
-}
-
-export interface TableData {
-  name: string;
-  x: number;
-  y: number;
-  columns: TableColumn[];
-}
+// FIX: Correct import path
+import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
 
 interface SchemaVisualizerProps {
     tables: TableData[];
@@ -32,13 +16,6 @@ interface SchemaVisualizerProps {
     onRenameTable: (oldName: string) => void;
     onDeleteTable: (tableName: string) => void;
     onUpdateTablePos: (tableName: string, pos: {x: number, y: number}) => void;
-}
-
-interface ContextMenuItem {
-    label: string;
-    icon?: React.ElementType;
-    action: () => void;
-    danger?: boolean;
 }
 
 const ContextMenu: React.FC<{ x: number, y: number, items: ContextMenuItem[], onClose: () => void }> = ({ x, y, items, onClose }) => {
@@ -53,9 +30,6 @@ const ContextMenu: React.FC<{ x: number, y: number, items: ContextMenuItem[], on
         </div>
     );
 };
-
-type ContextMenuType = 'table' | 'column' | 'canvas';
-type ContextData = { name: string } | { tableName: string, column: TableColumn } | null;
 
 export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
   const { theme, mode } = useTheme();

@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { UserAvatar } from './UserAvatar';
 import { ChevronDown } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { MOCK_USERS } from '../../data/models/user';
 
 interface UserOption {
   id: string;

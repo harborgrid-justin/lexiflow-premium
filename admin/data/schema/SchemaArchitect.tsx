@@ -1,15 +1,19 @@
-
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { Modal } from '../../../common/Modal';
 import { Input } from '../../../common/Inputs';
-import { SchemaVisualizer, TableData, TableColumn } from '../../../components/admin/data/schema/SchemaVisualizer';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
 import { Button } from '../../../common/Button';
+import { SchemaVisualizer } from './SchemaVisualizer';
+// FIX: Correct import path
+import { TableData, TableColumn } from './schemaTypes'; // Import types
+// FIX: Correct import path
+import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
+
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -156,13 +160,12 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
             {activeTab === 'snapshots' && <SchemaSnapshots />}
         </div>
 
-        {/* Column Edit/Add Modal */}
         <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
             <div className="p-6 space-y-4">
                 <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>

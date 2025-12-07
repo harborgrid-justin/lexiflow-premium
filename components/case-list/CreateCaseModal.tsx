@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
-import { Case, CaseStatus, MatterType, JurisdictionObject } from '../../types';
+import { Case, CaseStatus, MatterType, JurisdictionObject, CaseId } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '../../data/jurisdictionData';
@@ -108,7 +107,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
       }
 
       const newCase: Case = {
-          id: (isPreFiling ? `MAT-${Date.now()}` : (formData.id || `CASE-${Date.now()}`)) as any, // Cast to Branded CaseId
+// FIX: Cast string to branded type CaseId
+          id: (isPreFiling ? `MAT-${Date.now()}` : (formData.id || `CASE-${Date.now()}`)) as CaseId,
           title: formData.title,
           client: formData.client,
           matterType: formData.matterType as MatterType,

@@ -1,6 +1,5 @@
-
 import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Client } from '../types';
+import { Client, EntityId } from '../types';
 import {
   UserPlus, LayoutDashboard, List, GitPullRequest,
   BarChart3, Users, TrendingUp
@@ -12,7 +11,7 @@ import { DataService } from '../services/dataService';
 import { useQuery } from '../services/queryClient';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from '../common/LazyLoader';
+import { LazyLoader } from './common/LazyLoader';
 import { STORES } from '../services/db';
 import { cn } from '../utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '../config/crmConfig'; // Updated import path
@@ -52,7 +51,8 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
 
   const handleAddClient = async (clientName: string) => {
       const newClient: Client = {
-          id: `cli-${Date.now()}`, name: clientName, industry: 'General',
+// FIX: Cast string to branded type EntityId
+          id: `cli-${Date.now()}` as EntityId, name: clientName, industry: 'General',
           status: 'Prospect', totalBilled: 0, matters: []
       };
       await DataService.clients.add(newClient);

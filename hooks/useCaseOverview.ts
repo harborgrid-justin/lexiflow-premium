@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Case, TimeEntry, TimeEntryPayload } from '../types';
+import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId } from '../types';
 import { DataService } from '../services/dataService';
 import { useSync } from '../context/SyncContext';
 
@@ -25,7 +24,8 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     }, [caseData]);
 
     const handleSaveTime = (rawEntry: TimeEntryPayload) => {
-        const newEntry: TimeEntry = { id: `t-${Date.now()}`, userId: 'current-user', ...rawEntry };
+// FIX: Cast string to branded types
+        const newEntry: TimeEntry = { id: `t-${Date.now()}` as UUID, userId: 'current-user' as UserId, ...rawEntry };
         
         performMutation('BILLING_LOG', newEntry, () => DataService.billing.addTimeEntry(newEntry));
         
@@ -41,7 +41,8 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     const handleTransferToAppeal = async () => {
         const appealCase: Case = {
             ...caseData,
-            id: `APP-${Date.now()}`,
+// FIX: Cast string to branded type CaseId
+            id: `APP-${Date.now()}` as CaseId,
             title: `Appeal: ${caseData.title}`,
             matterType: 'Appeal',
             status: 'Appeal' as any,

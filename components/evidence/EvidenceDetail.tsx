@@ -1,21 +1,21 @@
 
 
+
 import React from 'react';
 import { Button } from '../common/Button';
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 import { ArrowLeft, FileSearch, Lock, ExternalLink, Stamp } from 'lucide-react';
-import { EvidenceOverview } from './EvidenceOverview';
-import { EvidenceAdmissibility } from './EvidenceAdmissibility';
+import { EvidenceOverview } from './overview/EvidenceOverview';
+import { EvidenceAdmissibility } from './fre/EvidenceAdmissibility';
 import { EvidenceStructure } from './EvidenceStructure';
 import { EvidenceForensics } from './EvidenceForensics';
 import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../services/dataService';
-import { useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { useNotify } from '../hooks/useNotify';
-// FIX: Corrected import to use the actual exported component
+import { DataService } from '../../services/dataService';
+import { useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { useNotify } from '../../hooks/useNotify';
 import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 
 
@@ -38,7 +38,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
       async () => {
           // 1. Create Exhibit
           const exhibit: TrialExhibit = {
-              id: `ex-${Date.now()}`,
+              id: `ex-${Date.now()}` as any,
               caseId: selectedItem.caseId,
               exhibitNumber: `PX-${Date.now().toString().slice(-3)}`, // Auto-gen number
               title: selectedItem.title,

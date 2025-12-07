@@ -1,4 +1,3 @@
-
 declare module "@google/genai" {
   export class GoogleGenAI {
     constructor(config: { apiKey: string });
@@ -39,10 +38,10 @@ declare module "@google/genai" {
           responseMimeType?: string;
           responseSchema?: Schema;
           tools?: any[];
-          // FIX: Add missing config properties based on documentation
+// FIX: Add missing config properties based on documentation
           maxOutputTokens?: number;
           thinkingConfig?: { thinkingBudget: number };
-          imageConfig?: { aspectRatio?: string, imageSize?: string };
+          imageConfig?: { aspectRatio?: string; imageSize?: string };
       };
   }
   

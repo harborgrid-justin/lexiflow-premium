@@ -5,7 +5,7 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { MetricCard } from '../common/Primitives';
 import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2 } from 'lucide-react';
-import { StaffMember } from '../../types';
+import { StaffMember, UserId } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -39,7 +39,8 @@ export const HRManager: React.FC = () => {
   const handleAddStaff = (newStaff: Partial<StaffMember>) => {
       const staff: StaffMember = {
           id: `s-${Date.now()}`,
-          userId: `u-${Date.now()}`,
+// FIX: Cast string to branded type UserId
+          userId: `u-${Date.now()}` as UserId,
           name: newStaff.name!,
           email: newStaff.email!,
           role: (newStaff.role as any) || 'Associate',

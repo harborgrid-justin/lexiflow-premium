@@ -1,4 +1,3 @@
-
 import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -18,12 +17,7 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Added explicit constructor to ensure proper base class initialization.
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-  }
-
-  public state: ErrorBoundaryState = {
+  state: ErrorBoundaryState = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -32,15 +26,11 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     isCopied: false,
   };
 
-  public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+  public static getDerivedStateFromError = (error: Error): Partial<ErrorBoundaryState> => {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  // FIX: Converted to arrow function property to guarantee 'this' context, resolving 'setState' not found errors.
   public componentDidCatch = (error: Error, errorInfo: ErrorInfo): void => {
-    // FIX: Add explicit type assertion for 'this' to resolve TypeScript error regarding 'setState' property.
-    const self = this as React.Component<ErrorBoundaryProps, ErrorBoundaryState>;
-
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
@@ -68,17 +58,22 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.log("Component Stack:", errorInfo.componentStack);
     console.groupEnd();
     
-    self.setState({ isResolving: true, debugInfo });
+// FIX: Add 'this' to access component state and methods
+    this.setState({ isResolving: true, debugInfo });
 
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
-        if (self.state.hasError) {
-            self.setState({ aiResolution: resolution, isResolving: false });
+// FIX: Add 'this' to access component state and methods
+        if (this.state.hasError) {
+// FIX: Add 'this' to access component state and methods
+            this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
-         if (self.state.hasError) {
-            self.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
+// FIX: Add 'this' to access component state and methods
+         if (this.state.hasError) {
+// FIX: Add 'this' to access component state and methods
+            this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
          }
       });
   }
@@ -90,12 +85,12 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
   private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
-            // FIX: Add explicit type assertion for 'this' to resolve TypeScript error regarding 'setState' property.
-            const self = this as React.Component<ErrorBoundaryProps, ErrorBoundaryState>;
             navigator.clipboard.writeText(this.state.debugInfo).then(() => {
-                self.setState({ isCopied: true });
+// FIX: Add 'this' to access component state and methods
+                this.setState({ isCopied: true });
                 setTimeout(() => {
-                    self.setState({ isCopied: false });
+// FIX: Add 'this' to access component state and methods
+                    this.setState({ isCopied: false });
                 }, 2000);
             }).catch(err => {
                 console.error("Failed to copy debug info:", err);
@@ -104,13 +99,13 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     }
   }
 
-  // FIX: Converted to arrow function property to guarantee 'this' context, resolving 'props' not found errors.
   public render = (): ReactNode => {
-    // FIX: Add explicit type assertion for 'this' to resolve TypeScript error regarding 'props' property.
-    const self = this as React.Component<ErrorBoundaryProps, ErrorBoundaryState>;
-    if (self.state.hasError) {
-      if (self.props.fallback) {
-        return self.props.fallback;
+// FIX: Add 'this' to access component state and methods
+    if (this.state.hasError) {
+// FIX: Add 'this' to access component state and methods
+      if (this.props.fallback) {
+// FIX: Add 'this' to access component state and methods
+        return this.props.fallback;
       }
 
       return (
@@ -123,7 +118,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
             The application encountered an unexpected error in this component. 
             <br/>
             <span className="font-mono text-xs bg-slate-200 dark:bg-slate-700 px-1 rounded mt-2 inline-block text-slate-700 dark:text-slate-300">
-              {self.state.error ? self.state.error.message : 'Unknown Error'}
+              {this.state.error ? this.state.error.message : 'Unknown Error'}
             </span>
           </p>
 
@@ -133,13 +128,13 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
                 AI-Powered Analysis
             </h3>
             <div className="mt-2 p-4 text-xs rounded-lg border bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 min-h-[50px]">
-                {self.state.isResolving ? (
+                {this.state.isResolving ? (
                     <div className="flex items-center gap-2 animate-pulse">
                         <Loader2 className="h-3 w-3 animate-spin" />
                         Analyzing error...
                     </div>
                 ) : (
-                    self.state.aiResolution || "No analysis available."
+                    this.state.aiResolution || "No analysis available."
                 )}
             </div>
           </div>
@@ -158,11 +153,11 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
             </button>
             <button 
               onClick={this.handleCopyDebugInfo}
-              disabled={self.state.isCopied}
+              disabled={this.state.isCopied}
               className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-70"
             >
-                {self.state.isCopied ? <Check className="h-4 w-4 mr-2 text-green-600"/> : <Clipboard className="h-4 w-4 mr-2" />}
-                {self.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
+                {this.state.isCopied ? <Check className="h-4 w-4 mr-2 text-green-600"/> : <Clipboard className="h-4 w-4 mr-2" />}
+                {this.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
             </button>
             <button 
               onClick={this.handleReset}
@@ -176,6 +171,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
-    return self.props.children;
+// FIX: Add 'this' to access component state and methods
+    return this.props.children;
   }
 }

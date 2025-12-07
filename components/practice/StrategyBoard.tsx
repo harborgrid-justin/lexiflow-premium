@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Target, TrendingUp, Users, PieChart, FileText } from 'lucide-react';
+import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-react';
 import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -76,7 +75,7 @@ export const StrategyBoard: React.FC = () => {
                                 <KanbanCard className="border-l-4 border-l-blue-500">Regional Employment Firm</KanbanCard>
                             </KanbanColumn>
                             {/* FIX: Added null child to satisfy required children prop. */}
-                            <KanbanColumn title="Negotiation" count={0}>{null}</KanbanColumn>
+                            <KanbanColumn title="Negotiation" count={0}><></></KanbanColumn>
                             <KanbanColumn title="Integration" count={1}>
                                 <KanbanCard className="border-l-4 border-l-green-500">Tax Practice Group</KanbanCard>
                             </KanbanColumn>
@@ -87,8 +86,3 @@ export const StrategyBoard: React.FC = () => {
         </div>
     );
 };
-
-// Helper Icon for local usage
-const MapPin = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-);

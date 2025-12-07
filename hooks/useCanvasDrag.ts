@@ -1,5 +1,5 @@
-
-import React, { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import React from 'react';
 
 type DragType = 'pan' | 'item';
 
@@ -19,6 +19,11 @@ interface UseCanvasDragProps {
 export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps = {}) => {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragState = useRef<DragState | null>(null);
+  const onUpdateItemPosRef = useRef(onUpdateItemPos);
+  
+  useEffect(() => {
+    onUpdateItemPosRef.current = onUpdateItemPos;
+  }, [onUpdateItemPos]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent, type: DragType, itemId?: string, currentItemPos?: { x: number, y: number }) => {
     // Middle mouse, shift, or meta/cmd for panning, or explicit pan type
@@ -55,21 +60,17 @@ export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps 
             const newX = state.initialPos.x + (e.clientX / zoom - state.startX);
             const newY = state.initialPos.y + (e.clientY / zoom - state.startY);
             
-            // DOM manipulation for performance (optional, usually handled by React state in parent, 
-            // but for high freq drag, direct DOM or specialized libs are better. 
-            // Here we assume parent updates state or we update a ref).
-            // For this hook, we'll return the handler to be attached.
-             const el = document.querySelector(`[data-drag-id="${state.id}"]`) as HTMLElement;
-             if(el) el.style.transform = `translate(${newX}px, ${newY}px)`;
+            const el = document.querySelector(`[data-drag-id="${state.id}"]`) as HTMLElement;
+            if(el) el.style.transform = `translate(${newX}px, ${newY}px)`;
         }
     };
 
     const handleWindowMouseUp = (e: MouseEvent) => {
-        if (dragState.current?.type === 'item' && dragState.current.id && onUpdateItemPos) {
+        if (dragState.current?.type === 'item' && dragState.current.id && onUpdateItemPosRef.current) {
              const { id, startX, startY, initialPos } = dragState.current;
              const newX = initialPos.x + (e.clientX / zoom - startX);
              const newY = initialPos.y + (e.clientY / zoom - startY);
-             onUpdateItemPos(id, { x: newX, y: newY });
+             onUpdateItemPosRef.current(id, { x: newX, y: newY });
         }
         dragState.current = null;
         window.removeEventListener('mousemove', handleWindowMouseMove);
@@ -78,7 +79,7 @@ export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps 
 
     window.addEventListener('mousemove', handleWindowMouseMove);
     window.addEventListener('mouseup', handleWindowMouseUp);
-  }, [pan, zoom, onUpdateItemPos]);
+  }, [pan, zoom]);
 
   return { pan, setPan, handleMouseDown };
 };

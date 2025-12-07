@@ -1,6 +1,7 @@
 
+
 import React, { useState } from 'react';
-import { ConferralSession, ConferralResult, ConferralMethod } from '../../../types';
+import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId } from '../../../types';
 import { Button } from '../../../components/common/Button';
 import { Badge } from '../../../components/common/Badge';
 import { Input, TextArea } from '../../../components/common/Inputs';
@@ -62,8 +63,10 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
   const handleSave = () => {
     const session: ConferralSession = {
-      id: `conf-${Date.now()}`,
-      caseId,
+// FIX: Cast string to branded type UUID
+      id: `conf-${Date.now()}` as UUID,
+// FIX: Cast string to branded type CaseId
+      caseId: caseId as CaseId,
       topic: newSession.topic || 'General Conferral',
       date: newSession.date || new Date().toISOString().split('T')[0],
       method: newSession.method as ConferralMethod,

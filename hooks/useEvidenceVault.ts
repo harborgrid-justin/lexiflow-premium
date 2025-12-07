@@ -1,7 +1,8 @@
 
+
 import { useState, useMemo, useEffect } from 'react';
 import { DataService } from '../services/dataService';
-import { EvidenceItem, ChainOfCustodyEvent } from '../types';
+import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '../types';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 
@@ -85,7 +86,8 @@ export const useEvidenceVault = (caseId?: string) => {
 
   const handleIntakeComplete = (newItem: EvidenceItem) => {
     // If we are in a scoped case view, ensure the new item belongs to it
-    if (caseId) newItem.caseId = caseId;
+// FIX: Cast string to branded type CaseId
+    if (caseId) newItem.caseId = caseId as CaseId;
     
     addEvidence(newItem);
     alert("Item logged successfully."); 

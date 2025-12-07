@@ -6,7 +6,7 @@ import {
   DollarSign, Gavel, Mic2, FileCheck, Archive, FileInput,
   LayoutDashboard, Layers, Plus
 } from 'lucide-react';
-import { Button } from './common/Button';
+import { Button } from '../common/Button';
 import { useCaseList } from '../hooks/useCaseList';
 import { DocketImportModal } from './DocketImportModal';
 import { CreateCaseModal } from './case-list/CreateCaseModal';
@@ -16,7 +16,7 @@ import { useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
+import { LazyLoader } from '../common/LazyLoader';
 import { cn } from '../utils/cn';
 import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
 import { CaseListContent } from './case-list/CaseListContent'; // Updated import path
@@ -65,7 +65,11 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
            title: data.caseInfo?.title || 'Imported Matter',
            matterType: 'Litigation', status: CaseStatus.Discovery, client: 'Imported Client', value: 0,
            description: 'Imported via Docket XML', filingDate: new Date().toISOString().split('T')[0],
-           ...data.caseInfo
+           ...data.caseInfo,
+           parties: [],
+           citations: [],
+           arguments: [],
+           defenses: []
        };
        await DataService.cases.add(newCase);
        await DataService.cases.importDocket(newCase.id, data);

@@ -3,7 +3,6 @@ import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '.
 import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { useTheme } from '../../context/ThemeContext';
-// FIX: Corrected import path for cn utility
 import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentService } from '../../services/documentService';
@@ -11,10 +10,9 @@ import { DataService } from '../../services/dataService';
 import { useNotify } from '../../hooks/useNotify';
 import { queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { CaseDocumentItem } from './documents/CaseDocumentItem'; // Updated import path
-import { Button } from '../common/Button'; // Ensure Button is imported
+import { CaseDocumentItem } from './documents/CaseDocumentItem';
+import { Button } from '../common/Button';
 
-// FIX: Lazy load DocumentAssembly
 const DocumentAssembly = lazy(() => import('../DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 
 interface CaseDocumentsProps {
@@ -38,7 +36,6 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     openWindow(
       id,
       'Drafting Wizard',
-      // FIX: Wrap lazy-loaded component in Suspense
       <Suspense fallback={<Loader2 className="animate-spin text-blue-600 h-8 w-8" />}>
         <DocumentAssembly
           windowId={id}
@@ -67,7 +64,6 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         const file = e.target.files[0];
         // Upload to IDB via DocumentService
         const savedDoc = await DocumentService.uploadDocument(file, {
-// FIX: Cast string to branded type CaseId
           caseId: (documents.length > 0 ? documents[0].caseId : 'General') as CaseId,
           sourceModule: 'General',
           tags: logAsEvidence ? ['Evidence'] : []
@@ -76,7 +72,6 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         if (logAsEvidence) {
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
-// FIX: Cast string to branded type EvidenceId
             id: `ev-${Date.now()}` as EvidenceId,
             trackingUuid: crypto.randomUUID() as any,
             caseId: savedDoc.caseId,

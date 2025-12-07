@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Party } from '../../types';
+import { Party, PartyId } from '../../types';
 import { MOCK_ORGS } from '../../data/models/organization'; // Updated import path
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -51,7 +52,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
     } else {
         // Add
         const newParty: Party = {
-            id: `p-${Date.now()}`,
+            // FIX: Cast string to branded type PartyId
+            id: `p-${Date.now()}` as PartyId,
             name: currentParty.name,
             role: currentParty.role,
             partyGroup: currentParty.partyGroup,

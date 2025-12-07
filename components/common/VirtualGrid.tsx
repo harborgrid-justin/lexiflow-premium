@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
@@ -69,7 +68,7 @@ export function VirtualGrid<T>({
       }
     }
     return rendered;
-  }, [items, startRow, endRow, columnCount, itemHeight, itemWidth, gap, containerSize.width, containerSize.height]);
+  }, [items, startRow, endRow, columnCount, itemHeight, itemWidth, gap, containerSize.width]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
@@ -85,6 +84,7 @@ export function VirtualGrid<T>({
     <div 
       ref={containerRef}
       className={cn("overflow-y-auto relative custom-scrollbar will-change-scroll h-full", className)}
+      style={{ height: height }}
       onScroll={handleScroll}
     >
       <div style={{ height: Math.max(totalHeight, containerSize.height), position: 'relative' }}>

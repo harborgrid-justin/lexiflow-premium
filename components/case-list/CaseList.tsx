@@ -60,16 +60,21 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
+// FIX: Add missing required properties for the Case type, ensuring they are not overwritten.
+           ...(data.caseInfo || {}),
 // FIX: Cast string to branded type CaseId
            id: (data.caseInfo?.id || `IMP-${Date.now()}`) as CaseId,
            title: data.caseInfo?.title || 'Imported Matter',
-           matterType: 'Litigation', status: CaseStatus.Discovery, client: 'Imported Client', value: 0,
-           description: 'Imported via Docket XML', filingDate: new Date().toISOString().split('T')[0],
-           ...data.caseInfo,
-           parties: [],
-           citations: [],
-           arguments: [],
-           defenses: []
+           matterType: (data.caseInfo as any)?.matterType || 'Litigation',
+           status: (data.caseInfo as any)?.status || CaseStatus.Discovery,
+           client: (data.caseInfo as any)?.client || 'Imported Client',
+           value: data.caseInfo?.value || 0,
+           description: data.caseInfo?.description || 'Imported via Docket XML',
+           filingDate: data.caseInfo?.filingDate || new Date().toISOString().split('T')[0],
+           parties: data.caseInfo?.parties || [],
+           citations: data.caseInfo?.citations || [],
+           arguments: data.caseInfo?.arguments || [],
+           defenses: data.caseInfo?.defenses || [],
        };
        await DataService.cases.add(newCase);
        await DataService.cases.importDocket(newCase.id, data);

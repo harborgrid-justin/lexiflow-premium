@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Deposition } from '../../types';
+import { Deposition, CaseId, UUID } from '../../types';
 import { DataService } from '../../services/dataService';
 import { Mic2, Calendar, FileText, CheckSquare, Video, MapPin, User, Plus } from 'lucide-react';
 import { TaskCreationModal } from '../common/TaskCreationModal';
@@ -39,8 +40,9 @@ export const DiscoveryDepositions: React.FC = () => {
   const handleSchedule = () => {
       if (!newDepo.witnessName || !newDepo.date) return;
       const deposition: Deposition = {
-          id: `DEP-${Date.now()}`,
-          caseId: 'C-2024-001', // Mock default
+          id: `DEP-${Date.now()}` as UUID,
+          // FIX: Cast string to branded type CaseId
+          caseId: 'C-2024-001' as CaseId, // Mock default
           witnessName: newDepo.witnessName,
           date: newDepo.date,
           location: newDepo.location || 'Remote',

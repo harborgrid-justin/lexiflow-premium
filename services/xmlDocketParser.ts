@@ -1,4 +1,5 @@
-import { CaseStatus, DocketEntry, DocketEntryType, Party, Case } from "../types";
+
+import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId } from "../types";
 import { PacerCase, PacerParty, PacerJurisdictionType } from "../types/pacer";
 
 export const XmlDocketParser = {
@@ -27,7 +28,8 @@ export const XmlDocketParser = {
     
     const caseInfo: Partial<Case> = {
       title: pacerData.caseTitle,
-      id: pacerData.caseNumberFull || "Unknown ID",
+      // FIX: Cast string to branded type CaseId
+      id: (pacerData.caseNumberFull || "Unknown ID") as CaseId,
       filingDate: pacerData.dateFiled || "",
       court: pacerData.courtId || "Federal Court",
       status: pacerData.caseStatus === 'C' ? CaseStatus.Closed : CaseStatus.Discovery,
@@ -55,7 +57,8 @@ export const XmlDocketParser = {
       };
       
       return {
-        id: `p-xml-${idx}`,
+        // FIX: Cast string to branded type PartyId
+        id: `p-xml-${idx}` as PartyId,
         name: name,
         role: typeStr.trim(),
         contact: attorney?.getAttribute("email") || attorney?.getAttribute("personalPhone") || "",
@@ -85,9 +88,10 @@ export const XmlDocketParser = {
       const seq = seqMatch ? parseInt(seqMatch[1]) : idx + 1;
 
       return {
-        id: `dk-xml-${idx}`,
+        // FIX: Cast string to branded type DocketId
+        id: `dk-xml-${idx}` as DocketId,
         sequenceNumber: seq,
-        caseId: caseInfo.id || "Unknown",
+        caseId: caseInfo.id || ("Unknown" as CaseId),
         date: date,
         type: type,
         title: text.substring(0, 150) + (text.length > 150 ? '...' : ''),

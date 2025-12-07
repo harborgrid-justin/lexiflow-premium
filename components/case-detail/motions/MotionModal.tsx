@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { Button } from '../../common/Button';
 import { RuleSelector } from '../../common/RuleSelector';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
-import { Motion, MotionType, LegalDocument } from '../../../types';
+import { Motion, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 

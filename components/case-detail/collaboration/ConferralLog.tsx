@@ -63,9 +63,9 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
   const handleSave = () => {
     const session: ConferralSession = {
-// FIX: Cast string to branded type UUID
+      // FIX: Cast string to branded type UUID
       id: `conf-${Date.now()}` as UUID,
-// FIX: Cast string to branded type CaseId
+      // FIX: Cast string to branded type CaseId
       caseId: caseId as CaseId,
       topic: newSession.topic || 'General Conferral',
       date: newSession.date || new Date().toISOString().split('T')[0],

@@ -1,3 +1,4 @@
+
 // components/ResearchTool.tsx
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import {

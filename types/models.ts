@@ -1,3 +1,4 @@
+
 import {
   CaseStatus, UserRole, MatterType, BillingModel,
   OrganizationType, RiskCategory, RiskLevel, RiskStatus,
@@ -6,7 +7,7 @@ import {
   DocketEntryType, DiscoveryType, DiscoveryStatus,
   EvidenceType, AdmissibilityStatus, ConferralResult,
   ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, ServiceMethod,
-  EntityType, EntityRole, CurrencyCode, LedesActivityCode, OcrStatus, TaskDependencyType
+  EntityType, EntityRole, CurrencyCode, LedesActivityCode, OcrStatus, TaskDependencyType, LedesTaskCode
 } from './enums';
 import { LucideIcon } from 'lucide-react';
 import type { FC, LazyExoticComponent } from 'react';
@@ -69,8 +70,8 @@ export interface Case extends BaseEntity {
   jurisdiction?: string; jurisdictionConfig?: JurisdictionObject; court?: string; judge?: string; magistrateJudge?: string; 
   opposingCounsel?: string; origCaseNumber?: string; origCourt?: string; origJudgmentDate?: string; noticeOfAppealDate?: string; 
   ownerId?: UserId; ownerOrgId?: OrgId; team?: CaseTeamMember[]; linkedCaseIds?: CaseId[]; leadCaseId?: CaseId; 
-  isConsolidated?: boolean; associatedCases?: any[]; parties?: Party[]; citations?: Citation[]; arguments?: LegalArgument[]; 
-  defenses?: Defense[]; dateTerminated?: string; natureOfSuit?: string; pacerData?: any; 
+  isConsolidated?: boolean; associatedCases?: any[]; parties: Party[]; citations: Citation[]; arguments: LegalArgument[]; 
+  defenses: Defense[]; dateTerminated?: string; natureOfSuit?: string; pacerData?: any; 
   billingModel?: BillingModel; feeAgreement?: FeeAgreement; projects?: Project[]; 
   solDate?: string; solTriggerDate?: string; budget?: Money; budgetAlertThreshold?: number;
 }

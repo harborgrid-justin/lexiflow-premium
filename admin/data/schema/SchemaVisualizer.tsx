@@ -5,7 +5,7 @@ import { cn } from '../../../../utils/cn';
 // FIX: Correct import path
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 // FIX: Correct import path
-import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
+import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
 
 interface SchemaVisualizerProps {
     tables: TableData[];

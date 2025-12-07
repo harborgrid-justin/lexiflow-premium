@@ -3,7 +3,7 @@ import React, { lazy } from 'react';
 // Sub-components
 const AdminHierarchy = lazy(() => import('./hierarchy/AdminHierarchy').then(m => ({ default: m.AdminHierarchy })));
 const AdminSecurity = lazy(() => import('./security/AdminSecurity').then(m => ({ default: m.AdminSecurity })));
-const AdminDatabaseControl = lazy(() => import('../admin/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
+const AdminDatabaseControl = lazy(() => import('./AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
 const AdminIntegrations = lazy(() => import('./integrations/AdminIntegrations').then(m => ({ default: m.AdminIntegrations })));
 const AdminAuditLog = lazy(() => import('./AdminAuditLog').then(m => ({ default: m.AdminAuditLog })));
 const AdminPlatformManager = lazy(() => import('./platform/AdminPlatformManager').then(m => ({ default: m.AdminPlatformManager })));

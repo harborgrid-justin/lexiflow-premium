@@ -1,10 +1,13 @@
 
-import { Deposition, ESISource, ProductionSet, CustodianInterview } from '../../types';
+
+
+import { Deposition, ESISource, ProductionSet, CustodianInterview, UUID, CaseId } from '../../types';
 
 export const MOCK_DEPOSITIONS: Deposition[] = [
     {
-        id: 'DEP-001',
-        caseId: 'C-2024-001',
+        id: 'DEP-001' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         witnessName: 'John Doe',
         date: '2024-04-15',
         location: 'LexiFlow NY Office - Conf Room A',
@@ -13,8 +16,9 @@ export const MOCK_DEPOSITIONS: Deposition[] = [
         prepNotes: 'Focus on timeline of events in Q3 2023.'
     },
     {
-        id: 'DEP-002',
-        caseId: 'C-2024-001',
+        id: 'DEP-002' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         witnessName: 'Jane Smith (HR Director)',
         date: '2024-04-18',
         location: 'Zoom (Remote)',
@@ -26,8 +30,9 @@ export const MOCK_DEPOSITIONS: Deposition[] = [
 
 export const MOCK_ESI_SOURCES: ESISource[] = [
     {
-        id: 'ESI-001',
-        caseId: 'C-2024-001',
+        id: 'ESI-001' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         name: 'Corporate Exchange Server',
         type: 'Email',
         custodian: 'IT Dept',
@@ -36,8 +41,9 @@ export const MOCK_ESI_SOURCES: ESISource[] = [
         notes: 'Legal Hold applied 11/01/2023.'
     },
     {
-        id: 'ESI-002',
-        caseId: 'C-2024-001',
+        id: 'ESI-002' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         name: 'John Doe Laptop',
         type: 'Device',
         custodian: 'John Doe',
@@ -46,8 +52,9 @@ export const MOCK_ESI_SOURCES: ESISource[] = [
         notes: 'Forensic image created.'
     },
     {
-        id: 'ESI-003',
-        caseId: 'C-2024-001',
+        id: 'ESI-003' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         name: 'Slack Workspace',
         type: 'Slack',
         custodian: 'IT Dept',
@@ -59,8 +66,9 @@ export const MOCK_ESI_SOURCES: ESISource[] = [
 
 export const MOCK_PRODUCTIONS: ProductionSet[] = [
     {
-        id: 'PROD-001',
-        caseId: 'C-2024-001',
+        id: 'PROD-001' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         name: 'Vol 001 - Initial Disclosures',
         date: '2023-12-01',
         batesRange: 'DEF-000001 - DEF-000450',
@@ -70,8 +78,9 @@ export const MOCK_PRODUCTIONS: ProductionSet[] = [
         status: 'Delivered'
     },
     {
-        id: 'PROD-002',
-        caseId: 'C-2024-001',
+        id: 'PROD-002' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         name: 'Vol 002 - Email Batch 1',
         date: '2024-03-20',
         batesRange: 'DEF-000451 - DEF-001200',
@@ -84,23 +93,25 @@ export const MOCK_PRODUCTIONS: ProductionSet[] = [
 
 export const MOCK_INTERVIEWS: CustodianInterview[] = [
     {
-        id: 'INT-001',
-        caseId: 'C-2024-001',
+        id: 'INT-001' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         custodianName: 'John Doe',
         department: 'Engineering',
         status: 'Completed',
         interviewDate: '2023-11-05',
         notes: 'Confirmed use of personal device for work email. Added to collection list.',
         relevantSources: ['ESI-002'],
-        legalHoldId: 'LH-01'
+        legalHoldId: 'LH-01' as UUID
     },
     {
-        id: 'INT-002',
-        caseId: 'C-2024-001',
+        id: 'INT-002' as UUID,
+        // FIX: Cast string to branded type CaseId
+        caseId: 'C-2024-001' as CaseId,
         custodianName: 'Jane Smith',
         department: 'HR',
         status: 'Scheduled',
         interviewDate: '2024-03-25',
-        legalHoldId: 'LH-02'
+        legalHoldId: 'LH-02' as UUID
     }
 ];

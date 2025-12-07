@@ -1,13 +1,17 @@
 
-import { Case, CaseStatus } from '../../types';
+
+
+import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId } from '../../types';
 
 export const MOCK_CASES: Case[] = [
   // MAIN APPEAL CASE
   {
-    id: '25-1229',
+    // FIX: Cast string to branded type CaseId
+    id: '25-1229' as CaseId,
     title: 'Justin Saadein-Morales v. Westridge Swim & Racquet Club, Inc.',
     client: 'Justin Saadein-Morales (Pro Se)',
-    clientId: 'usr-admin-justin', 
+    // FIX: Cast string to branded type UserId | EntityId
+    clientId: 'usr-admin-justin' as UserId, 
     opposingCounsel: 'Thomas Charles Junker (MercerTrigiani)',
     status: CaseStatus.Closed,
     filingDate: '2025-03-12',
@@ -25,16 +29,20 @@ export const MOCK_CASES: Case[] = [
     magistrateJudge: 'Ivan Darnell Davis (Mag. Judge)',
     origJudgmentDate: '2025-02-26',
     noticeOfAppealDate: '2025-03-07',
-    ownerId: 'usr-admin-justin',
-    linkedCaseIds: ['1:24-cv-01442-LMB-IDD', '24-2160'],
-    leadCaseId: '24-2160',
+    // FIX: Cast string to branded type UserId
+    ownerId: 'usr-admin-justin' as UserId,
+    // FIX: Cast string to branded type CaseId
+    linkedCaseIds: ['1:24-cv-01442-LMB-IDD' as CaseId, '24-2160' as CaseId],
+    // FIX: Cast string to branded type CaseId
+    leadCaseId: '24-2160' as CaseId,
     isConsolidated: true,
     associatedCases: [
         { leadCaseNumber: '24-2160', memberCaseNumber: '25-1229', type: 'Consolidated', startDate: '2025-04-25' }
     ],
     parties: [
         { 
-          id: 'p-appellant', 
+          // FIX: Cast string to branded type PartyId
+          id: 'p-appellant' as PartyId, 
           name: 'Justin Jeffrey Saadein-Morales', 
           role: 'Debtor - Appellant', 
           type: 'Individual', 
@@ -46,7 +54,8 @@ export const MOCK_CASES: Case[] = [
           partyGroup: 'Debtor'
         },
         { 
-          id: 'p-appellee', 
+          // FIX: Cast string to branded type PartyId
+          id: 'p-appellee' as PartyId, 
           name: 'Westridge Swim & Racquet Club, Inc.', 
           role: 'Creditor - Appellee', 
           type: 'Corporation', 
@@ -87,10 +96,12 @@ export const MOCK_CASES: Case[] = [
 
   // ORIGINATING DISTRICT COURT CASE
   {
-    id: '1:24-cv-01442-LMB-IDD',
+    // FIX: Cast string to branded type CaseId
+    id: '1:24-cv-01442-LMB-IDD' as CaseId,
     title: 'Saadein-Morales v. Westridge Swim & Racquet Club, Inc.',
     client: 'Justin Saadein-Morales',
-    clientId: 'usr-admin-justin',
+    // FIX: Cast string to branded type UserId | EntityId
+    clientId: 'usr-admin-justin' as UserId,
     opposingCounsel: 'MercerTrigiani',
     status: CaseStatus.Closed,
     filingDate: '2024-08-16',
@@ -103,11 +114,14 @@ export const MOCK_CASES: Case[] = [
     court: 'E.D. Virginia (Alexandria)',
     judge: 'Leonie M. Brinkema',
     magistrateJudge: 'Ivan D. Davis',
-    ownerId: 'usr-admin-justin',
-    linkedCaseIds: ['25-1229', '24-02160'],
+    // FIX: Cast string to branded type UserId
+    ownerId: 'usr-admin-justin' as UserId,
+    // FIX: Cast string to branded type CaseId
+    linkedCaseIds: ['25-1229' as CaseId, '24-02160' as CaseId],
     parties: [
         {
-            id: 'p-appellant-dc',
+            // FIX: Cast string to branded type PartyId
+            id: 'p-appellant-dc' as PartyId,
             name: 'Justin Jeffrey Saadein-Morales',
             role: 'Appellant',
             type: 'Individual',
@@ -117,7 +131,8 @@ export const MOCK_CASES: Case[] = [
             contact: 'justin.saadein@harborgrid.com'
         },
         {
-            id: 'p-appellee-dc',
+            // FIX: Cast string to branded type PartyId
+            id: 'p-appellee-dc' as PartyId,
             name: 'Westridge Swim & Racquet Club, Inc.',
             role: 'Appellee',
             type: 'Corporation',
@@ -136,10 +151,12 @@ export const MOCK_CASES: Case[] = [
 
   // Other Mock Cases
   {
-    id: 'C-2024-001', 
+    // FIX: Cast string to branded type CaseId
+    id: 'C-2024-001' as CaseId, 
     title: 'Martinez v. TechCorp Industries', 
     client: 'TechCorp Industries',
-    clientId: '1', 
+    // FIX: Cast string to branded type UserId | EntityId
+    clientId: '1' as EntityId, 
     opposingCounsel: 'Morgan & Morgan',
     status: CaseStatus.Discovery, 
     filingDate: '2023-11-15', 
@@ -149,14 +166,17 @@ export const MOCK_CASES: Case[] = [
     jurisdiction: 'CA Superior Court', 
     court: 'San Francisco',
     isConsolidated: true,
-    linkedCaseIds: ['C-2024-055', 'C-2024-089'],
-    ownerId: 'usr-admin-justin',
-    ownerOrgId: 'org-1',
+    // FIX: Cast string to branded type CaseId
+    linkedCaseIds: ['C-2024-055' as CaseId, 'C-2024-089' as CaseId],
+    // FIX: Cast string to branded type UserId
+    ownerId: 'usr-admin-justin' as UserId,
+    // FIX: Cast string to branded type OrgId
+    ownerOrgId: 'org-1' as OrgId,
     parties: [
-        { id: 'p1', name: 'John Doe', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'john@email.com', type: 'Individual' },
-        { id: 'p2', name: 'Jane Smith', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'jane@email.com', type: 'Individual' },
-        { id: 'p3', name: 'TechCorp HQ', role: 'Defendant', partyGroup: 'Corporate Entities', contact: 'legal@techcorp.com', type: 'Corporation' },
-        { id: 'p4', name: 'TechCorp Labs', role: 'Defendant', partyGroup: 'Corporate Entities', contact: 'legal@techcorp.com', type: 'Corporation' }
+        { id: 'p1' as PartyId, name: 'John Doe', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'john@email.com', type: 'Individual' },
+        { id: 'p2' as PartyId, name: 'Jane Smith', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'jane@email.com', type: 'Individual' },
+        { id: 'p3' as PartyId, name: 'TechCorp HQ', role: 'Defendant', partyGroup: 'Corporate Entities', contact: 'legal@techcorp.com', type: 'Corporation' },
+        { id: 'p4' as PartyId, name: 'TechCorp Labs', role: 'Defendant', partyGroup: 'Corporate Entities', contact: 'legal@techcorp.com', type: 'Corporation' }
     ],
     citations: [],
     arguments: [],

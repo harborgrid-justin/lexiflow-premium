@@ -1,9 +1,11 @@
 
-import { Organization } from '../../types';
+
+import { Organization, OrgId } from '../../types';
 
 export const MOCK_ORGS: Organization[] = [
-  { id: 'org-1', name: 'LexiFlow LLP', type: 'LawFirm', domain: 'lexiflow.com', status: 'Active' },
-  { id: 'org-2', name: 'TechCorp Industries', type: 'Corporate', domain: 'techcorp.com', status: 'Active' },
-  { id: 'org-3', name: 'Superior Court of CA', type: 'Court', domain: 'courts.ca.gov', status: 'Active' },
-  { id: 'org-4', name: 'Forensic Analytics Inc', type: 'Vendor', domain: 'forensics.io', status: 'Active' }
-];
+  // FIX: Cast string to branded type OrgId
+  { id: 'org-1' as OrgId, name: 'LexiFlow LLP', type: 'LawFirm', domain: 'lexiflow.com', status: 'Active' },
+  // FIX: Cast string to branded type OrgId
+  { id: 'org-2' as OrgId, name: 'TechCorp Industries', type: 'Corporate', domain: 'techcorp.com', status: 'Active' },
+  // FIX: Cast string to branded type OrgId
+  { id: 'org-3' as Org

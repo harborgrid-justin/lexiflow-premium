@@ -1,3 +1,4 @@
+
 import { BaseEntity, AuditLogEntry, UUID, UserId } from '../../types';
 import { db, STORES } from '../db';
 import { ChainService } from '../chainService';
@@ -66,7 +67,7 @@ export abstract class Repository<T extends BaseEntity> {
     protected logAction = async (action: string, resourceId: string, details: string, previousValue?: any, newValue?: any) => {
         const entry: Omit<AuditLogEntry, 'id'> = {
             timestamp: new Date().toISOString(),
-// FIX: Cast string to branded type UserId
+            // FIX: Cast string to branded type UserId
             userId: 'current-user' as UserId, 
             user: 'Current User',
             action: action,

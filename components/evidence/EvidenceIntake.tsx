@@ -1,9 +1,10 @@
+
 import React, { useState, useRef } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
 import { DocumentService } from '../../services/documentService';
-import { EvidenceItem } from '../../types';
+import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../types';
 import { Stepper } from '../common/Stepper';
 import { useWizard } from '../../hooks/useWizard';
 import { useNotify } from '../../hooks/useNotify';
@@ -60,9 +61,12 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
 
   const handleFinish = () => {
       const newItem: EvidenceItem = {
-          id: `EV-${Date.now()}`,
-          trackingUuid: generatedData.uuid || crypto.randomUUID(),
-          caseId: 'Pending Assignment',
+          // FIX: Cast string to branded type EvidenceId
+          id: `EV-${Date.now()}` as EvidenceId,
+          // FIX: Cast string to branded type UUID
+          trackingUuid: (generatedData.uuid || crypto.randomUUID()) as UUID,
+          // FIX: Cast string to branded type CaseId
+          caseId: 'Pending Assignment' as CaseId,
           title: title,
           type: type as any,
           description: description,

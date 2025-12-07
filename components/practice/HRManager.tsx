@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { UserAvatar } from '../common/UserAvatar';
@@ -39,7 +40,7 @@ export const HRManager: React.FC = () => {
   const handleAddStaff = (newStaff: Partial<StaffMember>) => {
       const staff: StaffMember = {
           id: `s-${Date.now()}`,
-// FIX: Cast string to branded type UserId
+          // FIX: Cast string to branded type UserId
           userId: `u-${Date.now()}` as UserId,
           name: newStaff.name!,
           email: newStaff.email!,

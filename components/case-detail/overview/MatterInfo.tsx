@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card } from '../../common/Card';
-import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar } from 'lucide-react';
+import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar, DollarSign } from 'lucide-react';
 import { Case } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -22,10 +22,20 @@ interface InfoItem {
 export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
   const { theme } = useTheme();
 
+  // Helper to format jurisdiction
+  const jurisdictionDisplay = caseData.jurisdictionConfig 
+    ? `${caseData.jurisdictionConfig.courtLevel} - ${caseData.jurisdictionConfig.state}` 
+    : caseData.jurisdiction || 'N/A';
+  
+  // Helper for Valuation
+  const valDisplay = caseData.valuation 
+    ? `${caseData.valuation.amount.toLocaleString()} ${caseData.valuation.currency}`
+    : `$${(caseData.value || 0).toLocaleString()}`;
+
   const items: (InfoItem | null)[] = [
     { label: 'Matter Type', value: `${caseData.matterType || 'General'} ${caseData.matterSubType ? `(${caseData.matterSubType})` : ''}`, icon: null, highlight: true },
-    { label: 'Est. Value / Exposure', value: `$${(caseData.value || 0).toLocaleString()}`, icon: null, mono: true },
-    { label: 'Jurisdiction', value: caseData.jurisdiction || 'N/A', icon: Globe },
+    { label: 'Est. Value / Exposure', value: valDisplay, icon: DollarSign, mono: true },
+    { label: 'Jurisdiction', value: jurisdictionDisplay, icon: Globe },
     { label: 'Venue / Court', value: caseData.court || 'N/A', icon: Gavel },
     { label: 'Presiding Judge', value: caseData.judge || 'Unassigned', icon: Scale },
     { label: 'Magistrate Judge', value: caseData.magistrateJudge || 'N/A', icon: Scale },
@@ -53,13 +63,16 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
                 <dd className={cn("text-sm leading-relaxed max-h-32 overflow-y-auto custom-scrollbar", theme.text.secondary)}>{caseData.description}</dd>
             </div>
             
-            {(caseData.origJudgmentDate || caseData.noticeOfAppealDate) && (
+            {(caseData.origJudgmentDate || caseData.noticeOfAppealDate || caseData.solDate) && (
                 <div className={cn("col-span-1 sm:col-span-2 flex flex-wrap gap-4 p-2 bg-slate-50 rounded text-xs border border-slate-100", theme.text.secondary)}>
                    {caseData.origJudgmentDate && (
                        <span className="flex items-center"><Gavel className="h-3 w-3 mr-1 opacity-50"/> <strong>Orig. Judgment:</strong>&nbsp;{caseData.origJudgmentDate}</span>
                    )}
                    {caseData.noticeOfAppealDate && (
                        <span className="flex items-center"><AlertCircle className="h-3 w-3 mr-1 opacity-50"/> <strong>Notice of Appeal:</strong>&nbsp;{caseData.noticeOfAppealDate}</span>
+                   )}
+                   {caseData.solDate && (
+                       <span className="flex items-center text-red-600"><AlertCircle className="h-3 w-3 mr-1"/> <strong>SOL Expiry:</strong>&nbsp;{caseData.solDate}</span>
                    )}
                 </div>
             )}

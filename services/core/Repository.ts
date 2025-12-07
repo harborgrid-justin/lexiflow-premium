@@ -3,41 +3,111 @@ import { BaseEntity, AuditLogEntry } from '../../types';
 import { db, STORES } from '../db';
 import { ChainService } from '../chainService';
 
+// Simple LRU Cache Implementation
+class LRUCache<T> {
+  private capacity: number;
+  private cache: Map<string, T>;
+
+  constructor(capacity: number) {
+    this.capacity = capacity;
+    this.cache = new Map();
+  }
+
+  get(key: string): T | undefined {
+    if (!this.cache.has(key)) return undefined;
+    const value = this.cache.get(key)!;
+    this.cache.delete(key);
+    this.cache.set(key, value);
+    return value;
+  }
+
+  put(key: string, value: T): void {
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    } else if (this.cache.size >= this.capacity) {
+      this.cache.delete(this.cache.keys().next().value);
+    }
+    this.cache.set(key, value);
+  }
+
+  delete(key: string): void {
+    this.cache.delete(key);
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+
+// Simple Observer Pattern
+type Listener<T> = (item: T) => void;
+
 /**
  * Abstract Base Repository
- * Implements standard CRUD, Audit Logging, and Timestamping.
+ * Implements standard CRUD, Audit Logging, Timestamping, LRU Caching, Soft Deletes, and Optimistic Concurrency.
  */
 export abstract class Repository<T extends BaseEntity> {
-    constructor(protected storeName: string) {}
+    private cache: LRUCache<T>;
+    private listeners: Set<Listener<T>> = new Set();
 
-    protected logAction = async (action: string, resourceId: string, details: string) => {
+    constructor(protected storeName: string) {
+        this.cache = new LRUCache<T>(100); // Cache last 100 items
+    }
+
+    // Subscribe to changes in this repository
+    subscribe(listener: Listener<T>) {
+        this.listeners.add(listener);
+        return () => this.listeners.delete(listener);
+    }
+
+    protected notify(item: T) {
+        this.listeners.forEach(l => l(item));
+    }
+
+    protected logAction = async (action: string, resourceId: string, details: string, previousValue?: any, newValue?: any) => {
         const entry: Omit<AuditLogEntry, 'id'> = {
             timestamp: new Date().toISOString(),
             userId: 'current-user', 
             user: 'Current User',
             action: action,
             resource: `${this.storeName}/${resourceId}`,
-            ip: '127.0.0.1'
+            ip: '127.0.0.1',
+            previousValue,
+            newValue
         };
         
-        // Fetch logs directly to avoid circular dep
         const logs = await db.getAll<AuditLogEntry>(STORES.LOGS || 'logs'); 
         const prevHash = logs.length > 0 && (logs[0] as any).hash ? (logs[0] as any).hash : '0000000000000000000000000000000000000000000000000000000000000000';
         
-        // We calculate hash but don't strictly persist chain here to keep it simple, 
-        // in real app this goes to a dedicated audit service.
         await ChainService.createEntry(entry, prevHash);
         console.log(`[AUDIT] ${action}: ${resourceId}`);
     }
 
-    getAll = async (): Promise<T[]> => {
+    getAll = async (options: { includeDeleted?: boolean, limit?: number, cursor?: string } = {}): Promise<T[]> => {
         const all = await db.getAll<T>(this.storeName);
-        return all.filter(item => !item.deletedAt);
+        let result = options.includeDeleted ? all : all.filter(item => !item.deletedAt);
+        
+        // Simple client-side pagination simulation (real DBs would do this in query)
+        if (options.limit) {
+            result = result.slice(0, options.limit);
+        }
+        return result;
     }
 
-    getById = async (id: string): Promise<T | undefined> => {
+    getById = async (id: string, options: { includeDeleted?: boolean } = {}): Promise<T | undefined> => {
+        // Try Cache
+        const cached = this.cache.get(id);
+        if (cached && (options.includeDeleted || !cached.deletedAt)) return cached;
+
+        // Try DB
         const item = await db.get<T>(this.storeName, id);
-        return item && !item.deletedAt ? item : undefined;
+        if (item) {
+             if (options.includeDeleted || !item.deletedAt) {
+                 this.cache.put(id, item);
+                 return item;
+             }
+        }
+        return undefined;
     }
 
     getByIndex = async (indexName: string, value: string): Promise<T[]> => {
@@ -57,13 +127,28 @@ export abstract class Repository<T extends BaseEntity> {
         };
         
         await db.put(this.storeName, entity);
-        await this.logAction(`CREATE_${this.storeName.toUpperCase().slice(0, -1)}`, entity.id, 'Record Created');
+        this.cache.put(entity.id, entity);
+        this.notify(entity);
+        await this.logAction(`CREATE_${this.storeName.toUpperCase().slice(0, -1)}`, entity.id, 'Record Created', null, entity);
         return entity;
     }
 
+    createMany = async (items: T[]): Promise<T[]> => {
+        const createdItems: T[] = [];
+        for (const item of items) {
+            createdItems.push(await this.add(item));
+        }
+        return createdItems;
+    }
+
     update = async (id: string, updates: Partial<T>): Promise<T> => {
-        const current = await this.getById(id);
+        const current = await this.getById(id, { includeDeleted: true });
         if (!current) throw new Error(`${this.storeName} record not found: ${id}`);
+
+        // Optimistic Concurrency Check
+        if (updates.version && updates.version !== current.version) {
+            throw new Error("Conflict: Record has been modified by another process.");
+        }
 
         const updated = {
             ...current,
@@ -74,16 +159,28 @@ export abstract class Repository<T extends BaseEntity> {
         };
 
         await db.put(this.storeName, updated);
-        await this.logAction(`UPDATE_${this.storeName.toUpperCase().slice(0, -1)}`, id, `Fields: ${Object.keys(updates).join(', ')}`);
+        this.cache.put(id, updated);
+        this.notify(updated);
+        await this.logAction(`UPDATE_${this.storeName.toUpperCase().slice(0, -1)}`, id, `Fields: ${Object.keys(updates).join(', ')}`, current, updated);
         return updated;
     }
 
+    updateMany = async (updates: { id: string, data: Partial<T> }[]): Promise<T[]> => {
+        const updatedItems: T[] = [];
+        for (const update of updates) {
+            updatedItems.push(await this.update(update.id, update.data));
+        }
+        return updatedItems;
+    }
+
     delete = async (id: string): Promise<void> => {
-        const current = await db.get<T>(this.storeName, id); // Use db.get to find item even if soft-deleted
+        const current = await this.getById(id, { includeDeleted: true });
         if (current && !current.deletedAt) {
             const deleted = { ...current, deletedAt: new Date().toISOString() };
             await db.put(this.storeName, deleted);
-            await this.logAction(`DELETE_${this.storeName.toUpperCase().slice(0, -1)}`, id, 'Soft Delete');
+            this.cache.delete(id); // Remove from cache or update to deleted
+            this.notify(deleted);
+            await this.logAction(`DELETE_${this.storeName.toUpperCase().slice(0, -1)}`, id, 'Soft Delete', current, deleted);
         }
     }
 }

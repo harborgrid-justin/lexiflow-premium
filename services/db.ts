@@ -30,12 +30,10 @@ export const STORES = {
   DISCOVERY_EXT_PROD: 'discovery_productions',
   DISCOVERY_EXT_INT: 'discovery_interviews',
   REQUESTS: 'discovery_requests',
-  // New Discovery Stores
   EXAMINATIONS: 'discovery_examinations',
   VENDORS: 'discovery_vendors',
   TRANSCRIPTS: 'discovery_transcripts',
   SANCTIONS: 'discovery_sanctions',
-  //
   CONFLICTS: 'conflicts',
   WALLS: 'ethical_walls',
   LOGS: 'audit_logs',
@@ -65,7 +63,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 12; // Incremented version for new stores
+  private dbVersion = 13; // Incremented for new schemas
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -99,7 +97,19 @@ export class DatabaseManager {
         Object.values(STORES).forEach(storeName => {
           if (!db.objectStoreNames.contains(storeName)) {
             const store = db.createObjectStore(storeName, { keyPath: 'id' });
+            
+            // Standard Indices
             if (!store.indexNames.contains('caseId')) store.createIndex('caseId', 'caseId', { unique: false });
+            if (!store.indexNames.contains('status')) store.createIndex('status', 'status', { unique: false });
+            
+            // Compound Indices for Performance
+            if (storeName === STORES.TASKS && !store.indexNames.contains('caseId_status')) {
+                store.createIndex('caseId_status', ['caseId', 'status'], { unique: false });
+            }
+          } else {
+             // Upgrade existing stores if needed
+             const store = (event.target as IDBOpenDBRequest).transaction!.objectStore(storeName);
+             if (!store.indexNames.contains('status')) store.createIndex('status', 'status', { unique: false });
           }
         });
         if (!db.objectStoreNames.contains('files')) {
@@ -193,15 +203,29 @@ export class DatabaseManager {
       });
   }
 
-  async getByIndex<T>(storeName: string, indexName: string, value: string): Promise<T[]> {
+  async getByIndex<T>(storeName: string, indexName: string, value: string | any[]): Promise<T[]> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          return items.filter((i: any) => i[indexName] === value);
+          // Simple single index emulation for local storage
+          const key = Array.isArray(value) ? indexName.split('_')[0] : indexName;
+          const val = Array.isArray(value) ? value[0] : value; 
+          return items.filter((i: any) => i[key] === val);
       }
       return new Promise((resolve, reject) => {
           const transaction = this.db!.transaction([storeName], 'readonly');
           const store = transaction.objectStore(storeName);
+          // Check if index exists to prevent crashes
+          if (!store.indexNames.contains(indexName)) {
+              // Fallback to getAll and filter
+               const request = store.getAll();
+               request.onsuccess = () => {
+                   // Simple fallback filter
+                   const all = request.result as any[];
+                   resolve(all.filter(i => i[indexName] === value)); 
+               };
+               return;
+          }
           const index = store.index(indexName);
           const request = index.getAll(value);
           request.onsuccess = () => resolve(request.result as T[]);

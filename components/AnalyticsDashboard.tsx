@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
 import { PageHeader } from './common/PageHeader';
 import { useTheme } from '../context/ThemeContext';
@@ -11,10 +12,10 @@ import { JudgeProfile } from '../types';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
 
-// Sub-components
-const JudgeAnalytics = React.lazy(() => import('./analytics/JudgeAnalytics'));
-const CounselAnalytics = React.lazy(() => import('./analytics/CounselAnalytics'));
-const CasePrediction = React.lazy(() => import('./analytics/CasePrediction'));
+// Sub-components with Correct Paths and Named Exports
+const JudgeAnalytics = React.lazy(() => import('./analytics/JudgeAnalytics').then(m => ({ default: m.JudgeAnalytics })));
+const CounselAnalytics = React.lazy(() => import('./analytics/CounselAnalytics').then(m => ({ default: m.CounselAnalytics })));
+const CasePrediction = React.lazy(() => import('./analytics/CasePrediction').then(m => ({ default: m.CasePrediction })));
 
 type AnalyticsView = 'judge' | 'counsel' | 'prediction';
 

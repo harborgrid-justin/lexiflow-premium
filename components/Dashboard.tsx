@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 import { Button } from './common/Button';
 import { LayoutDashboard, CheckSquare, Bell, Download, PieChart, Activity, ShieldCheck } from 'lucide-react';
@@ -5,10 +6,10 @@ import { LazyLoader } from './common/LazyLoader';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 
-// Sub-components - LAZY LOADED
-const DashboardOverview = React.lazy(() => import('./dashboard/DashboardOverview'));
-const FinancialPerformance = React.lazy(() => import('./dashboard/FinancialPerformance'));
-const PersonalWorkspace = React.lazy(() => import('./dashboard/PersonalWorkspace'));
+// Sub-components - LAZY LOADED with Named Export Fix
+const DashboardOverview = React.lazy(() => import('./dashboard/DashboardOverview').then(module => ({ default: module.DashboardOverview })));
+const FinancialPerformance = React.lazy(() => import('./dashboard/FinancialPerformance').then(module => ({ default: module.FinancialPerformance })));
+const PersonalWorkspace = React.lazy(() => import('./dashboard/PersonalWorkspace').then(module => ({ default: module.PersonalWorkspace })));
 
 interface DashboardProps {
   onSelectCase: (caseId: string) => void;

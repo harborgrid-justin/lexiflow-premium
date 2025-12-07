@@ -9,6 +9,7 @@ import { DataQualityService } from './domains/DataQualityDomain';
 import { DataCatalogService } from './domains/DataCatalogDomain';
 import { BackupService } from './domains/BackupDomain';
 import { DocketRepository } from './domains/DocketDomain';
+import { ProfileDomain } from './domains/ProfileDomain'; // Added
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -51,6 +52,7 @@ export const DataService = {
   quality: new DataQualityService(),
   catalog: DataCatalogService,
   backup: BackupService,
+  profile: ProfileDomain, // Added
 
   // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 

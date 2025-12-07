@@ -1,3 +1,4 @@
+
 export const PATHS = {
   DASHBOARD: 'dashboard',
   CASES: 'cases',
@@ -24,5 +25,6 @@ export const PATHS = {
   WAR_ROOM: 'war_room',
   RULES_ENGINE: 'rules_engine',
   ENTITIES: 'entities',
-  DATA_PLATFORM: 'data_platform'
+  DATA_PLATFORM: 'data_platform',
+  PROFILE: 'profile'
 } as const;

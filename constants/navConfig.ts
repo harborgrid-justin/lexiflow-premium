@@ -1,8 +1,9 @@
+
 import { 
   LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale, 
   Calendar, Book, DollarSign, Users, BarChart3, Settings, 
   FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch, 
-  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database
+  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle
 } from 'lucide-react';
 import { AppView, NavCategory } from '../types';
 import { PATHS } from './paths';
@@ -46,4 +47,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   // ADMIN
   { id: PATHS.COMPLIANCE, label: 'Compliance', icon: ShieldCheck, category: 'Admin', requiresAdmin: true },
   { id: PATHS.ADMIN, label: 'Admin Console', icon: Settings, category: 'Admin', requiresAdmin: true },
+  
+  // PROFILE (Can be in Admin or its own invisible category if handled by user menu, but adding here for completeness)
+  { id: PATHS.PROFILE, label: 'My Profile', icon: UserCircle, category: 'Main' },
 ];

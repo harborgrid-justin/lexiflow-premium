@@ -1,3 +1,4 @@
+
 // components/Sidebar.tsx
 import React, { useMemo, useEffect, useState } from 'react';
 import { Scale, X, ChevronDown, LogOut, Settings, User as UserIcon, Layers, Monitor } from 'lucide-react';
@@ -45,6 +46,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
   const visibleItems = useMemo(() => {
     const isAuthorizedAdmin = currentUser.role === 'Administrator' || currentUser.role === 'Senior Partner';
     return modules.filter(item => {
+      // Hide Profile from Main Menu List, accessible via footer only
+      if (item.id === PATHS.PROFILE) return false;
       if (item.requiresAdmin && !isAuthorizedAdmin) return false;
       return true;
     });
@@ -177,10 +180,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
           </div>
 
           <button 
-            onClick={onSwitchUser}
+            onClick={() => setActiveView(PATHS.PROFILE)}
             className={cn(
                 "w-full flex items-center p-2 rounded-lg transition-colors group mb-3 border shadow-sm",
-                theme.surface.default,
+                activeView === PATHS.PROFILE ? theme.primary.light : theme.surface.default,
                 theme.border.default,
                 `hover:${theme.surface.highlight}`
             )}
@@ -201,11 +204,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
           </button>
           
           <div className="grid grid-cols-2 gap-2">
-             <button className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>
+             <button onClick={() => setActiveView(PATHS.PROFILE)} className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>
                 <Settings className="h-3.5 w-3.5 mr-1.5"/> Settings
              </button>
-             <button className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>
-                <LogOut className="h-3.5 w-3.5 mr-1.5"/> Sign Out
+             <button onClick={onSwitchUser} className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>
+                <LogOut className="h-3.5 w-3.5 mr-1.5"/> Switch
              </button>
           </div>
         </div>

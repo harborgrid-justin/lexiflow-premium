@@ -30,7 +30,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  public componentDidCatch = (error: Error, errorInfo: ErrorInfo): void => {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
@@ -58,18 +58,15 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.log("Component Stack:", errorInfo.componentStack);
     console.groupEnd();
     
-    // FIX: Correctly call setState on the component instance.
     this.setState({ isResolving: true, debugInfo });
 
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
-        // FIX: Correctly call setState on the component instance inside the promise handler.
         if (this.state.hasError) {
             this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
-         // FIX: Correctly call setState on the component instance inside the promise handler.
          if (this.state.hasError) {
             this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
          }
@@ -84,10 +81,8 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo).then(() => {
-                // FIX: Correctly call setState on the component instance.
                 this.setState({ isCopied: true });
                 setTimeout(() => {
-                    // FIX: Correctly call setState on the component instance.
                     this.setState({ isCopied: false });
                 }, 2000);
             }).catch(err => {
@@ -97,11 +92,9 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     }
   }
 
-  public render = (): ReactNode => {
-    // FIX: Correctly access props via 'this.props'.
+  public render(): ReactNode {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        // FIX: Correctly access props via 'this.props'.
         return this.props.fallback;
       }
 
@@ -168,7 +161,6 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
-    // FIX: Correctly access props via 'this.props'.
     return this.props.children;
   }
 }

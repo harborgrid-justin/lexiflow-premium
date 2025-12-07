@@ -62,6 +62,68 @@ export interface Group extends BaseEntity { id: GroupId; orgId: OrgId; name: str
 export interface FeatureFlag extends BaseEntity { key: string; enabled: boolean; rules?: any; description: string; }
 export interface IntegrationMapping extends BaseEntity { system: string; entity: string; fieldMap: Record<string, string>; direction: 'Inbound' | 'Outbound' | 'Bi-directional'; }
 
+// --- NEW: GRANULAR PROFILE SYSTEM ---
+export type AccessEffect = 'Allow' | 'Deny';
+export type AccessScope = 'Global' | 'Region' | 'Office' | 'Personal';
+
+export interface AccessCondition {
+  type: 'Time' | 'Location' | 'Device' | 'Network';
+  operator: 'Equals' | 'NotEquals' | 'Between' | 'Includes';
+  value: any;
+}
+
+export interface GranularPermission {
+  id: string;
+  resource: string; // e.g., "cases", "billing.invoices", "documents.metadata"
+  action: 'create' | 'read' | 'update' | 'delete' | 'export' | 'approve' | '*';
+  effect: AccessEffect;
+  scope: AccessScope;
+  conditions?: AccessCondition[]; // e.g., Time: 9am-5pm
+  expiration?: string; // ISO Date for temporary access
+  reason?: string; // Audit trail for why this permission exists
+}
+
+export interface UserPreferences {
+  theme: 'light' | 'dark' | 'system';
+  notifications: {
+    email: boolean;
+    push: boolean;
+    slack: boolean;
+    digestFrequency: 'Realtime' | 'Daily' | 'Weekly';
+  };
+  dashboardLayout: string[]; // Widget IDs
+  density: 'comfortable' | 'compact';
+  locale: string;
+  timezone: string;
+}
+
+export interface UserSecurityProfile {
+  mfaEnabled: boolean;
+  mfaMethod: 'App' | 'SMS' | 'Hardware';
+  lastPasswordChange: string;
+  passwordExpiry: string;
+  ipWhitelist?: string[];
+  activeSessions: {
+    id: string;
+    device: string;
+    ip: string;
+    lastActive: string;
+    current: boolean;
+  }[];
+}
+
+export interface ExtendedUserProfile extends User {
+  entityId: EntityId; // Link to Entity Director
+  title: string;
+  department: string;
+  managerId?: UserId;
+  accessMatrix: GranularPermission[];
+  preferences: UserPreferences;
+  security: UserSecurityProfile;
+  skills: string[];
+  barAdmissions: { state: string; number: string; status: 'Active' | 'Inactive' }[];
+}
+
 // --- CLUSTER 2: CASE & LITIGATION ---
 export interface Case extends BaseEntity { 
   id: CaseId;

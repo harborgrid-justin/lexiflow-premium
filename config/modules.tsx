@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ModuleRegistry } from '../services/moduleRegistry';
 import { NAVIGATION_ITEMS } from '../constants/navConfig';
@@ -41,6 +42,7 @@ const AnalyticsDashboard = lazyWithPreload(() => import('../components/Analytics
 const JurisdictionManager = lazyWithPreload(() => import('../components/JurisdictionManager'));
 const CalendarView = lazyWithPreload(() => import('../components/CalendarView').then(m => ({ default: m.CalendarView })));
 const RulesPlatform = lazyWithPreload(() => import('../components/RulesPlatform').then(m => ({ default: m.RulesPlatform })));
+const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager').then(m => ({ default: m.UserProfileManager })));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,
@@ -66,6 +68,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.JURISDICTION]: JurisdictionManager,
   [PATHS.CALENDAR]: CalendarView,
   [PATHS.RULES_ENGINE]: RulesPlatform,
+  [PATHS.PROFILE]: UserProfileManager,
 };
 
 export const initializeModules = () => {

@@ -1,0 +1,163 @@
+
+import React, { useState } from 'react';
+import { ExtendedUserProfile, GranularPermission, AccessEffect } from '../../types';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { Button } from '../common/Button';
+import { Badge } from '../common/Badge';
+import { Plus, Trash2, Edit2, Shield, Globe, Lock, Clock } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { Modal } from '../common/Modal';
+import { Input } from '../common/Inputs';
+
+interface AccessMatrixEditorProps {
+  profile: ExtendedUserProfile;
+}
+
+export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile }) => {
+  const { theme } = useTheme();
+  const [permissions, setPermissions] = useState<GranularPermission[]>(profile.accessMatrix);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newPerm, setNewPerm] = useState<Partial<GranularPermission>>({ effect: 'Allow', scope: 'Global' });
+
+  const getEffectColor = (effect: AccessEffect) => {
+      return effect === 'Allow' ? 'success' : 'error';
+  };
+
+  const handleDelete = (id: string) => {
+      setPermissions(prev => prev.filter(p => p.id !== id));
+  };
+
+  const handleAdd = () => {
+      if(!newPerm.resource || !newPerm.action) return;
+      
+      const perm: GranularPermission = {
+          id: `perm-${Date.now()}`,
+          resource: newPerm.resource,
+          action: newPerm.action as any,
+          effect: newPerm.effect as any,
+          scope: newPerm.scope as any,
+          expiration: newPerm.expiration,
+          conditions: []
+      };
+      setPermissions([...permissions, perm]);
+      setIsModalOpen(false);
+      setNewPerm({ effect: 'Allow', scope: 'Global' });
+  };
+
+  return (
+    <div className="h-full flex flex-col p-6 animate-fade-in">
+        <div className="flex justify-between items-center mb-6">
+            <div>
+                <h3 className={cn("text-lg font-bold flex items-center gap-2", theme.text.primary)}>
+                    <Shield className="h-5 w-5 text-blue-600"/> Granular Access Matrix
+                </h3>
+                <p className={cn("text-sm", theme.text.secondary)}>
+                    Fine-grained permissions overriding standard role-based access. Evaluation order: Deny > Allow.
+                </p>
+            </div>
+            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Permission</Button>
+        </div>
+
+        <div className="flex-1 overflow-hidden rounded-lg border shadow-sm bg-white">
+            <TableContainer className="h-full border-0 rounded-none shadow-none">
+                <TableHeader>
+                    <TableHead>Resource</TableHead>
+                    <TableHead>Action</TableHead>
+                    <TableHead>Effect</TableHead>
+                    <TableHead>Scope</TableHead>
+                    <TableHead>Conditions</TableHead>
+                    <TableHead>Expiry</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                </TableHeader>
+                <TableBody>
+                    {permissions.map(perm => (
+                        <TableRow key={perm.id}>
+                            <TableCell className="font-mono text-xs font-bold text-slate-700">{perm.resource}</TableCell>
+                            <TableCell>
+                                <span className={cn("px-2 py-1 rounded text-xs border font-medium", theme.surfaceHighlight, theme.border.default)}>
+                                    {perm.action.toUpperCase()}
+                                </span>
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant={getEffectColor(perm.effect)}>{perm.effect}</Badge>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-1 text-xs">
+                                    {perm.scope === 'Global' ? <Globe className="h-3 w-3"/> : <Lock className="h-3 w-3"/>}
+                                    {perm.scope}
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                {perm.conditions && perm.conditions.length > 0 ? (
+                                    <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded border border-amber-200">
+                                        {perm.conditions.length} Active Rules
+                                    </span>
+                                ) : <span className="text-slate-400 text-xs">-</span>}
+                            </TableCell>
+                            <TableCell>
+                                {perm.expiration ? (
+                                    <div className="flex items-center text-xs text-red-600 font-medium">
+                                        <Clock className="h-3 w-3 mr-1"/> {perm.expiration}
+                                    </div>
+                                ) : <span className="text-slate-400 text-xs">Never</span>}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                    <button className="p-1 hover:bg-slate-100 rounded text-blue-600"><Edit2 className="h-4 w-4"/></button>
+                                    <button onClick={() => handleDelete(perm.id)} className="p-1 hover:bg-red-50 rounded text-red-600"><Trash2 className="h-4 w-4"/></button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </TableContainer>
+        </div>
+
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Grant Granular Permission" size="md">
+            <div className="p-6 space-y-4">
+                <Input label="Resource Identifier" placeholder="e.g. billing.invoices" value={newPerm.resource || ''} onChange={e => setNewPerm({...newPerm, resource: e.target.value})} />
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Action</label>
+                        <select className="w-full p-2 border rounded text-sm" value={newPerm.action} onChange={e => setNewPerm({...newPerm, action: e.target.value as any})}>
+                            <option value="read">Read</option>
+                            <option value="create">Create</option>
+                            <option value="update">Update</option>
+                            <option value="delete">Delete</option>
+                            <option value="approve">Approve</option>
+                            <option value="*">Full Control (*)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Effect</label>
+                        <select className="w-full p-2 border rounded text-sm" value={newPerm.effect} onChange={e => setNewPerm({...newPerm, effect: e.target.value as any})}>
+                            <option value="Allow">Allow</option>
+                            <option value="Deny">Deny</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Scope</label>
+                        <select className="w-full p-2 border rounded text-sm" value={newPerm.scope} onChange={e => setNewPerm({...newPerm, scope: e.target.value as any})}>
+                            <option value="Global">Global</option>
+                            <option value="Region">Region</option>
+                            <option value="Office">Office</option>
+                            <option value="Personal">Personal</option>
+                        </select>
+                    </div>
+                    <Input type="date" label="Expiration (Optional)" value={newPerm.expiration || ''} onChange={e => setNewPerm({...newPerm, expiration: e.target.value})} />
+                </div>
+
+                <div className="flex justify-end pt-4 border-t mt-2 gap-2">
+                    <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                    <Button variant="primary" onClick={handleAdd}>Save Rule</Button>
+                </div>
+            </div>
+        </Modal>
+    </div>
+  );
+};

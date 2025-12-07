@@ -11,6 +11,7 @@ import { ChainService } from '../../services/chainService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
+import { UserId } from '../../types';
 
 interface Invoice {
   id: string;
@@ -55,7 +56,7 @@ export const BillingInvoices: React.FC = () => {
           await ChainService.createEntry({
               timestamp: new Date().toISOString(),
               user: 'Current User', // Replace with actual user name
-              userId: 'current-user-id', // Replace with actual user ID
+              userId: 'current-user-id' as UserId, // Replace with actual user ID
               action: 'INVOICE_PAID',
               resource: `Invoice/${id}`,
               ip: '127.0.0.1' // Replace with actual IP

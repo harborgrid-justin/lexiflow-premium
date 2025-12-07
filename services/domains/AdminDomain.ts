@@ -57,9 +57,10 @@ export const AdminService = {
     getAnomalies: async () => {
         await delay(50);
         return [
-            { id: 1, table: 'Parties', field: 'phone', issue: 'Invalid Format', count: 142, sample: '123-456', status: 'Detected' },
-            { id: 2, table: 'Cases', field: 'status', issue: 'Unknown Enum', count: 5, sample: 'Pending Review (Legacy)', status: 'Detected' },
-            { id: 3, table: 'Documents', field: 'size', issue: 'Missing Value', count: 450, sample: 'null', status: 'Detected' },
+            { id: 1, table: 'Parties', field: 'phone', issue: 'Invalid Format', count: 142, sample: '123-456', status: 'Detected', severity: 'Medium' },
+            { id: 2, table: 'Cases', field: 'status', issue: 'Unknown Enum', count: 5, sample: 'Pending Review (Legacy)', status: 'Detected', severity: 'High' },
+            { id: 3, table: 'Documents', field: 'size', issue: 'Missing Value', count: 450, sample: 'null', status: 'Detected', severity: 'Low' },
+            { id: 4, table: 'Clients', field: 'email', issue: 'Invalid Domain', count: 23, sample: 'user@gmial.com', status: 'Detected', severity: 'High' },
         ];
     },
 

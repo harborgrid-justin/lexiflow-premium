@@ -9,6 +9,7 @@ import { SearchToolbar } from '../../common/SearchToolbar';
 import { useWindow } from '../../../../context/WindowContext';
 import { Button } from '../../common/Button';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
+import { DataDictionary } from './catalog/DataDictionary'; // Import new component
 import { DataService } from '../../../../services/dataService';
 import { useQuery } from '../../../../services/queryClient';
 
@@ -27,17 +28,8 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
   // Integrated Data Query
   const { data: domains = [], isLoading } = useQuery<any[]>(
       ['admin', 'catalog_domains'],
-      DataService.admin.getDataDomains as any
+      DataService.catalog.getDataDomains as any
   );
-
-  const dictionaryItems = Array.from({ length: 50 }, (_, i) => ({
-      id: `field-${i}`,
-      table: i % 2 === 0 ? 'public.cases' : 'public.clients',
-      column: i % 2 === 0 ? `field_${i}` : `attr_${i}`,
-      type: i % 3 === 0 ? 'VARCHAR(255)' : 'UUID',
-      desc: 'Standard field description for enterprise data model.',
-      classification: i % 5 === 0 ? 'Confidential' : 'Internal'
-  }));
 
   const handlePopOut = () => {
       openWindow(
@@ -46,20 +38,6 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
           <DataCatalog isOrbital={true} />
       );
   };
-
-  const renderDictionaryRow = (item: any) => (
-      <div key={item.id} className={cn("flex items-center border-b h-16 px-6 transition-colors", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
-          <div className={cn("w-[20%] font-mono text-sm font-medium", theme.text.secondary)}>{item.table}</div>
-          <div className={cn("w-[20%] font-bold text-sm", theme.text.primary)}>{item.column}</div>
-          <div className={cn("w-[15%] text-xs font-mono", theme.text.tertiary)}>{item.type}</div>
-          <div className={cn("flex-1 text-sm truncate pr-4", theme.text.secondary)}>{item.desc}</div>
-          <div className="w-[15%]">
-              <span className={cn("text-[10px] uppercase font-bold px-2 py-0.5 rounded border", item.classification === 'Confidential' ? cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border) : cn(theme.surfaceHighlight, theme.border.default, theme.text.secondary))}>
-                  {item.classification}
-              </span>
-          </div>
-      </div>
-  );
 
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
@@ -72,9 +50,6 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                     <p className={cn("text-sm", theme.text.secondary)}>Discover, understand, and govern your firm's data.</p>
                 </div>
                 <div className="flex gap-2 items-center">
-                    <div className="relative w-64 hidden md:block">
-                        <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search assets..." className="border-none shadow-none p-0 bg-transparent"/>
-                    </div>
                     {!isOrbital && (
                         <Button variant="ghost" size="icon" onClick={handlePopOut} title="Open in Window">
                             <Maximize2 className="h-4 w-4"/>
@@ -129,8 +104,10 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                                 <Button variant="ghost" onClick={() => setSelectedDomain(null)} icon={ArrowLeft}>Back</Button>
                                 <h2 className={cn("text-2xl font-bold", theme.text.primary)}>{selectedDomain} <span className={cn("font-normal text-lg", theme.text.tertiary)}>/ Tables</span></h2>
                             </div>
+                            {/* In a real implementation, this would drill down into specific tables of the domain */}
                             <div className={cn("rounded-lg border shadow-sm p-8 text-center", theme.surface, theme.border.default, theme.text.secondary)}>
-                                Table listing for {selectedDomain} would appear here.
+                                <p>Domain-specific table view coming soon. Use the Dictionary tab for full listing.</p>
+                                <Button className="mt-4" onClick={() => setActiveTab('dictionary')}>Go to Dictionary</Button>
                             </div>
                         </div>
                     )}
@@ -138,23 +115,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
             )}
 
             {activeTab === 'dictionary' && (
-                <div className={cn("flex flex-col h-full", theme.surface)}>
-                    <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
-                        <div className="w-[20%]">Table</div>
-                        <div className="w-[20%]">Column</div>
-                        <div className="w-[15%]">Type</div>
-                        <div className="flex-1">Description</div>
-                        <div className="w-[15%]">Class</div>
-                    </div>
-                    <div className="flex-1 relative min-h-0">
-                        <VirtualList 
-                            items={dictionaryItems}
-                            height="100%"
-                            itemHeight={64}
-                            renderItem={renderDictionaryRow}
-                        />
-                    </div>
-                </div>
+                <DataDictionary />
             )}
 
             {activeTab === 'requests' && (

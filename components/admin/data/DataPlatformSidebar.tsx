@@ -5,7 +5,7 @@ import {
   Lock, Book, Radio, Sparkles, Repeat, Network, DollarSign, 
   ChevronDown, ChevronRight, Table, Code, Activity, History,
   FileText, Key, Server, Globe, BarChart2, Calculator, FileSearch,
-  AlertOctagon, Layers, GitCommit, Share2, Users
+  AlertOctagon, Layers, GitCommit, Share2, Users, HardDrive
 } from 'lucide-react';
 import { PlatformView } from '../AdminDatabaseControl';
 import { useTheme } from '../../../context/ThemeContext';
@@ -64,6 +64,9 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
         { id: 'pipeline-jobs', label: 'Job History', icon: Activity },
         { id: 'pipeline-connectors', label: 'Connectors', icon: Network }
       ]
+    },
+    {
+      id: 'lake', label: 'Data Lake', icon: HardDrive
     },
     { 
       id: 'lineage', label: 'Data Lineage', icon: Network,

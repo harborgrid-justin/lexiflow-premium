@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { DataService } from '../services/dataService';
 import { CalendarEventItem } from '../types';

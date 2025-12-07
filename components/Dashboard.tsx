@@ -1,10 +1,11 @@
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useTransition } from 'react';
 import { Button } from './common/Button';
 import { LayoutDashboard, CheckSquare, Bell, Download, PieChart, Activity, ShieldCheck } from 'lucide-react';
 import { LazyLoader } from './common/LazyLoader';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import { cn } from '../utils/cn';
 
 // Sub-components - LAZY LOADED with Named Export Fix
 const DashboardOverview = React.lazy(() => import('./dashboard/DashboardOverview').then(module => ({ default: module.DashboardOverview })));
@@ -34,7 +35,14 @@ const TAB_CONFIG = [
 ];
 
 export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }) => {
-  const [activeTab, setActiveTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -63,7 +71,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }
       onTabChange={setActiveTab}
     >
         <Suspense fallback={<LazyLoader message="Loading Dashboard Module..." />}>
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
             {renderContent()}
+          </div>
         </Suspense>
     </TabbedPageLayout>
   );

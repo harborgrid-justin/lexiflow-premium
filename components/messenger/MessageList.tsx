@@ -40,7 +40,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
                     name={att.name} 
                     size={att.size} 
                     type={att.type} 
-                    className={cn(isMe ? "bg-blue-700/20 text-white border-blue-500/30" : theme.surface)}
+                    className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface)}
                     variant="card"
                     onDownload={() => console.log('Downloading', att.name)}
                   />

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Party } from '../../types';
 import { MOCK_ORGS } from '../../data/mockHierarchy';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
@@ -9,6 +10,7 @@ import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { Scheduler } from '../../utils/scheduler';
 
 interface CasePartiesProps {
   parties?: Party[];
@@ -20,6 +22,23 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
   const [groupBy, setGroupBy] = useState<'none' | 'role' | 'group'>('group'); // Grouping state
+  const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
+
+  useEffect(() => {
+    Scheduler.defer(() => {
+        if (groupBy === 'none') {
+            setGrouped({ 'All Parties': parties });
+            return;
+        }
+        const groups: Record<string, Party[]> = {};
+        parties.forEach(p => {
+            const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(p);
+        });
+        setGrouped(groups);
+    });
+  }, [parties, groupBy]);
   
   const handleSave = () => {
     if (!currentParty.name || !currentParty.role) return;
@@ -73,21 +92,6 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
       if (type === 'Government') return <Gavel className={cn("h-4 w-4", theme.text.secondary)}/>;
       return <User className={cn("h-4 w-4", theme.text.secondary)}/>;
   };
-
-  // Grouping Logic
-  const getGroupedParties = () => {
-      if (groupBy === 'none') return { 'All Parties': parties };
-      
-      const groups: Record<string, Party[]> = {};
-      parties.forEach(p => {
-          const key = groupBy === 'role' ? p.role : (p.partyGroup || 'Ungrouped');
-          if (!groups[key]) groups[key] = [];
-          groups[key].push(p);
-      });
-      return groups;
-  };
-
-  const grouped = getGroupedParties();
 
   return (
     <div className="space-y-6">
@@ -166,9 +170,9 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                                 </div>
                             </TableCell>
                             <TableCell className={cn("text-xs min-w-[150px]", theme.text.secondary)}>
-                                {party.attorneys && party.attorneys.length > 0 ? (
+                                {party.attorneys && Array.isArray(party.attorneys) && (party.attorneys as any[]).length > 0 ? (
                                     <div className="space-y-2">
-                                        {party.attorneys.map((att, idx) => (
+                                        {(party.attorneys as any[]).map((att: any, idx: number) => (
                                             <div key={idx} className={cn("p-2 rounded border text-xs", theme.surfaceHighlight, theme.border.light)}>
                                                 <div className="font-bold flex items-center gap-1 truncate" title={att.name}>
                                                     <Briefcase className={cn("h-3 w-3 shrink-0", theme.text.tertiary)}/> {att.name}
@@ -235,7 +239,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
 
               <Input label="Representation Type" value={currentParty.representationType || ''} onChange={e => setCurrentParty({...currentParty, representationType: e.target.value})} placeholder="e.g. Pro Se, Retained" />
               
-              {!currentParty.attorneys && (
+              {!(currentParty.attorneys && Array.isArray(currentParty.attorneys) && currentParty.attorneys.length > 0) && (
                   <Input label="Legal Counsel (Simple String)" value={currentParty.counsel || ''} onChange={e => setCurrentParty({...currentParty, counsel: e.target.value})} placeholder="Firm or Attorney Name"/>
               )}
               

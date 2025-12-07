@@ -58,10 +58,10 @@ export const DataDictionary: React.FC = () => {
         <div 
             key={item.id} 
             onClick={() => handleSelect(item)}
-            className={cn("flex items-center border-b h-16 px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.light)}
+            className={cn("flex items-center border-b h-16 px-6 cursor-pointer transition-colors group", theme.border.light, `hover:${theme.surfaceHighlight}`)}
         >
             <div className={cn("w-[25%] font-mono text-sm font-medium truncate", theme.text.secondary)} title={item.table}>{item.table}</div>
-            <div className={cn("w-[20%] font-bold text-sm text-blue-600 truncate", theme.text.primary)} title={item.column}>{item.column}</div>
+            <div className={cn("w-[20%] font-bold text-sm truncate", theme.primary.text)} title={item.column}>{item.column}</div>
             <div className={cn("w-[15%] text-xs font-mono", theme.text.tertiary)}>{item.dataType}</div>
             <div className={cn("flex-1 text-sm truncate pr-4", theme.text.secondary)}>{item.description}</div>
             <div className="w-[15%]">
@@ -111,8 +111,8 @@ export const DataDictionary: React.FC = () => {
                  </div>
             </div>
 
-            <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col bg-white", theme.border.default)}>
-                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50 shrink-0", theme.border.default, theme.text.secondary)}>
+            <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col", theme.surface, theme.border.default)}>
+                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.border.default, theme.surfaceHighlight, theme.text.secondary)}>
                     <div className="w-[25%]">Table Name</div>
                     <div className="w-[20%]">Column / Field</div>
                     <div className="w-[15%]">Data Type</div>
@@ -132,7 +132,7 @@ export const DataDictionary: React.FC = () => {
                             renderItem={renderRow}
                         />
                     ) : (
-                        <div className="flex items-center justify-center h-full text-slate-400">No definitions found.</div>
+                        <div className={cn("flex items-center justify-center h-full", theme.text.tertiary)}>No definitions found.</div>
                     )}
                 </div>
             </div>

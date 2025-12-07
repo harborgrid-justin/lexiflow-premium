@@ -39,7 +39,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className
                 className={cn(
                   "whitespace-nowrap border-b-2 py-3 px-2 md:px-1 text-sm font-medium transition-colors min-h-[44px] touch-manipulation flex items-center gap-2",
                   isActive 
-                    ? cn("border-blue-600", theme.primary.text) 
+                    ? cn("border-current", theme.primary.text) 
                     : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.border.default}`)
                 )}
                 aria-current={isActive ? 'page' : undefined}

@@ -37,7 +37,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose, onCle
             </button>
           )}
           {onClose && (
-            <button onClick={onClose} className={cn("hover:text-slate-600 transition-colors", theme.text.tertiary)}>
+            <button onClick={onClose} className={cn("transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}>
               <X className="h-4 w-4" />
             </button>
           )}

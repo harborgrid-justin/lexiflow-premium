@@ -61,7 +61,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
           {wizard.currentStep === 1 && (
             <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-100 rounded text-blue-700"><Users className="h-6 w-6"/></div>
+                    <div className={cn("p-2 rounded text-blue-700 bg-blue-50 border border-blue-100")}><Users className="h-6 w-6"/></div>
                     <div>
                         <h3 className={cn("font-bold text-lg", theme.text.primary)}>Individuals Likely to Have Discoverable Info</h3>
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(i)</p>
@@ -85,7 +85,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
           {wizard.currentStep === 2 && (
              <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-purple-100 rounded text-purple-700"><FileText className="h-6 w-6"/></div>
+                    <div className={cn("p-2 rounded text-purple-700 bg-purple-50 border border-purple-100")}><FileText className="h-6 w-6"/></div>
                     <div>
                         <h3 className={cn("font-bold text-lg", theme.text.primary)}>Documents & ESI</h3>
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(ii)</p>
@@ -106,7 +106,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
           {wizard.currentStep === 3 && (
              <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-green-100 rounded text-green-700"><Calculator className="h-6 w-6"/></div>
+                    <div className={cn("p-2 rounded text-green-700 bg-green-50 border border-green-100")}><Calculator className="h-6 w-6"/></div>
                     <div>
                         <h3 className={cn("font-bold text-lg", theme.text.primary)}>Computation of Damages</h3>
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(iii)</p>
@@ -130,7 +130,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
           {wizard.currentStep === 4 && (
              <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-amber-100 rounded text-amber-700"><ShieldCheck className="h-6 w-6"/></div>
+                    <div className={cn("p-2 rounded text-amber-700 bg-amber-50 border border-amber-100")}><ShieldCheck className="h-6 w-6"/></div>
                     <div>
                         <h3 className={cn("font-bold text-lg", theme.text.primary)}>Insurance Agreements</h3>
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(iv)</p>

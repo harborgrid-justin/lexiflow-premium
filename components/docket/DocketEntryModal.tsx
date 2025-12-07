@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
@@ -85,7 +86,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
 
         {/* Auto-generated Tags or Rules */}
         <div className="mb-6 flex gap-2">
-            {entry.type === 'Motion' && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surfaceHighlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
+            {entry.title.toLowerCase().includes('motion') && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surfaceHighlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
             {entry.type === 'Order' && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}><Scale className="h-3 w-3"/> Ruling</span>}
         </div>
 

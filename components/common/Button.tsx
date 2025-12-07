@@ -27,10 +27,10 @@ export const Button: React.FC<ButtonProps> = ({
   
   const variants = {
     primary: cn(theme.primary.DEFAULT, theme.text.inverse, theme.primary.hover, "shadow-sm focus:ring-blue-500 border border-transparent"),
-    secondary: cn(theme.surface, theme.text.secondary, "hover:bg-slate-50", theme.border.default, "border shadow-sm focus:ring-slate-200 hover:text-slate-900"),
-    outline: cn("bg-transparent", theme.primary.text, theme.primary.border, "border hover:bg-blue-50 focus:ring-blue-500"),
-    ghost: cn("bg-transparent", theme.text.secondary, "hover:bg-slate-100 hover:text-slate-900 border border-transparent"),
-    danger: cn(theme.surface, theme.status.error.text, theme.status.error.border, "border hover:bg-red-50 focus:ring-red-500"),
+    secondary: cn(theme.surface, theme.text.secondary, `hover:${theme.surfaceHighlight}`, theme.border.default, "border shadow-sm focus:ring-slate-200", `hover:${theme.text.primary}`),
+    outline: cn("bg-transparent", theme.primary.text, theme.primary.border, `border hover:${theme.primary.light} focus:ring-blue-500`),
+    ghost: cn("bg-transparent", theme.text.secondary, `hover:${theme.surfaceHighlight} hover:${theme.text.primary} border border-transparent`),
+    danger: cn(theme.surface, theme.status.error.text, theme.status.error.border, `border hover:${theme.status.error.bg} focus:ring-red-500`),
     link: cn("bg-transparent underline-offset-4 hover:underline text-blue-600 p-0 h-auto border-none shadow-none")
   };
 

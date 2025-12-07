@@ -1,4 +1,5 @@
-import React, { useState, useMemo, Suspense, lazy } from 'react';
+
+import React, { useState, useMemo, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView } from '../types';
 import { 
   Briefcase, UserPlus, ShieldAlert, Users, Calendar, CheckSquare,
@@ -16,6 +17,7 @@ import { STORES } from '../services/db';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
+import { cn } from '../utils/cn';
 
 // Lazy load sub-components for better performance
 const CaseListActive = lazy(() => import('./case-list/CaseListActive').then(m => ({ default: m.CaseListActive })));
@@ -74,9 +76,16 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const notify = useNotify();
   const { filteredCases, ...filterProps } = useCaseList();
 
-  const [activeTab, setActiveTab] = useSessionStorage<string>('case_list_active_view', initialTab || 'active');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('case_list_active_view', initialTab || 'active');
   const [isDocketModalOpen, setIsDocketModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
@@ -146,7 +155,9 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
         onTabChange={setActiveTab}
       >
         <Suspense fallback={<LazyLoader message="Loading Module..." />}>
-          {renderContent()}
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+          </div>
         </Suspense>
       </TabbedPageLayout>
 

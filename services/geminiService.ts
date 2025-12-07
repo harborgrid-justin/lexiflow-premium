@@ -107,11 +107,12 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Pr
 function safeParseJSON<T>(text: string | undefined, fallback: T): T {
     if (!text) return fallback;
     try { 
-        const cleanText = text.replace(/```(json)?\s*|\s*```/g, '').trim();
+        // FIX: The Gemini API may wrap JSON in ```json ... ```. This must be stripped.
+        const cleanText = text.replace(/^```(json)?\s*|\s*```$/g, '').trim();
         return JSON.parse(cleanText); 
     } 
     catch (e) { 
-        console.error("JSON Parse Error", e);
+        console.error("JSON Parse Error", e, "Raw text:", text);
         return fallback; 
     }
 }

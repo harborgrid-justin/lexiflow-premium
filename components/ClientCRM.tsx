@@ -1,4 +1,6 @@
-import React, { useState, Suspense, lazy } from 'react';
+
+
+import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Client } from '../types';
 import { 
   UserPlus, LayoutDashboard, List, GitPullRequest, 
@@ -13,6 +15,7 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { STORES } from '../services/db';
+import { cn } from '../utils/cn';
 
 // Sub-components
 const CRMDashboard = lazy(() => import('./crm/CRMDashboard').then(m => ({ default: m.CRMDashboard })));
@@ -49,9 +52,16 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
-  const [activeTab, setActiveTab] = useSessionStorage<string>('crm_active_tab', initialTab || 'dashboard');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('crm_active_tab', initialTab || 'dashboard');
   const [showIntake, setShowIntake] = useState(false);
   const [selectedClientPortal, setSelectedClientPortal] = useState<Client | null>(null);
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const { data: clients = [], refetch } = useQuery<Client[]>(
       [STORES.CLIENTS, 'all'],
@@ -92,7 +102,9 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
         onTabChange={setActiveTab}
       >
         <Suspense fallback={<LazyLoader message="Loading CRM Module..." />}>
-          {renderContent()}
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+          </div>
         </Suspense>
       </TabbedPageLayout>
     </>

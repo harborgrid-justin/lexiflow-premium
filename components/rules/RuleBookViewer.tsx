@@ -100,7 +100,6 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
   }, [fullHierarchy, searchTerm]);
 
   const toggleExpand = (id: string) => {
-      if (searchTerm) return; // Disable collapsing during search for simplicity, or handle separate state
       const newSet = new Set(expandedIds);
       if (newSet.has(id)) newSet.delete(id);
       else newSet.add(id);
@@ -146,7 +145,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
                                   isSelected ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)
                               )}
                               onClick={() => {
-                                  if (hasChildren && !searchTerm) toggleExpand(node.id);
+                                  if (hasChildren) toggleExpand(node.id);
                                   else setSelectedRuleId(node.id);
                               }}
                           >

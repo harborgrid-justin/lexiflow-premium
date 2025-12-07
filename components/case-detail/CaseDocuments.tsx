@@ -1,6 +1,5 @@
-
 import React, { useState, useRef } from 'react';
-import { LegalDocument, EvidenceItem } from '../../types';
+import { LegalDocument, EvidenceItem, WorkflowTask } from '../../types';
 import { FileText, Sparkles, Bot, Plus, Wand2, Eye, CheckSquare, Cpu, Loader2, ShieldCheck } from 'lucide-react';
 import { DocumentAssembly } from '../DocumentAssembly';
 import { TaskCreationModal } from '../common/TaskCreationModal';
@@ -10,6 +9,8 @@ import { useWindow } from '../../context/WindowContext';
 import { DocumentService } from '../../services/documentService';
 import { DataService } from '../../services/dataService';
 import { useNotify } from '../../hooks/useNotify';
+import { queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 interface CaseDocumentsProps {
   documents: LegalDocument[];
@@ -42,6 +43,13 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
             }}
           />
       );
+  };
+
+  const handleTaskSaved = (task: WorkflowTask) => {
+      DataService.tasks.add(task);
+      queryClient.invalidate([STORES.TASKS, 'all']);
+      queryClient.invalidate(['dashboard', 'stats']);
+      notify.success(`Task "${task.title}" created.`);
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +112,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         <TaskCreationModal 
             isOpen={true} 
             onClose={() => setTaskModalDoc(null)} 
+            onSave={handleTaskSaved}
             initialTitle={`Review Document: ${taskModalDoc.title}`}
             relatedModule="Documents"
             relatedItemId={taskModalDoc.id}

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
@@ -47,14 +48,15 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
     >
       {/* Backdrop */}
       <div 
-        className={cn("fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", tokens.zIndex.modalBackdrop)} 
+        className={cn("fixed inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop, tokens.zIndex.modalBackdrop)} 
         aria-hidden="true"
         onClick={onClose}
       />
 
       {/* Panel */}
       <div className={cn(
-        "relative flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-lg bg-white dark:bg-slate-900",
+        "relative flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-lg",
+        theme.surface,
         theme.border.default,
         sizes[size], 
         "max-h-[calc(100dvh-2rem)]",

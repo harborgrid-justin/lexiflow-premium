@@ -98,14 +98,14 @@ export const PDFEditorView: React.FC = () => {
                             pageNum={pageNum} setPageNum={setPageNum}
                             totalPages={10} // Mock
                         />
-                        <div className="flex-1 relative bg-slate-200 dark:bg-slate-800 overflow-auto">
+                        <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
                                 <InteractiveOverlay activeTool={activeTool} dimensions={pageDims} onFieldClick={handleFieldClick} />
                             </PDFViewer>
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex items-center justify-center text-slate-400">Select a document to begin.</div>
+                    <div className={cn("flex-1 flex items-center justify-center", theme.text.tertiary)}>Select a document to begin.</div>
                 )}
             </div>
             {/* Modals */}

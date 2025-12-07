@@ -1,0 +1,117 @@
+
+import React, { useState } from 'react';
+import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter } from 'lucide-react';
+import { Tabs } from '../common/Tabs';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { Badge } from '../common/Badge';
+import { Button } from '../common/Button';
+import { SearchToolbar } from '../common/SearchToolbar';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
+
+export const VendorProcurement: React.FC = () => {
+    const { theme } = useTheme();
+    const [activeTab, setActiveTab] = useState('directory');
+
+    const contracts = [
+        { id: 1, vendor: 'LexisNexis', type: 'Legal Research', value: '$45,000/yr', renewal: '2024-12-01', status: 'Active' },
+        { id: 'c2', vendor: 'Iron Mountain', type: 'Records', value: '$12,000/yr', renewal: '2024-06-15', status: 'Review Needed' },
+        { id: 'c3', vendor: 'Zoom', type: 'Software', value: '$8,500/yr', renewal: '2024-09-01', status: 'Active' },
+    ];
+
+    const rfps = [
+        { id: 'rfp1', title: 'E-Discovery Platform Upgrade', stage: 'Drafting', budget: '$150k' },
+        { id: 'rfp2', title: 'Office Cleaning Services', stage: 'Vendor Selection', budget: '$40k' },
+        { id: 'rfp3', title: 'Cybersecurity Audit', stage: 'Contract Negotiation', budget: '$25k' },
+    ];
+
+    return (
+        <div className="flex flex-col h-full space-y-4">
+            <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
+                <div className="flex justify-between items-center mb-4">
+                     <h3 className={cn("text-lg font-bold", theme.text.primary)}>Procurement & Contracts</h3>
+                     <Button variant="primary" icon={Plus}>New Requisition</Button>
+                </div>
+                <Tabs 
+                    tabs={[
+                        { id: 'directory', label: 'Vendor Directory', icon: Briefcase },
+                        { id: 'contracts', label: 'Contract Lifecycle', icon: FileText },
+                        { id: 'rfp', label: 'RFP Pipeline', icon: ShoppingCart },
+                        { id: 'spend', label: 'Spend Analysis', icon: BarChart2 },
+                    ]}
+                    activeTab={activeTab}
+                    onChange={setActiveTab}
+                />
+            </div>
+
+            <div className="flex-1 overflow-hidden p-6">
+                {activeTab === 'directory' && (
+                    <div className="space-y-4 animate-fade-in">
+                        <SearchToolbar value="" onChange={() => {}} placeholder="Search vendors..." />
+                        <TableContainer>
+                            <TableHeader><TableHead>Vendor</TableHead><TableHead>Category</TableHead><TableHead>Rating</TableHead><TableHead>Status</TableHead></TableHeader>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell className={cn("font-bold", theme.text.primary)}>Westlaw</TableCell>
+                                    <TableCell>Research</TableCell>
+                                    <TableCell>4.8/5</TableCell>
+                                    <TableCell><Badge variant="success">Preferred</Badge></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className={cn("font-bold", theme.text.primary)}>Clio</TableCell>
+                                    <TableCell>Software</TableCell>
+                                    <TableCell>4.5/5</TableCell>
+                                    <TableCell><Badge variant="success">Active</Badge></TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </TableContainer>
+                    </div>
+                )}
+
+                {activeTab === 'contracts' && (
+                    <div className="space-y-4 animate-fade-in">
+                        <TableContainer>
+                            <TableHeader><TableHead>Vendor</TableHead><TableHead>Service Type</TableHead><TableHead>Value</TableHead><TableHead>Renewal Date</TableHead><TableHead>Status</TableHead></TableHeader>
+                            <TableBody>
+                                {contracts.map(c => (
+                                    <TableRow key={c.id}>
+                                        <TableCell className={cn("font-medium", theme.text.primary)}>{c.vendor}</TableCell>
+                                        <TableCell>{c.type}</TableCell>
+                                        <TableCell className="font-mono">{c.value}</TableCell>
+                                        <TableCell>{c.renewal}</TableCell>
+                                        <TableCell><Badge variant={c.status === 'Active' ? 'success' : 'warning'}>{c.status}</Badge></TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </TableContainer>
+                    </div>
+                )}
+
+                {activeTab === 'rfp' && (
+                     <KanbanBoard>
+                         {['Drafting', 'Published', 'Vendor Selection', 'Contract Negotiation', 'Closed'].map(stage => (
+                             <KanbanColumn key={stage} title={stage} count={rfps.filter(r => r.stage === stage).length}>
+                                 {rfps.filter(r => r.stage === stage).map(r => (
+                                     <KanbanCard key={r.id}>
+                                         <h4 className={cn("font-bold text-sm", theme.text.primary)}>{r.title}</h4>
+                                         <p className={cn("text-xs mt-1", theme.text.secondary)}>Budget: {r.budget}</p>
+                                     </KanbanCard>
+                                 ))}
+                             </KanbanColumn>
+                         ))}
+                     </KanbanBoard>
+                )}
+
+                {activeTab === 'spend' && (
+                    <div className={cn("flex items-center justify-center h-full border-2 border-dashed rounded-lg", theme.border.default)}>
+                        <div className="text-center">
+                            <BarChart2 className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>
+                            <p className={theme.text.secondary}>Spend analytics visualization placeholder.</p>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};

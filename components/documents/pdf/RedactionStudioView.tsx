@@ -62,13 +62,13 @@ export const RedactionStudioView: React.FC = () => {
             <div className={cn("flex-1 flex", theme.surface)}>
                 {selectedDoc ? (
                     <>
-                        <div className="flex-1 relative bg-slate-200 dark:bg-slate-800 overflow-auto">
+                        <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
                             <PDFViewer url={previewUrl} />
                         </div>
                         <PIIPanel content={selectedDoc.content} onApplyRedactions={() => alert("Redacted!")} />
                     </>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
+                    <div className={cn("flex-1 flex flex-col items-center justify-center", theme.text.tertiary)}>
                         <Eraser className="h-12 w-12 mb-4 opacity-50"/>
                         Select a document to begin PII scan.
                     </div>

@@ -7,24 +7,32 @@ import { WorkflowTask, Case } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { VirtualList } from '../common/VirtualList';
+import { LazyLoader } from '../common/LazyLoader';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 interface CaseListTasksProps {
   onSelectCase?: (c: Case) => void;
 }
 
 export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) => {
-  const [tasks, setTasks] = useState<WorkflowTask[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState('All');
   const { theme } = useTheme();
 
-  useEffect(() => {
-      const load = async () => {
-          const data = await DataService.tasks.getAll();
-          setTasks(data);
-      };
-      load();
-  }, []);
+  const { data: tasks = [], isLoading, refetch } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], DataService.tasks.getAll);
+  
+  const { mutate: addTask } = useMutation(DataService.tasks.add, {
+      onSuccess: () => queryClient.invalidate([STORES.TASKS, 'all'])
+  });
+
+  const { mutate: updateTask } = useMutation(
+      (payload: {id: string, updates: Partial<WorkflowTask>}) => DataService.tasks.update(payload.id, payload.updates),
+      {
+          onSuccess: () => queryClient.invalidate([STORES.TASKS, 'all'])
+      }
+  );
 
   const getModuleIcon = (module?: string) => {
       switch(module) {
@@ -44,17 +52,14 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   });
 
   const handleAddTask = async (newTask: WorkflowTask) => {
-      await DataService.tasks.add(newTask);
-      const updated = await DataService.tasks.getAll();
-      setTasks(updated);
+      addTask(newTask);
   };
 
   const handleToggle = async (id: string) => {
       const task = tasks.find(t => t.id === id);
       if (task) {
           const newStatus = task.status === 'Done' ? 'Pending' : 'Done';
-          await DataService.tasks.update(id, { status: newStatus as any });
-          setTasks(tasks.map(t => t.id === id ? { ...t, status: newStatus as any } : t));
+          updateTask({ id, updates: { status: newStatus as any }});
       }
   };
 
@@ -64,6 +69,46 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
           if (found) onSelectCase(found);
       }
   };
+  
+  const renderRow = (t: WorkflowTask) => (
+    <div key={t.id} className={cn("p-4 flex items-start transition-colors group h-[90px] border-b", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+        <div className="pt-0.5 mr-4">
+            <input 
+                type="checkbox" 
+                className="h-5 w-5 text-blue-600 rounded border-slate-300 cursor-pointer" 
+                checked={t.status === 'Done'}
+                onChange={() => handleToggle(t.id)}
+            />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-start">
+              <p className={cn("text-sm font-bold truncate pr-2", t.status === 'Done' ? "text-slate-400 line-through" : theme.text.primary)}>{t.title}</p>
+              <div className="flex items-center gap-2 shrink-0">
+                <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'neutral'}>{t.priority}</Badge>
+                {t.caseId && (
+                    <button 
+                        onClick={() => handleTaskClick(t)}
+                        className={cn("flex items-center px-2 py-1 rounded text-[10px] font-medium transition-colors border border-transparent", "text-blue-600 bg-blue-50 hover:bg-blue-100 hover:border-blue-200")}
+                        title="Go to Case"
+                    >
+                        Case <ArrowRight className="h-3 w-3 ml-1"/>
+                    </button>
+                )}
+              </div>
+          </div>
+          <p className={cn("text-xs mt-1 flex items-center", theme.text.secondary)}>
+              {t.relatedModule && <span className={cn("flex items-center mr-3 px-1.5 py-0.5 rounded", theme.surfaceHighlight)}>{getModuleIcon(t.relatedModule)} {t.relatedModule}</span>}
+              <span className="mr-3">Due: {t.dueDate}</span>
+              <span>Assignee: {t.assignee}</span>
+          </p>
+          {t.relatedItemTitle && (
+              <p className={cn("text-xs mt-1 pl-2 border-l-2 truncate opacity-80", theme.primary.text, theme.primary.border)}>
+                  Linked: {t.relatedItemTitle}
+              </p>
+          )}
+        </div>
+    </div>
+  );
 
   return (
     <div className="space-y-4 h-full flex flex-col">
@@ -93,47 +138,16 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
         </div>
       </div>
 
-      <div className={cn("rounded-lg border divide-y shadow-sm flex-1 overflow-y-auto", theme.surface, theme.border.default, theme.border.light)}>
-        {filteredTasks.length === 0 && <div className={cn("p-8 text-center", theme.text.tertiary)}>No tasks found.</div>}
-        {filteredTasks.map(t => (
-          <div key={t.id} className={cn("p-4 flex items-start transition-colors group", `hover:${theme.surfaceHighlight}`)}>
-            <div className="pt-0.5 mr-4">
-                <input 
-                    type="checkbox" 
-                    className="h-5 w-5 text-blue-600 rounded border-slate-300 cursor-pointer" 
-                    checked={t.status === 'Done'}
-                    onChange={() => handleToggle(t.id)}
-                />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-start">
-                  <p className={cn("text-sm font-bold truncate pr-2", t.status === 'Done' ? "text-slate-400 line-through" : theme.text.primary)}>{t.title}</p>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'neutral'}>{t.priority}</Badge>
-                    {t.caseId && (
-                        <button 
-                            onClick={() => handleTaskClick(t)}
-                            className={cn("flex items-center px-2 py-1 rounded text-[10px] font-medium transition-colors border border-transparent", "text-blue-600 bg-blue-50 hover:bg-blue-100 hover:border-blue-200")}
-                            title="Go to Case"
-                        >
-                            Case <ArrowRight className="h-3 w-3 ml-1"/>
-                        </button>
-                    )}
-                  </div>
-              </div>
-              <p className={cn("text-xs mt-1 flex items-center", theme.text.secondary)}>
-                  {t.relatedModule && <span className={cn("flex items-center mr-3 px-1.5 py-0.5 rounded", theme.surfaceHighlight)}>{getModuleIcon(t.relatedModule)} {t.relatedModule}</span>}
-                  <span className="mr-3">Due: {t.dueDate}</span>
-                  <span>Assignee: {t.assignee}</span>
-              </p>
-              {t.relatedItemTitle && (
-                  <p className={cn("text-xs mt-1 pl-2 border-l-2 truncate opacity-80", theme.primary.text, theme.primary.border)}>
-                      Linked: {t.relatedItemTitle}
-                  </p>
-              )}
-            </div>
-          </div>
-        ))}
+      <div className={cn("rounded-lg border shadow-sm flex-1 overflow-hidden", theme.surface, theme.border.default)}>
+        {isLoading ? <LazyLoader /> : (
+          <VirtualList 
+            items={filteredTasks}
+            height="100%"
+            itemHeight={90}
+            renderItem={renderRow}
+            emptyMessage="No tasks found."
+          />
+        )}
       </div>
     </div>
   );

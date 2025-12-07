@@ -6,6 +6,8 @@ export const useSelection = <T extends Record<string, any>>(items: T[], idKey: k
   const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
 
   const toggleSelection = useCallback((id: string, originalEvent?: React.MouseEvent | React.ChangeEvent) => {
+    const isSelectedBeforeToggle = selectedIds.includes(id);
+
     // Handle Range Selection (Shift Key). Type-safe check for shiftKey property.
     if (originalEvent && 'shiftKey' in originalEvent && originalEvent.shiftKey && lastSelectedId) {
         const lastIndex = items.findIndex(item => String(item[idKey]) === lastSelectedId);
@@ -23,13 +25,15 @@ export const useSelection = <T extends Record<string, any>>(items: T[], idKey: k
     }
 
     // Standard Toggle
+    setLastSelectedId(id); // Update last clicked for next shift-click
     setSelectedIds(prev => {
-      const isSelected = prev.includes(id);
-      if (isSelected) return prev.filter(item => item !== id);
-      setLastSelectedId(id);
-      return [...prev, id];
+      if (isSelectedBeforeToggle) {
+        return prev.filter(item => item !== id);
+      } else {
+        return [...prev, id];
+      }
     });
-  }, [items, idKey, lastSelectedId]);
+  }, [items, idKey, lastSelectedId, selectedIds]);
 
   const selectAll = useCallback(() => {
     const allIds = items.map(item => String(item[idKey]));

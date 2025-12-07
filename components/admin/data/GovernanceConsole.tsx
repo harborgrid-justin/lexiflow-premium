@@ -82,26 +82,26 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
             {activeTab === 'overview' && (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, "bg-emerald-500/10 border-emerald-500/20")}>
+                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, theme.status.success.bg, theme.status.success.border)}>
                             <div>
-                                <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Compliance Score</p>
-                                <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">98.5%</p>
+                                <p className={cn("text-xs font-bold uppercase tracking-wider", theme.status.success.text)}>Compliance Score</p>
+                                <p className={cn("text-3xl font-bold mt-1", theme.status.success.text)}>98.5%</p>
                             </div>
-                            <ShieldCheck className="h-10 w-10 text-emerald-500 opacity-50"/>
+                            <ShieldCheck className={cn("h-10 w-10 opacity-50", theme.status.success.text)}/>
                         </div>
-                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, "bg-amber-500/10 border-amber-500/20")}>
+                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, theme.status.warning.bg, theme.status.warning.border)}>
                             <div>
-                                <p className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Risk Items</p>
-                                <p className="text-3xl font-bold text-amber-700 dark:text-amber-300 mt-1">3</p>
+                                <p className={cn("text-xs font-bold uppercase tracking-wider", theme.status.warning.text)}>Risk Items</p>
+                                <p className={cn("text-3xl font-bold mt-1", theme.status.warning.text)}>3</p>
                             </div>
-                            <AlertTriangle className="h-10 w-10 text-amber-500 opacity-50"/>
+                            <AlertTriangle className={cn("h-10 w-10 opacity-50", theme.status.warning.text)}/>
                         </div>
-                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, "bg-blue-500/10 border-blue-500/20")}>
+                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, theme.status.info.bg, theme.status.info.border)}>
                             <div>
-                                <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Enforced Rules</p>
-                                <p className="text-3xl font-bold text-blue-700 dark:text-blue-300 mt-1">{rules.length}</p>
+                                <p className={cn("text-xs font-bold uppercase tracking-wider", theme.status.info.text)}>Enforced Rules</p>
+                                <p className={cn("text-3xl font-bold mt-1", theme.status.info.text)}>{rules.length}</p>
                             </div>
-                            <FileSearch className="h-10 w-10 text-blue-500 opacity-50"/>
+                            <FileSearch className={cn("h-10 w-10 opacity-50", theme.status.info.text)}/>
                         </div>
                     </div>
                     
@@ -114,7 +114,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
                                             <Scale className={cn("h-5 w-5", theme.text.secondary)}/>
                                             <span className={cn("font-bold text-sm", theme.text.primary)}>{fw}</span>
                                         </div>
-                                        <span className="text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">Compliant</span>
+                                        <span className={cn("text-xs font-bold px-2 py-1 rounded border", theme.status.success.text, theme.status.success.bg, theme.status.success.border)}>Compliant</span>
                                     </div>
                                 ))}
                             </div>
@@ -154,7 +154,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <span className={cn("text-xs font-bold px-2 py-1 rounded border", pol.status === 'Active' ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" : "bg-amber-500/10 text-amber-600 border-amber-500/20")}>{pol.status}</span>
+                                    <span className={cn("text-xs font-bold px-2 py-1 rounded border", pol.status === 'Active' ? cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border) : cn(theme.status.warning.bg, theme.status.warning.text, theme.status.warning.border))}>{pol.status}</span>
                                     <Button size="sm" variant="ghost">View</Button>
                                 </div>
                             </div>

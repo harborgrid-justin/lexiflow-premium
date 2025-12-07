@@ -62,8 +62,8 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
   };
 
   return (
-    <div className={cn("w-80 border-l flex flex-col bg-slate-50", theme.border.default)}>
-        <div className="p-4 border-b flex justify-between items-center bg-white">
+    <div className={cn("w-80 border-l flex flex-col", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
             <h3 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
                 <ShieldAlert className="h-4 w-4 mr-2 text-amber-600"/> PII Detection
             </h3>
@@ -74,12 +74,12 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
         
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {isScanning ? (
-                <div className="text-center py-8 text-slate-400">
+                <div className={cn("text-center py-8", theme.text.tertiary)}>
                     Scanning document...
                 </div>
             ) : (
                 entities.map(entity => (
-                    <div key={entity.id} className={cn("p-3 rounded border bg-white transition-opacity", entity.ignored ? "opacity-50" : "shadow-sm", theme.border.default)}>
+                    <div key={entity.id} className={cn("p-3 rounded border transition-opacity", theme.surface, theme.border.default, entity.ignored ? "opacity-50" : "shadow-sm")}>
                         <div className="flex justify-between items-start mb-1">
                             <span className={cn("text-[10px] font-bold uppercase tracking-wide px-1.5 rounded border", 
                                 entity.type === 'SSN' ? "bg-red-50 text-red-700 border-red-100" : 
@@ -88,7 +88,7 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
                             )}>
                                 {entity.type}
                             </span>
-                            <button onClick={() => handleToggleIgnore(entity.id)} className="text-slate-400 hover:text-slate-600">
+                            <button onClick={() => handleToggleIgnore(entity.id)} className={cn("hover:text-slate-600", theme.text.tertiary)}>
                                 {entity.ignored ? <EyeOff className="h-4 w-4"/> : <Eye className="h-4 w-4"/>}
                             </button>
                         </div>
@@ -100,8 +100,8 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
             )}
         </div>
 
-        <div className="p-4 border-t bg-white space-y-3">
-            <div className="flex items-start gap-2 text-xs text-slate-500">
+        <div className={cn("p-4 border-t space-y-3", theme.surface, theme.border.default)}>
+            <div className={cn("flex items-start gap-2 text-xs", theme.text.secondary)}>
                 <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0"/>
                 <p>Redaction is permanent. A new version of the document will be created.</p>
             </div>

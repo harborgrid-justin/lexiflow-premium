@@ -1,5 +1,6 @@
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+
+import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { Plus, RefreshCw, Play, Loader2 } from 'lucide-react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
@@ -28,11 +29,18 @@ type WorkflowView = 'templates' | 'cases' | 'firm' | 'ops_center' | 'analytics' 
 export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, initialTab }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [activeTab, setActiveTab] = useState<WorkflowView>('templates');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useState<WorkflowView>('templates');
   const [viewMode, setViewMode] = useState<'list' | 'detail' | 'builder'>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<'case' | 'process'>('case');
   const [selectedTemplate, setSelectedTemplate] = useState<WorkflowTemplateData | null>(null);
+  
+  const setActiveTab = (tab: WorkflowView) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
   
   // Enterprise Data Access
   const { data: cases = [], isLoading: casesLoading } = useQuery<Case[]>(
@@ -184,13 +192,15 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 custom-scrollbar">
-        {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>}
-        {!isLoading && activeTab === 'templates' && <WorkflowLibrary onCreate={handleCreateTemplate} />}
-        {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={cases} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} getCaseProgress={getCaseProgress} getNextTask={getNextTask} />}
-        {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcesses} onSelectProcess={handleSelectProcess} />}
-        {activeTab === 'ops_center' && <EnhancedWorkflowPanel />}
-        {activeTab === 'analytics' && <WorkflowAnalyticsDashboard />}
-        {activeTab === 'settings' && <WorkflowConfig />}
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>}
+            {!isLoading && activeTab === 'templates' && <WorkflowLibrary onCreate={handleCreateTemplate} />}
+            {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={cases} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} getCaseProgress={getCaseProgress} getNextTask={getNextTask} />}
+            {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcesses} onSelectProcess={handleSelectProcess} />}
+            {activeTab === 'ops_center' && <EnhancedWorkflowPanel />}
+            {activeTab === 'analytics' && <WorkflowAnalyticsDashboard />}
+            {activeTab === 'settings' && <WorkflowConfig />}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { 
   Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp, 
   BrainCircuit, Map, Calculator, FileText, Bookmark, Library
@@ -13,22 +12,22 @@ import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 
 // --- Lazy Loaded Components ---
-const WikiView = React.lazy(() => import('./knowledge/WikiView').then(m => ({ default: m.WikiView })));
-const PrecedentsView = React.lazy(() => import('./knowledge/PrecedentsView').then(m => ({ default: m.PrecedentsView })));
-const QAView = React.lazy(() => import('./knowledge/QAView').then(m => ({ default: m.QAView })));
-const KnowledgeAnalytics = React.lazy(() => import('./knowledge/KnowledgeAnalytics').then(m => ({ default: m.KnowledgeAnalytics })));
-const ClauseList = React.lazy(() => import('./clauses/ClauseList').then(m => ({ default: m.ClauseList })));
-const ClauseHistoryModal = React.lazy(() => import('./ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
-const JudgeAnalytics = React.lazy(() => import('./analytics/JudgeAnalytics').then(m => ({ default: m.JudgeAnalytics })));
-const CounselAnalytics = React.lazy(() => import('./analytics/CounselAnalytics').then(m => ({ default: m.CounselAnalytics })));
-const CasePrediction = React.lazy(() => import('./analytics/CasePrediction').then(m => ({ default: m.CasePrediction })));
-const SettlementCalculator = React.lazy(() => import('./analytics/SettlementCalculator').then(m => ({ default: m.SettlementCalculator })));
-const RuleBookViewer = React.lazy(() => import('./rules/RuleBookViewer').then(m => ({ default: m.RuleBookViewer })));
-const StandingOrders = React.lazy(() => import('./rules/StandingOrders').then(m => ({ default: m.StandingOrders })));
-const LocalRulesMap = React.lazy(() => import('./rules/LocalRulesMap').then(m => ({ default: m.LocalRulesMap })));
-const CitationLibrary = React.lazy(() => import('./citation/CitationLibrary').then(m => ({ default: m.CitationLibrary })));
-const BriefAnalyzer = React.lazy(() => import('./citation/BriefAnalyzer').then(m => ({ default: m.BriefAnalyzer })));
-const ActiveResearch = React.lazy(() => import('./research/ActiveResearch').then(m => ({ default: m.ActiveResearch })));
+const WikiView = lazy(() => import('./knowledge/WikiView').then(m => ({ default: m.WikiView })));
+const PrecedentsView = lazy(() => import('./knowledge/PrecedentsView').then(m => ({ default: m.PrecedentsView })));
+const QAView = lazy(() => import('./knowledge/QAView').then(m => ({ default: m.QAView })));
+const KnowledgeAnalytics = lazy(() => import('./knowledge/KnowledgeAnalytics').then(m => ({ default: m.KnowledgeAnalytics })));
+const ClauseList = lazy(() => import('./clauses/ClauseList').then(m => ({ default: m.ClauseList })));
+const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
+const JudgeAnalytics = lazy(() => import('./analytics/JudgeAnalytics').then(m => ({ default: m.JudgeAnalytics })));
+const CounselAnalytics = lazy(() => import('./analytics/CounselAnalytics').then(m => ({ default: m.CounselAnalytics })));
+const CasePrediction = lazy(() => import('./analytics/CasePrediction').then(m => ({ default: m.CasePrediction })));
+const SettlementCalculator = lazy(() => import('./analytics/SettlementCalculator').then(m => ({ default: m.SettlementCalculator })));
+const RuleBookViewer = lazy(() => import('./rules/RuleBookViewer').then(m => ({ default: m.RuleBookViewer })));
+const StandingOrders = lazy(() => import('./rules/StandingOrders').then(m => ({ default: m.StandingOrders })));
+const LocalRulesMap = lazy(() => import('./rules/LocalRulesMap').then(m => ({ default: m.LocalRulesMap })));
+const CitationLibrary = lazy(() => import('./citation/CitationLibrary').then(m => ({ default: m.CitationLibrary })));
+const BriefAnalyzer = lazy(() => import('./citation/BriefAnalyzer').then(m => ({ default: m.BriefAnalyzer })));
+const ActiveResearch = lazy(() => import('./research/ActiveResearch').then(m => ({ default: m.ActiveResearch })));
 
 import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
 

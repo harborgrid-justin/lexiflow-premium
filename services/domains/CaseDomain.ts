@@ -1,12 +1,16 @@
-
-import { Case, CasePhase } from '../../types';
+import { Case, CasePhase, Party } from '../../types';
 import { Repository } from '../core/Repository';
-import { STORES } from '../db';
+import { STORES, db } from '../db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class CaseRepository extends Repository<Case> {
     constructor() { super(STORES.CASES); }
+
+    getParties = async (caseId: string): Promise<Party[]> => {
+        const c = await this.getById(caseId);
+        return c?.parties || [];
+    }
 
     getArchived = async () => {
         const cases = await this.getAll();

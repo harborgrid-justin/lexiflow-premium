@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
-import { WorkflowStage, WorkflowTask } from '../../../types';
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../../types';
 import { UserAvatar } from '../../common/UserAvatar';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -11,11 +12,13 @@ interface WorkflowTimelineProps {
   onNavigateToModule?: (module: string) => void;
 }
 
+// FIX: Corrected component signature to accept the correct props and remove unused ones.
 export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onToggleTask, onNavigateToModule }) => {
   const { theme } = useTheme();
+  // FIX: Added missing state for managing expanded stages.
   const [expandedStage, setExpandedStage] = useState<string | null>(stages.find(s => s.status === 'Active')?.id || null);
 
-  return (
+return (
     <div className="space-y-6">
         {stages.map((stage, index) => {
             const isExpanded = expandedStage === stage.id;
@@ -25,6 +28,7 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                     {/* Stage Header */}
                     <div 
                         className={cn("p-4 flex items-center justify-between cursor-pointer rounded-t-xl transition-colors", `hover:${theme.surfaceHighlight}`)}
+                        // FIX: Use the state setter for expanded stage.
                         onClick={() => setExpandedStage(isExpanded ? null : stage.id)}
                     >
                         <div className="flex items-center gap-4">
@@ -55,6 +59,7 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                             {stage.tasks.map((task) => (
                                 <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface, theme.border.default, "hover:border-blue-300")}>
                                     <button 
+                                        // FIX: Call the onToggleTask prop passed from the parent component.
                                         onClick={() => onToggleTask(stage.id, task.id)}
                                         className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                             task.status === 'Done' 

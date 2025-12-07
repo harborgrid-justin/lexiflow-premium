@@ -1,8 +1,10 @@
-import React, { Suspense, lazy } from 'react';
+
+import React, { Suspense, lazy, useTransition } from 'react';
 import { Network, Shield, Link, Database, Activity, Lock, Server } from 'lucide-react';
 import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { cn } from '../utils/cn';
 
 // Sub-components
 const AdminHierarchy = lazy(() => import('./admin/AdminHierarchy').then(m => ({ default: m.AdminHierarchy })));
@@ -43,7 +45,14 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
-  const [activeTab, setActiveTab] = useSessionStorage<string>('admin_active_tab', initialTab || 'hierarchy');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('admin_active_tab', initialTab || 'hierarchy');
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -51,7 +60,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
       case 'security': return <AdminSecurity />;
       case 'db': return <AdminDatabaseControl />;
       case 'data': return <AdminPlatformManager />;
-      case 'logs': return <AdminAuditLog logs={[]} />;
+      case 'logs': return <AdminAuditLog />;
       case 'integrations': return <AdminIntegrations />;
       default: return <AdminHierarchy />;
     }
@@ -66,7 +75,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Admin Module..."/>}>
-        {renderContent()}
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+        </div>
       </Suspense>
     </TabbedPageLayout>
   );

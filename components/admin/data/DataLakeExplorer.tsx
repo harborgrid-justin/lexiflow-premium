@@ -70,7 +70,7 @@ export const DataLakeExplorer: React.FC = () => {
              openWindow(
                 `preview-${file.id}`,
                 `Preview: ${file.name}`,
-                <div className="h-full bg-white">
+                <div className={cn("h-full", theme.surface)}>
                     <DocumentPreviewPanel 
                         document={{
                             id: file.id,
@@ -106,14 +106,14 @@ export const DataLakeExplorer: React.FC = () => {
                 </div>
             </div>
 
-            <div className={cn("p-2 border-b flex items-center gap-2 text-sm bg-slate-50/50", theme.border.default)}>
-                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 hover:bg-slate-200 rounded text-slate-500")}><Home className="h-4 w-4"/></button>
+            <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surfaceHighlight, theme.border.default)}>
+                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface}`)}><Home className="h-4 w-4"/></button>
                 {currentPath.slice(1).map((folder, i) => (
                     <React.Fragment key={folder}>
                         <ChevronRight className="h-4 w-4 text-slate-400"/>
                         <button 
                             onClick={() => handleBreadcrumb(i + 1)}
-                            className={cn("px-2 py-0.5 rounded hover:bg-slate-200 font-medium", i === currentPath.length - 2 ? theme.text.primary : theme.text.secondary)}
+                            className={cn("px-2 py-0.5 rounded font-medium", i === currentPath.length - 2 ? theme.text.primary : theme.text.secondary, `hover:${theme.surface}`)}
                         >
                             {folder}
                         </button>
@@ -135,10 +135,10 @@ export const DataLakeExplorer: React.FC = () => {
                         </TableHeader>
                         <TableBody>
                             {items.length === 0 && (
-                                <TableRow><TableCell colSpan={7} className="text-center py-12 text-slate-400">Folder is empty</TableCell></TableRow>
+                                <TableRow><TableCell colSpan={7} className={cn("text-center py-12", theme.text.tertiary)}>Folder is empty</TableCell></TableRow>
                             )}
                             {items.map(item => (
-                                <TableRow key={item.id} className="cursor-pointer hover:bg-slate-50" onClick={() => handleFileClick(item)}>
+                                <TableRow key={item.id} className={cn("cursor-pointer", `hover:${theme.surfaceHighlight}`)} onClick={() => handleFileClick(item)}>
                                     <TableCell onClick={e => e.stopPropagation()}>
                                         <input 
                                             type="checkbox" 
@@ -159,14 +159,14 @@ export const DataLakeExplorer: React.FC = () => {
                                     <TableCell>{item.format || 'Folder'}</TableCell>
                                     <TableCell>
                                         <span className={cn("text-[10px] px-2 py-0.5 rounded-full border", 
-                                            item.tier === 'Hot' ? "bg-red-50 text-red-700 border-red-100" :
-                                            item.tier === 'Cool' ? "bg-blue-50 text-blue-700 border-blue-100" :
-                                            "bg-slate-100 text-slate-600 border-slate-200"
+                                            item.tier === 'Hot' ? cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border) :
+                                            item.tier === 'Cool' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
+                                            cn(theme.surfaceHighlight, theme.text.secondary, theme.border.default)
                                         )}>{item.tier}</span>
                                     </TableCell>
-                                    <TableCell className="text-xs text-slate-500">{item.modified}</TableCell>
+                                    <TableCell className={cn("text-xs", theme.text.secondary)}>{item.modified}</TableCell>
                                     <TableCell className="text-right">
-                                        <button className="p-1 hover:bg-slate-200 rounded text-slate-400" onClick={e => e.stopPropagation()}>
+                                        <button className={cn("p-1 rounded", theme.text.tertiary, `hover:${theme.surfaceHighlight}`)} onClick={e => e.stopPropagation()}>
                                             <MoreHorizontal className="h-4 w-4"/>
                                         </button>
                                     </TableCell>

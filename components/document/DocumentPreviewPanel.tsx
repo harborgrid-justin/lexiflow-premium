@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { LegalDocument, UserRole } from '../../types';
 import { TagList } from '../common/Primitives';
@@ -36,7 +35,7 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
   const [isRedactionMode, setIsRedactionMode] = useState(false);
   
   // Systems Engineering: Integrated Memory Management
-  const { register, revoke } = useBlobRegistry();
+  const { register } = useBlobRegistry();
 
   // Mutation for Redaction
   const { mutate: performRedaction, isLoading: isRedacting } = useMutation(
@@ -55,7 +54,7 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
       if (document && document.tags.includes('Local')) {
           const loadBlob = async () => {
               // Retrieve raw blob from IndexedDB
-              const blob = await DataService.documents.getFile(document.id); // Assuming DataService exposes this via DocumentService logic
+              const blob = await DataService.documents.getFile(document.id);
               
               if (isMounted && blob) {
                   // Create managed URL
@@ -68,7 +67,7 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
           setPreviewUrl(null); 
       }
       return () => { isMounted = false; };
-  }, [document, register]); // Registry handles cleanup automatically
+  }, [document, register]); // The registry hook handles cleanup automatically
 
   const handleToggleEncryption = () => {
     if (!document || !onUpdate) return;

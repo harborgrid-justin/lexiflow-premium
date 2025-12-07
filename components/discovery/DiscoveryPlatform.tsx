@@ -27,10 +27,11 @@ import { DiscoveryDepositions } from './discovery/DiscoveryDepositions';
 import { DiscoveryESI } from './discovery/DiscoveryESI';
 import { DiscoveryInterviews } from './discovery/DiscoveryInterviews';
 
-type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
+export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
 
 interface DiscoveryPlatformProps {
     initialTab?: DiscoveryView;
+    caseId?: string; // Integration Point: Optional Scoping
 }
 
 const PARENT_TABS = [
@@ -63,16 +64,20 @@ const PARENT_TABS = [
   }
 ];
 
-export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab }) => {
+export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>('discovery_active_tab', 'dashboard');
+  const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
+      caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab', 
+      'dashboard'
+  );
   const [contextId, setContextId] = useState<string | null>(null);
 
   // Enterprise Query: Requests are central to many sub-views
+  // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, 'all'], // Using new discovery requests store
-      () => DataService.discovery.getRequests()
+      [STORES.REQUESTS, caseId || 'all'], 
+      () => DataService.discovery.getRequests(caseId) 
   );
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
@@ -110,7 +115,7 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
   const handleSaveResponse = async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
       // Invalidate query to refresh lists
-      queryClient.invalidate([STORES.REQUESTS, 'all']);
+      queryClient.invalidate([STORES.REQUESTS, caseId || 'all']);
       alert(`Response saved for ${reqId}. Status updated to Responded.`);
       setActiveTab('requests');
   };
@@ -154,17 +159,19 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-      <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-            title="Discovery Center" 
-            subtitle="Manage Requests, Legal Holds, and FRCP Compliance."
-            actions={
-            <div className="flex gap-2">
-                <Button variant="secondary" icon={Clock} onClick={() => syncDeadlines(undefined)} isLoading={isSyncing}>Sync Deadlines</Button>
-                <Button variant="primary" icon={Plus} onClick={() => alert("New Request Wizard")}>Create Request</Button>
-            </div>
-            }
-        />
+      <div className={cn("px-6 pt-6 shrink-0", caseId ? "pt-2" : "")}>
+        {!caseId && (
+            <PageHeader 
+                title="Discovery Center" 
+                subtitle="Manage Requests, Legal Holds, and FRCP Compliance."
+                actions={
+                <div className="flex gap-2">
+                    <Button variant="secondary" icon={Clock} onClick={() => syncDeadlines(undefined)} isLoading={isSyncing}>Sync Deadlines</Button>
+                    <Button variant="primary" icon={Plus} onClick={() => alert("New Request Wizard")}>Create Request</Button>
+                </div>
+                }
+            />
+        )}
         
         {/* Desktop Parent Navigation */}
         <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>

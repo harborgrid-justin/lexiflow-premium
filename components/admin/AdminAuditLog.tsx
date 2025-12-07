@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AuditLogEntry } from '../../types';
 import { Clock, User, Activity, Download, Filter, Shield, ShieldCheck, Link, AlertOctagon, Loader2, LayoutList, GitCommit, RefreshCw, Skull, Terminal, ArrowRight } from 'lucide-react';
@@ -11,15 +12,20 @@ import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
+import { useQuery, queryClient } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 interface AdminAuditLogProps {
-  logs: AuditLogEntry[];
+  // logs prop is removed; component will fetch its own data.
 }
 
-export const AdminAuditLog: React.FC<AdminAuditLogProps> = ({ logs }) => {
+export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
   const { theme } = useTheme();
   const { addToast } = useToast();
   const { openWindow, closeWindow } = useWindow();
+
+  const { data: logs = [], isLoading } = useQuery<AuditLogEntry[]>([STORES.LOGS, 'all'], DataService.admin.getLogs);
   
   const [localLogs, setLocalLogs] = useState<ChainedLogEntry[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -27,6 +33,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = ({ logs }) => {
   const [viewMode, setViewMode] = useState<'table' | 'visual'>('table');
 
   useEffect(() => {
+      // Assuming logs are already chained for this demo. In a real app, this might involve a transformation.
       setLocalLogs(logs as unknown as ChainedLogEntry[]);
   }, [logs]);
 
@@ -157,6 +164,14 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = ({ logs }) => {
         </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
+      </div>
+    );
+  }
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg border overflow-hidden", theme.surface, theme.border.default)}>

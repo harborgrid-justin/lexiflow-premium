@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
@@ -45,12 +46,12 @@ export const MotionForSanctions: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("p-6 rounded-lg border bg-red-50 border-red-200 flex justify-between items-center")}>
+        <div className={cn("p-6 rounded-lg border flex justify-between items-center", theme.status.error.bg, theme.status.error.border)}>
              <div>
-                 <h3 className="text-lg font-bold text-red-900 flex items-center">
+                 <h3 className={cn("text-lg font-bold flex items-center", theme.status.error.text)}>
                      <Gavel className="h-5 w-5 mr-2"/> Motion for Sanctions (Rule 37)
                  </h3>
-                 <p className="text-sm text-red-800">Track enforcement actions for discovery non-compliance.</p>
+                 <p className={cn("text-sm", theme.status.error.text)}>Track enforcement actions for discovery non-compliance.</p>
              </div>
              <Button variant="danger" icon={Plus} onClick={() => setIsModalOpen(true)}>File Motion</Button>
         </div>
@@ -71,7 +72,7 @@ export const MotionForSanctions: React.FC = () => {
                 </Card>
             ))}
             {sanctions.length === 0 && (
-                <div className="col-span-2 text-center py-12 border-2 border-dashed rounded-lg text-slate-400">
+                <div className={cn("col-span-2 text-center py-12 border-2 border-dashed rounded-lg text-slate-400", theme.border.default)}>
                     <FileWarning className="h-12 w-12 mx-auto mb-3 opacity-20"/>
                     <p>No sanctions motions filed.</p>
                 </div>
@@ -83,7 +84,7 @@ export const MotionForSanctions: React.FC = () => {
                 <Input label="Motion Title" value={newMotion.title || ''} onChange={e => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
                 <div>
                     <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Basis</label>
-                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)} value={newMotion.ruleBasis} onChange={e => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
+                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={e => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
                         <option value="Rule 37(a)">Rule 37(a) - Compel</option>
                         <option value="Rule 37(b)">Rule 37(b) - Failure to Comply with Order</option>
                         <option value="Rule 37(c)">Rule 37(c) - Failure to Disclose/Admit</option>

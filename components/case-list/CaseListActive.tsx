@@ -67,6 +67,12 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       }
   );
 
+  const prefetchCaseDetails = (caseId: string) => {
+    queryClient.fetch([STORES.DOCUMENTS, caseId], () => DataService.documents.getByCaseId(caseId));
+    queryClient.fetch([STORES.TASKS, caseId], () => DataService.tasks.getByCaseId(caseId));
+    queryClient.fetch([STORES.BILLING, caseId], () => DataService.billing.getTimeEntries(caseId));
+  };
+
   const handleArchiveCase = (c: Case) => {
      if(confirm(`Archive ${c.title}?`)) {
          archiveCase(c.id);
@@ -92,7 +98,10 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
 
   // Virtualized Row Renderer (Desktop)
   const renderDesktopRow = (c: Case) => (
-    <div className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6", theme.border.light)}>
+    <div 
+      className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6", theme.border.light)}
+      onMouseEnter={() => prefetchCaseDetails(c.id)}
+    >
        <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
           <span 
             onClick={() => onSelectCase(c)}

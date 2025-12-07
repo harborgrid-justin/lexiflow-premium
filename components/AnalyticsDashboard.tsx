@@ -1,5 +1,6 @@
 
-import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
+
+import React, { useState, useMemo, useCallback, useEffect, Suspense, useTransition } from 'react';
 import { PageHeader } from './common/PageHeader';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
@@ -37,9 +38,16 @@ const TAB_CONFIG: TabConfigItem[] = [
 
 export const AnalyticsDashboard: React.FC = () => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'judge');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'judge');
   const [judges, setJudges] = useState<JudgeProfile[]>([]);
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   useEffect(() => {
       const loadJudges = async () => {
@@ -85,7 +93,9 @@ export const AnalyticsDashboard: React.FC = () => {
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Analytics Module..." />}>
-          {renderContent()}
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+          </div>
       </Suspense>
     </TabbedPageLayout>
   );

@@ -1,8 +1,10 @@
 
-import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
-import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
+import { LayoutAlgorithms } from '../../../../utils/layoutAlgorithms';
+import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 
 interface SchemaVisualizerProps {
     tables: any[];
@@ -28,76 +30,16 @@ const ContextMenu: React.FC<{ x: number, y: number, items: any[], onClose: () =>
     );
 };
 
-type DragState = 
-  | { type: 'pan'; startX: number; startY: number; initialPan: { x: number; y: number } }
-  | { type: 'table'; id: string; startX: number; startY: number; initialPos: { x: number; y: number } };
-
 export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
   const { theme, mode } = useTheme();
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const colRefs = useRef(new Map());
-
-  // View State
-  const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: any[] } | null>(null);
-  
-  // Drag State
-  const dragState = useRef<DragState | null>(null);
 
-  useEffect(() => {
-    colRefs.current = new Map();
-    tables.forEach(t => t.columns.forEach((c: any) => colRefs.current.set(`${t.name}.${c.name}`, React.createRef())));
-  }, [tables]);
-
-  const handleWindowMouseMove = (e: MouseEvent) => {
-    if (!dragState.current) return;
-    e.preventDefault();
-    const state = dragState.current;
-    
-    if (state.type === 'pan') {
-      const { startX, startY, initialPan } = state;
-      setPan({ x: initialPan.x + (e.clientX - startX), y: initialPan.y + (e.clientY - startY) });
-    } else if (state.type === 'table') {
-        const { id, startX, startY, initialPos } = state;
-        const newX = initialPos.x + (e.clientX / zoom - startX);
-        const newY = initialPos.y + (e.clientY / zoom - startY);
-        // Live update for visuals
-        const tableEl = canvasRef.current?.querySelector(`[data-table-name="${id}"]`) as HTMLElement;
-        if(tableEl) tableEl.style.transform = `translate(${newX}px, ${newY}px)`;
-    }
-  };
-
-  const handleWindowMouseUp = (e: MouseEvent) => {
-      if (dragState.current?.type === 'table') {
-          const { id, startX, startY, initialPos } = dragState.current;
-          const newX = initialPos.x + (e.clientX / zoom - startX);
-          const newY = initialPos.y + (e.clientY / zoom - startY);
-          onUpdateTablePos(id, { x: newX, y: newY });
-      }
-      dragState.current = null;
-      window.removeEventListener('mousemove', handleWindowMouseMove);
-      window.removeEventListener('mouseup', handleWindowMouseUp);
-  };
-  
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button === 1 || e.key === ' ' || e.nativeEvent.buttons === 4) { // Middle mouse or space
-        e.preventDefault();
-        dragState.current = { type: 'pan', startX: e.clientX, startY: e.clientY, initialPan: { ...pan } };
-        window.addEventListener('mousemove', handleWindowMouseMove);
-        window.addEventListener('mouseup', handleWindowMouseUp);
-    }
-    setContextMenu(null);
-  };
-
-  const handleTableMouseDown = (e: React.MouseEvent, tableName: string) => {
-    e.stopPropagation();
-    const table = tables.find(t => t.name === tableName);
-    if (!table) return;
-    dragState.current = { type: 'table', id: tableName, startX: e.clientX / zoom, startY: e.clientY / zoom, initialPos: { x: table.x, y: table.y }};
-    window.addEventListener('mousemove', handleWindowMouseMove);
-    window.addEventListener('mouseup', handleWindowMouseUp);
-  };
+  // Hook Integration
+  const { pan, handleMouseDown } = useCanvasDrag({ 
+      onUpdateItemPos: onUpdateTablePos,
+      zoom 
+  });
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -126,12 +68,15 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
       setContextMenu({ x: e.clientX, y: e.clientY, items });
   };
   
+  // Expose auto-arrange functionality via parent or toolbar if needed, 
+  // currently parent holds state, so parent calls LayoutAlgorithms.autoArrangeGrid and passes new props.
+
   const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
 
   return (
     <div 
         className="h-full overflow-hidden relative cursor-grab active:cursor-grabbing" 
-        onMouseDown={handleMouseDown}
+        onMouseDown={(e) => { handleMouseDown(e, 'pan'); setContextMenu(null); }}
         onWheel={handleWheel}
         onContextMenu={(e) => handleContextMenu(e, 'canvas', null)}
     >
@@ -141,20 +86,16 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
       />
       
       <div 
-        ref={canvasRef} 
         className="w-full h-full"
         style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0' }}
       >
-        {/* SVG layer for relationship lines */}
-        
-        {/* Tables */}
         {tables.map(t => (
             <div 
                 key={t.name}
-                data-table-name={t.name}
+                data-drag-id={t.name}
                 className={cn("w-64 h-fit max-h-full flex flex-col rounded-lg shadow-md border overflow-hidden flex-shrink-0 absolute cursor-default", theme.surface, theme.border.default)}
                 style={{ transform: `translate(${t.x}px, ${t.y}px)` }}
-                onMouseDown={(e) => handleTableMouseDown(e, t.name)}
+                onMouseDown={(e) => handleMouseDown(e, 'item', t.name, { x: t.x, y: t.y })}
                 onContextMenu={(e) => handleContextMenu(e, 'table', { name: t.name })}
             >
                 <div className={cn("p-3 border-b flex justify-between items-center shrink-0 cursor-move", theme.surfaceHighlight, theme.border.default)}>
@@ -168,7 +109,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                                 {c.fk && <LinkIcon className="h-3 w-3 mr-2 text-blue-400"/>}
                                 <span className={cn("text-xs font-mono", c.pk ? cn("font-bold", theme.text.primary) : theme.text.secondary)}>{c.name}</span>
                             </div>
-                            <span className={cn("text-[9px] uppercase font-bold", theme.text.tertiary)}>{c.type}</span>
+                            <span className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>{c.type}</span>
                         </div>
                     ))}
                 </div>

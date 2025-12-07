@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DateText } from './Primitives';
 import { useTheme } from '../../context/ThemeContext';
@@ -20,7 +19,10 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
   const { theme } = useTheme();
 
   return (
-    <div className="relative pl-10 h-full flex flex-col justify-center group py-2">
+    <div 
+      className="relative pl-10 h-full flex flex-col justify-center group py-2"
+      style={{ contentVisibility: 'auto' } as React.CSSProperties}
+    >
       {/* Connecting Line */}
       {!isLast && (
         <div className={cn("absolute left-[11px] top-6 bottom-[-24px] w-0.5 transition-colors", theme.border.default, "group-hover:bg-slate-300")}></div>

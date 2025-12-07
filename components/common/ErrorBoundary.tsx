@@ -1,14 +1,14 @@
 
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 
-interface Props {
+interface ErrorBoundaryProps {
   children?: ReactNode;
   fallback?: ReactNode;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
   aiResolution: string | null;
@@ -17,8 +17,8 @@ interface State {
   isCopied: boolean;
 }
 
-export class ErrorBoundary extends React.Component<Props, State> {
-  public state: State = {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  state: ErrorBoundaryState = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -27,7 +27,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     isCopied: false,
   };
 
-  public static getDerivedStateFromError(error: Error): Partial<State> {
+  public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
@@ -93,7 +93,9 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
             setTimeout(() => {
                 // Check if component is still mounted implicitly by state check logic if needed, 
                 // but for class components usually safe unless unmounted
-                this.setState({ isCopied: false });
+                if (this.state.isCopied) {
+                   this.setState({ isCopied: false });
+                }
             }, 2000);
         }).catch(err => {
             console.error("Failed to copy debug info:", err);

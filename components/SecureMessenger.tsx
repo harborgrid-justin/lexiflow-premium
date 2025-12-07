@@ -1,5 +1,6 @@
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+
+import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { useSecureMessenger } from '../hooks/useSecureMessenger';
 import { MessengerInbox } from './messenger/MessengerInbox';
 import { MessengerContacts } from './messenger/MessengerContacts';
@@ -40,7 +41,14 @@ const PARENT_TABS = [
 
 export const SecureMessenger: React.FC<SecureMessengerProps> = ({ initialTab }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<MessengerView>('chats');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useState<MessengerView>('chats');
+  
+  const setActiveTab = (tab: MessengerView) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
   
   // Re-use hook logic for contacts and files props
   const {
@@ -72,7 +80,8 @@ export const SecureMessenger: React.FC<SecureMessengerProps> = ({ initialTab }) 
         <div className={cn(
             "flex-1 rounded-lg shadow-sm border overflow-hidden flex flex-col min-h-0 mx-0 mb-0 h-full",
             theme.surface,
-            theme.border.default
+            theme.border.default,
+            isPending && "opacity-60 transition-opacity"
         )}>
           {activeTab === 'contacts' && (
             <MessengerContacts 

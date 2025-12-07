@@ -46,7 +46,7 @@ export const DeduplicationManager: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <div className={cn("p-4 rounded-lg border bg-amber-50 border-amber-200 text-amber-900 flex justify-between items-center")}>
+            <div className={cn("p-4 rounded-lg border flex justify-between items-center", theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text)}>
                 <div className="flex items-center gap-3">
                     <Layers className="h-5 w-5"/>
                     <div>
@@ -60,7 +60,7 @@ export const DeduplicationManager: React.FC = () => {
             <div className="space-y-6">
                 {activeClusters.map(cluster => (
                     <Card key={cluster.id} noPadding className="overflow-hidden">
-                        <div className={cn("p-4 border-b flex justify-between items-center bg-slate-50 dark:bg-slate-800", theme.border.default)}>
+                        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
                             <h4 className={cn("font-bold text-sm", theme.text.primary)}>Potential Duplicate Group #{cluster.id}</h4>
                             <div className="flex gap-2">
                                 <Button size="sm" variant="ghost" className="text-red-600 hover:bg-red-50" onClick={() => ignoreCluster(cluster.id)}>Ignore</Button>
@@ -68,11 +68,11 @@ export const DeduplicationManager: React.FC = () => {
                             </div>
                         </div>
                         
-                        <div className="divide-y border-b border-slate-100 dark:border-slate-800">
+                        <div className={cn("divide-y border-b", theme.border.default)}>
                             {cluster.duplicates.map(record => (
-                                <div key={record.id} className={cn("p-4 flex items-center justify-between hover:bg-slate-50 transition-colors", record.id === cluster.masterId ? "bg-blue-50/50" : "")}>
+                                <div key={record.id} className={cn("p-4 flex items-center justify-between transition-colors", record.id === cluster.masterId ? theme.primary.light : "", `hover:${theme.surfaceHighlight}`)}>
                                     <div className="flex items-center gap-4">
-                                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border", record.id === cluster.masterId ? "bg-blue-100 text-blue-700 border-blue-200" : "bg-white text-slate-500 border-slate-200")}>
+                                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border", record.id === cluster.masterId ? cn(theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, theme.border.default, theme.surface))}>
                                             {record.similarityScore}%
                                         </div>
                                         <div>
@@ -85,7 +85,7 @@ export const DeduplicationManager: React.FC = () => {
                                     </div>
                                     
                                     <div className="flex items-center gap-4">
-                                        <span className={cn("text-xs px-2 py-1 rounded border bg-slate-100 text-slate-600")}>Match: {record.fieldMatch}</span>
+                                        <span className={cn("text-xs px-2 py-1 rounded border", theme.surface, theme.border.default, theme.text.secondary)}>Match: {record.fieldMatch}</span>
                                         {record.id !== cluster.masterId && (
                                             <ArrowRight className="h-4 w-4 text-slate-300"/>
                                         )}
@@ -97,7 +97,7 @@ export const DeduplicationManager: React.FC = () => {
                 ))}
                 
                 {activeClusters.length === 0 && (
-                    <div className="text-center py-12 text-slate-400">
+                    <div className={cn("text-center py-12", theme.text.tertiary)}>
                         <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-20 text-green-500"/>
                         <p>No duplicates found. Your data is clean.</p>
                     </div>

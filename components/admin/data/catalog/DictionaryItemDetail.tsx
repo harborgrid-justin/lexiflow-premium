@@ -55,12 +55,12 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
     };
 
     return (
-        <div className="flex flex-col h-full animate-in slide-in-from-right duration-200 bg-slate-50">
-            <div className={cn("p-4 border-b bg-white flex justify-between items-center", theme.border.default)}>
+        <div className={cn("flex flex-col h-full animate-in slide-in-from-right duration-200", theme.surfaceHighlight)}>
+            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" icon={ArrowLeft} onClick={onClose}>Back</Button>
                     <div>
-                        <h2 className={cn("font-bold text-lg font-mono text-blue-700", theme.text.primary)}>{formData.table}.{formData.column}</h2>
+                        <h2 className={cn("font-bold text-lg font-mono", theme.primary.text)}>{formData.table}.{formData.column}</h2>
                         <p className={cn("text-xs", theme.text.secondary)}>ID: {formData.id}</p>
                     </div>
                 </div>
@@ -97,12 +97,12 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                             label="Data Type" 
                                             value={formData.dataType} 
                                             disabled 
-                                            className="bg-slate-50 font-mono text-xs"
+                                            className="font-mono text-xs"
                                         />
                                         <div>
                                             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Domain Owner</label>
                                             <select 
-                                                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default)}
+                                                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
                                                 value={formData.domain}
                                                 onChange={e => setFormData({...formData, domain: e.target.value as any})}
                                             >
@@ -132,16 +132,16 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                                             : cn(theme.surface, theme.border.default)
                                                     )}
                                                 >
-                                                    <Shield className={cn("h-4 w-4 mr-2", formData.classification === cls ? "text-blue-600" : "text-slate-400")}/>
+                                                    <Shield className={cn("h-4 w-4 mr-2", formData.classification === cls ? "text-blue-600" : theme.text.tertiary)}/>
                                                     <span className="text-sm font-medium">{cls}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
                                     <div className="space-y-4">
-                                        <div className="p-4 rounded-lg bg-red-50 border border-red-100">
+                                        <div className={cn("p-4 rounded-lg border", theme.status.error.bg, theme.status.error.border)}>
                                             <div className="flex items-center justify-between mb-2">
-                                                <span className="text-sm font-bold text-red-800">PII Flag</span>
+                                                <span className={cn("text-sm font-bold", theme.status.error.text)}>PII Flag</span>
                                                 <input 
                                                     type="checkbox" 
                                                     className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
@@ -149,7 +149,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                                     onChange={e => setFormData({...formData, isPII: e.target.checked})}
                                                 />
                                             </div>
-                                            <p className="text-xs text-red-700">Checking this enforces column-level encryption and strict access logging.</p>
+                                            <p className={cn("text-xs", theme.status.error.text)}>Checking this enforces column-level encryption and strict access logging.</p>
                                         </div>
                                         <Input 
                                             label="Data Steward / Owner" 
@@ -164,11 +164,11 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                         <div className="space-y-6">
                             <Card title="Tech Specs">
                                 <div className="space-y-3 text-sm">
-                                    <div className="flex justify-between border-b pb-2">
+                                    <div className={cn("flex justify-between border-b pb-2", theme.border.light)}>
                                         <span className={theme.text.secondary}>Source System</span>
                                         <span className="font-medium">{formData.sourceSystem}</span>
                                     </div>
-                                    <div className="flex justify-between border-b pb-2">
+                                    <div className={cn("flex justify-between border-b pb-2", theme.border.light)}>
                                         <span className={theme.text.secondary}>Last Updated</span>
                                         <span className="font-mono text-xs">{new Date().toLocaleDateString()}</span>
                                     </div>
@@ -176,17 +176,17 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                         <span className={theme.text.secondary}>Quality Score</span>
                                         <Badge variant="success">{formData.dataQualityScore}/100</Badge>
                                     </div>
-                                    <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2">
+                                    <div className={cn("w-full rounded-full h-1.5 mt-2", theme.surfaceHighlight)}>
                                         <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${formData.dataQualityScore}%` }}></div>
                                     </div>
                                 </div>
                             </Card>
 
-                            <div className={cn("p-4 rounded-lg border bg-white shadow-sm", theme.border.default)}>
-                                <h4 className="font-bold text-sm mb-3 flex items-center gap-2">
+                            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+                                <h4 className={cn("font-bold text-sm mb-3 flex items-center gap-2", theme.text.primary)}>
                                     <Activity className="h-4 w-4 text-blue-500"/> Usage Stats
                                 </h4>
-                                <div className="space-y-2 text-xs text-slate-600">
+                                <div className={cn("space-y-2 text-xs", theme.text.secondary)}>
                                     <p>• Used in <strong>12</strong> Reports</p>
                                     <p>• Queried <strong>1.4k</strong> times (Last 30d)</p>
                                     <p>• <strong>3</strong> Downstream Dependencies</p>

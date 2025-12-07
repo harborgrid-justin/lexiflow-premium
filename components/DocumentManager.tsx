@@ -1,4 +1,5 @@
-import React, { Suspense, lazy } from 'react';
+
+import React, { Suspense, lazy, useTransition } from 'react';
 import { 
   Folder, Clock, Star, FileText, LayoutTemplate, 
   PenTool, Share2, CheckCircle, FileSignature, Edit, Eraser, Cpu
@@ -8,6 +9,7 @@ import { UserRole } from '../types';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
+import { cn } from '../utils/cn';
 
 // Lazy load sub-components
 const DocumentExplorer = lazy(() => import('./documents/DocumentExplorer').then(m => ({ default: m.DocumentExplorer })));
@@ -60,7 +62,14 @@ const TAB_CONFIG: TabConfigItem[] = [
 ];
 
 export const DocumentManager: React.FC<DocumentManagerProps> = ({ currentUserRole = 'Associate', initialTab }) => {
-  const [activeTab, setActiveTab] = useSessionStorage<string>('docs_active_tab', initialTab || 'browse');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('docs_active_tab', initialTab || 'browse');
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const renderContent = () => {
       switch (activeTab) {
@@ -94,7 +103,9 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ currentUserRol
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Document Module..." />}>
-        {renderContent()}
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+        </div>
       </Suspense>
     </TabbedPageLayout>
   );

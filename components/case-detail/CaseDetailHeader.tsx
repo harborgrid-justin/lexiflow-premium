@@ -11,28 +11,33 @@ import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 
 interface CaseDetailHeaderProps {
-  caseData: Case;
+  id: string;
+  title: string;
+  status: Case['status'];
+  client: string;
+  clientId?: string;
+  jurisdiction?: string;
   onBack: () => void;
   onShowTimeline: () => void;
 }
 
-export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({ 
-  caseData, onBack, onShowTimeline
+export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({ 
+  id, title, status, client, clientId, jurisdiction, onBack, onShowTimeline
 }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
 
   // Enterprise Feature: Live data in header
-  const { data: openTasks } = useQuery(['tasks', caseData.id, 'count'], () => DataService.tasks.countByCaseId(caseData.id));
-  const { data: unreadMessages } = useQuery(['messages', caseData.id, 'count'], () => DataService.messenger.countUnread(caseData.id));
+  const { data: openTasks } = useQuery(['tasks', id, 'count'], () => DataService.tasks.countByCaseId(id));
+  const { data: unreadMessages } = useQuery(['messages', id, 'count'], () => DataService.messenger.countUnread(id));
 
   const handleOpenPortal = () => {
-      const winId = `portal-${caseData.clientId}`;
+      const winId = `portal-${clientId}`;
       openWindow(
           winId,
-          `Client Portal: ${caseData.client}`,
+          `Client Portal: ${client}`,
           <ClientPortalModal 
-             client={{ id: caseData.clientId || 'unknown', name: caseData.client, industry: 'General', status: 'Active', totalBilled: 0, matters: [caseData.id] }} 
+             client={{ id: clientId || 'unknown', name: client, industry: 'General', status: 'Active', totalBilled: 0, matters: [id] }} 
              onClose={() => closeWindow(winId)}
           />
       );
@@ -49,17 +54,17 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-3 mb-1 flex-wrap">
-                                <h1 className={cn("text-xl md:text-2xl font-bold truncate tracking-tight max-w-full", theme.text.primary)} title={caseData.title}>{caseData.title}</h1>
-                                <Badge variant={caseData.status === 'Trial' ? 'warning' : 'info'} className="shrink-0">{caseData.status}</Badge>
+                                <h1 className={cn("text-xl md:text-2xl font-bold truncate tracking-tight max-w-full", theme.text.primary)} title={title}>{title}</h1>
+                                <Badge variant={status === 'Trial' ? 'warning' : 'info'} className="shrink-0">{status}</Badge>
                             </div>
                             <div className={cn("flex flex-wrap items-center gap-3 text-xs md:text-sm", theme.text.secondary)}>
-                                <span className={cn("font-mono px-1.5 py-0.5 rounded border shrink-0", theme.surfaceHighlight, theme.border.default)}>{caseData.id}</span>
+                                <span className={cn("font-mono px-1.5 py-0.5 rounded border shrink-0", theme.surfaceHighlight, theme.border.default)}>{id}</span>
                                 <span className="hidden sm:inline opacity-30">|</span>
-                                <span className={cn("flex items-center font-medium truncate max-w-[200px]", theme.text.primary)}><Users className={cn("h-3.5 w-3.5 mr-1.5 shrink-0", theme.text.tertiary)}/> {caseData.client}</span>
-                                {caseData.jurisdiction && (
+                                <span className={cn("flex items-center font-medium truncate max-w-[200px]", theme.text.primary)}><Users className={cn("h-3.5 w-3.5 mr-1.5 shrink-0", theme.text.tertiary)}/> {client}</span>
+                                {jurisdiction && (
                                     <>
                                         <span className="hidden sm:inline opacity-30">|</span>
-                                        <span className="hidden sm:flex items-center truncate max-w-[200px]"><MapPin className={cn("h-3.5 w-3.5 mr-1.5 shrink-0", theme.text.tertiary)}/> {caseData.jurisdiction}</span>
+                                        <span className="hidden sm:flex items-center truncate max-w-[200px]"><MapPin className={cn("h-3.5 w-3.5 mr-1.5 shrink-0", theme.text.tertiary)}/> {jurisdiction}</span>
                                     </>
                                 )}
                             </div>
@@ -91,4 +96,4 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({
         </div>
       </div>
   );
-};
+});

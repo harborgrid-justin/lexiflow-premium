@@ -1,4 +1,6 @@
-import React, { Suspense, lazy, useState } from 'react';
+
+
+import React, { Suspense, lazy, useState, useTransition } from 'react';
 import { 
   DollarSign, FileText, PieChart, Activity, Calculator, CreditCard, Landmark, RefreshCw 
 } from 'lucide-react';
@@ -11,6 +13,7 @@ import { useNotify } from '../hooks/useNotify';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
+import { cn } from '../utils/cn';
 
 // Sub-components
 const BillingOverview = lazy(() => import('./billing/BillingOverview').then(m => ({ default: m.BillingOverview })));
@@ -51,8 +54,15 @@ interface BillingDashboardProps {
 
 export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
   const notify = useNotify();
-  const [activeTab, setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
+  const [isPending, startTransition] = useTransition();
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
   const [period, setPeriod] = useState('30d');
+
+  const setActiveTab = (tab: string) => {
+    startTransition(() => {
+        _setActiveTab(tab);
+    });
+  };
 
   const { mutate: syncFinancials, isLoading: isSyncing } = useMutation(
       DataService.billing.sync,
@@ -92,7 +102,9 @@ export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, 
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Billing Module..." />}>
-        {renderContent()}
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {renderContent()}
+        </div>
       </Suspense>
     </TabbedPageLayout>
   );

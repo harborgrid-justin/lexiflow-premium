@@ -46,7 +46,7 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
         <div className={cn("w-72 border-r flex flex-col", theme.border.default, theme.surfaceHighlight)}>
             <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default)}>
                 <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Binder Sections</h3>
-                <button className={cn("p-1 rounded hover:bg-slate-200 text-slate-500", theme.text.tertiary)}>
+                <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface}`)}>
                     <Plus className="h-4 w-4"/>
                 </button>
             </div>
@@ -58,16 +58,16 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                         className={cn(
                             "w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all",
                             selectedSectionId === section.id 
-                                ? cn(theme.surface, "shadow-sm text-blue-600 border border-blue-100") 
-                                : cn("text-slate-600 hover:bg-white/50 hover:text-slate-900")
+                                ? cn(theme.surface, "shadow-sm text-blue-600 border", theme.border.default) 
+                                : cn(theme.text.secondary, `hover:${theme.surface}`)
                         )}
                     >
                         <div className="flex items-center gap-3">
-                            <section.icon className={cn("h-4 w-4", selectedSectionId === section.id ? "text-blue-600" : "text-slate-400")}/>
+                            <section.icon className={cn("h-4 w-4", selectedSectionId === section.id ? "text-blue-600" : theme.text.tertiary)}/>
                             {section.title}
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">{section.documents.length}</span>
+                            <span className={cn("text-xs px-1.5 py-0.5 rounded", theme.surface, theme.border.default, theme.text.tertiary)}>{section.documents.length}</span>
                             {selectedSectionId === section.id && <ChevronRight className="h-3 w-3"/>}
                         </div>
                     </button>
@@ -76,10 +76,10 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col bg-white">
+        <div className={cn("flex-1 flex flex-col", theme.surface)}>
             {activeSection ? (
                 <>
-                    <div className="p-6 border-b flex justify-between items-center">
+                    <div className={cn("p-6 border-b flex justify-between items-center", theme.border.default)}>
                         <div>
                             <h2 className={cn("text-xl font-bold", theme.text.primary)}>{activeSection.title}</h2>
                             <p className={cn("text-sm mt-1", theme.text.secondary)}>Digital Binder • {activeSection.documents.length} Documents</p>
@@ -89,9 +89,9 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                     <div className="flex-1 overflow-y-auto p-6">
                         <div className="grid grid-cols-1 gap-3">
                             {activeSection.documents.map(doc => (
-                                <div key={doc.id} className={cn("flex items-center justify-between p-4 rounded-lg border hover:shadow-md transition-all group cursor-pointer", theme.border.default, theme.surface)}>
+                                <div key={doc.id} className={cn("flex items-center justify-between p-4 rounded-lg border transition-all group cursor-pointer", theme.border.default, theme.surface, `hover:${theme.surfaceHighlight}`)}>
                                     <div className="flex items-center gap-4 overflow-hidden">
-                                        <div className={cn("p-3 rounded-lg bg-blue-50 text-blue-600 shrink-0")}>
+                                        <div className={cn("p-3 rounded-lg text-blue-600 shrink-0", theme.primary.light)}>
                                             <File className="h-6 w-6"/>
                                         </div>
                                         <div className="min-w-0">
@@ -99,30 +99,30 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                                             <div className={cn("flex items-center gap-3 text-xs mt-1", theme.text.secondary)}>
                                                 <span className="font-bold">{doc.docType}</span>
                                                 <span>• {doc.date}</span>
-                                                {doc.status && <span className={cn("px-1.5 py-0.5 rounded bg-slate-100 border text-slate-600 font-medium")}>{doc.status}</span>}
+                                                {doc.status && <span className={cn("px-1.5 py-0.5 rounded border font-medium", theme.surface, theme.border.default)}>{doc.status}</span>}
                                             </div>
-                                            {doc.description && <p className="text-xs text-slate-400 mt-1 truncate max-w-md">{doc.description}</p>}
+                                            {doc.description && <p className={cn("text-xs mt-1 truncate max-w-md", theme.text.tertiary)}>{doc.description}</p>}
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Button size="sm" variant="ghost">View</Button>
-                                        <button className={cn("p-2 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-600")}>
+                                        <button className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}>
                                             <MoreVertical className="h-4 w-4"/>
                                         </button>
                                     </div>
                                 </div>
                             ))}
                             {activeSection.documents.length === 0 && (
-                                <div className="text-center py-12 border-2 border-dashed rounded-lg">
-                                    <File className="h-12 w-12 mx-auto text-slate-300 mb-3"/>
-                                    <p className="text-slate-500">No documents in this section yet.</p>
+                                <div className={cn("text-center py-12 border-2 border-dashed rounded-lg", theme.border.default)}>
+                                    <File className={cn("h-12 w-12 mx-auto mb-3", theme.text.tertiary)}/>
+                                    <p className={cn(theme.text.secondary)}>No documents in this section yet.</p>
                                 </div>
                             )}
                         </div>
                     </div>
                 </>
             ) : (
-                <div className="flex-1 flex items-center justify-center text-slate-400">
+                <div className={cn("flex-1 flex items-center justify-center", theme.text.tertiary)}>
                     Select a section to view contents
                 </div>
             )}

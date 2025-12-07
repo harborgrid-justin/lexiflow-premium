@@ -51,23 +51,23 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
       return (
           <div className="flex flex-col h-full space-y-6 animate-in slide-in-from-right duration-300">
               {/* Witness Header */}
-              <div className={cn("flex justify-between items-start p-6 rounded-lg border bg-white shadow-sm", theme.border.default)}>
+              <div className={cn("flex justify-between items-start p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
                   <div className="flex items-center gap-6">
-                      <button onClick={handleCloseDetail} className="p-2 rounded-full hover:bg-slate-100 transition-colors">
-                          <ArrowLeft className="h-6 w-6 text-slate-500"/>
+                      <button onClick={handleCloseDetail} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+                          <ArrowLeft className="h-6 w-6"/>
                       </button>
                       <UserAvatar name={activeWitness.name} size="xl"/>
                       <div>
                           <h2 className={cn("text-2xl font-bold", theme.text.primary)}>{activeWitness.name}</h2>
-                          <div className="flex items-center gap-3 mt-1 text-sm text-slate-500">
-                              <span className="font-medium px-2 py-0.5 bg-slate-100 rounded border">{activeWitness.role}</span>
+                          <div className={cn("flex items-center gap-3 mt-1 text-sm", theme.text.secondary)}>
+                              <span className={cn("font-medium px-2 py-0.5 rounded border", theme.surfaceHighlight, theme.border.default)}>{activeWitness.role}</span>
                               <span>Scheduled: {activeWitness.scheduled}</span>
                           </div>
                       </div>
                   </div>
                   <div className="text-right">
-                      <div className="text-xs font-bold uppercase text-slate-400 mb-1">Prep Status</div>
-                      <div className="text-2xl font-bold text-slate-300">{activeWitness.prep}%</div>
+                      <div className={cn("text-xs font-bold uppercase mb-1", theme.text.tertiary)}>Prep Status</div>
+                      <div className={cn("text-2xl font-bold", theme.text.tertiary)}>{activeWitness.prep}%</div>
                   </div>
               </div>
 
@@ -87,7 +87,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                   {/* Right: Exhibit Bundle */}
                   <Card title="Witness Bundle (Exhibits)" action={<Button size="sm" variant="outline" icon={Plus} onClick={() => setIsLinkModalOpen(true)}>Link Exhibit</Button>} className="flex flex-col h-full">
                       <div className="space-y-3 overflow-y-auto flex-1 pr-2">
-                          <div className="text-center py-8 text-slate-400 italic">No exhibits linked yet.</div>
+                          <div className={cn("text-center py-8 italic", theme.text.tertiary)}>No exhibits linked yet.</div>
                       </div>
                   </Card>
               </div>
@@ -112,8 +112,8 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                     
                     <div className="px-5 pb-4 space-y-3" onClick={() => setSelectedWitnessId(w.id)}>
                         <div className="space-y-1">
-                            <div className="flex justify-between text-xs">
-                                <span className={theme.text.secondary}>Prep Completion</span>
+                            <div className={cn("flex justify-between text-xs", theme.text.secondary)}>
+                                <span>Prep Completion</span>
                                 <span className="font-bold">{w.prep}%</span>
                             </div>
                             <div className={cn("w-full h-1.5 rounded-full", theme.surfaceHighlight)}>
@@ -122,7 +122,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                         </div>
                     </div>
 
-                    <div className="bg-slate-50 p-3 border-t flex gap-2" onClick={e => e.stopPropagation()}>
+                    <div className={cn("p-3 border-t flex gap-2", theme.surfaceHighlight, theme.border.default)} onClick={e => e.stopPropagation()}>
                         <Button size="sm" variant="ghost" className="flex-1 text-xs" icon={FileText} onClick={() => setSelectedWitnessId(w.id)}>Outline</Button>
                         <Button size="sm" variant="ghost" className="flex-1 text-xs" icon={LinkIcon} onClick={() => setSelectedWitnessId(w.id)}>Exhibits</Button>
                     </div>

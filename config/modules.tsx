@@ -18,7 +18,7 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
     return Component;
 }
 
-// Lazy Imports with Preloading - STRICT RELATIVE PATHS
+// Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../components/Dashboard'));
 const CaseList = lazyWithPreload(() => import('../components/CaseList'));
 const DocketManager = lazyWithPreload(() => import('../components/DocketManager'));
@@ -41,6 +41,7 @@ const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/A
 const AnalyticsDashboard = lazyWithPreload(() => import('../components/AnalyticsDashboard'));
 const JurisdictionManager = lazyWithPreload(() => import('../components/JurisdictionManager'));
 const CalendarView = lazyWithPreload(() => import('../components/CalendarView').then(m => ({ default: m.CalendarView })));
+const RulesPlatform = lazyWithPreload(() => import('../components/RulesPlatform').then(m => ({ default: m.RulesPlatform })));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,
@@ -65,6 +66,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.ANALYTICS]: AnalyticsDashboard,
   [PATHS.JURISDICTION]: JurisdictionManager,
   [PATHS.CALENDAR]: CalendarView,
+  [PATHS.RULES_ENGINE]: RulesPlatform,
 };
 
 export const initializeModules = () => {

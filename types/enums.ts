@@ -52,3 +52,10 @@ export type LegalRuleType = 'FRE' | 'FRCP' | 'FRAP' | 'Local' | 'State';
 
 export type EntityType = 'Individual' | 'Corporation' | 'Court' | 'Government' | 'Vendor' | 'Law Firm';
 export type EntityRole = 'Client' | 'Opposing Counsel' | 'Judge' | 'Expert' | 'Witness' | 'Staff' | 'Prospect';
+
+// Enterprise Extensions
+export type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'CAD';
+export type LedesActivityCode = string; // e.g., 'A100'
+export type LedesTaskCode = string; // e.g., 'L110'
+export type OcrStatus = 'Pending' | 'Completed' | 'Failed';
+export type TaskDependencyType = 'FinishToStart' | 'StartToStart' | 'FinishToFinish' | 'StartToFinish';

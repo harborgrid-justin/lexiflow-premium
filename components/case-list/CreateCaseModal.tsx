@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
-import { Case, CaseStatus, MatterType } from '../../types';
+import { Case, CaseStatus, MatterType, JurisdictionObject } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '../../data/jurisdictionData';
@@ -79,12 +79,18 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
   const handleSave = () => {
       if (!formData.title || !formData.client) return;
 
-      // Construct Court String based on hierarchy
+      // Construct Structured Objects
       let finalCourt = '';
-      let finalJurisdiction = '';
+      let jurisConfig: JurisdictionObject;
 
       if (courtSystem === 'Federal') {
-          finalJurisdiction = `Federal - ${fedCircuit}`;
+          jurisConfig = {
+              country: 'USA',
+              state: 'Federal',
+              courtLevel: fedLevel === 'Appellate' ? 'Appellate' : fedLevel === 'Supreme' ? 'Supreme' : 'Federal',
+              division: fedCircuit
+          };
+
           if (fedLevel === 'Supreme') finalCourt = 'Supreme Court of the United States';
           else if (fedLevel === 'Appellate') finalCourt = `U.S. Court of Appeals for the ${fedCircuit}`;
           else if (fedLevel === 'District') finalCourt = `U.S. District Court, ${fedDistrict}`;
@@ -92,12 +98,17 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
       } else {
           // State Logic
           const stateData = STATE_JURISDICTIONS[selectedStateId];
-          finalJurisdiction = `${stateData.name} - ${stateLevelName}`;
+          jurisConfig = {
+              country: 'USA',
+              state: stateData.name,
+              courtLevel: 'State',
+              division: stateLevelName
+          };
           finalCourt = specificStateCourt;
       }
 
       const newCase: Case = {
-          id: isPreFiling ? `MAT-${Date.now()}` : (formData.id || `CASE-${Date.now()}`), // MAT prefix for matters
+          id: (isPreFiling ? `MAT-${Date.now()}` : (formData.id || `CASE-${Date.now()}`)) as any, // Cast to Branded CaseId
           title: formData.title,
           client: formData.client,
           matterType: formData.matterType as MatterType,
@@ -105,7 +116,9 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
           filingDate: isPreFiling ? '' : new Date().toISOString().split('T')[0],
           description: formData.description || '',
           value: Number(formData.value),
-          jurisdiction: finalJurisdiction,
+          valuation: { amount: Number(formData.value) || 0, currency: 'USD', precision: 2 }, // New Money Object
+          jurisdiction: `${jurisConfig.state} - ${jurisConfig.courtLevel}`, // Legacy String for display
+          jurisdictionConfig: jurisConfig, // New Structured Object
           court: finalCourt,
           judge: isPreFiling ? 'Unassigned' : formData.judge,
           // Defaults

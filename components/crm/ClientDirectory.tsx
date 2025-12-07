@@ -6,13 +6,14 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { Currency } from '../common/Primitives';
-import { Lock, PieChart, MoreVertical, Building } from 'lucide-react';
+import { Lock, MoreVertical } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { useMutation } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { useNotify } from '../../hooks/useNotify';
+import { useClients } from '../../hooks/useDomainData';
+import { ClientCard } from './ClientCard';
 
 interface ClientDirectoryProps {
   clients?: Client[]; // Optional override props
@@ -25,21 +26,15 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Enterprise Data Access: Use cached query if props not provided
-  const { data: fetchedClients = [] } = useQuery<Client[]>(
-      [STORES.CLIENTS, 'all'],
-      DataService.clients.getAll,
-      { enabled: !propClients }
-  );
+  // Enterprise Data Access
+  const { data: fetchedClients = [] } = useClients();
 
   const { mutate: generateToken } = useMutation(
       DataService.clients.generatePortalToken,
       {
           onSuccess: (token, clientId) => {
-               // In real app, this might copy to clipboard or email
                const tokenStr = token as string;
                notify.success(`Portal Access Token Generated: ${tokenStr.substring(0, 12)}...`);
-               // Then open portal view
                const client = clientsToRender.find(c => c.id === clientId);
                if (client) onOpenPortal(client);
           }
@@ -83,35 +78,11 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredClients.map(client => (
-            <div key={client.id} className={cn("p-6 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface, theme.border.default)}>
-              <div className="flex justify-between items-start mb-4">
-                <div className={cn("h-12 w-12 rounded-full flex items-center justify-center font-bold text-lg border", theme.primary.light, theme.primary.text, theme.primary.border)}>
-                  {client.name.substring(0, 2)}
-                </div>
-                <Badge variant={client.status === 'Active' ? 'success' : 'neutral'}>{client.status}</Badge>
-              </div>
-              
-              <h3 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{client.name}</h3>
-              <p className={cn("text-sm flex items-center mb-4", theme.text.secondary)}>
-                <Building className="h-3 w-3 mr-1"/> {client.industry}
-              </p>
-              
-              <div className={cn("grid grid-cols-2 gap-4 text-sm pt-4 border-t", theme.border.light)}>
-                <div>
-                  <p className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>Lifetime Billed</p>
-                  <Currency value={client.totalBilled} className={cn("font-bold", theme.text.primary)} />
-                </div>
-                <div>
-                  <p className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>Active Matters</p>
-                  <p className={cn("font-bold", theme.text.primary)}>{client.matters.length}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="sm" variant="outline" className="flex-1" icon={Lock} onClick={() => generateToken(client.id)}>Portal</Button>
-                <Button size="sm" variant="ghost" className="px-2" icon={PieChart} />
-              </div>
-            </div>
+              <ClientCard 
+                key={client.id} 
+                client={client} 
+                onGenerateToken={generateToken} 
+              />
           ))}
         </div>
       ) : (

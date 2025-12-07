@@ -1,3 +1,4 @@
+
 import React, { memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card } from '../common/Card';
@@ -8,9 +9,23 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useChartTheme } from '../common/ChartHelpers';
 
+export interface ProjectSummary {
+  id: string;
+  title: string;
+  status: string;
+  case: string;
+  due: string;
+  progress: number;
+}
+
+export interface ChartDataPoint {
+  name: string;
+  count: number;
+}
+
 interface DashboardAnalyticsProps {
-  activeProjects: any[];
-  chartData: any[];
+  activeProjects: ProjectSummary[];
+  chartData: ChartDataPoint[];
 }
 
 export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProjects, chartData }) => {
@@ -19,7 +34,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
   
   const CHART_COLORS = [
       chartTheme.colors.blue, 
-      chartTheme.colors.purple, // Indigo replacement
+      chartTheme.colors.purple,
       chartTheme.colors.purple, 
       chartTheme.colors.emerald, 
       chartTheme.colors.amber

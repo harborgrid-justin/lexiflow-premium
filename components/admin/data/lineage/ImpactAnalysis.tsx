@@ -4,10 +4,17 @@ import { ArrowRight, AlertTriangle, Database, FileText, Layers } from 'lucide-re
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 
+interface DependencyNode {
+    id: string;
+    name: string;
+    type: 'Table' | 'Pipeline' | 'Dashboard';
+    impact: string;
+}
+
 export const ImpactAnalysis: React.FC = () => {
     const { theme } = useTheme();
 
-    const dependencies = [
+    const dependencies: DependencyNode[] = [
         { id: '1', name: 'Raw Sales Data', type: 'Table', impact: 'None' },
         { id: '2', name: 'ETL: Clean Sales', type: 'Pipeline', impact: 'Re-run required' },
         { id: '3', name: 'Fact_Sales', type: 'Table', impact: 'Data stale' },

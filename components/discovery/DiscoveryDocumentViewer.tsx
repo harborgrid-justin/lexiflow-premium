@@ -12,9 +12,16 @@ interface DiscoveryDocumentViewerProps {
   onBack: () => void;
 }
 
+interface ViewerDocumentState {
+    title: string;
+    content: string;
+    type: string;
+    date: string;
+}
+
 export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = ({ docId, onBack }) => {
   const { theme } = useTheme();
-  const [doc, setDoc] = useState<any>({ title: 'Loading...', content: '', type: '', date: '' });
+  const [doc, setDoc] = useState<ViewerDocumentState>({ title: 'Loading...', content: '', type: '', date: '' });
   const [scale, setScale] = useState(100);
   const [showCodingPanel, setShowCodingPanel] = useState(true);
 

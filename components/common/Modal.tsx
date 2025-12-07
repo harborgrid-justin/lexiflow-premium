@@ -48,14 +48,14 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
     >
       {/* Backdrop */}
       <div 
-        className={cn("fixed inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop, tokens.zIndex.modalBackdrop)} 
+        className={cn("absolute inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop)} 
         aria-hidden="true"
         onClick={onClose}
       />
 
       {/* Panel */}
       <div className={cn(
-        "relative flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-lg",
+        "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-lg",
         theme.surface,
         theme.border.default,
         sizes[size], 

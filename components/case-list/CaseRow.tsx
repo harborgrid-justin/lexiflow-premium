@@ -1,0 +1,54 @@
+
+import React from 'react';
+import { User, Eye } from 'lucide-react';
+import { Case } from '../../types';
+import { StatusBadge } from '../common/RefactoredCommon';
+import { Currency } from '../common/Primitives';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
+interface CaseRowProps {
+    caseData: Case;
+    onSelect: (c: Case) => void;
+    onPrefetch: (id: string) => void;
+}
+
+export const CaseRow: React.FC<CaseRowProps> = ({ caseData, onSelect, onPrefetch }) => {
+    const { theme } = useTheme();
+
+    return (
+        <div 
+            className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6 group", theme.border.light)}
+            onMouseEnter={() => onPrefetch(caseData.id)}
+            onClick={() => onSelect(caseData)}
+        >
+            <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
+                <span 
+                    className={cn("font-bold text-sm transition-colors flex items-center hover:underline cursor-pointer truncate w-full", theme.primary.text)}
+                    title={caseData.title}
+                >
+                    {caseData.title}
+                </span>
+                <span className={cn("text-xs font-mono mt-0.5 opacity-70", theme.text.secondary)}>{caseData.id}</span>
+            </div>
+            <div className="w-[15%]"><StatusBadge status={caseData.matterType} /></div>
+            <div className="w-[20%] flex items-center text-sm text-slate-500 min-w-0 pr-2">
+                <User className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0"/>
+                <span className="truncate" title={caseData.client}>{caseData.client}</span>
+            </div>
+            <div className="w-[15%]"><Currency value={caseData.value || 0} className={cn("font-medium text-sm", theme.text.primary)} /></div>
+            <div className="w-[10%]">
+                <StatusBadge status={caseData.status} />
+            </div>
+            <div className="w-[5%] flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button 
+                    onClick={(e) => { e.stopPropagation(); onSelect(caseData); }} 
+                    className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)} 
+                    title="View Details"
+                >
+                    <Eye className="h-4 w-4"/>
+                </button>
+            </div>
+        </div>
+    );
+};

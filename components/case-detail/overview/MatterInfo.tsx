@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '../../common/Card';
 import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar } from 'lucide-react';
@@ -9,23 +10,34 @@ interface MatterInfoProps {
   caseData: Case;
 }
 
+interface InfoItem {
+    label: string;
+    value: React.ReactNode;
+    icon?: React.ElementType | null;
+    highlight?: boolean;
+    color?: string;
+    mono?: boolean;
+}
+
 export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
   const { theme } = useTheme();
+
+  const items: (InfoItem | null)[] = [
+    { label: 'Matter Type', value: `${caseData.matterType || 'General'} ${caseData.matterSubType ? `(${caseData.matterSubType})` : ''}`, icon: null, highlight: true },
+    { label: 'Est. Value / Exposure', value: `$${(caseData.value || 0).toLocaleString()}`, icon: null, mono: true },
+    { label: 'Jurisdiction', value: caseData.jurisdiction || 'N/A', icon: Globe },
+    { label: 'Venue / Court', value: caseData.court || 'N/A', icon: Gavel },
+    { label: 'Presiding Judge', value: caseData.judge || 'Unassigned', icon: Scale },
+    { label: 'Magistrate Judge', value: caseData.magistrateJudge || 'N/A', icon: Scale },
+    { label: 'Opposing Counsel', value: caseData.opposingCounsel || 'N/A', icon: Briefcase },
+    { label: 'Originating Case', value: caseData.origCaseNumber || 'N/A', icon: BookOpen },
+    caseData.dateTerminated ? { label: 'Date Terminated', value: caseData.dateTerminated, icon: Calendar, color: 'text-red-600' } : null,
+  ];
 
   return (
     <Card title="Matter Particulars" className={cn("border-t-4", `border-t-blue-600`)}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-            {[
-                { label: 'Matter Type', value: `${caseData.matterType || 'General'} ${caseData.matterSubType ? `(${caseData.matterSubType})` : ''}`, icon: null, highlight: true },
-                { label: 'Est. Value / Exposure', value: `$${(caseData.value || 0).toLocaleString()}`, icon: null, mono: true },
-                { label: 'Jurisdiction', value: caseData.jurisdiction || 'N/A', icon: Globe },
-                { label: 'Venue / Court', value: caseData.court || 'N/A', icon: Gavel },
-                { label: 'Presiding Judge', value: caseData.judge || 'Unassigned', icon: Scale },
-                { label: 'Magistrate Judge', value: caseData.magistrateJudge || 'N/A', icon: Scale },
-                { label: 'Opposing Counsel', value: caseData.opposingCounsel || 'N/A', icon: Briefcase },
-                { label: 'Originating Case', value: caseData.origCaseNumber || 'N/A', icon: BookOpen },
-                caseData.dateTerminated ? { label: 'Date Terminated', value: caseData.dateTerminated, icon: Calendar, color: 'text-red-600' } : null,
-            ].filter(Boolean).map((item: any, i) => (
+            {items.filter((item): item is InfoItem => Boolean(item)).map((item, i) => (
                 <div key={i} className="min-w-0">
                     <dt className={cn("text-xs font-bold uppercase mb-1 truncate", theme.text.tertiary)}>{item.label}</dt>
                     <dd className={cn("text-sm flex items-start break-words", item.color || theme.text.primary, item.mono ? "font-mono font-bold" : "")}>

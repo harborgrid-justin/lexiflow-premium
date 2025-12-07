@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem } from '../../types';
+import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask } from '../../types';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
@@ -22,14 +22,18 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   const notify = useNotify();
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   
-  // Local state for service updates
-  const [signerName, setSignerName] = useState((item as ServiceJob).signerName || '');
-  const [deliveryDate, setDeliveryDate] = useState((item as ServiceJob).servedDate || '');
-  const [newStatus, setNewStatus] = useState((item as ServiceJob).status || 'Out for Service');
+  // Local state for service updates - type narrowing required inside render or handlers, 
+  // but initial state setup needs careful handling if item is wrong type.
+  // We assume item matches type based on parent logic.
+  const serviceItem = type === 'service' ? (item as ServiceJob) : null;
+  
+  const [signerName, setSignerName] = useState(serviceItem?.signerName || '');
+  const [deliveryDate, setDeliveryDate] = useState(serviceItem?.servedDate || '');
+  const [newStatus, setNewStatus] = useState(serviceItem?.status || 'Out for Service');
 
   // Type Guard helpers
-  const isComm = (i: any): i is CommunicationItem => type === 'communication';
-  const isService = (i: any): i is ServiceJob => type === 'service';
+  const isComm = (i: CommunicationItem | ServiceJob): i is CommunicationItem => type === 'communication';
+  const isService = (i: CommunicationItem | ServiceJob): i is ServiceJob => type === 'service';
 
   // Mutations
   const { mutate: archiveItem } = useMutation(
@@ -42,7 +46,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
       }
   );
 
-  const handleCreateTask = async (task: any) => {
+  const handleCreateTask = async (task: WorkflowTask) => {
       await DataService.tasks.add(task);
       notify.success('Follow-up task created.');
   };
@@ -135,10 +139,10 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             <TaskCreationModal 
                 isOpen={true} 
                 onClose={() => setIsTaskModalOpen(false)}
-                initialTitle={`Follow up on: ${isComm(item) ? item.subject : item.documentTitle}`}
+                initialTitle={`Follow up on: ${isComm(item) ? item.subject : (item as ServiceJob).documentTitle}`}
                 relatedModule={type === 'communication' ? 'Correspondence' : 'Service'}
                 relatedItemId={item.id}
-                relatedItemTitle={isComm(item) ? item.subject : item.documentTitle}
+                relatedItemTitle={isComm(item) ? item.subject : (item as ServiceJob).documentTitle}
                 onSave={handleCreateTask}
             />
         )}

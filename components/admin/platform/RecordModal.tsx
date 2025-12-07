@@ -8,12 +8,12 @@ interface RecordModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  item: any;
-  onSave: (item: any) => void;
+  item: Record<string, any>;
+  onSave: (item: Record<string, any>) => void;
 }
 
 export const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, title, item, onSave }) => {
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Record<string, any>>({});
 
   useEffect(() => {
     if (item) setFormData({ ...item });
@@ -22,7 +22,9 @@ export const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, title
   const renderFormFields = () => {
     if (!formData) return null;
     return Object.keys(formData).map(key => {
-      if (key === 'id' || key === 'parties' || key === 'versions' || key === 'matters') return null;
+      // Filter out internal or complex array/object fields for this simple editor
+      if (key === 'id' || key === 'parties' || key === 'versions' || key === 'matters' || typeof formData[key] === 'object') return null;
+      
       return (
         <div key={key} className="mb-4">
           <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">{key}</label>

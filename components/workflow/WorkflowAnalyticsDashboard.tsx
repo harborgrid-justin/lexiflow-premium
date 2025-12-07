@@ -5,9 +5,14 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { useTheme } from '../../context/ThemeContext';
 import { DataService } from '../../services/dataService';
 
+interface WorkflowAnalyticsData {
+    completion: { name: string; completed: number }[];
+    status: { name: string; value: number; color: string }[];
+}
+
 export const WorkflowAnalyticsDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
-  const [analytics, setAnalytics] = useState<any>({ completion: [], status: [] });
+  const [analytics, setAnalytics] = useState<WorkflowAnalyticsData>({ completion: [], status: [] });
 
   useEffect(() => {
       const load = async () => {
@@ -53,7 +58,7 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={analytics.status} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
-                {analytics.status.map((entry: any, index: number) => (
+                {analytics.status.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>

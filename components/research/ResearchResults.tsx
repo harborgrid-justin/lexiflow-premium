@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { ExternalLink, Bookmark, Share2, ThumbsUp, ThumbsDown, BookOpen } from 'lucide-react';
+import { Bookmark, Share2, ThumbsUp, ThumbsDown, BookOpen } from 'lucide-react';
 import { ResearchSession } from '../../types';
 import { Card } from '../common/Card';
-import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { ResearchResultCard } from './ResearchResultCard';
 
 interface ResearchResultsProps {
   session?: ResearchSession;
@@ -53,20 +53,11 @@ export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onVie
                 <h4 className={cn("text-xs font-bold uppercase tracking-wider mb-3 ml-1", theme.text.secondary)}>Authorities Cited</h4>
                 <div className="grid grid-cols-1 gap-3">
                     {session.sources.map((source, idx) => (
-                        <div 
+                        <ResearchResultCard 
                             key={idx} 
-                            className={cn("p-4 rounded-lg border transition-colors shadow-sm flex flex-col group cursor-pointer", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}
-                            onClick={() => onViewSource && source.url && onViewSource(source.url, source.title)}
-                        >
-                            <div className="flex justify-between items-start">
-                                <div className={cn("text-sm font-bold hover:underline line-clamp-1 flex items-center", theme.primary.text)}>
-                                    {source.title} <ExternalLink className="h-3 w-3 ml-2 opacity-50"/>
-                                </div>
-                                <Badge variant="neutral">Web Source</Badge>
-                            </div>
-                            <p className={cn("text-xs mt-1 line-clamp-1 font-mono", theme.text.tertiary)}>{source.url}</p>
-                            <p className={cn("text-xs mt-2 line-clamp-2", theme.text.secondary)}>{source.snippet}</p>
-                        </div>
+                            source={source} 
+                            onView={() => onViewSource && source.url && onViewSource(source.url, source.title)}
+                        />
                     ))}
                 </div>
             </div>

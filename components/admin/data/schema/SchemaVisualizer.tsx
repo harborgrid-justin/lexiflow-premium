@@ -6,10 +6,28 @@ import { cn } from '../../../../utils/cn';
 import { LayoutAlgorithms } from '../../../../utils/layoutAlgorithms';
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 
+// Shared interfaces mirroring SchemaArchitect
+export interface TableColumn {
+  name: string;
+  type: string;
+  pk?: boolean;
+  notNull?: boolean;
+  unique?: boolean;
+  fk?: string;
+  index?: boolean;
+}
+
+export interface TableData {
+  name: string;
+  x: number;
+  y: number;
+  columns: TableColumn[];
+}
+
 interface SchemaVisualizerProps {
-    tables: any[];
+    tables: TableData[];
     onAddColumn: (tableName: string) => void;
-    onEditColumn: (tableName: string, column: any) => void;
+    onEditColumn: (tableName: string, column: TableColumn) => void;
     onRemoveColumn: (tableName: string, colName: string) => void;
     onCreateTable: () => void;
     onRenameTable: (oldName: string) => void;
@@ -17,7 +35,14 @@ interface SchemaVisualizerProps {
     onUpdateTablePos: (tableName: string, pos: {x: number, y: number}) => void;
 }
 
-const ContextMenu: React.FC<{ x: number, y: number, items: any[], onClose: () => void }> = ({ x, y, items, onClose }) => {
+interface ContextMenuItem {
+    label: string;
+    icon?: React.ElementType;
+    action: () => void;
+    danger?: boolean;
+}
+
+const ContextMenu: React.FC<{ x: number, y: number, items: ContextMenuItem[], onClose: () => void }> = ({ x, y, items, onClose }) => {
     const { theme } = useTheme();
     return (
         <div className={cn("absolute z-50 p-1 border rounded-lg shadow-xl", theme.surface, theme.border.default)} style={{ top: y, left: x }}>
@@ -30,10 +55,13 @@ const ContextMenu: React.FC<{ x: number, y: number, items: any[], onClose: () =>
     );
 };
 
+type ContextMenuType = 'table' | 'column' | 'canvas';
+type ContextData = { name: string } | { tableName: string, column: TableColumn } | null;
+
 export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
   const { theme, mode } = useTheme();
   const [zoom, setZoom] = useState(1);
-  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: any[] } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: ContextMenuItem[] } | null>(null);
 
   // Hook Integration
   const { pan, handleMouseDown } = useCanvasDrag({ 
@@ -47,17 +75,18 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
     setZoom(newZoom);
   };
   
-  const handleContextMenu = (e: React.MouseEvent, type: 'table' | 'column' | 'canvas', data: any) => {
+  const handleContextMenu = (e: React.MouseEvent, type: ContextMenuType, data: ContextData) => {
       e.preventDefault();
       e.stopPropagation();
-      let items = [];
-      if (type === 'table') {
+      let items: ContextMenuItem[] = [];
+      
+      if (type === 'table' && data && 'name' in data) {
           items = [
               { label: 'Rename Table', icon: Edit2, action: () => onRenameTable(data.name) },
               { label: 'Add Column', icon: Plus, action: () => onAddColumn(data.name) },
               { label: 'Delete Table', icon: Trash2, danger: true, action: () => onDeleteTable(data.name) }
           ];
-      } else if (type === 'column') {
+      } else if (type === 'column' && data && 'column' in data) {
           items = [
               { label: 'Edit Column', icon: Edit2, action: () => onEditColumn(data.tableName, data.column) },
               { label: 'Delete Column', icon: Trash2, danger: true, action: () => onRemoveColumn(data.tableName, data.column.name) }
@@ -68,9 +97,6 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
       setContextMenu({ x: e.clientX, y: e.clientY, items });
   };
   
-  // Expose auto-arrange functionality via parent or toolbar if needed, 
-  // currently parent holds state, so parent calls LayoutAlgorithms.autoArrangeGrid and passes new props.
-
   const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
 
   return (
@@ -102,7 +128,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                     <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}><Database className="h-3 w-3 mr-2 text-blue-600"/> {t.name}</h4>
                 </div>
                 <div className={cn("divide-y overflow-y-auto", theme.border.light)}>
-                    {t.columns.map((c: any, i: number) => (
+                    {t.columns.map((c: TableColumn, i: number) => (
                         <div key={i} className={cn("px-3 py-2 flex justify-between items-center group transition-colors", `hover:${theme.surfaceHighlight}`)} onContextMenu={(e) => handleContextMenu(e, 'column', { tableName: t.name, column: c })}>
                             <div className="flex items-center">
                                 {c.pk && <Key className="h-3 w-3 mr-2 text-yellow-500"/>}

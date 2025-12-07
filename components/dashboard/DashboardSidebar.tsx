@@ -8,14 +8,28 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 
+export interface DashboardAlert {
+  id: number;
+  message: string;
+  detail: string;
+  time: string;
+  caseId: string | null;
+}
+
+interface BillingStats {
+    realization: number;
+    totalBilled: number;
+    month: string;
+}
+
 interface DashboardSidebarProps {
   onSelectCase: (caseId: string) => void;
-  alerts: any[];
+  alerts: DashboardAlert[];
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase, alerts }) => {
   const { theme, mode } = useTheme();
-  const [billingStats, setBillingStats] = useState<{realization: number, totalBilled: number, month: string}>({
+  const [billingStats, setBillingStats] = useState<BillingStats>({
       realization: 0, totalBilled: 0, month: ''
   });
 

@@ -8,19 +8,19 @@ import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { DataService } from '../../services/dataService';
-import { WarRoomData, WorkflowTask, DocketEntry, Motion } from '../../types';
+import { WarRoomData, WorkflowTask, DocketEntry, Motion, SanctionMotion } from '../../types';
 
 interface CommandCenterProps {
   caseId: string;
   warRoomData: WarRoomData;
-  onNavigate: (view: any, context?: any) => void;
+  onNavigate: (view: string, context?: any) => void;
 }
 
 export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomData, onNavigate }) => {
   const { theme, mode } = useTheme();
   
   // New Live Data
-  const { data: sanctions = [] } = useQuery<any[]>([STORES.SANCTIONS, 'all'], DataService.discovery.getSanctions);
+  const { data: sanctions = [] } = useQuery<SanctionMotion[]>([STORES.SANCTIONS, 'all'], DataService.discovery.getSanctions);
   
   // Derive stats from passed data
   const exhibitsTotal = warRoomData.evidence?.length || 0;

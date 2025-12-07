@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import { MetricCard } from '../common/Primitives';
@@ -8,11 +9,23 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { DataService } from '../../services/dataService';
 import { useChartTheme } from '../common/ChartHelpers';
 
+interface RiskChartData {
+    name: string;
+    value: number;
+    color: string;
+}
+
+interface ComplianceMetrics {
+    high: number;
+    missingDocs: number;
+    violations: number;
+}
+
 export const ComplianceOverview: React.FC = () => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
-  const [riskData, setRiskData] = useState<any[]>([]);
-  const [metrics, setMetrics] = useState<any>({ high: 0, missingDocs: 0, violations: 0 });
+  const [riskData, setRiskData] = useState<RiskChartData[]>([]);
+  const [metrics, setMetrics] = useState<ComplianceMetrics>({ high: 0, missingDocs: 0, violations: 0 });
 
   useEffect(() => {
       const load = async () => {

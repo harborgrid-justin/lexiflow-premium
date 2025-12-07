@@ -22,8 +22,8 @@ export const ClauseHistoryModal: React.FC<ClauseHistoryModalProps> = ({ clause, 
         onClick={onClose}
       />
       
-      <div className={cn("relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-lg shadow-2xl overflow-hidden", theme.surface, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-lg shadow-2xl overflow-hidden", theme.surface.default, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surface.highlight, theme.border.default)}>
           <h3 className={cn("font-bold text-lg flex items-center", theme.text.primary)}>
             <History className={cn("mr-2 h-5 w-5", theme.primary.text)} /> 
             History: {clause.name}
@@ -36,7 +36,7 @@ export const ClauseHistoryModal: React.FC<ClauseHistoryModalProps> = ({ clause, 
                     "px-3 py-1.5 text-xs font-medium rounded border transition-colors flex items-center",
                     compareMode 
                         ? cn(theme.primary.light, theme.primary.text, theme.primary.border) 
-                        : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                 )}
               >
                 <ArrowLeftRight className="h-3 w-3 mr-1.5" /> {compareMode ? 'Exit Compare' : 'Compare Versions'}
@@ -61,14 +61,14 @@ export const ClauseHistoryModal: React.FC<ClauseHistoryModalProps> = ({ clause, 
           ) : (
             <div className="space-y-4">
               {clause.versions.map((v, idx) => (
-                <div key={idx} className={cn("border rounded-lg p-4 transition-colors group", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                <div key={idx} className={cn("border rounded-lg p-4 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <span className={cn(
                           "inline-flex items-center px-2 py-0.5 rounded text-xs font-bold mr-2",
                           idx === 0 
                             ? cn(theme.status.success.bg, theme.status.success.text) 
-                            : cn(theme.surfaceHighlight, theme.text.secondary)
+                            : cn(theme.surface.highlight, theme.text.secondary)
                       )}>
                         v{v.version}
                       </span>

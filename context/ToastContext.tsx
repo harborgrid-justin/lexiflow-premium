@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -9,6 +9,8 @@ interface Toast {
   id: string;
   message: string;
   type: ToastType;
+  priority: number; // Higher is more important
+  timestamp: number;
 }
 
 interface ToastContextType {
@@ -26,28 +28,76 @@ export const useToast = () => {
   return context;
 };
 
+// Priority mapping
+const PRIORITY_MAP: Record<ToastType, number> = {
+    'error': 3,
+    'warning': 2,
+    'success': 1,
+    'info': 0
+};
+
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const queueRef = useRef<Toast[]>([]);
+  const MAX_VISIBLE_TOASTS = 3;
+
+  const processQueue = useCallback(() => {
+    setToasts(prev => {
+        // If we have space
+        if (prev.length < MAX_VISIBLE_TOASTS && queueRef.current.length > 0) {
+            // Get highest priority items from queue
+            // Queue sort: Priority Desc, then Timestamp Asc
+            queueRef.current.sort((a, b) => {
+                if (a.priority !== b.priority) return b.priority - a.priority;
+                return a.timestamp - b.timestamp;
+            });
+            
+            const nextToast = queueRef.current.shift();
+            if (nextToast) {
+                 // Auto-dismiss logic
+                 setTimeout(() => removeToast(nextToast.id), nextToast.type === 'error' ? 8000 : 5000);
+                 return [...prev, nextToast];
+            }
+        }
+        return prev;
+    });
+  }, []);
+
+  // Trigger processing whenever toasts state changes (slot frees up)
+  useEffect(() => {
+    if (toasts.length < MAX_VISIBLE_TOASTS) {
+        processQueue();
+    }
+  }, [toasts.length]);
 
   const addToast = useCallback((message: string, type: ToastType = 'info') => {
     const id = Math.random().toString(36).substring(2, 9);
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => removeToast(id), 5000);
-  }, []);
+    const newToast: Toast = { 
+        id, 
+        message, 
+        type, 
+        priority: PRIORITY_MAP[type],
+        timestamp: Date.now() 
+    };
+    
+    queueRef.current.push(newToast);
+    processQueue();
+  }, [processQueue]);
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    // Removal triggers useEffect which calls processQueue
   }, []);
 
   return (
     <ToastContext.Provider value={{ addToast, removeToast }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2">
+      <div className="fixed bottom-4 right-4 z-[6000] flex flex-col gap-2 pointer-events-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}
             className={cn(
-              "flex items-center w-80 p-4 rounded-lg shadow-lg border animate-in slide-in-from-right-full duration-300",
+              "pointer-events-auto flex items-center w-80 p-4 rounded-lg shadow-lg border animate-in slide-in-from-right-full duration-300",
               "bg-white dark:bg-slate-800",
               toast.type === 'success' ? "border-green-500" :
               toast.type === 'error' ? "border-red-500" :

@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Party } from '../../types';
-import { MOCK_ORGS } from '../../data/mockHierarchy';
+import { MOCK_ORGS } from '../../data/models/organization'; // Updated import path
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Plus, Edit2, Trash2, User, Building, Gavel, Link, Layers, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
@@ -97,7 +96,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
 
   return (
     <div className="space-y-6">
-      <div className={cn("flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-lg border shadow-sm gap-4", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-lg border shadow-sm gap-4", theme.surface.default, theme.border.default)}>
         <div>
             <h3 className={cn("text-lg font-bold", theme.text.primary)}>Involved Parties</h3>
             <p className={cn("text-sm", theme.text.secondary)}>Manage plaintiffs, defendants, and groups.</p>
@@ -211,7 +210,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
               <div className="grid grid-cols-2 gap-4">
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
-                      <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={e => setCurrentParty({...currentParty, role: e.target.value})}>
+                      <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={e => setCurrentParty({...currentParty, role: e.target.value})}>
                           <option value="">Select Role...</option>
                           <option value="Plaintiff">Plaintiff</option>
                           <option value="Defendant">Defendant</option>
@@ -224,7 +223,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                       <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={currentParty.type || 'Individual'}
                         onChange={e => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
                       >
@@ -253,7 +252,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Link to Organization (Internal DB)</label>
                       <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} 
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
                         value={currentParty.linkedOrgId || ''} 
                         onChange={e => setCurrentParty({...currentParty, linkedOrgId: e.target.value})}
                       >

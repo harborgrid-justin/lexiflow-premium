@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
@@ -9,6 +9,29 @@ interface LazyLoaderProps {
 
 export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }) => {
   const { theme } = useTheme();
+  const [isLowBandwidth, setIsLowBandwidth] = useState(false);
+
+  useEffect(() => {
+    // Adaptive Loading: Check connection type
+    if ('connection' in navigator) {
+        const conn = (navigator as any).connection;
+        if (conn && (conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === '3g')) {
+            setIsLowBandwidth(true);
+        }
+    }
+  }, []);
+
+  if (isLowBandwidth) {
+      // Simplified loader for slow connections
+      return (
+          <div className="flex items-center justify-center h-full p-8">
+              <div className="text-center">
+                  <div className="text-sm font-bold text-slate-500 mb-2">Loading...</div>
+                  <div className="text-xs text-slate-400">Low Bandwidth Mode Active</div>
+              </div>
+          </div>
+      );
+  }
 
   return (
     <div className="h-full w-full p-6 space-y-6 overflow-hidden">

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
-import { Modal } from './common/Modal';
+import { Modal } from '../common/Modal'; // Fixed import path
 import { Button } from './common/Button';
 import { Input, TextArea } from './common/Inputs';
 import { TimeEntryPayload } from '../types';
+import { useTheme } from '../context/ThemeContext'; // Import useTheme
+import { cn } from '../utils/cn'; // Import cn
 
 interface TimeEntryModalProps {
   isOpen: boolean;
@@ -17,6 +19,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
   const [desc, setDesc] = useState('');
   const [duration, setDuration] = useState('0.5');
   const [isRefining, setIsRefining] = useState(false);
+  const { theme } = useTheme(); // Use theme
 
   const handleRefine = async () => {
     if (!desc) return;
@@ -27,68 +30,70 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
   };
 
   const handleSave = () => {
-    onSave({ 
-      caseId: caseId || 'General', 
-      date: new Date().toISOString().split('T')[0], 
-      duration: parseFloat(duration) * 60, 
-      description: desc, 
-      rate: 450, 
-      total: parseFloat(duration) * 450, 
-      status: 'Unbilled' 
+    onSave({
+      caseId: caseId || 'General',
+      date: new Date().toISOString().split('T')[0],
+      duration: parseFloat(duration) * 60,
+      description: desc,
+      rate: 450,
+      total: parseFloat(duration) * 450,
+      status: 'Unbilled'
     });
     setDesc('');
     onClose();
   };
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onClose={onClose} 
-      title={<span className="flex items-center gap-2"><Clock className="h-5 w-5 text-blue-600"/> Log Billable Time</span>}
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={<span className={cn("flex items-center gap-2", theme.text.primary)}><Clock className={cn("h-5 w-5", theme.primary.text)}/> Log Billable Time</span>}
       size="sm"
     >
       <div className="p-6 space-y-5">
-        <Input 
-          label="Matter / Case" 
-          value={caseId || 'General / Non-Billable'} 
-          disabled 
+        <Input
+          label="Matter / Case"
+          value={caseId || 'General / Non-Billable'}
+          disabled
+          className={cn(theme.surface.input, theme.border.default, theme.text.primary)} // Apply theme
         />
         
         <div className="grid grid-cols-2 gap-4">
-          <Input 
-            label="Duration (Hours)" 
-            type="number" 
-            step="0.1" 
-            value={duration} 
-            onChange={e => setDuration(e.target.value)} 
+          <Input
+            label="Duration (Hours)"
+            type="number"
+            step="0.1"
+            value={duration}
+            onChange={e => setDuration(e.target.value)}
+            className={cn(theme.surface.input, theme.border.default, theme.text.primary)} // Apply theme
           />
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Value Est.</label>
-            <div className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-sm font-mono flex items-center text-slate-700">
-              <DollarSign className="h-3 w-3 mr-1 text-slate-400"/>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Value Est.</label>
+            <div className={cn("w-full px-3 py-2 border rounded-md text-sm font-mono flex items-center", theme.surface.input, theme.border.default, theme.text.primary)}>
+              <DollarSign className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
               {(parseFloat(duration || '0') * 450).toFixed(2)}
             </div>
           </div>
         </div>
 
         <div>
-          <TextArea 
-            label="Description" 
-            placeholder="e.g. Call with client re: settlement strategy..." 
-            value={desc} 
-            onChange={e => setDesc(e.target.value)} 
+          <TextArea
+            label="Description"
+            placeholder="e.g. Call with client re: settlement strategy..."
+            value={desc}
+            onChange={e => setDesc(e.target.value)}
             rows={4}
-            className="resize-none"
+            className={cn("resize-none", theme.surface.input, theme.border.default, theme.text.primary)} // Apply theme
           />
           <div className="mt-2 flex justify-end">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleRefine} 
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleRefine}
               disabled={isRefining || !desc}
               icon={Wand2}
               isLoading={isRefining}
-              className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+              className={cn("text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50", theme.text.primary)} // Apply theme
             >
               AI Refine & Expand
             </Button>

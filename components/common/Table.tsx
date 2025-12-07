@@ -35,8 +35,7 @@ export const TableContainer = memo(function TableContainer({ children, className
                     {},
                     React.Children.map((row as React.ReactElement<{ children: React.ReactNode }>).props.children, (cell: React.ReactNode, cellIndex: number) => {
                         if (!React.isValidElement(cell)) return cell;
-                        // FIX: Use computed property name to correctly pass 'data-label' prop and avoid TypeScript error.
-                        return React.cloneElement(cell as React.ReactElement, { ['data-label']: headerLabels[cellIndex] || '' });
+                        return React.cloneElement(cell as React.ReactElement, { ['data-label' as string]: headerLabels[cellIndex] || '' });
                     })
                 );
             })
@@ -46,7 +45,7 @@ export const TableContainer = memo(function TableContainer({ children, className
   }
 
   return (
-    <div className={cn(theme.surface, theme.border.default, "rounded-lg border shadow-sm overflow-hidden flex flex-col", className)}>
+    <div className={cn(theme.surface.default, theme.border.default, "rounded-xl border shadow-sm overflow-hidden flex flex-col", className)}>
       <div className="overflow-x-auto flex-1 w-full">
         <table className={cn("min-w-full", responsive === 'card' ? 'responsive-card-table' : `divide-y ${theme.border.default}`)}>
           {finalChildren}
@@ -59,7 +58,7 @@ export const TableContainer = memo(function TableContainer({ children, className
 export const TableHeader = memo(function TableHeader({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
   return (
-    <thead className={cn(theme.surfaceHighlight, "border-b", theme.border.default)}>
+    <thead className={cn(theme.surface.highlight, "border-b", theme.border.default)}>
       <tr>{children}</tr>
     </thead>
   );
@@ -68,7 +67,7 @@ export const TableHeader = memo(function TableHeader({ children }: { children: R
 export const TableBody = memo(function TableBody({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
   return (
-    <tbody className={cn(theme.surface, "divide-y", theme.border.light)}>
+    <tbody className={cn(theme.surface.default, "divide-y", theme.border.subtle)}>
       {children}
     </tbody>
   );
@@ -77,10 +76,10 @@ export const TableBody = memo(function TableBody({ children }: { children: React
 export const TableRow = memo(function TableRow({ children, className = '', ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   const { theme } = useTheme();
   return (
-    <tr 
-      className={cn(`hover:${theme.surfaceHighlight} transition-colors group`, className)} 
+    <tr
+      className={cn(`hover:${theme.surface.highlight} transition-colors group h-14`, className)}
       {...props}
-      style={{ contentVisibility: 'auto' } as React.CSSProperties} 
+      style={{ contentVisibility: 'auto' } as React.CSSProperties}
     >
       {children}
     </tr>
@@ -90,14 +89,14 @@ export const TableRow = memo(function TableRow({ children, className = '', ...pr
 export const TableHead = memo(function TableHead({ children, className = '', ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
   const { theme } = useTheme();
   return (
-    <th 
+    <th
       className={cn(
-        "px-6 py-3 text-left text-xs font-bold uppercase tracking-wider sticky top-0 z-10 select-none border-b",
-        theme.surfaceHighlight,
+        "px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider sticky top-0 z-10 select-none border-b whitespace-nowrap h-11",
+        theme.surface.highlight,
         theme.text.secondary,
         theme.border.default,
         className
-      )} 
+      )}
       {...props}
     >
       {children}
@@ -108,7 +107,7 @@ export const TableHead = memo(function TableHead({ children, className = '', ...
 export const TableCell = memo(function TableCell({ children, className = '', ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
   const { theme } = useTheme();
   return (
-    <td className={cn("px-6 py-4 text-sm whitespace-nowrap", theme.text.primary, className)} {...props}>
+    <td className={cn("px-6 py-3 text-sm whitespace-nowrap align-middle", theme.text.primary, className)} {...props}>
       {children}
     </td>
   );

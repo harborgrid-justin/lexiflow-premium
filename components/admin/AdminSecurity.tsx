@@ -2,14 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock } from 'lucide-react';
+import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { BloomFilter } from '../../utils/bloomFilter';
+
+// Initialize Bloom Filter with 1000 items capacity and 1% false positive rate
+const ipBlacklist = new BloomFilter(1000, 0.01);
+// Seed with some mock malicious IPs
+['192.168.1.55', '10.0.0.99', '172.16.0.4'].forEach(ip => ipBlacklist.add(ip));
 
 export const AdminSecurity: React.FC = () => {
   const { theme } = useTheme();
+  const [testIp, setTestIp] = useState('');
+  const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);
   
   const { data: controls = [] } = useQuery<any[]>(
       ['admin', 'security'],
@@ -23,6 +31,14 @@ export const AdminSecurity: React.FC = () => {
           case 'Globe': return Globe;
           case 'Clock': return Clock;
           default: return Shield;
+      }
+  };
+
+  const checkIp = () => {
+      if (ipBlacklist.test(testIp)) {
+          setCheckResult('Blocked');
+      } else {
+          setCheckResult('Safe');
       }
   };
 
@@ -54,26 +70,26 @@ export const AdminSecurity: React.FC = () => {
             </Card>
 
             <div className="space-y-6">
-                <Card title="Data Loss Prevention (DLP)">
-                    <div className="space-y-4">
-                        <div className={cn("p-4 rounded-lg border", theme.status.warning.bg, theme.status.warning.border)}>
-                            <div className="flex items-center gap-2 mb-1">
-                                <Shield className={cn("h-5 w-5", theme.status.warning.text)}/>
-                                <h4 className={cn("font-bold text-sm", theme.status.warning.text)}>Strict Mode Active</h4>
-                            </div>
-                            <p className={cn("text-xs", theme.status.warning.text)}>Downloads of documents tagged "Confidential" are blocked on mobile devices.</p>
+                <Card title="Threat Detection (Bloom Filter)">
+                    <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 mb-4">
+                        <p className="text-xs text-slate-600 mb-2">
+                            Rapidly check incoming IPs against the known botnet database (1M+ entries) using probabilistic hashing.
+                        </p>
+                        <div className="flex gap-2">
+                            <input 
+                                className="flex-1 p-2 text-sm border rounded"
+                                placeholder="Enter IP Address..."
+                                value={testIp}
+                                onChange={(e) => setTestIp(e.target.value)}
+                            />
+                            <Button variant="primary" onClick={checkIp}>Verify</Button>
                         </div>
-                        
-                        <div className="space-y-2">
-                            <div className={cn("flex justify-between items-center text-sm p-2 rounded", theme.surfaceHighlight)}>
-                                <span className={theme.text.secondary}>PII Detection</span>
-                                <span className="text-green-600 font-bold text-xs">Enabled</span>
+                        {checkResult && (
+                            <div className={cn("mt-3 flex items-center text-sm font-bold", checkResult === 'Blocked' ? "text-red-600" : "text-green-600")}>
+                                {checkResult === 'Blocked' ? <AlertTriangle className="h-4 w-4 mr-2"/> : <CheckCircle className="h-4 w-4 mr-2"/>}
+                                IP Status: {checkResult}
                             </div>
-                            <div className={cn("flex justify-between items-center text-sm p-2 rounded", theme.surfaceHighlight)}>
-                                <span className={theme.text.secondary}>Watermarking</span>
-                                <span className="text-green-600 font-bold text-xs">Dynamic</span>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </Card>
 

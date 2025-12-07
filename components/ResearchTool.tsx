@@ -1,6 +1,7 @@
+// components/ResearchTool.tsx
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { 
-  Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp, 
+import {
+  Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp,
   BrainCircuit, Map, Calculator, FileText, Bookmark, Library
 } from 'lucide-react';
 import { LazyLoader } from './common/LazyLoader';
@@ -10,92 +11,26 @@ import { JudgeProfile, Clause } from '../types';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
+import { RESEARCH_TAB_CONFIG } from '../config/researchToolConfig'; // Updated import path
+import { ResearchToolContent } from './research/ResearchToolContent'; // Updated import path
 
 // --- Lazy Loaded Components ---
-const WikiView = lazy(() => import('./knowledge/WikiView').then(m => ({ default: m.WikiView })));
-const PrecedentsView = lazy(() => import('./knowledge/PrecedentsView').then(m => ({ default: m.PrecedentsView })));
-const QAView = lazy(() => import('./knowledge/QAView').then(m => ({ default: m.QAView })));
-const KnowledgeAnalytics = lazy(() => import('./knowledge/KnowledgeAnalytics').then(m => ({ default: m.KnowledgeAnalytics })));
-const ClauseList = lazy(() => import('./clauses/ClauseList').then(m => ({ default: m.ClauseList })));
-const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
-const JudgeAnalytics = lazy(() => import('./analytics/JudgeAnalytics').then(m => ({ default: m.JudgeAnalytics })));
-const CounselAnalytics = lazy(() => import('./analytics/CounselAnalytics').then(m => ({ default: m.CounselAnalytics })));
-const CasePrediction = lazy(() => import('./analytics/CasePrediction').then(m => ({ default: m.CasePrediction })));
-const SettlementCalculator = lazy(() => import('./analytics/SettlementCalculator').then(m => ({ default: m.SettlementCalculator })));
-const RuleBookViewer = lazy(() => import('./rules/RuleBookViewer').then(m => ({ default: m.RuleBookViewer })));
-const StandingOrders = lazy(() => import('./rules/StandingOrders').then(m => ({ default: m.StandingOrders })));
-const LocalRulesMap = lazy(() => import('./rules/LocalRulesMap').then(m => ({ default: m.LocalRulesMap })));
-const CitationLibrary = lazy(() => import('./citation/CitationLibrary').then(m => ({ default: m.CitationLibrary })));
-const BriefAnalyzer = lazy(() => import('./citation/BriefAnalyzer').then(m => ({ default: m.BriefAnalyzer })));
-const ActiveResearch = lazy(() => import('./research/ActiveResearch').then(m => ({ default: m.ActiveResearch })));
-
 import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
 
-const UniversalSearch = ({ context = '' }) => {
-    const { theme } = useTheme();
-    return (
-        <div className={cn("h-full flex flex-col items-center justify-center text-center p-8", theme.text.tertiary)}>
-            <div className={cn("p-6 rounded-full mb-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 border", theme.border.default)}>
-                <BrainCircuit className="h-16 w-16 opacity-50 text-blue-600"/>
-            </div>
-            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>
-                {context ? `Research for ${context}` : 'Universal Knowledge Graph'}
-            </h2>
-            <p className="max-w-md mt-2 mb-8">Perform semantic searches across case law, firm wikis, clauses, and predictive analytics with a single natural language query.</p>
-            <div className={cn("w-full max-w-xl p-4 rounded-lg border bg-opacity-50 flex items-center gap-3", theme.surfaceHighlight, theme.border.default)}>
-                <Search className="h-5 w-5 opacity-50"/>
-                <span className="text-sm opacity-50">Search {context ? 'case context...' : 'all firm intelligence...'}</span>
-            </div>
-        </div>
-    );
-};
+// UniversalSearch was moved to ResearchToolContent.tsx
+// const UniversalSearch = ({ context = '' }) => {...}
 
-const TAB_CONFIG = [
-  {
-    id: 'intel', label: 'Intelligence', icon: BrainCircuit,
-    subTabs: [
-      { id: 'search_home', label: 'Search', icon: Search },
-      { id: 'active_research', label: 'Active Session', icon: BrainCircuit },
-      { id: 'analytics_judge', label: 'Judge Analytics', icon: Gavel },
-      { id: 'analytics_counsel', label: 'Opposing Counsel', icon: Users },
-      { id: 'analytics_prediction', label: 'Case Outcome', icon: TrendingUp },
-    ]
-  },
-  {
-    id: 'authority', label: 'Legal Authority', icon: Scale,
-    subTabs: [
-      { id: 'authority_fre', label: 'Evidence (FRE)', icon: BookOpen },
-      { id: 'authority_frcp', label: 'Civil Proc. (FRCP)', icon: BookOpen },
-      { id: 'authority_local', label: 'Local Rules', icon: Map },
-      { id: 'authority_standing', label: 'Standing Orders', icon: Gavel },
-      { id: 'authority_citations', label: 'Citation Library', icon: Bookmark },
-    ]
-  },
-  {
-    id: 'knowledge', label: 'Firm Knowledge', icon: Library,
-    subTabs: [
-      { id: 'knowledge_wiki', label: 'Practice Wiki', icon: FileText },
-      { id: 'knowledge_precedents', label: 'Precedents', icon: ScrollText },
-      { id: 'knowledge_qa', label: 'Firm Q&A', icon: Users },
-      { id: 'knowledge_analytics', label: 'Usage Stats', icon: BarChart3 },
-    ]
-  },
-  {
-    id: 'tools', label: 'Drafting Tools', icon: ScrollText,
-    subTabs: [
-      { id: 'drafting_clauses', label: 'Clause Library', icon: ScrollText },
-      { id: 'drafting_analyzer', label: 'Brief Analyzer', icon: BrainCircuit },
-      { id: 'analytics_settlement', label: 'Settlement Calc', icon: Calculator },
-    ]
-  }
-];
+// TAB_CONFIG was moved to config/researchToolConfig.ts
+
+// FIX: Lazy load ClauseHistoryModal
+const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   // Scope session storage key if in case context
   const storageKey = caseId ? `research_active_view_${caseId}` : 'research_active_view';
   const [activeView, setActiveView] = useSessionStorage<string>(storageKey, initialTab || 'search_home');
-  
+
   const [selectedClause, setSelectedClause] = useState<Clause | null>(null);
   const [judges, setJudges] = useState<JudgeProfile[]>([]);
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
@@ -112,42 +47,15 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   }, [activeView, selectedJudgeId]);
 
   const renderContent = () => {
-    switch (activeView) {
-        case 'search_home': return <UniversalSearch context={caseId} />;
-        case 'active_research': return <ActiveResearch />;
-        case 'analytics_judge': {
-            const currentJudge = judges.find(j => j.id === selectedJudgeId) || judges[0];
-            return (
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <label className={cn("text-sm font-medium", theme.text.secondary)}>Select Judge:</label>
-                        <select 
-                            className={cn("p-2 rounded border text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
-                            value={selectedJudgeId} onChange={(e) => setSelectedJudgeId(e.target.value)}
-                        >
-                            {judges.map(j => <option key={j.id} value={j.id}>{j.name} ({j.court})</option>)}
-                        </select>
-                    </div>
-                    {currentJudge && <JudgeAnalytics judge={currentJudge} stats={MOCK_JUDGE_STATS} />}
-                </div>
-            );
-        }
-        case 'analytics_counsel': return <CounselAnalytics counsel={MOCK_COUNSEL[0]} />;
-        case 'analytics_prediction': return <CasePrediction outcomeData={MOCK_OUTCOME_DATA} />;
-        case 'authority_fre': return <RuleBookViewer type="FRE" title="Federal Rules of Evidence" />;
-        case 'authority_frcp': return <RuleBookViewer type="FRCP" title="Federal Rules of Civil Procedure" />;
-        case 'authority_local': return <div className="h-full"><LocalRulesMap /></div>;
-        case 'authority_standing': return <StandingOrders />;
-        case 'authority_citations': return <CitationLibrary onSelect={() => {}} />;
-        case 'knowledge_wiki': return <WikiView />;
-        case 'knowledge_precedents': return <div className="h-full overflow-y-auto p-1"><PrecedentsView /></div>;
-        case 'knowledge_qa': return <div className="h-full overflow-y-auto p-1"><QAView /></div>;
-        case 'knowledge_analytics': return <div className="h-full overflow-y-auto p-1"><KnowledgeAnalytics /></div>;
-        case 'drafting_clauses': return <ClauseList onSelectClause={setSelectedClause} />;
-        case 'drafting_analyzer': return <BriefAnalyzer />;
-        case 'analytics_settlement': return <SettlementCalculator />;
-        default: return <UniversalSearch context={caseId} />;
-    }
+    // Delegation to ResearchToolContent
+    return (
+      <ResearchToolContent
+        activeView={activeView}
+        caseId={caseId}
+        selectedClause={selectedClause}
+        setSelectedClause={setSelectedClause}
+      />
+    );
   };
 
   // If embedded in a case, we might want to hide the header or simplify it
@@ -163,15 +71,15 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
                 {/* Embedded Navigation (Simplified) */}
                 <div className={cn("px-6 pt-2 shrink-0 border-b", theme.border.default)}>
                      <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-3">
-                         {TAB_CONFIG.flatMap(g => g.subTabs).map(tab => (
+                         {RESEARCH_TAB_CONFIG.flatMap(g => g.subTabs).map(tab => (
                              <button
                                 key={tab.id}
                                 onClick={() => setActiveView(tab.id)}
                                 className={cn(
                                     "flex items-center text-xs font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap",
-                                    activeView === tab.id 
+                                    activeView === tab.id
                                         ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
-                                        : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                 )}
                              >
                                  <tab.icon className="h-3 w-3 mr-1.5"/>
@@ -200,7 +108,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
       <TabbedPageLayout
         pageTitle="Research & Knowledge Center"
         pageSubtitle="Unified intelligence hub for legal authority, firm knowledge, and strategic analysis."
-        tabConfig={TAB_CONFIG}
+        tabConfig={RESEARCH_TAB_CONFIG}
         activeTabId={activeView}
         onTabChange={setActiveView}
       >
@@ -211,3 +119,5 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
     </>
   );
 };
+
+export default ResearchTool;

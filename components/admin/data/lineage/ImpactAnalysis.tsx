@@ -3,6 +3,7 @@ import React from 'react';
 import { ArrowRight, AlertTriangle, Database, FileText, Layers } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
+import { Button } from '../../../common/Button';
 
 interface DependencyNode {
     id: string;

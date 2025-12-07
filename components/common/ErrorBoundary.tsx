@@ -1,5 +1,5 @@
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 
@@ -17,8 +17,13 @@ interface ErrorBoundaryState {
   isCopied: boolean;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  // FIX: Added explicit constructor to ensure proper base class initialization.
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+  }
+
+  public state: ErrorBoundaryState = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -31,12 +36,15 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Construct debug information
+  // FIX: Converted to arrow function property to guarantee 'this' context, resolving 'setState' not found errors.
+  public componentDidCatch = (error: Error, errorInfo: ErrorInfo): void => {
+    // FIX: Add explicit type assertion for 'this' to resolve TypeScript error regarding 'setState' property.
+    const self = this as React.Component<ErrorBoundaryProps, ErrorBoundaryState>;
+
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
-URL: ${window.location.href}
+URL: ${typeof window !== 'undefined' ? window.location.href : 'N/A'}
 
 -- Error --
 Name: ${error.name}
@@ -48,65 +56,61 @@ ${error.stack}
 ${errorInfo.componentStack}
 
 -- Browser & Environment --
-User Agent: ${navigator.userAgent}
-Platform: ${navigator.platform}
-Viewport: ${window.innerWidth}x${window.innerHeight}
+User Agent: ${typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'}
+Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'N/A'}
 ---------------------------
     `.trim();
 
-    // Log structured data to the console
     console.groupCollapsed("ErrorBoundary: Detailed Debug Information");
     console.log(`Timestamp: ${new Date().toISOString()}`);
-    console.log(`URL: ${window.location.href}`);
+    console.log(`URL: ${typeof window !== 'undefined' ? window.location.href : 'N/A'}`);
     console.error("Error Object:", error);
     console.log("Component Stack:", errorInfo.componentStack);
-    console.log("Browser:", {
-        userAgent: navigator.userAgent,
-        platform: navigator.platform,
-        viewport: `${window.innerWidth}x${window.innerHeight}`
-    });
     console.groupEnd();
     
-    this.setState({ isResolving: true, debugInfo });
+    self.setState({ isResolving: true, debugInfo });
 
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
-        if (this.state.hasError) { // Check if still mounted/in error state
-            this.setState({ aiResolution: resolution, isResolving: false });
+        if (self.state.hasError) {
+            self.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
-        if (this.state.hasError) {
-            this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
-        }
+         if (self.state.hasError) {
+            self.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
+         }
       });
   }
 
   private handleReset = () => {
-    window.location.reload();
+    if (typeof window !== 'undefined') window.location.reload();
   }
   
   private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
-        navigator.clipboard.writeText(this.state.debugInfo).then(() => {
-            this.setState({ isCopied: true });
-            setTimeout(() => {
-                // Check if component is still mounted implicitly by state check logic if needed, 
-                // but for class components usually safe unless unmounted
-                if (this.state.isCopied) {
-                   this.setState({ isCopied: false });
-                }
-            }, 2000);
-        }).catch(err => {
-            console.error("Failed to copy debug info:", err);
-        });
+        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+            // FIX: Add explicit type assertion for 'this' to resolve TypeScript error regarding 'setState' property.
+            const self = this as React.Component<ErrorBoundaryProps, ErrorBoundaryState>;
+            navigator.clipboard.writeText(this.state.debugInfo).then(() => {
+                self.setState({ isCopied: true });
+                setTimeout(() => {
+                    self.setState({ isCopied: false });
+                }, 2000);
+            }).catch(err => {
+                console.error("Failed to copy debug info:", err);
+            });
+        }
     }
   }
 
-  public render(): ReactNode {
-    if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
+  // FIX: Converted to arrow function property to guarantee 'this' context, resolving 'props' not found errors.
+  public render = (): ReactNode => {
+    // FIX: Add explicit type assertion for 'this' to resolve TypeScript error regarding 'props' property.
+    const self = this as React.Component<ErrorBoundaryProps, ErrorBoundaryState>;
+    if (self.state.hasError) {
+      if (self.props.fallback) {
+        return self.props.fallback;
       }
 
       return (
@@ -119,7 +123,7 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
             The application encountered an unexpected error in this component. 
             <br/>
             <span className="font-mono text-xs bg-slate-200 dark:bg-slate-700 px-1 rounded mt-2 inline-block text-slate-700 dark:text-slate-300">
-              {this.state.error ? this.state.error.message : 'Unknown Error'}
+              {self.state.error ? self.state.error.message : 'Unknown Error'}
             </span>
           </p>
 
@@ -129,24 +133,24 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
                 AI-Powered Analysis
             </h3>
             <div className="mt-2 p-4 text-xs rounded-lg border bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 min-h-[50px]">
-                {this.state.isResolving ? (
+                {self.state.isResolving ? (
                     <div className="flex items-center gap-2 animate-pulse">
                         <Loader2 className="h-3 w-3 animate-spin" />
                         Analyzing error...
                     </div>
                 ) : (
-                    this.state.aiResolution || "No analysis available."
+                    self.state.aiResolution || "No analysis available."
                 )}
             </div>
           </div>
 
           <div className="mt-4 w-full max-w-md text-left text-xs p-3 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
-            <strong>Note for Developers:</strong> Ensure no circular dependencies or missing exports in the module path.
+            <strong>Note for Developers:</strong> Ensure no circular dependencies or missing exports in the module path. Check that all imports use relative paths (e.g., '../') instead of aliases ('@/').
           </div>
 
           <div className="flex gap-3 mt-8">
             <button 
-              onClick={() => window.location.href = '/'}
+              onClick={() => { if(typeof window !== 'undefined') window.location.href = '/'; }}
               className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
             >
               <Home className="h-4 w-4 mr-2" />
@@ -154,11 +158,11 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
             </button>
             <button 
               onClick={this.handleCopyDebugInfo}
-              disabled={this.state.isCopied}
+              disabled={self.state.isCopied}
               className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-70"
             >
-                {this.state.isCopied ? <Check className="h-4 w-4 mr-2 text-green-600"/> : <Clipboard className="h-4 w-4 mr-2" />}
-                {this.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
+                {self.state.isCopied ? <Check className="h-4 w-4 mr-2 text-green-600"/> : <Clipboard className="h-4 w-4 mr-2" />}
+                {self.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
             </button>
             <button 
               onClick={this.handleReset}
@@ -172,6 +176,6 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
       );
     }
 
-    return this.props.children;
+    return self.props.children;
   }
 }

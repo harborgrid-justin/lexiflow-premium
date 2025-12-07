@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 import { AppView, User } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';

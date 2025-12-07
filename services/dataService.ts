@@ -2,21 +2,22 @@
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseService } from './domains/CaseDomain';
-import { BillingService } from './domains/BillingDomain';
 import { ComplianceService } from './domains/ComplianceDomain';
-import { DiscoveryService } from './discoveryService';
-import { DocketRepository } from './domains/DocketDomain';
 import { AdminService } from './domains/AdminDomain';
 import { CorrespondenceService } from './domains/CommunicationDomain';
 import { DataQualityService } from './domains/DataQualityDomain';
 import { DataCatalogService } from './domains/DataCatalogDomain';
 import { BackupService } from './domains/BackupDomain';
+import { DocketRepository } from './domains/DocketDomain';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
 import { HRRepository } from './repositories/HRRepository';
 import { EvidenceRepository } from './repositories/EvidenceRepository';
 import { WorkflowRepository } from './repositories/WorkflowRepository';
+import { BillingRepository } from './repositories/BillingRepository';
+import { DiscoveryRepository } from './repositories/DiscoveryRepository';
+import { TrialRepository } from './repositories/TrialRepository';
 
 // Types
 import { 
@@ -41,16 +42,17 @@ export const DataService = {
   documents: new DocumentRepository(),
   hr: HRRepository,
   workflow: WorkflowRepository,
-  billing: BillingService,
+  billing: new BillingRepository(),
+  discovery: new DiscoveryRepository(),
+  trial: new TrialRepository(),
   compliance: ComplianceService,
-  discovery: DiscoveryService,
   admin: AdminService,
   correspondence: CorrespondenceService,
   quality: new DataQualityService(),
   catalog: DataCatalogService,
   backup: BackupService,
 
-  // Standard Repositories
+  // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
       getByCaseId = async (caseId: string) => this.getByIndex('caseId', caseId);
@@ -203,38 +205,28 @@ export const DataService = {
   },
   knowledge: {
       getArticles: async () => {
-         // Mock Wiki Data
          return [
-           { id: 'wiki-1', title: 'Civil Litigation Guide', category: 'Litigation', content: 'Standard operating procedures for civil cases in Federal Court.', lastUpdated: '2024-01-15', isFavorite: true, author: 'Senior Partner' },
-           { id: 'wiki-2', title: 'Billing Codes & Practices', category: 'Operations', content: 'Guide to ABA task codes and firm billing policies.', lastUpdated: '2023-11-20', isFavorite: false, author: 'Finance Dept' },
-           { id: 'wiki-3', title: 'Deposition Prep Checklist', category: 'Discovery', content: 'Key steps for preparing witnesses for deposition.', lastUpdated: '2024-02-10', isFavorite: true, author: 'Associate' }
+           { id: 'wiki-1', title: 'Civil Litigation Guide', category: 'Litigation', content: 'Standard operating procedures for civil cases.', lastUpdated: '2024-01-15', isFavorite: true, author: 'Senior Partner' },
+           { id: 'wiki-2', title: 'Billing Codes & Practices', category: 'Operations', content: 'Guide to ABA task codes and firm billing.', lastUpdated: '2023-11-20', isFavorite: false, author: 'Finance Dept' },
+           { id: 'wiki-3', title: 'Deposition Prep Checklist', category: 'Discovery', content: 'Key steps for preparing witnesses.', lastUpdated: '2024-02-10', isFavorite: true, author: 'Associate' }
          ];
       },
       getPrecedents: async () => {
          return [
-           { id: 'prec-1', title: 'Motion to Dismiss (12b6)', type: 'Motion', description: 'Standard template for failure to state a claim.', tag: 'success', docId: 'DOC-001' },
-           { id: 'prec-2', title: 'Asset Purchase Agreement', type: 'Contract', description: 'Pro-buyer M&A agreement template.', tag: 'info', docId: 'DOC-002' },
-           { id: 'prec-3', title: 'Employment Offer Letter', type: 'HR', description: 'Standard offer letter for at-will employees.', tag: 'neutral', docId: 'DOC-003' }
+           { id: 'prec-1', title: 'Motion to Dismiss (12b6)', type: 'Motion', description: 'Standard template.', tag: 'success', docId: 'DOC-001' },
+           { id: 'prec-2', title: 'Asset Purchase Agreement', type: 'Contract', description: 'M&A template.', tag: 'info', docId: 'DOC-002' },
+           { id: 'prec-3', title: 'Employment Offer Letter', type: 'HR', description: 'Standard offer letter.', tag: 'neutral', docId: 'DOC-003' }
          ];
       },
       getQA: async () => {
          return [
-           { id: 'qa-1', question: 'What is the deadline for responding to a complaint in CA Superior?', asker: 'New Associate', time: '2h ago', answer: '30 days after service of summons.', answerer: 'Partner Alex', role: 'Partner', verified: true },
-           { id: 'qa-2', question: 'Do we use Westlaw or Lexis for out-of-state citations?', asker: 'Paralegal', time: '5h ago', answer: 'Westlaw is preferred for citation checking.', answerer: 'Librarian', role: 'Staff', verified: true }
+           { id: 'qa-1', question: 'What is the deadline for responding to a complaint?', asker: 'New Associate', time: '2h ago', answer: '30 days usually.', answerer: 'Partner Alex', role: 'Partner', verified: true }
          ];
       },
       getAnalytics: async () => {
          return {
-             usage: [
-                { name: 'Wiki', views: 450 },
-                { name: 'Precedents', views: 320 },
-                { name: 'Q&A', views: 150 }
-             ],
-             topics: [
-                { name: 'Litigation', value: 40, color: '#3b82f6' },
-                { name: 'Corporate', value: 30, color: '#8b5cf6' },
-                { name: 'Admin', value: 30, color: '#10b981' }
-             ]
+             usage: [ { name: 'Wiki', views: 450 }, { name: 'Precedents', views: 320 } ],
+             topics: [ { name: 'Litigation', value: 40, color: '#3b82f6' } ]
          };
       }
   },
@@ -249,25 +241,10 @@ export const DataService = {
   
   jurisdiction: {
       getMapNodes: async () => db.getAll<any>(STORES.MAP_NODES),
-      getStateCourts: async () => [
-          { state: 'California', court: 'Superior Court', level: 'Trial', eFiling: 'Required', system: 'Odyssey' },
-          { state: 'New York', court: 'Supreme Court', level: 'Trial', eFiling: 'Required', system: 'NYSCEF' },
-          { state: 'Texas', court: 'District Court', level: 'Trial', eFiling: 'Optional', system: 'eFileTexas' }
-      ],
-      getTreaties: async () => [
-          { name: 'Hague Service Convention', type: 'Service', status: 'Ratified', parties: 78 },
-          { name: 'Hague Evidence Convention', type: 'Discovery', status: 'Ratified', parties: 63 },
-          { name: 'New York Convention', type: 'Arbitration', status: 'Ratified', parties: 168 }
-      ],
-      getArbitrationProviders: async () => [
-          { name: 'AAA', fullName: 'American Arbitration Association', rules: ['Commercial Rules', 'Consumer Rules'] },
-          { name: 'JAMS', fullName: 'Judicial Arbitration and Mediation Services', rules: ['Comprehensive Rules', 'Streamlined Rules'] }
-      ],
-      getRegulatoryBodies: async () => [
-          { name: 'SEC', desc: 'Securities and Exchange Commission', ref: '17 CFR', iconColor: 'text-blue-600' },
-          { name: 'FTC', desc: 'Federal Trade Commission', ref: '16 CFR', iconColor: 'text-green-600' },
-          { name: 'EEOC', desc: 'Equal Employment Opportunity Commission', ref: '29 CFR', iconColor: 'text-purple-600' }
-      ]
+      getStateCourts: async () => [ { state: 'California', court: 'Superior Court', level: 'Trial', eFiling: 'Required', system: 'Odyssey' } ],
+      getTreaties: async () => [ { name: 'Hague Service Convention', type: 'Service', status: 'Ratified', parties: 78 } ],
+      getArbitrationProviders: async () => [ { name: 'AAA', fullName: 'American Arbitration Association', rules: ['Commercial Rules'] } ],
+      getRegulatoryBodies: async () => [ { name: 'SEC', desc: 'Securities and Exchange Commission', ref: '17 CFR', iconColor: 'text-blue-600' } ]
   },
   
   calendar: {

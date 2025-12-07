@@ -1,5 +1,5 @@
-
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+// components/DiscoveryPlatform.tsx
+import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
 import { DiscoveryRequest } from '../types';
@@ -14,18 +14,21 @@ import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useNotify } from '../hooks/useNotify';
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import { LazyLoader } from './common/LazyLoader';
 
-import { DiscoveryDashboard } from './discovery/DiscoveryDashboard';
-import { DiscoveryRequests } from './discovery/DiscoveryRequests';
-import { PrivilegeLog } from './discovery/PrivilegeLog';
-import { LegalHolds } from './discovery/LegalHolds';
-import { DiscoveryDocumentViewer } from './discovery/DiscoveryDocumentViewer';
-import { DiscoveryResponse } from './discovery/DiscoveryResponse';
-import { DiscoveryProduction } from './discovery/DiscoveryProduction';
-import { DiscoveryProductions } from './discovery/DiscoveryProductions';
-import { DiscoveryDepositions } from './discovery/DiscoveryDepositions';
-import { DiscoveryESI } from './discovery/DiscoveryESI';
-import { DiscoveryInterviews } from './discovery/DiscoveryInterviews';
+// FIX: Import all lazy loaded components for DiscoveryPlatform
+const DiscoveryDashboard = lazy(() => import('./discovery/DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
+const DiscoveryRequests = lazy(() => import('./discovery/DiscoveryRequests').then(m => ({ default: m.DiscoveryRequests })));
+const PrivilegeLog = lazy(() => import('./discovery/PrivilegeLog').then(m => ({ default: m.PrivilegeLog })));
+const LegalHolds = lazy(() => import('./discovery/LegalHolds').then(m => ({ default: m.LegalHolds })));
+const DiscoveryDocumentViewer = lazy(() => import('./discovery/DiscoveryDocumentViewer').then(m => ({ default: m.DiscoveryDocumentViewer })));
+const DiscoveryResponse = lazy(() => import('./discovery/DiscoveryResponse').then(m => ({ default: m.DiscoveryResponse })));
+const DiscoveryProduction = lazy(() => import('./discovery/DiscoveryProduction').then(m => ({ default: m.DiscoveryProduction })));
+const DiscoveryProductions = lazy(() => import('./discovery/DiscoveryProductions').then(m => ({ default: m.DiscoveryProductions })));
+const DiscoveryDepositions = lazy(() => import('./discovery/DiscoveryDepositions').then(m => ({ default: m.DiscoveryDepositions })));
+const DiscoveryESI = lazy(() => import('./discovery/DiscoveryESI').then(m => ({ default: m.DiscoveryESI })));
+const DiscoveryInterviews = lazy(() => import('./discovery/DiscoveryInterviews').then(m => ({ default: m.DiscoveryInterviews })));
+
 
 export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
 
@@ -139,11 +142,12 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
             <Button variant="outline" onClick={handleBackToDashboard}>Return to Dashboard</Button>
         </div>
     ),
-  }), [requests, theme]);
+  }), [requests, theme, handleNavigate, handleBackToDashboard]);
 
   if (isWizardView) {
       return (
           <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
+            <Suspense fallback={<LazyLoader message="Loading Discovery Wizard..." />}>
               {activeTab === 'doc_viewer' && (
                   <DiscoveryDocumentViewer docId={contextId || ''} onBack={handleBackToDashboard} />
               )}
@@ -153,6 +157,7 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
               {activeTab === 'production_wizard' && (
                   <div className="p-6 h-full"><DiscoveryProduction request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('productions')} /></div>
               )}
+            </Suspense>
           </div>
       );
   }
@@ -202,8 +207,8 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
                         className={cn(
                             "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
                             activeTab === tab.id 
-                                ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
+                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
+                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
                         )}
                     >
                         <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
@@ -216,7 +221,9 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
 
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
         <div className="h-full overflow-y-auto custom-scrollbar">
-            {tabContentMap[activeTab as keyof typeof tabContentMap]}
+            <Suspense fallback={<LazyLoader message="Loading Discovery Module..." />}>
+                {tabContentMap[activeTab as keyof typeof tabContentMap]}
+            </Suspense>
         </div>
       </div>
     </div>

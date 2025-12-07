@@ -5,6 +5,7 @@ export interface Mutation {
   id: string;
   type: string;
   payload: any;
+  patch?: any; // JSON Patch array
   timestamp: number;
   status: 'pending' | 'syncing' | 'failed';
   retryCount: number;
@@ -13,17 +14,38 @@ export interface Mutation {
 
 const QUEUE_KEY = 'lexiflow_sync_queue';
 
+// Simple Diff Implementation to generate JSON Patch-like structure
+const createPatch = (oldData: any, newData: any) => {
+    const patch: any = {};
+    for (const key in newData) {
+        if (JSON.stringify(oldData[key]) !== JSON.stringify(newData[key])) {
+            patch[key] = newData[key];
+        }
+    }
+    return patch;
+};
+
 export const SyncEngine = {
   getQueue: (): Mutation[] => {
     return StorageUtils.get(QUEUE_KEY, []);
   },
 
-  enqueue: (type: string, payload: any): Mutation => {
+  enqueue: (type: string, payload: any, oldPayload?: any): Mutation => {
     const queue = SyncEngine.getQueue();
+    
+    // Optimization: Calculate patch if updating
+    let patch = undefined;
+    if (type.includes('UPDATE') && oldPayload) {
+        patch = createPatch(oldPayload, payload);
+        // If no changes, skip enqueue
+        if (Object.keys(patch).length === 0) return { id: '', type, payload, timestamp: 0, status: 'pending', retryCount: 0 };
+    }
+
     const mutation: Mutation = {
       id: crypto.randomUUID(),
       type,
       payload,
+      patch, // Use patch for network transmission in real API implementation
       timestamp: Date.now(),
       status: 'pending',
       retryCount: 0
@@ -66,7 +88,6 @@ export const SyncEngine = {
   resetFailed: () => {
       const queue = SyncEngine.getQueue();
       const updated = queue.map(m => m.status === 'failed' ? { ...m, status: 'pending', retryCount: 0, lastError: undefined } : m);
-      // @ts-ignore - Typescript might complain about casting but structure matches
       StorageUtils.set(QUEUE_KEY, updated);
   },
   

@@ -21,8 +21,8 @@ export const CaseContractReview: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col md:flex-row gap-6">
-      <div className={cn("flex-1 flex flex-col rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("flex-1 flex flex-col rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
             <FileText className="mr-2 h-5 w-5 text-blue-600" /> Contract Text
           </h3>
@@ -31,12 +31,12 @@ export const CaseContractReview: React.FC = () => {
           </button>
         </div>
         <textarea 
-          className={cn("flex-1 p-4 resize-none outline-none font-mono text-sm leading-relaxed", theme.text.primary, theme.surface)}
+          className={cn("flex-1 p-4 resize-none outline-none font-mono text-sm leading-relaxed", theme.text.primary, theme.surface.default)}
           placeholder="Paste contract text here for analysis..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <div className={cn("p-4 border-t", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("p-4 border-t", theme.border.default, theme.surface.highlight)}>
           <button 
             onClick={handleReview}
             disabled={loading || !text}
@@ -48,8 +48,8 @@ export const CaseContractReview: React.FC = () => {
         </div>
       </div>
 
-      <div className={cn("flex-1 rounded-lg shadow-sm border flex flex-col overflow-hidden", theme.surface, theme.border.default)}>
-        <div className={cn("p-4 border-b", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("flex-1 rounded-lg shadow-sm border flex flex-col overflow-hidden", theme.surface.default, theme.border.default)}>
+        <div className={cn("p-4 border-b", theme.border.default, theme.surface.highlight)}>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
             <AlertTriangle className="mr-2 h-5 w-5 text-amber-500" /> AI Risk Analysis
           </h3>

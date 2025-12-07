@@ -1,8 +1,7 @@
 
-
 import React, { Suspense, lazy, useState, useTransition } from 'react';
-import { 
-  DollarSign, FileText, PieChart, Activity, Calculator, CreditCard, Landmark, RefreshCw 
+import {
+  RefreshCw
 } from 'lucide-react';
 import { Button } from './common/Button';
 import { PeriodSelector } from './common/PeriodSelector';
@@ -14,38 +13,19 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { cn } from '../utils/cn';
+import { BILLING_TAB_CONFIG, BillingView } from '../config/billingDashboardConfig'; // Updated import path
+import { BillingDashboardContent } from './billing/BillingDashboardContent'; // Updated import path
 
-// Sub-components
-const BillingOverview = lazy(() => import('./billing/BillingOverview').then(m => ({ default: m.BillingOverview })));
-const BillingInvoices = lazy(() => import('./billing/BillingInvoices').then(m => ({ default: m.BillingInvoices })));
-const BillingWIP = lazy(() => import('./billing/BillingWIP').then(m => ({ default: m.BillingWIP })));
-const BillingLedger = lazy(() => import('./billing/BillingLedger').then(m => ({ default: m.BillingLedger })));
+// Sub-components (these were moved to BillingDashboardContent)
+// const BillingOverview = lazy(() => import('./billing/BillingOverview').then(m => ({ default: m.BillingOverview })));
+// const BillingInvoices = lazy(() => import('./billing/BillingInvoices').then(m => ({ default: m.BillingInvoices })));
+// const BillingWIP = lazy(() => import('./billing/BillingWIP').then(m => ({ default: m.BillingWIP })));
+// const BillingLedger = lazy(() => import('./billing/BillingLedger').then(m => ({ default: m.BillingLedger })));
 
-type BillingView = 'overview' | 'invoices' | 'wip' | 'expenses' | 'trust' | 'analytics';
+// BillingView was moved to config/billingDashboardConfig.ts
+// type BillingView = 'overview' | 'invoices' | 'wip' | 'expenses' | 'trust' | 'analytics';
 
-const TAB_CONFIG: TabConfigItem[] = [
-  {
-    id: 'revenue', label: 'Revenue Cycle', icon: DollarSign,
-    subTabs: [
-      { id: 'overview', label: 'Dashboard', icon: Activity },
-      { id: 'invoices', label: 'Invoices', icon: FileText },
-      { id: 'wip', label: 'WIP & Time', icon: Calculator },
-    ]
-  },
-  {
-    id: 'accounting', label: 'Accounting', icon: Landmark,
-    subTabs: [
-      { id: 'expenses', label: 'General Ledger', icon: CreditCard },
-      { id: 'trust', label: 'Trust (IOLTA)', icon: Landmark },
-    ]
-  },
-  {
-    id: 'reporting', label: 'Reporting', icon: PieChart,
-    subTabs: [
-      { id: 'analytics', label: 'Analytics', icon: PieChart },
-    ]
-  }
-];
+// TAB_CONFIG was moved to config/billingDashboardConfig.ts
 
 interface BillingDashboardProps {
   navigateTo?: (view: string) => void;
@@ -75,15 +55,8 @@ export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, 
   );
 
   const renderContent = () => {
-    switch (activeTab) {
-      case 'overview': return <BillingOverview onNavigate={navigateTo} />;
-      case 'invoices': return <BillingInvoices />;
-      case 'wip': return <BillingWIP />;
-      case 'expenses': return <BillingLedger />;
-      case 'trust': return <BillingLedger />; 
-      case 'analytics': return <div className="p-12 text-center italic text-slate-500">Analytics module loading...</div>;
-      default: return <BillingOverview />;
-    }
+    // Delegation to BillingDashboardContent
+    return <BillingDashboardContent activeTab={activeTab as BillingView} navigateTo={navigateTo} />;
   };
 
   return (
@@ -97,7 +70,7 @@ export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, 
             <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
         </div>
       }
-      tabConfig={TAB_CONFIG}
+      tabConfig={BILLING_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

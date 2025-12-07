@@ -43,7 +43,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
 
   const renderRow = (event: TimelineEvent, idx: number) => (
       <div key={event.id} className="h-[60px] px-4">
-        <TimelineItem 
+        <TimelineItem
             date={event.date}
             title={event.title}
             description={event.description}
@@ -56,21 +56,21 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
   );
 
   return (
-    <div className={cn("flex flex-col h-full overflow-hidden w-full", theme.surface)}>
+    <div className={cn("flex flex-col h-full overflow-hidden w-full", theme.surface.default)}>
       <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surfaceHighlight)}>
         <div className="flex items-center gap-2">
             <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>Case Timeline</h3>
             <span className={cn("text-xs bg-slate-200 text-slate-600 px-1.5 rounded-full")}>{events.length}</span>
         </div>
         <div className="flex bg-slate-200/50 p-0.5 rounded-lg">
-            <button 
+            <button
                 onClick={() => setViewMode('list')}
                 className={cn("p-1.5 rounded transition-all", viewMode === 'list' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}
                 title="List View"
             >
                 <List className="h-4 w-4"/>
             </button>
-            <button 
+            <button
                 onClick={() => setViewMode('story')}
                 className={cn("p-1.5 rounded transition-all", viewMode === 'story' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}
                 title="Story Mode"
@@ -89,7 +89,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                     <StoryModeTimeline events={events} />
                 </div>
             ) : (
-                <VirtualList 
+                <VirtualList
                     items={events}
                     height="100%"
                     itemHeight={60}

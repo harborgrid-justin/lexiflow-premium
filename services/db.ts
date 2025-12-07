@@ -58,15 +58,29 @@ export const STORES = {
   INVOICES: 'invoices',
   ANALYSIS: 'brief_analysis',
   ENTITIES: 'legal_entities',
-  RELATIONSHIPS: 'entity_relationships'
+  RELATIONSHIPS: 'entity_relationships',
+  // Phase 3 Stores
+  RATES: 'rate_tables',
+  TRUST_TX: 'trust_transactions',
+  REVIEW_BATCHES: 'review_batches',
+  PRODUCTION_VOLS: 'production_volumes',
+  JURORS: 'jurors',
+  WITNESSES: 'witnesses',
+  SLAS: 'sla_configs',
+  PROCESSING_JOBS: 'processing_jobs',
+  RETENTION_POLICIES: 'retention_policies'
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 13; // Incremented for new schemas
+  private dbVersion = 14; 
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
+
+  // Transaction Coalescing Buffer
+  private writeBuffer: { store: string, item: any, type: 'put' | 'delete', resolve: Function, reject: Function }[] = [];
+  private flushTimer: number | null = null;
 
   constructor() {
       try {
@@ -97,19 +111,15 @@ export class DatabaseManager {
         Object.values(STORES).forEach(storeName => {
           if (!db.objectStoreNames.contains(storeName)) {
             const store = db.createObjectStore(storeName, { keyPath: 'id' });
-            
-            // Standard Indices
             if (!store.indexNames.contains('caseId')) store.createIndex('caseId', 'caseId', { unique: false });
             if (!store.indexNames.contains('status')) store.createIndex('status', 'status', { unique: false });
-            
-            // Compound Indices for Performance
             if (storeName === STORES.TASKS && !store.indexNames.contains('caseId_status')) {
                 store.createIndex('caseId_status', ['caseId', 'status'], { unique: false });
             }
           } else {
-             // Upgrade existing stores if needed
              const store = (event.target as IDBOpenDBRequest).transaction!.objectStore(storeName);
              if (!store.indexNames.contains('status')) store.createIndex('status', 'status', { unique: false });
+             if (storeName === STORES.CASES && !store.indexNames.contains('client')) store.createIndex('client', 'client', { unique: false });
           }
         });
         if (!db.objectStoreNames.contains('files')) {
@@ -132,10 +142,25 @@ export class DatabaseManager {
     return this.initPromise;
   }
 
+  async count(storeName: string): Promise<number> {
+      await this.init();
+      if (this.mode === 'LocalStorage' || !this.db) {
+          const items = StorageUtils.get<any[]>(storeName, []);
+          return items.length;
+      }
+      return new Promise((resolve, reject) => {
+          const transaction = this.db!.transaction([storeName], 'readonly');
+          const store = transaction.objectStore(storeName);
+          const request = store.count();
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+      });
+  }
+
   async seedData(): Promise<void> {
       await this.init();
-      const existing = await this.getAll(STORES.CASES);
-      if (existing.length > 0) return;
+      const count = await this.count(STORES.CASES);
+      if (count > 0) return;
       await Seeder.seed(this);
   }
 
@@ -168,6 +193,35 @@ export class DatabaseManager {
       });
   }
 
+  private flushBuffer = () => {
+    if (!this.db || this.writeBuffer.length === 0) return;
+
+    const ops = [...this.writeBuffer];
+    this.writeBuffer = [];
+    this.flushTimer = null;
+
+    const storeNames = Array.from(new Set(ops.map(o => o.store)));
+    const transaction = this.db.transaction(storeNames, 'readwrite');
+    
+    transaction.oncomplete = () => {
+        ops.forEach(op => op.resolve());
+    };
+
+    transaction.onerror = (e) => {
+        ops.forEach(op => op.reject(e));
+    };
+
+    ops.forEach(op => {
+        const store = transaction.objectStore(op.store);
+        try {
+            if (op.type === 'put') store.put(op.item);
+            else if (op.type === 'delete') store.delete(op.item); // item is id here
+        } catch(e) {
+            console.error("Coalesced Write Error", e);
+        }
+    });
+  }
+
   async put<T>(storeName: string, item: T): Promise<void> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
@@ -178,12 +232,14 @@ export class DatabaseManager {
           StorageUtils.set(storeName, items);
           return Promise.resolve();
       }
+
+      // Coalescing Strategy
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readwrite');
-          const store = transaction.objectStore(storeName);
-          const request = store.put(item);
-          request.onsuccess = () => resolve();
-          request.onerror = () => reject(request.error);
+          this.writeBuffer.push({ store: storeName, item, type: 'put', resolve, reject });
+          if (!this.flushTimer) {
+              // 16ms window (one frame)
+              this.flushTimer = window.setTimeout(this.flushBuffer, 16);
+          }
       });
   }
 
@@ -194,12 +250,12 @@ export class DatabaseManager {
           StorageUtils.set(storeName, items.filter(i => i.id !== id));
           return Promise.resolve();
       }
+
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readwrite');
-          const store = transaction.objectStore(storeName);
-          const request = store.delete(id);
-          request.onsuccess = () => resolve();
-          request.onerror = () => reject(request.error);
+        this.writeBuffer.push({ store: storeName, item: id, type: 'delete', resolve, reject });
+        if (!this.flushTimer) {
+            this.flushTimer = window.setTimeout(this.flushBuffer, 16);
+        }
       });
   }
 
@@ -207,7 +263,6 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          // Simple single index emulation for local storage
           const key = Array.isArray(value) ? indexName.split('_')[0] : indexName;
           const val = Array.isArray(value) ? value[0] : value; 
           return items.filter((i: any) => i[key] === val);
@@ -215,12 +270,9 @@ export class DatabaseManager {
       return new Promise((resolve, reject) => {
           const transaction = this.db!.transaction([storeName], 'readonly');
           const store = transaction.objectStore(storeName);
-          // Check if index exists to prevent crashes
           if (!store.indexNames.contains(indexName)) {
-              // Fallback to getAll and filter
                const request = store.getAll();
                request.onsuccess = () => {
-                   // Simple fallback filter
                    const all = request.result as any[];
                    resolve(all.filter(i => i[indexName] === value)); 
                };

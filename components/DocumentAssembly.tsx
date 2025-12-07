@@ -1,5 +1,6 @@
+// components/DocumentAssembly.tsx
 import React, { useState, useEffect } from 'react';
-import { X, FileText, ChevronRight, Check, Save, Wand2, Activity, Minus } from 'lucide-react';
+import { X, Wand2, Activity, Minus } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
 import { LegalDocument } from '../types';
 import { useWindow } from '../context/WindowContext';
@@ -9,6 +10,9 @@ import { STORES } from '../services/db';
 import { useNotify } from '../hooks/useNotify';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
+import { Step1TemplateSelection } from './document-assembly/Step1TemplateSelection'; // Updated import path
+import { Step2FormConfiguration } from './document-assembly/Step2FormConfiguration'; // Updated import path
+import { Step3DraftReview } from './document-assembly/Step3DraftReview'; // Updated import path
 
 interface DocumentAssemblyProps {
   onClose: () => void;
@@ -79,83 +83,39 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
     }
   };
 
+  const handleSelectTemplate = (templateName: string) => {
+    setTemplate(templateName);
+    setStep(2);
+  };
+
+  const handleFormChange = (data: typeof formData) => {
+    setFormData(data);
+  };
+
   return (
-    <div className={cn("flex flex-col h-full", theme.surface, theme.text.primary)}>
-        <div className={cn("p-4 border-b flex justify-between items-center drag-handle cursor-move", theme.border.default, theme.surfaceHighlight)}>
+    <div className={cn("flex flex-col h-full", theme.surface.default, theme.text.primary)}>
+        <div className={cn("p-4 border-b flex justify-between items-center drag-handle cursor-move", theme.border.default, theme.surface.highlight)}>
           <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>
             <Wand2 className="mr-2 h-5 w-5 text-purple-600 dark:text-purple-400" /> Document Ghostwriter
           </h3>
           <div className="flex items-center gap-2">
             {windowId && (
-                <button onClick={handleMinimize} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface}`)}>
+                <button onClick={handleMinimize} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                     <Minus className="h-5 w-5" />
                 </button>
             )}
-            <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface}`)}>
+            <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                 <X className="h-5 w-5" />
             </button>
           </div>
         </div>
 
         <div className="p-6 flex-1 overflow-y-auto">
-          {step === 1 && (
-            <div className="space-y-4">
-              <h4 className="text-base font-semibold">Select a Template</h4>
-              {['NDA', 'Engagement Letter', 'Motion to Dismiss', 'Settlement Agreement'].map(t => (
-                <button key={t} onClick={() => { setTemplate(t); setStep(2); }} 
-                  className={cn("w-full text-left p-4 rounded-lg border hover:border-purple-500 dark:hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all flex justify-between items-center group", theme.border.default)}>
-                  <span className={cn("font-medium text-slate-700 dark:text-slate-300 group-hover:text-purple-700 dark:group-hover:text-purple-300")}>{t}</span>
-                  <ChevronRight className="h-4 w-4 text-slate-300 dark:text-slate-600 group-hover:text-purple-500 dark:group-hover:text-purple-400" />
-                </button>
-              ))}
-            </div>
-          )}
+          {step === 1 && <Step1TemplateSelection onSelectTemplate={handleSelectTemplate} />}
 
-          {step === 2 && (
-            <div className="space-y-4">
-              <h4 className="text-base font-semibold">Configure {template}</h4>
-              <input placeholder="Recipient Name" className={cn("w-full p-3 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none", theme.surface, theme.border.default)}
-                value={formData.recipient} onChange={e => setFormData({...formData, recipient: e.target.value})} />
-              <input placeholder="Key Terms / Main Point" className={cn("w-full p-3 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none", theme.surface, theme.border.default)}
-                value={formData.mainPoint} onChange={e => setFormData({...formData, mainPoint: e.target.value})} />
-              <button onClick={generate} className="w-full py-3 bg-purple-600 dark:bg-purple-500 text-white rounded-md font-medium hover:bg-purple-700 dark:hover:bg-purple-600 flex justify-center transition-colors shadow-md">
-                 Start Generation
-              </button>
-            </div>
-          )}
+          {step === 2 && <Step2FormConfiguration template={template} formData={formData} onFormDataChange={handleFormChange} onGenerate={generate} />}
 
-          {step === 3 && (
-            <div className="space-y-4 h-full flex flex-col">
-              <div className="flex justify-between items-center">
-                  <h4 className="text-base font-semibold flex items-center text-green-600">
-                     {isStreaming ? <Activity className="h-4 w-4 mr-2 animate-pulse"/> : <Check className="h-4 w-4 mr-2"/>} 
-                     {isStreaming ? 'Ghostwriting...' : 'Draft Generated'}
-                  </h4>
-                  {isStreaming && <span className="text-xs text-slate-400 animate-pulse">Streaming tokens...</span>}
-              </div>
-              
-              <div className="flex-1 relative">
-                  <textarea 
-                    className={cn("w-full h-full p-6 border rounded-md font-mono text-sm min-h-[350px] resize-none outline-none focus:ring-2 focus:ring-purple-500 shadow-inner", theme.surfaceHighlight, theme.border.default)}
-                    value={result} 
-                    readOnly 
-                  />
-                  {isStreaming && (
-                      <div className="absolute bottom-4 right-4">
-                          <div className="h-2 w-2 bg-purple-600 dark:bg-purple-400 rounded-full animate-ping"></div>
-                      </div>
-                  )}
-              </div>
-
-              <button 
-                onClick={handleSave} 
-                disabled={isStreaming || isSaving}
-                className="w-full py-3 bg-purple-600 dark:bg-purple-500 text-white rounded-md font-medium hover:bg-purple-700 dark:hover:bg-purple-600 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                 <Save className="h-4 w-4 mr-2"/> {isSaving ? 'Saving...' : 'Save to Case Documents'}
-              </button>
-            </div>
-          )}
+          {step === 3 && <Step3DraftReview result={result} isStreaming={isStreaming} isSaving={isSaving} onSave={handleSave} />}
         </div>
     </div>
   );

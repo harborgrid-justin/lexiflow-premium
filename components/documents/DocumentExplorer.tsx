@@ -36,9 +36,8 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
   } = useDocumentManager();
 
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-  const [taggingDoc, setTaggingDoc] = useState<any>(null);
+  const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);
   
-  // Drag & Drop Logic extracted
   const { isDragging, handleDragEnter, handleDragLeave, handleDrop } = useDocumentDragDrop(currentFolder);
 
   const {
@@ -57,6 +56,17 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
       }
   );
 
+  const renderGridCell = (doc: LegalDocument) => {
+    return (
+        <DocumentGridCard 
+            doc={doc}
+            isSelected={isSelected(doc.id)}
+            onToggleSelection={(id, e) => toggleSelection(id, e)}
+            onPreview={setPreviewDoc}
+        />
+    );
+  };
+
   return (
     <div 
         className="flex-1 flex h-full relative"
@@ -64,12 +74,10 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
     >
         {isDragging && <DocumentDragOverlay />}
         
-        {/* Left Sidebar: Filters */}
         <div className={cn("w-64 border-r flex-shrink-0 hidden md:flex", theme.border.default, theme.surfaceHighlight)}>
             <DocumentFilters currentFolder={currentFolder} setCurrentFolder={setCurrentFolder} />
         </div>
 
-        {/* Main Content */}
         <div className={cn("flex-1 flex flex-col min-w-0 relative", theme.surface)}>
             <DocumentToolbar 
                 selectedDocsCount={selectedDocs.length} searchTerm={searchTerm} setSearchTerm={setSearchTerm}
@@ -92,14 +100,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
                             height="100%"
                             itemHeight={200} 
                             itemWidth={180} 
-                            renderItem={(doc: LegalDocument) => (
-                                <DocumentGridCard 
-                                    doc={doc}
-                                    isSelected={isSelected(doc.id)}
-                                    onToggleSelection={toggleSelection}
-                                    onPreview={setPreviewDoc}
-                                />
-                            )}
+                            renderItem={renderGridCell}
                             gap={16}
                             emptyMessage={isLoading ? "Searching documents..." : "No documents found"}
                         />
@@ -108,7 +109,6 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
             </div>
         </div>
 
-        {/* Right Sidebar: Preview */}
         {isDetailsOpen && previewDoc && (
             <div className={cn("w-96 border-l flex-shrink-0 shadow-xl z-20 absolute right-0 top-0 bottom-0 md:static", theme.surface, theme.border.default)}>
                 <DocumentPreviewPanel 
@@ -118,7 +118,6 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
             </div>
         )}
 
-        {/* Modals */}
         {selectedDocForHistory && <DocumentVersions document={selectedDocForHistory} userRole={currentUserRole} onRestore={handleRestore} onClose={() => setSelectedDocForHistory(null)} />}
         {taggingDoc && <TagManagementModal document={taggingDoc} allTags={allTags} onClose={() => setTaggingDoc(null)} onAddTag={addTag} onRemoveTag={removeTag} />}
     </div>

@@ -13,9 +13,9 @@ interface EditorToolbarProps {
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({ wordCount, onCmd, onSave }) => {
   const { theme } = useTheme();
   const btnClass = cn(
-      "p-1.5 rounded transition-colors border border-transparent", 
-      theme.text.primary, 
-      `hover:${theme.surface}`, 
+      "p-1.5 rounded transition-colors border border-transparent",
+      theme.text.primary,
+      `hover:${theme.surface}`,
       `hover:${theme.primary.text}`,
       `hover:${theme.border.light}`
   );

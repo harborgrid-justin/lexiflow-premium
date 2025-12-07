@@ -60,7 +60,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
       case 'security': return <AdminSecurity />;
       case 'db': return <AdminDatabaseControl />;
       case 'data': return <AdminPlatformManager />;
-      // FIX: Removed the `logs` prop as the component now fetches its own data.
       case 'logs': return <AdminAuditLog />;
       case 'integrations': return <AdminIntegrations />;
       default: return <AdminHierarchy />;

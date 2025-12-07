@@ -53,7 +53,6 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
                        <CheckCircle className="h-5 w-5 text-green-600"/>
                    </div>
                    
-                   {/* FIX: Changed 'disclosures' to 'requests' to match DiscoveryView type */}
                    <div className="flex items-center justify-between p-3 rounded border cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => onNavigate('requests')}>
                        <div className="flex items-center gap-3">
                            <FileText className="h-5 w-5 text-blue-600"/>
@@ -66,7 +65,6 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
                    </div>
 
                    {overdueCount > 0 && (
-                       // FIX: Changed 'compel' to 'requests' to match DiscoveryView type
                        <div className="flex items-center justify-between p-3 rounded border bg-red-50 border-red-200 cursor-pointer" onClick={() => onNavigate('requests')}>
                            <div className="flex items-center gap-3">
                                <AlertTriangle className="h-5 w-5 text-red-600"/>

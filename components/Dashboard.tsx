@@ -1,4 +1,4 @@
-
+// components/Dashboard.tsx
 import React, { Suspense, useTransition } from 'react';
 import { Button } from './common/Button';
 import { LayoutDashboard, CheckSquare, Bell, Download, PieChart, Activity, ShieldCheck } from 'lucide-react';
@@ -6,33 +6,15 @@ import { LazyLoader } from './common/LazyLoader';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { cn } from '../utils/cn';
-
-// Sub-components - LAZY LOADED with Named Export Fix
-const DashboardOverview = React.lazy(() => import('./dashboard/DashboardOverview').then(module => ({ default: module.DashboardOverview })));
-const FinancialPerformance = React.lazy(() => import('./dashboard/FinancialPerformance').then(module => ({ default: module.FinancialPerformance })));
-const PersonalWorkspace = React.lazy(() => import('./dashboard/PersonalWorkspace').then(module => ({ default: module.PersonalWorkspace })));
+import { DASHBOARD_TAB_CONFIG } from '../config/dashboardConfig'; // Updated import path
+import { DashboardContent } from './dashboard/DashboardContent'; // Updated import path
 
 interface DashboardProps {
   onSelectCase: (caseId: string) => void;
   initialTab?: string;
 }
 
-const TAB_CONFIG = [
-  {
-    id: 'executive', label: 'Executive', icon: LayoutDashboard,
-    subTabs: [
-      { id: 'overview', label: 'Firm Overview', icon: Activity },
-      { id: 'financials', label: 'Performance', icon: PieChart },
-    ]
-  },
-  {
-    id: 'personal', label: 'My Workspace', icon: CheckSquare,
-    subTabs: [
-      { id: 'tasks', label: 'My Tasks', icon: CheckSquare },
-      { id: 'notifications', label: 'Notifications', icon: Bell },
-    ]
-  }
-];
+// TAB_CONFIG was moved to config/dashboardConfig.ts in a previous turn, but was still in this file.
 
 export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }) => {
   const [isPending, startTransition] = useTransition();
@@ -45,13 +27,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }
   };
 
   const renderContent = () => {
-    switch (activeTab) {
-        case 'overview': return <DashboardOverview onSelectCase={onSelectCase} />;
-        case 'financials': return <FinancialPerformance />;
-        case 'tasks': return <PersonalWorkspace activeTab="tasks" />;
-        case 'notifications': return <PersonalWorkspace activeTab="notifications" />;
-        default: return <DashboardOverview onSelectCase={onSelectCase} />;
-    }
+    // Delegation to DashboardContent
+    return <DashboardContent activeTab={activeTab} onSelectCase={onSelectCase} />;
   };
 
   return (
@@ -66,7 +43,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }
             <Button variant="outline" size="sm" icon={Download}>Export Report</Button>
         </div>
       }
-      tabConfig={TAB_CONFIG}
+      tabConfig={DASHBOARD_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

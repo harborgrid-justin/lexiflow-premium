@@ -18,7 +18,7 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
     return Component;
 }
 
-// Lazy Imports with Preloading
+// Lazy Imports with Preloading - STRICT RELATIVE PATHS
 const Dashboard = lazyWithPreload(() => import('../components/Dashboard'));
 const CaseList = lazyWithPreload(() => import('../components/CaseList'));
 const DocketManager = lazyWithPreload(() => import('../components/DocketManager'));

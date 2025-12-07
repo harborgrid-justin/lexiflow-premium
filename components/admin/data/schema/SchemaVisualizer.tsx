@@ -45,23 +45,8 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
     colRefs.current = new Map();
     tables.forEach(t => t.columns.forEach((c: any) => colRefs.current.set(`${t.name}.${c.name}`, React.createRef())));
   }, [tables]);
-  
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button === 1 || e.key === ' ' || e.nativeEvent.buttons === 4) { // Middle mouse or space
-        e.preventDefault();
-        dragState.current = { type: 'pan', startX: e.clientX, startY: e.clientY, initialPan: { ...pan } };
-    }
-    setContextMenu(null);
-  };
 
-  const handleTableMouseDown = (e: React.MouseEvent, tableName: string) => {
-    e.stopPropagation();
-    const table = tables.find(t => t.name === tableName);
-    if (!table) return;
-    dragState.current = { type: 'table', id: tableName, startX: e.clientX / zoom, startY: e.clientY / zoom, initialPos: { x: table.x, y: table.y }};
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleWindowMouseMove = (e: MouseEvent) => {
     if (!dragState.current) return;
     e.preventDefault();
     const { type, startX, startY } = dragState.current;
@@ -81,7 +66,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
     }
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handleWindowMouseUp = (e: MouseEvent) => {
       if (dragState.current?.type === 'table') {
           const { id, startX, startY, initialPos } = dragState.current;
           if (id && initialPos) {
@@ -91,6 +76,27 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
           }
       }
       dragState.current = null;
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+      window.removeEventListener('mouseup', handleWindowMouseUp);
+  };
+  
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button === 1 || e.key === ' ' || e.nativeEvent.buttons === 4) { // Middle mouse or space
+        e.preventDefault();
+        dragState.current = { type: 'pan', startX: e.clientX, startY: e.clientY, initialPan: { ...pan } };
+        window.addEventListener('mousemove', handleWindowMouseMove);
+        window.addEventListener('mouseup', handleWindowMouseUp);
+    }
+    setContextMenu(null);
+  };
+
+  const handleTableMouseDown = (e: React.MouseEvent, tableName: string) => {
+    e.stopPropagation();
+    const table = tables.find(t => t.name === tableName);
+    if (!table) return;
+    dragState.current = { type: 'table', id: tableName, startX: e.clientX / zoom, startY: e.clientY / zoom, initialPos: { x: table.x, y: table.y }};
+    window.addEventListener('mousemove', handleWindowMouseMove);
+    window.addEventListener('mouseup', handleWindowMouseUp);
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -126,8 +132,6 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
     <div 
         className="h-full overflow-hidden relative cursor-grab active:cursor-grabbing" 
         onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
         onWheel={handleWheel}
         onContextMenu={(e) => handleContextMenu(e, 'canvas', null)}
     >

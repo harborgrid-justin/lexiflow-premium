@@ -151,6 +151,28 @@ export const HolographicRouting = {
       return 'hierarchy';
     }
 
+    if (moduleId === PATHS.DATA_PLATFORM) {
+        if (ctx.includes('schema') || ctx.includes('model') || ctx.includes('diagram')) return 'schema-designer';
+        if (ctx.includes('migrat') || ctx.includes('change')) return 'schema-migrations';
+        if (ctx.includes('query') || ctx.includes('sql') || ctx.includes('select')) return 'query-editor';
+        if (ctx.includes('history') && ctx.includes('sql')) return 'query-history';
+        if (ctx.includes('pipeline') || ctx.includes('etl') || ctx.includes('job')) return 'pipeline-dag';
+        if (ctx.includes('connect')) return 'pipeline-connectors';
+        if (ctx.includes('lake') || ctx.includes('s3') || ctx.includes('store')) return 'lake';
+        if (ctx.includes('lineage') || ctx.includes('depend')) return 'lineage-graph';
+        if (ctx.includes('quality') || ctx.includes('clean')) return 'quality-dashboard';
+        if (ctx.includes('rule') || ctx.includes('valid')) return 'quality-rules';
+        if (ctx.includes('govern') || ctx.includes('compliance')) return 'governance-overview';
+        if (ctx.includes('catalog') || ctx.includes('diction')) return 'catalog-dictionary';
+        if (ctx.includes('secur') || ctx.includes('rls') || ctx.includes('policy')) return 'security-policies';
+        if (ctx.includes('role') || ctx.includes('access')) return 'security-roles';
+        if (ctx.includes('replic') || ctx.includes('failover')) return 'replication';
+        if (ctx.includes('api') || ctx.includes('key')) return 'api';
+        if (ctx.includes('backup') || ctx.includes('recover') || ctx.includes('vault')) return 'backup';
+        if (ctx.includes('cost') || ctx.includes('finops') || ctx.includes('spend')) return 'cost';
+        return 'overview';
+    }
+
     // --- DOCUMENT & KNOWLEDGE ---
 
     if (moduleId === PATHS.DOCUMENTS) {

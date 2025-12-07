@@ -1,17 +1,22 @@
-
 import React, { useState, useEffect } from 'react';
-import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, BookOpen, Info, Maximize2, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, Book, Info, Maximize2, Loader2 } from 'lucide-react';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
 import { VirtualList } from '../../common/VirtualList';
 import { SearchToolbar } from '../../common/SearchToolbar';
-import { useWindow } from '../../../../context/WindowContext';
+import { useWindow } from '../../../context/WindowContext';
 import { Button } from '../../common/Button';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
-import { DataDictionary } from './catalog/DataDictionary'; // Import new component
-import { DataService } from '../../../../services/dataService';
-import { useQuery } from '../../../../services/queryClient';
+import { DataDictionary } from './catalog/DataDictionary';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+
+interface DataDomain {
+    name: string;
+    count: number;
+    desc: string;
+}
 
 interface DataCatalogProps {
     initialTab?: string;
@@ -25,10 +30,20 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Sync initialTab prop to state
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+
   // Integrated Data Query
-  const { data: domains = [], isLoading } = useQuery<any[]>(
+  const { data: domains = [], isLoading } = useQuery<DataDomain[]>(
       ['admin', 'catalog_domains'],
-      DataService.catalog.getDataDomains as any
+      async () => {
+         const result = await DataService.catalog.getDataDomains();
+         return result as DataDomain[];
+      }
   );
 
   const handlePopOut = () => {
@@ -42,7 +57,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
-    <div className={cn("flex flex-col h-full", isOrbital ? cn(theme.surface) : "")}>
+    <div className="flex flex-col h-full">
         <div className={cn("px-6 pt-6 border-b shrink-0", theme.border.default)}>
             <div className="flex justify-between items-center mb-4">
                 <div>
@@ -92,7 +107,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                                             <Tag className="h-3 w-3 mr-1"/> {domain.count} Tables
                                         </span>
                                     </div>
-                                    <div className={cn("absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity", theme.text.tertiary)}>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400">
                                         <ChevronRight className="h-6 w-6"/>
                                     </div>
                                 </div>

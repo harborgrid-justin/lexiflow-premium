@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Repeat, Globe, CheckCircle, ArrowRight, AlertTriangle, Power, ShieldAlert } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
@@ -12,10 +12,19 @@ export const ReplicationManager: React.FC = () => {
   const [isFailoverModalOpen, setIsFailoverModalOpen] = useState(false);
   const [primaryRegion, setPrimaryRegion] = useState('US-East');
   const [replicaStatus, setReplicaStatus] = useState<'Syncing' | 'Promoting' | 'Active'>('Syncing');
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+      return () => {
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      }
+  }, []);
 
   const handleFailover = () => {
       setReplicaStatus('Promoting');
-      setTimeout(() => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      
+      timeoutRef.current = setTimeout(() => {
           setPrimaryRegion(prev => prev === 'US-East' ? 'EU-West' : 'US-East');
           setReplicaStatus('Active');
           setIsFailoverModalOpen(false);

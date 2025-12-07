@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2, Plus, FileText } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
@@ -21,10 +21,18 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [editingRule, setEditingRule] = useState<any>(null);
+  
+  const scanIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
+
+  useEffect(() => {
+      return () => {
+          if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+      }
+  }, []);
 
   const [rules, setRules] = useState([
       { id: 1, name: 'PII Encryption', status: 'Enforced', impact: 'High', passing: '100%', desc: 'All columns tagged PII must be encrypted at rest.' },
@@ -39,12 +47,13 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
   ]);
 
   const handleScan = () => {
+      if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
       setIsScanning(true);
       setScanProgress(0);
-      const interval = setInterval(() => {
+      scanIntervalRef.current = setInterval(() => {
           setScanProgress(p => {
               if (p >= 100) {
-                  clearInterval(interval);
+                  if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
                   setIsScanning(false);
                   return 100;
               }
@@ -72,7 +81,6 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {activeTab === 'overview' && (
                 <>
-                    {/* ... (Metrics Grid) ... */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, "bg-emerald-500/10 border-emerald-500/20")}>
                             <div>

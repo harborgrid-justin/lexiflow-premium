@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Sparkles, Check, Trash2, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2, Loader2, GitMerge, Wand2, Activity } from 'lucide-react';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { Sparkles, Check, AlertOctagon, RefreshCw, CheckCircle2, BarChart2, FileSearch, Plus, Settings, Edit2, Loader2, GitMerge, Wand2, Activity } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { Tabs } from '../../common/Tabs';
 import { useTheme } from '../../../context/ThemeContext';
@@ -26,6 +27,9 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   
+  // Timer Ref for Cleanup
+  const scanIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  
   // Builder State
   const [isRuleBuilderOpen, setIsRuleBuilderOpen] = useState(false);
   const [editingRule, setEditingRule] = useState<QualityRule | undefined>(undefined);
@@ -33,6 +37,13 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
+
+  // Clean up interval on unmount
+  useEffect(() => {
+      return () => {
+          if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+      };
+  }, []);
 
   // Integrated Data Query
   const { data: fetchedAnomalies = [], isLoading } = useQuery<DataAnomaly[]>(
@@ -73,12 +84,15 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   ]);
 
   const handleScan = () => {
+      if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+      
       setIsScanning(true);
       setScanProgress(0);
-      const interval = setInterval(() => {
+      
+      scanIntervalRef.current = setInterval(() => {
           setScanProgress(p => {
               if (p >= 100) {
-                  clearInterval(interval);
+                  if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
                   setIsScanning(false);
                   return 100;
               }

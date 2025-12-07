@@ -1,36 +1,24 @@
+
 // components/EvidenceVault.tsx
 import React, { useMemo, useCallback, useState, useEffect, Suspense, lazy } from 'react';
-import { PageHeader } from '../common/PageHeader';
-import { Button } from '../common/Button';
-import {
-  Plus, Search
-} from 'lucide-react';
+import { PageHeader } from './common/PageHeader';
+import { Button } from './common/Button';
+import { Plus, Search } from 'lucide-react';
 import { useEvidenceVault, ViewMode } from '../hooks/useEvidenceVault';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { LazyLoader } from '../common/LazyLoader';
-import { EVIDENCE_PARENT_TABS } from '../config/evidenceVaultConfig'; // Updated import path
-import { EvidenceVaultContent } from './evidence/EvidenceVaultContent'; // Updated import path
-import { EvidenceItem } from '../types'; // Import EvidenceItem for type safety
+import { LazyLoader } from './common/LazyLoader';
+import { EVIDENCE_PARENT_TABS } from '../config/evidenceVaultConfig';
+import { EvidenceVaultContent } from './evidence/EvidenceVaultContent';
+import { EvidenceItem } from '../types';
 
-// FIX: Lazy load EvidenceDetail
 const EvidenceDetail = lazy(() => import('./evidence/EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));
-
-// FRE Workbench Components (these are used in EvidenceVaultContent now)
-// const AuthenticationManager = React.lazy(() => import('./evidence/fre/AuthenticationManager').then(m => ({ default: m.AuthenticationManager })));
-// const RelevanceAnalysis = React.lazy(() => import('./evidence/fre/RelevanceAnalysis').then(m => ({ default: m.RelevanceAnalysis })));
-// const HearsayAnalyzer = React.lazy(() => import('./evidence/fre/HearsayAnalyzer').then(m => ({ default: m.HearsayAnalyzer })));
-// const ExpertEvidenceManager = React.lazy(() => import('./evidence/fre/ExpertEvidenceManager').then(m => ({ default: m.ExpertEvidenceManager })));
-// const OriginalsManager = React.lazy(() => import('./evidence/fre/OriginalsManager').then(m => ({ default: m.OriginalsManager })));
-
 
 interface EvidenceVaultProps {
   onNavigateToCase?: (caseId: string) => void;
   initialTab?: ViewMode;
-  caseId?: string; // Integration Point
+  caseId?: string;
 }
-
-// PARENT_TABS was moved to config/evidenceVaultConfig.ts
 
 export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, initialTab, caseId }) => {
   const { theme } = useTheme();
@@ -48,13 +36,12 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
     handleBack,
     handleIntakeComplete,
     handleCustodyUpdate
-  } = useEvidenceVault(caseId); // Pass caseId to hook for scoping
+  } = useEvidenceVault(caseId);
 
   useEffect(() => {
       if (initialTab) setView(initialTab);
   }, [initialTab, setView]);
 
-  // Determine active parent tab based on current view
   const activeParentTab = useMemo(() =>
     EVIDENCE_PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || EVIDENCE_PARENT_TABS[0],
   [view]);
@@ -66,7 +53,6 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
     }
   }, [setView]);
 
-  // If viewing details, render full screen detail view
   if (view === 'detail' && selectedItem) {
     return (
       <Suspense fallback={<LazyLoader message="Loading Evidence Details..." />}>
@@ -85,18 +71,17 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
   }
 
   const renderContent = () => {
-    // Delegation to EvidenceVaultContent
     return (
       <EvidenceVaultContent
         view={view}
         evidenceItems={evidenceItems}
-        filteredItems={filteredItems} // FIX: Pass filteredItems as a prop
+        filteredItems={filteredItems}
         filters={filters}
         setFilters={setFilters}
         onItemClick={handleItemClick}
         onIntakeClick={() => setView('intake')}
         onIntakeComplete={handleIntakeComplete}
-        onNavigate={setView} // Pass setView to content for internal navigation
+        onNavigate={setView}
       />
     );
   };
@@ -117,7 +102,6 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
             />
         )}
 
-        {/* Desktop Parent Navigation */}
         <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
             {EVIDENCE_PARENT_TABS.map(parent => (
                 <button
@@ -136,7 +120,6 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
             ))}
         </div>
 
-        {/* Sub-Navigation (Pills) */}
         {activeParentTab.subTabs.length > 0 && (
             <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (

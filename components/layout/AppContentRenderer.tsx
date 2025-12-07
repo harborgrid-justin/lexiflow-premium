@@ -5,9 +5,7 @@ import { ModuleRegistry } from '../../services/moduleRegistry';
 import { PATHS } from '../../constants/paths';
 import { LazyLoader } from '../common/LazyLoader';
 import { HelpCircle, Lock } from 'lucide-react';
-
-// Lazy Load CaseDetail specifically as it's a heavy component often used
-const CaseDetail = React.lazy(() => import('../CaseDetail').then(m => ({ default: m.CaseDetail })));
+import { CaseDetail } from '../CaseDetail'; 
 
 interface AppContentRendererProps {
   activeView: AppView;
@@ -30,7 +28,6 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
   setActiveView,
   initialTab
 }) => {
-  // Special Case: Case Detail overrides generic modules
   if (selectedCase) {
     return (
       <Suspense fallback={<LazyLoader message="Loading Case Context..." />}>
@@ -44,11 +41,9 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     );
   }
 
-  // Resolve Module from Registry
   const moduleDef = ModuleRegistry.getModule(activeView);
 
   if (moduleDef) {
-    // Security Check
     if (moduleDef.requiresAdmin && currentUser.role !== 'Administrator' && currentUser.role !== 'Senior Partner') {
       return (
         <div className="flex flex-col justify-center items-center h-full text-slate-500 animate-fade-in">
@@ -64,23 +59,18 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
       );
     }
 
-    // Dynamic Component Injection
     const Component = moduleDef.component;
-    
-    // Inject props dynamically based on module requirements (Dependency Injection Lite)
     const dynamicProps: any = {};
 
-    // Inject Holographic Route
     if (initialTab) {
         dynamicProps.initialTab = initialTab;
     }
     
-    // Route-Specific Injection Logic
     if (activeView === PATHS.CASES) {
       dynamicProps.onSelectCase = handleSelectCase;
     } else if (([PATHS.DASHBOARD, PATHS.WORKFLOWS, PATHS.EVIDENCE, PATHS.EXHIBITS] as string[]).includes(activeView)) {
       dynamicProps.onSelectCase = handleSelectCaseById;
-      dynamicProps.onNavigateToCase = handleSelectCaseById; // Alias
+      dynamicProps.onNavigateToCase = handleSelectCaseById;
     }
     
     if (activeView === PATHS.BILLING) {
@@ -99,7 +89,6 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     );
   }
 
-  // Fallback 404
   return (
     <div className="flex flex-col justify-center items-center h-full text-slate-400">
       <div className="bg-slate-100 p-4 rounded-full mb-4">

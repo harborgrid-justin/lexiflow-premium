@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GitMerge, RefreshCw, Clock, Activity, CheckCircle, XCircle, Play, FileText, ChevronRight, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -19,15 +18,27 @@ interface PipelineJob {
     logs: string[];
 }
 
-export const PipelineMonitor: React.FC = () => {
+interface PipelineMonitorProps {
+    initialTab?: string;
+}
+
+export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = 'monitor' }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'monitor' | 'connectors'>('monitor');
   const [selectedJob, setSelectedJob] = useState<PipelineJob | null>(null);
   
+  useEffect(() => {
+      if (initialTab === 'connectors') setActiveTab('connectors');
+      else setActiveTab('monitor');
+  }, [initialTab]);
+  
   // Integrated Data Query
   const { data: pipelines = [], isLoading, refetch } = useQuery<PipelineJob[]>(
       ['admin', 'pipelines'],
-      DataService.admin.getPipelines as any
+      async () => {
+         const data = await DataService.admin.getPipelines();
+         return data as unknown as PipelineJob[];
+      }
   );
 
   const connectors = [
@@ -38,7 +49,6 @@ export const PipelineMonitor: React.FC = () => {
       { id: 'c5', name: 'Redis Cache', type: 'Cache', status: 'Degraded', icon: Database, color: 'text-red-600' },
   ];
 
-  // Note: Mutation would typically go here for 'Run'
   const handleRun = (id: string) => {
       alert(`Triggered run for pipeline ${id}`);
   };

@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 
@@ -16,8 +16,8 @@ interface State {
   isCopied: boolean;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
+export class ErrorBoundary extends React.Component<Props, State> {
+  public override state: State = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -30,7 +30,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Construct debug information
     const debugInfo = `
 --- LexiFlow Error Report ---
@@ -70,10 +70,14 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
 
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
-        this.setState({ aiResolution: resolution, isResolving: false });
+        if (this.state.hasError) { // Check if still mounted/in error state
+            this.setState({ aiResolution: resolution, isResolving: false });
+        }
       })
       .catch(e => {
-        this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
+        if (this.state.hasError) {
+            this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
+        }
       });
   }
 
@@ -86,6 +90,8 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
         navigator.clipboard.writeText(this.state.debugInfo).then(() => {
             this.setState({ isCopied: true });
             setTimeout(() => {
+                // Check if component is still mounted implicitly by state check logic if needed, 
+                // but for class components usually safe unless unmounted
                 this.setState({ isCopied: false });
             }, 2000);
         }).catch(err => {
@@ -94,7 +100,7 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
     }
   }
 
-  public render() {
+  public override render(): ReactNode {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
@@ -132,7 +138,7 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
           </div>
 
           <div className="mt-4 w-full max-w-md text-left text-xs p-3 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
-            <strong>Note for Developers:</strong> If the error mentions "Failed to resolve module specifier", it indicates a path alias issue during script loading. This Error Boundary cannot catch module-level errors. This build has been refactored to use relative paths exclusively to prevent this. Ensure your local configuration is up to date and no path aliases remain.
+            <strong>Note for Developers:</strong> Ensure no circular dependencies or missing exports in the module path.
           </div>
 
           <div className="flex gap-3 mt-8">

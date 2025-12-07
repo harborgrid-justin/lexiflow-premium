@@ -1,11 +1,10 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LayoutDashboard, Database, ShieldCheck, GitMerge, Archive, Terminal, 
   Lock, Book, Radio, Sparkles, Repeat, Network, DollarSign, 
   ChevronDown, ChevronRight, Table, Code, Activity, History,
-  FileText, Key, Server, Globe, BarChart2, Calculator, FileSearch,
-  AlertOctagon, Layers, GitCommit, Share2, Users, HardDrive
+  FileText, Key, Server, BarChart2, FileSearch,
+  AlertOctagon, Layers, GitCommit, Users, HardDrive
 } from 'lucide-react';
 import { PlatformView } from '../AdminDatabaseControl';
 import { useTheme } from '../../../context/ThemeContext';
@@ -20,7 +19,7 @@ type MenuItem = {
   id: PlatformView;
   label: string;
   icon: any;
-  children?: { id: string; label: string; icon: any }[];
+  children?: { id: PlatformView; label: string; icon: any }[];
 };
 
 export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ activeView, onChange }) => {
@@ -35,11 +34,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     'catalog': true
   });
 
-  const toggleExpand = (id: string) => {
-    setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const menu: MenuItem[] = [
+  const menu: MenuItem[] = useMemo(() => [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard },
     { 
       id: 'schema', label: 'Schema Architect', icon: Database,
@@ -110,7 +105,19 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     { id: 'api', label: 'API Gateway', icon: Radio },
     { id: 'backup', label: 'Vault & Recovery', icon: Archive },
     { id: 'cost', label: 'FinOps', icon: DollarSign },
-  ];
+  ], []);
+
+  // Auto-expand parent if child is active
+  useEffect(() => {
+    const parent = menu.find(item => item.children?.some(c => c.id === activeView));
+    if (parent && !expanded[parent.id]) {
+      setExpanded(prev => ({ ...prev, [parent.id]: true }));
+    }
+  }, [activeView, menu]);
+
+  const toggleExpand = (id: string) => {
+    setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   return (
     <div className={cn("w-full h-full flex flex-col shrink-0", theme.surface)}>
@@ -156,7 +163,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   {item.children?.map(sub => (
                     <button
                       key={sub.id}
-                      onClick={() => onChange(sub.id as any)} 
+                      onClick={() => onChange(sub.id)} 
                       className={cn(
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id

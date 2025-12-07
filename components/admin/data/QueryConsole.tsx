@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Play, Eraser, Save, Database, Table, Clock, Star, MoreVertical, Download, Terminal, Search, Folder, Share2, AlignLeft, Bot, Eye, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -23,7 +23,11 @@ interface SavedQuery {
     name: string;
 }
 
-export const QueryConsole: React.FC = () => {
+interface QueryConsoleProps {
+    initialTab?: string;
+}
+
+export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor' }) => {
   const { theme, mode } = useTheme();
   const notify = useNotify();
   const [activeSidebarTab, setActiveSidebarTab] = useState<'schema' | 'history' | 'saved'>('schema');
@@ -44,6 +48,12 @@ export const QueryConsole: React.FC = () => {
 
   const [explainPlan, setExplainPlan] = useState<any>(null);
   const [isFormatting, setIsFormatting] = useState(false);
+
+  useEffect(() => {
+      if (initialTab === 'history') setActiveSidebarTab('history');
+      else if (initialTab === 'saved') setActiveSidebarTab('saved');
+      else setActiveSidebarTab('schema');
+  }, [initialTab]);
 
   const handleRun = () => {
       const start = performance.now();

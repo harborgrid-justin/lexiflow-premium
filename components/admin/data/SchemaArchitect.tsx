@@ -29,6 +29,10 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
 
   const [activeTab, setActiveTab] = useState<'visual' | 'code' | 'history' | 'snapshots'>(mapInitialTabToState(initialTab));
   
+  useEffect(() => {
+    setActiveTab(mapInitialTabToState(initialTab));
+  }, [initialTab]);
+  
   const [tables, setTables] = useState([
       { name: 'cases', x: 50, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' } ] },
       { name: 'documents', x: 450, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },

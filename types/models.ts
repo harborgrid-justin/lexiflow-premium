@@ -199,6 +199,27 @@ export interface EntityRelationship extends BaseEntity {
   active: boolean;
 }
 
+// Security & RLS
+export type SqlCmd = 'SELECT' | 'INSERT' | 'UPDATE' | 'DELETE' | 'ALL';
+
+export interface RLSPolicy extends BaseEntity {
+  name: string;
+  table: string;
+  cmd: SqlCmd;
+  roles: string[];
+  using: string;
+  withCheck?: string;
+  status: 'Active' | 'Disabled';
+}
+
+export type PermissionLevel = 'None' | 'Read' | 'Write' | 'Full' | 'Own';
+
+export interface RolePermission extends BaseEntity {
+  role: string;
+  resource: string;
+  access: PermissionLevel;
+}
+
 // Data Quality & Cleansing
 export interface DataAnomaly {
     id: number;

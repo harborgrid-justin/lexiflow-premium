@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataPlatformSidebar } from './data/DataPlatformSidebar';
@@ -23,11 +23,22 @@ import { TabStrip } from '../common/RefactoredCommon';
 
 export type PlatformView = string; // Relaxed type for sub-routes
 
-export const AdminDatabaseControl: React.FC = () => {
+interface AdminDatabaseControlProps {
+  initialTab?: string;
+}
+
+export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ initialTab }) => {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
   const [activeView, setActiveView] = useState<PlatformView>('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Sync initialTab prop to state for deep linking
+  useEffect(() => {
+    if (initialTab) {
+      setActiveView(initialTab);
+    }
+  }, [initialTab]);
 
   const renderContent = () => {
     // Sub-module routing logic

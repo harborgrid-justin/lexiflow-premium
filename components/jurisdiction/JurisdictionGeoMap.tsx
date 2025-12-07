@@ -22,6 +22,7 @@ export const JurisdictionGeoMap: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isAnimating, setIsAnimating] = useState(true);
   const nodesRef = useRef<MapNode[]>([]);
+  const frameRef = useRef<number>(0);
 
   useEffect(() => {
       const loadNodes = async () => {
@@ -69,8 +70,6 @@ export const JurisdictionGeoMap: React.FC = () => {
     
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    let animationFrameId: number;
 
     const render = () => {
       if (!canvas) return;
@@ -120,14 +119,16 @@ export const JurisdictionGeoMap: React.FC = () => {
       });
 
       if (isAnimating) {
-        animationFrameId = requestAnimationFrame(render);
+        frameRef.current = requestAnimationFrame(render);
       }
     };
 
     // Handle Resize
     const resize = () => {
-        canvas.width = canvas.parentElement?.clientWidth || 800;
-        canvas.height = canvas.parentElement?.clientHeight || 500;
+        if (canvas.parentElement) {
+            canvas.width = canvas.parentElement.clientWidth || 800;
+            canvas.height = canvas.parentElement.clientHeight || 500;
+        }
     };
     window.addEventListener('resize', resize);
     resize(); // Initial size
@@ -136,7 +137,7 @@ export const JurisdictionGeoMap: React.FC = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
   }, [isAnimating]);
 

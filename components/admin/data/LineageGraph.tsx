@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Network, Database, FileText, ArrowRight, X, User, Clock, Code, RefreshCw, ZoomIn, ZoomOut, Play, Pause, Layers, Search } from 'lucide-react';
+import { Network, Database, FileText, ArrowRight, X, User, Clock, Code, RefreshCw, ZoomIn, ZoomOut, Play, Pause, Layers, GitCommit, Share2, Users, HardDrive } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { NexusPhysics, NODE_STRIDE } from '../../../utils/nexusPhysics';
@@ -33,64 +33,7 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
-  // Initialize Graph Data
-  useEffect(() => {
-      if (activeTab !== 'graph' || !containerRef.current) return;
-
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-
-      // Mock Lineage Data
-      const nodes = [
-          { id: 'src1', label: 'Salesforce CRM', type: 'root' },
-          { id: 'src2', label: 'Website Logs', type: 'root' },
-          { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },
-          { id: 'etl1', label: 'Cleaning Job', type: 'party' },
-          { id: 'wh1', label: 'Data Warehouse', type: 'org' },
-          { id: 'rpt1', label: 'Revenue Dashboard', type: 'evidence' },
-          { id: 'rpt2', label: 'User Activity Report', type: 'evidence' }
-      ];
-
-      const { buffer, idMap, meta } = NexusPhysics.initSystem(nodes, width, height);
-      setNodeLabels(meta);
-
-      const links = [
-          { source: 'src1', target: 'stg1' },
-          { source: 'src2', target: 'stg1' },
-          { source: 'stg1', target: 'etl1' },
-          { source: 'etl1', target: 'wh1' },
-          { source: 'wh1', target: 'rpt1' },
-          { source: 'wh1', target: 'rpt2' }
-      ].map(l => ({
-          sourceIndex: idMap.get(l.source)!,
-          targetIndex: idMap.get(l.target)!,
-          strength: 0.5
-      }));
-
-      physicsState.current = { buffer, links, count: nodes.length, alpha: 1 };
-      
-      // Start Loop
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-      requestRef.current = requestAnimationFrame(tick);
-
-      // Handle Resize properly
-      const resizeObserver = new ResizeObserver(() => {
-         // Just wake up physics, exact resizing happens in tick via clientWidth
-         physicsState.current.alpha = 0.8;
-      });
-      resizeObserver.observe(containerRef.current);
-
-      return () => {
-          cancelAnimationFrame(requestRef.current);
-          resizeObserver.disconnect();
-      };
-  }, [activeTab]);
-
-  // Effect to wake up physics on Theme Change
-  useEffect(() => {
-      physicsState.current.alpha = 0.1; // Trigger a few frames to repaint colors
-  }, [mode]);
-
+  // Animation Tick Function
   const tick = () => {
       if (!canvasRef.current || !containerRef.current) return;
       
@@ -163,6 +106,64 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
 
       if (isAnimating) requestRef.current = requestAnimationFrame(tick);
   };
+
+  // Initialize Graph Data
+  useEffect(() => {
+      if (activeTab !== 'graph' || !containerRef.current) return;
+
+      const width = containerRef.current.clientWidth;
+      const height = containerRef.current.clientHeight;
+
+      // Mock Lineage Data
+      const nodes = [
+          { id: 'src1', label: 'Salesforce CRM', type: 'root' },
+          { id: 'src2', label: 'Website Logs', type: 'root' },
+          { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },
+          { id: 'etl1', label: 'Cleaning Job', type: 'party' },
+          { id: 'wh1', label: 'Data Warehouse', type: 'org' },
+          { id: 'rpt1', label: 'Revenue Dashboard', type: 'evidence' },
+          { id: 'rpt2', label: 'User Activity Report', type: 'evidence' }
+      ];
+
+      const { buffer, idMap, meta } = NexusPhysics.initSystem(nodes, width, height);
+      setNodeLabels(meta);
+
+      const links = [
+          { source: 'src1', target: 'stg1' },
+          { source: 'src2', target: 'stg1' },
+          { source: 'stg1', target: 'etl1' },
+          { source: 'etl1', target: 'wh1' },
+          { source: 'wh1', target: 'rpt1' },
+          { source: 'wh1', target: 'rpt2' }
+      ].map(l => ({
+          sourceIndex: idMap.get(l.source)!,
+          targetIndex: idMap.get(l.target)!,
+          strength: 0.5
+      }));
+
+      physicsState.current = { buffer, links, count: nodes.length, alpha: 1 };
+      
+      // Start Loop
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      requestRef.current = requestAnimationFrame(tick);
+
+      // Handle Resize properly
+      const resizeObserver = new ResizeObserver(() => {
+         // Just wake up physics, exact resizing happens in tick via clientWidth
+         physicsState.current.alpha = 0.8;
+      });
+      resizeObserver.observe(containerRef.current);
+
+      return () => {
+          if (requestRef.current) cancelAnimationFrame(requestRef.current);
+          resizeObserver.disconnect();
+      };
+  }, [activeTab]);
+
+  // Effect to wake up physics on Theme Change
+  useEffect(() => {
+      physicsState.current.alpha = 0.1; // Trigger a few frames to repaint colors
+  }, [mode]);
 
   const handleReheat = () => {
       physicsState.current.alpha = 1;

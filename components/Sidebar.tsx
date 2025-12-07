@@ -55,6 +55,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
     return groups;
   }, [visibleItems]);
 
+  const handlePreload = (item: ModuleDefinition) => {
+      // Cast to any to access the preload method attached in config/modules.tsx
+      const component = item.component as any;
+      if (component && component.preload) {
+          component.preload();
+      }
+  };
+
   return (
     <>
       {/* Mobile Backdrop Overlay */}
@@ -111,6 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
                                     <button
                                         key={item.id}
                                         onClick={() => setActiveView(item.id)}
+                                        onMouseEnter={() => handlePreload(item)} // Trigger Code Fetch
                                         className={cn(
                                             "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                                             isActive 

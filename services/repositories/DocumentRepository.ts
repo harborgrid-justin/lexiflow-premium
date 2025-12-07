@@ -1,7 +1,6 @@
-
 import { LegalDocument } from '../../types';
 import { Repository } from '../core/Repository';
-import { STORES } from '../db';
+import { STORES, db } from '../db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -20,6 +19,10 @@ export class DocumentRepository extends Repository<LegalDocument> {
     getContent = async (id: string) => {
         const doc = await this.getById(id);
         return doc ? doc.content : '';
+    }
+
+    getFile = async (id: string) => {
+        return db.getFile(id);
     }
     
     getFolders = async () => {

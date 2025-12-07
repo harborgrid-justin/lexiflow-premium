@@ -11,6 +11,8 @@ interface QueryState<T> {
   dataUpdatedAt: number;
 }
 
+const MAX_CACHE_SIZE = 50; // Maximum number of queries to hold in memory
+
 class QueryClient {
   private cache: Map<string, QueryState<any>> = new Map();
   private listeners: Map<string, Set<(state: QueryState<any>) => void>> = new Map();
@@ -33,8 +35,34 @@ class QueryClient {
     return this.stableStringify(key);
   }
 
+  // LRU Implementation: Re-inserting a key moves it to the end (most recent)
+  private touch(key: string) {
+    const value = this.cache.get(key);
+    if (value) {
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+  }
+
+  private enforceLimits() {
+    if (this.cache.size > MAX_CACHE_SIZE) {
+      // Map iterator yields keys in insertion order. First one is oldest (LRU).
+      const oldestKey = this.cache.keys().next().value;
+      if (oldestKey) {
+        this.cache.delete(oldestKey);
+        // Also cleanup listeners if any exist for the evicted key (though they should have unsubscribed)
+        this.listeners.delete(oldestKey);
+      }
+    }
+  }
+
   getQueryState<T>(key: QueryKey): QueryState<T> | undefined {
-    return this.cache.get(this.hashKey(key));
+    const hashedKey = this.hashKey(key);
+    if (this.cache.has(hashedKey)) {
+      this.touch(hashedKey); // Mark as recently used
+      return this.cache.get(hashedKey);
+    }
+    return undefined;
   }
 
   subscribe(key: QueryKey, listener: (state: QueryState<any>) => void) {
@@ -46,6 +74,7 @@ class QueryClient {
 
     // Send current state immediately if exists
     if (this.cache.has(hashedKey)) {
+      this.touch(hashedKey); // Mark as recently used
       listener(this.cache.get(hashedKey)!);
     }
 
@@ -64,6 +93,7 @@ class QueryClient {
 
     // Return cached if valid and fresh and not forced
     if (!force && cached && cached.status === 'success' && (now - cached.dataUpdatedAt < staleTime)) {
+      this.touch(hashedKey); // Mark as recently used
       return cached.data;
     }
 
@@ -81,6 +111,7 @@ class QueryClient {
       .then((data) => {
         const state: QueryState<T> = { data, status: 'success', error: null, dataUpdatedAt: Date.now() };
         this.cache.set(hashedKey, state);
+        this.enforceLimits(); // Check memory budget
         this.notify(hashedKey, state);
         this.inflight.delete(hashedKey);
         return data;
@@ -93,6 +124,7 @@ class QueryClient {
           dataUpdatedAt: cached?.dataUpdatedAt || 0 
         };
         this.cache.set(hashedKey, state);
+        this.enforceLimits(); // Check memory budget
         this.notify(hashedKey, state);
         this.inflight.delete(hashedKey);
         throw error;
@@ -139,6 +171,7 @@ class QueryClient {
 
       const state: QueryState<T> = { data, status: 'success', error: null, dataUpdatedAt: Date.now() };
       this.cache.set(hashedKey, state);
+      this.enforceLimits(); // Check memory budget
       this.notify(hashedKey, state);
   }
 

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardSidebar } from './DashboardSidebar';
@@ -8,6 +8,7 @@ import { LazyLoader } from '../common/LazyLoader';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { WorkflowTask } from '../../types';
+import { Scheduler } from '../../utils/scheduler';
 
 interface DashboardOverviewProps {
   onSelectCase: (caseId: string) => void;
@@ -20,19 +21,27 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   const { data: chartData = [] } = useQuery(['dashboard', 'charts'], DataService.dashboard.getChartData);
   const { data: alerts = [] } = useQuery(['dashboard', 'alerts'], DataService.dashboard.getRecentAlerts);
 
-  // Processing derived state from cached data
-  const activeProjects = React.useMemo(() => {
-      return tasks
-         .filter((t) => t.priority === 'High' && t.status !== 'Done')
-         .slice(0, 5)
-         .map((t) => ({
-             id: t.id,
-             title: t.title,
-             case: t.caseId || 'General',
-             progress: t.status === 'In Progress' ? 50 : 10,
-             status: t.status,
-             due: t.dueDate
-         }));
+  // Optimization: Defer heavy processing of tasks to idle time
+  const [activeProjects, setActiveProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+      if (tasks.length > 0) {
+          // Process heavy filtering/mapping in idle time to unblock initial paint
+          Scheduler.defer(() => {
+              const processed = tasks
+                  .filter((t) => t.priority === 'High' && t.status !== 'Done')
+                  .slice(0, 5)
+                  .map((t) => ({
+                      id: t.id,
+                      title: t.title,
+                      case: t.caseId || 'General',
+                      progress: t.status === 'In Progress' ? 50 : 10,
+                      status: t.status,
+                      due: t.dueDate
+                  }));
+              setActiveProjects(processed);
+          });
+      }
   }, [tasks]);
 
   if (statsLoading) return <LazyLoader message="Aggregating Firm Intelligence..." />;

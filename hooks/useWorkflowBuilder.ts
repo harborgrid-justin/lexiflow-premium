@@ -39,6 +39,36 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
     return [{ id: 'c1', from: 'start', to: 'n1' }, { id: 'c2', from: 'n1', to: 'n2' }];
   });
 
+  const detectCycle = (fromId: string, toId: string): boolean => {
+      // Depth-First Search to check if 'fromId' is reachable from 'toId'
+      const visited = new Set<string>();
+      const stack = [toId];
+
+      while (stack.length > 0) {
+          const current = stack.pop()!;
+          if (current === fromId) return true; // Cycle detected
+          if (visited.has(current)) continue;
+          visited.add(current);
+
+          // Find outgoing connections from current node
+          const outgoing = connections.filter(c => c.from === current).map(c => c.to);
+          stack.push(...outgoing);
+      }
+      return false;
+  };
+
+  const addConnection = (from: string, to: string) => {
+      if (from === to) return; // No self loops
+      if (connections.some(c => c.from === from && c.to === to)) return; // No duplicates
+      
+      if (detectCycle(from, to)) {
+          alert("Cannot connect: This would create an infinite loop.");
+          return;
+      }
+
+      setConnections(prev => [...prev, { id: `c-${Date.now()}`, from, to }]);
+  };
+
   const addNode = (type: NodeType, x: number, y: number) => {
       const newNode: WorkflowNode = {
           id: `n-${Date.now()}`, type, label: `New ${type}`, x, y, config: {}
@@ -56,5 +86,5 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
       setConnections(prev => prev.filter(c => c.from !== id && c.to !== id));
   };
 
-  return { nodes, connections, setNodes, setConnections, addNode, updateNode, deleteNode };
+  return { nodes, connections, setNodes, setConnections, addNode, updateNode, deleteNode, addConnection };
 };

@@ -65,7 +65,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
       updateStats();
       if (onSave && editorRef.current) {
           // Debounce the save call slightly if needed, or pass raw
-          onSave(editorRef.current.innerHTML); 
+          onSave(editorRef.current.innerHTML);
       }
   }, [onSave, updateStats]);
 
@@ -125,7 +125,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
         
         // Cleanup
         selection.removeAllRanges();
-        setSelectionRange(null); 
+        setSelectionRange(null);
         
         // Notify parent of change
         handleInput();
@@ -147,17 +147,17 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
   }, []);
 
   return (
-    <div className={cn("flex flex-col h-full border rounded-lg shadow-sm overflow-hidden", theme.border.default, theme.surface)}>
-      <EditorToolbar 
+    <div className={cn("flex flex-col h-full border rounded-lg shadow-sm overflow-hidden", theme.border.default, theme.surface.default)}>
+      <EditorToolbar
         wordCount={wordCount}
         onCmd={execCmd}
         onSave={onSave ? () => onSave(editorRef.current?.innerHTML || '') : undefined}
       />
 
       <div className="relative flex-1 overflow-hidden group">
-         <div 
+         <div
             ref={editorRef}
-            className={cn("h-full w-full p-8 outline-none overflow-y-auto prose prose-slate max-w-none transition-colors", `focus:${theme.surfaceHighlight}`)}
+            className={cn("h-full w-full p-8 outline-none overflow-y-auto prose prose-slate max-w-none transition-colors", `focus:${theme.surface.highlight}`)}
             contentEditable
             onMouseUp={handleSelection}
             onKeyUp={handleSelection}
@@ -176,7 +176,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-96 bg-white rounded-lg shadow-2xl border border-slate-200 p-2 flex gap-2 animate-in fade-in slide-in-from-bottom-2 z-20">
                 <div className="flex-1 relative">
                     <Wand2 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-600"/>
-                    <input 
+                    <input
                         className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
                         placeholder="Ask AI to rewrite selection..."
                         value={aiPrompt}
@@ -185,7 +185,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
                         autoFocus
                     />
                 </div>
-                <button 
+                <button
                     onClick={handleAiEdit}
                     disabled={isAiLoading}
                     className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded text-xs font-bold hover:shadow-lg disabled:opacity-50 transition-all flex items-center"

@@ -18,8 +18,8 @@ export const DocumentVersions: React.FC<DocumentVersionsProps> = ({ document, us
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className={cn("rounded-lg shadow-xl w-full max-w-2xl overflow-hidden", theme.surface)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("rounded-lg shadow-xl w-full max-w-2xl overflow-hidden", theme.surface.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
           <div>
             <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>
               <History className={cn("mr-2 h-5 w-5", theme.primary.text)} />
@@ -29,7 +29,7 @@ export const DocumentVersions: React.FC<DocumentVersionsProps> = ({ document, us
           </div>
           <button 
             onClick={onClose} 
-            className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.text.primary}`)}
+            className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)}
           >
             <X className="h-5 w-5" />
           </button>
@@ -54,7 +54,7 @@ export const DocumentVersions: React.FC<DocumentVersionsProps> = ({ document, us
           )}
 
           {document.versions.map((version) => (
-            <div key={version.id} className={cn("border rounded-lg p-4 transition-colors flex justify-between items-center", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+            <div key={version.id} className={cn("border rounded-lg p-4 transition-colors flex justify-between items-center", theme.border.default, `hover:${theme.surface.highlight}`)}>
               <div>
                 <h4 className={cn("text-sm font-bold", theme.text.primary)}>Version {version.versionNumber}</h4>
                 <div className={cn("flex items-center space-x-2 text-xs mt-1", theme.text.secondary)}>
@@ -66,7 +66,7 @@ export const DocumentVersions: React.FC<DocumentVersionsProps> = ({ document, us
               {canRestore && (
                 <button 
                   onClick={() => onRestore(version)}
-                  className={cn("flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors", theme.primary.light, theme.primary.text, `hover:${theme.surface}`)}
+                  className={cn("flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors", theme.primary.light, theme.primary.text, `hover:${theme.surface.default}`)}
                 >
                   <RotateCcw className="h-3 w-3 mr-1.5" />
                   Restore

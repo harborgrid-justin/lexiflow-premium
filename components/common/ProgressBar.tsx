@@ -10,11 +10,11 @@ interface ProgressBarProps {
   showValue?: boolean;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ 
-  label, 
-  value, 
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  label,
+  value,
   colorClass,
-  showValue = true 
+  showValue = true
 }) => {
   const { theme } = useTheme();
   
@@ -25,8 +25,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         {showValue && <span className={cn("font-bold", theme.text.primary)}>{value}%</span>}
       </div>
       <div className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}>
-        <div 
-          className={cn("h-2 rounded-full", colorClass || theme.primary.DEFAULT)} 
+        <div
+          className={cn("h-2 rounded-full", colorClass || theme.primary.DEFAULT)}
           style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
         ></div>
       </div>

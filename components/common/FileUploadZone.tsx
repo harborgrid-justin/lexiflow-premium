@@ -15,14 +15,14 @@ interface FileUploadZoneProps {
   multiple?: boolean;
 }
 
-export const FileUploadZone: React.FC<FileUploadZoneProps> = ({ 
+export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   file, processing, processStage, onFileSelect, generatedHash, multiple = false
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { theme } = useTheme();
 
   return (
-    <div 
+    <div
         className={cn(
             "border-2 border-dashed rounded-lg p-10 text-center cursor-pointer transition-colors relative overflow-hidden",
             theme.border.default,

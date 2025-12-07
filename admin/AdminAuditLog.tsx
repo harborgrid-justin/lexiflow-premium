@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { AuditLogEntry } from '../../types';
 import { Clock, User, Activity, Download, Filter, Shield, ShieldCheck, Link, AlertOctagon, Loader2, LayoutList, GitCommit, RefreshCw, Skull, Terminal, ArrowRight } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { ChainService, ChainedLogEntry, IntegrityReport } from '../../services/chainService';

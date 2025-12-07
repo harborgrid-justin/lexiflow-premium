@@ -1,10 +1,9 @@
 
-
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Client } from '../types';
-import { 
-  UserPlus, LayoutDashboard, List, GitPullRequest, 
-  BarChart3, Users, TrendingUp 
+import {
+  UserPlus, LayoutDashboard, List, GitPullRequest,
+  BarChart3, Users, TrendingUp
 } from 'lucide-react';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
@@ -13,43 +12,26 @@ import { DataService } from '../services/dataService';
 import { useQuery } from '../services/queryClient';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
+import { LazyLoader } from '../common/LazyLoader';
 import { STORES } from '../services/db';
 import { cn } from '../utils/cn';
+import { CRM_TAB_CONFIG, CRMView } from '../config/crmConfig'; // Updated import path
+import { ClientCRMContent } from './crm/ClientCRMContent'; // Updated import path
 
-// Sub-components
-const CRMDashboard = lazy(() => import('./crm/CRMDashboard').then(m => ({ default: m.CRMDashboard })));
-const ClientDirectory = lazy(() => import('./crm/ClientDirectory').then(m => ({ default: m.ClientDirectory })));
-const CRMPipeline = lazy(() => import('./crm/CRMPipeline').then(m => ({ default: m.CRMPipeline })));
-const ClientAnalytics = lazy(() => import('./crm/ClientAnalytics').then(m => ({ default: m.ClientAnalytics })));
+// Sub-components (these were moved to ClientCRMContent)
+// const CRMDashboard = lazy(() => import('./crm/CRMDashboard').then(m => ({ default: m.CRMDashboard })));
+// const ClientDirectory = lazy(() => import('./crm/ClientDirectory').then(m => ({ default: m.ClientDirectory })));
+// const CRMPipeline = lazy(() => import('./crm/CRMPipeline').then(m => ({ default: m.CRMPipeline })));
+// const ClientAnalytics = lazy(() => import('./crm/ClientAnalytics').then(m => ({ default: m.ClientAnalytics })));
 
-type CRMView = 'dashboard' | 'directory' | 'pipeline' | 'analytics';
+// CRMView was moved to config/crmConfig.ts
+// type CRMView = 'dashboard' | 'directory' | 'pipeline' | 'analytics';
 
 interface ClientCRMProps {
     initialTab?: CRMView;
 }
 
-const TAB_CONFIG: TabConfigItem[] = [
-  {
-    id: 'relationships', label: 'Relationships', icon: Users,
-    subTabs: [
-      { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
-      { id: 'directory', label: 'Client Directory', icon: List },
-    ]
-  },
-  {
-    id: 'growth', label: 'Growth', icon: TrendingUp,
-    subTabs: [
-      { id: 'pipeline', label: 'Intake Pipeline', icon: GitPullRequest },
-    ]
-  },
-  {
-    id: 'insights', label: 'Insights', icon: BarChart3,
-    subTabs: [
-      { id: 'analytics', label: 'Revenue Analytics', icon: BarChart3 },
-    ]
-  }
-];
+// TAB_CONFIG was moved to config/crmConfig.ts
 
 export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
   const [isPending, startTransition] = useTransition();
@@ -79,13 +61,8 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
   };
 
   const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard': return <CRMDashboard />;
-      case 'directory': return <ClientDirectory clients={clients} onOpenPortal={setSelectedClientPortal} />;
-      case 'pipeline': return <CRMPipeline />;
-      case 'analytics': return <ClientAnalytics />;
-      default: return <CRMDashboard />;
-    }
+    // Delegation to ClientCRMContent
+    return <ClientCRMContent activeTab={activeTab as CRMView} onOpenPortal={setSelectedClientPortal} clients={clients} />;
   };
 
   return (
@@ -97,7 +74,7 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
         pageTitle="Client Relationships"
         pageSubtitle="CRM, Intake Pipeline, and Secure Client Portals."
         pageActions={<Button variant="primary" icon={UserPlus} onClick={() => setShowIntake(true)}>New Intake</Button>}
-        tabConfig={TAB_CONFIG}
+        tabConfig={CRM_TAB_CONFIG}
         activeTabId={activeTab}
         onTabChange={setActiveTab}
       >

@@ -23,7 +23,6 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
             <strong>Network Analysis:</strong> Visualizing {entities.length} entities and their cross-matter relationships.
         </div>
         <div className="flex-1 border rounded-xl overflow-hidden shadow-sm">
-            {/* FIX: Added missing onNodeClick prop to satisfy NexusGraphProps interface */}
             <NexusGraph caseData={caseMock} parties={partyMap} evidence={[]} onNodeClick={(node) => console.log('Node clicked:', node)} />
         </div>
     </div>

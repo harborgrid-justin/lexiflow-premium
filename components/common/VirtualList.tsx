@@ -58,6 +58,7 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
+    // Using requestAnimationFrame for scroll update throttling
     requestAnimationFrame(() => {
         setScrollTop(currentScrollTop);
     });
@@ -93,7 +94,7 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
               height: itemHeight, 
               transform: `translate3d(0, ${top}px, 0)`,
               willChange: 'transform',
-              contentVisibility: 'auto',
+              contentVisibility: 'auto', // Browser Optimization: Skips layout work for off-screen content
               containIntrinsicSize: `0px ${itemHeight}px`
             }}
           >

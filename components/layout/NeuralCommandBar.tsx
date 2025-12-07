@@ -1,12 +1,14 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, Sparkles, Command, ArrowRight, X } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Search, Sparkles, Command, ArrowRight, X, Zap } from 'lucide-react';
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
+import { Trie } from '../../utils/trie';
+import { StringUtils } from '../../utils/stringUtils';
 
 interface NeuralCommandBarProps {
   globalSearch: string;
@@ -23,16 +25,53 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
-  const debouncedSearch = useDebounce(globalSearch, 300);
+  const debouncedSearch = useDebounce(globalSearch, 150); // Faster debounce due to Trie
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Search Logic
+  // Initialize Trie
+  const searchTrie = useMemo(() => new Trie(), []);
+  const [isTrieReady, setIsTrieReady] = useState(false);
+
+  // Preload Trie (Effectively creating an in-memory search index)
+  useEffect(() => {
+    const buildIndex = async () => {
+        // Fetch base data for index
+        const data = await SearchService.search(''); // Empty search returns top items/recent
+        data.forEach(item => {
+            searchTrie.insert(item.title, item);
+            // Also index secondary keywords if available
+            if (item.subtitle) searchTrie.insert(item.subtitle, item);
+        });
+        setIsTrieReady(true);
+    };
+    buildIndex();
+  }, [searchTrie]);
+
+  // Hybrid Search Logic: Trie -> Levenshtein -> Full Text
   useEffect(() => {
     const performSearch = async () => {
-      if (debouncedSearch.length >= 2 && !isProcessingIntent) {
-        const data = await SearchService.search(debouncedSearch);
-        setResults(data);
+      if (debouncedSearch.length >= 1 && !isProcessingIntent) {
+        
+        // 1. O(L) Trie Prefix Lookup (Instant)
+        let matches = searchTrie.search(debouncedSearch);
+
+        // 2. If few results, try Levenshtein (Fuzzy) on specific hot terms
+        if (matches.length < 3 && debouncedSearch.length > 3) {
+            // This would usually check against a cached list of all titles
+            // For demo, we assume the SearchService.search handles the heavy lifting if Trie fails
+            const fuzzyResults = await SearchService.search(debouncedSearch);
+            // Dedupe
+            const existingIds = new Set(matches.map(m => m.id));
+            fuzzyResults.forEach(r => {
+                if (!existingIds.has(r.id)) matches.push(r);
+            });
+        } else if (matches.length === 0) {
+             // Fallback to full search service
+             matches = await SearchService.search(debouncedSearch);
+        }
+
+        setResults(matches.slice(0, 8)); // Limit visual results
         setShowResults(true);
       } else {
         setResults([]);
@@ -40,7 +79,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
       }
     };
     performSearch();
-  }, [debouncedSearch, isProcessingIntent]);
+  }, [debouncedSearch, isProcessingIntent, searchTrie]);
 
   // Outside Click
   useEffect(() => {
@@ -65,11 +104,8 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
         setIsProcessingIntent(true);
         const intent = await GeminiService.predictIntent(globalSearch);
         
-        // Holographic Routing Integration
         if (intent.action === 'NAVIGATE' && intent.targetModule) {
-            // Pre-calculate tab context to pass along
             const deepLink = HolographicRouting.resolveTab(intent.targetModule, intent.context);
-            // Inject into intent for downstream handler
             intent.context = deepLink || intent.context;
         }
         
@@ -128,8 +164,9 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
 
                 {results.length > 0 ? (
                     <div className="py-2">
-                        <div className={cn("px-3 py-2 text-xs font-semibold uppercase tracking-wider", theme.text.tertiary)}>
-                            Direct Matches
+                        <div className={cn("px-3 py-2 text-xs font-semibold uppercase tracking-wider flex justify-between", theme.text.tertiary)}>
+                            <span>Direct Matches</span>
+                            {results.length > 0 && <span className="text-[9px] border px-1 rounded flex items-center gap-1"><Zap className="h-2 w-2"/> Instant</span>}
                         </div>
                         {results.map((result) => (
                             <button

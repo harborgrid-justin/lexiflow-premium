@@ -14,19 +14,19 @@ export const Input: React.FC<InputProps> = ({ label, error, className = '', ...p
   
   return (
     <div className="w-full">
-      {label && <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>{label}</label>}
-      <input 
+      {label && <label className={cn("block text-xs font-semibold uppercase tracking-wide mb-1.5 ml-0.5", theme.text.secondary)}>{label}</label>}
+      <input
         className={cn(
-          "w-full px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all",
-          theme.surface,
-          error ? "border-red-300 focus:border-red-500 focus:ring-1 focus:ring-red-500" : cn(theme.border.default, "focus:ring-2 focus:ring-blue-500 focus:border-blue-500"),
+          "w-full h-10 px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600",
+          theme.surface.input,
+          error ? theme.border.error : cn(theme.border.default, theme.border.focused),
           theme.text.primary,
-          "placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
           className
         )}
-        {...props} 
+        {...props}
       />
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs text-rose-600 font-medium">{error}</p>}
     </div>
   );
 };
@@ -36,17 +36,17 @@ export const TextArea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement
   
   return (
     <div className="w-full">
-      {label && <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>{label}</label>}
-      <textarea 
+      {label && <label className={cn("block text-xs font-semibold uppercase tracking-wide mb-1.5 ml-0.5", theme.text.secondary)}>{label}</label>}
+      <textarea
         className={cn(
-          "w-full px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all",
-          theme.surface,
+          "w-full px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600",
+          theme.surface.input,
           theme.border.default,
           theme.text.primary,
-          "focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-slate-400",
+          theme.border.focused,
           className
         )}
-        {...props} 
+        {...props}
       />
     </div>
   );

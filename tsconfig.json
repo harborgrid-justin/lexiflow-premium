@@ -17,7 +17,6 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
     "esModuleInterop": true
   },
   "include": ["**/*.ts", "**/*.tsx"],

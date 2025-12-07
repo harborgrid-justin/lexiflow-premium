@@ -46,7 +46,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', class
   return (
     <div className="relative inline-block">
       <div className={cn(
-        sizeClasses[size], 
+        sizeClasses[size],
         colorClass,
         "rounded-full flex items-center justify-center font-bold shrink-0 border select-none",
         className
@@ -56,7 +56,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', class
       {indicatorStatus && (
         <span className={cn(
           "absolute bottom-0 right-0 block rounded-full ring-2",
-          theme.surface === 'bg-white' ? 'ring-white' : 'ring-slate-900', // Adapt ring to surface
+          theme.surface.default === 'bg-white' ? 'ring-white' : 'ring-slate-900', // Adapt ring to surface based on the actual theme token, not hardcoded string
           indicatorColors[indicatorStatus],
           size === 'xs' ? 'h-1.5 w-1.5' : 'h-2.5 w-2.5'
         )} />

@@ -1,5 +1,6 @@
+
 import React, { useState, useMemo } from 'react';
-import { Layers, Plus } from 'lucide-react';
+import { Layers, Plus, TrendingUp } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Case, CasePhase, WorkflowTask } from '../../types';
 import { DataService } from '../../services/dataService';
@@ -11,6 +12,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { GanttTimeline } from './planning/GanttTimeline';
+import { Pathfinding } from '../../utils/pathfinding';
 
 interface CasePlanningProps {
   caseData: Case;
@@ -26,6 +28,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [showCriticalPath, setShowCriticalPath] = useState(false);
   
   // Set start date to 1 month ago for context
   const [viewStartDate] = useState(new Date(new Date().setMonth(new Date().getMonth() - 1)));
@@ -62,6 +65,12 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
           default: return 5;
       }
   }, [zoom]);
+  
+  // A* Critical Path Calculation
+  const criticalPathIds = useMemo(() => {
+      if (!showCriticalPath) return new Set<string>();
+      return new Set(Pathfinding.findCriticalPath(tasks));
+  }, [tasks, showCriticalPath]);
 
   const handleTaskUpdate = (taskId: string, startDate: string, dueDate: string) => {
       const task = tasks.find(t => t.id === taskId);
@@ -97,6 +106,12 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
           </div>
           
           <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setShowCriticalPath(!showCriticalPath)}
+                className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : "bg-white text-slate-500")}
+              >
+                  <TrendingUp className="h-3 w-3 mr-1"/> Critical Path
+              </button>
               <div className={cn("flex items-center bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
                   {(['Quarter', 'Month', 'Week', 'Day'] as ZoomLevel[]).map(z => (
                       <button key={z} onClick={() => setZoom(z)} className={cn("px-3 py-1.5 text-xs font-bold rounded-md transition-all", zoom === z ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700")}>
@@ -120,7 +135,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
           />
           <GanttTimeline 
               phases={phases} 
-              tasks={tasks} 
+              tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) } as any))} 
               collapsedPhases={collapsedPhases} 
               zoom={zoom} 
               viewStartDate={viewStartDate} 

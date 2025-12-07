@@ -21,7 +21,7 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 'md', className = '', footer }) => {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
-  const modalId = React.useId(); 
+  const modalId = React.useId();
   
   useScrollLock(modalId, isOpen);
 
@@ -40,36 +40,36 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
   };
 
   const modalContent = (
-    <div 
+    <div
         className={cn("fixed inset-0 flex items-center justify-center p-4 sm:p-6", tokens.zIndex.modal)}
-        aria-labelledby="modal-title" 
-        role="dialog" 
+        aria-labelledby="modal-title"
+        role="dialog"
         aria-modal="true"
     >
       {/* Backdrop */}
-      <div 
-        className={cn("absolute inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop)} 
+      <div
+        className={cn("absolute inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop)}
         aria-hidden="true"
         onClick={onClose}
       />
 
       {/* Panel */}
       <div className={cn(
-        "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-lg",
-        theme.surface,
+        "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-xl",
+        theme.surface.default,
         theme.border.default,
-        sizes[size], 
-        "max-h-[calc(100dvh-2rem)]",
+        sizes[size],
+        "max-h-[calc(100dvh-3rem)]",
         className
       )}>
         {/* Header */}
-        <div className={cn("flex items-center justify-between px-6 py-4 border-b shrink-0", theme.surface, theme.border.default)}>
-          <h3 className={cn("text-lg font-bold leading-6", theme.text.primary)} id="modal-title">
+        <div className={cn("flex items-center justify-between px-6 py-4 border-b shrink-0", theme.surface.default, theme.border.default)}>
+          <h3 className={cn("text-lg font-bold leading-6 tracking-tight", theme.text.primary)} id="modal-title">
             {title}
           </h3>
-          <button 
-            type="button" 
-            className={cn("rounded-md p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500", theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surfaceHighlight}`)}
+          <button
+            type="button"
+            className={cn("rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500", theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surface.highlight}`)}
             onClick={onClose}
           >
             <span className="sr-only">Close</span>
@@ -84,7 +84,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
 
         {/* Footer */}
         {footer && (
-          <div className={cn("px-6 py-4 border-t flex justify-end gap-3 shrink-0", theme.surfaceHighlight, theme.border.default)}>
+          <div className={cn("px-6 py-4 border-t flex justify-end gap-3 shrink-0 bg-slate-50/50 rounded-b-xl", theme.border.default)}>
             {footer}
           </div>
         )}

@@ -1,12 +1,11 @@
-
 import React, { useState } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { LayoutAlgorithms } from '../../../../utils/layoutAlgorithms';
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 
 // Shared interfaces mirroring SchemaArchitect
+// FIX: Export interfaces so they can be imported by SchemaArchitect.
 export interface TableColumn {
   name: string;
   type: string;

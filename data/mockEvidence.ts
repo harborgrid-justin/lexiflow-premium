@@ -1,4 +1,4 @@
-import { EvidenceItem } from '../../types';
+import { EvidenceItem } from '../types';
 
 export const MOCK_EVIDENCE: EvidenceItem[] = [
   {
@@ -22,11 +22,7 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
     chainOfCustody: [
       { id: 'cc1', date: '2023-11-15', action: 'Collected from Client', actor: 'Alexandra H.' },
       { id: 'cc2', date: '2023-11-16', action: 'Uploaded to Evidence Vault', actor: 'System' }
-    ],
-    authenticationMethod: 'Self-Authenticated',
-    hearsayStatus: 'Not Hearsay',
-    isOriginal: true,
-    relevanceScore: 95,
+    ]
   },
   {
     id: 'EV-002',
@@ -45,12 +41,7 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
       { id: 'cc3', date: '2023-06-12', action: 'Collected at Scene', actor: 'Dr. Aris' },
       { id: 'cc4', date: '2023-06-12', action: 'Transferred to Lab', actor: 'Courier S.' },
       { id: 'cc5', date: '2023-06-15', action: 'Received at Firm Storage', actor: 'Paralegal Jenkins' }
-    ],
-    authenticationMethod: 'Testimony',
-    hearsayStatus: 'Unanalyzed',
-    isOriginal: true,
-    relevanceScore: 70,
-    expertId: 'exp-1'
+    ]
   },
   {
     id: 'EV-003',
@@ -74,10 +65,6 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
     chainOfCustody: [
       { id: 'cc6', date: '2024-01-10', action: 'Extracted from Server', actor: 'IT Admin' },
       { id: 'cc7', date: '2024-01-11', action: 'Hash Verified', actor: 'Forensic Tool v4' }
-    ],
-    authenticationMethod: 'Pending',
-    hearsayStatus: 'Exception Applies',
-    isOriginal: false,
-    relevanceScore: 80,
+    ]
   }
 ];

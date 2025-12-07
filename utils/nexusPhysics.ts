@@ -1,8 +1,8 @@
 
 // High-Performance Structure-of-Arrays (SoA) Physics Engine
-// Uses a single Float32Array block to manage memory, eliminating Garbage Collection pauses during simulation.
+// Optimized with Spatial Hashing for O(N) performance.
 
-export const NODE_STRIDE = 6; // x, y, vx, vy, radius, type(0=root, 1=org, 2=party, 3=evidence)
+export const NODE_STRIDE = 6; // x, y, vx, vy, radius, type
 // Offsets
 const O_X = 0;
 const O_Y = 1;
@@ -12,13 +12,14 @@ const O_RAD = 4;
 const O_TYPE = 5;
 
 // Physics Constants
-const REPULSION = 1000;
-const SPRING_LENGTH = 180;
+const REPULSION = 800; // Adjusted for spatial accuracy
+const SPRING_LENGTH = 150;
 const SPRING_STRENGTH = 0.05;
 const DAMPING = 0.85;
-const CENTER_PULL = 0.02;
-const ALPHA_DECAY = 0.01;
+const CENTER_PULL = 0.03;
+const ALPHA_DECAY = 0.015;
 const MIN_ALPHA = 0.001;
+const GRID_CELL_SIZE = 100; // Tuning for spatial bucket size
 
 export interface SerializedNode {
   id: string;
@@ -35,10 +36,6 @@ export interface NexusLink {
 export const NexusPhysics = {
   MIN_ALPHA,
 
-  /**
-   * Allocates a Float32Array buffer for the simulation.
-   * Returns the buffer and a map to lookup indexes by ID.
-   */
   initSystem: (data: any[], width: number, height: number) => {
     const count = data.length;
     const buffer = new Float32Array(count * NODE_STRIDE);
@@ -50,35 +47,20 @@ export const NexusPhysics = {
       idMap.set(d.id, i);
       meta.push({ id: d.id, label: d.label, type: d.type });
 
-      // Init positions with slight jitter to prevent stacking
-      buffer[idx + O_X] = width / 2 + (Math.random() - 0.5) * 150;
-      buffer[idx + O_Y] = height / 2 + (Math.random() - 0.5) * 150;
+      buffer[idx + O_X] = width / 2 + (Math.random() - 0.5) * 200;
+      buffer[idx + O_Y] = height / 2 + (Math.random() - 0.5) * 200;
       buffer[idx + O_VX] = 0;
       buffer[idx + O_VY] = 0;
       
-      // Type & Radius configuration
-      if (d.type === 'root') {
-          buffer[idx + O_RAD] = 40;
-          buffer[idx + O_TYPE] = 0;
-      } else if (d.type === 'org') {
-          buffer[idx + O_RAD] = 30;
-          buffer[idx + O_TYPE] = 1;
-      } else if (d.type === 'party') {
-          buffer[idx + O_RAD] = 25;
-          buffer[idx + O_TYPE] = 2;
-      } else {
-          buffer[idx + O_RAD] = 18; // evidence
-          buffer[idx + O_TYPE] = 3;
-      }
+      if (d.type === 'root') { buffer[idx + O_RAD] = 40; buffer[idx + O_TYPE] = 0; } 
+      else if (d.type === 'org') { buffer[idx + O_RAD] = 30; buffer[idx + O_TYPE] = 1; } 
+      else if (d.type === 'party') { buffer[idx + O_RAD] = 25; buffer[idx + O_TYPE] = 2; } 
+      else { buffer[idx + O_RAD] = 18; buffer[idx + O_TYPE] = 3; }
     });
 
     return { buffer, idMap, meta };
   },
 
-  /**
-   * Runs the physics simulation directly on the typed array.
-   * Zero object allocation per tick.
-   */
   simulate: (
     buffer: Float32Array, 
     links: NexusLink[], 
@@ -90,39 +72,71 @@ export const NexusPhysics = {
     const centerX = width / 2;
     const centerY = height / 2;
 
-    // 1. Repulsion (N^2 optimization via unrolled loops could happen here, but basic loop is fast enough for <500 nodes)
+    // 1. Build Spatial Grid (Hash Map)
+    // Map cell key "x,y" -> array of node indices
+    const grid = new Map<string, number[]>();
+    
+    for (let i = 0; i < count; i++) {
+        const idx = i * NODE_STRIDE;
+        const x = buffer[idx + O_X];
+        const y = buffer[idx + O_Y];
+        
+        // Calculate Grid Key
+        const gx = Math.floor(x / GRID_CELL_SIZE);
+        const gy = Math.floor(y / GRID_CELL_SIZE);
+        const key = `${gx},${gy}`;
+        
+        if (!grid.has(key)) grid.set(key, []);
+        grid.get(key)!.push(i);
+        
+        // Center Gravity (done here to save a loop)
+        const dxCenter = centerX - x;
+        const dyCenter = centerY - y;
+        buffer[idx + O_VX] += dxCenter * CENTER_PULL * alpha;
+        buffer[idx + O_VY] += dyCenter * CENTER_PULL * alpha;
+    }
+
+    // 2. Optimized Repulsion (Only check neighbors)
     for (let i = 0; i < count; i++) {
       const idxI = i * NODE_STRIDE;
+      const x = buffer[idxI + O_X];
+      const y = buffer[idxI + O_Y];
       
-      // Center Gravity
-      const dxCenter = centerX - buffer[idxI + O_X];
-      const dyCenter = centerY - buffer[idxI + O_Y];
-      buffer[idxI + O_VX] += dxCenter * CENTER_PULL * alpha;
-      buffer[idxI + O_VY] += dyCenter * CENTER_PULL * alpha;
+      const gx = Math.floor(x / GRID_CELL_SIZE);
+      const gy = Math.floor(y / GRID_CELL_SIZE);
 
-      for (let j = i + 1; j < count; j++) {
-        const idxJ = j * NODE_STRIDE;
-        const dx = buffer[idxI + O_X] - buffer[idxJ + O_X];
-        const dy = buffer[idxI + O_Y] - buffer[idxJ + O_Y];
-        let distSq = dx * dx + dy * dy;
-        
-        // Minimum distance clamp to prevent Infinity
-        if (distSq < 0.1) distSq = 0.1;
+      // Check 3x3 neighbor grid
+      for (let nx = gx - 1; nx <= gx + 1; nx++) {
+        for (let ny = gy - 1; ny <= gy + 1; ny++) {
+             const key = `${nx},${ny}`;
+             const cellNodes = grid.get(key);
+             if (!cellNodes) continue;
+             
+             for (const j of cellNodes) {
+                 if (i === j) continue;
+                 const idxJ = j * NODE_STRIDE;
+                 
+                 const dx = x - buffer[idxJ + O_X];
+                 const dy = y - buffer[idxJ + O_Y];
+                 let distSq = dx * dx + dy * dy;
+                 if (distSq < 0.1) distSq = 0.1;
+                 
+                 // Limit repulsion range to keep O(1) local cost
+                 if (distSq > (GRID_CELL_SIZE * GRID_CELL_SIZE)) continue;
 
-        const force = (REPULSION / distSq) * alpha;
-        const dist = Math.sqrt(distSq);
-        
-        const fx = (dx / dist) * force;
-        const fy = (dy / dist) * force;
+                 const force = (REPULSION / distSq) * alpha;
+                 const dist = Math.sqrt(distSq);
+                 const fx = (dx / dist) * force;
+                 const fy = (dy / dist) * force;
 
-        buffer[idxI + O_VX] += fx;
-        buffer[idxI + O_VY] += fy;
-        buffer[idxJ + O_VX] -= fx;
-        buffer[idxJ + O_VY] -= fy;
+                 buffer[idxI + O_VX] += fx;
+                 buffer[idxI + O_VY] += fy;
+             }
+        }
       }
     }
 
-    // 2. Spring Forces (Links)
+    // 3. Spring Forces
     const linkCount = links.length;
     for (let i = 0; i < linkCount; i++) {
         const link = links[i];
@@ -145,19 +159,15 @@ export const NexusPhysics = {
         buffer[idxT + O_VY] -= fy;
     }
 
-    // 3. Integration & Boundaries
+    // 4. Integration
     for (let i = 0; i < count; i++) {
         const idx = i * NODE_STRIDE;
-
-        // Apply Damping
         buffer[idx + O_VX] *= DAMPING;
         buffer[idx + O_VY] *= DAMPING;
-
-        // Update Position
         buffer[idx + O_X] += buffer[idx + O_VX];
         buffer[idx + O_Y] += buffer[idx + O_VY];
 
-        // Hard Boundaries (Bounce)
+        // Bounds
         const r = buffer[idx + O_RAD];
         if (buffer[idx + O_X] < r) { buffer[idx + O_X] = r; buffer[idx + O_VX] *= -0.5; }
         if (buffer[idx + O_X] > width - r) { buffer[idx + O_X] = width - r; buffer[idx + O_VX] *= -0.5; }

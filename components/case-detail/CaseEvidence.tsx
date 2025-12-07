@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { EvidenceInventory } from '../evidence/EvidenceInventory';
 import { useQuery } from '../../services/queryClient';
@@ -5,6 +6,7 @@ import { STORES } from '../../services/db';
 import { DataService } from '../../services/dataService';
 import { EvidenceItem } from '../../types';
 import { Loader2 } from 'lucide-react';
+import { useEvidenceVault } from '../../hooks/useEvidenceVault'; // Import useEvidenceVault
 
 interface CaseEvidenceProps {
   caseId: string;
@@ -23,6 +25,9 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
     DataService.evidence.getAll
   );
   
+  // Use a simplified version of useEvidenceVault to provide necessary props
+  const { filters, setFilters, handleItemClick, handleIntakeComplete } = useEvidenceVault(caseId);
+
   if (isLoading) return <div className="flex justify-center items-center p-8"><Loader2 className="animate-spin h-6 w-6"/></div>;
 
   return (
@@ -31,12 +36,13 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
       {caseEvidence.length === 0 ? (
         <p className="text-slate-500 italic">No evidence logged for this case.</p>
       ) : (
-        <EvidenceInventory 
-          items={allEvidence} 
-          filteredItems={caseEvidence} 
-          filters={{ search: '', type: '', admissibility: '', caseId: '', custodian: '', dateFrom: '', dateTo: '', location: '', tags: '', collectedBy: '', hasBlockchain: false }}
-          setFilters={() => {}} // No-op for read-only view in case detail context
-          onItemClick={(item) => alert(`Viewing details for ${item.title} (Nav to Vault for full details)`)}
+        <EvidenceInventory
+          items={allEvidence} // Pass all evidence for search context if needed
+          filteredItems={caseEvidence} // Pass case-specific items for display initially
+          filters={filters}
+          setFilters={setFilters}
+          // FIX: Correct the onItemClick prop type to match the expected function signature
+          onItemClick={handleItemClick}
           onIntakeClick={() => alert("Please go to Evidence Vault to log new items.")}
         />
       )}

@@ -1,40 +1,22 @@
-
-import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Modal } from '../../common/Modal';
-import { Input } from '../../common/Inputs';
+import { useTheme } from '../../../../context/ThemeContext';
+import { cn } from '../../../../utils/cn';
+import { Modal } from '../../../common/Modal';
+import { Input } from '../../../common/Inputs';
+import { SchemaCodeEditor } from './SchemaCodeEditor';
+import { MigrationHistory } from './MigrationHistory';
+import { SchemaSnapshots } from './SchemaSnapshots';
+import { Button } from '../../../common/Button';
 import { SchemaVisualizer } from './schema/SchemaVisualizer';
-import { SchemaCodeEditor } from './schema/SchemaCodeEditor';
-import { MigrationHistory } from './schema/MigrationHistory';
-import { SchemaSnapshots } from './schema/SchemaSnapshots';
-import { Button } from '../../common/Button';
+import { TableData, TableColumn } from './schema/schemaTypes'; // Import types
 
 interface SchemaArchitectProps {
   initialTab?: string;
 }
 
-// FIX: Define explicit types for table and column state to resolve inference errors.
-interface TableColumn {
-  name: string;
-  type: string;
-  pk?: boolean;
-  notNull?: boolean;
-  unique?: boolean;
-  fk?: string;
-  index?: boolean;
-}
-
-interface TableData {
-  name: string;
-  x: number;
-  y: number;
-  columns: TableColumn[];
-}
-
 export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = 'designer' }) => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   
   const mapInitialTabToState = (tab?: string): 'visual' | 'code' | 'history' | 'snapshots' => {
       switch (tab) {
@@ -71,11 +53,11 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
           return colDef;
       }).join(',\n');
-      const indexes = t.columns.filter(c => (c as any).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
+      const indexes = t.columns.filter(c => c.index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   
-  const handleOpenColumnModal = (tableName: string, column?: any) => {
+  const handleOpenColumnModal = (tableName: string, column?: TableColumn) => {
       setEditingColumn({ 
           tableName, 
           columnName: column?.name, 
@@ -92,8 +74,8 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         if (t.name === tableName) {
             const newColumns = [...t.columns];
             const existingIndex = columnName ? newColumns.findIndex(c => c.name === columnName) : -1;
-            if (existingIndex > -1) newColumns[existingIndex] = data; // Update
-            else newColumns.push(data); // Add
+            if (existingIndex > -1) newColumns[existingIndex] = data as TableColumn; // Update
+            else newColumns.push(data as TableColumn); // Add
             return { ...t, columns: newColumns };
         }
         return t;
@@ -180,7 +162,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
                 <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>

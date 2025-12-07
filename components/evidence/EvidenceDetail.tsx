@@ -1,20 +1,23 @@
 
+
 import React from 'react';
 import { Button } from '../common/Button';
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 import { ArrowLeft, FileSearch, Lock, ExternalLink, Stamp } from 'lucide-react';
 import { EvidenceOverview } from './EvidenceOverview';
-import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 import { EvidenceAdmissibility } from './EvidenceAdmissibility';
 import { EvidenceStructure } from './EvidenceStructure';
 import { EvidenceForensics } from './EvidenceForensics';
 import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
+import { DataService } from '../services/dataService';
+import { useMutation, queryClient } from '../services/queryClient';
+import { STORES } from '../services/db';
+import { useNotify } from '../hooks/useNotify';
+// FIX: Corrected import to use the actual exported component
+import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
+
 
 interface EvidenceDetailProps {
   selectedItem: EvidenceItem;

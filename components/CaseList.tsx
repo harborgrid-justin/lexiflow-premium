@@ -1,7 +1,7 @@
-
-import React, { useState, useMemo, Suspense, lazy, useTransition } from 'react';
+// components/CaseList.tsx
+import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView } from '../types';
-import { 
+import {
   Briefcase, UserPlus, ShieldAlert, Users, Calendar, CheckSquare,
   DollarSign, Gavel, Mic2, FileCheck, Archive, FileInput,
   LayoutDashboard, Layers, Plus
@@ -18,8 +18,10 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { cn } from '../utils/cn';
+import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
+import { CaseListContent } from './case-list/CaseListContent'; // Updated import path
 
-// Lazy load sub-components for better performance
+// FIX: Lazy load sub-components for better performance
 const CaseListActive = lazy(() => import('./case-list/CaseListActive').then(m => ({ default: m.CaseListActive })));
 const CaseListIntake = lazy(() => import('./case-list/CaseListIntake').then(m => ({ default: m.CaseListIntake })));
 const CaseListDocket = lazy(() => import('./case-list/CaseListDocket').then(m => ({ default: m.CaseListDocket })));
@@ -38,39 +40,7 @@ interface CaseListProps {
   initialTab?: string;
 }
 
-const TAB_CONFIG: TabConfigItem[] = [
-  {
-    id: 'work', label: 'Case Work', icon: Briefcase,
-    subTabs: [
-      { id: 'active', label: 'Matters', icon: LayoutDashboard },
-      { id: 'docket', label: 'Docket', icon: Calendar },
-      { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-    ]
-  },
-  {
-    id: 'pipeline', label: 'Pipeline', icon: Layers,
-    subTabs: [
-      { id: 'intake', label: 'Intake', icon: UserPlus },
-      { id: 'conflicts', label: 'Conflicts', icon: ShieldAlert },
-      { id: 'closing', label: 'Closing', icon: FileCheck },
-    ]
-  },
-  {
-    id: 'resources', label: 'Resources', icon: Users,
-    subTabs: [
-      { id: 'resources', label: 'Staffing', icon: Users },
-      { id: 'experts', label: 'Experts', icon: Gavel },
-      { id: 'reporters', label: 'Reporters', icon: Mic2 },
-    ]
-  },
-  {
-    id: 'admin', label: 'Admin', icon: DollarSign,
-    subTabs: [
-      { id: 'trust', label: 'Trust', icon: DollarSign },
-      { id: 'archived', label: 'Archive', icon: Archive },
-    ]
-  }
-];
+// TAB_CONFIG was moved to config/caseListConfig.ts
 
 export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
   const notify = useNotify();
@@ -123,20 +93,8 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   );
 
   const renderContent = () => {
-    switch(activeTab) {
-      case 'active': return <CaseListActive filteredCases={filteredCases} {...filterProps} onSelectCase={onSelectCase} />;
-      case 'intake': return <CaseListIntake />;
-      case 'docket': return <CaseListDocket onSelectCase={c => onSelectCase(c as Case)} />;
-      case 'tasks': return <CaseListTasks onSelectCase={c => onSelectCase(c as Case)} />;
-      case 'conflicts': return <CaseListConflicts onSelectCase={c => onSelectCase(c as Case)} />;
-      case 'resources': return <CaseListResources />;
-      case 'trust': return <CaseListTrust />;
-      case 'experts': return <CaseListExperts />;
-      case 'reporters': return <CaseListReporters />;
-      case 'closing': return <CaseListClosing />;
-      case 'archived': return <CaseListArchived onSelectCase={c => onSelectCase(c as Case)} />;
-      default: return <CaseListActive filteredCases={filteredCases} {...filterProps} onSelectCase={onSelectCase} />;
-    }
+    // Delegation to CaseListContent
+    return <CaseListContent activeTab={activeTab} onSelectCase={onSelectCase} caseListProps={{ filteredCases, ...filterProps }} />;
   };
 
   return (
@@ -150,7 +108,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
             <Button variant="primary" icon={Plus} onClick={() => setIsCreateModalOpen(true)}>New Matter</Button>
           </div>
         }
-        tabConfig={TAB_CONFIG}
+        tabConfig={CASE_LIST_TAB_CONFIG}
         activeTabId={activeTab}
         onTabChange={setActiveTab}
       >
@@ -161,9 +119,9 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
         </Suspense>
       </TabbedPageLayout>
 
-      <DocketImportModal 
-        isOpen={isDocketModalOpen} 
-        onClose={() => setIsDocketModalOpen(false)} 
+      <DocketImportModal
+        isOpen={isDocketModalOpen}
+        onClose={() => setIsDocketModalOpen(false)}
         onImport={importDocketData}
       />
 

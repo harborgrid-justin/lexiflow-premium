@@ -7,6 +7,7 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
   const [isIdle, setIsIdle] = useState(false);
   const lastActivity = useRef(Date.now());
   const timerRef = useRef<any>(null);
+  const rafRef = useRef<number | null>(null);
   
   // Use a ref to track if we are currently idle so event listeners don't need to re-bind
   const isIdleRef = useRef(false);
@@ -19,32 +20,37 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
   useEffect(() => {
       if (activeTime > 60 && currentCaseId) {
           // In a real app, auto-log here. 
-          // For demo, we just reset.
-          // console.log(`[AutoTime] Captured ${activeTime}s for ${currentCaseId}`);
       }
       setActiveTime(0);
       lastActivity.current = Date.now();
       setIsIdle(false);
   }, [currentPath, currentCaseId]);
 
-  // Stable Activity Handler
+  // Throttled Activity Handler using RAF
   const handleActivity = useCallback(() => {
-      lastActivity.current = Date.now();
-      if (isIdleRef.current) {
-          setIsIdle(false);
-      }
+      if (rafRef.current) return;
+      
+      rafRef.current = requestAnimationFrame(() => {
+          lastActivity.current = Date.now();
+          if (isIdleRef.current) {
+              setIsIdle(false);
+          }
+          rafRef.current = null;
+      });
   }, []);
 
-  // Activity Listeners - Bound ONCE
+  // Activity Listeners - Bound ONCE with passive flag for performance
   useEffect(() => {
-      window.addEventListener('mousemove', handleActivity);
-      window.addEventListener('keydown', handleActivity);
-      window.addEventListener('click', handleActivity);
+      const options = { passive: true };
+      window.addEventListener('mousemove', handleActivity, options);
+      window.addEventListener('keydown', handleActivity, options);
+      window.addEventListener('click', handleActivity, options);
       
       return () => {
           window.removeEventListener('mousemove', handleActivity);
           window.removeEventListener('keydown', handleActivity);
           window.removeEventListener('click', handleActivity);
+          if (rafRef.current) cancelAnimationFrame(rafRef.current);
       };
   }, [handleActivity]);
 

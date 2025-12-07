@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TimeEntry, BillingModel } from '../../types';
 import { Download, Clock, DollarSign, TrendingUp, AlertCircle } from 'lucide-react';
@@ -40,21 +41,21 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         <div className="bg-blue-500 h-full" style={{width: '65%'}}></div>
                     </div>
                 </div>
-                <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface, theme.border.default)}>
+                <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs uppercase font-bold tracking-wider", theme.text.secondary)}>Total Billed</p>
                     <div className="flex items-end justify-between">
                         <p className={cn("text-2xl font-mono font-bold", theme.text.primary)}>${billedTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                         <TrendingUp className="h-5 w-5 text-green-600 mb-1"/>
                     </div>
                 </div>
-                <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface, theme.border.default)}>
+                <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs uppercase font-bold tracking-wider", theme.text.secondary)}>Hours Logged</p>
                     <div className="flex items-end justify-between">
                         <p className={cn("text-2xl font-bold", theme.text.primary)}>{totalHours.toFixed(1)} <span className={cn("text-sm font-normal", theme.text.tertiary)}>hrs</span></p>
                         <Clock className="h-5 w-5 text-blue-600 mb-1"/>
                     </div>
                 </div>
-                <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface, theme.border.default)}>
+                <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs uppercase font-bold tracking-wider", theme.text.secondary)}>Matter Budget</p>
                     <div className="flex items-end justify-between">
                         <p className={cn("text-2xl font-mono font-bold", theme.text.primary)}>${value.toLocaleString()}</p>
@@ -98,7 +99,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         )}
                     </TableBody>
                     {entries.length > 0 && (
-                        <tfoot className={cn("border-t", theme.border.default, theme.surfaceHighlight)}>
+                        <tfoot className={cn("border-t", theme.border.default, theme.surface.highlight)}>
                             <tr>
                                 <td colSpan={4} data-label="" className={cn("px-6 py-3 text-right text-xs font-bold uppercase", theme.text.secondary)}>Ledger Total</td>
                                 <td data-label="Total" className={cn("px-6 py-3 text-right text-sm font-mono font-bold", theme.text.primary)}>${(unbilledTotal + billedTotal).toFixed(2)}</td>

@@ -1,17 +1,17 @@
 
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
-import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../types';
-import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
-import { CaseDetailContent } from './case-detail/CaseDetailContent';
-import { CaseTimeline } from './case-detail/CaseTimeline';
-import { useCaseDetail } from '../hooks/useCaseDetail';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { DataService } from '../services/dataService';
-import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
+import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
+import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailContent } from './CaseDetailContent';
+import { CaseTimeline } from './CaseTimeline';
+import { useCaseDetail } from '../../hooks/useCaseDetail';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { CASE_DETAIL_TABS } from './CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
-import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
-import { HolographicRouting } from '../services/holographicRouting';
+import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
+import { HolographicRouting } from '../../services/holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
 
 interface CaseDetailProps {
@@ -98,10 +98,10 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       {/* Mobile Timeline Overlay */}
       {showMobileTimeline && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm lg:hidden" onClick={() => setShowMobileTimeline(false)}>
-            <div className={cn("absolute right-0 top-0 bottom-0 w-80 shadow-2xl p-4 animate-in slide-in-from-right h-full flex flex-col", theme.surface)} onClick={e => e.stopPropagation()}>
+            <div className={cn("absolute right-0 top-0 bottom-0 w-80 shadow-2xl p-4 animate-in slide-in-from-right h-full flex flex-col", theme.surface.default)} onClick={e => e.stopPropagation()}>
                 <div className="flex justify-between items-center mb-4 shrink-0">
                     <h3 className={cn("font-bold", theme.text.primary)}>Case Timeline</h3>
-                    <button onClick={() => setShowMobileTimeline(false)} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}><X className="h-5 w-5"/></button>
+                    <button onClick={() => setShowMobileTimeline(false)} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}><X className="h-5 w-5"/></button>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     <CaseTimeline events={hookData.timelineEvents} onEventClick={handleTimelineClick} />
@@ -122,7 +122,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       />
 
       {/* Top Header & Navigation */}
-      {/* FIX: Destructure caseData to pass individual props to CaseDetailHeader */}
       <CaseDetailHeader 
         id={caseData.id}
         title={caseData.title}
@@ -163,8 +162,8 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                     className={cn(
                         "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
                         hookData.activeTab === tab.id 
-                            ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                            : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
+                            ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
+                            : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
                     )}
                 >
                     <tab.icon className={cn("h-3.5 w-3.5", hookData.activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
@@ -190,10 +189,8 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAddTask={hookData.addTaskToProject}
                         onUpdateTask={hookData.updateProjectTaskStatus}
                         onGenerateWorkflow={hookData.handleGenerateWorkflow}
-                        // FIX: Changed props.onAnalyzeDoc to hookData.handleAnalyze, as 'props' is not defined in this functional component.
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
-                        // FIX: Changed props.onDraft to hookData.handleDraft.
                         onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />
@@ -207,7 +204,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       </div>
 
       {/* Mobile Bottom Action Bar */}
-      <div className={cn("md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 p-2 pl-4 rounded-full shadow-2xl z-40 border backdrop-blur-md pb-safe", theme.surface, theme.border.default)}>
+      <div className={cn("md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 p-2 pl-4 rounded-full shadow-2xl z-40 border backdrop-blur-md pb-safe", theme.surface.default, theme.border.default)}>
           <span className={cn("text-xs font-bold mr-2 uppercase tracking-wider", theme.text.primary)}>{hookData.activeTab}</span>
           <div className={cn("h-6 w-px", theme.border.default)}></div>
           <button 

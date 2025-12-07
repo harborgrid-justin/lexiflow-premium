@@ -1,23 +1,12 @@
 
-import React, { useState, useRef, useMemo, useEffect, useCallback } from 'react';
-import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
+import React, { useState } from 'react';
+import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../common/Modal';
-import { Input } from '../../../common/Inputs';
-// FIX: Corrected circular import by pointing to the actual SchemaVisualizer component.
-import { SchemaVisualizer } from '../../../components/admin/data/schema/SchemaVisualizer';
-import { SchemaCodeEditor } from './SchemaCodeEditor';
-import { MigrationHistory } from './MigrationHistory';
-import { SchemaSnapshots } from './SchemaSnapshots';
-import { Button } from '../../../common/Button';
+import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 
-interface SchemaArchitectProps {
-  initialTab?: string;
-}
-
-// FIX: Define explicit types for table and column state to resolve inference errors.
-interface TableColumn {
+// Shared interfaces mirroring SchemaArchitect
+export interface TableColumn {
   name: string;
   type: string;
   pk?: boolean;
@@ -27,177 +16,135 @@ interface TableColumn {
   index?: boolean;
 }
 
-interface TableData {
+export interface TableData {
   name: string;
   x: number;
   y: number;
   columns: TableColumn[];
 }
 
-export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = 'designer' }) => {
+interface SchemaVisualizerProps {
+    tables: TableData[];
+    onAddColumn: (tableName: string) => void;
+    onEditColumn: (tableName: string, column: TableColumn) => void;
+    onRemoveColumn: (tableName: string, colName: string) => void;
+    onCreateTable: () => void;
+    onRenameTable: (oldName: string) => void;
+    onDeleteTable: (tableName: string) => void;
+    onUpdateTablePos: (tableName: string, pos: {x: number, y: number}) => void;
+}
+
+interface ContextMenuItem {
+    label: string;
+    icon?: React.ElementType;
+    action: () => void;
+    danger?: boolean;
+}
+
+const ContextMenu: React.FC<{ x: number, y: number, items: ContextMenuItem[], onClose: () => void }> = ({ x, y, items, onClose }) => {
+    const { theme } = useTheme();
+    return (
+        <div className={cn("absolute z-50 p-1 border rounded-lg shadow-xl", theme.surface, theme.border.default)} style={{ top: y, left: x }}>
+            {items.map((item, i) => (
+                <button key={i} onClick={() => { item.action(); onClose(); }} className={cn("w-full text-left text-sm flex items-center px-3 py-1.5 rounded-md transition-colors", `hover:${theme.surfaceHighlight}`, item.danger ? 'text-red-600' : theme.text.primary)}>
+                    {item.icon && <item.icon className="h-3 w-3 mr-2"/>} {item.label}
+                </button>
+            ))}
+        </div>
+    );
+};
+
+type ContextMenuType = 'table' | 'column' | 'canvas';
+type ContextData = { name: string } | { tableName: string, column: TableColumn } | null;
+
+export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
   const { theme, mode } = useTheme();
+  const [zoom, setZoom] = useState(1);
+  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: ContextMenuItem[] } | null>(null);
+
+  // Hook Integration
+  const { pan, handleMouseDown } = useCanvasDrag({ 
+      onUpdateItemPos: onUpdateTablePos,
+      zoom 
+  });
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const newZoom = Math.max(0.2, Math.min(2, zoom - e.deltaY * 0.001));
+    setZoom(newZoom);
+  };
   
-  const mapInitialTabToState = (tab?: string): 'visual' | 'code' | 'history' | 'snapshots' => {
-      switch (tab) {
-          case 'designer': return 'visual';
-          case 'migrations': return 'history';
-          case 'snapshots': return 'snapshots';
-          default: return 'visual';
+  const handleContextMenu = (e: React.MouseEvent, type: ContextMenuType, data: ContextData) => {
+      e.preventDefault();
+      e.stopPropagation();
+      let items: ContextMenuItem[] = [];
+      
+      if (type === 'table' && data && 'name' in data) {
+          items = [
+              { label: 'Rename Table', icon: Edit2, action: () => onRenameTable(data.name) },
+              { label: 'Add Column', icon: Plus, action: () => onAddColumn(data.name) },
+              { label: 'Delete Table', icon: Trash2, danger: true, action: () => onDeleteTable(data.name) }
+          ];
+      } else if (type === 'column' && data && 'column' in data) {
+          items = [
+              { label: 'Edit Column', icon: Edit2, action: () => onEditColumn(data.tableName, data.column) },
+              { label: 'Delete Column', icon: Trash2, danger: true, action: () => onRemoveColumn(data.tableName, data.column.name) }
+          ];
+      } else { // Canvas
+          items = [{ label: 'Create Table', icon: Plus, action: onCreateTable }];
       }
-  };
-
-  const [activeTab, setActiveTab] = useState<'visual' | 'code' | 'history' | 'snapshots'>(mapInitialTabToState(initialTab));
-  
-  useEffect(() => {
-    setActiveTab(mapInitialTabToState(initialTab));
-  }, [initialTab]);
-  
-  const [tables, setTables] = useState<TableData[]>([
-      { name: 'cases', x: 50, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' } ] },
-      { name: 'documents', x: 450, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },
-      { name: 'clients', x: 50, y: 400, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'name', type: 'VARCHAR(255)', notNull: true }, { name: 'industry', type: 'VARCHAR(100)'} ]}
-  ]);
-  
-  const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
-  const [editingColumn, setEditingColumn] = useState<{tableName: string, columnName?: string, data: any} | null>(null);
-
-  const dataTypes = ['UUID', 'VARCHAR(255)', 'TEXT', 'INTEGER', 'BIGINT', 'NUMERIC', 'BOOLEAN', 'TIMESTAMP WITH TIME ZONE', 'DATE'];
-
-  const generatedDDL = useMemo(() => tables.map(t => {
-      const cols = t.columns.map(c => {
-          let colDef = `  ${c.name} ${c.type}`;
-          if (c.pk) colDef += ' PRIMARY KEY';
-          if (c.notNull) colDef += ' NOT NULL';
-          if (c.unique) colDef += ' UNIQUE';
-          if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
-          return colDef;
-      }).join(',\n');
-      const indexes = t.columns.filter(c => (c as any).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
-      return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
-  }).join('\n'), [tables]);
-  
-  const handleOpenColumnModal = (tableName: string, column?: any) => {
-      setEditingColumn({ 
-          tableName, 
-          columnName: column?.name, 
-          data: column ? {...column} : { name: '', type: 'VARCHAR(255)', pk: false, notNull: false, unique: false, index: false } 
-      });
-      setIsColumnModalOpen(true);
+      setContextMenu({ x: e.clientX, y: e.clientY, items });
   };
   
-  const handleSaveColumn = () => {
-    if (!editingColumn || !editingColumn.data.name) return;
-    const { tableName, columnName, data } = editingColumn;
-    
-    setTables(prev => prev.map(t => {
-        if (t.name === tableName) {
-            const newColumns = [...t.columns];
-            const existingIndex = columnName ? newColumns.findIndex(c => c.name === columnName) : -1;
-            if (existingIndex > -1) newColumns[existingIndex] = data; // Update
-            else newColumns.push(data); // Add
-            return { ...t, columns: newColumns };
-        }
-        return t;
-    }));
-    setIsColumnModalOpen(false);
-    setEditingColumn(null);
-  };
-
-  const handleDeleteColumn = (tableName: string, columnName: string) => {
-    if (confirm(`Delete column "${columnName}" from table "${tableName}"?`)) {
-      setTables(prev => prev.map(t => 
-        t.name === tableName ? { ...t, columns: t.columns.filter(c => c.name !== columnName) } : t
-      ));
-    }
-  };
-
-  const handleRenameTable = (oldName: string) => {
-    const newName = prompt(`Rename table "${oldName}":`, oldName);
-    if (!newName || oldName === newName) return;
-    setTables(prev => prev.map(t => t.name === oldName ? { ...t, name: newName } : t));
-    setTables(prev => prev.map(t => ({
-        ...t,
-        columns: t.columns.map(c => (c.fk && c.fk.startsWith(oldName + '.')) ? { ...c, fk: c.fk.replace(oldName, newName) } : c)
-    })));
-  };
-  
-  const handleDeleteTable = (tableName: string) => {
-      if (confirm(`Are you sure you want to delete the table "${tableName}"? This cannot be undone.`)) {
-          setTables(prev => prev.filter(t => t.name !== tableName));
-      }
-  };
-
-  const handleCreateTable = () => {
-    const name = prompt("Enter new table name:");
-    if (name) {
-        setTables(prev => [...prev, { name, x: 200, y: 200, columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }] }]);
-    }
-  };
-  
-  const handleUpdateTablePos = (tableName: string, pos: {x: number, y: number}) => {
-      setTables(prev => prev.map(t => t.name === tableName ? { ...t, x: pos.x, y: pos.y } : t));
-  };
-
-  const autoArrange = () => {
-    const PADDING = 80;
-    const TABLE_WIDTH = 256;
-    const TABLE_HEIGHT = 300;
-    const containerWidth = 1600; 
-    const tablesPerRow = Math.floor(containerWidth / (TABLE_WIDTH + PADDING));
-    
-    setTables(prev => prev.map((table, index) => {
-        const row = Math.floor(index / tablesPerRow);
-        const col = index % tablesPerRow;
-        return { ...table, x: col * (TABLE_WIDTH + PADDING) + PADDING, y: row * (TABLE_HEIGHT + PADDING) + PADDING };
-    }));
-  };
+  const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
 
   return (
-    <div className="flex flex-col h-full min-h-0">
-        <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surface, theme.border.default)}>
-            <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
-                <button onClick={() => setActiveTab('visual')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'visual' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><Table className="h-3 w-3 mr-2"/> Visual</button>
-                <button onClick={() => setActiveTab('code')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'code' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><Code className="h-3 w-3 mr-2"/> Generate SQL</button>
-                <button onClick={() => setActiveTab('history')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'history' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><GitBranch className="h-3 w-3 mr-2"/> Migrations</button>
-                <button onClick={() => setActiveTab('snapshots')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'snapshots' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><History className="h-3 w-3 mr-2"/> Snapshots</button>
-            </div>
-            <div className="flex gap-2 w-full md:w-auto">
-                {activeTab === 'visual' && <Button variant="secondary" size="sm" icon={Brain} onClick={autoArrange}>Auto-Arrange</Button>}
-                <Button variant="outline" size="sm" icon={RefreshCw}>Sync DB</Button>
-                <Button variant="primary" size="sm" icon={Save}>Apply to Staging</Button>
-            </div>
-        </div>
-
-        <div className={cn("flex-1 overflow-hidden relative", theme.background)}>
-            {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
-            {activeTab === 'code' && <SchemaCodeEditor ddl={generatedDDL} />}
-            {activeTab === 'history' && <MigrationHistory />}
-            {activeTab === 'snapshots' && <SchemaSnapshots />}
-        </div>
-
-        {/* Column Edit/Add Modal */}
-        <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
-            <div className="p-6 space-y-4">
-                <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
-                <div>
-                    <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
-                        {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
-                    </select>
+    <div 
+        className="h-full overflow-hidden relative cursor-grab active:cursor-grabbing" 
+        onMouseDown={(e) => { handleMouseDown(e, 'pan'); setContextMenu(null); }}
+        onWheel={handleWheel}
+        onContextMenu={(e) => handleContextMenu(e, 'canvas', null)}
+    >
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{ backgroundImage: `radial-gradient(${gridColor} 1px, transparent 1px)`, backgroundSize: `${20 * zoom}px ${20 * zoom}px`, backgroundPosition: `${pan.x}px ${pan.y}px`, opacity: 0.5 }}
+      />
+      
+      <div 
+        className="w-full h-full"
+        style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0' }}
+      >
+        {tables.map(t => (
+            <div 
+                key={t.name}
+                data-drag-id={t.name}
+                className={cn("w-64 h-fit max-h-full flex flex-col rounded-lg shadow-md border overflow-hidden flex-shrink-0 absolute cursor-default", theme.surface, theme.border.default)}
+                style={{ transform: `translate(${t.x}px, ${t.y}px)` }}
+                onMouseDown={(e) => handleMouseDown(e, 'item', t.name, { x: t.x, y: t.y })}
+                onContextMenu={(e) => handleContextMenu(e, 'table', { name: t.name })}
+            >
+                <div className={cn("p-3 border-b flex justify-between items-center shrink-0 cursor-move", theme.surfaceHighlight, theme.border.default)}>
+                    <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}><Database className="h-3 w-3 mr-2 text-blue-600"/> {t.name}</h4>
                 </div>
-                <Input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.notNull || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, notNull: e.target.checked}} : null)}/> Not Null</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.unique || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, unique: e.target.checked}} : null)}/> Unique</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.pk || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, pk: e.target.checked}} : null)}/> Primary Key</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.index || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, index: e.target.checked}} : null)}/> Create Index</label>
+                <div className={cn("divide-y overflow-y-auto", theme.border.light)}>
+                    {t.columns.map((c: TableColumn, i: number) => (
+                        <div key={i} className={cn("px-3 py-2 flex justify-between items-center group transition-colors", `hover:${theme.surfaceHighlight}`)} onContextMenu={(e) => handleContextMenu(e, 'column', { tableName: t.name, column: c })}>
+                            <div className="flex items-center">
+                                {c.pk && <Key className="h-3 w-3 mr-2 text-yellow-500"/>}
+                                {c.fk && <LinkIcon className="h-3 w-3 mr-2 text-blue-400"/>}
+                                <span className={cn("text-xs font-mono", c.pk ? cn("font-bold", theme.text.primary) : theme.text.secondary)}>{c.name}</span>
+                            </div>
+                            <span className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>{c.type}</span>
+                        </div>
+                    ))}
                 </div>
-                <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-                    <Button variant="secondary" onClick={() => setIsColumnModalOpen(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={handleSaveColumn}>Save Column</Button>
-                </div>
+                <button onClick={() => onAddColumn(t.name)} className={cn("w-full py-2 text-xs flex items-center justify-center transition-colors font-medium border-t shrink-0", theme.border.default, theme.primary.text, `hover:${theme.surfaceHighlight}`)}>
+                    <Plus className="h-3 w-3 mr-1"/> Add Column
+                </button>
             </div>
-        </Modal>
+        ))}
+      </div>
+      {contextMenu && <ContextMenu {...contextMenu} onClose={() => setContextMenu(null)} />}
     </div>
   );
 };

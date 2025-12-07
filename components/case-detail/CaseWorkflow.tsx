@@ -24,7 +24,6 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
     setStages(prevStages => prevStages.map(stage => {
         if (stage.id !== stageId) return stage;
         
-        // FIX: Explicitly cast status to TaskStatus to resolve type mismatch.
         const newTasks = stage.tasks.map(task => 
             task.id === taskId ? { ...task, status: (task.status === 'Done' ? 'Pending' : 'Done') as TaskStatus } : task
         );
@@ -47,14 +46,14 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Workflow Header / Stats */}
-      <div className={cn("rounded-xl shadow-sm border p-6 flex flex-col md:flex-row justify-between items-center gap-6", theme.surface, theme.border.default)}>
+      <div className={cn("rounded-xl shadow-sm border p-6 flex flex-col md:flex-row justify-between items-center gap-6", theme.surface.default, theme.border.default)}>
           <div className="w-full md:w-1/3">
               <h3 className={cn("text-lg font-bold mb-1", theme.text.primary)}>Workflow Status</h3>
               <div className={cn("flex items-center justify-between text-sm mb-2", theme.text.secondary)}>
                   <span>{completedTasks} of {totalTasks} Tasks Complete</span>
                   <span className="font-bold text-blue-600">{progress}%</span>
               </div>
-              <div className={cn("w-full rounded-full h-2.5", theme.surfaceHighlight)}>
+              <div className={cn("w-full rounded-full h-2.5", theme.surface.highlight)}>
                   <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-1000 ease-out" style={{ width: `${progress}%` }}></div>
               </div>
           </div>
@@ -62,13 +61,13 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
           <div className="flex gap-3 w-full md:w-auto">
              <button 
                 onClick={() => setActiveTab('timeline')}
-                className={cn("flex-1 md:flex-none px-4 py-2 rounded-lg font-medium text-sm transition-colors", activeTab === 'timeline' ? "bg-slate-900 text-white shadow-lg" : cn("border", theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`))}
+                className={cn("flex-1 md:flex-none px-4 py-2 rounded-lg font-medium text-sm transition-colors", activeTab === 'timeline' ? "bg-slate-900 text-white shadow-lg" : cn("border", theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`))}
              >
                  Timeline
              </button>
              <button 
                 onClick={() => setActiveTab('automation')}
-                className={cn("flex-1 md:flex-none px-4 py-2 rounded-lg font-medium text-sm transition-colors", activeTab === 'automation' ? "bg-slate-900 text-white shadow-lg" : cn("border", theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`))}
+                className={cn("flex-1 md:flex-none px-4 py-2 rounded-lg font-medium text-sm transition-colors", activeTab === 'automation' ? "bg-slate-900 text-white shadow-lg" : cn("border", theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`))}
              >
                  Automations
              </button>

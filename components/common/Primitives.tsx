@@ -63,14 +63,14 @@ export const LoadingSpinner: React.FC<{ text?: string; className?: string }> = (
 export const TagList: React.FC<{ tags: string[]; limit?: number }> = ({ tags, limit = 3 }) => {
   const { theme } = useTheme();
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1.5">
       {tags.slice(0, limit).map(t => (
-        <span key={t} className={cn("px-1.5 py-0.5 rounded text-[10px] font-medium border", theme.surfaceHighlight, theme.text.secondary, theme.border.light)}>
+        <span key={t} className={cn("px-2 py-0.5 rounded text-[10px] font-medium border", theme.surfaceHighlight, theme.text.secondary, theme.border.light)}>
           {t}
         </span>
       ))}
       {tags.length > limit && (
-        <span className={cn("px-1.5 py-0.5 rounded text-[10px] font-medium opacity-70", theme.surfaceHighlight, theme.text.secondary)}>+{tags.length - limit}</span>
+        <span className={cn("px-2 py-0.5 rounded text-[10px] font-medium opacity-70", theme.surfaceHighlight, theme.text.secondary)}>+{tags.length - limit}</span>
       )}
     </div>
   );
@@ -115,22 +115,22 @@ export const MetricCard: React.FC<{
     <div className={cn(
       theme.surface, 
       theme.border.default, 
-      "rounded-lg border p-5 shadow-sm transition-all hover:shadow-md",
+      "rounded-xl border p-5 shadow-sm transition-all hover:shadow-md flex flex-col justify-between h-full",
       className
     )}>
       <div className="flex justify-between items-start">
         <div>
-          <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>{label}</p>
+          <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1.5", theme.text.secondary)}>{label}</p>
           <div className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>{value}</div>
         </div>
         {Icon && (
-          <div className={cn("p-2 rounded-lg bg-opacity-10", theme.surfaceHighlight)}>
+          <div className={cn("p-2.5 rounded-lg bg-opacity-10", theme.surfaceHighlight)}>
             <Icon className={cn("h-5 w-5", theme.text.secondary)}/>
           </div>
         )}
       </div>
       {trend && (
-        <div className={cn("mt-3 text-xs font-medium flex items-center", trendUp ? "text-emerald-600" : "text-rose-600")}>
+        <div className={cn("mt-4 text-xs font-medium flex items-center", trendUp ? "text-emerald-600" : "text-rose-600")}>
           {trendUp ? <TrendingUp className="h-3 w-3 mr-1"/> : <TrendingDown className="h-3 w-3 mr-1"/>}
           {trend}
         </div>

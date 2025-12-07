@@ -7,6 +7,7 @@ interface ThemeContextType {
   toggleTheme: () => void;
   setTheme: (mode: ThemeMode) => void;
   theme: typeof tokens.colors.light;
+  isDark: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -24,20 +25,18 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  // Check local storage or system preference
   const getInitialTheme = (): ThemeMode => {
     if (typeof window !== 'undefined' && window.localStorage) {
       const storedPrefs = window.localStorage.getItem('color-theme');
       if (typeof storedPrefs === 'string') {
         return storedPrefs as ThemeMode;
       }
-      
       const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
       if (userMedia.matches) {
         return 'dark';
       }
     }
-    return 'light'; // Default to light for this enterprise app
+    return 'light'; 
   };
 
   const [mode, setMode] = useState<ThemeMode>(getInitialTheme);
@@ -55,20 +54,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     localStorage.setItem('color-theme', newMode);
   }, []);
 
-  // Effect to apply class to body for global styles if needed
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(mode);
+    
+    // Apply meta theme color for mobile browsers
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', mode === 'dark' ? '#0f172a' : '#f8fafc');
+    }
   }, [mode]);
 
-  // CRITICAL: Memoize the value object to prevent re-rendering consumers 
-  // when the provider's parent re-renders but context hasn't changed.
   const value = useMemo(() => ({
     mode,
     toggleTheme,
     setTheme,
     theme: tokens.colors[mode],
+    isDark: mode === 'dark',
   }), [mode, toggleTheme, setTheme]);
 
   return (

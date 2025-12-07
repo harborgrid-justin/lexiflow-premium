@@ -1,16 +1,22 @@
 
-
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { Plus, RefreshCw, Play, Loader2 } from 'lucide-react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
 import { DataService } from '../services/dataService';
-import { 
-  CaseWorkflowList, FirmProcessList, EnhancedWorkflowPanel,
-  WorkflowTemplateBuilder, WorkflowAnalyticsDashboard, WorkflowConfig,
-  WorkflowTemplateData, WorkflowEngineDetail, FirmProcessDetail
-} from './workflow';
+
+// Direct Imports to optimize Tree-Shaking and HMR
+import { CaseWorkflowList } from './workflow/CaseWorkflowList';
+import { FirmProcessList } from './workflow/FirmProcessList';
+import { EnhancedWorkflowPanel } from './workflow/EnhancedWorkflowPanel';
+import { WorkflowTemplateBuilder } from './workflow/WorkflowTemplateBuilder';
+import { WorkflowAnalyticsDashboard } from './workflow/WorkflowAnalyticsDashboard';
+import { WorkflowConfig } from './workflow/WorkflowConfig';
+import { WorkflowEngineDetail } from './workflow/WorkflowEngineDetail';
+import { FirmProcessDetail } from './workflow/FirmProcessDetail';
 import { WorkflowLibrary } from './workflow/WorkflowLibrary';
+import { TemplatePreview, WorkflowTemplateData } from './workflow/TemplatePreview';
+
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { WORKFLOW_TABS } from './workflow/WorkflowTabs';

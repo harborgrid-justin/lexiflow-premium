@@ -1,0 +1,189 @@
+
+import React, { useState } from 'react';
+import { Folder, File, HardDrive, Search, Download, MoreHorizontal, FileText, Image, Film, UploadCloud, ChevronRight, Home } from 'lucide-react';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { Card } from '../../common/Card';
+import { Button } from '../../common/Button';
+import { SearchToolbar } from '../../common/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
+import { useWindow } from '../../../context/WindowContext';
+import { DocumentPreviewPanel } from '../../document/DocumentPreviewPanel';
+
+interface FileObject {
+    id: string;
+    name: string;
+    type: 'folder' | 'file';
+    size?: string;
+    modified: string;
+    format?: string;
+    tier: 'Hot' | 'Cool' | 'Archive';
+}
+
+const MOCK_FILES: Record<string, FileObject[]> = {
+    'root': [
+        { id: 'f1', name: 'raw_ingest', type: 'folder', modified: '2024-03-10', tier: 'Hot' },
+        { id: 'f2', name: 'processed_parquet', type: 'folder', modified: '2024-03-11', tier: 'Hot' },
+        { id: 'f3', name: 'archive_logs', type: 'folder', modified: '2023-12-01', tier: 'Cool' },
+        { id: 'doc1', name: 'manifest.json', type: 'file', size: '12 KB', modified: '2024-03-12', format: 'JSON', tier: 'Hot' },
+    ],
+    'raw_ingest': [
+        { id: 'raw1', name: 'client_dump_2024.csv', type: 'file', size: '450 MB', modified: '2024-03-10', format: 'CSV', tier: 'Hot' },
+        { id: 'raw2', name: 'images_batch_01', type: 'folder', modified: '2024-03-10', tier: 'Hot' },
+    ],
+    'processed_parquet': [
+        { id: 'pq1', name: 'fact_sales_q1.parquet', type: 'file', size: '1.2 GB', modified: '2024-03-11', format: 'Parquet', tier: 'Hot' },
+    ]
+};
+
+export const DataLakeExplorer: React.FC = () => {
+    const { theme } = useTheme();
+    const { openWindow } = useWindow();
+    const [currentPath, setCurrentPath] = useState<string[]>(['root']);
+    const [selection, setSelection] = useState<string[]>([]);
+    
+    const currentFolderId = currentPath[currentPath.length - 1];
+    const items = MOCK_FILES[currentFolderId] || [];
+
+    const handleNavigate = (folderId: string) => {
+        setCurrentPath([...currentPath, folderId]);
+        setSelection([]);
+    };
+
+    const handleBreadcrumb = (index: number) => {
+        setCurrentPath(currentPath.slice(0, index + 1));
+        setSelection([]);
+    };
+
+    const getFileIcon = (format?: string, type?: string) => {
+        if (type === 'folder') return <Folder className="h-5 w-5 text-blue-500 fill-blue-100" />;
+        if (format === 'JSON' || format === 'CSV') return <FileText className="h-5 w-5 text-green-600" />;
+        if (format === 'Parquet') return <DatabaseIcon className="h-5 w-5 text-purple-600" />;
+        return <File className="h-5 w-5 text-slate-500" />;
+    };
+
+    const handleFileClick = (file: FileObject) => {
+        if (file.type === 'folder') {
+            handleNavigate(file.name);
+        } else {
+            // Preview logic
+             openWindow(
+                `preview-${file.id}`,
+                `Preview: ${file.name}`,
+                <div className="h-full bg-white">
+                    <DocumentPreviewPanel 
+                        document={{
+                            id: file.id,
+                            title: file.name,
+                            type: file.format || 'File',
+                            content: `Preview of raw data object: ${file.name}`,
+                            uploadDate: file.modified,
+                            lastModified: file.modified,
+                            tags: [file.tier, 'Data Lake'],
+                            versions: [],
+                            caseId: 'System'
+                        }}
+                        onViewHistory={() => {}}
+                        isOrbital={true}
+                    />
+                </div>
+            );
+        }
+    };
+
+    return (
+        <div className="flex flex-col h-full animate-fade-in">
+            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
+                <div>
+                    <h3 className={cn("text-lg font-bold flex items-center gap-2", theme.text.primary)}>
+                        <HardDrive className="h-5 w-5 text-indigo-600"/> Data Lake Storage
+                    </h3>
+                    <p className={cn("text-xs", theme.text.secondary)}>S3 Compatible Object Store • us-east-1</p>
+                </div>
+                <div className="flex gap-2">
+                    <Button variant="outline" icon={Download} disabled={selection.length === 0}>Download</Button>
+                    <Button variant="primary" icon={UploadCloud}>Upload Object</Button>
+                </div>
+            </div>
+
+            <div className={cn("p-2 border-b flex items-center gap-2 text-sm bg-slate-50/50", theme.border.default)}>
+                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 hover:bg-slate-200 rounded text-slate-500")}><Home className="h-4 w-4"/></button>
+                {currentPath.slice(1).map((folder, i) => (
+                    <React.Fragment key={folder}>
+                        <ChevronRight className="h-4 w-4 text-slate-400"/>
+                        <button 
+                            onClick={() => handleBreadcrumb(i + 1)}
+                            className={cn("px-2 py-0.5 rounded hover:bg-slate-200 font-medium", i === currentPath.length - 2 ? theme.text.primary : theme.text.secondary)}
+                        >
+                            {folder}
+                        </button>
+                    </React.Fragment>
+                ))}
+            </div>
+
+            <div className="flex-1 overflow-auto p-4">
+                <Card noPadding className="h-full flex flex-col">
+                    <TableContainer className="border-0 shadow-none rounded-none flex-1">
+                        <TableHeader>
+                            <TableHead className="w-10"><input type="checkbox"/></TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Size</TableHead>
+                            <TableHead>Type</TableHead>
+                            <TableHead>Storage Tier</TableHead>
+                            <TableHead>Last Modified</TableHead>
+                            <TableHead className="text-right"></TableHead>
+                        </TableHeader>
+                        <TableBody>
+                            {items.length === 0 && (
+                                <TableRow><TableCell colSpan={7} className="text-center py-12 text-slate-400">Folder is empty</TableCell></TableRow>
+                            )}
+                            {items.map(item => (
+                                <TableRow key={item.id} className="cursor-pointer hover:bg-slate-50" onClick={() => handleFileClick(item)}>
+                                    <TableCell onClick={e => e.stopPropagation()}>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={selection.includes(item.id)}
+                                            onChange={(e) => {
+                                                if(e.target.checked) setSelection([...selection, item.id]);
+                                                else setSelection(selection.filter(id => id !== item.id));
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            {getFileIcon(item.format, item.type)}
+                                            <span className={cn("font-medium", theme.text.primary)}>{item.name}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="font-mono text-xs">{item.size || '-'}</TableCell>
+                                    <TableCell>{item.format || 'Folder'}</TableCell>
+                                    <TableCell>
+                                        <span className={cn("text-[10px] px-2 py-0.5 rounded-full border", 
+                                            item.tier === 'Hot' ? "bg-red-50 text-red-700 border-red-100" :
+                                            item.tier === 'Cool' ? "bg-blue-50 text-blue-700 border-blue-100" :
+                                            "bg-slate-100 text-slate-600 border-slate-200"
+                                        )}>{item.tier}</span>
+                                    </TableCell>
+                                    <TableCell className="text-xs text-slate-500">{item.modified}</TableCell>
+                                    <TableCell className="text-right">
+                                        <button className="p-1 hover:bg-slate-200 rounded text-slate-400" onClick={e => e.stopPropagation()}>
+                                            <MoreHorizontal className="h-4 w-4"/>
+                                        </button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </TableContainer>
+                </Card>
+            </div>
+        </div>
+    );
+};
+
+const DatabaseIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+    </svg>
+);

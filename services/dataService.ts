@@ -9,6 +9,7 @@ import { DocketRepository } from './domains/DocketDomain';
 import { AdminService } from './domains/AdminDomain';
 import { CorrespondenceService } from './domains/CommunicationDomain';
 import { DataQualityService } from './domains/DataQualityDomain';
+import { DataCatalogService } from './domains/DataCatalogDomain';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -43,7 +44,8 @@ export const DataService = {
   discovery: DiscoveryService,
   admin: AdminService,
   correspondence: CorrespondenceService,
-  quality: new DataQualityService(), // New Domain Added
+  quality: new DataQualityService(),
+  catalog: DataCatalogService,
 
   // Standard Repositories
   tasks: new class extends Repository<WorkflowTask> { 
@@ -109,8 +111,6 @@ export const DataService = {
         }
     },
     countUnread: async (caseId: string): Promise<number> => {
-        // NOTE: Conversations are not linked to cases in the current data model.
-        // This returns a global unread count for the user for demonstration purposes.
         const convs = await db.getAll<Conversation>(STORES.CONVERSATIONS);
         return convs.reduce((sum, c) => sum + (c.unread || 0), 0);
     },

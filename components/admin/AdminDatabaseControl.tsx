@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -15,6 +16,7 @@ import { DataQualityStudio } from './data/DataQualityStudio';
 import { ReplicationManager } from './data/ReplicationManager';
 import { LineageGraph } from './data/LineageGraph';
 import { CostFinOps } from './data/CostFinOps';
+import { DataLakeExplorer } from './data/DataLakeExplorer';
 import { useWindow } from '../../context/WindowContext';
 import { Maximize2, Menu, X } from 'lucide-react';
 
@@ -43,6 +45,7 @@ export const AdminDatabaseControl: React.FC = () => {
       case 'api': return <ApiGateway />;
       case 'replication': return <ReplicationManager />;
       case 'cost': return <CostFinOps />;
+      case 'lake': return <DataLakeExplorer />;
       default: return <PlatformOverview />;
     }
   };

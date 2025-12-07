@@ -239,6 +239,20 @@ export interface QualityMetricHistory {
     issuesFixed: number;
 }
 
+// Data Catalog & Dictionary
+export interface DataDictionaryItem extends BaseEntity {
+    table: string;
+    column: string;
+    dataType: string;
+    description: string;
+    classification: 'Public' | 'Internal' | 'Confidential' | 'Restricted';
+    isPII: boolean;
+    domain: 'Legal' | 'Finance' | 'HR' | 'IT' | 'Operations';
+    owner: string;
+    sourceSystem: string;
+    dataQualityScore: number; // 0-100
+}
+
 // For Discovery Platform
 export interface PrivilegeLogEntry extends BaseEntity {
   date: string;

@@ -1,0 +1,141 @@
+
+import React, { useState, useMemo } from 'react';
+import { DataDictionaryItem } from '../../../../types';
+import { DataService } from '../../../../services/dataService';
+import { useQuery } from '../../../../services/queryClient';
+import { VirtualList } from '../../../../components/common/VirtualList';
+import { SearchToolbar } from '../../../../components/common/SearchToolbar';
+import { Badge } from '../../../../components/common/Badge';
+import { Button } from '../../../../components/common/Button';
+import { FilterPanel } from '../../../../components/common/FilterPanel';
+import { TableContainer, TableHeader, TableHead, TableCell, TableRow } from '../../../../components/common/Table';
+import { useTheme } from '../../../../context/ThemeContext';
+import { cn } from '../../../../utils/cn';
+import { Eye, Shield, Tag, Loader2, Filter } from 'lucide-react';
+import { DictionaryItemDetail } from './DictionaryItemDetail';
+
+export const DataDictionary: React.FC = () => {
+    const { theme } = useTheme();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showFilters, setShowFilters] = useState(false);
+    const [activeDomain, setActiveDomain] = useState('All');
+    const [selectedItem, setSelectedItem] = useState<DataDictionaryItem | null>(null);
+
+    const { data: items = [], isLoading, refetch } = useQuery<DataDictionaryItem[]>(
+        ['catalog', 'dictionary'],
+        DataService.catalog.getDictionary
+    );
+
+    const filteredItems = useMemo(() => {
+        return items.filter(item => {
+            const matchesSearch = item.column.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                  item.table.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                  item.description.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesDomain = activeDomain === 'All' || item.domain === activeDomain;
+            return matchesSearch && matchesDomain;
+        });
+    }, [items, searchTerm, activeDomain]);
+
+    const getClassificationColor = (classification: string) => {
+        switch(classification) {
+            case 'Restricted': return 'error';
+            case 'Confidential': return 'warning';
+            case 'Internal': return 'info';
+            default: return 'success';
+        }
+    };
+
+    const handleSelect = (item: DataDictionaryItem) => {
+        setSelectedItem(item);
+    };
+
+    const handleCloseDetail = () => {
+        setSelectedItem(null);
+        refetch(); // Refresh list on close to catch edits
+    };
+
+    const renderRow = (item: DataDictionaryItem) => (
+        <div 
+            key={item.id} 
+            onClick={() => handleSelect(item)}
+            className={cn("flex items-center border-b h-16 px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.light)}
+        >
+            <div className={cn("w-[25%] font-mono text-sm font-medium truncate", theme.text.secondary)} title={item.table}>{item.table}</div>
+            <div className={cn("w-[20%] font-bold text-sm text-blue-600 truncate", theme.text.primary)} title={item.column}>{item.column}</div>
+            <div className={cn("w-[15%] text-xs font-mono", theme.text.tertiary)}>{item.dataType}</div>
+            <div className={cn("flex-1 text-sm truncate pr-4", theme.text.secondary)}>{item.description}</div>
+            <div className="w-[15%]">
+                <Badge variant={getClassificationColor(item.classification)}>{item.classification}</Badge>
+            </div>
+            <div className="w-10 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button size="sm" variant="ghost" icon={Eye} />
+            </div>
+        </div>
+    );
+
+    if (selectedItem) {
+        return <DictionaryItemDetail item={selectedItem} onClose={handleCloseDetail} />;
+    }
+
+    return (
+        <div className="flex flex-col h-full space-y-4">
+            <div className="flex justify-between items-center px-1">
+                 <div className="flex-1 max-w-xl">
+                    <SearchToolbar 
+                        value={searchTerm} 
+                        onChange={setSearchTerm} 
+                        placeholder="Search definitions, columns, or tables..." 
+                        className="border-none shadow-none p-0 bg-transparent"
+                        actions={
+                            <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
+                                {activeDomain !== 'All' ? activeDomain : 'Filter'}
+                            </Button>
+                        }
+                    />
+                 </div>
+                 <div className="flex gap-2">
+                     {['All', 'Legal', 'Finance', 'HR', 'IT'].map(dom => (
+                         <button
+                            key={dom}
+                            onClick={() => setActiveDomain(dom)}
+                            className={cn(
+                                "px-3 py-1.5 text-xs font-medium rounded-full transition-colors border",
+                                activeDomain === dom 
+                                    ? cn(theme.primary.light, theme.primary.text, theme.primary.border) 
+                                    : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                            )}
+                         >
+                             {dom}
+                         </button>
+                     ))}
+                 </div>
+            </div>
+
+            <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col bg-white", theme.border.default)}>
+                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50 shrink-0", theme.border.default, theme.text.secondary)}>
+                    <div className="w-[25%]">Table Name</div>
+                    <div className="w-[20%]">Column / Field</div>
+                    <div className="w-[15%]">Data Type</div>
+                    <div className="flex-1">Description</div>
+                    <div className="w-[15%]">Class</div>
+                    <div className="w-10"></div>
+                </div>
+                
+                <div className="flex-1 relative">
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-blue-600"/></div>
+                    ) : filteredItems.length > 0 ? (
+                        <VirtualList 
+                            items={filteredItems}
+                            height="100%"
+                            itemHeight={64}
+                            renderItem={renderRow}
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-slate-400">No definitions found.</div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};

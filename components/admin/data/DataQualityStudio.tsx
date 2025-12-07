@@ -48,7 +48,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   // Integrated Data Query
   const { data: fetchedAnomalies = [], isLoading } = useQuery<DataAnomaly[]>(
       ['admin', 'anomalies'],
-      DataService.admin.getAnomalies as any
+      DataService.admin.getAnomalies
   );
 
   const { data: history = [] } = useQuery<QualityMetricHistory[]>(

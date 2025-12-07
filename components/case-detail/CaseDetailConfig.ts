@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, Users, Clock, Lightbulb, Calendar, Briefcase, CheckSquare, MessageSquare, Gavel, Search, Fingerprint, FileText, Folder, PenTool, FileSearch, DollarSign, Target, ShieldAlert, Layers } from 'lucide-react';
+import { LayoutDashboard, Users, Clock, Lightbulb, Calendar, Briefcase, CheckSquare, MessageSquare, Gavel, Search, Fingerprint, FileText, Folder, PenTool, FileSearch, DollarSign, Target, ShieldAlert, Layers, Box, StickyNote } from 'lucide-react';
 
 export const CASE_DETAIL_TABS = [
   {
@@ -14,6 +14,7 @@ export const CASE_DETAIL_TABS = [
   {
     id: 'strategy', label: 'Strategy', icon: Lightbulb,
     subTabs: [
+      { id: 'Research', label: 'Research', icon: Search },
       { id: 'Arguments', label: 'Argument Builder', icon: Target },
       { id: 'Risk', label: 'Risk Assessment', icon: ShieldAlert },
       { id: 'Strategy', label: 'Authority & Defenses', icon: Layers },
@@ -32,8 +33,9 @@ export const CASE_DETAIL_TABS = [
     id: 'litigation', label: 'Litigation', icon: Gavel,
     subTabs: [
       { id: 'Motions', label: 'Motions', icon: Gavel },
-      { id: 'Discovery', label: 'Discovery', icon: Search },
-      { id: 'Evidence', label: 'Evidence', icon: Fingerprint },
+      { id: 'Discovery', label: 'Discovery', icon: FileSearch },
+      { id: 'Evidence', label: 'Evidence Vault', icon: Fingerprint },
+      { id: 'Exhibits', label: 'Exhibits', icon: StickyNote },
     ]
   },
   {

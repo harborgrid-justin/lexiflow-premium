@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { DataService } from '../services/dataService';
 import { EvidenceItem, ChainOfCustodyEvent } from '../types';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
@@ -25,16 +25,22 @@ export interface EvidenceFilters {
   hasBlockchain: boolean;
 }
 
-export const useEvidenceVault = () => {
+export const useEvidenceVault = (caseId?: string) => {
   const [view, setView] = useState<ViewMode>('dashboard');
   const [activeTab, setActiveTab] = useState<DetailTab>('overview');
   const [selectedItem, setSelectedItem] = useState<EvidenceItem | null>(null);
   
-  // Enterprise Query: Fetch evidence with caching
-  const { data: evidenceItems = [] } = useQuery<EvidenceItem[]>(
+  // Enterprise Query: Fetch evidence. If caseId provided, filter at source or via selector.
+  // Here we fetch all and filter client-side for the demo, but in prod this would be a specific API call.
+  const { data: allEvidenceItems = [] } = useQuery<EvidenceItem[]>(
       [STORES.EVIDENCE, 'all'],
       DataService.evidence.getAll
   );
+
+  const evidenceItems = useMemo(() => {
+      if (!caseId) return allEvidenceItems;
+      return allEvidenceItems.filter(e => e.caseId === caseId);
+  }, [allEvidenceItems, caseId]);
 
   // Mutations for transactional integrity
   const { mutate: addEvidence } = useMutation(
@@ -51,7 +57,7 @@ export const useEvidenceVault = () => {
     search: '',
     type: '',
     admissibility: '',
-    caseId: '',
+    caseId: caseId || '', // Pre-fill filter if scoped
     custodian: '',
     dateFrom: '',
     dateTo: '',
@@ -60,6 +66,11 @@ export const useEvidenceVault = () => {
     collectedBy: '',
     hasBlockchain: false
   });
+
+  // Ensure filter stays synced if caseId changes prop
+  useEffect(() => {
+      if(caseId) setFilters(f => ({ ...f, caseId }));
+  }, [caseId]);
 
   const handleItemClick = (item: EvidenceItem) => {
     setSelectedItem(item);
@@ -73,6 +84,9 @@ export const useEvidenceVault = () => {
   };
 
   const handleIntakeComplete = (newItem: EvidenceItem) => {
+    // If we are in a scoped case view, ensure the new item belongs to it
+    if (caseId) newItem.caseId = caseId;
+    
     addEvidence(newItem);
     alert("Item logged successfully."); 
     setView('inventory');
@@ -97,6 +111,7 @@ export const useEvidenceVault = () => {
       const matchesSearch = !filters.search || e.title.toLowerCase().includes(filters.search.toLowerCase()) || e.description.toLowerCase().includes(filters.search.toLowerCase());
       const matchesType = !filters.type || e.type === filters.type;
       const matchesAdmissibility = !filters.admissibility || e.admissibility === filters.admissibility;
+      // If caseId is passed as prop, we already filtered 'evidenceItems', so we can ignore the filter input for caseId or enforce it matches
       const matchesCaseId = !filters.caseId || e.caseId.toLowerCase().includes(filters.caseId.toLowerCase());
       const matchesCustodian = !filters.custodian || e.custodian.toLowerCase().includes(filters.custodian.toLowerCase());
       const matchesDateFrom = !filters.dateFrom || e.collectionDate >= filters.dateFrom;

@@ -23,6 +23,7 @@ type WarRoomView = 'command' | 'evidence' | 'witnesses' | 'binder' | 'advisory' 
 
 interface WarRoomProps {
     initialTab?: WarRoomView;
+    caseId?: string; // Optional direct case injection
 }
 
 const PARENT_TABS = [
@@ -49,26 +50,32 @@ const PARENT_TABS = [
   }
 ];
 
-export const WarRoom: React.FC<WarRoomProps> = ({ initialTab }) => {
+export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<WarRoomView>('command');
   const [defcon, setDefcon] = useState<'normal' | 'elevated' | 'critical'>('elevated');
   
   // Default to the detailed case provided in context, or first available if not found
-  const [currentCaseId, setCurrentCaseId] = useState('25-1229');
+  const [currentCaseId, setCurrentCaseId] = useState(caseId || '25-1229');
 
-  // Fetch all cases for selector
+  // Fetch all cases for selector if not in scoped mode
   const { data: allCases = [] } = useQuery<Case[]>(
       [STORES.CASES, 'all'],
-      DataService.cases.getAll
+      DataService.cases.getAll,
+      { enabled: !caseId }
   );
 
-  // Ensure currentCaseId is valid if initial load happens
+  // Sync prop change
   useEffect(() => {
-      if (allCases.length > 0 && !allCases.find(c => c.id === currentCaseId)) {
+    if (caseId) setCurrentCaseId(caseId);
+  }, [caseId]);
+
+  // Ensure currentCaseId is valid if initial load happens without prop
+  useEffect(() => {
+      if (!caseId && allCases.length > 0 && !allCases.find(c => c.id === currentCaseId)) {
           setCurrentCaseId(allCases[0].id);
       }
-  }, [allCases, currentCaseId]);
+  }, [allCases, currentCaseId, caseId]);
 
   // Enterprise Data Access for specific case
   const { data: trialData, isLoading } = useQuery(
@@ -146,27 +153,31 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab }) => {
                     {defcon === 'elevated' && <span className="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">ACTIVE APPEAL</span>}
                     {defcon === 'normal' && <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">READY</span>}
                 </div>
-                <div className="mt-2 flex items-center gap-3">
-                    <div className="relative group">
-                        <select 
-                            value={currentCaseId} 
-                            onChange={(e) => setCurrentCaseId(e.target.value)}
-                            className={cn(
-                                "appearance-none bg-transparent font-semibold text-sm pr-6 py-1 outline-none cursor-pointer border-b border-dashed transition-colors hover:border-solid max-w-[300px] md:max-w-[500px] truncate",
-                                theme.text.secondary,
-                                theme.border.default,
-                                `hover:${theme.text.primary}`,
-                                `hover:${theme.border.default}` // Using default as fallback for dark
-                            )}
-                        >
-                            {allCases.map(c => (
-                                <option key={c.id} value={c.id}>{c.title}</option>
-                            ))}
-                        </select>
-                        <ChevronDown className={cn("absolute right-0 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)}/>
+                
+                {/* Case Selector (Hidden if caseId prop provided) */}
+                {!caseId && (
+                    <div className="mt-2 flex items-center gap-3">
+                        <div className="relative group">
+                            <select 
+                                value={currentCaseId} 
+                                onChange={(e) => setCurrentCaseId(e.target.value)}
+                                className={cn(
+                                    "appearance-none bg-transparent font-semibold text-sm pr-6 py-1 outline-none cursor-pointer border-b border-dashed transition-colors hover:border-solid max-w-[300px] md:max-w-[500px] truncate",
+                                    theme.text.secondary,
+                                    theme.border.default,
+                                    `hover:${theme.text.primary}`,
+                                    `hover:${theme.border.default}`
+                                )}
+                            >
+                                {allCases.map(c => (
+                                    <option key={c.id} value={c.id}>{c.title}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className={cn("absolute right-0 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)}/>
+                        </div>
+                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded bg-slate-100 border", theme.text.tertiary)}>{currentCaseId}</span>
                     </div>
-                    <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded bg-slate-100 border", theme.text.tertiary)}>{currentCaseId}</span>
-                </div>
+                )}
             </div>
             <div className="flex items-center gap-3 shrink-0 flex-wrap">
                 <Button variant="outline" size="sm" icon={Shield} className={defcon === 'critical' ? 'bg-red-50 text-red-700 border-red-200' : ''} onClick={() => setDefcon(defcon === 'critical' ? 'normal' : 'critical')}>Escalate</Button>

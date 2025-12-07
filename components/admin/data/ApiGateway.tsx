@@ -7,14 +7,7 @@ import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
-
-interface ApiKey {
-    id: string;
-    name: string;
-    prefix: string;
-    created: string;
-    status: 'Active' | 'Revoked';
-}
+import { ApiKey } from '../../../types';
 
 export const ApiGateway: React.FC = () => {
   const { theme } = useTheme();
@@ -22,7 +15,7 @@ export const ApiGateway: React.FC = () => {
   // Integrated Data Query
   const { data: fetchedKeys = [], isLoading } = useQuery<ApiKey[]>(
       ['admin', 'apikeys'],
-      DataService.admin.getApiKeys as any
+      DataService.admin.getApiKeys
   );
   
   // Local state to handle optimistic updates for this demo view

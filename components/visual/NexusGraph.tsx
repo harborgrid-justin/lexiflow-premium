@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { NODE_STRIDE, NexusLink } from '../../utils/nexusPhysics';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Case, Party, EvidenceItem } from '../../types';
+import { Case, Party, EvidenceItem, NexusNodeData } from '../../types';
 import { GraphOverlay } from './GraphOverlay';
 import { useNexusGraph } from '../../hooks/useNexusGraph';
 import { useChartTheme } from '../common/ChartHelpers';
@@ -12,7 +12,7 @@ interface NexusGraphProps {
   caseData: Case;
   parties: Party[];
   evidence: EvidenceItem[];
-  onNodeClick: (node: any) => void;
+  onNodeClick: (node: NexusNodeData) => void;
 }
 
 export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evidence, onNodeClick }) => {
@@ -36,17 +36,26 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
   }, []);
 
   const graphData = useMemo(() => {
-    const nodes = [
+    // Explicitly type the nodes array to avoid implicit any[], which caused issues in Phase 1
+    const nodes: NexusNodeData[] = [
         { id: 'root', type: 'root', label: caseData.title ? caseData.title.substring(0, 20) + '...' : 'Untitled Case', original: caseData },
-        ...parties.map(p => ({ id: p.id, type: p.type === 'Corporation' ? 'org' : 'party', label: p.name, original: p })),
-        ...evidence.map(e => ({ id: e.id, type: 'evidence', label: e.title.substring(0, 15) + '...', original: e }))
+        ...parties.map(p => ({ id: p.id, type: (p.type === 'Corporation' ? 'org' : 'party') as 'org' | 'party', label: p.name, original: p })),
+        ...evidence.map(e => ({ id: e.id, type: 'evidence' as const, label: e.title.substring(0, 15) + '...', original: e }))
     ];
-    const links: NexusLink[] = [
-        // We calculate source/target indexes later in useNexusGraph
-        // Here we pass raw IDs for preprocessing
-        ...parties.map(p => ({ sourceIndex: -1, targetIndex: -1, strength: 0.8, sourceId: 'root', targetId: p.id })),
-        ...evidence.map(e => ({ sourceIndex: -1, targetIndex: -1, strength: 0.3, sourceId: 'root', targetId: e.id }))
-    ].map(l => ({ sourceIndex: 0, targetIndex: 0, strength: l.strength, source: l.sourceId, target: l.targetId })); // Temporary mapping to match hook expected format
+    
+    // Create links with temporary placeholder indices to be resolved by useNexusGraph
+    const rawLinks = [
+        ...parties.map(p => ({ sourceId: 'root', targetId: p.id, strength: 0.8 })),
+        ...evidence.map(e => ({ sourceId: 'root', targetId: e.id, strength: 0.3 }))
+    ];
+
+    const links: any[] = rawLinks.map(l => ({ 
+        sourceIndex: 0, 
+        targetIndex: 0, 
+        strength: l.strength, 
+        source: l.sourceId, 
+        target: l.targetId 
+    }));
 
     return { nodes, links };
   }, [caseData, parties, evidence]);

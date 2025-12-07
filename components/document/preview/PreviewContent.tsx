@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import { FileIcon } from '../../common/Primitives';
 import { PDFViewer } from '../../common/PDFViewer';
 import { AcrobatToolbar, PDFTool } from './AcrobatToolbar';
-import { InteractiveOverlay } from './InteractiveOverlay';
+import { InteractiveOverlay, Field } from './InteractiveOverlay';
 import { Modal } from '../../common/Modal';
 import { SignaturePad } from '../../common/SignaturePad';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { LegalDocument } from '../../../types';
 
 interface PreviewContentProps {
-    document: any;
+    document: LegalDocument;
     previewUrl: string | null;
     isRedactionMode: boolean;
 }
@@ -28,9 +29,9 @@ export const PreviewContent: React.FC<PreviewContentProps> = ({ document, previe
     const [pageNum, setPageNum] = useState(1);
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
-    const [activeField, setActiveField] = useState<any>(null);
+    const [activeField, setActiveField] = useState<Field | null>(null);
 
-    const handleFieldClick = (field: any) => {
+    const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {
             setActiveField(field);
             setSignModalOpen(true);

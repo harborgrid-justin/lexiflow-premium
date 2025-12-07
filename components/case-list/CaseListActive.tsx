@@ -1,10 +1,7 @@
 
 import React, { useCallback } from 'react';
 import { Case, CaseStatus } from '../../types';
-import { 
-  Briefcase, User, ArrowUp, ArrowDown, Eye, Filter
-} from 'lucide-react';
-import { Currency } from '../common/Primitives';
+import { Briefcase, ArrowUp, ArrowDown, Filter } from 'lucide-react';
 import { useSort } from '../../hooks/useSort';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -19,6 +16,8 @@ import { FilterPanel } from '../common/FilterPanel';
 import { SearchInput, Input } from '../common/Inputs';
 import { useToggle } from '../../hooks/useToggle';
 import { StatusBadge, EmptyListState } from '../common/RefactoredCommon';
+import { Currency } from '../common/Primitives';
+import { CaseRow } from './CaseRow';
 
 interface CaseListActiveProps {
   filteredCases: Case[];
@@ -67,11 +66,11 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       }
   );
 
-  const prefetchCaseDetails = (caseId: string) => {
+  const prefetchCaseDetails = useCallback((caseId: string) => {
     queryClient.fetch([STORES.DOCUMENTS, caseId], () => DataService.documents.getByCaseId(caseId));
     queryClient.fetch([STORES.TASKS, caseId], () => DataService.tasks.getByCaseId(caseId));
     queryClient.fetch([STORES.BILLING, caseId], () => DataService.billing.getTimeEntries(caseId));
-  };
+  }, []);
 
   const handleArchiveCase = (c: Case) => {
      if(confirm(`Archive ${c.title}?`)) {
@@ -88,44 +87,14 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
     return sortConfig.direction === 'asc' ? <ArrowUp className={cn("h-4 w-4 ml-1", theme.primary.text)} /> : <ArrowDown className={cn("h-4 w-4 ml-1", theme.primary.text)} />;
   };
 
-  const actionBtnClass = cn(
-    "p-1.5 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1",
-    theme.text.secondary, 
-    `hover:${theme.surfaceHighlight}`, 
-    `hover:${theme.primary.text}`,
-    "focus:ring-blue-500"
-  );
-
   // Virtualized Row Renderer (Desktop)
-  const renderDesktopRow = (c: Case) => (
-    <div 
-      className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6", theme.border.light)}
-      onMouseEnter={() => prefetchCaseDetails(c.id)}
-    >
-       <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
-          <span 
-            onClick={() => onSelectCase(c)}
-            className={cn("font-bold text-sm transition-colors flex items-center hover:underline cursor-pointer truncate w-full", theme.primary.text)}
-            title={c.title}
-          >
-              {c.title}
-          </span>
-          <span className={cn("text-xs font-mono mt-0.5 opacity-70", theme.text.secondary)}>{c.id}</span>
-       </div>
-       <div className="w-[15%]"><StatusBadge status={c.matterType} /></div>
-       <div className="w-[20%] flex items-center text-sm text-slate-500 min-w-0 pr-2">
-          <User className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0"/>
-          <span className="truncate" title={c.client}>{c.client}</span>
-       </div>
-       <div className="w-[15%]"><Currency value={c.value} className={cn("font-medium text-sm", theme.text.primary)} /></div>
-       <div className="w-[10%]">
-          <StatusBadge status={c.status} />
-       </div>
-       <div className="w-[5%] flex justify-end items-center gap-1">
-            <button onClick={() => onSelectCase(c)} className={actionBtnClass} title="View Details"><Eye className="h-4 w-4"/></button>
-       </div>
-    </div>
-  );
+  const renderDesktopRow = useCallback((c: Case) => (
+      <CaseRow 
+        caseData={c} 
+        onSelect={onSelectCase} 
+        onPrefetch={prefetchCaseDetails} 
+      />
+  ), [onSelectCase, prefetchCaseDetails]);
 
   // Virtualized Row Renderer (Mobile)
   const renderMobileRow = (c: Case) => (
@@ -148,7 +117,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
             <h4 className={cn("font-bold text-lg mb-1 leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
             <div className="flex items-center justify-between pl-2 mt-2">
                 <StatusBadge status={c.status} />
-                <Currency value={c.value} className="font-bold text-sm" />
+                <Currency value={c.value || 0} className="font-bold text-sm" />
             </div>
             </div>
         </SwipeableItem>

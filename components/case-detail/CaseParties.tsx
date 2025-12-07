@@ -17,11 +17,13 @@ interface CasePartiesProps {
   onUpdate: (parties: Party[]) => void;
 }
 
+type GroupByOption = 'none' | 'role' | 'group';
+
 export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate }) => {
   const { theme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
-  const [groupBy, setGroupBy] = useState<'none' | 'role' | 'group'>('group'); // Grouping state
+  const [groupBy, setGroupBy] = useState<GroupByOption>('group');
   const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
 
   useEffect(() => {
@@ -104,7 +106,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             <select 
                 className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
                 value={groupBy}
-                onChange={(e) => setGroupBy(e.target.value as any)}
+                onChange={(e) => setGroupBy(e.target.value as GroupByOption)}
             >
                 <option value="none">No Grouping</option>
                 <option value="group">Group by Party Type</option>
@@ -114,7 +116,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
         </div>
       </div>
 
-      {Object.entries(grouped).map(([groupName, groupParties]) => (
+      {Object.entries(grouped).map(([groupName, groupParties]: [string, Party[]]) => (
         <div key={groupName} className="space-y-2">
             {groupBy !== 'none' && (
                 <div className="flex items-center gap-2 px-1">
@@ -170,9 +172,9 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                                 </div>
                             </TableCell>
                             <TableCell className={cn("text-xs min-w-[150px]", theme.text.secondary)}>
-                                {party.attorneys && Array.isArray(party.attorneys) && (party.attorneys as any[]).length > 0 ? (
+                                {party.attorneys && party.attorneys.length > 0 ? (
                                     <div className="space-y-2">
-                                        {(party.attorneys as any[]).map((att: any, idx: number) => (
+                                        {party.attorneys.map((att, idx) => (
                                             <div key={idx} className={cn("p-2 rounded border text-xs", theme.surfaceHighlight, theme.border.light)}>
                                                 <div className="font-bold flex items-center gap-1 truncate" title={att.name}>
                                                     <Briefcase className={cn("h-3 w-3 shrink-0", theme.text.tertiary)}/> {att.name}
@@ -221,7 +223,11 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                   </div>
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                      <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} value={currentParty.type || 'Individual'} onChange={e => setCurrentParty({...currentParty, type: e.target.value as any})}>
+                      <select 
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                        value={currentParty.type || 'Individual'}
+                        onChange={e => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
+                      >
                           <option value="Individual">Individual</option>
                           <option value="Corporation">Corporation</option>
                           <option value="Government">Government</option>

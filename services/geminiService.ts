@@ -97,8 +97,9 @@ const DocketSchema = {
 
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   try { return await fn(); } 
-  catch (error: any) {
-    if (retries === 0 || (error.status && error.status !== 429 && error.status < 500)) throw error;
+  catch (error: unknown) {
+    const status = (error as { status?: number }).status;
+    if (retries === 0 || (status && status !== 429 && status < 500)) throw error;
     await new Promise(resolve => setTimeout(resolve, delay));
     return withRetry(fn, retries - 1, delay * 2);
   }
@@ -269,7 +270,8 @@ export const GeminiService = {
              
              const sources: SearchResult[] = [];
              if (response.candidates && response.candidates[0]?.groundingMetadata?.groundingChunks) {
-                 (response.candidates[0].groundingMetadata.groundingChunks as any[]).forEach((c: GroundingChunk) => {
+                 const chunks = response.candidates[0].groundingMetadata.groundingChunks as unknown as GroundingChunk[];
+                 chunks.forEach((c) => {
                      if (c.web) {
                          sources.push({ 
                             id: crypto.randomUUID(),

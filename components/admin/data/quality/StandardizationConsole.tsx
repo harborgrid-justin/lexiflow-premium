@@ -12,7 +12,7 @@ import { useNotify } from '../../../../hooks/useNotify';
 
 const AVAILABLE_RULES: CleansingRule[] = [
     { id: 'rule-phone', name: 'Normalize Phone Numbers', targetField: 'phone', operation: 'FormatPhone', isActive: true, parameters: { format: 'E.164' } },
-    { id: 'rule-email', name: 'Lowercase Emails', targetField: 'email', operation: 'Lowercase' as any, isActive: true },
+    { id: 'rule-email', name: 'Lowercase Emails', targetField: 'email', operation: 'Lowercase', isActive: true },
     { id: 'rule-trim', name: 'Trim Whitespace', targetField: '*', operation: 'Trim', isActive: true },
     { id: 'rule-state', name: 'Standardize State Codes', targetField: 'state', operation: 'CustomRegex', isActive: false, parameters: { dictionary: 'US_States' } },
 ];

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '../../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
@@ -38,7 +39,7 @@ export const DiscoveryCharts: React.FC = () => {
                         />
                         <Tooltip 
                         cursor={{fill: 'transparent'}} 
-                        formatter={(value: number) => value.toLocaleString()} 
+                        formatter={(value: any) => value.toLocaleString()} 
                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                         />
                         <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: mode === 'dark' ? '#cbd5e1' : '#475569', formatter: (v:any) => funnelData.find(d => d.value === v)?.label }}>

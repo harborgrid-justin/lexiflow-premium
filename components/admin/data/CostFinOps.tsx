@@ -8,7 +8,18 @@ import { cn } from '../../../utils/cn';
 import { useChartTheme } from '../../common/ChartHelpers';
 import { MetricTile } from '../../common/RefactoredCommon';
 
-const costData = [
+interface ServiceCost {
+    name: string;
+    cost: number;
+}
+
+interface ForecastData {
+    day: string;
+    actual: number | null;
+    forecast: number | null;
+}
+
+const costData: ServiceCost[] = [
     { name: 'Compute', cost: 1200 },
     { name: 'Storage', cost: 850 },
     { name: 'Network', cost: 300 },
@@ -16,7 +27,7 @@ const costData = [
     { name: 'AI', cost: 2200 },
 ];
 
-const forecastData = [
+const forecastData: ForecastData[] = [
     { day: '1', actual: 120, forecast: 125 },
     { day: '5', actual: 135, forecast: 130 },
     { day: '10', actual: 140, forecast: 145 },

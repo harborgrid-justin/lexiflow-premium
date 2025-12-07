@@ -13,17 +13,25 @@ import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
 import { ActionRow } from '../common/RefactoredCommon';
 
+interface PolicyItem {
+  id: string;
+  title: string;
+  version: string;
+  date: string;
+  status: string;
+}
+
 export const CompliancePolicies: React.FC = () => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
   
   // Performance Engine: Caching
-  const { data: policies = [], isLoading } = useQuery<any[]>(
+  const { data: policies = [], isLoading } = useQuery<PolicyItem[]>(
       [STORES.POLICIES, 'all'],
       DataService.compliance.getPolicies
   );
 
-  const handleViewPolicy = (policy: any) => {
+  const handleViewPolicy = (policy: PolicyItem) => {
       const winId = `policy-${policy.id}`;
       openWindow(
           winId,

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../types';
@@ -13,7 +14,8 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useNotify } from '../../../hooks/useNotify';
 
-type FormStatus = 'Draft' | 'Out for Signature' | 'Completed';
+type FormStatus = 'Draft' | 'Sent' | 'Signed';
+type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Completed';
 
 export const FormsSigningView: React.FC = () => {
     const { theme } = useTheme();
@@ -22,7 +24,7 @@ export const FormsSigningView: React.FC = () => {
     const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [activeList, setActiveList] = useState<FormStatus | 'Templates'>('Templates');
+    const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
 
     // PDF viewer state
@@ -32,7 +34,7 @@ export const FormsSigningView: React.FC = () => {
     const [pageNum, setPageNum] = useState(1);
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
-    const [activeField, setActiveField] = useState<any>(null);
+    const [activeField, setActiveField] = useState<Field | null>(null);
     const [isSendModalOpen, setIsSendModalOpen] = useState(false);
 
     useEffect(() => {
@@ -79,7 +81,7 @@ export const FormsSigningView: React.FC = () => {
         });
     }, [documents, searchTerm, activeList]);
 
-    const handleFieldClick = (field: any) => {
+    const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {
             setActiveField(field);
             setSignModalOpen(true);
@@ -90,7 +92,7 @@ export const FormsSigningView: React.FC = () => {
         if (signed && activeField && selectedDoc) {
             const updatedDoc = {
                 ...selectedDoc,
-                formFields: (selectedDoc.formFields || []).map((f:any) => f.id === activeField.id ? {...f, value: "Signed by User"} : f)
+                formFields: (selectedDoc.formFields || []).map((f: Field) => f.id === activeField.id ? {...f, value: "Signed by User"} : f)
             };
             setSelectedDoc(updatedDoc);
             setDocuments(docs => docs.map(d => d.id === selectedDoc.id ? updatedDoc : d));
@@ -118,7 +120,7 @@ export const FormsSigningView: React.FC = () => {
         }
     };
 
-    const ListButton = ({ id, label, count }: { id: any, label: string, count: number }) => (
+    const ListButton = ({ id, label, count }: { id: FilterCategory, label: string, count: number }) => (
         <button onClick={() => setActiveList(id)} className={cn(
             "w-full text-left p-3 rounded-md text-sm font-medium flex justify-between items-center transition-colors",
             activeList === id ? cn(theme.surface, theme.primary.text) : `hover:${theme.surface}`

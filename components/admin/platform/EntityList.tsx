@@ -7,17 +7,39 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { VirtualList } from '../../common/VirtualList';
 
+// Generic interface to cover the varying shapes of entities in the list
+interface GenericRecord {
+  id: string;
+  name?: string;
+  title?: string;
+  role?: string;
+  office?: string;
+  client?: string;
+  status?: string;
+  value?: number;
+  industry?: string;
+  type?: string;
+  category?: string;
+  riskRating?: string;
+  uploadDate?: string;
+  company?: string;
+  email?: string;
+  roles?: string[];
+  city?: string;
+  state?: string;
+}
+
 interface EntityListProps {
   activeCategory: Category;
-  items: any[];
-  onEdit: (item: any) => void;
+  items: GenericRecord[];
+  onEdit: (item: GenericRecord) => void;
   onDelete: (id: string) => void;
 }
 
 export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, onEdit, onDelete }) => {
   const { theme } = useTheme();
 
-  const renderRow = (item: any) => {
+  const renderRow = (item: GenericRecord) => {
     return (
         <div key={item.id} className={cn("flex items-center border-b h-[60px] px-6 transition-colors", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
             <div className={cn("w-32 font-mono text-xs truncate pr-4", theme.text.tertiary)}>{item.id}</div>
@@ -25,7 +47,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
             {activeCategory === 'users' && (
                 <>
                     <div className={cn("flex-1 font-medium", theme.text.primary)}>{item.name}</div>
-                    <div className="w-40"><Badge variant="neutral">{item.role}</Badge></div>
+                    <div className="w-40"><Badge variant="neutral">{item.role || 'User'}</Badge></div>
                     <div className={cn("w-40 text-sm", theme.text.secondary)}>{item.office}</div>
                 </>
             )}
@@ -34,8 +56,8 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
                 <>
                     <div className={cn("flex-1 font-medium truncate pr-4", theme.text.primary)}>{item.title}</div>
                     <div className={cn("w-48 text-sm truncate", theme.text.secondary)}>{item.client}</div>
-                    <div className="w-32"><Badge variant="info">{item.status}</Badge></div>
-                    <div className={cn("w-32 font-mono text-sm", theme.text.primary)}>${item.value?.toLocaleString()}</div>
+                    <div className="w-32"><Badge variant="info">{item.status || 'Active'}</Badge></div>
+                    <div className={cn("w-32 font-mono text-sm", theme.text.primary)}>${(item.value || 0).toLocaleString()}</div>
                 </>
             )}
 
@@ -43,7 +65,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
                 <>
                     <div className={cn("flex-1 font-medium", theme.text.primary)}>{item.name}</div>
                     <div className={cn("w-48 text-sm", theme.text.secondary)}>{item.industry}</div>
-                    <div className="w-32"><Badge variant={item.status === 'Active' ? 'success' : 'neutral'}>{item.status}</Badge></div>
+                    <div className="w-32"><Badge variant={item.status === 'Active' ? 'success' : 'neutral'}>{item.status || 'Active'}</Badge></div>
                 </>
             )}
 
@@ -51,7 +73,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
                 <>
                     <div className={cn("flex-1 font-medium", theme.text.primary)}>{item.name}</div>
                     <div className={cn("w-48 text-sm", theme.text.secondary)}>{item.category}</div>
-                    <div className="w-32"><Badge variant={item.riskRating === 'High' ? 'error' : 'success'}>{item.riskRating}</Badge></div>
+                    <div className="w-32"><Badge variant={item.riskRating === 'High' ? 'error' : 'success'}>{item.riskRating || 'Low'}</Badge></div>
                 </>
             )}
 
@@ -100,7 +122,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
 
         {/* Mobile Card View (Simple map) */}
         <div className="md:hidden space-y-3 p-4 overflow-y-auto">
-            {items.map((item: any) => (
+            {items.map((item) => (
             <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
                 <div className="flex justify-between items-start mb-2">
                 <span className={cn("text-xs font-mono", theme.text.secondary)}>{item.id}</span>

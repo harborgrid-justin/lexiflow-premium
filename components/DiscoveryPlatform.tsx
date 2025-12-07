@@ -1,3 +1,4 @@
+
 // components/DiscoveryPlatform.tsx
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { PageHeader } from './common/PageHeader';

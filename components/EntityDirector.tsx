@@ -8,7 +8,7 @@ import { cn } from '../utils/cn';
 import { useQuery } from '../services/queryClient';
 import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
-import { LegalEntity } from '../types';
+import { LegalEntity, EntityId } from '../types';
 import { useWindow } from '../context/WindowContext'; // Holographic DOM
 import { LazyLoader } from './common/LazyLoader';
 
@@ -132,7 +132,8 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
       const type = prompt("Type (Individual/Corporation/Law Firm):") || 'Individual';
       
       const newEntity: LegalEntity = {
-          id: `ent-${Date.now()}`,
+          // FIX: Cast string to branded type EntityId
+          id: `ent-${Date.now()}` as EntityId,
           name,
           type: type as any,
           roles: ['Prospect'],
@@ -199,7 +200,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
         )}
       </div>
 
-      <div className="flex-1 overflow-hidden flex relative">
+      <div className="flex-1 flex overflow-hidden relative">
          <div className={cn("flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar", activeTab === 'map' ? 'p-0' : '')}>
             <Suspense fallback={<LazyLoader message="Loading Module..." />}>
               {activeTab === 'directory' && <EntityGrid entities={entities} onSelect={handleSelectEntity} />}

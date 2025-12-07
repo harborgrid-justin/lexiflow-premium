@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId } from '../types';
 import { DataService } from '../services/dataService';
@@ -24,8 +25,13 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     }, [caseData]);
 
     const handleSaveTime = (rawEntry: TimeEntryPayload) => {
-// FIX: Cast string to branded types
-        const newEntry: TimeEntry = { id: `t-${Date.now()}` as UUID, userId: 'current-user' as UserId, ...rawEntry };
+        // FIX: Cast string to branded types and handle caseId correctly
+        const newEntry: TimeEntry = { 
+            ...rawEntry,
+            id: `t-${Date.now()}` as UUID, 
+            userId: 'current-user' as UserId,
+            caseId: rawEntry.caseId as CaseId,
+        };
         
         performMutation('BILLING_LOG', newEntry, () => DataService.billing.addTimeEntry(newEntry));
         

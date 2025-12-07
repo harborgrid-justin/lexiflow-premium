@@ -1,10 +1,9 @@
+
 import React, { useState } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-// FIX: Correct import path
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-// FIX: Correct import path
 import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
 
 interface SchemaVisualizerProps {

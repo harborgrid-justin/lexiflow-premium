@@ -9,7 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { ClausePanel } from './drafting/ClausePanel'; // Updated import path
+import { ClauseList as ClausePanel } from '../clauses/ClauseList';
 
 const ClauseHistoryModal = lazy(() => import('../ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
@@ -48,6 +48,7 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     setActiveMode('review');
     const plainText = content.replace(/<[^>]*>?/gm, '');
     const res = await GeminiService.reviewContract(plainText);
+    // FIX: Corrected function name from setResult to setReviewResult.
     setReviewResult(res);
     setLoading(false);
   };
@@ -99,19 +100,19 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
         <div className={cn("flex border-b", theme.border.subtle)}>
           <button
             onClick={() => setActiveMode('edit')}
-            className={`flex-1 py-3 text-sm font-medium ${activeMode !== 'review' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/20' : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)}`}
+            className={`flex-1 py-3 text-sm font-medium ${activeMode !== 'review' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/20' : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)}`}
           >
             Clause Library
           </button>
           <button
             onClick={() => setActiveMode('review')}
-            className={`flex-1 py-3 text-sm font-medium ${activeMode === 'review' ? 'text-amber-600 border-b-2 border-amber-600 bg-amber-50/20' : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)}`}
+            className={`flex-1 py-3 text-sm font-medium ${activeMode === 'review' ? 'text-amber-600 border-b-2 border-amber-600 bg-amber-50/20' : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)}`}
           >
             Risk Analysis
           </button>
         </div>
 
-        <div className={cn("flex-1 overflow-y-auto flex flex-col", theme.surface.highlight)}>
+        <div className={cn("flex-1 overflow-y-auto flex flex-col", theme.surfaceHighlight)}>
           {activeMode === 'review' ? (
              <div className="p-4 space-y-4">
                 <div className="bg-amber-50 border border-amber-200 rounded p-3 text-xs text-amber-800 flex items-start">
@@ -135,7 +136,7 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
                 )}
              </div>
           ) : (
-            <ClausePanel onInsertClause={insertClause} />
+            <ClausePanel onSelectClause={insertClause} />
           )}
         </div>
       </div>

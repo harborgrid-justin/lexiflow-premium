@@ -18,9 +18,10 @@ import { STORES } from '../services/db';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';
+    caseId?: string; // Integration Point: Scoped to case
 }
 
-export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) => {
+export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'list' | 'sticker' | 'stats'>('list');
   const [filterParty, setFilterParty] = useState<string>('All');
@@ -28,14 +29,15 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) =>
   const [showFilters, setShowFilters] = useState(false);
 
   // Enterprise Data Access
+  // Using caseId in query key ensures React Query manages cache independently per case
   const { data: exhibits = [] } = useQuery<TrialExhibit[]>(
-      [STORES.EXHIBITS, 'all'],
+      [STORES.EXHIBITS, caseId || 'all'],
       DataService.exhibits.getAll
   );
 
   const { mutate: addExhibit } = useMutation(
       DataService.exhibits.add,
-      { invalidateKeys: [[STORES.EXHIBITS, 'all']] }
+      { invalidateKeys: [[STORES.EXHIBITS, caseId || 'all']] }
   );
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) =>
   const handleAddExhibit = () => {
       const newExhibit: TrialExhibit = {
           id: `ex-${Date.now()}`,
-          caseId: 'General', // Default context for global manager
+          caseId: caseId || 'General', 
           exhibitNumber: `PX-${exhibits.length + 1}`,
           title: 'New Evidence Document',
           dateMarked: new Date().toISOString().split('T')[0],
@@ -57,23 +59,37 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) =>
       addExhibit(newExhibit);
   };
 
-  const filteredExhibits = exhibits.filter(ex => 
-    filterParty === 'All' || ex.party === filterParty
-  );
+  // Filter exhibits locally if the service returns all (fallback) 
+  // though DataService could be optimized to filter server-side
+  const filteredExhibits = exhibits.filter(ex => {
+      const matchParty = filterParty === 'All' || ex.party === filterParty;
+      const matchCase = caseId ? ex.caseId === caseId : true;
+      return matchParty && matchCase;
+  });
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-          title="Exhibit Pro" 
-          subtitle="Trial exhibit management, digital stickering, and admissibility tracking."
-          actions={
-            <div className="flex gap-2">
-              <Button variant="outline" icon={Printer}>Export Index</Button>
-              <Button variant="primary" icon={Plus} onClick={handleAddExhibit}>Add Exhibit</Button>
+        {!caseId && (
+            <PageHeader 
+            title="Exhibit Pro" 
+            subtitle="Trial exhibit management, digital stickering, and admissibility tracking."
+            actions={
+                <div className="flex gap-2">
+                <Button variant="outline" icon={Printer}>Export Index</Button>
+                <Button variant="primary" icon={Plus} onClick={handleAddExhibit}>Add Exhibit</Button>
+                </div>
+            }
+            />
+        )}
+        
+        {/* Case Context Header if Embedded */}
+        {caseId && (
+            <div className="flex justify-between items-center mb-4">
+                 <h3 className={cn("text-lg font-bold text-slate-700", theme.text.primary)}>Case Exhibits</h3>
+                 <Button variant="primary" icon={Plus} size="sm" onClick={handleAddExhibit}>Add Exhibit</Button>
             </div>
-          }
-        />
+        )}
 
         {/* View Toggles */}
         <div className={cn("flex justify-between items-center border-b pb-4 mb-4", theme.border.default)}>
@@ -127,7 +143,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) =>
                             >
                                 {p} Exhibits
                                 <span className={cn("text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600")}>
-                                    {p === 'All' ? exhibits.length : exhibits.filter(e => e.party === p).length}
+                                    {p === 'All' ? filteredExhibits.length : filteredExhibits.filter(e => e.party === p).length}
                                 </span>
                             </button>
                         ))}
@@ -136,7 +152,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) =>
                 <div className="p-4">
                     <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Witnesses</h4>
                     <div className="space-y-1 max-h-64 overflow-y-auto">
-                        {Array.from(new Set(exhibits.map(e => e.witness).filter(Boolean))).map(w => (
+                        {Array.from(new Set(filteredExhibits.map(e => e.witness).filter(Boolean))).map(w => (
                             <button key={w as string} className={cn("w-full text-left px-3 py-1.5 rounded text-sm text-slate-600 hover:bg-slate-100 flex items-center")}>
                                 <Users className="h-3 w-3 mr-2 opacity-50"/> {w}
                             </button>
@@ -174,7 +190,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab }) =>
 
             {activeTab === 'sticker' && <StickerDesigner />}
             
-            {activeTab === 'stats' && <ExhibitStats exhibits={exhibits} />}
+            {activeTab === 'stats' && <ExhibitStats exhibits={filteredExhibits} />}
         </div>
       </div>
     </div>

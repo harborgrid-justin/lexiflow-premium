@@ -236,7 +236,7 @@ export interface CleansingRule {
     id: string;
     name: string;
     targetField: string;
-    operation: 'Trim' | 'Uppercase' | 'FormatPhone' | 'FormatDate' | 'RemoveSpecialChars' | 'CustomRegex';
+    operation: 'Trim' | 'Uppercase' | 'FormatPhone' | 'FormatDate' | 'RemoveSpecialChars' | 'CustomRegex' | 'Lowercase';
     parameters?: any;
     isActive: boolean;
 }
@@ -294,6 +294,26 @@ export interface ArchiveStats {
     monthlyCost: number;
     retentionPolicy: string;
     glacierTier: string;
+}
+
+// Admin / System
+export interface ApiKey {
+    id: string;
+    name: string;
+    prefix: string;
+    created: string;
+    status: 'Active' | 'Revoked';
+}
+
+export interface PipelineJob {
+    id: string;
+    name: string;
+    status: 'Running' | 'Idle' | 'Failed' | 'Success';
+    lastRun: string;
+    duration: string;
+    volume: string;
+    schedule: string;
+    logs: string[];
 }
 
 // For Discovery Platform

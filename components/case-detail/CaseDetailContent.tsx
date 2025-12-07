@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent } from '../../types';
 import { CaseOverview } from './CaseOverview';
@@ -19,6 +20,10 @@ import { CasePlanning } from './CasePlanning';
 import { CaseProjects } from './CaseProjects';
 import { CaseCollaboration } from './collaboration/CaseCollaboration';
 import { NexusGraph } from '../visual/NexusGraph';
+import { ExhibitManager } from '../ExhibitManager'; // Integrated Exhibit Pro
+import { EvidenceVault } from '../EvidenceVault';   // Integrated Evidence Vault
+import { ResearchTool } from '../ResearchTool';     // Integrated Research
+import { WarRoom } from '../WarRoom'; // Integration Point
 
 interface CaseDetailContentProps {
   activeTab: string;
@@ -56,24 +61,38 @@ export const CaseDetailContent: React.FC<CaseDetailContentProps> = (props) => {
   const { activeTab, caseData, parties, documents, stages, projects, billingEntries, evidence, timelineEvents } = props;
 
   switch (activeTab) {
+    // --- OVERVIEW ---
     case 'Overview': return <CaseOverview caseData={{...caseData, parties}} onTimeEntryAdded={props.onTimeEntryAdded} onNavigateToCase={props.onNavigateToCase} />;
     case 'Nexus': return <NexusGraph caseData={caseData} parties={parties} evidence={evidence} onNodeClick={props.onNodeClick} />;
     case 'Parties': return <CaseParties parties={parties} onUpdate={props.onUpdateParties} />;
     case 'Timeline': return <CaseTimeline events={timelineEvents} onEventClick={props.onTimelineClick} />;
+    
+    // --- STRATEGY ---
+    case 'Research': return <ResearchTool caseId={caseData.id} />;
     case 'Arguments': return <CaseArgumentManager caseData={caseData} evidence={evidence} />;
     case 'Risk': return <CaseRiskManager caseData={caseData} />;
     case 'Strategy': return <CaseStrategy citations={caseData.citations} arguments={caseData.arguments} defenses={caseData.defenses} evidence={evidence} />;
     case 'Planning': return <CasePlanning caseData={caseData} />;
+    
+    // --- EXECUTION ---
     case 'Projects': return <CaseProjects projects={projects} onAddProject={props.onAddProject} onAddTask={props.onAddTask} onUpdateTaskStatus={props.onUpdateTask} />;
     case 'Workflow': return <CaseWorkflow stages={stages} generatingWorkflow={props.generatingWorkflow} onGenerateWorkflow={props.onGenerateWorkflow} />;
     case 'Collaboration': return <CaseCollaboration caseId={caseData.id} />;
+    
+    // --- LITIGATION ---
     case 'Motions': return <CaseMotions caseId={caseData.id} caseTitle={caseData.title} documents={documents} />;
     case 'Discovery': return <CaseDiscovery caseId={caseData.id} />;
-    case 'Evidence': return <CaseEvidence caseId={caseData.id} />;
+    case 'Evidence': return <EvidenceVault caseId={caseData.id} />;
+    case 'Exhibits': return <ExhibitManager caseId={caseData.id} initialTab="list" />;
+    
+    // --- DOCS ---
     case 'Documents': return <CaseDocuments documents={documents} analyzingId={props.analyzingId} onAnalyze={props.onAnalyzeDoc} onDocumentCreated={props.onDocumentCreated} />;
     case 'Drafting': return <CaseDrafting caseTitle={caseData.title} draftPrompt={props.draftPrompt} setDraftPrompt={props.setDraftPrompt} draftResult={props.draftResult} isDrafting={props.isDrafting} onDraft={props.onDraft} />;
     case 'Contract Review': return <CaseContractReview />;
+    
+    // --- FINANCE ---
     case 'Billing': return <CaseBilling billingModel={caseData.billingModel || 'Hourly'} value={caseData.value || 0} entries={billingEntries} />;
+    
     default: return <CaseOverview caseData={{...caseData, parties}} onTimeEntryAdded={props.onTimeEntryAdded} onNavigateToCase={props.onNavigateToCase} />;
   }
 };

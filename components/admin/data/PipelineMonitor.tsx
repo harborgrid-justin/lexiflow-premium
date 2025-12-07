@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { GitMerge, RefreshCw, Clock, Activity, CheckCircle, XCircle, Play, FileText, ChevronRight, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -6,17 +7,7 @@ import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
-
-interface PipelineJob {
-    id: string;
-    name: string;
-    status: 'Running' | 'Idle' | 'Failed' | 'Success';
-    lastRun: string;
-    duration: string;
-    volume: string;
-    schedule: string;
-    logs: string[];
-}
+import { PipelineJob } from '../../../types';
 
 interface PipelineMonitorProps {
     initialTab?: string;
@@ -35,10 +26,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
   // Integrated Data Query
   const { data: pipelines = [], isLoading, refetch } = useQuery<PipelineJob[]>(
       ['admin', 'pipelines'],
-      async () => {
-         const data = await DataService.admin.getPipelines();
-         return data as unknown as PipelineJob[];
-      }
+      DataService.admin.getPipelines
   );
 
   const connectors = [

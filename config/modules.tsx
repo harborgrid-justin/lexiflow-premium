@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ModuleRegistry } from '../services/moduleRegistry';
 import { NAVIGATION_ITEMS } from '../constants/navConfig';
@@ -13,7 +14,7 @@ const DocumentManager = React.lazy(() => import('../components/DocumentManager')
 const WarRoom = React.lazy(() => import('../components/WarRoom').then(m => ({ default: m.WarRoom })));
 const ExhibitManager = React.lazy(() => import('../components/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
 const DiscoveryPlatform = React.lazy(() => import('../components/DiscoveryPlatform').then(m => ({ default: m.DiscoveryPlatform })));
-const EvidenceVault = React.lazy(() => import('../components/EvidenceVault'));
+const EvidenceVault = React.lazy(() => import('../components/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
 const ResearchTool = React.lazy(() => import('../components/ResearchTool').then(m => ({ default: m.ResearchTool })));
 const FirmOperations = React.lazy(() => import('../components/FirmOperations').then(m => ({ default: m.FirmOperations })));
 const BillingDashboard = React.lazy(() => import('../components/BillingDashboard'));

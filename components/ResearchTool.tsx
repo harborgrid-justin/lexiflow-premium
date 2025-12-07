@@ -13,7 +13,6 @@ import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 
 // --- Lazy Loaded Components ---
-// Updated to handle named exports correctly
 const WikiView = React.lazy(() => import('./knowledge/WikiView').then(m => ({ default: m.WikiView })));
 const PrecedentsView = React.lazy(() => import('./knowledge/PrecedentsView').then(m => ({ default: m.PrecedentsView })));
 const QAView = React.lazy(() => import('./knowledge/QAView').then(m => ({ default: m.QAView })));
@@ -29,21 +28,24 @@ const StandingOrders = React.lazy(() => import('./rules/StandingOrders').then(m 
 const LocalRulesMap = React.lazy(() => import('./rules/LocalRulesMap').then(m => ({ default: m.LocalRulesMap })));
 const CitationLibrary = React.lazy(() => import('./citation/CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = React.lazy(() => import('./citation/BriefAnalyzer').then(m => ({ default: m.BriefAnalyzer })));
+const ActiveResearch = React.lazy(() => import('./research/ActiveResearch').then(m => ({ default: m.ActiveResearch })));
 
 import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
 
-const UniversalSearch = () => {
+const UniversalSearch = ({ context = '' }) => {
     const { theme } = useTheme();
     return (
         <div className={cn("h-full flex flex-col items-center justify-center text-center p-8", theme.text.tertiary)}>
             <div className={cn("p-6 rounded-full mb-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 border", theme.border.default)}>
                 <BrainCircuit className="h-16 w-16 opacity-50 text-blue-600"/>
             </div>
-            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Universal Knowledge Graph</h2>
+            <h2 className={cn("text-2xl font-bold", theme.text.primary)}>
+                {context ? `Research for ${context}` : 'Universal Knowledge Graph'}
+            </h2>
             <p className="max-w-md mt-2 mb-8">Perform semantic searches across case law, firm wikis, clauses, and predictive analytics with a single natural language query.</p>
             <div className={cn("w-full max-w-xl p-4 rounded-lg border bg-opacity-50 flex items-center gap-3", theme.surfaceHighlight, theme.border.default)}>
                 <Search className="h-5 w-5 opacity-50"/>
-                <span className="text-sm opacity-50">Search all firm intelligence...</span>
+                <span className="text-sm opacity-50">Search {context ? 'case context...' : 'all firm intelligence...'}</span>
             </div>
         </div>
     );
@@ -53,7 +55,8 @@ const TAB_CONFIG = [
   {
     id: 'intel', label: 'Intelligence', icon: BrainCircuit,
     subTabs: [
-      { id: 'search_home', label: 'Universal Search', icon: Search },
+      { id: 'search_home', label: 'Search', icon: Search },
+      { id: 'active_research', label: 'Active Session', icon: BrainCircuit },
       { id: 'analytics_judge', label: 'Judge Analytics', icon: Gavel },
       { id: 'analytics_counsel', label: 'Opposing Counsel', icon: Users },
       { id: 'analytics_prediction', label: 'Case Outcome', icon: TrendingUp },
@@ -88,9 +91,12 @@ const TAB_CONFIG = [
   }
 ];
 
-export const ResearchTool: React.FC<{ initialTab?: string }> = ({ initialTab }) => {
+export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
-  const [activeView, setActiveView] = useSessionStorage<string>('research_active_view', initialTab || 'search_home');
+  // Scope session storage key if in case context
+  const storageKey = caseId ? `research_active_view_${caseId}` : 'research_active_view';
+  const [activeView, setActiveView] = useSessionStorage<string>(storageKey, initialTab || 'search_home');
+  
   const [selectedClause, setSelectedClause] = useState<Clause | null>(null);
   const [judges, setJudges] = useState<JudgeProfile[]>([]);
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
@@ -108,7 +114,8 @@ export const ResearchTool: React.FC<{ initialTab?: string }> = ({ initialTab }) 
 
   const renderContent = () => {
     switch (activeView) {
-        case 'search_home': return <UniversalSearch />;
+        case 'search_home': return <UniversalSearch context={caseId} />;
+        case 'active_research': return <ActiveResearch />;
         case 'analytics_judge': {
             const currentJudge = judges.find(j => j.id === selectedJudgeId) || judges[0];
             return (
@@ -140,9 +147,49 @@ export const ResearchTool: React.FC<{ initialTab?: string }> = ({ initialTab }) 
         case 'drafting_clauses': return <ClauseList onSelectClause={setSelectedClause} />;
         case 'drafting_analyzer': return <BriefAnalyzer />;
         case 'analytics_settlement': return <SettlementCalculator />;
-        default: return <UniversalSearch />;
+        default: return <UniversalSearch context={caseId} />;
     }
   };
+
+  // If embedded in a case, we might want to hide the header or simplify it
+  if (caseId) {
+      return (
+          <>
+            {selectedClause && (
+                <Suspense fallback={null}>
+                    <ClauseHistoryModal clause={selectedClause} onClose={() => setSelectedClause(null)} />
+                </Suspense>
+            )}
+            <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
+                {/* Embedded Navigation (Simplified) */}
+                <div className={cn("px-6 pt-2 shrink-0 border-b", theme.border.default)}>
+                     <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-3">
+                         {TAB_CONFIG.flatMap(g => g.subTabs).map(tab => (
+                             <button
+                                key={tab.id}
+                                onClick={() => setActiveView(tab.id)}
+                                className={cn(
+                                    "flex items-center text-xs font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap",
+                                    activeView === tab.id 
+                                        ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
+                                        : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                )}
+                             >
+                                 <tab.icon className="h-3 w-3 mr-1.5"/>
+                                 {tab.label}
+                             </button>
+                         ))}
+                     </div>
+                </div>
+                <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0 pt-4">
+                    <Suspense fallback={<LazyLoader message="Loading Research Tools..." />}>
+                        {renderContent()}
+                    </Suspense>
+                </div>
+            </div>
+          </>
+      );
+  }
 
   return (
     <>

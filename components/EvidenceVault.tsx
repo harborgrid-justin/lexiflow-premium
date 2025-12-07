@@ -1,3 +1,4 @@
+
 import React, { useMemo, useCallback, useState, useEffect, Suspense } from 'react';
 import { EvidenceInventory } from './evidence/EvidenceInventory';
 import { EvidenceDetail } from './evidence/EvidenceDetail';
@@ -26,6 +27,7 @@ const OriginalsManager = React.lazy(() => import('./evidence/fre/OriginalsManage
 interface EvidenceVaultProps {
   onNavigateToCase?: (caseId: string) => void;
   initialTab?: ViewMode;
+  caseId?: string; // Integration Point
 }
 
 const PARENT_TABS = [
@@ -52,7 +54,7 @@ const PARENT_TABS = [
   }
 ];
 
-export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, initialTab }) => {
+export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, initialTab, caseId }) => {
   const { theme } = useTheme();
   const {
     view,
@@ -68,7 +70,7 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
     handleBack,
     handleIntakeComplete,
     handleCustodyUpdate
-  } = useEvidenceVault();
+  } = useEvidenceVault(caseId); // Pass caseId to hook for scoping
 
   useEffect(() => {
       if (initialTab) setView(initialTab);
@@ -133,17 +135,19 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-      <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-            title="Evidence Vault" 
-            subtitle="Secure Chain of Custody & Forensic Asset Management."
-            actions={
-              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                 <Button variant="secondary" icon={Search} onClick={() => setView('inventory')} className="w-full sm:w-auto justify-center">Search Vault</Button>
-                 <Button variant="primary" icon={Plus} onClick={() => setView('intake')} className="w-full sm:w-auto justify-center">Log New Item</Button>
-              </div>
-            }
-        />
+      <div className={cn("px-6 pt-6 shrink-0", caseId ? "pt-2" : "")}>
+        {!caseId && (
+            <PageHeader 
+                title="Evidence Vault" 
+                subtitle="Secure Chain of Custody & Forensic Asset Management."
+                actions={
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Button variant="secondary" icon={Search} onClick={() => setView('inventory')} className="w-full sm:w-auto justify-center">Search Vault</Button>
+                    <Button variant="primary" icon={Plus} onClick={() => setView('intake')} className="w-full sm:w-auto justify-center">Log New Item</Button>
+                </div>
+                }
+            />
+        )}
 
         {/* Desktop Parent Navigation */}
         <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
@@ -192,5 +196,3 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
     </div>
   );
 };
-
-export default EvidenceVault;

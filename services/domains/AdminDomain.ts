@@ -1,5 +1,5 @@
 
-import { AuditLogEntry, RLSPolicy, RolePermission } from '../../types';
+import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly } from '../../types';
 import { db, STORES } from '../db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -44,9 +44,9 @@ let permissionsStore: RolePermission[] = [
 ];
 
 export const AdminService = {
-    getLogs: async () => db.getAll<AuditLogEntry>(STORES.LOGS),
+    getLogs: async (): Promise<AuditLogEntry[]> => db.getAll<AuditLogEntry>(STORES.LOGS),
     
-    addLog: async (entry: Omit<AuditLogEntry, 'id'>) => { 
+    addLog: async (entry: Omit<AuditLogEntry, 'id'>): Promise<AuditLogEntry> => { 
         const log = { id: crypto.randomUUID(), ...entry };
         await db.put(STORES.LOGS, log);
         return log;
@@ -79,10 +79,10 @@ export const AdminService = {
         return [...policiesStore];
     },
 
-    saveRLSPolicy: async (policy: Partial<RLSPolicy>) => {
+    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<RLSPolicy | undefined> => {
         await delay(300);
         if (policy.id) {
-            policiesStore = policiesStore.map(p => p.id === policy.id ? { ...p, ...policy } : p);
+            policiesStore = policiesStore.map(p => p.id === policy.id ? { ...p, ...policy } as RLSPolicy : p);
             return policiesStore.find(p => p.id === policy.id);
         } else {
             const newPolicy = {
@@ -100,7 +100,7 @@ export const AdminService = {
         }
     },
 
-    deleteRLSPolicy: async (id: string) => {
+    deleteRLSPolicy: async (id: string): Promise<void> => {
         await delay(200);
         policiesStore = policiesStore.filter(p => p.id !== id);
     },
@@ -110,7 +110,7 @@ export const AdminService = {
         return [...permissionsStore];
     },
 
-    updatePermission: async (payload: { role: string, resource: string, level: string }) => {
+    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<RolePermission | undefined> => {
         await delay(100);
         const idx = permissionsStore.findIndex(p => p.role === payload.role && p.resource === payload.resource);
         if (idx !== -1) {
@@ -123,7 +123,7 @@ export const AdminService = {
 
     // --- Data Platform Services ---
 
-    getPipelines: async () => {
+    getPipelines: async (): Promise<PipelineJob[]> => {
         await delay(50); // Sim network
         return [
             { id: 'p1', name: 'PACER Sync (Hourly)', status: 'Running', lastRun: '2 mins ago', duration: '45s', volume: '12MB', schedule: 'Hourly (00:00)', logs: ['[INFO] Connecting to PACER API...', '[INFO] Auth Success', '[INFO] Fetching updates...', '[WARN] Rate limit approaching'] },
@@ -133,7 +133,7 @@ export const AdminService = {
         ];
     },
 
-    getApiKeys: async () => {
+    getApiKeys: async (): Promise<ApiKey[]> => {
         await delay(50);
         return [
             { id: 'k1', name: 'Production App', prefix: 'pk_live_...', created: '2023-11-01', status: 'Active' },
@@ -142,7 +142,7 @@ export const AdminService = {
         ];
     },
 
-    getAnomalies: async () => {
+    getAnomalies: async (): Promise<DataAnomaly[]> => {
         await delay(50);
         return [
             { id: 1, table: 'Parties', field: 'phone', issue: 'Invalid Format', count: 142, sample: '123-456', status: 'Detected', severity: 'Medium' },

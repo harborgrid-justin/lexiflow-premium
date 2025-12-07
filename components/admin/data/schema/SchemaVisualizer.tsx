@@ -28,6 +28,10 @@ const ContextMenu: React.FC<{ x: number, y: number, items: any[], onClose: () =>
     );
 };
 
+type DragState = 
+  | { type: 'pan'; startX: number; startY: number; initialPan: { x: number; y: number } }
+  | { type: 'table'; id: string; startX: number; startY: number; initialPos: { x: number; y: number } };
+
 export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
   const { theme, mode } = useTheme();
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -39,7 +43,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, items: any[] } | null>(null);
   
   // Drag State
-  const dragState = useRef<{ type: 'pan' | 'table', id?: string, startX: number, startY: number, initialPan?: {x: number, y:number}, initialPos?: {x: number, y:number} } | null>(null);
+  const dragState = useRef<DragState | null>(null);
 
   useEffect(() => {
     colRefs.current = new Map();
@@ -49,15 +53,13 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
   const handleWindowMouseMove = (e: MouseEvent) => {
     if (!dragState.current) return;
     e.preventDefault();
-    const { type, startX, startY } = dragState.current;
+    const state = dragState.current;
     
-    if (type === 'pan') {
-      const { initialPan } = dragState.current;
-      if (!initialPan) return;
+    if (state.type === 'pan') {
+      const { startX, startY, initialPan } = state;
       setPan({ x: initialPan.x + (e.clientX - startX), y: initialPan.y + (e.clientY - startY) });
-    } else if (type === 'table') {
-        const { id, initialPos } = dragState.current;
-        if (!id || !initialPos) return;
+    } else if (state.type === 'table') {
+        const { id, startX, startY, initialPos } = state;
         const newX = initialPos.x + (e.clientX / zoom - startX);
         const newY = initialPos.y + (e.clientY / zoom - startY);
         // Live update for visuals
@@ -69,11 +71,9 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
   const handleWindowMouseUp = (e: MouseEvent) => {
       if (dragState.current?.type === 'table') {
           const { id, startX, startY, initialPos } = dragState.current;
-          if (id && initialPos) {
-              const newX = initialPos.x + (e.clientX / zoom - startX);
-              const newY = initialPos.y + (e.clientY / zoom - startY);
-              onUpdateTablePos(id, { x: newX, y: newY });
-          }
+          const newX = initialPos.x + (e.clientX / zoom - startX);
+          const newY = initialPos.y + (e.clientY / zoom - startY);
+          onUpdateTablePos(id, { x: newX, y: newY });
       }
       dragState.current = null;
       window.removeEventListener('mousemove', handleWindowMouseMove);

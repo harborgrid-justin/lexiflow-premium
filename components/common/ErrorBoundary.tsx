@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 
@@ -16,8 +16,8 @@ interface State {
   isCopied: boolean;
 }
 
-export class ErrorBoundary extends React.Component<Props, State> {
-  public override state: State = {
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -30,7 +30,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 
-  public override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Construct debug information
     const debugInfo = `
 --- LexiFlow Error Report ---
@@ -100,7 +100,7 @@ Viewport: ${window.innerWidth}x${window.innerHeight}
     }
   }
 
-  public override render(): ReactNode {
+  public render(): ReactNode {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;

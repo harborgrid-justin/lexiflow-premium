@@ -10,6 +10,7 @@ import { AdminService } from './domains/AdminDomain';
 import { CorrespondenceService } from './domains/CommunicationDomain';
 import { DataQualityService } from './domains/DataQualityDomain';
 import { DataCatalogService } from './domains/DataCatalogDomain';
+import { BackupService } from './domains/BackupDomain';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -46,6 +47,7 @@ export const DataService = {
   correspondence: CorrespondenceService,
   quality: new DataQualityService(),
   catalog: DataCatalogService,
+  backup: BackupService,
 
   // Standard Repositories
   tasks: new class extends Repository<WorkflowTask> { 

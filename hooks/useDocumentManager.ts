@@ -1,12 +1,14 @@
-import { useState, useMemo, useDeferredValue } from 'react';
+
+import { useState, useMemo } from 'react';
 import { LegalDocument, DocumentVersion } from '../types';
 import { DataService } from '../services/dataService';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+import { useWorkerSearch } from './useWorkerSearch';
 
 export const useDocumentManager = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const deferredSearchTerm = useDeferredValue(searchTerm);
+  // useDeferredValue is removed in favor of Worker-based search
   
   const [activeModuleFilter, setActiveModuleFilter] = useState<string>('All');
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -23,6 +25,23 @@ export const useDocumentManager = () => {
     [STORES.DOCUMENTS, 'all'],
     DataService.documents.getAll
   );
+
+  // 1. Initial Filter (Cheap: Folder & Module)
+  const contextFilteredDocs = useMemo(() => {
+      return documents.filter(d => {
+          const inFolder = currentFolder === 'root' ? true : d.folderId === currentFolder;
+          const matchesModule = activeModuleFilter === 'All' || d.sourceModule === activeModuleFilter;
+          // If searching, ignore folder constraint
+          return matchesModule && (searchTerm ? true : inFolder);
+      });
+  }, [documents, currentFolder, activeModuleFilter, searchTerm]);
+
+  // 2. Heavy Filter (Worker: Search Text)
+  const { filteredItems: filtered, isSearching } = useWorkerSearch({
+      items: contextFilteredDocs,
+      query: searchTerm,
+      fields: ['title', 'content', 'tags', 'type']
+  });
 
   // Mutation for updates
   const { mutate: performUpdate } = useMutation(
@@ -94,15 +113,6 @@ export const useDocumentManager = () => {
 
   const allTags = useMemo(() => Array.from(new Set(documents.flatMap(d => d.tags))), [documents]);
 
-  const filtered = useMemo(() => {
-    return documents.filter(d => {
-        const inFolder = currentFolder === 'root' ? true : d.folderId === currentFolder;
-        const matchesSearch = d.title.toLowerCase().includes(deferredSearchTerm.toLowerCase()) || d.tags.some(t => t.toLowerCase().includes(deferredSearchTerm.toLowerCase()));
-        const matchesModule = activeModuleFilter === 'All' || d.sourceModule === activeModuleFilter;
-        return matchesSearch && matchesModule && (deferredSearchTerm ? true : inFolder);
-    });
-  }, [documents, deferredSearchTerm, activeModuleFilter, currentFolder]);
-
   const stats = {
       total: documents.length,
       evidence: documents.filter(d => d.sourceModule === 'Evidence').length,
@@ -122,7 +132,7 @@ export const useDocumentManager = () => {
     documents,
     setDocuments,
     isProcessingAI,
-    isLoading,
+    isLoading: isLoading || isSearching,
     handleRestore,
     handleBulkSummarize,
     toggleSelection,

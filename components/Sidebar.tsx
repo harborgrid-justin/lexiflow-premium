@@ -6,6 +6,21 @@ import { ModuleRegistry } from '../services/moduleRegistry';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { useWindow } from '../context/WindowContext';
+import { queryClient } from '../services/queryClient';
+import { DataService } from '../services/dataService';
+import { STORES } from '../services/db';
+import { PATHS } from '../constants/paths';
+
+// Data Prefetch Map: Maps routes to their data dependencies
+const PREFETCH_MAP: Record<string, { key: any[], fn: () => Promise<any> }> = {
+    [PATHS.CASES]: { key: [STORES.CASES, 'all'], fn: DataService.cases.getAll },
+    [PATHS.DOCUMENTS]: { key: [STORES.DOCUMENTS, 'all'], fn: DataService.documents.getAll },
+    [PATHS.WORKFLOWS]: { key: [STORES.TASKS, 'all'], fn: DataService.tasks.getAll },
+    [PATHS.EVIDENCE]: { key: [STORES.EVIDENCE, 'all'], fn: DataService.evidence.getAll },
+    [PATHS.CRM]: { key: [STORES.CLIENTS, 'all'], fn: DataService.clients.getAll },
+    [PATHS.BILLING]: { key: [STORES.BILLING, 'all'], fn: DataService.billing.getTimeEntries },
+    [PATHS.DOCKET]: { key: [STORES.DOCKET, 'all'], fn: DataService.docket.getAll },
+};
 
 interface SidebarProps {
   activeView: AppView; 
@@ -56,10 +71,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
   }, [visibleItems]);
 
   const handlePreload = (item: ModuleDefinition) => {
+      // 1. Code Splitting Prefetch
       // Cast to any to access the preload method attached in config/modules.tsx
       const component = item.component as any;
       if (component && component.preload) {
           component.preload();
+      }
+
+      // 2. Data Prefetching
+      const prefetchConfig = PREFETCH_MAP[item.id];
+      if (prefetchConfig) {
+          // This ensures data is fetching while the user is still moving the mouse to click
+          queryClient.fetch(prefetchConfig.key, prefetchConfig.fn);
       }
   };
 
@@ -119,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
                                     <button
                                         key={item.id}
                                         onClick={() => setActiveView(item.id)}
-                                        onMouseEnter={() => handlePreload(item)} // Trigger Code Fetch
+                                        onMouseEnter={() => handlePreload(item)} // Trigger Code & Data Prefetch
                                         className={cn(
                                             "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                                             isActive 

@@ -2,11 +2,12 @@
 import React, { useMemo, useState } from 'react';
 import { Badge } from '../common/Badge';
 import { LegalEntity } from '../../types';
-import { Building2, User, Gavel, Briefcase } from 'lucide-react';
+import { Building2, User, Gavel, Briefcase, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { SearchInputBar } from '../common/RefactoredCommon';
 import { VirtualList } from '../common/VirtualList';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 
 interface EntityGridProps {
   entities: LegalEntity[];
@@ -27,13 +28,17 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
       }
   };
 
-  const filtered = useMemo(() => {
-      return entities.filter(e => {
-          const matchesSearch = e.name.toLowerCase().includes(searchTerm.toLowerCase());
-          const matchesType = filterType === 'All' || e.type === filterType;
-          return matchesSearch && matchesType;
-      });
-  }, [entities, searchTerm, filterType]);
+  // 1. First Pass: Cheap Filter (Type)
+  const typeFiltered = useMemo(() => {
+      return filterType === 'All' ? entities : entities.filter(e => e.type === filterType);
+  }, [entities, filterType]);
+
+  // 2. Second Pass: Heavy Search (Worker)
+  const { filteredItems: filtered, isSearching } = useWorkerSearch({
+      items: typeFiltered,
+      query: searchTerm,
+      fields: ['name', 'email', 'roles', 'city', 'state']
+  });
 
   const renderRow = (ent: LegalEntity) => (
       <div 
@@ -76,12 +81,13 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
   return (
     <div className="space-y-4 h-full flex flex-col">
         <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm shrink-0", theme.surface, theme.border.default)}>
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-md relative">
                 <SearchInputBar 
                     value={searchTerm} 
                     onChange={(e) => setSearchTerm(e.target.value)} 
                     placeholder="Search entities..." 
                 />
+                {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
             </div>
             <select 
                 className={cn("p-2 border rounded text-sm outline-none bg-transparent ml-4", theme.border.default, theme.text.primary)}
@@ -109,7 +115,9 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
              {/* Virtual Body */}
              <div className="flex-1 relative">
                 {filtered.length === 0 ? (
-                     <div className="flex items-center justify-center h-full text-sm text-slate-400">No entities found.</div>
+                     <div className="flex items-center justify-center h-full text-sm text-slate-400">
+                         {isSearching ? "Searching..." : "No entities found."}
+                     </div>
                 ) : (
                     <VirtualList 
                         items={filtered}

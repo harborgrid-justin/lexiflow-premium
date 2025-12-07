@@ -1,5 +1,6 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
-import { Plus, Trash2, Lock, Eye, CheckSquare, Layers, Calendar as CalendarIcon, FileText, Gavel } from 'lucide-react';
+import { Plus, Trash2, Lock, Eye, CheckSquare, Layers, Calendar as CalendarIcon, FileText, Gavel, Loader2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { DataService } from '../../services/dataService';
 import { DocketEntry, DocketEntryType, Case } from '../../types';
@@ -14,6 +15,7 @@ import { cn } from '../../utils/cn';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';
@@ -98,23 +100,32 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       );
   };
 
-  const filteredEntries = useMemo(() => {
+  // 1. Context Filter (Cheap)
+  const contextFiltered = useMemo(() => {
     let data = selectedCaseId 
       ? docketEntries.filter(e => e.caseId === selectedCaseId)
       : docketEntries;
 
     return data.filter(entry => {
-      const matchesSearch = 
-        entry.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        entry.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        entry.caseId.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesTab = 
         activeTab === 'all' ? true :
         activeTab === 'orders' ? entry.type === 'Order' :
         activeTab === 'filings' ? entry.type === 'Filing' : true;
-      return matchesSearch && matchesTab;
-    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [searchTerm, activeTab, selectedCaseId, docketEntries]);
+      return matchesTab;
+    });
+  }, [activeTab, selectedCaseId, docketEntries]);
+
+  // 2. Heavy Filter (Worker)
+  const { filteredItems: filteredEntries, isSearching } = useWorkerSearch({
+      items: contextFiltered,
+      query: searchTerm,
+      fields: ['title', 'description', 'caseId', 'filedBy']
+  });
+
+  // Sort happens on the UI thread for now as it's cheap compared to string search
+  const sortedEntries = useMemo(() => {
+      return [...filteredEntries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [filteredEntries]);
 
   const renderLinkedText = (text: string) => {
     const parts = text.split(/(Docket #\d+|Motion|Order|Complaint|Exhibit|Answer)/g);
@@ -148,15 +159,16 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
         <div className={cn("flex-1 rounded-lg border shadow-sm flex flex-col overflow-hidden relative", theme.surface, theme.border.default)}>
           {!selectedCaseId ? (
             <div className="flex-1 overflow-auto relative">
+               {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className="animate-spin h-5 w-5 text-blue-500"/></div>}
               <DocketTable 
-                entries={filteredEntries} 
+                entries={sortedEntries} 
                 onSelectEntry={openOrbitalEntry} 
                 onSelectCaseId={setSelectedCaseId} 
                 showCaseColumn={true}
               />
             </div>
           ) : (
-            <div className={cn("flex-1 overflow-auto p-0", theme.surface)}>
+            <div className={cn("flex-1 overflow-auto p-0 flex flex-col", theme.surface)}>
                 <div className={cn("p-4 border-b flex justify-between items-center sticky top-0 z-10", theme.surfaceHighlight, theme.border.default)}>
                     <div>
                         <h3 className={cn("font-bold text-lg", theme.text.primary)}>Case Docket</h3>
@@ -165,12 +177,15 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                     <Button size="sm" variant="primary" icon={Plus} onClick={() => setIsAddModalOpen(true)}>Add Entry</Button>
                 </div>
                 
-                <DocketTable 
-                    entries={filteredEntries} 
-                    onSelectEntry={openOrbitalEntry} 
-                    onSelectCaseId={() => {}} // No-op, already selected
-                    showCaseColumn={false}
-                />
+                <div className="flex-1 relative">
+                    {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className="animate-spin h-5 w-5 text-blue-500"/></div>}
+                    <DocketTable 
+                        entries={sortedEntries} 
+                        onSelectEntry={openOrbitalEntry} 
+                        onSelectCaseId={() => {}} // No-op, already selected
+                        showCaseColumn={false}
+                    />
+                </div>
             </div>
           )}
         </div>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Citation } from '../../types';
 import { DataService } from '../../services/dataService';
@@ -13,6 +14,7 @@ import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
 import { CitationDetail } from './CitationDetail';
 import { EmptyState } from '../common/EmptyState';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 
 interface CitationLibraryProps {
   onSelect: (citation: Citation) => void;
@@ -28,10 +30,11 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
         DataService.citations.getAll
     );
 
-    const filteredCitations = citations.filter(c => 
-        c.citation.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        c.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const { filteredItems: filteredCitations, isSearching } = useWorkerSearch({
+        items: citations,
+        query: searchTerm,
+        fields: ['citation', 'title', 'description', 'type']
+    });
 
     const handleOpenDetail = (citation: Citation) => {
         const winId = `citation-${citation.id}`;
@@ -127,14 +130,17 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
 
     return (
         <div className="flex flex-col h-full">
-            <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
-                <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search citation, title, or description..." className="border-none shadow-none p-0" />
+            <div className={cn("p-4 border-b shrink-0 flex items-center gap-4", theme.border.default)}>
+                <div className="flex-1 relative">
+                    <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search citation, title, or description..." className="border-none shadow-none p-0 w-full" />
+                    {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
+                </div>
             </div>
             
             <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.light)}>
                 {isLoading ? <div className="flex items-center justify-center h-full"><Loader2 className="h-6 w-6 animate-spin text-blue-600"/></div>
                 : filteredCitations.length > 0 ? content
-                : <div className="pt-10"><EmptyState icon={BookOpen} title="No Citations Found" description="Your firm's citation library is empty or your search returned no results."/></div>
+                : <div className="pt-10"><EmptyState icon={BookOpen} title="No Citations Found" description={isSearching ? "Searching..." : "Your firm's citation library is empty or your search returned no results."}/></div>
                 }
             </div>
         </div>

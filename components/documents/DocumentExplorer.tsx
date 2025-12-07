@@ -19,6 +19,9 @@ import { useNotify } from '../../hooks/useNotify';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useDocumentDragDrop } from '../../hooks/useDocumentDragDrop';
+import { VirtualGrid } from '../common/VirtualGrid';
+import { FileIcon } from '../common/Primitives';
+import { Badge } from '../common/Badge';
 
 interface DocumentExplorerProps {
   currentUserRole?: UserRole;
@@ -27,20 +30,19 @@ interface DocumentExplorerProps {
 export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserRole = 'Associate' }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     searchTerm, setSearchTerm, selectedDocForHistory, setSelectedDocForHistory,
-    isProcessingAI, handleRestore, handleBulkSummarize: legacySummarize,
+    isProcessingAI, handleRestore,
     addTag, removeTag, allTags, filtered, currentFolder, setCurrentFolder,
-    isDetailsOpen, setIsDetailsOpen, previewDoc, setPreviewDoc, updateDocument
+    isDetailsOpen, setIsDetailsOpen, previewDoc, setPreviewDoc, updateDocument, isLoading
   } = useDocumentManager();
 
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);
   
   // Drag & Drop Logic extracted
-  const { isDragging, isUploading, setIsUploading, handleDragEnter, handleDragLeave, handleDrop } = useDocumentDragDrop(currentFolder);
+  const { isDragging, handleDragEnter, handleDragLeave, handleDrop } = useDocumentDragDrop(currentFolder);
 
   const {
     selectedIds: selectedDocs, toggleSelection, selectAll,
@@ -57,6 +59,41 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
           }
       }
   );
+
+  // Virtual Grid Cell Renderer
+  const renderGridCell = (doc: LegalDocument) => {
+    const isItemSelected = isSelected(doc.id);
+    return (
+        <div 
+            onClick={(e) => {
+                if(e.ctrlKey || e.metaKey) toggleSelection(doc.id, e);
+                else setPreviewDoc(doc);
+            }}
+            className={cn(
+                "h-full w-full border rounded-lg p-4 flex flex-col items-center justify-between cursor-pointer transition-all hover:shadow-md relative group",
+                theme.surface,
+                theme.border.default,
+                isItemSelected ? "ring-2 ring-blue-500 bg-blue-50/50" : `hover:${theme.surfaceHighlight}`
+            )}
+        >
+            <div className="absolute top-2 left-2 z-10" onClick={e => e.stopPropagation()}>
+                <input type="checkbox" checked={isItemSelected} onChange={(e) => toggleSelection(doc.id, e)} className="rounded text-blue-600 cursor-pointer w-4 h-4"/>
+            </div>
+
+            <div className="flex-1 flex items-center justify-center w-full">
+                <FileIcon type={doc.type} className="h-16 w-16 opacity-80" />
+            </div>
+
+            <div className="w-full text-center mt-3">
+                <h4 className={cn("text-xs font-bold truncate px-1", theme.text.primary)} title={doc.title}>{doc.title}</h4>
+                <div className="flex justify-center items-center gap-2 mt-1">
+                    <span className={cn("text-[10px]", theme.text.secondary)}>{doc.fileSize || '24KB'}</span>
+                    <Badge variant="neutral" className="text-[9px] px-1 py-0">{doc.status || 'Active'}</Badge>
+                </div>
+            </div>
+        </div>
+    );
+  };
 
   return (
     <div 
@@ -79,12 +116,25 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
             />
             
             <div className="flex-1 overflow-hidden relative">
-                <DocumentTable 
-                    documents={filtered} viewMode={viewMode} selectedDocs={selectedDocs} toggleSelection={toggleSelection}
-                    selectAll={selectAll} isAllSelected={isAllSelected} isSelected={isSelected}
-                    setSelectedDocForHistory={setSelectedDocForHistory} setTaggingDoc={setTaggingDoc}
-                    onRowClick={setPreviewDoc}
-                />
+                {viewMode === 'list' ? (
+                    <DocumentTable 
+                        documents={filtered} viewMode={viewMode} selectedDocs={selectedDocs} toggleSelection={toggleSelection}
+                        selectAll={selectAll} isAllSelected={isAllSelected} isSelected={isSelected}
+                        setSelectedDocForHistory={setSelectedDocForHistory} setTaggingDoc={setTaggingDoc}
+                        onRowClick={setPreviewDoc}
+                    />
+                ) : (
+                    <div className="h-full p-4 bg-slate-50/30">
+                        <VirtualGrid 
+                            items={filtered} 
+                            itemHeight={200} 
+                            itemWidth={180} 
+                            renderItem={renderGridCell}
+                            gap={16}
+                            emptyMessage={isLoading ? "Searching documents..." : "No documents found"}
+                        />
+                    </div>
+                )}
             </div>
         </div>
 

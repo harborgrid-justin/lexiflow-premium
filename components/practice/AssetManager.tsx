@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2 } from 'lucide-react';
+import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
@@ -14,6 +14,7 @@ import { cn } from '../../utils/cn';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 
 export const AssetManager: React.FC = () => {
   const { theme } = useTheme();
@@ -72,10 +73,12 @@ export const AssetManager: React.FC = () => {
     }
   };
 
-  const filteredAssets = assets.filter(a => 
-    a.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    a.assignedTo?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Off-Main-Thread Search
+  const { filteredItems: filteredAssets, isSearching } = useWorkerSearch({
+      items: assets,
+      query: searchTerm,
+      fields: ['name', 'assignedTo', 'serialNumber', 'type']
+  });
 
   // Performance Engine: Virtual Row Renderer
   const renderRow = (asset: FirmAsset) => (
@@ -114,12 +117,13 @@ export const AssetManager: React.FC = () => {
         </div>
       </div>
 
-      <div className="shrink-0">
+      <div className="shrink-0 relative">
         <SearchToolbar 
             value={searchTerm} 
             onChange={setSearchTerm} 
             placeholder="Search assets by tag or assignee..." 
         />
+        {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
       </div>
 
       <div className={cn("flex-1 flex flex-col border rounded-lg overflow-hidden shadow-sm bg-white", theme.border.default)}>
@@ -141,7 +145,7 @@ export const AssetManager: React.FC = () => {
                 height="100%"
                 itemHeight={60}
                 renderItem={renderRow}
-                emptyMessage="No assets found."
+                emptyMessage={isSearching ? "Searching..." : "No assets found."}
             />
           </div>
       </div>

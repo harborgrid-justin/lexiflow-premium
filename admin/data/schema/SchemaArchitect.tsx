@@ -10,7 +10,7 @@ import { SchemaSnapshots } from './SchemaSnapshots';
 import { Button } from '../../../common/Button';
 import { SchemaVisualizer } from './SchemaVisualizer';
 // FIX: Correct import path
-import { TableData, TableColumn } from './schemaTypes'; // Import types
+import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
 // FIX: Correct import path
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 

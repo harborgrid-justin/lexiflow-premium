@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { CustodianInterview } from '../../types';
+import { CustodianInterview, CaseId } from '../../types';
 import { DataService } from '../../services/dataService';
 import { Button } from '../common/Button';
 import { MessageSquare, Plus } from 'lucide-react';
@@ -32,7 +33,8 @@ export const DiscoveryInterviews: React.FC = () => {
       if (!newInterview.custodianName) return;
       createInterview({
           id: `INT-${Date.now()}`,
-          caseId: 'C-2024-001', // Mock default
+          // FIX: Cast string to branded type CaseId
+          caseId: 'C-2024-001' as CaseId, // Mock default
           custodianName: newInterview.custodianName,
           department: newInterview.department || 'General',
           status: 'Scheduled',

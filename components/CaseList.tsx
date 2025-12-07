@@ -1,3 +1,4 @@
+
 // components/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../types';
@@ -21,7 +22,7 @@ import { cn } from '../utils/cn';
 import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
 import { CaseListContent } from './case-list/CaseListContent'; // Updated import path
 
-// FIX: Lazy load sub-components for better performance
+// Lazy load sub-components for better performance
 const CaseListActive = lazy(() => import('./case-list/CaseListActive').then(m => ({ default: m.CaseListActive })));
 const CaseListIntake = lazy(() => import('./case-list/CaseListIntake').then(m => ({ default: m.CaseListIntake })));
 const CaseListDocket = lazy(() => import('./case-list/CaseListDocket').then(m => ({ default: m.CaseListDocket })));
@@ -60,12 +61,21 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
-// FIX: Cast string to branded type CaseId
+        // FIX: Add missing required properties for the Case type, ensuring they are not overwritten.
+           ...(data.caseInfo || {}),
+        // FIX: Cast string to branded type CaseId
            id: (data.caseInfo?.id || `IMP-${Date.now()}`) as CaseId,
            title: data.caseInfo?.title || 'Imported Matter',
-           matterType: 'Litigation', status: CaseStatus.Discovery, client: 'Imported Client', value: 0,
-           description: 'Imported via Docket XML', filingDate: new Date().toISOString().split('T')[0],
-           ...data.caseInfo
+           matterType: (data.caseInfo as any)?.matterType || 'Litigation', 
+           status: (data.caseInfo as any)?.status || CaseStatus.Discovery, 
+           client: (data.caseInfo as any)?.client || 'Imported Client', 
+           value: data.caseInfo?.value || 0,
+           description: data.caseInfo?.description || 'Imported via Docket XML', 
+           filingDate: data.caseInfo?.filingDate || new Date().toISOString().split('T')[0],
+           parties: data.caseInfo?.parties || [],
+           citations: data.caseInfo?.citations || [],
+           arguments: data.caseInfo?.arguments || [],
+           defenses: data.caseInfo?.defenses || [],
        };
        await DataService.cases.add(newCase);
        await DataService.cases.importDocket(newCase.id, data);

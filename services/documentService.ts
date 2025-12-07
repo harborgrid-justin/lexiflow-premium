@@ -1,4 +1,5 @@
-import { EvidenceItem, FileChunk, LegalDocument } from '../types';
+
+import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../types';
 import { db, STORES } from './db';
 
 // Helper to yield control to the main thread
@@ -8,12 +9,14 @@ export const DocumentService = {
   
   // Store a real file into IDB
   async uploadDocument(file: File, meta: Partial<LegalDocument>): Promise<LegalDocument> {
-      const id = `doc-${Date.now()}`;
+      // FIX: Cast string to branded type DocumentId
+      const id = `doc-${Date.now()}` as DocumentId;
       
       // 1. Save Metadata
       const newDoc: LegalDocument = {
           id,
-          caseId: meta.caseId || 'General',
+          // FIX: Cast string to branded type CaseId
+          caseId: (meta.caseId || 'General') as CaseId,
           title: file.name,
           type: meta.type || file.type.split('/')[1].toUpperCase(),
           content: 'Binary content stored in secure blob storage.',

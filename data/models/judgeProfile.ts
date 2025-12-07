@@ -1,9 +1,8 @@
-
-import { JudgeProfile } from '../../types';
+import { JudgeProfile, UUID } from '../../types';
 
 export const MOCK_JUDGES: JudgeProfile[] = [
     {
-        id: 'j1', 
+        id: 'j1' as UUID, 
         name: 'Hon. Sarah Miller', 
         court: 'CA Superior - SF',
         grantRateDismiss: 65, 
@@ -12,7 +11,7 @@ export const MOCK_JUDGES: JudgeProfile[] = [
         tendencies: ['Strict on discovery deadlines', 'favors mediation', 'Detailed rulings']
     },
     {
-        id: 'j-brinkema',
+        id: 'j-brinkema' as UUID,
         name: 'Hon. Leonie M. Brinkema',
         court: 'E.D. Virginia (Alexandria)',
         grantRateDismiss: 72,
@@ -21,7 +20,7 @@ export const MOCK_JUDGES: JudgeProfile[] = [
         tendencies: ['Rocket Docket efficiency', 'Strict adherence to local rules', 'Expects preparedness']
     },
     {
-        id: 'j-davis',
+        id: 'j-davis' as UUID,
         name: 'Magistrate Ivan D. Davis',
         court: 'E.D. Virginia (Alexandria)',
         grantRateDismiss: 40,

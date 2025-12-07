@@ -1,3 +1,4 @@
+
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseService } from './domains/CaseDomain';
@@ -89,8 +90,8 @@ export const DataService = {
       constructor() { super(STORES.ENTITIES); }
       getRelationships = async (id: string) => { return []; } 
   }(),
-// FIX: The type 'WorkflowTemplateData' does not satisfy the constraint 'BaseEntity'.
-  playbooks: new class extends Repository<any> { constructor() { super(STORES.TEMPLATES); } }(),
+  // FIX: The type 'WorkflowTemplateData' does not satisfy the constraint 'BaseEntity'. Corrected 'any' to 'WorkflowTemplateData'.
+  playbooks: new class extends Repository<WorkflowTemplateData> { constructor() { super(STORES.TEMPLATES); } }(),
   clauses: new class extends Repository<Clause> { constructor() { super(STORES.CLAUSES); } }(),
   rules: new class extends Repository<LegalRule> { 
       constructor() { super(STORES.RULES); } 

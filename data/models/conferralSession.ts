@@ -1,10 +1,13 @@
 
-import { ConferralSession } from '../../types';
+
+
+import { ConferralSession, UUID, CaseId, MotionId } from '../../types';
 
 export const MOCK_CONFERRALS: ConferralSession[] = [
   {
-    id: 'conf-1',
-    caseId: 'C-2024-001',
+    id: 'conf-1' as UUID,
+    // FIX: Cast string to branded type CaseId
+    caseId: 'C-2024-001' as CaseId,
     topic: 'Scope of ESI Production',
     date: '2024-01-10',
     method: 'Video Conference',
@@ -14,14 +17,16 @@ export const MOCK_CONFERRALS: ConferralSession[] = [
     nextSteps: 'Send revised search term list by Friday.'
   },
   {
-    id: 'conf-2',
-    caseId: 'C-2024-001',
+    id: 'conf-2' as UUID,
+    // FIX: Cast string to branded type CaseId
+    caseId: 'C-2024-001' as CaseId,
     topic: 'Motion to Dismiss - Meet & Confer',
     date: '2024-02-12',
     method: 'Phone',
     participants: ['Alexandra H. (Us)', 'Lead Counsel (Them)'],
     notes: 'Attempted to resolve issues regarding Count II. Opposing counsel stands firm on standing argument. No agreement reached.',
     result: 'Impasse',
-    linkedMotionId: 'mot-1'
+    // FIX: Cast string to branded type MotionId
+    linkedMotionId: 'mot-1' as MotionId
   }
 ];

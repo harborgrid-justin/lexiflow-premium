@@ -1,11 +1,16 @@
 
-import { EvidenceItem } from '../../types';
+
+
+import { EvidenceItem, EvidenceId, UUID, CaseId } from '../../types';
 
 export const MOCK_EVIDENCE: EvidenceItem[] = [
   {
-    id: 'EV-001',
-    trackingUuid: '123e4567-e89b-12d3-a456-426614174000',
-    caseId: 'C-2024-001',
+    // FIX: Cast string to branded type EvidenceId
+    id: 'EV-001' as EvidenceId,
+    // FIX: Cast string to branded type UUID
+    trackingUuid: '123e4567-e89b-12d3-a456-426614174000' as UUID,
+    // FIX: Cast string to branded type CaseId
+    caseId: 'C-2024-001' as CaseId,
     title: 'Termination Letter',
     type: 'Document',
     description: 'Original letter of termination signed by HR Director.',
@@ -26,9 +31,12 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
     ]
   },
   {
-    id: 'EV-002',
-    trackingUuid: '123e4567-e89b-12d3-a456-426614174001',
-    caseId: 'C-2023-892',
+    // FIX: Cast string to branded type EvidenceId
+    id: 'EV-002' as EvidenceId,
+    // FIX: Cast string to branded type UUID
+    trackingUuid: '123e4567-e89b-12d3-a456-426614174001' as UUID,
+    // FIX: Cast string to branded type CaseId
+    caseId: 'C-2023-892' as CaseId,
     title: 'Soil Samples - Site B',
     type: 'Physical',
     description: 'Jar containing soil samples from the northern perimeter.',
@@ -45,9 +53,12 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
     ]
   },
   {
-    id: 'EV-003',
-    trackingUuid: '123e4567-e89b-12d3-a456-426614174002',
-    caseId: 'C-2024-001',
+    // FIX: Cast string to branded type EvidenceId
+    id: 'EV-003' as EvidenceId,
+    // FIX: Cast string to branded type UUID
+    trackingUuid: '123e4567-e89b-12d3-a456-426614174002' as UUID,
+    // FIX: Cast string to branded type CaseId
+    caseId: 'C-2024-001' as CaseId,
     title: 'Server Logs 2023-Oct',
     type: 'Digital',
     description: 'Access logs for the HR portal during the incident window.',

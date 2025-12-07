@@ -1,3 +1,4 @@
+
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Client, EntityId } from '../types';
 import {
@@ -51,7 +52,7 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
 
   const handleAddClient = async (clientName: string) => {
       const newClient: Client = {
-// FIX: Cast string to branded type EntityId
+        // FIX: Cast string to branded type EntityId
           id: `cli-${Date.now()}` as EntityId, name: clientName, industry: 'General',
           status: 'Prospect', totalBilled: 0, matters: []
       };

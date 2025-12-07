@@ -1,34 +1,33 @@
+
+
 import React, { useState, useCallback, useEffect, useTransition } from 'react';
-import { Sidebar } from './Sidebar';
-import { AppShell } from './layout/AppShell';
-import { AppHeader } from './layout/AppHeader';
-import { AppView, User, Case } from '../types';
-import { MOCK_USERS } from '../data/models/user'; // Updated import path
-import { ThemeProvider } from '../context/ThemeContext';
-import { ToastProvider, useToast } from '../context/ToastContext';
-import { WindowProvider } from '../context/WindowContext';
-import { SyncProvider } from '../context/SyncContext';
-import { HolographicDock } from './layout/HolographicDock';
-import { PATHS } from '../constants/paths';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { DataService } from '../services/dataService';
-import { GlobalSearchResult } from '../services/searchService';
-import { IntentResult } from '../services/geminiService';
-import { ErrorBoundary } from './common/ErrorBoundary';
-import { db } from '../services/db';
-import { GlobalHotkeys } from './common/GlobalHotkeys';
-import { AppContentRenderer } from './layout/AppContentRenderer';
+import { Sidebar } from './components/Sidebar';
+import { AppShell } from './components/layout/AppShell';
+import { AppHeader } from './components/layout/AppHeader';
+import { AppView, User, Case } from './types';
+import { MOCK_USERS } from './data/models/user';
+import { ThemeProvider } from './context/ThemeContext';
+import { ToastProvider, useToast } from './context/ToastContext';
+import { WindowProvider } from './context/WindowContext';
+import { SyncProvider } from './context/SyncContext';
+import { HolographicDock } from './components/layout/HolographicDock';
+import { PATHS } from './constants/paths';
+import { useSessionStorage } from './hooks/useSessionStorage';
+import { DataService } from './services/dataService';
+import { GlobalSearchResult } from './services/searchService';
+import { IntentResult } from './services/geminiService';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { db } from './services/db';
+import { GlobalHotkeys } from './components/common/GlobalHotkeys';
+import { AppContentRenderer } from './components/layout/AppContentRenderer';
 import { Loader2 } from 'lucide-react';
+import { initializeModules } from './config/modules';
+import { ModuleRegistry } from './services/moduleRegistry';
+import { HolographicRouting } from './services/holographicRouting';
 
-// DYNAMIC IMPORT CONFIG
-import { initializeModules } from '../config/modules';
-import { ModuleRegistry } from '../services/moduleRegistry';
-import { HolographicRouting } from '../services/holographicRouting';
-
-// Initialize Registry immediately
+// Initialize Registry
 initializeModules();
 
-// Inner App Component to access Context
 const InnerApp: React.FC = () => {
   const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
   const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, null);
@@ -44,7 +43,6 @@ const InnerApp: React.FC = () => {
 
   const currentUser: User = MOCK_USERS[currentUserIndex];
 
-  // Load case data on mount if ID exists in storage
   useEffect(() => {
     if (selectedCaseId) {
         const loadCase = async () => {
@@ -64,8 +62,6 @@ const InnerApp: React.FC = () => {
       setSelectedCase(null);
     }
   }, [selectedCaseId, setSelectedCaseId]);
-
-  // --- NAVIGATION HANDLERS ---
 
   const handleSelectCaseById = useCallback((caseId: string) => {
     startTransition(async () => {
@@ -123,25 +119,19 @@ const InnerApp: React.FC = () => {
     });
   }, [handleSelectCase, setActiveView, setSelectedCaseId]);
 
-  // --- AI NEURAL INTERFACE ---
   const handleNeuralCommand = useCallback((intent: IntentResult) => {
-    console.log("Processing Neural Intent:", intent);
     startTransition(() => {
-      // 1. Module Navigation
       if (intent.action === 'NAVIGATE' && intent.targetModule) {
         const moduleId = ModuleRegistry.resolveIntent(intent.targetModule.toLowerCase());
         
         if (moduleId) {
             const deepLinkTab = HolographicRouting.resolveTab(moduleId, intent.context);
             setInitialTab(deepLinkTab);
-
             setActiveView(moduleId);
-            
             if (!['cases', 'documents', 'docket'].includes(moduleId)) {
                 setSelectedCase(null);
                 setSelectedCaseId(null);
             }
-            
             const destName = deepLinkTab ? `${intent.targetModule} / ${deepLinkTab}` : intent.targetModule;
             addToast(`Navigating to ${destName}...`, 'info');
         } else {
@@ -153,12 +143,10 @@ const InnerApp: React.FC = () => {
         }
       }
       
-      // 2. Entity Resolution (Cases/Clients)
       if ((intent.action === 'NAVIGATE' || intent.action === 'SEARCH') && intent.entityId) {
           handleSelectCaseById(intent.entityId);
       }
       
-      // 3. Action Creation (Drafting, Tasks)
       if (intent.action === 'CREATE' && intent.context) {
           if (intent.context.toLowerCase().includes('motion') || intent.context.toLowerCase().includes('draft')) {
              if (selectedCase) {

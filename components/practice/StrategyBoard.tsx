@@ -75,7 +75,7 @@ export const StrategyBoard: React.FC = () => {
                                 <KanbanCard className="border-l-4 border-l-blue-500">Regional Employment Firm</KanbanCard>
                             </KanbanColumn>
                             {/* FIX: Added null child to satisfy required children prop. */}
-                            <KanbanColumn title="Negotiation" count={0}><></></KanbanColumn>
+                            <KanbanColumn title="Negotiation" count={0}>{null}</KanbanColumn>
                             <KanbanColumn title="Integration" count={1}>
                                 <KanbanCard className="border-l-4 border-l-green-500">Tax Practice Group</KanbanCard>
                             </KanbanColumn>

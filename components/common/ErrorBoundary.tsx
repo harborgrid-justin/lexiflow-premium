@@ -12,6 +12,9 @@ interface ErrorBoundaryState {
   errorInfo: ErrorInfo | null;
 }
 
+// FIX: Extended React.Component to correctly implement an Error Boundary.
+// This resolves issues where `this.state`, `this.props`, and lifecycle methods
+// were not available on the class instance.
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   // FIX: Switched from class property state initialization to a constructor.
   // This is a more traditional and explicit way to initialize state in React class components,

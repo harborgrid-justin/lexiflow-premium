@@ -12,8 +12,8 @@ import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
 import { HolographicRouting } from '../services/holographicRouting';
-import { NexusInspector } from '../visual/NexusInspector';
-import { ErrorBoundary } from '../common/ErrorBoundary';
+import { NexusInspector } from './visual/NexusInspector';
+import { ErrorBoundary } from './common/ErrorBoundary';
 
 interface CaseDetailProps {
   caseData: Case;
@@ -185,8 +185,15 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         evidence={caseEvidence}
                         onTimeEntryAdded={(e) => hookData.setBillingEntries(prev => prev ? [e, ...prev] : [e])}
                         onNavigateToCase={onSelectCase}
+                        onUpdateParties={hookData.setParties}
                         onTimelineClick={handleTimelineClick}
+                        onAddProject={hookData.addProject}
+                        onAddTask={hookData.addTaskToProject}
+                        onUpdateTask={hookData.updateProjectTaskStatus}
+                        onGenerateWorkflow={hookData.handleGenerateWorkflow}
+                        onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
+                        onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />
                   </ErrorBoundary>

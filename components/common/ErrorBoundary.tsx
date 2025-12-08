@@ -1,4 +1,3 @@
-
 import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -31,7 +30,6 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { hasError: true, error };
   }
 
-  // FIX: Converted from class property arrow function to a standard class method.
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const debugInfo = `
 --- LexiFlow Error Report ---
@@ -60,40 +58,35 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.log("Component Stack:", errorInfo.componentStack);
     console.groupEnd();
     
-    // FIX: `this.setState` is now correctly recognized on the component instance.
     this.setState({ isResolving: true, debugInfo });
 
     // Using promises to handle async logic while keeping the lifecycle method synchronous
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
         if (this.state.hasError) {
-          // FIX: `this.setState` is now correctly recognized on the component instance.
           this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
         if (this.state.hasError) {
-          // FIX: `this.setState` is now correctly recognized on the component instance.
           this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
         }
       });
   }
 
-  // FIX: Converted from class property arrow function to a standard class method.
-  private handleReset() {
+  // FIX: Converted to arrow function to ensure `this` is correctly bound.
+  private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  // FIX: Converted from class property arrow function to a standard class method.
-  private handleCopyDebugInfo() {
+  // FIX: Converted to arrow function to ensure `this` is correctly bound.
+  private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo)
               .then(() => {
-                // FIX: `this.setState` is now correctly recognized on the component instance.
                 this.setState({ isCopied: true });
                 setTimeout(() => {
-                    // FIX: `this.setState` is now correctly recognized on the component instance.
                     this.setState({ isCopied: false });
                 }, 2000);
               })
@@ -106,9 +99,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
 
   public render(): ReactNode {
     if (this.state.hasError) {
-      // FIX: `this.props` is now correctly recognized on the component instance.
       if (this.props.fallback) {
-        // FIX: `this.props` is now correctly recognized on the component instance.
         return this.props.fallback;
       }
 
@@ -156,7 +147,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
               Dashboard
             </button>
             <button 
-              onClick={() => this.handleCopyDebugInfo()}
+              onClick={this.handleCopyDebugInfo}
               disabled={this.state.isCopied}
               className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-70"
             >
@@ -164,7 +155,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
                 {this.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
             </button>
             <button 
-              onClick={() => this.handleReset()}
+              onClick={this.handleReset}
               className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
@@ -175,7 +166,6 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
-    // FIX: `this.props` is now correctly recognized on the component instance.
     return this.props.children;
   }
 }

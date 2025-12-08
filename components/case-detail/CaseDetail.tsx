@@ -1,20 +1,20 @@
 
-
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
-import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
-import { CaseDetailContent } from './case-detail/CaseDetailContent';
-import { CaseTimeline } from './case-detail/CaseTimeline';
+import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailContent } from './CaseDetailContent';
+import { CaseTimeline } from './CaseTimeline';
 import { useCaseDetail } from '../../hooks/useCaseDetail';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
+import { CASE_DETAIL_TABS } from './CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
-import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
+import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
 import { HolographicRouting } from '../../services/holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
 import { ErrorBoundary } from '../common/ErrorBoundary';
+import { CaseDetailNavigation } from './layout/CaseDetailNavigation';
 
 interface CaseDetailProps {
   caseData: Case;
@@ -53,11 +53,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
           }
       }
   }, [initialTab, hookData.setActiveTab]);
-
-  // Derived state for parent tab using shared config
-  const activeParentTab = useMemo(() => 
-    CASE_DETAIL_TABS.find(p => p.subTabs.some(s => s.id === hookData.activeTab)) || CASE_DETAIL_TABS[0],
-  [hookData.activeTab]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = CASE_DETAIL_TABS.find(p => p.id === parentId);
@@ -129,51 +124,17 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
         title={caseData.title}
         status={caseData.status}
         client={caseData.client}
-        clientId={caseData.clientId}
+        clientId={caseData.clientId as any}
         jurisdiction={caseData.jurisdiction}
         onBack={onBack} 
         onShowTimeline={() => setShowMobileTimeline(true)}
       />
 
-      <div className="px-6 pt-2 shrink-0">
-        {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
-            {CASE_DETAIL_TABS.map(parent => (
-                <button
-                    key={parent.id}
-                    onClick={() => handleParentTabChange(parent.id)}
-                    className={cn(
-                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                        activeParentTab.id === parent.id 
-                            ? cn("border-current", theme.primary.text)
-                            : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
-                    )}
-                >
-                    <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {parent.label}
-                </button>
-            ))}
-        </div>
-
-        {/* Sub-Navigation (Pills) */}
-        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
-            {activeParentTab.subTabs.map(tab => (
-                <button 
-                    key={tab.id} 
-                    onClick={() => handleSubTabChange(tab.id)} 
-                    className={cn(
-                        "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                        hookData.activeTab === tab.id 
-                            ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                            : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
-                    )}
-                >
-                    <tab.icon className={cn("h-3.5 w-3.5", hookData.activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {tab.label}
-                </button>
-            ))}
-        </div>
-      </div>
+      <CaseDetailNavigation 
+        activeTab={hookData.activeTab}
+        setActiveTab={handleSubTabChange}
+        onParentTabChange={handleParentTabChange}
+      />
 
       {/* Main Content */}
       <div className={cn("flex-1 overflow-hidden min-h-0 flex", isPending && "opacity-60 transition-opacity")}>

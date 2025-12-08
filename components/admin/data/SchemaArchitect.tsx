@@ -1,6 +1,5 @@
 
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Modal } from '../../common/Modal';
@@ -11,6 +10,7 @@ import { SchemaSnapshots } from './schema/SchemaSnapshots';
 import { Button } from '../../common/Button';
 import { SchemaVisualizer } from './schema/SchemaVisualizer';
 import { TableData, TableColumn } from './schema/schemaTypes';
+import { SchemaToolbar } from './schema/SchemaToolbar';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -54,7 +54,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
           return colDef;
       }).join(',\n');
-      const indexes = t.columns.filter(c => c.index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
+      const indexes = t.columns.filter(c => (c as any).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   
@@ -136,19 +136,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
 
   return (
     <div className="flex flex-col h-full min-h-0">
-        <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surface, theme.border.default)}>
-            <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
-                <button onClick={() => setActiveTab('visual')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'visual' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><Table className="h-3 w-3 mr-2"/> Visual</button>
-                <button onClick={() => setActiveTab('code')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'code' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><Code className="h-3 w-3 mr-2"/> Generate SQL</button>
-                <button onClick={() => setActiveTab('history')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'history' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><GitBranch className="h-3 w-3 mr-2"/> Migrations</button>
-                <button onClick={() => setActiveTab('snapshots')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'snapshots' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}><History className="h-3 w-3 mr-2"/> Snapshots</button>
-            </div>
-            <div className="flex gap-2 w-full md:w-auto">
-                {activeTab === 'visual' && <Button variant="secondary" size="sm" icon={Brain} onClick={autoArrange}>Auto-Arrange</Button>}
-                <Button variant="outline" size="sm" icon={RefreshCw}>Sync DB</Button>
-                <Button variant="primary" size="sm" icon={Save}>Apply to Staging</Button>
-            </div>
-        </div>
+        <SchemaToolbar activeTab={activeTab} setActiveTab={setActiveTab} onAutoArrange={autoArrange} />
 
         <div className={cn("flex-1 overflow-hidden relative", theme.background)}>
             {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}

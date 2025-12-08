@@ -1,9 +1,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { Plus, Trash2, Lock, Eye, CheckSquare, Layers, Calendar as CalendarIcon, FileText, Gavel, Loader2 } from 'lucide-react';
-import { Button } from '../common/Button';
+import { Loader2 } from 'lucide-react';
 import { DataService } from '../../services/dataService';
-import { DocketEntry, DocketEntryType, Case } from '../../types';
+import { DocketEntry, Case } from '../../types';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';
@@ -16,6 +15,7 @@ import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+import { DocketToolbar } from './DocketToolbar';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';
@@ -169,13 +169,10 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
             </div>
           ) : (
             <div className={cn("flex-1 overflow-auto p-0 flex flex-col", theme.surface)}>
-                <div className={cn("p-4 border-b flex justify-between items-center sticky top-0 z-10", theme.surfaceHighlight, theme.border.default)}>
-                    <div>
-                        <h3 className={cn("font-bold text-lg", theme.text.primary)}>Case Docket</h3>
-                        <p className={cn("text-xs", theme.text.secondary)}>Viewing: {activeCase?.title}</p>
-                    </div>
-                    <Button size="sm" variant="primary" icon={Plus} onClick={() => setIsAddModalOpen(true)}>Add Entry</Button>
-                </div>
+                <DocketToolbar 
+                    activeCaseTitle={activeCase?.title}
+                    onAddEntry={() => setIsAddModalOpen(true)}
+                />
                 
                 <div className="flex-1 relative">
                     {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className="animate-spin h-5 w-5 text-blue-500"/></div>}

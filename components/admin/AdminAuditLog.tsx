@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AuditLogEntry } from '../../types';
-import { Clock, User, Activity, Download, Filter, Shield, ShieldCheck, Link, AlertOctagon, Loader2, LayoutList, GitCommit, RefreshCw, Skull, Terminal, ArrowRight } from 'lucide-react';
+import { User, Link, AlertOctagon, Loader2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { ChainService, ChainedLogEntry, IntegrityReport } from '../../services/chainService';
@@ -11,9 +11,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
-import { useQuery, queryClient } from '../../services/queryClient';
+import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
+import { AuditLogControls } from './audit/AuditLogControls';
 
 interface AdminAuditLogProps {
   // logs prop is removed; component will fetch its own data.
@@ -174,29 +175,16 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg border overflow-hidden", theme.surface, theme.border.default)}>
-      <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surfaceHighlight, theme.border.default)}>
-        <div>
-            <h3 className={cn("font-bold flex items-center gap-2", theme.text.primary)}>
-                <Shield className="h-5 w-5 text-blue-600"/> Immutable Audit Ledger
-            </h3>
-            <p className={cn("text-xs mt-1", theme.text.secondary)}>Cryptographically chained events.</p>
-        </div>
-        <div className="flex flex-wrap gap-2 w-full md:w-auto justify-end items-center">
-            <div className={cn("flex p-0.5 rounded-lg border mr-2", theme.surface, theme.border.default)}>
-                <button onClick={() => setViewMode('table')} className={cn("p-1.5 rounded", viewMode === 'table' ? cn(theme.surfaceHighlight, "text-blue-600") : theme.text.tertiary)}><LayoutList className="h-4 w-4"/></button>
-                <button onClick={() => setViewMode('visual')} className={cn("p-1.5 rounded", viewMode === 'visual' ? cn(theme.surfaceHighlight, "text-blue-600") : theme.text.tertiary)}><GitCommit className="h-4 w-4"/></button>
-            </div>
-            <div className="flex gap-1 mr-2">
-                <Button size="sm" variant="ghost" onClick={handleReset} className={theme.text.secondary}><RefreshCw className="h-4 w-4"/></Button>
-                <Button size="sm" variant="outline" onClick={handleSimulateTamper} className="text-red-600 border-red-200 hover:bg-red-50" icon={Skull}>Tamper</Button>
-            </div>
-            <div className={cn("h-6 w-px mx-1 self-center", theme.border.default)}></div>
-            <Button size="sm" variant={verifyResult?.isValid ? "primary" : verifyResult?.isValid === false ? "danger" : "outline"} icon={isVerifying ? Loader2 : ShieldCheck} onClick={handleVerifyChain} isLoading={isVerifying}>
-                {isVerifying ? 'Verifying...' : verifyResult?.isValid ? 'Verified' : verifyResult?.isValid === false ? 'Broken!' : 'Verify'}
-            </Button>
-            <Button size="sm" variant="secondary" icon={Download} onClick={handleExport}>Export</Button>
-        </div>
-      </div>
+      <AuditLogControls 
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        handleReset={handleReset}
+        handleSimulateTamper={handleSimulateTamper}
+        handleVerifyChain={handleVerifyChain}
+        handleExport={handleExport}
+        isVerifying={isVerifying}
+        verifyResult={verifyResult}
+      />
       
       <div className="flex-1 overflow-hidden relative">
         {viewMode === 'visual' ? (

@@ -14,6 +14,7 @@ interface CRMPipelineProps {
 export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
   const { theme } = useTheme();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
+  const [dragOverStage, setDragOverStage] = useState<string | null>(null);
 
   // Performance Engine: useMutation for Sync Queue
   const { mutate: updateStage } = useMutation(
@@ -37,12 +38,23 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
     setDraggedLeadId(id);
     e.dataTransfer.effectAllowed = 'move';
   };
+  
+  const handleDragOver = (e: React.DragEvent, stage: string) => {
+    e.preventDefault();
+    setDragOverStage(stage);
+  };
 
   const handleDrop = (stage: string) => {
     if (draggedLeadId !== null) {
       updateStage({ id: draggedLeadId, stage });
     }
     setDraggedLeadId(null);
+    setDragOverStage(null);
+  };
+
+  const handleAddLead = () => {
+      // Simple mock addition for UI demo
+      alert("Lead intake wizard would open here.");
   };
 
   const stages = ['New Lead', 'Conflict Check', 'Engagement', 'Matter Created'];
@@ -55,9 +67,11 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
             key={stage} 
             title={stage} 
             count={leads.filter((l: any) => l.stage === stage).length}
+            isDragOver={dragOverStage === stage}
             onDrop={() => handleDrop(stage)}
             action={idx === 0 ? (
               <button 
+                onClick={handleAddLead}
                 className={cn(
                   "mt-3 w-full py-2 border-2 border-dashed rounded-lg text-xs font-bold transition-all flex items-center justify-center",
                   theme.border.default,

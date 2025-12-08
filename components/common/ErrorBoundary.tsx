@@ -13,11 +13,8 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: The original code used a class property for state, which can cause issues with
-  // `this` context and property initialization order depending on the TypeScript/Babel
-  // configuration (e.g., `useDefineForClassFields`). Reverting to a standard constructor
-  // for state initialization ensures the component's `state`, `props`, and `setState`
-  // are correctly bound and available on the component instance.
+  public state: ErrorBoundaryState;
+
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -25,6 +22,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       error: null,
       errorInfo: null,
     };
+    // FIX: Manually bind `this` for class methods. While arrow functions on class
+    // properties can handle this, explicit binding in the constructor is more robust
+    // against various TypeScript/Babel configurations that can alter `this` context.
+    this.handleReset = this.handleReset.bind(this);
   }
 
   static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
@@ -36,7 +37,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.setState({ error, errorInfo });
   }
 
-  private handleReset = () => {
+  // FIX: Converted from an arrow function property to a standard class method.
+  private handleReset() {
     if (typeof window !== 'undefined') window.location.reload();
   }
 

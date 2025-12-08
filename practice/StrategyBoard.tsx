@@ -77,6 +77,7 @@ export const StrategyBoard: React.FC = () => {
                             </KanbanColumn>
                             <KanbanColumn title="Negotiation" count={0}>
                                 {/* FIX: KanbanColumn requires children */}
+                                <></>
                             </KanbanColumn>
                             <KanbanColumn title="Integration" count={1}>
                                 <KanbanCard className="border-l-4 border-l-green-500">Tax Practice Group</KanbanCard>

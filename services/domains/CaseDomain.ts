@@ -1,4 +1,3 @@
-
 import { Case, CasePhase, Party, CaseId } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';

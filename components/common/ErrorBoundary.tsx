@@ -1,4 +1,3 @@
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -19,7 +18,7 @@ interface ErrorBoundaryState {
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   
-  public state: ErrorBoundaryState = {
+  state: ErrorBoundaryState = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -62,49 +61,44 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     
     this.setState({ isResolving: true, debugInfo });
 
+    // Using promises to handle async logic while keeping the lifecycle method synchronous
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
         if (this.state.hasError) {
-            // FIX: Using an arrow function for the promise callback correctly captures `this`, making this call valid.
-            this.setState({ aiResolution: resolution, isResolving: false });
+          this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
-         if (this.state.hasError) {
-            // FIX: Using an arrow function for the promise callback correctly captures `this`, making this call valid.
-            this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
-         }
+        if (this.state.hasError) {
+          this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
+        }
       });
   }
 
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound when used as an event handler.
   private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound when used as an event handler.
   private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
-        if (typeof navigator !== 'undefined' && navigator.clipboard) {
-            navigator.clipboard.writeText(this.state.debugInfo).then(() => {
-                // FIX: `this.setState` is valid here due to the arrow function binding.
+        if (typeof window !== 'undefined' && navigator.clipboard) {
+            navigator.clipboard.writeText(this.state.debugInfo)
+              .then(() => {
                 this.setState({ isCopied: true });
                 setTimeout(() => {
-                    // FIX: `this.setState` is valid here due to the arrow function binding.
                     this.setState({ isCopied: false });
                 }, 2000);
-            }).catch(err => {
+              })
+              .catch(err => {
                 console.error("Failed to copy debug info:", err);
-            });
+              });
         }
     }
   }
 
   public render(): ReactNode {
     if (this.state.hasError) {
-      // FIX: `this.props` is a standard property in a React class component's render method.
       if (this.props.fallback) {
-        // FIX: `this.props` is a standard property in a React class component's render method.
         return this.props.fallback;
       }
 
@@ -171,7 +165,6 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
-    // FIX: `this.props` is a standard property in a React class component's render method.
     return this.props.children;
   }
 }

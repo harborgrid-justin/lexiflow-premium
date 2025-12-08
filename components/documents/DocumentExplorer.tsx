@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useRef } from 'react';
 import { UserRole, LegalDocument } from '../../types';
 import { DocumentVersions } from '../DocumentVersions';

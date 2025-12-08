@@ -1,4 +1,3 @@
-
 // components/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../types';
@@ -61,9 +60,8 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
-        // FIX: Add missing required properties for the Case type, ensuring they are not overwritten.
-           ...(data.caseInfo || {}),
-        // FIX: Cast string to branded type CaseId
+// FIX: Ensure all required Case properties are provided with fallbacks and correctly spread from caseInfo.
+           ...(data.caseInfo as Partial<Case>),
            id: (data.caseInfo?.id || `IMP-${Date.now()}`) as CaseId,
            title: data.caseInfo?.title || 'Imported Matter',
            matterType: (data.caseInfo as any)?.matterType || 'Litigation', 

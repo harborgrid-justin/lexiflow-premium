@@ -1,5 +1,6 @@
 
 import { StorageUtils } from '../utils/storage';
+import { LinearHash } from '../utils/datastructures/linearHash';
 
 export interface Mutation {
   id: string;
@@ -13,6 +14,7 @@ export interface Mutation {
 }
 
 const QUEUE_KEY = 'lexiflow_sync_queue';
+const processedCache = new LinearHash<string, boolean>();
 
 // Simple Diff Implementation to generate JSON Patch-like structure
 const createPatch = (oldData: any, newData: any) => {
@@ -50,6 +52,12 @@ export const SyncEngine = {
       status: 'pending',
       retryCount: 0
     };
+
+    if (processedCache.get(mutation.id)) {
+        console.log(`[Sync] Skipping duplicate mutation: ${mutation.id}`);
+        return mutation; // Don't re-add
+    }
+
     queue.push(mutation);
     StorageUtils.set(QUEUE_KEY, queue);
     return mutation;
@@ -59,6 +67,7 @@ export const SyncEngine = {
     const queue = SyncEngine.getQueue();
     if (queue.length === 0) return undefined;
     const item = queue.shift();
+    if(item) processedCache.set(item.id, true);
     StorageUtils.set(QUEUE_KEY, queue);
     return item;
   },

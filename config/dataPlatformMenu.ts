@@ -43,6 +43,7 @@ export const DATA_PLATFORM_MENU: MenuItem[] = [
     {
       id: 'lake', label: 'Data Lake', icon: HardDrive
     },
+    { id: 'sharding', label: 'Sharding', icon: Layers },
     { 
       id: 'lineage', label: 'Data Lineage', icon: Network,
       children: [

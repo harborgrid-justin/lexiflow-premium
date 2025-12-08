@@ -12,7 +12,7 @@ import { DataService } from '../../services/dataService';
 import { CASE_DETAIL_TABS } from './CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
-import { HolographicRouting } from '../../services/holographicRouting';
+import { HolographicRouting } from '../services/holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 

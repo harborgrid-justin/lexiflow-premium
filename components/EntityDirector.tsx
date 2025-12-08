@@ -10,7 +10,7 @@ import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
 import { LegalEntity, EntityId } from '../types';
 import { useWindow } from '../context/WindowContext'; // Holographic DOM
-import { LazyLoader } from './common/LazyLoader';
+import { LazyLoader } from '../common/LazyLoader';
 
 // Sub-components
 const EntityGrid = React.lazy(() => import('./entities/EntityGrid').then(m => ({ default: m.EntityGrid })));
@@ -132,7 +132,6 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
       const type = prompt("Type (Individual/Corporation/Law Firm):") || 'Individual';
       
       const newEntity: LegalEntity = {
-          // FIX: Cast string to branded type EntityId
           id: `ent-${Date.now()}` as EntityId,
           name,
           type: type as any,
@@ -201,7 +200,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
       </div>
 
       <div className="flex-1 flex overflow-hidden relative">
-         <div className={cn("flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar", activeTab === 'map' ? 'p-0' : '')}>
+         <div className={cn("flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar", activeTab === 'map' || activeTab === 'network' ? 'p-0' : '')}>
             <Suspense fallback={<LazyLoader message="Loading Module..." />}>
               {activeTab === 'directory' && <EntityGrid entities={entities} onSelect={handleSelectEntity} />}
               {activeTab === 'network' && <EntityNetwork entities={entities} />}

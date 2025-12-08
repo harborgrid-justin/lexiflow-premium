@@ -1,10 +1,8 @@
-
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
 import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema } from "./ai/schemas";
 import { safeParseJSON } from "../utils/apiUtils";
-// FIX: Import GroundingChunk type
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk } from '../types/ai';
 
 export * from '../types/ai';
@@ -21,6 +19,7 @@ export const GeminiService = {
                     responseSchema: AnalyzedDocSchema
                 }
             });
+            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON(response.text, { summary: "Analysis failed", riskScore: 0 });
         } catch (e) {
             console.error(e);
@@ -39,6 +38,7 @@ export const GeminiService = {
                     responseSchema: BriefCritiqueSchema
                 }
             });
+            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON(response.text, {
                 score: 0,
                 strengths: [],
@@ -125,6 +125,7 @@ export const GeminiService = {
                     responseSchema: IntentResultSchema
                 }
             });
+            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
         } catch (e) {
             return { action: 'UNKNOWN', confidence: 0 };
@@ -142,6 +143,7 @@ export const GeminiService = {
                     responseSchema: DocketSchema
                 }
             });
+            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
         } catch (e) {
             return {};
@@ -155,15 +157,13 @@ export const GeminiService = {
                  model: 'gemini-2.5-flash',
                  contents: Prompts.Research(query),
                  config: {
-                     tools: [{googleSearch: {}}]
+                     tools: [{googleSearch: {}}],
                  }
              });
              
              const sources: SearchResult[] = [];
              if (response.candidates && response.candidates[0]?.groundingMetadata?.groundingChunks) {
-                // FIX: Cast groundingChunks to the correct type to iterate safely.
                  const chunks = response.candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
-                // FIX: Use GroundingChunk type for loop variable instead of any for better type safety.
                  chunks.forEach((c: GroundingChunk) => {
                      if (c.web) {
                          sources.push({

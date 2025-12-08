@@ -1,4 +1,3 @@
-
 // components/ResearchTool.tsx
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import {
@@ -23,8 +22,7 @@ import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/model
 
 // TAB_CONFIG was moved to config/researchToolConfig.ts
 
-// FIX: Lazy load ClauseHistoryModal
-const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
+const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal'));
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
@@ -39,7 +37,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   useEffect(() => {
     if (activeView.startsWith('analytics_')) {
         const loadJudges = async () => {
-            // FIX: Property 'analytics' does not exist on type '...'. Did you mean 'analysis'?
+            // FIX: Corrected property from 'analytics' to 'analysis'
             const data = await DataService.analysis.getJudgeProfiles();
             setJudges(data);
             if (data.length > 0 && !selectedJudgeId) setSelectedJudgeId(data[0].id);

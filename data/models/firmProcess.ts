@@ -17,4 +17,5 @@ export const BUSINESS_PROCESSES = [
   { id: 'bp12', name: 'Vendor Risk Assessment', status: 'Pending', triggers: 'Admin: New Vendor', tasks: 9, completed: 0, owner: 'Compliance' },
   { id: 'bp13', name: 'Conflict Waiver Protocol', status: 'Active', triggers: 'Compliance: Conflict Hit', tasks: 3, completed: 2, owner: 'Ethics Committee' },
   { id: 'bp14', name: 'Litigation Hold Enforcement', status: 'Completed', triggers: 'Case: Created', tasks: 5, completed: 5, owner: 'General Counsel' },
+  { id: 'bp15', name: 'Document Malware Scan', status: 'Active', triggers: 'DMS: File Upload', tasks: 1, completed: 1, owner: 'Security Ops' },
 ];

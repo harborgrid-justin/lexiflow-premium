@@ -1,82 +1,94 @@
 
 import React, { useState } from 'react';
-import { ShieldAlert, Users, Smartphone, BookOpen, Activity, AlertOctagon, CheckCircle, Lock } from 'lucide-react';
-import { Tabs } from '../common/Tabs';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
+import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { MetricTile, SectionTitle } from '../common/RefactoredCommon';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Badge } from '../common/Badge';
+import { SuffixTree } from '../../utils/datastructures/suffixTree';
+import { useNotify } from '../../hooks/useNotify';
+
+const MALWARE_SIGNATURES = ['malicious_code_xyz', 'trojan_payload_abc', 'ransomware_encrypt'];
 
 export const SecurityOps: React.FC = () => {
     const { theme } = useTheme();
-    const [activeTab, setActiveTab] = useState('incidents');
+    const notify = useNotify();
+    const [isScanning, setIsScanning] = useState(false);
+    const [scanResult, setScanResult] = useState<'clean' | 'infected' | null>(null);
+    const [fileName, setFileName] = useState('');
 
-    const incidents = [
-        { id: 'SEC-001', type: 'Phishing Attempt', user: 'James Doe', severity: 'High', status: 'Mitigated', time: '2 hours ago' },
-        { id: 'SEC-002', type: 'Failed Login (5x)', user: 'System Admin', severity: 'Medium', status: 'Investigating', time: '4 hours ago' },
-        { id: 'SEC-003', type: 'Unusual Download', user: 'Sarah Jenkins', severity: 'Low', status: 'Cleared', time: 'Yesterday' },
-    ];
+    const handleFileScan = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+        
+        const file = e.target.files[0];
+        setFileName(file.name);
+        setIsScanning(true);
+        setScanResult(null);
+
+        // Simulate reading file and building suffix tree
+        const content = await file.text();
+        const suffixTree = new SuffixTree(content);
+
+        // Simulate delay for analysis
+        await new Promise(res => setTimeout(res, 1500));
+
+        let found = false;
+        for (const sig of MALWARE_SIGNATURES) {
+            if (suffixTree.hasSubstring(sig)) {
+                found = true;
+                break;
+            }
+        }
+
+        setScanResult(found ? 'infected' : 'clean');
+        setIsScanning(false);
+        notify.info(`Scan complete for ${file.name}`);
+    };
 
     return (
-        <div className="flex flex-col h-full space-y-4">
-             <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className={cn("text-lg font-bold", theme.text.primary)}>Security Operations Center</h3>
-                    <div className="flex gap-2">
-                        <Badge variant="success" className="px-3 py-1 text-sm"><CheckCircle className="h-4 w-4 mr-1"/> System Healthy</Badge>
+        <div className="space-y-6">
+            <Card title="Threat Intelligence Center">
+                <div className="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div>
+                        <h4 className="font-bold text-red-800">Threat Level: Elevated</h4>
+                        <p className="text-xs text-red-700">Increased phishing activity detected targeting legal sector.</p>
                     </div>
+                    <Button variant="danger">View Intel Brief</Button>
                 </div>
-                <Tabs 
-                    tabs={[
-                        { id: 'incidents', label: 'Incident Log', icon: AlertOctagon },
-                        { id: 'access', label: 'Access Reviews', icon: Users },
-                        { id: 'devices', label: 'Device Compliance', icon: Smartphone },
-                        { id: 'training', label: 'Security Training', icon: BookOpen },
-                        { id: 'threats', label: 'Threat Intel', icon: Activity },
-                    ]}
-                    activeTab={activeTab}
-                    onChange={setActiveTab}
-                />
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-6">
-                {activeTab === 'incidents' && (
-                    <div className="space-y-6 animate-fade-in">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <MetricTile label="Active Threats" value="0" icon={ShieldAlert} className="border-l-4 border-l-green-500" />
-                            <MetricTile label="Failed Logins (24h)" value="12" icon={Lock} className="border-l-4 border-l-amber-500" />
-                            <MetricTile label="Phishing Reports" value="3" icon={AlertOctagon} className="border-l-4 border-l-purple-500" />
-                            <MetricTile label="Mean Time to Resolve" value="14m" icon={Activity} className="border-l-4 border-l-blue-500" />
-                        </div>
-
-                        <SectionTitle>Recent Alerts</SectionTitle>
-                        <TableContainer>
-                            <TableHeader><TableHead>ID</TableHead><TableHead>Type</TableHead><TableHead>User Context</TableHead><TableHead>Severity</TableHead><TableHead>Time</TableHead><TableHead>Status</TableHead></TableHeader>
-                            <TableBody>
-                                {incidents.map(inc => (
-                                    <TableRow key={inc.id}>
-                                        <TableCell className="font-mono text-xs">{inc.id}</TableCell>
-                                        <TableCell className="font-bold">{inc.type}</TableCell>
-                                        <TableCell>{inc.user}</TableCell>
-                                        <TableCell><Badge variant={inc.severity === 'High' ? 'error' : inc.severity === 'Medium' ? 'warning' : 'neutral'}>{inc.severity}</Badge></TableCell>
-                                        <TableCell>{inc.time}</TableCell>
-                                        <TableCell><Badge variant={inc.status === 'Mitigated' ? 'success' : 'info'}>{inc.status}</Badge></TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </TableContainer>
-                    </div>
-                )}
-                
-                {activeTab !== 'incidents' && (
-                    <div className={cn("flex flex-col items-center justify-center h-full text-center p-12", theme.text.tertiary)}>
-                         <Lock className="h-16 w-16 mb-4 opacity-20"/>
-                         <h3 className="text-lg font-bold">Secure Zone</h3>
-                         <p>Detailed view restricted in demo mode.</p>
-                    </div>
-                )}
-            </div>
+            </Card>
+            
+            <Card title="Malware Signature Scanner (Suffix Tree)">
+                 <div className={cn("p-8 border-2 border-dashed rounded-lg text-center cursor-pointer relative", theme.border.default, `hover:${theme.primary.border}`)}>
+                    <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileScan} />
+                    {isScanning ? (
+                        <>
+                            <Loader2 className={cn("h-12 w-12 mx-auto mb-4 animate-spin", theme.primary.text)}/>
+                            <h3 className={cn("font-bold text-lg", theme.text.primary)}>Scanning: {fileName}</h3>
+                            <p className={cn("text-sm", theme.text.secondary)}>Using Suffix Tree for O(L) substring search...</p>
+                        </>
+                    ) : scanResult ? (
+                        scanResult === 'clean' ? (
+                            <>
+                                <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500"/>
+                                <h3 className="font-bold text-lg text-green-700">File is Clean</h3>
+                                <p className={cn("text-sm", theme.text.secondary)}>No known malware signatures found in {fileName}.</p>
+                            </>
+                        ) : (
+                            <>
+                                <FileWarning className="h-12 w-12 mx-auto mb-4 text-red-500"/>
+                                <h3 className="font-bold text-lg text-red-700">Threat Detected!</h3>
+                                <p className={cn("text-sm", theme.text.secondary)}>Malicious signature found in {fileName}. File has been quarantined.</p>
+                            </>
+                        )
+                    ) : (
+                        <>
+                            <UploadCloud className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>
+                            <h3 className={cn("font-bold text-lg", theme.text.primary)}>Scan Document for Threats</h3>
+                            <p className={cn("text-sm", theme.text.secondary)}>Click or drop file to analyze against signature database.</p>
+                        </>
+                    )}
+                </div>
+            </Card>
         </div>
     );
 };

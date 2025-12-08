@@ -6,7 +6,7 @@ import {
   DollarSign, Gavel, Mic2, FileCheck, Archive, FileInput,
   LayoutDashboard, Layers, Plus
 } from 'lucide-react';
-import { Button } from '../common/Button';
+import { Button } from './common/Button';
 import { useCaseList } from '../hooks/useCaseList';
 import { DocketImportModal } from './DocketImportModal';
 import { CreateCaseModal } from './case-list/CreateCaseModal';
@@ -16,7 +16,7 @@ import { useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from '../common/LazyLoader';
+import { LazyLoader } from './common/LazyLoader';
 import { cn } from '../utils/cn';
 import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
 import { CaseListContent } from './case-list/CaseListContent'; // Updated import path

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EvidenceInventory } from '../evidence/EvidenceInventory';
 import { useQuery } from '../../services/queryClient';
@@ -44,6 +43,7 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
           // FIX: Correct the onItemClick prop type to match the expected function signature
           onItemClick={handleItemClick}
           onIntakeClick={() => alert("Please go to Evidence Vault to log new items.")}
+          onIntakeComplete={handleIntakeComplete}
         />
       )}
     </div>

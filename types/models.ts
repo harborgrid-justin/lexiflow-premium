@@ -64,6 +64,7 @@ export interface TenantConfig {
 }
 
 export interface OperatingSummary {
+    id?: string;
     balance: number;
     expensesMtd: number;
     cashFlowMtd: number;
@@ -281,6 +282,7 @@ export interface Witness extends BaseEntity { caseId: CaseId; name: string; type
 export interface DepositionDesignation { id: string; depositionId: string; pageStart: number; lineStart: number; pageEnd: number; lineEnd: number; party: string; objection?: string; ruling?: string; }
 export interface OpeningStatement extends BaseEntity { caseId: CaseId; sections: { title: string; durationMinutes: number; linkedExhibitIds: string[] }[]; }
 export interface Fact extends BaseEntity { caseId: CaseId; date: string; description: string; type: 'Undisputed' | 'Disputed' | 'Stipulated'; supportingEvidenceIds: EvidenceId[]; }
+export interface StandingOrder extends BaseEntity { judgeId: string; title: string; updated: string; }
 
 // --- CLUSTER 6: WORKFLOW & AUTOMATION ---
 export interface WorkflowTask extends BaseEntity { 
@@ -340,7 +342,7 @@ export interface SanctionMotion extends BaseEntity { caseId: CaseId; title: stri
 export interface LegalHold extends BaseEntity { custodian: string; dept: string; issued: string; status: string; scope?: string; }
 export interface PrivilegeLogEntry extends BaseEntity { date: string; author: string; recipient: string; type: string; basis: string; desc: string; }
 export interface FirmAsset extends BaseEntity { name: string; type: string; assignedTo: string; status: string; purchaseDate: string; value: number; serialNumber?: string; }
-export interface MarketingMetric { source: string; leads: number; conversions: number; revenue: number; roi: number; }
+export interface MarketingMetric { id?: string; source: string; leads: number; conversions: number; revenue: number; roi: number; }
 export interface Clause extends BaseEntity { name: string; category: string; content: string; version: number; usageCount: number; lastUpdated: string; riskRating: string; versions: any[]; embedding?: number[]; }
 export interface WikiArticle extends BaseEntity { title: string; category: string; content: string; lastUpdated: string; isFavorite: boolean; author: string; }
 export interface Precedent extends BaseEntity { title: string; type: string; description: string; tag: string; docId: DocumentId; embedding?: number[]; }
@@ -380,7 +382,7 @@ export interface ArchiveStats { totalSize: string; objectCount: number; monthlyC
 export interface ApiKey { id: string; name: string; prefix: string; created: string; status: 'Active' | 'Revoked'; }
 export interface PipelineJob { id: string; name: string; status: 'Running' | 'Idle' | 'Failed' | 'Success'; lastRun: string; duration: string; volume: string; schedule: string; logs: string[]; }
 export interface WIPStat { name: string; wip: number; billed: number; }
-export interface RealizationStat { name: string; value: number; color: string; }
+export interface RealizationStat { id?: string; name: string; value: number; color: string; }
 export interface NexusNodeData { id: string; type: 'root' | 'org' | 'party' | 'evidence'; label: string; original: Case | Party | EvidenceItem | object; }
 export interface WarRoomData { case: Case; witnesses: Party[]; documents: LegalDocument[]; motions: Motion[]; docket: DocketEntry[]; evidence: EvidenceItem[]; tasks: WorkflowTask[]; }
 export interface OutcomePredictionData {

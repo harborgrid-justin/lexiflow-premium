@@ -2,12 +2,12 @@
 // components/Sidebar.tsx
 import React, { useMemo, useEffect, useState } from 'react';
 import { Scale, X, ChevronDown, LogOut, Settings, User as UserIcon, Layers, Monitor } from 'lucide-react';
-import { User as UserType, AppView, NavCategory, ModuleDefinition } from '../types';
+import { User as UserType, AppView, NavCategory, ModuleDefinition, TenantConfig } from '../types';
 import { ModuleRegistry } from '../services/moduleRegistry';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { useWindow } from '../context/WindowContext';
-import { queryClient } from '../services/queryClient';
+import { queryClient, useQuery } from '../services/queryClient';
 import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
 import { PATHS } from '../constants/paths';
@@ -33,6 +33,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
   const { theme } = useTheme();
   const { isOrbitalEnabled, toggleOrbitalMode } = useWindow();
   const [modules, setModules] = useState<ModuleDefinition[]>([]);
+
+  // Fetch Tenant Config for Branding
+  const { data: tenantConfig } = useQuery<TenantConfig>(
+      ['admin', 'tenant'],
+      DataService.admin.getTenantConfig,
+      { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
+  );
 
   // Subscribe to registry changes
   useEffect(() => {
@@ -110,8 +117,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
                 <Scale className={cn("h-5 w-5 text-white")} />
             </div>
             <div>
-              <h1 className={cn("text-lg font-bold tracking-tight leading-none", theme.text.primary)}>LexiFlow</h1>
-              <p className={cn("text-[10px] uppercase tracking-widest font-bold mt-0.5 opacity-60", theme.text.primary)}>Enterprise Suite</p>
+              <h1 className={cn("text-lg font-bold tracking-tight leading-none", theme.text.primary)}>{tenantConfig?.name}</h1>
+              <p className={cn("text-[10px] uppercase tracking-widest font-bold mt-0.5 opacity-60", theme.text.primary)}>{tenantConfig?.tier}</p>
             </div>
           </div>
           <button 

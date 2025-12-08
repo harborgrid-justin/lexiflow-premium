@@ -55,6 +55,28 @@ export interface BaseEntity {
   isEncrypted?: boolean;
 }
 
+// --- SYSTEM CONFIG ---
+export interface TenantConfig {
+  name: string;
+  tier: string;
+  version: string;
+  region: string;
+}
+
+export interface OperatingSummary {
+    balance: number;
+    expensesMtd: number;
+    cashFlowMtd: number;
+}
+
+export interface ComplianceMetrics {
+    score: number;
+    high: number;
+    missingDocs: number;
+    violations: number;
+    activeWalls: number;
+}
+
 // --- CLUSTER 1: CORE & SYSTEM ---
 export interface User extends BaseEntity { id: UserId; name: string; email: string; role: UserRole; orgId?: OrgId; groupIds?: GroupId[]; userType?: 'Internal' | 'External'; office?: string; status?: 'online' | 'offline' | 'away' | 'busy'; }
 export interface Organization extends BaseEntity { id: OrgId; name: string; type: OrganizationType; domain: string; status: string; }

@@ -7,6 +7,9 @@ import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useChartTheme } from '../../common/ChartHelpers';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { TenantConfig } from '../../../types';
 
 const trafficData = Array.from({ length: 20 }, (_, i) => ({
     time: i, value: Math.floor(Math.random() * 1000) + 500
@@ -16,13 +19,19 @@ export const PlatformOverview: React.FC = () => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
+  const { data: tenantConfig } = useQuery<TenantConfig>(
+      ['admin', 'tenant'],
+      DataService.admin.getTenantConfig,
+      { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
+  );
+
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Data Infrastructure</h2>
             <div className="flex gap-2">
                 <span className={cn("px-3 py-1 rounded-full text-xs font-bold border", theme.status.success.bg, theme.status.success.text, theme.status.success.border)}>Production</span>
-                <span className={cn("px-3 py-1 rounded-full text-xs font-bold border", theme.status.info.bg, theme.status.info.text, theme.status.info.border)}>US-East-1</span>
+                <span className={cn("px-3 py-1 rounded-full text-xs font-bold border", theme.status.info.bg, theme.status.info.text, theme.status.info.border)}>{tenantConfig?.region}</span>
             </div>
         </div>
 

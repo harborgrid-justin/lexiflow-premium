@@ -1,5 +1,5 @@
 
-import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID, CaseId } from '../../types';
+import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary } from '../../types';
 import { db, STORES } from '../db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -19,10 +19,6 @@ export const BillingService = {
          ]);
          
          return clients.slice(0, 3).map(c => {
-             const clientEntries = entries.filter(e => {
-                return e.status === 'Unbilled'; 
-             });
-             
              return {
                 name: c.name.split(' ')[0],
                 wip: Math.floor(Math.random() * 50000), 
@@ -96,6 +92,11 @@ export const BillingService = {
         const updated = { ...invoice, ...updates };
         await db.put(STORES.INVOICES, updated);
         return updated;
+    },
+
+    getOperatingSummary: async (): Promise<OperatingSummary> => {
+        await delay(100);
+        return { balance: 482500.00, expensesMtd: 45100, cashFlowMtd: 80320 };
     },
 
     sync: async () => { await delay(1000); console.log("[API] Financials Synced"); },

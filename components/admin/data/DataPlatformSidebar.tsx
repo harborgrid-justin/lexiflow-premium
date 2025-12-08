@@ -1,10 +1,13 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Server, ChevronDown, ChevronRight } from 'lucide-react';
+import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
 import { PlatformView } from '../AdminDatabaseControl';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DATA_PLATFORM_MENU } from '../../../config/dataPlatformMenu';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { TenantConfig } from '../../../types';
 
 interface DataPlatformSidebarProps {
   activeView: PlatformView;
@@ -22,6 +25,12 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     'governance': true,
     'catalog': true
   });
+
+  const { data: tenantConfig } = useQuery<TenantConfig>(
+      ['admin', 'tenant'],
+      DataService.admin.getTenantConfig,
+      { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
+  );
 
   const menu = useMemo(() => DATA_PLATFORM_MENU, []);
 
@@ -42,7 +51,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
       <div className={cn("p-4 border-b shrink-0", theme.border.default, theme.surfaceHighlight)}>
         <h3 className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>Data Platform</h3>
         <p className={cn("text-xs mt-1 font-mono flex items-center gap-1", theme.text.tertiary)}>
-          <Server className="h-3 w-3"/> v2.5 Enterprise
+          <Server className="h-3 w-3"/> v{tenantConfig?.version} {tenantConfig?.tier}
         </p>
       </div>
       <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">

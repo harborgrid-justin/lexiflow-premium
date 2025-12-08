@@ -1,5 +1,4 @@
 
-
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../types';
 import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
@@ -13,8 +12,8 @@ import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
 import { HolographicRouting } from '../services/holographicRouting';
-import { NexusInspector } from './visual/NexusInspector';
-import { ErrorBoundary } from './common/ErrorBoundary';
+import { NexusInspector } from '../visual/NexusInspector';
+import { ErrorBoundary } from '../common/ErrorBoundary';
 
 interface CaseDetailProps {
   caseData: Case;

@@ -60,8 +60,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
-// FIX: Ensure all required Case properties are provided with fallbacks and correctly spread from caseInfo.
-           ...(data.caseInfo as Partial<Case>),
+           ...(data.caseInfo || {}),
            id: (data.caseInfo?.id || `IMP-${Date.now()}`) as CaseId,
            title: data.caseInfo?.title || 'Imported Matter',
            matterType: (data.caseInfo as any)?.matterType || 'Litigation', 

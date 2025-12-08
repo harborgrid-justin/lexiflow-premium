@@ -1,7 +1,6 @@
-
-import { PleadingDocument } from '../../types/pleadingTypes';
+import { PleadingDocument, PleadingTemplate } from '../../types/pleadingTypes';
 import { Repository } from '../core/Repository';
-import { STORES } from '../db';
+import { STORES, db } from '../db';
 
 export class PleadingRepository extends Repository<PleadingDocument> {
     constructor() {
@@ -11,6 +10,10 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     // Custom method to find pleadings by case ID
     getByCaseId = async (caseId: string): Promise<PleadingDocument[]> => {
         return this.getByIndex('caseId', caseId);
+    }
+    
+    getTemplates = async (): Promise<PleadingTemplate[]> => {
+        return db.getAll<PleadingTemplate>(STORES.PLEADING_TEMPLATES);
     }
 
     // Generate a PDF version (Mock implementation)

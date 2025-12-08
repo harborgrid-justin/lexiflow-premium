@@ -10,7 +10,7 @@ import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
 import { Button } from '../../../common/Button';
 import { SchemaVisualizer } from './SchemaVisualizer';
-import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
+import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
 
 interface SchemaArchitectProps {

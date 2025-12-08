@@ -26,6 +26,10 @@ import { MOCK_DISCOVERY } from '../data/models/discoveryRequest';
 import { MOCK_CONFLICTS, MOCK_WALLS } from '../data/mockCompliance';
 import { MOCK_RULES } from '../data/models/legalRule';
 import { LegalEntity, EntityId } from '../types';
+import { MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
+import { MOCK_OKRS } from '../data/models/strategy';
+import { MALWARE_SIGNATURES } from '../data/models/security';
+import { PLEADING_TEMPLATES } from '../data/models/pleadingTemplate';
 
 export const Seeder = {
   async seed(db: DatabaseManager) {
@@ -33,6 +37,10 @@ export const Seeder = {
       
       const batchPut = async (store: string, data: any[]) => {
           for (const item of data) {
+              // Ensure item has an ID for stores that need it
+              if (!item.id && store !== STORES.JUDGE_MOTION_STATS && store !== STORES.OUTCOME_PREDICTIONS) {
+                  item.id = crypto.randomUUID();
+              }
               await db.put(store, item);
           }
       };
@@ -48,15 +56,10 @@ export const Seeder = {
           }
       };
       
-      // From Users
       MOCK_USERS.forEach(u => addEntity({ ...u, id: u.id as any, type: 'Individual', roles: [u.role as any], status: 'Active', riskScore: 10, tags: ['Internal'] }));
-      // From Clients
       MOCK_CLIENTS.forEach(c => addEntity({ id: `ent-cli-${c.id}` as EntityId, name: c.name, type: 'Corporation', roles: ['Client'], status: c.status as any, riskScore: 30, tags: [c.industry] }));
-      // From Case Parties
       MOCK_CASES.forEach(c => c.parties?.forEach(p => addEntity({ id: `ent-pty-${p.id}` as EntityId, name: p.name, type: p.type, roles: [p.role as any, 'Party'], status: 'Active', riskScore: 50, tags: [] })));
-      // From Judges
       MOCK_JUDGES.forEach(j => addEntity({ id: `ent-jdg-${j.id}` as EntityId, name: j.name, type: 'Individual', roles: ['Judge'], status: 'Active', riskScore: 5, tags: [j.court] }));
-      // From Counsel
       MOCK_COUNSEL.forEach(c => addEntity({ id: `ent-cnsl-${c.id}` as EntityId, name: c.name, type: 'Law Firm', roles: ['Opposing Counsel'], status: 'Active', riskScore: 60, tags: [] }));
 
 
@@ -91,7 +94,14 @@ export const Seeder = {
           batchPut(STORES.CONFLICTS, MOCK_CONFLICTS),
           batchPut(STORES.WALLS, MOCK_WALLS),
           batchPut(STORES.RULES, MOCK_RULES),
-          batchPut(STORES.ENTITIES, allEntities)
+          batchPut(STORES.ENTITIES, allEntities),
+          // New Data for Refactor
+          batchPut(STORES.COUNSEL_PROFILES, MOCK_COUNSEL),
+          batchPut(STORES.JUDGE_MOTION_STATS, MOCK_JUDGE_STATS.map((stat, i) => ({...stat, id: `jms-${i}`}))),
+          batchPut(STORES.OUTCOME_PREDICTIONS, MOCK_OUTCOME_DATA.map((d, i) => ({...d, id: `op-${i}`}))),
+          batchPut(STORES.OKRS, MOCK_OKRS),
+          batchPut(STORES.MALWARE_SIGNATURES, MALWARE_SIGNATURES.map((sig, i) => ({id: `sig-${i}`, signature: sig}))),
+          batchPut(STORES.PLEADING_TEMPLATES, PLEADING_TEMPLATES)
       ]);
       console.log("Seeding Complete.");
   }

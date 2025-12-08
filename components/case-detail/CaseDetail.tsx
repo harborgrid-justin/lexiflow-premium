@@ -2,17 +2,17 @@
 
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
-import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseDetailContent } from './CaseDetailContent';
-import { CaseTimeline } from './CaseTimeline';
+import { CaseDetailHeader } from './case-detail/CaseDetailHeader';
+import { CaseDetailContent } from './case-detail/CaseDetailContent';
+import { CaseTimeline } from './case-detail/CaseTimeline';
 import { useCaseDetail } from '../../hooks/useCaseDetail';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { CASE_DETAIL_TABS } from './CaseDetailConfig';
+import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
-import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
-import { HolographicRouting } from '../services/holographicRouting';
+import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
+import { HolographicRouting } from '../../services/holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 
@@ -124,7 +124,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       />
 
       {/* Top Header & Navigation */}
-      {/* FIX: Destructure caseData to pass individual props to CaseDetailHeader */}
       <CaseDetailHeader 
         id={caseData.id}
         title={caseData.title}
@@ -193,10 +192,8 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAddTask={hookData.addTaskToProject}
                         onUpdateTask={hookData.updateProjectTaskStatus}
                         onGenerateWorkflow={hookData.handleGenerateWorkflow}
-                        // FIX: Changed props.onAnalyzeDoc to hookData.handleAnalyze, as 'props' is not defined in this functional component.
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
-                        // FIX: Changed props.onDraft to hookData.handleDraft.
                         onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />

@@ -49,7 +49,6 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     setActiveMode('review');
     const plainText = content.replace(/<[^>]*>?/gm, '');
     const res = await GeminiService.reviewContract(plainText);
-    // FIX: Corrected function name from setResult to setReviewResult.
     setReviewResult(res);
     setLoading(false);
   };

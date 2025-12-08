@@ -1,15 +1,16 @@
+
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../common/Modal';
-import { Input } from '../../../common/Inputs';
-import { SchemaCodeEditor } from './SchemaCodeEditor';
-import { MigrationHistory } from './MigrationHistory';
-import { SchemaSnapshots } from './SchemaSnapshots';
-import { Button } from '../../../common/Button';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { Modal } from '../../common/Modal';
+import { Input } from '../../common/Inputs';
+import { SchemaCodeEditor } from './schema/SchemaCodeEditor';
+import { MigrationHistory } from './schema/MigrationHistory';
+import { SchemaSnapshots } from './schema/SchemaSnapshots';
+import { Button } from '../../common/Button';
 import { SchemaVisualizer } from './schema/SchemaVisualizer';
-import { TableData, TableColumn } from './schema/schemaTypes'; // Import types
+import { TableData, TableColumn } from './schema/schemaTypes';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -156,7 +157,6 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
             {activeTab === 'snapshots' && <SchemaSnapshots />}
         </div>
 
-        {/* Column Edit/Add Modal */}
         <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
             <div className="p-6 space-y-4">
                 <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />

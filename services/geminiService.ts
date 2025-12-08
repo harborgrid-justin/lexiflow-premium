@@ -19,7 +19,6 @@ export const GeminiService = {
                     responseSchema: AnalyzedDocSchema
                 }
             });
-            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON(response.text, { summary: "Analysis failed", riskScore: 0 });
         } catch (e) {
             console.error(e);
@@ -38,7 +37,6 @@ export const GeminiService = {
                     responseSchema: BriefCritiqueSchema
                 }
             });
-            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON(response.text, {
                 score: 0,
                 strengths: [],
@@ -125,7 +123,6 @@ export const GeminiService = {
                     responseSchema: IntentResultSchema
                 }
             });
-            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
         } catch (e) {
             return { action: 'UNKNOWN', confidence: 0 };
@@ -143,7 +140,6 @@ export const GeminiService = {
                     responseSchema: DocketSchema
                 }
             });
-            // FIX: The 'text' property on GenerateContentResponse is a getter, not a method.
             return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
         } catch (e) {
             return {};

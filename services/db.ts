@@ -70,12 +70,19 @@ export const STORES = {
   PROCESSING_JOBS: 'processing_jobs',
   RETENTION_POLICIES: 'retention_policies',
   // Phase 4 Stores
-  PLEADINGS: 'pleading_documents'
+  PLEADINGS: 'pleading_documents',
+  // New Stores for Data-Driven Refactor
+  COUNSEL_PROFILES: 'counsel_profiles',
+  JUDGE_MOTION_STATS: 'judge_motion_stats',
+  OUTCOME_PREDICTIONS: 'outcome_predictions',
+  OKRS: 'okrs',
+  MALWARE_SIGNATURES: 'malware_signatures',
+  PLEADING_TEMPLATES: 'pleading_templates'
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 15; // Incremented for new store
+  private dbVersion = 16; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -135,7 +142,6 @@ export class DatabaseManager {
       request.onsuccess = (event) => {
         this.db = (event.target as IDBOpenDBRequest).result;
 
-        // FIX: Add handlers for database lifecycle events to prevent "connection is closing" errors.
         this.db.onversionchange = () => {
             console.warn("A new version of the database is available. Closing old connection to allow upgrade.");
             if (this.db) {
@@ -147,7 +153,6 @@ export class DatabaseManager {
 
         this.db.onclose = () => {
             console.error("Database connection was unexpectedly closed. Future operations will attempt to re-initialize.");
-            // Resetting the initPromise allows the next DB operation to attempt a reconnect.
             this.initPromise = null;
             this.db = null;
         };
@@ -167,7 +172,6 @@ export class DatabaseManager {
   }
 
   private async buildIndices() {
-      // Build B-Tree on startup for demo
       const cases = await this.getAll<any>(STORES.CASES);
       cases.forEach(c => this.titleIndex.insert(c.title.toLowerCase(), c.id));
       console.log("B-Tree index for case titles built.");
@@ -201,7 +205,7 @@ export class DatabaseManager {
       const count = await this.count(STORES.CASES);
       if (count > 0) return;
       await Seeder.seed(this);
-      await this.buildIndices(); // Build index after seeding
+      await this.buildIndices();
   }
 
   async getAll<T>(storeName: string): Promise<T[]> {
@@ -255,7 +259,7 @@ export class DatabaseManager {
         const store = transaction.objectStore(op.store);
         try {
             if (op.type === 'put') store.put(op.item);
-            else if (op.type === 'delete') store.delete(op.item); // item is id here
+            else if (op.type === 'delete') store.delete(op.item);
         } catch(e) {
             console.error("Coalesced Write Error", e);
         }
@@ -273,11 +277,9 @@ export class DatabaseManager {
           return Promise.resolve();
       }
 
-      // Coalescing Strategy
       return new Promise((resolve, reject) => {
           this.writeBuffer.push({ store: storeName, item, type: 'put', resolve, reject });
           if (!this.flushTimer) {
-              // 16ms window (one frame)
               this.flushTimer = window.setTimeout(this.flushBuffer, 16);
           }
       });

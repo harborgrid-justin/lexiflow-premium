@@ -22,6 +22,9 @@ import { DiscoveryRepository } from './repositories/DiscoveryRepository';
 import { TrialRepository } from './repositories/TrialRepository';
 import { PleadingRepository } from './repositories/PleadingRepository';
 import { CRMService } from './domains/CRMDomain';
+import { AnalyticsService } from './domains/AnalyticsDomain';
+import { OperationsService } from './domains/OperationsDomain';
+import { SecurityService } from './domains/SecurityDomain';
 
 // Types
 import { 
@@ -93,12 +96,15 @@ export const DataService = {
   trial: new TrialRepository(),
   compliance: ComplianceService,
   admin: AdminService,
-  correspondence: CorrespondenceService, // Note: CorrespondenceService likely needs similar wrapping if we want ServiceJob events
+  correspondence: CorrespondenceService, 
   quality: new DataQualityService(),
   catalog: DataCatalogService,
   backup: BackupService,
   profile: ProfileDomain,
   crm: CRMService,
+  analytics: AnalyticsService,
+  operations: OperationsService,
+  security: SecurityService,
 
   // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
@@ -108,10 +114,8 @@ export const DataService = {
         const tasks = await this.getByCaseId(caseId);
         return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
       }
-      // Override add to trigger event
       async add(item: WorkflowTask): Promise<WorkflowTask> {
           const result = await super.add(item);
-          // Potential place for TASK_CREATED event if needed
           return result;
       }
       
@@ -158,7 +162,6 @@ export const DataService = {
   }(),
   analysis: new class extends Repository<BriefAnalysisSession> { 
       constructor() { super(STORES.ANALYSIS); }
-      // FIX: Add missing getJudgeProfiles method to the analysis service to match compiler hint
       async getJudgeProfiles(): Promise<JudgeProfile[]> {
           await delay(100);
           return db.getAll<JudgeProfile>(STORES.JUDGES);
@@ -199,9 +202,7 @@ export const DataService = {
         if (conv) {
             conv.messages.push(message);
             await db.put(STORES.CONVERSATIONS, conv);
-            // Integration: Log message time
             if (message.senderId === 'me') {
-                // Mock a call to log time for messages > 50 words could happen here
             }
         }
     },
@@ -210,10 +211,8 @@ export const DataService = {
         return convs.reduce((sum, c) => sum + (c.unread || 0), 0);
     },
   },
-// FIX: Add missing calendar service
   calendar: {
     getEvents: async (): Promise<CalendarEventItem[]> => {
-        // In a real app, this would be a real DB call
         const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
         return tasks.filter(t => t.dueDate).map(t => ({
             id: t.id,
@@ -228,7 +227,6 @@ export const DataService = {
     getActiveRuleSets: async (): Promise<string[]> => { await delay(50); return ["FRCP", "FRE", "CA Local Rules"] },
     sync: async (): Promise<void> => { await delay(500); console.log('Calendar synced'); }
   },
-  // FIX: Add missing jurisdiction service
   jurisdiction: {
     getStateCourts: async (): Promise<any[]> => {
         await delay(100);
@@ -239,7 +237,6 @@ export const DataService = {
     getArbitrationProviders: async (): Promise<any[]> => { await delay(100); return []; },
     getMapNodes: async (): Promise<any[]> => { await delay(100); return []; },
   },
-  // FIX: Add missing notifications service
   notifications: {
       getAll: async (): Promise<SystemNotification[]> => db.getAll<SystemNotification>(STORES.NOTIFICATIONS),
       markRead: async (id: string) => {
@@ -249,7 +246,6 @@ export const DataService = {
           }
       }
   },
-  // FIX: Add missing knowledge service
   knowledge: {
       getPrecedents: async (): Promise<Precedent[]> => db.getAll<Precedent>(STORES.PRECEDENTS),
       getQA: async (): Promise<QAItem[]> => db.getAll<QAItem>(STORES.QA),

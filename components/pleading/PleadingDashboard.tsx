@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
@@ -13,32 +12,6 @@ import { VirtualGrid } from '../common/VirtualGrid';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
 import { Case, CaseId, DocumentId, UserId } from '../../types';
-
-// Hardcoded Templates for Demo
-const TEMPLATES: PleadingTemplate[] = [
-    {
-        id: 'tpl-complaint', name: 'Civil Complaint', category: 'Complaint',
-        defaultSections: [
-            { id: 'sec-1', type: 'Caption', content: '' },
-            { id: 'sec-2', type: 'Heading', content: 'INTRODUCTION' },
-            { id: 'sec-3', type: 'Paragraph', content: 'Plaintiff brings this action against Defendant for...' },
-            { id: 'sec-4', type: 'Heading', content: 'JURISDICTION AND VENUE' },
-            { id: 'sec-5', type: 'Paragraph', content: 'This Court has jurisdiction because...' },
-            { id: 'sec-6', type: 'Heading', content: 'PARTIES' },
-            { id: 'sec-7', type: 'Signature', content: '' }
-        ]
-    },
-    {
-        id: 'tpl-motion-dismiss', name: 'Motion to Dismiss (12b6)', category: 'Motion',
-        defaultSections: [
-            { id: 'sec-1', type: 'Caption', content: '' },
-            { id: 'sec-2', type: 'Heading', content: 'NOTICE OF MOTION' },
-            { id: 'sec-3', type: 'Paragraph', content: 'PLEASE TAKE NOTICE that Defendant will move this Court...' },
-            { id: 'sec-4', type: 'Heading', content: 'MEMORANDUM OF POINTS AND AUTHORITIES' },
-            { id: 'sec-5', type: 'Signature', content: '' }
-        ]
-    }
-];
 
 interface PleadingDashboardProps {
     onCreate: (newDoc: PleadingDocument) => void;
@@ -60,6 +33,11 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         [STORES.CASES, 'all'],
         DataService.cases.getAll
     );
+    
+    const { data: templates = [] } = useQuery<PleadingTemplate[]>(
+        [STORES.PLEADING_TEMPLATES, 'all'],
+        () => DataService.pleadings.getTemplates()
+    );
 
     const { mutate: createPleading } = useMutation(
         DataService.pleadings.add,
@@ -74,12 +52,11 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
     const handleCreateSubmit = () => {
         if (!newDocData.title || !newDocData.caseId || !newDocData.templateId) return;
         
-        const template = TEMPLATES.find(t => t.id === newDocData.templateId);
-        // Deep copy sections and assign new IDs
+        const template = templates.find(t => t.id === newDocData.templateId);
         const sections: PleadingSection[] = template 
             ? template.defaultSections.map((s, idx) => ({ 
                 id: `sec-${Date.now()}-${idx}`,
-                type: s.type || 'Paragraph', // Ensure type is set
+                type: s.type || 'Paragraph',
                 content: s.content || '',
                 order: idx
              }))
@@ -155,7 +132,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
                         <div className="grid grid-cols-2 gap-3">
-                            {TEMPLATES.map(t => (
+                            {templates.map(t => (
                                 <div 
                                     key={t.id}
                                     onClick={() => setNewDocData({...newDocData, templateId: t.id})}

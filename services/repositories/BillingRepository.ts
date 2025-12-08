@@ -38,9 +38,9 @@ export class BillingRepository extends Repository<TimeEntry> {
          });
     }
 
-    async getRealizationStats(): Promise<RealizationStat[]> {
-        await delay(50);
-        return [ { name: 'Billed', value: 85, color: '#10b981' }, { name: 'Write-off', value: 15, color: '#ef4444' } ];
+    async getRealizationStats(): Promise<any> {
+        const stats = await db.get<any>(STORES.REALIZATION_STATS, 'realization-main');
+        return stats?.data || [];
     }
 
     // --- Invoices ---
@@ -56,12 +56,10 @@ export class BillingRepository extends Repository<TimeEntry> {
         dueDate.setDate(now.getDate() + 30);
 
         const invoice: Invoice = {
-            // FIX: Cast string to branded type UUID
             id: `INV-${Date.now()}` as UUID,
             client: clientName,
             matter: caseId,
-            // FIX: Cast string to branded type CaseId
-            caseId: caseId as CaseId,
+            caseId: caseId as any,
             date: now.toISOString().split('T')[0],
             dueDate: dueDate.toISOString().split('T')[0],
             amount: totalAmount,
@@ -102,8 +100,8 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getOverviewStats() { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
     
     async getOperatingSummary(): Promise<OperatingSummary> {
-        await delay(100);
-        return { balance: 482500.00, expensesMtd: 45100, cashFlowMtd: 80320 };
+        const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
+        return summary || { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
     }
 
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {

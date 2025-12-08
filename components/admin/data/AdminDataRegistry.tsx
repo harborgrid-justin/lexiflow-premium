@@ -1,9 +1,11 @@
 
 import React from 'react';
-import { Server, HardDrive } from 'lucide-react';
+import { Server, HardDrive, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { VirtualGrid } from '../../common/VirtualGrid';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
 
 interface DataFile {
     name: string;
@@ -12,12 +14,13 @@ interface DataFile {
     size: string;
 }
 
-interface AdminDataRegistryProps {
-  dataFiles: DataFile[];
-}
-
-export const AdminDataRegistry: React.FC<AdminDataRegistryProps> = ({ dataFiles }) => {
+export const AdminDataRegistry: React.FC = () => {
   const { theme } = useTheme();
+
+  const { data: dataFiles = [], isLoading } = useQuery<DataFile[]>(
+      ['admin', 'registry'],
+      DataService.catalog.getRegistryInfo
+  );
 
   const renderItem = (file: DataFile) => (
       <div 
@@ -41,6 +44,14 @@ export const AdminDataRegistry: React.FC<AdminDataRegistryProps> = ({ dataFiles 
         </div>
       </div>
   );
+
+  if (isLoading) {
+      return (
+          <div className="flex h-full items-center justify-center">
+              <Loader2 className="animate-spin h-6 w-6 text-blue-600"/>
+          </div>
+      );
+  }
 
   return (
     <div className="flex flex-col h-full">

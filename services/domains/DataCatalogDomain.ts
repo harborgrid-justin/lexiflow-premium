@@ -1,18 +1,42 @@
 
 import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink } from '../../types';
+import { db, STORES } from '../db';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const DataCatalogService = {
     getDictionary: async (): Promise<DataDictionaryItem[]> => { await delay(100); return []; },
     updateItem: async (id: string, updates: Partial<DataDictionaryItem>): Promise<DataDictionaryItem> => { await delay(100); return {id, ...updates} as any; },
     getDataDomains: async () => { await delay(100); return []; },
+    
     getSchemaTables: async (): Promise<SchemaTable[]> => {
-        await delay(200);
-        return [
-            { name: 'cases', x: 50, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' } ] },
-            { name: 'documents', x: 450, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },
-            { name: 'clients', x: 50, y: 400, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'name', type: 'VARCHAR(255)', notNull: true }, { name: 'industry', type: 'VARCHAR(100)'} ]}
-        ];
+        // Dynamically create table list from STORES enum
+        const tables = Object.values(STORES).map((name, i) => ({
+            name,
+            x: (i % 8) * 300 + 50,
+            y: Math.floor(i / 8) * 400 + 50,
+            columns: [
+                { name: 'id', type: 'UUID', pk: true },
+                { name: 'created_at', type: 'TIMESTAMP' },
+            ]
+        }));
+        return tables;
     },
+
+    getRegistryInfo: async (): Promise<any[]> => {
+        const stores = Object.values(STORES);
+        const info = [];
+        for (const store of stores) {
+            const count = await db.count(store);
+            info.push({
+                name: store,
+                type: 'System Table',
+                records: count,
+                size: `${(count * 0.5).toFixed(1)} KB` // Mock size calculation
+            });
+        }
+        return info;
+    },
+
     getDataLakeItems: async (folderId: string = 'root'): Promise<DataLakeItem[]> => {
         await delay(150);
         const MOCK_FILES: Record<string, DataLakeItem[]> = {

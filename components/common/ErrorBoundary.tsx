@@ -13,25 +13,24 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Initialize state in the constructor for a class component
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
+  // FIX: Initialize state as a class property instead of in the constructor.
+  state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
+
+  // FIX: Correctly implement static getDerivedStateFromError.
+  // This lifecycle updates state to trigger a fallback UI render.
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+    return { hasError: true };
   }
 
-  // FIX: Correctly implement static getDerivedStateFromError
-  public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
-    return { hasError: true, error };
-  }
-
-  // FIX: Correctly implement componentDidCatch
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  // FIX: Correctly implement componentDidCatch.
+  // This lifecycle is for side effects (logging) and can update state with more details.
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
-    // FIX: Use this.setState in a class component
+    // FIX: Use this.setState to store detailed error information for display.
     this.setState({ error, errorInfo });
   }
 
@@ -40,7 +39,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   public render(): ReactNode {
-    // FIX: Access state and props via this.state and this.props
+    // FIX: Access state and props via this.state and this.props, which is now correctly typed.
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;

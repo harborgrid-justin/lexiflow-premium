@@ -10,6 +10,17 @@ import { db, STORES } from '../db';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class DiscoveryRepository {
+
+    // --- Dashboard Stats ---
+    getFunnelStats = async (): Promise<any[]> => {
+        const stats = await db.get<any>(STORES.DISCOVERY_FUNNEL_STATS, 'funnel-main');
+        return stats?.data || [];
+    }
+
+    getCustodianStats = async (): Promise<any[]> => {
+        const stats = await db.get<any>(STORES.DISCOVERY_CUSTODIAN_STATS, 'custodian-main');
+        return stats?.data || [];
+    }
     
     // --- Review & Production ---
     

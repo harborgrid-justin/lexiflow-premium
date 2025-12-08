@@ -1,5 +1,5 @@
 
-import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel } from '../../types';
+import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig } from '../../types';
 import { db, STORES } from '../db';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export const AdminService = {
@@ -43,4 +43,8 @@ export const AdminService = {
         { name: 'Finance', count: 8, desc: 'Billing, invoices, and trust accounts.' },
         { name: 'HR', count: 4, desc: 'Staff, roles, and performance data.' },
     ]; },
+    getTenantConfig: async (): Promise<TenantConfig> => {
+        await delay(100);
+        return { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' };
+    }
 };

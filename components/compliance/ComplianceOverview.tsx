@@ -10,17 +10,12 @@ import { DataService } from '../../services/dataService';
 import { useChartTheme } from '../common/ChartHelpers';
 import { useQuery } from '../../services/queryClient';
 import { Loader2 } from 'lucide-react';
+import { ComplianceMetrics } from '../../types';
 
 interface RiskChartData {
     name: string;
     value: number;
     color: string;
-}
-
-interface ComplianceMetrics {
-    high: number;
-    missingDocs: number;
-    violations: number;
 }
 
 export const ComplianceOverview: React.FC = () => {
@@ -47,7 +42,7 @@ export const ComplianceOverview: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
          <MetricCard 
             label="Compliance Score" 
-            value="94/100" 
+            value={`${metrics?.score}/100`}
             icon={ShieldAlert}
             trend="+2% vs Last Qtr"
             trendUp={true}
@@ -63,7 +58,7 @@ export const ComplianceOverview: React.FC = () => {
          />
          <MetricCard 
             label="Active Walls" 
-            value="12" 
+            value={metrics?.activeWalls || 0} 
             icon={FileText}
             className="border-l-4 border-l-blue-500"
          />

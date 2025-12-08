@@ -1,11 +1,14 @@
+
 import React from 'react';
-import { FirmExpense } from '../../../types';
+import { FirmExpense, OperatingSummary } from '../../../types';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Badge } from '../../common/Badge';
 import { Card } from '../../common/Card';
 import { Landmark, ArrowUpRight, ArrowDownLeft, PieChart, CreditCard } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
 
 interface OperatingLedgerProps {
     expenses: FirmExpense[];
@@ -14,20 +17,26 @@ interface OperatingLedgerProps {
 export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) => {
   const { theme, mode } = useTheme();
 
+  const { data: summary } = useQuery<OperatingSummary>(
+      ['billing', 'operating_summary'],
+      DataService.billing.getOperatingSummary,
+      { initialData: { balance: 0, expensesMtd: 0, cashFlowMtd: 0 } }
+  );
+
   return (
     <div className="space-y-6">
         <div className={cn("rounded-lg p-6 shadow-lg border grid grid-cols-1 md:grid-cols-3 gap-6", mode === 'dark' ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200")}>
             <div className={cn("border-r pr-6", theme.border.light)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Operating Balance</p>
-                <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>$482,500.00</p>
+                <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>${summary?.balance.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div className={cn("border-r pr-6", theme.border.light)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Expenses (MTD)</p>
-                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> $45,100</p>
+                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> ${summary?.expensesMtd.toLocaleString()}</p>
             </div>
             <div>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Cash Flow (MTD)</p>
-                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.success.text)}><ArrowUpRight className="h-5 w-5 mr-1"/> $80,320</p>
+                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.success.text)}><ArrowUpRight className="h-5 w-5 mr-1"/> ${summary?.cashFlowMtd.toLocaleString()}</p>
             </div>
         </div>
 

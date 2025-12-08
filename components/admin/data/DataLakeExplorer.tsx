@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Folder, File, HardDrive, Search, Download, MoreHorizontal, FileText, Image, Film, UploadCloud, ChevronRight, Home } from 'lucide-react';
+import { Folder, File, HardDrive, Search, Download, MoreHorizontal, FileText, Image, Film, UploadCloud, ChevronRight, Home, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Card } from '../../common/Card';
@@ -9,32 +9,9 @@ import { SearchToolbar } from '../../common/SearchToolbar';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useWindow } from '../../../context/WindowContext';
 import { DocumentPreviewPanel } from '../../document/DocumentPreviewPanel';
-
-interface FileObject {
-    id: string;
-    name: string;
-    type: 'folder' | 'file';
-    size?: string;
-    modified: string;
-    format?: string;
-    tier: 'Hot' | 'Cool' | 'Archive';
-}
-
-const MOCK_FILES: Record<string, FileObject[]> = {
-    'root': [
-        { id: 'f1', name: 'raw_ingest', type: 'folder', modified: '2024-03-10', tier: 'Hot' },
-        { id: 'f2', name: 'processed_parquet', type: 'folder', modified: '2024-03-11', tier: 'Hot' },
-        { id: 'f3', name: 'archive_logs', type: 'folder', modified: '2023-12-01', tier: 'Cool' },
-        { id: 'doc1', name: 'manifest.json', type: 'file', size: '12 KB', modified: '2024-03-12', format: 'JSON', tier: 'Hot' },
-    ],
-    'raw_ingest': [
-        { id: 'raw1', name: 'client_dump_2024.csv', type: 'file', size: '450 MB', modified: '2024-03-10', format: 'CSV', tier: 'Hot' },
-        { id: 'raw2', name: 'images_batch_01', type: 'folder', modified: '2024-03-10', tier: 'Hot' },
-    ],
-    'processed_parquet': [
-        { id: 'pq1', name: 'fact_sales_q1.parquet', type: 'file', size: '1.2 GB', modified: '2024-03-11', format: 'Parquet', tier: 'Hot' },
-    ]
-};
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { DataLakeItem } from '../../../types';
 
 export const DataLakeExplorer: React.FC = () => {
     const { theme } = useTheme();
@@ -43,7 +20,11 @@ export const DataLakeExplorer: React.FC = () => {
     const [selection, setSelection] = useState<string[]>([]);
     
     const currentFolderId = currentPath[currentPath.length - 1];
-    const items = MOCK_FILES[currentFolderId] || [];
+
+    const { data: items = [], isLoading } = useQuery<DataLakeItem[]>(
+        ['lake', currentFolderId],
+        () => DataService.catalog.getDataLakeItems(currentFolderId)
+    );
 
     const handleNavigate = (folderId: string) => {
         setCurrentPath([...currentPath, folderId]);
@@ -62,7 +43,7 @@ export const DataLakeExplorer: React.FC = () => {
         return <File className="h-5 w-5 text-slate-500" />;
     };
 
-    const handleFileClick = (file: FileObject) => {
+    const handleFileClick = (file: DataLakeItem) => {
         if (file.type === 'folder') {
             handleNavigate(file.name);
         } else {
@@ -81,7 +62,7 @@ export const DataLakeExplorer: React.FC = () => {
                             lastModified: file.modified,
                             tags: [file.tier, 'Data Lake'],
                             versions: [],
-                            caseId: 'System'
+                            caseId: 'System' as any
                         }}
                         onViewHistory={() => {}}
                         isOrbital={true}
@@ -90,6 +71,8 @@ export const DataLakeExplorer: React.FC = () => {
             );
         }
     };
+
+    if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
     return (
         <div className="flex flex-col h-full animate-fade-in">

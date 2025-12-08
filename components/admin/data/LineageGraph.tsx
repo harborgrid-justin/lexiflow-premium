@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { NexusPhysics } from '../../../utils/nexusPhysics';
@@ -8,6 +8,9 @@ import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
 import { ImpactAnalysis } from './lineage/ImpactAnalysis';
 import { LineageCanvas } from './lineage/LineageCanvas';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { LineageNode, LineageLink } from '../../../types';
 
 interface LineageGraphProps {
     initialTab?: string;
@@ -31,43 +34,30 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
+  const { data: graphData, isLoading } = useQuery<{ nodes: LineageNode[], links: LineageLink[] }>(
+      ['lineage', 'graph'],
+      DataService.catalog.getLineageGraph
+  );
+
   // Initialize Graph Data
   useEffect(() => {
-      if (activeTab !== 'graph') return;
+      if (activeTab !== 'graph' || !graphData) return;
       
       // We assume reasonable default dimensions until canvas mounts and resizes
       const width = 800;
       const height = 600;
 
-      // Mock Lineage Data
-      const nodes = [
-          { id: 'src1', label: 'Salesforce CRM', type: 'root' },
-          { id: 'src2', label: 'Website Logs', type: 'root' },
-          { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },
-          { id: 'etl1', label: 'Cleaning Job', type: 'party' },
-          { id: 'wh1', label: 'Data Warehouse', type: 'org' },
-          { id: 'rpt1', label: 'Revenue Dashboard', type: 'evidence' },
-          { id: 'rpt2', label: 'User Activity Report', type: 'evidence' }
-      ];
-
-      const { buffer, idMap, meta } = NexusPhysics.initSystem(nodes, width, height);
+      const { buffer, idMap, meta } = NexusPhysics.initSystem(graphData.nodes, width, height);
       setNodeLabels(meta);
 
-      const links = [
-          { source: 'src1', target: 'stg1' },
-          { source: 'src2', target: 'stg1' },
-          { source: 'stg1', target: 'etl1' },
-          { source: 'etl1', target: 'wh1' },
-          { source: 'wh1', target: 'rpt1' },
-          { source: 'wh1', target: 'rpt2' }
-      ].map(l => ({
+      const links = graphData.links.map(l => ({
           sourceIndex: idMap.get(l.source)!,
           targetIndex: idMap.get(l.target)!,
-          strength: 0.5
-      }));
+          strength: l.strength
+      })).filter(l => l.sourceIndex !== undefined && l.targetIndex !== undefined);
 
-      physicsState.current = { buffer, links, count: nodes.length, alpha: 1 };
-  }, [activeTab]);
+      physicsState.current = { buffer, links, count: graphData.nodes.length, alpha: 1 };
+  }, [activeTab, graphData]);
 
   // Effect to wake up physics on Theme Change
   useEffect(() => {
@@ -80,6 +70,8 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
           setIsAnimating(true);
       }
   };
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className="flex flex-col h-full">

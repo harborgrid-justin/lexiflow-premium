@@ -5,50 +5,19 @@ import { Card } from '../../../common/Card';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { useChartTheme } from '../../../common/ChartHelpers';
-import { Hash, AlignLeft, Calendar, CheckCircle2, AlertTriangle } from 'lucide-react';
-
-const MOCK_PROFILES = [
-  {
-    column: 'status',
-    type: 'string',
-    nulls: 0.5,
-    unique: 8,
-    distribution: [
-      { name: 'Active', value: 4500 },
-      { name: 'Closed', value: 3200 },
-      { name: 'Pending', value: 800 },
-      { name: 'Archived', value: 200 },
-    ]
-  },
-  {
-    column: 'value',
-    type: 'numeric',
-    nulls: 0,
-    unique: 1420,
-    distribution: [
-      { name: '0-10k', value: 1200 },
-      { name: '10k-50k', value: 3500 },
-      { name: '50k-100k', value: 2100 },
-      { name: '100k+', value: 800 },
-    ]
-  },
-  {
-    column: 'created_at',
-    type: 'datetime',
-    nulls: 0,
-    unique: 8500,
-    distribution: [
-      { name: '2021', value: 1500 },
-      { name: '2022', value: 2800 },
-      { name: '2023', value: 3200 },
-      { name: '2024', value: 1100 },
-    ]
-  }
-];
+import { Hash, AlignLeft, Calendar, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
+import { DataService } from '../../../../services/dataService';
+import { useQuery } from '../../../../services/queryClient';
+import { DataProfile } from '../../../../types';
 
 export const DataProfiler: React.FC = () => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
+
+  const { data: profiles = [], isLoading } = useQuery<DataProfile[]>(
+      ['quality', 'profiles'],
+      DataService.quality.getProfiles
+  );
 
   const getIcon = (type: string) => {
       switch(type) {
@@ -58,10 +27,12 @@ export const DataProfiler: React.FC = () => {
       }
   };
 
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+
   return (
     <div className="space-y-6 animate-fade-in">
         <div className="grid grid-cols-1 gap-6">
-            {MOCK_PROFILES.map((profile, idx) => (
+            {profiles.map((profile, idx) => (
                 <Card key={idx} noPadding>
                     <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
                         <div className="flex items-center gap-3">

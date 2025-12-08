@@ -11,6 +11,10 @@ import { Button } from '../../common/Button';
 import { SchemaVisualizer } from './schema/SchemaVisualizer';
 import { TableData, TableColumn } from './schema/schemaTypes';
 import { SchemaToolbar } from './schema/SchemaToolbar';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { SchemaTable } from '../../../types';
+import { Loader2 } from 'lucide-react';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -34,11 +38,18 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     setActiveTab(mapInitialTabToState(initialTab));
   }, [initialTab]);
   
-  const [tables, setTables] = useState<TableData[]>([
-      { name: 'cases', x: 50, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' } ] },
-      { name: 'documents', x: 450, y: 50, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },
-      { name: 'clients', x: 50, y: 400, columns: [ { name: 'id', type: 'UUID', pk: true }, { name: 'name', type: 'VARCHAR(255)', notNull: true }, { name: 'industry', type: 'VARCHAR(100)'} ]}
-  ]);
+  const { data: fetchedTables = [], isLoading } = useQuery<SchemaTable[]>(
+      ['schema', 'tables'],
+      DataService.catalog.getSchemaTables
+  );
+  
+  const [tables, setTables] = useState<TableData[]>([]);
+
+  useEffect(() => {
+      if (fetchedTables.length > 0) {
+          setTables(fetchedTables as TableData[]);
+      }
+  }, [fetchedTables]);
   
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
   const [editingColumn, setEditingColumn] = useState<{tableName: string, columnName?: string, data: any} | null>(null);
@@ -133,6 +144,8 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         return { ...table, x: col * (TABLE_WIDTH + PADDING) + PADDING, y: row * (TABLE_HEIGHT + PADDING) + PADDING };
     }));
   };
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className="flex flex-col h-full min-h-0">

@@ -1,11 +1,12 @@
 
 import { Type } from "@google/genai";
 
+// Existing Schemas
 export const AnalyzedDocSchema = {
     type: Type.OBJECT,
     properties: {
-        summary: { type: Type.STRING, description: "A concise summary of the legal document." },
-        riskScore: { type: Type.NUMBER, description: "A risk score from 0 to 100." }
+        summary: { type: Type.STRING },
+        riskScore: { type: Type.NUMBER }
     },
     required: ["summary", "riskScore"]
 };
@@ -13,13 +14,12 @@ export const AnalyzedDocSchema = {
 export const BriefCritiqueSchema = {
     type: Type.OBJECT,
     properties: {
-        score: { type: Type.NUMBER, description: "Overall score from 0-100." },
-        strengths: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Positive aspects of the brief." },
-        weaknesses: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Areas for improvement." },
-        suggestions: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Specific suggestions for revision." },
-        missingAuthority: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Key legal authorities that are missing." }
+        score: { type: Type.NUMBER },
+        strengths: { type: Type.ARRAY, items: { type: Type.STRING } },
+        weaknesses: { type: Type.ARRAY, items: { type: Type.STRING } },
+        suggestions: { type: Type.ARRAY, items: { type: Type.STRING } },
+        missingAuthority: { type: Type.ARRAY, items: { type: Type.STRING } }
     },
-    propertyOrdering: ["score", "strengths", "weaknesses", "suggestions", "missingAuthority"],
     required: ["score", "strengths", "weaknesses", "suggestions", "missingAuthority"]
 };
 
@@ -65,6 +65,43 @@ export const DocketSchema = {
                 }
             }
         }
+    }
+};
+
+// New Schema
+export const ShepardizeSchema = {
+    type: Type.OBJECT,
+    properties: {
+        caseName: { type: Type.STRING, description: "The full name of the case." },
+        citation: { type: Type.STRING, description: "The full, standardized legal citation." },
+        summary: { type: Type.STRING, description: "A brief, one-paragraph summary of the case's core holding." },
+        history: {
+            type: Type.ARRAY,
+            description: "Appellate history of the case.",
+            items: {
+                type: Type.OBJECT,
+                properties: {
+                    action: { type: Type.STRING, description: "e.g., 'Affirmed by', 'Reversed by'" },
+                    citingCase: { type: Type.STRING, description: "The name of the court or case taking the action." },
+                    citingCitation: { type: Type.STRING, description: "The citation for the appellate decision." },
+                },
+                required: ["action", "citingCase"]
+            }
+        },
+        treatment: {
+            type: Type.ARRAY,
+            description: "How other cases have treated this case.",
+            items: {
+                type: Type.OBJECT,
+                properties: {
+                    treatment: { type: Type.STRING, enum: ['Followed', 'Criticized', 'Distinguished', 'Questioned', 'Mentioned'] },
+                    citingCase: { type: Type.STRING, description: "Name of the case that cites the original case." },
+                    citingCitation: { type: Type.STRING, description: "Citation for the citing case." },
+                    quote: { type: Type.STRING, description: "A relevant quote from the citing case discussing the original case." }
+                },
+                required: ["treatment", "citingCase", "quote"]
+            }
+        }
     },
-    required: ["caseInfo", "parties", "docketEntries"]
+    required: ["caseName", "citation", "summary", "history", "treatment"]
 };

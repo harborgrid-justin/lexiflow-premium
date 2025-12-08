@@ -1,4 +1,3 @@
-
 /**
  * PACER Case Locator (PCL) API Type Definitions
  * Based on PCL API User Guide (December 2022)
@@ -102,7 +101,7 @@ export interface PacerPageInfo {
   last: boolean;
 }
 
-// Comprehensive Case Definition based on Search Results Data Definitions (Pg 49-55)
+// FIX: Comprehensive Case Definition based on Search Results Data Definitions (Pg 49-55) & XML Parser
 export interface PacerCase {
   // Core Fields
   caseId: number; // Max 2,147,483,647

@@ -1,4 +1,3 @@
-
 export const MOCK_JURISDICTIONS = [
     { id: 'fed-scotus', system: 'Federal', type: 'Highest', name: 'U.S. Supreme Court', region: 'SCOTUS' },
     { id: 'fed-ca9', system: 'Federal', type: 'Appellate', name: '9th Circuit Court of Appeals', region: '9th' },

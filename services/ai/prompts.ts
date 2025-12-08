@@ -50,5 +50,14 @@ export const Prompts = {
     `An enterprise legal React application built with TypeScript threw an error: "${errorMessage}". 
     Explain the likely technical cause in 1-2 sentences. 
     Then, provide a concise, user-friendly suggestion for what might be happening and what they could try. 
-    Format the output as plain text. Do not use markdown.`
+    Format the output as plain text. Do not use markdown.`,
+    
+  Shepardize: (citation: string) => `
+    You are an expert legal research assistant similar to Westlaw's KeyCite or LexisNexis's Shepard's.
+    Analyze the provided legal citation and generate a comprehensive report on its history and treatment by other courts.
+    
+    Citation to Analyze: "${citation}"
+    
+    Return a structured JSON object.
+  `,
 };

@@ -1,5 +1,5 @@
 
-import { Search, BookOpen, Scale, Gavel, History, Bookmark, Settings } from 'lucide-react';
+import { Search, BookOpen, Scale, Gavel, History, Bookmark, Settings, Library } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 
 export const RESEARCH_TAB_CONFIG: TabConfigItem[] = [
@@ -14,8 +14,9 @@ export const RESEARCH_TAB_CONFIG: TabConfigItem[] = [
   {
     id: 'tools_group', label: 'Tools', icon: Scale,
     subTabs: [
-        { id: 'shepard', label: 'Shepards', icon: Scale },
+        { id: 'shepardize', label: 'Shepardize', icon: Scale },
         { id: 'bluebook', label: 'Bluebook', icon: BookOpen },
+        { id: 'library', label: 'Clause Library', icon: Library },
     ]
   },
   {

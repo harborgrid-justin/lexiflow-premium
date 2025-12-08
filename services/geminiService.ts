@@ -2,9 +2,9 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
-import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema } from "./ai/schemas";
+import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema } from "./ai/schemas";
 import { safeParseJSON } from "../utils/apiUtils";
-import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk } from '../types/ai';
+import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '../types/ai';
 
 export * from '../types/ai';
 
@@ -147,6 +147,21 @@ export const GeminiService = {
             contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
         });
         return response.text || "";
+    },
+
+    async shepardizeCitation(citation: string): Promise<ShepardizeResult | null> {
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const response: GenerateContentResponse = await ai.models.generateContent({
+            model: 'gemini-3-pro-preview',
+            contents: Prompts.Shepardize(citation),
+            config: {
+                responseMimeType: 'application/json',
+                responseSchema: ShepardizeSchema
+            }
+        });
+
+        if (!response.text) return null;
+        return safeParseJSON<ShepardizeResult>(response.text, null);
     },
     
     // Removed getResolutionForError to prevent circular dependency and simplification

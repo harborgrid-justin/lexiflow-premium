@@ -6,9 +6,10 @@ const ActiveResearch = lazy(() => import('./ActiveResearch').then(m => ({ defaul
 const ResearchHistory = lazy(() => import('./ResearchHistory').then(m => ({ default: m.ResearchHistory })));
 const SavedAuthorities = lazy(() => import('./SavedAuthorities').then(m => ({ default: m.SavedAuthorities })));
 const JurisdictionSettings = lazy(() => import('./JurisdictionSettings').then(m => ({ default: m.JurisdictionSettings })));
+const ShepardizingTool = lazy(() => import('./ShepardizingTool').then(m => ({ default: m.ShepardizingTool })));
+const ClauseLibrary = lazy(() => import('../ClauseLibrary'));
 
 // Placeholders for tools until implemented
-const ShepardizingTool = () => <div className="p-8 text-center text-slate-500">Shepard's Signal Check (Coming Soon)</div>;
 const BluebookFormatter = () => <div className="p-8 text-center text-slate-500">Bluebook Auto-Formatter (Coming Soon)</div>;
 
 interface ResearchToolContentProps {
@@ -23,8 +24,9 @@ export const ResearchToolContent: React.FC<ResearchToolContentProps> = ({ active
         case 'active': return <ActiveResearch />;
         case 'history': return <ResearchHistory />;
         case 'saved': return <SavedAuthorities />;
-        case 'shepard': return <ShepardizingTool />;
+        case 'shepardize': return <ShepardizingTool />;
         case 'bluebook': return <BluebookFormatter />;
+        case 'library': return <ClauseLibrary onSelectClause={() => {}} />;
         case 'settings': return <JurisdictionSettings />;
         default: return <ActiveResearch />;
     }

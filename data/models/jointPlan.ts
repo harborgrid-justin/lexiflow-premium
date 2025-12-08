@@ -1,12 +1,9 @@
 
-
-
 import { JointPlan, UUID, CaseId } from '../../types';
 
 export const MOCK_JOINT_PLANS: JointPlan[] = [
   {
     id: 'plan-1' as UUID,
-    // FIX: Cast string to branded type CaseId
     caseId: 'C-2024-001' as CaseId,
     title: 'Joint Rule 26(f) Discovery Plan',
     lastUpdated: '2023-11-01',

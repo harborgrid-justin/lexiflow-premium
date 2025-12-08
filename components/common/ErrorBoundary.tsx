@@ -31,8 +31,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { hasError: true, error };
   }
 
-  // FIX: Convert to arrow function to bind `this` correctly.
-  public componentDidCatch = (error: Error, errorInfo: ErrorInfo): void => {
+  // FIX: Converted from class property arrow function to a standard class method.
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
@@ -60,40 +60,40 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.log("Component Stack:", errorInfo.componentStack);
     console.groupEnd();
     
-    // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
+    // FIX: `this.setState` is now correctly recognized on the component instance.
     this.setState({ isResolving: true, debugInfo });
 
     // Using promises to handle async logic while keeping the lifecycle method synchronous
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
         if (this.state.hasError) {
-          // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
+          // FIX: `this.setState` is now correctly recognized on the component instance.
           this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
         if (this.state.hasError) {
-          // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
+          // FIX: `this.setState` is now correctly recognized on the component instance.
           this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
         }
       });
   }
 
-  // FIX: Convert to arrow function to bind `this` correctly.
-  private handleReset = () => {
+  // FIX: Converted from class property arrow function to a standard class method.
+  private handleReset() {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  // FIX: Convert to arrow function to bind `this` correctly.
-  private handleCopyDebugInfo = () => {
+  // FIX: Converted from class property arrow function to a standard class method.
+  private handleCopyDebugInfo() {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo)
               .then(() => {
-                // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
+                // FIX: `this.setState` is now correctly recognized on the component instance.
                 this.setState({ isCopied: true });
                 setTimeout(() => {
-                    // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
+                    // FIX: `this.setState` is now correctly recognized on the component instance.
                     this.setState({ isCopied: false });
                 }, 2000);
               })
@@ -106,9 +106,9 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
 
   public render(): ReactNode {
     if (this.state.hasError) {
-      // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
+      // FIX: `this.props` is now correctly recognized on the component instance.
       if (this.props.fallback) {
-        // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
+        // FIX: `this.props` is now correctly recognized on the component instance.
         return this.props.fallback;
       }
 
@@ -175,7 +175,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
-    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
+    // FIX: `this.props` is now correctly recognized on the component instance.
     return this.props.children;
   }
 }

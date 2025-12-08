@@ -60,7 +60,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     }
 
     const Component = moduleDef.component;
-    const dynamicProps: any = {};
+    const dynamicProps: any = { currentUser };
 
     if (initialTab) {
         dynamicProps.initialTab = initialTab;

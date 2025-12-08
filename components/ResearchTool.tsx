@@ -1,3 +1,4 @@
+
 // components/ResearchTool.tsx
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import {
@@ -29,7 +30,6 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   useEffect(() => {
     if (activeView.startsWith('analytics_')) {
         const loadJudges = async () => {
-            // FIX: Property 'analytics' does not exist on type '...'. Did you mean 'analysis'?
             const data = await DataService.analysis.getJudgeProfiles();
             setJudges(data);
             if (data.length > 0 && !selectedJudgeId) setSelectedJudgeId(data[0].id);

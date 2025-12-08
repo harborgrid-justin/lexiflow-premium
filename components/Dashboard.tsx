@@ -9,15 +9,15 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { cn } from '../utils/cn';
 import { DASHBOARD_TAB_CONFIG } from '../config/dashboardConfig'; // Updated import path
 import { DashboardContent } from './dashboard/DashboardContent'; // Updated import path
+import { User } from '../types';
 
 interface DashboardProps {
   onSelectCase: (caseId: string) => void;
   initialTab?: string;
+  currentUser: User;
 }
 
-// TAB_CONFIG was moved to config/dashboardConfig.ts in a previous turn, but was still in this file.
-
-export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, currentUser }) => {
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
 
@@ -29,7 +29,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab }
 
   const renderContent = () => {
     // Delegation to DashboardContent
-    return <DashboardContent activeTab={activeTab} onSelectCase={onSelectCase} />;
+    return <DashboardContent activeTab={activeTab} onSelectCase={onSelectCase} currentUser={currentUser} />;
   };
 
   return (

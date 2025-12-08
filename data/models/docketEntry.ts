@@ -1,16 +1,12 @@
 
-
-
 import { DocketEntry, DocketId, CaseId, DocumentId } from '../../types';
 
 export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
   // CASE: 1:24-cv-01442-LMB-IDD
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-dc-1' as DocketId, 
     sequenceNumber: 1, 
     pacerSequenceNumber: 1,
-    // FIX: Cast string to branded type CaseId
     caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
     date: '2024-08-16', 
     type: 'Notice',
@@ -18,7 +14,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'Bankruptcy Court case number 24-11119-BFK, filed by Justin Jeffrey Saadein-Morales.', 
     filedBy: 'Justin Jeffrey Saadein-Morales', 
     isSealed: false, 
-    // FIX: Cast string to branded type DocumentId
     documentId: 'doc-dc-1' as DocumentId,
     structuredData: {
         actionType: 'Notice',
@@ -29,11 +24,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     }
   },
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-dc-2' as DocketId, 
     sequenceNumber: 2, 
     pacerSequenceNumber: 2,
-    // FIX: Cast string to branded type CaseId
     caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
     date: '2024-08-19', 
     type: 'Order',
@@ -50,11 +43,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     }
   },
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-dc-10' as DocketId, 
     sequenceNumber: 10, 
     pacerSequenceNumber: 10,
-    // FIX: Cast string to branded type CaseId
     caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
     date: '2024-11-15', 
     type: 'Filing',
@@ -62,7 +53,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'by Justin Jeffrey Saadein-Morales. Attachments: Exhibits A-O, Affidavit, Proposed Orders.', 
     filedBy: 'Justin Jeffrey Saadein-Morales', 
     isSealed: false, 
-    // FIX: Cast string to branded type DocumentId
     documentId: 'doc-dc-10' as DocumentId,
     structuredData: {
         actionType: 'Motion',
@@ -73,11 +63,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     }
   },
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-dc-13' as DocketId, 
     sequenceNumber: 13, 
     pacerSequenceNumber: 13,
-    // FIX: Cast string to branded type CaseId
     caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
     date: '2024-11-15', 
     type: 'Order',
@@ -85,7 +73,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'Signed by District Judge Leonie M. Brinkema.', 
     filedBy: 'Court', 
     isSealed: false, 
-    // FIX: Cast string to branded type DocumentId
     documentId: 'doc-dc-13' as DocumentId,
     structuredData: {
         actionType: 'Order',
@@ -96,11 +83,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     }
   },
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-dc-31' as DocketId, 
     sequenceNumber: 31, 
     pacerSequenceNumber: 31,
-    // FIX: Cast string to branded type CaseId
     caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
     date: '2025-03-26', 
     type: 'Filing',
@@ -108,7 +93,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'of Pending Appeals No. 24-2160 and No. 25-1229. Filed by Justin Jeffrey Saadein-Morales.', 
     filedBy: 'Justin Jeffrey Saadein-Morales', 
     isSealed: false, 
-    // FIX: Cast string to branded type DocumentId
     documentId: 'doc-dc-31' as DocumentId,
     structuredData: {
         actionType: 'Motion',
@@ -121,11 +105,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
   
   // CASE: 25-1229 (Appellate)
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-25-1' as DocketId, 
     sequenceNumber: 1, 
     pacerSequenceNumber: 1,
-    // FIX: Cast string to branded type CaseId
     caseId: '25-1229' as CaseId, 
     date: '2025-03-12', 
     type: 'Notice',
@@ -135,11 +117,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     isSealed: false
   },
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-25-6' as DocketId, 
     sequenceNumber: 6, 
     pacerSequenceNumber: 6,
-    // FIX: Cast string to branded type CaseId
     caseId: '25-1229' as CaseId, 
     date: '2025-03-28', 
     type: 'Filing',
@@ -147,7 +127,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'EXERCISE its supervisory authority; CONSIDER transfer... [1001744472]', 
     filedBy: 'Justin Jeffrey Saadein-Morales', 
     isSealed: false, 
-    // FIX: Cast string to branded type DocumentId
     documentId: '1001744472' as DocumentId,
     structuredData: {
         actionType: 'Motion',
@@ -158,11 +137,9 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     }
   },
   {
-    // FIX: Cast string to branded type DocketId
     id: 'dk-25-119' as DocketId, 
     sequenceNumber: 119, 
     pacerSequenceNumber: 119,
-    // FIX: Cast string to branded type CaseId
     caseId: '25-1229' as CaseId, 
     date: '2025-09-29', 
     type: 'Order',
@@ -170,7 +147,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'Entered on 09/29/2025. [1001850048]', 
     filedBy: 'Court', 
     isSealed: false, 
-    // FIX: Cast string to branded type DocumentId
     documentId: '1001850048' as DocumentId,
     structuredData: {
         actionType: 'Judgment',

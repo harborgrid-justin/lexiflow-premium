@@ -1,16 +1,12 @@
 
-
-
 import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId } from '../../types';
 
 export const MOCK_CASES: Case[] = [
   // MAIN APPEAL CASE
   {
-    // FIX: Cast string to branded type CaseId
     id: '25-1229' as CaseId,
     title: 'Justin Saadein-Morales v. Westridge Swim & Racquet Club, Inc.',
     client: 'Justin Saadein-Morales (Pro Se)',
-    // FIX: Cast string to branded type UserId | EntityId
     clientId: 'usr-admin-justin' as UserId, 
     opposingCounsel: 'Thomas Charles Junker (MercerTrigiani)',
     status: CaseStatus.Closed,
@@ -29,11 +25,8 @@ export const MOCK_CASES: Case[] = [
     magistrateJudge: 'Ivan Darnell Davis (Mag. Judge)',
     origJudgmentDate: '2025-02-26',
     noticeOfAppealDate: '2025-03-07',
-    // FIX: Cast string to branded type UserId
     ownerId: 'usr-admin-justin' as UserId,
-    // FIX: Cast string to branded type CaseId
     linkedCaseIds: ['1:24-cv-01442-LMB-IDD' as CaseId, '24-2160' as CaseId],
-    // FIX: Cast string to branded type CaseId
     leadCaseId: '24-2160' as CaseId,
     isConsolidated: true,
     associatedCases: [
@@ -41,7 +34,6 @@ export const MOCK_CASES: Case[] = [
     ],
     parties: [
         { 
-          // FIX: Cast string to branded type PartyId
           id: 'p-appellant' as PartyId, 
           name: 'Justin Jeffrey Saadein-Morales', 
           role: 'Debtor - Appellant', 
@@ -54,7 +46,6 @@ export const MOCK_CASES: Case[] = [
           partyGroup: 'Debtor'
         },
         { 
-          // FIX: Cast string to branded type PartyId
           id: 'p-appellee' as PartyId, 
           name: 'Westridge Swim & Racquet Club, Inc.', 
           role: 'Creditor - Appellee', 
@@ -96,11 +87,9 @@ export const MOCK_CASES: Case[] = [
 
   // ORIGINATING DISTRICT COURT CASE
   {
-    // FIX: Cast string to branded type CaseId
     id: '1:24-cv-01442-LMB-IDD' as CaseId,
     title: 'Saadein-Morales v. Westridge Swim & Racquet Club, Inc.',
     client: 'Justin Saadein-Morales',
-    // FIX: Cast string to branded type UserId | EntityId
     clientId: 'usr-admin-justin' as UserId,
     opposingCounsel: 'MercerTrigiani',
     status: CaseStatus.Closed,
@@ -114,13 +103,10 @@ export const MOCK_CASES: Case[] = [
     court: 'E.D. Virginia (Alexandria)',
     judge: 'Leonie M. Brinkema',
     magistrateJudge: 'Ivan D. Davis',
-    // FIX: Cast string to branded type UserId
     ownerId: 'usr-admin-justin' as UserId,
-    // FIX: Cast string to branded type CaseId
     linkedCaseIds: ['25-1229' as CaseId, '24-02160' as CaseId],
     parties: [
         {
-            // FIX: Cast string to branded type PartyId
             id: 'p-appellant-dc' as PartyId,
             name: 'Justin Jeffrey Saadein-Morales',
             role: 'Appellant',
@@ -131,7 +117,6 @@ export const MOCK_CASES: Case[] = [
             contact: 'justin.saadein@harborgrid.com'
         },
         {
-            // FIX: Cast string to branded type PartyId
             id: 'p-appellee-dc' as PartyId,
             name: 'Westridge Swim & Racquet Club, Inc.',
             role: 'Appellee',
@@ -151,11 +136,9 @@ export const MOCK_CASES: Case[] = [
 
   // Other Mock Cases
   {
-    // FIX: Cast string to branded type CaseId
     id: 'C-2024-001' as CaseId, 
     title: 'Martinez v. TechCorp Industries', 
     client: 'TechCorp Industries',
-    // FIX: Cast string to branded type UserId | EntityId
     clientId: '1' as EntityId, 
     opposingCounsel: 'Morgan & Morgan',
     status: CaseStatus.Discovery, 
@@ -166,11 +149,8 @@ export const MOCK_CASES: Case[] = [
     jurisdiction: 'CA Superior Court', 
     court: 'San Francisco',
     isConsolidated: true,
-    // FIX: Cast string to branded type CaseId
     linkedCaseIds: ['C-2024-055' as CaseId, 'C-2024-089' as CaseId],
-    // FIX: Cast string to branded type UserId
     ownerId: 'usr-admin-justin' as UserId,
-    // FIX: Cast string to branded type OrgId
     ownerOrgId: 'org-1' as OrgId,
     parties: [
         { id: 'p1' as PartyId, name: 'John Doe', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'john@email.com', type: 'Individual' },

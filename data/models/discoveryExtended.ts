@@ -1,12 +1,9 @@
 
-
-
 import { Deposition, ESISource, ProductionSet, CustodianInterview, UUID, CaseId } from '../../types';
 
 export const MOCK_DEPOSITIONS: Deposition[] = [
     {
         id: 'DEP-001' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         witnessName: 'John Doe',
         date: '2024-04-15',
@@ -17,7 +14,6 @@ export const MOCK_DEPOSITIONS: Deposition[] = [
     },
     {
         id: 'DEP-002' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         witnessName: 'Jane Smith (HR Director)',
         date: '2024-04-18',
@@ -31,7 +27,6 @@ export const MOCK_DEPOSITIONS: Deposition[] = [
 export const MOCK_ESI_SOURCES: ESISource[] = [
     {
         id: 'ESI-001' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         name: 'Corporate Exchange Server',
         type: 'Email',
@@ -42,7 +37,6 @@ export const MOCK_ESI_SOURCES: ESISource[] = [
     },
     {
         id: 'ESI-002' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         name: 'John Doe Laptop',
         type: 'Device',
@@ -53,7 +47,6 @@ export const MOCK_ESI_SOURCES: ESISource[] = [
     },
     {
         id: 'ESI-003' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         name: 'Slack Workspace',
         type: 'Slack',
@@ -67,7 +60,6 @@ export const MOCK_ESI_SOURCES: ESISource[] = [
 export const MOCK_PRODUCTIONS: ProductionSet[] = [
     {
         id: 'PROD-001' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         name: 'Vol 001 - Initial Disclosures',
         date: '2023-12-01',
@@ -79,7 +71,6 @@ export const MOCK_PRODUCTIONS: ProductionSet[] = [
     },
     {
         id: 'PROD-002' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         name: 'Vol 002 - Email Batch 1',
         date: '2024-03-20',
@@ -94,7 +85,6 @@ export const MOCK_PRODUCTIONS: ProductionSet[] = [
 export const MOCK_INTERVIEWS: CustodianInterview[] = [
     {
         id: 'INT-001' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         custodianName: 'John Doe',
         department: 'Engineering',
@@ -106,7 +96,6 @@ export const MOCK_INTERVIEWS: CustodianInterview[] = [
     },
     {
         id: 'INT-002' as UUID,
-        // FIX: Cast string to branded type CaseId
         caseId: 'C-2024-001' as CaseId,
         custodianName: 'Jane Smith',
         department: 'HR',

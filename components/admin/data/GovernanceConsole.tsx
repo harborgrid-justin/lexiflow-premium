@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2, Plus, FileText } from 'lucide-react';
-import { Card } from '../../common/Card';
+import { Plus, FileText } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Modal } from '../../common/Modal';
@@ -9,7 +8,8 @@ import { Input } from '../../common/Inputs';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
 import { AccessGovernance } from './governance/AccessGovernance';
-import { CentredLoader, ModalFooter } from '../../common/RefactoredCommon';
+import { ModalFooter } from '../../common/RefactoredCommon';
+import { GovernanceDashboard } from './governance/GovernanceDashboard';
 
 interface GovernanceConsoleProps {
     initialTab?: string;
@@ -80,61 +80,13 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {activeTab === 'overview' && (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, theme.status.success.bg, theme.status.success.border)}>
-                            <div>
-                                <p className={cn("text-xs font-bold uppercase tracking-wider", theme.status.success.text)}>Compliance Score</p>
-                                <p className={cn("text-3xl font-bold mt-1", theme.status.success.text)}>98.5%</p>
-                            </div>
-                            <ShieldCheck className={cn("h-10 w-10 opacity-50", theme.status.success.text)}/>
-                        </div>
-                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, theme.status.warning.bg, theme.status.warning.border)}>
-                            <div>
-                                <p className={cn("text-xs font-bold uppercase tracking-wider", theme.status.warning.text)}>Risk Items</p>
-                                <p className={cn("text-3xl font-bold mt-1", theme.status.warning.text)}>3</p>
-                            </div>
-                            <AlertTriangle className={cn("h-10 w-10 opacity-50", theme.status.warning.text)}/>
-                        </div>
-                        <div className={cn("border rounded-lg p-6 flex items-center justify-between", theme.border.default, theme.status.info.bg, theme.status.info.border)}>
-                            <div>
-                                <p className={cn("text-xs font-bold uppercase tracking-wider", theme.status.info.text)}>Enforced Rules</p>
-                                <p className={cn("text-3xl font-bold mt-1", theme.status.info.text)}>{rules.length}</p>
-                            </div>
-                            <FileSearch className={cn("h-10 w-10 opacity-50", theme.status.info.text)}/>
-                        </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <Card title="Compliance Frameworks">
-                            <div className="space-y-4">
-                                {['GDPR', 'SOC 2 Type II', 'CCPA', 'HIPAA'].map(fw => (
-                                    <div key={fw} className={cn("flex items-center justify-between p-3 rounded border", theme.surfaceHighlight, theme.border.default)}>
-                                        <div className="flex items-center gap-2">
-                                            <Scale className={cn("h-5 w-5", theme.text.secondary)}/>
-                                            <span className={cn("font-bold text-sm", theme.text.primary)}>{fw}</span>
-                                        </div>
-                                        <span className={cn("text-xs font-bold px-2 py-1 rounded border", theme.status.success.text, theme.status.success.bg, theme.status.success.border)}>Compliant</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </Card>
-                        
-                        <Card title="Active Rules" action={<Button size="sm" variant="outline" onClick={handleScan}>{isScanning ? `Scanning ${scanProgress}%` : 'Run Scan'}</Button>}>
-                            <div className="space-y-2">
-                                {rules.map(r => (
-                                    <div key={r.id} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
-                                        <div>
-                                            <p className={cn("text-sm font-bold", theme.text.primary)}>{r.name}</p>
-                                            <p className={cn("text-xs", theme.text.secondary)}>{r.status} • {r.impact}</p>
-                                        </div>
-                                        <button onClick={() => setEditingRule(r)} className="text-blue-500 hover:text-blue-600"><Edit2 className="h-4 w-4"/></button>
-                                    </div>
-                                ))}
-                            </div>
-                        </Card>
-                    </div>
-                </>
+                <GovernanceDashboard 
+                    rules={rules} 
+                    isScanning={isScanning} 
+                    scanProgress={scanProgress} 
+                    handleScan={handleScan} 
+                    setEditingRule={setEditingRule} 
+                />
             )}
 
             {activeTab === 'policies' && (

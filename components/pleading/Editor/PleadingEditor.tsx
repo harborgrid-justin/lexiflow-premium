@@ -1,11 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Save, Layout, Settings, FileText, Download } from 'lucide-react';
+import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadCloud, Download, FileText } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { PleadingDocument, PleadingSection } from '../../../types/pleadingTypes';
-import { SidebarLibrary } from './SidebarLibrary';
+import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../types/pleadingTypes';
 import { DocumentCanvas } from './DocumentCanvas';
 import { PropertyPanel } from './PropertyPanel';
 import { DataService } from '../../../services/dataService';
@@ -13,18 +12,35 @@ import { useNotify } from '../../../hooks/useNotify';
 import { useMutation, queryClient } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
 
+// Module Imports
+import { TemplateArchitect } from '../modules/TemplateArchitect';
+import { FactIntegrator } from '../modules/FactIntegrator';
+import { CitationAssistant } from '../modules/CitationAssistant';
+import { ReviewPanel } from '../modules/ReviewPanel';
+import { FilingCenter } from '../modules/FilingCenter';
+
 interface PleadingEditorProps {
   document: PleadingDocument;
   onClose: () => void;
 }
+
+type EditorTool = 'properties' | 'template' | 'facts' | 'research' | 'review' | 'filing';
 
 export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initialDoc, onClose }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [document, setDocument] = useState<PleadingDocument>(initialDoc);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
-  const [rightPanel, setRightPanel] = useState<'properties' | 'context'>('properties');
+  const [activeTool, setActiveTool] = useState<EditorTool>('properties');
   const [isSaving, setIsSaving] = useState(false);
+
+  // Local state for comments/variables (normally would be in document object, mocking here for UI flow)
+  const [comments, setComments] = useState<PleadingComment[]>(document.comments || []);
+  const [variables, setVariables] = useState<PleadingVariable[]>(document.variables || [
+      { id: 'v1', key: 'PlaintiffName', label: 'Plaintiff Name', value: 'Justin Saadein-Morales', source: 'Case' },
+      { id: 'v2', key: 'DefendantName', label: 'Defendant Name', value: 'Westridge Swim & Racquet Club', source: 'Case' },
+      { id: 'v3', key: 'Court', label: 'Court Name', value: 'US District Court', source: 'System' }
+  ]);
 
   const { mutate: saveDocument } = useMutation(
       (doc: PleadingDocument) => DataService.pleadings.update(doc.id, doc),
@@ -43,7 +59,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
 
   const handleSave = () => {
       setIsSaving(true);
-      saveDocument({ ...document, lastAutoSaved: new Date().toISOString() });
+      saveDocument({ ...document, comments, variables, lastAutoSaved: new Date().toISOString() });
   };
 
   const handleUpdateSection = (id: string, updates: Partial<PleadingSection>) => {
@@ -55,27 +71,44 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
       setDocument({ ...document, sections: newSections });
   };
 
-  const handleAddSection = (type: string, index?: number) => {
-      const newSection: PleadingSection = {
-          id: `sec-${Date.now()}`,
-          type: type as any,
-          content: type === 'Heading' ? 'NEW HEADING' : type === 'Caption' ? '[Case Caption Placeholder]' : 'Enter text...',
-          meta: { alignment: 'left' }
-      };
-      
-      const sections = [...document.sections];
-      if (typeof index === 'number') {
-          sections.splice(index, 0, newSection);
-      } else {
-          sections.push(newSection);
-      }
-      setDocument({ ...document, sections });
-      setSelectedSectionId(newSection.id);
-  };
-
   const handleDeleteSection = (id: string) => {
       setDocument({ ...document, sections: document.sections.filter(s => s.id !== id) });
       setSelectedSectionId(null);
+  };
+
+  // Module Handlers
+  const handleInsertText = (text: string) => {
+      // Append to currently selected section or create new one
+      if (selectedSectionId) {
+          const section = document.sections.find(s => s.id === selectedSectionId);
+          if (section) handleUpdateSection(selectedSectionId, { content: section.content + ' ' + text });
+      } else {
+          // Add new paragraph
+           const newSection: PleadingSection = {
+              id: `sec-${Date.now()}`,
+              type: 'Paragraph',
+              content: text,
+              meta: { alignment: 'left' }
+          };
+          setDocument({ ...document, sections: [...document.sections, newSection] });
+      }
+  };
+
+  const handleUpdateVariable = (id: string, val: string) => {
+      setVariables(vars => vars.map(v => v.id === id ? { ...v, value: val } : v));
+  };
+
+  const handleAddComment = (text: string) => {
+      const comment: PleadingComment = {
+          id: `c-${Date.now()}`,
+          sectionId: selectedSectionId || 'general',
+          authorId: 'me',
+          authorName: 'Current User',
+          text,
+          timestamp: new Date().toISOString(),
+          resolved: false
+      };
+      setComments([...comments, comment]);
   };
 
   return (
@@ -87,7 +120,10 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                 <div className="h-6 w-px bg-slate-200"></div>
                 <div>
                     <h2 className={cn("text-sm font-bold", theme.text.primary)}>{document.title}</h2>
-                    <p className={cn("text-xs", theme.text.secondary)}>{document.status} • {document.caseId}</p>
+                    <div className="flex items-center text-xs text-slate-500 gap-2">
+                        <span className={cn("px-1.5 rounded bg-slate-100")}>{document.status}</span>
+                        <span>Autosaved: {document.lastAutoSaved ? new Date(document.lastAutoSaved).toLocaleTimeString() : 'Just now'}</span>
+                    </div>
                 </div>
             </div>
             <div className="flex gap-2">
@@ -97,17 +133,15 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
         </div>
 
         <div className="flex-1 flex overflow-hidden">
-            {/* Left Library */}
-            <div className={cn("w-64 border-r flex flex-col shrink-0 bg-slate-50", theme.border.default)}>
-                <SidebarLibrary onAddSection={handleAddSection} />
-            </div>
-
             {/* Center Canvas */}
-            <div className={cn("flex-1 bg-slate-100 overflow-y-auto p-8 flex justify-center", theme.background)}>
+            <div className={cn("flex-1 bg-slate-100 overflow-y-auto p-8 flex justify-center relative", theme.background)}>
                  <DocumentCanvas 
                     sections={document.sections}
                     selectedSectionId={selectedSectionId}
-                    onSelectSection={setSelectedSectionId}
+                    onSelectSection={(id) => {
+                        setSelectedSectionId(id);
+                        if(activeTool !== 'review') setActiveTool('properties');
+                    }}
                     onUpdateSection={handleUpdateSection}
                     onReorderSections={handleReorderSections}
                     onDeleteSection={handleDeleteSection}
@@ -115,34 +149,82 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                  />
             </div>
 
-            {/* Right Inspector */}
-            <div className={cn("w-80 border-l flex flex-col shrink-0 bg-white", theme.border.default)}>
-                 <div className={cn("flex border-b", theme.border.default)}>
-                     <button 
-                        onClick={() => setRightPanel('properties')} 
-                        className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors", rightPanel === 'properties' ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500")}
-                     >
-                         Properties
-                     </button>
-                     <button 
-                        onClick={() => setRightPanel('context')} 
-                        className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors", rightPanel === 'context' ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500")}
-                     >
-                         Case Context
-                     </button>
+            {/* Right Multi-Module Sidebar */}
+            <div className={cn("w-80 border-l flex flex-col shrink-0 bg-white shadow-xl z-10", theme.border.default)}>
+                 {/* Module Switcher Tabs */}
+                 <div className={cn("flex border-b overflow-x-auto no-scrollbar", theme.border.default)}>
+                     {[
+                         { id: 'properties', icon: FileText, title: 'Props' },
+                         { id: 'template', icon: LayoutTemplate, title: 'Template' },
+                         { id: 'facts', icon: Link, title: 'Facts' },
+                         { id: 'research', icon: BookOpen, title: 'Auth' },
+                         { id: 'review', icon: MessageSquare, title: 'Review' },
+                         { id: 'filing', icon: UploadCloud, title: 'Filing' },
+                     ].map(tool => (
+                         <button 
+                            key={tool.id}
+                            onClick={() => setActiveTool(tool.id as EditorTool)} 
+                            className={cn(
+                                "flex-1 py-3 px-2 flex flex-col items-center justify-center min-w-[50px] border-b-2 transition-colors", 
+                                activeTool === tool.id 
+                                    ? "border-blue-600 text-blue-600 bg-blue-50/50" 
+                                    : "border-transparent text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                            )}
+                            title={tool.title}
+                         >
+                             <tool.icon className="h-4 w-4 mb-0.5" />
+                             <span className="text-[9px] font-bold uppercase">{tool.title}</span>
+                         </button>
+                     ))}
                  </div>
-                 <div className="flex-1 overflow-y-auto p-4">
-                     {rightPanel === 'properties' && (
-                         <PropertyPanel 
-                            section={document.sections.find(s => s.id === selectedSectionId)}
-                            onUpdate={(updates) => selectedSectionId && handleUpdateSection(selectedSectionId, updates)}
+                 
+                 {/* Module Content Area */}
+                 <div className="flex-1 overflow-hidden flex flex-col relative">
+                     {activeTool === 'properties' && (
+                         <div className="flex-1 overflow-y-auto p-4">
+                            <PropertyPanel 
+                                section={document.sections.find(s => s.id === selectedSectionId)}
+                                onUpdate={(updates) => selectedSectionId && handleUpdateSection(selectedSectionId, updates)}
+                            />
+                         </div>
+                     )}
+
+                     {activeTool === 'template' && (
+                         <TemplateArchitect 
+                             variables={variables} 
+                             jurisdiction="Federal" 
+                             onUpdateVariable={handleUpdateVariable} 
                          />
                      )}
-                     {rightPanel === 'context' && (
-                         <div className="text-sm text-slate-500">
-                             <p>Case ID: {document.caseId}</p>
-                             <p className="mt-2 text-xs italic">Drag evidence or citations from here in future update.</p>
-                         </div>
+
+                     {activeTool === 'facts' && (
+                         <FactIntegrator 
+                             caseId={document.caseId} 
+                             onInsertFact={handleInsertText} 
+                         />
+                     )}
+
+                     {activeTool === 'research' && (
+                         <CitationAssistant 
+                             onInsertCitation={handleInsertText} 
+                         />
+                     )}
+
+                     {activeTool === 'review' && (
+                         <ReviewPanel 
+                             comments={comments} 
+                             caseId={document.caseId}
+                             docId={document.id}
+                             onAddComment={handleAddComment}
+                             onResolveComment={(cid) => setComments(comments.map(c => c.id === cid ? { ...c, resolved: true } : c))}
+                         />
+                     )}
+
+                     {activeTool === 'filing' && (
+                         <FilingCenter 
+                             onExport={() => alert("Exporting...")}
+                             isReady={document.status === 'Final'}
+                         />
                      )}
                  </div>
             </div>

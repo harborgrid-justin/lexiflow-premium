@@ -31,8 +31,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { hasError: true, error };
   }
 
-  // FIX: Converted to async method to correctly handle `this` context within promise chains.
-  public async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
@@ -61,9 +60,12 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.groupEnd();
     
     this.setState({ isResolving: true, debugInfo });
+    this.getAiResolution(error.message);
+  }
 
+  private getAiResolution = async (errorMessage: string) => {
     try {
-        const resolution = await GeminiService.getResolutionForError(error.message);
+        const resolution = await GeminiService.getResolutionForError(errorMessage);
         if (this.state.hasError) {
           this.setState({ aiResolution: resolution, isResolving: false });
         }
@@ -78,7 +80,6 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  // FIX: Refactored to async/await to ensure `this` is correctly bound in promise callbacks.
   private handleCopyDebugInfo = async () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {

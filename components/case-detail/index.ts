@@ -10,11 +10,13 @@ export * from './CaseEvidence';
 export * from './CaseDiscovery';
 export * from './CaseMessages';
 export * from './CaseParties';
-export * from './CaseMotions';
+// FIX: Corrected path to point to the actual component location
+export * from './motions/CaseMotions';
 export * from './CaseStrategy';
 export * from './CaseArgumentManager';
 export * from './CaseRiskManager';
 export * from './CasePlanning';
-export * from './CaseProjects';
+// FIX: Corrected path to point to the actual component location
+export * from './projects/CaseProjects';
 export * from './collaboration/CaseCollaboration';
 export * from './CaseDetailHeader';

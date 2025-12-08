@@ -56,12 +56,10 @@ export class BillingRepository extends Repository<TimeEntry> {
         dueDate.setDate(now.getDate() + 30);
 
         const invoice: Invoice = {
-            // FIX: Cast string to branded type UUID
             id: `INV-${Date.now()}` as UUID,
             client: clientName,
             matter: caseId,
-            // FIX: Cast string to branded type CaseId
-            caseId: caseId as CaseId,
+            caseId: caseId as any,
             date: now.toISOString().split('T')[0],
             dueDate: dueDate.toISOString().split('T')[0],
             amount: totalAmount,

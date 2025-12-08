@@ -26,5 +26,6 @@ export const PATHS = {
   RULES_ENGINE: 'rules_engine',
   ENTITIES: 'entities',
   DATA_PLATFORM: 'data_platform',
-  PROFILE: 'profile'
+  PROFILE: 'profile',
+  PLEADING_BUILDER: 'pleading_builder' // Added
 } as const;

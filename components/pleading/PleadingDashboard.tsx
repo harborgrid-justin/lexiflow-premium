@@ -1,0 +1,175 @@
+
+import React, { useState } from 'react';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
+import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleadingTypes';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { VirtualGrid } from '../common/VirtualGrid';
+import { Modal } from '../common/Modal';
+import { Input } from '../common/Inputs';
+import { Case, CaseId, DocumentId, UserId } from '../../types';
+
+// Hardcoded Templates for Demo
+const TEMPLATES: PleadingTemplate[] = [
+    {
+        id: 'tpl-complaint', name: 'Civil Complaint', category: 'Complaint',
+        defaultSections: [
+            { id: 'sec-1', type: 'Caption', content: '' },
+            { id: 'sec-2', type: 'Heading', content: 'INTRODUCTION' },
+            { id: 'sec-3', type: 'Paragraph', content: 'Plaintiff brings this action against Defendant for...' },
+            { id: 'sec-4', type: 'Heading', content: 'JURISDICTION AND VENUE' },
+            { id: 'sec-5', type: 'Paragraph', content: 'This Court has jurisdiction because...' },
+            { id: 'sec-6', type: 'Heading', content: 'PARTIES' },
+            { id: 'sec-7', type: 'Signature', content: '' }
+        ]
+    },
+    {
+        id: 'tpl-motion-dismiss', name: 'Motion to Dismiss (12b6)', category: 'Motion',
+        defaultSections: [
+            { id: 'sec-1', type: 'Caption', content: '' },
+            { id: 'sec-2', type: 'Heading', content: 'NOTICE OF MOTION' },
+            { id: 'sec-3', type: 'Paragraph', content: 'PLEASE TAKE NOTICE that Defendant will move this Court...' },
+            { id: 'sec-4', type: 'Heading', content: 'MEMORANDUM OF POINTS AND AUTHORITIES' },
+            { id: 'sec-5', type: 'Signature', content: '' }
+        ]
+    }
+];
+
+interface PleadingDashboardProps {
+    onCreate: (doc: PleadingDocument) => void;
+    onEdit: (id: string) => void;
+    caseId?: string;
+}
+
+export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, onEdit, caseId }) => {
+    const { theme } = useTheme();
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
+    
+    const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
+        [STORES.PLEADINGS, caseId || 'all'],
+        () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
+    );
+
+    const { data: cases = [] } = useQuery<Case[]>(
+        [STORES.CASES, 'all'],
+        DataService.cases.getAll
+    );
+
+    const { mutate: createPleading } = useMutation(
+        DataService.pleadings.add,
+        {
+            onSuccess: (newDoc) => {
+                setIsCreateModalOpen(false);
+                onCreate(newDoc);
+            }
+        }
+    );
+
+    const handleCreateSubmit = () => {
+        if (!newDocData.title || !newDocData.caseId || !newDocData.templateId) return;
+        
+        const template = TEMPLATES.find(t => t.id === newDocData.templateId);
+        // Deep copy sections and assign new IDs
+        const sections: PleadingSection[] = template 
+            ? template.defaultSections.map((s, idx) => ({ ...s, id: `sec-${Date.now()}-${idx}` }))
+            : [];
+
+        const doc: PleadingDocument = {
+            id: `plead-${Date.now()}` as any,
+            title: newDocData.title,
+            caseId: newDocData.caseId as CaseId,
+            status: 'Draft',
+            version: 1,
+            sections: sections,
+            createdBy: 'current-user' as UserId
+        };
+        createPleading(doc);
+    };
+
+    const renderItem = (item: PleadingDocument) => (
+        <div 
+            key={item.id} 
+            className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-md group", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}
+            onClick={() => onEdit(item.id)}
+        >
+            <div className="flex items-start justify-between mb-2">
+                <div className={cn("p-2 rounded bg-blue-50 text-blue-600")}><FileText className="h-6 w-6"/></div>
+                <span className={cn("text-xs px-2 py-1 rounded bg-slate-100 text-slate-600 font-medium")}>{item.status}</span>
+            </div>
+            <h4 className={cn("font-bold text-sm mb-1 line-clamp-2", theme.text.primary)}>{item.title}</h4>
+            <p className={cn("text-xs mb-3 font-mono opacity-70", theme.text.secondary)}>{item.caseId}</p>
+            <div className={cn("mt-auto text-xs flex items-center pt-2 border-t", theme.border.light, theme.text.tertiary)}>
+                <Clock className="h-3 w-3 mr-1"/> Last edited: {item.lastAutoSaved || 'Just now'}
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="h-full flex flex-col px-6 pt-6">
+            <PageHeader 
+                title="Pleading Builder" 
+                subtitle="Draft complaints, motions, and orders with automated formatting and case integration."
+                actions={<Button variant="primary" icon={Plus} onClick={() => setIsCreateModalOpen(true)}>New Pleading</Button>}
+            />
+            
+            <div className="flex-1 overflow-hidden border-t pt-4">
+                <VirtualGrid 
+                    items={pleadings}
+                    height="100%"
+                    itemHeight={160}
+                    itemWidth={250}
+                    renderItem={renderItem}
+                    emptyMessage="No pleadings found. Create one to get started."
+                />
+            </div>
+
+            <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Pleading">
+                <div className="p-6 space-y-4">
+                    <Input label="Document Title" value={newDocData.title} onChange={e => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
+                    
+                    <div>
+                        <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
+                        <select 
+                            className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                            value={newDocData.caseId}
+                            onChange={e => setNewDocData({...newDocData, caseId: e.target.value})}
+                        >
+                            <option value="">Select Case...</option>
+                            {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
+                        <div className="grid grid-cols-2 gap-3">
+                            {TEMPLATES.map(t => (
+                                <div 
+                                    key={t.id}
+                                    onClick={() => setNewDocData({...newDocData, templateId: t.id})}
+                                    className={cn(
+                                        "p-3 border rounded cursor-pointer transition-colors flex items-center gap-2",
+                                        newDocData.templateId === t.id ? cn("border-blue-500 bg-blue-50", theme.text.primary) : cn(theme.border.default, theme.surface, theme.text.secondary)
+                                    )}
+                                >
+                                    <LayoutTemplate className="h-4 w-4"/>
+                                    <span className="text-sm font-medium">{t.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end pt-4 gap-2">
+                        <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
+                        <Button variant="primary" onClick={handleCreateSubmit} disabled={!newDocData.title || !newDocData.caseId || !newDocData.templateId}>Create Draft</Button>
+                    </div>
+                </div>
+            </Modal>
+        </div>
+    );
+};

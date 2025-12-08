@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { Play, Download, Terminal, Database, Table, Clock, Star, AlignLeft, Bot } from 'lucide-react';
+import { Play, Download, AlignLeft, Bot } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
@@ -10,6 +10,7 @@ import { CopyButton } from '../../common/CopyButton';
 import { Button } from '../../common/Button';
 import { VirtualList } from '../../common/VirtualList';
 import { SqlHelpers } from '../../../utils/sqlHelpers';
+import { QuerySidebar } from './query/QuerySidebar';
 
 const MOCK_SCHEMA = {
   cases: { desc: 'Core table for all legal matters.', columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' }] },
@@ -17,11 +18,6 @@ const MOCK_SCHEMA = {
   documents: { desc: 'Metadata for all documents.', columns: [{ name: 'id', type: 'UUID' }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },
   audit_logs: { desc: 'Immutable record of all system events.', columns: [{ name: 'id', type: 'UUID' }, { name: 'timestamp', type: 'TIMESTAMPTZ' }, { name: 'action', type: 'VARCHAR' }] },
 };
-
-interface SavedQuery {
-    id: string;
-    name: string;
-}
 
 interface QueryConsoleProps {
     initialTab?: string;
@@ -50,7 +46,6 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
       setTimeout(() => {
           let data: any[] = [];
           if (query.toLowerCase().includes('cases')) {
-               // Mock large dataset
                data = Array.from({length: 1000}, (_, i) => ({ id: `C-${i}`, title: `Martinez v. Tech ${i}`, status: i % 2 === 0 ? 'Active' : 'Closed' }));
           }
           else if (query.toLowerCase().includes('users')) data = [{ id: 'U-101', name: 'Admin User', role: 'Administrator' }];
@@ -119,33 +114,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
             </Modal>
         )}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-             {/* Sidebar */}
-             <div className={cn("w-full md:w-72 border-b md:border-b-0 md:border-r p-0 flex flex-col shrink-0", theme.surface, theme.border.default)}>
-                 <div className={cn("flex border-b", theme.border.default)}>
-                     <button onClick={() => setActiveSidebarTab('schema')} className={cn("flex-1 py-3 text-xs font-bold uppercase", activeSidebarTab === 'schema' ? cn("border-b-2", theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, `hover:${theme.text.primary}`))}><Database className="h-4 w-4 mx-auto"/></button>
-                     <button onClick={() => setActiveSidebarTab('history')} className={cn("flex-1 py-3 text-xs font-bold uppercase", activeSidebarTab === 'history' ? cn("border-b-2", theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, `hover:${theme.text.primary}`))}><Clock className="h-4 w-4 mx-auto"/></button>
-                     <button onClick={() => setActiveSidebarTab('saved')} className={cn("flex-1 py-3 text-xs font-bold uppercase", activeSidebarTab === 'saved' ? cn("border-b-2", theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, `hover:${theme.text.primary}`))}><Star className="h-4 w-4 mx-auto"/></button>
-                 </div>
-                 
-                 <div className="flex-1 overflow-y-auto p-4">
-                     {activeSidebarTab === 'schema' && Object.entries(MOCK_SCHEMA).map(([table, details]) => (
-                         <details key={table} className="group mb-2">
-                             <summary className={cn("flex items-center text-sm cursor-pointer p-1.5 rounded list-none transition-colors", `group-hover:${theme.surfaceHighlight}`, theme.text.primary)}>
-                                 <Table className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/> {table}
-                             </summary>
-                             <div className="pl-6 pt-1 space-y-1">
-                                 {details.columns.map(col => (
-                                     <div key={col.name} className={cn("text-xs flex items-center", theme.text.secondary)}>
-                                        <div className={cn("w-2 h-2 rounded-full mr-2", theme.border.default, theme.surfaceHighlight)}></div>
-                                        <span className="font-mono">{col.name}</span>
-                                        <span className={cn("ml-2 font-sans", theme.text.tertiary)}>({col.type})</span>
-                                     </div>
-                                 ))}
-                             </div>
-                         </details>
-                     ))}
-                 </div>
-             </div>
+             <QuerySidebar activeTab={activeSidebarTab} setActiveTab={setActiveSidebarTab} schema={MOCK_SCHEMA} />
 
              <div className="flex-1 flex flex-col min-w-0">
                 <div className={cn("h-[40%] flex flex-col", theme.surface)}>

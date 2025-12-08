@@ -1,4 +1,3 @@
-
 export enum CaseStatus {
   PreFiling = 'Pre-Filing',
   Discovery = 'Discovery',

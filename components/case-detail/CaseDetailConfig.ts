@@ -1,4 +1,3 @@
-
 import { LayoutDashboard, Users, Clock, Lightbulb, Calendar, Briefcase, CheckSquare, MessageSquare, Gavel, Search, Fingerprint, FileText, Folder, PenTool, FileSearch, DollarSign, Target, ShieldAlert, Layers, Box, StickyNote } from 'lucide-react';
 
 export const CASE_DETAIL_TABS = [

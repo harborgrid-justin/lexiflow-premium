@@ -1,4 +1,3 @@
-
 export const PATHS = {
   DASHBOARD: 'dashboard',
   CASES: 'cases',

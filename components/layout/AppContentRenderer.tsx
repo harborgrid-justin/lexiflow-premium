@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { AppView, User } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';
@@ -66,7 +65,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
         dynamicProps.initialTab = initialTab;
     }
     
-    if (activeView === PATHS.CASES) {
+    if (activeView === PATHS.CASES || activeView === PATHS.PLEADING_BUILDER) {
       dynamicProps.onSelectCase = handleSelectCase;
     } else if (([PATHS.DASHBOARD, PATHS.WORKFLOWS, PATHS.EVIDENCE, PATHS.EXHIBITS] as string[]).includes(activeView)) {
       dynamicProps.onSelectCase = handleSelectCaseById;

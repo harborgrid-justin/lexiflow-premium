@@ -1,4 +1,3 @@
-
 import { WikiArticle, Precedent, QAItem, DocumentId } from '../types';
 
 export const MOCK_WIKI_ARTICLES: WikiArticle[] = [

@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { PleadingDesigner } from './pleading/PleadingDesigner';
 import { PleadingDashboard } from './pleading/PleadingDashboard';
-import { Case } from '../types';
+import { Case, PleadingDocument } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { AnimatePresence, motion } from 'framer-motion'; // Assuming framer-motion is avail or we simulate transitions
+import { AnimatePresence, motion } from 'framer-motion'; 
 
 interface PleadingBuilderProps {
   onSelectCase?: (c: Case) => void;
@@ -15,10 +14,15 @@ interface PleadingBuilderProps {
 export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, caseId }) => {
   const { theme } = useTheme();
   const [view, setView] = useState<'dashboard' | 'designer'>('dashboard');
-  const [selectedPleadingId, setSelectedPleadingId] = useState<string | null>(null);
+  const [selectedPleading, setSelectedPleading] = useState<PleadingDocument | null>(null);
 
-  const handleCreate = (id: string) => {
-      setSelectedPleadingId(id);
+  const handleCreate = (newDoc: PleadingDocument) => {
+      setSelectedPleading(newDoc);
+      setView('designer');
+  };
+
+  const handleEdit = (doc: PleadingDocument) => {
+      setSelectedPleading(doc);
       setView('designer');
   };
 
@@ -27,12 +31,12 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
         {view === 'dashboard' ? (
             <PleadingDashboard 
                 onCreate={handleCreate} 
-                onEdit={handleCreate} 
+                onEdit={handleEdit} 
                 caseId={caseId}
             />
         ) : (
             <PleadingDesigner 
-                pleadingId={selectedPleadingId!} 
+                pleading={selectedPleading!} 
                 onBack={() => setView('dashboard')}
             />
         )}

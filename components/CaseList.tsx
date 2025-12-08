@@ -1,3 +1,4 @@
+
 // components/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../types';
@@ -18,8 +19,8 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { cn } from '../utils/cn';
-import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
-import { CaseListContent } from './case-list/CaseListContent'; // Updated import path
+import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig';
+import { CaseListContent } from './case-list/CaseListContent';
 
 // Lazy load sub-components for better performance
 const CaseListActive = lazy(() => import('./case-list/CaseListActive').then(m => ({ default: m.CaseListActive })));
@@ -40,8 +41,6 @@ interface CaseListProps {
   initialTab?: string;
 }
 
-// TAB_CONFIG was moved to config/caseListConfig.ts
-
 export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
   const notify = useNotify();
   const { filteredCases, ...filterProps } = useCaseList();
@@ -60,7 +59,6 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
-           // FIX: Safely spread caseInfo to prevent errors if it's null/undefined
            ...(data.caseInfo || {}),
            id: (data.caseInfo?.id || `IMP-${Date.now()}`) as CaseId,
            title: data.caseInfo?.title || 'Imported Matter',

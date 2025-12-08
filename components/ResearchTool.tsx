@@ -12,8 +12,8 @@ import { JudgeProfile, Clause } from '../types';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { RESEARCH_TAB_CONFIG } from '../config/researchToolConfig'; // Updated import path
-import { ResearchToolContent } from './research/ResearchToolContent'; // Updated import path
+import { RESEARCH_TAB_CONFIG } from '../config/researchToolConfig';
+import { ResearchToolContent } from './research/ResearchToolContent';
 
 const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal'));
 

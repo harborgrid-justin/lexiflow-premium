@@ -4,7 +4,7 @@ import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-rea
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
+import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
 
 interface SchemaVisualizerProps {
     tables: TableData[];

@@ -120,7 +120,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                             className={cn(
                                                 "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                                 rule.severity === s 
-                                                    ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
+                                                    ? cn(theme.primary.light, theme.primary.text, theme.primary.border) 
                                                     : theme.border.default
                                             )}
                                         >

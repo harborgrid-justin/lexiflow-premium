@@ -7,8 +7,8 @@ import { LazyLoader } from './common/LazyLoader';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { cn } from '../utils/cn';
-import { DASHBOARD_TAB_CONFIG } from '../config/dashboardConfig'; // Updated import path
-import { DashboardContent } from './dashboard/DashboardContent'; // Updated import path
+import { DASHBOARD_TAB_CONFIG } from '../config/dashboardConfig';
+import { DashboardContent } from './dashboard/DashboardContent';
 import { User } from '../types';
 
 interface DashboardProps {

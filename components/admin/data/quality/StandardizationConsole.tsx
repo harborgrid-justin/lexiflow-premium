@@ -91,7 +91,7 @@ export const StandardizationConsole: React.FC = () => {
                             <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
                                 {getIcon(rule.operation)}
                             </div>
-                            <div className={cn("w-10 h-5 rounded-full p-1 transition-colors", rule.isActive ? "bg-blue-600" : theme.border.default)}>
+                            <div className={cn("w-10 h-5 rounded-full p-1 transition-colors", rule.isActive ? "bg-blue-600" : cn(theme.border.default))}>
                                 <div className={cn("w-3 h-3 bg-white rounded-full shadow-sm transition-transform", rule.isActive ? "translate-x-5" : "")}></div>
                             </div>
                         </div>

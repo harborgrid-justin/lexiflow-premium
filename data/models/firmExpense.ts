@@ -1,6 +1,4 @@
 
-
-
 import { FirmExpense, UUID } from '../../types';
 
 export const MOCK_EXPENSES: FirmExpense[] = [

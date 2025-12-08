@@ -1,11 +1,8 @@
 
-
-
 import { DiscoveryRequest, UUID, CaseId } from '../../types';
 
 export const MOCK_DISCOVERY: DiscoveryRequest[] = [
   {
-    // FIX: Cast string to branded type UUID and CaseId
     id: 'DR-001' as UUID,
     caseId: 'C-2024-001' as CaseId,
     type: 'Production',
@@ -18,7 +15,6 @@ export const MOCK_DISCOVERY: DiscoveryRequest[] = [
     description: 'Request for production of all performance reviews, email communications regarding termination, and payroll records.',
   },
   {
-    // FIX: Cast string to branded type UUID and CaseId
     id: 'DR-002' as UUID,
     caseId: 'C-2024-001' as CaseId,
     type: 'Interrogatory',
@@ -31,7 +27,6 @@ export const MOCK_DISCOVERY: DiscoveryRequest[] = [
     description: 'Identify all individuals involved in the decision to terminate Plaintiff.',
   },
   {
-    // FIX: Cast string to branded type UUID and CaseId
     id: 'DR-003' as UUID,
     caseId: 'C-2024-112' as CaseId,
     type: 'Admission',
@@ -44,7 +39,6 @@ export const MOCK_DISCOVERY: DiscoveryRequest[] = [
     description: 'Admit that OmniGlobal controls >40% of the widget market in the Northeast region.',
   },
   {
-    // FIX: Cast string to branded type UUID and CaseId
     id: 'DR-004' as UUID,
     caseId: 'C-2024-001' as CaseId,
     type: 'Deposition',

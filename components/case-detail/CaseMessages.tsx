@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Case, Conversation, Message } from '../../types';
+import { Case, Conversation, Message, User } from '../../types';
 import { Send, Paperclip, Lock, Shield, FileText } from 'lucide-react';
 import { Button } from '../common/Button';
 import { UserAvatar } from '../common/UserAvatar';
@@ -9,8 +10,6 @@ import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 import { Loader2 } from 'lucide-react';
-// FIX: Import MOCK_USERS to look up sender information.
-import { MOCK_USERS } from '../../data/models/user';
 
 interface CaseMessagesProps {
   caseData: Case;
@@ -23,12 +22,18 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   const conversationId = `conv-case-${caseData.id}`;
   
   // Enterprise Data Fetching
-  const { data: conversation, isLoading } = useQuery<Conversation | undefined>(
+  const { data: conversation, isLoading: isLoadingConversation } = useQuery<Conversation | undefined>(
     [STORES.CONVERSATIONS, conversationId],
     () => DataService.messenger.getConversationById(conversationId)
   );
 
+  const { data: users = [], isLoading: isLoadingUsers } = useQuery<User[]>(
+    [STORES.USERS, 'all'],
+    DataService.users.getAll
+  );
+
   const messages = conversation?.messages || [];
+  const isLoading = isLoadingConversation || isLoadingUsers;
 
   const handleSend = () => {
     if (!inputText.trim()) return;
@@ -62,10 +67,9 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
 
       {/* Messages Area */}
       <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surfaceHighlight)}>
-        {/* FIX: Use Message type and look up sender info to prevent runtime error. */}
         {messages.map((msg: Message) => { 
           const isMe = msg.senderId === 'me';
-          const user = MOCK_USERS.find(u => u.id === msg.senderId);
+          const user = users.find(u => u.id === msg.senderId);
           const senderName = user ? user.name : isMe ? 'Me' : 'Unknown';
           const senderRole = user ? user.role : isMe ? 'Attorney' : 'Unknown';
           return (

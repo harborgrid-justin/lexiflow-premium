@@ -1,15 +1,10 @@
 
-
-
 import { EvidenceItem, EvidenceId, UUID, CaseId } from '../../types';
 
 export const MOCK_EVIDENCE: EvidenceItem[] = [
   {
-    // FIX: Cast string to branded type EvidenceId
     id: 'EV-001' as EvidenceId,
-    // FIX: Cast string to branded type UUID
     trackingUuid: '123e4567-e89b-12d3-a456-426614174000' as UUID,
-    // FIX: Cast string to branded type CaseId
     caseId: 'C-2024-001' as CaseId,
     title: 'Termination Letter',
     type: 'Document',
@@ -31,11 +26,8 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
     ]
   },
   {
-    // FIX: Cast string to branded type EvidenceId
     id: 'EV-002' as EvidenceId,
-    // FIX: Cast string to branded type UUID
     trackingUuid: '123e4567-e89b-12d3-a456-426614174001' as UUID,
-    // FIX: Cast string to branded type CaseId
     caseId: 'C-2023-892' as CaseId,
     title: 'Soil Samples - Site B',
     type: 'Physical',
@@ -53,11 +45,8 @@ export const MOCK_EVIDENCE: EvidenceItem[] = [
     ]
   },
   {
-    // FIX: Cast string to branded type EvidenceId
     id: 'EV-003' as EvidenceId,
-    // FIX: Cast string to branded type UUID
     trackingUuid: '123e4567-e89b-12d3-a456-426614174002' as UUID,
-    // FIX: Cast string to branded type CaseId
     caseId: 'C-2024-001' as CaseId,
     title: 'Server Logs 2023-Oct',
     type: 'Digital',

@@ -69,12 +69,12 @@ export const STORES = {
   PROCESSING_JOBS: 'processing_jobs',
   RETENTION_POLICIES: 'retention_policies',
   PLEADINGS: 'pleading_documents',
+  PLEADING_TEMPLATES: 'pleading_templates',
   COUNSEL_PROFILES: 'counsel_profiles',
   JUDGE_MOTION_STATS: 'judge_motion_stats',
   OUTCOME_PREDICTIONS: 'outcome_predictions',
   OKRS: 'okrs',
   MALWARE_SIGNATURES: 'malware_signatures',
-  PLEADING_TEMPLATES: 'pleading_templates',
   CLE_TRACKING: 'cle_tracking',
   VENDOR_CONTRACTS: 'vendor_contracts',
   RFPS: 'rfps',
@@ -93,7 +93,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 22; // Incremented for new stores
+  private dbVersion = 24; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

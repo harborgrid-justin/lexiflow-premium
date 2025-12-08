@@ -1,4 +1,3 @@
-
 import { BaseEntity, CaseId, UserId, EvidenceId, MotionId } from './models';
 
 export type PleadingSectionType = 
@@ -20,12 +19,10 @@ export interface PleadingSection {
       isBold?: boolean;
       indent?: number;
   };
-  // Logic Linking - The "BPM" of the document
   linkedEvidenceIds?: string[];
   linkedCitationIds?: string[];
-  linkedArgumentId?: string; // Link to specific LegalArgument
+  linkedArgumentId?: string;
   
-  // Compliance
   complianceIssues?: string[];
   metadata?: Record<string, any>;
 }
@@ -59,7 +56,7 @@ export interface PleadingDocument extends BaseEntity {
   caseId: CaseId;
   title: string;
   status: 'Draft' | 'Review' | 'Final' | 'Filed';
-  filingStatus: 'Pre-Filing' | 'Filed'; // Explicit filing state
+  filingStatus: 'Pre-Filing' | 'Filed';
   sections: PleadingSection[];
   comments?: PleadingComment[];
   variables?: PleadingVariable[];
@@ -69,7 +66,6 @@ export interface PleadingDocument extends BaseEntity {
   lastAutoSaved?: string;
   createdBy?: UserId;
   
-  // Pre-filing specific metadata (Snapshots)
   court?: string;
   judge?: string;
   plaintiff?: string;

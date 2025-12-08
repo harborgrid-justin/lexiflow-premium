@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -15,14 +14,12 @@ export const CaseDetailNavigation: React.FC<CaseDetailNavigationProps> = ({
 }) => {
   const { theme } = useTheme();
 
-  // Derived state for parent tab using shared config
   const activeParentTab = useMemo(() => 
     CASE_DETAIL_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || CASE_DETAIL_TABS[0],
   [activeTab]);
 
   return (
     <div className="px-6 pt-2 shrink-0">
-        {/* Desktop Parent Navigation */}
         <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
             {CASE_DETAIL_TABS.map(parent => (
                 <button
@@ -41,7 +38,6 @@ export const CaseDetailNavigation: React.FC<CaseDetailNavigationProps> = ({
             ))}
         </div>
 
-        {/* Sub-Navigation (Pills) */}
         <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surfaceHighlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
                 <button 

@@ -13,21 +13,18 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Reverted to standard class property for state and used an arrow function for the event handler to ensure 'this' is correctly bound, simplifying the constructor and resolving type errors.
+  // FIX: Refactored to use class properties for state and arrow functions for methods to avoid 'this' binding issues.
   state: ErrorBoundaryState = {
     hasError: false,
     error: null,
     errorInfo: null,
   };
 
-  // This lifecycle updates state to trigger a fallback UI render.
   static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true };
   }
 
-  // This lifecycle is for side effects (logging) and can also update state with more details.
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound when calling `setState`.
-  componentDidCatch = (error: Error, errorInfo: ErrorInfo) => {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
     this.setState({ error, errorInfo });
   }

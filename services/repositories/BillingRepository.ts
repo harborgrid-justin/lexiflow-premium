@@ -9,21 +9,21 @@ export class BillingRepository extends Repository<TimeEntry> {
     constructor() { super(STORES.BILLING); }
 
     // --- Rate Management ---
-    getRates = async (timekeeperId: string) => {
+    async getRates(timekeeperId: string) {
         return db.getByIndex<RateTable>(STORES.RATES, 'timekeeperId', timekeeperId);
     }
     
     // --- Time & WIP ---
-    getTimeEntries = async (caseId?: string) => {
+    async getTimeEntries(caseId?: string) {
       const allEntries = await this.getAll();
       return caseId ? allEntries.filter(e => e.caseId === caseId) : allEntries;
     }
 
-    addTimeEntry = async (entry: TimeEntry) => {
+    async addTimeEntry(entry: TimeEntry) {
         return this.add(entry);
     }
 
-    getWIPStats = async (): Promise<WIPStat[]> => {
+    async getWIPStats(): Promise<WIPStat[]> {
          const [clients, entries] = await Promise.all([
              db.getAll<Client>(STORES.CLIENTS),
              this.getAll()
@@ -38,18 +38,18 @@ export class BillingRepository extends Repository<TimeEntry> {
          });
     }
 
-    getRealizationStats = async (): Promise<RealizationStat[]> => {
+    async getRealizationStats(): Promise<RealizationStat[]> {
         await delay(50);
         return [ { name: 'Billed', value: 85, color: '#10b981' }, { name: 'Write-off', value: 15, color: '#ef4444' } ];
     }
 
     // --- Invoices ---
-    getInvoices = async (): Promise<Invoice[]> => {
+    async getInvoices(): Promise<Invoice[]> {
         const invoices = await db.getAll<Invoice>(STORES.INVOICES);
         return invoices;
     }
 
-    createInvoice = async (clientName: string, caseId: string, entries: TimeEntry[]): Promise<Invoice> => {
+    async createInvoice(clientName: string, caseId: string, entries: TimeEntry[]): Promise<Invoice> {
         const totalAmount = entries.reduce((sum, e) => sum + e.total, 0);
         const now = new Date();
         const dueDate = new Date();
@@ -79,7 +79,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return invoice;
     }
     
-    updateInvoice = async (id: string, updates: Partial<Invoice>): Promise<Invoice> => {
+    async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
         const invoice = await db.get<Invoice>(STORES.INVOICES, id);
         if (!invoice) throw new Error("Invoice not found");
         const updated = { ...invoice, ...updates };
@@ -87,19 +87,19 @@ export class BillingRepository extends Repository<TimeEntry> {
         return updated;
     }
     
-    sendInvoice = async (id: string) => { await delay(500); console.log(`[API] Invoice ${id} sent`); return true; }
+    async sendInvoice(id: string) { await delay(500); console.log(`[API] Invoice ${id} sent`); return true; }
 
     // --- Trust Accounting ---
-    getTrustTransactions = async (accountId: string): Promise<TrustTransaction[]> => {
+    async getTrustTransactions(accountId: string): Promise<TrustTransaction[]> {
         return db.getByIndex(STORES.TRUST_TX, 'accountId', accountId);
     }
 
-    getTrustAccounts = async () => db.getAll<any>(STORES.TRUST);
-    getTopAccounts = async (): Promise<Client[]> => {
+    async getTrustAccounts() { return db.getAll<any>(STORES.TRUST); }
+    async getTopAccounts(): Promise<Client[]> {
         const clients = await db.getAll<Client>(STORES.CLIENTS);
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     }
-    getOverviewStats = async () => { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
-    sync = async () => { await delay(1000); console.log("[API] Financials Synced"); }
-    export = async (format: string) => { await delay(1500); return `report.${format}`; }
+    async getOverviewStats() { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
+    async sync() { await delay(1000); console.log("[API] Financials Synced"); }
+    async export(format: string) { await delay(1500); return `report.${format}`; }
 }

@@ -10,6 +10,8 @@ import { DataCatalogService } from './domains/DataCatalogDomain';
 import { BackupService } from './domains/BackupDomain';
 import { DocketRepository } from './domains/DocketDomain';
 import { ProfileDomain } from './domains/ProfileDomain'; 
+import { IntegrationOrchestrator } from './integrationOrchestrator';
+import { SystemEventType } from '../types/integrationTypes';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -19,7 +21,7 @@ import { WorkflowRepository } from './repositories/WorkflowRepository';
 import { BillingRepository } from './repositories/BillingRepository';
 import { DiscoveryRepository } from './repositories/DiscoveryRepository';
 import { TrialRepository } from './repositories/TrialRepository';
-import { PleadingRepository } from './repositories/PleadingRepository'; // Added
+import { PleadingRepository } from './repositories/PleadingRepository';
 
 // Types
 import { 
@@ -28,29 +30,67 @@ import {
   LegalEntity, EntityRelationship, Clause, WorkflowTemplateData,
   WikiArticle, Precedent, QAItem, LegalRule, SystemNotification,
   CalendarEventItem, Client, Conversation, Message, Case, LegalDocument, DocketEntry, EvidenceItem,
-  WarRoomData
+  WarRoomData, TimeEntry
 } from '../types';
 
 import { MOCK_METRICS } from '../data/models/marketingMetric';
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_RULES } from '../data/models/legalRule';
 
+// --- WRAPPERS FOR INTEGRATION ---
+
+class IntegratedCaseRepository extends CaseRepository {
+    async add(item: Case): Promise<Case> {
+        const result = await super.add(item);
+        // Trigger Integration
+        IntegrationOrchestrator.publish(SystemEventType.CASE_CREATED, { caseData: result });
+        return result;
+    }
+}
+
+class IntegratedDocketRepository extends DocketRepository {
+    async add(item: DocketEntry): Promise<DocketEntry> {
+        const result = await super.add(item);
+        // Trigger Integration
+        IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, { entry: result, caseId: result.caseId });
+        return result;
+    }
+}
+
+class IntegratedDocumentRepository extends DocumentRepository {
+    async add(item: LegalDocument): Promise<LegalDocument> {
+        const result = await super.add(item);
+        // Trigger Integration
+        IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: result });
+        return result;
+    }
+}
+
+class IntegratedBillingRepository extends BillingRepository {
+    async addTimeEntry(entry: TimeEntry): Promise<TimeEntry> {
+        const result = await super.addTimeEntry(entry);
+        // Trigger Integration
+        IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, { entry: result });
+        return result;
+    }
+}
+
 // --- FACADE ---
 
 export const DataService = {
-  cases: new CaseRepository(),
-  docket: new DocketRepository(),
+  cases: new IntegratedCaseRepository(),
+  docket: new IntegratedDocketRepository(),
   evidence: new EvidenceRepository(),
-  documents: new DocumentRepository(),
-  pleadings: new PleadingRepository(), // Added
+  documents: new IntegratedDocumentRepository(),
+  pleadings: new PleadingRepository(),
   hr: HRRepository,
   workflow: WorkflowRepository,
-  billing: new BillingRepository(),
+  billing: new IntegratedBillingRepository(),
   discovery: new DiscoveryRepository(),
   trial: new TrialRepository(),
   compliance: ComplianceService,
   admin: AdminService,
-  correspondence: CorrespondenceService,
+  correspondence: CorrespondenceService, // Note: CorrespondenceService likely needs similar wrapping if we want ServiceJob events
   quality: new DataQualityService(),
   catalog: DataCatalogService,
   backup: BackupService,
@@ -59,40 +99,69 @@ export const DataService = {
   // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
-      getByCaseId = async (caseId: string) => this.getByIndex('caseId', caseId);
-      countByCaseId = async (caseId: string): Promise<number> => {
+      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
+      async countByCaseId(caseId: string): Promise<number> {
         const tasks = await this.getByCaseId(caseId);
         return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
       }
+      // Override add to trigger event
+      async add(item: WorkflowTask): Promise<WorkflowTask> {
+          const result = await super.add(item);
+          // Potential place for TASK_CREATED event if needed
+          return result;
+      }
+      
+      async update(id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> {
+          const result = await super.update(id, updates);
+          if (updates.status === 'Done' || updates.status === 'Completed') {
+               IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
+          }
+          return result;
+      }
   }(),
+  
   projects: new class extends Repository<Project> { 
       constructor() { super(STORES.PROJECTS); } 
-      getByCaseId = async (caseId: string) => this.getByIndex('caseId', caseId);
+      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
   }(),
   risks: new class extends Repository<Risk> { 
       constructor() { super(STORES.RISKS); } 
-      getByCaseId = async (caseId: string) => this.getByIndex('caseId', caseId);
+      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
+      
+      async add(item: Risk): Promise<Risk> {
+          const result = await super.add(item);
+          if (result.impact === 'High' && result.probability === 'High') {
+               IntegrationOrchestrator.publish(SystemEventType.RISK_ESCALATED, { risk: result });
+          }
+          return result;
+      }
   }(),
   motions: new class extends Repository<Motion> { 
       constructor() { super(STORES.MOTIONS); }
-      getByCaseId = async (caseId: string) => this.getByIndex('caseId', caseId);
+      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
   }(),
   expenses: new class extends Repository<FirmExpense> { constructor() { super(STORES.EXPENSES); } }(),
   exhibits: new class extends Repository<TrialExhibit> { constructor() { super(STORES.EXHIBITS); } }(),
   users: new class extends Repository<User> { constructor() { super(STORES.USERS); } }(),
   clients: new class extends Repository<Client> { 
       constructor() { super(STORES.CLIENTS); }
-      generatePortalToken = async (clientId: string) => { return `token-${clientId}-${Date.now()}`; }
+      async generatePortalToken(clientId: string) { return `token-${clientId}-${Date.now()}`; }
   }(),
   citations: new class extends Repository<Citation> { 
       constructor() { super(STORES.CITATIONS); }
-      verifyAll = async () => { return { checked: 150, flagged: 3 }; }
-      quickAdd = async (citation: any) => this.add(citation);
+      async verifyAll() { return { checked: 150, flagged: 3 }; }
+      async quickAdd(citation: any) { return this.add(citation); }
   }(),
   analysis: new class extends Repository<BriefAnalysisSession> { constructor() { super(STORES.ANALYSIS); } }(),
   entities: new class extends Repository<LegalEntity> { 
       constructor() { super(STORES.ENTITIES); }
-      getRelationships = async (id: string) => { return []; } 
+      async getRelationships(id: string) { return []; } 
+      
+      async add(item: LegalEntity): Promise<LegalEntity> {
+          const result = await super.add(item);
+          IntegrationOrchestrator.publish(SystemEventType.ENTITY_CREATED, { entity: result });
+          return result;
+      }
   }(),
   playbooks: new class extends Repository<WorkflowTemplateData> { constructor() { super(STORES.TEMPLATES); } }(),
   clauses: new class extends Repository<Clause> { constructor() { super(STORES.CLAUSES); } }(),
@@ -118,7 +187,11 @@ export const DataService = {
         const conv = await db.get<Conversation>(STORES.CONVERSATIONS, convId);
         if (conv) {
             conv.messages.push(message);
-            return db.put(STORES.CONVERSATIONS, conv);
+            await db.put(STORES.CONVERSATIONS, conv);
+            // Integration: Log message time
+            if (message.senderId === 'me') {
+                // Mock a call to log time for messages > 50 words could happen here
+            }
         }
     },
     countUnread: async (caseId: string): Promise<number> => {

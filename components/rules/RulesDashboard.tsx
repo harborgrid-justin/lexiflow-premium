@@ -16,10 +16,11 @@ interface RulesDashboardProps {
 export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
 
-  // Performance Engine: useQuery for live data
+  // Performance Engine: useQuery
+  // FIX: Property 'analytics' does not exist on type... Did you mean 'analysis'?
   const { data: judges = [], isLoading } = useQuery(
       ['analytics', 'judges'], 
-      DataService.analytics.getJudgeProfiles
+      DataService.analysis.getJudgeProfiles
   );
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;

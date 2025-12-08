@@ -13,6 +13,8 @@ import { queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 import { Button } from '../common/Button';
+import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
+import { SystemEventType } from '../../types/integrationTypes';
 
 const DocumentAssembly = lazy(() => import('../DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 
@@ -69,6 +71,9 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
           sourceModule: 'General',
           tags: logAsEvidence ? ['Evidence'] : []
         });
+
+        // INTEGRATION POINT: Trigger orchestrator
+        IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: savedDoc });
 
         if (logAsEvidence) {
           // Auto-create Evidence Item

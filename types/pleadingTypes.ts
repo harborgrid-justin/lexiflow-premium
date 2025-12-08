@@ -1,5 +1,5 @@
 
-import { BaseEntity, CaseId, UserId, EvidenceId } from './models';
+import { BaseEntity, CaseId, UserId, EvidenceId, MotionId } from './models';
 
 export type PleadingSectionType = 
   | 'Caption' 
@@ -18,11 +18,13 @@ export interface PleadingSection {
   meta?: {
       alignment?: 'left' | 'center' | 'right' | 'justify';
       isBold?: boolean;
+      indent?: number;
   };
-  // Logic Linking
+  // Logic Linking - The "BPM" of the document
   linkedEvidenceIds?: string[];
   linkedCitationIds?: string[];
-  linkedFactIds?: string[];
+  linkedArgumentId?: string; // Link to specific LegalArgument
+  
   // Compliance
   complianceIssues?: string[];
   metadata?: Record<string, any>;
@@ -50,13 +52,14 @@ export interface LogicLink {
     id: string;
     fromSectionId: string;
     toEntityId: string;
-    type: 'Evidence' | 'Citation' | 'Fact';
+    type: 'Evidence' | 'Citation' | 'Fact' | 'Argument';
 }
 
 export interface PleadingDocument extends BaseEntity {
   caseId: CaseId;
   title: string;
   status: 'Draft' | 'Review' | 'Final' | 'Filed';
+  filingStatus: 'Pre-Filing' | 'Filed'; // Explicit filing state
   sections: PleadingSection[];
   comments?: PleadingComment[];
   variables?: PleadingVariable[];
@@ -65,6 +68,12 @@ export interface PleadingDocument extends BaseEntity {
   version: number;
   lastAutoSaved?: string;
   createdBy?: UserId;
+  
+  // Pre-filing specific metadata (Snapshots)
+  court?: string;
+  judge?: string;
+  plaintiff?: string;
+  defendant?: string;
 }
 
 export interface PleadingTemplate {

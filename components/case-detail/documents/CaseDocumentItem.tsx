@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { LegalDocument } from '../../../types';
 import { FileText, Wand2, CheckSquare, Loader2 } from 'lucide-react';

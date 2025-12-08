@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-    Layout, Database, Settings, Play, Save, ArrowLeft, 
-    Share2, Printer, CheckCircle, AlertTriangle, Cpu, Layers 
+    Layout, Layers, Printer, CheckCircle, AlertTriangle, Share2, 
+    ArrowLeft, Wand2, Target, Link as LinkIcon
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -10,9 +10,12 @@ import { PleadingCanvas } from './Canvas/PleadingCanvas';
 import { ContextPanel } from './Sidebar/ContextPanel';
 import { ComplianceHUD } from './Tools/ComplianceHUD';
 import { LogicOverlay } from './Visual/LogicOverlay';
+import { AIDraftingAssistant } from './modules/AIDraftingAssistant';
+import { ArgumentSelector } from './modules/ArgumentSelector';
 import { Button } from '../common/Button';
 import { DataService } from '../../services/dataService';
-import { PleadingDocument, PleadingSection, FormattingRule } from '../../types/pleadingTypes';
+import { PleadingDocument, FormattingRule, PleadingSection } from '../../types/pleadingTypes';
+import { Case } from '../../types';
 
 interface PleadingDesignerProps {
     pleadingId: string;
@@ -24,10 +27,10 @@ const MOCK_RULES: FormattingRule = {
     name: 'Federal Civil Rules',
     fontFamily: 'Times New Roman',
     fontSize: 12,
-    lineHeight: 2.0, // Double spacing
+    lineHeight: 2.0, 
     marginTop: '1in',
     marginBottom: '1in',
-    marginLeft: '1.25in', // Left margin for binding
+    marginLeft: '1.25in', 
     marginRight: '1in',
     showLineNumbers: true,
     paperSize: 'Letter',
@@ -37,36 +40,65 @@ const MOCK_RULES: FormattingRule = {
 export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, onBack }) => {
     const { theme } = useTheme();
     const [viewMode, setViewMode] = useState<'write' | 'logic' | 'preview'>('write');
-    const [activeSidebar, setActiveSidebar] = useState<'context' | 'settings'>('context');
+    const [sidebarMode, setSidebarMode] = useState<'context' | 'ai' | 'arguments'>('context');
     const [document, setDocument] = useState<PleadingDocument | null>(null);
     const [rules, setRules] = useState<FormattingRule>(MOCK_RULES);
     const [complianceScore, setComplianceScore] = useState(92);
+    const [relatedCase, setRelatedCase] = useState<Case | null>(null);
 
-    // Load Document (Mock)
+    // Load Document
     useEffect(() => {
-        // In real app: DataService.pleadings.getById(pleadingId).then(...)
-        const mockDoc: PleadingDocument = {
-            id: pleadingId,
-            caseId: '1:24-cv-01442' as any,
-            title: 'Motion for Summary Judgment',
-            status: 'Draft',
-            version: 1,
-            jurisdictionRulesId: 'fed-civil',
-            sections: [
-                { id: 'b1', type: 'Caption', content: '', order: 0 },
-                { id: 'b2', type: 'Heading', content: 'I. INTRODUCTION', order: 1 },
-                { id: 'b3', type: 'Paragraph', content: 'Plaintiff brings this motion because the undisputed facts show no genuine issue for trial.', order: 2 },
-            ],
-            links: []
+        // Mock Load logic simulating DataService fetch
+        const load = async () => {
+             // In real app: const doc = await DataService.pleadings.getById(pleadingId);
+             const mockDoc: PleadingDocument = {
+                id: pleadingId,
+                caseId: '1:24-cv-01442' as any, // This might be a temp ID if pre-filing
+                title: 'Motion for Summary Judgment',
+                status: 'Draft',
+                filingStatus: 'Pre-Filing', // Default to pre-filing for demo
+                version: 1,
+                jurisdictionRulesId: 'fed-civil',
+                sections: [
+                    { id: 'b1', type: 'Caption', content: '', order: 0 },
+                    { id: 'b2', type: 'Heading', content: 'I. INTRODUCTION', order: 1 },
+                    { id: 'b3', type: 'Paragraph', content: 'Plaintiff brings this motion because the undisputed facts show no genuine issue for trial.', order: 2 },
+                ],
+                links: []
+            };
+            setDocument(mockDoc);
+            
+            if (mockDoc.caseId) {
+                const c = await DataService.cases.getById(mockDoc.caseId);
+                if (c) setRelatedCase(c);
+            }
         };
-        setDocument(mockDoc);
+        load();
     }, [pleadingId]);
 
-    if (!document) return <div>Loading Studio...</div>;
+    const handleUpdateSection = (id: string, updates: Partial<PleadingSection>) => {
+        if (!document) return;
+        const newSections = document.sections.map(s => s.id === id ? { ...s, ...updates } : s);
+        setDocument({ ...document, sections: newSections });
+    };
+    
+    const handleAddSection = (content: string, type: 'Paragraph' | 'Heading' = 'Paragraph', linkedArgId?: string) => {
+        if (!document) return;
+        const newSection: PleadingSection = {
+            id: `sec-${Date.now()}`,
+            type,
+            content,
+            order: document.sections.length,
+            linkedArgumentId: linkedArgId
+        };
+        setDocument({ ...document, sections: [...document.sections, newSection] });
+    };
+
+    if (!document) return <div className="flex h-full items-center justify-center">Loading Studio...</div>;
 
     return (
         <div className="flex flex-col h-full overflow-hidden">
-            {/* 1. Top Bar: The "IDE" Header */}
+            {/* 1. Top Bar */}
             <header className={cn("h-16 border-b flex items-center justify-between px-4 shrink-0 bg-white dark:bg-slate-900 z-50", theme.border.default)}>
                 <div className="flex items-center gap-4">
                     <button onClick={onBack} className={cn("p-2 rounded-full hover:bg-slate-100", theme.text.secondary)}>
@@ -75,30 +107,22 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
                     <div>
                         <h2 className={cn("text-sm font-bold flex items-center gap-2", theme.text.primary)}>
                             {document.title}
-                            <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] uppercase">Draft</span>
+                            <span className={cn("px-2 py-0.5 rounded-full text-[10px] uppercase border", document.filingStatus === 'Pre-Filing' ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-blue-50 text-blue-700 border-blue-200")}>
+                                {document.filingStatus}
+                            </span>
                         </h2>
-                        <p className={cn("text-xs", theme.text.secondary)}>Federal District Court • {rules.name}</p>
+                        <p className={cn("text-xs", theme.text.secondary)}>{rules.name} • {relatedCase ? relatedCase.title : 'Unassigned Matter'}</p>
                     </div>
                 </div>
 
-                {/* View Modes */}
                 <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
-                    <button 
-                        onClick={() => setViewMode('write')}
-                        className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'write' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}
-                    >
+                    <button onClick={() => setViewMode('write')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'write' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}>
                         <Layout className="h-4 w-4"/> Write
                     </button>
-                    <button 
-                        onClick={() => setViewMode('logic')}
-                        className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'logic' ? "bg-white shadow text-purple-600" : "text-slate-500 hover:text-slate-700")}
-                    >
+                    <button onClick={() => setViewMode('logic')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'logic' ? "bg-white shadow text-purple-600" : "text-slate-500 hover:text-slate-700")}>
                         <Layers className="h-4 w-4"/> Logic Map
                     </button>
-                    <button 
-                        onClick={() => setViewMode('preview')}
-                        className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'preview' ? "bg-white shadow text-green-600" : "text-slate-500 hover:text-slate-700")}
-                    >
+                    <button onClick={() => setViewMode('preview')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'preview' ? "bg-white shadow text-green-600" : "text-slate-500 hover:text-slate-700")}>
                         <Printer className="h-4 w-4"/> Print
                     </button>
                 </div>
@@ -108,27 +132,53 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
                         {complianceScore === 100 ? <CheckCircle className="h-4 w-4"/> : <AlertTriangle className="h-4 w-4"/>}
                         <span className="text-xs font-bold">{complianceScore}% Compliant</span>
                     </div>
-                    <Button variant="primary" icon={Share2}>Collaborate</Button>
+                    <Button variant="primary" icon={Share2}>Share</Button>
                 </div>
             </header>
 
             {/* 2. Main Workspace */}
             <div className="flex-1 flex overflow-hidden relative bg-slate-100 dark:bg-slate-950">
                 
-                {/* Left: Context / Assets */}
-                <div className={cn("w-80 border-r bg-white dark:bg-slate-900 flex flex-col z-20", theme.border.default)}>
-                    <ContextPanel caseId={document.caseId} />
+                {/* Left Sidebar: Context / AI / Args */}
+                <div className={cn("w-80 border-r bg-white dark:bg-slate-900 flex flex-col z-20 transition-all", theme.border.default)}>
+                    {/* Tab Switcher */}
+                    <div className="flex border-b border-slate-200 dark:border-slate-800">
+                        <button onClick={() => setSidebarMode('context')} className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors", sidebarMode === 'context' ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500")}>Context</button>
+                        <button onClick={() => setSidebarMode('ai')} className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors flex justify-center items-center gap-1", sidebarMode === 'ai' ? "border-purple-600 text-purple-600" : "border-transparent text-slate-500")}>
+                            <Wand2 className="h-3 w-3"/> AI
+                        </button>
+                        <button onClick={() => setSidebarMode('arguments')} className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors flex justify-center items-center gap-1", sidebarMode === 'arguments' ? "border-indigo-600 text-indigo-600" : "border-transparent text-slate-500")}>
+                            <Target className="h-3 w-3"/> Args
+                        </button>
+                    </div>
+
+                    <div className="flex-1 overflow-hidden">
+                        {sidebarMode === 'context' && <ContextPanel caseId={document.caseId} />}
+                        {sidebarMode === 'ai' && (
+                            <AIDraftingAssistant 
+                                onInsert={(text) => handleAddSection(text)} 
+                                caseContext={{ title: relatedCase?.title || '', summary: relatedCase?.description }}
+                            />
+                        )}
+                        {sidebarMode === 'arguments' && (
+                            <ArgumentSelector 
+                                caseId={document.caseId}
+                                onInsertArgument={(arg) => handleAddSection(arg.description, 'Paragraph', arg.id)}
+                            />
+                        )}
+                    </div>
                 </div>
 
                 {/* Center: The Canvas */}
-                <div className="flex-1 overflow-y-auto relative flex justify-center p-8 custom-scrollbar">
-                    {/* The "Paper" */}
+                <div className="flex-1 overflow-y-auto relative flex justify-center p-8 custom-scrollbar bg-slate-100 dark:bg-slate-950">
                     <div className="relative">
                         <PleadingCanvas 
                             document={document} 
                             rules={rules} 
                             readOnly={viewMode === 'preview'}
                             viewMode={viewMode}
+                            onUpdateSection={handleUpdateSection}
+                            relatedCase={relatedCase}
                         />
                         {/* Logic Overlay (BPM Lines) */}
                         {viewMode === 'logic' && (
@@ -137,7 +187,7 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
                     </div>
                 </div>
 
-                {/* Right: Tools & Linter */}
+                {/* Right: Linter */}
                 <div className={cn("w-72 border-l bg-white dark:bg-slate-900 flex flex-col z-20", theme.border.default)}>
                      <ComplianceHUD 
                         rules={rules} 

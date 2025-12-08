@@ -18,22 +18,18 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  public state: ErrorBoundaryState;
   
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      aiResolution: null,
-      isResolving: false,
-      debugInfo: null,
-      isCopied: false,
-    };
-  }
+  public state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    aiResolution: null,
+    isResolving: false,
+    debugInfo: null,
+    isCopied: false,
+  };
 
   public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
-    return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
+    return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
@@ -69,26 +65,32 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
         if (this.state.hasError) {
+            // FIX: Using an arrow function for the promise callback correctly captures `this`, making this call valid.
             this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
          if (this.state.hasError) {
+            // FIX: Using an arrow function for the promise callback correctly captures `this`, making this call valid.
             this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
          }
       });
   }
 
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound when used as an event handler.
   private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound when used as an event handler.
   private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo).then(() => {
+                // FIX: `this.setState` is valid here due to the arrow function binding.
                 this.setState({ isCopied: true });
                 setTimeout(() => {
+                    // FIX: `this.setState` is valid here due to the arrow function binding.
                     this.setState({ isCopied: false });
                 }, 2000);
             }).catch(err => {
@@ -100,7 +102,9 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
 
   public render(): ReactNode {
     if (this.state.hasError) {
+      // FIX: `this.props` is a standard property in a React class component's render method.
       if (this.props.fallback) {
+        // FIX: `this.props` is a standard property in a React class component's render method.
         return this.props.fallback;
       }
 
@@ -167,6 +171,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
+    // FIX: `this.props` is a standard property in a React class component's render method.
     return this.props.children;
   }
 }

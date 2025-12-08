@@ -25,12 +25,11 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     }, [caseData]);
 
     const handleSaveTime = (rawEntry: TimeEntryPayload) => {
-        // FIX: Cast string to branded types and handle caseId correctly
         const newEntry: TimeEntry = { 
             ...rawEntry,
             id: `t-${Date.now()}` as UUID, 
             userId: 'current-user' as UserId,
-            caseId: rawEntry.caseId as CaseId,
+            caseId: caseData.id,
         };
         
         performMutation('BILLING_LOG', newEntry, () => DataService.billing.addTimeEntry(newEntry));
@@ -47,7 +46,6 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     const handleTransferToAppeal = async () => {
         const appealCase: Case = {
             ...caseData,
-// FIX: Cast string to branded type CaseId
             id: `APP-${Date.now()}` as CaseId,
             title: `Appeal: ${caseData.title}`,
             matterType: 'Appeal',

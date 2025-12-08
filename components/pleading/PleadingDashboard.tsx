@@ -41,7 +41,7 @@ const TEMPLATES: PleadingTemplate[] = [
 ];
 
 interface PleadingDashboardProps {
-    onCreate: (doc: PleadingDocument) => void;
+    onCreate: (newDoc: PleadingDocument) => void;
     onEdit: (id: string) => void;
     caseId?: string;
 }
@@ -77,7 +77,12 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         const template = TEMPLATES.find(t => t.id === newDocData.templateId);
         // Deep copy sections and assign new IDs
         const sections: PleadingSection[] = template 
-            ? template.defaultSections.map((s, idx) => ({ ...s, id: `sec-${Date.now()}-${idx}` }))
+            ? template.defaultSections.map((s, idx) => ({ 
+                id: `sec-${Date.now()}-${idx}`,
+                type: s.type || 'Paragraph', // Ensure type is set
+                content: s.content || '',
+                order: idx
+             }))
             : [];
 
         const doc: PleadingDocument = {
@@ -85,6 +90,8 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             title: newDocData.title,
             caseId: newDocData.caseId as CaseId,
             status: 'Draft',
+            filingStatus: 'Pre-Filing',
+            jurisdictionRulesId: 'default',
             version: 1,
             sections: sections,
             createdBy: 'current-user' as UserId

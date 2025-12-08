@@ -7,6 +7,7 @@ import { AlertCircle, TrendingUp, ArrowRight, FileText } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
 
 export interface DashboardAlert {
   id: number;
@@ -29,17 +30,12 @@ interface DashboardSidebarProps {
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase, alerts }) => {
   const { theme, mode } = useTheme();
-  const [billingStats, setBillingStats] = useState<BillingStats>({
-      realization: 0, totalBilled: 0, month: ''
-  });
-
-  useEffect(() => {
-      const loadStats = async () => {
-          const stats = await DataService.billing.getOverviewStats();
-          setBillingStats(stats);
-      };
-      loadStats();
-  }, []);
+  
+  const { data: billingStats } = useQuery<BillingStats>(
+    ['billing', 'overview'],
+    DataService.billing.getOverviewStats,
+    { initialData: { realization: 0, totalBilled: 0, month: '' } }
+  );
 
   return (
     <div className="space-y-6">
@@ -73,31 +69,31 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase
                 </div>
                 ))}
             </div>
-            <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-                <Button variant="ghost" size="sm" className="text-xs uppercase tracking-wide text-slate-500">View Notification Center</Button>
+            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+                <Button variant="ghost" size="sm" className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">View Notification Center</Button>
             </div>
         </Card>
 
-        <div className={cn("rounded-xl p-6 text-white shadow-xl border", mode === 'dark' ? "bg-slate-800 border-slate-700" : "bg-slate-900 border-slate-700")}>
+        <div className={cn("rounded-xl p-6 text-white shadow-xl border", mode === 'dark' ? "bg-slate-800 border-slate-700" : "bg-gradient-to-br from-slate-800 to-slate-900")}>
             <div className="flex items-center mb-6">
                 <div className="p-2.5 bg-white/10 rounded-lg mr-4 border border-white/10"><FileText className="h-5 w-5 text-blue-300"/></div>
                 <div>
                     <h4 className="font-bold text-lg leading-none">Billing Cycle</h4>
-                    <p className="text-xs text-slate-400 mt-1">Current Period: {billingStats.month}</p>
+                    <p className="text-xs text-slate-400 mt-1">Current Period: {billingStats?.month}</p>
                 </div>
             </div>
             <div className="flex justify-between items-end mb-2">
                 <div>
                     <p className="text-xs font-bold opacity-50 uppercase mb-1">Realization</p>
-                    <p className="text-2xl font-mono font-bold text-green-400">{billingStats.realization}%</p>
+                    <p className="text-2xl font-mono font-bold text-green-400">{billingStats?.realization}%</p>
                 </div>
                 <div className="text-right">
                     <p className="text-xs font-bold opacity-50 uppercase mb-1">Total Billed</p>
-                    <p className="text-xl font-mono font-bold text-blue-400">${(billingStats.totalBilled/1000).toFixed(0)}k</p>
+                    <p className="text-xl font-mono font-bold text-blue-400">${((billingStats?.totalBilled || 0)/1000).toFixed(0)}k</p>
                 </div>
             </div>
             <div className="w-full bg-slate-800 h-1.5 rounded-full mt-4 overflow-hidden">
-                 <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${billingStats.realization}%` }}></div>
+                 <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${billingStats?.realization}%` }}></div>
             </div>
         </div>
     </div>

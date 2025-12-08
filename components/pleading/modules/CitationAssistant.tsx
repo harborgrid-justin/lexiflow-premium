@@ -1,0 +1,71 @@
+
+import React, { useState } from 'react';
+import { BookOpen, Search, Plus, ExternalLink } from 'lucide-react';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { SignalChecker } from './research/SignalChecker';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { STORES } from '../../../services/db';
+import { Citation } from '../../../types';
+
+interface CitationAssistantProps {
+  onInsertCitation: (citation: string) => void;
+}
+
+export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCitation }) => {
+  const { theme } = useTheme();
+  const [search, setSearch] = useState('');
+
+  // Cross-Module Integration: Fetching from Research/Citation Domain
+  const { data: citations = [] } = useQuery<Citation[]>(
+    [STORES.CITATIONS, 'all'],
+    DataService.citations.getAll
+  );
+
+  const filtered = citations.filter(c => c.citation.toLowerCase().includes(search.toLowerCase()) || c.title.toLowerCase().includes(search.toLowerCase()));
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className={cn("p-4 border-b", theme.border.default)}>
+        <h3 className={cn("text-sm font-bold flex items-center mb-3", theme.text.primary)}>
+          <BookOpen className="h-4 w-4 mr-2" /> Authority Assistant
+        </h3>
+        <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+            <input 
+                className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                placeholder="Search saved authorities..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+        {filtered.map(c => (
+            <div key={c.id} className={cn("p-3 rounded-lg border group", theme.surface, theme.border.default)}>
+                <div className="flex justify-between items-start mb-1">
+                    <span className={cn("font-mono text-xs font-bold hover:underline cursor-pointer", theme.primary.text)}>{c.citation}</span>
+                    <SignalChecker citation={c.citation} status={c.shepardsSignal as any || 'Unknown'} />
+                </div>
+                <p className={cn("text-xs font-medium mb-1", theme.text.primary)}>{c.title}</p>
+                <p className={cn("text-[10px] line-clamp-2 italic mb-2", theme.text.secondary)}>{c.description}</p>
+                
+                <div className="flex gap-2">
+                    <button 
+                        onClick={() => onInsertCitation(c.citation)}
+                        className={cn("flex-1 py-1 rounded text-xs font-medium border transition-colors flex items-center justify-center gap-1", theme.surfaceHighlight, theme.border.default, `hover:${theme.primary.light} hover:text-blue-600`)}
+                    >
+                        <Plus className="h-3 w-3" /> Insert
+                    </button>
+                    <button className={cn("p-1 rounded text-slate-400 hover:text-blue-600")}>
+                        <ExternalLink className="h-3.5 w-3.5" />
+                    </button>
+                </div>
+            </div>
+        ))}
+      </div>
+    </div>
+  );
+};

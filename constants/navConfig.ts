@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale, 
   Calendar, Book, DollarSign, Users, BarChart3, Settings, 
   FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch, 
-  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle
+  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool
 } from 'lucide-react';
 import { AppView, NavCategory } from '../types';
 import { PATHS } from './paths';
@@ -25,6 +25,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
 
   // CASE WORK
   { id: PATHS.CASES, label: 'Case Management', icon: Briefcase, category: 'Case Work' },
+  { id: PATHS.PLEADING_BUILDER, label: 'Pleading Builder', icon: PenTool, category: 'Case Work' },
   { id: PATHS.DOCKET, label: 'Master Docket', icon: BookOpen, category: 'Case Work' },
   { id: PATHS.DOCUMENTS, label: 'Documents', icon: FileText, category: 'Case Work' },
   { id: PATHS.CORRESPONDENCE, label: 'Correspondence', icon: Send, category: 'Case Work' },

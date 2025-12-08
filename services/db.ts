@@ -68,12 +68,14 @@ export const STORES = {
   WITNESSES: 'witnesses',
   SLAS: 'sla_configs',
   PROCESSING_JOBS: 'processing_jobs',
-  RETENTION_POLICIES: 'retention_policies'
+  RETENTION_POLICIES: 'retention_policies',
+  // Phase 4 Stores
+  PLEADINGS: 'pleading_documents'
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 14; 
+  private dbVersion = 15; // Incremented for new store
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

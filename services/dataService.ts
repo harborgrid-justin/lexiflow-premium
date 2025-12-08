@@ -9,7 +9,7 @@ import { DataQualityService } from './domains/DataQualityDomain';
 import { DataCatalogService } from './domains/DataCatalogDomain';
 import { BackupService } from './domains/BackupDomain';
 import { DocketRepository } from './domains/DocketDomain';
-import { ProfileDomain } from './domains/ProfileDomain'; // Added
+import { ProfileDomain } from './domains/ProfileDomain'; 
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -19,6 +19,7 @@ import { WorkflowRepository } from './repositories/WorkflowRepository';
 import { BillingRepository } from './repositories/BillingRepository';
 import { DiscoveryRepository } from './repositories/DiscoveryRepository';
 import { TrialRepository } from './repositories/TrialRepository';
+import { PleadingRepository } from './repositories/PleadingRepository'; // Added
 
 // Types
 import { 
@@ -41,6 +42,7 @@ export const DataService = {
   docket: new DocketRepository(),
   evidence: new EvidenceRepository(),
   documents: new DocumentRepository(),
+  pleadings: new PleadingRepository(), // Added
   hr: HRRepository,
   workflow: WorkflowRepository,
   billing: new BillingRepository(),
@@ -52,7 +54,7 @@ export const DataService = {
   quality: new DataQualityService(),
   catalog: DataCatalogService,
   backup: BackupService,
-  profile: ProfileDomain, // Added
+  profile: ProfileDomain,
 
   // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
@@ -92,7 +94,6 @@ export const DataService = {
       constructor() { super(STORES.ENTITIES); }
       getRelationships = async (id: string) => { return []; } 
   }(),
-  // FIX: The type 'WorkflowTemplateData' does not satisfy the constraint 'BaseEntity'. Corrected 'any' to 'WorkflowTemplateData'.
   playbooks: new class extends Repository<WorkflowTemplateData> { constructor() { super(STORES.TEMPLATES); } }(),
   clauses: new class extends Repository<Clause> { constructor() { super(STORES.CLAUSES); } }(),
   rules: new class extends Repository<LegalRule> { 
@@ -265,7 +266,7 @@ export const DataService = {
           motions.forEach((m: any) => { if (m.hearingDate) events.push({ id: `evt-motion-${m.id}`, title: `Hearing: ${m.title}`, date: m.hearingDate, type: 'hearing', priority: 'High', description: `Hearing for ${m.type}` }); });
           tasks.forEach(t => { if (t.dueDate) events.push({ id: `evt-task-${t.id}`, title: `Task: ${t.title}`, date: t.dueDate, type: 'task', priority: t.priority === 'High' ? 'High' : 'Medium', description: `Assigned to ${t.assignee}` }); });
 
-          return events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+          return events.sort((a, b) => new Date(a.date).getTime() - new Date(a.date).getTime());
       },
       getSOL: async () => [],
       getTeamAvailability: async () => [],

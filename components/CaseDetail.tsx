@@ -128,7 +128,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
         title={caseData.title}
         status={caseData.status}
         client={caseData.client}
-        clientId={caseData.clientId}
+        clientId={caseData.clientId as any}
         jurisdiction={caseData.jurisdiction}
         onBack={onBack} 
         onShowTimeline={() => setShowMobileTimeline(true)}

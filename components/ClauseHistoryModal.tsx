@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { Clause } from '../types';
 import { History, ArrowLeftRight, X } from 'lucide-react';

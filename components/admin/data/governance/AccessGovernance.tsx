@@ -1,76 +1,120 @@
-
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
 import { UserAvatar } from '../../../common/UserAvatar';
 import { Badge } from '../../../common/Badge';
 import { Button } from '../../../common/Button';
-import { Shield, Clock, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+// FIX: Add missing 'Info' import from lucide-react
+import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
+import { RolePermission, PermissionLevel } from '../../../../types';
+import { useQuery, useMutation, queryClient } from '../../../../services/queryClient';
+import { DataService } from '../../../../services/dataService';
+import { useNotify } from '../../../../hooks/useNotify';
 
 export const AccessGovernance: React.FC = () => {
-    const { theme } = useTheme();
+  const { theme } = useTheme();
+  const notify = useNotify();
 
-    const assignments = [
-        { id: 1, user: 'James Doe', role: 'Associate', resource: 'Billing Database', permission: 'Write', risk: 'Medium', lastReview: '30 days ago' },
-        { id: 2, user: 'Sarah Jenkins', role: 'Paralegal', resource: 'HR Records', permission: 'Read', risk: 'High', lastReview: 'Overdue' },
-        { id: 3, user: 'Alexandra H.', role: 'Partner', resource: 'Admin Console', permission: 'Full', risk: 'Critical', lastReview: '7 days ago' },
-    ];
+  // Roles and Resources definition
+  const roles = ['Administrator', 'Partner', 'Associate', 'Paralegal', 'Client'];
+  const resources = ['Cases', 'Financials', 'Audit Logs', 'Security Settings', 'Personnel', 'Integrations', 'API Keys'];
 
-    return (
-        <div className="space-y-6 animate-fade-in">
-            <div className={cn("p-4 border rounded-lg flex items-center justify-between", theme.surface, theme.border.default)}>
-                <div>
-                    <h4 className={cn("font-bold text-sm", theme.text.primary)}>Quarterly Access Review</h4>
-                    <p className={cn("text-xs mt-1", theme.text.secondary)}>Cycle Q1 2024 • 12/45 Reviews Completed</p>
-                </div>
-                <Button variant="primary">Start Review</Button>
-            </div>
+  const { data: permissions = [], isLoading } = useQuery<RolePermission[]>(
+      ['admin', 'permissions'],
+      DataService.admin.getPermissions
+  );
 
-            <TableContainer>
-                <TableHeader>
-                    <TableHead>User</TableHead>
-                    <TableHead>Resource</TableHead>
-                    <TableHead>Permission</TableHead>
-                    <TableHead>Risk Level</TableHead>
-                    <TableHead>Last Review</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                </TableHeader>
-                <TableBody>
-                    {assignments.map(a => (
-                        <TableRow key={a.id}>
-                            <TableCell>
-                                <div className="flex items-center gap-2">
-                                    <UserAvatar name={a.user} size="sm"/>
-                                    <div>
-                                        <div className={cn("text-sm font-medium", theme.text.primary)}>{a.user}</div>
-                                        <div className={cn("text-xs", theme.text.secondary)}>{a.role}</div>
-                                    </div>
-                                </div>
-                            </TableCell>
-                            <TableCell>{a.resource}</TableCell>
-                            <TableCell><span className="font-mono text-xs">{a.permission}</span></TableCell>
-                            <TableCell>
-                                <Badge variant={a.risk === 'Critical' || a.risk === 'High' ? 'error' : 'warning'}>
-                                    {a.risk}
-                                </Badge>
-                            </TableCell>
-                            <TableCell>
-                                <span className={cn("text-xs flex items-center", a.lastReview === 'Overdue' ? "text-red-500 font-bold" : theme.text.secondary)}>
-                                    {a.lastReview === 'Overdue' && <AlertTriangle className="h-3 w-3 mr-1"/>}
-                                    {a.lastReview}
-                                </span>
-                            </TableCell>
-                            <TableCell className="text-right">
-                                <div className="flex justify-end gap-1">
-                                    <button className="p-1.5 text-green-600 hover:bg-green-50 rounded" title="Approve"><CheckCircle className="h-4 w-4"/></button>
-                                    <button className="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Revoke"><XCircle className="h-4 w-4"/></button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
+  const { mutate: updatePermission } = useMutation(
+      DataService.admin.updatePermission,
+      {
+          onSuccess: (data) => {
+              queryClient.invalidate(['admin', 'permissions']);
+              notify.info(`Permission updated: ${data.role} -> ${data.resource}`);
+          }
+      }
+  );
+
+  const getPermission = (role: string, resource: string): PermissionLevel => {
+      const perm = permissions.find(p => p.role === role && p.resource === resource);
+      return perm ? perm.access : 'None';
+  };
+
+  const cyclePermission = (role: string, resource: string) => {
+      const current = getPermission(role, resource);
+      const levels: PermissionLevel[] = ['None', 'Read', 'Write', 'Full', 'Own'];
+      const nextIndex = (levels.indexOf(current) + 1) % levels.length;
+      const nextLevel = levels[nextIndex];
+      
+      updatePermission({ role, resource, level: nextLevel });
+  };
+
+  const getPermissionStyle = (level: PermissionLevel) => {
+      switch (level) {
+          case 'Full': return "bg-green-50 text-green-700 border-green-200";
+          case 'Write': return "bg-blue-50 text-blue-700 border-blue-200";
+          case 'Read': return "bg-sky-50 text-sky-700 border-sky-200";
+          case 'Own': return "bg-purple-50 text-purple-700 border-purple-200";
+          default: return cn(theme.surfaceHighlight, theme.text.secondary, theme.border.default, "opacity-60");
+      }
+  };
+
+  const getIcon = (level: PermissionLevel) => {
+      switch (level) {
+          case 'Full': return <CheckCircle className="h-3 w-3"/>;
+          case 'Write': return <CheckCircle className="h-3 w-3"/>;
+          case 'Read': return <Info className="h-3 w-3"/>;
+          case 'Own': return <Lock className="h-3 w-3"/>;
+          default: return <XCircle className="h-3 w-3"/>;
+      }
+  };
+
+  if (isLoading) return <div className={cn("p-8 text-center", theme.text.secondary)}>Loading Access Matrix...</div>;
+
+  return (
+    <div className={cn("h-full w-full rounded-lg border shadow-sm overflow-auto relative", theme.surface, theme.border.default)}>
+        <table className="w-full text-sm text-left border-collapse">
+            <thead className={cn("text-xs uppercase font-bold", theme.text.secondary)}>
+                <tr>
+                    <th className={cn("px-6 py-4 sticky top-0 left-0 z-20 border-b border-r min-w-[200px]", theme.surfaceHighlight, theme.border.default)}>Resource Scope</th>
+                    {roles.map(r => (
+                        <th key={r} className={cn("px-6 py-4 text-center sticky top-0 z-10 border-b", theme.surfaceHighlight, theme.border.default)}>{r}</th>
                     ))}
-                </TableBody>
-            </TableContainer>
+                </tr>
+            </thead>
+            <tbody className={cn("divide-y", theme.border.light)}>
+                {resources.map(res => (
+                    <tr key={res} className={cn("transition-colors", `hover:${theme.surfaceHighlight}`)}>
+                        <td className={cn("px-6 py-4 font-medium flex items-center gap-2 sticky left-0 z-10 border-r", theme.surface, theme.text.primary, theme.border.default)}>
+                            <Shield className="h-4 w-4 text-blue-500 shrink-0"/> {res}
+                        </td>
+                        {roles.map(role => {
+                            const access = getPermission(role, res);
+                            return (
+                                <td 
+                                    key={role} 
+                                    onClick={() => cyclePermission(role, res)}
+                                    className={cn("px-6 py-4 text-center cursor-pointer transition-colors border-r last:border-r-0 border-dashed", theme.border.light, `hover:${theme.surfaceHighlight}`)}
+                                >
+                                    <div className="flex justify-center">
+                                        <span className={cn(
+                                            "px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1 w-20 justify-center select-none transition-all",
+                                            getPermissionStyle(access)
+                                        )}>
+                                            {getIcon(access)}
+                                            {access}
+                                        </span>
+                                    </div>
+                                </td>
+                            )
+                        })}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+        <div className={cn("p-4 text-xs text-center border-t", theme.text.tertiary, theme.surfaceHighlight, theme.border.default)}>
+            Click any cell to cycle permission levels: None → Read → Write → Full → Own
         </div>
-    );
+    </div>
+  );
 };

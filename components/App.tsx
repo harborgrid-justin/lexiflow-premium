@@ -1,29 +1,29 @@
 
-
 import React, { useState, useCallback, useEffect, useTransition } from 'react';
-import { Sidebar } from './components/Sidebar';
-import { AppShell } from './components/layout/AppShell';
-import { AppHeader } from './components/layout/AppHeader';
+import { Sidebar } from './Sidebar';
+import { AppShell } from './layout/AppShell';
+import { AppHeader } from './layout/AppHeader';
 import { AppView, User, Case } from './types';
-import { MOCK_USERS } from './data/models/user';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider, useToast } from './context/ToastContext';
 import { WindowProvider } from './context/WindowContext';
 import { SyncProvider } from './context/SyncContext';
-import { HolographicDock } from './components/layout/HolographicDock';
+import { HolographicDock } from './layout/HolographicDock';
 import { PATHS } from './constants/paths';
 import { useSessionStorage } from './hooks/useSessionStorage';
 import { DataService } from './services/dataService';
 import { GlobalSearchResult } from './services/searchService';
 import { IntentResult } from './services/geminiService';
-import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { db } from './services/db';
-import { GlobalHotkeys } from './components/common/GlobalHotkeys';
-import { AppContentRenderer } from './components/layout/AppContentRenderer';
+import { ErrorBoundary } from './common/ErrorBoundary';
+import { db, STORES } from './services/db';
+import { Seeder } from './services/dbSeeder';
+import { GlobalHotkeys } from './common/GlobalHotkeys';
+import { AppContentRenderer } from './layout/AppContentRenderer';
 import { Loader2 } from 'lucide-react';
 import { initializeModules } from './config/modules';
 import { ModuleRegistry } from './services/moduleRegistry';
 import { HolographicRouting } from './services/holographicRouting';
+import { useQuery } from './services/queryClient';
 
 // Initialize Registry
 initializeModules();
@@ -41,7 +41,8 @@ const InnerApp: React.FC = () => {
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
 
-  const currentUser: User = MOCK_USERS[currentUserIndex];
+  const { data: users = [] } = useQuery<User[]>([STORES.USERS, 'all'], DataService.users.getAll);
+  const currentUser: User | undefined = users[currentUserIndex];
 
   useEffect(() => {
     if (selectedCaseId) {
@@ -169,10 +170,12 @@ const InnerApp: React.FC = () => {
 
   const handleSwitchUser = useCallback(() => {
     startTransition(() => {
-        setCurrentUserIndex((prev) => (prev + 1) % MOCK_USERS.length);
-        addToast(`Switched user profile`, 'info');
+        if (users.length > 0) {
+            setCurrentUserIndex((prev) => (prev + 1) % users.length);
+            addToast(`Switched user profile`, 'info');
+        }
     });
-  }, [addToast]);
+  }, [addToast, users]);
 
   const handleBackToMain = useCallback(() => {
       startTransition(() => {
@@ -186,6 +189,10 @@ const InnerApp: React.FC = () => {
       const input = document.querySelector('input[placeholder*="Search or type a command"]');
       if (input) (input as HTMLElement).focus();
   }, []);
+
+  if (!currentUser) {
+    return <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin" /></div>;
+  }
 
   return (
     <AppShell
@@ -239,9 +246,15 @@ const App: React.FC = () => {
     useEffect(() => {
         const init = async () => {
             try {
-                await db.seedData();
+                // Correctly initialize DB connection
+                await db.init();
+                // Check if seeding is needed
+                const count = await db.count(STORES.CASES);
+                if (count === 0) {
+                    await Seeder.seed(db);
+                }
             } catch (e) {
-                console.error("Failed to seed database:", e);
+                console.error("Failed to initialize database:", e);
             } finally {
                 setIsReady(true);
             }

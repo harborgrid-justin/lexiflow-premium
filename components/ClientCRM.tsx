@@ -1,3 +1,4 @@
+
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Client, EntityId } from '../types';
 import {
@@ -14,8 +15,8 @@ import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { STORES } from '../services/db';
 import { cn } from '../utils/cn';
-import { CRM_TAB_CONFIG, CRMView } from '../config/crmConfig'; // Updated import path
-import { ClientCRMContent } from './crm/ClientCRMContent'; // Updated import path
+import { CRM_TAB_CONFIG, CRMView } from '../config/crmConfig';
+import { ClientCRMContent } from './crm/ClientCRMContent';
 
 interface ClientCRMProps {
     initialTab?: CRMView;

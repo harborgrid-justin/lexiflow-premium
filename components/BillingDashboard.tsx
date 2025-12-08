@@ -13,19 +13,8 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { cn } from '../utils/cn';
-import { BILLING_TAB_CONFIG, BillingView } from '../config/billingDashboardConfig'; // Updated import path
-import { BillingDashboardContent } from './billing/BillingDashboardContent'; // Updated import path
-
-// Sub-components (these were moved to BillingDashboardContent)
-// const BillingOverview = lazy(() => import('./billing/BillingOverview').then(m => ({ default: m.BillingOverview })));
-// const BillingInvoices = lazy(() => import('./billing/BillingInvoices').then(m => ({ default: m.BillingInvoices })));
-// const BillingWIP = lazy(() => import('./billing/BillingWIP').then(m => ({ default: m.BillingWIP })));
-// const BillingLedger = lazy(() => import('./billing/BillingLedger').then(m => ({ default: m.BillingLedger })));
-
-// BillingView was moved to config/billingDashboardConfig.ts
-// type BillingView = 'overview' | 'invoices' | 'wip' | 'expenses' | 'trust' | 'analytics';
-
-// TAB_CONFIG was moved to config/billingDashboardConfig.ts
+import { BILLING_TAB_CONFIG, BillingView } from '../config/billingDashboardConfig';
+import { BillingDashboardContent } from './billing/BillingDashboardContent';
 
 interface BillingDashboardProps {
   navigateTo?: (view: string) => void;

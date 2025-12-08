@@ -1,4 +1,5 @@
 
+// components/discovery/layout/DiscoveryNavigation.tsx
 import React from 'react';
 import { Scale, Database, ClipboardList, Lock, MessageCircle, Package, Shield, Mic2, Users, FileText } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';

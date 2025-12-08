@@ -92,7 +92,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 24; // Incremented for new stores
+  private dbVersion = 25; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

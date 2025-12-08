@@ -96,6 +96,8 @@ export class DiscoveryRepository {
     }
     addStipulation = async (stip: StipulationRequest) => db.put(STORES.STIPULATIONS, stip);
 
+    
+    // Common
     getLegalHolds = async () => db.getAll<LegalHold>(STORES.LEGAL_HOLDS);
     getPrivilegeLog = async () => db.getAll<PrivilegeLogEntry>(STORES.PRIVILEGE_LOG);
 

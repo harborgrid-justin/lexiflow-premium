@@ -1,4 +1,3 @@
-
 // components/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../types';
@@ -40,6 +39,8 @@ interface CaseListProps {
   onSelectCase: (c: Case) => void;
   initialTab?: string;
 }
+
+// TAB_CONFIG was moved to config/caseListConfig.ts
 
 export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
   const notify = useNotify();

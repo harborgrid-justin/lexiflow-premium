@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent, NexusNodeData } from '../../types';
 import { CaseOverview } from './CaseOverview';
@@ -11,12 +12,14 @@ import { CaseEvidence } from './CaseEvidence';
 import { CaseDiscovery } from './CaseDiscovery';
 import { CaseMessages } from './CaseMessages';
 import { CaseParties } from './CaseParties';
-import { CaseMotions } from './CaseMotions';
+// FIX: Corrected import path for CaseMotions component
+import { CaseMotions } from './motions/CaseMotions';
 import { CaseStrategy } from './CaseStrategy';
 import { CaseArgumentManager } from './CaseArgumentManager';
 import { CaseRiskManager } from './CaseRiskManager';
 import { CasePlanning } from './CasePlanning';
-import { CaseProjects } from './CaseProjects';
+// FIX: Corrected import path for CaseProjects component
+import { CaseProjects } from './projects/CaseProjects';
 import { CaseCollaboration } from './collaboration/CaseCollaboration';
 import { ExhibitManager } from '../ExhibitManager'; // Integrated Exhibit Pro
 import { EvidenceVault } from '../EvidenceVault';   // Integrated Evidence Vault

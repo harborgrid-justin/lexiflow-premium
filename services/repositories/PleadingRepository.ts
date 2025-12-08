@@ -1,3 +1,4 @@
+
 import { PleadingDocument, PleadingTemplate } from '../../types/pleadingTypes';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';

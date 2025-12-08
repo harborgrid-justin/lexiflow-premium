@@ -1,26 +1,26 @@
 import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../types';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
+import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from './types';
+import { useTheme } from './context/ThemeContext';
+import { cn } from './utils/cn';
 import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { PLEADING_BUILDER_TAB_CONFIG } from '../config/pleadingBuilderConfig';
-import { useSessionStorage } from '../hooks/useSessionStorage';
+import { PLEADING_BUILDER_TAB_CONFIG } from './config/pleadingBuilderConfig';
+import { useSessionStorage } from './hooks/useSessionStorage';
 import { Button } from './common/Button';
 import { Plus, Loader2 } from 'lucide-react';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { DataService } from '../services/dataService';
-import { STORES } from '../services/db';
+import { useQuery, useMutation, queryClient } from './services/queryClient';
+import { DataService } from './services/dataService';
+import { STORES } from './services/db';
 import { Modal } from './common/Modal';
 import { Input } from './common/Inputs';
 import { LazyLoader } from './common/LazyLoader';
 
-// Lazy load components
-const PleadingDesigner = lazy(() => import('./pleading/PleadingDesigner').then(m => ({ default: m.PleadingDesigner })));
-const PleadingDrafts = lazy(() => import('./pleading/PleadingDrafts').then(m => ({ default: m.PleadingDrafts })));
-const PleadingTemplates = lazy(() => import('./pleading/PleadingTemplates').then(m => ({ default: m.PleadingTemplates })));
+// Lazy load components with correct default export syntax
+const PleadingDesigner = lazy(() => import('./pleading/PleadingDesigner'));
+const PleadingDrafts = lazy(() => import('./pleading/PleadingDrafts'));
+const PleadingTemplates = lazy(() => import('./pleading/PleadingTemplates'));
 const ClauseLibrary = lazy(() => import('./ClauseLibrary'));
-const PleadingFilingQueue = lazy(() => import('./pleading/PleadingFilingQueue').then(m => ({ default: m.PleadingFilingQueue })));
-const PleadingAnalytics = lazy(() => import('./pleading/PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
+const PleadingFilingQueue = lazy(() => import('./pleading/PleadingFilingQueue'));
+const PleadingAnalytics = lazy(() => import('./pleading/PleadingAnalytics'));
 
 
 interface PleadingBuilderProps {
@@ -182,3 +182,4 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
         </>
     );
 };
+export default PleadingBuilder;

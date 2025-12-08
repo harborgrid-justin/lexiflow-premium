@@ -1,4 +1,3 @@
-
 import { STORES, DatabaseManager } from './db';
 import { MOCK_CASES } from '../data/models/case';
 import { MOCK_TASKS } from '../data/models/workflowTask';
@@ -48,6 +47,9 @@ import { MOCK_INVOICES } from '../data/models/invoice';
 import { MOCK_LEADS, MOCK_CRM_ANALYTICS } from '../data/models/crm';
 import { MOCK_REALIZATION_DATA, MOCK_OPERATING_SUMMARY } from '../data/models/billingStats';
 import { MOCK_DISCOVERY_FUNNEL, MOCK_DISCOVERY_CUSTODIANS } from '../data/models/discoveryCharts';
+import { MOCK_EXHIBITS } from '../data/models/exhibit';
+import { MOCK_ADVISORS } from '../data/models/advisor';
+import { MOCK_OPPOSITION } from '../data/models/opposition';
 
 export const Seeder = {
   async seed(db: DatabaseManager) {
@@ -55,9 +57,6 @@ export const Seeder = {
       
       const batchPut = async (store: string, data: any[]) => {
           for (const item of data) {
-              if (!item.id && !['crm-analytics-main', 'realization-main', 'op-summary-main', 'funnel-main', 'custodian-main'].includes(item.id)) {
-                  item.id = crypto.randomUUID();
-              }
               await db.put(store, item);
           }
       };
@@ -136,6 +135,10 @@ export const Seeder = {
           batchPut(STORES.WIKI, MOCK_WIKI_ARTICLES),
           batchPut(STORES.PRECEDENTS, MOCK_PRECEDENTS),
           batchPut(STORES.QA, MOCK_QA_ITEMS),
+          // War Room
+          batchPut(STORES.EXHIBITS, MOCK_EXHIBITS),
+          batchPut(STORES.ADVISORS, MOCK_ADVISORS),
+          batchPut(STORES.OPPOSITION, MOCK_OPPOSITION),
       ]);
       console.log("Seeding Complete.");
   }

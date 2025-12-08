@@ -13,12 +13,17 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Refactored state initialization to use a class property. The previous constructor-based initialization was not being recognized correctly by the build environment, causing errors where `this.state` and `this.props` were not found.
-  state: ErrorBoundaryState = {
-    hasError: false,
-    error: null,
-    errorInfo: null,
-  };
+  // FIX: Switched from class property state initialization to a constructor.
+  // The build environment was not correctly recognizing the class properties, leading to errors where
+  // `this.state`, `this.props`, and `this.setState` were not found. The constructor pattern is more robust.
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    };
+  }
 
   static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true };

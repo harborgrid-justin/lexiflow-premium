@@ -10,7 +10,7 @@ import { STORES } from '../services/db';
 import { useNotify } from '../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
 
-// Lazy load new designer components with corrected relative paths and default export syntax
+// Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));
 const PleadingCanvas = lazy(() => import('./designer/PleadingCanvas'));
 const AIDraftingAssistant = lazy(() => import('./designer/AIDraftingAssistant'));

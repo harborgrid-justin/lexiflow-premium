@@ -1,3 +1,4 @@
+
 import React, { useState, useTransition } from 'react';
 import { Search, ChevronRight, Book, Star, Loader2 } from 'lucide-react';
 import { DataService } from '../../services/dataService';
@@ -7,6 +8,12 @@ import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { Badge } from '../common/Badge';
+
+const sanitizeHtml = (html: string) => {
+    return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
+               .replace(/<iframe\b[^>]*>([\s\S]*?)<\/iframe>/gim, "")
+               .replace(/on\w+="[^"]*"/g, "");
+};
 
 export const WikiView: React.FC = () => {
   const { theme, mode } = useTheme();
@@ -72,7 +79,7 @@ export const WikiView: React.FC = () => {
                 <span className={cn("text-xs", theme.text.secondary)}>Last Updated: {activeArticle.lastUpdated} by {activeArticle.author}</span>
             </div>
             <h1 className="mb-2">{activeArticle.title}</h1>
-            <div dangerouslySetInnerHTML={{ __html: activeArticle.content }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(activeArticle.content) }} />
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">

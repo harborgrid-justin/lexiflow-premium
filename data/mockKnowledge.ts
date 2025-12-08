@@ -1,4 +1,5 @@
-import { WikiArticle, Precedent, QAItem } from '../types';
+
+import { WikiArticle, Precedent, QAItem, DocumentId } from '../types';
 
 export const MOCK_WIKI_ARTICLES: WikiArticle[] = [
   {
@@ -53,7 +54,7 @@ export const MOCK_PRECEDENTS: Precedent[] = [
       type: 'Motion',
       description: 'Based on lack of triable issue of material fact in a contract dispute case.',
       tag: 'success',
-      docId: 'doc-msj-template' as any,
+      docId: 'doc-msj-template' as DocumentId,
     },
     {
       id: 'prec-2',
@@ -61,7 +62,7 @@ export const MOCK_PRECEDENTS: Precedent[] = [
       type: 'Appeal',
       description: 'Example of a successful appellate brief focusing on standard of review.',
       tag: 'success',
-      docId: 'doc-appeal-template' as any,
+      docId: 'doc-appeal-template' as DocumentId,
     },
     {
       id: 'prec-3',
@@ -69,7 +70,7 @@ export const MOCK_PRECEDENTS: Precedent[] = [
       type: 'Discovery',
       description: 'Template includes specific requests for ESI protocols and search terms.',
       tag: 'info',
-      docId: 'doc-depo-template' as any,
+      docId: 'doc-depo-template' as DocumentId,
     },
 ];
 

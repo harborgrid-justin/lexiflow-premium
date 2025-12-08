@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { Card } from '../../common/Card';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Loader2 } from 'recharts';
-import { useTheme } from '../../../context/ThemeContext';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useTheme } from '../../context/ThemeContext';
 import { useChartTheme } from '../../common/ChartHelpers';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { Loader2 } from 'lucide-react';
 
 // Map theme colors to chart
 const CHART_COLORS = ['#94a3b8', '#64748b', '#3b82f6', '#22c55e'];
@@ -17,12 +18,12 @@ export const DiscoveryCharts: React.FC = () => {
   
   const { data: funnelData = [], isLoading: funnelLoading } = useQuery(
       [STORES.DISCOVERY_FUNNEL_STATS, 'main'],
-      DataService.discovery.getFunnelStats
+      DataService.discovery.getFunnelStats as any
   );
   
   const { data: custodianData = [], isLoading: custodianLoading } = useQuery(
       [STORES.DISCOVERY_CUSTODIAN_STATS, 'main'],
-      DataService.discovery.getCustodianStats
+      DataService.discovery.getCustodianStats as any
   );
 
   if (funnelLoading || custodianLoading) {
@@ -51,8 +52,8 @@ export const DiscoveryCharts: React.FC = () => {
                         formatter={(value: any) => value.toLocaleString()} 
                         contentStyle={chartTheme.tooltipStyle}
                         />
-                        <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v:any) => funnelData.find(d => d.value === v)?.label }}>
-                        {funnelData.map((entry, index) => (
+                        <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v:any) => (funnelData.find((d: any) => d.value === v) as any)?.label }}>
+                        {funnelData.map((entry: any, index: number) => (
                             <Cell key={`cell-${index}`} fill={CHART_COLORS[index]} />
                         ))}
                         </Bar>

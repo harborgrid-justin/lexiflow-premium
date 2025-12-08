@@ -1,19 +1,19 @@
 
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
-import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
+import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../../types';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailContent } from './CaseDetailContent';
 import { CaseTimeline } from './CaseTimeline';
-import { useCaseDetail } from '../../hooks/useCaseDetail';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { useCaseDetail } from '../../../hooks/useCaseDetail';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { DataService } from '../../../services/dataService';
 import { CASE_DETAIL_TABS } from './CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
-import { HolographicRouting } from '../../services/holographicRouting';
-import { NexusInspector } from '../visual/NexusInspector';
-import { ErrorBoundary } from '../common/ErrorBoundary';
+import { HolographicRouting } from '../../../services/holographicRouting';
+import { NexusInspector } from '../../visual/NexusInspector';
+import { ErrorBoundary } from '../../common/ErrorBoundary';
 import { CaseDetailNavigation } from './layout/CaseDetailNavigation';
 
 interface CaseDetailProps {

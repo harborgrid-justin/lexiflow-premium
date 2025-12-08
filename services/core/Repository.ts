@@ -52,6 +52,16 @@ export abstract class Repository<T extends BaseEntity> {
 
     constructor(protected storeName: string) {
         this.cache = new LRUCache<T>(100); // Cache last 100 items
+
+        // Bind methods to ensure 'this' context is preserved when passed as callbacks
+        this.getAll = this.getAll.bind(this);
+        this.getById = this.getById.bind(this);
+        this.getByIndex = this.getByIndex.bind(this);
+        this.add = this.add.bind(this);
+        this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
+        this.createMany = this.createMany.bind(this);
+        this.updateMany = this.updateMany.bind(this);
     }
 
     // Subscribe to changes in this repository

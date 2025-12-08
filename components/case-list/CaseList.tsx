@@ -6,17 +6,17 @@ import {
   DollarSign, Gavel, Mic2, FileCheck, Archive, FileInput,
   LayoutDashboard, Layers, Plus
 } from 'lucide-react';
-import { Button } from './common/Button';
+import { Button } from '../common/Button';
 import { useCaseList } from '../hooks/useCaseList';
-import { DocketImportModal } from './DocketImportModal';
+import { DocketImportModal } from '../DocketImportModal';
 import { CreateCaseModal } from './case-list/CreateCaseModal';
 import { DataService } from '../services/dataService';
 import { useNotify } from '../hooks/useNotify';
 import { useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
 import { cn } from '../utils/cn';
 import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
 import { CaseListContent } from './case-list/CaseListContent'; // Updated import path
@@ -60,9 +60,8 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const { mutate: importDocketData } = useMutation(
     async (data: Partial<ParsedDocket>) => {
        const newCase: Case = {
-        // FIX: Add missing required properties for the Case type, ensuring they are not overwritten.
+           // FIX: Safely spread caseInfo to prevent errors if it's null/undefined
            ...(data.caseInfo || {}),
-        // FIX: Cast string to branded type CaseId
            id: (data.caseInfo?.id || `IMP-${Date.now()}`) as CaseId,
            title: data.caseInfo?.title || 'Imported Matter',
            matterType: (data.caseInfo as any)?.matterType || 'Litigation', 

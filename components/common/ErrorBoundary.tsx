@@ -1,4 +1,3 @@
-
 import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -18,27 +17,21 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Converted from class property to constructor to properly initialize state and bind event handlers. This ensures 'this' context is always correct.
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      aiResolution: null,
-      isResolving: false,
-      debugInfo: null,
-      isCopied: false,
-    };
-    this.handleCopyDebugInfo = this.handleCopyDebugInfo.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-  }
+  // FIX: Converted to class property syntax to ensure correct `this` binding and state initialization.
+  state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    aiResolution: null,
+    isResolving: false,
+    debugInfo: null,
+    isCopied: false,
+  };
 
   public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error };
   }
 
-  // FIX: Converted `componentDidCatch` from an arrow function property to a standard class method. As a lifecycle method, React binds `this` correctly. This is the conventional and most reliable approach.
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  public componentDidCatch = (error: Error, errorInfo: ErrorInfo): void => {
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
@@ -82,13 +75,11 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       });
   }
 
-  // FIX: Converted to a standard class method and bound in the constructor.
-  private handleReset() {
+  private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  // FIX: Converted to a standard class method and bound in the constructor to ensure correct `this` context for event handling and its nested callbacks.
-  private handleCopyDebugInfo() {
+  private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo)
@@ -105,7 +96,8 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     }
   }
 
-  public render(): ReactNode {
+  // FIX: Converted `render` to a class property arrow function to fix `this` context issues.
+  public render = (): ReactNode => {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;

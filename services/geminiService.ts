@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
@@ -19,6 +20,7 @@ export const GeminiService = {
                     responseSchema: AnalyzedDocSchema
                 }
             });
+            // FIX: Access response.text property directly instead of as a function call.
             return safeParseJSON(response.text, { summary: "Analysis failed", riskScore: 0 });
         } catch (e) {
             console.error(e);
@@ -37,6 +39,7 @@ export const GeminiService = {
                     responseSchema: BriefCritiqueSchema
                 }
             });
+            // FIX: Access response.text property directly instead of as a function call.
             return safeParseJSON(response.text, {
                 score: 0,
                 strengths: [],
@@ -63,6 +66,7 @@ export const GeminiService = {
                 model: 'gemini-2.5-flash',
                 contents: Prompts.Review(text)
             });
+            // FIX: Access response.text property directly.
             return response.text || "Error reviewing contract.";
         } catch (e) {
             return "Error reviewing contract.";
@@ -78,6 +82,7 @@ export const GeminiService = {
             });
             for await (const chunk of responseStream) {
                 const c = chunk as GenerateContentResponse;
+                // FIX: Access c.text property directly.
                 if (c.text) yield c.text;
             }
         } catch (e) {
@@ -93,6 +98,7 @@ export const GeminiService = {
                 model: 'gemini-2.5-flash',
                 contents: Prompts.Refine(desc)
             });
+            // FIX: Access response.text property directly.
             return response.text || desc;
         } catch (e) {
             return desc;
@@ -106,6 +112,7 @@ export const GeminiService = {
                 model: 'gemini-2.5-flash',
                 contents: Prompts.Draft(prompt, type)
             });
+            // FIX: Access response.text property directly.
             return response.text || "Error generating content.";
         } catch (e) {
             return "Error generating content.";
@@ -123,6 +130,7 @@ export const GeminiService = {
                     responseSchema: IntentResultSchema
                 }
             });
+            // FIX: Access response.text property directly.
             return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
         } catch (e) {
             return { action: 'UNKNOWN', confidence: 0 };
@@ -140,6 +148,7 @@ export const GeminiService = {
                     responseSchema: DocketSchema
                 }
             });
+            // FIX: Access response.text property directly.
             return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
         } catch (e) {
             return {};
@@ -170,6 +179,7 @@ export const GeminiService = {
                      }
                  });
              }
+             // FIX: Access response.text property directly.
              return { text: response.text || "No text response.", sources };
         } catch (e) {
             return { text: "Research unavailable.", sources: [] };
@@ -183,6 +193,7 @@ export const GeminiService = {
                 model: 'gemini-2.5-flash',
                 contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
             });
+            // FIX: Access response.text property directly.
             return response.text || "";
         } catch (e) {
             return "";
@@ -196,6 +207,7 @@ export const GeminiService = {
                 model: 'gemini-2.5-flash',
                 contents: Prompts.ErrorResolution(errorMessage),
             });
+            // FIX: Access response.text property directly.
             return response.text || "Could not determine a resolution.";
         } catch (e) {
             console.error("AI resolution failed", e);

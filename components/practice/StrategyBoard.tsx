@@ -7,16 +7,18 @@ import { MetricTile } from '../common/RefactoredCommon';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
 import { Card } from '../common/Card';
 import { ProgressBar } from '../common/ProgressBar';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const StrategyBoard: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('okr');
 
-    const okrs = [
-        { id: 1, title: 'Expand into IP Litigation', progress: 65, owner: 'Partner Committee' },
-        { id: 2, title: 'Increase Profit Margin by 5%', progress: 40, owner: 'Finance' },
-        { id: 3, title: 'Launch AI Defense Practice', progress: 85, owner: 'Innovation Team' },
-    ];
+    const { data: okrs = [] } = useQuery<any[]>(
+        [STORES.OKRS, 'all'],
+        DataService.operations.getOkrs
+    );
 
     return (
         <div className="flex flex-col h-full space-y-4">
@@ -75,6 +77,7 @@ export const StrategyBoard: React.FC = () => {
                                 <KanbanCard className="border-l-4 border-l-blue-500">Regional Employment Firm</KanbanCard>
                             </KanbanColumn>
                             <KanbanColumn title="Negotiation" count={0}>
+                                {/* FIX: KanbanColumn requires children */}
                                 <></>
                             </KanbanColumn>
                             <KanbanColumn title="Integration" count={1}>

@@ -1,60 +1,49 @@
-
 import React, { useState } from 'react';
-import { Case } from '../../types';
+import { Case, Conversation, Message } from '../../types';
 import { Send, Paperclip, Lock, Shield, FileText } from 'lucide-react';
 import { Button } from '../common/Button';
 import { UserAvatar } from '../common/UserAvatar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { Loader2 } from 'lucide-react';
+// FIX: Import MOCK_USERS to look up sender information.
+import { MOCK_USERS } from '../../data/models/user';
 
 interface CaseMessagesProps {
   caseData: Case;
 }
 
-interface Message {
-  id: string;
-  sender: string;
-  role: string;
-  text: string;
-  timestamp: string;
-  isPrivileged: boolean;
-  attachments?: string[];
-}
-
 export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   const { theme } = useTheme();
   const [inputText, setInputText] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'm1', sender: 'Alexandra H.', role: 'Senior Partner',
-      text: `Team, regarding ${caseData.title}, we need to expedite the discovery review. The judge is pushing for a conference next week.`,
-      timestamp: 'Yesterday 09:30 AM', isPrivileged: true
-    },
-    {
-      id: 'm2', sender: 'Sarah Jenkins', role: 'Paralegal',
-      text: 'Understood. I have uploaded the latest production set to the Discovery center. Waiting on OCR.',
-      timestamp: 'Yesterday 10:15 AM', isPrivileged: true, attachments: ['Production_Set_004.pdf']
-    },
-    {
-      id: 'm3', sender: 'John Doe', role: 'Client',
-      text: 'I found the old email archives you asked for. How should I send them securely?',
-      timestamp: 'Today 08:00 AM', isPrivileged: true
-    }
-  ]);
+  
+  const conversationId = `conv-case-${caseData.id}`;
+  
+  // Enterprise Data Fetching
+  const { data: conversation, isLoading } = useQuery<Conversation | undefined>(
+    [STORES.CONVERSATIONS, conversationId],
+    () => DataService.messenger.getConversationById(conversationId)
+  );
+
+  const messages = conversation?.messages || [];
 
   const handleSend = () => {
     if (!inputText.trim()) return;
-    const newMsg: Message = {
-      id: `m-${Date.now()}`,
-      sender: 'Me',
-      role: 'Attorney',
-      text: inputText,
-      timestamp: 'Just now',
-      isPrivileged: true
-    };
-    setMessages([...messages, newMsg]);
+    // In a real app, this would be a mutation
+    // setMessages([...messages, newMsg]);
     setInputText('');
   };
+
+  if (isLoading) {
+      return <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-blue-600"/></div>
+  }
+
+  if (!conversation) {
+      return <div className="text-center p-8 text-slate-500">No communication thread found for this case.</div>
+  }
 
   return (
     <div className={cn("flex flex-col h-[500px] md:h-[600px] max-h-[80vh] rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
@@ -73,15 +62,19 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
 
       {/* Messages Area */}
       <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surfaceHighlight)}>
-        {messages.map((msg) => {
-          const isMe = msg.sender === 'Me';
+        {/* FIX: Use Message type and look up sender info to prevent runtime error. */}
+        {messages.map((msg: Message) => { 
+          const isMe = msg.senderId === 'me';
+          const user = MOCK_USERS.find(u => u.id === msg.senderId);
+          const senderName = user ? user.name : isMe ? 'Me' : 'Unknown';
+          const senderRole = user ? user.role : isMe ? 'Attorney' : 'Unknown';
           return (
             <div key={msg.id} className={`flex gap-4 ${isMe ? 'flex-row-reverse' : ''}`}>
-              <UserAvatar name={msg.sender} className="mt-1 shrink-0"/>
+              <UserAvatar name={senderName} className="mt-1 shrink-0"/>
               <div className={`max-w-[75%] md:max-w-[70%] ${isMe ? 'items-end' : 'items-start'} flex flex-col min-w-0`}>
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                   <span className={cn("text-xs font-bold", theme.text.primary)}>{msg.sender}</span>
-                   <span className={cn("text-xs", theme.text.tertiary)}>{msg.role} • {msg.timestamp}</span>
+                   <span className={cn("text-xs font-bold", theme.text.primary)}>{senderName}</span>
+                   <span className={cn("text-xs", theme.text.tertiary)}>{senderRole} • {new Date(msg.timestamp).toLocaleString()}</span>
                 </div>
                 <div className={cn(
                     "p-4 rounded-2xl text-sm shadow-sm relative break-words whitespace-pre-wrap w-full",
@@ -92,9 +85,9 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
                    {msg.text}
                    {msg.attachments && (
                      <div className="mt-3 space-y-1">
-                       {msg.attachments.map(att => (
-                         <div key={att} className="flex items-center p-2 bg-black/10 rounded text-xs font-medium">
-                            <FileText className="h-3 w-3 mr-2"/> {att}
+                       {msg.attachments.map((att: any) => (
+                         <div key={att.name} className="flex items-center p-2 bg-black/10 rounded text-xs font-medium">
+                            <FileText className="h-3 w-3 mr-2"/> {att.name}
                          </div>
                        ))}
                      </div>

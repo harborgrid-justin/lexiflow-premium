@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { Plus, RefreshCw, Play, Loader2 } from 'lucide-react';
 import { PageHeader } from './common/PageHeader';
@@ -15,7 +16,9 @@ import { WorkflowConfig } from './workflow/WorkflowConfig';
 import { WorkflowEngineDetail } from './workflow/WorkflowEngineDetail';
 import { FirmProcessDetail } from './workflow/FirmProcessDetail';
 import { WorkflowLibrary } from './workflow/WorkflowLibrary';
-import { TemplatePreview, WorkflowTemplateData } from './workflow/TemplatePreview';
+// FIX: `WorkflowTemplateData` is not exported from `TemplatePreview`. It should be imported from `types`.
+import { TemplatePreview } from './workflow/TemplatePreview';
+import { WorkflowTemplateData } from '../types';
 
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';

@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-react';
@@ -7,8 +6,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { SuffixTree } from '../../utils/datastructures/suffixTree';
 import { useNotify } from '../../hooks/useNotify';
-
-const MALWARE_SIGNATURES = ['malicious_code_xyz', 'trojan_payload_abc', 'ransomware_encrypt'];
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const SecurityOps: React.FC = () => {
     const { theme } = useTheme();
@@ -16,6 +16,11 @@ export const SecurityOps: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);
     const [scanResult, setScanResult] = useState<'clean' | 'infected' | null>(null);
     const [fileName, setFileName] = useState('');
+
+    const { data: malwareSignatures = [] } = useQuery<string[]>(
+        [STORES.MALWARE_SIGNATURES, 'all'],
+        DataService.security.getMalwareSignatures
+    );
 
     const handleFileScan = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
@@ -33,7 +38,7 @@ export const SecurityOps: React.FC = () => {
         await new Promise(res => setTimeout(res, 1500));
 
         let found = false;
-        for (const sig of MALWARE_SIGNATURES) {
+        for (const sig of malwareSignatures) {
             if (suffixTree.hasSubstring(sig)) {
                 found = true;
                 break;

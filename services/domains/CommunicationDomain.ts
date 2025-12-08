@@ -1,8 +1,10 @@
-
 import { CommunicationItem, ServiceJob } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 import { SystemEventType } from '../../types/integrationTypes';
+// FIX: Add missing imports
+import { DocketEntry, DocketId } from '../../types';
+
 export const CorrespondenceService = {
     getCommunications: async () => db.getAll<CommunicationItem>(STORES.COMMUNICATIONS),
     getServiceJobs: async () => db.getAll<ServiceJob>(STORES.SERVICE_JOBS),

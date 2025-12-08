@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MetricCard } from '../common/Primitives';
 import { Card } from '../common/Card';
@@ -17,7 +16,6 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  // FIX: Property 'analytics' does not exist on type... Did you mean 'analysis'?
   const { data: judges = [], isLoading } = useQuery(
       ['analytics', 'judges'], 
       DataService.analysis.getJudgeProfiles
@@ -102,7 +100,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
                         />
                         <Button variant="primary">Search</Button>
                     </div>
-                    <div className={cn("flex gap-2 mt-3 text-xs", theme.text.secondary)}>
+                    <div className={cn("flex gap-4 mt-3 text-xs", theme.text.secondary)}>
                         <span>Popular:</span>
                         <span className="hover:text-blue-600 cursor-pointer underline">Rule 12(b)(6)</span>
                         <span className="hover:text-blue-600 cursor-pointer underline">Rule 26(f)</span>

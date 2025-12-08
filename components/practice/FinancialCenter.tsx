@@ -5,10 +5,17 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { OperatingLedger } from './finance/OperatingLedger';
 import { TrustLedger } from './finance/TrustLedger';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const FinancialCenter: React.FC = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');
+
+  // Enterprise Data Hooks
+  const { data: expenses } = useQuery([STORES.EXPENSES, 'all'], DataService.expenses.getAll);
+  const { data: trustAccounts } = useQuery([STORES.TRUST, 'all'], DataService.billing.getTrustAccounts);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -44,9 +51,9 @@ export const FinancialCenter: React.FC = () => {
       </div>
 
       {activeTab === 'operating' ? (
-        <OperatingLedger />
+        <OperatingLedger expenses={expenses || []} />
       ) : (
-        <TrustLedger />
+        <TrustLedger trustAccounts={trustAccounts || []} />
       )}
     </div>
   );

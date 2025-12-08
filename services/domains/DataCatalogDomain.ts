@@ -1,4 +1,3 @@
-
 import { DataDictionaryItem } from '../../types';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export const DataCatalogService = {

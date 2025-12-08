@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import { MetricCard } from '../common/Primitives';
@@ -8,6 +7,8 @@ import { cn } from '../../utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { DataService } from '../../services/dataService';
 import { useChartTheme } from '../common/ChartHelpers';
+import { useQuery } from '../../services/queryClient';
+import { Loader2 } from 'lucide-react';
 
 interface RiskChartData {
     name: string;
@@ -24,20 +25,20 @@ interface ComplianceMetrics {
 export const ComplianceOverview: React.FC = () => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
-  const [riskData, setRiskData] = useState<RiskChartData[]>([]);
-  const [metrics, setMetrics] = useState<ComplianceMetrics>({ high: 0, missingDocs: 0, violations: 0 });
+  
+  const { data: riskData = [], isLoading: loadingRiskData } = useQuery<RiskChartData[]>(
+      ['compliance', 'riskStats'], 
+      DataService.compliance.getRiskStats as any
+  );
 
-  useEffect(() => {
-      const load = async () => {
-          const [data, stats] = await Promise.all([
-              DataService.compliance.getRiskStats(),
-              DataService.compliance.getRiskMetrics()
-          ]);
-          setRiskData(data);
-          setMetrics(stats);
-      };
-      load();
-  }, []);
+  const { data: metrics, isLoading: loadingMetrics } = useQuery<ComplianceMetrics>(
+      ['compliance', 'riskMetrics'], 
+      DataService.compliance.getRiskMetrics
+  );
+
+  if (loadingRiskData || loadingMetrics) {
+      return <div className="flex justify-center p-12"><Loader2 className="animate-spin h-6 w-6 text-blue-600"/></div>
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -53,7 +54,7 @@ export const ComplianceOverview: React.FC = () => {
          />
          <MetricCard 
             label="Pending Conflicts" 
-            value={metrics.high} 
+            value={metrics?.high || 0} 
             icon={AlertTriangle}
             trend="Needs Review"
             trendUp={false}
@@ -67,7 +68,7 @@ export const ComplianceOverview: React.FC = () => {
          />
          <MetricCard 
             label="Policy Violations" 
-            value={metrics.violations} 
+            value={metrics?.violations || 0} 
             icon={CheckCircle}
             className="border-l-4 border-l-green-500"
          />
@@ -130,4 +131,19 @@ export const ComplianceOverview: React.FC = () => {
       </div>
     </div>
   );
+};--- START OF FILE services/domains/ComplianceDomain.ts ---
+
+import { Risk, ConflictCheck, EthicalWall, AuditLogEntry } from '../../types';
+import { db, STORES } from '../db';
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export const ComplianceService = {
+    getRiskStats: async () => { await delay(100); return [
+        { name: 'Low Risk', value: 85, color: '#22c55e' },
+        { name: 'Medium Risk', value: 12, color: '#f59e0b' },
+        { name: 'High Risk', value: 3, color: '#ef4444' },
+    ]; },
+    getRiskMetrics: async () => { await delay(100); return { high: 3, missingDocs: 8, violations: 2 }; },
+    getConflicts: async () => db.getAll<ConflictCheck>(STORES.CONFLICTS),
+    getEthicalWalls: async () => db.getAll<EthicalWall>(STORES.WALLS),
+    getPolicies: async () => db.getAll<any>(STORES.POLICIES)
 };

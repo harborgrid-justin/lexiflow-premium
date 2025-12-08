@@ -1,4 +1,3 @@
-
 import { Client } from '../../types';
 import { db, STORES } from '../db';
 

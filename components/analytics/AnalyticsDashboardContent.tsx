@@ -1,12 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
 import { lazy } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { JudgeProfile } from '../../types';
-import { MOCK_COUNSEL, MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../../data/mockAnalytics';
+import { JudgeProfile, OpposingCounselProfile, OutcomePredictionData, JudgeMotionStat } from '../../types';
 import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { Loader2 } from 'lucide-react';
 
 // Sub-components with Correct Paths and Named Exports
 const JudgeAnalytics = lazy(() => import('./JudgeAnalytics').then(m => ({ default: m.JudgeAnalytics })));
@@ -21,26 +21,41 @@ interface AnalyticsDashboardContentProps {
 
 export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps> = ({ activeTab }) => {
   const { theme } = useTheme();
-  const [judges, setJudges] = useState<JudgeProfile[]>([]);
-  const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
-  // Use useQuery for fetching judge profiles
-  // FIX: Property 'analytics' does not exist on type '...'. Did you mean 'analysis'?
-  const { data: fetchedJudges, isLoading: isLoadingJudges } = useQuery<JudgeProfile[]>(
-    ['analytics', 'judgeProfiles'],
+  // Enterprise Data Fetching
+  const { data: judges = [], isLoading: loadingJudges } = useQuery<JudgeProfile[]>(
+    [STORES.JUDGES, 'all'],
     DataService.analysis.getJudgeProfiles
   );
+  const { data: counsel = [], isLoading: loadingCounsel } = useQuery<OpposingCounselProfile[]>(
+    [STORES.COUNSEL_PROFILES, 'all'],
+    DataService.analytics.getCounselProfiles
+  );
+  const { data: judgeStats = [], isLoading: loadingJudgeStats } = useQuery<JudgeMotionStat[]>(
+    [STORES.JUDGE_MOTION_STATS, 'all'],
+    DataService.analytics.getJudgeMotionStats
+  );
+  const { data: outcomeData = [], isLoading: loadingOutcome } = useQuery<OutcomePredictionData[]>(
+    [STORES.OUTCOME_PREDICTIONS, 'all'],
+    DataService.analytics.getOutcomePredictions
+  );
+
+  const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
   useEffect(() => {
-    if (fetchedJudges && fetchedJudges.length > 0) {
-      setJudges(fetchedJudges);
-      if (!selectedJudgeId) {
-        setSelectedJudgeId(fetchedJudges[0].id);
-      }
+    if (judges && judges.length > 0 && !selectedJudgeId) {
+      setSelectedJudgeId(judges[0].id);
     }
-  }, [fetchedJudges, selectedJudgeId]);
+  }, [judges, selectedJudgeId]);
 
   const currentJudge = judges.find(j => j.id === selectedJudgeId) || judges[0];
+  const currentCounsel = counsel[0]; // Simple selection for demo
+
+  const isLoading = loadingJudges || loadingCounsel || loadingJudgeStats || loadingOutcome;
+
+  if (isLoading) {
+      return <div className="flex justify-center p-12"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>
+  }
 
   switch (activeTab) {
     case 'judge': return (
@@ -55,11 +70,11 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
                     {judges.map(j => ( <option key={j.id} value={j.id}>{j.name} ({j.court})</option>))}
                 </select>
             </div>
-            {currentJudge && <JudgeAnalytics judge={currentJudge} stats={MOCK_JUDGE_STATS} />}
+            {currentJudge && <JudgeAnalytics judge={currentJudge} stats={judgeStats} />}
         </div>
     );
-    case 'counsel': return <CounselAnalytics counsel={MOCK_COUNSEL[0]} />;
-    case 'prediction': return <CasePrediction outcomeData={MOCK_OUTCOME_DATA} />;
+    case 'counsel': return currentCounsel && <CounselAnalytics counsel={currentCounsel} />;
+    case 'prediction': return <CasePrediction outcomeData={outcomeData} />;
     default: return null;
   }
 };

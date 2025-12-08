@@ -6,18 +6,13 @@ import { Card } from '../../common/Card';
 import { Landmark, ArrowUpRight, ArrowDownLeft, PieChart, CreditCard } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
-import { DataService } from '../../../services/dataService';
 
-export const OperatingLedger: React.FC = () => {
+interface OperatingLedgerProps {
+    expenses: FirmExpense[];
+}
+
+export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) => {
   const { theme, mode } = useTheme();
-
-  // Enterprise Data Access
-  const { data: expenses = [] } = useQuery<FirmExpense[]>(
-      [STORES.EXPENSES, 'all'],
-      DataService.expenses.getAll
-  );
 
   return (
     <div className="space-y-6">

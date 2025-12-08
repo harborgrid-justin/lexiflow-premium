@@ -4,19 +4,14 @@ import { Card } from '../../common/Card';
 import { Landmark, FileText } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
 
-export const TrustLedger: React.FC = () => {
+interface TrustLedgerProps {
+    trustAccounts: any[];
+}
+
+export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
   const { theme } = useTheme();
-
-  // Enterprise Data Access
-  const { data: trustAccounts = [] } = useQuery<any[]>(
-      [STORES.TRUST, 'all'],
-      DataService.billing.getTrustAccounts
-  );
-
+  
   const totalLiability = trustAccounts.reduce((acc, curr) => acc + curr.balance, 0);
 
   return (

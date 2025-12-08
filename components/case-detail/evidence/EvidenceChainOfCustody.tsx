@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState } from 'react';
 import { Button } from '../../common/Button';
 import { User, Layers, Plus, ShieldCheck, AlertOctagon, Link } from 'lucide-react';
@@ -51,7 +52,6 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           
           const chainedLog = await ChainService.createEntry({
               timestamp: payload.event.date,
-              // FIX: Cast string to branded type UserId
               userId: 'current-user' as UserId,
               user: payload.event.actor,
               action: `CUSTODY_UPDATE_${payload.event.action.toUpperCase().replace(/\s/g, '_')}`,

@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { Input, TextArea } from './Inputs';
 import { Button } from './Button';
 import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
-import { WorkflowTask, TaskId, ProjectId } from '../../types';
+import { WorkflowTask, TaskId, ProjectId, CaseId } from '../../types';
 import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
 import { MOCK_USERS } from '../../data/models/user';
@@ -41,7 +40,6 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     if (!task.title) return;
     
     const newTask: WorkflowTask = {
-        // FIX: Cast string to branded type TaskId
         id: `t-${Date.now()}` as TaskId,
         title: task.title!,
         status: 'Pending',
@@ -53,9 +51,9 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         relatedItemId: relatedItemId,
         relatedItemTitle: relatedItemTitle,
         actionLabel: `View ${relatedModule || 'Item'}`,
-        // FIX: Cast string to branded type ProjectId
         projectId: task.projectId as ProjectId,
-        linkedRules: task.linkedRules
+        linkedRules: task.linkedRules,
+        caseId: 'General' as CaseId, // Default caseId
     };
 
     if (onSave) {

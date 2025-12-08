@@ -1,4 +1,7 @@
 import React, { lazy } from 'react';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 // Sub-components
 const ComplianceOverview = lazy(() => import('./ComplianceOverview').then(m => ({ default: m.ComplianceOverview })));
@@ -13,14 +16,13 @@ interface ComplianceDashboardContentProps {
 }
 
 export const ComplianceDashboardContent: React.FC<ComplianceDashboardContentProps> = ({ activeTab }) => {
-  // Mock data for conflicts and walls, in a real app these would come from useQuery
-  const mockConflicts = [];
-  const mockWalls = [];
+  const { data: conflicts = [] } = useQuery([STORES.CONFLICTS, 'all'], DataService.compliance.getConflicts);
+  const { data: walls = [] } = useQuery([STORES.WALLS, 'all'], DataService.compliance.getEthicalWalls);
 
   switch (activeTab) {
     case 'overview': return <ComplianceOverview />;
-    case 'conflicts': return <ComplianceConflicts conflicts={mockConflicts} />;
-    case 'walls': return <ComplianceWalls walls={mockWalls} />;
+    case 'conflicts': return <ComplianceConflicts conflicts={conflicts} />;
+    case 'walls': return <ComplianceWalls walls={walls} />;
     case 'policies': return <CompliancePolicies />;
     default: return <ComplianceOverview />;
   }

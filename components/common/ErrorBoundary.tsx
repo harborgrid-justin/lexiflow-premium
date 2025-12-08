@@ -26,7 +26,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   // This lifecycle is for side effects (logging) and can also update state with more details.
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound when calling `setState`.
+  componentDidCatch = (error: Error, errorInfo: ErrorInfo) => {
     console.error("Uncaught error:", error, errorInfo);
     this.setState({ error, errorInfo });
   }

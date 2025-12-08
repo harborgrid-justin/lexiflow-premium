@@ -43,7 +43,8 @@ const JurisdictionManager = lazyWithPreload(() => import('../components/Jurisdic
 const CalendarView = lazyWithPreload(() => import('../components/CalendarView').then(m => ({ default: m.CalendarView })));
 const RulesPlatform = lazyWithPreload(() => import('../components/RulesPlatform').then(m => ({ default: m.RulesPlatform })));
 const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager').then(m => ({ default: m.UserProfileManager })));
-const PleadingBuilder = lazyWithPreload(() => import('../components/PleadingBuilder').then(m => ({ default: m.PleadingBuilder }))); // Added
+const PleadingBuilder = lazyWithPreload(() => import('../components/PleadingBuilder').then(m => ({ default: m.PleadingBuilder })));
+const KnowledgeBase = lazyWithPreload(() => import('../components/KnowledgeBase'));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,
@@ -70,7 +71,8 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.CALENDAR]: CalendarView,
   [PATHS.RULES_ENGINE]: RulesPlatform,
   [PATHS.PROFILE]: UserProfileManager,
-  [PATHS.PLEADING_BUILDER]: PleadingBuilder, // Added
+  [PATHS.PLEADING_BUILDER]: PleadingBuilder,
+  [PATHS.LIBRARY]: KnowledgeBase,
 };
 
 export const initializeModules = () => {

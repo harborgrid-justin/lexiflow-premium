@@ -14,6 +14,7 @@ import { MarketingService } from './domains/MarketingDomain';
 import { IntegrationOrchestrator } from './integrationOrchestrator';
 import { SystemEventType } from '../types/integrationTypes';
 import { JurisdictionService } from './domains/JurisdictionDomain';
+import { KnowledgeRepository } from './domains/KnowledgeDomain';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -50,7 +51,6 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 class IntegratedCaseRepository extends CaseRepository {
     async add(item: Case): Promise<Case> {
         const result = await super.add(item);
-        // Trigger Integration
         IntegrationOrchestrator.publish(SystemEventType.CASE_CREATED, { caseData: result });
         return result;
     }
@@ -59,7 +59,6 @@ class IntegratedCaseRepository extends CaseRepository {
 class IntegratedDocketRepository extends DocketRepository {
     async add(item: DocketEntry): Promise<DocketEntry> {
         const result = await super.add(item);
-        // Trigger Integration
         IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, { entry: result, caseId: result.caseId });
         return result;
     }
@@ -68,7 +67,6 @@ class IntegratedDocketRepository extends DocketRepository {
 class IntegratedDocumentRepository extends DocumentRepository {
     async add(item: LegalDocument): Promise<LegalDocument> {
         const result = await super.add(item);
-        // Trigger Integration
         IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: result });
         return result;
     }
@@ -77,7 +75,6 @@ class IntegratedDocumentRepository extends DocumentRepository {
 class IntegratedBillingRepository extends BillingRepository {
     async addTimeEntry(entry: TimeEntry): Promise<TimeEntry> {
         const result = await super.addTimeEntry(entry);
-        // Trigger Integration
         IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, { entry: result });
         return result;
     }
@@ -109,11 +106,10 @@ export const DataService = {
   security: SecurityService,
   marketing: MarketingService,
   jurisdiction: JurisdictionService,
+  knowledge: new KnowledgeRepository(),
   
-  // Use named class to ensure getJudgeProfiles is visible to TS consumers
   analysis: new AnalysisRepository(),
 
-  // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
       async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
@@ -183,7 +179,6 @@ export const DataService = {
       constructor() { super(STORES.RULES); } 
   }(),
 
-  // Simple Services
   phases: PhaseService,
   
   organization: {
@@ -203,8 +198,6 @@ export const DataService = {
         if (conv) {
             conv.messages.push(message);
             await db.put(STORES.CONVERSATIONS, conv);
-            if (message.senderId === 'me') {
-            }
         }
     },
     countUnread: async (caseId: string): Promise<number> => {
@@ -238,14 +231,7 @@ export const DataService = {
           }
       }
   },
-  knowledge: {
-      getPrecedents: async (): Promise<Precedent[]> => db.getAll<Precedent>(STORES.PRECEDENTS),
-      getQA: async (): Promise<QAItem[]> => db.getAll<QAItem>(STORES.QA),
-      getAnalytics: async (): Promise<any> => {
-          await delay(100);
-          return { usage: [], topics: [] };
-      }
-  },
+  
   collaboration: {
       getConferrals: async (caseId: string) => {
           const all = await db.getAll<any>(STORES.CONFERRALS);

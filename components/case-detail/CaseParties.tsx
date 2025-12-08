@@ -1,6 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Party, PartyId } from '../../types';
-import { MOCK_ORGS } from '../../data/models/organization'; // Updated import path
+import { Party, PartyId, Organization } from '../../types';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Plus, Edit2, Trash2, User, Building, Gavel, Link, Layers, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
@@ -10,6 +10,9 @@ import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Scheduler } from '../../utils/scheduler';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 interface CasePartiesProps {
   parties?: Party[];
@@ -24,6 +27,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
   const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
   const [groupBy, setGroupBy] = useState<GroupByOption>('group');
   const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
+
+  const { data: orgs = [] } = useQuery<Organization[]>([STORES.ORGS, 'all'], DataService.organization.getOrgs);
 
   useEffect(() => {
     Scheduler.defer(() => {
@@ -135,7 +140,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                 </TableHeader>
                 <TableBody>
                     {groupParties.map(party => {
-                        const linkedOrg = MOCK_ORGS.find(o => o.id === party.linkedOrgId);
+                        const linkedOrg = orgs.find(o => o.id === party.linkedOrgId);
                         return (
                         <TableRow key={party.id}>
                             <TableCell className={cn("font-medium min-w-[200px]", theme.text.primary)}>
@@ -257,7 +262,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                         onChange={e => setCurrentParty({...currentParty, linkedOrgId: e.target.value})}
                       >
                           <option value="">No Link</option>
-                          {MOCK_ORGS.map(org => (
+                          {orgs.map(org => (
                               <option key={org.id} value={org.id}>{org.name} ({org.type})</option>
                           ))}
                       </select>

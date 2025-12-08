@@ -15,8 +15,9 @@ import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useNotify } from '../hooks/useNotify';
 import { useSessionStorage } from '../hooks/useSessionStorage';
-import { LazyLoader } from '../common/LazyLoader';
+import { LazyLoader } from './common/LazyLoader';
 
+// FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./discovery/DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
 const DiscoveryRequests = lazy(() => import('./discovery/DiscoveryRequests').then(m => ({ default: m.DiscoveryRequests })));
 const PrivilegeLog = lazy(() => import('./discovery/PrivilegeLog').then(m => ({ default: m.PrivilegeLog })));

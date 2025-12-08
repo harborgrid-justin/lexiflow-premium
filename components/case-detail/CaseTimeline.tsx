@@ -1,5 +1,6 @@
 
 
+
 import React, { useState } from 'react';
 import { TimelineEvent } from '../../types';
 import { FileText, CheckCircle, DollarSign, Flag, Briefcase, Gavel, Calendar, BookOpen, List } from 'lucide-react';
@@ -58,7 +59,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
 
   return (
     <div className={cn("flex flex-col h-full overflow-hidden w-full", theme.surface.default)}>
-      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surface.highlight)}>
         <div className="flex items-center gap-2">
             <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>Case Timeline</h3>
             <span className={cn("text-xs bg-slate-200 text-slate-600 px-1.5 rounded-full")}>{events.length}</span>

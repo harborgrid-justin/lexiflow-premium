@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, lazy, Suspense } from 'react';
 import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../types';
 import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';

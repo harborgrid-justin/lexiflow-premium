@@ -11,7 +11,7 @@ import { DataService } from '../services/dataService';
 import { CASE_DETAIL_TABS } from './case-detail/CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './case-detail/CaseDetailMobileMenu';
-import { HolographicRouting } from '../services/holographicRouting';
+import { HolographicRouting } from '../services/h holographicRouting';
 import { NexusInspector } from '../visual/NexusInspector';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 
@@ -155,7 +155,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
         </div>
 
         {/* Sub-Navigation (Pills) */}
-        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
+        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surfaceHighlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
                 <button 
                     key={tab.id} 
@@ -187,6 +187,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onNavigateToCase={onSelectCase}
                         onUpdateParties={hookData.setParties}
                         onTimelineClick={handleTimelineClick}
+                        // FIX: Use hookData for props instead of non-existent 'props' object.
                         onAddProject={hookData.addProject}
                         onAddTask={hookData.addTaskToProject}
                         onUpdateTask={hookData.updateProjectTaskStatus}

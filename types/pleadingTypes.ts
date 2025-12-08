@@ -1,45 +1,56 @@
 
-import { BaseEntity, CaseId, UserId } from './models';
+import { BaseEntity, CaseId, UserId, EvidenceId } from './models';
 
 export type PleadingSectionType = 
   | 'Caption' 
   | 'Heading' 
   | 'Paragraph' 
-  | 'NumberedList' 
-  | 'EvidenceRef' 
-  | 'CitationRef' 
+  | 'List' 
+  | 'BlockQuote' 
   | 'Signature' 
-  | 'CertificateOfService';
+  | 'Certificate';
 
 export interface PleadingSection {
   id: string;
   type: PleadingSectionType;
-  content: string; // HTML or Text
+  content: string;
+  order: number;
   meta?: {
-    alignment?: 'left' | 'center' | 'right' | 'justify';
-    isBold?: boolean;
-    linkedId?: string; // ID of Evidence or Citation
-    placeholder?: string;
-    linkedFactIds?: string[]; // IDs from Case Timeline
+      alignment?: 'left' | 'center' | 'right' | 'justify';
+      isBold?: boolean;
   };
+  // Logic Linking
+  linkedEvidenceIds?: string[];
+  linkedCitationIds?: string[];
+  linkedFactIds?: string[];
+  // Compliance
+  complianceIssues?: string[];
+  metadata?: Record<string, any>;
 }
 
 export interface PleadingComment {
-  id: string;
-  sectionId: string;
-  authorId: string;
-  authorName: string;
-  text: string;
-  timestamp: string;
-  resolved: boolean;
+    id: string;
+    sectionId: string;
+    authorId: string;
+    authorName: string;
+    text: string;
+    timestamp: string;
+    resolved: boolean;
 }
 
 export interface PleadingVariable {
-  id: string;
-  key: string; // e.g., "client_name"
-  label: string;
-  value: string;
-  source: 'Case' | 'Client' | 'System' | 'Manual';
+    id: string;
+    key: string;
+    label: string;
+    value: string;
+    source: 'Case' | 'System' | 'Manual' | 'Client';
+}
+
+export interface LogicLink {
+    id: string;
+    fromSectionId: string;
+    toEntityId: string;
+    type: 'Evidence' | 'Citation' | 'Fact';
 }
 
 export interface PleadingDocument extends BaseEntity {
@@ -47,19 +58,33 @@ export interface PleadingDocument extends BaseEntity {
   title: string;
   status: 'Draft' | 'Review' | 'Final' | 'Filed';
   sections: PleadingSection[];
-  version: number;
-  lastAutoSaved?: string;
   comments?: PleadingComment[];
   variables?: PleadingVariable[];
-  citations?: string[]; // IDs of linked citations
-  jurisdictionRulesId?: string;
+  links?: LogicLink[]; 
+  jurisdictionRulesId: string; 
+  version: number;
+  lastAutoSaved?: string;
+  createdBy?: UserId;
 }
 
 export interface PleadingTemplate {
-  id: string;
-  name: string;
-  category: 'Motion' | 'Complaint' | 'Answer' | 'Discovery';
-  defaultSections: PleadingSection[];
-  jurisdiction?: string;
-  variables?: PleadingVariable[];
+    id: string;
+    name: string;
+    category: string;
+    defaultSections: Partial<PleadingSection>[];
+}
+
+export interface FormattingRule {
+    id: string;
+    name: string;
+    fontFamily: string;
+    fontSize: number;
+    lineHeight: number;
+    marginTop: string;
+    marginBottom: string;
+    marginLeft: string;
+    marginRight: string;
+    showLineNumbers: boolean;
+    paperSize: 'Letter' | 'Legal';
+    captionStyle: 'Boxed' | 'Underlined' | 'Plain';
 }

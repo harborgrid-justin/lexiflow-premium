@@ -15,7 +15,8 @@
     "lucide-react": "0.263.1",
     "recharts": "2.12.3",
     "pdfjs-dist": "4.0.379",
-    "react-router-dom": "^7.10.1"
+    "react-router-dom": "^7.10.1",
+    "framer-motion": "^12.23.25"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

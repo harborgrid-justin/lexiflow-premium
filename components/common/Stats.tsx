@@ -1,0 +1,35 @@
+import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
+interface StatItem {
+    label: string;
+    value: string;
+    icon: React.ElementType;
+    color: string;
+    bg: string;
+}
+
+interface StatsProps {
+    items: StatItem[];
+}
+
+export const Stats: React.FC<StatsProps> = ({ items }) => {
+    const { theme } = useTheme();
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {items.map((item, index) => (
+                <div key={index} className={cn("p-5 rounded-lg border shadow-sm flex items-start gap-4", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded-lg", item.bg)}>
+                        <item.icon className={cn("h-6 w-6", item.color)} />
+                    </div>
+                    <div>
+                        <p className={cn("text-sm font-bold uppercase tracking-wider", theme.text.secondary)}>{item.label}</p>
+                        <p className={cn("text-3xl font-bold mt-1", theme.text.primary)}>{item.value}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};

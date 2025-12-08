@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Network, Database, FileText, ArrowRight, X, User, Clock, Code, RefreshCw, ZoomIn, ZoomOut, Play, Pause, Layers, GitCommit, Share2, Users, HardDrive } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { NexusPhysics, NODE_STRIDE } from '../../../utils/nexusPhysics';
+import { NexusPhysics } from '../../../utils/nexusPhysics';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
 import { ImpactAnalysis } from './lineage/ImpactAnalysis';
+import { LineageCanvas } from './lineage/LineageCanvas';
 
 interface LineageGraphProps {
     initialTab?: string;
@@ -15,10 +16,7 @@ interface LineageGraphProps {
 export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph' }) => {
   const { theme, mode } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isAnimating, setIsAnimating] = useState(true);
-  const requestRef = useRef<number>(0);
 
   // Physics State
   const physicsState = useRef({
@@ -33,86 +31,13 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
-  // Animation Tick Function
-  const tick = () => {
-      if (!canvasRef.current || !containerRef.current) return;
-      
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      const dpr = window.devicePixelRatio || 1;
-      // Get logical size
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-      
-      // Set physical size
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      
-      // Normalize scale
-      ctx.scale(dpr, dpr);
-
-      // CSS styling for proper display size
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-
-      const state = physicsState.current;
-
-      // Update Physics
-      if (state.alpha > 0.001 && isAnimating) {
-          state.alpha = NexusPhysics.simulate(state.buffer, state.links, state.count, width, height, state.alpha);
-      }
-
-      // Draw
-      ctx.clearRect(0, 0, width, height);
-      
-      // Links - Dynamic Theme Color
-      ctx.lineWidth = 2;
-      const isDark = mode === 'dark';
-      ctx.strokeStyle = isDark ? '#475569' : '#cbd5e1'; // slate-600 vs slate-300
-      
-      state.links.forEach(link => {
-          const idxS = link.sourceIndex * NODE_STRIDE;
-          const idxT = link.targetIndex * NODE_STRIDE;
-          ctx.beginPath();
-          ctx.moveTo(state.buffer[idxS], state.buffer[idxS+1]);
-          ctx.lineTo(state.buffer[idxT], state.buffer[idxT+1]);
-          ctx.stroke();
-      });
-
-      // Nodes
-      for (let i = 0; i < state.count; i++) {
-          const idx = i * NODE_STRIDE;
-          const x = state.buffer[idx];
-          const y = state.buffer[idx+1];
-          const type = state.buffer[idx+5];
-          
-          ctx.beginPath();
-          ctx.arc(x, y, type === 0 ? 30 : 20, 0, Math.PI * 2);
-          // Colors: root=blue, org=purple, party=green, evidence=amber
-          ctx.fillStyle = type === 0 ? '#3b82f6' : type === 1 ? '#8b5cf6' : type === 2 ? '#10b981' : '#f59e0b';
-          ctx.fill();
-          ctx.lineWidth = 3;
-          ctx.strokeStyle = isDark ? '#1e293b' : '#fff';
-          ctx.stroke();
-          
-          // Label
-          ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
-          ctx.font = '10px Inter, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(nodeLabels[i]?.label || '', x, y + 40);
-      }
-
-      if (isAnimating) requestRef.current = requestAnimationFrame(tick);
-  };
-
   // Initialize Graph Data
   useEffect(() => {
-      if (activeTab !== 'graph' || !containerRef.current) return;
-
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
+      if (activeTab !== 'graph') return;
+      
+      // We assume reasonable default dimensions until canvas mounts and resizes
+      const width = 800;
+      const height = 600;
 
       // Mock Lineage Data
       const nodes = [
@@ -142,22 +67,6 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       }));
 
       physicsState.current = { buffer, links, count: nodes.length, alpha: 1 };
-      
-      // Start Loop
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-      requestRef.current = requestAnimationFrame(tick);
-
-      // Handle Resize properly
-      const resizeObserver = new ResizeObserver(() => {
-         // Just wake up physics, exact resizing happens in tick via clientWidth
-         physicsState.current.alpha = 0.8;
-      });
-      resizeObserver.observe(containerRef.current);
-
-      return () => {
-          if (requestRef.current) cancelAnimationFrame(requestRef.current);
-          resizeObserver.disconnect();
-      };
   }, [activeTab]);
 
   // Effect to wake up physics on Theme Change
@@ -169,7 +78,6 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       physicsState.current.alpha = 1;
       if (!isAnimating) {
           setIsAnimating(true);
-          requestRef.current = requestAnimationFrame(tick);
       }
   };
 
@@ -191,23 +99,12 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
 
         <div className={cn("flex-1 overflow-hidden relative", theme.surfaceHighlight)}>
             {activeTab === 'graph' && (
-                <div ref={containerRef} className="w-full h-full relative">
-                    <canvas ref={canvasRef} className="block w-full h-full"/>
-                    
-                    <div className={cn("absolute bottom-6 left-6 p-4 backdrop-blur rounded-lg border shadow-sm text-xs space-y-2 pointer-events-none bg-opacity-90", theme.surface, theme.border.default)}>
-                        <div className={cn("font-bold uppercase mb-1", theme.text.tertiary)}>Legend</div>
-                        <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-blue-500"></div> Source System</div>
-                        <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-purple-500"></div> Storage / Warehouse</div>
-                        <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-green-500"></div> Transformation</div>
-                        <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-amber-500"></div> Report / Output</div>
-                    </div>
-
-                    <div className="absolute top-4 right-4 flex flex-col gap-2">
-                        <button onClick={() => setIsAnimating(!isAnimating)} className={cn("p-2 border rounded-lg shadow-sm transition-colors", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
-                            {isAnimating ? <Pause className="h-5 w-5"/> : <Play className="h-5 w-5"/>}
-                        </button>
-                    </div>
-                </div>
+                <LineageCanvas 
+                    isAnimating={isAnimating} 
+                    setIsAnimating={setIsAnimating} 
+                    physicsState={physicsState} 
+                    nodeLabels={nodeLabels} 
+                />
             )}
 
             {activeTab === 'impact' && (

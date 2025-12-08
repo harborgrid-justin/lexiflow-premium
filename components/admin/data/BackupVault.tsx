@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Archive, Download, Clock, RefreshCw, HardDrive, Database, ShieldCheck, AlertCircle, Play, Server, Trash2 } from 'lucide-react';
+import { RefreshCw, Play, ShieldCheck, Server, AlertCircle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
@@ -8,9 +8,10 @@ import { useQuery, useMutation, queryClient } from '../../../services/queryClien
 import { DataService } from '../../../services/dataService';
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
 import { Modal } from '../../common/Modal';
-import { MetricTile, StatusBadge } from '../../common/RefactoredCommon';
-import { TableContainer, TableHeader, TableHead, TableBody, TableRow, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
+import { BackupMetrics } from './backup/BackupMetrics';
+import { SnapshotList } from './backup/SnapshotList';
+import { Clock, Database } from 'lucide-react';
 
 export const BackupVault: React.FC = () => {
   const { theme } = useTheme();
@@ -57,11 +58,6 @@ export const BackupVault: React.FC = () => {
       createSnapshot(type);
   };
 
-  const getSnapshotIcon = (type: SnapshotType) => {
-      if (type === 'Full') return <Database className="h-4 w-4 text-purple-600" />;
-      return <Clock className="h-4 w-4 text-blue-600" />;
-  };
-
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto h-full overflow-y-auto">
         {/* Header Actions */}
@@ -78,75 +74,13 @@ export const BackupVault: React.FC = () => {
             </div>
         </div>
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <MetricTile 
-                label="Latest Recovery Point" 
-                value={snapshots.length > 0 ? new Date(snapshots[0].created).toLocaleTimeString() : 'N/A'} 
-                icon={Clock} 
-                trend="Healthy"
-                trendUp={true}
-            />
-            <MetricTile 
-                label="Cold Storage Usage" 
-                value={stats?.totalSize || '...'} 
-                icon={HardDrive} 
-                trend={`${stats?.objectCount.toLocaleString()} Objects`}
-            />
-            <MetricTile 
-                label="Monthly Cost" 
-                value={`$${stats?.monthlyCost.toFixed(2)}`} 
-                icon={Database} 
-                trend="Optimized"
-                trendUp={true}
-            />
-        </div>
+        <BackupMetrics latestCreated={snapshots.length > 0 ? snapshots[0].created : undefined} stats={stats} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Snapshots Table */}
             <div className="col-span-2 space-y-4">
                 <h4 className={cn("text-sm font-bold uppercase border-b pb-2", theme.text.secondary, theme.border.default)}>Active Recovery Points</h4>
-                <div className={cn("rounded-lg border overflow-hidden", theme.border.default)}>
-                    <TableContainer responsive="card" className="border-0 shadow-none rounded-none">
-                        <TableHeader>
-                            <TableHead>Snapshot ID</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Created At</TableHead>
-                            <TableHead>Size</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableHeader>
-                        <TableBody>
-                            {isLoadingSnapshots ? (
-                                <TableRow><TableCell colSpan={6} className="text-center py-8">Loading snapshots...</TableCell></TableRow>
-                            ) : snapshots.map(snap => (
-                                <TableRow key={snap.id}>
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
-                                                {getSnapshotIcon(snap.type)}
-                                            </div>
-                                            <div>
-                                                <p className={cn("font-bold text-sm", theme.text.primary)}>{snap.name}</p>
-                                                <p className={cn("text-xs font-mono", theme.text.tertiary)}>{snap.id}</p>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>{snap.type}</TableCell>
-                                    <TableCell className={cn("text-xs", theme.text.secondary)}>{new Date(snap.created).toLocaleString()}</TableCell>
-                                    <TableCell className="font-mono text-xs">{snap.size}</TableCell>
-                                    <TableCell><StatusBadge status={snap.status}/></TableCell>
-                                    <TableCell className="text-right">
-                                        <div className="flex justify-end gap-2">
-                                            <Button size="sm" variant="ghost" icon={Download}>Get</Button>
-                                            <Button size="sm" variant="secondary" icon={Archive} onClick={() => setRestoreModalOpen(snap)}>Restore</Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </TableContainer>
-                </div>
+                <SnapshotList snapshots={snapshots} isLoading={isLoadingSnapshots} onRestore={setRestoreModalOpen} />
             </div>
             
             {/* Cold Storage & Info */}

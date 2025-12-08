@@ -16,7 +16,7 @@ export const KnowledgeAnalytics: React.FC = () => {
   
   // Enterprise Data Access
   const { data: analytics = { usage: [], topics: [] } } = useQuery(
-      [STORES.QA, 'analytics'], // Updated key
+      [STORES.QA, 'analytics'],
       DataService.knowledge.getAnalytics
   );
 

@@ -27,5 +27,5 @@ export const PATHS = {
   ENTITIES: 'entities',
   DATA_PLATFORM: 'data_platform',
   PROFILE: 'profile',
-  PLEADING_BUILDER: 'pleading_builder' // Added
+  PLEADING_BUILDER: 'pleading_builder'
 } as const;

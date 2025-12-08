@@ -6,9 +6,82 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+// FIX: Added missing import for Badge component
+import { Badge } from '../common/Badge';
 
 export const WikiView: React.FC = () => {
   const { theme, mode } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');
   const [search, setSearch] = useState('');
-  const [isPending, startTransition
+  const [isPending, startTransition] = useTransition();
+
+  const { data: articles = [], isLoading } = useQuery<WikiArticle[]>(
+    [STORES.WIKI, 'all'],
+    DataService.knowledge.getWikiArticles
+  );
+
+  const activeArticle = articles.find(a => a.id === activeArticleId);
+  const filteredArticles = articles.filter(a => a.title.toLowerCase().includes(search.toLowerCase()));
+
+  const handleSelectArticle = (id: string) => {
+    startTransition(() => {
+      setActiveArticleId(id);
+    });
+  };
+
+  return (
+    <div className={cn("flex h-full rounded-lg border overflow-hidden", theme.surface, theme.border.default)}>
+      {/* Sidebar */}
+      <div className={cn("w-80 border-r flex flex-col shrink-0", theme.surfaceHighlight, theme.border.default)}>
+        <div className="p-4 border-b">
+          <div className="relative">
+            <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
+            <input 
+                className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface, theme.border.default)}
+                placeholder="Search articles..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto p-2">
+          {isLoading && <div className="p-4 text-center"><Loader2 className="animate-spin" /></div>}
+          {filteredArticles.map(article => (
+            <button
+              key={article.id}
+              onClick={() => handleSelectArticle(article.id)}
+              className={cn(
+                "w-full text-left p-3 rounded-lg flex items-center justify-between transition-colors",
+                activeArticleId === article.id ? "bg-blue-50 text-blue-800" : `hover:${theme.surface}`
+              )}
+            >
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold truncate">{article.title}</p>
+                <p className="text-xs text-slate-500">{article.category}</p>
+              </div>
+              {article.isFavorite && <Star className="h-4 w-4 text-amber-400 fill-current ml-2 shrink-0"/>}
+            </button>
+          ))}
+        </div>
+      </div>
+      {/* Content */}
+      <div className={cn("flex-1 overflow-y-auto p-8 md:p-12", isPending ? "opacity-50" : "")}>
+        {activeArticle ? (
+          <div className={cn("prose max-w-none", mode === 'dark' ? "prose-invert" : "")}>
+            <div className="flex justify-between items-start mb-4">
+                <Badge variant="neutral">{activeArticle.category}</Badge>
+                <span className={cn("text-xs", theme.text.secondary)}>Last Updated: {activeArticle.lastUpdated} by {activeArticle.author}</span>
+            </div>
+            <h1 className="mb-2">{activeArticle.title}</h1>
+            <div dangerouslySetInnerHTML={{ __html: activeArticle.content }} />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full">
+            <Book className="h-16 w-16 text-slate-300 mb-4"/>
+            <p className={cn("font-medium", theme.text.secondary)}>Select an article to read</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

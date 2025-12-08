@@ -33,6 +33,7 @@ import { MOCK_OKRS } from '../data/models/strategy';
 import { MALWARE_SIGNATURES } from '../data/models/security';
 import { PLEADING_TEMPLATES } from '../data/models/pleadingTemplate';
 import { MOCK_CONVERSATIONS } from '../data/models/conversation';
+import { MOCK_WIKI_ARTICLES, MOCK_PRECEDENTS, MOCK_QA_ITEMS } from '../data/mockKnowledge';
 
 // New mock data imports
 import { MOCK_CLE_TRACKING } from '../data/models/cle';
@@ -54,15 +55,13 @@ export const Seeder = {
       
       const batchPut = async (store: string, data: any[]) => {
           for (const item of data) {
-              // Ensure item has an ID for stores that need it
-              if (!item.id && store !== STORES.JUDGE_MOTION_STATS && store !== STORES.OUTCOME_PREDICTIONS) {
+              if (!item.id && !['crm-analytics-main', 'realization-main', 'op-summary-main', 'funnel-main', 'custodian-main'].includes(item.id)) {
                   item.id = crypto.randomUUID();
               }
               await db.put(store, item);
           }
       };
       
-      // Centralize Entities
       const allEntities: LegalEntity[] = [];
       const seen = new Set<string>();
 
@@ -78,7 +77,6 @@ export const Seeder = {
       MOCK_CASES.forEach(c => c.parties?.forEach(p => addEntity({ id: `ent-pty-${p.id}` as EntityId, name: p.name, type: p.type, roles: [p.role as any, 'Party'], status: 'Active', riskScore: 50, tags: [] })));
       MOCK_JUDGES.forEach(j => addEntity({ id: `ent-jdg-${j.id}` as EntityId, name: j.name, type: 'Individual', roles: ['Judge'], status: 'Active', riskScore: 5, tags: [j.court] }));
       MOCK_COUNSEL.forEach(c => addEntity({ id: `ent-cnsl-${c.id}` as EntityId, name: c.name, type: 'Law Firm', roles: ['Opposing Counsel'], status: 'Active', riskScore: 60, tags: [] }));
-
 
       await Promise.all([
           batchPut(STORES.CASES, MOCK_CASES),
@@ -113,24 +111,20 @@ export const Seeder = {
           batchPut(STORES.RULES, MOCK_RULES),
           batchPut(STORES.ENTITIES, allEntities),
           batchPut(STORES.CONVERSATIONS, MOCK_CONVERSATIONS),
-          // New Data for Refactor
           batchPut(STORES.COUNSEL_PROFILES, MOCK_COUNSEL),
           batchPut(STORES.JUDGE_MOTION_STATS, MOCK_JUDGE_STATS.map((stat, i) => ({...stat, id: `jms-${i}`}))),
           batchPut(STORES.OUTCOME_PREDICTIONS, MOCK_OUTCOME_DATA.map((d, i) => ({...d, id: `op-${i}`}))),
           batchPut(STORES.OKRS, MOCK_OKRS),
           batchPut(STORES.MALWARE_SIGNATURES, MALWARE_SIGNATURES.map((sig, i) => ({id: `sig-${i}`, signature: sig}))),
           batchPut(STORES.PLEADING_TEMPLATES, PLEADING_TEMPLATES),
-          // Phase 2 Seeding
           batchPut(STORES.CLE_TRACKING, MOCK_CLE_TRACKING),
           batchPut(STORES.VENDOR_CONTRACTS, MOCK_VENDOR_CONTRACTS),
           batchPut(STORES.RFPS, MOCK_RFPS),
           batchPut(STORES.MAINTENANCE_TICKETS, MOCK_MAINTENANCE_TICKETS),
           batchPut(STORES.FACILITIES, MOCK_FACILITIES),
-          // Final configurability
           batchPut(STORES.VENDOR_DIRECTORY, MOCK_VENDOR_DIRECTORY),
           batchPut(STORES.REPORTERS, MOCK_REPORTERS),
           batchPut(STORES.JURISDICTIONS, MOCK_JURISDICTIONS),
-          // Phase 3 Seeding
           batchPut(STORES.INVOICES, MOCK_INVOICES),
           batchPut(STORES.LEADS, MOCK_LEADS),
           db.put(STORES.CRM_ANALYTICS, MOCK_CRM_ANALYTICS),
@@ -138,6 +132,10 @@ export const Seeder = {
           db.put(STORES.OPERATING_SUMMARY, MOCK_OPERATING_SUMMARY),
           db.put(STORES.DISCOVERY_FUNNEL_STATS, MOCK_DISCOVERY_FUNNEL),
           db.put(STORES.DISCOVERY_CUSTODIAN_STATS, MOCK_DISCOVERY_CUSTODIANS),
+          // Knowledge Base
+          batchPut(STORES.WIKI, MOCK_WIKI_ARTICLES),
+          batchPut(STORES.PRECEDENTS, MOCK_PRECEDENTS),
+          batchPut(STORES.QA, MOCK_QA_ITEMS),
       ]);
       console.log("Seeding Complete.");
   }

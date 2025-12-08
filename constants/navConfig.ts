@@ -32,7 +32,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   { id: PATHS.WORKFLOWS, label: 'Workflows', icon: GitBranch, category: 'Case Work' },
 
   // LITIGATION TOOLS
-  { id: PATHS.RESEARCH, label: 'Research & Knowledge', icon: Search, category: 'Litigation Tools' },
+  { id: PATHS.RESEARCH, label: 'Research', icon: Search, category: 'Litigation Tools' },
   { id: PATHS.WAR_ROOM, label: 'War Room', icon: Target, category: 'Litigation Tools' },
   { id: PATHS.DISCOVERY, label: 'Discovery Center', icon: FileQuestion, category: 'Litigation Tools' },
   { id: PATHS.EVIDENCE, label: 'Evidence Vault', icon: Fingerprint, category: 'Litigation Tools' },
@@ -44,6 +44,9 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   { id: PATHS.PRACTICE, label: 'Firm Operations', icon: Building2, category: 'Operations' },
   { id: PATHS.BILLING, label: 'Billing & Finance', icon: DollarSign, category: 'Operations' },
   { id: PATHS.CRM, label: 'Client CRM', icon: Users, category: 'Operations' },
+
+  // KNOWLEDGE
+  { id: PATHS.LIBRARY, label: 'Knowledge Base', icon: Library, category: 'Knowledge' },
 
   // ADMIN
   { id: PATHS.COMPLIANCE, label: 'Compliance', icon: ShieldCheck, category: 'Admin', requiresAdmin: true },

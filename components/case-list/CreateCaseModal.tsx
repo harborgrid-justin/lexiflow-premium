@@ -110,7 +110,6 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
       }
 
       const newCase: Case = {
-          // FIX: Use crypto.randomUUID() for safer ID generation
           id: (isPreFiling ? `MAT-${crypto.randomUUID().slice(0,8)}` : (formData.id || `CASE-${crypto.randomUUID().slice(0,8)}`)) as CaseId,
           title: formData.title || '',
           client: formData.client || '',

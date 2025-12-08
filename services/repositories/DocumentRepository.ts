@@ -1,5 +1,4 @@
-
-import { LegalDocument, DocumentVersion, CaseId, UUID, DocumentId, FileChunk } from '../../types';
+import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../../types';
 import { db, STORES } from '../db';
 import { Repository } from '../core/Repository';
 

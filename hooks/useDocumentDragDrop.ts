@@ -37,7 +37,6 @@ export const useDocumentDragDrop = (currentFolder: string) => {
                 for (let i = 0; i < e.dataTransfer.files.length; i++) {
                     await DocumentService.uploadDocument(e.dataTransfer.files[i], {
                         sourceModule: currentFolder === 'root' ? 'General' : currentFolder as any,
-// FIX: Cast string to branded type CaseId
                         caseId: 'General' as CaseId
                     });
                 }

@@ -1,20 +1,21 @@
-// components/DiscoveryPlatform.tsx
+
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { DiscoveryRequest } from '../../types';
+import { DiscoveryRequest } from '../types';
 import { 
   MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
   Mic2, Database, Package, ClipboardList, FileText
 } from 'lucide-react';
-import { DataService } from '../../services/dataService';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { DataService } from '../services/dataService';
+import { useTheme } from '../context/ThemeContext';
+import { cn } from '../utils/cn';
+import { useQuery, useMutation, queryClient } from '../services/queryClient';
+import { STORES } from '../services/db';
+import { useNotify } from '../hooks/useNotify';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 import { LazyLoader } from '../common/LazyLoader';
+import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './discovery/layout/DiscoveryNavigation';
 
 // FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./discovery/DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
@@ -178,45 +179,12 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
             />
         )}
         
-        {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
-            {PARENT_TABS.map(parent => (
-                <button
-                    key={parent.id}
-                    onClick={() => handleParentTabChange(parent.id)}
-                    className={cn(
-                        "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                        activeParentTab.id === parent.id 
-                            ? cn("border-current", theme.primary.text)
-                            : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
-                    )}
-                >
-                    <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)}/>
-                    {parent.label}
-                </button>
-            ))}
-        </div>
-
-        {/* Sub-Navigation (Pills) */}
-        {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
-                {activeParentTab.subTabs.map(tab => (
-                    <button 
-                        key={tab.id} 
-                        onClick={() => setActiveTab(tab.id as DiscoveryView)} 
-                        className={cn(
-                            "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                            activeTab === tab.id 
-                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
-                        )}
-                    >
-                        <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>
-                        {tab.label}
-                    </button>
-                ))}
-            </div>
-        )}
+        <DiscoveryNavigation 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab} 
+            activeParentTabId={activeParentTab.id}
+            onParentTabChange={handleParentTabChange}
+        />
       </div>
 
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">

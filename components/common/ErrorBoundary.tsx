@@ -13,16 +13,12 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Switched to full constructor-based setup, including method binding. The original code mixed a constructor for state with a class property for a method (`handleReset`), which can be problematic in some build environments. By defining `handleReset` as a standard method and binding it in the constructor, we ensure `this` is correctly bound and avoid potential `this.state`/`this.props` errors.
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
-    this.handleReset = this.handleReset.bind(this);
-  }
+  // FIX: Reverted to standard class property for state and used an arrow function for the event handler to ensure 'this' is correctly bound, simplifying the constructor and resolving type errors.
+  state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
 
   // This lifecycle updates state to trigger a fallback UI render.
   static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
@@ -35,7 +31,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.setState({ error, errorInfo });
   }
 
-  private handleReset() {
+  private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
 

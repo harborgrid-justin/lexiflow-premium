@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../../types';
 import { CaseDetailHeader } from './CaseDetailHeader';
@@ -155,6 +154,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onGenerateWorkflow={hookData.handleGenerateWorkflow}
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
+                        // FIX: Replaced incorrect 'props.onDraft' with 'hookData.handleDraft' to pass the correct function from the useCaseDetail hook.
                         onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />

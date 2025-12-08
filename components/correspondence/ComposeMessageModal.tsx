@@ -81,7 +81,6 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       const newMessage: CommunicationItem = {
           id: `comm-${Date.now()}`,
           caseId: formData.caseId,
-          // FIX: Cast string to branded type UserId
           userId: 'current-user' as UserId, // Replace with auth context
           subject: formData.subject,
           date: new Date().toISOString().split('T')[0],

@@ -52,7 +52,6 @@ export const PhaseService = {
         // Specific Logic for 1:24-cv-01442-LMB-IDD
         if (caseId === '1:24-cv-01442-LMB-IDD') {
              return [
-                // FIX: Cast string to branded type CaseId
                 { id: 'p1', caseId: caseId as CaseId, name: 'Strategy & Pleadings', startDate: '2024-11-01', duration: 30, status: 'Completed', color: 'bg-blue-500' },
                 { id: 'p2', caseId: caseId as CaseId, name: 'Discovery', startDate: '2024-12-01', duration: 90, status: 'Active', color: 'bg-indigo-500' },
                 { id: 'p3', caseId: caseId as CaseId, name: 'Expert Witness', startDate: '2025-03-01', duration: 30, status: 'Pending', color: 'bg-purple-500' },
@@ -63,7 +62,6 @@ export const PhaseService = {
         }
 
         return [
-            // FIX: Cast string to branded type CaseId
             { id: 'p1', caseId: caseId as CaseId, name: 'Intake & Investigation', startDate: '2023-11-15', duration: 45, status: 'Completed', color: 'bg-green-500' },
             { id: 'p2', caseId: caseId as CaseId, name: 'Pleadings', startDate: '2024-01-01', duration: 60, status: 'Completed', color: 'bg-blue-500' },
             { id: 'p3', caseId: caseId as CaseId, name: 'Discovery', startDate: '2024-03-01', duration: 180, status: 'Active', color: 'bg-blue-600' },

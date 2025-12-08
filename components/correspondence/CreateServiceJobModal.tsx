@@ -48,7 +48,6 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
       const newJob: ServiceJob = {
           id: `srv-${Date.now()}`,
           caseId: formData.caseId,
-          // FIX: Cast string to branded type UserId
           requestorId: 'current-user' as UserId, 
           documentTitle: formData.documentTitle,
           targetPerson: formData.targetPerson,

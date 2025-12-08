@@ -1,3 +1,4 @@
+
 import { STORES, DatabaseManager } from './db';
 import { MOCK_CASES } from '../data/models/case';
 import { MOCK_TASKS } from '../data/models/workflowTask';
@@ -14,7 +15,8 @@ import { MOCK_LEGAL_HOLDS } from '../data/models/legalHold';
 import { MOCK_PRIVILEGE_LOG } from '../data/models/privilegeLogEntry';
 import { BUSINESS_PROCESSES } from '../data/models/firmProcess';
 import { MOCK_CLAUSES } from '../data/models/clause';
-import { TEMPLATE_LIBRARY } from '../data/workflowTemplates';
+// FIX: Corrected import path for TEMPLATE_LIBRARY
+import { TEMPLATE_LIBRARY } from '../data/models/workflowTemplates';
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_COUNSEL } from '../data/models/opposingCounselProfile';
 import { MOCK_USERS } from '../data/models/user';
@@ -23,10 +25,13 @@ import { MOCK_JOINT_PLANS } from '../data/models/jointPlan';
 import { MOCK_STIPULATIONS } from '../data/models/stipulationRequest';
 import { MOCK_DEPOSITIONS, MOCK_ESI_SOURCES, MOCK_PRODUCTIONS, MOCK_INTERVIEWS } from '../data/models/discoveryExtended';
 import { MOCK_DISCOVERY } from '../data/models/discoveryRequest';
-import { MOCK_CONFLICTS, MOCK_WALLS } from '../data/mockCompliance';
+// FIX: Corrected import paths for MOCK_CONFLICTS and MOCK_WALLS
+import { MOCK_CONFLICTS } from '../data/models/conflictCheck';
+import { MOCK_WALLS } from '../data/models/ethicalWall';
 import { MOCK_RULES } from '../data/models/legalRule';
 import { LegalEntity, EntityId } from '../types';
-import { MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
+// FIX: Corrected import path for MOCK_JUDGE_STATS and MOCK_OUTCOME_DATA
+import { MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/models/analyticsStats';
 import { MOCK_OKRS } from '../data/models/strategy';
 import { MALWARE_SIGNATURES } from '../data/models/security';
 import { PLEADING_TEMPLATES } from '../data/models/pleadingTemplate';

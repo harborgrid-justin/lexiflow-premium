@@ -1,5 +1,4 @@
 
-// FIX: Import from types to ensure consistency
 import { WorkflowTemplateData, WorkflowTemplateId } from '../types';
 
 export const TEMPLATE_LIBRARY: WorkflowTemplateData[] = [

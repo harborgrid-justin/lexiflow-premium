@@ -1,10 +1,10 @@
+
 import React, { useState } from 'react';
 import { MessageSquare, CheckCircle, User, Clock, Send } from 'lucide-react';
 import { PleadingComment } from '../../../types/pleadingTypes';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/dataService';
-// FIX: Add missing imports
 import { WorkflowTask, TaskId, CaseId, UserId } from '../../../types';
 
 interface ReviewPanelProps {
@@ -22,15 +22,12 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
   // Cross-Module: Create Workflow Task
   const handleRequestReview = async () => {
       const task: WorkflowTask = {
-          // FIX: Cast to branded type TaskId
           id: `t-${Date.now()}` as TaskId,
           title: 'Review Pleading Draft',
-          // FIX: Cast to branded type CaseId
           caseId: caseId as CaseId,
           status: 'Pending',
           priority: 'High',
           assignee: 'Senior Partner',
-          // FIX: Cast string to branded type UserId
           assigneeId: 'usr-partner-alex' as UserId,
           dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
           description: `Please review document ${docId}.`,

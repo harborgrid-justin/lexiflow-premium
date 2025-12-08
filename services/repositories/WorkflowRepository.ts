@@ -1,6 +1,6 @@
 
 import { BUSINESS_PROCESSES } from '../../data/models/firmProcess';
-import { TEMPLATE_LIBRARY } from '../../data/workflowTemplates';
+import { TEMPLATE_LIBRARY } from '../../data/models/workflowTemplates';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

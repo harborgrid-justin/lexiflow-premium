@@ -1,5 +1,5 @@
 
-import { PleadingDocument, PleadingTemplate } from '../../types/pleadingTypes';
+import { PleadingDocument, PleadingTemplate, FormattingRule } from '../../types/pleadingTypes';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 
@@ -15,6 +15,24 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     
     getTemplates = async (): Promise<PleadingTemplate[]> => {
         return db.getAll<PleadingTemplate>(STORES.PLEADING_TEMPLATES);
+    }
+    
+    getFormattingRules = async (): Promise<FormattingRule> => {
+        // Mocking fetching default rules from DB or config
+        return {
+            id: 'fed-civil',
+            name: 'Federal Civil Rules',
+            fontFamily: 'Times New Roman',
+            fontSize: 12,
+            lineHeight: 2.0, 
+            marginTop: '1in',
+            marginBottom: '1in',
+            marginLeft: '1.25in', 
+            marginRight: '1in',
+            showLineNumbers: true,
+            paperSize: 'Letter',
+            captionStyle: 'Boxed'
+        };
     }
 
     // Generate a PDF version (Mock implementation)

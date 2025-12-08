@@ -16,13 +16,15 @@ import { Button } from '../common/Button';
 import { DataService } from '../../services/dataService';
 import { PleadingDocument, FormattingRule, PleadingSection } from '../../types/pleadingTypes';
 import { Case } from '../../types';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 interface PleadingDesignerProps {
     pleadingId: string;
     onBack: () => void;
 }
 
-const MOCK_RULES: FormattingRule = {
+const DEFAULT_RULES: FormattingRule = {
     id: 'fed-civil',
     name: 'Federal Civil Rules',
     fontFamily: 'Times New Roman',
@@ -42,9 +44,14 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
     const [viewMode, setViewMode] = useState<'write' | 'logic' | 'preview'>('write');
     const [sidebarMode, setSidebarMode] = useState<'context' | 'ai' | 'arguments'>('context');
     const [document, setDocument] = useState<PleadingDocument | null>(null);
-    const [rules, setRules] = useState<FormattingRule>(MOCK_RULES);
     const [complianceScore, setComplianceScore] = useState(92);
     const [relatedCase, setRelatedCase] = useState<Case | null>(null);
+
+    // Enterprise Data Access
+    const { data: rules = DEFAULT_RULES } = useQuery<FormattingRule>(
+        ['pleading', 'rules'],
+        DataService.pleadings.getFormattingRules
+    );
 
     // Load Document
     useEffect(() => {

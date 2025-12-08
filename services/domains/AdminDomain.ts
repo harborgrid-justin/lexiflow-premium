@@ -1,5 +1,5 @@
 
-import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig } from '../../types';
+import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy } from '../../types';
 import { db, STORES } from '../db';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export const AdminService = {
@@ -46,5 +46,31 @@ export const AdminService = {
     getTenantConfig: async (): Promise<TenantConfig> => {
         await delay(100);
         return { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' };
+    },
+    getConnectors: async (): Promise<Connector[]> => {
+        await delay(200);
+        return [
+          { id: 'c1', name: 'PostgreSQL Production', type: 'Database', status: 'Healthy', color: 'text-blue-600' },
+          { id: 'c2', name: 'Snowflake Warehouse', type: 'Warehouse', status: 'Healthy', color: 'text-sky-500' },
+          { id: 'c3', name: 'Salesforce CRM', type: 'SaaS', status: 'Syncing', color: 'text-indigo-600' },
+          { id: 'c4', name: 'AWS S3 Data Lake', type: 'Storage', status: 'Healthy', color: 'text-amber-600' },
+          { id: 'c5', name: 'Redis Cache', type: 'Cache', status: 'Degraded', color: 'text-red-600' },
+        ];
+    },
+    getGovernanceRules: async (): Promise<GovernanceRule[]> => {
+        await delay(200);
+        return [
+            { id: 1, name: 'PII Encryption', status: 'Enforced', impact: 'High', passing: '100%', desc: 'All columns tagged PII must be encrypted at rest.' },
+            { id: 2, name: 'Duplicate Detection', status: 'Monitoring', impact: 'Medium', passing: '98.2%', desc: 'Flag records with >95% similarity in core fields.' },
+            { id: 3, name: 'Retention Policy (7 Years)', status: 'Enforced', impact: 'Critical', passing: '100%', desc: 'Hard delete case data 7 years after closure.' },
+        ];
+    },
+    getGovernancePolicies: async (): Promise<GovernancePolicy[]> => {
+        await delay(200);
+        return [
+            { id: 'pol1', title: 'Data Retention Standard', version: '2.4', status: 'Active', date: '2024-01-15' },
+            { id: 'pol2', title: 'Access Control Policy', version: '1.1', status: 'Review', date: '2023-11-30' },
+            { id: 'pol3', title: 'GDPR Compliance Guide', version: '3.0', status: 'Active', date: '2024-02-10' }
+        ];
     }
 };

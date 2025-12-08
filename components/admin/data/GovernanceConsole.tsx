@@ -10,6 +10,9 @@ import { Button } from '../../common/Button';
 import { AccessGovernance } from './governance/AccessGovernance';
 import { ModalFooter } from '../../common/RefactoredCommon';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { GovernanceRule, GovernancePolicy } from '../../../types';
 
 interface GovernanceConsoleProps {
     initialTab?: string;
@@ -24,6 +27,17 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
   
   const scanIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Data Fetching
+  const { data: rules = [] } = useQuery<GovernanceRule[]>(
+      ['admin', 'governance_rules'],
+      DataService.admin.getGovernanceRules
+  );
+
+  const { data: policies = [] } = useQuery<GovernancePolicy[]>(
+      ['admin', 'governance_policies'],
+      DataService.admin.getGovernancePolicies
+  );
+
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
@@ -33,18 +47,6 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
           if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
       }
   }, []);
-
-  const [rules, setRules] = useState([
-      { id: 1, name: 'PII Encryption', status: 'Enforced', impact: 'High', passing: '100%', desc: 'All columns tagged PII must be encrypted at rest.' },
-      { id: 2, name: 'Duplicate Detection', status: 'Monitoring', impact: 'Medium', passing: '98.2%', desc: 'Flag records with >95% similarity in core fields.' },
-      { id: 3, name: 'Retention Policy (7 Years)', status: 'Enforced', impact: 'Critical', passing: '100%', desc: 'Hard delete case data 7 years after closure.' },
-  ]);
-
-  const [policies, setPolicies] = useState([
-      { id: 'pol1', title: 'Data Retention Standard', version: '2.4', status: 'Active', date: '2024-01-15' },
-      { id: 'pol2', title: 'Access Control Policy', version: '1.1', status: 'Review', date: '2023-11-30' },
-      { id: 'pol3', title: 'GDPR Compliance Guide', version: '3.0', status: 'Active', date: '2024-02-10' }
-  ]);
 
   const handleScan = () => {
       if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);

@@ -1,3 +1,4 @@
+
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseService } from './domains/CaseDomain';
@@ -9,6 +10,7 @@ import { DataCatalogService } from './domains/DataCatalogDomain';
 import { BackupService } from './domains/BackupDomain';
 import { DocketRepository } from './domains/DocketDomain';
 import { ProfileDomain } from './domains/ProfileDomain'; 
+import { MarketingService } from './domains/MarketingDomain';
 import { IntegrationOrchestrator } from './integrationOrchestrator';
 import { SystemEventType } from '../types/integrationTypes';
 
@@ -36,7 +38,6 @@ import {
   WarRoomData, TimeEntry, JudgeProfile
 } from '../types';
 
-import { MOCK_METRICS } from '../data/models/marketingMetric';
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_RULES } from '../data/models/legalRule';
 import { STATE_JURISDICTIONS } from '../data/jurisdictionData';
@@ -105,6 +106,7 @@ export const DataService = {
   analytics: AnalyticsService,
   operations: OperationsService,
   security: SecurityService,
+  marketing: MarketingService,
 
   // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
@@ -193,7 +195,6 @@ export const DataService = {
 
   messenger: {
     getConversations: async () => db.getAll<Conversation>(STORES.CONVERSATIONS),
-    // FIX: Add missing getConversationById method
     getConversationById: async (id: string): Promise<Conversation | undefined> => db.get<Conversation>(STORES.CONVERSATIONS, id),
     getContacts: async () => { 
         const users = await db.getAll<User>(STORES.USERS);
@@ -331,6 +332,4 @@ export const DataService = {
       add: async (asset: any) => db.put('assets', asset),
       delete: async (id: string) => db.delete('assets', id)
   },
-
-  marketing: { getMetrics: async () => MOCK_METRICS },
 };

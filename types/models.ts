@@ -120,6 +120,44 @@ export interface LineageLink {
     target: string; 
     strength: number; 
 }
+export interface Connector {
+  id: string;
+  name: string;
+  type: string;
+  status: 'Healthy' | 'Syncing' | 'Degraded' | 'Error';
+  color: string;
+  icon?: any; 
+}
+export interface GovernanceRule {
+  id: number;
+  name: string;
+  status: string;
+  impact: string;
+  passing: string;
+  desc: string;
+}
+export interface GovernancePolicy {
+  id: string;
+  title: string;
+  version: string;
+  status: string;
+  date: string;
+}
+
+// --- FINANCIAL & MARKETING ---
+export interface FinancialPerformanceData {
+    revenue: { month: string; actual: number; target: number }[];
+    expenses: { category: string; value: number }[];
+}
+export interface MarketingCampaign {
+    id: string;
+    name: string;
+    target: string;
+    status: 'Active' | 'Upcoming' | 'Completed';
+    budget?: string;
+    dates?: string;
+}
+
 
 // --- CLUSTER 1: CORE & SYSTEM ---
 export interface User extends BaseEntity { id: UserId; name: string; email: string; role: UserRole; orgId?: OrgId; groupIds?: GroupId[]; userType?: 'Internal' | 'External'; office?: string; status?: 'online' | 'offline' | 'away' | 'busy'; }

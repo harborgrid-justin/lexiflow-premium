@@ -1,5 +1,5 @@
 
-import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary } from '../../types';
+import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
 import { db, STORES } from '../db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -97,6 +97,27 @@ export const BillingService = {
     getOperatingSummary: async (): Promise<OperatingSummary> => {
         await delay(100);
         return { balance: 482500.00, expensesMtd: 45100, cashFlowMtd: 80320 };
+    },
+
+    getFinancialPerformance: async (): Promise<FinancialPerformanceData> => {
+        await delay(200);
+        return {
+            revenue: [
+                { month: 'Jan', actual: 420000, target: 400000 },
+                { month: 'Feb', actual: 450000, target: 410000 },
+                { month: 'Mar', actual: 380000, target: 420000 },
+                { month: 'Apr', actual: 490000, target: 430000 },
+                { month: 'May', actual: 510000, target: 440000 },
+                { month: 'Jun', actual: 550000, target: 450000 },
+            ],
+            expenses: [
+                { category: 'Payroll', value: 250000 },
+                { category: 'Rent', value: 45000 },
+                { category: 'Software', value: 15000 },
+                { category: 'Marketing', value: 25000 },
+                { category: 'Travel', value: 12000 },
+            ]
+        };
     },
 
     sync: async () => { await delay(1000); console.log("[API] Financials Synced"); },

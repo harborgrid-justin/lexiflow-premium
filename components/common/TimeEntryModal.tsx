@@ -1,12 +1,13 @@
+
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
-import { Modal } from './common/Modal';
-import { Button } from './common/Button';
-import { Input, TextArea } from './common/Inputs';
+import { Modal } from './Modal';
+import { Button } from './Button';
+import { Input, TextArea } from './Inputs';
 import { TimeEntryPayload, CaseId } from '../../types';
-import { useTheme } from '../../context/ThemeContext'; // Import useTheme
-import { cn } from '../../utils/cn'; // Import cn
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
 
 interface TimeEntryModalProps {
   isOpen: boolean;
@@ -19,7 +20,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
   const [desc, setDesc] = useState('');
   const [duration, setDuration] = useState('0.5');
   const [isRefining, setIsRefining] = useState(false);
-  const { theme } = useTheme(); // Use theme
+  const { theme } = useTheme();
 
   const handleRefine = async () => {
     if (!desc) return;
@@ -55,7 +56,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
           label="Matter / Case"
           value={caseId || 'General / Non-Billable'}
           disabled
-          className={cn(theme.surface.input, theme.border.default, theme.text.primary)} // Apply theme
+          className={cn(theme.surface.input, theme.border.default, theme.text.primary)}
         />
         
         <div className="grid grid-cols-2 gap-4">
@@ -65,7 +66,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
             step="0.1"
             value={duration}
             onChange={e => setDuration(e.target.value)}
-            className={cn(theme.surface.input, theme.border.default, theme.text.primary)} // Apply theme
+            className={cn(theme.surface.input, theme.border.default, theme.text.primary)}
           />
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Value Est.</label>
@@ -83,7 +84,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
             value={desc}
             onChange={e => setDesc(e.target.value)}
             rows={4}
-            className={cn("resize-none", theme.surface.input, theme.border.default, theme.text.primary)} // Apply theme
+            className={cn("resize-none", theme.surface.input, theme.border.default, theme.text.primary)}
           />
           <div className="mt-2 flex justify-end">
             <Button
@@ -93,7 +94,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
               disabled={isRefining || !desc}
               icon={Wand2}
               isLoading={isRefining}
-              className={cn("text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-900/50")} // Apply theme
+              className={cn("text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-900/50")}
             >
               AI Refine & Expand
             </Button>

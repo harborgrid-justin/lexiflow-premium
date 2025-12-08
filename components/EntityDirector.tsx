@@ -10,7 +10,7 @@ import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
 import { LegalEntity, EntityId } from '../types';
 import { useWindow } from '../context/WindowContext'; // Holographic DOM
-import { LazyLoader } from '../common/LazyLoader';
+import { LazyLoader } from './common/LazyLoader';
 
 // Sub-components
 const EntityGrid = React.lazy(() => import('./entities/EntityGrid').then(m => ({ default: m.EntityGrid })));

@@ -92,7 +92,7 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
                    <span>Responsive Documents Review</span>
                    <span className="font-bold">78%</span>
                 </div>
-                <div className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}>
+                <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
                    <div className="bg-blue-600 h-2 rounded-full w-[78%]"></div>
                 </div>
               </div>
@@ -101,7 +101,7 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
                    <span>Privilege Redactions</span>
                    <span className="font-bold">45%</span>
                 </div>
-                <div className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}>
+                <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
                    <div className="bg-amber-500 h-2 rounded-full w-[45%]"></div>
                 </div>
               </div>
@@ -114,7 +114,7 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
 
         <Card title="Active Integrations">
             <div className="space-y-4">
-                <div className={cn("flex items-center justify-between p-3 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("flex items-center justify-between p-3 border rounded-lg", theme.surface.highlight, theme.border.default)}>
                     <div className="flex items-center gap-3">
                         <Database className={cn("h-5 w-5", theme.text.secondary)}/>
                         <div>
@@ -124,7 +124,7 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
                     </div>
                     <Badge variant="success">Connected</Badge>
                 </div>
-                <div className={cn("flex items-center justify-between p-3 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("flex items-center justify-between p-3 border rounded-lg", theme.surface.highlight, theme.border.default)}>
                     <div className="flex items-center gap-3">
                         <FileText className={cn("h-5 w-5", theme.text.secondary)}/>
                         <div>

@@ -1,16 +1,11 @@
 
-
 import React, { Suspense, lazy, useTransition } from 'react';
-import { Network, Shield, Link, Database, Activity, Lock, Server } from 'lucide-react';
 import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
+import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { LazyLoader } from './common/LazyLoader';
 import { cn } from '../utils/cn';
 import { ADMIN_TAB_CONFIG } from '../config/adminPanelConfig';
-import { AdminPanelContent } from './admin/AdminPanelContent'; // Updated import path
-
-// Sub-components are now lazy loaded in AdminPanelContent
-// ... (Previous imports removed)
+import { AdminPanelContent } from './admin/AdminPanelContent';
 
 type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';
 

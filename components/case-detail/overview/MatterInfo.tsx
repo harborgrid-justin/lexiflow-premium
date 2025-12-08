@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '../../common/Card';
 import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar, DollarSign } from 'lucide-react';

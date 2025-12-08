@@ -1,3 +1,4 @@
+
 import React, { lazy } from 'react';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';

@@ -1,5 +1,5 @@
 
-import { MOCK_RULES } from '../data/mockRules';
+import { MOCK_RULES } from '../data/models/legalRule';
 import { LegalRule } from '../types';
 import { StorageUtils, STORAGE_KEYS } from '../utils/storage';
 
@@ -28,7 +28,7 @@ export const RuleService = {
   },
 
   update: async (id: string, updates: Partial<LegalRule>): Promise<LegalRule> => {
-    dbRules = dbRules.map(r => r.id === id ? { ...r, ...updates } : r);
+    dbRules = dbRules.map(r => r.id === id ? { ...r, ...updates } as LegalRule : r);
     StorageUtils.set(STORAGE_KEYS.RULES, dbRules);
     const updated = dbRules.find(r => r.id === id);
     if (!updated) throw new Error('Rule not found');

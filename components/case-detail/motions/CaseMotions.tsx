@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
 import { Button } from '../../common/Button';
 import { Plus, RefreshCw } from 'lucide-react';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { MotionList } from './motions/MotionList';
-import { MotionModal } from './motions/MotionModal';
+import { MotionList } from './MotionList';
+import { MotionModal } from './MotionModal';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/dataService';

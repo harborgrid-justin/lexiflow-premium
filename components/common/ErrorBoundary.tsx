@@ -1,3 +1,4 @@
+
 import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -30,7 +31,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  // FIX: Converted to async method to correctly handle `this` context within promise chains.
+  public async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const debugInfo = `
 --- LexiFlow Error Report ---
 Timestamp: ${new Date().toISOString()}
@@ -60,39 +62,35 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     
     this.setState({ isResolving: true, debugInfo });
 
-    // Using promises to handle async logic while keeping the lifecycle method synchronous
-    GeminiService.getResolutionForError(error.message)
-      .then(resolution => {
+    try {
+        const resolution = await GeminiService.getResolutionForError(error.message);
         if (this.state.hasError) {
           this.setState({ aiResolution: resolution, isResolving: false });
         }
-      })
-      .catch(e => {
+      } catch (e) {
         if (this.state.hasError) {
           this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
         }
-      });
+      }
   }
 
-  // FIX: Converted to arrow function to ensure `this` is correctly bound.
   private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  // FIX: Converted to arrow function to ensure `this` is correctly bound.
-  private handleCopyDebugInfo = () => {
+  // FIX: Refactored to async/await to ensure `this` is correctly bound in promise callbacks.
+  private handleCopyDebugInfo = async () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {
-            navigator.clipboard.writeText(this.state.debugInfo)
-              .then(() => {
-                this.setState({ isCopied: true });
-                setTimeout(() => {
-                    this.setState({ isCopied: false });
-                }, 2000);
-              })
-              .catch(err => {
-                console.error("Failed to copy debug info:", err);
-              });
+            try {
+              await navigator.clipboard.writeText(this.state.debugInfo);
+              this.setState({ isCopied: true });
+              setTimeout(() => {
+                  this.setState({ isCopied: false });
+              }, 2000);
+            } catch (err) {
+              console.error("Failed to copy debug info:", err);
+            }
         }
     }
   }

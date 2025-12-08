@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+
+import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 
@@ -16,21 +17,27 @@ interface ErrorBoundaryState {
   isCopied: boolean;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  
-  state: ErrorBoundaryState = {
-    hasError: false,
-    error: null,
-    aiResolution: null,
-    isResolving: false,
-    debugInfo: null,
-    isCopied: false,
-  };
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  // FIX: Converted from class property to constructor to properly initialize state and bind event handlers. This ensures 'this' context is always correct.
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+      aiResolution: null,
+      isResolving: false,
+      debugInfo: null,
+      isCopied: false,
+    };
+    this.handleCopyDebugInfo = this.handleCopyDebugInfo.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+  }
 
   public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error };
   }
 
+  // FIX: Converted `componentDidCatch` from an arrow function property to a standard class method. As a lifecycle method, React binds `this` correctly. This is the conventional and most reliable approach.
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const debugInfo = `
 --- LexiFlow Error Report ---
@@ -75,11 +82,13 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       });
   }
 
-  private handleReset = () => {
+  // FIX: Converted to a standard class method and bound in the constructor.
+  private handleReset() {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
-  private handleCopyDebugInfo = () => {
+  // FIX: Converted to a standard class method and bound in the constructor to ensure correct `this` context for event handling and its nested callbacks.
+  private handleCopyDebugInfo() {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo)

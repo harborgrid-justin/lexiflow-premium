@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useRef } from 'react';
 import { UserRole, LegalDocument } from '../../types';
 import { DocumentVersions } from '../DocumentVersions';
@@ -95,7 +96,6 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
                     />
                 ) : (
                     <div className={cn("h-full p-4", theme.surfaceHighlight)}>
-                        {/* FIX: Property 'height' is missing in type '{ items: any; itemHeight: number; itemWidth: number; renderItem: (doc: LegalDocument) => any; gap: number; emptyMessage: string; }' but required in type 'VirtualGridProps<LegalDocument>'. */}
                         <VirtualGrid 
                             items={filtered} 
                             height="100%"

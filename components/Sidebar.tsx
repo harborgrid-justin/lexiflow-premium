@@ -15,11 +15,6 @@ import { useHoverIntent } from '../hooks/useHoverIntent';
 import { UserAvatar } from './common/UserAvatar';
 import { PREFETCH_MAP } from '../config/prefetchConfig';
 
-// Data Prefetch Map: Maps routes to their data dependencies
-// This was moved to config/prefetchConfig.ts in a previous turn, but was still in this file,
-// so it's being removed here and will be correctly imported from the config file.
-
-
 interface SidebarProps {
   activeView: AppView;
   setActiveView: (view: AppView) => void;
@@ -93,6 +88,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
       timeout: 200 // Only prefetch if user hovers for 200ms
   });
 
+  const handleNavClick = (view: string) => {
+      setActiveView(view);
+      // Auto-close on mobile
+      if (window.innerWidth < 768) {
+          onClose();
+      }
+  };
+
   return (
     <>
       {/* Mobile Backdrop Overlay */}
@@ -148,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
                                 return (
                                     <button
                                         key={item.id}
-                                        onClick={() => setActiveView(item.id)}
+                                        onClick={() => handleNavClick(item.id)}
                                         {...hoverHandlers(item)} // Smart Prefetching
                                         className={cn(
                                             "w-full flex items-center space-x-3 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-200 group relative",
@@ -187,7 +190,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
           </div>
 
           <button 
-            onClick={() => setActiveView(PATHS.PROFILE)}
+            onClick={() => handleNavClick(PATHS.PROFILE)}
             className={cn(
                 "w-full flex items-center p-2 rounded-lg transition-colors group mb-3 border shadow-sm",
                 activeView === PATHS.PROFILE ? theme.primary.light : theme.surface.default,
@@ -203,7 +206,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
               <p className={cn("text-xs font-bold truncate", theme.text.primary)}>
                 {currentUser.name}
               </p>
-              <p className={cn("text-[10px] truncate font-medium", theme.text.secondary)}>
+              <p className={cn("text--[10px] truncate font-medium", theme.text.secondary)}>
                 {currentUser.role}
               </p>
             </div>
@@ -211,7 +214,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
           </button>
           
           <div className="grid grid-cols-2 gap-2">
-             <button onClick={() => setActiveView(PATHS.PROFILE)} className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>
+             <button onClick={() => handleNavClick(PATHS.PROFILE)} className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>
                 <Settings className="h-3.5 w-3.5 mr-1.5"/> Settings
              </button>
              <button onClick={onSwitchUser} className={cn("h-8 px-2 text-xs font-medium rounded transition-colors flex items-center justify-center border", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary} hover:${theme.surface.highlight}`)}>

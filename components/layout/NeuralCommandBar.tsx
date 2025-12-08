@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, Sparkles, Command, ArrowRight, X, Zap } from 'lucide-react';
+import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle } from 'lucide-react';
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -8,7 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
 import { Trie } from '../../utils/trie';
-import { StringUtils } from '../../utils/stringUtils';
+import { Scheduler } from '../../utils/scheduler';
 
 interface NeuralCommandBarProps {
   globalSearch: string;
@@ -33,17 +33,31 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const searchTrie = useMemo(() => new Trie(), []);
   const [isTrieReady, setIsTrieReady] = useState(false);
 
-  // Preload Trie (Effectively creating an in-memory search index)
+  // Preload Trie with non-blocking chunks
   useEffect(() => {
     const buildIndex = async () => {
         // Fetch base data for index
         const data = await SearchService.search(''); // Empty search returns top items/recent
-        data.forEach(item => {
-            searchTrie.insert(item.title, item);
-            // Also index secondary keywords if available
-            if (item.subtitle) searchTrie.insert(item.subtitle, item);
-        });
-        setIsTrieReady(true);
+        
+        let i = 0;
+        const CHUNK_SIZE = 50;
+
+        const processChunk = () => {
+            const chunkEnd = Math.min(i + CHUNK_SIZE, data.length);
+            for (; i < chunkEnd; i++) {
+                const item = data[i];
+                searchTrie.insert(item.title, item);
+                if (item.subtitle) searchTrie.insert(item.subtitle, item);
+            }
+
+            if (i < data.length) {
+                Scheduler.defer(processChunk);
+            } else {
+                setIsTrieReady(true);
+            }
+        };
+
+        Scheduler.defer(processChunk);
     };
     buildIndex();
   }, [searchTrie]);
@@ -140,7 +154,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
             value={globalSearch}
             onChange={(e) => setGlobalSearch(e.target.value)}
             onKeyDown={handleNeuralSubmit}
-            onFocus={() => { if(results.length > 0) setShowResults(true); }}
+            onFocus={() => { if(globalSearch.length > 0) setShowResults(true); }}
             disabled={isProcessingIntent}
         />
 
@@ -183,9 +197,10 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
                         ))}
                     </div>
                 ) : (
-                    <div className={cn("p-6 text-center", theme.text.secondary)}>
-                        <p className="text-sm font-medium">No direct records found.</p>
-                        <p className="text-xs mt-1 opacity-70">Try a natural language command.</p>
+                    <div className={cn("p-8 text-center flex flex-col items-center justify-center", theme.text.secondary)}>
+                         <AlertCircle className="h-8 w-8 mb-2 opacity-50"/>
+                        <p className="text-sm font-medium">No direct matches found.</p>
+                        <p className="text-xs mt-1 opacity-70">Try a natural language command like "Find cases about tax fraud".</p>
                     </div>
                 )}
             </div>

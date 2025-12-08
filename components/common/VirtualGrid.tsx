@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
@@ -20,21 +21,33 @@ export function VirtualGrid<T>({
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
+    
     const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerSize({ width: entry.contentRect.width, height: entry.contentRect.height });
-      }
+      // Debounce resize updates with RAF to prevent thrashing
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      
+      rafRef.current = requestAnimationFrame(() => {
+          for (const entry of entries) {
+            setContainerSize({ width: entry.contentRect.width, height: entry.contentRect.height });
+          }
+      });
     });
+    
     observer.observe(containerRef.current);
     // Init
     setContainerSize({ 
         width: containerRef.current.clientWidth, 
         height: containerRef.current.clientHeight 
     });
-    return () => observer.disconnect();
+    
+    return () => {
+        observer.disconnect();
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   // Calculate Columns

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
@@ -18,8 +19,9 @@ interface SchemaVisualizerProps {
 
 const ContextMenu: React.FC<{ x: number, y: number, items: ContextMenuItem[], onClose: () => void }> = ({ x, y, items, onClose }) => {
     const { theme } = useTheme();
+    // Using fixed positioning to ensure menu appears at mouse coordinates regardless of scroll/transform
     return (
-        <div className={cn("absolute z-50 p-1 border rounded-lg shadow-xl", theme.surface, theme.border.default)} style={{ top: y, left: x }}>
+        <div className={cn("fixed z-50 p-1 border rounded-lg shadow-xl", theme.surface, theme.border.default)} style={{ top: y, left: x }}>
             {items.map((item, i) => (
                 <button key={i} onClick={() => { item.action(); onClose(); }} className={cn("w-full text-left text-sm flex items-center px-3 py-1.5 rounded-md transition-colors", `hover:${theme.surfaceHighlight}`, item.danger ? 'text-red-600' : theme.text.primary)}>
                     {item.icon && <item.icon className="h-3 w-3 mr-2"/>} {item.label}

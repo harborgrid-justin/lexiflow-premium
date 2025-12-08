@@ -3,10 +3,11 @@ import React from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag } from 'lucide-react';
+import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag, Copy } from 'lucide-react';
 import { DocketEntry } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { CopyButton } from '../common/CopyButton';
 
 interface DocketEntryModalProps {
   entry: DocketEntry | null;
@@ -79,7 +80,10 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
         )}
 
         <div className={cn("p-4 rounded-lg border mb-6", theme.surfaceHighlight, theme.border.default)}>
-          <h4 className={cn("text-sm font-bold mb-2", theme.text.primary)}>Full Text</h4>
+          <div className="flex justify-between items-center mb-2">
+            <h4 className={cn("text-sm font-bold", theme.text.primary)}>Full Text</h4>
+            <CopyButton text={entry.description || entry.title} variant="ghost" size="sm" />
+          </div>
           <p className={cn("text-sm leading-relaxed", theme.text.secondary)}>{renderLinkedText(entry.title)}</p>
           {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description)}</p>}
         </div>

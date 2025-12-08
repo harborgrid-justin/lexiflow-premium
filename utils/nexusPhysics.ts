@@ -73,8 +73,10 @@ export const NexusPhysics = {
     const centerY = height / 2;
 
     // 1. Build Spatial Grid (Hash Map)
-    // Map cell key "x,y" -> array of node indices
-    const grid = new Map<string, number[]>();
+    // Map integer hash key -> array of node indices
+    // Key formula: (gx * 4000) + gy to avoid string alloc
+    // Assuming grid dimension max 4000x4000 cells (plenty)
+    const grid = new Map<number, number[]>();
     
     for (let i = 0; i < count; i++) {
         const idx = i * NODE_STRIDE;
@@ -84,10 +86,14 @@ export const NexusPhysics = {
         // Calculate Grid Key
         const gx = Math.floor(x / GRID_CELL_SIZE);
         const gy = Math.floor(y / GRID_CELL_SIZE);
-        const key = `${gx},${gy}`;
+        const key = (gx * 4000) + gy;
         
-        if (!grid.has(key)) grid.set(key, []);
-        grid.get(key)!.push(i);
+        let cellNodes = grid.get(key);
+        if (!cellNodes) {
+             cellNodes = [];
+             grid.set(key, cellNodes);
+        }
+        cellNodes.push(i);
         
         // Center Gravity (done here to save a loop)
         const dxCenter = centerX - x;
@@ -108,11 +114,13 @@ export const NexusPhysics = {
       // Check 3x3 neighbor grid
       for (let nx = gx - 1; nx <= gx + 1; nx++) {
         for (let ny = gy - 1; ny <= gy + 1; ny++) {
-             const key = `${nx},${ny}`;
+             const key = (nx * 4000) + ny;
              const cellNodes = grid.get(key);
              if (!cellNodes) continue;
              
-             for (const j of cellNodes) {
+             const len = cellNodes.length;
+             for (let k = 0; k < len; k++) {
+                 const j = cellNodes[k];
                  if (i === j) continue;
                  const idxJ = j * NODE_STRIDE;
                  

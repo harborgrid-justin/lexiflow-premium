@@ -7,20 +7,22 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { Loader2 } from 'lucide-react';
+import { STORES } from '../../services/db';
 
 export const JurisdictionState: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
 
   // Performance Engine: useQuery
+  // FIX: Use the correct STORES key
   const { data: states = [], isLoading } = useQuery<any[]>(
-      ['jurisdiction', 'state_courts'],
-      DataService.jurisdiction.getStateCourts
+      [STORES.JURISDICTIONS, 'state'],
+      DataService.jurisdiction.getState
   );
 
   const filteredStates = states.filter(s => 
-      s.state.toLowerCase().includes(filter.toLowerCase()) || 
-      s.court.toLowerCase().includes(filter.toLowerCase())
+      s.name.toLowerCase().includes(filter.toLowerCase()) || 
+      s.region.toLowerCase().includes(filter.toLowerCase())
   );
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
@@ -43,19 +45,13 @@ export const JurisdictionState: React.FC = () => {
           <TableHead>State</TableHead>
           <TableHead>Court System</TableHead>
           <TableHead>Jurisdiction Level</TableHead>
-          <TableHead>e-Filing Policy</TableHead>
-          <TableHead>System Provider</TableHead>
         </TableHeader>
         <TableBody>
           {filteredStates.map((s, i) => (
             <TableRow key={i}>
-              <TableCell className={cn("font-medium", theme.text.primary)}>{s.state}</TableCell>
-              <TableCell>{s.court}</TableCell>
-              <TableCell>{s.level}</TableCell>
-              <TableCell>
-                <Badge variant={s.eFiling === 'Required' ? 'error' : 'success'}>{s.eFiling}</Badge>
-              </TableCell>
-              <TableCell className={cn("text-xs", theme.text.secondary)}>{s.system}</TableCell>
+              <TableCell className={cn("font-medium", theme.text.primary)}>{s.region}</TableCell>
+              <TableCell>{s.name}</TableCell>
+              <TableCell>{s.type}</TableCell>
             </TableRow>
           ))}
         </TableBody>

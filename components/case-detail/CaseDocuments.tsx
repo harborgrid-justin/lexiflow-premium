@@ -100,6 +100,8 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
             fileSize: savedDoc.fileSize
           };
           await DataService.evidence.add(evidence);
+          // INVALIDATE EVIDENCE CACHE
+          queryClient.invalidate([STORES.EVIDENCE, 'all']);
           notify.success("Document uploaded and logged to Evidence Vault.");
         } else {
           notify.success(`Uploaded ${file.name} successfully.`);

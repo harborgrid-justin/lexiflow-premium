@@ -36,6 +36,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
   // Refs for tracking async state
   const renderTaskRef = useRef<any>(null);
+  const loadingTaskRef = useRef<any>(null);
   const isMounted = useRef(false);
   const resizeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -77,12 +78,20 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   useEffect(() => {
     if (!url) return;
 
+    // Cleanup previous task if any
+    if (loadingTaskRef.current) {
+        loadingTaskRef.current.destroy();
+        loadingTaskRef.current = null;
+    }
+
     const loadPdf = async () => {
       setLoading(true);
       setError(null);
       try {
         const loadingTask = pdfjsLib.getDocument(url);
+        loadingTaskRef.current = loadingTask;
         const doc = await loadingTask.promise;
+        
         if (isMounted.current) {
             setPdfDoc(doc);
             setPageNum(1);
@@ -96,6 +105,12 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     };
 
     loadPdf();
+    
+    return () => {
+        if (loadingTaskRef.current) {
+            loadingTaskRef.current.destroy();
+        }
+    };
   }, [url]);
 
   // Render Page
@@ -115,9 +130,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       const page = await pdfDoc.getPage(pageNum);
       
       // Calculate scale to fit width, considering the external scale prop
-      // We use the viewport width at scale 1.0 to determine the ratio needed to fit container
       const unscaledViewport = page.getViewport({ scale: 1, rotation: rotation });
-      // Subtract padding (e.g., 64px total for p-8) from container width
       const availableWidth = Math.max(containerWidth - 64, 300);
       const responsiveScale = (availableWidth / unscaledViewport.width) * scale;
 

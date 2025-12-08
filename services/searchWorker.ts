@@ -8,10 +8,10 @@
 const createSearchWorker = () => {
     const code = `
       self.onmessage = function(e) {
-        const { items, query, fields, idKey } = e.data;
+        const { items, query, fields, idKey, requestId } = e.data;
         
         if (!query || !items || items.length === 0) {
-          self.postMessage({ results: items });
+          self.postMessage({ results: items, requestId });
           return;
         }
   
@@ -50,11 +50,14 @@ const createSearchWorker = () => {
           }
         }
   
-        self.postMessage({ results: results });
+        self.postMessage({ results: results, requestId });
       };
     `;
     const blob = new Blob([code], { type: 'application/javascript' });
-    return new Worker(URL.createObjectURL(blob));
+    const url = URL.createObjectURL(blob);
+    const worker = new Worker(url);
+    URL.revokeObjectURL(url); // Clean up immediately
+    return worker;
   };
   
   export const SearchWorker = {

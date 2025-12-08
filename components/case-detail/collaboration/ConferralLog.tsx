@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-// FIX: Add missing UserId import
 import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '../../../types';
 import { Button } from '../../../components/common/Button';
 import { Badge } from '../../../components/common/Badge';
@@ -205,4 +204,3 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
       </Modal>
     </div>
   );
-};

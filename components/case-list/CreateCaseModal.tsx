@@ -5,7 +5,8 @@ import { Input, TextArea } from '../common/Inputs';
 import { Case, CaseStatus, MatterType, JurisdictionObject, CaseId } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS } from '../../data/jurisdictionData';
+// FIX: Update import path and add StateJurisdiction type
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '../../data/federalHierarchy';
 import { Globe, Scale, Shield, FilePlus, Building2 } from 'lucide-react';
 import { ModalFooter } from '../common/RefactoredCommon';
 
@@ -75,8 +76,10 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
   }, [stateLevelName]);
 
 
+  const isValid = formData.title && formData.client && (isPreFiling || formData.id);
+
   const handleSave = () => {
-      if (!formData.title || !formData.client) return;
+      if (!isValid) return;
 
       // Construct Structured Objects
       let finalCourt = '';
@@ -107,10 +110,10 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
       }
 
       const newCase: Case = {
-// FIX: Cast string to branded type CaseId
-          id: (isPreFiling ? `MAT-${Date.now()}` : (formData.id || `CASE-${Date.now()}`)) as CaseId,
-          title: formData.title,
-          client: formData.client,
+          // FIX: Use crypto.randomUUID() for safer ID generation
+          id: (isPreFiling ? `MAT-${crypto.randomUUID().slice(0,8)}` : (formData.id || `CASE-${crypto.randomUUID().slice(0,8)}`)) as CaseId,
+          title: formData.title || '',
+          client: formData.client || '',
           matterType: formData.matterType as MatterType,
           status: isPreFiling ? CaseStatus.PreFiling : CaseStatus.Discovery,
           filingDate: isPreFiling ? '' : new Date().toISOString().split('T')[0],
@@ -139,7 +142,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
   const activeStateLevel = activeStateData?.levels.find(l => l.name === stateLevelName);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={isPreFiling ? "Develop New Matter" : "File New Case"} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title={isPreFiling ? "Develop New Matter" : "File New Case"} size="lg" closeOnBackdrop={false}>
       <div className="p-6 space-y-6">
         
         {/* Toggle Type */}
@@ -172,12 +175,14 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
                     value={formData.title} 
                     onChange={e => setFormData({...formData, title: e.target.value})}
                     autoFocus
+                    required
                 />
                 <Input 
                     label="Client" 
                     placeholder="Client Name" 
                     value={formData.client} 
                     onChange={e => setFormData({...formData, client: e.target.value})}
+                    required
                 />
                  <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -282,7 +287,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
                                 value={selectedStateId}
                                 onChange={e => setSelectedStateId(e.target.value)}
                             >
-                                {Object.values(STATE_JURISDICTIONS).map(s => (
+                                {/* FIX: Cast to StateJurisdiction[] to resolve typing errors */}
+                                {(Object.values(STATE_JURISDICTIONS) as StateJurisdiction[]).map(s => (
                                     <option key={s.id} value={s.id}>{s.name}</option>
                                 ))}
                             </select>
@@ -331,6 +337,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
                     placeholder="e.g. 1:24-cv-00123"
                     value={formData.id} 
                     onChange={e => setFormData({...formData, id: e.target.value})}
+                    required
                 />
                  <Input 
                     label="Assigned Judge" 
@@ -353,7 +360,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
         
         <ModalFooter>
             <Button variant="secondary" onClick={onClose}>Cancel</Button>
-            <Button variant="primary" onClick={handleSave}>
+            <Button variant="primary" onClick={handleSave} disabled={!isValid}>
                 {isPreFiling ? 'Create Matter' : 'File Case'}
             </Button>
         </ModalFooter>

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattingRule, PleadingSection } from '../../../types/pleadingTypes';
 import { CheckCircle, AlertOctagon, Info, Zap, Settings, BookOpen, AlertTriangle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -11,18 +11,28 @@ interface ComplianceHUDProps {
     score: number;
 }
 
-export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score }) => {
+export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score: propScore }) => {
     const { theme } = useTheme();
 
-    const issues = [
+    const issues = useMemo(() => [
         { id: 1, type: 'error', msg: 'Signature block missing date', blockId: 'b3' },
         { id: 2, type: 'warning', msg: 'Heading III capitalization inconsistent', blockId: 'b2' },
         { id: 3, type: 'info', msg: 'Exhibit A referenced but not attached', blockId: 'b3' }
-    ];
+    ], [sections]);
+
+    const dynamicScore = useMemo(() => {
+        if (issues.length === 0) return 100;
+        const errorWeight = 10;
+        const warningWeight = 5;
+        const penalty = issues.reduce((acc, issue) => acc + (issue.type === 'error' ? errorWeight : issue.type === 'warning' ? warningWeight : 0), 0);
+        return Math.max(0, 100 - penalty);
+    }, [issues]);
+
+    const displayScore = propScore !== 100 ? propScore : dynamicScore;
 
     return (
         <div className="flex flex-col h-full">
-            <div className={cn("p-4 border-b bg-slate-50 dark:bg-slate-900", theme.border.default)}>
+            <div className={cn("p-4 border-b", theme.surfaceHighlight, theme.border.default)}>
                 <h3 className={cn("font-bold text-xs uppercase tracking-wider flex items-center gap-2", theme.text.tertiary)}>
                     <Zap className="h-4 w-4 text-amber-500"/> Genius Linter
                 </h3>
@@ -30,8 +40,8 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
 
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {/* Score Card */}
-                <div className={cn("p-4 rounded-xl border flex flex-col items-center", score === 100 ? "bg-green-50 border-green-200" : "bg-amber-50 border-amber-200")}>
-                    <div className="text-3xl font-bold mb-1">{score}</div>
+                <div className={cn("p-4 rounded-xl border flex flex-col items-center", displayScore === 100 ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800" : "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800")}>
+                    <div className={cn("text-3xl font-bold mb-1", theme.text.primary)}>{displayScore}</div>
                     <div className="text-xs font-bold uppercase tracking-wide opacity-70">Compliance Score</div>
                 </div>
 
@@ -40,7 +50,7 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
                     <div className="flex items-center gap-2">
                         <BookOpen className="h-4 w-4 text-blue-500"/>
                         <div className="text-xs">
-                            <span className="block font-bold text-slate-700 dark:text-slate-200">FRCP Rules</span>
+                            <span className={cn("block font-bold", theme.text.primary)}>FRCP Rules</span>
                             <span className="text-slate-500">Active Check</span>
                         </div>
                     </div>
@@ -52,7 +62,7 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
                     <h4 className={cn("text-xs font-bold uppercase mb-3", theme.text.tertiary)}>Detected Issues</h4>
                     <div className="space-y-2">
                         {issues.map(issue => (
-                            <div key={issue.id} className={cn("p-3 rounded-lg border text-xs flex gap-3 transition-colors cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800", theme.surface, theme.border.default)}>
+                            <div key={issue.id} className={cn("p-3 rounded-lg border text-xs flex gap-3 transition-colors cursor-pointer", theme.surface, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
                                 <div className="mt-0.5">
                                     {issue.type === 'error' && <AlertOctagon className="h-4 w-4 text-red-500"/>}
                                     {issue.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-500"/>}
@@ -64,6 +74,7 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
                                 </div>
                             </div>
                         ))}
+                        {issues.length === 0 && <div className={cn("text-center italic text-xs", theme.text.tertiary)}>No issues found.</div>}
                     </div>
                 </div>
 

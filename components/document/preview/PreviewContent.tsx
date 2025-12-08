@@ -79,7 +79,7 @@ export const PreviewContent: React.FC<PreviewContentProps> = ({ document, previe
             />
 
             {/* PDF Canvas Container */}
-            <div className="flex-1 relative bg-slate-200 dark:bg-slate-800 overflow-auto">
+            <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
                 {previewUrl ? (
                     <PDFViewer 
                         url={previewUrl} 
@@ -94,8 +94,8 @@ export const PreviewContent: React.FC<PreviewContentProps> = ({ document, previe
                         />
                     </PDFViewer>
                 ) : (
-                    <div className="flex items-center justify-center h-full">
-                        <p className="text-slate-400 text-sm">No PDF source available.</p>
+                    <div className={cn("flex items-center justify-center h-full", theme.text.tertiary)}>
+                        <p className="text-sm">No PDF source available.</p>
                     </div>
                 )}
             </div>

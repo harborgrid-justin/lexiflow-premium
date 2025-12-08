@@ -11,6 +11,7 @@ export const OperationsService = {
     // New
     getCleTracking: async () => db.getAll(STORES.CLE_TRACKING),
     getVendorContracts: async () => db.getAll(STORES.VENDOR_CONTRACTS),
+    getVendorDirectory: async () => db.getAll(STORES.VENDOR_DIRECTORY),
     getRfps: async () => db.getAll(STORES.RFPS),
     getMaintenanceTickets: async () => db.getAll(STORES.MAINTENANCE_TICKETS),
     getFacilities: async () => db.getAll(STORES.FACILITIES),

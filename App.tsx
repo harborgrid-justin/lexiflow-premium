@@ -16,7 +16,8 @@ import { DataService } from './services/dataService';
 import { GlobalSearchResult } from './services/searchService';
 import { IntentResult } from './services/geminiService';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { db } from './services/db';
+import { db, STORES } from './services/db';
+import { Seeder } from './services/dbSeeder';
 import { GlobalHotkeys } from './components/common/GlobalHotkeys';
 import { AppContentRenderer } from './components/layout/AppContentRenderer';
 import { Loader2 } from 'lucide-react';
@@ -238,9 +239,15 @@ const App: React.FC = () => {
     useEffect(() => {
         const init = async () => {
             try {
-                await db.seedData();
+                // Initialize DB connection
+                await db.init();
+                // Check if seeding needed
+                const count = await db.count(STORES.CASES);
+                if (count === 0) {
+                    await Seeder.seed(db);
+                }
             } catch (e) {
-                console.error("Failed to seed database:", e);
+                console.error("Failed to initialize database:", e);
             } finally {
                 setIsReady(true);
             }

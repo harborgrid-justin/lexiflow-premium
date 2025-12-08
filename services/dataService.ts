@@ -13,6 +13,7 @@ import { ProfileDomain } from './domains/ProfileDomain';
 import { MarketingService } from './domains/MarketingDomain';
 import { IntegrationOrchestrator } from './integrationOrchestrator';
 import { SystemEventType } from '../types/integrationTypes';
+import { JurisdictionService } from './domains/JurisdictionDomain';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -23,6 +24,7 @@ import { BillingRepository } from './repositories/BillingRepository';
 import { DiscoveryRepository } from './repositories/DiscoveryRepository';
 import { TrialRepository } from './repositories/TrialRepository';
 import { PleadingRepository } from './repositories/PleadingRepository';
+import { AnalysisRepository } from './repositories/AnalysisRepository';
 import { CRMService } from './domains/CRMDomain';
 import { AnalyticsService } from './domains/AnalyticsDomain';
 import { OperationsService } from './domains/OperationsDomain';
@@ -40,7 +42,6 @@ import {
 
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_RULES } from '../data/models/legalRule';
-import { STATE_JURISDICTIONS } from '../data/jurisdictionData';
 
 // --- WRAPPERS FOR INTEGRATION ---
 
@@ -107,6 +108,10 @@ export const DataService = {
   operations: OperationsService,
   security: SecurityService,
   marketing: MarketingService,
+  jurisdiction: JurisdictionService,
+  
+  // Use named class to ensure getJudgeProfiles is visible to TS consumers
+  analysis: new AnalysisRepository(),
 
   // Standard Repositories for Simple Entities
   tasks: new class extends Repository<WorkflowTask> { 
@@ -161,13 +166,6 @@ export const DataService = {
       constructor() { super(STORES.CITATIONS); }
       async verifyAll() { return { checked: 150, flagged: 3 }; }
       async quickAdd(citation: any) { return this.add(citation); }
-  }(),
-  analysis: new class extends Repository<BriefAnalysisSession> { 
-      constructor() { super(STORES.ANALYSIS); }
-      async getJudgeProfiles(): Promise<JudgeProfile[]> {
-          await delay(100);
-          return db.getAll<JudgeProfile>(STORES.JUDGES);
-      }
   }(),
   entities: new class extends Repository<LegalEntity> { 
       constructor() { super(STORES.ENTITIES); }
@@ -230,16 +228,6 @@ export const DataService = {
     getSOL: async (): Promise<any[]> => { await delay(50); return []; },
     getActiveRuleSets: async (): Promise<string[]> => { await delay(50); return ["FRCP", "FRE", "CA Local Rules"] },
     sync: async (): Promise<void> => { await delay(500); console.log('Calendar synced'); }
-  },
-  jurisdiction: {
-    getStateCourts: async (): Promise<any[]> => {
-        await delay(100);
-        return Object.values(STATE_JURISDICTIONS).flatMap(s => s.levels.map(l => ({ state: s.name, court: l.courts[0], level: l.name, eFiling: 'Optional', system: 'CourtPortal' })));
-    },
-    getRegulatoryBodies: async (): Promise<any[]> => { await delay(100); return []; },
-    getTreaties: async (): Promise<any[]> => { await delay(100); return []; },
-    getArbitrationProviders: async (): Promise<any[]> => { await delay(100); return []; },
-    getMapNodes: async (): Promise<any[]> => { await delay(100); return []; },
   },
   notifications: {
       getAll: async (): Promise<SystemNotification[]> => db.getAll<SystemNotification>(STORES.NOTIFICATIONS),
@@ -307,11 +295,29 @@ export const DataService = {
 
   dashboard: {
       getStats: async () => {
-          const [cases, motions] = await Promise.all([ db.getAll<any>(STORES.CASES), db.getAll<Motion>(STORES.MOTIONS) ]);
+          const [cases, motions, timeEntries, risks] = await Promise.all([ 
+              db.getAll<Case>(STORES.CASES), 
+              db.getAll<Motion>(STORES.MOTIONS),
+              db.getAll<TimeEntry>(STORES.BILLING),
+              db.getAll<Risk>(STORES.RISKS),
+          ]);
+
+          const currentMonth = new Date().getMonth();
+          const currentYear = new Date().getFullYear();
+          const billableHours = timeEntries
+              .filter(e => {
+                  const entryDate = new Date(e.date);
+                  return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
+              })
+              .reduce((sum, e) => sum + (e.duration / 60), 0);
+              
+          const highRisks = risks.filter(r => r.impact === 'High' || r.probability === 'High').length;
+          
           return { 
-              activeCases: cases.filter((c: any) => c.status !== 'Closed').length, 
+              activeCases: cases.filter((c: any) => c.status !== 'Closed' && c.status !== 'Settled').length, 
               pendingMotions: motions.filter(m => m.status === 'Draft' || m.status === 'Filed').length, 
-              billableHours: 1240, highRisks: 3 
+              billableHours: Math.round(billableHours), 
+              highRisks: highRisks
           };
       },
       getChartData: async () => { 

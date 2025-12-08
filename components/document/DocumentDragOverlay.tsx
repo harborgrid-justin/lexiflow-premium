@@ -9,14 +9,14 @@ export const DocumentDragOverlay: React.FC = () => {
 
   return (
     <div className={cn(
-      "absolute inset-0 z-50 border-4 border-dashed rounded-lg flex flex-col items-center justify-center pointer-events-none backdrop-blur-sm transition-all duration-200",
-      // Inject opacity into the bg class (assumes tailwind structure like bg-blue-50)
-      theme.primary.light.replace('bg-', 'bg-opacity-90 bg-'), 
-      theme.primary.border
+      "absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none backdrop-blur-md transition-all duration-200 animate-in fade-in zoom-in-95",
+      "bg-blue-500/10 border-4 border-blue-500 border-dashed m-4 rounded-xl"
     )}>
-      <UploadCloud className={cn("h-20 w-20 mb-4 animate-bounce", theme.primary.text)}/>
-      <h3 className={cn("text-2xl font-bold", theme.primary.text)}>Drop files to upload</h3>
-      <p className={cn(theme.primary.text)}>Secure Ingestion Pipeline Ready</p>
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-full shadow-2xl mb-4 animate-bounce">
+         <UploadCloud className="h-16 w-16 text-blue-600"/>
+      </div>
+      <h3 className={cn("text-3xl font-bold drop-shadow-sm", theme.text.primary)}>Drop files to upload</h3>
+      <p className={cn("mt-2 text-lg font-medium", theme.text.secondary)}>Secure Ingestion Pipeline Ready</p>
     </div>
   );
 };

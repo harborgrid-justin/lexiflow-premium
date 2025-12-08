@@ -12,6 +12,7 @@ import { Button } from '../../common/Button';
 import { FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { useBlobRegistry } from '../../../hooks/useBlobRegistry';
 
 export const PDFEditorView: React.FC = () => {
     const { theme } = useTheme();
@@ -19,6 +20,9 @@ export const PDFEditorView: React.FC = () => {
     const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    // Registry hook for managing blob lifecycle
+    const { register } = useBlobRegistry();
 
     // PDF viewer state
     const [activeTool, setActiveTool] = useState<PDFTool>('select');
@@ -44,15 +48,23 @@ export const PDFEditorView: React.FC = () => {
     }, []);
 
     useEffect(() => {
+        let isMounted = true;
         if (selectedDoc) {
             const loadUrl = async () => {
-                const url = await DocumentService.getDocumentUrl(selectedDoc.id);
-                setPreviewUrl(url);
+                const blob = await DataService.documents.getFile(selectedDoc.id);
+                if (isMounted && blob) {
+                    const url = register(blob);
+                    setPreviewUrl(url);
+                } else if (isMounted) {
+                    setPreviewUrl(null);
+                }
             };
             loadUrl();
+        } else {
+             setPreviewUrl(null);
         }
-        return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
-    }, [selectedDoc]);
+        return () => { isMounted = false; };
+    }, [selectedDoc, register]);
     
     const handleFieldClick = (field: any) => {
         if (field.type === 'signature' || field.type === 'initials') {

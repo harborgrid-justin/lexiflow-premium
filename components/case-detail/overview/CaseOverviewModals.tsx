@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { TimeEntryModal } from '../../TimeEntryModal';
+import { TimeEntryModal } from '../../common/TimeEntryModal';
 import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
 import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
@@ -32,7 +33,7 @@ export const CaseOverviewModals: React.FC<CaseOverviewModalsProps> = ({
       <TimeEntryModal 
         isOpen={showTimeModal} 
         onClose={() => setShowTimeModal(false)} 
-        caseId={caseData.title} 
+        caseId={caseData.id} 
         onSave={onSaveTime} 
       />
 

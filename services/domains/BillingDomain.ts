@@ -1,6 +1,6 @@
-import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID } from '../../types';
+
+import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID, CaseId } from '../../types';
 import { db, STORES } from '../db';
-import { MOCK_TIME_ENTRIES } from '../../data/mockBilling';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -39,12 +39,20 @@ export const BillingService = {
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     },
     getTrustAccounts: async () => db.getAll<any>(STORES.TRUST),
-    getOverviewStats: async () => { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; },
+    getOverviewStats: async () => {
+        await delay(50);
+        const allEntries = await db.getAll<TimeEntry>(STORES.BILLING);
+        const totalBilled = allEntries.filter(e => e.status === 'Billed').reduce((sum, e) => sum + e.total, 0);
+        return { 
+            realization: 92.4, 
+            totalBilled, 
+            month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) 
+        };
+    },
     
     getInvoices: async () => {
         const invoices = await db.getAll<Invoice>(STORES.INVOICES);
         if (invoices.length === 0) {
-// FIX: Cast IDs to UUID
              return [
                 { id: 'INV-2024-001' as UUID, client: 'TechCorp Industries', matter: 'Martinez v. TechCorp', date: '2024-03-01', dueDate: '2024-03-31', amount: 15450.00, status: 'Sent', items: [] },
                 { id: 'INV-2024-002' as UUID, client: 'OmniGlobal', matter: 'Merger Acquisition', date: '2024-02-15', dueDate: '2024-03-15', amount: 42000.50, status: 'Paid', items: [] },
@@ -61,7 +69,6 @@ export const BillingService = {
         dueDate.setDate(now.getDate() + 30);
 
         const invoice: Invoice = {
-// FIX: Cast string to branded type UUID
             id: `INV-${Date.now()}` as UUID,
             client: clientName,
             matter: caseId,

@@ -1,12 +1,16 @@
+
+
+
 import React, { Suspense, lazy, useTransition } from 'react';
 import { Button } from '../common/Button';
 import { Download } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { LazyLoader } from '../common/LazyLoader';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { ANALYTICS_TAB_CONFIG } from '../../config/analyticsDashboardConfig';
+// FIX: Corrected import path for AnalyticsDashboardContent
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 type AnalyticsView = 'judge' | 'counsel' | 'prediction';

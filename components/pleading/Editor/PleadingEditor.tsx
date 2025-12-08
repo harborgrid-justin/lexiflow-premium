@@ -88,7 +88,8 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
               id: `sec-${Date.now()}`,
               type: 'Paragraph',
               content: text,
-              meta: { alignment: 'left' }
+              meta: { alignment: 'left' },
+              order: document.sections.length
           };
           setDocument({ ...document, sections: [...document.sections, newSection] });
       }

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Gavel, FileText, Clock, Bell, Lock, Eye, Hash } from 'lucide-react';
+import { Gavel, FileText, Clock, Bell, Lock, Eye, Hash, ExternalLink } from 'lucide-react';
 import { DocketEntry, DocketEntryType } from '../../types';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
@@ -48,7 +48,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
     return (
         <div 
             className={cn(
-                "flex items-center border-b transition-colors cursor-pointer px-6",
+                "flex items-center border-b transition-colors cursor-pointer px-6 group",
                 theme.border.light,
                 theme.surface,
                 `hover:${theme.surfaceHighlight}`
@@ -113,7 +113,18 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
             </div>
 
             {/* Deadlines / Status */}
-            <div className="w-32 shrink-0 text-right">
+            <div className="w-32 shrink-0 text-right flex justify-end">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button 
+                        size="xs" 
+                        variant="ghost" 
+                        icon={ExternalLink} 
+                        onClick={(e) => { e.stopPropagation(); onSelect(entry); }}
+                        className="text-slate-500 hover:text-blue-600"
+                    >
+                        Details
+                    </Button>
+                </div>
                   {entry.triggersDeadlines?.slice(0, 1).map(dl => (
                     <Badge key={dl.id} variant={dl.status === 'Satisfied' ? 'success' : 'warning'}>
                       {dl.status === 'Satisfied' ? 'Done' : 'Due ' + dl.date.split('-').slice(1).join('/')}

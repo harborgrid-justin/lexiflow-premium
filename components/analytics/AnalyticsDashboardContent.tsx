@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { lazy } from 'react';
 import { useTheme } from '../../context/ThemeContext';
@@ -24,9 +25,10 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
   // Use useQuery for fetching judge profiles
+  // FIX: Property 'analytics' does not exist on type '...'. Did you mean 'analysis'?
   const { data: fetchedJudges, isLoading: isLoadingJudges } = useQuery<JudgeProfile[]>(
     ['analytics', 'judgeProfiles'],
-    DataService.analytics.getJudgeProfiles
+    DataService.analysis.getJudgeProfiles
   );
 
   useEffect(() => {

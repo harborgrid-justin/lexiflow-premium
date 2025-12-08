@@ -56,7 +56,6 @@ export type EntityRole = 'Client' | 'Opposing Counsel' | 'Judge' | 'Expert' | 'W
 // Enterprise Extensions
 export type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'CAD';
 export type LedesActivityCode = string; // e.g., 'A100'
-// FIX: Add missing LedesTaskCode export
 export type LedesTaskCode = string; // e.g., 'L110'
 export type OcrStatus = 'Pending' | 'Completed' | 'Failed';
 export type TaskDependencyType = 'FinishToStart' | 'StartToStart' | 'FinishToFinish' | 'StartToFinish';

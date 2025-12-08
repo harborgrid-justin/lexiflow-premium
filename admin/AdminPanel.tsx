@@ -1,12 +1,11 @@
 
-
 import React, { Suspense, lazy, useTransition } from 'react';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 import { cn } from '../utils/cn';
 import { ADMIN_TAB_CONFIG } from '../config/adminPanelConfig';
-import { AdminPanelContent } from './admin/AdminPanelContent';
+import { AdminPanelContent } from './AdminPanelContent';
 
 type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';
 

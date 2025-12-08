@@ -24,7 +24,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
   if (!entry) return null;
 
   const content = (
-      <div className="p-6">
+      <div className={cn("p-6 h-full overflow-y-auto", theme.surface)}>
         <div className={cn("flex justify-between items-start mb-6 border-b pb-4", theme.border.light)}>
           <div>
             <div className="flex items-center gap-3 mb-2">

@@ -1,19 +1,17 @@
+
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../common/Modal';
-import { Input } from '../../../common/Inputs';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { Modal } from '../../common/Modal';
+import { Input } from '../../common/Inputs';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
-import { Button } from '../../../common/Button';
+import { Button } from '../../common/Button';
 import { SchemaVisualizer } from './SchemaVisualizer';
-// FIX: Correct import path
 import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
-// FIX: Correct import path
-import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-
+import { useCanvasDrag } from '../../../hooks/useCanvasDrag';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -154,7 +152,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         </div>
 
         <div className={cn("flex-1 overflow-hidden relative", theme.background)}>
-            {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
+            {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal as any} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
             {activeTab === 'code' && <SchemaCodeEditor ddl={generatedDDL} />}
             {activeTab === 'history' && <MigrationHistory />}
             {activeTab === 'snapshots' && <SchemaSnapshots />}

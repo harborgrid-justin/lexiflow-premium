@@ -46,7 +46,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
 
   return (
     <div className="space-y-6">
-      <CaseOverviewModals 
+      <CaseOverviewModals
           caseData={caseData}
           showTimeModal={showTimeModal} setShowTimeModal={setShowTimeModal}
           showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal}
@@ -88,8 +88,8 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
         </div>
 
         <div className="space-y-6">
-            <OverviewSidebar 
-                caseData={caseData} 
+            <OverviewSidebar
+                caseData={caseData}
                 linkedCases={linkedCases}
                 onShowTimeModal={() => setShowTimeModal(true)}
                 onShowLinkModal={() => setShowLinkModal(true)}

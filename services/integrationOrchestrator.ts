@@ -1,4 +1,3 @@
-
 import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../types/integrationTypes';
 import { DataService } from './dataService';
 import { STORES, db } from './db';
@@ -40,7 +39,7 @@ export const IntegrationOrchestrator = {
 
                 case SystemEventType.DOCKET_INGESTED:
                     const docketPayload = payload as SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED];
-                    // Opp #5: Docket -> Calendar
+                    // Opp #2: Docket -> Calendar
                     if (docketPayload.entry.type === 'Hearing' || docketPayload.entry.description?.toLowerCase().includes('deadline')) {
                         const evt: CalendarEventItem = {
                             id: `cal-${Date.now()}`,
@@ -59,14 +58,12 @@ export const IntegrationOrchestrator = {
                     if (docketPayload.entry.type === 'Motion') {
                         // Create Task
                         const task: WorkflowTask = {
-                            // FIX: Cast string to branded type TaskId
                             id: `t-auto-${Date.now()}` as TaskId,
                             title: `Respond to ${docketPayload.entry.title}`,
                             status: 'Pending',
                             priority: 'High',
                             assignee: 'System',
                             dueDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0], // +14 days
-                            // FIX: Cast string to branded type CaseId
                             caseId: docketPayload.entry.caseId as CaseId,
                             description: 'Auto-generated based on FRCP response deadlines.',
                             relatedModule: 'Motions',
@@ -80,16 +77,15 @@ export const IntegrationOrchestrator = {
                 case SystemEventType.DOCUMENT_UPLOADED:
                     const docPayload = payload as SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED];
                     // Opp #6: Document -> Workflow
-                    if (docPayload.document.tags.includes('Motion')) {
+                    if (docPayload.document.title.toLowerCase().includes('motion')) {
                          const task: WorkflowTask = {
-                            // FIX: Cast string to branded type TaskId
                             id: `t-rev-${Date.now()}` as TaskId,
                             title: `Review New Motion: ${docPayload.document.title}`,
                             status: 'Pending',
                             priority: 'High',
                             assignee: 'Senior Partner',
+                            assigneeId: 'usr-partner-alex' as UserId,
                             dueDate: new Date().toISOString().split('T')[0],
-                            // FIX: Cast string to branded type CaseId
                             caseId: docPayload.document.caseId as CaseId,
                             relatedModule: 'Documents',
                             relatedItemId: docPayload.document.id
@@ -114,10 +110,9 @@ export const IntegrationOrchestrator = {
 
                 case SystemEventType.SERVICE_COMPLETED:
                     const servicePayload = payload as SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED];
-                    // Opp #20: Service -> Docket
+                    // Opp #13: Service -> Docket
                     if (servicePayload.job.status === 'Served') {
                          const entry: DocketEntry = {
-                            // FIX: Cast string to branded type DocketId
                             id: `dk-proof-${Date.now()}` as DocketId,
                             sequenceNumber: 999,
                             caseId: servicePayload.job.caseId,

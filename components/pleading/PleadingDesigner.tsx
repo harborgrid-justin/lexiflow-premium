@@ -1,186 +1,146 @@
-import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../types';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { PleadingDocument, FormattingRule, Case, PleadingSection } from '../types';
+import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2 } from 'lucide-react';
+import { Button } from '../common/Button';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { PLEADING_BUILDER_TAB_CONFIG } from '../config/pleadingBuilderConfig';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { Button } from '../common/Button';
-import { Plus, Loader2 } from 'lucide-react';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { DataService } from '../services/dataService';
+import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
-import { Modal } from '../common/Modal';
-import { Input } from '../common/Inputs';
+import { useNotify } from '../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
 
-// Lazy load components
-// FIX: Corrected lazy imports to handle default exports correctly.
-// The previous `.then(m => ({ default: m.Component }))` syntax is for named exports.
-const PleadingDesigner = lazy(() => import('./designer/PleadingDesigner'));
-const PleadingDrafts = lazy(() => import('./PleadingDrafts'));
-const PleadingTemplates = lazy(() => import('./PleadingTemplates'));
-const ClauseLibrary = lazy(() => import('../ClauseLibrary'));
-const PleadingFilingQueue = lazy(() => import('./PleadingFilingQueue'));
-const PleadingAnalytics = lazy(() => import('./PleadingAnalytics'));
+// Lazy load new designer components with corrected relative paths and default export syntax
+const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));
+const PleadingCanvas = lazy(() => import('./designer/PleadingCanvas'));
+const AIDraftingAssistant = lazy(() => import('./designer/AIDraftingAssistant'));
+const ContextPanel = lazy(() => import('./designer/ContextPanel'));
+const ComplianceHUD = lazy(() => import('./designer/tools/ComplianceHUD'));
+const LogicOverlay = lazy(() => import('./designer/visual/LogicOverlay'));
 
-
-interface PleadingBuilderProps {
-  onSelectCase?: (c: Case) => void;
-  caseId?: string;
+interface PleadingDesignerProps {
+  pleading: PleadingDocument;
+  onBack: () => void;
 }
 
-export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, caseId }) => {
-    const { theme } = useTheme();
-    const [view, setView] = useState<'workspace' | 'designer'>('workspace');
-    const [activePleading, setActivePleading] = useState<PleadingDocument | null>(null);
-    const [isPending, startTransition] = useTransition();
-    const [activeTab, _setActiveTab] = useSessionStorage<string>('pleading_builder_tab', 'drafts');
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
+type ViewMode = 'write' | 'logic' | 'preview';
 
-    const setActiveTab = (tab: string) => {
-      startTransition(() => {
-        _setActiveTab(tab);
-      });
-    };
+const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDoc, onBack }) => {
+  const { theme } = useTheme();
+  const notify = useNotify();
 
-    // Data fetching
-    const { data: pleadings = [], isLoading: pleadingsLoading } = useQuery<PleadingDocument[]>(
-        [STORES.PLEADINGS, caseId || 'all'],
-        () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
-    );
-    const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);
-    const { data: templates = [] } = useQuery<PleadingTemplate[]>([STORES.PLEADING_TEMPLATES, 'all'], DataService.pleadings.getTemplates);
+  const [document, setDocument] = useState<PleadingDocument>(initialDoc);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('write');
+  
+  // Data Fetching
+  const { data: formattingRules, isLoading: rulesLoading } = useQuery<FormattingRule>(
+    ['format_rules', document.jurisdictionRulesId],
+    () => DataService.pleadings.getFormattingRules()
+  );
+  
+  const { data: caseData, isLoading: caseLoading } = useQuery<Case | undefined>(
+      [STORES.CASES, document.caseId],
+      () => DataService.cases.getById(document.caseId)
+  );
 
-    const { mutate: createPleading } = useMutation(
-        DataService.pleadings.add,
-        {
-            onSuccess: (newDoc) => {
-                setIsCreateModalOpen(false);
-                setActivePleading(newDoc);
-                setView('designer');
-                queryClient.invalidate([STORES.PLEADINGS, caseId || 'all']);
-            }
-        }
-    );
-
-    const handleEdit = (doc: PleadingDocument) => {
-        setActivePleading(doc);
-        setView('designer');
-    };
-
-    const handleCreateNew = (template?: PleadingTemplate) => {
-        setNewDocData({ title: template ? template.name : '', caseId: caseId || '', templateId: template?.id || '' });
-        setIsCreateModalOpen(true);
-    };
-    
-    const handleCreateSubmit = () => {
-        if (!newDocData.title || !newDocData.caseId || !newDocData.templateId) return;
-        
-        const template = templates.find(t => t.id === newDocData.templateId);
-        const sections: PleadingSection[] = template 
-            ? template.defaultSections.map((s, idx) => ({ 
-                id: `sec-${Date.now()}-${idx}`,
-                type: s.type || 'Paragraph',
-                content: s.content || '',
-                order: idx,
-                meta: s.meta
-             }))
-            : [];
-
-        const doc: PleadingDocument = {
-            id: `plead-${Date.now()}` as any,
-            title: newDocData.title,
-            caseId: newDocData.caseId as CaseId,
-            status: 'Draft',
-            filingStatus: 'Pre-Filing',
-            jurisdictionRulesId: 'default',
-            version: 1,
-            sections: sections,
-            createdBy: 'current-user' as UserId
-        };
-        createPleading(doc);
-    };
-
-    const renderContent = () => {
-        if(pleadingsLoading) return <LazyLoader message="Loading Pleadings..." />;
-
-        switch (activeTab) {
-            case 'drafts':
-                return <PleadingDrafts pleadings={pleadings} onEdit={handleEdit} />;
-            case 'templates':
-                return <PleadingTemplates templates={templates} onCreateFromTemplate={handleCreateNew} />;
-            case 'clauses':
-                return <ClauseLibrary onSelectClause={(c) => alert(`Clause '${c.name}' selected. Editor integration pending.`)} />;
-            case 'queue':
-                return <PleadingFilingQueue />;
-            case 'analytics':
-                return <PleadingAnalytics />;
-            default:
-                return <PleadingDrafts pleadings={pleadings} onEdit={handleEdit} />;
-        }
-    };
-
-    if (view === 'designer' && activePleading) {
-        return (
-            <Suspense fallback={<LazyLoader message="Loading Designer..." />}>
-                <PleadingDesigner pleading={activePleading} onBack={() => setView('workspace')} />
-            </Suspense>
-        );
+  // Mutations
+  const { mutate: saveDocument, isLoading: isSaving } = useMutation(
+    (doc: PleadingDocument) => DataService.pleadings.update(doc.id, doc),
+    {
+      onSuccess: (updatedDoc) => {
+        setDocument(updatedDoc);
+        queryClient.invalidate([STORES.PLEADINGS, document.caseId]);
+        notify.success("Document auto-saved.");
+      },
+      onError: () => notify.error("Save failed.")
     }
+  );
+  
+  // Auto-save logic
+  useEffect(() => {
+    const handler = setTimeout(() => saveDocument(document), 2000);
+    return () => clearTimeout(handler);
+  }, [document, saveDocument]);
 
-    return (
-        <>
-        <TabbedPageLayout
-            pageTitle="Pleading Builder"
-            pageSubtitle="Draft, format, and file legal documents with AI assistance."
-            pageActions={<Button variant="primary" icon={Plus} onClick={() => handleCreateNew()}>New Pleading</Button>}
-            tabConfig={PLEADING_BUILDER_TAB_CONFIG}
-            activeTabId={activeTab}
-            onTabChange={setActiveTab}
-        >
-            <Suspense fallback={<LazyLoader message={`Loading ${activeTab}...`} />}>
-                <div className={cn("h-full", isPending && "opacity-60 transition-opacity")}>
-                  {renderContent()}
-                </div>
-            </Suspense>
-        </TabbedPageLayout>
+  const handleUpdateSection = (id: string, updates: Partial<PleadingSection>) => {
+    setDocument(prev => ({
+      ...prev,
+      sections: prev.sections.map(s => s.id === id ? { ...s, ...updates } : s)
+    }));
+  };
 
-        <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Pleading">
-            <div className="p-6 space-y-4">
-                <Input label="Document Title" value={newDocData.title} onChange={e => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
-                {!caseId && (
-                <div>
-                    <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
-                    <select 
-                        className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
-                        value={newDocData.caseId}
-                        onChange={e => setNewDocData({...newDocData, caseId: e.target.value})}
-                    >
-                        <option value="">Select Case...</option>
-                        {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-                    </select>
-                </div>
-                )}
-                <div>
-                    <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
-                    <select 
-                        className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
-                        value={newDocData.templateId}
-                        onChange={e => setNewDocData({...newDocData, templateId: e.target.value})}
-                    >
-                        <option value="">Select Template...</option>
-                        {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                    </select>
-                </div>
+  const handleInsertText = (text: string) => {
+      if (selectedSectionId) {
+          const section = document.sections.find(s => s.id === selectedSectionId);
+          if (section) handleUpdateSection(selectedSectionId, { content: section.content + '\n\n' + text });
+      }
+  };
 
-                <div className="flex justify-end pt-4 gap-2">
-                    <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={handleCreateSubmit} disabled={!newDocData.title || !newDocData.caseId || !newDocData.templateId}>Create & Open</Button>
-                </div>
-            </div>
-        </Modal>
-        </>
-    );
+  if (rulesLoading || caseLoading) return <LazyLoader message="Loading Designer Environment..."/>;
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden bg-slate-100 dark:bg-slate-900">
+      {/* Top Toolbar */}
+      <div className={cn("h-16 border-b flex justify-between items-center px-4 shrink-0 z-20", theme.surface, theme.border.default)}>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" icon={ArrowLeft} onClick={onBack}>Back to Workspace</Button>
+          <div className={cn("h-6 w-px", theme.border.default)}></div>
+          <h2 className={cn("font-bold", theme.text.primary)}>{document.title}</h2>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+            {(['write', 'logic', 'preview'] as ViewMode[]).map(mode => (
+              <button key={mode} onClick={() => setViewMode(mode)} className={cn("px-3 py-1.5 text-xs font-bold rounded-md flex items-center gap-2 transition-all", viewMode === mode ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}>
+                {mode === 'write' && <PenTool className="h-3 w-3"/>}
+                {mode === 'logic' && <GitMerge className="h-3 w-3"/>}
+                {mode === 'preview' && <Eye className="h-3 w-3"/>}
+                <span className="capitalize">{mode}</span>
+              </button>
+            ))}
+          </div>
+          <Button variant="primary" icon={Save} onClick={() => saveDocument(document)} isLoading={isSaving}>Save</Button>
+        </div>
+      </div>
+
+      {/* Main 3-Panel Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Panel: Context */}
+        <aside className={cn("w-80 border-r flex flex-col shrink-0", theme.surface, theme.border.default)}>
+          <Suspense fallback={<div className="p-4"><Loader2 className="animate-spin" /></div>}>
+            <ContextPanel caseId={document.caseId} onInsertFact={handleInsertText} />
+          </Suspense>
+        </aside>
+        
+        {/* Center Panel: Canvas */}
+        <main className="flex-1 overflow-auto p-8 relative">
+          <Suspense fallback={<div className="p-4"><Loader2 className="animate-spin" /></div>}>
+            <PleadingPaper rules={formattingRules!}>
+                <PleadingCanvas 
+                    document={document} 
+                    rules={formattingRules!}
+                    readOnly={viewMode === 'preview'} 
+                    viewMode={viewMode}
+                    onUpdateSection={handleUpdateSection}
+                    relatedCase={caseData || null}
+                />
+                {viewMode === 'logic' && <LogicOverlay document={document} />}
+            </PleadingPaper>
+            <ComplianceHUD rules={formattingRules!} sections={document.sections} score={100}/>
+          </Suspense>
+        </main>
+
+        {/* Right Panel: AI Assistant */}
+        <aside className={cn("w-80 border-l flex flex-col shrink-0", theme.surface, theme.border.default)}>
+          <Suspense fallback={<div className="p-4"><Loader2 className="animate-spin" /></div>}>
+            <AIDraftingAssistant 
+              onInsert={handleInsertText} 
+              caseContext={{ title: caseData?.title || '', summary: caseData?.description }}
+            />
+          </Suspense>
+        </aside>
+      </div>
+    </div>
+  );
 };
+export default PleadingDesigner;

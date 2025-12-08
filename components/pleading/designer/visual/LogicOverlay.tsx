@@ -10,13 +10,12 @@ const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDoc }) =>
     const [paths, setPaths] = useState<React.ReactElement[]>([]);
 
     useEffect(() => {
-        // Calculate paths after render
         const calculatePaths = () => {
             const newPaths: React.ReactElement[] = [];
             if (!svgRef.current) return;
             const svgRect = svgRef.current.getBoundingClientRect();
             
-            pleadingDoc.sections.forEach((section, index) => {
+            pleadingDoc.sections.forEach((section) => {
                 const nodeEl = window.document.getElementById(`block-${section.id}`);
                 
                 if (nodeEl && (section.linkedEvidenceIds?.length || section.linkedArgumentId)) {
@@ -26,7 +25,6 @@ const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDoc }) =>
                         const startX = rect.right - svgRect.left - 12; // From right side of block
                         const startY = rect.top - svgRect.top + rect.height / 2;
                         
-                        // Draw to imaginary sidebar nodes for visualization effect
                         const endX = svgRect.width - 20; 
                         const endY = startY + (Math.random() * 80 - 40);
 

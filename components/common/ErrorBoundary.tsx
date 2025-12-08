@@ -12,22 +12,15 @@ interface ErrorBoundaryState {
   errorInfo: ErrorInfo | null;
 }
 
-// FIX: Extended React.Component to correctly implement an Error Boundary.
-// This resolves issues where `this.state`, `this.props`, and lifecycle methods
-// were not available on the class instance.
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Switched from class property state initialization to a constructor.
-  // This is a more traditional and explicit way to initialize state in React class components,
-  // resolving potential context issues with `this` that might cause TypeScript to not recognize
-  // `this.state`, `this.setState`, or `this.props` as valid properties of the component instance.
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
-  }
+  // FIX: Replaced constructor with a class property for state initialization.
+  // This is a more modern syntax and resolves potential 'this' context issues
+  // that were causing the compiler errors.
+  state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
 
   static getDerivedStateFromError(_error: Error): { hasError: boolean } {
     return { hasError: true };
@@ -35,7 +28,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
-    // FIX: With the constructor properly initializing the component, 'this.setState' is now correctly recognized.
     this.setState({ error, errorInfo });
   }
 
@@ -45,7 +37,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   public render(): ReactNode {
     if (this.state.hasError) {
-      // FIX: With the constructor ensuring the class extends React.Component correctly, 'this.props' is now correctly recognized.
       if (this.props.fallback) {
         return this.props.fallback;
       }
@@ -86,7 +77,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       );
     }
 
-    // FIX: 'this.props' is now correctly recognized on the component instance.
     return this.props.children;
   }
 }

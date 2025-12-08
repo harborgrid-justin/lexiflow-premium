@@ -9,7 +9,6 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
       initialTemplate.stages.forEach((stage, idx) => {
         generatedNodes.push({
           id: `n-${idx}`, type: 'Task', label: stage, x: 50 + ((idx + 1) * 220), y: 300,
-          // FIX: Corrected shorthand property error by providing an initializer for 'assignee'.
           config: { description: `Execute stage: ${stage}`, assignee: '' }
         });
       });
@@ -54,6 +53,5 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
     setConnections(prev => prev.filter(c => c.from !== id && c.to !== id));
   }, []);
 
-  // FIX: Added missing return statement.
   return { nodes, connections, addNode, updateNode, deleteNode };
 };

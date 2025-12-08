@@ -1,9 +1,7 @@
 import React from 'react';
-import { PleadingDocument, FormattingRule, PleadingSection } from '../../../types';
-import { GripVertical, Link } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { PleadingDocument, FormattingRule, PleadingSection, Case } from '../../../types';
+import { GripVertical } from 'lucide-react';
 import { cn } from '../../../utils/cn';
-import { Case } from '../../../types';
 
 interface PleadingCanvasProps {
     document: PleadingDocument;
@@ -17,8 +15,6 @@ interface PleadingCanvasProps {
 const PleadingCanvas: React.FC<PleadingCanvasProps> = ({ 
     document, rules, readOnly, viewMode, onUpdateSection, relatedCase 
 }) => {
-    const { theme } = useTheme();
-
     const renderBlock = (section: PleadingSection) => {
         const isLogicMode = viewMode === 'logic';
         const hasLinks = (section.linkedEvidenceIds?.length || 0) > 0 || !!section.linkedArgumentId;

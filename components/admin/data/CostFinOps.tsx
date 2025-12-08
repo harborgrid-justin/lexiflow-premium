@@ -1,45 +1,33 @@
 
 import React from 'react';
-import { DollarSign, TrendingDown, AlertTriangle } from 'lucide-react';
+import { DollarSign, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useChartTheme } from '../../common/ChartHelpers';
 import { MetricTile } from '../../common/RefactoredCommon';
-
-interface ServiceCost {
-    name: string;
-    cost: number;
-}
-
-interface ForecastData {
-    day: string;
-    actual: number | null;
-    forecast: number | null;
-}
-
-const costData: ServiceCost[] = [
-    { name: 'Compute', cost: 1200 },
-    { name: 'Storage', cost: 850 },
-    { name: 'Network', cost: 300 },
-    { name: 'DB', cost: 1500 },
-    { name: 'AI', cost: 2200 },
-];
-
-const forecastData: ForecastData[] = [
-    { day: '1', actual: 120, forecast: 125 },
-    { day: '5', actual: 135, forecast: 130 },
-    { day: '10', actual: 140, forecast: 145 },
-    { day: '15', actual: 180, forecast: 160 },
-    { day: '20', actual: null, forecast: 185 },
-    { day: '25', actual: null, forecast: 190 },
-    { day: '30', actual: null, forecast: 210 },
-];
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { CostMetric, CostForecast } from '../../../types';
 
 export const CostFinOps: React.FC = () => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
+
+  const { data: costData = [], isLoading: costLoading } = useQuery<CostMetric[]>(
+      ['finops', 'costs'],
+      DataService.operations.getCostMetrics
+  );
+
+  const { data: forecastData = [], isLoading: forecastLoading } = useQuery<CostForecast[]>(
+      ['finops', 'forecast'],
+      DataService.operations.getCostForecast
+  );
+
+  const isLoading = costLoading || forecastLoading;
+
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full">

@@ -1,28 +1,31 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../../../common/Card';
 import { Button } from '../../../common/Button';
-import { Wand2, Play, CheckCircle, Hash, Phone, Calendar, Type, MoreHorizontal, Plus } from 'lucide-react';
+import { Wand2, Play, CheckCircle, Hash, Phone, Calendar, Type, MoreHorizontal, Plus, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { CleansingRule } from '../../../../types';
-import { useMutation } from '../../../../services/queryClient';
+import { useMutation, useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
-
-const AVAILABLE_RULES: CleansingRule[] = [
-    { id: 'rule-phone', name: 'Normalize Phone Numbers', targetField: 'phone', operation: 'FormatPhone', isActive: true, parameters: { format: 'E.164' } },
-    { id: 'rule-email', name: 'Lowercase Emails', targetField: 'email', operation: 'Lowercase', isActive: true },
-    { id: 'rule-trim', name: 'Trim Whitespace', targetField: '*', operation: 'Trim', isActive: true },
-    { id: 'rule-state', name: 'Standardize State Codes', targetField: 'state', operation: 'CustomRegex', isActive: false, parameters: { dictionary: 'US_States' } },
-];
 
 export const StandardizationConsole: React.FC = () => {
     const { theme } = useTheme();
     const notify = useNotify();
-    const [rules, setRules] = useState(AVAILABLE_RULES);
     const [isRunning, setIsRunning] = useState(false);
     const [lastRunStats, setLastRunStats] = useState<{processed: number, fixed: number} | null>(null);
+
+    const { data: fetchedRules = [], isLoading } = useQuery<CleansingRule[]>(
+        ['quality', 'rules'],
+        DataService.quality.getStandardizationRules
+    );
+
+    const [rules, setRules] = useState<CleansingRule[]>([]);
+
+    useEffect(() => {
+        if (fetchedRules.length > 0) setRules(fetchedRules);
+    }, [fetchedRules]);
 
     const { mutate: runJob } = useMutation(
         DataService.quality.runCleansingJob,
@@ -50,6 +53,8 @@ export const StandardizationConsole: React.FC = () => {
         if (op.includes('Trim')) return <Wand2 className="h-4 w-4 text-purple-600"/>;
         return <Type className="h-4 w-4 text-slate-600"/>;
     };
+
+    if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
     return (
         <div className="space-y-6 animate-fade-in">

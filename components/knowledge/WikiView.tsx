@@ -6,7 +6,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-// FIX: Added missing import for Badge component
 import { Badge } from '../common/Badge';
 
 export const WikiView: React.FC = () => {
@@ -52,7 +51,7 @@ export const WikiView: React.FC = () => {
               onClick={() => handleSelectArticle(article.id)}
               className={cn(
                 "w-full text-left p-3 rounded-lg flex items-center justify-between transition-colors",
-                activeArticleId === article.id ? "bg-blue-50 text-blue-800" : `hover:${theme.surface}`
+                activeArticleId === article.id ? "bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300" : `hover:${theme.surface}`
               )}
             >
               <div className="flex-1 min-w-0">

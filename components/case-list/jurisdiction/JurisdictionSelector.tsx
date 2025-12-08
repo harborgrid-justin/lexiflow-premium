@@ -12,7 +12,6 @@ interface JurisdictionSelectorProps {
 export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJurisdictionChange }) => {
   const { theme } = useTheme();
 
-  // Component-internal state
   const [courtSystem, setCourtSystem] = useState<'Federal' | 'State'>('Federal');
   const [fedLevel, setFedLevel] = useState<'Supreme' | 'Appellate' | 'District' | 'Bankruptcy'>('District');
   const [fedCircuit, setFedCircuit] = useState(FEDERAL_CIRCUITS[0].name);
@@ -21,7 +20,6 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
   const [stateLevelName, setStateLevelName] = useState<string>('');
   const [specificStateCourt, setSpecificStateCourt] = useState<string>('');
 
-  // Effect to manage dependent dropdowns for federal courts
   useEffect(() => {
     const circuit = FEDERAL_CIRCUITS.find(c => c.name === fedCircuit);
     if (circuit?.districts?.[0]) {
@@ -29,7 +27,6 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
     }
   }, [fedCircuit]);
 
-  // Effects to manage dependent dropdowns for state courts
   useEffect(() => {
     if (courtSystem === 'State') {
       const stateData = STATE_JURISDICTIONS[selectedStateId];
@@ -51,11 +48,10 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
     }
   }, [stateLevelName, selectedStateId]);
 
-  // Effect to report changes up to the parent
-  // FIX: Refactored to define and use jurisConfig within scopes where it's guaranteed to be initialized, resolving the error.
   useEffect(() => {
     if (courtSystem === 'Federal') {
-      const jurisConfig: JurisdictionObject = {
+      // FIX: Renamed 'jurisConfig' to 'jurisdictionConfig' to match usage in object shorthand.
+      const jurisdictionConfig: JurisdictionObject = {
         country: 'USA', state: 'Federal', courtLevel: fedLevel, division: fedCircuit
       };
       let finalCourt = '';
@@ -66,7 +62,8 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
     } else {
       const stateData = STATE_JURISDICTIONS[selectedStateId];
       if (stateData) {
-        const jurisConfig: JurisdictionObject = { country: 'USA', state: stateData.name, courtLevel: 'State', division: stateLevelName };
+        // FIX: Renamed 'jurisConfig' to 'jurisdictionConfig' to match usage in object shorthand.
+        const jurisdictionConfig: JurisdictionObject = { country: 'USA', state: stateData.name, courtLevel: 'State', division: stateLevelName };
         const finalCourt = specificStateCourt;
         onJurisdictionChange({ finalCourt, jurisdictionConfig });
       }

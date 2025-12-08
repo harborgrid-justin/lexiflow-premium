@@ -80,7 +80,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({ user, viewMode = 'ta
 
     if (viewMode === 'card') {
         return (
-            <div className="p-4 flex items-center justify-between border-b last:border-0 border-slate-100 dark:border-slate-800">
+            <div className={cn("p-4 flex items-center justify-between border-b last:border-0", theme.border.light)}>
                 <div className="flex items-center">
                     <UserAvatar name={user.name} size="sm" className="mr-3"/>
                     <div>

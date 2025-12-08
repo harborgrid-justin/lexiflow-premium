@@ -1,4 +1,3 @@
-
 import { STORES, DatabaseManager } from './db';
 import { MOCK_CASES } from '../data/models/case';
 import { MOCK_TASKS } from '../data/models/workflowTask';
@@ -15,7 +14,6 @@ import { MOCK_LEGAL_HOLDS } from '../data/models/legalHold';
 import { MOCK_PRIVILEGE_LOG } from '../data/models/privilegeLogEntry';
 import { BUSINESS_PROCESSES } from '../data/models/firmProcess';
 import { MOCK_CLAUSES } from '../data/models/clause';
-// FIX: Corrected import path for TEMPLATE_LIBRARY
 import { TEMPLATE_LIBRARY } from '../data/models/workflowTemplates';
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_COUNSEL } from '../data/models/opposingCounselProfile';
@@ -25,12 +23,10 @@ import { MOCK_JOINT_PLANS } from '../data/models/jointPlan';
 import { MOCK_STIPULATIONS } from '../data/models/stipulationRequest';
 import { MOCK_DEPOSITIONS, MOCK_ESI_SOURCES, MOCK_PRODUCTIONS, MOCK_INTERVIEWS } from '../data/models/discoveryExtended';
 import { MOCK_DISCOVERY } from '../data/models/discoveryRequest';
-// FIX: Corrected import paths for MOCK_CONFLICTS and MOCK_WALLS
 import { MOCK_CONFLICTS } from '../data/models/conflictCheck';
 import { MOCK_WALLS } from '../data/models/ethicalWall';
 import { MOCK_RULES } from '../data/models/legalRule';
 import { LegalEntity, EntityId } from '../types';
-// FIX: Corrected import path for MOCK_JUDGE_STATS and MOCK_OUTCOME_DATA
 import { MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/models/analyticsStats';
 import { MOCK_OKRS } from '../data/models/strategy';
 import { MALWARE_SIGNATURES } from '../data/models/security';
@@ -43,6 +39,9 @@ import { MOCK_VENDOR_CONTRACTS } from '../data/models/vendorContract';
 import { MOCK_RFPS } from '../data/models/rfp';
 import { MOCK_MAINTENANCE_TICKETS } from '../data/models/maintenanceTicket';
 import { MOCK_FACILITIES } from '../data/models/facility';
+import { MOCK_VENDOR_DIRECTORY } from '../data/models/vendorDirectory';
+import { MOCK_REPORTERS } from '../data/models/reporters';
+import { MOCK_JURISDICTIONS } from '../data/models/jurisdiction';
 
 export const Seeder = {
   async seed(db: DatabaseManager) {
@@ -122,6 +121,11 @@ export const Seeder = {
           batchPut(STORES.RFPS, MOCK_RFPS),
           batchPut(STORES.MAINTENANCE_TICKETS, MOCK_MAINTENANCE_TICKETS),
           batchPut(STORES.FACILITIES, MOCK_FACILITIES),
+          // Final configurability
+          batchPut(STORES.VENDOR_DIRECTORY, MOCK_VENDOR_DIRECTORY),
+          batchPut(STORES.REPORTERS, MOCK_REPORTERS),
+          // FIX: Use the correct STORES key for jurisdictions
+          batchPut(STORES.JURISDICTIONS, MOCK_JURISDICTIONS),
       ]);
       console.log("Seeding Complete.");
   }

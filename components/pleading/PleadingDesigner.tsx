@@ -106,9 +106,9 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
     return (
         <div className="flex flex-col h-full overflow-hidden">
             {/* 1. Top Bar */}
-            <header className={cn("h-16 border-b flex items-center justify-between px-4 shrink-0 bg-white dark:bg-slate-900 z-50", theme.border.default)}>
+            <header className={cn("h-16 border-b flex items-center justify-between px-4 shrink-0 z-50", theme.surface, theme.border.default)}>
                 <div className="flex items-center gap-4">
-                    <button onClick={onBack} className={cn("p-2 rounded-full hover:bg-slate-100", theme.text.secondary)}>
+                    <button onClick={onBack} className={cn("p-2 rounded-full", theme.surfaceHighlight, theme.text.secondary)}>
                         <ArrowLeft className="h-5 w-5"/>
                     </button>
                     <div>
@@ -122,14 +122,14 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
                     </div>
                 </div>
 
-                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
-                    <button onClick={() => setViewMode('write')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'write' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}>
+                <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+                    <button onClick={() => setViewMode('write')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'write' ? cn(theme.surface, "shadow text-blue-600") : "text-slate-500 hover:text-slate-700")}>
                         <Layout className="h-4 w-4"/> Write
                     </button>
-                    <button onClick={() => setViewMode('logic')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'logic' ? "bg-white shadow text-purple-600" : "text-slate-500 hover:text-slate-700")}>
+                    <button onClick={() => setViewMode('logic')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'logic' ? cn(theme.surface, "shadow text-purple-600") : "text-slate-500 hover:text-slate-700")}>
                         <Layers className="h-4 w-4"/> Logic Map
                     </button>
-                    <button onClick={() => setViewMode('preview')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'preview' ? "bg-white shadow text-green-600" : "text-slate-500 hover:text-slate-700")}>
+                    <button onClick={() => setViewMode('preview')} className={cn("px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all", viewMode === 'preview' ? cn(theme.surface, "shadow text-green-600") : "text-slate-500 hover:text-slate-700")}>
                         <Printer className="h-4 w-4"/> Print
                     </button>
                 </div>
@@ -144,12 +144,12 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
             </header>
 
             {/* 2. Main Workspace */}
-            <div className="flex-1 flex overflow-hidden relative bg-slate-100 dark:bg-slate-950">
+            <div className={cn("flex-1 flex overflow-hidden relative", theme.background)}>
                 
                 {/* Left Sidebar: Context / AI / Args */}
-                <div className={cn("w-80 border-r bg-white dark:bg-slate-900 flex flex-col z-20 transition-all", theme.border.default)}>
+                <div className={cn("w-80 border-r flex flex-col z-20 transition-all", theme.surface, theme.border.default)}>
                     {/* Tab Switcher */}
-                    <div className="flex border-b border-slate-200 dark:border-slate-800">
+                    <div className={cn("flex border-b", theme.border.default)}>
                         <button onClick={() => setSidebarMode('context')} className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors", sidebarMode === 'context' ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500")}>Context</button>
                         <button onClick={() => setSidebarMode('ai')} className={cn("flex-1 py-3 text-xs font-bold uppercase border-b-2 transition-colors flex justify-center items-center gap-1", sidebarMode === 'ai' ? "border-purple-600 text-purple-600" : "border-transparent text-slate-500")}>
                             <Wand2 className="h-3 w-3"/> AI
@@ -177,7 +177,7 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
                 </div>
 
                 {/* Center: The Canvas */}
-                <div className="flex-1 overflow-y-auto relative flex justify-center p-8 custom-scrollbar bg-slate-100 dark:bg-slate-950">
+                <div className={cn("flex-1 overflow-y-auto relative flex justify-center p-8 custom-scrollbar", theme.surfaceHighlight)}>
                     <div className="relative">
                         <PleadingCanvas 
                             document={document} 
@@ -195,7 +195,7 @@ export const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleadingId, 
                 </div>
 
                 {/* Right: Linter */}
-                <div className={cn("w-72 border-l bg-white dark:bg-slate-900 flex flex-col z-20", theme.border.default)}>
+                <div className={cn("w-72 border-l flex flex-col z-20", theme.surface, theme.border.default)}>
                      <ComplianceHUD 
                         rules={rules} 
                         sections={document.sections} 

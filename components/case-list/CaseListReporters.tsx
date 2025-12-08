@@ -6,22 +6,14 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const CaseListReporters: React.FC = () => {
   const { theme } = useTheme();
   
-  // Mocking a reporter fetch using existing asset service or similar, 
-  // in real app this would be a distinct endpoint
   const { data: reporters = [] } = useQuery(
-      ['assets', 'reporters'],
-      async () => {
-          // Simulating fetch
-          return [
-              { id: 1, name: 'Veritext Legal Solutions', type: 'Agency', status: 'Preferred' },
-              { id: 2, name: 'Precision Reporting', type: 'Agency', status: 'Active' },
-              { id: 3, name: 'Jane Doe CSR', type: 'Individual', status: 'Active' }
-          ];
-      }
+      [STORES.REPORTERS, 'all'],
+      DataService.discovery.getReporters
   );
 
   return (

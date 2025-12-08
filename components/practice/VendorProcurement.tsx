@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter } from 'lucide-react';
 import { Tabs } from '../common/Tabs';
@@ -27,7 +28,12 @@ export const VendorProcurement: React.FC = () => {
         DataService.operations.getRfps
     );
 
-    const isLoading = contractsLoading || rfpsLoading;
+    const { data: directory = [], isLoading: directoryLoading } = useQuery<any[]>(
+        [STORES.VENDOR_DIRECTORY, 'all'],
+        DataService.operations.getVendorDirectory
+    );
+
+    const isLoading = contractsLoading || rfpsLoading || directoryLoading;
 
     return (
         <div className="flex flex-col h-full space-y-4">
@@ -57,18 +63,14 @@ export const VendorProcurement: React.FC = () => {
                         <TableContainer>
                             <TableHeader><TableHead>Vendor</TableHead><TableHead>Category</TableHead><TableHead>Rating</TableHead><TableHead>Status</TableHead></TableHeader>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell className={cn("font-bold", theme.text.primary)}>Westlaw</TableCell>
-                                    <TableCell>Research</TableCell>
-                                    <TableCell>4.8/5</TableCell>
-                                    <TableCell><Badge variant="success">Preferred</Badge></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className={cn("font-bold", theme.text.primary)}>Clio</TableCell>
-                                    <TableCell>Software</TableCell>
-                                    <TableCell>4.5/5</TableCell>
-                                    <TableCell><Badge variant="success">Active</Badge></TableCell>
-                                </TableRow>
+                                {directory.map((v: any) => (
+                                    <TableRow key={v.id}>
+                                        <TableCell className={cn("font-bold", theme.text.primary)}>{v.name}</TableCell>
+                                        <TableCell>{v.category}</TableCell>
+                                        <TableCell>{v.rating}/5</TableCell>
+                                        <TableCell><Badge variant={v.status === 'Preferred' ? 'success' : v.status === 'Active' ? 'info' : 'neutral'}>{v.status}</Badge></TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </TableContainer>
                     </div>

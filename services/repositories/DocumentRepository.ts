@@ -1,3 +1,4 @@
+
 import { LegalDocument, DocumentVersion, CaseId, UUID, DocumentId, FileChunk } from '../../types';
 import { db, STORES } from '../db';
 import { Repository } from '../core/Repository';
@@ -9,17 +10,14 @@ export class DocumentRepository extends Repository<LegalDocument> {
         super(STORES.DOCUMENTS);
     }
     
-    // FIX: Implement getByCaseId which was missing
     async getByCaseId(caseId: string): Promise<LegalDocument[]> {
         return this.getByIndex('caseId', caseId);
     }
 
-    // FIX: Implement getFile to retrieve blobs from IndexedDB
     async getFile(id: string): Promise<Blob | null> {
         return db.getFile(id);
     }
     
-    // FIX: Implement getContent to retrieve text from a document blob
     async getContent(id: string): Promise<string> {
         const blob = await this.getFile(id);
         if (blob) {
@@ -34,7 +32,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
         return doc?.content || '';
     }
 
-    // FIX: Implement getFolders with mock data
     async getFolders(): Promise<any[]> {
         return [
             { id: 'root', label: 'All Documents' },
@@ -44,7 +41,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
         ];
     }
     
-    // FIX: Implement redact method
     async redact(docId: string): Promise<LegalDocument> {
         const doc = await this.getById(docId);
         if (!doc) throw new Error("Document not found");
@@ -57,14 +53,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
         return updatedDoc;
     }
 
-    // FIX: Implement summarizeBatch method
     async summarizeBatch(docIds: string[]): Promise<number> {
         console.log(`[AI] Summarizing ${docIds.length} documents.`);
         await yieldToMain();
         return docIds.length;
     }
 
-    // FIX: Implement getTemplates method
     async getTemplates(): Promise<any[]> {
         const docs = await this.getAll();
         return docs.filter(d => d.tags.includes('Template')).map(d => ({
@@ -75,7 +69,6 @@ export class DocumentRepository extends Repository<LegalDocument> {
         }));
     }
 
-    // FIX: Implement getRecent method
     async getRecent(): Promise<LegalDocument[]> {
         const docs = await this.getAll();
         return docs.sort((a,b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()).slice(0, 10);

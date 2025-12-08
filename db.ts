@@ -1,3 +1,4 @@
+
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
@@ -85,8 +86,7 @@ export const STORES = {
   // Added for complete SaaS configurability
   VENDOR_DIRECTORY: 'vendor_directory',
   REPORTERS: 'reporters',
-  // FIX: Add missing JURISDICTIONS store key
-  JURISDICTIONS: 'jurisdictions',
+  JURISDICTIONS: 'jurisdictions'
 };
 
 export class DatabaseManager {

@@ -5,7 +5,7 @@ import { cn } from '../../utils/cn';
 import { Badge } from './Badge';
 import { Loader2, Search } from 'lucide-react';
 
-// 1. StatusBadge: Unified status coloring logic
+// 1. StatusBadge: Unified status coloring logic with better A11y
 export const StatusBadge: React.FC<{ status: string, className?: string }> = ({ status, className }) => {
   const { theme } = useTheme();
   let variant: 'success' | 'warning' | 'error' | 'info' | 'neutral' = 'neutral';
@@ -70,7 +70,7 @@ export const SearchInputBar: React.FC<React.InputHTMLAttributes<HTMLInputElement
         <div className={cn("relative w-full", className)}>
             <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
             <input 
-                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600", theme.surface, theme.border.default, theme.text.primary)}
                 {...props}
             />
         </div>

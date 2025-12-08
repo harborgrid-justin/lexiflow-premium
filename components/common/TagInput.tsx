@@ -17,9 +17,12 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, sugge
   const [input, setInput] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && input.trim()) {
-      onAdd(input.trim());
-      setInput('');
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Stop form submission
+      if (input.trim()) {
+        onAdd(input.trim());
+        setInput('');
+      }
     }
   };
 
@@ -50,6 +53,7 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, sugge
           {suggestions.filter(s => !tags.includes(s)).slice(0, 5).map(s => (
             <button 
               key={s} 
+              type="button"
               onClick={() => onAdd(s)} 
               className={cn("text-xs px-2 py-1 border rounded transition-colors", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}
             >

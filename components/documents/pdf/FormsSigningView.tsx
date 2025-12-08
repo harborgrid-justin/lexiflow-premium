@@ -182,7 +182,7 @@ export const FormsSigningView: React.FC = () => {
                             pageNum={pageNum} setPageNum={setPageNum}
                             totalPages={1}
                         />
-                        <div className="flex-1 relative bg-slate-200 dark:bg-slate-800 overflow-auto">
+                        <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
                                 <InteractiveOverlay 
                                     activeTool={activeTool} 
@@ -198,7 +198,7 @@ export const FormsSigningView: React.FC = () => {
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
+                    <div className={cn("flex-1 flex flex-col items-center justify-center", theme.text.tertiary)}>
                         <FileSignature className="h-12 w-12 mb-4 opacity-50"/>
                         {isLoading ? "Loading documents..." : "Select a document to prepare for signing."}
                     </div>

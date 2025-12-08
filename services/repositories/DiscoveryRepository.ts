@@ -83,6 +83,8 @@ export class DiscoveryRepository {
 
     getVendors = async () => db.getAll<Vendor>(STORES.VENDORS);
     addVendor = async (vendor: Vendor) => db.put(STORES.VENDORS, vendor);
+    
+    getReporters = async () => db.getAll(STORES.REPORTERS);
 
     getSanctions = async (caseId?: string) => {
         const sancs = await db.getAll<SanctionMotion>(STORES.SANCTIONS);

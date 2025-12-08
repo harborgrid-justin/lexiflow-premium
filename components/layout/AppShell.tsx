@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { PATHS } from '../../constants/paths';
@@ -14,13 +14,24 @@ interface AppShellProps {
   selectedCaseId?: string | null;
 }
 
+// Isolated component to contain the 1-second interval re-renders
+const PassiveTimeTracker = memo(({ activeView, selectedCaseId }: { activeView: string, selectedCaseId: string | null }) => {
+    const { activeTime, isIdle } = useAutoTimeCapture(activeView, selectedCaseId);
+    
+    if (activeTime === 0) return null;
+
+    return (
+        <div className={cn(
+            "absolute top-0 right-0 h-0.5 bg-green-500 transition-all duration-1000 z-[60] pointer-events-none", 
+            isIdle ? "opacity-0" : "opacity-100"
+        )} style={{ width: `${Math.min((activeTime % 60) / 60 * 100, 100)}%` }} />
+    );
+});
+
 export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // Auto Time Capture Integration (Enterprise Feature)
-  const { activeTime, isIdle } = useAutoTimeCapture(activeView || 'unknown', selectedCaseId);
-
   // Helper to inject toggle prop into Sidebar if it's a React Element
   const sidebarWithProps = React.isValidElement(sidebar) 
     ? React.cloneElement(sidebar as React.ReactElement<any>, { 
@@ -45,13 +56,7 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
       {sidebarWithProps}
       
       <div className="flex-1 flex flex-col h-full w-full min-w-0 relative">
-        {/* Passive Time Indicator */}
-        {activeTime > 0 && (
-            <div className={cn(
-                "absolute top-0 right-0 h-0.5 bg-green-500 transition-all duration-1000 z-[60] pointer-events-none", 
-                isIdle ? "opacity-0" : "opacity-100"
-            )} style={{ width: `${Math.min((activeTime % 60) / 60 * 100, 100)}%` }} />
-        )}
+        <PassiveTimeTracker activeView={activeView || 'unknown'} selectedCaseId={selectedCaseId || null} />
 
         <header className={cn("h-16 flex items-center justify-between px-4 md:px-6 shadow-sm z-40 shrink-0 border-b", theme.surface, theme.border.default)}>
           {headerWithProps}

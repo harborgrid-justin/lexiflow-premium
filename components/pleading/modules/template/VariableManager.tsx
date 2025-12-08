@@ -26,10 +26,10 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
       
       <div className="space-y-3">
         {variables.map((variable) => (
-          <div key={variable.id} className={cn("p-3 rounded border bg-white dark:bg-slate-900", theme.border.default)}>
+          <div key={variable.id} className={cn("p-3 rounded border", theme.surface, theme.border.default)}>
             <div className="flex justify-between mb-1">
               <span className={cn("text-xs font-mono font-medium", theme.primary.text)}>{`{{${variable.key}}}`}</span>
-              <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500")}>{variable.source}</span>
+              <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded text-slate-500", theme.surfaceHighlight)}>{variable.source}</span>
             </div>
             <p className={cn("text-xs mb-2", theme.text.secondary)}>{variable.label}</p>
             <div className="relative">

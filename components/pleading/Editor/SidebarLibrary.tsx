@@ -36,17 +36,19 @@ export const SidebarLibrary: React.FC<SidebarLibraryProps> = ({ onAddSection }) 
                     onDragStart={(e) => handleDragStart(e, item.type)}
                     onClick={() => onAddSection(item.type)}
                     className={cn(
-                        "flex items-center gap-3 p-3 rounded-lg border bg-white cursor-grab hover:border-blue-400 hover:shadow-sm transition-all active:cursor-grabbing",
-                        theme.border.default
+                        "flex items-center gap-3 p-3 rounded-lg border cursor-grab hover:shadow-sm transition-all active:cursor-grabbing",
+                        theme.surface,
+                        theme.border.default,
+                        `hover:${theme.primary.border}`
                     )}
                 >
                     <GripVertical className="h-4 w-4 text-slate-300"/>
                     <item.icon className="h-4 w-4 text-slate-600"/>
-                    <span className="text-sm font-medium text-slate-700">{item.label}</span>
+                    <span className={cn("text-sm font-medium", theme.text.primary)}>{item.label}</span>
                 </div>
             ))}
         </div>
-        <div className="mt-auto p-4 bg-blue-50 border-t border-blue-100 text-xs text-blue-800">
+        <div className="mt-auto p-4 bg-blue-50 dark:bg-blue-900/20 border-t border-blue-100 dark:border-blue-800 text-xs text-blue-800 dark:text-blue-300">
             <p><strong>Tip:</strong> Drag items onto the canvas or click to append.</p>
         </div>
     </div>

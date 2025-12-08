@@ -23,17 +23,17 @@ export const TemplateArchitect: React.FC<TemplateArchitectProps> = ({ variables 
         <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
           <LayoutTemplate className="h-4 w-4 mr-2" /> Template Architect
         </h3>
-        <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg">
+        <div className={cn("flex p-0.5 rounded-lg", theme.surfaceHighlight)}>
            <button 
              onClick={() => setActiveTab('variables')}
-             className={cn("p-1.5 rounded-md transition-colors", activeTab === 'variables' ? "bg-white dark:bg-slate-600 shadow text-blue-600" : "text-slate-500")}
+             className={cn("p-1.5 rounded-md transition-colors", activeTab === 'variables' ? cn(theme.surface, "shadow text-blue-600") : "text-slate-500")}
              title="Variables"
             >
              <Sliders className="h-3.5 w-3.5" />
            </button>
            <button 
              onClick={() => setActiveTab('rules')}
-             className={cn("p-1.5 rounded-md transition-colors", activeTab === 'rules' ? "bg-white dark:bg-slate-600 shadow text-blue-600" : "text-slate-500")}
+             className={cn("p-1.5 rounded-md transition-colors", activeTab === 'rules' ? cn(theme.surface, "shadow text-blue-600") : "text-slate-500")}
              title="Jurisdiction Rules"
             >
              <Settings className="h-3.5 w-3.5" />

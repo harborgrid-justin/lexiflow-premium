@@ -115,14 +115,14 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
   return (
     <div className="flex flex-col h-full overflow-hidden">
         {/* Toolbar */}
-        <div className={cn("h-14 border-b flex justify-between items-center px-4 shrink-0 bg-white", theme.border.default)}>
+        <div className={cn("h-14 border-b flex justify-between items-center px-4 shrink-0", theme.surface, theme.border.default)}>
             <div className="flex items-center gap-4">
                 <Button variant="ghost" icon={ArrowLeft} onClick={onClose} size="sm">Back</Button>
-                <div className="h-6 w-px bg-slate-200"></div>
+                <div className={cn("h-6 w-px", theme.border.default)}></div>
                 <div>
                     <h2 className={cn("text-sm font-bold", theme.text.primary)}>{document.title}</h2>
-                    <div className="flex items-center text-xs text-slate-500 gap-2">
-                        <span className={cn("px-1.5 rounded bg-slate-100")}>{document.status}</span>
+                    <div className={cn("flex items-center text-xs gap-2", theme.text.secondary)}>
+                        <span className={cn("px-1.5 rounded", theme.surfaceHighlight)}>{document.status}</span>
                         <span>Autosaved: {document.lastAutoSaved ? new Date(document.lastAutoSaved).toLocaleTimeString() : 'Just now'}</span>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
 
         <div className="flex-1 flex overflow-hidden">
             {/* Center Canvas */}
-            <div className={cn("flex-1 bg-slate-100 overflow-y-auto p-8 flex justify-center relative", theme.background)}>
+            <div className={cn("flex-1 overflow-y-auto p-8 flex justify-center relative", theme.surfaceHighlight)}>
                  <DocumentCanvas 
                     sections={document.sections}
                     selectedSectionId={selectedSectionId}
@@ -151,7 +151,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
             </div>
 
             {/* Right Multi-Module Sidebar */}
-            <div className={cn("w-80 border-l flex flex-col shrink-0 bg-white shadow-xl z-10", theme.border.default)}>
+            <div className={cn("w-80 border-l flex flex-col shrink-0 shadow-xl z-10", theme.surface, theme.border.default)}>
                  {/* Module Switcher Tabs */}
                  <div className={cn("flex border-b overflow-x-auto no-scrollbar", theme.border.default)}>
                      {[
@@ -168,8 +168,8 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                             className={cn(
                                 "flex-1 py-3 px-2 flex flex-col items-center justify-center min-w-[50px] border-b-2 transition-colors", 
                                 activeTool === tool.id 
-                                    ? "border-blue-600 text-blue-600 bg-blue-50/50" 
-                                    : "border-transparent text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                                    ? cn("border-blue-600 text-blue-600", theme.surfaceHighlight) 
+                                    : cn("border-transparent text-slate-400 hover:text-slate-600", `hover:${theme.surfaceHighlight}`)
                             )}
                             title={tool.title}
                          >

@@ -22,15 +22,12 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
   // Cross-Module: Create Workflow Task
   const handleRequestReview = async () => {
       const task: WorkflowTask = {
-          // FIX: Cast to branded type TaskId
           id: `t-${Date.now()}` as TaskId,
           title: 'Review Pleading Draft',
-          // FIX: Cast to branded type CaseId
           caseId: caseId as CaseId,
           status: 'Pending',
           priority: 'High',
           assignee: 'Senior Partner',
-          // FIX: Cast to branded type UserId
           assigneeId: 'usr-partner-alex' as UserId,
           dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
           description: `Please review document ${docId}.`,
@@ -54,7 +51,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
                  <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
                     <MessageSquare className="h-4 w-4 mr-2" /> Review Studio
                 </h3>
-                <span className={cn("text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded")}>{comments.filter(c => !c.resolved).length} Open</span>
+                <span className={cn("text-xs font-mono px-2 py-0.5 rounded", theme.surfaceHighlight)}>{comments.filter(c => !c.resolved).length} Open</span>
             </div>
             <button 
                 onClick={handleRequestReview}
@@ -65,10 +62,10 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-            {comments.length === 0 && <div className="text-center text-xs text-slate-400 py-8">No comments yet.</div>}
+            {comments.length === 0 && <div className={cn("text-center text-xs py-8", theme.text.tertiary)}>No comments yet.</div>}
             
             {comments.map(c => (
-                <div key={c.id} className={cn("p-3 rounded-lg border text-sm group", c.resolved ? "opacity-60 bg-slate-50 dark:bg-slate-900" : "bg-white dark:bg-slate-800 shadow-sm", theme.border.default)}>
+                <div key={c.id} className={cn("p-3 rounded-lg border text-sm group", c.resolved ? "opacity-60 bg-slate-50 dark:bg-slate-900" : cn(theme.surface, "shadow-sm"), theme.border.default)}>
                     <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
                             <div className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">

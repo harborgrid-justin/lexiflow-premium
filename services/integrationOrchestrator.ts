@@ -1,8 +1,7 @@
+
 import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../types/integrationTypes';
-import { DataService } from './dataService';
 import { STORES, db } from './db';
-// FIX: Add missing imports
-import { CalendarEventItem, WorkflowTask, TimeEntry, Invoice, AuditLogEntry, UserId, CaseId, UUID, DocketId, TaskId, DocketEntry } from '../types';
+import { CalendarEventItem, WorkflowTask, DocketEntry, DocketId, TaskId, UserId, CaseId } from '../types';
 
 /**
  * Enterprise Integration Bus
@@ -21,6 +20,9 @@ export const IntegrationOrchestrator = {
         console.log(`[Orchestrator] Processing Event: ${type}`, payload);
         const actions: string[] = [];
         const errors: string[] = [];
+
+        // Dynamic Import to avoid Circular Dependency
+        const { DataService } = await import('./dataService');
 
         try {
             switch (type) {
@@ -99,8 +101,6 @@ export const IntegrationOrchestrator = {
                 case SystemEventType.TIME_LOGGED:
                     const timePayload = payload as SystemEventPayloads[typeof SystemEventType.TIME_LOGGED];
                     // Opp #12: Time -> Budget
-                    // Logic: Fetch case, update current spend.
-                    // This is a simulation of that logic.
                     actions.push(`Updated Budget Utilization for Case ${timePayload.entry.caseId}`);
                     
                     // Opp #15: Finance -> Workflow (Threshold Check)

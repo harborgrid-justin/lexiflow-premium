@@ -4,7 +4,6 @@ import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
-import { useWindow } from '../../context/WindowContext';
 import { useScrollLock } from '../../hooks/useScrollLock';
 import { tokens } from '../../theme/tokens';
 
@@ -16,9 +15,12 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   className?: string;
   footer?: React.ReactNode;
+  closeOnBackdrop?: boolean; // New UX prop
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 'md', className = '', footer }) => {
+export const Modal: React.FC<ModalProps> = ({ 
+    isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true 
+}) => {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
   const modalId = React.useId();
@@ -28,6 +30,12 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+      if (closeOnBackdrop) {
+          onClose();
+      }
+  };
 
   if (!isOpen || !mounted) return null;
 
@@ -50,7 +58,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
       <div
         className={cn("absolute inset-0 backdrop-blur-sm transition-opacity animate-in fade-in duration-200", theme.backdrop)}
         aria-hidden="true"
-        onClick={onClose}
+        onClick={handleBackdropClick}
       />
 
       {/* Panel */}

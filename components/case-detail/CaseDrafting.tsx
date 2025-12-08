@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -39,7 +38,9 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
 
   useEffect(() => {
     if (draftResult) {
-      setContent(prev => prev + `<p>${draftResult.replace(/\n/g, '<br/>')}</p>`);
+      // Ensure paragraphs are properly separated if AI returns blocks
+      const formatted = draftResult.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br/>');
+      setContent(prev => prev + `<p>${formatted}</p>`);
     }
   }, [draftResult]);
 
@@ -47,7 +48,12 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     if(!content) return;
     setLoading(true);
     setActiveMode('review');
-    const plainText = content.replace(/<[^>]*>?/gm, '');
+    // Safe text extraction replacing block tags with newlines to preserve spacing for AI context
+    const plainText = content
+        .replace(/<\/p>/gi, '\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]*>/g, ''); // Strip remaining tags
+        
     const res = await GeminiService.reviewContract(plainText);
     setReviewResult(res);
     setLoading(false);

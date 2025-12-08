@@ -16,11 +16,21 @@ interface CaseRowProps {
 export const CaseRow: React.FC<CaseRowProps> = ({ caseData, onSelect, onPrefetch }) => {
     const { theme } = useTheme();
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(caseData);
+        }
+    };
+
     return (
         <div 
-            className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6 group", theme.border.light)}
+            role="button"
+            tabIndex={0}
+            className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6 group outline-none focus:bg-slate-50 focus:ring-1 focus:ring-inset focus:ring-blue-500", theme.border.light)}
             onMouseEnter={() => onPrefetch(caseData.id)}
             onClick={() => onSelect(caseData)}
+            onKeyDown={handleKeyDown}
         >
             <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
                 <span 
@@ -40,11 +50,12 @@ export const CaseRow: React.FC<CaseRowProps> = ({ caseData, onSelect, onPrefetch
             <div className="w-[10%]">
                 <StatusBadge status={caseData.status} />
             </div>
-            <div className="w-[5%] flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="w-[5%] flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity">
                 <button 
                     onClick={(e) => { e.stopPropagation(); onSelect(caseData); }} 
                     className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)} 
                     title="View Details"
+                    tabIndex={-1} // Prevent double-tabbing
                 >
                     <Eye className="h-4 w-4"/>
                 </button>

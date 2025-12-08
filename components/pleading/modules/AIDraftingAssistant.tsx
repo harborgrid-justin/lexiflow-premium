@@ -47,8 +47,8 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+    <div className={cn("flex flex-col h-full border-l", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-b", theme.surface, theme.border.default)}>
             <h3 className={cn("text-sm font-bold flex items-center gap-2", theme.text.primary)}>
                 <Sparkles className="h-4 w-4 text-purple-600" /> AI Co-Counsel
             </h3>
@@ -63,7 +63,7 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="e.g., Draft an introduction arguing that the court lacks personal jurisdiction..."
                     rows={4}
-                    className="bg-white dark:bg-slate-800"
+                    className={theme.surface}
                 />
             </div>
 
@@ -78,7 +78,7 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
                                 "flex-1 py-1.5 text-xs font-medium rounded border transition-colors",
                                 tone === t 
                                     ? "bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900/30 dark:border-purple-700 dark:text-purple-300" 
-                                    : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400"
+                                    : cn(theme.surface, theme.border.default, theme.text.secondary)
                             )}
                         >
                             {t}
@@ -102,7 +102,7 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
                     <div className="flex items-center justify-between mb-2">
                         <span className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Result</span>
                         <div className="flex gap-2">
-                            <button onClick={handleDraft} className="p-1 hover:bg-slate-200 rounded text-slate-500" title="Regenerate">
+                            <button onClick={handleDraft} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500" title="Regenerate">
                                 <RefreshCw className="h-3 w-3"/>
                             </button>
                         </div>

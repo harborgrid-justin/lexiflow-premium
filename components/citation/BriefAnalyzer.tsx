@@ -19,6 +19,13 @@ import { RiskMeter } from '../../components/common/RiskMeter';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 
+// Simple sanitizer to strip script tags
+const sanitizeHtml = (html: string) => {
+    return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
+               .replace(/<iframe\b[^>]*>([\s\S]*?)<\/iframe>/gim, "")
+               .replace(/on\w+="[^"]*"/g, "");
+};
+
 export const BriefAnalyzer: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
@@ -147,7 +154,7 @@ export const BriefAnalyzer: React.FC = () => {
                          <>
                             <Button variant="secondary" size="sm" icon={Save} onClick={() => saveSession({
                                 id: `ans-${Date.now()}`,
-                                textSnapshot: text.substring(0, 1000),
+                                textSnapshot: sanitizeHtml(text.substring(0, 1000)),
                                 extractedCitations,
                                 riskScore: 100 - critique.score,
                                 strengths: critique.strengths,

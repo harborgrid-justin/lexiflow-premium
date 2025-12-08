@@ -10,6 +10,7 @@ import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 import { Loader2 } from 'lucide-react';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 interface CaseMessagesProps {
   caseData: Case;
@@ -17,9 +18,11 @@ interface CaseMessagesProps {
 
 export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   const { theme } = useTheme();
-  const [inputText, setInputText] = useState('');
   
   const conversationId = `conv-case-${caseData.id}`;
+  
+  // Persist draft in session storage
+  const [inputText, setInputText] = useSessionStorage<string>(`draft-msg-${conversationId}`, '');
   
   // Enterprise Data Fetching
   const { data: conversation, isLoading: isLoadingConversation } = useQuery<Conversation | undefined>(

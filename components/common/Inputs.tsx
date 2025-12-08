@@ -10,7 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input: React.FC<InputProps> = ({ label, error, className = '', ...props }) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   
   return (
     <div className="w-full">
@@ -22,8 +22,11 @@ export const Input: React.FC<InputProps> = ({ label, error, className = '', ...p
           error ? theme.border.error : cn(theme.border.default, theme.border.focused),
           theme.text.primary,
           "disabled:opacity-50 disabled:cursor-not-allowed",
+          // Fix for native date picker in dark mode
+          mode === 'dark' ? "color-scheme-dark" : "",
           className
         )}
+        style={mode === 'dark' ? { colorScheme: 'dark' } : {}}
         {...props}
       />
       {error && <p className="mt-1 text-xs text-rose-600 font-medium">{error}</p>}

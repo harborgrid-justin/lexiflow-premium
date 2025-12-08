@@ -95,7 +95,10 @@ const createPhysicsWorker = () => {
     };
   `;
   const blob = new Blob([code], { type: 'application/javascript' });
-  return new Worker(URL.createObjectURL(blob));
+  const url = URL.createObjectURL(blob);
+  const worker = new Worker(url);
+  URL.revokeObjectURL(url); // Immediate cleanup
+  return worker;
 };
 
 export const useNexusGraph = (containerRef: React.RefObject<HTMLDivElement>, initialData: { nodes: any[], links: any[] }) => {

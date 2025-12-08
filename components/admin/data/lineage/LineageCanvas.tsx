@@ -22,6 +22,12 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const requestRef = useRef<number>(0);
+    const modeRef = useRef(mode);
+
+    // Keep mode ref sync to avoid stale closure in tick
+    useEffect(() => {
+        modeRef.current = mode;
+    }, [mode]);
 
     const tick = () => {
       if (!canvasRef.current || !containerRef.current) return;
@@ -50,7 +56,8 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
       ctx.clearRect(0, 0, width, height);
       
       ctx.lineWidth = 2;
-      const isDark = mode === 'dark';
+      const currentMode = modeRef.current;
+      const isDark = currentMode === 'dark';
       ctx.strokeStyle = isDark ? '#475569' : '#cbd5e1'; 
       
       state.links.forEach(link => {

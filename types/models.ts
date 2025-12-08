@@ -6,7 +6,7 @@ import {
   DocketEntryType, DiscoveryType, DiscoveryStatus,
   EvidenceType, AdmissibilityStatus, ConferralResult,
   ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, ServiceMethod,
-  EntityType, EntityRole, CurrencyCode, LedesActivityCode, OcrStatus, TaskDependencyType, LedesTaskCode
+  EntityType, EntityRole, CurrencyCode, LedesActivityCode, OcrStatus, TaskDependencyType
 } from './enums';
 import { LucideIcon } from 'lucide-react';
 import type { FC, LazyExoticComponent } from 'react';
@@ -306,11 +306,11 @@ export interface CaseTeamMember { userId: UserId; role: 'Lead' | 'Support' | 'Pa
 export interface FeeAgreement { type: BillingModel; rate?: Money; contingencyPercent?: number; retainerRequired?: Money; splitRules?: SplitBillingRule[]; }
 export interface SplitBillingRule { clientId: string; percentage: number; }
 export interface RateTable extends BaseEntity { timekeeperId: string; rate: Money; effectiveDate: string; expiryDate?: string; level: string; }
-export interface TimeEntry extends BaseEntity { caseId: CaseId; userId: UserId; date: string; duration: number; description: string; rate: number; total: number; status: string; invoiceId?: string; ledesActivity?: LedesActivityCode; ledesTask?: LedesTaskCode; }
+export interface TimeEntry extends BaseEntity { caseId: CaseId; userId: UserId; date: string; duration: number; description: string; rate: number; total: number; status: string; invoiceId?: string; ledesActivity?: LedesActivityCode; }
 export interface TimeEntryPayload { caseId: string; date: string; duration: number; description: string; rate: number; total: number; status: 'Unbilled'; }
 export interface Invoice extends BaseEntity { client: string; matter: string; caseId: CaseId; date: string; dueDate: string; amount: number; status: string; items: string[]; currency?: CurrencyCode; taxAmount?: number; taxJurisdiction?: string; }
 export interface TrustTransaction extends BaseEntity { accountId: string; type: 'Deposit' | 'Withdrawal'; amount: Money; date: string; checkNumber?: string; clearedDate?: string; description: string; }
-export interface FirmExpense extends BaseEntity { date: string; category: string; description: string; amount: number; status: 'Paid' | 'Pending'; vendor: string; ledesCode?: string; }
+export interface FirmExpense extends BaseEntity { date: string; category: string; description: string; amount: number; status: 'Paid' | 'Pending'; vendor: string; }
 export interface TrustSubLedger { id: string; name: string; balance: Money; lastReconciled: string; accountId?: string; }
 export interface Client extends BaseEntity { id: EntityId; name: string; industry: string; status: string; totalBilled: number; matters: CaseId[]; trustSubLedgers?: TrustSubLedger[]; taxId?: string; billingGuidelineId?: string; }
 

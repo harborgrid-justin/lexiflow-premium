@@ -1,4 +1,3 @@
-
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
@@ -88,7 +87,7 @@ export const STORES = {
   REALIZATION_STATS: 'realization_stats',
   OPERATING_SUMMARY: 'operating_summary',
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
-  DISCOVERY_CUSTODIAN_STATS: 'discovery_custodian_stats',
+  DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
 };
 
 export class DatabaseManager {

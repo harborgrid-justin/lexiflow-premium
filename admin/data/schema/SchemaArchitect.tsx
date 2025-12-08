@@ -59,7 +59,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   
-  const handleOpenColumnModal = (tableName: string, column?: any) => {
+  const handleOpenColumnModal = (tableName: string, column?: TableColumn) => {
       setEditingColumn({ 
           tableName, 
           columnName: column?.name, 
@@ -76,8 +76,8 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         if (t.name === tableName) {
             const newColumns = [...t.columns];
             const existingIndex = columnName ? newColumns.findIndex(c => c.name === columnName) : -1;
-            if (existingIndex > -1) newColumns[existingIndex] = data; // Update
-            else newColumns.push(data); // Add
+            if (existingIndex > -1) newColumns[existingIndex] = data as TableColumn; // Update
+            else newColumns.push(data as TableColumn); // Add
             return { ...t, columns: newColumns };
         }
         return t;
@@ -152,7 +152,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         </div>
 
         <div className={cn("flex-1 overflow-hidden relative", theme.background)}>
-            {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal as any} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
+            {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
             {activeTab === 'code' && <SchemaCodeEditor ddl={generatedDDL} />}
             {activeTab === 'history' && <MigrationHistory />}
             {activeTab === 'snapshots' && <SchemaSnapshots />}

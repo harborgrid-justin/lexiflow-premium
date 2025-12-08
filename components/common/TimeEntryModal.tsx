@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';

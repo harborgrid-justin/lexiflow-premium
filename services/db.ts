@@ -1,6 +1,6 @@
-
 import { StorageUtils } from '../utils/storage';
 import { Seeder } from './dbSeeder';
+import { BTree } from '../utils/datastructures/bTree';
 
 export const STORES = {
   CASES: 'cases',
@@ -80,6 +80,9 @@ export class DatabaseManager {
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
 
+  // Data Structure Integration: B-Tree for sorted indexes
+  private titleIndex: BTree<string, string> = new BTree(5);
+
   // Transaction Coalescing Buffer
   private writeBuffer: { store: string, item: any, type: 'put' | 'delete', resolve: Function, reject: Function }[] = [];
   private flushTimer: number | null = null;
@@ -131,6 +134,25 @@ export class DatabaseManager {
 
       request.onsuccess = (event) => {
         this.db = (event.target as IDBOpenDBRequest).result;
+
+        // FIX: Add handlers for database lifecycle events to prevent "connection is closing" errors.
+        this.db.onversionchange = () => {
+            console.warn("A new version of the database is available. Closing old connection to allow upgrade.");
+            if (this.db) {
+                this.db.close();
+            }
+            alert("A new version of the application is available. The page will now reload to apply updates.");
+            window.location.reload();
+        };
+
+        this.db.onclose = () => {
+            console.error("Database connection was unexpectedly closed. Future operations will attempt to re-initialize.");
+            // Resetting the initPromise allows the next DB operation to attempt a reconnect.
+            this.initPromise = null;
+            this.db = null;
+        };
+
+        this.buildIndices();
         resolve();
       };
 
@@ -142,6 +164,21 @@ export class DatabaseManager {
     });
 
     return this.initPromise;
+  }
+
+  private async buildIndices() {
+      // Build B-Tree on startup for demo
+      const cases = await this.getAll<any>(STORES.CASES);
+      cases.forEach(c => this.titleIndex.insert(c.title.toLowerCase(), c.id));
+      console.log("B-Tree index for case titles built.");
+  }
+
+  async findCaseByTitle(title: string): Promise<any | null> {
+      const id = this.titleIndex.search(title.toLowerCase());
+      if (id) {
+          return this.get(STORES.CASES, id);
+      }
+      return null;
   }
 
   async count(storeName: string): Promise<number> {
@@ -164,6 +201,7 @@ export class DatabaseManager {
       const count = await this.count(STORES.CASES);
       if (count > 0) return;
       await Seeder.seed(this);
+      await this.buildIndices(); // Build index after seeding
   }
 
   async getAll<T>(storeName: string): Promise<T[]> {

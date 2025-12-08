@@ -3,7 +3,7 @@ import React from 'react';
 import { Server, HardDrive } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { VirtualGrid } from '../common/VirtualGrid';
+import { VirtualGrid } from '../../common/VirtualGrid';
 
 interface DataFile {
     name: string;

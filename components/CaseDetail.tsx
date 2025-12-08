@@ -124,7 +124,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       />
 
       {/* Top Header & Navigation */}
-      {/* FIX: Destructure caseData to pass individual props to CaseDetailHeader */}
       <CaseDetailHeader 
         id={caseData.id}
         title={caseData.title}
@@ -193,10 +192,8 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAddTask={hookData.addTaskToProject}
                         onUpdateTask={hookData.updateProjectTaskStatus}
                         onGenerateWorkflow={hookData.handleGenerateWorkflow}
-                        // FIX: Changed props.onAnalyzeDoc to hookData.handleAnalyze, as 'props' is not defined in this functional component.
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
-                        // FIX: Changed props.onDraft to hookData.handleDraft.
                         onDraft={hookData.handleDraft}
                         onNodeClick={setNexusInspectorItem}
                     />

@@ -1,5 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Server, ChevronDown, ChevronRight, Maximize2, Menu, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataPlatformSidebar } from './data/DataPlatformSidebar';
@@ -18,10 +20,10 @@ import { LineageGraph } from './data/LineageGraph';
 import { CostFinOps } from './data/CostFinOps';
 import { DataLakeExplorer } from './data/DataLakeExplorer';
 import { useWindow } from '../../context/WindowContext';
-import { Maximize2, Menu, X } from 'lucide-react';
 import { TabStrip } from '../common/RefactoredCommon';
+import { ShardingVisualizer } from './data/ShardingVisualizer';
 
-export type PlatformView = string; // Relaxed type for sub-routes
+export type PlatformView = string;
 
 interface AdminDatabaseControlProps {
   initialTab?: string;
@@ -42,23 +44,24 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
 
   const renderContent = () => {
     // Sub-module routing logic
-    if (activeView.startsWith('quality')) return <DataQualityStudio initialTab={activeView.replace('quality-', '')} />;
-    if (activeView.startsWith('lineage')) return <LineageGraph initialTab={activeView.replace('lineage-', '')} />;
-    if (activeView.startsWith('governance')) return <GovernanceConsole initialTab={activeView.replace('governance-', '')} />;
-    if (activeView.startsWith('catalog')) return <DataCatalog initialTab={activeView.replace('catalog-', '')} />;
-    if (activeView.startsWith('schema')) return <SchemaArchitect initialTab={activeView.replace('schema-', '')} />;
-    if (activeView.startsWith('pipeline')) return <PipelineMonitor initialTab={activeView.replace('pipeline-', '')} />;
-    if (activeView.startsWith('query')) return <QueryConsole initialTab={activeView.replace('query-', '')} />;
-    if (activeView.startsWith('security')) return <SecurityMatrix initialTab={activeView.replace('security-', '')} />;
+    if (activeView.startsWith('quality')) return <Suspense fallback={null}><DataQualityStudio initialTab={activeView.replace('quality-', '')} /></Suspense>;
+    if (activeView.startsWith('lineage')) return <Suspense fallback={null}><LineageGraph initialTab={activeView.replace('lineage-', '')} /></Suspense>;
+    if (activeView.startsWith('governance')) return <Suspense fallback={null}><GovernanceConsole initialTab={activeView.replace('governance-', '')} /></Suspense>;
+    if (activeView.startsWith('catalog')) return <Suspense fallback={null}><DataCatalog initialTab={activeView.replace('catalog-', '')} /></Suspense>;
+    if (activeView.startsWith('schema')) return <Suspense fallback={null}><SchemaArchitect initialTab={activeView.replace('schema-', '')} /></Suspense>;
+    if (activeView.startsWith('pipeline')) return <Suspense fallback={null}><PipelineMonitor initialTab={activeView.replace('pipeline-', '')} /></Suspense>;
+    if (activeView.startsWith('query')) return <Suspense fallback={null}><QueryConsole initialTab={activeView.replace('query-', '')} /></Suspense>;
+    if (activeView.startsWith('security')) return <Suspense fallback={null}><SecurityMatrix initialTab={activeView.replace('security-', '')} /></Suspense>;
 
     switch (activeView) {
-      case 'overview': return <PlatformOverview />;
-      case 'backup': return <BackupVault />;
-      case 'api': return <ApiGateway />;
-      case 'replication': return <ReplicationManager />;
-      case 'cost': return <CostFinOps />;
-      case 'lake': return <DataLakeExplorer />;
-      default: return <PlatformOverview />;
+      case 'overview': return <Suspense fallback={null}><PlatformOverview /></Suspense>;
+      case 'backup': return <Suspense fallback={null}><BackupVault /></Suspense>;
+      case 'api': return <Suspense fallback={null}><ApiGateway /></Suspense>;
+      case 'replication': return <Suspense fallback={null}><ReplicationManager /></Suspense>;
+      case 'cost': return <Suspense fallback={null}><CostFinOps /></Suspense>;
+      case 'lake': return <Suspense fallback={null}><DataLakeExplorer /></Suspense>;
+      case 'sharding': return <Suspense fallback={null}><ShardingVisualizer /></Suspense>;
+      default: return <Suspense fallback={null}><PlatformOverview /></Suspense>;
     }
   };
 

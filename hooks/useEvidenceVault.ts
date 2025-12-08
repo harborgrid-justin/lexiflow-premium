@@ -86,7 +86,6 @@ export const useEvidenceVault = (caseId?: string) => {
 
   const handleIntakeComplete = (newItem: EvidenceItem) => {
     // If we are in a scoped case view, ensure the new item belongs to it
-// FIX: Cast string to branded type CaseId
     if (caseId) newItem.caseId = caseId as CaseId;
     
     addEvidence(newItem);

@@ -1,4 +1,3 @@
-
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
@@ -71,7 +70,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         for (const entry of entries) {
             const updatedEntry = { ...entry, status: 'Billed' as const, invoiceId: invoice.id };
-            await this.update(entry.id, updatedEntry);
+            await db.put(STORES.BILLING, updatedEntry);
         }
 
         return invoice;

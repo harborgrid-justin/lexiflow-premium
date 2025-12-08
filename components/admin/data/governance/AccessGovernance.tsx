@@ -3,7 +3,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { UserAvatar } from '../../../common/UserAvatar';
 import { Badge } from '../../../common/Badge';
 import { Button } from '../../../common/Button';
-// FIX: Add missing 'Info' import from lucide-react
+// FIX: Add missing 'Info' and 'Lock' imports from lucide-react
 import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';

@@ -1,21 +1,31 @@
-
-import { TimeEntry, Client, Invoice, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
-import { db, STORES } from '../db';
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
+import { Repository } from '../core/Repository';
+import { STORES, db } from '../db';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const BillingService = {
-    getTimeEntries: async (caseId?: string) => {
-      const allEntries = await db.getAll<TimeEntry>(STORES.BILLING);
+export class BillingRepository extends Repository<TimeEntry> {
+    constructor() { super(STORES.BILLING); }
+
+    // --- Rate Management ---
+    async getRates(timekeeperId: string) {
+        return db.getByIndex<RateTable>(STORES.RATES, 'timekeeperId', timekeeperId);
+    }
+    
+    // --- Time & WIP ---
+    async getTimeEntries(caseId?: string) {
+      const allEntries = await this.getAll();
       return caseId ? allEntries.filter(e => e.caseId === caseId) : allEntries;
-    },
-    addTimeEntry: async (entry: TimeEntry) => {
-        return db.put(STORES.BILLING, entry);
-    },
-    getWIPStats: async (): Promise<WIPStat[]> => {
+    }
+
+    async addTimeEntry(entry: TimeEntry) {
+        return this.add(entry);
+    }
+
+    async getWIPStats(): Promise<WIPStat[]> {
          const [clients, entries] = await Promise.all([
              db.getAll<Client>(STORES.CLIENTS),
-             db.getAll<TimeEntry>(STORES.BILLING)
+             this.getAll()
          ]);
          
          return clients.slice(0, 3).map(c => {
@@ -25,40 +35,20 @@ export const BillingService = {
                 billed: c.totalBilled
              };
          });
-    },
-    getRealizationStats: async (): Promise<RealizationStat[]> => {
-        await delay(50);
-        return [ { name: 'Billed', value: 85, color: '#10b981' }, { name: 'Write-off', value: 15, color: '#ef4444' } ];
-    },
-    getTopAccounts: async (): Promise<Client[]> => {
-        const clients = await db.getAll<Client>(STORES.CLIENTS);
-        return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
-    },
-    getTrustAccounts: async () => db.getAll<any>(STORES.TRUST),
-    getOverviewStats: async () => {
-        await delay(50);
-        const allEntries = await db.getAll<TimeEntry>(STORES.BILLING);
-        const totalBilled = allEntries.filter(e => e.status === 'Billed').reduce((sum, e) => sum + e.total, 0);
-        return { 
-            realization: 92.4, 
-            totalBilled, 
-            month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) 
-        };
-    },
-    
-    getInvoices: async () => {
-        const invoices = await db.getAll<Invoice>(STORES.INVOICES);
-        if (invoices.length === 0) {
-             return [
-                { id: 'INV-2024-001' as UUID, client: 'TechCorp Industries', matter: 'Martinez v. TechCorp', date: '2024-03-01', dueDate: '2024-03-31', amount: 15450.00, status: 'Sent', items: [] },
-                { id: 'INV-2024-002' as UUID, client: 'OmniGlobal', matter: 'Merger Acquisition', date: '2024-02-15', dueDate: '2024-03-15', amount: 42000.50, status: 'Paid', items: [] },
-                { id: 'INV-2024-003' as UUID, client: 'StartUp Inc', matter: 'Series A Funding', date: '2024-01-10', dueDate: '2024-02-10', amount: 8500.00, status: 'Overdue', items: [] },
-            ];
-        }
-        return invoices;
-    },
+    }
 
-    createInvoice: async (clientName: string, caseId: string, entries: TimeEntry[]): Promise<Invoice> => {
+    async getRealizationStats(): Promise<any> {
+        const stats = await db.get<any>(STORES.REALIZATION_STATS, 'realization-main');
+        return stats?.data || [];
+    }
+
+    // --- Invoices ---
+    async getInvoices(): Promise<Invoice[]> {
+        const invoices = await db.getAll<Invoice>(STORES.INVOICES);
+        return invoices;
+    }
+
+    async createInvoice(clientName: string, caseId: string, entries: TimeEntry[]): Promise<Invoice> {
         const totalAmount = entries.reduce((sum, e) => sum + e.total, 0);
         const now = new Date();
         const dueDate = new Date();
@@ -84,22 +74,36 @@ export const BillingService = {
         }
 
         return invoice;
-    },
-
-    updateInvoice: async (id: string, updates: Partial<Invoice>): Promise<Invoice> => {
+    }
+    
+    async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
         const invoice = await db.get<Invoice>(STORES.INVOICES, id);
         if (!invoice) throw new Error("Invoice not found");
         const updated = { ...invoice, ...updates };
         await db.put(STORES.INVOICES, updated);
         return updated;
-    },
+    }
+    
+    async sendInvoice(id: string) { await delay(500); console.log(`[API] Invoice ${id} sent`); return true; }
 
-    getOperatingSummary: async (): Promise<OperatingSummary> => {
-        await delay(100);
-        return { balance: 482500.00, expensesMtd: 45100, cashFlowMtd: 80320 };
-    },
+    // --- Trust Accounting ---
+    async getTrustTransactions(accountId: string): Promise<TrustTransaction[]> {
+        return db.getByIndex(STORES.TRUST_TX, 'accountId', accountId);
+    }
 
-    getFinancialPerformance: async (): Promise<FinancialPerformanceData> => {
+    async getTrustAccounts() { return db.getAll<any>(STORES.TRUST); }
+    async getTopAccounts(): Promise<Client[]> {
+        const clients = await db.getAll<Client>(STORES.CLIENTS);
+        return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
+    }
+    async getOverviewStats() { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
+    
+    async getOperatingSummary(): Promise<OperatingSummary> {
+        const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
+        return summary || { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
+    }
+
+    async getFinancialPerformance(): Promise<FinancialPerformanceData> {
         await delay(200);
         return {
             revenue: [
@@ -118,9 +122,8 @@ export const BillingService = {
                 { category: 'Travel', value: 12000 },
             ]
         };
-    },
+    }
 
-    sync: async () => { await delay(1000); console.log("[API] Financials Synced"); },
-    export: async (format: string) => { await delay(1500); return `report.${format}`; },
-    sendInvoice: async (id: string) => { await delay(500); console.log(`[API] Invoice ${id} sent`); return true; }
-};
+    async sync() { await delay(1000); console.log("[API] Financials Synced"); }
+    async export(format: string) { await delay(1500); return `report.${format}`; }
+}

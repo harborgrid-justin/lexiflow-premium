@@ -1,4 +1,3 @@
-
 import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
 import { db, STORES } from '../db';
 import { MOCK_USERS } from '../../data/models/user';
@@ -6,12 +5,10 @@ import { MOCK_USERS } from '../../data/models/user';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const MOCK_PROFILE: ExtendedUserProfile = {
-    // FIX: Cast string to branded type UserId
     id: 'usr-admin-justin' as UserId,
     name: 'Justin Jeffrey Saadein-Morales',
     email: 'justin.saadein@harborgrid.com',
     role: 'Administrator',
-    // FIX: Cast string to branded type EntityId
     entityId: 'ent-usr-001' as EntityId,
     title: 'Senior Partner',
     department: 'Litigation',

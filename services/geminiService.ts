@@ -1,5 +1,4 @@
-
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
 import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema } from "./ai/schemas";

@@ -1,5 +1,4 @@
-
-import { BaseEntity } from '../../types';
+import { BaseEntity, UserId } from '../../types';
 import { MicroORM } from './microORM';
 
 // Simple LRU Cache Implementation
@@ -102,7 +101,7 @@ export abstract class Repository<T extends BaseEntity> {
         const entity = {
             ...item,
             id: item.id || crypto.randomUUID(),
-            createdAt: now, updatedAt: now, version: 1, createdBy: 'current-user' as any
+            createdAt: now, updatedAt: now, version: 1, createdBy: 'current-user' as UserId
         };
         
         await this.orm.save(entity as T);
@@ -130,7 +129,7 @@ export abstract class Repository<T extends BaseEntity> {
             ...current, ...updates,
             updatedAt: new Date().toISOString(),
             version: (current.version || 1) + 1,
-            updatedBy: 'current-user' as any
+            updatedBy: 'current-user' as UserId
         };
         await this.orm.save(updated);
         this.cache.put(id, updated);

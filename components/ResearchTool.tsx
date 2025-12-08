@@ -80,7 +80,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
                                     "flex items-center text-xs font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap",
                                     activeView === tab.id
                                         ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
-                                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
+                                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
                                 )}
                              >
                                  <tab.icon className="h-3 w-3 mr-1.5"/>

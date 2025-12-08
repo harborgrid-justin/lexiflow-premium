@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -129,7 +130,7 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
                         {reviewResult || (
                             <div className={cn("text-center py-8 italic", theme.text.tertiary)}>
                                 Click "Review Risks" to analyze the current document content.
-                                <button onClick={handleReview} className={cn("mt-4 px-4 py-2 border rounded shadow-sm block mx-auto transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>Run Analysis</button>
+                                <button onClick={handleReview} className={cn("mt-4 px-4 py-2 border rounded shadow-sm block mx-auto transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>Run Analysis</button>
                             </div>
                         )}
                     </div>

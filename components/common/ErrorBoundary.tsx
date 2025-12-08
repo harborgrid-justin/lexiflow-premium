@@ -26,7 +26,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     isCopied: false,
   };
 
-  public static getDerivedStateFromError = (error: Error): Partial<ErrorBoundaryState> => {
+  public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error, aiResolution: null, isResolving: false, isCopied: false };
   }
 

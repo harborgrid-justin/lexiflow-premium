@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { TimeEntry, BillingModel } from '../../types';
 import { Download, Clock, DollarSign, TrendingUp, AlertCircle } from 'lucide-react';

@@ -17,7 +17,7 @@ export const AdminHierarchy: React.FC = () => {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
-  // Enterprise Data Access - Fetching from DataService
+  // Enterprise Data Access
   const { data: orgs = [], isLoading: loadingOrgs } = useQuery<Organization[]>(
       [STORES.ORGS, 'all'],
       DataService.organization.getOrgs
@@ -32,7 +32,7 @@ export const AdminHierarchy: React.FC = () => {
       [STORES.USERS, 'all'],
       DataService.users.getAll
   );
-
+  
   const isLoading = loadingOrgs || loadingGroups || loadingUsers;
 
   // Derived State

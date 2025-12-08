@@ -1,3 +1,4 @@
+
 import { STORES, DatabaseManager } from './db';
 import { MOCK_CASES } from '../data/models/case';
 import { MOCK_TASKS } from '../data/models/workflowTask';
@@ -42,6 +43,10 @@ import { MOCK_FACILITIES } from '../data/models/facility';
 import { MOCK_VENDOR_DIRECTORY } from '../data/models/vendorDirectory';
 import { MOCK_REPORTERS } from '../data/models/reporters';
 import { MOCK_JURISDICTIONS } from '../data/models/jurisdiction';
+import { MOCK_INVOICES } from '../data/models/invoice';
+import { MOCK_LEADS, MOCK_CRM_ANALYTICS } from '../data/models/crm';
+import { MOCK_REALIZATION_DATA, MOCK_OPERATING_SUMMARY } from '../data/models/billingStats';
+import { MOCK_DISCOVERY_FUNNEL, MOCK_DISCOVERY_CUSTODIANS } from '../data/models/discoveryCharts';
 
 export const Seeder = {
   async seed(db: DatabaseManager) {
@@ -124,8 +129,15 @@ export const Seeder = {
           // Final configurability
           batchPut(STORES.VENDOR_DIRECTORY, MOCK_VENDOR_DIRECTORY),
           batchPut(STORES.REPORTERS, MOCK_REPORTERS),
-          // FIX: Use the correct STORES key for jurisdictions
           batchPut(STORES.JURISDICTIONS, MOCK_JURISDICTIONS),
+          // Phase 3 Seeding
+          batchPut(STORES.INVOICES, MOCK_INVOICES),
+          batchPut(STORES.LEADS, MOCK_LEADS),
+          db.put(STORES.CRM_ANALYTICS, MOCK_CRM_ANALYTICS),
+          db.put(STORES.REALIZATION_STATS, MOCK_REALIZATION_DATA),
+          db.put(STORES.OPERATING_SUMMARY, MOCK_OPERATING_SUMMARY),
+          db.put(STORES.DISCOVERY_FUNNEL_STATS, MOCK_DISCOVERY_FUNNEL),
+          db.put(STORES.DISCOVERY_CUSTODIAN_STATS, MOCK_DISCOVERY_CUSTODIANS),
       ]);
       console.log("Seeding Complete.");
   }

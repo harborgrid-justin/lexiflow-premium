@@ -1,3 +1,4 @@
+
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
@@ -85,13 +86,19 @@ export const STORES = {
   // Added for complete SaaS configurability
   VENDOR_DIRECTORY: 'vendor_directory',
   REPORTERS: 'reporters',
-  // FIX: Add missing JURISDICTIONS store key
   JURISDICTIONS: 'jurisdictions',
+  // Phase 3 Data-Driven Refactor Stores
+  LEADS: 'leads',
+  CRM_ANALYTICS: 'crm_analytics',
+  DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
+  DISCOVERY_CUSTODIAN_STATS: 'discovery_custodian_stats',
+  REALIZATION_STATS: 'realization_stats',
+  OPERATING_SUMMARY: 'operating_summary'
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 19; // Incremented for new stores
+  private dbVersion = 20; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

@@ -1,28 +1,37 @@
 
 import React from 'react';
 import { Card } from '../../common/Card';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Loader2 } from 'recharts';
 import { useTheme } from '../../../context/ThemeContext';
-
-const funnelData = [
-    { name: 'Collection', value: 120000, label: '120k Docs' },
-    { name: 'Processing', value: 85000, label: '85k De-NIST' },
-    { name: 'Review', value: 24000, label: '24k Responsive' },
-    { name: 'Production', value: 1500, label: '1.5k Produced' },
-];
-
-const custodianData = [
-    { name: 'J. Doe', docs: 4500 },
-    { name: 'J. Smith', docs: 3200 },
-    { name: 'HR Dept', docs: 8900 },
-    { name: 'IT Admin', docs: 1200 },
-];
+import { useChartTheme } from '../../common/ChartHelpers';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { STORES } from '../../../services/db';
 
 // Map theme colors to chart
 const CHART_COLORS = ['#94a3b8', '#64748b', '#3b82f6', '#22c55e'];
 
 export const DiscoveryCharts: React.FC = () => {
   const { mode } = useTheme();
+  const chartTheme = useChartTheme();
+  
+  const { data: funnelData = [], isLoading: funnelLoading } = useQuery(
+      [STORES.DISCOVERY_FUNNEL_STATS, 'main'],
+      DataService.discovery.getFunnelStats
+  );
+  
+  const { data: custodianData = [], isLoading: custodianLoading } = useQuery(
+      [STORES.DISCOVERY_CUSTODIAN_STATS, 'main'],
+      DataService.discovery.getCustodianStats
+  );
+
+  if (funnelLoading || custodianLoading) {
+      return (
+          <div className="flex h-full items-center justify-center">
+              <Loader2 className="animate-spin text-blue-600"/>
+          </div>
+      );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -35,14 +44,14 @@ export const DiscoveryCharts: React.FC = () => {
                         fontSize={12} 
                         tickLine={false} 
                         axisLine={false} 
-                        tick={{fill: mode === 'dark' ? '#94a3b8' : '#64748b'}} 
+                        tick={{fill: chartTheme.text}} 
                         />
                         <Tooltip 
                         cursor={{fill: 'transparent'}} 
                         formatter={(value: any) => value.toLocaleString()} 
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                        contentStyle={chartTheme.tooltipStyle}
                         />
-                        <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: mode === 'dark' ? '#cbd5e1' : '#475569', formatter: (v:any) => funnelData.find(d => d.value === v)?.label }}>
+                        <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v:any) => funnelData.find(d => d.value === v)?.label }}>
                         {funnelData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={CHART_COLORS[index]} />
                         ))}
@@ -62,11 +71,11 @@ export const DiscoveryCharts: React.FC = () => {
                         type="category" 
                         fontSize={11} 
                         width={60} 
-                        tick={{fill: mode === 'dark' ? '#94a3b8' : '#64748b'}} 
+                        tick={{fill: chartTheme.text}} 
                         />
                         <Tooltip 
                         cursor={{fill: 'transparent'}} 
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                        contentStyle={chartTheme.tooltipStyle}
                         />
                         <Bar dataKey="docs" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
                     </BarChart>

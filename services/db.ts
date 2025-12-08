@@ -93,12 +93,28 @@ export const STORES = {
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
   DISCOVERY_CUSTODIAN_STATS: 'discovery_custodian_stats',
   REALIZATION_STATS: 'realization_stats',
-  OPERATING_SUMMARY: 'operating_summary'
+  OPERATING_SUMMARY: 'operating_summary',
+  // Phase 5 Data-Driven Refactor Stores
+  STANDING_ORDERS: 'standing_orders',
+  PORTAL_DOCUMENTS: 'portal_documents',
+  TEAM_AVAILABILITY: 'team_availability',
+  SOL_WATCHLIST: 'sol_watchlist',
+  INTEGRATIONS: 'integrations',
+  SECURITY_SETTINGS: 'security_settings',
+  ASSETS: 'assets',
+  MARKETING_CAMPAIGNS: 'marketing_campaigns',
+  DATA_ANOMALIES: 'data_anomalies',
+  DATA_PROFILES: 'data_profiles',
+  CLEANSING_RULES: 'cleansing_rules',
+  DEDUPE_CLUSTERS: 'dedupe_clusters',
+  QUALITY_HISTORY: 'quality_history',
+  CASE_PHASES: 'case_phases',
+  BILLING_OVERVIEW_STATS: 'billing_overview_stats',
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 20; // Incremented for new stores
+  private dbVersion = 21; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

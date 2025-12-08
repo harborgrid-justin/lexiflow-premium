@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Building2, Globe, Shield, Users, CheckCircle, MoreVertical, Plus } from 'lucide-react';
+import { Building2, Globe, Shield, MoreVertical } from 'lucide-react';
 import { Organization, Group, User as UserType } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -80,7 +80,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({ user, viewMode = 'ta
 
     if (viewMode === 'card') {
         return (
-            <div className="p-4 flex items-center justify-between">
+            <div className="p-4 flex items-center justify-between border-b last:border-0 border-slate-100 dark:border-slate-800">
                 <div className="flex items-center">
                     <UserAvatar name={user.name} size="sm" className="mr-3"/>
                     <div>

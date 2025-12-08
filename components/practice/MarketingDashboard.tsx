@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Users, Megaphone, Target, ArrowRight } from 'lucide-react';
 import { DataService } from '../../services/dataService';
-import { MarketingMetric } from '../../types';
+import { MarketingMetric, MarketingCampaign } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
@@ -15,6 +16,11 @@ export const MarketingDashboard: React.FC = () => {
   const { data: metrics = [] } = useQuery<MarketingMetric[]>(
       ['marketing', 'metrics'],
       DataService.marketing.getMetrics
+  );
+
+  const { data: campaigns = [] } = useQuery<MarketingCampaign[]>(
+      ['marketing', 'campaigns'],
+      DataService.marketing.getCampaigns
   );
 
   // Calculate totals
@@ -82,27 +88,20 @@ export const MarketingDashboard: React.FC = () => {
 
         <Card title="Active Marketing Campaigns">
           <div className="space-y-4">
-            <div className={cn("p-3 border rounded-lg flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
-              <div>
-                <h4 className={cn("font-bold text-sm", theme.text.primary)}>Q1 Webinar Series</h4>
-                <p className={cn("text-xs", theme.text.secondary)}>Target: Corporate Counsel</p>
+            {campaigns.map((camp) => (
+              <div key={camp.id} className={cn("p-3 border rounded-lg flex justify-between items-center transition-colors", camp.status === 'Upcoming' ? "opacity-70" : "", theme.surfaceHighlight, theme.border.default)}>
+                <div>
+                  <h4 className={cn("font-bold text-sm", theme.text.primary)}>{camp.name}</h4>
+                  <p className={cn("text-xs", theme.text.secondary)}>Target: {camp.target}</p>
+                </div>
+                <div className="text-right">
+                    <span className={cn("text-xs px-2 py-1 rounded font-bold mb-1 block", camp.status === 'Active' ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600")}>
+                        {camp.status}
+                    </span>
+                    <span className="text-[10px] text-slate-500">{camp.budget || camp.dates}</span>
+                </div>
               </div>
-              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">Active</span>
-            </div>
-            <div className={cn("p-3 border rounded-lg flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
-              <div>
-                <h4 className={cn("font-bold text-sm", theme.text.primary)}>Google Ads - "Commercial Lit"</h4>
-                <p className={cn("text-xs", theme.text.secondary)}>Budget: $2,000/mo</p>
-              </div>
-              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">Active</span>
-            </div>
-            <div className={cn("p-3 border rounded-lg flex justify-between items-center opacity-70", theme.surfaceHighlight, theme.border.default)}>
-              <div>
-                <h4 className={cn("font-bold text-sm", theme.text.primary)}>LegalTech Conference Sponsor</h4>
-                <p className={cn("text-xs", theme.text.secondary)}>Dates: Sep 15-18</p>
-              </div>
-              <span className={cn("text-xs px-2 py-1 rounded font-bold", theme.surface, theme.text.secondary)}>Upcoming</span>
-            </div>
+            ))}
             <button className="w-full text-xs text-blue-600 font-medium hover:underline flex items-center justify-center mt-2">
               View All Campaigns <ArrowRight className="h-3 w-3 ml-1"/>
             </button>

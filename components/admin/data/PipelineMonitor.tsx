@@ -7,7 +7,7 @@ import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
-import { PipelineJob } from '../../../types';
+import { PipelineJob, Connector } from '../../../types';
 import { PipelineList } from './pipeline/PipelineList';
 
 interface PipelineMonitorProps {
@@ -24,25 +24,32 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
       else setActiveTab('monitor');
   }, [initialTab]);
   
-  // Integrated Data Query
-  const { data: pipelines = [], isLoading, refetch } = useQuery<PipelineJob[]>(
+  // Integrated Data Queries
+  const { data: pipelines = [], isLoading: isLoadingPipelines, refetch } = useQuery<PipelineJob[]>(
       ['admin', 'pipelines'],
       DataService.admin.getPipelines
   );
 
-  const connectors = [
-      { id: 'c1', name: 'PostgreSQL Production', type: 'Database', status: 'Healthy', icon: Database, color: 'text-blue-600' },
-      { id: 'c2', name: 'Snowflake Warehouse', type: 'Warehouse', status: 'Healthy', icon: Cloud, color: 'text-sky-500' },
-      { id: 'c3', name: 'Salesforce CRM', type: 'SaaS', status: 'Syncing', icon: Cloud, color: 'text-indigo-600' },
-      { id: 'c4', name: 'AWS S3 Data Lake', type: 'Storage', status: 'Healthy', icon: Server, color: 'text-amber-600' },
-      { id: 'c5', name: 'Redis Cache', type: 'Cache', status: 'Degraded', icon: Database, color: 'text-red-600' },
-  ];
+  const { data: connectors = [], isLoading: isLoadingConnectors } = useQuery<Connector[]>(
+      ['admin', 'connectors'],
+      DataService.admin.getConnectors
+  );
 
   const handleRun = (id: string) => {
       alert(`Triggered run for pipeline ${id}`);
   };
+  
+  const getIcon = (type: string) => {
+      switch(type) {
+          case 'Database': return Database;
+          case 'Warehouse': return Cloud;
+          case 'SaaS': return Cloud;
+          case 'Storage': return Server;
+          default: return Database;
+      }
+  };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoadingPipelines || isLoadingConnectors) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
     <div className={cn("flex flex-col h-full", theme.background)}>
@@ -145,11 +152,13 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
         {activeTab === 'connectors' && (
             <div className="p-6 overflow-y-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {connectors.map(conn => (
+                    {connectors.map(conn => {
+                        const Icon = getIcon(conn.type);
+                        return (
                         <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface, theme.border.default)}>
                             <div className="flex justify-between items-start mb-4">
                                 <div className={cn("p-3 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
-                                    <conn.icon className={cn("h-6 w-6", conn.color)}/>
+                                    <Icon className={cn("h-6 w-6", conn.color)}/>
                                 </div>
                                 <div className="flex gap-1">
                                     <button className={cn("p-1.5 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`, `hover:${theme.surfaceHighlight}`)}><Settings className="h-4 w-4"/></button>
@@ -168,7 +177,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                 <span className={cn("text-xs", theme.text.tertiary)}>Last sync: 5m ago</span>
                             </div>
                         </div>
-                    ))}
+                    )})}
                     
                     <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)}>
                         <Plus className="h-10 w-10 mb-2"/>

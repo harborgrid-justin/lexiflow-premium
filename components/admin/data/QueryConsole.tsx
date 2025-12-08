@@ -11,13 +11,9 @@ import { Button } from '../../common/Button';
 import { VirtualList } from '../../common/VirtualList';
 import { SqlHelpers } from '../../../utils/sqlHelpers';
 import { QuerySidebar } from './query/QuerySidebar';
-
-const MOCK_SCHEMA = {
-  cases: { desc: 'Core table for all legal matters.', columns: [{ name: 'id', type: 'UUID', pk: true, notNull: true, unique: true }, { name: 'title', type: 'VARCHAR(255)', pk: false }, { name: 'status', type: 'case_status', pk: false }, { name: 'client_id', type: 'UUID', fk: 'clients.id' }] },
-  users: { desc: 'Firm staff and client user accounts.', columns: [{ name: 'id', type: 'UUID' }, { name: 'name', type: 'VARCHAR' }, { name: 'role', type: 'user_role' }] },
-  documents: { desc: 'Metadata for all documents.', columns: [{ name: 'id', type: 'UUID' }, { name: 'case_id', type: 'UUID', pk: false, fk: 'cases.id' }, { name: 'content', type: 'TEXT', pk: false } ] },
-  audit_logs: { desc: 'Immutable record of all system events.', columns: [{ name: 'id', type: 'UUID' }, { name: 'timestamp', type: 'TIMESTAMPTZ' }, { name: 'action', type: 'VARCHAR' }] },
-};
+import { DataService } from '../../../services/dataService';
+import { SchemaTable } from '../../../types';
+import { useQuery } from '../../../services/queryClient';
 
 interface QueryConsoleProps {
     initialTab?: string;
@@ -34,6 +30,23 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [explainPlan, setExplainPlan] = useState<any>(null);
   const [isFormatting, setIsFormatting] = useState(false);
+
+  // Dynamic Schema Fetching
+  const { data: schemaTables = [] } = useQuery<SchemaTable[]>(
+      ['schema', 'tables'],
+      DataService.catalog.getSchemaTables
+  );
+
+  const formattedSchema = useMemo(() => {
+      const schema: Record<string, any> = {};
+      schemaTables.forEach(t => {
+          schema[t.name] = {
+              desc: `Table: ${t.name}`, // In a real app, description would come from API
+              columns: t.columns
+          };
+      });
+      return schema;
+  }, [schemaTables]);
 
   useEffect(() => {
       if (initialTab === 'history') setActiveSidebarTab('history');
@@ -114,7 +127,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
             </Modal>
         )}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-             <QuerySidebar activeTab={activeSidebarTab} setActiveTab={setActiveSidebarTab} schema={MOCK_SCHEMA} />
+             <QuerySidebar activeTab={activeSidebarTab} setActiveTab={setActiveSidebarTab} schema={formattedSchema} />
 
              <div className="flex-1 flex flex-col min-w-0">
                 <div className={cn("h-[40%] flex flex-col", theme.surface)}>

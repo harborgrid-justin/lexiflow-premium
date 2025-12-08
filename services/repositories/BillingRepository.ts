@@ -1,5 +1,5 @@
 
-import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary } from '../../types';
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 
@@ -56,10 +56,12 @@ export class BillingRepository extends Repository<TimeEntry> {
         dueDate.setDate(now.getDate() + 30);
 
         const invoice: Invoice = {
+            // FIX: Cast string to branded type UUID
             id: `INV-${Date.now()}` as UUID,
             client: clientName,
             matter: caseId,
-            caseId: caseId as any,
+            // FIX: Cast string to branded type CaseId
+            caseId: caseId as CaseId,
             date: now.toISOString().split('T')[0],
             dueDate: dueDate.toISOString().split('T')[0],
             amount: totalAmount,
@@ -98,10 +100,31 @@ export class BillingRepository extends Repository<TimeEntry> {
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     }
     async getOverviewStats() { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
-
+    
     async getOperatingSummary(): Promise<OperatingSummary> {
         await delay(100);
         return { balance: 482500.00, expensesMtd: 45100, cashFlowMtd: 80320 };
+    }
+
+    async getFinancialPerformance(): Promise<FinancialPerformanceData> {
+        await delay(200);
+        return {
+            revenue: [
+                { month: 'Jan', actual: 420000, target: 400000 },
+                { month: 'Feb', actual: 450000, target: 410000 },
+                { month: 'Mar', actual: 380000, target: 420000 },
+                { month: 'Apr', actual: 490000, target: 430000 },
+                { month: 'May', actual: 510000, target: 440000 },
+                { month: 'Jun', actual: 550000, target: 450000 },
+            ],
+            expenses: [
+                { category: 'Payroll', value: 250000 },
+                { category: 'Rent', value: 45000 },
+                { category: 'Software', value: 15000 },
+                { category: 'Marketing', value: 25000 },
+                { category: 'Travel', value: 12000 },
+            ]
+        };
     }
 
     async sync() { await delay(1000); console.log("[API] Financials Synced"); }

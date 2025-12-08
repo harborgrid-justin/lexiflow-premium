@@ -193,6 +193,8 @@ export const DataService = {
 
   messenger: {
     getConversations: async () => db.getAll<Conversation>(STORES.CONVERSATIONS),
+    // FIX: Add missing getConversationById method
+    getConversationById: async (id: string): Promise<Conversation | undefined> => db.get<Conversation>(STORES.CONVERSATIONS, id),
     getContacts: async () => { 
         const users = await db.getAll<User>(STORES.USERS);
         return users.map(u => ({ id: u.id, name: u.name, role: u.role, status: 'online', email: u.email, department: 'Legal' })); 
@@ -208,7 +210,8 @@ export const DataService = {
     },
     countUnread: async (caseId: string): Promise<number> => {
         const convs = await db.getAll<Conversation>(STORES.CONVERSATIONS);
-        return convs.reduce((sum, c) => sum + (c.unread || 0), 0);
+        const targetConv = convs.find(c => c.id === `conv-case-${caseId}`);
+        return targetConv?.unread || 0;
     },
   },
   calendar: {

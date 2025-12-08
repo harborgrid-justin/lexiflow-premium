@@ -1,6 +1,7 @@
 import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../types/integrationTypes';
 import { DataService } from './dataService';
 import { STORES, db } from './db';
+// FIX: Add missing imports
 import { CalendarEventItem, WorkflowTask, TimeEntry, Invoice, AuditLogEntry, UserId, CaseId, UUID, DocketId, TaskId, DocketEntry } from '../types';
 
 /**

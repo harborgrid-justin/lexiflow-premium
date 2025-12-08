@@ -52,9 +52,7 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   const handleSave = (motionData: Partial<Motion>) => {
     if (!motionData.title) return;
     const motion: Motion = {
-// FIX: Cast string to branded type MotionId
       id: `mot-${Date.now()}` as MotionId,
-// FIX: Cast string to branded type CaseId
       caseId: caseId as CaseId,
       title: motionData.title,
       type: motionData.type as MotionType,

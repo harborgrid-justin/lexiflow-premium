@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Clock, BarChart, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Badge } from '../common/Badge';
@@ -11,8 +10,6 @@ interface TemplatePreviewProps {
   data: WorkflowTemplateData;
   onClick: () => void;
 }
-// FIX: Export WorkflowTemplateData type to resolve import error in other components.
-export type { WorkflowTemplateData };
 
 export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick }) => {
   const { theme } = useTheme();

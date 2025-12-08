@@ -30,6 +30,14 @@ import { MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/mockAnalytics';
 import { MOCK_OKRS } from '../data/models/strategy';
 import { MALWARE_SIGNATURES } from '../data/models/security';
 import { PLEADING_TEMPLATES } from '../data/models/pleadingTemplate';
+import { MOCK_CONVERSATIONS } from '../data/models/conversation';
+
+// New mock data imports
+import { MOCK_CLE_TRACKING } from '../data/models/cle';
+import { MOCK_VENDOR_CONTRACTS } from '../data/models/vendorContract';
+import { MOCK_RFPS } from '../data/models/rfp';
+import { MOCK_MAINTENANCE_TICKETS } from '../data/models/maintenanceTicket';
+import { MOCK_FACILITIES } from '../data/models/facility';
 
 export const Seeder = {
   async seed(db: DatabaseManager) {
@@ -95,13 +103,20 @@ export const Seeder = {
           batchPut(STORES.WALLS, MOCK_WALLS),
           batchPut(STORES.RULES, MOCK_RULES),
           batchPut(STORES.ENTITIES, allEntities),
+          batchPut(STORES.CONVERSATIONS, MOCK_CONVERSATIONS),
           // New Data for Refactor
           batchPut(STORES.COUNSEL_PROFILES, MOCK_COUNSEL),
           batchPut(STORES.JUDGE_MOTION_STATS, MOCK_JUDGE_STATS.map((stat, i) => ({...stat, id: `jms-${i}`}))),
           batchPut(STORES.OUTCOME_PREDICTIONS, MOCK_OUTCOME_DATA.map((d, i) => ({...d, id: `op-${i}`}))),
           batchPut(STORES.OKRS, MOCK_OKRS),
           batchPut(STORES.MALWARE_SIGNATURES, MALWARE_SIGNATURES.map((sig, i) => ({id: `sig-${i}`, signature: sig}))),
-          batchPut(STORES.PLEADING_TEMPLATES, PLEADING_TEMPLATES)
+          batchPut(STORES.PLEADING_TEMPLATES, PLEADING_TEMPLATES),
+          // Phase 2 Seeding
+          batchPut(STORES.CLE_TRACKING, MOCK_CLE_TRACKING),
+          batchPut(STORES.VENDOR_CONTRACTS, MOCK_VENDOR_CONTRACTS),
+          batchPut(STORES.RFPS, MOCK_RFPS),
+          batchPut(STORES.MAINTENANCE_TICKETS, MOCK_MAINTENANCE_TICKETS),
+          batchPut(STORES.FACILITIES, MOCK_FACILITIES),
       ]);
       console.log("Seeding Complete.");
   }

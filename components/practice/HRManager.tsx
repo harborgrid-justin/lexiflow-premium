@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { UserAvatar } from '../common/UserAvatar';
@@ -11,18 +10,16 @@ import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { AddStaffModal } from './hr/AddStaffModal';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { useStaff } from '../../hooks/useDomainData';
 
 export const HRManager: React.FC = () => {
   const { theme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Enterprise Data Access
-  const { data: staffList = [] } = useQuery<StaffMember[]>(
-      [STORES.STAFF, 'all'],
-      DataService.hr.getStaff
-  );
+  const { data: staffList = [] } = useStaff();
 
   const { mutate: addStaff } = useMutation(
       DataService.hr.addStaff,
@@ -40,7 +37,6 @@ export const HRManager: React.FC = () => {
   const handleAddStaff = (newStaff: Partial<StaffMember>) => {
       const staff: StaffMember = {
           id: `s-${Date.now()}`,
-          // FIX: Cast string to branded type UserId
           userId: `u-${Date.now()}` as UserId,
           name: newStaff.name!,
           email: newStaff.email!,

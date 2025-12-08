@@ -1,18 +1,17 @@
-
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../services/geminiService';
 import { Modal } from './common/Modal';
 import { Button } from './common/Button';
 import { Input, TextArea } from './common/Inputs';
-import { TimeEntryPayload } from '../types';
+import { TimeEntryPayload, CaseId } from '../types';
 import { useTheme } from '../context/ThemeContext'; // Import useTheme
 import { cn } from '../utils/cn'; // Import cn
 
 interface TimeEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  caseId?: string;
+  caseId?: CaseId;
   onSave: (entry: TimeEntryPayload) => void;
 }
 

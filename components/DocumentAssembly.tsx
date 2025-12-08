@@ -1,4 +1,3 @@
-
 // components/DocumentAssembly.tsx
 import React, { useState, useEffect } from 'react';
 import { X, Wand2, Activity, Minus } from 'lucide-react';
@@ -63,9 +62,7 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
   const handleSave = () => {
     if (result) {
       const newDoc: LegalDocument = {
-        // FIX: Cast string to branded type DocumentId
         id: `gen-${Date.now()}` as DocumentId,
-        // FIX: Cast string to branded type CaseId
         caseId: 'current' as CaseId,
         title: `${template} - ${new Date().toLocaleDateString()}`,
         type: 'Generated',

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Server, HardDrive } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -19,7 +18,7 @@ interface AdminDataRegistryProps {
 export const AdminDataRegistry: React.FC<AdminDataRegistryProps> = ({ dataFiles }) => {
   const { theme } = useTheme();
 
-  const renderRow = (file: DataFile) => (
+  const renderItem = (file: DataFile) => (
       <div 
         key={file.name} 
         className="h-full w-full p-2"
@@ -56,7 +55,7 @@ export const AdminDataRegistry: React.FC<AdminDataRegistryProps> = ({ dataFiles 
             items={dataFiles}
             itemHeight={80} 
             itemWidth={350}
-            renderItem={renderRow}
+            renderItem={renderItem}
             height="100%"
             gap={16}
             emptyMessage="No data registries found."

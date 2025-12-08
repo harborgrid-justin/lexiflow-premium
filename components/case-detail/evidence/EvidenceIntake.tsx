@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
@@ -61,11 +60,8 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
 
   const handleFinish = () => {
       const newItem: EvidenceItem = {
-          // FIX: Cast string to branded type EvidenceId
           id: `EV-${Date.now()}` as EvidenceId,
-          // FIX: Cast string to branded type UUID
           trackingUuid: (generatedData.uuid || crypto.randomUUID()) as UUID,
-          // FIX: Cast string to branded type CaseId
           caseId: 'Pending Assignment' as CaseId,
           title: title,
           type: type as any,

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter } from 'lucide-react';
 import { Tabs } from '../common/Tabs';
@@ -9,22 +8,26 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { Loader2 } from 'lucide-react';
 
 export const VendorProcurement: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('directory');
 
-    const contracts = [
-        { id: 1, vendor: 'LexisNexis', type: 'Legal Research', value: '$45,000/yr', renewal: '2024-12-01', status: 'Active' },
-        { id: 'c2', vendor: 'Iron Mountain', type: 'Records', value: '$12,000/yr', renewal: '2024-06-15', status: 'Review Needed' },
-        { id: 'c3', vendor: 'Zoom', type: 'Software', value: '$8,500/yr', renewal: '2024-09-01', status: 'Active' },
-    ];
+    const { data: contracts = [], isLoading: contractsLoading } = useQuery<any[]>(
+        [STORES.VENDOR_CONTRACTS, 'all'],
+        DataService.operations.getVendorContracts
+    );
+    
+    const { data: rfps = [], isLoading: rfpsLoading } = useQuery<any[]>(
+        [STORES.RFPS, 'all'],
+        DataService.operations.getRfps
+    );
 
-    const rfps = [
-        { id: 'rfp1', title: 'E-Discovery Platform Upgrade', stage: 'Drafting', budget: '$150k' },
-        { id: 'rfp2', title: 'Office Cleaning Services', stage: 'Vendor Selection', budget: '$40k' },
-        { id: 'rfp3', title: 'Cybersecurity Audit', stage: 'Contract Negotiation', budget: '$25k' },
-    ];
+    const isLoading = contractsLoading || rfpsLoading;
 
     return (
         <div className="flex flex-col h-full space-y-4">
@@ -46,7 +49,9 @@ export const VendorProcurement: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-hidden p-6">
-                {activeTab === 'directory' && (
+                {isLoading && <div className="flex justify-center p-8"><Loader2 className="animate-spin h-6 w-6 text-blue-600"/></div>}
+
+                {!isLoading && activeTab === 'directory' && (
                     <div className="space-y-4 animate-fade-in">
                         <SearchToolbar value="" onChange={() => {}} placeholder="Search vendors..." />
                         <TableContainer>
@@ -69,7 +74,7 @@ export const VendorProcurement: React.FC = () => {
                     </div>
                 )}
 
-                {activeTab === 'contracts' && (
+                {!isLoading && activeTab === 'contracts' && (
                     <div className="space-y-4 animate-fade-in">
                         <TableContainer>
                             <TableHeader><TableHead>Vendor</TableHead><TableHead>Service Type</TableHead><TableHead>Value</TableHead><TableHead>Renewal Date</TableHead><TableHead>Status</TableHead></TableHeader>
@@ -88,7 +93,7 @@ export const VendorProcurement: React.FC = () => {
                     </div>
                 )}
 
-                {activeTab === 'rfp' && (
+                {!isLoading && activeTab === 'rfp' && (
                      <KanbanBoard>
                          {['Drafting', 'Published', 'Vendor Selection', 'Contract Negotiation', 'Closed'].map(stage => (
                              <KanbanColumn key={stage} title={stage} count={rfps.filter(r => r.stage === stage).length}>
@@ -103,7 +108,7 @@ export const VendorProcurement: React.FC = () => {
                      </KanbanBoard>
                 )}
 
-                {activeTab === 'spend' && (
+                {!isLoading && activeTab === 'spend' && (
                     <div className={cn("flex items-center justify-center h-full border-2 border-dashed rounded-lg", theme.border.default)}>
                         <div className="text-center">
                             <BarChart2 className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>

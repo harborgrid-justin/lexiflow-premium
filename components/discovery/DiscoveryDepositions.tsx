@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -41,7 +40,6 @@ export const DiscoveryDepositions: React.FC = () => {
       if (!newDepo.witnessName || !newDepo.date) return;
       const deposition: Deposition = {
           id: `DEP-${Date.now()}` as UUID,
-          // FIX: Cast string to branded type CaseId
           caseId: 'C-2024-001' as CaseId, // Mock default
           witnessName: newDepo.witnessName,
           date: newDepo.date,

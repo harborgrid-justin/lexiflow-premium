@@ -77,12 +77,17 @@ export const STORES = {
   OUTCOME_PREDICTIONS: 'outcome_predictions',
   OKRS: 'okrs',
   MALWARE_SIGNATURES: 'malware_signatures',
-  PLEADING_TEMPLATES: 'pleading_templates'
+  PLEADING_TEMPLATES: 'pleading_templates',
+  CLE_TRACKING: 'cle_tracking',
+  VENDOR_CONTRACTS: 'vendor_contracts',
+  RFPS: 'rfps',
+  MAINTENANCE_TICKETS: 'maintenance_tickets',
+  FACILITIES: 'facilities'
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 16; // Incremented for new stores
+  private dbVersion = 17; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

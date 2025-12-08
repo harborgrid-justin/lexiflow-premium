@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
@@ -13,7 +12,7 @@ export const StandingOrders: React.FC = () => {
   
   // Using Mock Judges for now
   // FIX: Property 'analytics' does not exist on type '...'. Did you mean 'analysis'?
-  const { data: judges = [] } = useQuery(['analytics', 'judges'], DataService.analysis.getJudgeProfiles);
+  const { data: judges = [] } = useQuery(['analysis', 'judges'], DataService.analysis.getJudgeProfiles);
 
   return (
     <div className="space-y-6 animate-fade-in">

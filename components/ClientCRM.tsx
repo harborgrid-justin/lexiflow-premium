@@ -1,4 +1,3 @@
-
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Client, EntityId } from '../types';
 import {
@@ -18,20 +17,9 @@ import { cn } from '../utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '../config/crmConfig'; // Updated import path
 import { ClientCRMContent } from './crm/ClientCRMContent'; // Updated import path
 
-// Sub-components (these were moved to ClientCRMContent)
-// const CRMDashboard = lazy(() => import('./crm/CRMDashboard').then(m => ({ default: m.CRMDashboard })));
-// const ClientDirectory = lazy(() => import('./crm/ClientDirectory').then(m => ({ default: m.ClientDirectory })));
-// const CRMPipeline = lazy(() => import('./crm/CRMPipeline').then(m => ({ default: m.CRMPipeline })));
-// const ClientAnalytics = lazy(() => import('./crm/ClientAnalytics').then(m => ({ default: m.ClientAnalytics })));
-
-// CRMView was moved to config/crmConfig.ts
-// type CRMView = 'dashboard' | 'directory' | 'pipeline' | 'analytics';
-
 interface ClientCRMProps {
     initialTab?: CRMView;
 }
-
-// TAB_CONFIG was moved to config/crmConfig.ts
 
 export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
   const [isPending, startTransition] = useTransition();
@@ -52,7 +40,6 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
 
   const handleAddClient = async (clientName: string) => {
       const newClient: Client = {
-        // FIX: Cast string to branded type EntityId
           id: `cli-${Date.now()}` as EntityId, name: clientName, industry: 'General',
           status: 'Prospect', totalBilled: 0, matters: []
       };

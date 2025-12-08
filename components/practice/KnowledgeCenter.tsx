@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BookOpen, FileText, GraduationCap, Users, BarChart3 } from 'lucide-react';
 import { Tabs } from '../common/Tabs';
@@ -10,16 +9,18 @@ import { QAView } from '../knowledge/QAView';
 import { KnowledgeAnalytics } from '../knowledge/KnowledgeAnalytics';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const KnowledgeCenter: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('wiki');
 
-    const cleTracker = [
-        { id: 1, attorney: 'James Doe', req: 24, completed: 18, deadline: '2024-12-31', status: 'On Track' },
-        { id: 2, attorney: 'Sarah Jenkins', req: 12, completed: 12, deadline: '2024-06-30', status: 'Completed' },
-        { id: 3, attorney: 'Alexandra H.', req: 24, completed: 4, deadline: '2024-12-31', status: 'At Risk' },
-    ];
+    const { data: cleTracker = [] } = useQuery<any[]>(
+        [STORES.CLE_TRACKING, 'all'],
+        DataService.operations.getCleTracking
+    );
 
     return (
         <div className="flex flex-col h-full space-y-4">

@@ -84,7 +84,7 @@ export abstract class Repository<T extends BaseEntity> {
         console.log(`[AUDIT] ${action}: ${resourceId}`);
     }
 
-    getAll = async (options: { includeDeleted?: boolean, limit?: number, cursor?: string } = {}): Promise<T[]> => {
+    async getAll(options: { includeDeleted?: boolean, limit?: number, cursor?: string } = {}): Promise<T[]> {
         const all = await db.getAll<T>(this.storeName);
         let result = options.includeDeleted ? all : all.filter(item => !item.deletedAt);
         
@@ -95,7 +95,7 @@ export abstract class Repository<T extends BaseEntity> {
         return result;
     }
 
-    getById = async (id: string, options: { includeDeleted?: boolean } = {}): Promise<T | undefined> => {
+    async getById(id: string, options: { includeDeleted?: boolean } = {}): Promise<T | undefined> {
         // Try Cache
         const cached = this.cache.get(id);
         if (cached && (options.includeDeleted || !cached.deletedAt)) return cached;
@@ -111,12 +111,12 @@ export abstract class Repository<T extends BaseEntity> {
         return undefined;
     }
 
-    getByIndex = async (indexName: string, value: string): Promise<T[]> => {
+    async getByIndex(indexName: string, value: string): Promise<T[]> {
         const items = await db.getByIndex<T>(this.storeName, indexName, value);
         return items.filter(item => !item.deletedAt);
     }
 
-    add = async (item: T): Promise<T> => {
+    async add(item: T): Promise<T> {
         const now = new Date().toISOString();
         const entity = {
             ...item,
@@ -134,7 +134,7 @@ export abstract class Repository<T extends BaseEntity> {
         return entity;
     }
 
-    createMany = async (items: T[]): Promise<T[]> => {
+    async createMany(items: T[]): Promise<T[]> {
         const createdItems: T[] = [];
         for (const item of items) {
             createdItems.push(await this.add(item));
@@ -142,7 +142,7 @@ export abstract class Repository<T extends BaseEntity> {
         return createdItems;
     }
 
-    update = async (id: string, updates: Partial<T>): Promise<T> => {
+    async update(id: string, updates: Partial<T>): Promise<T> {
         const current = await this.getById(id, { includeDeleted: true });
         if (!current) throw new Error(`${this.storeName} record not found: ${id}`);
 
@@ -166,7 +166,7 @@ export abstract class Repository<T extends BaseEntity> {
         return updated;
     }
 
-    updateMany = async (updates: { id: string, data: Partial<T> }[]): Promise<T[]> => {
+    async updateMany(updates: { id: string, data: Partial<T> }[]): Promise<T[]> {
         const updatedItems: T[] = [];
         for (const update of updates) {
             updatedItems.push(await this.update(update.id, update.data));
@@ -174,7 +174,7 @@ export abstract class Repository<T extends BaseEntity> {
         return updatedItems;
     }
 
-    delete = async (id: string): Promise<void> => {
+    async delete(id: string): Promise<void> {
         const current = await this.getById(id, { includeDeleted: true });
         if (current && !current.deletedAt) {
             const deleted = { ...current, deletedAt: new Date().toISOString() };

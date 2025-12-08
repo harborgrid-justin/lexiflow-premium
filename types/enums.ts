@@ -34,7 +34,7 @@ export type MotionType = 'Dismiss' | 'Summary Judgment' | 'Compel Discovery' | '
 export type MotionStatus = 'Draft' | 'Filed' | 'Opposition Served' | 'Reply Served' | 'Hearing Set' | 'Submitted' | 'Decided' | 'Withdrawn';
 export type MotionOutcome = 'Granted' | 'Denied' | 'Withdrawn' | 'Moot';
 
-export type DocketEntryType = 'Filing' | 'Order' | 'Notice' | 'Minute Entry' | 'Exhibit' | 'Hearing';
+export type DocketEntryType = 'Filing' | 'Order' | 'Notice' | 'Minute Entry' | 'Exhibit' | 'Hearing' | 'Motion';
 
 export type DiscoveryType = 'Production' | 'Interrogatory' | 'Admission' | 'Deposition';
 export type DiscoveryStatus = 'Draft' | 'Served' | 'Responded' | 'Overdue' | 'Closed' | 'Motion Filed';

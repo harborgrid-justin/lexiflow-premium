@@ -1,3 +1,4 @@
+
 import { LegalDocument, DocumentVersion, CaseId, UUID, DocumentId, FileChunk } from '../../types';
 import { db, STORES } from '../db';
 import { Repository } from '../core/Repository';
@@ -10,7 +11,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
     }
     
     // FIX: Implement getByCaseId which was missing
-    getByCaseId = async (caseId: string): Promise<LegalDocument[]> => {
+    async getByCaseId(caseId: string): Promise<LegalDocument[]> {
         return this.getByIndex('caseId', caseId);
     }
 

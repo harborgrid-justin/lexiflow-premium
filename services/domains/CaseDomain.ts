@@ -8,12 +8,12 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export class CaseRepository extends Repository<Case> {
     constructor() { super(STORES.CASES); }
 
-    getParties = async (caseId: string): Promise<Party[]> => {
+    async getParties(caseId: string): Promise<Party[]> {
         const c = await this.getById(caseId);
         return c?.parties || [];
     }
 
-    getArchived = async () => {
+    async getArchived() {
         const cases = await this.getAll();
         return cases.filter(c => c.status === 'Closed' || c.status === 'Settled').map(c => ({
             id: c.id,
@@ -24,23 +24,23 @@ export class CaseRepository extends Repository<Case> {
         }));
     }
     
-    getByStatus = async (status: string) => {
+    async getByStatus(status: string) {
         return this.getByIndex('status', status);
     }
 
-    importDocket = async (caseId: string, data: any) => {
+    async importDocket(caseId: string, data: any) {
         await delay(500);
         console.log(`[API] Imported docket data for ${caseId}`, data);
         return true;
     }
 
-    archive = async (id: string) => {
+    async archive(id: string) {
         await delay(300);
         const c = await this.getById(id);
         if (c) await this.update(id, { status: 'Closed' as any });
     }
 
-    flag = async (id: string) => {
+    async flag(id: string) {
         await delay(300);
         console.log(`[API] Case ${id} flagged`);
     }

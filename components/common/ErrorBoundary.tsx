@@ -1,3 +1,4 @@
+
 import React, { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Sparkles, Loader2, Clipboard, Check } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
@@ -17,8 +18,7 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // FIX: Converted to class property syntax to ensure correct `this` binding and state initialization.
-  state: ErrorBoundaryState = {
+  public state: ErrorBoundaryState = {
     hasError: false,
     error: null,
     aiResolution: null,
@@ -31,6 +31,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { hasError: true, error };
   }
 
+  // FIX: Convert to arrow function to bind `this` correctly.
   public componentDidCatch = (error: Error, errorInfo: ErrorInfo): void => {
     const debugInfo = `
 --- LexiFlow Error Report ---
@@ -59,33 +60,40 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     console.log("Component Stack:", errorInfo.componentStack);
     console.groupEnd();
     
+    // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
     this.setState({ isResolving: true, debugInfo });
 
     // Using promises to handle async logic while keeping the lifecycle method synchronous
     GeminiService.getResolutionForError(error.message)
       .then(resolution => {
         if (this.state.hasError) {
+          // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
           this.setState({ aiResolution: resolution, isResolving: false });
         }
       })
       .catch(e => {
         if (this.state.hasError) {
+          // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
           this.setState({ aiResolution: "AI analysis is currently unavailable.", isResolving: false });
         }
       });
   }
 
+  // FIX: Convert to arrow function to bind `this` correctly.
   private handleReset = () => {
     if (typeof window !== 'undefined') window.location.reload();
   }
   
+  // FIX: Convert to arrow function to bind `this` correctly.
   private handleCopyDebugInfo = () => {
     if (this.state.debugInfo && !this.state.isCopied) {
         if (typeof window !== 'undefined' && navigator.clipboard) {
             navigator.clipboard.writeText(this.state.debugInfo)
               .then(() => {
+                // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
                 this.setState({ isCopied: true });
                 setTimeout(() => {
+                    // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
                     this.setState({ isCopied: false });
                 }, 2000);
               })
@@ -96,10 +104,11 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
     }
   }
 
-  // FIX: Converted `render` to a class property arrow function to fix `this` context issues.
-  public render = (): ReactNode => {
+  public render(): ReactNode {
     if (this.state.hasError) {
+      // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
       if (this.props.fallback) {
+        // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
         return this.props.fallback;
       }
 
@@ -147,7 +156,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
               Dashboard
             </button>
             <button 
-              onClick={this.handleCopyDebugInfo}
+              onClick={() => this.handleCopyDebugInfo()}
               disabled={this.state.isCopied}
               className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-70"
             >
@@ -155,7 +164,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
                 {this.state.isCopied ? 'Copied!' : 'Copy Debug Info'}
             </button>
             <button 
-              onClick={this.handleReset}
+              onClick={() => this.handleReset()}
               className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
@@ -166,6 +175,7 @@ Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.inner
       );
     }
 
+    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     return this.props.children;
   }
 }

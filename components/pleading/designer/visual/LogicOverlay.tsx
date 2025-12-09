@@ -1,61 +1,89 @@
+
 import React, { useEffect, useState, useRef } from 'react';
-import { PleadingDocument } from '../../../../types';
+import { PleadingDocument } from '../../../../types/pleadingTypes';
 
 interface LogicOverlayProps {
     document: PleadingDocument;
 }
 
-const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDoc }) => {
+export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDoc }) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const [paths, setPaths] = useState<React.ReactElement[]>([]);
+    const rafRef = useRef<number | null>(null);
 
     useEffect(() => {
+        // Debounced calculation using RAF
+        const scheduleUpdate = () => {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            rafRef.current = requestAnimationFrame(calculatePaths);
+        };
+
         const calculatePaths = () => {
-            const newPaths: React.ReactElement[] = [];
             if (!svgRef.current) return;
+            
+            // 1. Batch Reads: Get SVG rect first
             const svgRect = svgRef.current.getBoundingClientRect();
             
-            pleadingDoc.sections.forEach((section) => {
-                const nodeEl = window.document.getElementById(`block-${section.id}`);
-                
-                if (nodeEl && (section.linkedEvidenceIds?.length || section.linkedArgumentId)) {
-                    const rect = nodeEl.getBoundingClientRect();
-                    
-                    if (svgRect) {
-                        const startX = rect.right - svgRect.left - 12; // From right side of block
-                        const startY = rect.top - svgRect.top + rect.height / 2;
-                        
-                        const endX = svgRect.width - 20; 
-                        const endY = startY + (Math.random() * 80 - 40);
+            // 2. Batch Reads: Collect all relevant node positions
+            // We filter sections that need links first
+            const linksToDraw = pleadingDoc.sections
+                .filter(s => (s.linkedEvidenceIds?.length || s.linkedArgumentId))
+                .map(section => {
+                    const el = window.document.getElementById(`node-${section.id}`);
+                    if (!el) return null;
+                    return {
+                        section,
+                        rect: el.getBoundingClientRect()
+                    };
+                })
+                .filter(item => item !== null) as { section: any, rect: DOMRect }[];
 
-                        const controlX1 = startX + (endX - startX) / 2;
-                        
-                        newPaths.push(
-                            <g key={section.id}>
-                                <path 
-                                    d={`M ${startX} ${startY} C ${controlX1} ${startY}, ${controlX1} ${endY}, ${endX} ${endY}`}
-                                    stroke={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} 
-                                    strokeWidth="1.5" 
-                                    fill="none"
-                                    strokeDasharray="4,4"
-                                    className="animate-dash"
-                                />
-                                <circle cx={startX} cy={startY} r="3" fill="white" stroke={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} strokeWidth={1.5} />
-                                <circle cx={endX} cy={endY} r="3" fill={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} />
-                            </g>
-                        );
-                    }
-                }
+            // 3. Batch Writes/Calculations (React State Update)
+            const newPaths = linksToDraw.map(({ section, rect }) => {
+                const startX = rect.right - svgRect.left - 12; // From right side of block
+                const startY = rect.top - svgRect.top + rect.height / 2;
+                
+                // Draw to imaginary sidebar nodes for visualization effect
+                // In a real d3/react-flow implementation, we'd have exact coords for target nodes.
+                // Here we fan them out to the right.
+                const endX = svgRect.width - 20; 
+                
+                // Deterministic pseudo-random Y for stability
+                const pseudoRandomY = (section.id.charCodeAt(section.id.length-1) % 100) - 50;
+                const endY = startY + pseudoRandomY;
+
+                const controlX1 = startX + (endX - startX) / 2;
+                
+                return (
+                    <g key={section.id}>
+                        <path 
+                            d={`M ${startX} ${startY} C ${controlX1} ${startY}, ${controlX1} ${endY}, ${endX} ${endY}`}
+                            stroke={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} 
+                            strokeWidth="2" 
+                            fill="none"
+                            strokeDasharray="5,5"
+                            className="animate-dash"
+                        />
+                        <circle cx={startX} cy={startY} r="3" fill="white" stroke={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} strokeWidth={1.5} />
+                        <circle cx={endX} cy={endY} r="3" fill={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} />
+                    </g>
+                );
             });
+
             setPaths(newPaths);
         };
 
-        const timer = setTimeout(calculatePaths, 100);
-        window.addEventListener('resize', calculatePaths);
+        // Initial calc
+        scheduleUpdate();
+
+        // Listeners
+        window.addEventListener('resize', scheduleUpdate);
+        window.addEventListener('scroll', scheduleUpdate, true); // Capture scroll on any parent
         
         return () => {
-            clearTimeout(timer);
-            window.removeEventListener('resize', calculatePaths);
+            window.removeEventListener('resize', scheduleUpdate);
+            window.removeEventListener('scroll', scheduleUpdate, true);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
         }
     }, [pleadingDoc]);
 

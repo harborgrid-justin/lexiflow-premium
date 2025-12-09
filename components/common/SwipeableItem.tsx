@@ -28,39 +28,64 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
   const { theme } = useTheme();
   const [offsetX, setOffsetX] = useState(0);
   const startX = useRef(0);
+  const startY = useRef(0);
   const currentX = useRef(0);
   const isDragging = useRef(false);
+  const isScrolling = useRef(false);
 
   // Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     if (disabled) return;
     startX.current = e.touches[0].clientX;
+    startY.current = e.touches[0].clientY;
     currentX.current = 0; // Reset delta
     isDragging.current = true;
+    isScrolling.current = false;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging.current || disabled) return;
-    const touchX = e.touches[0].clientX;
-    const diff = touchX - startX.current;
+    
+    // If we've already determined this is a scroll interaction, ignore swipe logic
+    if (isScrolling.current) return;
 
+    const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+    const diffX = touchX - startX.current;
+    const diffY = touchY - startY.current;
+
+    // Detect if the user is scrolling vertically
+    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 5) {
+      isScrolling.current = true;
+      return;
+    }
+
+    // It's a horizontal swipe
+    if (e.cancelable) {
+        e.preventDefault(); // Prevent scrolling only if we are sure it's a swipe
+    }
+    
     // Limit the swipe distance for better UX
-    if (Math.abs(diff) < 150) {
-        setOffsetX(diff);
-        currentX.current = diff;
+    if (Math.abs(diffX) < 150) {
+        setOffsetX(diffX);
+        currentX.current = diffX;
     }
   };
 
   const handleTouchEnd = () => {
-    if (!isDragging.current || disabled) return;
+    if (!isDragging.current || disabled || isScrolling.current) {
+        isDragging.current = false;
+        return;
+    }
+    
     isDragging.current = false;
 
     // Threshold for triggering action
-    if (currentX.current > 100 && onSwipeRight) {
+    if (currentX.current > 80 && onSwipeRight) {
         // Swiped Right
         onSwipeRight();
-        setOffsetX(0); // Reset or keep open depending on logic (resetting for now)
-    } else if (currentX.current < -100 && onSwipeLeft) {
+        setOffsetX(0); 
+    } else if (currentX.current < -80 && onSwipeLeft) {
         // Swiped Left
         onSwipeLeft();
         setOffsetX(0);

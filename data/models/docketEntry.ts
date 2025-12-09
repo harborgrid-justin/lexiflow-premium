@@ -4,45 +4,6 @@ import { DocketEntry, DocketId, CaseId, DocumentId } from '../../types';
 export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
   // CASE: 1:24-cv-01442-LMB-IDD
   {
-    id: 'dk-dc-1' as DocketId, 
-    sequenceNumber: 1, 
-    pacerSequenceNumber: 1,
-    caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
-    date: '2024-08-16', 
-    type: 'Notice',
-    title: 'Notice of APPEAL FROM BANKRUPTCY COURT',
-    description: 'Bankruptcy Court case number 24-11119-BFK, filed by Justin Jeffrey Saadein-Morales.', 
-    filedBy: 'Justin Jeffrey Saadein-Morales', 
-    isSealed: false, 
-    documentId: 'doc-dc-1' as DocumentId,
-    structuredData: {
-        actionType: 'Notice',
-        actionVerb: 'filed',
-        documentTitle: 'Appeal from Bankruptcy Court',
-        filer: 'Justin Jeffrey Saadein-Morales',
-        additionalText: 'Bankruptcy Case #24-11119-BFK'
-    }
-  },
-  {
-    id: 'dk-dc-2' as DocketId, 
-    sequenceNumber: 2, 
-    pacerSequenceNumber: 2,
-    caseId: '1:24-cv-01442-LMB-IDD' as CaseId, 
-    date: '2024-08-19', 
-    type: 'Order',
-    title: 'Order Denying Debtor\'s Application to Proceed in Forma Pauperis',
-    description: 'The Debtor must pay the appeal fee of $298.00 within 14 days. Signed by Brian F. Kenney.', 
-    filedBy: 'Court', 
-    isSealed: false,
-    structuredData: {
-        actionType: 'Order',
-        actionVerb: 'denying',
-        documentTitle: 'Application to Proceed IFP',
-        filer: 'Court',
-        additionalText: 'Debtor must pay $298.00 within 14 days.'
-    }
-  },
-  {
     id: 'dk-dc-10' as DocketId, 
     sequenceNumber: 10, 
     pacerSequenceNumber: 10,
@@ -73,14 +34,7 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'Signed by District Judge Leonie M. Brinkema.', 
     filedBy: 'Court', 
     isSealed: false, 
-    documentId: 'doc-dc-13' as DocumentId,
-    structuredData: {
-        actionType: 'Order',
-        actionVerb: 'denying',
-        documentTitle: 'Emergency Motion [10]',
-        filer: 'Court',
-        additionalText: 'Signed by Judge Brinkema'
-    }
+    documentId: 'doc-dc-13' as DocumentId
   },
   {
     id: 'dk-dc-31' as DocketId, 
@@ -93,14 +47,7 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'of Pending Appeals No. 24-2160 and No. 25-1229. Filed by Justin Jeffrey Saadein-Morales.', 
     filedBy: 'Justin Jeffrey Saadein-Morales', 
     isSealed: false, 
-    documentId: 'doc-dc-31' as DocumentId,
-    structuredData: {
-        actionType: 'Motion',
-        actionVerb: 'requesting',
-        documentTitle: 'Judicial Notice',
-        filer: 'Justin Jeffrey Saadein-Morales',
-        additionalText: 're: Pending Appeals 24-2160 & 25-1229'
-    }
+    documentId: 'doc-dc-31' as DocumentId
   },
   
   // CASE: 25-1229 (Appellate)
@@ -127,14 +74,31 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'EXERCISE its supervisory authority; CONSIDER transfer... [1001744472]', 
     filedBy: 'Justin Jeffrey Saadein-Morales', 
     isSealed: false, 
-    documentId: '1001744472' as DocumentId,
-    structuredData: {
-        actionType: 'Motion',
-        actionVerb: 'submitted',
-        documentTitle: 'Motion for Summary Reversal',
-        filer: 'Appellant',
-        additionalText: 'Requesting supervisory authority exercise'
-    }
+    documentId: '1001744472' as DocumentId
+  },
+  {
+    id: 'dk-25-8' as DocketId,
+    sequenceNumber: 8,
+    pacerSequenceNumber: 8,
+    caseId: '25-1229' as CaseId,
+    date: '2025-04-18',
+    type: 'Filing',
+    title: 'Emergency MOTION for Injunctive Relief',
+    description: 'Filed by Justin Jeffrey Saadein-Morales. [1001758998]',
+    filedBy: 'Justin Jeffrey Saadein-Morales',
+    isSealed: false
+  },
+  {
+    id: 'dk-25-30' as DocketId,
+    sequenceNumber: 30,
+    pacerSequenceNumber: 30,
+    caseId: '25-1229' as CaseId,
+    date: '2025-05-30',
+    type: 'Filing',
+    title: 'MOTION to Affirm Decision',
+    description: 'Filed by Appellee Westridge Swim & Racquet Club. [1001779538]',
+    filedBy: 'Appellee Counsel',
+    isSealed: false
   },
   {
     id: 'dk-25-119' as DocketId, 
@@ -147,13 +111,6 @@ export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
     description: 'Entered on 09/29/2025. [1001850048]', 
     filedBy: 'Court', 
     isSealed: false, 
-    documentId: '1001850048' as DocumentId,
-    structuredData: {
-        actionType: 'Judgment',
-        actionVerb: 'dismissing',
-        documentTitle: 'Case',
-        filer: 'Court',
-        additionalText: 'Mandate to issue.'
-    }
+    documentId: '1001850048' as DocumentId
   }
 ];

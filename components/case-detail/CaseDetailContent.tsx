@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent, NexusNodeData } from '../../types';
 import { CaseOverview } from './CaseOverview';

@@ -6,7 +6,7 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
   const [activeTime, setActiveTime] = useState(0);
   const [isIdle, setIsIdle] = useState(false);
   const lastActivity = useRef(Date.now());
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const rafRef = useRef<number | null>(null);
   
   // Use a ref to track if we are currently idle so event listeners don't need to re-bind
@@ -65,7 +65,9 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
           }
       }, 1000);
 
-      return () => clearInterval(timerRef.current);
+      return () => {
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
   }, []);
 
   return { activeTime, isIdle };

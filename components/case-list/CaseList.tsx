@@ -1,46 +1,31 @@
+
 // components/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../types';
+import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../../types';
 import {
   Briefcase, UserPlus, ShieldAlert, Users, Calendar, CheckSquare,
   DollarSign, Gavel, Mic2, FileCheck, Archive, FileInput,
   LayoutDashboard, Layers, Plus
 } from 'lucide-react';
 import { Button } from '../common/Button';
-import { useCaseList } from '../hooks/useCaseList';
+import { useCaseList } from '../../hooks/useCaseList';
 import { DocketImportModal } from '../DocketImportModal';
-import { CreateCaseModal } from './case-list/CreateCaseModal';
-import { DataService } from '../services/dataService';
-import { useNotify } from '../hooks/useNotify';
-import { useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { useSessionStorage } from '../hooks/useSessionStorage';
+import { CreateCaseModal } from './CreateCaseModal';
+import { DataService } from '../../services/dataService';
+import { useNotify } from '../../hooks/useNotify';
+import { useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../utils/cn';
-import { CASE_LIST_TAB_CONFIG } from '../config/caseListConfig'; // Updated import path
-import { CaseListContent } from './case-list/CaseListContent'; // Updated import path
-
-// Lazy load sub-components for better performance
-const CaseListActive = lazy(() => import('./case-list/CaseListActive').then(m => ({ default: m.CaseListActive })));
-const CaseListIntake = lazy(() => import('./case-list/CaseListIntake').then(m => ({ default: m.CaseListIntake })));
-const CaseListDocket = lazy(() => import('./case-list/CaseListDocket').then(m => ({ default: m.CaseListDocket })));
-const CaseListTasks = lazy(() => import('./case-list/CaseListTasks').then(m => ({ default: m.CaseListTasks })));
-const CaseListConflicts = lazy(() => import('./case-list/CaseListConflicts').then(m => ({ default: m.CaseListConflicts })));
-const CaseListResources = lazy(() => import('./case-list/CaseListResources').then(m => ({ default: m.CaseListResources })));
-const CaseListTrust = lazy(() => import('./case-list/CaseListTrust').then(m => ({ default: m.CaseListTrust })));
-const CaseListExperts = lazy(() => import('./case-list/CaseListExperts').then(m => ({ default: m.CaseListExperts })));
-const CaseListReporters = lazy(() => import('./case-list/CaseListReporters').then(m => ({ default: m.CaseListReporters })));
-const CaseListClosing = lazy(() => import('./case-list/CaseListClosing').then(m => ({ default: m.CaseListClosing })));
-const CaseListArchived = lazy(() => import('./case-list/CaseListArchived').then(m => ({ default: m.CaseListArchived })));
-
+import { cn } from '../../utils/cn';
+import { CASE_LIST_TAB_CONFIG } from '../../config/caseListConfig';
+import { CaseListContent } from './CaseListContent';
 
 interface CaseListProps {
   onSelectCase: (c: Case) => void;
   initialTab?: string;
 }
-
-// TAB_CONFIG was moved to config/caseListConfig.ts
 
 export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
   const notify = useNotify();

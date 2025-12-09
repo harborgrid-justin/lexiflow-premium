@@ -17,6 +17,7 @@ import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useDocumentDragDrop } from '../../hooks/useDocumentDragDrop';
 import { VirtualGrid } from '../common/VirtualGrid';
+// Fix: Added missing import for DocumentGridCard
 import { DocumentGridCard } from './DocumentGridCard';
 
 interface DocumentExplorerProps {

@@ -54,6 +54,7 @@ export const TableContainer = memo(function TableContainer({ children, className
     </div>
   );
 });
+TableContainer.displayName = 'TableContainer';
 
 export const TableHeader = memo(function TableHeader({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
@@ -63,6 +64,7 @@ export const TableHeader = memo(function TableHeader({ children }: { children: R
     </thead>
   );
 });
+TableHeader.displayName = 'TableHeader';
 
 export const TableBody = memo(function TableBody({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
@@ -72,6 +74,7 @@ export const TableBody = memo(function TableBody({ children }: { children: React
     </tbody>
   );
 });
+TableBody.displayName = 'TableBody';
 
 export const TableRow = memo(function TableRow({ children, className = '', ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   const { theme } = useTheme();
@@ -85,6 +88,7 @@ export const TableRow = memo(function TableRow({ children, className = '', ...pr
     </tr>
   );
 });
+TableRow.displayName = 'TableRow';
 
 export const TableHead = memo(function TableHead({ children, className = '', ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
   const { theme } = useTheme();
@@ -103,6 +107,7 @@ export const TableHead = memo(function TableHead({ children, className = '', ...
     </th>
   );
 });
+TableHead.displayName = 'TableHead';
 
 export const TableCell = memo(function TableCell({ children, className = '', ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
   const { theme } = useTheme();
@@ -112,3 +117,4 @@ export const TableCell = memo(function TableCell({ children, className = '', ...
     </td>
   );
 });
+TableCell.displayName = 'TableCell';

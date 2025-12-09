@@ -27,6 +27,7 @@ const PassiveTimeTracker = memo(({ activeView, selectedCaseId }: { activeView: s
         )} style={{ width: `${Math.min((activeTime % 60) / 60 * 100, 100)}%` }} />
     );
 });
+PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 
 export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
@@ -58,7 +59,7 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
       <div className="flex-1 flex flex-col h-full w-full min-w-0 relative">
         <PassiveTimeTracker activeView={activeView || 'unknown'} selectedCaseId={selectedCaseId || null} />
 
-        <header className={cn("h-16 flex items-center justify-between px-4 md:px-6 shadow-sm z-40 shrink-0 border-b", theme.surface, theme.border.default)}>
+        <header className={cn("h-16 flex items-center justify-between px-4 md:px-6 shadow-sm z-40 shrink-0 border-b", theme.surface.default, theme.border.default)}>
           {headerWithProps}
         </header>
         

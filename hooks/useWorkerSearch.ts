@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef, useTransition } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SearchWorker } from '../services/searchWorker';
 
 interface UseWorkerSearchProps<T> {
@@ -33,7 +33,37 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
     };
   }, []);
 
-  // Dispatch Search Task
+  // Dispatch Data Update (Only when items/config change)
+  useEffect(() => {
+      if (!workerRef.current) return;
+      
+      workerRef.current.postMessage({
+          type: 'UPDATE',
+          payload: {
+              items,
+              fields,
+              idKey
+          }
+      });
+      
+      // If query is empty, reset display immediately
+      if (!query) {
+          setFilteredItems(items);
+      } else {
+          // If data updated while searching, re-trigger search
+          const currentRequestId = ++requestIdRef.current;
+          setIsSearching(true);
+          workerRef.current.postMessage({
+              type: 'SEARCH',
+              payload: {
+                  query,
+                  requestId: currentRequestId
+              }
+          });
+      }
+  }, [items, fields, idKey]); // Removed 'query' from dependency array
+
+  // Dispatch Search Task (Only when query changes)
   useEffect(() => {
     if (!workerRef.current) return;
 
@@ -45,16 +75,15 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
     setIsSearching(true);
     const currentRequestId = ++requestIdRef.current;
     
-    // Send data to worker (Structured Clone Algorithm handles the copy)
     workerRef.current.postMessage({
-        items,
-        query,
-        fields,
-        idKey,
-        requestId: currentRequestId
+        type: 'SEARCH',
+        payload: {
+            query,
+            requestId: currentRequestId
+        }
     });
 
-  }, [items, query, fields]); // Re-run when source data or query changes
+  }, [query]); // Only run on query change
 
   return { filteredItems, isSearching };
 };

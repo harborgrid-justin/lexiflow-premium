@@ -11,17 +11,7 @@ import { ChainService } from '../../services/chainService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
-import { UserId } from '../../types';
-
-interface Invoice {
-  id: string;
-  client: string;
-  matter: string;
-  date: string;
-  dueDate: string;
-  amount: number;
-  status: 'Draft' | 'Sent' | 'Paid' | 'Overdue';
-}
+import { UserId, Invoice } from '../../types';
 
 export const BillingInvoices: React.FC = () => {
   const { theme } = useTheme();
@@ -32,11 +22,11 @@ export const BillingInvoices: React.FC = () => {
   // Enterprise Data Access
   const { data: invoices = [] } = useQuery<Invoice[]>(
       [STORES.INVOICES, 'all'],
-      DataService.billing.getInvoices as any 
+      () => DataService.billing ? DataService.billing.getInvoices() : Promise.resolve([])
   );
 
   const { mutate: sendInvoice, isLoading: isSending } = useMutation(
-      DataService.billing.sendInvoice,
+      (id: string) => DataService.billing.sendInvoice(id),
       {
           onSuccess: (_, id) => {
               notify.success(`Invoice ${id} sent successfully.`);

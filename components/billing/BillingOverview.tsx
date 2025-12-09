@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { DollarSign, AlertCircle, Users, Calculator } from 'lucide-react';
@@ -19,20 +18,20 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
   
-  // Enterprise Data Access: Parallel Queries
+  // Enterprise Data Access: Parallel Queries with safety check
   const { data: wipData = [] } = useQuery<WIPStat[]>(
       ['billing', 'wipStats'],
-      DataService.billing.getWIPStats
+      () => DataService.billing ? DataService.billing.getWIPStats() : Promise.resolve([])
   );
   
   const { data: realizationData = [] } = useQuery(
       ['billing', 'realization'],
-      DataService.billing.getRealizationStats
+      () => DataService.billing ? DataService.billing.getRealizationStats() : Promise.resolve([])
   );
   
   const { data: topClients = [] } = useQuery(
       ['billing', 'topAccounts'],
-      DataService.billing.getTopAccounts
+      () => DataService.billing ? DataService.billing.getTopAccounts() : Promise.resolve([])
   );
 
   const totalWip = wipData.reduce((acc: number, curr: any) => acc + curr.wip, 0);

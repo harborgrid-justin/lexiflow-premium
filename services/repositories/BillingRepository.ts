@@ -1,5 +1,4 @@
-
-import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, OperatingSummary, FinancialPerformanceData, UUID, UserId, FirmExpense } from '../../types';
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 import { ChainService } from '../chainService';
@@ -31,12 +30,9 @@ export class BillingRepository extends Repository<TimeEntry> {
          ]);
          
          // Aggregate WIP by Client
-         // First, map Case IDs to Client IDs
          const caseToClientMap: Record<string, string> = {};
-         const clientNames: Record<string, string> = {};
          
          clients.forEach(c => {
-             clientNames[c.id] = c.name;
              c.matters.forEach(m => {
                  caseToClientMap[m] = c.id;
              });
@@ -62,7 +58,6 @@ export class BillingRepository extends Repository<TimeEntry> {
              };
          });
 
-         // Return top 5 by WIP, or mock if empty for demo
          if (stats.length === 0) {
               return clients.slice(0, 3).map(c => ({
                 name: c.name.split(' ')[0],
@@ -75,12 +70,10 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
 
     async getRealizationStats(): Promise<any> {
-        // Calculate dynamic realization
         const invoices = await this.getInvoices();
         const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
         const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
         
-        // Avoid division by zero
         const rate = totalBilled === 0 ? 100 : Math.round((totalCollected / totalBilled) * 100);
         
         return [
@@ -133,11 +126,9 @@ export class BillingRepository extends Repository<TimeEntry> {
     
     async sendInvoice(id: string): Promise<boolean> {
         await delay(500);
-        
         await this.updateInvoice(id, { status: 'Sent' });
         
-        // Log to Audit Chain
-        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // Simplification
+        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
         await ChainService.createEntry({
             timestamp: new Date().toISOString(),
             user: 'System Billing',
@@ -147,7 +138,6 @@ export class BillingRepository extends Repository<TimeEntry> {
             ip: 'internal'
         }, prevHash);
 
-        console.log(`[API] Invoice ${id} sent and audit logged.`); 
         return true; 
     }
 
@@ -164,7 +154,6 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
     
     async getOverviewStats() { 
-        // Real aggregation
         const invoices = await this.getInvoices();
         const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
         const collected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
@@ -178,7 +167,6 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
     
     async getOperatingSummary(): Promise<OperatingSummary> {
-        // Aggregate Expenses and Revenue for current month
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
         
@@ -195,13 +183,12 @@ export class BillingRepository extends Repository<TimeEntry> {
             .filter(i => i.status === 'Paid' && i.date >= startOfMonth)
             .reduce((sum, i) => sum + i.amount, 0);
         
-        const balance = revenueMtd - expensesMtd + 500000; // Mock opening balance
+        const balance = revenueMtd - expensesMtd + 500000;
 
         return { balance, expensesMtd, cashFlowMtd: revenueMtd };
     }
 
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {
-        // Aggregate data by month for chart
         const [invoices, expenses] = await Promise.all([
             db.getAll<Invoice>(STORES.INVOICES),
             db.getAll<FirmExpense>(STORES.EXPENSES)
@@ -210,13 +197,11 @@ export class BillingRepository extends Repository<TimeEntry> {
         const revenueByMonth: Record<string, number> = {};
         const expensesByCategory: Record<string, number> = {};
 
-        // Process Revenue
         invoices.forEach(inv => {
             const month = new Date(inv.date).toLocaleString('default', { month: 'short' });
             revenueByMonth[month] = (revenueByMonth[month] || 0) + inv.amount;
         });
 
-        // Process Expenses
         expenses.forEach(exp => {
             expensesByCategory[exp.category] = (expensesByCategory[exp.category] || 0) + exp.amount;
         });
@@ -225,7 +210,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         const revenueData = months.map(m => ({
             month: m,
             actual: revenueByMonth[m] || 0,
-            target: 400000 // Mock target
+            target: 400000 
         }));
 
         const expenseData = Object.keys(expensesByCategory).map(cat => ({
@@ -233,7 +218,6 @@ export class BillingRepository extends Repository<TimeEntry> {
             value: expensesByCategory[cat]
         }));
         
-        // If data is empty (initial state), return seeds
         if (revenueData.every(d => d.actual === 0)) {
              return {
                 revenue: [

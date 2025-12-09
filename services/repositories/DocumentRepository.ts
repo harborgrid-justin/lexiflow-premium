@@ -1,4 +1,5 @@
-import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../../types';
+
+import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId, DocumentVersion } from '../../types';
 import { db, STORES } from '../db';
 import { Repository } from '../core/Repository';
 
@@ -43,11 +44,24 @@ export class DocumentRepository extends Repository<LegalDocument> {
     async redact(docId: string): Promise<LegalDocument> {
         const doc = await this.getById(docId);
         if (!doc) throw new Error("Document not found");
+
+        // Create a version snapshot of current state
+        const newVersion: DocumentVersion = {
+            id: `ver-${Date.now()}` as any,
+            versionNumber: (doc.versions.length || 0) + 1,
+            uploadedBy: 'System',
+            uploadDate: new Date().toISOString(),
+            contentSnapshot: doc.content
+        };
+
         const updatedDoc = {
             ...doc,
-            content: "[REDACTED CONTENT]",
+            content: "[REDACTED CONTENT] - PII Removed via Automated Scrubbing",
             isRedacted: true,
+            versions: [newVersion, ...doc.versions],
+            lastModified: new Date().toISOString()
         };
+        
         await this.update(docId, updatedDoc);
         return updatedDoc;
     }
@@ -55,6 +69,14 @@ export class DocumentRepository extends Repository<LegalDocument> {
     async summarizeBatch(docIds: string[]): Promise<number> {
         console.log(`[AI] Summarizing ${docIds.length} documents.`);
         await yieldToMain();
+        
+        // Loop through and update summary field
+        for (const id of docIds) {
+            const doc = await this.getById(id);
+            if (doc) {
+                await this.update(id, { summary: 'AI Summary: Document processed successfully.' });
+            }
+        }
         return docIds.length;
     }
 

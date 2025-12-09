@@ -1,6 +1,7 @@
 
 import { DataService } from './dataService';
 import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../types';
+import { StringUtils } from '../utils/stringUtils';
 
 export type SearchResultType = 'case' | 'document' | 'client' | 'task' | 'evidence' | 'user' | 'docket' | 'motion' | 'clause' | 'rule';
 
@@ -10,203 +11,158 @@ export interface GlobalSearchResult {
   title: string;
   subtitle: string;
   data: Case | Client | WorkflowTask | EvidenceItem | User | LegalDocument | DocketEntry | Motion | Clause | LegalRule;
+  score?: number;
 }
 
-// Optimization: Yield control to main thread to prevent UI freezing during heavy aggregation
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
 export const SearchService = {
   async search(query: string): Promise<GlobalSearchResult[]> {
     const q = query ? query.toLowerCase() : '';
     const results: GlobalSearchResult[] = [];
-    const CHUNK_SIZE = 50; // Optimization: Process items in small batches
+    const CHUNK_SIZE = 50;
+
+    // Helper for scoring
+    const calculateScore = (text: string, query: string): number => {
+        const t = text.toLowerCase();
+        if (t === query) return 100; // Exact match
+        if (t.startsWith(query)) return 80; // Prefix match
+        if (t.includes(query)) return 50; // Partial match
+        // Simple fuzzy fallbacks
+        const dist = StringUtils.levenshtein(t.substring(0, Math.min(t.length, query.length * 2)), query);
+        if (dist <= 2) return 20; 
+        return 0;
+    };
 
     try {
-      // Optimization: Parallel Fetch of All 10 Data Domains
       const resultsSettled = await Promise.allSettled([
         DataService.cases.getAll(),
         DataService.clients.getAll(),
         DataService.tasks.getAll(),
         DataService.evidence.getAll(),
         DataService.users.getAll(),
-        DataService.documents.getAll(),     // New Domain 1
-        DataService.docket.getAll(),        // New Domain 2
-        DataService.motions.getAll(),       // New Domain 3
-        DataService.clauses.getAll(),       // New Domain 4
-        DataService.rules.getAll()          // New Domain 5
+        DataService.documents.getAll(),
+        DataService.docket.getAll(),
+        DataService.motions.getAll(),
+        DataService.clauses.getAll(),
+        DataService.rules.getAll()
       ]);
 
       let processCount = 0;
 
-      // Helper to push result and cooperatively yield to main thread
-      const pushResult = async (item: GlobalSearchResult) => {
-          results.push(item);
+      const pushResult = async (item: GlobalSearchResult, textToScore: string) => {
+          if (!q) {
+              // No query, return recent/all (score 1)
+              results.push({...item, score: 1});
+              return;
+          }
+
+          const score = calculateScore(textToScore, q);
+          if (score > 0) {
+            results.push({ ...item, score });
+          }
+          
           processCount++;
-          // Optimization: Yield every CHUNK_SIZE items to keep UI responsive
           if (processCount % CHUNK_SIZE === 0) await yieldToMain();
       };
 
-      // --- EXISTING DOMAINS ---
-
       // 0: Cases
       if (resultsSettled[0].status === 'fulfilled') {
-        const cases = resultsSettled[0].value;
-        for (const c of cases) {
-          if (!q || c.title.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || c.client.toLowerCase().includes(q)) {
+        for (const c of resultsSettled[0].value) {
             await pushResult({ 
-              id: c.id, 
-              type: 'case', 
-              title: c.title, 
-              subtitle: `${c.id} • ${c.client}`, 
-              data: c 
-            });
-          }
+              id: c.id, type: 'case', title: c.title, 
+              subtitle: `${c.id} • ${c.client}`, data: c 
+            }, c.title);
         }
       }
 
       // 1: Clients
       if (resultsSettled[1].status === 'fulfilled') {
-        const clients = resultsSettled[1].value;
-        for (const c of clients) {
-          if (!q || c.name.toLowerCase().includes(q) || c.industry.toLowerCase().includes(q)) {
+        for (const c of resultsSettled[1].value) {
             await pushResult({ 
-              id: c.id, 
-              type: 'client', 
-              title: c.name, 
-              subtitle: `Client • ${c.industry}`, 
-              data: c 
-            });
-          }
+              id: c.id, type: 'client', title: c.name, 
+              subtitle: `Client • ${c.industry}`, data: c 
+            }, c.name);
         }
       }
 
       // 2: Tasks
       if (resultsSettled[2].status === 'fulfilled') {
-        const tasks = resultsSettled[2].value;
-        for (const t of tasks) {
-          if (!q || t.title.toLowerCase().includes(q)) {
+        for (const t of resultsSettled[2].value) {
             await pushResult({ 
-              id: t.id, 
-              type: 'task', 
-              title: t.title, 
-              subtitle: `Task • Due: ${t.dueDate}`, 
-              data: t 
-            });
-          }
+              id: t.id, type: 'task', title: t.title, 
+              subtitle: `Task • Due: ${t.dueDate}`, data: t 
+            }, t.title);
         }
       }
 
       // 3: Evidence
       if (resultsSettled[3].status === 'fulfilled') {
-        const evidence = resultsSettled[3].value;
-        for (const e of evidence) {
-          if (!q || e.title.toLowerCase().includes(q) || e.trackingUuid.toLowerCase().includes(q)) {
-              await pushResult({
-                  id: e.id,
-                  type: 'evidence',
-                  title: e.title,
-                  subtitle: `Evidence • ${e.type} • ${e.custodian}`,
-                  data: e
-              });
-          }
+        for (const e of resultsSettled[3].value) {
+           await pushResult({
+              id: e.id, type: 'evidence', title: e.title,
+              subtitle: `Evidence • ${e.type}`, data: e
+           }, e.title);
         }
       }
 
       // 4: Users
       if (resultsSettled[4].status === 'fulfilled') {
-        const users = resultsSettled[4].value;
-        for (const u of users) {
-            if (!q || u.name.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q)) {
-                await pushResult({
-                    id: u.id,
-                    type: 'user',
-                    title: u.name,
-                    subtitle: `${u.role} • ${u.office}`,
-                    data: u
-                });
-            }
+        for (const u of resultsSettled[4].value) {
+            await pushResult({
+                id: u.id, type: 'user', title: u.name,
+                subtitle: `${u.role} • ${u.office}`, data: u
+            }, u.name);
         }
       }
 
-      // --- NEW DEEP SEARCH DOMAINS ---
-
       // 5: Documents
       if (resultsSettled[5].status === 'fulfilled') {
-        const docs = resultsSettled[5].value;
-        for (const d of docs) {
-            if (!q || d.title.toLowerCase().includes(q) || d.type.toLowerCase().includes(q)) {
-                await pushResult({
-                    id: d.id,
-                    type: 'document',
-                    title: d.title,
-                    subtitle: `Doc • ${d.type} • ${d.status || 'Draft'}`,
-                    data: d
-                });
-            }
+        for (const d of resultsSettled[5].value) {
+            await pushResult({
+                id: d.id, type: 'document', title: d.title,
+                subtitle: `Doc • ${d.type}`, data: d
+            }, d.title);
         }
       }
 
       // 6: Docket
       if (resultsSettled[6].status === 'fulfilled') {
-        const entries = resultsSettled[6].value;
-        for (const d of entries) {
-            if (!q || d.title.toLowerCase().includes(q) || (d.description && d.description.toLowerCase().includes(q))) {
-                await pushResult({
-                    id: d.id,
-                    type: 'docket',
-                    title: d.title,
-                    subtitle: `Docket #${d.sequenceNumber} • ${d.type}`,
-                    data: d
-                });
-            }
+        for (const d of resultsSettled[6].value) {
+             await pushResult({
+                id: d.id, type: 'docket', title: d.title,
+                subtitle: `Docket #${d.sequenceNumber}`, data: d
+            }, d.title);
         }
       }
 
       // 7: Motions
       if (resultsSettled[7].status === 'fulfilled') {
-        const motions = resultsSettled[7].value;
-        for (const m of motions) {
-            if (!q || m.title.toLowerCase().includes(q) || m.type.toLowerCase().includes(q)) {
-                await pushResult({
-                    id: m.id,
-                    type: 'motion',
-                    title: m.title,
-                    subtitle: `Motion • ${m.status} • ${m.type}`,
-                    data: m
-                });
-            }
+        for (const m of resultsSettled[7].value) {
+             await pushResult({
+                id: m.id, type: 'motion', title: m.title,
+                subtitle: `Motion • ${m.status}`, data: m
+            }, m.title);
         }
       }
 
       // 8: Clauses
       if (resultsSettled[8].status === 'fulfilled') {
-        const clauses = resultsSettled[8].value;
-        for (const c of clauses) {
-            if (!q || c.name.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)) {
-                await pushResult({
-                    id: c.id,
-                    type: 'clause',
-                    title: c.name,
-                    subtitle: `Clause • ${c.category}`,
-                    data: c
-                });
-            }
+        for (const c of resultsSettled[8].value) {
+            await pushResult({
+                id: c.id, type: 'clause', title: c.name,
+                subtitle: `Clause • ${c.category}`, data: c
+            }, c.name);
         }
       }
 
       // 9: Rules
       if (resultsSettled[9].status === 'fulfilled') {
-        const rules = resultsSettled[9].value;
-        for (const r of rules) {
-            if (!q || r.name.toLowerCase().includes(q) || r.code.toLowerCase().includes(q)) {
-                await pushResult({
-                    id: r.id,
-                    type: 'rule',
-                    title: `${r.code} - ${r.name}`,
-                    subtitle: `Rule • ${r.type}`,
-                    data: r
-                });
-            }
+        for (const r of resultsSettled[9].value) {
+             await pushResult({
+                id: r.id, type: 'rule', title: `${r.code} - ${r.name}`,
+                subtitle: `Rule • ${r.type}`, data: r
+            }, r.name + ' ' + r.code);
         }
       }
 
@@ -214,7 +170,7 @@ export const SearchService = {
       console.error("Critical Search Failure", error);
     }
 
-    // Optimization: Limit result set size to avoid rendering bottlenecks
-    return results.slice(0, 20);
+    // Sort by score descending
+    return results.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 15);
   }
 };

@@ -1,14 +1,16 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle } from 'lucide-react';
+import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
 import { useDebounce } from '../../hooks/useDebounce';
+import { useKeyboardNav } from '../../hooks/useKeyboardNav';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
 import { Trie } from '../../utils/trie';
 import { Scheduler } from '../../utils/scheduler';
+import { HighlightedText } from '../common/HighlightedText';
 
 interface NeuralCommandBarProps {
   globalSearch: string;
@@ -25,62 +27,53 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
-  const debouncedSearch = useDebounce(globalSearch, 150); // Optimization: Faster debounce due to Trie speed
+  const debouncedSearch = useDebounce(globalSearch, 150);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Optimization: Initialize Trie for O(L) lookup
+  
+  // Trie for Instant Prefix Matching
   const searchTrie = useMemo(() => new Trie(), []);
-  const [isTrieReady, setIsTrieReady] = useState(false);
 
-  // Optimization: Build Trie index in background chunks to avoid blocking main thread
+  // Build Trie in background
   useEffect(() => {
     const buildIndex = async () => {
-        // Fetch base data for index
-        const data = await SearchService.search(''); // Empty search returns top items/recent
-        
+        const data = await SearchService.search(''); // empty query gets base set
         let i = 0;
-        const CHUNK_SIZE = 50;
-
         const processChunk = () => {
-            const chunkEnd = Math.min(i + CHUNK_SIZE, data.length);
+            const chunkEnd = Math.min(i + 50, data.length);
             for (; i < chunkEnd; i++) {
                 const item = data[i];
                 searchTrie.insert(item.title, item);
                 if (item.subtitle) searchTrie.insert(item.subtitle, item);
             }
-
-            if (i < data.length) {
-                Scheduler.defer(processChunk);
-            } else {
-                setIsTrieReady(true);
-            }
+            if (i < data.length) Scheduler.defer(processChunk);
         };
-
         Scheduler.defer(processChunk);
     };
     buildIndex();
   }, [searchTrie]);
 
-  // Hybrid Search Logic: Trie -> Levenshtein -> Full Text
+  // Hybrid Search Execution
   useEffect(() => {
     const performSearch = async () => {
       if (debouncedSearch.length >= 1 && !isProcessingIntent) {
-        
-        // 1. O(L) Trie Prefix Lookup (Instant)
+        // 1. Try Trie
         let matches = searchTrie.search(debouncedSearch);
-
-        // 2. If few results, try simple string match via Service (Fuzzy fallback)
-        if (matches.length < 3) {
-            const fuzzyResults = await SearchService.search(debouncedSearch);
-            // Dedupe
+        
+        // 2. If weak results, fall back to robust service (includes fuzzy)
+        if (matches.length < 5) {
+            const serviceResults = await SearchService.search(debouncedSearch);
+            // Merge deduplicated
             const existingIds = new Set(matches.map(m => m.id));
-            fuzzyResults.forEach(r => {
+            serviceResults.forEach(r => {
                 if (!existingIds.has(r.id)) matches.push(r);
             });
         }
+        
+        // 3. Sort by Score
+        matches.sort((a,b) => (b.score || 0) - (a.score || 0));
 
-        setResults(matches.slice(0, 8)); // Limit visual results
+        setResults(matches.slice(0, 10));
         setShowResults(true);
       } else {
         setResults([]);
@@ -107,9 +100,8 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
     if (onSearchResultClick) onSearchResultClick(result);
   };
 
-  const handleNeuralSubmit = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && globalSearch.trim().length > 0) {
-      if (globalSearch.length > 10 || /open|go to|draft|create|show/.test(globalSearch.toLowerCase())) {
+  const handleNeuralSubmit = async () => {
+    if (globalSearch.length > 10 || /open|go to|draft|create|show/.test(globalSearch.toLowerCase())) {
         setIsProcessingIntent(true);
         const intent = await GeminiService.predictIntent(globalSearch);
         
@@ -123,11 +115,25 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
         if (intent.action !== 'UNKNOWN' && onNeuralCommand) {
           setGlobalSearch('');
           onNeuralCommand(intent);
-          return;
         }
-      }
-      onGlobalSearch(e);
     }
+  };
+
+  // Keyboard Navigation Hook
+  const { activeIndex, setActiveIndex, handleKeyDown } = useKeyboardNav({
+      items: results,
+      isOpen: showResults,
+      onSelect: handleResultSelect,
+      onClose: () => setShowResults(false)
+  });
+
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter' && activeIndex === -1) {
+          handleNeuralSubmit();
+          onGlobalSearch(e);
+      } else {
+          handleKeyDown(e);
+      }
   };
 
   return (
@@ -139,7 +145,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
         <input 
             ref={inputRef}
             type="text" 
-            placeholder={isProcessingIntent ? "Analyzing intent..." : "Search or type a command (e.g., 'Open Martinez case and draft motion')..."} 
+            placeholder={isProcessingIntent ? "Analyzing intent..." : "Search or type a command (e.g., 'Draft motion for Martinez')..."} 
             className={cn(
                 "w-full pl-10 pr-10 py-2.5 rounded-xl text-sm outline-none transition-all border shadow-sm font-medium",
                 theme.surface,
@@ -148,7 +154,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
             )} 
             value={globalSearch}
             onChange={(e) => setGlobalSearch(e.target.value)}
-            onKeyDown={handleNeuralSubmit}
+            onKeyDown={onInputKeyDown}
             onFocus={() => { if(globalSearch.length > 0) setShowResults(true); }}
             disabled={isProcessingIntent}
         />
@@ -164,30 +170,51 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
 
         {showResults && (
             <div className={cn("absolute top-full left-0 right-0 mt-2 rounded-lg shadow-2xl border overflow-hidden max-h-96 overflow-y-auto z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface, theme.border.default)}>
-                <div className={cn("bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-3 border-b flex justify-between items-center", theme.border.default)}>
+                <div className={cn("bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-2 border-b flex justify-between items-center", theme.border.default)}>
                     <span className="text-[10px] font-bold text-purple-600 uppercase tracking-wider flex items-center">
                         <Sparkles className="h-3 w-3 mr-1"/> AI Command Ready
                     </span>
-                    <span className={cn("text-[10px]", theme.text.secondary)}>Press Enter to execute</span>
+                    <span className={cn("text-[9px] flex items-center gap-1", theme.text.secondary)}>
+                        <kbd className="border rounded px-1 font-mono">↵</kbd> to execute
+                    </span>
                 </div>
 
                 {results.length > 0 ? (
-                    <div className="py-2">
-                        <div className={cn("px-3 py-2 text-xs font-semibold uppercase tracking-wider flex justify-between", theme.text.tertiary)}>
-                            <span>Direct Matches</span>
-                            {results.length > 0 && <span className="text-[9px] border px-1 rounded flex items-center gap-1"><Zap className="h-2 w-2"/> Instant</span>}
-                        </div>
-                        {results.map((result) => (
+                    <div className="py-1">
+                         {/* Optional Quick Actions Header */}
+                         {results.length > 0 && results[0].score && results[0].score > 80 && (
+                            <div className={cn("px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider flex justify-between", theme.text.tertiary)}>
+                                <span>Top Matches</span>
+                                <span className="flex items-center gap-1"><Zap className="h-2 w-2"/> Instant</span>
+                            </div>
+                         )}
+
+                        {results.map((result, index) => (
                             <button
                                 key={`${result.type}-${result.id}`}
                                 onClick={() => handleResultSelect(result)}
-                                className={cn("w-full text-left px-4 py-3 flex items-center gap-3 transition-colors border-b last:border-0", theme.border.light, `hover:${theme.surfaceHighlight}`)}
+                                onMouseEnter={() => setActiveIndex(index)}
+                                className={cn(
+                                    "w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors border-b last:border-0",
+                                    activeIndex === index 
+                                        ? cn("bg-blue-50 dark:bg-blue-900/30 border-blue-100 dark:border-blue-800") 
+                                        : cn(theme.border.light, `hover:${theme.surfaceHighlight}`)
+                                )}
                             >
-                                <div>
-                                    <p className={cn("text-sm font-bold", theme.text.primary)}>{result.title}</p>
-                                    <p className={cn("text-xs", theme.text.secondary)}>{result.subtitle}</p>
+                                <div className="flex-1 min-w-0">
+                                    <p className={cn("text-sm font-bold truncate", theme.text.primary)}>
+                                        <HighlightedText text={result.title} query={globalSearch} />
+                                    </p>
+                                    <p className={cn("text-xs truncate", theme.text.secondary)}>
+                                        <HighlightedText text={result.subtitle} query={globalSearch} />
+                                    </p>
                                 </div>
-                                <ArrowRight className={cn("h-4 w-4 ml-auto opacity-0 group-hover:opacity-100", theme.text.tertiary)}/>
+                                
+                                {activeIndex === index && (
+                                    <div className="hidden sm:flex items-center gap-2 text-[10px] text-blue-600 font-medium animate-in fade-in slide-in-from-left-1">
+                                        Open <CornerDownLeft className="h-3 w-3"/>
+                                    </div>
+                                )}
                             </button>
                         ))}
                     </div>

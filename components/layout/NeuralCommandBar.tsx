@@ -5,6 +5,7 @@ import { GlobalSearchResult, SearchService } from '../../services/searchService'
 import { GeminiService, IntentResult } from '../../services/geminiService';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useKeyboardNav } from '../../hooks/useKeyboardNav';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
@@ -30,6 +31,8 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const debouncedSearch = useDebounce(globalSearch, 150);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  useClickOutside(searchRef, () => setShowResults(false));
   
   // Trie for Instant Prefix Matching
   const searchTrie = useMemo(() => new Trie(), []);
@@ -82,17 +85,6 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
     };
     performSearch();
   }, [debouncedSearch, isProcessingIntent, searchTrie]);
-
-  // Outside Click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowResults(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleResultSelect = (result: GlobalSearchResult) => {
     setGlobalSearch('');

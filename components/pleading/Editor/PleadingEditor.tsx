@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadCloud, Download, FileText } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
@@ -62,19 +62,21 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
       saveDocument({ ...document, comments, variables, lastAutoSaved: new Date().toISOString() });
   };
 
-  const handleUpdateSection = (id: string, updates: Partial<PleadingSection>) => {
-      const newSections = document.sections.map(s => s.id === id ? { ...s, ...updates } : s);
-      setDocument({ ...document, sections: newSections });
-  };
+  const handleUpdateSection = useCallback((id: string, updates: Partial<PleadingSection>) => {
+      setDocument(prev => ({
+          ...prev,
+          sections: prev.sections.map(s => s.id === id ? { ...s, ...updates } : s)
+      }));
+  }, []);
 
-  const handleReorderSections = (newSections: PleadingSection[]) => {
-      setDocument({ ...document, sections: newSections });
-  };
+  const handleReorderSections = useCallback((newSections: PleadingSection[]) => {
+      setDocument(prev => ({ ...prev, sections: newSections }));
+  }, []);
 
-  const handleDeleteSection = (id: string) => {
-      setDocument({ ...document, sections: document.sections.filter(s => s.id !== id) });
+  const handleDeleteSection = useCallback((id: string) => {
+      setDocument(prev => ({ ...prev, sections: prev.sections.filter(s => s.id !== id) }));
       setSelectedSectionId(null);
-  };
+  }, []);
 
   // Module Handlers
   const handleInsertText = (text: string) => {

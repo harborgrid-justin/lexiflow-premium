@@ -78,7 +78,7 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
   return (
     <div 
       ref={containerRef}
-      className={cn("overflow-y-auto relative custom-scrollbar will-change-scroll", className)}
+      className={cn("overflow-y-auto relative custom-scrollbar will-change-scroll scroll-smooth", className)}
       style={{ height: typeof height === 'number' ? `${height}px` : '100%', contain: 'strict' }}
       onScroll={handleScroll}
     >

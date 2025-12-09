@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { PenTool, CheckCircle, RefreshCcw } from 'lucide-react';
+import { PenTool, CheckCircle, RefreshCcw, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
@@ -19,10 +19,8 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
   const [localSigning, setLocalSigning] = useState(false);
 
   const handleClick = () => {
-    if (value) {
-      onChange(false);
-      return;
-    }
+    if (value) return; // Prevent re-signing on simple click if already signed, use clear button
+    
     setLocalSigning(true);
     setTimeout(() => {
       setLocalSigning(false);
@@ -30,33 +28,53 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
     }, 800);
   };
 
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange(false);
+  };
+
   const loading = isSigning || localSigning;
 
   return (
-    <div 
-      className={cn(
-        "p-4 rounded-lg border-2 border-dashed transition-all cursor-pointer group",
-        value 
-          ? cn(theme.status.info.bg, theme.status.info.border) 
-          : cn(theme.surfaceHighlight, theme.border.default, `hover:${theme.border.light}`)
-      )} 
-      onClick={handleClick}
-    >
-      <div className="flex items-center gap-3">
-        <div className={cn(
-          "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+    <div className="relative">
+      <div 
+        className={cn(
+          "p-4 rounded-lg border-2 border-dashed transition-all cursor-pointer group relative overflow-hidden",
           value 
-            ? "bg-blue-600 text-white" 
-            : cn(theme.surface, theme.border.default, "border text-slate-400 group-hover:border-slate-300")
-        )}>
-          {loading ? <RefreshCcw className="h-5 w-5 animate-spin"/> : value ? <CheckCircle className="h-6 w-6"/> : <PenTool className="h-5 w-5"/>}
+            ? cn(theme.status.info.bg, theme.status.info.border) 
+            : cn(theme.surfaceHighlight, theme.border.default, `hover:${theme.border.light}`)
+        )} 
+        onClick={handleClick}
+      >
+        <div className="flex items-center gap-3">
+          <div className={cn(
+            "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+            value 
+              ? "bg-blue-600 text-white" 
+              : cn(theme.surface, theme.border.default, "border text-slate-400 group-hover:border-slate-300")
+          )}>
+            {loading ? <RefreshCcw className="h-5 w-5 animate-spin"/> : value ? <CheckCircle className="h-6 w-6"/> : <PenTool className="h-5 w-5"/>}
+          </div>
+          <div>
+            <span className={cn("block text-sm font-bold", value ? "text-blue-900 dark:text-blue-200" : theme.text.primary)}>
+              {value ? 'Signed & Verified' : label}
+            </span>
+            <span className={cn("text-xs", theme.text.secondary)}>{subtext}</span>
+          </div>
         </div>
-        <div>
-          <span className={cn("block text-sm font-bold", value ? "text-blue-900 dark:text-blue-200" : theme.text.primary)}>
-            {value ? 'Signed & Verified' : label}
-          </span>
-          <span className={cn("text-xs", theme.text.secondary)}>{subtext}</span>
-        </div>
+        
+        {value && (
+             <div className="absolute top-0 right-0 p-2">
+                 <button 
+                    onClick={handleClear}
+                    className="p-1 rounded-full bg-slate-200 hover:bg-red-100 hover:text-red-500 text-slate-500 transition-colors"
+                    title="Clear Signature"
+                    aria-label="Clear Signature"
+                 >
+                     <X className="h-4 w-4"/>
+                 </button>
+             </div>
+        )}
       </div>
     </div>
   );

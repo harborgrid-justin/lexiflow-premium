@@ -114,6 +114,6 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
     </div>
   );
 }, (prev, next) => {
-  return prev.doc === next.doc && prev.isSelected === next.isSelected && prev.theme === next.theme;
+  return prev.doc === next.doc && prev.isSelected === next.isSelected;
 });
 DocumentRow.displayName = 'DocumentRow';

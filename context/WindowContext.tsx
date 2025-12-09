@@ -1,7 +1,8 @@
+
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Minus, Maximize2 } from 'lucide-react';
-import { tokens } from '../theme/tokens';
+import { ErrorBoundary } from '../components/common/ErrorBoundary';
 
 export interface WindowInstance {
   id: string;
@@ -240,7 +241,9 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
                 {/* Content */}
                 <div className="flex-1 h-full relative pointer-events-auto overflow-hidden">
-                    {win.component}
+                    <ErrorBoundary>
+                      {win.component}
+                    </ErrorBoundary>
                 </div>
             </div>,
             portalRoot

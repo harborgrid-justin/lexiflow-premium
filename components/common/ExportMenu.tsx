@@ -1,9 +1,10 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Download, FileText, Table, FileCode } from 'lucide-react';
 import { Button } from './Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 interface ExportMenuProps {
   onExport: (format: 'pdf' | 'csv' | 'xml') => void;
@@ -14,15 +15,7 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onExport }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(menuRef, () => setIsOpen(false));
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
@@ -30,6 +23,8 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onExport }) => {
         variant="secondary" 
         icon={Download} 
         onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       >
         Export
       </Button>

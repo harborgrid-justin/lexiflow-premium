@@ -1,8 +1,9 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { MoreVertical } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 interface ActionItem {
   label: string;
@@ -20,21 +21,15 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(menuRef, () => setIsOpen(false));
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
       <button 
         onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
         className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.text.secondary}`)}
+        aria-label="More actions"
+        aria-expanded={isOpen}
       >
         <MoreVertical className="h-4 w-4" />
       </button>

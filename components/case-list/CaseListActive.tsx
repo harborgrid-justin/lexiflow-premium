@@ -83,10 +83,9 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   };
 
   // Virtualized Row Renderer (Mobile)
-  const renderMobileRow = (c: Case) => (
-    <div className="px-1 py-1.5 h-[104px]">
+  const renderMobileRow = (c: Case, index: number) => (
+    <div key={c.id} className="px-1 py-1.5 h-[120px]">
         <SwipeableItem 
-            key={c.id}
             onSwipeLeft={() => handleArchiveCase(c)}
             onSwipeRight={() => handleFlagCase(c)}
             leftActionLabel="Archive"
@@ -95,14 +94,20 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
             <div 
             onClick={() => onSelectCase(c)}
             className={cn(
-                "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden h-full",
+                "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden h-full flex flex-col justify-between",
                 theme.surface, theme.border.default
             )}
             >
             <div className={cn("absolute left-0 top-0 bottom-0 w-1", c.status === 'Trial' ? "bg-amber-500" : c.status === 'Discovery' ? "bg-blue-500" : "bg-slate-300")}></div>
-            <h4 className={cn("font-bold text-lg mb-1 leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
-            <div className="flex items-center justify-between pl-2 mt-2">
-                <StatusBadge status={c.status} />
+            <div>
+                <div className="flex justify-between items-start mb-1 pl-2">
+                    <span className={cn("text-xs font-mono opacity-70", theme.text.secondary)}>{c.id}</span>
+                    <span className={cn("text-[10px] uppercase font-bold text-slate-400")}>{c.matterType}</span>
+                </div>
+                <h4 className={cn("font-bold text-base leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
+            </div>
+            <div className="flex items-center justify-between pl-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <StatusBadge status={c.status} className="text-[10px] px-2 py-0.5" />
                 <Currency value={c.value || 0} className="font-bold text-sm" />
             </div>
             </div>
@@ -112,7 +117,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
 
   return (
     <div className="space-y-4 h-full flex flex-col">
-      <div className="flex justify-between items-center shrink-0">
+      <div className={cn("flex justify-between items-center shrink-0 px-1")}>
         <h2 className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>Active Matters</h2>
         <Button variant="outline" icon={Filter} onClick={toggleFilters}>
             {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -157,12 +162,13 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       />
 
       {/* Mobile Virtualized Card View */}
-      <div className="md:hidden flex-1 min-h-0 relative -mx-1">
+      <div className="md:hidden flex-1 min-h-0 relative -mx-2">
          <VirtualList 
             items={sortedCases}
             height="100%"
-            itemHeight={104}
+            itemHeight={120}
             renderItem={renderMobileRow}
+            emptyMessage="No cases found."
          />
       </div>
     </div>

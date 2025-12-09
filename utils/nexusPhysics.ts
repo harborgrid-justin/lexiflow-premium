@@ -21,10 +21,16 @@ const ALPHA_DECAY = 0.015;
 const MIN_ALPHA = 0.001;
 const GRID_CELL_SIZE = 100; // Tuning for spatial bucket size
 
+export interface SimulationNode {
+  id: string;
+  label: string;
+  type: 'party' | 'org' | 'evidence' | 'root' | 'motion';
+}
+
 export interface SerializedNode {
   id: string;
   label: string;
-  type: 'party' | 'org' | 'evidence' | 'root';
+  type: 'party' | 'org' | 'evidence' | 'root' | 'motion';
 }
 
 export interface NexusLink {
@@ -36,7 +42,7 @@ export interface NexusLink {
 export const NexusPhysics = {
   MIN_ALPHA,
 
-  initSystem: (data: any[], width: number, height: number) => {
+  initSystem: (data: SimulationNode[], width: number, height: number) => {
     const count = data.length;
     const buffer = new Float32Array(count * NODE_STRIDE);
     const idMap = new Map<string, number>();
@@ -74,8 +80,6 @@ export const NexusPhysics = {
 
     // 1. Build Spatial Grid (Hash Map)
     // Map integer hash key -> array of node indices
-    // Key formula: (gx * 4000) + gy to avoid string alloc
-    // Assuming grid dimension max 4000x4000 cells (plenty)
     const grid = new Map<number, number[]>();
     
     for (let i = 0; i < count; i++) {

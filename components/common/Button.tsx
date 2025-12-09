@@ -43,6 +43,9 @@ export const Button: React.FC<ButtonProps> = ({
     icon: "p-2"
   };
 
+  // Ensure accessible labels for icon-only buttons
+  const ariaLabel = props['aria-label'] || (typeof children === 'string' ? children : undefined);
+
   return (
     <button
       className={cn(
@@ -52,6 +55,7 @@ export const Button: React.FC<ButtonProps> = ({
         className
       )}
       disabled={disabled || isLoading}
+      aria-label={ariaLabel}
       {...props}
     >
       {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}

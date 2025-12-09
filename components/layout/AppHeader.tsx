@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Menu, Bell } from 'lucide-react';
 import { User as UserType } from '../../types';
 import { GlobalSearchResult } from '../../services/searchService';
@@ -9,6 +9,7 @@ import { cn } from '../../utils/cn';
 import { ConnectivityHUD } from '../common/ConnectivityHUD';
 import { NeuralCommandBar } from './NeuralCommandBar';
 import { UserAvatar } from '../common/UserAvatar';
+import { useInterval } from '../../hooks/useInterval';
 
 interface AppHeaderProps {
   onToggleSidebar: () => void;
@@ -25,6 +26,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onToggleSidebar, globalSearch, setGlobalSearch, onGlobalSearch, currentUser, onSwitchUser, onSearchResultClick, onNeuralCommand 
 }) => {
   const { theme } = useTheme();
+  const [pulse, setPulse] = useState(false);
+
+  // System Heartbeat Visual
+  useInterval(() => setPulse(p => !p), 2000);
 
   return (
     <div className="flex-1 flex items-center justify-between h-full">
@@ -43,6 +48,12 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             onSearchResultClick={onSearchResultClick}
             onNeuralCommand={onNeuralCommand}
         />
+        
+        {/* System Heartbeat Dot - Desktop only */}
+        <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+             <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000", pulse ? "bg-green-400 opacity-100" : "bg-green-600 opacity-40")}></div>
+             <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">System Online</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">

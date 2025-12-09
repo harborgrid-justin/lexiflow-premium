@@ -1,13 +1,23 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useSync } from '../../context/SyncContext';
-import { Wifi, CloudOff, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Wifi, CloudOff, RefreshCw, AlertTriangle, Activity } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
+import { useInterval } from '../../hooks/useInterval';
 
 export const ConnectivityHUD: React.FC = () => {
   const { isOnline, pendingCount, failedCount, syncStatus, retryFailed } = useSync();
   const { theme } = useTheme();
+  const [latency, setLatency] = useState(24);
+
+  // Simulate network latency fluctuation
+  useInterval(() => {
+      setLatency(prev => {
+          const change = Math.floor(Math.random() * 10) - 5;
+          return Math.max(10, Math.min(150, prev + change));
+      });
+  }, 2000);
 
   if (failedCount > 0) {
       return (
@@ -25,30 +35,36 @@ export const ConnectivityHUD: React.FC = () => {
   }
 
   return (
-    <button 
-      className={cn(
-        "relative p-2 rounded-lg transition-all duration-200 flex items-center justify-center group",
-        !isOnline 
-          ? "text-amber-600 bg-amber-50 hover:bg-amber-100" 
-          : syncStatus === 'syncing' 
-            ? "text-blue-600 bg-blue-50 hover:bg-blue-100" 
-            : cn(theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surfaceHighlight}`)
-      )}
-      title={!isOnline ? "Offline Mode - Changes Queued" : syncStatus === 'syncing' ? "Syncing..." : "System Online"}
-    >
-      {syncStatus === 'syncing' ? (
-         <RefreshCw className="h-5 w-5 animate-spin" />
-      ) : !isOnline ? (
-         <CloudOff className="h-5 w-5" />
-      ) : (
-         <Wifi className="h-5 w-5" />
-      )}
-      
-      {pendingCount > 0 && (
-        <span className="absolute -top-1 -right-1 h-4 min-w-[1rem] px-1 bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full shadow-sm border-2 border-white">
-          {pendingCount}
-        </span>
-      )}
-    </button>
+    <div className="flex items-center gap-2">
+        <div className={cn("hidden md:flex items-center gap-1 text-[10px] font-mono", latency > 100 ? "text-amber-500" : theme.text.tertiary)}>
+             <Activity className="h-3 w-3"/>
+             {latency}ms
+        </div>
+        <button 
+        className={cn(
+            "relative p-2 rounded-lg transition-all duration-200 flex items-center justify-center group",
+            !isOnline 
+            ? "text-amber-600 bg-amber-50 hover:bg-amber-100" 
+            : syncStatus === 'syncing' 
+                ? "text-blue-600 bg-blue-50 hover:bg-blue-100" 
+                : cn(theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surfaceHighlight}`)
+        )}
+        title={!isOnline ? "Offline Mode" : syncStatus === 'syncing' ? "Syncing..." : "System Online"}
+        >
+        {syncStatus === 'syncing' ? (
+            <RefreshCw className="h-5 w-5 animate-spin" />
+        ) : !isOnline ? (
+            <CloudOff className="h-5 w-5" />
+        ) : (
+            <Wifi className="h-5 w-5" />
+        )}
+        
+        {pendingCount > 0 && (
+            <span className="absolute -top-1 -right-1 h-4 min-w-[1rem] px-1 bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full shadow-sm border-2 border-white">
+            {pendingCount}
+            </span>
+        )}
+        </button>
+    </div>
   );
 };

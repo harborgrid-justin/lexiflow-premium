@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { DollarSign, AlertCircle, Users, Calculator } from 'lucide-react';
@@ -42,11 +43,12 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
             label="Total WIP (Unbilled)"
-            value={<Currency value={totalWip} />}
+            value={totalWip} // Pass number for hydration animation
             icon={DollarSign}
             trend="+12% MoM"
             trendUp={true}
             className="border-l-4 border-l-blue-600"
+            isLive={true} // Simulate live financial feed
         />
         <MetricCard
             label="Realization Rate"
@@ -58,7 +60,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
         />
         <MetricCard
             label="Outstanding (60+ Days)"
-            value={<Currency value={12450} />}
+            value={12450} // Pass number for hydration animation
             icon={AlertCircle}
             trend="3 Invoices Overdue"
             trendUp={false}
@@ -93,8 +95,8 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                     contentStyle={chartTheme.tooltipStyle}
                 />
                 <Legend iconType="circle" />
-                <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.slate} name="Billed" radius={[0, 0, 4, 4]} />
-                <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.blue} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.slate} name="Billed" radius={[0, 0, 4, 4]} isAnimationActive={true} />
+                <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.blue} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} isAnimationActive={true} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -111,6 +113,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                             paddingAngle={5} 
                             dataKey="value"
                             stroke="none"
+                            isAnimationActive={true}
                         >
                             {realizationData.map((e: any, index: number) => (
                                 <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartTheme.colors.emerald : chartTheme.colors.rose} />

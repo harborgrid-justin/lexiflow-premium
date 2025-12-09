@@ -28,9 +28,9 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
 
-  // Enterprise Feature: Live data in header
-  const { data: openTasks } = useQuery(['tasks', id, 'count'], () => DataService.tasks.countByCaseId(id));
-  const { data: unreadMessages } = useQuery(['messages', id, 'count'], () => DataService.messenger.countUnread(id));
+  // Enterprise Feature: Live data in header with frequent polling
+  const { data: openTasks } = useQuery(['tasks', id, 'count'], () => DataService.tasks.countByCaseId(id), { refetchOnWindowFocus: true, staleTime: 5000 });
+  const { data: unreadMessages } = useQuery(['messages', id, 'count'], () => DataService.messenger.countUnread(id), { refetchOnWindowFocus: true, staleTime: 5000 });
 
   const handleOpenPortal = () => {
       const winId = `portal-${clientId}`;
@@ -73,12 +73,12 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                         <div className="flex items-center gap-3 shrink-0">
                             <div className="hidden md:flex gap-3">
                                 {typeof openTasks === 'number' && openTasks > 0 && (
-                                    <span className="flex items-center text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-200">
+                                    <span className="flex items-center text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-200 animate-in fade-in">
                                         <CheckSquare className="h-3 w-3 mr-1"/> {openTasks} Open Tasks
                                     </span>
                                 )}
                                 {typeof unreadMessages === 'number' && unreadMessages > 0 && (
-                                    <span className="flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded border border-rose-200">
+                                    <span className="flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded border border-rose-200 animate-pulse">
                                         <MessageCircle className="h-3 w-3 mr-1"/> {unreadMessages} Unread
                                     </span>
                                 )}

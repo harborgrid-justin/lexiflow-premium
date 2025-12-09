@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Loader2, FileText, Image as ImageIcon, Film, Music, Box, Shield, Activity, Calendar, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
@@ -10,12 +10,12 @@ export const StatusDot: React.FC<{ status: string; size?: string; className?: st
   let color = theme.status.neutral.bg; // Default fallback
   const s = status.toLowerCase();
   
-  if (['active', 'online', 'paid', 'cleared', 'success', 'completed'].includes(s)) color = "bg-emerald-500";
-  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress'].includes(s)) color = "bg-amber-500";
-  else if (['error', 'offline', 'overdue', 'breached', 'critical', 'rejected'].includes(s)) color = "bg-rose-500";
+  if (['active', 'online', 'paid', 'cleared', 'success', 'completed', 'good', 'healthy', 'connected'].includes(s)) color = "bg-emerald-500";
+  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress', 'syncing'].includes(s)) color = "bg-amber-500";
+  else if (['error', 'offline', 'overdue', 'breached', 'critical', 'rejected', 'disconnected', 'failed'].includes(s)) color = "bg-rose-500";
   else if (['processing', 'info'].includes(s)) color = "bg-blue-500";
 
-  return <div className={cn(size, "rounded-full shrink-0", color, className)} title={status} />;
+  return <div className={cn(size, "rounded-full shrink-0 transition-colors duration-500", color, className)} title={status} />;
 };
 
 // 2. Currency Display
@@ -100,28 +100,69 @@ export const TruncatedText: React.FC<{ text: string; limit?: number; className?:
   );
 };
 
-// 9. Metric Card
+// 9. Metric Card with Hydration Animation
 export const MetricCard: React.FC<{ 
   label: string; 
   value: string | number | React.ReactNode; 
   icon?: React.ElementType; 
   trend?: string;
   trendUp?: boolean;
-  className?: string; 
-}> = ({ label, value, icon: Icon, trend, trendUp, className = "" }) => {
+  className?: string;
+  isLive?: boolean; 
+}> = ({ label, value, icon: Icon, trend, trendUp, className = "", isLive = false }) => {
   const { theme } = useTheme();
+  const [displayValue, setDisplayValue] = useState<string | number>(typeof value === 'number' ? 0 : value);
+  const prevValueRef = useRef(value);
+
+  useEffect(() => {
+    // Basic CountUp animation for numbers
+    if (typeof value === 'number') {
+      let start = typeof displayValue === 'number' ? displayValue : 0;
+      const end = value;
+      if (start === end) return;
+
+      const range = end - start;
+      const duration = 1000;
+      const startTime = Date.now();
+
+      const animate = () => {
+        const now = Date.now();
+        const elapsed = now - startTime;
+        if (elapsed > duration) {
+          setDisplayValue(end);
+          return;
+        }
+        const progress = elapsed / duration;
+        const easeOut = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+        setDisplayValue(Math.round(start + range * easeOut));
+        requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    } else {
+      setDisplayValue(value);
+    }
+    prevValueRef.current = value;
+  }, [value]);
   
   return (
     <div className={cn(
       theme.surface, 
       theme.border.default, 
-      "rounded-xl border p-5 shadow-sm transition-all hover:shadow-md flex flex-col justify-between h-full",
+      "rounded-xl border p-5 shadow-sm transition-all hover:shadow-md flex flex-col justify-between h-full relative overflow-hidden",
       className
     )}>
+      {isLive && (
+        <span className="absolute top-2 right-2 flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        </span>
+      )}
       <div className="flex justify-between items-start">
         <div>
           <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1.5", theme.text.secondary)}>{label}</p>
-          <div className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>{value}</div>
+          <div className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>
+              {typeof value === 'number' ? displayValue.toLocaleString() : value}
+          </div>
         </div>
         {Icon && (
           <div className={cn("p-2.5 rounded-lg bg-opacity-10", theme.surfaceHighlight)}>

@@ -1,17 +1,28 @@
 
 import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy } from '../../types';
 import { db, STORES } from '../db';
+import { ChainService } from '../chainService';
+
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const AdminService = {
-    getLogs: async (): Promise<AuditLogEntry[]> => db.getAll<AuditLogEntry>(STORES.LOGS),
+    // Real DB Access
+    getLogs: async (): Promise<AuditLogEntry[]> => {
+        const logs = await db.getAll<AuditLogEntry>(STORES.LOGS);
+        return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    },
+    
+    // Simulations (Infra)
     getIntegrations: async () => { 
         await delay(500); 
         return [
             { id: 'int1', name: 'Outlook 365', type: 'Email & Calendar', status: 'Connected', icon: 'O', color: 'bg-blue-600' },
             { id: 'int2', name: 'Salesforce', type: 'CRM', status: 'Error', icon: 'S', color: 'bg-sky-500' },
             { id: 'int3', name: 'QuickBooks', type: 'Accounting', status: 'Disconnected', icon: 'Q', color: 'bg-green-600' },
+            { id: 'int4', name: 'Clio', type: 'Practice Mgmt', status: 'Connected', icon: 'C', color: 'bg-indigo-600' },
         ]; 
     },
+
     getSecuritySettings: async () => { 
         await delay(300);
         return [
@@ -20,11 +31,24 @@ export const AdminService = {
             { id: 'sec3', label: 'IP Whitelisting', desc: 'Restrict access to specific IP ranges.', type: 'Globe', enabled: false },
         ];
     },
-    getRLSPolicies: async (): Promise<RLSPolicy[]> => { await delay(200); return [{ id: 'rls1', name: 'tenant_isolation_cases', table: 'cases', cmd: 'ALL', roles: ['All'], using: "org_id = current_setting('app.current_org_id')::uuid", status: 'Active' }]; },
+
+    // RLS Mock
+    getRLSPolicies: async (): Promise<RLSPolicy[]> => { 
+        await delay(200); 
+        return [
+            { id: 'rls1', name: 'tenant_isolation_cases', table: 'cases', cmd: 'ALL', roles: ['All'], using: "org_id = current_setting('app.current_org_id')::uuid", status: 'Active' },
+            { id: 'rls2', name: 'partner_view_billing', table: 'billing', cmd: 'SELECT', roles: ['Partner'], using: "true", status: 'Active' },
+            { id: 'rls3', name: 'associate_edit_own_time', table: 'time_entries', cmd: 'UPDATE', roles: ['Associate'], using: "user_id = auth.uid()", status: 'Active' }
+        ]; 
+    },
     saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<any> => { await delay(100); return policy; },
     deleteRLSPolicy: async (id: string): Promise<void> => { await delay(100); },
+    
+    // Permissions
     getPermissions: async (): Promise<RolePermission[]> => { await delay(200); return [ {id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'} ]; },
     updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<any> => { await delay(100); return payload; },
+    
+    // Data Platform Simulations
     getPipelines: async (): Promise<PipelineJob[]> => { 
         await delay(400); 
         return [
@@ -34,19 +58,27 @@ export const AdminService = {
         ];
     },
     getApiKeys: async (): Promise<ApiKey[]> => { await delay(100); return [{id: 'key_1', name: 'Default Key', prefix: 'pk_live_ab12...', created: '2024-01-01', status: 'Active'}]; },
-    getAnomalies: async (): Promise<DataAnomaly[]> => { await delay(600); return [
-        { id: 1, table: 'clients', field: 'email', issue: 'Invalid Format', count: 12, sample: 'john-doe@', status: 'Detected', severity: 'High'},
-        { id: 2, table: 'cases', field: 'status', issue: 'Inconsistent Casing', count: 5, sample: 'closed', status: 'Fixed', severity: 'Low'},
-    ]; },
+    
+    getAnomalies: async (): Promise<DataAnomaly[]> => { 
+        await delay(600); 
+        return [
+            { id: 1, table: 'clients', field: 'email', issue: 'Invalid Format', count: 12, sample: 'john-doe@', status: 'Detected', severity: 'High'},
+            { id: 2, table: 'cases', field: 'status', issue: 'Inconsistent Casing', count: 5, sample: 'closed', status: 'Fixed', severity: 'Low'},
+            { id: 3, table: 'documents', field: 'metadata', issue: 'Missing Author', count: 142, sample: 'NULL', status: 'Detected', severity: 'Medium'},
+        ]; 
+    },
+    
     getDataDomains: async () => { await delay(200); return [
         { name: 'Legal', count: 12, desc: 'Core case and litigation data.'},
         { name: 'Finance', count: 8, desc: 'Billing, invoices, and trust accounts.' },
         { name: 'HR', count: 4, desc: 'Staff, roles, and performance data.' },
     ]; },
+    
     getTenantConfig: async (): Promise<TenantConfig> => {
         await delay(100);
         return { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' };
     },
+    
     getConnectors: async (): Promise<Connector[]> => {
         await delay(200);
         return [
@@ -57,6 +89,7 @@ export const AdminService = {
           { id: 'c5', name: 'Redis Cache', type: 'Cache', status: 'Degraded', color: 'text-red-600' },
         ];
     },
+    
     getGovernanceRules: async (): Promise<GovernanceRule[]> => {
         await delay(200);
         return [
@@ -65,6 +98,7 @@ export const AdminService = {
             { id: 3, name: 'Retention Policy (7 Years)', status: 'Enforced', impact: 'Critical', passing: '100%', desc: 'Hard delete case data 7 years after closure.' },
         ];
     },
+    
     getGovernancePolicies: async (): Promise<GovernancePolicy[]> => {
         await delay(200);
         return [

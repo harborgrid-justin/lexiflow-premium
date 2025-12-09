@@ -1,11 +1,15 @@
+
 import { WikiArticle, Precedent, QAItem } from '../../types';
 import { db, STORES } from '../db';
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export class KnowledgeRepository {
-    getWikiArticles = async (): Promise<WikiArticle[]> => {
-        return db.getAll<WikiArticle>(STORES.WIKI);
+    getWikiArticles = async (query?: string): Promise<WikiArticle[]> => {
+        const all = await db.getAll<WikiArticle>(STORES.WIKI);
+        if (!query) return all;
+        const q = query.toLowerCase();
+        return all.filter(a => a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q));
     }
     
     getPrecedents = async (): Promise<Precedent[]> => {

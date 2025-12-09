@@ -19,11 +19,14 @@ export const DashboardMetrics: React.FC<DashboardMetricsProps> = ({ stats }) => 
 
   // Simulate real-time updates for demo purposes (DOM Hydration effect)
   useInterval(() => {
+      // 30% chance to update every 3 seconds
       if (Math.random() > 0.7) {
           setLiveStats(prev => ({
               ...prev,
               billableHours: prev.billableHours + (Math.random() > 0.5 ? 0.5 : 0),
-              pendingMotions: prev.pendingMotions + (Math.random() > 0.9 ? 1 : 0)
+              pendingMotions: prev.pendingMotions + (Math.random() > 0.8 ? 1 : 0),
+              // Rarely change active cases
+              activeCases: prev.activeCases + (Math.random() > 0.95 ? 1 : 0)
           }));
       }
   }, 3000);
@@ -32,7 +35,7 @@ export const DashboardMetrics: React.FC<DashboardMetricsProps> = ({ stats }) => 
     { label: 'Active Cases', value: liveStats.activeCases, icon: Briefcase, color: 'border-l-blue-600', trend: '+2 New', isLive: true },
     { label: 'Pending Motions', value: liveStats.pendingMotions, icon: FileText, color: 'border-l-indigo-600', isLive: true },
     { label: 'Billable Hours (Mo)', value: liveStats.billableHours, icon: Clock, color: 'border-l-emerald-600', trend: '+5% MoM', isLive: true },
-    { label: 'High Risk Items', value: liveStats.highRisks, icon: AlertTriangle, color: 'border-l-rose-600' },
+    { label: 'High Risk Items', value: liveStats.highRisks, icon: AlertTriangle, color: 'border-l-rose-600', isLive: false },
   ];
 
   return (

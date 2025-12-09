@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MetricCard } from '../../common/Primitives';
 import { Card } from '../../common/Card';
 import { Database, Activity, HardDrive, Server } from 'lucide-react';
@@ -22,15 +22,20 @@ export const PlatformOverview: React.FC = () => {
       { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
 
-  // Live Traffic Simulation
-  const [data, setData] = useState(Array.from({ length: 30 }, (_, i) => ({
-      time: i, value: Math.floor(Math.random() * 800) + 400
+  // Live Traffic Simulation Data
+  const [data, setData] = useState(Array.from({ length: 40 }, (_, i) => ({
+      time: i, value: Math.floor(Math.random() * 500) + 200
   })));
 
+  // Update chart every second to simulate live monitoring
   useInterval(() => {
       setData(currentData => {
           const nextTime = currentData[currentData.length - 1].time + 1;
-          const nextValue = Math.floor(Math.random() * 800) + 400;
+          // Random walk logic for somewhat realistic look
+          const prevValue = currentData[currentData.length - 1].value;
+          const delta = Math.floor(Math.random() * 100) - 50;
+          const nextValue = Math.max(100, Math.min(900, prevValue + delta));
+          
           return [...currentData.slice(1), { time: nextTime, value: nextValue }];
       });
   }, 1000);
@@ -53,18 +58,26 @@ export const PlatformOverview: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card title="Live Query Traffic" className="lg:col-span-2 overflow-hidden">
+            <Card title="Live Query Traffic (QPS)" className="lg:col-span-2 overflow-hidden">
                 <div className="h-64 w-full min-w-0">
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={data}>
                             <defs>
                                 <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                                    <stop offset="5%" stopColor={chartTheme.colors.primary} stopOpacity={0.3}/>
+                                    <stop offset="95%" stopColor={chartTheme.colors.primary} stopOpacity={0}/>
                                 </linearGradient>
                             </defs>
                             <Tooltip contentStyle={chartTheme.tooltipStyle} />
-                            <Area type="monotone" dataKey="value" stroke="#3b82f6" fillOpacity={1} fill="url(#colorVal)" isAnimationActive={false} />
+                            <Area 
+                                type="monotone" 
+                                dataKey="value" 
+                                stroke={chartTheme.colors.primary} 
+                                strokeWidth={2}
+                                fillOpacity={1} 
+                                fill="url(#colorVal)" 
+                                isAnimationActive={false} 
+                            />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>

@@ -10,10 +10,10 @@ export const StatusDot: React.FC<{ status: string; size?: string; className?: st
   let color = theme.status.neutral.bg; // Default fallback
   const s = status.toLowerCase();
   
-  if (['active', 'online', 'paid', 'cleared', 'success', 'completed', 'good', 'healthy', 'connected'].includes(s)) color = "bg-emerald-500";
-  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress', 'syncing'].includes(s)) color = "bg-amber-500";
-  else if (['error', 'offline', 'overdue', 'breached', 'critical', 'rejected', 'disconnected', 'failed'].includes(s)) color = "bg-rose-500";
-  else if (['processing', 'info'].includes(s)) color = "bg-blue-500";
+  if (['active', 'online', 'paid', 'cleared', 'success', 'completed', 'good', 'healthy', 'connected', 'admitted'].includes(s)) color = "bg-emerald-500";
+  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress', 'syncing', 'marked'].includes(s)) color = "bg-amber-500";
+  else if (['error', 'offline', 'overdue', 'breached', 'critical', 'rejected', 'disconnected', 'failed', 'excluded'].includes(s)) color = "bg-rose-500";
+  else if (['processing', 'info', 'open'].includes(s)) color = "bg-blue-500";
 
   return <div className={cn(size, "rounded-full shrink-0 transition-colors duration-500", color, className)} title={status} />;
 };
@@ -114,29 +114,30 @@ export const MetricCard: React.FC<{
   const [displayValue, setDisplayValue] = useState<string | number>(typeof value === 'number' ? 0 : value);
   const prevValueRef = useRef(value);
 
+  // Animation effect for numeric values
   useEffect(() => {
-    // Basic CountUp animation for numbers
     if (typeof value === 'number') {
       let start = typeof displayValue === 'number' ? displayValue : 0;
       const end = value;
       if (start === end) return;
 
       const range = end - start;
-      const duration = 1000;
-      const startTime = Date.now();
+      const duration = 800; // ms
+      const startTime = performance.now();
 
-      const animate = () => {
-        const now = Date.now();
-        const elapsed = now - startTime;
-        if (elapsed > duration) {
-          setDisplayValue(end);
-          return;
-        }
-        const progress = elapsed / duration;
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
         const easeOut = 1 - Math.pow(1 - progress, 3); // Cubic ease out
-        setDisplayValue(Math.round(start + range * easeOut));
-        requestAnimationFrame(animate);
+        
+        const nextValue = Math.round(start + range * easeOut);
+        setDisplayValue(nextValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
       };
+      
       requestAnimationFrame(animate);
     } else {
       setDisplayValue(value);
@@ -152,9 +153,9 @@ export const MetricCard: React.FC<{
       className
     )}>
       {isLive && (
-        <span className="absolute top-2 right-2 flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        <span className="absolute top-3 right-3 flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
         </span>
       )}
       <div className="flex justify-between items-start">

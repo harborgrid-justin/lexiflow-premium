@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Bookmark, Share2, ThumbsUp, ThumbsDown, BookOpen } from 'lucide-react';
 import { ResearchSession } from '../../types';
 import { Card } from '../common/Card';
@@ -11,6 +11,38 @@ interface ResearchResultsProps {
   session?: ResearchSession;
   onViewSource?: (url: string, title: string) => void;
 }
+
+// Simple Typewriter Effect Component
+const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
+    const [displayedText, setDisplayedText] = useState('');
+    const { theme } = useTheme();
+    const index = useRef(0);
+
+    useEffect(() => {
+        setDisplayedText('');
+        index.current = 0;
+        
+        const intervalId = setInterval(() => {
+            if (index.current < text.length) {
+                // Add chunks for faster "streaming" feel
+                const chunk = text.slice(index.current, index.current + 3);
+                setDisplayedText((prev) => prev + chunk);
+                index.current += 3;
+            } else {
+                clearInterval(intervalId);
+            }
+        }, 15); // Speed of typing
+
+        return () => clearInterval(intervalId);
+    }, [text]);
+
+    return (
+        <div className={cn("prose prose-sm max-w-none leading-relaxed whitespace-pre-line font-serif", theme.text.primary)}>
+            {displayedText}
+            {index.current < text.length && <span className="inline-block w-2 h-4 ml-1 bg-blue-500 animate-pulse align-middle"></span>}
+        </div>
+    );
+};
 
 export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onViewSource }) => {
   const { theme } = useTheme();
@@ -38,9 +70,8 @@ export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onVie
         </div>
 
         <Card className={cn("shadow-md", theme.primary.border)}>
-            <div className={cn("prose prose-sm max-w-none leading-relaxed whitespace-pre-line font-serif", theme.text.primary)}>
-                {session.response}
-            </div>
+            <TypewriterText text={session.response} />
+            
             <div className={cn("mt-6 flex items-center justify-end space-x-4 border-t pt-4", theme.border.light)}>
                 <span className={cn("text-xs", theme.text.tertiary)}>Was this answer helpful?</span>
                 <button className={cn("p-1.5 rounded transition-colors hover:bg-green-50 hover:text-green-600", theme.text.tertiary)}><ThumbsUp className="h-4 w-4" /></button>
@@ -49,7 +80,7 @@ export const ResearchResults: React.FC<ResearchResultsProps> = ({ session, onVie
         </Card>
 
         {session.sources.length > 0 && (
-            <div>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
                 <h4 className={cn("text-xs font-bold uppercase tracking-wider mb-3 ml-1", theme.text.secondary)}>Authorities Cited</h4>
                 <div className="grid grid-cols-1 gap-3">
                     {session.sources.map((source, idx) => (

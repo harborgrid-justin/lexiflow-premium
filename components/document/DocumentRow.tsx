@@ -60,7 +60,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
             />
         </div>
         <div className="flex-1 min-w-0 flex items-center pr-4">
-            <div className={cn("p-2 rounded-lg mr-3 border transition-colors", theme.surfaceHighlight, theme.border.default, `group-hover:${theme.border.light}`)}>
+            <div className={cn("p-2 rounded-lg mr-3 border transition-colors", theme.surface.highlight, theme.border.default, `group-hover:${theme.border.light}`)}>
                 <FileIcon type={doc.type} className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -88,7 +88,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
                     <TagList tags={doc.tags} limit={2} />
                     <button 
                         onClick={handleTagging} 
-                        className={cn("opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}
+                        className={cn("opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
                     >
                         <Tag className="h-3 w-3"/>
                     </button>
@@ -116,3 +116,4 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
 }, (prev, next) => {
   return prev.doc === next.doc && prev.isSelected === next.isSelected && prev.theme === next.theme;
 });
+DocumentRow.displayName = 'DocumentRow';

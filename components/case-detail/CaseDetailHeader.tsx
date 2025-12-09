@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowLeft, MapPin, ArrowUpRight, Calendar, Users, CheckSquare, MessageCircle } from 'lucide-react';
 import { Button } from '../common/Button';
@@ -44,10 +45,10 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
   };
 
   return (
-    <div className={cn("border-b sticky top-0 z-20 shadow-sm shrink-0 backdrop-blur-sm bg-opacity-90", theme.surface, theme.border.default)}>
+    <div className={cn("border-b sticky top-0 z-20 shadow-sm shrink-0 backdrop-blur-sm bg-opacity-90", theme.surface.default, theme.border.default)}>
         <div className="px-4 md:px-6 py-4">
             <div className="flex items-start gap-4">
-                <button onClick={onBack} className={cn("mt-1 p-1.5 rounded-md transition-colors border shadow-sm shrink-0", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+                <button onClick={onBack} className={cn("mt-1 p-1.5 rounded-md transition-colors border shadow-sm shrink-0", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                     <ArrowLeft className="h-5 w-5" />
                 </button>
                 <div className="flex-1 min-w-0">
@@ -58,7 +59,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                                 <Badge variant={status === 'Trial' ? 'warning' : 'info'} className="shrink-0">{status}</Badge>
                             </div>
                             <div className={cn("flex flex-wrap items-center gap-3 text-xs md:text-sm", theme.text.secondary)}>
-                                <span className={cn("font-mono px-1.5 py-0.5 rounded border shrink-0", theme.surfaceHighlight, theme.border.default)}>{id}</span>
+                                <span className={cn("font-mono px-1.5 py-0.5 rounded border shrink-0", theme.surface.highlight, theme.border.default)}>{id}</span>
                                 <span className="hidden sm:inline opacity-30">|</span>
                                 <span className={cn("flex items-center font-medium truncate max-w-[200px]", theme.text.primary)}><Users className={cn("h-3.5 w-3.5 mr-1.5 shrink-0", theme.text.tertiary)}/> {client}</span>
                                 {jurisdiction && (
@@ -84,7 +85,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                             </div>
                             <Button variant="outline" size="sm" className="hidden sm:flex" icon={ArrowUpRight} onClick={handleOpenPortal}>Client Portal</Button>
                             <button 
-                                className={cn("lg:hidden p-2 rounded-full", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}
+                                className={cn("lg:hidden p-2 rounded-full", theme.text.secondary, `hover:${theme.surface.highlight}`)}
                                 onClick={onShowTimeline}
                             >
                                 <Calendar className="h-6 w-6"/>
@@ -97,3 +98,4 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
       </div>
   );
 });
+CaseDetailHeader.displayName = 'CaseDetailHeader';

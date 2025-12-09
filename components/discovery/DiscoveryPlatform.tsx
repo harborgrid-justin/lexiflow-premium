@@ -1,4 +1,4 @@
-
+// components/discovery/DiscoveryPlatform.tsx
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
@@ -38,36 +38,6 @@ interface DiscoveryPlatformProps {
     caseId?: string; // Integration Point: Optional Scoping
 }
 
-const PARENT_TABS = [
-  {
-    id: 'dashboard_parent', label: 'Dashboard', icon: Scale,
-    subTabs: [ { id: 'dashboard', label: 'Overview', icon: Scale } ]
-  },
-  {
-    id: 'collection', label: 'Collection', icon: Database,
-    subTabs: [
-      { id: 'esi', label: 'ESI Map', icon: Database },
-      { id: 'interviews', label: 'Interviews', icon: ClipboardList },
-      { id: 'holds', label: 'Legal Holds', icon: Lock },
-    ]
-  },
-  {
-    id: 'review', label: 'Review & Production', icon: FileText,
-    subTabs: [
-      { id: 'requests', label: 'Requests', icon: MessageCircle },
-      { id: 'productions', label: 'Productions', icon: Package },
-      { id: 'privilege', label: 'Privilege Log', icon: Shield },
-    ]
-  },
-  {
-    id: 'proceedings', label: 'Proceedings', icon: Mic2,
-    subTabs: [
-      { id: 'depositions', label: 'Depositions', icon: Mic2 },
-      { id: 'plan', label: 'Discovery Plan', icon: Users },
-    ]
-  }
-];
-
 export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
@@ -96,14 +66,11 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
   }, [initialTab, setActiveTab]);
 
   const activeParentTab = useMemo(() => 
-    PARENT_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || PARENT_TABS[0],
+    getParentTabForView(activeTab),
   [activeTab]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
-    const parent = PARENT_TABS.find(p => p.id === parentId);
-    if (parent && parent.subTabs.length > 0) {
-      setActiveTab(parent.subTabs[0].id as DiscoveryView);
-    }
+    setActiveTab(getFirstTabOfParent(parentId));
   }, [setActiveTab]);
   
   const handleNavigate = (targetView: DiscoveryView, id?: string) => {

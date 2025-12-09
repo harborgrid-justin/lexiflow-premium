@@ -1,5 +1,5 @@
 
-import { Motion, MotionId, CaseId, DocumentId } from '../../types';
+import { Motion, MotionId, CaseId, DocumentId, EvidenceId } from '../../types';
 
 export const MOCK_MOTIONS: Motion[] = [
   // CASE: 1:24-cv-01442-LMB-IDD
@@ -147,6 +147,7 @@ export const MOCK_MOTIONS: Motion[] = [
     status: 'Hearing Set', 
     filingDate: '2024-02-15', 
     hearingDate: '2024-03-20',
-    assignedAttorney: 'James Doe'
+    assignedAttorney: 'James Doe',
+    linkedEvidenceIds: ['EV-001' as EvidenceId]
   }
 ];

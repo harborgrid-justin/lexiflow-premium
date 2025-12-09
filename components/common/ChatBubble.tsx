@@ -33,7 +33,7 @@ export const ChatBubble = memo(function ChatBubble({ text, sender, isMe, timesta
           "p-3 rounded-2xl text-sm shadow-sm relative",
           isMe 
             ? cn(theme.primary.DEFAULT, theme.text.inverse, "rounded-tr-none") 
-            : cn(theme.surface, theme.text.primary, theme.border.default, "border rounded-tl-none")
+            : cn(theme.surface.default, theme.text.primary, theme.border.default, "border rounded-tl-none")
         )}>
           <div className="whitespace-pre-wrap leading-relaxed">{text}</div>
           
@@ -55,3 +55,4 @@ export const ChatBubble = memo(function ChatBubble({ text, sender, isMe, timesta
     </div>
   );
 });
+ChatBubble.displayName = 'ChatBubble';

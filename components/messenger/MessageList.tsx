@@ -21,7 +21,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
   }, [conversation.messages]);
 
   return (
-    <div className={cn("flex-1 overflow-y-auto p-4 space-y-4 pt-8 scrollbar-thin", theme.surfaceHighlight)}>
+    <div className={cn("flex-1 overflow-y-auto p-4 space-y-4 pt-8 scrollbar-thin", theme.surface.highlight)}>
         {conversation.messages.map((msg) => {
           const isMe = msg.senderId === currentUserId;
           return (
@@ -40,7 +40,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
                     name={att.name} 
                     size={att.size} 
                     type={att.type} 
-                    className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface)}
+                    className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface.default)}
                     variant="card"
                     onDownload={() => console.log('Downloading', att.name)}
                   />
@@ -53,3 +53,4 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
       </div>
   );
 });
+MessageList.displayName = 'MessageList';

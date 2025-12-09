@@ -1,3 +1,4 @@
+
 import {
   CaseStatus, UserRole, MatterType, BillingModel,
   OrganizationType, RiskCategory, RiskLevel, RiskStatus,
@@ -357,7 +358,23 @@ export interface Project extends BaseEntity { id: ProjectId; caseId: CaseId; tit
 // --- EXISTING MODELS (Maintained for Compatibility) ---
 export interface SearchResult { id: string; title: string; url?: string; type?: string; snippet?: string; }
 export interface FileChunk { id: string; pageNumber: number; contentPreview: string; hash: string; }
-export interface Motion extends BaseEntity { id: MotionId; caseId: CaseId; title: string; type: MotionType; status: MotionStatus; outcome?: MotionOutcome; filingDate?: string; hearingDate?: string; oppositionDueDate?: string; replyDueDate?: string; documents?: DocumentId[]; assignedAttorney?: string; linkedRules?: string[]; conferralStatus?: string; }
+export interface Motion extends BaseEntity { 
+  id: MotionId; 
+  caseId: CaseId; 
+  title: string; 
+  type: MotionType; 
+  status: MotionStatus; 
+  outcome?: MotionOutcome; 
+  filingDate?: string; 
+  hearingDate?: string; 
+  oppositionDueDate?: string; 
+  replyDueDate?: string; 
+  documents?: DocumentId[]; 
+  assignedAttorney?: string; 
+  linkedRules?: string[]; 
+  conferralStatus?: string;
+  linkedEvidenceIds?: EvidenceId[]; // For Nexus Graph
+}
 
 export interface DocketEntryStructuredData {
   actionType: string;
@@ -503,7 +520,13 @@ export interface ProductionSet {
 
 export interface WIPStat { name: string; wip: number; billed: number; }
 export interface RealizationStat { id?: string; name: string; value: number; color: string; }
-export interface NexusNodeData { id: string; type: 'root' | 'org' | 'party' | 'evidence'; label: string; original: Case | Party | EvidenceItem | object; }
+export interface NexusNodeData { 
+  id: string; 
+  type: 'root' | 'org' | 'party' | 'evidence' | 'motion'; 
+  label: string; 
+  original: Case | Party | EvidenceItem | Motion | object; 
+  status?: string;
+}
 export interface WarRoomData { case: Case; witnesses: Party[]; documents: LegalDocument[]; motions: Motion[]; docket: DocketEntry[]; evidence: EvidenceItem[]; tasks: WorkflowTask[]; }
 export interface OutcomePredictionData {
   subject: string;

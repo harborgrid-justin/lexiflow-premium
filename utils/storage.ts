@@ -57,6 +57,9 @@ export const STORAGE_KEYS = {
     DRAFTS: 'lexiflow_drafts'
 };
 
+// Increased threshold to prevent main-thread blocking on small/medium writes
+const COMPRESSION_THRESHOLD = 2048; 
+
 export const StorageUtils = {
   get: <T>(key: string, defaultData: T): T => {
     try {
@@ -64,12 +67,11 @@ export const StorageUtils = {
       const item = window.localStorage.getItem(key);
       if (!item) return defaultData;
 
-      // Check for compression marker (simple check if it looks like JSON or compressed string)
-      // We assume if it doesn't start with [{ or ", it might be compressed
+      // Check for compression marker (heuristic: high entropy chars or simply fail JSON parse)
       try {
           return JSON.parse(item);
       } catch (e) {
-          // Failed to parse, try decompressing
+          // Failed to parse JSON, assume it might be compressed
           try {
               const decompressed = LZW.decompress(item);
               return JSON.parse(decompressed);
@@ -88,8 +90,12 @@ export const StorageUtils = {
     try {
       if (typeof window === 'undefined') return;
       const stringified = JSON.stringify(value);
-      // Compress if length > 200 chars to save space
-      const toStore = stringified.length > 200 ? LZW.compress(stringified) : stringified;
+      
+      // Only compress if significantly large to avoid CPU overhead on main thread
+      const toStore = stringified.length > COMPRESSION_THRESHOLD 
+        ? LZW.compress(stringified) 
+        : stringified;
+        
       window.localStorage.setItem(key, toStore);
     } catch (error) {
       console.error(`Error saving ${key} to storage`, error);

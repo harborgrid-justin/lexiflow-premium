@@ -25,15 +25,15 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
-  const debouncedSearch = useDebounce(globalSearch, 150); // Faster debounce due to Trie
+  const debouncedSearch = useDebounce(globalSearch, 150); // Optimization: Faster debounce due to Trie speed
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize Trie
+  // Optimization: Initialize Trie for O(L) lookup
   const searchTrie = useMemo(() => new Trie(), []);
   const [isTrieReady, setIsTrieReady] = useState(false);
 
-  // Preload Trie with non-blocking chunks
+  // Optimization: Build Trie index in background chunks to avoid blocking main thread
   useEffect(() => {
     const buildIndex = async () => {
         // Fetch base data for index
@@ -70,19 +70,14 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
         // 1. O(L) Trie Prefix Lookup (Instant)
         let matches = searchTrie.search(debouncedSearch);
 
-        // 2. If few results, try Levenshtein (Fuzzy) on specific hot terms
-        if (matches.length < 3 && debouncedSearch.length > 3) {
-            // This would usually check against a cached list of all titles
-            // For demo, we assume the SearchService.search handles the heavy lifting if Trie fails
+        // 2. If few results, try simple string match via Service (Fuzzy fallback)
+        if (matches.length < 3) {
             const fuzzyResults = await SearchService.search(debouncedSearch);
             // Dedupe
             const existingIds = new Set(matches.map(m => m.id));
             fuzzyResults.forEach(r => {
                 if (!existingIds.has(r.id)) matches.push(r);
             });
-        } else if (matches.length === 0) {
-             // Fallback to full search service
-             matches = await SearchService.search(debouncedSearch);
         }
 
         setResults(matches.slice(0, 8)); // Limit visual results

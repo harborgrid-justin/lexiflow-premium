@@ -57,7 +57,7 @@ export const STORAGE_KEYS = {
     DRAFTS: 'lexiflow_drafts'
 };
 
-// Increased threshold to prevent main-thread blocking on small/medium writes
+// Optimization: Increased threshold to prevent main-thread blocking on small/medium writes
 const COMPRESSION_THRESHOLD = 2048; 
 
 export const StorageUtils = {
@@ -67,7 +67,8 @@ export const StorageUtils = {
       const item = window.localStorage.getItem(key);
       if (!item) return defaultData;
 
-      // Check for compression marker (heuristic: high entropy chars or simply fail JSON parse)
+      // Heuristic: If it starts with [ or {, it likely wasn't compressed by LZW (which produces binary-like chars)
+      // Or simply try parse, if fail, try decompress
       try {
           return JSON.parse(item);
       } catch (e) {
@@ -76,7 +77,7 @@ export const StorageUtils = {
               const decompressed = LZW.decompress(item);
               return JSON.parse(decompressed);
           } catch (decompError) {
-              console.error(`Storage corruption for ${key}`, decompError);
+              console.error(`Storage corruption or format error for ${key}`, decompError);
               return defaultData;
           }
       }
@@ -91,7 +92,7 @@ export const StorageUtils = {
       if (typeof window === 'undefined') return;
       const stringified = JSON.stringify(value);
       
-      // Only compress if significantly large to avoid CPU overhead on main thread
+      // Optimization: Only compress if significantly large to avoid CPU overhead on main thread
       const toStore = stringified.length > COMPRESSION_THRESHOLD 
         ? LZW.compress(stringified) 
         : stringified;

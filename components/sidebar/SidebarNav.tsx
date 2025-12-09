@@ -1,3 +1,4 @@
+
 import React, { useMemo, useEffect, useState } from 'react';
 import { NavCategory, ModuleDefinition } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';
@@ -43,12 +44,17 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
 
   const { hoverHandlers } = useHoverIntent({
     onHover: (item: ModuleDefinition) => {
+      // 1. Preload Component Code
       const component = item.component as any;
       if (component?.preload) component.preload();
+      
+      // 2. Preload Data
       const prefetchConfig = PREFETCH_MAP[item.id];
-      if (prefetchConfig) queryClient.fetch(prefetchConfig.key, prefetchConfig.fn);
+      if (prefetchConfig) {
+          queryClient.fetch(prefetchConfig.key, prefetchConfig.fn);
+      }
     },
-    timeout: 200,
+    timeout: 200, // Wait 200ms before triggering to avoid spamming while scrolling
   });
 
   return (

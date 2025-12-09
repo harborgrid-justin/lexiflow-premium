@@ -16,12 +16,20 @@ export const OperationsService = {
     getMaintenanceTickets: async () => db.getAll(STORES.MAINTENANCE_TICKETS),
     getFacilities: async () => db.getAll(STORES.FACILITIES),
     
-    // Cost FinOps
+    // Cost FinOps - Calculated dynamically
     getCostMetrics: async (): Promise<CostMetric[]> => {
+        // Calculate storage cost based on document count (simulated)
+        const docCount = await db.count(STORES.DOCUMENTS);
+        const storageCost = Math.round(docCount * 0.05) + 850; // Base + var
+
+        // Calculate compute based on task count
+        const taskCount = await db.count(STORES.TASKS);
+        const computeCost = Math.round(taskCount * 0.1) + 1200;
+
         await delay(100);
         return [
-            { name: 'Compute', cost: 1200 },
-            { name: 'Storage', cost: 850 },
+            { name: 'Compute', cost: computeCost },
+            { name: 'Storage', cost: storageCost },
             { name: 'Network', cost: 300 },
             { name: 'DB', cost: 1500 },
             { name: 'AI', cost: 2200 },

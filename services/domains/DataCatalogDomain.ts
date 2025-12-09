@@ -1,22 +1,45 @@
 
 import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink } from '../../types';
 import { db, STORES } from '../db';
+import { MOCK_DATA_DICTIONARY } from '../../data/models/dataDictionary';
+
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const DataCatalogService = {
-    getDictionary: async (): Promise<DataDictionaryItem[]> => { await delay(100); return []; },
-    updateItem: async (id: string, updates: Partial<DataDictionaryItem>): Promise<DataDictionaryItem> => { await delay(100); return {id, ...updates} as any; },
-    getDataDomains: async () => { await delay(100); return []; },
+    getDictionary: async (): Promise<DataDictionaryItem[]> => { 
+        await delay(100); 
+        return MOCK_DATA_DICTIONARY; 
+    },
+    
+    updateItem: async (id: string, updates: Partial<DataDictionaryItem>): Promise<DataDictionaryItem> => { 
+        await delay(300);
+        // In a real app this would update the DB. For now we simulate success.
+        const item = MOCK_DATA_DICTIONARY.find(d => d.id === id);
+        if (!item) throw new Error("Item not found");
+        return { ...item, ...updates };
+    },
+    
+    getDataDomains: async () => { 
+        await delay(200); 
+        return [
+            { name: 'Legal', count: 12, desc: 'Core case and litigation data.'},
+            { name: 'Finance', count: 8, desc: 'Billing, invoices, and trust accounts.' },
+            { name: 'HR', count: 4, desc: 'Staff, roles, and performance data.' },
+            { name: 'IT', count: 15, desc: 'System logs, security, and infrastructure.' },
+        ]; 
+    },
     
     getSchemaTables: async (): Promise<SchemaTable[]> => {
         // Dynamically create table list from STORES enum
         const tables = Object.values(STORES).map((name, i) => ({
             name,
-            x: (i % 8) * 300 + 50,
-            y: Math.floor(i / 8) * 400 + 50,
+            x: (i % 6) * 300 + 50,
+            y: Math.floor(i / 6) * 350 + 50,
             columns: [
-                { name: 'id', type: 'UUID', pk: true },
-                { name: 'created_at', type: 'TIMESTAMP' },
+                { name: 'id', type: 'UUID', pk: true, notNull: true },
+                { name: 'created_at', type: 'TIMESTAMP WITH TIME ZONE', notNull: true },
+                { name: 'updated_at', type: 'TIMESTAMP WITH TIME ZONE' },
+                { name: 'version', type: 'INTEGER', default: '1' },
             ]
         }));
         return tables;
@@ -31,7 +54,7 @@ export const DataCatalogService = {
                 name: store,
                 type: 'System Table',
                 records: count,
-                size: `${(count * 0.5).toFixed(1)} KB` // Mock size calculation
+                size: `${(count * 1.5 + 24).toFixed(1)} KB` // Mock size calculation
             });
         }
         return info;
@@ -56,6 +79,7 @@ export const DataCatalogService = {
         };
         return MOCK_FILES[folderId] || [];
     },
+
     getLineageGraph: async (): Promise<{ nodes: LineageNode[], links: LineageLink[] }> => {
         await delay(200);
         return {

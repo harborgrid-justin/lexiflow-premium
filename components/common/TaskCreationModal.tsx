@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { Input, TextArea } from './Inputs';
@@ -62,7 +63,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         await DataService.tasks.add(newTask);
         queryClient.invalidate('tasks');
         queryClient.invalidate(['dashboard', 'stats']);
-        notify.success("Task created and added to global workflow queue.");
+        notify.success("Task created. Completion will trigger billing prompt."); // User feedback for Opp #3
     }
     onClose();
   };

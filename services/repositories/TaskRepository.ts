@@ -26,9 +26,12 @@ export class TaskRepository extends Repository<WorkflowTask> {
     
     async update(id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> {
         const result = await super.update(id, updates);
+        
+        // Opp #3 Integration Point
         if (updates.status === 'Done' || updates.status === 'Completed') {
              IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
         }
+        
         return result;
     }
 }

@@ -62,27 +62,4 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
             </div>
 
             <div className="flex-1 overflow-y-auto p-2 space-y-2">
-                {isLoading ? <Loader2 className="animate-spin m-4" /> : filteredItems.map(item => (
-                    <div 
-                        key={item.id} 
-                        draggable
-                        onDragStart={(e) => { e.dataTransfer.setData('text/plain', item.text); }}
-                        onClick={() => onInsertFact(item.text)}
-                        className={cn(
-                            "p-3 rounded-lg border cursor-grab active:cursor-grabbing hover:shadow-md transition-all group", 
-                            theme.surface, theme.border.default
-                        )}
-                    >
-                        <div className="flex justify-between items-start mb-1">
-                            <span className={cn("text-[10px] font-bold uppercase px-1.5 py-0.5 rounded", theme.surfaceHighlight, theme.text.tertiary)}>{item.type}</span>
-                            <ArrowRight className="h-3 w-3 text-slate-300 opacity-0 group-hover:opacity-100"/>
-                        </div>
-                        <p className={cn("text-xs font-medium line-clamp-2", theme.text.primary)}>{item.text}</p>
-                        <p className={cn("text-[10px] mt-1 italic", theme.text.tertiary)}>{item.source}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-export default ContextPanel;
+                {isLoading ? <Loader2 className="animate-spin m-4"

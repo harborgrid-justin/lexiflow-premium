@@ -1,6 +1,7 @@
 
 import { BUSINESS_PROCESSES } from '../../data/models/firmProcess';
 import { TEMPLATE_LIBRARY } from '../../data/models/workflowTemplates';
+import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 import { SystemEventType } from '../../types/integrationTypes';
@@ -51,23 +52,51 @@ export const WorkflowRepository = {
     
     getApprovals: async () => { await delay(50); return []; },
     
-    deploy: async (templateId: string) => { 
-        await delay(1000); 
-        console.log(`[API] Deployed workflow ${templateId}`); 
-        // In real app, this would instantiate tasks from the template
+    deploy: async (templateId: string, context?: { caseId?: string }) => { 
+        console.log(`[API] Deploying workflow ${templateId}...`);
+        const template = await db.get<WorkflowTemplateData>(STORES.TEMPLATES, templateId) 
+                        || TEMPLATE_LIBRARY.find(t => t.id === templateId);
+        
+        if (!template) throw new Error("Template not found");
+
+        const newTasks: WorkflowTask[] = [];
+        const now = new Date();
+        
+        // Instantiate tasks from template stages
+        template.stages.forEach((stage, idx) => {
+             const dueDate = new Date(now);
+             dueDate.setDate(dueDate.getDate() + (idx + 1) * 2); // Stagger deadlines
+
+             const task: WorkflowTask = {
+                 id: `t-auto-${Date.now()}-${idx}` as TaskId,
+                 title: stage,
+                 status: 'Pending',
+                 assignee: 'Unassigned',
+                 priority: 'Medium',
+                 dueDate: dueDate.toISOString().split('T')[0],
+                 caseId: context?.caseId as CaseId || 'General' as CaseId,
+                 description: `Automated task from template: ${template.title}`,
+                 linkedRules: []
+             };
+             newTasks.push(task);
+        });
+
+        // Batch insert
+        for (const t of newTasks) {
+            await db.put(STORES.TASKS, t);
+        }
+
+        return newTasks;
     },
     
     runAutomation: async (scope: string) => { 
         await delay(800); 
         console.log(`[API] Running automation scope: ${scope}`);
         
-        // Simulate an automated system event
-        // E.g. Checking for overdue tasks and creating notifications
         const tasks = await db.getAll<any>(STORES.TASKS);
         const overdue = tasks.filter(t => t.status !== 'Done' && new Date(t.dueDate) < new Date());
         
         if (overdue.length > 0) {
-            // Generate notification
             const notif = {
                 id: `notif-auto-${Date.now()}`,
                 text: `Automation Run: Identified ${overdue.length} overdue tasks. Escalations triggered.`,
@@ -84,6 +113,5 @@ export const WorkflowRepository = {
     syncEngine: async () => { 
         await delay(800); 
         console.log("[API] Engine synced");
-        // Simulate syncing state with external BPMN engine
     }
 };

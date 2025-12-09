@@ -1,5 +1,5 @@
 
-import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, OperatingSummary, FinancialPerformanceData, UUID, UserId } from '../../types';
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, OperatingSummary, FinancialPerformanceData, UUID, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 import { ChainService } from '../chainService';
@@ -30,24 +30,63 @@ export class BillingRepository extends Repository<TimeEntry> {
              this.getAll()
          ]);
          
-         // Aggregate WIP
-         const wipMap = entries.filter(e => e.status === 'Unbilled').reduce((acc, curr) => {
-             // Mock lookup client by case if possible, here using first client for simplicity or matching ID logic
-             const clientId = '1'; // Placeholder logic
-             acc[clientId] = (acc[clientId] || 0) + curr.total;
-             return acc;
-         }, {} as Record<string, number>);
+         // Aggregate WIP by Client
+         // First, map Case IDs to Client IDs
+         const caseToClientMap: Record<string, string> = {};
+         const clientNames: Record<string, string> = {};
+         
+         clients.forEach(c => {
+             clientNames[c.id] = c.name;
+             c.matters.forEach(m => {
+                 caseToClientMap[m] = c.id;
+             });
+         });
 
-         return clients.slice(0, 5).map(c => ({
-            name: c.name.split(' ')[0],
-            wip: wipMap[c.id] || Math.floor(Math.random() * 5000), // Fallback to mock data if empty
-            billed: c.totalBilled
-         }));
+         const wipMap: Record<string, number> = {};
+
+         entries.forEach(e => {
+             if (e.status === 'Unbilled') {
+                 const clientId = caseToClientMap[e.caseId];
+                 if (clientId) {
+                     wipMap[clientId] = (wipMap[clientId] || 0) + e.total;
+                 }
+             }
+         });
+
+         const stats = Object.keys(wipMap).map(clientId => {
+             const client = clients.find(c => c.id === clientId);
+             return {
+                 name: client ? client.name.split(' ')[0] : 'Unknown',
+                 wip: wipMap[clientId],
+                 billed: client ? client.totalBilled : 0
+             };
+         });
+
+         // Return top 5 by WIP, or mock if empty for demo
+         if (stats.length === 0) {
+              return clients.slice(0, 3).map(c => ({
+                name: c.name.split(' ')[0],
+                wip: 0, 
+                billed: c.totalBilled
+             }));
+         }
+         
+         return stats.sort((a,b) => b.wip - a.wip).slice(0, 5);
     }
 
     async getRealizationStats(): Promise<any> {
-        const stats = await db.get<any>(STORES.REALIZATION_STATS, 'realization-main');
-        return stats?.data || [];
+        // Calculate dynamic realization
+        const invoices = await this.getInvoices();
+        const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
+        const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
+        
+        // Avoid division by zero
+        const rate = totalBilled === 0 ? 100 : Math.round((totalCollected / totalBilled) * 100);
+        
+        return [
+            { name: 'Billed', value: rate, color: '#10b981' },
+            { name: 'Write-off', value: 100 - rate, color: '#ef4444' },
+        ];
     }
 
     // --- Invoices ---
@@ -95,7 +134,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async sendInvoice(id: string): Promise<boolean> {
         await delay(500);
         
-        const invoice = await this.updateInvoice(id, { status: 'Sent' });
+        await this.updateInvoice(id, { status: 'Sent' });
         
         // Log to Audit Chain
         const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // Simplification
@@ -139,29 +178,79 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
     
     async getOperatingSummary(): Promise<OperatingSummary> {
-        const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
-        return summary || { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
+        // Aggregate Expenses and Revenue for current month
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+        
+        const [expenses, invoices] = await Promise.all([
+            db.getAll<FirmExpense>(STORES.EXPENSES),
+            db.getAll<Invoice>(STORES.INVOICES)
+        ]);
+
+        const expensesMtd = expenses
+            .filter(e => e.date >= startOfMonth)
+            .reduce((sum, e) => sum + e.amount, 0);
+
+        const revenueMtd = invoices
+            .filter(i => i.status === 'Paid' && i.date >= startOfMonth)
+            .reduce((sum, i) => sum + i.amount, 0);
+        
+        const balance = revenueMtd - expensesMtd + 500000; // Mock opening balance
+
+        return { balance, expensesMtd, cashFlowMtd: revenueMtd };
     }
 
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {
-        await delay(200);
-        // In a real app, calculate from invoices and expenses dynamically
+        // Aggregate data by month for chart
+        const [invoices, expenses] = await Promise.all([
+            db.getAll<Invoice>(STORES.INVOICES),
+            db.getAll<FirmExpense>(STORES.EXPENSES)
+        ]);
+
+        const revenueByMonth: Record<string, number> = {};
+        const expensesByCategory: Record<string, number> = {};
+
+        // Process Revenue
+        invoices.forEach(inv => {
+            const month = new Date(inv.date).toLocaleString('default', { month: 'short' });
+            revenueByMonth[month] = (revenueByMonth[month] || 0) + inv.amount;
+        });
+
+        // Process Expenses
+        expenses.forEach(exp => {
+            expensesByCategory[exp.category] = (expensesByCategory[exp.category] || 0) + exp.amount;
+        });
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const revenueData = months.map(m => ({
+            month: m,
+            actual: revenueByMonth[m] || 0,
+            target: 400000 // Mock target
+        }));
+
+        const expenseData = Object.keys(expensesByCategory).map(cat => ({
+            category: cat,
+            value: expensesByCategory[cat]
+        }));
+        
+        // If data is empty (initial state), return seeds
+        if (revenueData.every(d => d.actual === 0)) {
+             return {
+                revenue: [
+                    { month: 'Jan', actual: 420000, target: 400000 },
+                    { month: 'Feb', actual: 450000, target: 410000 },
+                    { month: 'Mar', actual: 380000, target: 420000 },
+                ],
+                expenses: [
+                    { category: 'Payroll', value: 250000 },
+                    { category: 'Rent', value: 45000 },
+                ]
+            };
+        }
+
         return {
-            revenue: [
-                { month: 'Jan', actual: 420000, target: 400000 },
-                { month: 'Feb', actual: 450000, target: 410000 },
-                { month: 'Mar', actual: 380000, target: 420000 },
-                { month: 'Apr', actual: 490000, target: 430000 },
-                { month: 'May', actual: 510000, target: 440000 },
-                { month: 'Jun', actual: 550000, target: 450000 },
-            ],
-            expenses: [
-                { category: 'Payroll', value: 250000 },
-                { category: 'Rent', value: 45000 },
-                { category: 'Software', value: 15000 },
-                { category: 'Marketing', value: 25000 },
-                { category: 'Travel', value: 12000 },
-            ]
+            revenue: revenueData,
+            expenses: expenseData
         };
     }
 

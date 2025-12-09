@@ -46,6 +46,16 @@ export const CRMService = {
         const updatedLead = { ...lead, ...updates };
         await db.put(STORES.LEADS, updatedLead);
 
+        // Opp #1 Integration Point: CRM -> Compliance
+        if (updates.stage) {
+            IntegrationOrchestrator.publish(SystemEventType.LEAD_STAGE_CHANGED, {
+                leadId: id,
+                stage: updates.stage,
+                clientName: lead.client,
+                value: lead.value
+            });
+        }
+
         // Automation: If Converted, create Client and Case
         if (updates.stage === 'Matter Created' && lead.stage !== 'Matter Created') {
             await CRMService.convertLeadToClient(updatedLead);

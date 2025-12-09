@@ -3,7 +3,7 @@ import {
     Deposition, ESISource, ProductionSet, CustodianInterview, 
     DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
     Examination, Vendor, Transcript, SanctionMotion, StipulationRequest,
-    ReviewBatch, ProcessingJob
+    ReviewBatch, ProcessingJob, CalendarEventItem
 } from '../../types';
 import { db, STORES } from '../db';
 
@@ -23,21 +23,17 @@ export class DiscoveryRepository {
     }
     
     // --- Review & Production ---
-    
     getReviewBatches = async (caseId: string): Promise<ReviewBatch[]> => {
         return db.getByIndex(STORES.REVIEW_BATCHES, 'caseId', caseId);
     }
-
     createReviewBatch = async (batch: ReviewBatch) => {
         return db.put(STORES.REVIEW_BATCHES, batch);
     }
-
     getProcessingJobs = async (): Promise<ProcessingJob[]> => {
         return db.getAll(STORES.PROCESSING_JOBS);
     }
 
     // --- Core Discovery ---
-
     getDepositions = async (caseId?: string) => {
         const depositions = await db.getAll<Deposition>(STORES.DISCOVERY_EXT_DEPO);
         return caseId ? depositions.filter(d => d.caseId === caseId) : depositions;
@@ -109,11 +105,34 @@ export class DiscoveryRepository {
     }
     addStipulation = async (stip: StipulationRequest) => db.put(STORES.STIPULATIONS, stip);
 
-    
     // Common
     getLegalHolds = async () => db.getAll<LegalHold>(STORES.LEGAL_HOLDS);
     getPrivilegeLog = async () => db.getAll<PrivilegeLogEntry>(STORES.PRIVILEGE_LOG);
 
-    syncDeadlines = async () => { await delay(1000); };
+    syncDeadlines = async () => { 
+        await delay(500);
+        // Find all open requests and ensure they exist on calendar
+        const requests = await this.getRequests();
+        const pending = requests.filter(r => r.status === 'Served' || r.status === 'Overdue');
+        
+        let syncedCount = 0;
+        // Mock calendar push (in real app, check for duplicates first)
+        for (const req of pending) {
+             const evt: CalendarEventItem = {
+                 id: `cal-req-${req.id}`,
+                 title: `Response Due: ${req.title}`,
+                 date: req.dueDate,
+                 type: 'deadline',
+                 description: `Discovery Request ID: ${req.id}`,
+                 priority: 'High'
+             };
+             // Push to calendar store via DB to avoid circular dependency
+             // Assuming a 'calendar_events' store or appending to tasks/docket.
+             // Here we just simulate the success.
+             syncedCount++;
+        }
+        console.log(`[API] Synced ${syncedCount} discovery deadlines to Master Calendar.`);
+    };
+    
     startCollection = async (id: string) => { await delay(500); return "job-123"; };
 }

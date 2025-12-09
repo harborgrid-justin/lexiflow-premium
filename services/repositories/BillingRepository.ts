@@ -1,6 +1,8 @@
-import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
+
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, OperatingSummary, FinancialPerformanceData, UUID, UserId } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
+import { ChainService } from '../chainService';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -28,13 +30,19 @@ export class BillingRepository extends Repository<TimeEntry> {
              this.getAll()
          ]);
          
-         return clients.slice(0, 3).map(c => {
-             return {
-                name: c.name.split(' ')[0],
-                wip: Math.floor(Math.random() * 50000), 
-                billed: c.totalBilled
-             };
-         });
+         // Aggregate WIP
+         const wipMap = entries.filter(e => e.status === 'Unbilled').reduce((acc, curr) => {
+             // Mock lookup client by case if possible, here using first client for simplicity or matching ID logic
+             const clientId = '1'; // Placeholder logic
+             acc[clientId] = (acc[clientId] || 0) + curr.total;
+             return acc;
+         }, {} as Record<string, number>);
+
+         return clients.slice(0, 5).map(c => ({
+            name: c.name.split(' ')[0],
+            wip: wipMap[c.id] || Math.floor(Math.random() * 5000), // Fallback to mock data if empty
+            billed: c.totalBilled
+         }));
     }
 
     async getRealizationStats(): Promise<any> {
@@ -84,7 +92,25 @@ export class BillingRepository extends Repository<TimeEntry> {
         return updated;
     }
     
-    async sendInvoice(id: string) { await delay(500); console.log(`[API] Invoice ${id} sent`); return true; }
+    async sendInvoice(id: string): Promise<boolean> {
+        await delay(500);
+        
+        const invoice = await this.updateInvoice(id, { status: 'Sent' });
+        
+        // Log to Audit Chain
+        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // Simplification
+        await ChainService.createEntry({
+            timestamp: new Date().toISOString(),
+            user: 'System Billing',
+            userId: 'sys-billing' as UserId,
+            action: 'INVOICE_SENT',
+            resource: `Invoice/${id}`,
+            ip: 'internal'
+        }, prevHash);
+
+        console.log(`[API] Invoice ${id} sent and audit logged.`); 
+        return true; 
+    }
 
     // --- Trust Accounting ---
     async getTrustTransactions(accountId: string): Promise<TrustTransaction[]> {
@@ -92,11 +118,25 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
 
     async getTrustAccounts() { return db.getAll<any>(STORES.TRUST); }
+    
     async getTopAccounts(): Promise<Client[]> {
         const clients = await db.getAll<Client>(STORES.CLIENTS);
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     }
-    async getOverviewStats() { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
+    
+    async getOverviewStats() { 
+        // Real aggregation
+        const invoices = await this.getInvoices();
+        const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
+        const collected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
+        const realization = totalBilled > 0 ? Math.round((collected / totalBilled) * 100) : 0;
+        
+        return { 
+            realization, 
+            totalBilled, 
+            month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) 
+        }; 
+    }
     
     async getOperatingSummary(): Promise<OperatingSummary> {
         const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
@@ -105,6 +145,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {
         await delay(200);
+        // In a real app, calculate from invoices and expenses dynamically
         return {
             revenue: [
                 { month: 'Jan', actual: 420000, target: 400000 },

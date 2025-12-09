@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MetricCard } from '../../common/Primitives';
 import { Card } from '../../common/Card';
 import { Database, Activity, HardDrive, Server } from 'lucide-react';
@@ -10,10 +10,7 @@ import { useChartTheme } from '../../common/ChartHelpers';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { TenantConfig } from '../../../types';
-
-const trafficData = Array.from({ length: 20 }, (_, i) => ({
-    time: i, value: Math.floor(Math.random() * 1000) + 500
-}));
+import { useInterval } from '../../../hooks/useInterval';
 
 export const PlatformOverview: React.FC = () => {
   const { theme } = useTheme();
@@ -24,6 +21,19 @@ export const PlatformOverview: React.FC = () => {
       DataService.admin.getTenantConfig,
       { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
+
+  // Live Traffic Simulation
+  const [data, setData] = useState(Array.from({ length: 30 }, (_, i) => ({
+      time: i, value: Math.floor(Math.random() * 800) + 400
+  })));
+
+  useInterval(() => {
+      setData(currentData => {
+          const nextTime = currentData[currentData.length - 1].time + 1;
+          const nextValue = Math.floor(Math.random() * 800) + 400;
+          return [...currentData.slice(1), { time: nextTime, value: nextValue }];
+      });
+  }, 1000);
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -37,7 +47,7 @@ export const PlatformOverview: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <MetricCard label="Total Records" value="2.4M" icon={Database} className="border-l-4 border-l-blue-600" />
-            <MetricCard label="Throughput" value="1.2GB/s" icon={Activity} className="border-l-4 border-l-green-600" trend="+15%" trendUp={true}/>
+            <MetricCard label="Throughput" value="1.2GB/s" icon={Activity} className="border-l-4 border-l-green-600" trend="+15%" trendUp={true} isLive={true}/>
             <MetricCard label="Storage Used" value="450TB" icon={HardDrive} className="border-l-4 border-l-purple-600" />
             <MetricCard label="Active Nodes" value="12" icon={Server} className="border-l-4 border-l-amber-600" />
         </div>
@@ -46,7 +56,7 @@ export const PlatformOverview: React.FC = () => {
             <Card title="Live Query Traffic" className="lg:col-span-2 overflow-hidden">
                 <div className="h-64 w-full min-w-0">
                     <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={trafficData}>
+                        <AreaChart data={data}>
                             <defs>
                                 <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
@@ -54,7 +64,7 @@ export const PlatformOverview: React.FC = () => {
                                 </linearGradient>
                             </defs>
                             <Tooltip contentStyle={chartTheme.tooltipStyle} />
-                            <Area type="monotone" dataKey="value" stroke="#3b82f6" fillOpacity={1} fill="url(#colorVal)" />
+                            <Area type="monotone" dataKey="value" stroke="#3b82f6" fillOpacity={1} fill="url(#colorVal)" isAnimationActive={false} />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>

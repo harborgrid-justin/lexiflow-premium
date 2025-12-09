@@ -1,8 +1,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Radio } from 'lucide-react';
 import { DataService } from '../../services/dataService';
-import { DocketEntry, Case } from '../../types';
+import { DocketEntry, Case, DocketId, CaseId } from '../../types';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';
@@ -16,6 +16,7 @@ import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 import { DocketToolbar } from './DocketToolbar';
+import { useInterval } from '../../hooks/useInterval';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';
@@ -27,11 +28,12 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'filings' | 'orders'>(filterType);
+  const [isLiveMode, setIsLiveMode] = useState(false);
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // --- ENTERPRISE DATA ACCESS ---
-  const { data: docketEntries = [] } = useQuery<DocketEntry[]>(
+  const { data: docketEntries = [], refetch } = useQuery<DocketEntry[]>(
       [STORES.DOCKET, 'all'],
       DataService.docket.getAll
   );
@@ -55,6 +57,27 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       }
   );
 
+  // Live Mode Simulator
+  useInterval(() => {
+      if (isLiveMode) {
+          const randomCase = cases[Math.floor(Math.random() * cases.length)];
+          if (randomCase) {
+              const entry: DocketEntry = {
+                  id: `dk-live-${Date.now()}` as DocketId,
+                  sequenceNumber: docketEntries.length + 100,
+                  caseId: randomCase.id,
+                  date: new Date().toISOString().split('T')[0],
+                  type: 'Notice',
+                  title: 'LIVE: Notice of Electronic Filing',
+                  description: 'System generated notice for simulated live feed activity.',
+                  filedBy: 'Court',
+                  isSealed: false
+              };
+              addEntry(entry);
+          }
+      }
+  }, isLiveMode ? 4000 : null);
+
   const { mutate: deleteEntry } = useMutation(
       DataService.docket.delete,
       {
@@ -68,11 +91,9 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   }, [filterType]);
 
   const handleSaveEntry = (entry: Partial<DocketEntry>) => {
-      // Ensure we have a case ID
       const finalEntry = {
           ...entry,
           caseId: selectedCaseId || entry.caseId,
-          // Calculate internal seq if not provided
           sequenceNumber: entry.sequenceNumber || docketEntries.filter(d => d.caseId === selectedCaseId).length + 1
       } as DocketEntry;
       
@@ -100,7 +121,6 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       );
   };
 
-  // 1. Context Filter (Cheap)
   const contextFiltered = useMemo(() => {
     let data = selectedCaseId 
       ? docketEntries.filter(e => e.caseId === selectedCaseId)
@@ -115,14 +135,12 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     });
   }, [activeTab, selectedCaseId, docketEntries]);
 
-  // 2. Heavy Filter (Worker)
   const { filteredItems: filteredEntries, isSearching } = useWorkerSearch({
       items: contextFiltered,
       query: searchTerm,
       fields: ['title', 'description', 'caseId', 'filedBy']
   });
 
-  // Sort happens on the UI thread for now as it's cheap compared to string search
   const sortedEntries = useMemo(() => {
       return [...filteredEntries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [filteredEntries]);
@@ -147,6 +165,18 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   return (
     <div className="flex flex-col h-full gap-6">
       {!selectedCaseId && <DocketStats />}
+      
+      <div className="flex justify-end px-1">
+          <button 
+            onClick={() => setIsLiveMode(!isLiveMode)}
+            className={cn(
+                "text-xs flex items-center px-2 py-1 rounded border transition-colors",
+                isLiveMode ? "bg-red-50 border-red-200 text-red-600 animate-pulse" : cn(theme.surface, theme.border.default, theme.text.secondary)
+            )}
+          >
+              <Radio className="h-3 w-3 mr-1"/> {isLiveMode ? 'Live Feed Active' : 'Enable Live Feed'}
+          </button>
+      </div>
 
       <div className="flex-1 flex flex-col md:flex-row gap-6 overflow-hidden">
         <DocketFilterPanel 
@@ -179,7 +209,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                     <DocketTable 
                         entries={sortedEntries} 
                         onSelectEntry={openOrbitalEntry} 
-                        onSelectCaseId={() => {}} // No-op, already selected
+                        onSelectCaseId={() => {}} 
                         showCaseColumn={false}
                     />
                 </div>
@@ -195,7 +225,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                     onSave={handleSaveEntry}
                     onCancel={() => setIsAddModalOpen(false)}
                     caseParties={caseParties}
-                    initialData={{ caseId: selectedCaseId || '' }}
+                    initialData={{ caseId: selectedCaseId || '' as CaseId }}
                 />
               </div>
           </Modal>

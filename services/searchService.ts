@@ -12,38 +12,41 @@ export interface GlobalSearchResult {
   data: Case | Client | WorkflowTask | EvidenceItem | User | LegalDocument | DocketEntry | Motion | Clause | LegalRule;
 }
 
-// Helper to yield control to main thread to prevent UI freezing
+// Optimization: Yield control to main thread to prevent UI freezing during heavy aggregation
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
 export const SearchService = {
   async search(query: string): Promise<GlobalSearchResult[]> {
     const q = query ? query.toLowerCase() : '';
     const results: GlobalSearchResult[] = [];
-    const CHUNK_SIZE = 200; // Process 200 items before yielding
+    const CHUNK_SIZE = 50; // Optimization: Process items in small batches
 
     try {
-      // Use allSettled to ensure one failure doesn't brick the entire search
+      // Optimization: Parallel Fetch of All 10 Data Domains
       const resultsSettled = await Promise.allSettled([
         DataService.cases.getAll(),
         DataService.clients.getAll(),
         DataService.tasks.getAll(),
         DataService.evidence.getAll(),
         DataService.users.getAll(),
-        DataService.documents.getAll(),
-        DataService.docket.getAll(),
-        DataService.motions.getAll(),
-        DataService.clauses.getAll(),
-        DataService.rules.getAll()
+        DataService.documents.getAll(),     // New Domain 1
+        DataService.docket.getAll(),        // New Domain 2
+        DataService.motions.getAll(),       // New Domain 3
+        DataService.clauses.getAll(),       // New Domain 4
+        DataService.rules.getAll()          // New Domain 5
       ]);
 
       let processCount = 0;
 
-      // Helper to push result and check yield
+      // Helper to push result and cooperatively yield to main thread
       const pushResult = async (item: GlobalSearchResult) => {
           results.push(item);
           processCount++;
+          // Optimization: Yield every CHUNK_SIZE items to keep UI responsive
           if (processCount % CHUNK_SIZE === 0) await yieldToMain();
       };
+
+      // --- EXISTING DOMAINS ---
 
       // 0: Cases
       if (resultsSettled[0].status === 'fulfilled') {
@@ -125,6 +128,8 @@ export const SearchService = {
         }
       }
 
+      // --- NEW DEEP SEARCH DOMAINS ---
+
       // 5: Documents
       if (resultsSettled[5].status === 'fulfilled') {
         const docs = resultsSettled[5].value;
@@ -145,7 +150,7 @@ export const SearchService = {
       if (resultsSettled[6].status === 'fulfilled') {
         const entries = resultsSettled[6].value;
         for (const d of entries) {
-            if (!q || d.title.toLowerCase().includes(q) || d.description?.toLowerCase().includes(q)) {
+            if (!q || d.title.toLowerCase().includes(q) || (d.description && d.description.toLowerCase().includes(q))) {
                 await pushResult({
                     id: d.id,
                     type: 'docket',
@@ -209,7 +214,7 @@ export const SearchService = {
       console.error("Critical Search Failure", error);
     }
 
-    // Return top 20 results
+    // Optimization: Limit result set size to avoid rendering bottlenecks
     return results.slice(0, 20);
   }
 };

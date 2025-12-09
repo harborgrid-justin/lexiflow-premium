@@ -13,7 +13,7 @@ export const Scheduler = {
    * Fallback to setTimeout if requestIdleCallback is not supported.
    */
   defer: (task: () => void, priority: TaskPriority = 'normal') => {
-    if ('requestIdleCallback' in window) {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
       const timeout = priority === 'background' ? 5000 : 1000;
       // @ts-ignore - TS doesn't fully support RIC types in all envs yet
       window.requestIdleCallback(() => {

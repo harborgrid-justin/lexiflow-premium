@@ -12,7 +12,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
     const rafRef = useRef<number | null>(null);
 
     useEffect(() => {
-        // Debounced calculation using RAF
+        // Optimization: Use requestAnimationFrame to throttle updates
         const scheduleUpdate = () => {
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
             rafRef.current = requestAnimationFrame(calculatePaths);
@@ -21,12 +21,11 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
         const calculatePaths = () => {
             if (!svgRef.current) return;
             
-            // 1. Batch Reads: Get SVG rect first
+            // Optimization: Batch Read - Get container dimensions once
             const svgRect = svgRef.current.getBoundingClientRect();
             
-            // 2. Batch Reads: Collect all relevant node positions
-            // We filter sections that need links first
-            const linksToDraw = pleadingDoc.sections
+            // Optimization: Batch Read - Collect all target elements first
+            const targets = pleadingDoc.sections
                 .filter(s => (s.linkedEvidenceIds?.length || s.linkedArgumentId))
                 .map(section => {
                     const el = window.document.getElementById(`node-${section.id}`);
@@ -38,17 +37,15 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
                 })
                 .filter(item => item !== null) as { section: any, rect: DOMRect }[];
 
-            // 3. Batch Writes/Calculations (React State Update)
-            const newPaths = linksToDraw.map(({ section, rect }) => {
-                const startX = rect.right - svgRect.left - 12; // From right side of block
+            // Optimization: Batch Calculation/Write
+            const newPaths = targets.map(({ section, rect }) => {
+                const startX = rect.right - svgRect.left - 12; // Adjusted offset
                 const startY = rect.top - svgRect.top + rect.height / 2;
                 
                 // Draw to imaginary sidebar nodes for visualization effect
-                // In a real d3/react-flow implementation, we'd have exact coords for target nodes.
-                // Here we fan them out to the right.
                 const endX = svgRect.width - 20; 
                 
-                // Deterministic pseudo-random Y for stability
+                // Deterministic pseudo-random Y for visual distribution based on ID hash
                 const pseudoRandomY = (section.id.charCodeAt(section.id.length-1) % 100) - 50;
                 const endY = startY + pseudoRandomY;
 
@@ -76,7 +73,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
         // Initial calc
         scheduleUpdate();
 
-        // Listeners
+        // Listeners with throttling
         window.addEventListener('resize', scheduleUpdate);
         window.addEventListener('scroll', scheduleUpdate, true); // Capture scroll on any parent
         

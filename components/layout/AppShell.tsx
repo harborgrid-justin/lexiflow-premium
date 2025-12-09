@@ -63,8 +63,11 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
           {headerWithProps}
         </header>
         
-        {/* Main Content - strict overflow handling */}
-        <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate pb-0">
+        {/* Main Content - strict overflow handling & containment */}
+        <main 
+            className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate pb-0"
+            style={{ contain: 'strict' }}
+        >
             {children}
         </main>
       </div>

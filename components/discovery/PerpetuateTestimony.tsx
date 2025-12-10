@@ -1,12 +1,22 @@
+
 import React from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Clock, AlertTriangle, FileText } from 'lucide-react';
+import { Clock, AlertTriangle, FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const PerpetuateTestimony: React.FC = () => {
   const { theme } = useTheme();
+
+  // Use dynamic query instead of static placeholder
+  const { data: petitions = [], isLoading } = useQuery<any[]>(
+      ['discovery', 'petitions'],
+      DataService.discovery.getPetitions
+  );
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
@@ -22,7 +32,20 @@ export const PerpetuateTestimony: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card title="Active Petitions">
-                <div className="text-center py-8 text-slate-400 italic">No active Rule 27 petitions.</div>
+                {isLoading ? (
+                    <div className="py-8 flex justify-center"><Loader2 className="animate-spin text-blue-600"/></div>
+                ) : petitions.length === 0 ? (
+                    <div className="text-center py-8 text-slate-400 italic">No active Rule 27 petitions.</div>
+                ) : (
+                    <div className="space-y-2">
+                        {petitions.map((p, i) => (
+                            <div key={i} className="p-3 border rounded">
+                                <p className="font-bold">{p.title}</p>
+                                <p className="text-xs text-slate-500">{p.date}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </Card>
             
             <Card title="Requirements Checklist">

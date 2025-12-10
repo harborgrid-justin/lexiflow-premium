@@ -126,6 +126,13 @@ export class DiscoveryRepository {
         return caseId ? stips.filter(s => s.caseId === caseId) : stips;
     }
     addStipulation = async (stip: StipulationRequest) => db.put(STORES.STIPULATIONS, stip);
+    
+    // Rule 27
+    getPetitions = async () => {
+        // Mock implementation for Rule 27 petitions - would be a real store in prod
+        await delay(100);
+        return []; 
+    }
 
     // Common
     getLegalHolds = async () => db.getAll<LegalHold>(STORES.LEGAL_HOLDS);

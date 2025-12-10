@@ -1,8 +1,10 @@
 
-import React from 'react';
-import { Search } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Search, Clock } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { SearchService } from '../../services/searchService';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 interface SearchToolbarProps {
   value: string;
@@ -14,7 +16,12 @@ interface SearchToolbarProps {
 
 export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, placeholder = "Search (Press /)...", actions, className = "" }) => {
   const { theme } = useTheme();
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const history = SearchService.getHistory();
+
+  useClickOutside(containerRef, () => setShowHistory(false));
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -27,9 +34,26 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, p
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const handleFocus = () => {
+    if (history.length > 0) setShowHistory(true);
+  };
+
+  const handleHistorySelect = (term: string) => {
+      onChange(term);
+      setShowHistory(false);
+      inputRef.current?.focus();
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+        SearchService.saveHistory(value);
+        setShowHistory(false);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default, className)}>
-      <div className="relative w-full md:max-w-md">
+      <div className="relative w-full md:max-w-md" ref={containerRef}>
         <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
         <input 
           ref={inputRef}
@@ -42,7 +66,24 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, p
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onFocus={handleFocus}
+          onKeyUp={handleKeyUp}
         />
+        
+        {showHistory && history.length > 0 && !value && (
+            <div className={cn("absolute top-full left-0 right-0 mt-1 rounded-md shadow-lg border z-50 overflow-hidden", theme.surface, theme.border.default)}>
+                <div className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-slate-50 dark:bg-slate-800 text-slate-500")}>Recent Searches</div>
+                {history.map((term, i) => (
+                    <button 
+                        key={i}
+                        className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700", theme.text.primary)}
+                        onClick={() => handleHistorySelect(term)}
+                    >
+                        <Clock className="h-3 w-3 text-slate-400"/> {term}
+                    </button>
+                ))}
+            </div>
+        )}
       </div>
       {actions && (
         <div className="flex gap-2 w-full md:w-auto">

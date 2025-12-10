@@ -1,3 +1,4 @@
+
 import { BaseEntity, UserId } from '../../types';
 import { MicroORM } from './microORM';
 
@@ -52,6 +53,7 @@ export abstract class Repository<T extends BaseEntity> {
         this.getAll = this.getAll.bind(this);
         this.getById = this.getById.bind(this);
         this.getByIndex = this.getByIndex.bind(this);
+        this.getMany = this.getMany.bind(this);
         this.add = this.add.bind(this);
         this.update = this.update.bind(this);
         this.delete = this.delete.bind(this);
@@ -89,6 +91,37 @@ export abstract class Repository<T extends BaseEntity> {
             return item;
         }
         return undefined;
+    }
+
+    async getMany(ids: string[]): Promise<T[]> {
+        // Optimization: Check cache first for all IDs
+        const results: T[] = [];
+        const missingIds: string[] = [];
+        
+        ids.forEach(id => {
+            const cached = this.cache.get(id);
+            if (cached && !cached.deletedAt) {
+                results.push(cached);
+            } else {
+                missingIds.push(id);
+            }
+        });
+
+        if (missingIds.length === 0) return results;
+
+        // Fetch missing items in one go if possible (simulated via loop here, but ideally db.getAll with filter)
+        // Since IndexedDB doesn't support efficient multi-get by default without index or key range hacks, 
+        // we'll iterate efficiently or use getAll() and filter if dataset is small enough (mock scale).
+        // For larger scales, MicroORM should implement IDBKeyRange.
+        const allItems = await this.orm.findAll(); // Assuming small mock dataset
+        const fetched = allItems.filter(item => missingIds.includes(item.id) && !item.deletedAt);
+        
+        fetched.forEach(item => {
+            this.cache.put(item.id, item);
+            results.push(item);
+        });
+
+        return results;
     }
     
     async getByIndex(indexName: string, value: string): Promise<T[]> {

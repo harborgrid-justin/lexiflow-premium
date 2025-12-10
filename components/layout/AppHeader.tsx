@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react';
 import { User as UserType } from '../../types';
 import { GlobalSearchResult } from '../../services/searchService';
 import { IntentResult } from '../../services/geminiService';
@@ -10,6 +10,7 @@ import { ConnectivityHUD } from '../common/ConnectivityHUD';
 import { NeuralCommandBar } from './NeuralCommandBar';
 import { UserAvatar } from '../common/UserAvatar';
 import { useInterval } from '../../hooks/useInterval';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 interface AppHeaderProps {
   onToggleSidebar: () => void;
@@ -27,6 +28,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 }) => {
   const { theme } = useTheme();
   const [pulse, setPulse] = useState(false);
+  const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
+  const quickActionRef = React.useRef<HTMLDivElement>(null);
+  
+  useClickOutside(quickActionRef, () => setIsQuickActionOpen(false));
 
   // System Heartbeat Visual
   useInterval(() => setPulse(p => !p), 2000);
@@ -57,6 +62,29 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
+        <div className="relative" ref={quickActionRef}>
+             <button 
+                onClick={() => setIsQuickActionOpen(!isQuickActionOpen)}
+                className={cn("flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all text-xs font-bold shadow-sm", theme.surface, theme.border.default, theme.text.primary, `hover:${theme.surfaceHighlight}`)}
+             >
+                 <PlusCircle className="h-4 w-4 text-blue-600"/> Quick Add
+             </button>
+             
+             {isQuickActionOpen && (
+                 <div className={cn("absolute top-full right-0 mt-2 w-48 rounded-lg shadow-xl border overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface, theme.border.default)}>
+                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors", theme.text.primary)}>
+                         <Clock className="h-4 w-4 text-green-600"/> Log Time
+                     </button>
+                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors", theme.text.primary)}>
+                         <FileText className="h-4 w-4 text-blue-600"/> New Document
+                     </button>
+                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors", theme.text.primary)}>
+                         <UserPlus className="h-4 w-4 text-purple-600"/> New Client
+                     </button>
+                 </div>
+             )}
+        </div>
+
         <ConnectivityHUD />
         
         <button className={cn("relative p-2 rounded-lg transition-colors group", theme.text.tertiary, `hover:${theme.surfaceHighlight} hover:${theme.text.secondary}`)}>

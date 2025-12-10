@@ -1,6 +1,9 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNotify } from './useNotify';
+
+// define options outside to maintain reference equality
+// Cast to any to avoid TS error about 'passive' property in strict environments
+const EVENT_OPTIONS = { passive: true } as any;
 
 export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string | null) => {
   const [activeTime, setActiveTime] = useState(0);
@@ -39,17 +42,15 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
       });
   }, []);
 
-  // Activity Listeners - Bound ONCE with passive flag for performance
+  // Activity Listeners - Optimized
   useEffect(() => {
-      const options = { passive: true };
-      window.addEventListener('mousemove', handleActivity, options);
-      window.addEventListener('keydown', handleActivity, options);
-      window.addEventListener('click', handleActivity, options);
+      window.addEventListener('mousemove', handleActivity, EVENT_OPTIONS);
+      window.addEventListener('keydown', handleActivity, EVENT_OPTIONS);
+      // 'click' is redundant if we track mousemove/keydown and expensive if spam-clicked
       
       return () => {
-          window.removeEventListener('mousemove', handleActivity);
-          window.removeEventListener('keydown', handleActivity);
-          window.removeEventListener('click', handleActivity);
+          window.removeEventListener('mousemove', handleActivity, EVENT_OPTIONS);
+          window.removeEventListener('keydown', handleActivity, EVENT_OPTIONS);
           if (rafRef.current) cancelAnimationFrame(rafRef.current);
       };
   }, [handleActivity]);

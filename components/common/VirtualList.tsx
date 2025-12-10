@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
@@ -13,11 +13,26 @@ interface VirtualListProps<T> {
   footer?: React.ReactNode; 
 }
 
-export function VirtualList<T>({ items, height, itemHeight, renderItem, className, emptyMessage = "No items found", footer }: VirtualListProps<T>) {
+export interface VirtualListRef {
+    scrollToIndex: (index: number) => void;
+}
+
+export const VirtualList = forwardRef<VirtualListRef, VirtualListProps<any>>((
+    { items, height, itemHeight, renderItem, className, emptyMessage = "No items found", footer }, ref
+) => {
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
+
+  // Expose scroll method
+  useImperativeHandle(ref, () => ({
+      scrollToIndex: (index: number) => {
+          if (containerRef.current) {
+              containerRef.current.scrollTop = index * itemHeight;
+          }
+      }
+  }));
 
   // Resize Observer to handle responsive container height dynamically
   useEffect(() => {
@@ -117,4 +132,4 @@ export function VirtualList<T>({ items, height, itemHeight, renderItem, classNam
       </div>
     </div>
   );
-}
+});

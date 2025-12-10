@@ -10,7 +10,11 @@ interface State {
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  public state: State = { hasError: false };
+  // FIX: Switched from public class field to constructor for broader compatibility.
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
@@ -22,11 +26,12 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
-    // FIX: Directly access props to avoid potential destructuring-related type errors.
     if (this.state.hasError) {
+      // FIX: Correctly access props via `this.props`. The constructor ensures `this.props` is set.
       return this.props.fallback ?? <h1>Something went wrong.</h1>;
     }
 
+    // FIX: Correctly access props via `this.props`.
     return this.props.children;
   }
 }

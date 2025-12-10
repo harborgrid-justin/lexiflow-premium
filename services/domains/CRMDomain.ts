@@ -33,7 +33,8 @@ export const CRMService = {
                 { name: 'Healthcare', value: 15, color: '#10b981' }
             ], 
             revenue: [
-                { name: 'Current Pipeline', retained: pipelineValue * 0.3, new: pipelineValue * 0.7 }
+                { name: 'Q1', retained: 400000, new: 120000 },
+                { name: 'Q2', retained: 450000, new: 180000 },
             ], 
             sources: sourcesChart
         };

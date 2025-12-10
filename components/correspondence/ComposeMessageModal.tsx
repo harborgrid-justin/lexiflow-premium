@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
 import { UserSelect } from '../common/UserSelect';
 import { Send, Paperclip, Wand2 } from 'lucide-react';
-// FIX: Import UserId type
 import { CommunicationItem, CommunicationType, UserId } from '../../types';
 import { MOCK_USERS } from '../../data/models/user';
 import { useTheme } from '../../context/ThemeContext';

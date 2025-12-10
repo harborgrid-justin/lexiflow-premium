@@ -86,12 +86,18 @@ export const STORES = {
   // Added for complete SaaS configurability
   VENDOR_DIRECTORY: 'vendor_directory',
   REPORTERS: 'reporters',
-  JURISDICTIONS: 'jurisdictions'
+  JURISDICTIONS: 'jurisdictions',
+  LEADS: 'leads',
+  CRM_ANALYTICS: 'crm_analytics',
+  REALIZATION_STATS: 'realization_stats',
+  OPERATING_SUMMARY: 'operating_summary',
+  DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
+  DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 19; // Incremented for new stores
+  private dbVersion = 25; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -285,6 +291,33 @@ export class DatabaseManager {
           if (!this.flushTimer) {
               this.flushTimer = window.setTimeout(this.flushBuffer, 16);
           }
+      });
+  }
+
+  async bulkPut<T>(storeName: string, items: T[]): Promise<void> {
+      await this.init();
+      if (this.mode === 'LocalStorage' || !this.db) {
+          const currentItems = StorageUtils.get<T[]>(storeName, []);
+          const newItems = [...currentItems];
+          items.forEach(item => {
+             const idx = newItems.findIndex((i: any) => i.id === (item as any).id);
+             if (idx >= 0) newItems[idx] = item;
+             else newItems.push(item);
+          });
+          StorageUtils.set(storeName, newItems);
+          return Promise.resolve();
+      }
+
+      return new Promise((resolve, reject) => {
+          const transaction = this.db!.transaction([storeName], 'readwrite');
+          const store = transaction.objectStore(storeName);
+          
+          transaction.oncomplete = () => resolve();
+          transaction.onerror = (event) => reject((event.target as IDBTransaction).error);
+
+          items.forEach(item => {
+              store.put(item);
+          });
       });
   }
 

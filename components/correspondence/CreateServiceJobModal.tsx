@@ -1,8 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
-// FIX: Import UserId type
 import { ServiceJob, UserId } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { JurisdictionObject } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';

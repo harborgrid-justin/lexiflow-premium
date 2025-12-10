@@ -1,4 +1,3 @@
-
 import { LayoutDashboard, FileText, Clock, Wallet, ShieldCheck, BarChart2 } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

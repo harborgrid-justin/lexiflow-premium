@@ -1,4 +1,3 @@
-
 import { Briefcase, UserPlus, FileText, CheckSquare, ShieldAlert, Users, DollarSign, Archive } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

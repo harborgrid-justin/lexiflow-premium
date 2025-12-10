@@ -1,4 +1,3 @@
-
 import { WorkflowTask } from '../types';
 
 interface GraphNode {

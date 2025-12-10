@@ -1,4 +1,3 @@
-
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';

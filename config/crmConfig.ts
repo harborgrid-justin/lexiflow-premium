@@ -1,4 +1,3 @@
-
 import { LayoutDashboard, Users, GitPullRequest, BarChart3 } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

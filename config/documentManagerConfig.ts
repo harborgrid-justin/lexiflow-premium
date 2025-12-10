@@ -1,4 +1,3 @@
-
 import { Folder, Clock, Star, LayoutTemplate, FileSignature, Eraser, Cpu } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

@@ -1,4 +1,3 @@
-
 import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink } from '../../types';
 import { db, STORES } from '../db';
 import { MOCK_DATA_DICTIONARY } from '../../data/models/dataDictionary';

@@ -1,4 +1,3 @@
-
 import { LayoutDashboard, CheckSquare, Bell, PieChart, Activity } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

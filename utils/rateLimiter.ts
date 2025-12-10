@@ -1,4 +1,3 @@
-
 export class TokenBucket {
     private tokens: number;
     private lastRefill: number;

@@ -1,4 +1,3 @@
-
 const createCryptoWorker = () => {
     const code = `
       self.onmessage = async function(e) {

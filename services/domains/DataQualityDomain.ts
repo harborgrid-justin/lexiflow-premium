@@ -1,9 +1,7 @@
 
-import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataProfile } from '../../types';
+import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataProfile, Case } from '../../types';
 import { db, STORES } from '../db';
 import { yieldToMain } from '../../utils/apiUtils';
-// FIX: Add missing import for Case
-import { Case } from '../../types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

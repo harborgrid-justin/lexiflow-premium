@@ -4,7 +4,6 @@ import { Card } from '../common/Card';
 import { Input } from '../common/Inputs';
 import { Button } from '../common/Button';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-// FIX: Added missing 'Search' import from lucide-react.
 import { Calculator, RefreshCw, TrendingUp, DollarSign, Gavel, Users, Scale, AlertTriangle, Search } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';

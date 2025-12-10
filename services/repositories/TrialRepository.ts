@@ -1,9 +1,7 @@
 
-import { Juror, Witness, TrialExhibit, Fact } from '../../types';
+import { Juror, Witness, TrialExhibit, Fact, Case } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
-// FIX: Add missing import for Case
-import { Case } from '../../types';
 
 export class TrialRepository extends Repository<TrialExhibit> {
     constructor() { super(STORES.EXHIBITS); }
@@ -50,7 +48,6 @@ export class TrialRepository extends Repository<TrialExhibit> {
         return this.add(exhibit);
     }
     
-    // FIX: Add missing 'getExhibits' method called by useExhibits hook.
     getExhibits = async (caseId?: string): Promise<TrialExhibit[]> => {
         if (caseId) {
             return this.getByIndex('caseId', caseId);

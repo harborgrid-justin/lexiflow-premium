@@ -95,11 +95,12 @@ export const STORES = {
   OPERATING_SUMMARY: 'operating_summary',
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
   DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
+  CALENDAR_EVENTS: 'calendar_events', // New store for integrations
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 25; // Incremented for new stores
+  private dbVersion = 26; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

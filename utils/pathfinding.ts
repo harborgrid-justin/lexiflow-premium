@@ -1,3 +1,4 @@
+
 import { WorkflowTask } from '../types';
 
 interface GraphNode {
@@ -12,13 +13,19 @@ export const Pathfinding = {
      * Used for project management to identify tasks that cannot be delayed.
      */
     findCriticalPath: (tasks: WorkflowTask[]): string[] => {
+        if (tasks.length === 0) return [];
+        
         // Build Adjacency List and Durations
         const adj = new Map<string, string[]>();
         const durations = new Map<string, number>();
         const inDegree = new Map<string, number>();
         
         tasks.forEach(t => {
-            durations.set(t.id, 1); // Simplified: 1 unit per task unless specified
+            const start = t.startDate ? new Date(t.startDate) : new Date(t.dueDate);
+            const due = new Date(t.dueDate);
+            const durationDays = (due.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) || 1;
+            
+            durations.set(t.id, durationDays);
             inDegree.set(t.id, 0);
             if (!adj.has(t.id)) adj.set(t.id, []);
         });
@@ -43,22 +50,20 @@ export const Pathfinding = {
 
         const sortedOrder: string[] = [];
         const earliestFinish = new Map<string, number>();
+        const predecessors = new Map<string, string | null>();
 
         while (queue.length > 0) {
             const u = queue.shift()!;
             sortedOrder.push(u);
             
-            // Calculate Earliest Finish
-            // EF(u) = Duration(u) + max(EF(predecessors))
-            // Simplified: We accumulate cost forward
-            const currentCost = earliestFinish.get(u) || durations.get(u) || 0;
+            const ef_u = (earliestFinish.get(u) || 0) + (durations.get(u) || 0);
             
             const neighbors = adj.get(u) || [];
             neighbors.forEach(v => {
-                const existing = earliestFinish.get(v) || 0;
-                const newCost = currentCost + (durations.get(v) || 0);
-                if (newCost > existing) {
-                    earliestFinish.set(v, newCost);
+                const existing_ef_v = earliestFinish.get(v) || 0;
+                if (ef_u > existing_ef_v) {
+                    earliestFinish.set(v, ef_u);
+                    predecessors.set(v, u);
                 }
                 
                 inDegree.set(v, (inDegree.get(v) || 1) - 1);
@@ -68,24 +73,28 @@ export const Pathfinding = {
             });
         }
 
-        // Backtrack to find path with max cost
-        let maxNode = '';
+        // Backtrack from the last node(s) to find path with max cost
+        let maxNode: string | null = null;
         let maxVal = -1;
         earliestFinish.forEach((val, key) => {
-            if (val > maxVal) {
-                maxVal = val;
+            const totalDuration = val + (durations.get(key) || 0);
+            if (totalDuration > maxVal) {
+                maxVal = totalDuration;
                 maxNode = key;
             }
         });
-
-        // Reconstruct path backward (Simplified Critical Path)
-        // In full CPM, we'd calculate LS/LF and Float. 
-        // Here we just grab the longest chain found during topo sort propogation.
-        // This is a heuristic approximation suitable for UI visualization.
-        const path: string[] = [];
-        // TODO: Full backtracking implementation requires storing predecessor pointers.
-        // For now, return the nodes with 0 float (approximated by high accumulated cost).
         
-        return Array.from(earliestFinish.keys()).sort((a,b) => earliestFinish.get(b)! - earliestFinish.get(a)!);
+        if (!maxNode) { // Handle case with no links
+            return tasks.length > 0 ? [tasks[0].id] : [];
+        }
+
+        const path: string[] = [];
+        let current: string | null = maxNode;
+        while (current) {
+            path.unshift(current);
+            current = predecessors.get(current) || null;
+        }
+        
+        return path;
     }
 };

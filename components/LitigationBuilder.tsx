@@ -1,20 +1,22 @@
 
 import React, { useState, Suspense, lazy } from 'react';
-import { GitMerge, Save, Play, Milestone, FileText, Gavel, Settings } from 'lucide-react';
+import { GitMerge, Save, Play, Milestone, FileText, Settings } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { LazyLoader } from './common/LazyLoader';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
+import { TabbedPageLayout } from './layout/TabbedPageLayout';
 import { Button } from './common/Button';
-import { useWorkflowBuilder } from '../hooks/useWorkflowBuilder';
+import { useLitigationBuilder } from '../hooks/useLitigationBuilder';
+import { ContextMenuItem } from './common/ContextMenu';
+import { Edit2, Copy, Trash2, Layout, BoxSelect } from 'lucide-react';
 
 // Lazy Load sub-components
-const StrategyCanvas = lazy(() => import('./litigation/StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));
-const PlaybookLibrary = lazy(() => import('./litigation/PlaybookLibrary').then(m => ({ default: m.PlaybookLibrary })));
-const OutcomeSimulator = lazy(() => import('./litigation/OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
-const LitigationGanttView = lazy(() => import('./litigation/LitigationGanttView').then(m => ({ default: m.LitigationGanttView })));
+const StrategyCanvas = lazy(() => import('./litigation/StrategyCanvas'));
+const PlaybookLibrary = lazy(() => import('./litigation/PlaybookLibrary'));
+const OutcomeSimulator = lazy(() => import('./litigation/OutcomeSimulator'));
+const LitigationGanttView = lazy(() => import('./litigation/LitigationGanttView'));
 
-const LITIGATION_TABS: TabConfigItem[] = [
+const LITIGATION_TABS = [
   {
     id: 'design', label: 'Strategy Design', icon: GitMerge,
     subTabs: [
@@ -35,8 +37,8 @@ export const LitigationBuilder: React.FC = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('canvas');
   
-  // LIFTED STATE: `useWorkflowBuilder` now lives here as the source of truth
-  const workflowProps = useWorkflowBuilder(null);
+  // LIFTED STATE: `useLitigationBuilder` now lives here as the source of truth
+  const builderProps = useLitigationBuilder();
 
   return (
     <TabbedPageLayout
@@ -54,12 +56,13 @@ export const LitigationBuilder: React.FC = () => {
     >
       <div className={cn("h-full w-full", theme.background)}>
         <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
-            {activeTab === 'canvas' && <StrategyCanvas {...workflowProps} />}
-            {activeTab === 'timeline' && <LitigationGanttView {...workflowProps} />}
-            {activeTab === 'templates' && <PlaybookLibrary />}
+            {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
+            {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
+            {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadFromPlaybook(p)} />}
             {activeTab === 'simulate' && <OutcomeSimulator />}
         </Suspense>
       </div>
     </TabbedPageLayout>
   );
 };
+export default LitigationBuilder;

@@ -1,3 +1,4 @@
+
 export const Prompts = {
   Draft: (context: string, type: string) => 
     `You are an expert legal aide. Draft a professional ${type}. 
@@ -58,5 +59,25 @@ export const Prompts = {
     Citation to Analyze: "${citation}"
     
     Return a structured JSON object.
+  `,
+  
+  // --- NEW FOR LITIGATION BUILDER ---
+  Strategy: (prompt: string) => `
+    You are a master litigator and strategist. Generate a litigation strategy graph based on the user's prompt.
+    User Prompt: "${prompt}"
+    
+    Nodes can be of type: 'Start', 'End', 'Task', 'Decision', 'Milestone', 'Event', 'Phase'.
+    Connections should link nodes logically. Use the 'label' field for connections from 'Decision' nodes (e.g., 'Granted', 'Denied').
+    Generate IDs for all nodes and connections.
+    Output a structured JSON object.
+  `,
+
+  Lint: (graphData: string) => `
+    You are an AI Strategy Linter. Analyze this litigation graph for logical errors, missing steps, or strategic weaknesses.
+    Graph Data (JSON): ${graphData}
+
+    Provide concise, actionable suggestions. For each suggestion, identify the relevant nodeId if applicable.
+    Example: "Warning: The 'Trial' phase has no preceding 'Discovery Cutoff' event."
+    Output a structured JSON object.
   `,
 };

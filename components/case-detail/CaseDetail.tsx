@@ -12,7 +12,6 @@ import { CASE_DETAIL_TABS } from './CaseDetailConfig';
 import { X, Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from './CaseDetailMobileMenu';
 import { HolographicRouting } from '../../services/holographicRouting';
-import { NexusInspector } from '../visual/NexusInspector';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 
 interface CaseDetailProps {
@@ -31,7 +30,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
   const [showMobileTimeline, setShowMobileTimeline] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [caseEvidence, setCaseEvidence] = useState<EvidenceItem[]>([]);
-  const [nexusInspectorItem, setNexusInspectorItem] = useState<NexusNodeData | null>(null);
 
   useEffect(() => {
       const loadEvidence = async () => {
@@ -64,7 +62,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
         startTransition(() => {
           hookData.setActiveTab(parent.subTabs[0].id);
         });
-        setNexusInspectorItem(null); // Close inspector on tab change
     }
   }, [hookData]);
   
@@ -72,7 +69,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
       startTransition(() => {
         hookData.setActiveTab(tabId);
       });
-      setNexusInspectorItem(null); // Close inspector on sub-tab change
   };
 
   const handleTimelineClick = (event: TimelineEvent) => {
@@ -176,7 +172,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
 
       {/* Main Content */}
       <div className={cn("flex-1 overflow-hidden min-h-0 flex", isPending && "opacity-60 transition-opacity")}>
-          <div className={cn("flex-1 overflow-hidden min-h-0 transition-all duration-300", nexusInspectorItem ? 'pr-4' : 'pr-0')}>
+          <div className="flex-1 overflow-hidden min-h-0 transition-all duration-300">
                 <div className={cn("h-full overflow-y-auto scroll-smooth", 'px-6')}>
                   <ErrorBoundary>
                     <CaseDetailContent 
@@ -194,15 +190,9 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
                         onDraft={hookData.handleDraft}
-                        onNodeClick={setNexusInspectorItem}
                     />
                   </ErrorBoundary>
                 </div>
-          </div>
-
-          {/* Nexus Inspector Panel */}
-          <div className={cn("transition-all duration-300 overflow-hidden", nexusInspectorItem ? 'w-96' : 'w-0')}>
-              <NexusInspector item={nexusInspectorItem} onClose={() => setNexusInspectorItem(null)} />
           </div>
       </div>
 

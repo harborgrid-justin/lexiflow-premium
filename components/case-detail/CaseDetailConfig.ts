@@ -1,3 +1,4 @@
+
 import { LayoutDashboard, Users, Clock, Lightbulb, Calendar, Briefcase, CheckSquare, MessageSquare, Gavel, Search, Fingerprint, FileText, Folder, PenTool, FileSearch, DollarSign, Target, ShieldAlert, Layers, Box, StickyNote } from 'lucide-react';
 
 export const CASE_DETAIL_TABS = [
@@ -5,7 +6,6 @@ export const CASE_DETAIL_TABS = [
     id: 'overview', label: 'Overview', icon: LayoutDashboard,
     subTabs: [
       { id: 'Overview', label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'Nexus', label: 'Nexus Graph', icon: Layers },
       { id: 'Parties', label: 'Parties', icon: Users },
       { id: 'Timeline', label: 'Timeline', icon: Clock },
     ]

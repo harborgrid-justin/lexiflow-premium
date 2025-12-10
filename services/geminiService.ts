@@ -1,9 +1,8 @@
 
-
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
-import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema } from "./ai/schemas";
+import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "./ai/schemas";
 import { safeParseJSON, withRetry } from "../utils/apiUtils";
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '../types/ai';
 
@@ -23,6 +22,7 @@ export const GeminiService = {
                     }
                 });
                 
+                // FIX: response.text is a property, not a function.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, { summary: "Analysis failed to parse", riskScore: 0 });
             } catch (e) {
@@ -45,6 +45,7 @@ export const GeminiService = {
                     }
                 });
 
+                // FIX: response.text is a property, not a function.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, {
                     score: 0,
@@ -68,6 +69,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Review(text)
                 });
+                // FIX: response.text is a property, not a function.
                 return response.text || "Error reviewing contract.";
             } catch (e) {
                 return "Contract review service unavailable.";
@@ -83,6 +85,7 @@ export const GeminiService = {
                 contents: Prompts.Draft(context, type)
             });
             for await (const chunk of responseStream) {
+                // FIX: chunk is already a GenerateContentResponse, access its text property directly.
                 const c = chunk as GenerateContentResponse;
                 if (c.text) yield c.text;
             }
@@ -99,6 +102,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Refine(desc)
                 });
+                // FIX: response.text is a property, not a function.
                 return response.text || desc;
             } catch (e) {
                 return desc;
@@ -114,6 +118,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Draft(prompt, type)
                 });
+                // FIX: response.text is a property, not a function.
                 return response.text || "Error generating content.";
             } catch(e) {
                 return "Generation failed.";
@@ -134,6 +139,7 @@ export const GeminiService = {
                     }
                 });
                 
+                // FIX: response.text is a property, not a function.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
             } catch (e) {
@@ -155,6 +161,7 @@ export const GeminiService = {
                     }
                 });
                 
+                // FIX: response.text is a property, not a function.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
             } catch(e) {
@@ -189,6 +196,7 @@ export const GeminiService = {
                         }
                     });
                 }
+                // FIX: response.text is a property, not a function.
                 return { text: response.text || "No text response.", sources };
             } catch (e) {
                 return { text: "Research service unavailable.", sources: [] };
@@ -204,6 +212,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
                 });
+                // FIX: response.text is a property, not a function.
                 return response.text || "";
             } catch (e) {
                 return "Unable to generate reply.";
@@ -224,9 +233,55 @@ export const GeminiService = {
                     }
                 });
         
+                // FIX: response.text is a property, not a function.
                 if (!response.text) return null;
                 return safeParseJSON<ShepardizeResult>(response.text, null);
             } catch (e) {
+                return null;
+            }
+        });
+    },
+
+    // --- NEW FOR LITIGATION BUILDER ---
+    async generateStrategyFromPrompt(prompt: string): Promise<{ nodes: any[], connections: any[] } | null> {
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        return withRetry(async () => {
+            try {
+                 const response: GenerateContentResponse = await ai.models.generateContent({
+                    model: 'gemini-3-pro-preview',
+                    contents: Prompts.Strategy(prompt),
+                    config: {
+                        responseMimeType: 'application/json',
+                        responseSchema: StrategyGraphSchema
+                    }
+                });
+                // FIX: response.text is a property, not a function.
+                if (!response.text) return null;
+                return safeParseJSON(response.text, { nodes: [], connections: [] });
+            } catch(e) {
+                console.error("Gemini Strategy Generation Error:", e);
+                return null;
+            }
+        });
+    },
+
+    async lintStrategy(graphData: any): Promise<{ suggestions: any[] } | null> {
+         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        return withRetry(async () => {
+            try {
+                 const response: GenerateContentResponse = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: Prompts.Lint(JSON.stringify(graphData)),
+                    config: {
+                        responseMimeType: 'application/json',
+                        responseSchema: LinterResultSchema
+                    }
+                });
+                // FIX: response.text is a property, not a function.
+                if (!response.text) return null;
+                return safeParseJSON(response.text, { suggestions: [] });
+            } catch(e) {
+                console.error("Gemini Strategy Linter Error:", e);
                 return null;
             }
         });

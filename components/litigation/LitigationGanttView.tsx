@@ -7,7 +7,8 @@ import { GanttTimeline } from '../case-detail/planning/GanttTimeline';
 import { WorkflowNode, NodeType, WorkflowConnection, Port } from '../workflow/builder/types';
 import { CasePhase, WorkflowTask, TaskId, ProjectId, CaseId } from '../../types';
 import { Button } from '../common/Button';
-import { Plus } from 'lucide-react';
+import { Plus, TrendingUp } from 'lucide-react';
+import { Pathfinding } from '../../utils/pathfinding';
 
 type ZoomLevel = 'Quarter' | 'Month' | 'Week' | 'Day';
 
@@ -20,13 +21,14 @@ interface LitigationGanttViewProps {
   deleteNode: (id: string) => void;
 }
 
-export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes, updateNode, addNode }) => {
+export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes, connections, updateNode, addNode }) => {
   const { theme } = useTheme();
   
   const [zoom, setZoom] = useState<ZoomLevel>('Month');
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
   const [viewStartDate] = useState(new Date(new Date().setMonth(new Date().getMonth() - 1)));
+  const [showCriticalPath, setShowCriticalPath] = useState(true);
 
   // Memoized transformation logic
   const { phases, tasks } = useMemo(() => {
@@ -50,7 +52,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
           status: 'Active',
           color: 'bg-indigo-500'
         });
-      } else {
+      } else if (node.type !== 'Comment' && node.type !== 'Start' && node.type !== 'End') {
         const startOffsetDays = Math.max(0, Math.floor((node.x - minX) / 20)); // 20px per day
         const startDate = new Date(today);
         startDate.setDate(today.getDate() + startOffsetDays);
@@ -59,6 +61,8 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
         const dueDate = new Date(startDate);
         dueDate.setDate(startDate.getDate() + durationDays);
         
+        const dependencies = connections.filter(c => c.to === node.id).map(c => c.from as TaskId);
+
         ganttTasks.push({
           id: node.id as TaskId,
           caseId: 'strategy-plan' as CaseId,
@@ -68,44 +72,13 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
           status: 'Pending',
           assignee: node.config.assignee || 'Unassigned',
           priority: 'Medium',
+          dependencies
         });
       }
     });
 
-    // Link tasks to phases by checking coordinates
-    const phaseNodes = sortedNodes.filter(n => n.type === 'Phase');
-    ganttTasks.forEach(task => {
-        const node = sortedNodes.find(n => n.id === task.id);
-        if (node) {
-            const containingPhase = phaseNodes.find(p => 
-                node.x >= p.x && node.x < p.x + 600 && // width of phase node
-                node.y >= p.y && node.y < p.y + 400   // height of phase node
-            );
-            if (containingPhase) {
-                task.projectId = containingPhase.id as ProjectId;
-            }
-        }
-    });
-    
-    // Calculate phase start/end dates from tasks within them
-    ganttPhases.forEach(phase => {
-        const phaseTasks = ganttTasks.filter(t => t.projectId === phase.id);
-        if (phaseTasks.length > 0) {
-            const startDates = phaseTasks.map(t => new Date(t.startDate!).getTime());
-            const endDates = phaseTasks.map(t => new Date(t.dueDate).getTime());
-            phase.startDate = new Date(Math.min(...startDates)).toISOString().split('T')[0];
-            const endDate = new Date(Math.max(...endDates));
-            const duration = (endDate.getTime() - new Date(phase.startDate).getTime()) / (1000 * 3600 * 24);
-            phase.duration = Math.max(1, Math.round(duration));
-        } else {
-            // Default for empty phases
-            phase.startDate = new Date().toISOString().split('T')[0];
-            phase.duration = 30;
-        }
-    });
-
     return { phases: ganttPhases, tasks: ganttTasks };
-  }, [nodes]);
+  }, [nodes, connections]);
 
   const pixelsPerDay = useMemo(() => {
     switch(zoom) {
@@ -116,18 +89,22 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
         default: return 5;
     }
   }, [zoom]);
+
+  // A* Critical Path Calculation
+  const criticalPathIds = useMemo(() => {
+      if (!showCriticalPath) return new Set<string>();
+      return new Set(Pathfinding.findCriticalPath(tasks));
+  }, [tasks, showCriticalPath]);
   
   const handleTaskUpdate = useCallback((taskId: string, start: string, due: string) => {
     const today = new Date();
     const newStartDate = new Date(start);
-    // Use viewStartDate to handle negative offsets correctly
-    const startOffsetDays = (newStartDate.getTime() - viewStartDate.getTime()) / (1000 * 3600 * 24);
+    const startOffsetDays = (newStartDate.getTime() - today.getTime()) / (1000 * 3600 * 24);
     
-    // Reverse the calculation: map days back to x-coordinate
-    const newX = 50 + startOffsetDays * 20; // 50 is base start, 20px per day
+    const newX = 50 + startOffsetDays * 20;
     
     updateNode(taskId, { x: newX });
-  }, [nodes, updateNode, viewStartDate]);
+  }, [updateNode]);
 
   const togglePhase = (phaseId: string) => {
     setCollapsedPhases(prev => {
@@ -139,7 +116,6 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
   };
 
   const handleAddTask = () => {
-      // Adds a task to the canvas, which will then reflect in the Gantt
       addNode('Task', 100, 100, 'New Task');
   };
 
@@ -148,6 +124,12 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
       <div className={cn("p-4 border-b shrink-0 flex items-center justify-between", theme.surface, theme.border.default)}>
         <h3 className="text-lg font-bold">Gantt Timeline View</h3>
         <div className="flex items-center gap-2">
+           <button 
+              onClick={() => setShowCriticalPath(!showCriticalPath)}
+              className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : cn(theme.surface, "text-slate-500"))}
+            >
+                <TrendingUp className="h-3 w-3 mr-1"/> Critical Path
+            </button>
            <div className={cn("flex items-center bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
               {(['Quarter', 'Month', 'Week', 'Day'] as ZoomLevel[]).map(z => (
                   <button key={z} onClick={() => setZoom(z)} className={cn("px-3 py-1.5 text-xs font-bold rounded-md transition-all", zoom === z ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700")}>
@@ -170,7 +152,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
         />
         <GanttTimeline
           phases={phases}
-          tasks={tasks}
+          tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) } as any))} 
           collapsedPhases={collapsedPhases}
           zoom={zoom}
           viewStartDate={viewStartDate}

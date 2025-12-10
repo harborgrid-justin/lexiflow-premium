@@ -1,4 +1,3 @@
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { RefreshCw, AlertTriangle } from 'lucide-react';
 import { errorHandler } from '../../utils/errorHandler';
@@ -16,37 +15,35 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  // FIX: Initialize state as a class property to avoid constructor issues and fix linter errors.
-  public state: State = {
-    hasError: false,
-    error: null,
-  };
+  // FIX: Switched to a constructor to initialize state and bind methods. This is a more traditional and widely supported pattern that can resolve toolchain-related issues with 'this' context.
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+    };
+    this.handleReset = this.handleReset.bind(this);
+  }
 
   public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     errorHandler.logError(error, this.props.scope || 'ErrorBoundary');
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
-  private handleReset = () => {
-    // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
+  private handleReset() {
     this.setState({ hasError: false, error: null });
-    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     if (this.props.onReset) {
-      // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
       this.props.onReset();
     }
-  };
+  }
 
   public render() {
     if (this.state.hasError) {
-      // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
       if (this.props.fallback) {
-        // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
         return this.props.fallback;
       }
 
@@ -74,7 +71,6 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     return this.props.children;
   }
 }

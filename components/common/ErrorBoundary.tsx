@@ -1,7 +1,7 @@
 import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
   fallback?: ReactNode;
 }
 
@@ -10,12 +10,9 @@ interface State {
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false
-    };
-  }
+  public state: State = {
+    hasError: false
+  };
 
   public static getDerivedStateFromError(_: Error): State {
     return { hasError: true };
@@ -27,10 +24,16 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
-      if (this.props.fallback) return this.props.fallback;
+      // Fix: In a class component, props are accessed via `this.props`.
+      const { fallback } = this.props;
+      if (fallback) {
+        return fallback;
+      }
       return <h1>Something went wrong.</h1>;
     }
 
-    return this.props.children;
+    // Fix: In a class component, props are accessed via `this.props`.
+    const { children } = this.props;
+    return children;
   }
 }

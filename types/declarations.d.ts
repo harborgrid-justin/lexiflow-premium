@@ -1,4 +1,3 @@
-
 declare module "@google/genai" {
   export class GoogleGenAI {
     constructor(config: { apiKey: string });
@@ -46,6 +45,7 @@ declare module "@google/genai" {
   }
   
   export interface GenerateContentResponse {
+    // FIX: Add readonly text property to match Gemini API guidelines.
     readonly text: string | undefined;
     readonly functionCalls?: { name: string; args: any; }[];
     readonly candidates?: {

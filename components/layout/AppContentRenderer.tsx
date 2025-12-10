@@ -1,10 +1,14 @@
-import React, { Suspense } from 'react';
+
+import React, { Suspense, lazy } from 'react';
 import { AppView, User } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';
 import { PATHS } from '../../constants/paths';
 import { LazyLoader } from '../common/LazyLoader';
 import { HelpCircle, Lock } from 'lucide-react';
-import { CaseDetail } from '../CaseDetail'; 
+
+// OPTIMIZATION: Lazy load CaseDetail to prevent it from being bundled in the main chunk.
+// This splits the code so "Case Work" logic is only loaded when a case is actually selected.
+const CaseDetail = lazy(() => import('../CaseDetail').then(m => ({ default: m.CaseDetail })));
 
 interface AppContentRendererProps {
   activeView: AppView;
@@ -29,7 +33,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
 }) => {
   if (selectedCase) {
     return (
-      <Suspense fallback={<LazyLoader message="Loading Case Context..." />}>
+      <Suspense fallback={<LazyLoader message="Initializing Case Context & Workspace..." />}>
         <CaseDetail 
           caseData={selectedCase} 
           onBack={handleBackToMain} 

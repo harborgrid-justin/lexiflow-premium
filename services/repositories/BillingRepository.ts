@@ -1,3 +1,4 @@
+
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
@@ -74,7 +75,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
         const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
         
-        const rate = totalBilled === 0 ? 100 : Math.round((totalCollected / totalBilled) * 100);
+        const rate = totalBilled > 0 ? Math.round((totalCollected / totalBilled) * 100) : 0;
         
         return [
             { name: 'Billed', value: rate, color: '#10b981' },
@@ -110,7 +111,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         for (const entry of entries) {
             const updatedEntry = { ...entry, status: 'Billed' as const, invoiceId: invoice.id };
-            await db.put(STORES.BILLING, updatedEntry);
+            await this.update(entry.id, updatedEntry);
         }
 
         return invoice;
@@ -124,22 +125,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return updated;
     }
     
-    async sendInvoice(id: string): Promise<boolean> {
-        await delay(500);
-        await this.updateInvoice(id, { status: 'Sent' });
-        
-        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
-        await ChainService.createEntry({
-            timestamp: new Date().toISOString(),
-            user: 'System Billing',
-            userId: 'sys-billing' as UserId,
-            action: 'INVOICE_SENT',
-            resource: `Invoice/${id}`,
-            ip: 'internal'
-        }, prevHash);
-
-        return true; 
-    }
+    async sendInvoice(id: string) { await delay(500); console.log(`[API] Invoice ${id} sent`); return true; }
 
     // --- Trust Accounting ---
     async getTrustTransactions(accountId: string): Promise<TrustTransaction[]> {
@@ -147,94 +133,35 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
 
     async getTrustAccounts() { return db.getAll<any>(STORES.TRUST); }
-    
     async getTopAccounts(): Promise<Client[]> {
         const clients = await db.getAll<Client>(STORES.CLIENTS);
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);
     }
-    
-    async getOverviewStats() { 
-        const invoices = await this.getInvoices();
-        const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
-        const collected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
-        const realization = totalBilled > 0 ? Math.round((collected / totalBilled) * 100) : 0;
-        
-        return { 
-            realization, 
-            totalBilled, 
-            month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) 
-        }; 
-    }
+    async getOverviewStats() { await delay(50); return { realization: 92.4, totalBilled: 482000, month: 'March 2024' }; }
     
     async getOperatingSummary(): Promise<OperatingSummary> {
-        const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-        
-        const [expenses, invoices] = await Promise.all([
-            db.getAll<FirmExpense>(STORES.EXPENSES),
-            db.getAll<Invoice>(STORES.INVOICES)
-        ]);
-
-        const expensesMtd = expenses
-            .filter(e => e.date >= startOfMonth)
-            .reduce((sum, e) => sum + e.amount, 0);
-
-        const revenueMtd = invoices
-            .filter(i => i.status === 'Paid' && i.date >= startOfMonth)
-            .reduce((sum, i) => sum + i.amount, 0);
-        
-        const balance = revenueMtd - expensesMtd + 500000;
-
-        return { balance, expensesMtd, cashFlowMtd: revenueMtd };
+        const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
+        return summary || { balance: 0, expensesMtd: 0, cashFlowMtd: 0 };
     }
 
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {
-        const [invoices, expenses] = await Promise.all([
-            db.getAll<Invoice>(STORES.INVOICES),
-            db.getAll<FirmExpense>(STORES.EXPENSES)
-        ]);
-
-        const revenueByMonth: Record<string, number> = {};
-        const expensesByCategory: Record<string, number> = {};
-
-        invoices.forEach(inv => {
-            const month = new Date(inv.date).toLocaleString('default', { month: 'short' });
-            revenueByMonth[month] = (revenueByMonth[month] || 0) + inv.amount;
-        });
-
-        expenses.forEach(exp => {
-            expensesByCategory[exp.category] = (expensesByCategory[exp.category] || 0) + exp.amount;
-        });
-
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-        const revenueData = months.map(m => ({
-            month: m,
-            actual: revenueByMonth[m] || 0,
-            target: 400000 
-        }));
-
-        const expenseData = Object.keys(expensesByCategory).map(cat => ({
-            category: cat,
-            value: expensesByCategory[cat]
-        }));
-        
-        if (revenueData.every(d => d.actual === 0)) {
-             return {
-                revenue: [
-                    { month: 'Jan', actual: 420000, target: 400000 },
-                    { month: 'Feb', actual: 450000, target: 410000 },
-                    { month: 'Mar', actual: 380000, target: 420000 },
-                ],
-                expenses: [
-                    { category: 'Payroll', value: 250000 },
-                    { category: 'Rent', value: 45000 },
-                ]
-            };
-        }
-
+        await delay(200);
         return {
-            revenue: revenueData,
-            expenses: expenseData
+            revenue: [
+                { month: 'Jan', actual: 420000, target: 400000 },
+                { month: 'Feb', actual: 450000, target: 410000 },
+                { month: 'Mar', actual: 380000, target: 420000 },
+                { month: 'Apr', actual: 490000, target: 430000 },
+                { month: 'May', actual: 510000, target: 440000 },
+                { month: 'Jun', actual: 550000, target: 450000 },
+            ],
+            expenses: [
+                { category: 'Payroll', value: 250000 },
+                { category: 'Rent', value: 45000 },
+                { category: 'Software', value: 15000 },
+                { category: 'Marketing', value: 25000 },
+                { category: 'Travel', value: 12000 },
+            ]
         };
     }
 

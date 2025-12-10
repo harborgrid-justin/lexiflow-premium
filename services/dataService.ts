@@ -1,3 +1,4 @@
+
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseService } from './domains/CaseDomain';
@@ -48,7 +49,7 @@ import { MOCK_RULES } from '../data/models/legalRule';
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 class IntegratedCaseRepository extends CaseRepository {
-    async add(item: Case): Promise<Case> {
+    add = async (item: Case): Promise<Case> => {
         const result = await super.add(item);
         IntegrationOrchestrator.publish(SystemEventType.CASE_CREATED, { caseData: result });
         return result;
@@ -56,7 +57,7 @@ class IntegratedCaseRepository extends CaseRepository {
 }
 
 class IntegratedDocketRepository extends DocketRepository {
-    async add(item: DocketEntry): Promise<DocketEntry> {
+    add = async (item: DocketEntry): Promise<DocketEntry> => {
         const result = await super.add(item);
         IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, { entry: result, caseId: result.caseId });
         return result;
@@ -64,7 +65,7 @@ class IntegratedDocketRepository extends DocketRepository {
 }
 
 class IntegratedDocumentRepository extends DocumentRepository {
-    async add(item: LegalDocument): Promise<LegalDocument> {
+    add = async (item: LegalDocument): Promise<LegalDocument> => {
         const result = await super.add(item);
         IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: result });
         return result;
@@ -72,7 +73,7 @@ class IntegratedDocumentRepository extends DocumentRepository {
 }
 
 class IntegratedBillingRepository extends BillingRepository {
-    async addTimeEntry(entry: TimeEntry): Promise<TimeEntry> {
+    addTimeEntry = async (entry: TimeEntry): Promise<TimeEntry> => {
         const result = await super.addTimeEntry(entry);
         IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, { entry: result });
         return result;
@@ -111,17 +112,17 @@ export const DataService = {
 
   tasks: new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
-      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
-      async countByCaseId(caseId: string): Promise<number> {
+      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
+      countByCaseId = async (caseId: string): Promise<number> => {
         const tasks = await this.getByCaseId(caseId);
         return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
       }
-      async add(item: WorkflowTask): Promise<WorkflowTask> {
+      add = async (item: WorkflowTask): Promise<WorkflowTask> => {
           const result = await super.add(item);
           return result;
       }
       
-      async update(id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> {
+      update = async (id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> => {
           const result = await super.update(id, updates);
           if (updates.status === 'Done' || updates.status === 'Completed') {
                IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
@@ -132,13 +133,13 @@ export const DataService = {
   
   projects: new class extends Repository<Project> { 
       constructor() { super(STORES.PROJECTS); } 
-      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
+      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
   }(),
   risks: new class extends Repository<Risk> { 
       constructor() { super(STORES.RISKS); } 
-      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
+      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
       
-      async add(item: Risk): Promise<Risk> {
+      add = async (item: Risk): Promise<Risk> => {
           const result = await super.add(item);
           if (result.impact === 'High' && result.probability === 'High') {
                IntegrationOrchestrator.publish(SystemEventType.RISK_ESCALATED, { risk: result });
@@ -148,25 +149,25 @@ export const DataService = {
   }(),
   motions: new class extends Repository<Motion> { 
       constructor() { super(STORES.MOTIONS); }
-      async getByCaseId(caseId: string) { return this.getByIndex('caseId', caseId); }
+      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
   }(),
   expenses: new class extends Repository<FirmExpense> { constructor() { super(STORES.EXPENSES); } }(),
   exhibits: new class extends Repository<TrialExhibit> { constructor() { super(STORES.EXHIBITS); } }(),
   users: new class extends Repository<User> { constructor() { super(STORES.USERS); } }(),
   clients: new class extends Repository<Client> { 
       constructor() { super(STORES.CLIENTS); }
-      async generatePortalToken(clientId: string) { return `token-${clientId}-${Date.now()}`; }
+      generatePortalToken = async (clientId: string) => { return `token-${clientId}-${Date.now()}`; }
   }(),
   citations: new class extends Repository<Citation> { 
       constructor() { super(STORES.CITATIONS); }
-      async verifyAll() { return { checked: 150, flagged: 3 }; }
-      async quickAdd(citation: any) { return this.add(citation); }
+      verifyAll = async () => { return { checked: 150, flagged: 3 }; }
+      quickAdd = async (citation: any) => { return this.add(citation); }
   }(),
   entities: new class extends Repository<LegalEntity> { 
       constructor() { super(STORES.ENTITIES); }
-      async getRelationships(id: string) { return []; } 
+      getRelationships = async (id: string) => { return []; } 
       
-      async add(item: LegalEntity): Promise<LegalEntity> {
+      add = async (item: LegalEntity): Promise<LegalEntity> => {
           const result = await super.add(item);
           IntegrationOrchestrator.publish(SystemEventType.ENTITY_CREATED, { entity: result });
           return result;

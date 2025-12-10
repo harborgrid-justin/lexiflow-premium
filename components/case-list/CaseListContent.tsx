@@ -1,20 +1,20 @@
-
+// components/case-list/CaseListContent.tsx
 import React, { Suspense, lazy } from 'react';
 import { Case } from '../../types';
 import { LazyLoader } from '../common/LazyLoader';
 import { CaseListToolbar } from './CaseListToolbar';
 
-const CaseListActive = lazy(() => import('./CaseListActive').then(m => ({ default: m.CaseListActive })));
-const CaseListIntake = lazy(() => import('./CaseListIntake').then(m => ({ default: m.CaseListIntake })));
-const CaseListDocket = lazy(() => import('./CaseListDocket').then(m => ({ default: m.CaseListDocket })));
-const CaseListTasks = lazy(() => import('./CaseListTasks').then(m => ({ default: m.CaseListTasks })));
-const CaseListConflicts = lazy(() => import('./CaseListConflicts').then(m => ({ default: m.CaseListConflicts })));
-const CaseListResources = lazy(() => import('./CaseListResources').then(m => ({ default: m.CaseListResources })));
-const CaseListTrust = lazy(() => import('./CaseListTrust').then(m => ({ default: m.CaseListTrust })));
-const CaseListExperts = lazy(() => import('./CaseListExperts').then(m => ({ default: m.CaseListExperts })));
-const CaseListReporters = lazy(() => import('./CaseListReporters').then(m => ({ default: m.CaseListReporters })));
-const CaseListClosing = lazy(() => import('./CaseListClosing').then(m => ({ default: m.CaseListClosing })));
-const CaseListArchived = lazy(() => import('./CaseListArchived').then(m => ({ default: m.CaseListArchived })));
+const CaseListActive = lazy(() => import('./CaseListActive'));
+const CaseListIntake = lazy(() => import('./CaseListIntake'));
+const CaseListDocket = lazy(() => import('./CaseListDocket'));
+const CaseListTasks = lazy(() => import('./CaseListTasks'));
+const CaseListConflicts = lazy(() => import('./CaseListConflicts'));
+const CaseListResources = lazy(() => import('./CaseListResources'));
+const CaseListTrust = lazy(() => import('./CaseListTrust'));
+const CaseListExperts = lazy(() => import('./CaseListExperts'));
+const CaseListReporters = lazy(() => import('./CaseListReporters'));
+const CaseListClosing = lazy(() => import('./CaseListClosing'));
+const CaseListArchived = lazy(() => import('./CaseListArchived'));
 
 interface CaseListContentProps {
   activeTab: string;
@@ -55,7 +55,7 @@ export const CaseListContent: React.FC<CaseListContentProps> = ({ activeTab, onS
   return (
     <>
       {activeTab === 'active' && (
-         <div className="mb-4">
+         <div className="mb-4 shrink-0">
             <CaseListToolbar 
                 statusFilter={statusFilter} 
                 setStatusFilter={setStatusFilter}

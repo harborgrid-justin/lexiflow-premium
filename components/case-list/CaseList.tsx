@@ -1,4 +1,3 @@
-
 // components/case-list/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../../types';
@@ -106,7 +105,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
         onTabChange={setActiveTab}
       >
         <Suspense fallback={<LazyLoader message="Loading Module..." />}>
-          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+          <div className={cn("h-full flex flex-col", isPending && 'opacity-60 transition-opacity')}>
             {renderContent()}
           </div>
         </Suspense>

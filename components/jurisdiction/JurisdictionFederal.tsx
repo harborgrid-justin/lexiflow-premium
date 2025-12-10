@@ -13,7 +13,6 @@ export const JurisdictionFederal: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  // FIX: Use the correct STORES key
   const { data: courts = [], isLoading } = useQuery<any[]>(
       [STORES.JURISDICTIONS, 'federal'],
       DataService.jurisdiction.getFederal

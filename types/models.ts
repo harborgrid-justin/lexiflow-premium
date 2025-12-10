@@ -1,3 +1,4 @@
+// types/models.ts
 
 import {
   CaseStatus, UserRole, MatterType, BillingModel,
@@ -78,7 +79,6 @@ export interface ComplianceMetrics {
     activeWalls: number;
 }
 
-// FIX: Add missing type definitions for Data Platform modules
 // --- DATA PLATFORM ---
 export interface SchemaTable { 
     name: string; 
@@ -193,7 +193,6 @@ export interface DataDictionaryItem {
 }
 
 
-// FIX: Add missing type definitions for Financial & Marketing modules
 // --- FINANCIAL & MARKETING ---
 export interface FinancialPerformanceData {
     revenue: { month: string; actual: number; target: number }[];

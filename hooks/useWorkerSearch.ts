@@ -33,6 +33,9 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
     };
   }, []);
 
+  // Use a stable key for fields to prevent effect loops with inline arrays
+  const fieldsKey = JSON.stringify(fields);
+
   // Dispatch Data Update (Only when items/config change)
   useEffect(() => {
       if (!workerRef.current) return;
@@ -61,7 +64,8 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
               }
           });
       }
-  }, [items, fields, idKey]); // Removed 'query' from dependency array
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, fieldsKey, idKey]); 
 
   // Dispatch Search Task (Only when query changes)
   useEffect(() => {
@@ -83,7 +87,7 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
         }
     });
 
-  }, [query]); // Only run on query change
+  }, [query]); 
 
   return { filteredItems, isSearching };
 };

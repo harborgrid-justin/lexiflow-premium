@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+
+import React, { useRef, useEffect, useState } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { NODE_STRIDE } from '../../../../utils/nexusPhysics';
 import { useNexusGraph } from '../../../../hooks/useNexusGraph';
@@ -9,66 +10,66 @@ import { LineageNode, LineageLink } from '../../../../types';
 interface LineageCanvasProps {
     isAnimating: boolean;
     setIsAnimating: (v: boolean) => void;
-    // Props changed to accept data directly, hook handles physics state
-    physicsState?: any; // kept for legacy compat signature but ignored
-    nodeLabels?: any[]; // legacy
-    data?: { nodes: LineageNode[], links: LineageLink[] }; // New prop for direct data injection
+    // Removed legacy props for cleaner API
+    data?: { nodes: LineageNode[], links: LineageLink[] }; 
 }
 
-export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIsAnimating }) => {
+export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIsAnimating, data }) => {
     const { theme, mode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [graphData, setGraphData] = useState<{ nodes: any[], links: any[] }>({ nodes: [], links: [] });
-
-    // Mock data fetch (replace with React Query prop in real usage)
-    useEffect(() => {
-        // Simulating data prop for self-containment if not provided
-        const nodes = [
+    
+    // Default mock data if no props provided (Fallthrough safety)
+    const [graphData, setGraphData] = useState<{ nodes: any[], links: any[] }>({ 
+        nodes: [
             { id: 'src1', label: 'Salesforce CRM', type: 'root' },
             { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },
             { id: 'wh1', label: 'Data Warehouse', type: 'org' },
             { id: 'rpt1', label: 'Revenue Dashboard', type: 'evidence' },
-            { id: 'src2', label: 'Stripe API', type: 'root' },
-            { id: 'stg2', label: 'Payments Raw', type: 'org' },
-            { id: 'wh2', label: 'Reconciliation', type: 'evidence' }
-        ];
-        const links = [
+        ], 
+        links: [
             { source: 'src1', target: 'stg1', strength: 0.8 },
             { source: 'stg1', target: 'wh1', strength: 0.8 },
             { source: 'wh1', target: 'rpt1', strength: 0.8 },
-            { source: 'src2', target: 'stg2', strength: 0.8 },
-            { source: 'stg2', target: 'wh2', strength: 0.8 },
-            { source: 'wh2', target: 'wh1', strength: 0.5 }
-        ];
-        setGraphData({ nodes, links });
-    }, []);
+        ] 
+    });
+
+    useEffect(() => {
+        if (data && data.nodes.length > 0) {
+            setGraphData(data);
+        }
+    }, [data]);
 
     // Use Worker-based physics hook
     const { nodesMeta, physicsState, reheat } = useNexusGraph(containerRef, graphData);
 
     useEffect(() => {
         let frameId: number;
+        let isMounted = true;
         
         const render = () => {
-            if (!canvasRef.current || !containerRef.current) return;
+            if (!isMounted || !canvasRef.current || !containerRef.current) return;
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
 
             const state = physicsState.current;
-            if (!state.buffer) return;
+            if (!state || !state.buffer) return;
 
             const width = containerRef.current.clientWidth;
             const height = containerRef.current.clientHeight;
             
-            // Handle high-DPI
+            // Handle high-DPI displays
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
-            ctx.scale(dpr, dpr);
-            canvas.style.width = `${width}px`;
-            canvas.style.height = `${height}px`;
+            
+            // Only resize if dimensions changed to avoid clearing too often
+            if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                ctx.scale(dpr, dpr);
+                canvas.style.width = `${width}px`;
+                canvas.style.height = `${height}px`;
+            }
 
             ctx.clearRect(0, 0, width, height);
             
@@ -82,6 +83,9 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
                 const idxS = link.sourceIndex * NODE_STRIDE;
                 const idxT = link.targetIndex * NODE_STRIDE;
                 
+                // Bounds checks
+                if (idxS >= state.buffer.length || idxT >= state.buffer.length) continue;
+
                 const x1 = state.buffer[idxS];
                 const y1 = state.buffer[idxS+1];
                 const x2 = state.buffer[idxT];
@@ -96,6 +100,8 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
             // Draw Nodes
             for (let i = 0; i < state.count; i++) {
                 const idx = i * NODE_STRIDE;
+                if (idx >= state.buffer.length) continue;
+
                 const x = state.buffer[idx];
                 const y = state.buffer[idx+1];
                 const type = state.buffer[idx+5];
@@ -108,10 +114,12 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
                 ctx.strokeStyle = isDark ? '#1e293b' : '#fff';
                 ctx.stroke();
                 
-                ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
-                ctx.font = '10px Inter, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText(nodesMeta[i]?.label || '', x, y + 40);
+                if (nodesMeta && nodesMeta[i]) {
+                    ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
+                    ctx.font = '10px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(nodesMeta[i].label, x, y + 40);
+                }
             }
 
             if (isAnimating) {
@@ -123,7 +131,10 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
             frameId = requestAnimationFrame(render);
         }
 
-        return () => cancelAnimationFrame(frameId);
+        return () => {
+            isMounted = false;
+            cancelAnimationFrame(frameId);
+        };
     }, [isAnimating, physicsState, nodesMeta, mode]);
 
     return (

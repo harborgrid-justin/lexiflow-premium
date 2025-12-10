@@ -1,29 +1,30 @@
 
-
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Server, ChevronDown, ChevronRight, Maximize2, Menu, X } from 'lucide-react';
+import { Maximize2, Menu, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataPlatformSidebar } from './data/DataPlatformSidebar';
-import { PlatformOverview } from './data/PlatformOverview';
-import { SchemaArchitect } from './data/SchemaArchitect';
-import { GovernanceConsole } from './data/GovernanceConsole';
-import { PipelineMonitor } from './data/PipelineMonitor';
-import { BackupVault } from './data/BackupVault';
-import { QueryConsole } from './data/QueryConsole';
-import { SecurityMatrix } from './data/SecurityMatrix';
-import { DataCatalog } from './data/DataCatalog';
-import { ApiGateway } from './data/ApiGateway';
-import { DataQualityStudio } from './data/DataQualityStudio';
-import { ReplicationManager } from './data/ReplicationManager';
-import { LineageGraph } from './data/LineageGraph';
-import { CostFinOps } from './data/CostFinOps';
-import { DataLakeExplorer } from './data/DataLakeExplorer';
 import { useWindow } from '../../context/WindowContext';
-import { TabStrip } from '../common/RefactoredCommon';
-import { ShardingVisualizer } from './data/ShardingVisualizer';
+import { Loader2 } from 'lucide-react';
 
 export type PlatformView = string;
+
+// Lazy Load All Sub-Modules
+const PlatformOverview = lazy(() => import('./data/PlatformOverview').then(m => ({ default: m.PlatformOverview })));
+const SchemaArchitect = lazy(() => import('./data/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
+const GovernanceConsole = lazy(() => import('./data/GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
+const PipelineMonitor = lazy(() => import('./data/PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
+const BackupVault = lazy(() => import('./data/BackupVault').then(m => ({ default: m.BackupVault })));
+const QueryConsole = lazy(() => import('./data/QueryConsole').then(m => ({ default: m.QueryConsole })));
+const SecurityMatrix = lazy(() => import('./data/SecurityMatrix').then(m => ({ default: m.SecurityMatrix })));
+const DataCatalog = lazy(() => import('./data/DataCatalog').then(m => ({ default: m.DataCatalog })));
+const ApiGateway = lazy(() => import('./data/ApiGateway').then(m => ({ default: m.ApiGateway })));
+const DataQualityStudio = lazy(() => import('./data/DataQualityStudio').then(m => ({ default: m.DataQualityStudio })));
+const ReplicationManager = lazy(() => import('./data/ReplicationManager').then(m => ({ default: m.ReplicationManager })));
+const LineageGraph = lazy(() => import('./data/LineageGraph').then(m => ({ default: m.LineageGraph })));
+const CostFinOps = lazy(() => import('./data/CostFinOps').then(m => ({ default: m.CostFinOps })));
+const DataLakeExplorer = lazy(() => import('./data/DataLakeExplorer').then(m => ({ default: m.DataLakeExplorer })));
+const ShardingVisualizer = lazy(() => import('./data/ShardingVisualizer').then(m => ({ default: m.ShardingVisualizer })));
 
 interface AdminDatabaseControlProps {
   initialTab?: string;
@@ -43,25 +44,29 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
   }, [initialTab]);
 
   const renderContent = () => {
-    // Sub-module routing logic
-    if (activeView.startsWith('quality')) return <Suspense fallback={null}><DataQualityStudio initialTab={activeView.replace('quality-', '')} /></Suspense>;
-    if (activeView.startsWith('lineage')) return <Suspense fallback={null}><LineageGraph initialTab={activeView.replace('lineage-', '')} /></Suspense>;
-    if (activeView.startsWith('governance')) return <Suspense fallback={null}><GovernanceConsole initialTab={activeView.replace('governance-', '')} /></Suspense>;
-    if (activeView.startsWith('catalog')) return <Suspense fallback={null}><DataCatalog initialTab={activeView.replace('catalog-', '')} /></Suspense>;
-    if (activeView.startsWith('schema')) return <Suspense fallback={null}><SchemaArchitect initialTab={activeView.replace('schema-', '')} /></Suspense>;
-    if (activeView.startsWith('pipeline')) return <Suspense fallback={null}><PipelineMonitor initialTab={activeView.replace('pipeline-', '')} /></Suspense>;
-    if (activeView.startsWith('query')) return <Suspense fallback={null}><QueryConsole initialTab={activeView.replace('query-', '')} /></Suspense>;
-    if (activeView.startsWith('security')) return <Suspense fallback={null}><SecurityMatrix initialTab={activeView.replace('security-', '')} /></Suspense>;
+    // Dynamic routing helper to strip prefixes
+    const getSubTab = (prefix: string) => activeView.startsWith(prefix + '-') ? activeView.replace(prefix + '-', '') : undefined;
 
+    // Route Mapping
+    if (activeView.startsWith('quality')) return <DataQualityStudio initialTab={getSubTab('quality')} />;
+    if (activeView.startsWith('lineage')) return <LineageGraph initialTab={getSubTab('lineage')} />;
+    if (activeView.startsWith('governance')) return <GovernanceConsole initialTab={getSubTab('governance')} />;
+    if (activeView.startsWith('catalog')) return <DataCatalog initialTab={getSubTab('catalog')} />;
+    if (activeView.startsWith('schema')) return <SchemaArchitect initialTab={getSubTab('schema')} />;
+    if (activeView.startsWith('pipeline')) return <PipelineMonitor initialTab={getSubTab('pipeline')} />;
+    if (activeView.startsWith('query')) return <QueryConsole initialTab={getSubTab('query')} />;
+    if (activeView.startsWith('security')) return <SecurityMatrix initialTab={getSubTab('security')} />;
+
+    // Direct Matches
     switch (activeView) {
-      case 'overview': return <Suspense fallback={null}><PlatformOverview /></Suspense>;
-      case 'backup': return <Suspense fallback={null}><BackupVault /></Suspense>;
-      case 'api': return <Suspense fallback={null}><ApiGateway /></Suspense>;
-      case 'replication': return <Suspense fallback={null}><ReplicationManager /></Suspense>;
-      case 'cost': return <Suspense fallback={null}><CostFinOps /></Suspense>;
-      case 'lake': return <Suspense fallback={null}><DataLakeExplorer /></Suspense>;
-      case 'sharding': return <Suspense fallback={null}><ShardingVisualizer /></Suspense>;
-      default: return <Suspense fallback={null}><PlatformOverview /></Suspense>;
+      case 'overview': return <PlatformOverview />;
+      case 'backup': return <BackupVault />;
+      case 'api': return <ApiGateway />;
+      case 'replication': return <ReplicationManager />;
+      case 'cost': return <CostFinOps />;
+      case 'lake': return <DataLakeExplorer />;
+      case 'sharding': return <ShardingVisualizer />;
+      default: return <PlatformOverview />;
     }
   };
 
@@ -114,7 +119,9 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
             </button>
         </div>
         
-        {renderContent()}
+        <Suspense fallback={<div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>}>
+            {renderContent()}
+        </Suspense>
       </div>
     </div>
   );

@@ -1,22 +1,18 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Database, Settings, Plus, Key, Link as LinkIcon, X, Edit2, Trash2, Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
+
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../common/Modal';
-import { Input } from '../../../common/Inputs';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
-import { Button } from '../../../common/Button';
 import { SchemaVisualizer } from './SchemaVisualizer';
-import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
-import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-import { DataService } from '../../../../services/dataService';
+import { TableData, TableColumn } from './schemaTypes';
+import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
+import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
-// FIX: Add missing import for SchemaToolbar
-import { SchemaToolbar } from './SchemaToolbar';
+import { ColumnEditorModal } from './ColumnEditorModal';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -55,8 +51,6 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
   const [editingColumn, setEditingColumn] = useState<{tableName: string, columnName?: string, data: any} | null>(null);
-
-  const dataTypes = ['UUID', 'VARCHAR(255)', 'TEXT', 'INTEGER', 'BIGINT', 'NUMERIC', 'BOOLEAN', 'TIMESTAMP WITH TIME ZONE', 'DATE'];
 
   const generatedDDL = useMemo(() => tables.map(t => {
       const cols = t.columns.map(c => {
@@ -160,28 +154,15 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
             {activeTab === 'snapshots' && <SchemaSnapshots />}
         </div>
 
-        <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
-            <div className="p-6 space-y-4">
-                <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
-                <div>
-                    <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
-                        {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
-                    </select>
-                </div>
-                <Input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.notNull || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, notNull: e.target.checked}} : null)}/> Not Null</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.unique || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, unique: e.target.checked}} : null)}/> Unique</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.pk || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, pk: e.target.checked}} : null)}/> Primary Key</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.index || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, index: e.target.checked}} : null)}/> Create Index</label>
-                </div>
-                <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-                    <Button variant="secondary" onClick={() => setIsColumnModalOpen(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={handleSaveColumn}>Save Column</Button>
-                </div>
-            </div>
-        </Modal>
+        <ColumnEditorModal 
+            isOpen={isColumnModalOpen}
+            onClose={() => setIsColumnModalOpen(false)}
+            onSave={handleSaveColumn}
+            tableName={editingColumn?.tableName}
+            columnName={editingColumn?.columnName}
+            data={editingColumn?.data || {}}
+            setData={(data) => setEditingColumn(prev => prev ? {...prev, data} : null)}
+        />
     </div>
   );
 };

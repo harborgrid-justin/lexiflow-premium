@@ -7,11 +7,10 @@ import { Button } from '../../common/Button';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
-import { Modal } from '../../common/Modal';
 import { useNotify } from '../../../hooks/useNotify';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { SnapshotList } from './backup/SnapshotList';
-import { Clock, Database } from 'lucide-react';
+import { CreateSnapshotModal, RestoreSnapshotModal } from './backup/BackupModals';
 
 export const BackupVault: React.FC = () => {
   const { theme } = useTheme();
@@ -119,59 +118,19 @@ export const BackupVault: React.FC = () => {
             </div>
         </div>
 
-        {/* Create Modal */}
-        <Modal isOpen={isSnapshotModalOpen} onClose={() => setIsSnapshotModalOpen(false)} title="Trigger Manual Snapshot">
-            <div className="p-6">
-                <p className={cn("text-sm mb-4", theme.text.secondary)}>
-                    Manual snapshots are retained for 90 days by default. Choose snapshot type:
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                    <button 
-                        onClick={() => handleSnapshot('Incremental')}
-                        className={cn("p-4 border rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all text-left group", theme.border.default)}
-                    >
-                        <div className="flex items-center gap-2 mb-2 font-bold group-hover:text-blue-700">
-                            <Clock className="h-5 w-5"/> Incremental
-                        </div>
-                        <p className="text-xs text-slate-500">Fast. Captures changes since last backup. Low storage impact.</p>
-                    </button>
-                    <button 
-                         onClick={() => handleSnapshot('Full')}
-                         className={cn("p-4 border rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all text-left group", theme.border.default)}
-                    >
-                        <div className="flex items-center gap-2 mb-2 font-bold group-hover:text-purple-700">
-                            <Database className="h-5 w-5"/> Full Backup
-                        </div>
-                        <p className="text-xs text-slate-500">Complete cluster copy. High storage impact. Use for major milestones.</p>
-                    </button>
-                </div>
-                {isCreating && <div className="mt-4 text-center text-sm text-blue-600 animate-pulse">Initiating snapshot task...</div>}
-            </div>
-        </Modal>
+        <CreateSnapshotModal 
+            isOpen={isSnapshotModalOpen}
+            onClose={() => setIsSnapshotModalOpen(false)}
+            onSnapshot={handleSnapshot}
+            isCreating={isCreating}
+        />
 
-        {/* Restore Confirm Modal */}
-        <Modal isOpen={!!restoreModalOpen} onClose={() => setRestoreModalOpen(null)} title="Confirm System Restore" size="sm">
-            <div className="p-6">
-                <div className={cn("border rounded p-4 mb-4 flex items-start gap-3", theme.status.error.bg, theme.status.error.border)}>
-                    <AlertCircle className={cn("h-6 w-6 shrink-0", theme.status.error.text)}/>
-                    <div>
-                        <h4 className={cn("text-sm font-bold", theme.status.error.text)}>Warning: Destructive Action</h4>
-                        <p className={cn("text-xs mt-1", theme.status.error.text)}>
-                            Restoring from <strong>{restoreModalOpen?.id}</strong> will overwrite current data. Any changes made after {restoreModalOpen && new Date(restoreModalOpen.created).toLocaleString()} will be lost.
-                        </p>
-                    </div>
-                </div>
-                <p className={cn("text-sm mb-6", theme.text.secondary)}>
-                    Are you sure you want to proceed with the restoration of the <strong>{restoreModalOpen?.name}</strong> snapshot?
-                </p>
-                <div className="flex justify-end gap-3">
-                    <Button variant="secondary" onClick={() => setRestoreModalOpen(null)}>Cancel</Button>
-                    <Button variant="danger" onClick={() => restoreModalOpen && restoreSnapshot(restoreModalOpen.id)} isLoading={isRestoring}>
-                        {isRestoring ? 'Restoring...' : 'Confirm Restore'}
-                    </Button>
-                </div>
-            </div>
-        </Modal>
+        <RestoreSnapshotModal 
+            snapshot={restoreModalOpen}
+            onClose={() => setRestoreModalOpen(null)}
+            onRestore={() => restoreModalOpen && restoreSnapshot(restoreModalOpen.id)}
+            isRestoring={isRestoring}
+        />
     </div>
   );
 };

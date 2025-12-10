@@ -100,7 +100,7 @@ export const TruncatedText: React.FC<{ text: string; limit?: number; className?:
   );
 };
 
-// 9. Metric Card with Hydration Animation
+// 9. Metric Card with Sparkline & Animation
 export const MetricCard: React.FC<{ 
   label: string; 
   value: string | number | React.ReactNode; 
@@ -109,7 +109,8 @@ export const MetricCard: React.FC<{
   trendUp?: boolean;
   className?: string;
   isLive?: boolean; 
-}> = ({ label, value, icon: Icon, trend, trendUp, className = "", isLive = false }) => {
+  sparklineData?: number[];
+}> = ({ label, value, icon: Icon, trend, trendUp, className = "", isLive = false, sparklineData }) => {
   const { theme } = useTheme();
   const [displayValue, setDisplayValue] = useState<string | number>(typeof value === 'number' ? 0 : value);
   const prevValueRef = useRef(value);
@@ -145,6 +146,35 @@ export const MetricCard: React.FC<{
     prevValueRef.current = value;
   }, [value]);
   
+  // Sparkline Generator
+  const renderSparkline = () => {
+    if (!sparklineData || sparklineData.length < 2) return null;
+    const height = 40;
+    const width = 100;
+    const max = Math.max(...sparklineData);
+    const min = Math.min(...sparklineData);
+    const range = max - min || 1;
+    
+    const points = sparklineData.map((d, i) => {
+        const x = (i / (sparklineData.length - 1)) * width;
+        const y = height - ((d - min) / range) * height;
+        return `${x},${y}`;
+    }).join(' ');
+
+    return (
+        <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible opacity-50">
+            <polyline 
+                points={points} 
+                fill="none" 
+                stroke={trendUp ? '#10b981' : '#f43f5e'} 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+  };
+
   return (
     <div className={cn(
       theme.surface, 
@@ -158,7 +188,7 @@ export const MetricCard: React.FC<{
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
         </span>
       )}
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start mb-2">
         <div>
           <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1.5", theme.text.secondary)}>{label}</p>
           <div className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>
@@ -171,11 +201,18 @@ export const MetricCard: React.FC<{
           </div>
         )}
       </div>
-      {trend && (
-        <div className={cn("mt-4 text-xs font-medium flex items-center", trendUp ? "text-emerald-600" : "text-rose-600")}>
-          {trendUp ? <TrendingUp className="h-3 w-3 mr-1"/> : <TrendingDown className="h-3 w-3 mr-1"/>}
-          {trend}
-        </div>
+      
+      {sparklineData ? (
+          <div className="h-10 mt-2">
+              {renderSparkline()}
+          </div>
+      ) : (
+          trend && (
+            <div className={cn("mt-4 text-xs font-medium flex items-center", trendUp ? "text-emerald-600" : "text-rose-600")}>
+              {trendUp ? <TrendingUp className="h-3 w-3 mr-1"/> : <TrendingDown className="h-3 w-3 mr-1"/>}
+              {trend}
+            </div>
+          )
       )}
     </div>
   );

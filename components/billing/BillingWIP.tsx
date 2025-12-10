@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -20,7 +21,7 @@ export const BillingWIP: React.FC = () => {
   // Enterprise Data Access
   const { data: entries = [] } = useQuery<TimeEntry[]>(
       [STORES.BILLING, 'all'],
-      () => DataService.billing.getTimeEntries()
+      () => (DataService && DataService.billing) ? DataService.billing.getTimeEntries() : Promise.resolve([])
   );
 
   const filteredEntries = useMemo(() => {
@@ -33,6 +34,7 @@ export const BillingWIP: React.FC = () => {
 
   const { mutate: generateInvoice, isLoading: isGenerating } = useMutation(
       async (selectedEntries: TimeEntry[]) => {
+          if (!DataService || !DataService.billing) throw new Error("Billing service unavailable");
           // Group by Case ID first (simplified: take first case found)
           if (selectedEntries.length === 0) throw new Error("No entries selected");
           const primaryCase = selectedEntries[0].caseId;

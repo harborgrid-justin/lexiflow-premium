@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Paperclip, Send, X, FileText, Clock, Sparkles, Loader2 } from 'lucide-react';
 import { Attachment } from '../../hooks/useSecureMessenger';
 import { useTheme } from '../../context/ThemeContext';
@@ -26,7 +26,23 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   onAiAssist, isAiThinking
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { theme } = useTheme();
+
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + 'px';
+    }
+  }, [inputText]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          onSend();
+      }
+  };
 
   return (
     <div className={cn("p-4 border-t shrink-0", theme.surface, theme.border.default)}>
@@ -71,26 +87,30 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           </div>
         </div>
 
-        <div className={cn("flex items-center gap-2 border rounded-full px-2 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all shadow-sm", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex items-end gap-2 border rounded-xl px-2 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all shadow-sm", theme.surfaceHighlight, theme.border.default)}>
           <input type="file" ref={fileInputRef} className="hidden" onChange={onFileSelect} />
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface}`)}
+            className={cn("p-2 rounded-full transition-colors mb-0.5", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface}`)}
             title="Attach File"
           >
             <Paperclip className="h-5 w-5"/>
           </button>
-          <input 
-            className={cn("flex-1 bg-transparent border-none outline-none text-sm px-2 placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
+          
+          <textarea 
+            ref={textareaRef}
+            className={cn("flex-1 bg-transparent border-none outline-none text-sm px-2 py-2 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none max-h-32 min-h-[36px]", theme.text.primary)}
             placeholder={`Message ${recipientName}...`}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && onSend()}
+            onKeyDown={handleKeyDown}
+            rows={1}
           />
+          
           <button 
             onClick={onSend}
             disabled={!inputText.trim() && pendingAttachments.length === 0}
-            className={cn("p-2 rounded-full transition-all", 
+            className={cn("p-2 rounded-full transition-all mb-0.5", 
                 inputText.trim() || pendingAttachments.length > 0 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") : cn(theme.surface, theme.text.tertiary, theme.border.default, "border")
             )}
           >

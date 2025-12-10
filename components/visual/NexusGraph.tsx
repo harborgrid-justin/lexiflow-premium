@@ -21,6 +21,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.8);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [pan, setPan] = useState({ x: 0, y: 0 }); // New pan state
   
   // Resize Observer for precise dimensions
   useEffect(() => {
@@ -113,7 +114,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
                 className="w-full h-full touch-none"
                 viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
             >
-                <g transform={`scale(${scale})`}>
+                <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
                     {physicsState.current.links.map((_, i) => (
                         <line key={`link-${i}`} ref={el => { if(el) linkRefs.current[i] = el; }} stroke={mode === 'dark' ? '#475569' : '#cbd5e1'} strokeWidth="1.5" strokeOpacity="0.4" />
                     ))}

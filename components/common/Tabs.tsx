@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
@@ -19,30 +19,47 @@ interface TabsProps {
 
 export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className = '', variant = 'segmented' }) => {
   const { theme } = useTheme();
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   
   // Normalizing tabs to objects
   const normalizedTabs: TabItem[] = tabs.map(t =>
     typeof t === 'string' ? { id: t, label: t.charAt(0).toUpperCase() + t.slice(1).replace(/([A-Z])/g, ' $1').trim() } : t
   );
 
+  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowRight') {
+      const nextIndex = (index + 1) % normalizedTabs.length;
+      onChange(normalizedTabs[nextIndex].id);
+      tabRefs.current[nextIndex]?.focus();
+    } else if (e.key === 'ArrowLeft') {
+      const prevIndex = (index - 1 + normalizedTabs.length) % normalizedTabs.length;
+      onChange(normalizedTabs[prevIndex].id);
+      tabRefs.current[prevIndex]?.focus();
+    }
+  };
+
   if (variant === 'underline') {
     return (
       <div className={cn("border-b w-full", theme.border.default, className)}>
-        <nav className="-mb-px flex space-x-6 px-4" aria-label="Tabs">
-          {normalizedTabs.map((tab) => {
+        <nav className="-mb-px flex space-x-6 px-4" aria-label="Tabs" role="tablist">
+          {normalizedTabs.map((tab, index) => {
              const isActive = activeTab === tab.id;
              const Icon = tab.icon;
              return (
               <button
                 key={tab.id}
+                ref={el => { if (el) tabRefs.current[index] = el; }}
                 onClick={() => onChange(tab.id)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
                 className={cn(
-                  "whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium transition-all duration-200 flex items-center gap-2 relative top-px",
+                  "whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium transition-all duration-200 flex items-center gap-2 relative top-px outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-t",
                   isActive
                     ? cn("border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400")
                     : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`, `hover:border-slate-300`)
                 )}
-                aria-current={isActive ? 'page' : undefined}
+                role="tab"
+                aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
               >
                 {Icon && <Icon className={cn("h-4 w-4", isActive ? "text-current" : theme.text.tertiary)} />}
                 {tab.label}
@@ -56,20 +73,25 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className
 
   // Default Segmented Style
   return (
-    <div className={cn("inline-flex rounded-lg p-1 border", theme.surface.highlight, theme.border.default, className)}>
-      {normalizedTabs.map((tab) => {
+    <div className={cn("inline-flex rounded-lg p-1 border", theme.surface.highlight, theme.border.default, className)} role="tablist">
+      {normalizedTabs.map((tab, index) => {
         const isActive = activeTab === tab.id;
         const Icon = tab.icon;
         return (
           <button
             key={tab.id}
+            ref={el => { if (el) tabRefs.current[index] = el; }}
             onClick={() => onChange(tab.id)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
             className={cn(
-              "flex-1 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-w-[80px]",
+              "flex-1 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-w-[80px] outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
               isActive
                 ? cn(theme.surface.default, theme.text.primary, "shadow-sm ring-1 ring-black/5")
                 : cn("bg-transparent text-slate-500 hover:text-slate-700")
             )}
+            role="tab"
+            aria-selected={isActive}
+            tabIndex={isActive ? 0 : -1}
           >
             {Icon && <Icon className={cn("h-3.5 w-3.5", isActive ? theme.primary.text : "opacity-70")} />}
             {tab.label}

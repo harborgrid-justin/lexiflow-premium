@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -22,11 +23,11 @@ export const BillingInvoices: React.FC = () => {
   // Enterprise Data Access
   const { data: invoices = [] } = useQuery<Invoice[]>(
       [STORES.INVOICES, 'all'],
-      () => DataService.billing ? DataService.billing.getInvoices() : Promise.resolve([])
+      () => (DataService && DataService.billing) ? DataService.billing.getInvoices() : Promise.resolve([])
   );
 
   const { mutate: sendInvoice, isLoading: isSending } = useMutation(
-      (id: string) => DataService.billing.sendInvoice(id),
+      (id: string) => (DataService && DataService.billing) ? DataService.billing.sendInvoice(id) : Promise.resolve(false),
       {
           onSuccess: (_, id) => {
               notify.success(`Invoice ${id} sent successfully.`);
@@ -38,6 +39,7 @@ export const BillingInvoices: React.FC = () => {
   // Mark Paid Mutation
   const { mutate: markPaid } = useMutation(
       async (id: string) => {
+          if (!DataService || !DataService.billing) return;
           // 1. Update Invoice Status in DB
           await DataService.billing.updateInvoice(id, { status: 'Paid' });
           

@@ -2,6 +2,7 @@
 import { DataService } from './dataService';
 import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../types';
 import { StringUtils } from '../utils/stringUtils';
+import { StorageUtils } from '../utils/storage';
 
 export type SearchResultType = 'case' | 'document' | 'client' | 'task' | 'evidence' | 'user' | 'docket' | 'motion' | 'clause' | 'rule';
 
@@ -15,6 +16,7 @@ export interface GlobalSearchResult {
 }
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
+const HISTORY_KEY = 'lexiflow_search_history';
 
 export const SearchService = {
   async search(query: string): Promise<GlobalSearchResult[]> {
@@ -172,5 +174,16 @@ export const SearchService = {
 
     // Sort by score descending
     return results.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 15);
+  },
+
+  saveHistory(term: string) {
+    if (!term.trim()) return;
+    const history = StorageUtils.get<string[]>(HISTORY_KEY, []);
+    const newHistory = [term, ...history.filter(h => h !== term)].slice(0, 10);
+    StorageUtils.set(HISTORY_KEY, newHistory);
+  },
+
+  getHistory(): string[] {
+    return StorageUtils.get<string[]>(HISTORY_KEY, []);
   }
 };

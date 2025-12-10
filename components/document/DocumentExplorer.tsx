@@ -18,7 +18,6 @@ import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useDocumentDragDrop } from '../../hooks/useDocumentDragDrop';
 import { VirtualGrid } from '../common/VirtualGrid';
-// Fix: Added missing import for DocumentGridCard
 import { DocumentGridCard } from './DocumentGridCard';
 
 interface DocumentExplorerProps {
@@ -71,9 +70,9 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
   return (
     <div 
         className="flex-1 flex h-full relative"
-        onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragOver={e => e.preventDefault()} onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
     >
-        {isDragging && <DocumentDragOverlay />}
+        {isDragging && <DocumentDragOverlay onDrop={handleDrop} onDragLeave={handleDragLeave} />}
         
         <div className={cn("w-64 border-r flex-shrink-0 hidden md:flex", theme.border.default, theme.surfaceHighlight)}>
             <DocumentFilters currentFolder={currentFolder} setCurrentFolder={setCurrentFolder} />

@@ -99,9 +99,13 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       };
 
       const handleMouseUp = () => {
-          dragRef.current.id = null;
-          document.body.style.userSelect = '';
-          document.body.style.cursor = '';
+          // CRITICAL FIX: Only reset styles if we were actually dragging.
+          // Resetting body style on every click causes layout thrashing and freezing.
+          if (dragRef.current.id) {
+            dragRef.current.id = null;
+            document.body.style.userSelect = '';
+            document.body.style.cursor = '';
+          }
       };
 
       window.addEventListener('mousemove', handleMouseMove);

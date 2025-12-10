@@ -211,7 +211,7 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
      // Note: passing 'key' (the object) to fetch is fine, but we must depend on hashedKey for stability
      return queryClient.fetch(key, fnRef.current, staleTime, true);
-  }, [hashedKey, staleTime, enabled]); // removed 'key', added 'hashedKey'
+  }, [hashedKey, staleTime, enabled, key]); // removed 'key', added 'hashedKey'
 
   useEffect(() => {
     if (!enabled) return;
@@ -223,7 +223,7 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
       }
     });
     
-    queryClient.fetch(key, fnRef.current, staleTime).then((data) => {
+    queryClient.fetch<T>(key, fnRef.current, staleTime).then((data) => {
        if (onSuccess && !hasFetched.current) {
          onSuccess(data);
          hasFetched.current = true;
@@ -249,7 +249,7 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
         }
     };
   // Explicitly rely on hashedKey for effect stability, NOT 'key' which might be a new array every render
-  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch]);
+  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch, key, onSuccess]);
 
   return { 
     ...state, 
@@ -271,10 +271,14 @@ export function useMutation<T, V>(
 ) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
 
+  // Stable refs for options and mutationFn
   const optionsRef = useRef(options);
+  const fnRef = useRef(mutationFn);
+
   useEffect(() => {
       optionsRef.current = options;
-  }, [options]);
+      fnRef.current = mutationFn;
+  }, [options, mutationFn]);
 
   const mutate = useCallback(async (variables: V) => {
     setStatus('pending');
@@ -286,7 +290,8 @@ export function useMutation<T, V>(
     }
 
     try {
-      const result = await mutationFn(variables);
+      // Use ref to ensure we call latest function without recreating 'mutate'
+      const result = await fnRef.current(variables);
       setStatus('success');
       
       if (opts?.invalidateKeys) {
@@ -303,7 +308,7 @@ export function useMutation<T, V>(
       }
       throw e;
     }
-  }, [mutationFn]);
+  }, []); // Empty dependency array ensures stable identity
 
   return { mutate, isLoading: status === 'pending', isSuccess: status === 'success', isError: status === 'error' };
 }

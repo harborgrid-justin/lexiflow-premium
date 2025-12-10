@@ -1,3 +1,4 @@
+
 // components/discovery/DiscoveryPlatform.tsx
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { PageHeader } from '../common/PageHeader';
@@ -15,20 +16,20 @@ import { STORES } from '../services/db';
 import { useNotify } from '../hooks/useNotify';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { LazyLoader } from '../common/LazyLoader';
-import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './discovery/layout/DiscoveryNavigation';
+import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './layout/DiscoveryNavigation';
 
 // FIX: Import all lazy loaded components for DiscoveryPlatform
-const DiscoveryDashboard = lazy(() => import('./discovery/DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
-const DiscoveryRequests = lazy(() => import('./discovery/DiscoveryRequests').then(m => ({ default: m.DiscoveryRequests })));
-const PrivilegeLog = lazy(() => import('./discovery/PrivilegeLog').then(m => ({ default: m.PrivilegeLog })));
-const LegalHolds = lazy(() => import('./discovery/LegalHolds').then(m => ({ default: m.LegalHolds })));
-const DiscoveryDocumentViewer = lazy(() => import('./discovery/DiscoveryDocumentViewer').then(m => ({ default: m.DiscoveryDocumentViewer })));
-const DiscoveryResponse = lazy(() => import('./discovery/DiscoveryResponse').then(m => ({ default: m.DiscoveryResponse })));
-const DiscoveryProduction = lazy(() => import('./discovery/DiscoveryProduction').then(m => ({ default: m.DiscoveryProduction })));
-const DiscoveryProductions = lazy(() => import('./discovery/DiscoveryProductions').then(m => ({ default: m.DiscoveryProductions })));
-const DiscoveryDepositions = lazy(() => import('./discovery/DiscoveryDepositions').then(m => ({ default: m.DiscoveryDepositions })));
-const DiscoveryESI = lazy(() => import('./discovery/DiscoveryESI').then(m => ({ default: m.DiscoveryESI })));
-const DiscoveryInterviews = lazy(() => import('./discovery/DiscoveryInterviews').then(m => ({ default: m.DiscoveryInterviews })));
+const DiscoveryDashboard = lazy(() => import('./DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
+const DiscoveryRequests = lazy(() => import('./DiscoveryRequests').then(m => ({ default: m.DiscoveryRequests })));
+const PrivilegeLog = lazy(() => import('./PrivilegeLog').then(m => ({ default: m.PrivilegeLog })));
+const LegalHolds = lazy(() => import('./LegalHolds').then(m => ({ default: m.LegalHolds })));
+const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer').then(m => ({ default: m.DiscoveryDocumentViewer })));
+const DiscoveryResponse = lazy(() => import('./DiscoveryResponse').then(m => ({ default: m.DiscoveryResponse })));
+const DiscoveryProduction = lazy(() => import('./DiscoveryProduction').then(m => ({ default: m.DiscoveryProduction })));
+const DiscoveryProductions = lazy(() => import('./DiscoveryProductions').then(m => ({ default: m.DiscoveryProductions })));
+const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions').then(m => ({ default: m.DiscoveryDepositions })));
+const DiscoveryESI = lazy(() => import('./DiscoveryESI').then(m => ({ default: m.DiscoveryESI })));
+const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews').then(m => ({ default: m.DiscoveryInterviews })));
 
 
 export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';

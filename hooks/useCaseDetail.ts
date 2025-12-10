@@ -5,6 +5,7 @@ import { GeminiService } from '../services/geminiService';
 import { DataService } from '../services/dataService';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+import { useNotify } from './useNotify';
 
 export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') => {
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -13,6 +14,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   const [draftPrompt, setDraftPrompt] = useState('');
   const [draftResult, setDraftResult] = useState('');
   const [isDrafting, setIsDrafting] = useState(false);
+  const notify = useNotify();
 
   // --- DATA QUERIES (Parallel Fetching) ---
   
@@ -101,6 +103,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
         updateDocuments(updated); // Optimistic update via mutation
     } catch (e) {
         console.error("Analysis failed", e);
+        notify.error("AI analysis failed to complete.");
     } finally {
         setAnalyzingId(null);
     }
@@ -112,6 +115,9 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
     try {
         const text = await GeminiService.generateDraft(`${draftPrompt}\n\nCase: ${caseData.title}\nClient: ${caseData.client}`, 'Motion/Clause');
         setDraftResult(text);
+    } catch (e) {
+        console.error("Drafting failed", e);
+        notify.error("AI drafting failed to complete.");
     } finally {
         setIsDrafting(false);
     }

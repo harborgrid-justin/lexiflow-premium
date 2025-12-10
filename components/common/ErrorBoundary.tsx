@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -9,22 +9,21 @@ interface State {
   hasError: boolean;
 }
 
-export class ErrorBoundary extends React.Component<Props, State> {
-  // FIX: Initialize state as a class property.
-  // This is a more modern syntax and provides a clearer type definition for TypeScript,
-  // resolving the errors related to 'this.state' and 'this.props' not being found.
-  public state: State = { hasError: false };
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false
+  };
 
-  static getDerivedStateFromError(_: Error): State {
+  public static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
   }
 
-  render() {
+  public render() {
     if (this.state.hasError) {
       return this.props.fallback ?? (
         <div className="flex h-full w-full items-center justify-center p-4">

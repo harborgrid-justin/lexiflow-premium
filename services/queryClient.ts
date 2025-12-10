@@ -21,7 +21,7 @@ export interface UseQueryOptions<T> {
 
 const MAX_CACHE_SIZE = 50; 
 
-// Optimized Deep Equal using native JSON serialization (faster for large POJOs than JS recursion)
+// Optimized Deep Equal using native JSON serialization
 function fastDeepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
   if (!obj1 || !obj2 || typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
@@ -43,7 +43,7 @@ class QueryClient {
     return '{' + Object.keys(obj).sort().map(key => JSON.stringify(key) + ':' + this.stableStringify(obj[key])).join(',') + '}';
   }
 
-  private hashKey(key: QueryKey): string {
+  public hashKey(key: QueryKey): string {
     return this.stableStringify(key);
   }
 
@@ -69,7 +69,7 @@ class QueryClient {
     const hashedKey = this.hashKey(key);
     if (this.cache.has(hashedKey)) {
       this.touch(hashedKey);
-      return this.cache.get(hashedKey);
+      return this.cache.get(hashedKey) as QueryState<T>;
     }
     return undefined;
   }
@@ -112,7 +112,6 @@ class QueryClient {
       .then((data) => {
         const currentCache = this.cache.get(hashedKey);
         
-        // Check for data equality to prevent unnecessary re-renders
         if (currentCache && fastDeepEqual(currentCache.data, data)) {
            currentCache.dataUpdatedAt = Date.now();
            this.cache.set(hashedKey, currentCache);
@@ -167,7 +166,6 @@ class QueryClient {
       
       let data: T | undefined;
       if (typeof updater === 'function') {
-          // Explicit cast to function type to handle TS inference
           data = (updater as (oldData: T | undefined) => T | undefined)(oldData);
       } else {
           data = updater;
@@ -190,7 +188,9 @@ export const queryClient = new QueryClient();
 
 export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQueryOptions<T> = {}) {
   const { staleTime = 60000, enabled = true, onSuccess, refetchOnWindowFocus = true, initialData } = options;
-  const hashedKey = queryClient['hashKey'](key);
+  
+  // Use hashedKey for stable identity across renders when key is an array literal
+  const hashedKey = queryClient.hashKey(key);
 
   const [state, setState] = useState<QueryState<T>>(() => {
     const cached = queryClient.getQueryState<T>(key);
@@ -200,30 +200,29 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
   });
 
   const hasFetched = useRef(false);
-  
-  // Use a ref for the function to prevent useEffect from re-running when fn identity changes
   const fnRef = useRef(fn);
+
   useEffect(() => {
     fnRef.current = fn;
   }, [fn]);
 
+  // Use hashedKey instead of key to prevent recreation of refetch if key object reference changes
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
+     // Note: passing 'key' (the object) to fetch is fine, but we must depend on hashedKey for stability
      return queryClient.fetch(key, fnRef.current, staleTime, true);
-  }, [key, staleTime, enabled]);
+  }, [hashedKey, staleTime, enabled]); // removed 'key', added 'hashedKey'
 
   useEffect(() => {
     if (!enabled) return;
     
     const unsubscribe = queryClient.subscribe(key, (newState) => {
-      setState(newState);
-      // Auto-refetch if invalidated (dataUpdatedAt === 0)
+      setState(newState as QueryState<T>);
       if (newState.status === 'success' && newState.dataUpdatedAt === 0) {
           queryClient.fetch(key, fnRef.current, staleTime, true);
       }
     });
     
-    // Initial fetch if needed
     queryClient.fetch(key, fnRef.current, staleTime).then((data) => {
        if (onSuccess && !hasFetched.current) {
          onSuccess(data);
@@ -249,7 +248,7 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
             window.removeEventListener('visibilitychange', focusHandler);
         }
     };
-    // DEPENDENCY ARRAY FIX: Removed 'fn' and 'onSuccess' to prevent loops when these are inline functions
+  // Explicitly rely on hashedKey for effect stability, NOT 'key' which might be a new array every render
   }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch]);
 
   return { 
@@ -266,13 +265,12 @@ export function useMutation<T, V>(
   options?: { 
     onSuccess?: (data: T, variables: V) => void;
     onError?: (error: any) => void;
-    onMutate?: (variables: V) => void; // Support optimistic updates
+    onMutate?: (variables: V) => void;
     invalidateKeys?: QueryKey[]; 
   }
 ) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
 
-  // Use refs for callbacks to ensure stability
   const optionsRef = useRef(options);
   useEffect(() => {
       optionsRef.current = options;
@@ -283,7 +281,6 @@ export function useMutation<T, V>(
     
     const opts = optionsRef.current;
     
-    // Optimistic Update / Setup
     if (opts?.onMutate) {
         opts.onMutate(variables);
     }

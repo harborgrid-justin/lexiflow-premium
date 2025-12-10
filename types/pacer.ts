@@ -102,7 +102,6 @@ export interface PacerPageInfo {
   last: boolean;
 }
 
-// FIX: Comprehensive Case Definition based on Search Results Data Definitions (Pg 49-55) & XML Parser
 export interface PacerCase {
   // Core Fields
   caseId: number; // Max 2,147,483,647

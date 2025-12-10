@@ -22,12 +22,11 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
-    // FIX: Destructure props to avoid potential linter errors with `this.props`.
-    const { fallback, children } = this.props;
+    // FIX: Directly access props to avoid potential destructuring-related type errors.
     if (this.state.hasError) {
-      return fallback ?? <h1>Something went wrong.</h1>;
+      return this.props.fallback ?? <h1>Something went wrong.</h1>;
     }
 
-    return children;
+    return this.props.children;
   }
 }

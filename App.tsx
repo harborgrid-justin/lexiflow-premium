@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useTransition } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
@@ -22,8 +23,7 @@ import { Loader2 } from 'lucide-react';
 import { initializeModules } from './config/modules';
 import { ModuleRegistry } from './services/moduleRegistry';
 import { HolographicRouting } from './services/holographicRouting';
-import { useQuery } from './services/queryClient';
-import { useUsers } from './hooks';
+import { useUsers } from './hooks/useDomainData';
 
 // Initialize Registry
 initializeModules();
@@ -53,6 +53,7 @@ const InnerApp: React.FC = () => {
                 setSelectedCase(found);
               } else {
                 setSelectedCaseId(null);
+                addToast("Case not found or access denied.", "warning");
               }
             } catch (e) {
               console.error("Failed to restore case context", e);
@@ -90,13 +91,21 @@ const InnerApp: React.FC = () => {
 
   const handleNavigation = useCallback((view: string) => {
       startTransition(() => {
+          // If navigating away from case view, verify if we need to clear context
+          if (view !== PATHS.CASES && selectedCase) {
+               // Optional: Auto-clear case selection when navigating to global modules
+               // setSelectedCase(null);
+               // setSelectedCaseId(null);
+          }
           setActiveView(view);
-          setSelectedCase(null);
-          setSelectedCaseId(null);
+          if (view !== PATHS.CASES) {
+             setSelectedCase(null);
+             setSelectedCaseId(null);
+          }
           setInitialTab(undefined);
           setIsSidebarOpen(false);
       });
-  }, [setActiveView, setSelectedCaseId]);
+  }, [setActiveView, setSelectedCaseId, selectedCase]);
 
   const handleSearchResultClick = useCallback((result: GlobalSearchResult) => {
     startTransition(() => {
@@ -183,8 +192,9 @@ const InnerApp: React.FC = () => {
           setSelectedCase(null);
           setSelectedCaseId(null);
           setInitialTab(undefined);
+          setActiveView(PATHS.DASHBOARD);
       });
-  }, [setSelectedCaseId]);
+  }, [setSelectedCaseId, setActiveView]);
 
   const focusSearch = useCallback(() => {
       const input = document.querySelector('input[placeholder*="Search or type a command"]');
@@ -192,7 +202,12 @@ const InnerApp: React.FC = () => {
   }, []);
 
   if (!currentUser) {
-    return <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin" /></div>;
+    return (
+        <div className="flex items-center justify-center h-full flex-col gap-4">
+            <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
+            <span className="text-sm text-slate-500">Loading User Profile...</span>
+        </div>
+    );
   }
 
   return (
@@ -201,30 +216,34 @@ const InnerApp: React.FC = () => {
         onNavigate={handleNavigation}
         selectedCaseId={selectedCaseId}
         sidebar={
-            <Sidebar 
-                activeView={selectedCase ? PATHS.CASES : activeView} 
-                setActiveView={handleNavigation} 
-                isOpen={isSidebarOpen} 
-                onClose={() => setIsSidebarOpen(false)}
-                currentUser={currentUser} 
-                onSwitchUser={handleSwitchUser} 
-            />
+            <ErrorBoundary scope="Sidebar">
+                <Sidebar 
+                    activeView={selectedCase ? PATHS.CASES : activeView} 
+                    setActiveView={handleNavigation} 
+                    isOpen={isSidebarOpen} 
+                    onClose={() => setIsSidebarOpen(false)}
+                    currentUser={currentUser} 
+                    onSwitchUser={handleSwitchUser} 
+                />
+            </ErrorBoundary>
         }
         headerContent={
-            <AppHeader 
-                onToggleSidebar={() => setIsSidebarOpen(true)}
-                globalSearch={globalSearch}
-                setGlobalSearch={setGlobalSearch}
-                onGlobalSearch={handleGlobalSearch}
-                currentUser={currentUser}
-                onSwitchUser={handleSwitchUser}
-                onSearchResultClick={handleSearchResultClick}
-                onNeuralCommand={handleNeuralCommand}
-            />
+            <ErrorBoundary scope="Header">
+                <AppHeader 
+                    onToggleSidebar={() => setIsSidebarOpen(true)}
+                    globalSearch={globalSearch}
+                    setGlobalSearch={setGlobalSearch}
+                    onGlobalSearch={handleGlobalSearch}
+                    currentUser={currentUser}
+                    onSwitchUser={handleSwitchUser}
+                    onSearchResultClick={handleSearchResultClick}
+                    onNeuralCommand={handleNeuralCommand}
+                />
+            </ErrorBoundary>
         }
     >
         <GlobalHotkeys onToggleCommand={focusSearch} onNavigate={handleNavigation} />
-        <ErrorBoundary>
+        <ErrorBoundary scope="MainContent" onReset={() => setActiveView(PATHS.DASHBOARD)}>
             <AppContentRenderer 
                 activeView={activeView}
                 currentUser={currentUser}
@@ -235,8 +254,8 @@ const InnerApp: React.FC = () => {
                 setActiveView={setActiveView}
                 initialTab={initialTab}
             />
-            <HolographicDock />
         </ErrorBoundary>
+        <HolographicDock />
     </AppShell>
   );
 };
@@ -282,7 +301,7 @@ const App: React.FC = () => {
 
     return (
         <ThemeProvider>
-            <ErrorBoundary>
+            <ErrorBoundary scope="AppRoot">
                 <ToastProvider>
                     <SyncProvider>
                         <WindowProvider>

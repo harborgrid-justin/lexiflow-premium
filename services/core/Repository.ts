@@ -1,5 +1,7 @@
+
 import { BaseEntity, UserId } from '../../types';
 import { MicroORM } from './microORM';
+import { errorHandler } from '../../utils/errorHandler';
 
 // Simple LRU Cache Implementation
 class LRUCache<T> {
@@ -63,14 +65,12 @@ export abstract class Repository<T extends BaseEntity> {
 
     /**
      * Safety wrapper for DB operations.
-     * Prevents unhandled promise rejections and standardizes logging.
      */
     protected async safeExecute<R>(operation: () => Promise<R>, operationName: string): Promise<R> {
         try {
             return await operation();
         } catch (error) {
-            console.error(`[Repository] Error in ${this.storeName}.${operationName}:`, error);
-            // Re-throw a standardized error object or handle graceful degradation
+            errorHandler.logError(error instanceof Error ? error : new Error(String(error)), `Repository:${this.storeName}.${operationName}`);
             throw new Error(`Database Error (${operationName}): ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
@@ -85,8 +85,7 @@ export abstract class Repository<T extends BaseEntity> {
     }
 
     protected logAction = async (action: string, resourceId: string, details: string, previousValue?: any, newValue?: any) => {
-        // Placeholder for audit logging integration
-        // console.log(`[Audit] ${action} on ${resourceId}: ${details}`);
+        // Log action logic here if needed
     }
 
     async getAll(options: { includeDeleted?: boolean, limit?: number, cursor?: string } = {}): Promise<T[]> {
@@ -128,7 +127,6 @@ export abstract class Repository<T extends BaseEntity> {
 
             if (missingIds.length === 0) return results;
 
-            // Efficient fetch fallback
             const allItems = await this.orm.findAll(); 
             const fetched = allItems.filter(item => missingIds.includes(item.id) && !item.deletedAt);
             
@@ -172,7 +170,6 @@ export abstract class Repository<T extends BaseEntity> {
         return this.safeExecute(async () => {
             const createdItems: T[] = [];
             for (const item of items) {
-                // Sequential add to ensure internal integrity
                 createdItems.push(await this.add(item));
             }
             return createdItems;
@@ -184,7 +181,6 @@ export abstract class Repository<T extends BaseEntity> {
             const current = await this.getById(id, { includeDeleted: true });
             if (!current) throw new Error(`${this.storeName} record not found: ${id}`);
             
-            // Basic optimistic concurrency check
             if (updates.version && updates.version !== current.version) {
                 throw new Error("Conflict: Record has been modified by another process.");
             }

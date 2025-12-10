@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ModuleRegistry } from '../services/moduleRegistry';
 import { NAVIGATION_ITEMS } from '../constants/navConfig';
@@ -44,6 +45,7 @@ const RulesPlatform = lazyWithPreload(() => import('../components/RulesPlatform'
 const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager').then(m => ({ default: m.UserProfileManager })));
 const PleadingBuilder = lazyWithPreload(() => import('../components/PleadingBuilder').then(m => ({ default: m.PleadingBuilder })));
 const KnowledgeBase = lazyWithPreload(() => import('../components/KnowledgeBase'));
+const LitigationBuilder = lazyWithPreload(() => import('../components/LitigationBuilder').then(m => ({ default: m.LitigationBuilder })));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,
@@ -72,6 +74,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.PROFILE]: UserProfileManager,
   [PATHS.PLEADING_BUILDER]: PleadingBuilder,
   [PATHS.LIBRARY]: KnowledgeBase,
+  [PATHS.LITIGATION_BUILDER]: LitigationBuilder,
 };
 
 export const initializeModules = () => {

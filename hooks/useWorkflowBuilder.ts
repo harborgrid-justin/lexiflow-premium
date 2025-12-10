@@ -1,6 +1,14 @@
+
 import { useState, useCallback } from 'react';
-import { WorkflowNode, WorkflowConnection, NodeType } from '../components/workflow/builder/types';
+import { WorkflowNode, WorkflowConnection, NodeType, Port } from '../components/workflow/builder/types';
 import { WorkflowTemplateData } from '../types';
+
+const LITIGATION_PORTS: Record<string, Port[]> = {
+    'Rule 12(b)(6)': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
+    'Rule 56': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
+    'Motion in Limine': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
+    'Default': [{ id: 'success', label: 'Success' }, { id: 'failure', label: 'Failure' }],
+};
 
 export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null) => {
   const [nodes, setNodes] = useState<WorkflowNode[]>(() => {
@@ -37,9 +45,15 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
     return [{ id: 'c1', from: 'start', to: 'end' }];
   });
 
-  const addNode = useCallback((type: NodeType, x: number, y: number) => {
+  const addNode = useCallback((type: NodeType, x: number, y: number, label?: string) => {
     const id = `node-${Date.now()}`;
-    const newNode: WorkflowNode = { id, type, label: type, x, y, config: {} };
+    const nodeLabel = label || type;
+    const newNode: WorkflowNode = { id, type, label: nodeLabel, x, y, config: {} };
+
+    if (type === 'Decision') {
+        newNode.ports = LITIGATION_PORTS[nodeLabel] || LITIGATION_PORTS['Default'];
+    }
+
     setNodes(prev => [...prev, newNode]);
     return id;
   }, []);
@@ -53,5 +67,28 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
     setConnections(prev => prev.filter(c => c.from !== id && c.to !== id));
   }, []);
 
-  return { nodes, connections, addNode, updateNode, deleteNode };
+  const addConnection = useCallback((from: string, to: string, fromPort?: string) => {
+    const id = `conn-${Date.now()}`;
+    const newConnection: WorkflowConnection = { id, from, to, fromPort, toPort: 'input' };
+
+    const fromNode = nodes.find(n => n.id === from);
+    if (fromNode && fromPort) {
+        const port = fromNode.ports?.find(p => p.id === fromPort);
+        if (port) {
+            newConnection.label = port.label;
+        }
+    }
+
+    setConnections(prev => [...prev, newConnection]);
+  }, [nodes]);
+
+  const updateConnection = useCallback((id: string, updates: Partial<WorkflowConnection>) => {
+    setConnections(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+  }, []);
+  
+  const deleteConnection = useCallback((id: string) => {
+    setConnections(prev => prev.filter(c => c.id !== id));
+  }, []);
+
+  return { nodes, connections, addNode, updateNode, deleteNode, addConnection, updateConnection, deleteConnection };
 };

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { memo } from 'react';
 import { User, Eye } from 'lucide-react';
 import { Case } from '../../types';
 import { StatusBadge } from '../common/RefactoredCommon';
@@ -13,7 +13,8 @@ interface CaseRowProps {
     onPrefetch: (id: string) => void;
 }
 
-export const CaseRow: React.FC<CaseRowProps> = ({ caseData, onSelect, onPrefetch }) => {
+// OPTIMIZATION: Memoize row to prevent re-renders during parent updates or unrelated state changes.
+export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) => {
     const { theme } = useTheme();
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -31,6 +32,10 @@ export const CaseRow: React.FC<CaseRowProps> = ({ caseData, onSelect, onPrefetch
             onMouseEnter={() => onPrefetch(caseData.id)}
             onClick={() => onSelect(caseData)}
             onKeyDown={handleKeyDown}
+            style={{ 
+                contentVisibility: 'auto', // OPTIMIZATION: Browser skips layout work for off-screen rows
+                containIntrinsicSize: '0 64px' 
+            }}
         >
             <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
                 <span 
@@ -55,11 +60,13 @@ export const CaseRow: React.FC<CaseRowProps> = ({ caseData, onSelect, onPrefetch
                     onClick={(e) => { e.stopPropagation(); onSelect(caseData); }} 
                     className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)} 
                     title="View Details"
-                    tabIndex={-1} // Prevent double-tabbing
+                    tabIndex={-1}
                 >
                     <Eye className="h-4 w-4"/>
                 </button>
             </div>
         </div>
     );
-};
+}, (prev, next) => prev.caseData === next.caseData); // Strict equality check
+
+CaseRow.displayName = 'CaseRow';

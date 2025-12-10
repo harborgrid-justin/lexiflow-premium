@@ -1,10 +1,8 @@
 
 /**
  * SYSTEMS ENGINEERING: OFF-MAIN-THREAD SEARCH ENGINE
- * This worker handles CPU-intensive string matching and filtering
- * to keep the UI thread (60fps) completely unblocked during typing.
- * 
- * OPTIMIZATION: State caching prevents main-thread serialization blocks on repeated queries.
+ * This worker handles CPU-intensive string matching, Levenshtein distance calculation,
+ * and filtering to keep the UI thread (60fps) completely unblocked.
  */
 
 const createSearchWorker = () => {
@@ -13,11 +11,63 @@ const createSearchWorker = () => {
       let fieldsCache = [];
       let idKeyCache = 'id';
 
+      // Advanced Levenshtein Distance for fuzzy matching
+      // Implemented in Worker to avoid main-thread blocking during matrix calculation
+      function levenshtein(a, b) {
+        if (a.length === 0) return b.length;
+        if (b.length === 0) return a.length;
+
+        const matrix = [];
+
+        for (let i = 0; i <= b.length; i++) {
+          matrix[i] = [i];
+        }
+
+        for (let j = 0; j <= a.length; j++) {
+          matrix[0][j] = j;
+        }
+
+        for (let i = 1; i <= b.length; i++) {
+          for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+              matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+              matrix[i][j] = Math.min(
+                matrix[i - 1][j - 1] + 1,
+                Math.min(
+                  matrix[i][j - 1] + 1,
+                  matrix[i - 1][j] + 1
+                )
+              );
+            }
+          }
+        }
+        return matrix[b.length][a.length];
+      }
+
+      function calculateScore(text, query) {
+          const t = String(text).toLowerCase();
+          const q = query.toLowerCase();
+          
+          if (t === q) return 100; // Exact match
+          if (t.startsWith(q)) return 80; // Prefix match
+          if (t.includes(q)) return 60; // Substring match
+          
+          // Only run expensive Levenshtein if lengths are somewhat close
+          if (Math.abs(t.length - q.length) > 5) return 0;
+          
+          const dist = levenshtein(t, q);
+          if (dist <= 2) return 40; // Fuzzy match
+          
+          return 0;
+      }
+
       self.onmessage = function(e) {
         const { type, payload } = e.data;
 
         // 1. Data Ingestion (Heavy, Infrequent)
         if (type === 'UPDATE') {
+            // Flatten or prepare data if necessary
             itemsCache = payload.items || [];
             fieldsCache = payload.fields || [];
             idKeyCache = payload.idKey || 'id';
@@ -29,47 +79,42 @@ const createSearchWorker = () => {
             const { query, requestId } = payload;
             
             if (!query || itemsCache.length === 0) {
-                self.postMessage({ results: itemsCache, requestId });
+                // If query empty, return all (up to limit) or empty depending on UX requirement.
+                // Here we return top 20 unsorted.
+                self.postMessage({ results: itemsCache.slice(0, 20), requestId });
                 return;
             }
     
-            const lowerQuery = query.toLowerCase();
             const results = [];
-            
-            // Optimized loop for throughput
-            // We avoid .filter() to reduce allocation overhead of boolean arrays
             const len = itemsCache.length;
+            
             for (let i = 0; i < len; i++) {
                 const item = itemsCache[i];
-                let match = false;
+                let maxScore = 0;
         
-                // Check specific fields if provided
-                if (fieldsCache.length > 0) {
-                    for (let j = 0; j < fieldsCache.length; j++) {
-                        const val = item[fieldsCache[j]];
-                        if (val && String(val).toLowerCase().includes(lowerQuery)) {
-                            match = true;
-                            break;
-                        }
-                    }
-                } else {
-                    // Deep search (expensive, hence why we are in a worker)
-                    const values = Object.values(item);
-                    for (let j = 0; j < values.length; j++) {
-                        const val = values[j];
-                        if (val && String(val).toLowerCase().includes(lowerQuery)) {
-                            match = true;
-                            break;
-                        }
+                // Search strategy: Check specific fields if provided, else check all own properties
+                const searchFields = fieldsCache.length > 0 ? fieldsCache : Object.keys(item);
+                
+                for (let j = 0; j < searchFields.length; j++) {
+                    const field = searchFields[j];
+                    const val = item[field];
+                    if (val) {
+                        const score = calculateScore(val, query);
+                        if (score > maxScore) maxScore = score;
+                        if (maxScore === 100) break; // Optimization: early exit
                     }
                 }
         
-                if (match) {
-                    results.push(item);
+                if (maxScore > 0) {
+                    // Inject score into result for sorting later
+                    results.push({ ...item, _score: maxScore });
                 }
             }
+            
+            // Sort by score descending
+            results.sort((a, b) => b._score - a._score);
     
-            self.postMessage({ results: results, requestId });
+            self.postMessage({ results: results.slice(0, 50), requestId });
         }
       };
     `;

@@ -1,3 +1,4 @@
+
 export const PATHS = {
   DASHBOARD: 'dashboard',
   CASES: 'cases',
@@ -26,5 +27,6 @@ export const PATHS = {
   ENTITIES: 'entities',
   DATA_PLATFORM: 'data_platform',
   PROFILE: 'profile',
-  PLEADING_BUILDER: 'pleading_builder'
+  PLEADING_BUILDER: 'pleading_builder',
+  LITIGATION_BUILDER: 'litigation_builder'
 } as const;

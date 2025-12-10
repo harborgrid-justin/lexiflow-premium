@@ -1,3 +1,4 @@
+
 import { db, STORES } from '../db';
 import { CostMetric, CostForecast } from '../../types';
 
@@ -15,6 +16,16 @@ export const OperationsService = {
     getMaintenanceTickets: async () => db.getAll(STORES.MAINTENANCE_TICKETS),
     getFacilities: async () => db.getAll(STORES.FACILITIES),
     
+    getReplicationStatus: async () => {
+        await delay(100);
+        return {
+            lag: 12,
+            bandwidth: 45,
+            syncStatus: 'Active',
+            peakBandwidth: 120
+        };
+    },
+
     // Cost FinOps - Calculated dynamically
     getCostMetrics: async (): Promise<CostMetric[]> => {
         // Calculate storage cost based on document count (simulated)

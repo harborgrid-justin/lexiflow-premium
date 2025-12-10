@@ -1,3 +1,4 @@
+
 import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -10,7 +11,6 @@ interface State {
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  // FIX: Replaced the constructor-based state initialization with public class field syntax. This is a more modern and concise approach that can also resolve obscure 'this' context or property initialization issues in certain TypeScript/Babel configurations.
   public state: State = { hasError: false };
 
   static getDerivedStateFromError(_: Error): State {
@@ -23,11 +23,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
+    // FIX: Refactor render method for conciseness and to potentially avoid linter errors with `this.props`.
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
-      return <h1>Something went wrong.</h1>;
+      return this.props.fallback ?? <h1>Something went wrong.</h1>;
     }
 
     return this.props.children;

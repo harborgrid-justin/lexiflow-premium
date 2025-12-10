@@ -1,5 +1,5 @@
 
-// components/CaseList.tsx
+// components/case-list/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../../types';
 import {

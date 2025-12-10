@@ -5,6 +5,8 @@ import { Button } from '../../common/Button';
 import { MapPin } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+// FIX: Add missing import for Case
+import { Case } from '../../../types';
 
 interface EvidenceLocationProps {
   location: string;

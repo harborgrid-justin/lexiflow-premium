@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
@@ -5,17 +6,17 @@ import { Modal } from '../../../common/Modal';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
-// FIX: Corrected invalid import path by making it explicitly relative to the current directory, which can resolve ambiguity in some build systems.
 import { SchemaVisualizer } from './SchemaVisualizer';
 import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
+// FIX: Corrected invalid import path by removing the extra '/schema' directory level.
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
-// FIX: Imported Input component
-import { Input } from '../../../common/Inputs';
+// FIX: Imported Input and TextArea components
+import { Input, TextArea } from '../../../common/Inputs';
 
 interface SchemaArchitectProps {
   initialTab?: string;

@@ -83,3 +83,4 @@ export const CaseDetailContent: React.FC<CaseDetailContentProps> = (props) => {
 
   return <>{contentMap[activeTab] || contentMap['Overview']}</>;
 };
+// FIX: This file is obsolete and can be safely deleted.

@@ -15,7 +15,10 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  // FIX: Switched to a constructor to initialize state and bind methods. This is a more traditional and widely supported pattern that can resolve toolchain-related issues with 'this' context.
+  // FIX: Reverted to a constructor for state initialization and method binding.
+  // The reported errors suggest a problem with how `this` is being resolved,
+  // potentially due to a build configuration issue with modern class property syntax.
+  // This classic approach is more robust and guarantees the correct `this` context.
   constructor(props: Props) {
     super(props);
     this.state = {

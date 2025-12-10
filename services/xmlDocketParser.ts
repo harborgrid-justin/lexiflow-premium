@@ -1,17 +1,21 @@
 
 import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId } from "../types";
 import { PacerCase, PacerParty, PacerJurisdictionType } from "../types/pacer";
+import { yieldToMain } from "../utils/apiUtils";
 
 export const XmlDocketParser = {
-  parse: (xmlString: string): { 
+  parse: async (xmlString: string): Promise<{ 
     caseInfo: Partial<Case>, 
     parties: Party[], 
     docketEntries: DocketEntry[] 
-  } => {
+  }> => {
+    // Note: DOMParser is synchronous, but for very large strings we might still block here.
+    // In a real browser environment, there is no async streaming XML parser standard readily available without libs.
+    // We assume the XML string load itself isn't the blocker, but the traversal is.
     const parser = new DOMParser();
     const doc = parser.parseFromString(xmlString, "text/xml");
 
-    // 1. Extract Case Info and Map to PacerCase structure
+    // 1. Extract Case Info
     const stub = doc.querySelector("stub");
     const caseTypeNode = doc.querySelector("caseType");
     
@@ -28,7 +32,6 @@ export const XmlDocketParser = {
     
     const caseInfo: Partial<Case> = {
       title: pacerData.caseTitle,
-      // FIX: Cast string to branded type CaseId
       id: (pacerData.caseNumberFull || "Unknown ID") as CaseId,
       filingDate: pacerData.dateFiled || "",
       court: pacerData.courtId || "Federal Court",
@@ -37,13 +40,15 @@ export const XmlDocketParser = {
       description: `Imported via XML. NOS: ${pacerData.natureOfSuit}`,
       jurisdiction: "Federal",
       dateTerminated: stub?.getAttribute("dateTerminated") || undefined,
-      // Embed Pacer Data
       pacerData: pacerData as PacerCase
     };
 
-    // 2. Extract Parties and Map to PacerParty
+    // 2. Extract Parties
     const partyNodes = Array.from(doc.querySelectorAll("party"));
-    const parties: Party[] = partyNodes.map((p, idx) => {
+    const parties: Party[] = [];
+    
+    for (let i = 0; i < partyNodes.length; i++) {
+      const p = partyNodes[i];
       const attorney = p.querySelector("attorney");
       const name = p.getAttribute("info") || "Unknown";
       const typeStr = p.getAttribute("type") || "";
@@ -52,13 +57,12 @@ export const XmlDocketParser = {
       if (name.includes("Inc") || name.includes("Corp") || name.includes("LLC")) type = 'Corporation';
       
       const pacerParty: Partial<PacerParty> = {
-          lastName: name, // Simplified mapping
+          lastName: name,
           partyRole: typeStr.trim(),
       };
       
-      return {
-        // FIX: Cast string to branded type PartyId
-        id: `p-xml-${idx}` as PartyId,
+      parties.push({
+        id: `p-xml-${i}` as PartyId,
         name: name,
         role: typeStr.trim(),
         contact: attorney?.getAttribute("email") || attorney?.getAttribute("personalPhone") || "",
@@ -66,30 +70,33 @@ export const XmlDocketParser = {
         counsel: attorney ? `${attorney.getAttribute("firstName") || ''} ${attorney.getAttribute("lastName") || ''}`.trim() : undefined,
         partyGroup: p.getAttribute("prisonerNumber") ? "Prisoner" : undefined,
         pacerData: pacerParty as PacerParty
-      };
-    });
+      });
+
+      // Yield every 50 parties to avoid blocking
+      if (i % 50 === 0) await yieldToMain();
+    }
 
     // 3. Extract Docket Entries
     const docketNodes = Array.from(doc.querySelectorAll("docketText"));
-    const docketEntries: DocketEntry[] = docketNodes.map((dt, idx) => {
+    const docketEntries: DocketEntry[] = [];
+    
+    for (let i = 0; i < docketNodes.length; i++) {
+      const dt = docketNodes[i];
       const text = dt.getAttribute("text") || "";
       const date = dt.getAttribute("dateFiled") || "";
       const docLink = dt.getAttribute("docLink") || undefined;
       
-      // Determine Type Heuristically
       let type: DocketEntryType = 'Filing';
       if (text.toUpperCase().includes("ORDER")) type = 'Order';
       else if (text.toUpperCase().includes("NOTICE")) type = 'Notice';
       else if (text.toUpperCase().includes("MINUTE")) type = 'Minute Entry';
       else if (text.toUpperCase().includes("EXHIBIT")) type = 'Exhibit';
 
-      // Extract Sequence Number via Regex if present e.g. [123]
       const seqMatch = text.match(/\[(\d+)\]/);
-      const seq = seqMatch ? parseInt(seqMatch[1]) : idx + 1;
+      const seq = seqMatch ? parseInt(seqMatch[1]) : i + 1;
 
-      return {
-        // FIX: Cast string to branded type DocketId
-        id: `dk-xml-${idx}` as DocketId,
+      docketEntries.push({
+        id: `dk-xml-${i}` as DocketId,
         sequenceNumber: seq,
         caseId: caseInfo.id || ("Unknown" as CaseId),
         date: date,
@@ -100,8 +107,11 @@ export const XmlDocketParser = {
                  text.toLowerCase().includes("defendant") || text.toLowerCase().includes("appellee") ? "Appellee/Defendant" : "Court",
         docLink: docLink,
         isSealed: text.toUpperCase().includes("SEALED")
-      };
-    });
+      });
+
+      // Yield every 50 entries
+      if (i % 50 === 0) await yieldToMain();
+    }
 
     return { caseInfo, parties, docketEntries };
   }

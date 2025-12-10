@@ -32,7 +32,7 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
     
     try {
         if (mode === 'xml') {
-            const result = XmlDocketParser.parse(rawText);
+            const result = await XmlDocketParser.parse(rawText);
             setParsedData(result);
         } else {
             const result = await GeminiService.parseDocket(rawText);
@@ -42,6 +42,7 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
         setStep(2);
     } catch (e) {
         notify.error("Failed to parse input. Please check the format.");
+        console.error(e);
     } finally {
         setIsParsing(false);
     }

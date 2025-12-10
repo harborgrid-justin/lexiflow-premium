@@ -12,14 +12,14 @@ const O_RAD = 4;
 const O_TYPE = 5;
 
 // Physics Constants
-const REPULSION = 800; // Adjusted for spatial accuracy
+const REPULSION = 800;
 const SPRING_LENGTH = 150;
 const SPRING_STRENGTH = 0.05;
 const DAMPING = 0.85;
 const CENTER_PULL = 0.03;
 const ALPHA_DECAY = 0.015;
 const MIN_ALPHA = 0.001;
-const GRID_CELL_SIZE = 100; // Tuning for spatial bucket size
+const GRID_CELL_SIZE = 100;
 
 export interface SimulationNode {
   id: string;
@@ -37,6 +37,26 @@ export interface NexusLink {
     sourceIndex: number;
     targetIndex: number;
     strength: number;
+}
+
+// Reusable cache to prevent GC churn
+const gridCache = new Map<number, number[]>();
+const cellPool: number[][] = [];
+
+function getEmptyArray(): number[] {
+    if (cellPool.length > 0) {
+        const arr = cellPool.pop()!;
+        arr.length = 0;
+        return arr;
+    }
+    return [];
+}
+
+function releaseGrid(grid: Map<number, number[]>) {
+    for (const arr of grid.values()) {
+        cellPool.push(arr);
+    }
+    grid.clear();
 }
 
 export const NexusPhysics = {
@@ -78,9 +98,8 @@ export const NexusPhysics = {
     const centerX = width / 2;
     const centerY = height / 2;
 
-    // 1. Build Spatial Grid (Hash Map)
-    // Map integer hash key -> array of node indices
-    const grid = new Map<number, number[]>();
+    // 1. Build Spatial Grid (Hash Map) using object reuse
+    releaseGrid(gridCache);
     
     for (let i = 0; i < count; i++) {
         const idx = i * NODE_STRIDE;
@@ -92,10 +111,10 @@ export const NexusPhysics = {
         const gy = Math.floor(y / GRID_CELL_SIZE);
         const key = (gx * 4000) + gy;
         
-        let cellNodes = grid.get(key);
+        let cellNodes = gridCache.get(key);
         if (!cellNodes) {
-             cellNodes = [];
-             grid.set(key, cellNodes);
+             cellNodes = getEmptyArray();
+             gridCache.set(key, cellNodes);
         }
         cellNodes.push(i);
         
@@ -119,7 +138,7 @@ export const NexusPhysics = {
       for (let nx = gx - 1; nx <= gx + 1; nx++) {
         for (let ny = gy - 1; ny <= gy + 1; ny++) {
              const key = (nx * 4000) + ny;
-             const cellNodes = grid.get(key);
+             const cellNodes = gridCache.get(key);
              if (!cellNodes) continue;
              
              const len = cellNodes.length;
@@ -133,7 +152,7 @@ export const NexusPhysics = {
                  let distSq = dx * dx + dy * dy;
                  if (distSq < 0.1) distSq = 0.1;
                  
-                 // Limit repulsion range to keep O(1) local cost
+                 // Limit repulsion range
                  if (distSq > (GRID_CELL_SIZE * GRID_CELL_SIZE)) continue;
 
                  const force = (REPULSION / distSq) * alpha;

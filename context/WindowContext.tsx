@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Minus, Maximize2 } from 'lucide-react';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
@@ -99,8 +99,6 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       };
 
       const handleMouseUp = () => {
-          // CRITICAL FIX: Only reset styles if we were actually dragging.
-          // Resetting body style on every click causes layout thrashing and freezing.
           if (dragRef.current.id) {
             dragRef.current.id = null;
             document.body.style.userSelect = '';
@@ -178,8 +176,19 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       document.body.style.cursor = 'grabbing';
   };
 
+  const contextValue = useMemo(() => ({
+    windows, 
+    openWindow, 
+    closeWindow, 
+    minimizeWindow, 
+    restoreWindow, 
+    currentMaxZIndex: maxZIndex, 
+    isOrbitalEnabled, 
+    toggleOrbitalMode
+  }), [windows, openWindow, closeWindow, minimizeWindow, restoreWindow, maxZIndex, isOrbitalEnabled, toggleOrbitalMode]);
+
   return (
-    <WindowContext.Provider value={{ windows, openWindow, closeWindow, minimizeWindow, restoreWindow, currentMaxZIndex: maxZIndex, isOrbitalEnabled, toggleOrbitalMode }}>
+    <WindowContext.Provider value={contextValue}>
       {children}
       
       {portalRoot && windows.map(win => (

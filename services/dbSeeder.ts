@@ -1,3 +1,4 @@
+
 import { STORES, DatabaseManager } from './db';
 import { MOCK_CASES } from '../data/models/case';
 import { MOCK_TASKS } from '../data/models/workflowTask';
@@ -56,9 +57,7 @@ export const Seeder = {
       console.log("Seeding Initial Data...");
       
       const batchPut = async (store: string, data: any[]) => {
-          for (const item of data) {
-              await db.put(store, item);
-          }
+          await db.bulkPut(store, data);
       };
       
       const allEntities: LegalEntity[] = [];

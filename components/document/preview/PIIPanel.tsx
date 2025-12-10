@@ -4,6 +4,7 @@ import { ShieldAlert, Eye, EyeOff, Check, AlertTriangle } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { yieldToMain } from '../../../utils/apiUtils';
 
 interface PIIPanelProps {
   content: string;
@@ -24,31 +25,55 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
   const [isScanning, setIsScanning] = useState(true);
 
   useEffect(() => {
-    // Simulate PII Scan with regex
-    const scan = () => {
+    let isCancelled = false;
+
+    const scan = async () => {
+        setIsScanning(true);
         const findings: PIIEntity[] = [];
-        // Mock findings based on content patterns (using simple heuristics for demo)
+        
+        // Mock findings based on content patterns
         const emailRegex = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/g;
         const phoneRegex = /\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g;
         
         let match;
+        let count = 0;
+
+        // Process Emails
         while ((match = emailRegex.exec(content)) !== null) {
-            findings.push({ id: `pii-${match.index}`, type: 'Email', value: match[0], index: match.index, ignored: false });
+            if (isCancelled) return;
+            findings.push({ id: `pii-e-${match.index}`, type: 'Email', value: match[0], index: match.index, ignored: false });
+            count++;
+            // Yield every 10 matches to keep UI responsive
+            if (count % 10 === 0) await yieldToMain();
         }
+
+        // Process Phones
         while ((match = phoneRegex.exec(content)) !== null) {
-            findings.push({ id: `pii-${match.index}`, type: 'Phone', value: match[0], index: match.index, ignored: false });
+            if (isCancelled) return;
+            findings.push({ id: `pii-p-${match.index}`, type: 'Phone', value: match[0], index: match.index, ignored: false });
+            count++;
+            if (count % 10 === 0) await yieldToMain();
         }
 
         // Add some mock SSNs if none found just for demo visual
-        if (findings.length === 0) {
+        if (findings.length === 0 && content.length > 0) {
             findings.push({ id: 'mock-1', type: 'SSN', value: '***-**-1234', index: 0, ignored: false });
             findings.push({ id: 'mock-2', type: 'CreditCard', value: '****-****-****-4242', index: 0, ignored: false });
         }
 
-        setEntities(findings);
-        setIsScanning(false);
+        if (!isCancelled) {
+            setEntities(findings);
+            setIsScanning(false);
+        }
     };
-    setTimeout(scan, 1000);
+
+    // Small delay to allow initial render
+    const timer = setTimeout(scan, 500);
+
+    return () => {
+        isCancelled = true;
+        clearTimeout(timer);
+    };
   }, [content]);
 
   const handleToggleIgnore = (id: string) => {
@@ -56,8 +81,6 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
   };
 
   const handleRedactAll = () => {
-      // In a real app, this would perform string replacement on the actual content
-      // For the demo, we just trigger the callback
       onApplyRedactions("Redacted Content");
   };
 

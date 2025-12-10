@@ -3,20 +3,17 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { Modal } from '../../../common/Modal';
-import { SchemaCodeEditor } from './SchemaCodeEditor';
-import { MigrationHistory } from './MigrationHistory';
-import { SchemaSnapshots } from './SchemaSnapshots';
-// FIX: Corrected the import path for SchemaVisualizer.
+// FIX: Corrected invalid import path by making it explicitly relative to the current directory, which can resolve ambiguity in some build systems.
 import { SchemaVisualizer } from './SchemaVisualizer';
 import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
-import { SchemaToolbar } from './SchemaToolbar';
+import { SchemaToolbar } from './schema/SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
-// FIX: Imported Input component
-import { Input } from '../../../common/Inputs';
+// FIX: Imported Input and TextArea components
+import { Input, TextArea } from '../../../common/Inputs';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -162,15 +159,13 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
 
         <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
             <div className="p-6 space-y-4">
-                {/* FIX: Use Input component for label prop */}
                 <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
                 <div>
-                    <label className="block text-xs font-semibold uppercase mb-1.5">Data Type</label>
-                    <select className="w-full px-3 py-2 border rounded-md text-sm" value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
+                    <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>
-                {/* FIX: Use Input component for label prop */}
                 <Input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
                 <div className="grid grid-cols-2 gap-4 pt-2">
                     <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.notNull || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, notNull: e.target.checked}} : null)}/> Not Null</label>
@@ -186,4 +181,3 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
         </Modal>
     </div>
   );
-};

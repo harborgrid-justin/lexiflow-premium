@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { JurisdictionObject } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
@@ -6,7 +7,7 @@ import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '../../
 import { Globe, Scale, Building2 } from 'lucide-react';
 
 interface JurisdictionSelectorProps {
-  onJurisdictionChange: (data: { finalCourt: string; jurisdictionConfig: JurisdictionObject }) => void;
+  onJurisdictionChange: (data: { finalCourt: string; jurisdictionConfig: JurisdictionObject } | null) => void;
 }
 
 export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJurisdictionChange }) => {
@@ -49,24 +50,28 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
   }, [stateLevelName, selectedStateId]);
 
   useEffect(() => {
+    let finalCourt = '';
+    let jurisdictionConfig: JurisdictionObject | null = null;
+  
     if (courtSystem === 'Federal') {
-      // FIX: Renamed 'jurisConfig' to 'jurisdictionConfig' to match usage in object shorthand.
-      const jurisdictionConfig: JurisdictionObject = {
+      jurisdictionConfig = {
         country: 'USA', state: 'Federal', courtLevel: fedLevel, division: fedCircuit
       };
-      let finalCourt = '';
       if (fedLevel === 'Supreme') finalCourt = 'Supreme Court of the United States';
       else if (fedLevel === 'Appellate') finalCourt = `U.S. Court of Appeals for the ${fedCircuit}`;
       else finalCourt = `U.S. ${fedLevel} Court, ${fedDistrict}`;
-      onJurisdictionChange({ finalCourt, jurisdictionConfig });
     } else {
       const stateData = STATE_JURISDICTIONS[selectedStateId];
       if (stateData) {
-        // FIX: Renamed 'jurisConfig' to 'jurisdictionConfig' to match usage in object shorthand.
-        const jurisdictionConfig: JurisdictionObject = { country: 'USA', state: stateData.name, courtLevel: 'State', division: stateLevelName };
-        const finalCourt = specificStateCourt;
-        onJurisdictionChange({ finalCourt, jurisdictionConfig });
+        jurisdictionConfig = { country: 'USA', state: stateData.name, courtLevel: 'State' as 'State', division: stateLevelName };
+        finalCourt = specificStateCourt;
       }
+    }
+
+    if (finalCourt && jurisdictionConfig) {
+        onJurisdictionChange({ finalCourt, jurisdictionConfig });
+    } else {
+        onJurisdictionChange(null);
     }
   }, [courtSystem, fedLevel, fedCircuit, fedDistrict, selectedStateId, stateLevelName, specificStateCourt, onJurisdictionChange]);
 

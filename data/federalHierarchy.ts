@@ -1,3 +1,4 @@
+
 // FIX: Add necessary types and data transformations to make this file a module and provide required data structures.
 import { MOCK_JURISDICTIONS } from './models/jurisdiction';
 

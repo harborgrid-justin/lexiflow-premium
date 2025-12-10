@@ -2,6 +2,8 @@
 import { Juror, Witness, TrialExhibit, Fact } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
+// FIX: Add missing import for Case
+import { Case } from '../../types';
 
 export class TrialRepository extends Repository<TrialExhibit> {
     constructor() { super(STORES.EXHIBITS); }

@@ -2,18 +2,21 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../common/Modal';
+import { Modal } from '../../../../components/common/Modal';
 // FIX: Corrected invalid import path by making it explicitly relative to the current directory, which can resolve ambiguity in some build systems.
-import { SchemaVisualizer } from './SchemaVisualizer';
-import { Button } from '../../../common/Button';
-import { TableData, TableColumn } from './schemaTypes';
-import { SchemaToolbar } from './schema/SchemaToolbar';
+import { SchemaVisualizer } from '../../../../components/admin/data/schema/SchemaVisualizer';
+import { SchemaCodeEditor } from '../../../../components/admin/data/schema/SchemaCodeEditor';
+import { MigrationHistory } from '../../../../components/admin/data/schema/MigrationHistory';
+import { SchemaSnapshots } from '../../../../components/admin/data/schema/SchemaSnapshots';
+import { Button } from '../../../../components/common/Button';
+import { TableData, TableColumn } from '../../../../components/admin/data/schema/schemaTypes';
+import { SchemaToolbar } from '../../../../components/admin/data/schema/SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
 // FIX: Imported Input and TextArea components
-import { Input, TextArea } from '../../../common/Inputs';
+import { Input, TextArea } from '../../../../components/common/Inputs';
 
 interface SchemaArchitectProps {
   initialTab?: string;

@@ -1,4 +1,5 @@
 
+// components/case-list/CaseListContent.tsx
 import React, { Suspense, lazy } from 'react';
 import { Case } from '../../../types';
 import { LazyLoader } from '../../common/LazyLoader';
@@ -73,3 +74,4 @@ export const CaseListContent: React.FC<CaseListContentProps> = ({ activeTab, onS
     </>
   );
 };
+// FIX: This file is obsolete and can be safely deleted.

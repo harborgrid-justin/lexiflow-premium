@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
 import { Organization, Group, User as UserType } from '../../../types';
@@ -9,6 +10,13 @@ import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+// FIX: Add missing import for Case
+import { Case } from '../../../types';
+
+// Directly import from models
+import { MOCK_ORGS } from '../../../data/models/organization'; // Updated import path
+import { MOCK_GROUPS } from '../../../data/models/group'; // Updated import path
+import { MOCK_USERS } from '../../../data/models/user'; // Updated import path
 
 export const AdminHierarchy: React.FC = () => {
   const { theme } = useTheme();
@@ -16,23 +24,34 @@ export const AdminHierarchy: React.FC = () => {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
-  // Enterprise Data Access
-  const { data: orgs = [], isLoading: loadingOrgs } = useQuery<Organization[]>(
+  // Enterprise Data Access - Using MOCK_ORGS, MOCK_GROUPS, MOCK_USERS directly for demo
+  const { data: orgs = MOCK_ORGS, isLoading: loadingOrgs } = useQuery<Organization[]>(
       [STORES.ORGS, 'all'],
-      DataService.organization.getOrgs
+      DataService.organization.getOrgs // This service will likely use the same mock data or actual DB in prod
   );
 
-  const { data: groups = [], isLoading: loadingGroups } = useQuery<Group[]>(
+  const { data: groups = MOCK_GROUPS, isLoading: loadingGroups } = useQuery<Group[]>(
       [STORES.GROUPS, 'all'],
-      DataService.organization.getGroups
-  );
-  
-  const { data: users = [], isLoading: loadingUsers } = useQuery<UserType[]>(
-      [STORES.USERS, 'all'],
-      DataService.users.getAll
+      DataService.organization.getGroups // Same here
   );
 
-  const isLoading = loadingOrgs || loadingGroups || loadingUsers;
+  // The staff list is currently mocked via HR.getStaff, which itself uses MOCK_STAFF
+  // We explicitly use MOCK_USERS here to simplify the demo and directly link to hierarchical users
+  const staff = MOCK_USERS; 
+
+  // Transform Staff to User
+  const users: UserType[] = React.useMemo(() => staff.map(s => ({
+      id: s.id,
+      name: s.name,
+      email: s.email,
+      role: s.role,
+      office: 'Main',
+      orgId: 'org-1', // Assuming default org for internal users in mock
+      groupIds: ['g-1'],
+      userType: 'Internal'
+  })), [staff]);
+
+  const isLoading = loadingOrgs || loadingGroups; // Adjusted to not include staffLoading since it's direct mock_users
 
   // Derived State
   const orgGroups = groups.filter(g => g.orgId === selectedOrgId);
@@ -45,10 +64,8 @@ export const AdminHierarchy: React.FC = () => {
   });
 
   // Auto-select first org on load
-  useEffect(() => {
-      if (orgs.length > 0 && !selectedOrgId) {
-          setSelectedOrgId(orgs[0].id);
-      }
+  React.useEffect(() => {
+      if (orgs.length > 0 && !selectedOrgId) setSelectedOrgId(orgs[0].id);
   }, [orgs, selectedOrgId]);
 
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;

@@ -5,17 +5,17 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
     {
         id: 'conv-1', name: 'John Doe (GC)', role: 'Client', status: 'online', unread: 2, isExternal: true,
         messages: [
-// FIX: Cast string to branded type UserId
+            // FIX: Cast string to branded type UserId
             { id: 'm1', senderId: 'usr-client-doe' as UserId, text: 'Thanks for the update. Can we schedule a call for tomorrow?', timestamp: '2024-03-12T14:30:00Z', status: 'read' },
             { id: 'm2', senderId: 'me', text: 'Of course, I am available at 2pm EST.', timestamp: '2024-03-12T14:32:00Z', status: 'delivered' },
-// FIX: Cast string to branded type UserId
+            // FIX: Cast string to branded type UserId
             { id: 'm3', senderId: 'usr-client-doe' as UserId, text: 'Perfect.', timestamp: '2024-03-12T14:35:00Z', status: 'read' }
         ]
     },
     {
         id: 'conv-2', name: 'Litigation Team A', role: 'Internal Group', status: 'online', unread: 0, isExternal: false,
         messages: [
-// FIX: Cast string to branded type UserId
+            // FIX: Cast string to branded type UserId
             { id: 'm4', senderId: 'usr-partner-alex' as UserId, text: 'Team, please review the latest filing from opposing counsel in Martinez v. TechCorp', timestamp: '2024-03-11T10:00:00Z' },
         ],
         draft: 'Okay, I will review it now.'

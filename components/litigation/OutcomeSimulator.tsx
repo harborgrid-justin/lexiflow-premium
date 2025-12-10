@@ -5,7 +5,8 @@ import { Button } from '../common/Button';
 import { RiskMeter } from '../common/RiskMeter';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Play, RotateCcw, TrendingUp, DollarSign, Gavel, Users, Scale, AlertTriangle } from 'lucide-react';
+// FIX: Added missing 'Search' import from lucide-react.
+import { Play, RotateCcw, TrendingUp, DollarSign, Gavel, Users, Scale, AlertTriangle, Search } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, AreaChart, Area } from 'recharts';
 import { useChartTheme } from '../common/ChartHelpers';
 import { SimulationEngine } from '../../utils/simulationEngine';

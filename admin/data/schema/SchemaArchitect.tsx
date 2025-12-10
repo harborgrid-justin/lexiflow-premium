@@ -1,23 +1,30 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { useTheme } from '../../../../context/ThemeContext';
+import { cn } from '../../../../utils/cn';
 import { Modal } from '../../../common/Modal';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
-import { Button } from '../../../common/Button';
+// FIX: Corrected the import path for SchemaVisualizer.
 import { SchemaVisualizer } from './SchemaVisualizer';
+import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
+// FIX: Imported Input component
+import { Input } from '../../../common/Inputs';
 
 interface SchemaArchitectProps {
   initialTab?: string;
 }
 
 export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = 'designer' }) => {
+  const { theme } = useTheme();
+  
   const mapInitialTabToState = (tab?: string): 'visual' | 'code' | 'history' | 'snapshots' => {
       switch (tab) {
           case 'designer': return 'visual';
@@ -146,7 +153,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     <div className="flex flex-col h-full min-h-0">
         <SchemaToolbar activeTab={activeTab} setActiveTab={setActiveTab} onAutoArrange={autoArrange} />
 
-        <div className="flex-1 overflow-hidden relative">
+        <div className={cn("flex-1 overflow-hidden relative", theme.background)}>
             {activeTab === 'visual' && <SchemaVisualizer tables={tables} onAddColumn={handleOpenColumnModal} onEditColumn={handleOpenColumnModal} onRemoveColumn={handleDeleteColumn} onCreateTable={handleCreateTable} onRenameTable={handleRenameTable} onDeleteTable={handleDeleteTable} onUpdateTablePos={handleUpdateTablePos} />}
             {activeTab === 'code' && <SchemaCodeEditor ddl={generatedDDL} />}
             {activeTab === 'history' && <MigrationHistory />}
@@ -155,14 +162,16 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
 
         <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
             <div className="p-6 space-y-4">
-                <input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
+                {/* FIX: Use Input component for label prop */}
+                <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
                 <div>
                     <label className="block text-xs font-semibold uppercase mb-1.5">Data Type</label>
                     <select className="w-full px-3 py-2 border rounded-md text-sm" value={editingColumn?.data.type || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>
-                <input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
+                {/* FIX: Use Input component for label prop */}
+                <Input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
                 <div className="grid grid-cols-2 gap-4 pt-2">
                     <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.notNull || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, notNull: e.target.checked}} : null)}/> Not Null</label>
                     <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.unique || false} onChange={e => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, unique: e.target.checked}} : null)}/> Unique</label>

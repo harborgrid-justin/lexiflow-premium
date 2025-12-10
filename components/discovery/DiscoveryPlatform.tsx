@@ -19,17 +19,17 @@ import { LazyLoader } from '../common/LazyLoader';
 import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './layout/DiscoveryNavigation';
 
 // FIX: Import all lazy loaded components for DiscoveryPlatform
-const DiscoveryDashboard = lazy(() => import('./DiscoveryDashboard').then(m => ({ default: m.DiscoveryDashboard })));
-const DiscoveryRequests = lazy(() => import('./DiscoveryRequests').then(m => ({ default: m.DiscoveryRequests })));
-const PrivilegeLog = lazy(() => import('./PrivilegeLog').then(m => ({ default: m.PrivilegeLog })));
-const LegalHolds = lazy(() => import('./LegalHolds').then(m => ({ default: m.LegalHolds })));
-const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer').then(m => ({ default: m.DiscoveryDocumentViewer })));
-const DiscoveryResponse = lazy(() => import('./DiscoveryResponse').then(m => ({ default: m.DiscoveryResponse })));
-const DiscoveryProduction = lazy(() => import('./DiscoveryProduction').then(m => ({ default: m.DiscoveryProduction })));
-const DiscoveryProductions = lazy(() => import('./DiscoveryProductions').then(m => ({ default: m.DiscoveryProductions })));
-const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions').then(m => ({ default: m.DiscoveryDepositions })));
-const DiscoveryESI = lazy(() => import('./DiscoveryESI').then(m => ({ default: m.DiscoveryESI })));
-const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews').then(m => ({ default: m.DiscoveryInterviews })));
+const DiscoveryDashboard = lazy(() => import('./DiscoveryDashboard'));
+const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
+const PrivilegeLog = lazy(() => import('./PrivilegeLog'));
+const LegalHolds = lazy(() => import('./LegalHolds'));
+const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer'));
+const DiscoveryResponse = lazy(() => import('./DiscoveryResponse'));
+const DiscoveryProduction = lazy(() => import('./DiscoveryProduction'));
+const DiscoveryProductions = lazy(() => import('./DiscoveryProductions'));
+const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions'));
+const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
+const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 
 
 export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';

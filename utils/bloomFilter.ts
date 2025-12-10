@@ -1,4 +1,3 @@
-
 // A simple Bloom Filter implementation using FNV-1a and MurmurHash3-like approximations
 export class BloomFilter {
     private size: number;

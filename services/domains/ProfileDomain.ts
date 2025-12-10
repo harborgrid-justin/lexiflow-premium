@@ -1,4 +1,3 @@
-
 import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';

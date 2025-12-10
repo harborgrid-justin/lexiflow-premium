@@ -1,4 +1,3 @@
-
 import { LayoutDashboard, Box, Lock, Plus } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

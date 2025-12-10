@@ -10,9 +10,10 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   public static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
@@ -25,6 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
+      // FIX: 'this.props' is now correctly typed and accessible due to using a standard constructor.
       return this.props.fallback ?? (
         <div className="flex h-full w-full items-center justify-center p-4">
             <div className="text-center">
@@ -35,6 +37,7 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
+    // FIX: 'this.props' is now correctly typed and accessible.
     return this.props.children;
   }
 }

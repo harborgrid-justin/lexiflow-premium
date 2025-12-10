@@ -1,4 +1,3 @@
-
 import { db, STORES } from '../db';
 import { CostMetric, CostForecast } from '../../types';
 

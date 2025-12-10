@@ -1,4 +1,3 @@
-
 import { Search, BookOpen, Scale, Gavel, History, Bookmark, Settings, Library } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 

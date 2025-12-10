@@ -1,4 +1,3 @@
-
 export const Prompts = {
   Draft: (context: string, type: string) => 
     `You are an expert legal aide. Draft a professional ${type}. 

@@ -1,4 +1,3 @@
-
 export const StringUtils = {
     levenshtein: (a: string, b: string): number => {
         const matrix = [];

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '../../common/Card';
 import { CheckCircle } from 'lucide-react';

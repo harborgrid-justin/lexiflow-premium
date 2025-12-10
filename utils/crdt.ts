@@ -1,4 +1,3 @@
-
 interface LWWRegister<T> {
     value: T;
     timestamp: number;

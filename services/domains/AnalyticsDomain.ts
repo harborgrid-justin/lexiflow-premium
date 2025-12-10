@@ -1,4 +1,3 @@
-
 import { db, STORES } from '../db';
 import { JudgeMotionStat, OpposingCounselProfile, OutcomePredictionData, Motion } from '../../types';
 

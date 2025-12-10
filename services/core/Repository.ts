@@ -1,4 +1,3 @@
-
 import { BaseEntity, UserId } from '../../types';
 import { MicroORM } from './microORM';
 

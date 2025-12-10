@@ -1,4 +1,3 @@
-
 import { WikiArticle, Precedent, QAItem } from '../../types';
 import { db, STORES } from '../db';
 

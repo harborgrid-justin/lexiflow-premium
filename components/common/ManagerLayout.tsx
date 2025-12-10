@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { PageHeader } from './PageHeader';
 import { useTheme } from '../../context/ThemeContext';
@@ -34,13 +33,13 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
         )}
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden px-6 pb-6 gap-6">
         {sidebar && (
-            <div className={cn("w-64 border-r flex flex-col shrink-0 hidden md:flex", theme.border.default, theme.surfaceHighlight)}>
+            <div className={cn("w-64 border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto", theme.surface, theme.border.default)}>
                 {sidebar}
             </div>
         )}
-        <div className={cn("flex-1 overflow-y-auto custom-scrollbar p-6", theme.surface)}>
+        <div className={cn("flex-1 overflow-y-auto custom-scrollbar")}>
             {children}
         </div>
       </div>

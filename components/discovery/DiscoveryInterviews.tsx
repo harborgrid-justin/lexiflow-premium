@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CustodianInterview, CaseId } from '../../types';
 import { DataService } from '../../services/dataService';
@@ -33,7 +32,6 @@ export const DiscoveryInterviews: React.FC = () => {
       if (!newInterview.custodianName) return;
       createInterview({
           id: `INT-${Date.now()}`,
-          // FIX: Cast string to branded type CaseId
           caseId: 'C-2024-001' as CaseId, // Mock default
           custodianName: newInterview.custodianName,
           department: newInterview.department || 'General',
@@ -68,3 +66,5 @@ export const DiscoveryInterviews: React.FC = () => {
     </div>
   );
 };
+
+export default DiscoveryInterviews;

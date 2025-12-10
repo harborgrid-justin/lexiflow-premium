@@ -1,7 +1,5 @@
-
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Badge } from '../../common/Badge';
-// FIX: Add missing NodeType import.
 import { WorkflowNode, WorkflowConnection, getNodeIcon, getNodeStyles, NodeType } from './types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -150,15 +148,32 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
       
       <div className="absolute top-0 left-0 w-full h-full" style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${scale})`, transformOrigin: '0 0' }}>
         <svg className="absolute w-[10000px] h-[10000px] -top-[5000px] -left-[5000px] pointer-events-none overflow-visible z-0">
+            <defs>
+                <marker id="arrow-default" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill={mode === 'dark' ? '#64748b' : '#94a3b8'} />
+                </marker>
+                 <marker id="arrow-selected" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb" />
+                </marker>
+                 <marker id="arrow-denied" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+                </marker>
+                 <marker id="arrow-granted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e" />
+                </marker>
+            </defs>
+
           {connections.map(conn => {
               const { path, midX, midY } = getConnectorPath(conn);
               const isSelected = selectedConnectionId === conn.id;
               const isDenied = conn.label?.toLowerCase().includes('denied');
               const isGranted = conn.label?.toLowerCase().includes('granted');
               const strokeColor = isSelected ? '#2563eb' : isDenied ? '#ef4444' : isGranted ? '#22c55e' : (mode === 'dark' ? '#64748b' : '#94a3b8');
+              const markerId = isSelected ? 'arrow-selected' : isDenied ? 'arrow-denied' : isGranted ? 'arrow-granted' : 'arrow-default';
+
               return (
                 <g key={conn.id} className="cursor-pointer" onClick={(e) => { e.stopPropagation(); onSelectConnection(conn.id); }}>
-                  <path d={path} stroke={strokeColor} strokeWidth={isSelected ? 4 : 2} fill="none" className="transition-all" />
+                  <path d={path} stroke={strokeColor} strokeWidth={isSelected ? 4 : 2} fill="none" className="transition-all" markerEnd={`url(#${markerId})`} />
                   <path d={path} stroke="transparent" strokeWidth="12" fill="none" />
                   {conn.label && (
                       <text x={midX} y={midY} textAnchor="middle" dy="-5" className={cn("text-[10px] font-bold fill-current", isDenied ? 'text-red-500' : isGranted ? 'text-green-500' : 'text-slate-500')}>{conn.label}</text>

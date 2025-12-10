@@ -158,3 +158,5 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
     </div>
   );
 };
+
+export default DiscoveryRequests;

@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { WorkflowNode, WorkflowConnection, NodeType, Port } from '../components/workflow/builder/types';
 import { WorkflowTemplateData } from '../types';
@@ -68,6 +67,16 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
   }, []);
 
   const addConnection = useCallback((from: string, to: string, fromPort?: string) => {
+    if (from === to) {
+        console.warn("Cannot connect a node to itself.");
+        return;
+    }
+    const exists = connections.some(c => c.from === from && c.to === to && c.fromPort === fromPort);
+    if (exists) {
+        console.warn("Connection already exists.");
+        return;
+    }
+
     const id = `conn-${Date.now()}`;
     const newConnection: WorkflowConnection = { id, from, to, fromPort, toPort: 'input' };
 
@@ -80,7 +89,7 @@ export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null
     }
 
     setConnections(prev => [...prev, newConnection]);
-  }, [nodes]);
+  }, [nodes, connections]);
 
   const updateConnection = useCallback((id: string, updates: Partial<WorkflowConnection>) => {
     setConnections(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));

@@ -161,3 +161,5 @@ export const DiscoveryDepositions: React.FC = () => {
     </div>
   );
 };
+
+export default DiscoveryDepositions;

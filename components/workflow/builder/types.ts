@@ -1,9 +1,8 @@
-
 import React from 'react';
-import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Layers } from 'lucide-react';
+import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Layers, Milestone } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
-export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event';
+export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event' | 'Milestone';
 
 export interface Port {
   id: string;
@@ -38,6 +37,7 @@ export const getNodeIcon = (type: NodeType) => {
     case 'Delay': return React.createElement(Clock, { className: "h-4 w-4 text-amber-600" });
     case 'Phase': return React.createElement(BoxSelect, { className: "h-4 w-4 text-indigo-600" });
     case 'Event': return React.createElement(Calendar, { className: "h-4 w-4 text-pink-600" });
+    case 'Milestone': return React.createElement(Milestone, { className: "h-4 w-4 text-teal-600" });
     default: return React.createElement(CheckCircle, { className: "h-4 w-4 text-slate-600" });
   }
 };
@@ -71,14 +71,19 @@ export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) =
     case 'Delay':
       color = "border-amber-200 dashed-border dark:border-amber-800 bg-amber-50/30";
       break;
+    case 'Milestone':
+        color = "border-teal-200 dark:border-teal-800 bg-teal-50/50 dark:bg-teal-900/10";
+        size = "w-32 h-32 rotate-45";
+        extra = "decision-node";
+        break;
+    case 'Event':
+        color = "border-pink-200 dark:border-pink-800 bg-pink-50/50 dark:bg-pink-900/10";
+        size = "w-40 h-16 rounded-full";
+        break;
     case 'Phase':
       color = "border-indigo-300 border-2 border-dashed bg-indigo-50/20 dark:bg-indigo-900/10 dark:border-indigo-700";
       size = "w-[600px] h-[400px] justify-start items-start pt-4 px-4"; // Large box
       return `absolute flex flex-col p-3 rounded-xl cursor-pointer transition-all select-none ${color} ${size} ${isSelected ? 'ring-2 ring-indigo-400 z-0' : 'z-0'}`;
-    case 'Event':
-      color = "border-pink-200 border-l-4 border-l-pink-500 dark:border-pink-800";
-      size = "w-40 h-16 rounded-r-full";
-      break;
   }
 
   return `${base} ${color} ${size} ${selected} ${hover} ${extra}`;

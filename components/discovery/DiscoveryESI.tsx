@@ -153,3 +153,5 @@ export const DiscoveryESI: React.FC = () => {
     </div>
   );
 };
+
+export default DiscoveryESI;

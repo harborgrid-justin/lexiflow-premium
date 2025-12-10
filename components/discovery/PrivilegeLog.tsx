@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
@@ -103,3 +102,5 @@ export const PrivilegeLog: React.FC = () => {
     </div>
   );
 };
+
+export default PrivilegeLog;

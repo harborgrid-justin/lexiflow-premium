@@ -1,5 +1,3 @@
-
-// FIX: Add necessary types and data transformations to make this file a module and provide required data structures.
 import { MOCK_JURISDICTIONS } from './models/jurisdiction';
 
 export interface CourtNode {
@@ -70,7 +68,6 @@ export const getCourtHierarchy = () => {
 };
 
 
-// FIX: Define and export types for state jurisdiction data.
 export interface StateJurisdictionLevel {
   name: string;
   courts: string[];
@@ -81,7 +78,6 @@ export interface StateJurisdiction {
   levels: StateJurisdictionLevel[];
 }
 
-// FIX: Transform MOCK_JURISDICTIONS into the expected STATE_JURISDICTIONS structure.
 const stateCourts = MOCK_JURISDICTIONS.filter(j => j.system === 'State');
 const stateNames: Record<string, string> = {
     VA: 'Virginia',
@@ -105,4 +101,4 @@ export const STATE_JURISDICTIONS: Record<string, StateJurisdiction> = stateCourt
     }
     level.courts.push(court.name);
     return acc;
-}, {} as Record<string, StateJurisdiction>);
+}, {} as Record<string, StateJurisdiction>)

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
@@ -140,3 +139,5 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
     </div>
   );
 };
+
+export default DiscoveryDashboard;

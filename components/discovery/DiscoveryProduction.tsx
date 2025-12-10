@@ -161,3 +161,5 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
     </div>
   );
 };
+
+export default DiscoveryProduction;

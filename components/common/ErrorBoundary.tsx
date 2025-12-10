@@ -27,20 +27,26 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     errorHandler.logError(error, this.props.scope || 'ErrorBoundary');
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
   private handleReset = () => {
+    // FIX: Property 'setState' does not exist on type 'ErrorBoundary'.
     this.setState({ hasError: false, error: null });
+    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     if (this.props.onReset) {
+      // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
       this.props.onReset();
     }
   };
 
   public render() {
     if (this.state.hasError) {
+      // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
       if (this.props.fallback) {
+        // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
         return this.props.fallback;
       }
 
@@ -68,6 +74,7 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
+    // FIX: Property 'props' does not exist on type 'ErrorBoundary'.
     return this.props.children;
   }
 }

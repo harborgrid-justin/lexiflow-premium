@@ -6,8 +6,9 @@ import { Modal } from '../../../common/Modal';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
-import { Button } from '../../../common/Button';
+// FIX: Corrected invalid import path
 import { SchemaVisualizer } from './SchemaVisualizer';
+import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';

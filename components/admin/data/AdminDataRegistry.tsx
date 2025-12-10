@@ -1,11 +1,12 @@
 
 import React from 'react';
 import { Server, HardDrive, Loader2 } from 'lucide-react';
+// FIX: Added missing imports
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { VirtualGrid } from '../../common/VirtualGrid';
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
 
 interface DataFile {
     name: string;

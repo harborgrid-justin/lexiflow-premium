@@ -86,8 +86,7 @@ export const GeminiService = {
             });
             for await (const chunk of responseStream) {
                 // FIX: chunk is already a GenerateContentResponse, access its text property directly.
-                const c = chunk as GenerateContentResponse;
-                if (c.text) yield c.text;
+                if (chunk.text) yield chunk.text;
             }
         } catch (e) {
             yield "Error streaming content.";

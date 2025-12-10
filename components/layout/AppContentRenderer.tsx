@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy } from 'react';
 import { AppView, User } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';
@@ -8,7 +7,8 @@ import { HelpCircle, Lock } from 'lucide-react';
 
 // OPTIMIZATION: Lazy load CaseDetail to prevent it from being bundled in the main chunk.
 // This splits the code so "Case Work" logic is only loaded when a case is actually selected.
-const CaseDetail = lazy(() => import('../CaseDetail').then(m => ({ default: m.CaseDetail })));
+// FIX: Corrected import path for CaseDetail component.
+const CaseDetail = lazy(() => import('../case-detail/CaseDetail').then(m => ({ default: m.CaseDetail })));
 
 interface AppContentRendererProps {
   activeView: AppView;

@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 type QueryKey = string | readonly unknown[];
@@ -20,16 +21,15 @@ export interface UseQueryOptions<T> {
 
 const MAX_CACHE_SIZE = 50; 
 
-function deepEqual(obj1: any, obj2: any): boolean {
+// Optimized Deep Equal using native JSON serialization (faster for large POJOs than JS recursion)
+function fastDeepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
-  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) return false;
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  if (keys1.length !== keys2.length) return false;
-  for (const key of keys1) {
-    if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) return false;
+  if (!obj1 || !obj2 || typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
+  try {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  } catch (e) {
+    return false;
   }
-  return true;
 }
 
 class QueryClient {
@@ -111,7 +111,9 @@ class QueryClient {
     const promise = fn()
       .then((data) => {
         const currentCache = this.cache.get(hashedKey);
-        if (currentCache && deepEqual(currentCache.data, data)) {
+        
+        // Check for data equality to prevent unnecessary re-renders
+        if (currentCache && fastDeepEqual(currentCache.data, data)) {
            currentCache.dataUpdatedAt = Date.now();
            this.cache.set(hashedKey, currentCache);
            this.inflight.delete(hashedKey);
@@ -162,7 +164,14 @@ class QueryClient {
       const hashedKey = this.hashKey(key);
       const oldState = this.cache.get(hashedKey);
       const oldData = oldState ? (oldState.data as T | undefined) : undefined;
-      const data = typeof updater === 'function' ? (updater as any)(oldData) : updater;
+      
+      let data: T | undefined;
+      if (typeof updater === 'function') {
+          // Explicit cast to function type to handle TS inference
+          data = (updater as (oldData: T | undefined) => T | undefined)(oldData);
+      } else {
+          data = updater;
+      }
       
       if (typeof data === 'undefined') return;
 
@@ -191,21 +200,31 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
   });
 
   const hasFetched = useRef(false);
+  
+  // Use a ref for the function to prevent useEffect from re-running when fn identity changes
+  const fnRef = useRef(fn);
+  useEffect(() => {
+    fnRef.current = fn;
+  }, [fn]);
 
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
-     return queryClient.fetch(key, fn, staleTime, true);
-  }, [key, fn, staleTime, enabled]);
+     return queryClient.fetch(key, fnRef.current, staleTime, true);
+  }, [key, staleTime, enabled]);
 
   useEffect(() => {
     if (!enabled) return;
+    
     const unsubscribe = queryClient.subscribe(key, (newState) => {
       setState(newState);
+      // Auto-refetch if invalidated (dataUpdatedAt === 0)
       if (newState.status === 'success' && newState.dataUpdatedAt === 0) {
-          queryClient.fetch(key, fn, staleTime, true);
+          queryClient.fetch(key, fnRef.current, staleTime, true);
       }
     });
-    queryClient.fetch(key, fn, staleTime).then((data) => {
+    
+    // Initial fetch if needed
+    queryClient.fetch(key, fnRef.current, staleTime).then((data) => {
        if (onSuccess && !hasFetched.current) {
          onSuccess(data);
          hasFetched.current = true;
@@ -230,7 +249,8 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
             window.removeEventListener('visibilitychange', focusHandler);
         }
     };
-  }, [hashedKey, enabled, staleTime, fn, onSuccess, refetchOnWindowFocus, refetch]);
+    // DEPENDENCY ARRAY FIX: Removed 'fn' and 'onSuccess' to prevent loops when these are inline functions
+  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch]);
 
   return { 
     ...state, 
@@ -252,34 +272,41 @@ export function useMutation<T, V>(
 ) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
 
-  const mutate = async (variables: V) => {
+  // Use refs for callbacks to ensure stability
+  const optionsRef = useRef(options);
+  useEffect(() => {
+      optionsRef.current = options;
+  }, [options]);
+
+  const mutate = useCallback(async (variables: V) => {
     setStatus('pending');
     
+    const opts = optionsRef.current;
+    
     // Optimistic Update / Setup
-    if (options?.onMutate) {
-        options.onMutate(variables);
+    if (opts?.onMutate) {
+        opts.onMutate(variables);
     }
 
     try {
       const result = await mutationFn(variables);
       setStatus('success');
       
-      if (options?.invalidateKeys) {
-        options.invalidateKeys.forEach(k => queryClient.invalidate(k));
+      if (opts?.invalidateKeys) {
+        opts.invalidateKeys.forEach(k => queryClient.invalidate(k));
       }
-      if (options?.onSuccess) {
-        options.onSuccess(result, variables);
+      if (opts?.onSuccess) {
+        opts.onSuccess(result, variables);
       }
       return result;
     } catch (e) {
       setStatus('error');
-      // In a real implementation, we would access the previous context returned by onMutate here to rollback
-      if (options?.onError) {
-        options.onError(e);
+      if (opts?.onError) {
+        opts.onError(e);
       }
       throw e;
     }
-  };
+  }, [mutationFn]);
 
   return { mutate, isLoading: status === 'pending', isSuccess: status === 'success', isError: status === 'error' };
 }

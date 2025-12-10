@@ -2,6 +2,9 @@
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
+// Helper to unblock main thread
+const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
+
 export const STORES = {
   CASES: 'cases',
   TASKS: 'tasks',
@@ -220,6 +223,7 @@ export class DatabaseManager {
   async getAll<T>(storeName: string): Promise<T[]> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
+          await yieldToMain(); // Crucial: break sync loop
           return StorageUtils.get(storeName, []);
       }
       return new Promise((resolve, reject) => {
@@ -234,6 +238,7 @@ export class DatabaseManager {
   async get<T>(storeName: string, id: string): Promise<T | undefined> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
+          await yieldToMain();
           const items = StorageUtils.get<T[]>(storeName, []);
           return items.find((i: any) => i.id === id);
       }
@@ -294,6 +299,33 @@ export class DatabaseManager {
       });
   }
 
+  async bulkPut<T>(storeName: string, items: T[]): Promise<void> {
+      await this.init();
+      if (this.mode === 'LocalStorage' || !this.db) {
+          const currentItems = StorageUtils.get<T[]>(storeName, []);
+          const newItems = [...currentItems];
+          items.forEach(item => {
+             const idx = newItems.findIndex((i: any) => i.id === (item as any).id);
+             if (idx >= 0) newItems[idx] = item;
+             else newItems.push(item);
+          });
+          StorageUtils.set(storeName, newItems);
+          return Promise.resolve();
+      }
+
+      return new Promise((resolve, reject) => {
+          const transaction = this.db!.transaction([storeName], 'readwrite');
+          const store = transaction.objectStore(storeName);
+          
+          transaction.oncomplete = () => resolve();
+          transaction.onerror = (event) => reject((event.target as IDBTransaction).error);
+
+          items.forEach(item => {
+              store.put(item);
+          });
+      });
+  }
+
   async delete(storeName: string, id: string): Promise<void> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
@@ -313,6 +345,7 @@ export class DatabaseManager {
   async getByIndex<T>(storeName: string, indexName: string, value: string | any[]): Promise<T[]> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
+          await yieldToMain();
           const items = StorageUtils.get<T[]>(storeName, []);
           const key = Array.isArray(value) ? indexName.split('_')[0] : indexName;
           const val = Array.isArray(value) ? value[0] : value; 

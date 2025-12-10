@@ -1,39 +1,48 @@
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 
 interface HoverIntentOptions<T> {
   onHover: (item: T) => void;
   timeout?: number;
 }
 
-export const useHoverIntent = <T>({ onHover, timeout = 200 }: HoverIntentOptions<T>) => {
+export const useHoverIntent = <T>({ onHover, timeout = 300 }: HoverIntentOptions<T>) => {
   const timer = useRef<number | null>(null);
   const onHoverRef = useRef(onHover);
-  onHoverRef.current = onHover;
+  
+  // Keep ref fresh without re-binding handlers
+  useEffect(() => {
+    onHoverRef.current = onHover;
+  }, [onHover]);
 
-  const clearTimer = () => {
+  const clearTimer = useCallback(() => {
     if (timer.current) {
-      clearTimeout(timer.current);
+      window.clearTimeout(timer.current);
       timer.current = null;
     }
-  };
+  }, []);
 
   const onMouseEnter = useCallback((item: T) => {
-    clearTimer();
+    clearTimer(); // Safety clear
     timer.current = window.setTimeout(() => {
       onHoverRef.current(item);
     }, timeout);
-  }, [timeout]);
+  }, [timeout, clearTimer]);
 
   const onMouseLeave = useCallback(() => {
     clearTimer();
-  }, []);
+  }, [clearTimer]);
 
-  // Return a single object to be spread onto the element
-  const hoverHandlers = (item: T) => ({
+  // Clean up on unmount
+  useEffect(() => {
+      return () => clearTimer();
+  }, [clearTimer]);
+
+  // Return a stable function factory to be spread onto the element
+  const hoverHandlers = useCallback((item: T) => ({
       onMouseEnter: () => onMouseEnter(item),
       onMouseLeave: onMouseLeave
-  });
+  }), [onMouseEnter, onMouseLeave]);
   
   return { hoverHandlers };
 };

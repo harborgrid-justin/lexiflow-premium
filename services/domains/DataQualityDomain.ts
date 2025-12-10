@@ -1,13 +1,14 @@
 
 import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataProfile } from '../../types';
 import { db, STORES } from '../db';
+import { yieldToMain } from '../../utils/apiUtils';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class DataQualityService {
     async getAnomalies(): Promise<DataAnomaly[]> { 
         // In real app, scan DB. Here we return seeded anomalies.
-        const anomalies = await db.getAll<DataAnomaly>('anomalies'); // Assuming store exists or using mock
+        const anomalies = await db.getAll<DataAnomaly>('anomalies'); 
         if (anomalies.length === 0) {
              return [
                 { id: 1, table: 'clients', field: 'email', issue: 'Invalid Format', count: 12, sample: 'john-doe@', status: 'Detected', severity: 'High'},
@@ -24,52 +25,77 @@ export class DataQualityService {
     async ignoreCluster(clusterId: string): Promise<void> { await delay(100); }
     async applyFix(anomalyId: number): Promise<void> { await delay(100); }
     
-    // Dynamic Profiler that actually reads the 'cases' store
+    // Optimized Profiler with single-pass aggregation and yielding
     async getProfiles(): Promise<DataProfile[]> {
         const cases = await db.getAll<any>(STORES.CASES);
         const total = cases.length;
 
-        // Profile 'status'
-        const statusCounts = cases.reduce((acc: any, c) => {
-            acc[c.status] = (acc[c.status] || 0) + 1;
-            return acc;
-        }, {});
-        const statusDist = Object.keys(statusCounts).map(k => ({ name: k, value: statusCounts[k] }));
+        // Initialize accumulators
+        const statusCounts: Record<string, number> = {};
+        let valueNulls = 0;
+        const valueDist = { '0-10k': 0, '10k-100k': 0, '100k+': 0 };
+        const filingYears: Record<string, number> = { '2023': 0, '2024': 0, '2025': 0 };
+        const uniqueValues = new Set<number>();
+        const uniqueDates = new Set<string>();
 
-        // Profile 'value'
-        const valueNulls = cases.filter(c => c.value === undefined || c.value === null).length;
-        const valueDist = [
-            { name: '0-10k', value: cases.filter(c => (c.value || 0) < 10000).length },
-            { name: '10k-100k', value: cases.filter(c => (c.value || 0) >= 10000 && (c.value || 0) < 100000).length },
-            { name: '100k+', value: cases.filter(c => (c.value || 0) >= 100000).length }
-        ];
+        // Single pass loop
+        for (let i = 0; i < total; i++) {
+            const c = cases[i];
+            
+            // Status Profile
+            statusCounts[c.status] = (statusCounts[c.status] || 0) + 1;
 
-        await delay(500); // Simulate processing time
+            // Value Profile
+            if (c.value === undefined || c.value === null) {
+                valueNulls++;
+            } else {
+                uniqueValues.add(c.value);
+                if (c.value < 10000) valueDist['0-10k']++;
+                else if (c.value < 100000) valueDist['10k-100k']++;
+                else valueDist['100k+']++;
+            }
 
+            // Date Profile
+            if (c.filingDate) {
+                uniqueDates.add(c.filingDate);
+                const year = c.filingDate.split('-')[0];
+                if (filingYears[year] !== undefined) filingYears[year]++;
+            }
+
+            // Yield every 500 items to keep UI responsive
+            if (i % 500 === 0) await yieldToMain();
+        }
+
+        const statusDistArray = Object.keys(statusCounts).map(k => ({ name: k, value: statusCounts[k] }));
+        
         return [
             {
                 column: 'status',
                 type: 'string',
                 nulls: 0,
                 unique: Object.keys(statusCounts).length,
-                distribution: statusDist
+                distribution: statusDistArray
             },
             {
                 column: 'value',
                 type: 'numeric',
-                nulls: parseFloat(((valueNulls / total) * 100).toFixed(1)),
-                unique: new Set(cases.map(c => c.value)).size,
-                distribution: valueDist
+                nulls: total > 0 ? parseFloat(((valueNulls / total) * 100).toFixed(1)) : 0,
+                unique: uniqueValues.size,
+                distribution: [
+                    { name: '0-10k', value: valueDist['0-10k'] },
+                    { name: '10k-100k', value: valueDist['10k-100k'] },
+                    { name: '100k+', value: valueDist['100k+'] }
+                ]
             },
             {
                 column: 'filing_date',
                 type: 'datetime',
                 nulls: 0,
-                unique: new Set(cases.map(c => c.filingDate)).size,
+                unique: uniqueDates.size,
                 distribution: [
-                  { name: '2023', value: cases.filter(c => c.filingDate.startsWith('2023')).length },
-                  { name: '2024', value: cases.filter(c => c.filingDate.startsWith('2024')).length },
-                  { name: '2025', value: cases.filter(c => c.filingDate.startsWith('2025')).length },
+                  { name: '2023', value: filingYears['2023'] },
+                  { name: '2024', value: filingYears['2024'] },
+                  { name: '2025', value: filingYears['2025'] },
                 ]
             }
         ];

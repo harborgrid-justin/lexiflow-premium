@@ -9,8 +9,6 @@ import { useClickOutside } from '../../hooks/useClickOutside';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
-import { Trie } from '../../utils/trie';
-import { Scheduler } from '../../utils/scheduler';
 import { HighlightedText } from '../common/HighlightedText';
 
 interface NeuralCommandBarProps {
@@ -34,49 +32,16 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   
   useClickOutside(searchRef, () => setShowResults(false));
   
-  // Trie for Instant Prefix Matching
-  const searchTrie = useMemo(() => new Trie(), []);
+  // Removed heavy Trie building. Rely on optimized SearchService.search which yields to main thread.
+  // This drastically improves initial application load time.
 
-  // Build Trie in background
-  useEffect(() => {
-    const buildIndex = async () => {
-        const data = await SearchService.search(''); // empty query gets base set
-        let i = 0;
-        const processChunk = () => {
-            const chunkEnd = Math.min(i + 50, data.length);
-            for (; i < chunkEnd; i++) {
-                const item = data[i];
-                searchTrie.insert(item.title, item);
-                if (item.subtitle) searchTrie.insert(item.subtitle, item);
-            }
-            if (i < data.length) Scheduler.defer(processChunk);
-        };
-        Scheduler.defer(processChunk);
-    };
-    buildIndex();
-  }, [searchTrie]);
-
-  // Hybrid Search Execution
   useEffect(() => {
     const performSearch = async () => {
-      if (debouncedSearch.length >= 1 && !isProcessingIntent) {
-        // 1. Try Trie
-        let matches = searchTrie.search(debouncedSearch);
+      if (debouncedSearch.length >= 2 && !isProcessingIntent) {
+        // Direct Service call (now optimized with yieldToMain)
+        const serviceResults = await SearchService.search(debouncedSearch);
         
-        // 2. If weak results, fall back to robust service (includes fuzzy)
-        if (matches.length < 5) {
-            const serviceResults = await SearchService.search(debouncedSearch);
-            // Merge deduplicated
-            const existingIds = new Set(matches.map(m => m.id));
-            serviceResults.forEach(r => {
-                if (!existingIds.has(r.id)) matches.push(r);
-            });
-        }
-        
-        // 3. Sort by Score
-        matches.sort((a,b) => (b.score || 0) - (a.score || 0));
-
-        setResults(matches.slice(0, 10));
+        setResults(serviceResults.slice(0, 10));
         setShowResults(true);
       } else {
         setResults([]);
@@ -84,7 +49,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
       }
     };
     performSearch();
-  }, [debouncedSearch, isProcessingIntent, searchTrie]);
+  }, [debouncedSearch, isProcessingIntent]);
 
   const handleResultSelect = (result: GlobalSearchResult) => {
     setGlobalSearch('');

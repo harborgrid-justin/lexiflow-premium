@@ -8,6 +8,7 @@ import { queryClient } from '../../services/queryClient';
 import { PATHS } from '../../constants/paths';
 import { useHoverIntent } from '../../hooks/useHoverIntent';
 import { PREFETCH_MAP } from '../../config/prefetchConfig';
+import { Scheduler } from '../../utils/scheduler';
 
 interface SidebarNavProps {
   activeView: string;
@@ -44,17 +45,23 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
 
   const { hoverHandlers } = useHoverIntent({
     onHover: (item: ModuleDefinition) => {
-      // 1. Preload Component Code
-      const component = item.component as any;
-      if (component?.preload) component.preload();
-      
-      // 2. Preload Data
-      const prefetchConfig = PREFETCH_MAP[item.id];
-      if (prefetchConfig) {
-          queryClient.fetch(prefetchConfig.key, prefetchConfig.fn);
-      }
+      // PERFORMANCE CRITICAL: Use Scheduler to ensure pre-fetching never blocks the UI thread.
+      // This prevents the "stutter" when moving the mouse quickly over multiple sidebar items.
+      Scheduler.defer(() => {
+        // 1. Preload Component Code (Lazy Load chunks)
+        const component = item.component as any;
+        if (component?.preload) component.preload();
+        
+        // 2. Preload Data (Heavy DB Ops)
+        // We only prefetch if the data isn't already fresh in cache
+        const prefetchConfig = PREFETCH_MAP[item.id];
+        if (prefetchConfig) {
+            // Using a longer stale time for hover-prefetches (2 mins) to avoid redundant DB hits
+            queryClient.fetch(prefetchConfig.key, prefetchConfig.fn, 120000);
+        }
+      }, 'background');
     },
-    timeout: 200, // Wait 200ms before triggering to avoid spamming while scrolling
+    timeout: 350, // Increased threshold: User must hover for 350ms before we burn CPU
   });
 
   return (

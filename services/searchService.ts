@@ -22,7 +22,7 @@ export const SearchService = {
   async search(query: string): Promise<GlobalSearchResult[]> {
     const q = query ? query.toLowerCase() : '';
     const results: GlobalSearchResult[] = [];
-    const CHUNK_SIZE = 50;
+    const CHUNK_SIZE = 20; // Reduce chunk size to be more responsive
 
     // Helper for scoring
     const calculateScore = (text: string, query: string): number => {
@@ -30,7 +30,9 @@ export const SearchService = {
         if (t === query) return 100; // Exact match
         if (t.startsWith(query)) return 80; // Prefix match
         if (t.includes(query)) return 50; // Partial match
-        // Simple fuzzy fallbacks
+        // Avoid heavy levenshtein if query is very short or length diff is huge
+        if (query.length < 3 || Math.abs(t.length - query.length) > 5) return 0;
+        
         const dist = StringUtils.levenshtein(t.substring(0, Math.min(t.length, query.length * 2)), query);
         if (dist <= 2) return 20; 
         return 0;

@@ -2,6 +2,9 @@
 import { apiCircuitBreaker } from './circuitBreaker';
 import { globalRateLimiter } from './rateLimiter';
 
+// Non-blocking yield to main thread
+export const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
+
 export class Semaphore {
     private tasks: (() => void)[] = [];
     private count: number;

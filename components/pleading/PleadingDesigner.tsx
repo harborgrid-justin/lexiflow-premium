@@ -1,22 +1,23 @@
+
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { PleadingDocument, FormattingRule, Case, PleadingSection } from '../types';
+import { PleadingDocument, FormattingRule, Case, PleadingSection } from '../../types';
 import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2 } from 'lucide-react';
-import { Button } from '../common/Button';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { useNotify } from '../hooks/useNotify';
-import { LazyLoader } from '../common/LazyLoader';
+import { Button } from '../../components/common/Button';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { useNotify } from '../../hooks/useNotify';
+import { LazyLoader } from '../../components/common/LazyLoader';
 
 // Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));
 const PleadingCanvas = lazy(() => import('./designer/PleadingCanvas'));
-const AIDraftingAssistant = lazy(() => import('./designer/AIDraftingAssistant'));
-const ContextPanel = lazy(() => import('./designer/ContextPanel'));
-const ComplianceHUD = lazy(() => import('./designer/tools/ComplianceHUD'));
-const LogicOverlay = lazy(() => import('./designer/visual/LogicOverlay'));
+const AIDraftingAssistant = lazy(() => import('./modules/AIDraftingAssistant'));
+const ContextPanel = lazy(() => import('./Sidebar/ContextPanel'));
+const ComplianceHUD = lazy(() => import('./Tools/ComplianceHUD'));
+const LogicOverlay = lazy(() => import('./Visual/LogicOverlay'));
 
 interface PleadingDesignerProps {
   pleading: PleadingDocument;

@@ -1,4 +1,3 @@
-
 import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -23,11 +22,12 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
-    // FIX: Refactor render method for conciseness and to potentially avoid linter errors with `this.props`.
+    // FIX: Destructure props to avoid potential linter errors with `this.props`.
+    const { fallback, children } = this.props;
     if (this.state.hasError) {
-      return this.props.fallback ?? <h1>Something went wrong.</h1>;
+      return fallback ?? <h1>Something went wrong.</h1>;
     }
 
-    return this.props.children;
+    return children;
   }
 }

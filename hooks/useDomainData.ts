@@ -1,8 +1,7 @@
-
 import { useQuery } from '../services/queryClient';
 import { DataService } from '../services/dataService';
 import { STORES } from '../services/db';
-import { Case, LegalDocument, DocketEntry, WorkflowTask, EvidenceItem, TrialExhibit, Project, Conversation, ResearchSession, Client } from '../types';
+import { Case, LegalDocument, DocketEntry, WorkflowTask, EvidenceItem, TrialExhibit, Project, Conversation, ResearchSession, Client, User } from '../types';
 
 /**
  * Domain-specific hooks to standardize data fetching and cache keys.
@@ -20,12 +19,14 @@ export const useEvidence = () => useQuery<EvidenceItem[]>([STORES.EVIDENCE, 'all
 
 export const useExhibits = (caseId?: string) => useQuery<TrialExhibit[]>(
     [STORES.EXHIBITS, caseId || 'all'],
-    DataService.exhibits.getAll
+    () => DataService.trial.getExhibits(caseId)
 );
 
 export const useStaff = () => useQuery<any[]>([STORES.STAFF, 'all'], DataService.hr.getStaff);
 
 export const useClients = () => useQuery<Client[]>([STORES.CLIENTS, 'all'], DataService.clients.getAll);
+
+export const useUsers = () => useQuery<User[]>([STORES.USERS, 'all'], DataService.users.getAll);
 
 export const useProjects = (caseId: string) => useQuery<Project[]>(
     [STORES.PROJECTS, caseId], 

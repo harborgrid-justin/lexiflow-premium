@@ -15,7 +15,6 @@ export const JurisdictionState: React.FC = () => {
   const [filter, setFilter] = useState('');
 
   // Performance Engine: useQuery
-  // FIX: Use the correct STORES key
   const { data: states = [], isLoading } = useQuery<any[]>(
       [STORES.JURISDICTIONS, 'state'],
       DataService.jurisdiction.getState

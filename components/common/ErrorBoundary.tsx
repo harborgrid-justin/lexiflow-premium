@@ -10,11 +10,10 @@ interface State {
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  // FIX: Switched from public class field to constructor for broader compatibility.
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false };
-  }
+  // FIX: Initialize state as a class property.
+  // This is a more modern syntax and provides a clearer type definition for TypeScript,
+  // resolving the errors related to 'this.state' and 'this.props' not being found.
+  public state: State = { hasError: false };
 
   static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
@@ -27,11 +26,16 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      // FIX: Correctly access props via `this.props`. The constructor ensures `this.props` is set.
-      return this.props.fallback ?? <h1>Something went wrong.</h1>;
+      return this.props.fallback ?? (
+        <div className="flex h-full w-full items-center justify-center p-4">
+            <div className="text-center">
+                <h1 className="text-lg font-bold text-red-600">Application Error</h1>
+                <p className="text-sm text-slate-500 mt-2">Something went wrong in this module. Please try refreshing the page.</p>
+            </div>
+        </div>
+      );
     }
 
-    // FIX: Correctly access props via `this.props`.
     return this.props.children;
   }
 }

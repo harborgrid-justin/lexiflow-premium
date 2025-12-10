@@ -1,3 +1,5 @@
+// types/pleadingTypes.ts
+
 import { BaseEntity, CaseId, UserId, EvidenceId, MotionId } from './models';
 
 export type PleadingSectionType = 

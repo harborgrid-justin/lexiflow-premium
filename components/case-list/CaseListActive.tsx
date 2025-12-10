@@ -1,4 +1,3 @@
-
 import React, { useCallback } from 'react';
 import { Case, CaseStatus } from '../../types';
 import { Filter } from 'lucide-react';
@@ -93,8 +92,9 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
         >
             <div 
             onClick={() => onSelectCase(c)}
+            onMouseEnter={() => prefetchCaseDetails(c.id)}
             className={cn(
-                "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden h-full flex flex-col justify-between",
+                "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden h-full flex flex-col justify-between rounded-lg",
                 theme.surface, theme.border.default
             )}
             >
@@ -106,7 +106,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
                 </div>
                 <h4 className={cn("font-bold text-base leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
             </div>
-            <div className="flex items-center justify-between pl-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className={cn("flex items-center justify-between pl-2 pt-2 border-t", theme.border.light)}>
                 <StatusBadge status={c.status} className="text-[10px] px-2 py-0.5" />
                 <Currency value={c.value || 0} className="font-bold text-sm" />
             </div>
@@ -174,3 +174,4 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
     </div>
   );
 };
+export default CaseListActive;

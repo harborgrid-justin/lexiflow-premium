@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useTransition } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
@@ -24,6 +23,7 @@ import { initializeModules } from './config/modules';
 import { ModuleRegistry } from './services/moduleRegistry';
 import { HolographicRouting } from './services/holographicRouting';
 import { useQuery } from './services/queryClient';
+import { useUsers } from './hooks';
 
 // Initialize Registry
 initializeModules();
@@ -41,7 +41,7 @@ const InnerApp: React.FC = () => {
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
 
-  const { data: users = [] } = useQuery<User[]>([STORES.USERS, 'all'], DataService.users.getAll);
+  const { data: users = [] } = useUsers();
   const currentUser: User | undefined = users[currentUserIndex];
 
   useEffect(() => {
@@ -56,13 +56,14 @@ const InnerApp: React.FC = () => {
               }
             } catch (e) {
               console.error("Failed to restore case context", e);
+              addToast("Error restoring case context.", "error");
             }
         };
         loadCase();
     } else {
       setSelectedCase(null);
     }
-  }, [selectedCaseId, setSelectedCaseId]);
+  }, [selectedCaseId, setSelectedCaseId, addToast]);
 
   const handleSelectCaseById = useCallback((caseId: string) => {
     startTransition(async () => {
@@ -242,21 +243,27 @@ const InnerApp: React.FC = () => {
 
 const App: React.FC = () => {
     const [isReady, setIsReady] = useState(false);
+    const [statusMessage, setStatusMessage] = useState('Initializing Secure Data Layer...');
 
     useEffect(() => {
         const init = async () => {
             try {
                 // Correctly initialize DB connection
                 await db.init();
+                
                 // Check if seeding is needed
                 const count = await db.count(STORES.CASES);
                 if (count === 0) {
+                    setStatusMessage('Seeding enterprise data for first-time use...');
                     await Seeder.seed(db);
                 }
             } catch (e) {
                 console.error("Failed to initialize database:", e);
+                setStatusMessage('Error initializing database. Functionality may be limited.');
             } finally {
-                setIsReady(true);
+                // Short delay to allow user to read final message
+                setStatusMessage('Ready.');
+                setTimeout(() => setIsReady(true), 300);
             }
         };
         init();
@@ -267,7 +274,7 @@ const App: React.FC = () => {
             <div className="flex items-center justify-center h-[100dvh]">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="animate-spin h-10 w-10 text-blue-600"/>
-                    <p className="text-sm font-medium text-slate-500 animate-pulse">Initializing Secure Data Layer...</p>
+                    <p className="text-sm font-medium text-slate-500 animate-pulse">{statusMessage}</p>
                 </div>
             </div>
         );

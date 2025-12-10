@@ -1,3 +1,4 @@
+// types/ai.ts
 
 import { SearchResult } from './models';
 

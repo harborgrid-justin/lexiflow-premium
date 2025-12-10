@@ -43,48 +43,53 @@ export const getNodeIcon = (type: NodeType) => {
 };
 
 export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) => {
-  const base = cn("absolute flex flex-col items-center justify-center p-3 rounded-xl border-2 shadow-sm cursor-pointer transition-all select-none", theme.surface);
-  const selected = isSelected ? "ring-2 ring-blue-500 ring-offset-2 z-20" : "z-10";
-  const hover = "hover:shadow-md hover:-translate-y-0.5";
+  const base = cn("absolute flex flex-col rounded-xl border-2 shadow-md cursor-pointer transition-all duration-200 select-none", `hover:shadow-xl hover:-translate-y-0.5`);
+  const selected = isSelected ? "ring-4 ring-blue-500/40 ring-offset-2 dark:ring-offset-slate-900 z-20" : "z-10";
   
   let color = theme.border.default;
-  let size = "w-40 h-20";
-  let extra = "";
+  let size = "";
+  let padding = "";
 
   switch (type) {
     case 'Start': 
-      color = "border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10";
-      size = "w-32 h-14 rounded-full";
+      color = "border-green-300 dark:border-green-700 bg-gradient-to-br from-white to-green-50 dark:from-slate-800 dark:to-green-900/30";
+      size = "w-32 h-14";
+      padding = "p-3 items-center justify-center rounded-full";
       break;
     case 'End': 
-      color = "border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10";
-      size = "w-32 h-14 rounded-full";
+      color = "border-red-300 dark:border-red-700 bg-gradient-to-br from-white to-red-50 dark:from-slate-800 dark:to-red-900/30";
+      size = "w-32 h-14";
+      padding = "p-3 items-center justify-center rounded-full";
       break;
     case 'Decision': 
-      color = "border-purple-200 dark:border-purple-800 bg-purple-50/50 dark:bg-purple-900/10";
-      size = "w-28 h-28 rotate-45"; 
-      extra = "decision-node"; // CSS class hook for rotation correction on inner content
-      break;
-    case 'Task':
-      color = "border-blue-200 border-l-4 border-l-blue-500 dark:border-blue-800";
-      break;
-    case 'Delay':
-      color = "border-amber-200 dashed-border dark:border-amber-800 bg-amber-50/30";
+      color = "border-purple-300 dark:border-purple-700 bg-gradient-to-br from-white to-purple-50 dark:from-slate-800 dark:to-purple-900/30";
+      size = "w-28 h-28 rotate-45 !rounded-2xl"; 
       break;
     case 'Milestone':
-        color = "border-teal-200 dark:border-teal-800 bg-teal-50/50 dark:bg-teal-900/10";
-        size = "w-32 h-32 rotate-45";
-        extra = "decision-node";
+        color = "border-teal-300 dark:border-teal-700 bg-gradient-to-br from-white to-teal-50 dark:from-slate-800 dark:to-teal-900/30";
+        size = "w-32 h-32 rotate-45 !rounded-3xl";
         break;
+    case 'Task':
+      color = cn("border-slate-200 dark:border-slate-700", "bg-white dark:bg-slate-800");
+      size = "w-48 !rounded-lg";
+      padding = "p-0"; // Internal padding
+      break;
+    case 'Delay':
+      color = "border-amber-300 dark:border-amber-700 border-dashed bg-amber-50/30";
+      size = "w-40 h-20";
+      padding = "p-3 items-center justify-center";
+      break;
     case 'Event':
-        color = "border-pink-200 dark:border-pink-800 bg-pink-50/50 dark:bg-pink-900/10";
-        size = "w-40 h-16 rounded-full";
+        color = "border-pink-300 dark:border-pink-700 bg-gradient-to-br from-white to-pink-50 dark:from-slate-800 dark:to-pink-900/30";
+        size = "w-40 h-16";
+        padding = "p-3 items-center justify-center rounded-full";
         break;
     case 'Phase':
-      color = "border-indigo-300 border-2 border-dashed bg-indigo-50/20 dark:bg-indigo-900/10 dark:border-indigo-700";
-      size = "w-[600px] h-[400px] justify-start items-start pt-4 px-4"; // Large box
-      return `absolute flex flex-col p-3 rounded-xl cursor-pointer transition-all select-none ${color} ${size} ${isSelected ? 'ring-2 ring-indigo-400 z-0' : 'z-0'}`;
+      color = "border-slate-300/80 dark:border-slate-700/80 bg-slate-100/20 dark:bg-slate-900/20 backdrop-blur-sm !rounded-2xl";
+      size = "w-[600px] h-[400px]"; // Large box
+      padding = "p-0 justify-start items-start";
+      return `absolute flex flex-col cursor-pointer transition-all select-none ${color} ${size} ${padding} ${isSelected ? 'ring-2 ring-indigo-400 z-0' : 'z-0'}`;
   }
 
-  return `${base} ${color} ${size} ${selected} ${hover} ${extra}`;
+  return `${base} ${color} ${size} ${padding} ${selected}`;
 };

@@ -34,6 +34,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
       else if (type === 'Decision') { w=112; h=112; }
       else if (type === 'Phase') { w=600; h=400; }
       else if (type === 'Event') { w=160; h=64; }
+      else if (type === 'Task') { w = 192; h = 88; } // Specific size for new task node
       return { w, h };
   };
 
@@ -187,6 +188,49 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
         {nodes.map(node => {
             const isSelected = selectedNodeId === node.id;
             const { h } = getNodeDimensions(node.type);
+
+            let nodeContent;
+            switch (node.type) {
+                case 'Task':
+                    nodeContent = (
+                        <>
+                            <div className={cn("flex items-center gap-2 px-3 py-1.5 border-b rounded-t-lg", theme.border.light)}>
+                                {getNodeIcon(node.type)}
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{node.type}</span>
+                            </div>
+                            <div className="p-3 text-center flex-1 flex items-center justify-center">
+                                <span className="text-sm font-medium text-slate-800 dark:text-slate-100 leading-tight">{node.label}</span>
+                            </div>
+                        </>
+                    );
+                    break;
+                case 'Decision':
+                case 'Milestone':
+                    nodeContent = (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center -rotate-45 pointer-events-none text-center">
+                            <div className={cn("p-2 mb-1 rounded-full bg-white/30 dark:bg-black/20 backdrop-blur-sm")}>
+                                {getNodeIcon(node.type)}
+                            </div>
+                            <span className={cn("text-xs font-bold leading-tight max-w-[80%] line-clamp-2", theme.text.primary)}>{node.label}</span>
+                        </div>
+                    );
+                    break;
+                case 'Phase':
+                    nodeContent = (
+                        <div className={cn("h-10 px-4 flex items-center border-b rounded-t-2xl backdrop-blur-sm", theme.surface, theme.border.default, "bg-opacity-80 dark:bg-opacity-60")}>
+                            <span className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>{node.label}</span>
+                        </div>
+                    );
+                    break;
+                default: // Start, End, Delay, Event
+                    nodeContent = (
+                        <>
+                            <div className="mb-1 pointer-events-none">{getNodeIcon(node.type)}</div>
+                            <span className={cn("text-sm font-bold text-center leading-tight line-clamp-2 w-full px-2 pointer-events-none", theme.text.primary)}>{node.label}</span>
+                        </>
+                    );
+            }
+            
             return (
               <div
                 key={node.id}
@@ -195,28 +239,28 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                 className={getNodeStyles(node.type, isSelected, theme)}
                 style={{ transform: `translate(${node.x}px, ${node.y}px)` }}
               >
-                {node.type !== 'Start' && node.type !== 'Phase' && (
-                    <div className="absolute -left-[7px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 border-2 rounded-full transition-colors hover:border-blue-500 bg-white" data-port-id="input" onMouseUp={(e) => handlePortMouseUp(e, node.id)} />
-                )}
+                {nodeContent}
                 
-                {node.type === 'Phase' ? (
-                    <div className={cn("text-sm font-bold uppercase tracking-wider pointer-events-none", theme.text.tertiary)}>
-                        {node.label}
-                    </div>
-                ) : (
-                    <div className={cn("flex flex-col items-center justify-center w-full h-full", node.type === 'Decision' && "-rotate-45")}>
-                        <div className="mb-2 pointer-events-none">{getNodeIcon(node.type)}</div>
-                        <span className={cn("text-xs font-bold text-center leading-tight line-clamp-2 w-full px-2 pointer-events-none", theme.text.primary)}>{node.label}</span>
+                {/* Ports */}
+                {node.type !== 'Start' && node.type !== 'Phase' && (
+                    <div className={cn("absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 border-2 rounded-full transition-all bg-white dark:bg-slate-800 shadow-sm group-hover:scale-110 hover:!border-blue-500 dark:border-slate-600 dark:hover:!border-blue-400 flex items-center justify-center z-10")} data-port-id="input" onMouseUp={(e) => handlePortMouseUp(e, node.id)}>
+                        <div className="w-2 h-2 rounded-full bg-transparent group-hover:bg-blue-500 transition-colors"/>
                     </div>
                 )}
                 
                 {node.ports && node.ports.map((port, portIndex, arr) => {
                     const yOffset = (h / (arr.length + 1)) * (portIndex + 1);
                     return (
-                        <div key={port.id} className="absolute right-[-7px] w-3.5 h-3.5 border-2 rounded-full transition-colors hover:border-blue-500 bg-white cursor-crosshair" style={{ top: yOffset - 7 }} onMouseDown={(e) => handlePortMouseDown(e, node.id, port.id)} />
+                        <div key={port.id} className={cn("absolute -right-3 w-6 h-6 border-2 rounded-full transition-all bg-white dark:bg-slate-800 shadow-sm hover:scale-110 hover:border-blue-500 dark:border-slate-600 dark:hover:border-blue-400 cursor-crosshair flex items-center justify-center z-10")} style={{ top: yOffset - 12 }} onMouseDown={(e) => handlePortMouseDown(e, node.id, port.id)}>
+                            <div className="w-2 h-2 rounded-full bg-slate-400 group-hover:bg-blue-500 transition-colors"/>
+                        </div>
                     );
                 })}
-                {node.type !== 'End' && !node.ports && node.type !== 'Phase' && <div className="absolute right-[-7px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 border-2 rounded-full transition-colors hover:border-blue-500 bg-white cursor-crosshair" onMouseDown={(e) => handlePortMouseDown(e, node.id, 'default')} />}
+                {node.type !== 'End' && !node.ports && node.type !== 'Phase' && (
+                    <div className={cn("absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 border-2 rounded-full transition-all bg-white dark:bg-slate-800 shadow-sm hover:scale-110 hover:border-blue-500 dark:border-slate-600 dark:hover:border-blue-400 cursor-crosshair flex items-center justify-center z-10")} onMouseDown={(e) => handlePortMouseDown(e, node.id, 'default')}>
+                       <div className="w-2 h-2 rounded-full bg-slate-400 group-hover:bg-blue-500 transition-colors"/>
+                    </div>
+                )}
               </div>
             );
         })}

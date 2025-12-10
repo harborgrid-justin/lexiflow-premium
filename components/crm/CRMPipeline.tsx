@@ -6,7 +6,6 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 
-// FIX: Add leads prop to make this a presentational component
 interface CRMPipelineProps {
   leads: any[];
 }

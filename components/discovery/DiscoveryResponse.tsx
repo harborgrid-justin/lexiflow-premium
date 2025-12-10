@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Wand2, Save, FileText } from 'lucide-react';
 import { Button } from '../common/Button';
@@ -108,3 +107,5 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
     </div>
   );
 };
+
+export default DiscoveryResponse;

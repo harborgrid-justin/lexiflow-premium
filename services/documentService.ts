@@ -9,13 +9,11 @@ export const DocumentService = {
   
   // Store a real file into IDB
   async uploadDocument(file: File, meta: Partial<LegalDocument>): Promise<LegalDocument> {
-      // FIX: Cast string to branded type DocumentId
       const id = `doc-${Date.now()}` as DocumentId;
       
       // 1. Save Metadata
       const newDoc: LegalDocument = {
           id,
-          // FIX: Cast string to branded type CaseId
           caseId: (meta.caseId || 'General') as CaseId,
           title: file.name,
           type: meta.type || file.type.split('/')[1].toUpperCase(),

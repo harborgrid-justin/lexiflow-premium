@@ -1,4 +1,3 @@
-
 import React, { lazy } from 'react';
 import { CRMView } from '../../config/crmConfig';
 import { Client } from '../../types';
@@ -8,7 +7,6 @@ import { Loader2 } from 'lucide-react';
 
 const CRMDashboard = lazy(() => import('./CRMDashboard').then(m => ({ default: m.CRMDashboard })));
 const ClientDirectory = lazy(() => import('./ClientDirectory').then(m => ({ default: m.ClientDirectory })));
-// FIX: Correct lazy import to use default export.
 const CRMPipeline = lazy(() => import('./CRMPipeline'));
 const ClientAnalytics = lazy(() => import('./ClientAnalytics').then(m => ({ default: m.ClientAnalytics })));
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, StopCircle, Clock } from 'lucide-react';
 import { Button } from '../common/Button';
@@ -43,11 +42,8 @@ export const TimeTrackingPanel: React.FC = () => {
       
       const durationMinutes = Math.ceil(seconds / 60);
       const entry: TimeEntry = {
-        // FIX: Cast string to branded type UUID
           id: `t-${Date.now()}` as UUID,
-        // FIX: Cast string to branded type CaseId
           caseId: 'General' as CaseId,
-        // FIX: Cast string to branded type UserId
           userId: 'current-user' as UserId,
           date: new Date().toISOString().split('T')[0],
           duration: durationMinutes,

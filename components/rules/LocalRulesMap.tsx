@@ -1,7 +1,6 @@
 import React from 'react';
 import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
 import { Card } from '../common/Card';
-// FIX: Update import path and add StateJurisdiction type
 import { STATE_JURISDICTIONS, StateJurisdiction } from '../../data/federalHierarchy';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -24,7 +23,6 @@ export const LocalRulesMap: React.FC = () => {
             <div className="flex flex-col gap-6 overflow-hidden">
                 <Card title="Active Jurisdictions" className="flex-1 overflow-y-auto">
                     <div className="space-y-4">
-                        {/* FIX: Cast Object.values to StateJurisdiction[] to resolve typing errors */}
                         {(Object.values(STATE_JURISDICTIONS) as StateJurisdiction[]).map(state => (
                             <div key={state.id} className="border rounded-lg p-3 hover:shadow-md transition-all cursor-pointer group">
                                 <div className="flex items-center gap-3 mb-2">

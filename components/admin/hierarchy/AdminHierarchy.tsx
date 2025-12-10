@@ -1,17 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
-import { Organization, Group, User as UserType } from '../../../types';
+import { Organization, Group, User as UserType, Case } from '../../../types';
 import { Button } from '../../common/Button';
-import { HierarchyColumn } from './HierarchyColumn';
-import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';
+import { HierarchyColumn } from './hierarchy/HierarchyColumn';
+import { OrgListItem, GroupListItem, UserListItem } from './hierarchy/HierarchyRows';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
-// FIX: Add missing import for Case
-import { Case } from '../../../types';
 
 // Directly import from models
 import { MOCK_ORGS } from '../../../data/models/organization'; // Updated import path

@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../types';
 import { CaseDetailHeader } from './CaseDetailHeader';

@@ -4,7 +4,6 @@ import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'luci
 import { Case } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-// FIX: Add missing import for useNotify
 import { useNotify } from '../../../hooks/useNotify';
 
 interface OverviewSidebarProps {

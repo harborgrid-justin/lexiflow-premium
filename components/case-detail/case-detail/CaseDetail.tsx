@@ -1,4 +1,3 @@
-
-// This file is obsolete. The logic has been migrated to the parent `CaseDetail.tsx`.
-// It can be safely deleted.
-// FIX: Add comment to obsolete file indicating it can be deleted.
+// This file is an obsolete duplicate. 
+// The correct component is located at `components/case-detail/CaseDetail.tsx`.
+// This file can be safely deleted.

@@ -1,8 +1,9 @@
+
 import React from 'react';
-import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Layers, Milestone } from 'lucide-react';
+import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Layers, Milestone, MessageSquare } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
-export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event' | 'Milestone';
+export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event' | 'Milestone' | 'Comment';
 
 export interface Port {
   id: string;
@@ -15,8 +16,13 @@ export interface WorkflowNode {
   label: string;
   x: number;
   y: number;
+  width?: number;
+  height?: number;
   config: Record<string, any>;
   ports?: Port[];
+  parentId?: string; // For grouping
+  linkedEntityId?: string;
+  status?: 'complete' | 'in_progress' | 'blocked';
 }
 
 export interface WorkflowConnection {
@@ -26,6 +32,7 @@ export interface WorkflowConnection {
   label?: string;
   fromPort?: string;
   toPort?: string;
+  style?: 'solid' | 'dashed';
 }
 
 export const getNodeIcon = (type: NodeType) => {
@@ -38,6 +45,7 @@ export const getNodeIcon = (type: NodeType) => {
     case 'Phase': return React.createElement(BoxSelect, { className: "h-4 w-4 text-indigo-600" });
     case 'Event': return React.createElement(Calendar, { className: "h-4 w-4 text-pink-600" });
     case 'Milestone': return React.createElement(Milestone, { className: "h-4 w-4 text-teal-600" });
+    case 'Comment': return React.createElement(MessageSquare, { className: "h-4 w-4 text-gray-500" });
     default: return React.createElement(CheckCircle, { className: "h-4 w-4 text-slate-600" });
   }
 };
@@ -86,9 +94,14 @@ export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) =
         break;
     case 'Phase':
       color = "border-slate-300/80 dark:border-slate-700/80 bg-slate-100/20 dark:bg-slate-900/20 backdrop-blur-sm !rounded-2xl";
-      size = "w-[600px] h-[400px]"; // Large box
+      // Size will be dynamic
       padding = "p-0 justify-start items-start";
-      return `absolute flex flex-col cursor-pointer transition-all select-none ${color} ${size} ${padding} ${isSelected ? 'ring-2 ring-indigo-400 z-0' : 'z-0'}`;
+      return `absolute flex flex-col cursor-pointer transition-all select-none ${color} ${padding} ${isSelected ? 'ring-2 ring-indigo-400 z-0' : 'z-0'}`;
+    case 'Comment':
+        color = "border-yellow-300 bg-yellow-100/80 dark:bg-yellow-900/30 shadow-none";
+        size = "w-48 h-auto";
+        padding = "p-3";
+        break;
   }
 
   return `${base} ${color} ${size} ${padding} ${selected}`;

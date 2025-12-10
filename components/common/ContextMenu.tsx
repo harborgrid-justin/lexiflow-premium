@@ -28,7 +28,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, items, onClose }
     <div
       ref={menuRef}
       className={cn(
-        "fixed z-50 w-52 rounded-xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-100 border backdrop-blur-sm bg-opacity-80",
+        "fixed z-[9999] w-52 rounded-xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-100 border backdrop-blur-sm bg-opacity-80",
         theme.surface.default,
         theme.border.default
       )}

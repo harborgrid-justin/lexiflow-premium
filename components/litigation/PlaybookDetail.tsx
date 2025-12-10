@@ -9,18 +9,17 @@ import { CheckCircle, Clock, BookOpen, Target, ArrowRight, Shield, Layers, Scale
 import { useWindow } from '../../context/WindowContext';
 import { ResearchTool } from '../ResearchTool';
 import { WarRoom } from '../WarRoom';
-import { CreateCaseModal } from '../case-list/CreateCaseModal';
 
 interface PlaybookDetailProps {
   playbook: Playbook;
   onClose: () => void;
+  onApply: (playbook: Playbook) => void;
 }
 
-export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClose }) => {
+export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClose, onApply }) => {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
   const [activeTab, setActiveTab] = useState('workflow');
-  const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
 
   const handleLaunchResearch = (query: string) => {
     const winId = `research-${Date.now()}`;
@@ -28,7 +27,6 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClos
         winId,
         `Research: ${query}`,
         <div className="h-full bg-white dark:bg-slate-900">
-             {/* Note: In a real implementation we would pass the query to pre-fill the search */}
             <ResearchTool initialTab="active" />
         </div>
     );
@@ -63,7 +61,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClos
         </div>
         <div className="flex gap-2">
             <Button variant="secondary" onClick={handlePreviewWarRoom} icon={Target}>Preview War Room</Button>
-            <Button variant="primary" onClick={() => setIsCaseModalOpen(true)}>Initialize Matter</Button>
+            <Button variant="primary" onClick={() => onApply(playbook)}>Apply to Canvas</Button>
         </div>
       </div>
 
@@ -140,57 +138,10 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClos
                       <div className={cn("p-6 rounded-lg border bg-amber-50 dark:bg-amber-900/10 border-amber-100 dark:border-amber-800 text-sm leading-relaxed", theme.text.primary)}>
                           {playbook.strategyNotes}
                       </div>
-                      
-                      <div className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
-                           <h4 className="font-bold text-sm mb-2">Common Pitfalls</h4>
-                           <ul className="list-disc pl-5 text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                               <li>Missed deadlines for initial disclosures.</li>
-                               <li>Inadequate preservation of ESI leading to spoliation.</li>
-                               <li>Failure to plead fraud with particularity (Rule 9(b)).</li>
-                           </ul>
-                      </div>
-                  </div>
-              </div>
-          )}
-
-          {activeTab === 'assets' && (
-              <div className="space-y-6">
-                  <h3 className="font-bold text-lg">War Room Configuration</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
-                          <h4 className="text-sm font-bold mb-3 uppercase text-slate-500">Suggested Tabs</h4>
-                          <div className="flex flex-wrap gap-2">
-                              {playbook.warRoomConfig?.recommendedTabs.map(tab => (
-                                  <span key={tab} className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium capitalize border border-slate-200 dark:border-slate-700">
-                                      {tab}
-                                  </span>
-                              ))}
-                          </div>
-                      </div>
-                      <div className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
-                          <h4 className="text-sm font-bold mb-3 uppercase text-slate-500">Evidence Taxonomy</h4>
-                          <div className="flex flex-wrap gap-2">
-                              {playbook.warRoomConfig?.evidenceTags.map(tag => (
-                                  <span key={tag} className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium border border-blue-100 dark:border-blue-800">
-                                      #{tag}
-                                  </span>
-                              ))}
-                          </div>
-                      </div>
                   </div>
               </div>
           )}
       </div>
-
-      <CreateCaseModal 
-        isOpen={isCaseModalOpen}
-        onClose={() => setIsCaseModalOpen(false)}
-        onSave={(newCase) => {
-            alert(`Case ${newCase.title} created from playbook!`);
-            setIsCaseModalOpen(false);
-            onClose();
-        }}
-      />
     </div>
   );
 };

@@ -8,8 +8,13 @@ import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlayboo
 import { VirtualGrid } from '../common/VirtualGrid';
 import { useWindow } from '../../context/WindowContext';
 import { PlaybookDetail } from './PlaybookDetail';
+import { Layers } from 'lucide-react';
 
-export const PlaybookLibrary: React.FC = () => {
+interface PlaybookLibraryProps {
+    onApply: (playbook: Playbook) => void;
+}
+
+export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,7 +38,7 @@ export const PlaybookLibrary: React.FC = () => {
       openWindow(
           winId,
           `Strategy: ${pb.title}`,
-          <PlaybookDetail playbook={pb} onClose={() => closeWindow(winId)} />
+          <PlaybookDetail playbook={pb} onClose={() => closeWindow(winId)} onApply={(p) => { onApply(p); closeWindow(winId); }} />
       );
   };
 
@@ -78,7 +83,6 @@ export const PlaybookLibrary: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Readiness Indicator */}
                 {pb.readiness && (
                     <div className="mb-4">
                         <div className="flex justify-between items-center text-[10px] font-bold mb-1">
@@ -94,14 +98,9 @@ export const PlaybookLibrary: React.FC = () => {
                 <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.light)}>
                     <div className={cn("flex items-center gap-3 text-xs", theme.text.tertiary)}>
                         <span className="flex items-center"><Globe className="h-3 w-3 mr-1"/> {pb.jurisdiction}</span>
-                        <span className="flex items-center"><LayersIcon className="h-3 w-3 mr-1"/> {pb.phases} Phs</span>
+                        <span className="flex items-center"><Layers className="h-3 w-3 mr-1"/> {pb.phases} Phs</span>
                     </div>
                 </div>
-            </div>
-
-            <div className={cn("p-3 bg-slate-50 dark:bg-slate-800/50 border-t flex justify-between items-center group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors", theme.border.default)}>
-                <span className={cn("text-xs font-medium", theme.text.secondary)}>View Strategy</span>
-                <ArrowRight className={cn("h-4 w-4 text-slate-400 group-hover:text-blue-600 transition-colors transform group-hover:translate-x-1")}/>
             </div>
         </div>
       </div>
@@ -141,17 +140,13 @@ export const PlaybookLibrary: React.FC = () => {
                     </select>
                 </div>
             </div>
-            
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-                <span className="font-bold">{filteredPlaybooks.length}</span> templates found
-            </div>
         </div>
 
         {/* Content Grid */}
         <div className="flex-1 overflow-hidden p-4 bg-slate-50 dark:bg-black/20">
             <VirtualGrid 
                 items={filteredPlaybooks}
-                itemHeight={340} // Increased height for readiness bar
+                itemHeight={340}
                 itemWidth={320}
                 height="100%"
                 gap={16}
@@ -162,7 +157,4 @@ export const PlaybookLibrary: React.FC = () => {
     </div>
   );
 };
-
-const LayersIcon = ({className}: {className?: string}) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
-);
+export default PlaybookLibrary;

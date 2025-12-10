@@ -105,3 +105,50 @@ export const ShepardizeSchema = {
     },
     required: ["caseName", "citation", "summary", "history", "treatment"]
 };
+
+// --- NEW SCHEMAS FOR LITIGATION BUILDER ---
+
+export const StrategyGraphSchema = {
+  type: Type.OBJECT,
+  properties: {
+    nodes: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          id: { type: Type.STRING },
+          label: { type: Type.STRING },
+          type: { type: Type.STRING, enum: ['Task', 'Decision', 'Milestone', 'Event', 'Phase', 'Start', 'End'] },
+        }
+      }
+    },
+    connections: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          from: { type: Type.STRING },
+          to: { type: Type.STRING },
+          label: { type: Type.STRING },
+        }
+      }
+    }
+  }
+};
+
+export const LinterResultSchema = {
+  type: Type.OBJECT,
+  properties: {
+    suggestions: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          severity: { type: Type.STRING, enum: ['Info', 'Warning', 'Error'] },
+          message: { type: Type.STRING },
+          nodeId: { type: Type.STRING },
+        }
+      }
+    }
+  }
+};

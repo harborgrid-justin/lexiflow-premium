@@ -1,5 +1,5 @@
 
-import React, { useState, Suspense, lazy, useTransition } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
@@ -15,13 +15,12 @@ import { Modal } from './common/Modal';
 import { Input } from './common/Inputs';
 import { LazyLoader } from './common/LazyLoader';
 
-// Lazy load components with correct default export syntax
 const PleadingDesigner = lazy(() => import('./pleading/PleadingDesigner'));
-const PleadingDrafts = lazy(() => import('./pleading/PleadingDrafts').then(m => ({ default: m.PleadingDrafts })));
-const PleadingTemplates = lazy(() => import('./pleading/PleadingTemplates').then(m => ({ default: m.PleadingTemplates })));
-const ClauseLibrary = lazy(() => import('./ClauseLibrary')); // Assuming ClauseLibrary is default export
-const PleadingFilingQueue = lazy(() => import('./pleading/PleadingFilingQueue').then(m => ({ default: m.PleadingFilingQueue })));
-const PleadingAnalytics = lazy(() => import('./pleading/PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
+const PleadingDrafts = lazy(() => import('./pleading/PleadingDrafts'));
+const PleadingTemplates = lazy(() => import('./pleading/PleadingTemplates'));
+const ClauseLibrary = lazy(() => import('./ClauseLibrary'));
+const PleadingFilingQueue = lazy(() => import('./pleading/PleadingFilingQueue'));
+const PleadingAnalytics = lazy(() => import('./pleading/PleadingAnalytics'));
 
 
 interface PleadingBuilderProps {
@@ -33,16 +32,9 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     const { theme } = useTheme();
     const [view, setView] = useState<'workspace' | 'designer'>('workspace');
     const [activePleading, setActivePleading] = useState<PleadingDocument | null>(null);
-    const [isPending, startTransition] = useTransition();
-    const [activeTab, _setActiveTab] = useSessionStorage<string>('pleading_builder_tab', 'drafts');
+    const [activeTab, setActiveTab] = useSessionStorage<string>('pleading_builder_tab', 'drafts');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
-
-    const setActiveTab = (tab: string) => {
-      startTransition(() => {
-        _setActiveTab(tab);
-      });
-    };
 
     // Data fetching
     const { data: pleadings = [], isLoading: pleadingsLoading } = useQuery<PleadingDocument[]>(
@@ -53,7 +45,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     const { data: templates = [] } = useQuery<PleadingTemplate[]>([STORES.PLEADING_TEMPLATES, 'all'], DataService.pleadings.getTemplates);
 
     const { mutate: createPleading } = useMutation(
-        DataService.pleadings.add,
+        (doc: PleadingDocument) => DataService.pleadings.add(doc),
         {
             onSuccess: (newDoc) => {
                 setIsCreateModalOpen(false);
@@ -140,7 +132,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
             onTabChange={setActiveTab}
         >
             <Suspense fallback={<LazyLoader message={`Loading ${activeTab}...`} />}>
-                <div className={cn("h-full", isPending && "opacity-60 transition-opacity")}>
+                <div className="h-full">
                   {renderContent()}
                 </div>
             </Suspense>

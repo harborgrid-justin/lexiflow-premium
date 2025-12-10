@@ -1,6 +1,7 @@
+
 import React from 'react';
-import { Card } from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
+import { Card } from '../../common/Card';
+import { Button } from '../../common/Button';
 import { MapPin } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';

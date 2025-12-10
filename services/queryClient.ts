@@ -112,11 +112,12 @@ class QueryClient {
       .then((data) => {
         const currentCache = this.cache.get(hashedKey);
         
+        // CRITICAL FIX: Return the EXISTING data reference if deep equal to prevent re-renders
         if (currentCache && fastDeepEqual(currentCache.data, data)) {
            currentCache.dataUpdatedAt = Date.now();
            this.cache.set(hashedKey, currentCache);
            this.inflight.delete(hashedKey);
-           return data;
+           return currentCache.data; // Return stable reference
         }
 
         const state: QueryState<T> = { data, status: 'success', error: null, dataUpdatedAt: Date.now() };
@@ -189,7 +190,7 @@ export const queryClient = new QueryClient();
 export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQueryOptions<T> = {}) {
   const { staleTime = 60000, enabled = true, onSuccess, refetchOnWindowFocus = true, initialData } = options;
   
-  // Use hashedKey for stable identity across renders when key is an array literal
+  // Use hashedKey for stable identity across renders
   const hashedKey = queryClient.hashKey(key);
 
   const [state, setState] = useState<QueryState<T>>(() => {
@@ -201,17 +202,19 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
 
   const hasFetched = useRef(false);
   const fnRef = useRef(fn);
+  const onSuccessRef = useRef(onSuccess);
 
+  // Keep refs up to date
   useEffect(() => {
     fnRef.current = fn;
-  }, [fn]);
+    onSuccessRef.current = onSuccess;
+  }, [fn, onSuccess]);
 
-  // Use hashedKey instead of key to prevent recreation of refetch if key object reference changes
+  // Stable refetch function relying only on string key
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
-     // Note: passing 'key' (the object) to fetch is fine, but we must depend on hashedKey for stability
      return queryClient.fetch(key, fnRef.current, staleTime, true);
-  }, [hashedKey, staleTime, enabled, key]); // removed 'key', added 'hashedKey'
+  }, [hashedKey, staleTime, enabled]); // Removed 'key', using 'hashedKey'
 
   useEffect(() => {
     if (!enabled) return;
@@ -224,8 +227,8 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
     });
     
     queryClient.fetch<T>(key, fnRef.current, staleTime).then((data) => {
-       if (onSuccess && !hasFetched.current) {
-         onSuccess(data);
+       if (onSuccessRef.current && !hasFetched.current) {
+         onSuccessRef.current(data);
          hasFetched.current = true;
        }
     }).catch(() => {});
@@ -248,8 +251,8 @@ export function useQuery<T>(key: QueryKey, fn: QueryFunction<T>, options: UseQue
             window.removeEventListener('visibilitychange', focusHandler);
         }
     };
-  // Explicitly rely on hashedKey for effect stability, NOT 'key' which might be a new array every render
-  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch, key, onSuccess]);
+  // CRITICAL: Only depend on hashedKey (string). Do NOT include 'key' or 'onSuccess' object/func references.
+  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch]);
 
   return { 
     ...state, 
@@ -290,7 +293,6 @@ export function useMutation<T, V>(
     }
 
     try {
-      // Use ref to ensure we call latest function without recreating 'mutate'
       const result = await fnRef.current(variables);
       setStatus('success');
       
@@ -308,7 +310,7 @@ export function useMutation<T, V>(
       }
       throw e;
     }
-  }, []); // Empty dependency array ensures stable identity
+  }, []);
 
   return { mutate, isLoading: status === 'pending', isSuccess: status === 'success', isError: status === 'error' };
 }

@@ -63,7 +63,7 @@ export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) =
       break;
     case 'Decision': 
       color = "border-purple-300 dark:border-purple-700 bg-gradient-to-br from-white to-purple-50 dark:from-slate-800 dark:to-purple-900/30";
-      size = "w-28 h-28 rotate-45 !rounded-2xl"; 
+      size = "w-32 h-32 rotate-45 !rounded-2xl"; 
       break;
     case 'Milestone':
         color = "border-teal-300 dark:border-teal-700 bg-gradient-to-br from-white to-teal-50 dark:from-slate-800 dark:to-teal-900/30";
@@ -71,7 +71,7 @@ export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) =
         break;
     case 'Task':
       color = cn("border-slate-200 dark:border-slate-700", "bg-white dark:bg-slate-800");
-      size = "w-48 !rounded-lg";
+      size = "w-48 h-22 !rounded-lg"; // Height changed to h-22
       padding = "p-0"; // Internal padding
       break;
     case 'Delay':

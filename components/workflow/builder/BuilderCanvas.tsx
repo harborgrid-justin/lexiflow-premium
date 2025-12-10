@@ -31,10 +31,10 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
   const getNodeDimensions = (type: NodeType) => {
       let w = 160, h = 80;
       if (type === 'Start' || type === 'End') { w=128; h=56; }
-      else if (type === 'Decision') { w=112; h=112; }
+      else if (type === 'Decision' || type === 'Milestone') { w=128; h=128; }
       else if (type === 'Phase') { w=600; h=400; }
       else if (type === 'Event') { w=160; h=64; }
-      else if (type === 'Task') { w = 192; h = 88; } // Specific size for new task node
+      else if (type === 'Task') { w = 192; h = 88; }
       return { w, h };
   };
 
@@ -61,14 +61,61 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
     const curvature = Math.max(dist * 0.5, 50);
     const path = `M ${startX} ${startY} C ${startX + curvature} ${startY}, ${endX - curvature} ${endY}, ${endX} ${endY}`;
     
-    // Calculate midpoint for label
     const midX = startX * 0.25 + (startX + curvature) * 0.25 + (endX - curvature) * 0.25 + endX * 0.25;
     const midY = startY * 0.25 + startY * 0.25 + endY * 0.25 + endY * 0.25;
 
     return { path, midX, midY };
   }, [nodes]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  // FIX: Robust drag handling with global window event listeners
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Panning logic
+      if (isPanning) {
+        setLastMousePos(prevPos => {
+          const dx = e.clientX - prevPos.x;
+          const dy = e.clientY - prevPos.y;
+          setPan(p => ({ x: p.x + dx, y: p.y + dy }));
+          return { x: e.clientX, y: e.clientY };
+        });
+      }
+      
+      // Connection drawing logic
+      if (drawingConnection && canvasRef.current) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        setDrawingConnection(prev => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            x2: (e.clientX - rect.left - pan.x) / scale,
+            y2: (e.clientY - rect.top - pan.y) / scale,
+          };
+        });
+      }
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      setIsPanning(false);
+      // If a connection is being drawn when mouse is released globally, it means
+      // it wasn't dropped on a valid port, so we cancel it.
+      if (drawingConnection) {
+        setDrawingConnection(null);
+      }
+    };
+    
+    // Attach listeners only when a drag operation (panning or connecting) is active
+    if (isPanning || drawingConnection) {
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isPanning, drawingConnection, pan, scale, lastMousePos, setPan]);
+
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
     if (e.button === 1 || e.shiftKey || e.metaKey) {
         setIsPanning(true);
         setLastMousePos({ x: e.clientX, y: e.clientY });
@@ -78,27 +125,10 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isPanning) {
-        const dx = e.clientX - lastMousePos.x;
-        const dy = e.clientY - lastMousePos.y;
-        setPan({ x: pan.x + dx, y: pan.y + dy });
-        setLastMousePos({ x: e.clientX, y: e.clientY });
-    }
-    if (drawingConnection) {
-        const rect = canvasRef.current!.getBoundingClientRect();
-        setDrawingConnection(prev => ({
-            ...prev!,
-            x2: (e.clientX - rect.left - pan.x) / scale,
-            y2: (e.clientY - rect.top - pan.y) / scale,
-        }));
-    }
-  };
-
   const handlePortMouseDown = (e: React.MouseEvent, nodeId: string, portId: string) => {
       e.stopPropagation();
       const fromNode = nodes.find(n => n.id === nodeId);
-      if (!fromNode) return;
+      if (!fromNode || !canvasRef.current) return;
       
       const { w, h } = getNodeDimensions(fromNode.type);
       let yOffset = h / 2;
@@ -107,7 +137,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
         if (portIndex !== -1) yOffset = (h / (fromNode.ports.length + 1)) * (portIndex + 1);
       }
       
-      const rect = canvasRef.current!.getBoundingClientRect();
+      const rect = canvasRef.current.getBoundingClientRect();
       const startX = fromNode.x + w;
       const startY = fromNode.y + yOffset;
       const mouseX = (e.clientX - rect.left - pan.x) / scale;
@@ -119,14 +149,11 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
   const handlePortMouseUp = (e: React.MouseEvent, toNodeId: string) => {
       if (drawingConnection) {
           e.stopPropagation();
-          onAddConnection(drawingConnection.from, toNodeId, drawingConnection.fromPort);
+          if (drawingConnection.from !== toNodeId) {
+            onAddConnection(drawingConnection.from, toNodeId, drawingConnection.fromPort);
+          }
           setDrawingConnection(null);
       }
-  };
-
-  const handleMouseUp = () => {
-    setIsPanning(false);
-    setDrawingConnection(null);
   };
 
   const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
@@ -136,11 +163,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
     <div 
       ref={canvasRef}
       className={cn("flex-1 relative overflow-hidden outline-none", isPanning ? "cursor-grabbing" : "cursor-default")}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      style={{ backgroundColor: bgColor }}
+      onMouseDown={handleCanvasMouseDown}
     >
       <div 
         className="absolute inset-0 pointer-events-none z-0"
@@ -166,6 +189,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
 
           {connections.map(conn => {
               const { path, midX, midY } = getConnectorPath(conn);
+              if (!path) return null;
               const isSelected = selectedConnectionId === conn.id;
               const isDenied = conn.label?.toLowerCase().includes('denied');
               const isGranted = conn.label?.toLowerCase().includes('granted');
@@ -182,7 +206,14 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                 </g>
               );
           })}
-          {drawingConnection && <path d={`M ${drawingConnection.x1} ${drawingConnection.y1} L ${drawingConnection.x2} ${drawingConnection.y2}`} stroke="#2563eb" strokeWidth="2" strokeDasharray="5,5" />}
+          {(() => {
+              if (!drawingConnection) return null;
+              const { x1, y1, x2, y2 } = drawingConnection;
+              const dist = Math.abs(x2 - x1);
+              const curvature = Math.max(dist * 0.5, 50);
+              const path = `M ${x1} ${y1} C ${x1 + curvature} ${y1}, ${x2 - curvature} ${y2}, ${x2} ${y2}`;
+              return <path d={path} stroke="#2563eb" strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd="url(#arrow-selected)" />;
+          })()}
         </svg>
 
         {nodes.map(node => {
@@ -199,7 +230,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{node.type}</span>
                             </div>
                             <div className="p-3 text-center flex-1 flex items-center justify-center">
-                                <span className="text-sm font-medium text-slate-800 dark:text-slate-100 leading-tight">{node.label}</span>
+                                <p className="text-sm font-medium text-slate-800 dark:text-slate-100 break-words">{node.label}</p>
                             </div>
                         </>
                     );
@@ -207,11 +238,11 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                 case 'Decision':
                 case 'Milestone':
                     nodeContent = (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center -rotate-45 pointer-events-none text-center">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center -rotate-45 pointer-events-none text-center p-2">
                             <div className={cn("p-2 mb-1 rounded-full bg-white/30 dark:bg-black/20 backdrop-blur-sm")}>
                                 {getNodeIcon(node.type)}
                             </div>
-                            <span className={cn("text-xs font-bold leading-tight max-w-[80%] line-clamp-2", theme.text.primary)}>{node.label}</span>
+                            <p className={cn("text-xs font-bold leading-tight", theme.text.primary)}>{node.label}</p>
                         </div>
                     );
                     break;
@@ -226,7 +257,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                     nodeContent = (
                         <>
                             <div className="mb-1 pointer-events-none">{getNodeIcon(node.type)}</div>
-                            <span className={cn("text-sm font-bold text-center leading-tight line-clamp-2 w-full px-2 pointer-events-none", theme.text.primary)}>{node.label}</span>
+                            <p className={cn("text-sm font-bold text-center leading-tight w-full px-2 pointer-events-none", theme.text.primary)}>{node.label}</p>
                         </>
                     );
             }

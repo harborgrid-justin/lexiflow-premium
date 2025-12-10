@@ -20,7 +20,8 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../components/Dashboard'));
-const CaseList = lazyWithPreload(() => import('../components/CaseList'));
+// FIX: Corrected import path for CaseList component.
+const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
 const DocketManager = lazyWithPreload(() => import('../components/DocketManager'));
 const CorrespondenceManager = lazyWithPreload(() => import('../components/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));
 const MasterWorkflow = lazyWithPreload(() => import('../components/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
@@ -34,7 +35,7 @@ const FirmOperations = lazyWithPreload(() => import('../components/FirmOperation
 const BillingDashboard = lazyWithPreload(() => import('../components/BillingDashboard'));
 const ClientCRM = lazyWithPreload(() => import('../components/ClientCRM'));
 const ComplianceDashboard = lazyWithPreload(() => import('../components/ComplianceDashboard'));
-const AdminPanel = lazyWithPreload(() => import('../components/AdminPanel').then(m => ({ default: m.AdminPanel })));
+const AdminPanel = lazyWithPreload(() => import('../components/admin/AdminPanel').then(m => ({ default: m.AdminPanel })));
 const SecureMessenger = lazyWithPreload(() => import('../components/SecureMessenger').then(m => ({ default: m.SecureMessenger })));
 const EntityDirector = lazyWithPreload(() => import('../components/EntityDirector').then(m => ({ default: m.EntityDirector })));
 const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));

@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
@@ -22,7 +23,7 @@ export const GeminiService = {
                     }
                 });
                 
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, { summary: "Analysis failed to parse", riskScore: 0 });
             } catch (e) {
@@ -45,7 +46,7 @@ export const GeminiService = {
                     }
                 });
 
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, {
                     score: 0,
@@ -69,7 +70,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Review(text)
                 });
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 return response.text || "Error reviewing contract.";
             } catch (e) {
                 return "Contract review service unavailable.";
@@ -86,7 +87,7 @@ export const GeminiService = {
             });
             for await (const chunk of responseStream) {
                 const c = chunk as GenerateContentResponse;
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 if (c.text) yield c.text;
             }
         } catch (e) {
@@ -102,7 +103,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Refine(desc)
                 });
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 return response.text || desc;
             } catch (e) {
                 return desc;
@@ -118,7 +119,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Draft(prompt, type)
                 });
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 return response.text || "Error generating content.";
             } catch(e) {
                 return "Generation failed.";
@@ -139,7 +140,7 @@ export const GeminiService = {
                     }
                 });
                 
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
             } catch (e) {
@@ -161,7 +162,7 @@ export const GeminiService = {
                     }
                 });
                 
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
             } catch(e) {
@@ -196,7 +197,7 @@ export const GeminiService = {
                         }
                     });
                 }
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 return { text: response.text || "No text response.", sources };
             } catch (e) {
                 return { text: "Research service unavailable.", sources: [] };
@@ -212,7 +213,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
                 });
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 return response.text || "";
             } catch (e) {
                 return "Unable to generate reply.";
@@ -233,7 +234,7 @@ export const GeminiService = {
                     }
                 });
         
-                // FIX: Access the 'text' property instead of calling it as a function.
+                // FIX: Use .text property, not method
                 if (!response.text) return null;
                 return safeParseJSON<ShepardizeResult>(response.text, null);
             } catch (e) {

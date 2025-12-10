@@ -1,19 +1,20 @@
+
 import React, { useMemo, useState, useCallback, useEffect, useTransition } from 'react';
 import { Case, TimelineEvent, EvidenceItem, NexusNodeData } from '../../../types';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { CaseDetailContent } from '../CaseDetailContent';
-import { CaseTimeline } from '../CaseTimeline';
 import { useCaseDetail } from '../../../hooks/useCaseDetail';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/dataService';
 import { CASE_DETAIL_TABS } from '../CaseDetailConfig';
-import { X, Plus, MoreVertical } from 'lucide-react';
+import { Plus, MoreVertical } from 'lucide-react';
 import { CaseDetailMobileMenu } from '../CaseDetailMobileMenu';
 import { HolographicRouting } from '../../../services/holographicRouting';
 import { NexusInspector } from '../../visual/NexusInspector';
 import { ErrorBoundary } from '../../common/ErrorBoundary';
 import { CaseDetailNavigation } from '../layout/CaseDetailNavigation';
+import { MobileTimelineOverlay } from '../MobileTimelineOverlay';
 
 interface CaseDetailProps {
   caseData: Case;
@@ -83,19 +84,12 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
 
   return (
     <div className={cn("h-full flex flex-col relative", theme.background)}>
-      {showMobileTimeline && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm lg:hidden" onClick={() => setShowMobileTimeline(false)}>
-            <div className={cn("absolute right-0 top-0 bottom-0 w-80 shadow-2xl p-4 animate-in slide-in-from-right h-full flex flex-col", theme.surface.default)} onClick={e => e.stopPropagation()}>
-                <div className="flex justify-between items-center mb-4 shrink-0">
-                    <h3 className={cn("font-bold", theme.text.primary)}>Case Timeline</h3>
-                    <button onClick={() => setShowMobileTimeline(false)} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}><X className="h-5 w-5"/></button>
-                </div>
-                <div className="flex-1 overflow-y-auto">
-                    <CaseTimeline events={hookData.timelineEvents} onEventClick={handleTimelineClick} />
-                </div>
-            </div>
-        </div>
-      )}
+      <MobileTimelineOverlay 
+          isOpen={showMobileTimeline} 
+          onClose={() => setShowMobileTimeline(false)} 
+          events={hookData.timelineEvents} 
+          onEventClick={handleTimelineClick} 
+      />
       
       <CaseDetailMobileMenu
         isOpen={showMobileMenu}
@@ -129,7 +123,6 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseData, onBack, onSele
                         onAddProject={hookData.addProject} onAddTask={hookData.addTaskToProject} onUpdateTask={hookData.updateProjectTaskStatus}
                         onGenerateWorkflow={hookData.handleGenerateWorkflow} onAnalyzeDoc={hookData.handleAnalyze}
                         onDocumentCreated={(d) => { hookData.setDocuments(prev => prev ? [...prev, d] : [d]); hookData.setActiveTab('Documents'); }}
-// Fix: Changed props.onDraft to hookData.handleDraft to correctly reference the draft handler from the useCaseDetail hook.
                         onDraft={hookData.handleDraft} onNodeClick={setNexusInspectorItem}
                     />
                   </ErrorBoundary>

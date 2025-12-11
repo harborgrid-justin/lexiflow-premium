@@ -1,13 +1,7 @@
-import { useState, useCallback } from 'react';
-import { WorkflowNode, WorkflowConnection, NodeType, Port } from '../components/workflow/builder/types';
-import { WorkflowTemplateData } from '../types';
 
-const LITIGATION_PORTS: Record<string, Port[]> = {
-    'Rule 12(b)(6)': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Rule 56': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Motion in Limine': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Default': [{ id: 'success', label: 'Success' }, { id: 'failure', label: 'Failure' }],
-};
+import { useState, useCallback } from 'react';
+import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '../components/workflow/builder/types';
+import { WorkflowTemplateData } from '../types';
 
 export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null) => {
   const [nodes, setNodes] = useState<WorkflowNode[]>(() => {

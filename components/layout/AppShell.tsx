@@ -4,6 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { PATHS } from '../../constants/paths';
 import { useAutoTimeCapture } from '../../hooks/useAutoTimeCapture';
+import { useGlobalQueryStatus } from '../../hooks/useGlobalQueryStatus';
 
 interface AppShellProps {
   sidebar: React.ReactNode;
@@ -14,7 +15,6 @@ interface AppShellProps {
   selectedCaseId?: string | null;
 }
 
-// Isolated component to contain the 1-second interval re-renders
 const PassiveTimeTracker = memo(({ activeView, selectedCaseId }: { activeView: string, selectedCaseId: string | null }) => {
     const { activeTime, isIdle } = useAutoTimeCapture(activeView, selectedCaseId);
     
@@ -32,8 +32,8 @@ PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isFetching } = useGlobalQueryStatus();
   
-  // Helper to inject toggle prop into Sidebar if it's a React Element
   const sidebarWithProps = React.isValidElement(sidebar) 
     ? React.cloneElement(sidebar as React.ReactElement<any>, { 
         isOpen: isSidebarOpen, 
@@ -41,7 +41,6 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
       }) 
     : sidebar;
 
-  // Helper to inject toggle handler into Header
   const headerWithProps = React.isValidElement(headerContent)
     ? React.cloneElement(headerContent as React.ReactElement<any>, {
         onToggleSidebar: () => setIsSidebarOpen(!isSidebarOpen)
@@ -50,10 +49,18 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
 
   return (
     <div className={cn(
-      "flex h-[100dvh] w-screen font-sans overflow-hidden transition-colors duration-200", 
+      "flex h-[100dvh] w-screen font-sans overflow-hidden transition-colors duration-200 relative", 
       theme.background, 
       theme.text.primary
     )}>
+      {/* Global Fetching Indicator */}
+      <div className={cn(
+        "absolute top-0 left-0 right-0 h-0.5 z-[9000] bg-blue-500 transition-opacity duration-300",
+        isFetching ? "opacity-100" : "opacity-0"
+      )}>
+          <div className="absolute inset-0 bg-inherit opacity-50 animate-pulse"></div>
+      </div>
+      
       {sidebarWithProps}
       
       <div className="flex-1 flex flex-col h-full w-full min-w-0 relative">
@@ -63,7 +70,6 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
           {headerWithProps}
         </header>
         
-        {/* Main Content - strict overflow handling & containment */}
         <main 
             className="flex-1 flex flex-col min-h-0 overflow-hidden relative isolate pb-0"
             style={{ contain: 'strict' }}

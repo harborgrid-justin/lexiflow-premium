@@ -10,6 +10,7 @@ interface QueryState<T> {
   status: 'idle' | 'loading' | 'success' | 'error';
   error: Error | null;
   dataUpdatedAt: number;
+  isFetching: boolean;
 }
 
 export interface UseQueryOptions<T> {
@@ -23,7 +24,6 @@ export interface UseQueryOptions<T> {
 
 const MAX_CACHE_SIZE = 100;
 
-// Optimized Deep Equal using native JSON serialization with cycle detection
 function fastDeepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
   if (!obj1 || !obj2 || typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
@@ -68,6 +68,18 @@ class QueryClient {
   private listeners: Map<string, Set<(state: QueryState<any>) => void>> = new Map();
   private inflight: Map<string, Promise<any>> = new Map();
   private abortControllers: Map<string, AbortController> = new Map();
+  private globalListeners: Set<(status: { isFetching: number }) => void> = new Set();
+
+  private notifyGlobal() {
+    const fetchingCount = Array.from(this.cache.values()).filter(s => s.isFetching).length;
+    this.globalListeners.forEach(listener => listener({ isFetching: fetchingCount }));
+  }
+
+  public subscribeToGlobalUpdates(listener: (status: { isFetching: number }) => void) {
+    this.globalListeners.add(listener);
+    this.notifyGlobal();
+    return () => this.globalListeners.delete(listener);
+  }
 
   public hashKey(key: QueryKey): string {
     try {
@@ -82,17 +94,15 @@ class QueryClient {
     const value = this.cache.get(key);
     if (value) {
       this.cache.delete(key);
-      this.cache.set(key, value); // Re-insert for LRU
+      this.cache.set(key, value);
     }
   }
 
   private enforceLimits() {
     if (this.cache.size > MAX_CACHE_SIZE) {
-      const iterator = this.cache.keys();
-      const oldestKey = iterator.next().value;
+      const oldestKey = this.cache.keys().next().value;
       if (oldestKey) {
         this.cache.delete(oldestKey);
-        // Also clean up listeners for evicted keys to prevent memory leaks
         this.listeners.delete(oldestKey);
       }
     }
@@ -123,9 +133,7 @@ class QueryClient {
       const listeners = this.listeners.get(hashedKey);
       if (listeners) {
         listeners.delete(listener);
-        if (listeners.size === 0) {
-          this.listeners.delete(hashedKey);
-        }
+        if (listeners.size === 0) this.listeners.delete(hashedKey);
       }
     };
   }
@@ -144,23 +152,18 @@ class QueryClient {
       return this.inflight.get(hashedKey);
     }
 
-    // Cancel previous request if exists and we are forcing
     if (force && this.abortControllers.has(hashedKey)) {
         this.abortControllers.get(hashedKey)?.abort();
-        this.abortControllers.delete(hashedKey);
     }
 
     const controller = new AbortController();
     this.abortControllers.set(hashedKey, controller);
 
-    if (!cached || force) {
-      this.notify(hashedKey, { 
-        data: cached?.data, 
-        status: 'loading', 
-        error: null, 
-        dataUpdatedAt: cached?.dataUpdatedAt || 0 
-      });
-    }
+    this.notify(hashedKey, { 
+      ...(this.cache.get(hashedKey) || { status: 'loading', data: undefined, error: null, dataUpdatedAt: 0 }),
+      isFetching: true 
+    });
+    this.notifyGlobal();
 
     const promise = fn(controller.signal)
       .then((data) => {
@@ -168,43 +171,40 @@ class QueryClient {
 
         const currentCache = this.cache.get(hashedKey);
         
-        if (currentCache && fastDeepEqual(currentCache.data, data)) {
-           currentCache.dataUpdatedAt = Date.now();
-           this.cache.set(hashedKey, currentCache);
+        if (currentCache && fastDeepEqual(currentCache.data, data) && currentCache.status === 'success') {
+           this.notify(hashedKey, { ...currentCache, dataUpdatedAt: Date.now(), isFetching: false });
+           this.notifyGlobal();
            this.inflight.delete(hashedKey);
            this.abortControllers.delete(hashedKey);
-           return currentCache.data; 
+           return currentCache.data;
         }
 
-        const state: QueryState<T> = { 
-          data, 
-          status: 'success', 
-          error: null, 
-          dataUpdatedAt: Date.now() 
-        };
-        
+        const state: QueryState<T> = { data, status: 'success', error: null, dataUpdatedAt: Date.now(), isFetching: false };
         this.cache.set(hashedKey, state);
         this.enforceLimits(); 
         this.notify(hashedKey, state);
+        this.notifyGlobal();
         this.inflight.delete(hashedKey);
         this.abortControllers.delete(hashedKey);
         return data;
       })
       .catch((rawError) => {
-        if (controller.signal.aborted) return; // Ignore aborts
+        if (controller.signal.aborted) return;
 
         const error = rawError instanceof Error ? rawError : new Error(String(rawError));
         errorHandler.logError(error, `QueryFetch:${String(key)}`);
-
+        
+        // FIX: Added dataUpdatedAt to the default object for when no cache entry exists, satisfying the QueryState<T> type.
         const state: QueryState<T> = { 
-          data: cached?.data, 
-          status: 'error', 
-          error, 
-          dataUpdatedAt: cached?.dataUpdatedAt || 0 
+            ...(this.cache.get(hashedKey) || { data: undefined, dataUpdatedAt: 0 }),
+            status: 'error', 
+            error,
+            isFetching: false
         };
         this.cache.set(hashedKey, state);
         this.enforceLimits(); 
         this.notify(hashedKey, state);
+        this.notifyGlobal();
         this.inflight.delete(hashedKey);
         this.abortControllers.delete(hashedKey);
         throw error;
@@ -238,11 +238,7 @@ class QueryClient {
       
       let data: T | undefined;
       try {
-          if (typeof updater === 'function') {
-              data = (updater as (oldData: T | undefined) => T | undefined)(oldData);
-          } else {
-              data = updater;
-          }
+          data = typeof updater === 'function' ? (updater as (oldData: T | undefined) => T | undefined)(oldData) : updater;
       } catch (e) {
           errorHandler.logError(e as Error, 'QueryClient:setQueryData');
           return;
@@ -250,13 +246,7 @@ class QueryClient {
       
       if (typeof data === 'undefined') return;
 
-      const state: QueryState<T> = { 
-        data, 
-        status: 'success', 
-        error: null, 
-        dataUpdatedAt: Date.now() 
-      };
-      
+      const state: QueryState<T> = { data, status: 'success', error: null, dataUpdatedAt: Date.now(), isFetching: false };
       this.cache.set(hashedKey, state);
       this.enforceLimits(); 
       this.notify(hashedKey, state);
@@ -276,11 +266,10 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
   const [state, setState] = useState<QueryState<T>>(() => {
     const cached = queryClient.getQueryState<T>(key);
     if (cached) return cached;
-    if (initialData !== undefined) return { data: initialData, status: 'success', error: null, dataUpdatedAt: Date.now() };
-    return { data: undefined, status: 'idle', error: null, dataUpdatedAt: 0 };
+    if (initialData !== undefined) return { data: initialData, status: 'success', error: null, dataUpdatedAt: Date.now(), isFetching: false };
+    return { data: undefined, status: 'idle', error: null, dataUpdatedAt: 0, isFetching: false };
   });
 
-  const hasFetched = useRef(false);
   const fnRef = useRef(fn);
   const onSuccessRef = useRef(onSuccess);
   const onErrorRef = useRef(onError);
@@ -293,74 +282,58 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
 
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
-     // Wrap fn to ignore AbortSignal if user-provided fn doesn't expect it
      const wrappedFn = () => fnRef.current(); 
      return queryClient.fetch(key, wrappedFn, staleTime, true);
-  }, [hashedKey, staleTime, enabled]); 
+  }, [hashedKey, staleTime, enabled, key]); 
 
   useEffect(() => {
     if (!enabled) return;
     
-    const unsubscribe = queryClient.subscribe(key, (newState) => {
-      setState(newState as QueryState<T>);
-      if (newState.status === 'success' && newState.dataUpdatedAt === 0) {
-          const wrappedFn = () => fnRef.current();
-          queryClient.fetch(key, wrappedFn, staleTime, true);
-      }
-    });
+    const unsubscribe = queryClient.subscribe(key, (newState) => setState(newState as QueryState<T>));
     
-    const wrappedFn = () => fnRef.current();
-    queryClient.fetch<T>(key, wrappedFn, staleTime)
-      .then((data) => {
-         if (onSuccessRef.current && !hasFetched.current) {
-           onSuccessRef.current(data);
-           hasFetched.current = true;
-         }
-      })
-      .catch((err) => {
-         if (onErrorRef.current) onErrorRef.current(err);
-      });
+    if (state.dataUpdatedAt === 0) { // Fetch on mount or if invalidated
+      const wrappedFn = () => fnRef.current();
+      queryClient.fetch<T>(key, wrappedFn, staleTime);
+    }
 
     let focusHandler: () => void;
     if (refetchOnWindowFocus && enabled) {
         focusHandler = () => {
             if (document.visibilityState === 'visible') {
-                const queryState = queryClient.getQueryState(key);
-                if (queryState && Date.now() - queryState.dataUpdatedAt > staleTime) {
-                    refetch();
-                }
+                refetch();
             }
         };
-        window.addEventListener('focus', focusHandler);
         window.addEventListener('visibilitychange', focusHandler);
     }
 
     return () => {
         unsubscribe();
-        if (focusHandler) {
-            window.removeEventListener('focus', focusHandler);
-            window.removeEventListener('visibilitychange', focusHandler);
-        }
+        if (focusHandler) window.removeEventListener('visibilitychange', focusHandler);
     };
-  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch]);
+  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch, key, state.dataUpdatedAt]);
 
   return { 
     ...state, 
-    isLoading: state.status === 'loading' || (enabled && state.status === 'idle'),
+    isFetching: state.isFetching,
+    isLoading: state.isFetching && state.status !== 'success',
     isError: state.status === 'error',
     isSuccess: state.status === 'success',
     refetch
   };
 }
 
-export function useMutation<T, V>(
-  mutationFn: (variables: V) => Promise<T>,
-  options?: { 
-    onSuccess?: (data: T, variables: V) => void;
-    onError?: (error: any) => void;
-    onMutate?: (variables: V) => void;
+interface MutationContext { [key: string]: any; }
+interface UseMutationOptions<T, V> {
+    onSuccess?: (data: T, variables: V, context?: MutationContext) => void;
+    onError?: (error: Error, variables: V, context?: MutationContext) => void;
+    onMutate?: (variables: V) => Promise<MutationContext | void> | MutationContext | void;
+    onSettled?: (data: T | undefined, error: Error | null, variables: V, context?: MutationContext) => void;
     invalidateKeys?: QueryKey[]; 
-  }
+}
+
+export function useMutation<T, V = void>(
+  mutationFn: (variables: V) => Promise<T>,
+  options?: UseMutationOptions<T, V>
 ) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
   const [error, setError] = useState<Error | null>(null);
@@ -379,40 +352,49 @@ export function useMutation<T, V>(
     setError(null);
     
     const opts = optionsRef.current;
+    let context: MutationContext | void;
     
     if (opts?.onMutate) {
         try {
-            opts.onMutate(variables);
+            context = await opts.onMutate(variables);
         } catch(e) {
-            console.error("Error in mutation onMutate callback", e);
+            const err = e instanceof Error ? e : new Error(String(e));
+            setError(err);
+            setStatus('error');
+            if(opts.onError) opts.onError(err, variables, context || {});
+            if(opts.onSettled) opts.onSettled(undefined, err, variables, context || {});
+            return;
         }
     }
 
+    let result: T | undefined;
+    let mutationError: Error | null = null;
     try {
-      const result = await fnRef.current(variables);
+      result = await fnRef.current(variables);
       setData(result);
       setStatus('success');
-      
-      if (opts?.invalidateKeys) {
-        opts.invalidateKeys.forEach(k => queryClient.invalidate(k));
-      }
-      
       if (opts?.onSuccess) {
-        opts.onSuccess(result, variables);
+        opts.onSuccess(result, variables, context || {});
       }
-      return result;
     } catch (e) {
-      const err = e instanceof Error ? e : new Error(String(e));
-      setError(err);
+      mutationError = e instanceof Error ? e : new Error(String(e));
+      setError(mutationError);
       setStatus('error');
-      
-      errorHandler.logError(err, 'useMutation');
-      
+      errorHandler.logError(mutationError, 'useMutation');
       if (opts?.onError) {
-        opts.onError(err);
+        opts.onError(mutationError, variables, context || {});
       }
-      throw err;
+    } finally {
+        if (opts?.onSettled) {
+            opts.onSettled(result, mutationError, variables, context || {});
+        }
+        if (opts?.invalidateKeys) {
+            opts.invalidateKeys.forEach(k => queryClient.invalidate(k));
+        }
     }
+    
+    if (mutationError) throw mutationError;
+    return result;
   }, []);
 
   return { mutate, isLoading: status === 'pending', isSuccess: status === 'success', isError: status === 'error', error, data };

@@ -16,7 +16,7 @@ import { FilterPanel } from '../common/FilterPanel';
 import { SearchInput, Input } from '../common/Inputs';
 import { useToggle } from '../../hooks/useToggle';
 import { Badge } from '../common/Badge';
-import { Currency } from '../../common/Primitives';
+import { Currency } from '../common/Primitives';
 import { ActiveCaseTable } from './ActiveCaseTable';
 import { UseCaseListReturn } from '../../hooks/useCaseList';
 

@@ -36,7 +36,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
       {/* Header */}
       <div className={cn("p-5 border-b", theme.border.light, theme.surfaceHighlight)}>
         <div className="flex justify-between items-start mb-2">
-          <Badge variant="neutral" className={theme.surface}>{data.category}</Badge>
+          <Badge variant="neutral" className={theme.surface.default}>{data.category}</Badge>
           {data.auditReady && (
             <div className={cn("flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full border", theme.status.success.text, theme.status.success.bg, theme.status.success.border)} title="Full Audit Trail Enabled">
               <ShieldCheck className="h-3 w-3 mr-1"/> Audited

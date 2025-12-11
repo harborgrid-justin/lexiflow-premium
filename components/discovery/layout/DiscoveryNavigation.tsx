@@ -1,10 +1,10 @@
-
 // components/discovery/layout/DiscoveryNavigation.tsx
 import React from 'react';
 import { Scale, Database, ClipboardList, Lock, MessageCircle, Package, Shield, Mic2, Users, FileText } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { DiscoveryView } from '../../DiscoveryPlatform';
+// FIX: Corrected import path for DiscoveryView type.
+import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
 
 interface DiscoveryNavigationProps {
   activeTab: DiscoveryView;

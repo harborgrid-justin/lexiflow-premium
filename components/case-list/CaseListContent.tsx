@@ -1,8 +1,10 @@
+
 // components/case-list/CaseListContent.tsx
 import React, { Suspense, lazy } from 'react';
 import { Case } from '../../types';
 import { LazyLoader } from '../common/LazyLoader';
 import { CaseListToolbar } from './CaseListToolbar';
+import { UseCaseListReturn } from '../../hooks/useCaseList';
 
 const CaseListActive = lazy(() => import('./CaseListActive'));
 const CaseListIntake = lazy(() => import('./CaseListIntake'));
@@ -19,7 +21,7 @@ const CaseListArchived = lazy(() => import('./CaseListArchived'));
 interface CaseListContentProps {
   activeTab: string;
   onSelectCase: (c: Case) => void;
-  caseListProps: any; // Props from useCaseList hook
+  caseListProps: UseCaseListReturn;
 }
 
 export const CaseListContent: React.FC<CaseListContentProps> = ({ activeTab, onSelectCase, caseListProps }) => {

@@ -1,9 +1,12 @@
+
 import { useState, useMemo } from 'react';
 import { DataService } from '../services/dataService';
 import { Case } from '../types';
 import { useQuery } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useDebounce } from './useDebounce';
+
+export type UseCaseListReturn = ReturnType<typeof useCaseList>;
 
 export const useCaseList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -9,7 +9,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
-import { DiscoveryView } from '../DiscoveryPlatform';
+// FIX: Corrected import path for DiscoveryView type.
+import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
 
 interface DiscoveryRequestsProps {
   onNavigate: (view: DiscoveryView, id?: string) => void;

@@ -10,7 +10,8 @@ import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { DiscoveryMetrics } from './dashboard/DiscoveryMetrics';
 import { DiscoveryCharts } from './dashboard/DiscoveryCharts';
-import { DiscoveryView } from '../DiscoveryPlatform';
+// FIX: Corrected import path for DiscoveryView type.
+import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
 import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../types';
 
 interface DiscoveryDashboardProps {

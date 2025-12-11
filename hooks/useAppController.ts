@@ -12,6 +12,7 @@ import { db, STORES } from '../services/db';
 import { Seeder } from '../services/dbSeeder';
 import { Case, AppView } from '../types';
 import { PATHS } from '../constants/paths';
+import { queryClient } from '../services/queryClient';
 
 export const useAppController = () => {
   const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
@@ -37,20 +38,34 @@ export const useAppController = () => {
     const init = async () => {
         try {
             await db.init();
+            
+            // The app is interactive once the DB connection is established.
+            // Hide the main loading screen immediately.
+            setIsAppLoading(false);
+            
+            // Check if we need to seed data in the background.
             const count = await db.count(STORES.CASES);
             if (count === 0) {
-                setAppStatusMessage('Seeding enterprise data for first-time use...');
-                await Seeder.seed(db);
+                addToast('Setting up for first-time use. Data will appear shortly.', 'info');
+                // Run the seeder, but don't await it.
+                Seeder.seed(db).then(() => {
+                    addToast('Initial data loaded successfully!', 'success');
+                    // Invalidate all queries to trigger a UI refresh with the new data.
+                    queryClient.invalidate(''); 
+                }).catch((e) => {
+                    console.error("Background seeding failed", e);
+                    addToast('Failed to load initial data. Please refresh.', 'error');
+                });
             }
         } catch (e) {
             console.error("Failed to initialize database:", e);
             setAppStatusMessage('Error initializing database.');
-        } finally {
-            setAppStatusMessage('Ready.');
-            setTimeout(() => setIsAppLoading(false), 300);
+            // Ensure the loading screen is hidden even on error.
+            setIsAppLoading(false); 
         }
     };
     init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

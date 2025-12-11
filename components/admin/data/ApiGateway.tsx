@@ -42,7 +42,7 @@ const MethodCard: React.FC<{ method: ApiMethod }> = ({ method }) => {
                 <h4 className={cn("text-lg font-mono font-bold", theme.text.primary)}>{method.name}</h4>
                 <div className={cn("flex items-center gap-2", theme.text.secondary)}>
                     <span className={`text-xs font-bold px-2 py-1 rounded ${httpColors[method.http]}`}>{method.http}</span>
-                    <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded">{method.path}</span>
+                    <span className="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{method.path}</span>
                 </div>
             </div>
             <p className={cn("text-sm mb-6", theme.text.secondary)}>{method.description}</p>
@@ -54,7 +54,7 @@ const MethodCard: React.FC<{ method: ApiMethod }> = ({ method }) => {
                         {method.params.map((p, i) => (
                             <div key={i} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.light)}>
                                 <code className={cn("font-bold", theme.text.primary)}>{p.name}</code>
-                                <code className={cn("text-purple-600", theme.text.secondary)}>{p.type}</code>
+                                <code className={cn("text-purple-600 dark:text-purple-400", theme.text.secondary)}>{p.type}</code>
                                 <p className={cn("text-xs", theme.text.tertiary)}>{p.desc}</p>
                             </div>
                         ))}

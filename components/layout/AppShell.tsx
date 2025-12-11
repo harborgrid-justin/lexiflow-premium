@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { memo } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { PATHS } from '../../constants/paths';
 import { useAutoTimeCapture } from '../../hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '../../hooks/useGlobalQueryStatus';
 
@@ -31,21 +30,10 @@ PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 
 export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { isFetching } = useGlobalQueryStatus();
   
-  const sidebarWithProps = React.isValidElement(sidebar) 
-    ? React.cloneElement(sidebar as React.ReactElement<any>, { 
-        isOpen: isSidebarOpen, 
-        onClose: () => setIsSidebarOpen(false) 
-      }) 
-    : sidebar;
-
-  const headerWithProps = React.isValidElement(headerContent)
-    ? React.cloneElement(headerContent as React.ReactElement<any>, {
-        onToggleSidebar: () => setIsSidebarOpen(!isSidebarOpen)
-      })
-    : headerContent;
+  // Sidebar logic is now fully controlled by the parent (App.tsx / AppController)
+  // We do not clone/inject props here to avoid ref issues with ErrorBoundaries.
 
   return (
     <div className={cn(
@@ -61,13 +49,13 @@ export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, chil
           <div className="absolute inset-0 bg-inherit opacity-50 animate-pulse"></div>
       </div>
       
-      {sidebarWithProps}
+      {sidebar}
       
       <div className="flex-1 flex flex-col h-full w-full min-w-0 relative">
         <PassiveTimeTracker activeView={activeView || 'unknown'} selectedCaseId={selectedCaseId || null} />
 
         <header className={cn("h-16 flex items-center justify-between px-4 md:px-6 shadow-sm z-40 shrink-0 border-b", theme.surface.default, theme.border.default)}>
-          {headerWithProps}
+          {headerContent}
         </header>
         
         <main 

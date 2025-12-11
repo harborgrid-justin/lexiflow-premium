@@ -14,7 +14,7 @@ import { useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
-import { Input, TextArea } from '../../../common/Inputs';
+import { Input, TextArea } from '../../../../components/common/Inputs';
 
 interface SchemaArchitectProps {
   initialTab?: string;

@@ -22,7 +22,6 @@ export const GeminiService = {
                     }
                 });
                 
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, { summary: "Analysis failed to parse", riskScore: 0 });
             } catch (e) {
@@ -45,7 +44,6 @@ export const GeminiService = {
                     }
                 });
 
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, {
                     score: 0,
@@ -69,7 +67,6 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Review(text)
                 });
-                // FIX: Access response.text as a property, not a method.
                 return response.text || "Error reviewing contract.";
             } catch (e) {
                 return "Contract review service unavailable.";
@@ -85,7 +82,6 @@ export const GeminiService = {
                 contents: Prompts.Draft(context, type)
             });
             for await (const chunk of responseStream) {
-                // FIX: Access chunk.text as a property, not a method.
                 if (chunk.text) yield chunk.text;
             }
         } catch (e) {
@@ -101,7 +97,6 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Refine(desc)
                 });
-                // FIX: Access response.text as a property, not a method.
                 return response.text || desc;
             } catch (e) {
                 return desc;
@@ -117,7 +112,6 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Draft(prompt, type)
                 });
-                // FIX: Access response.text as a property, not a method.
                 return response.text || "Error generating content.";
             } catch(e) {
                 return "Generation failed.";
@@ -138,7 +132,6 @@ export const GeminiService = {
                     }
                 });
                 
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
             } catch (e) {
@@ -160,7 +153,6 @@ export const GeminiService = {
                     }
                 });
                 
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) throw new Error("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
             } catch(e) {
@@ -195,7 +187,6 @@ export const GeminiService = {
                         }
                     });
                 }
-                // FIX: Access response.text as a property, not a method.
                 return { text: response.text || "No text response.", sources };
             } catch (e) {
                 return { text: "Research service unavailable.", sources: [] };
@@ -211,7 +202,6 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
                 });
-                // FIX: Access response.text as a property, not a method.
                 return response.text || "";
             } catch (e) {
                 return "Unable to generate reply.";
@@ -232,7 +222,6 @@ export const GeminiService = {
                     }
                 });
         
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) return null;
                 return safeParseJSON<ShepardizeResult>(response.text, null);
             } catch (e) {
@@ -254,7 +243,6 @@ export const GeminiService = {
                         responseSchema: StrategyGraphSchema
                     }
                 });
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) return null;
                 return safeParseJSON(response.text, { nodes: [], connections: [] });
             } catch(e) {
@@ -276,7 +264,6 @@ export const GeminiService = {
                         responseSchema: LinterResultSchema
                     }
                 });
-                // FIX: Access response.text as a property, not a method.
                 if (!response.text) return null;
                 return safeParseJSON(response.text, { suggestions: [] });
             } catch(e) {

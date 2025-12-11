@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { Card } from '../../common/Card';
 import { CheckCircle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { Case } from '../../../types';
 
 export const EvidenceFRCPStatus: React.FC = () => {
   const { theme } = useTheme();

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Clock, BarChart, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Badge } from '../common/Badge';

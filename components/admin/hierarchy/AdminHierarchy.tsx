@@ -27,6 +27,7 @@ export const AdminHierarchy: React.FC = () => {
       DataService.organization.getGroups
   );
   
+  // INTEGRATION POINT: Fetching from shared user service, not a local mock.
   const { data: users = [], isLoading: loadingUsers } = useQuery<UserType[]>(
       [STORES.USERS, 'all'],
       DataService.users.getAll

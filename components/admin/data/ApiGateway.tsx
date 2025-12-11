@@ -10,7 +10,7 @@ import { Badge } from '../../common/Badge';
 
 // Internal CodeBlock component for syntax highlighting
 const CodeBlock: React.FC<{ code: string }> = ({ code }) => {
-    // FIX: Destructure `theme` from useTheme() to make it available in the component scope.
+    // FIX: Destructure `theme` and `mode` from useTheme() to make it available in the component scope.
     const { theme, mode } = useTheme();
     
     // Simple regex highlighting for JSON

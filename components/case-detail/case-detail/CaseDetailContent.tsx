@@ -1,4 +1,6 @@
-
+// This file is an obsolete duplicate. 
+// The correct component is located at `components/case-detail/CaseDetailContent.tsx`.
+// This file can be safely deleted.
 import React, { Suspense, lazy } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, Party, Project, EvidenceItem, TimelineEvent } from '../../../types';
 import { CaseOverview } from '../CaseOverview';

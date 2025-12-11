@@ -10,15 +10,16 @@ export type PlatformView = string;
 
 // Lazy Load All Sub-Modules
 const PlatformOverview = lazy(() => import('./data/PlatformOverview').then(m => ({ default: m.PlatformOverview })));
-const SchemaArchitect = lazy(() => import('./data/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
+// FIX: Corrected import path for SchemaArchitect. It was pointing to a non-existent file in `components/admin/data/` instead of `admin/data/schema/`.
+const SchemaArchitect = lazy(() => import('../../admin/data/schema/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
 const GovernanceConsole = lazy(() => import('./data/GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
 const PipelineMonitor = lazy(() => import('./data/PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
 const BackupVault = lazy(() => import('./data/BackupVault').then(m => ({ default: m.BackupVault })));
 const QueryConsole = lazy(() => import('./data/QueryConsole').then(m => ({ default: m.QueryConsole })));
 const SecurityMatrix = lazy(() => import('./data/SecurityMatrix').then(m => ({ default: m.SecurityMatrix })));
 const DataCatalog = lazy(() => import('./data/DataCatalog').then(m => ({ default: m.DataCatalog })));
-// FIX: Correct lazy import for a default exported component.
-const ApiGateway = lazy(() => import('./data/ApiGateway'));
+// FIX: Corrected lazy import syntax for a named export. It was missing the `.then(m => ({ default: m.ApiGateway }))` block.
+const ApiGateway = lazy(() => import('./data/ApiGateway').then(m => ({ default: m.ApiGateway })));
 const DataQualityStudio = lazy(() => import('./data/DataQualityStudio').then(m => ({ default: m.DataQualityStudio })));
 const ReplicationManager = lazy(() => import('./data/ReplicationManager').then(m => ({ default: m.ReplicationManager })));
 const LineageGraph = lazy(() => import('./data/LineageGraph').then(m => ({ default: m.LineageGraph })));

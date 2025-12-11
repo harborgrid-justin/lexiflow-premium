@@ -1,3 +1,5 @@
+// This file is obsolete and can be safely deleted.
+// The main component is located at: ../../components/admin/data/AdminDataRegistry.tsx
 
 import React from 'react';
 import { Server, HardDrive, Loader2 } from 'lucide-react';

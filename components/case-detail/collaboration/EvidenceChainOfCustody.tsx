@@ -65,7 +65,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               if (onCustodyUpdate) {
                   // Merge the original event data with the hash from the audit log
                   const enrichedEvent = { ...variables.event, hash: data.chainedLog.hash };
-                  onCustodyUpdate(enrichedEvent as unknown as ChainOfCustodyEvent); 
+                  onCustodyUpdate(enrichedEvent); 
               }
               notify.success("Custody log updated and immutably recorded.");
               setIsModalOpen(false);
@@ -189,4 +189,3 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
       </Modal>
     </div>
   );
-};

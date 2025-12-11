@@ -408,6 +408,7 @@ export interface ChainOfCustodyEvent {
   action: string;
   actor: string;
   notes?: string;
+  hash?: string;
 }
 
 export interface EvidenceItem extends BaseEntity { id: EvidenceId; caseId: CaseId; title: string; type: EvidenceType; description: string; collectionDate: string; collectedBy: string; custodian: string; location: string; admissibility: AdmissibilityStatus; tags: string[]; blockchainHash?: string; trackingUuid: UUID; chainOfCustody: ChainOfCustodyEvent[]; chunks?: FileChunk[]; fileSize?: string; fileType?: string; linkedRules?: string[]; status?: string; authenticationMethod?: 'Self-Authenticated' | 'Stipulation' | 'Testimony' | 'Pending'; hearsayStatus?: 'Not Hearsay' | 'Exception Applies' | 'Objectionable' | 'Unanalyzed'; isOriginal?: boolean; relevanceScore?: number; expertId?: string; }

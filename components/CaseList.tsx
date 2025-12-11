@@ -1,2 +1,2 @@
-// This file is obsolete and can be safely deleted.
-// The main CaseList component is now located at: ./case-list/CaseList.tsx
+// This file is obsolete and its contents have been moved to `components/case-list/CaseList.tsx`.
+// It can be safely deleted from the project.

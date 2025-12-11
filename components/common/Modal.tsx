@@ -37,7 +37,7 @@ export const Modal: React.FC<ModalProps> = ({
       }
   };
 
-  if (!isOpen || !mounted) return null;
+  if (!isOpen || !mounted || typeof document === 'undefined' || !document.body) return null;
 
   const sizes = {
     sm: 'max-w-md',

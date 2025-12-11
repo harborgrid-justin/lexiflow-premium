@@ -1,4 +1,4 @@
-// components/case-list/ActiveCaseTable.tsx
+
 import React, { useCallback } from 'react';
 import { ArrowUp, ArrowDown, Briefcase } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -7,6 +7,7 @@ import { VirtualList } from '../common/VirtualList';
 import { EmptyListState } from '../common/RefactoredCommon';
 import { CaseRow } from './CaseRow';
 import { Case } from '../../types';
+import { Currency } from '../common/Primitives';
 
 interface ActiveCaseTableProps {
   filteredCases: Case[];

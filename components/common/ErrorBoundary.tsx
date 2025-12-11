@@ -15,12 +15,17 @@ interface State {
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
-  // FIX: Switched to class field syntax for state and arrow functions for methods.
-  // This modern approach is more concise and correctly binds `this`, resolving the compile-time errors.
-  state: State = {
-    hasError: false,
-    error: null,
-  };
+  // FIX: Reverted to constructor-based state and method binding.
+  // The class field and arrow function properties were causing type resolution issues
+  // with `this` context for inherited properties like `props` and `setState`.
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+    };
+    this.handleReset = this.handleReset.bind(this);
+  }
 
   public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
@@ -31,12 +36,12 @@ export class ErrorBoundary extends React.Component<Props, State> {
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
-  private handleReset = () => {
+  private handleReset() {
     this.setState({ hasError: false, error: null });
     if (this.props.onReset) {
       this.props.onReset();
     }
-  };
+  }
 
   public render() {
     if (this.state.hasError) {

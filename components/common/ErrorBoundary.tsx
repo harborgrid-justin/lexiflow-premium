@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import { RefreshCw, AlertTriangle } from 'lucide-react';
 import { errorHandler } from '../../utils/errorHandler';
 
@@ -14,9 +14,9 @@ interface State {
   error: Error | null;
 }
 
-// FIX: Changed `extends React.Component` to `extends Component` and imported `Component` from React
-// to resolve TypeScript errors where `this.props` and `this.state` were not being recognized.
-export class ErrorBoundary extends Component<Props, State> {
+// FIX: The ErrorBoundary class must extend React.Component to be a valid class component.
+// This provides access to `this.props`, `this.state`, and lifecycle methods like `componentDidCatch`.
+export class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

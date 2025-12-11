@@ -30,7 +30,7 @@ const WarRoom = lazyWithPreload(() => import('../components/WarRoom').then(m => 
 const ExhibitManager = lazyWithPreload(() => import('../components/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
 const DiscoveryPlatform = lazyWithPreload(() => import('../components/DiscoveryPlatform').then(m => ({ default: m.DiscoveryPlatform })));
 const EvidenceVault = lazyWithPreload(() => import('../components/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
-const ResearchTool = lazyWithPreload(() => import('../components/ResearchTool').then(m => ({ default: m.ResearchTool })));
+const ResearchTool = lazyWithPreload(() => import('../components/ResearchTool'));
 const FirmOperations = lazyWithPreload(() => import('../components/FirmOperations').then(m => ({ default: m.FirmOperations })));
 const BillingDashboard = lazyWithPreload(() => import('../components/BillingDashboard'));
 const ClientCRM = lazyWithPreload(() => import('../components/ClientCRM'));

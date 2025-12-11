@@ -11,7 +11,6 @@ import { useQuery } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
 import { DiscoveryMetrics } from './DiscoveryMetrics';
 import { DiscoveryCharts } from './DiscoveryCharts';
-// FIX: Corrected import path for DiscoveryView type.
 import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
 import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../../types';
 

@@ -1,8 +1,9 @@
-
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 import { ChainService } from '../chainService';
+import { IntegrationOrchestrator } from '../integrationOrchestrator';
+import { SystemEventType } from '../../types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -124,18 +125,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         const updated = { ...invoice, ...updates };
         await db.put(STORES.INVOICES, updated);
 
-        // DOMAIN LOGIC: If invoice is marked as paid, create an immutable audit record.
-        if (updates.status === 'Paid' && invoice.status !== 'Paid') {
-            const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // In real app, fetch last hash from DB
-            await ChainService.createEntry({
-                timestamp: new Date().toISOString(),
-                user: 'System', // Replace with actual user context
-                userId: 'system' as UserId,
-                action: 'INVOICE_PAID',
-                resource: `Invoice/${id}`,
-                ip: 'internal',
-                newValue: updated.amount
-            }, prevHash);
+        if (updates.status && updates.status !== invoice.status) {
+            IntegrationOrchestrator.publish(SystemEventType.INVOICE_STATUS_CHANGED, { invoice: updated });
         }
         
         return updated;

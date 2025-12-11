@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -8,10 +7,10 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { Invoice } from '../../types';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
-import { UserId, Invoice } from '../../types';
 
 export const BillingInvoices: React.FC = () => {
   const { theme } = useTheme();
@@ -136,4 +135,4 @@ export const BillingInvoices: React.FC = () => {
         </TableContainer>
     </div>
   );
-};
+}

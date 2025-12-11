@@ -1,6 +1,7 @@
-
 import { StaffMember, TimeEntry } from '../../types';
 import { db, STORES } from '../db';
+import { IntegrationOrchestrator } from '../integrationOrchestrator';
+import { SystemEventType } from '../../types/integrationTypes';
 
 export const HRRepository = {
     getStaff: async () => {
@@ -40,7 +41,13 @@ export const HRRepository = {
         }));
     },
 
-    addStaff: async (staff: StaffMember) => db.put(STORES.STAFF, { ...staff, id: staff.id || crypto.randomUUID() }),
+    addStaff: async (staff: StaffMember) => {
+        const newStaff = { ...staff, id: staff.id || crypto.randomUUID() };
+        await db.put(STORES.STAFF, newStaff);
+        // Opp #9 Integration Point
+        IntegrationOrchestrator.publish(SystemEventType.STAFF_HIRED, { staff: newStaff });
+        return newStaff;
+    },
     
     updateStaff: async (id: string, updates: Partial<StaffMember>) => {
         const current = await db.get<StaffMember>(STORES.STAFF, id);

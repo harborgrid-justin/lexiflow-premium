@@ -1,10 +1,12 @@
+// This file is obsolete and can be safely deleted.
+// The main AdminPanel component is located at: ../components/AdminPanel.tsx
 
 import React, { Suspense, useTransition } from 'react';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
-import { TabbedPageLayout } from '../layout/TabbedPageLayout';
-import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../../utils/cn';
-import { ADMIN_TAB_CONFIG } from '../../config/adminPanelConfig';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { TabbedPageLayout } from '../components/layout/TabbedPageLayout';
+import { LazyLoader } from '../components/common/LazyLoader';
+import { cn } from '../utils/cn';
+import { ADMIN_TAB_CONFIG } from '../config/adminPanelConfig';
 import { AdminPanelContent } from './AdminPanelContent';
 
 type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';

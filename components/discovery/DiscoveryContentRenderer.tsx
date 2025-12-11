@@ -1,7 +1,8 @@
 
 import React, { lazy, Suspense } from 'react';
 import { DiscoveryRequest } from '../../types';
-import { DiscoveryView } from '../DiscoveryPlatform';
+// FIX: Corrected import path for DiscoveryView type.
+import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
 import { LazyLoader } from '../common/LazyLoader';
 
 const DiscoveryDashboard = lazy(() => import('./DiscoveryDashboard'));

@@ -1,3 +1,4 @@
+
 import React, { useCallback } from 'react';
 import { Case, CaseStatus } from '../../types';
 import { Filter } from 'lucide-react';
@@ -17,22 +18,11 @@ import { useToggle } from '../../hooks/useToggle';
 import { StatusBadge } from '../common/RefactoredCommon';
 import { Currency } from '../common/Primitives';
 import { ActiveCaseTable } from './ActiveCaseTable';
+import { UseCaseListReturn } from '../../hooks/useCaseList';
 
-interface CaseListActiveProps {
-  filteredCases: Case[];
-  statusFilter: string;
-  setStatusFilter: (s: string) => void;
-  typeFilter: string;
-  setTypeFilter: (s: string) => void;
-  searchTerm: string;
-  setSearchTerm: (s: string) => void;
-  dateFrom: string;
-  setDateFrom: (d: string) => void;
-  dateTo: string;
-  setDateTo: (d: string) => void;
-  resetFilters: () => void;
+type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;
-}
+};
 
 export const CaseListActive: React.FC<CaseListActiveProps> = ({
   filteredCases,
@@ -174,4 +164,3 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
     </div>
   );
 };
-export default CaseListActive;

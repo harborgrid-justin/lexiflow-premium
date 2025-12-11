@@ -15,9 +15,9 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  // FIX: Reverted to a constructor-based approach for state initialization and method binding.
-  // This can improve compatibility with older build toolchains that may not fully support
-  // modern class field syntax, which could be the source of the 'this' context errors.
+  // FIX: Explicitly declare state property for TypeScript
+  public state: State;
+  
   constructor(props: Props) {
     super(props);
     this.state = {

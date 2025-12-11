@@ -1,85 +1,37 @@
 
 // components/DiscoveryPlatform.tsx
-import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { PageHeader } from './common/PageHeader';
 import { Button } from './common/Button';
-import { DiscoveryRequest } from '../types';
-import { 
-  MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
-  Mic2, Database, Package, ClipboardList, FileText
-} from 'lucide-react';
-import { DataService } from '../services/dataService';
+import { Plus, Clock } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { useNotify } from '../hooks/useNotify';
-import { useSessionStorage } from '../hooks/useSessionStorage';
 import { LazyLoader } from './common/LazyLoader';
-import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './discovery/layout/DiscoveryNavigation';
+import { DiscoveryNavigation } from './discovery/layout/DiscoveryNavigation';
 import { DiscoveryContentRenderer } from './discovery/DiscoveryContentRenderer';
-
-export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
+import { useDiscoveryPlatform, DiscoveryView } from '../hooks/useDiscoveryPlatform';
 
 interface DiscoveryPlatformProps {
     initialTab?: DiscoveryView;
-    caseId?: string; // Integration Point: Optional Scoping
+    caseId?: string;
 }
 
 export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
-  const notify = useNotify();
-  const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
-      caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab', 
-      'dashboard'
-  );
-  const [contextId, setContextId] = useState<string | null>(null);
-
-  const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, caseId || 'all'], 
-      () => DataService.discovery.getRequests(caseId) 
-  );
-
-  const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
-      DataService.discovery.syncDeadlines,
-      {
-          onSuccess: () => notify.success("Synced discovery deadlines with court calendar.")
-      }
-  );
-
-  useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
-  }, [initialTab, setActiveTab]);
-
-  const activeParentTab = useMemo(() => 
-    getParentTabForView(activeTab),
-  [activeTab]);
-
-  const handleParentTabChange = useCallback((parentId: string) => {
-    setActiveTab(getFirstTabOfParent(parentId));
-  }, [setActiveTab]);
   
-  const handleNavigate = (targetView: DiscoveryView, id?: string) => {
-    if (id) setContextId(id);
-    setActiveTab(targetView);
-  };
-  
-  const handleBack = () => {
-    if (['doc_viewer', 'response', 'production_wizard'].includes(activeTab)) {
-        const parent = getParentTabForView(activeTab);
-        setActiveTab(parent.subTabs[0].id as DiscoveryView);
-    } else {
-        setActiveTab('dashboard');
-    }
-    setContextId(null);
-  };
-
-  const handleSaveResponse = async (reqId: string, text: string) => {
-      await DataService.discovery.updateRequestStatus(reqId, 'Responded');
-      queryClient.invalidate([STORES.REQUESTS, caseId || 'all']);
-      notify.success(`Response saved for ${reqId}.`);
-      setActiveTab('requests');
-  };
+  const {
+    activeTab,
+    contextId,
+    requests,
+    isSyncing,
+    activeParentTab,
+    syncDeadlines,
+    handleParentTabChange,
+    handleNavigate,
+    handleBack,
+    handleSaveResponse,
+    setActiveTab
+  } = useDiscoveryPlatform(initialTab, caseId);
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>

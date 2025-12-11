@@ -1,22 +1,28 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { UserAvatar } from '../common/UserAvatar';
 import { ProgressBar } from '../common/ProgressBar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { Loader2 } from 'lucide-react';
 
 export const CaseListResources: React.FC = () => {
   const { theme } = useTheme();
-  const [resources, setResources] = useState<any[]>([]);
+  
+  const { data: resources = [], isLoading } = useQuery<any[]>(
+      ['hr', 'utilization'],
+      DataService.hr.getUtilizationMetrics
+  );
 
-  useEffect(() => {
-      const loadData = async () => {
-          const data = await DataService.hr.getUtilizationMetrics();
-          setResources(data);
-      };
-      loadData();
-  }, []);
+  if (isLoading) {
+      return (
+          <div className="flex h-full items-center justify-center">
+              <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
+          </div>
+      );
+  }
 
   return (
     <div className="space-y-6">

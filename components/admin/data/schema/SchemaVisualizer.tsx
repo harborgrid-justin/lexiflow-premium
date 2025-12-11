@@ -4,7 +4,35 @@ import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-rea
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-import { TableColumn, TableData, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes'; // Import types
+
+// Inlined types from missing file
+export interface TableColumn {
+  name: string;
+  type: string;
+  pk?: boolean;
+  notNull?: boolean;
+  unique?: boolean;
+  fk?: string;
+  index?: boolean;
+}
+
+export interface TableData {
+  name: string;
+  x: number;
+  y: number;
+  columns: TableColumn[];
+}
+
+export interface ContextMenuItem {
+    label: string;
+    icon?: React.ElementType;
+    action: () => void;
+    danger?: boolean;
+}
+
+export type ContextMenuType = 'table' | 'column' | 'canvas';
+export type ContextData = { name: string } | { tableName: string, column: TableColumn } | null;
+
 
 interface SchemaVisualizerProps {
     tables: TableData[];

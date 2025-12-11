@@ -9,13 +9,11 @@ import { SchemaSnapshots } from './SchemaSnapshots';
 import { SchemaVisualizer } from './SchemaVisualizer';
 import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
-// FIX: Corrected invalid import path by removing the extra '/schema' directory level.
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
 import { DataService } from '../../../../services/dataService';
 import { SchemaTable } from '../../../../types';
 import { Loader2 } from 'lucide-react';
-// FIX: Imported Input and TextArea components
 import { Input, TextArea } from '../../../common/Inputs';
 
 interface SchemaArchitectProps {

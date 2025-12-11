@@ -1,13 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
-import { DataService } from '../../services/dataService';
-import { Organization, Group, User as UserType } from '../../types';
+import { Organization, Group, User as UserType, Case } from '../../types';
 import { Button } from '../common/Button';
 import { HierarchyColumn } from './hierarchy/HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './hierarchy/HierarchyRows';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 
 // Directly import from models
@@ -52,9 +53,13 @@ export const AdminHierarchy: React.FC = () => {
 
   // Derived State
   const orgGroups = groups.filter(g => g.orgId === selectedOrgId);
-  const displayedUsers = users.filter(u => 
-    u.orgId === selectedOrgId || (u.orgId === 'org-1' && selectedOrgId === 'org-1') // Filter by selected org, default to org-1
-  );
+  
+  const displayedUsers = users.filter(user => {
+    if (!selectedOrgId) return false;
+    if (user.orgId !== selectedOrgId) return false;
+    if (selectedGroupId) return user.groupIds?.includes(selectedGroupId);
+    return true; // Show all users in org if no group selected
+  });
 
   // Auto-select first org on load
   React.useEffect(() => {

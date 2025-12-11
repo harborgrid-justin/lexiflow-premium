@@ -15,13 +15,17 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  // FIX: Replaced the constructor with modern class property syntax for state
-  // and an arrow function for the `handleReset` method. This approach automatically
-  // binds `this` and resolves the reported context issues.
-  state: State = {
-    hasError: false,
-    error: null,
-  };
+  // FIX: Reverted to a constructor-based approach for state initialization and method binding.
+  // This can improve compatibility with older build toolchains that may not fully support
+  // modern class field syntax, which could be the source of the 'this' context errors.
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+    };
+    this.handleReset = this.handleReset.bind(this);
+  }
 
   public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
@@ -32,12 +36,12 @@ export class ErrorBoundary extends Component<Props, State> {
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
-  private handleReset = () => {
+  private handleReset() {
     this.setState({ hasError: false, error: null });
     if (this.props.onReset) {
       this.props.onReset();
     }
-  };
+  }
 
   public render() {
     if (this.state.hasError) {

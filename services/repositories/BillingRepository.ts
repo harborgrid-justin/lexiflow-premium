@@ -1,14 +1,27 @@
+
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 import { ChainService } from '../chainService';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types';
+import { SystemEventType } from '../../types/integrationTypes';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class BillingRepository extends Repository<TimeEntry> {
-    constructor() { super(STORES.BILLING); }
+    constructor() { 
+        super(STORES.BILLING);
+        // Bind methods to ensure 'this' context is preserved
+        this.getTimeEntries = this.getTimeEntries.bind(this);
+        this.getRates = this.getRates.bind(this);
+        this.addTimeEntry = this.addTimeEntry.bind(this);
+        this.getWIPStats = this.getWIPStats.bind(this);
+        this.getRealizationStats = this.getRealizationStats.bind(this);
+        this.getInvoices = this.getInvoices.bind(this);
+        this.createInvoice = this.createInvoice.bind(this);
+        this.updateInvoice = this.updateInvoice.bind(this);
+        this.sendInvoice = this.sendInvoice.bind(this);
+    }
 
     // --- Rate Management ---
     async getRates(timekeeperId: string) {

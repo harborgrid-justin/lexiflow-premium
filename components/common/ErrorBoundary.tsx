@@ -14,10 +14,11 @@ interface State {
   error: Error | null;
 }
 
+// FIX: Changed `extends React.Component` to `extends Component` and imported `Component` from React
+// to resolve TypeScript errors where `this.props` and `this.state` were not being recognized.
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    // FIX: Class properties `state` and `props` must be accessed with `this`.
     this.state = {
       hasError: false,
       error: null,
@@ -30,27 +31,20 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // FIX: Class property `props` must be accessed with `this`.
     errorHandler.logError(error, this.props.scope || 'ErrorBoundary');
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
   private handleReset() {
-    // FIX: Class methods like `setState` must be called on `this`.
     this.setState({ hasError: false, error: null });
-    // FIX: Class property `props` must be accessed with `this`.
     if (this.props.onReset) {
-      // FIX: Class property `props` must be accessed with `this`.
       this.props.onReset();
     }
   }
 
   public render() {
-    // FIX: Class property `state` must be accessed with `this`.
     if (this.state.hasError) {
-      // FIX: Class property `props` must be accessed with `this`.
       if (this.props.fallback) {
-        // FIX: Class property `props` must be accessed with `this`.
         return this.props.fallback;
       }
 
@@ -64,7 +58,6 @@ export class ErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-              {/* FIX: Class property `state` must be accessed with `this`. */}
               {this.state.error?.message || 'An unexpected error occurred in this module.'}
             </p>
             <button
@@ -79,7 +72,6 @@ export class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // FIX: Class property `props` must be accessed with `this`.
     return this.props.children;
   }
 }

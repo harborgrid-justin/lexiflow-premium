@@ -1,38 +1,10 @@
-
 import React, { useState } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { useCanvasDrag } from '../../../../hooks/useCanvasDrag';
-
-// Inlined types from missing file
-export interface TableColumn {
-  name: string;
-  type: string;
-  pk?: boolean;
-  notNull?: boolean;
-  unique?: boolean;
-  fk?: string;
-  index?: boolean;
-}
-
-export interface TableData {
-  name: string;
-  x: number;
-  y: number;
-  columns: TableColumn[];
-}
-
-export interface ContextMenuItem {
-    label: string;
-    icon?: React.ElementType;
-    action: () => void;
-    danger?: boolean;
-}
-
-export type ContextMenuType = 'table' | 'column' | 'canvas';
-export type ContextData = { name: string } | { tableName: string, column: TableColumn } | null;
-
+import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
+import { ContextMenu } from '../../../common/ContextMenu';
 
 interface SchemaVisualizerProps {
     tables: TableData[];
@@ -44,20 +16,6 @@ interface SchemaVisualizerProps {
     onDeleteTable: (tableName: string) => void;
     onUpdateTablePos: (tableName: string, pos: {x: number, y: number}) => void;
 }
-
-const ContextMenu: React.FC<{ x: number, y: number, items: ContextMenuItem[], onClose: () => void }> = ({ x, y, items, onClose }) => {
-    const { theme } = useTheme();
-    // Using fixed positioning to ensure menu appears at mouse coordinates regardless of scroll/transform
-    return (
-        <div className={cn("fixed z-50 p-1 border rounded-lg shadow-xl", theme.surface, theme.border.default)} style={{ top: y, left: x }}>
-            {items.map((item, i) => (
-                <button key={i} onClick={() => { item.action(); onClose(); }} className={cn("w-full text-left text-sm flex items-center px-3 py-1.5 rounded-md transition-colors", `hover:${theme.surfaceHighlight}`, item.danger ? 'text-red-600' : theme.text.primary)}>
-                    {item.icon && <item.icon className="h-3 w-3 mr-2"/>} {item.label}
-                </button>
-            ))}
-        </div>
-    );
-};
 
 export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAddColumn, onEditColumn, onRemoveColumn, onCreateTable, onRenameTable, onDeleteTable, onUpdateTablePos }) => {
   const { theme, mode } = useTheme();

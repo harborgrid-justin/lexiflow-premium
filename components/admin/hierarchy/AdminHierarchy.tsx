@@ -1,20 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
-import { Organization, Group, User as UserType, Case } from '../../../types';
-import { Button } from '../../common/Button';
+import { Organization, Group, User as UserType, Case } from '../../types';
+import { Button } from '../common/Button';
 import { HierarchyColumn } from './hierarchy/HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './hierarchy/HierarchyRows';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
-
-// Directly import from models
-import { MOCK_ORGS } from '../../../data/models/organization'; // Updated import path
-import { MOCK_GROUPS } from '../../../data/models/group'; // Updated import path
-import { MOCK_USERS } from '../../../data/models/user'; // Updated import path
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 
 export const AdminHierarchy: React.FC = () => {
   const { theme } = useTheme();
@@ -22,34 +16,23 @@ export const AdminHierarchy: React.FC = () => {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
-  // Enterprise Data Access - Using MOCK_ORGS, MOCK_GROUPS, MOCK_USERS directly for demo
-  const { data: orgs = MOCK_ORGS, isLoading: loadingOrgs } = useQuery<Organization[]>(
+  // Enterprise Data Access
+  const { data: orgs = [], isLoading: loadingOrgs } = useQuery<Organization[]>(
       [STORES.ORGS, 'all'],
-      DataService.organization.getOrgs // This service will likely use the same mock data or actual DB in prod
+      DataService.organization.getOrgs
   );
 
-  const { data: groups = MOCK_GROUPS, isLoading: loadingGroups } = useQuery<Group[]>(
+  const { data: groups = [], isLoading: loadingGroups } = useQuery<Group[]>(
       [STORES.GROUPS, 'all'],
-      DataService.organization.getGroups // Same here
+      DataService.organization.getGroups
+  );
+  
+  const { data: users = [], isLoading: loadingUsers } = useQuery<UserType[]>(
+      [STORES.USERS, 'all'],
+      DataService.users.getAll
   );
 
-  // The staff list is currently mocked via HR.getStaff, which itself uses MOCK_STAFF
-  // We explicitly use MOCK_USERS here to simplify the demo and directly link to hierarchical users
-  const staff = MOCK_USERS; 
-
-  // Transform Staff to User
-  const users: UserType[] = React.useMemo(() => staff.map(s => ({
-      id: s.id,
-      name: s.name,
-      email: s.email,
-      role: s.role,
-      office: 'Main',
-      orgId: 'org-1', // Assuming default org for internal users in mock
-      groupIds: ['g-1'],
-      userType: 'Internal'
-  })), [staff]);
-
-  const isLoading = loadingOrgs || loadingGroups; // Adjusted to not include staffLoading since it's direct mock_users
+  const isLoading = loadingOrgs || loadingGroups || loadingUsers;
 
   // Derived State
   const orgGroups = groups.filter(g => g.orgId === selectedOrgId);

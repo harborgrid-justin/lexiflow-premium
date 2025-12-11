@@ -1,8 +1,9 @@
-
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 import { ChainService } from '../chainService';
+import { IntegrationOrchestrator } from '../integrationOrchestrator';
+import { SystemEventType } from '../../types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -120,8 +121,14 @@ export class BillingRepository extends Repository<TimeEntry> {
     async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
         const invoice = await db.get<Invoice>(STORES.INVOICES, id);
         if (!invoice) throw new Error("Invoice not found");
+        
         const updated = { ...invoice, ...updates };
         await db.put(STORES.INVOICES, updated);
+
+        if (updates.status && updates.status !== invoice.status) {
+            IntegrationOrchestrator.publish(SystemEventType.INVOICE_STATUS_CHANGED, { invoice: updated });
+        }
+        
         return updated;
     }
     

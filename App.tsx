@@ -9,7 +9,7 @@ import { WindowProvider } from './context/WindowContext';
 import { SyncProvider } from './context/SyncContext';
 import { HolographicDock } from './components/layout/HolographicDock';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { Loader2 } from 'lucide-react';
+import { LazyLoader } from './components/common/LazyLoader';
 import { initializeModules } from './config/modules';
 import { AppContentRenderer } from './components/layout/AppContentRenderer';
 import { GlobalHotkeys } from './components/common/GlobalHotkeys';
@@ -42,11 +42,8 @@ const InnerApp: React.FC = () => {
 
   if (isAppLoading || !currentUser) {
     return (
-      <div className="flex items-center justify-center h-[100dvh]">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="animate-spin h-10 w-10 text-blue-600" />
-          <p className="text-sm font-medium text-slate-500 animate-pulse">{appStatusMessage}</p>
-        </div>
+      <div className="h-screen w-screen overflow-hidden">
+        <LazyLoader message={appStatusMessage} />
       </div>
     );
   }

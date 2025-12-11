@@ -8,15 +8,47 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { DataAnomaly, QualityMetricHistory } from '../../../../types';
 import { CheckCircle2, AlertOctagon, RefreshCw, Check } from 'lucide-react';
 import { Button } from '../../../common/Button';
+import { useMutation, queryClient } from '../../../../services/queryClient';
+import { DataService } from '../../../../services/dataService';
+import { useNotify } from '../../../../hooks/useNotify';
 
 interface QualityDashboardProps {
     anomalies: DataAnomaly[];
     history: QualityMetricHistory[];
-    onFix: (id: number) => void;
 }
 
-export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, history, onFix }) => {
+export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, history }) => {
     const { theme } = useTheme();
+    const notify = useNotify();
+
+    const { mutate: fixAnomaly } = useMutation(
+        DataService.quality.applyFix,
+        {
+            onMutate: async (id: number) => {
+                await queryClient.invalidate(['admin', 'anomalies']);
+                const previousAnomalies = queryClient.getQueryState<DataAnomaly[]>(['admin', 'anomalies'])?.data || [];
+                
+                queryClient.setQueryData<DataAnomaly[]>(['admin', 'anomalies'], old => 
+                    (old || []).map(a => a.id === id ? { ...a, status: 'Fixing' } : a)
+                );
+                
+                return { previousAnomalies };
+            },
+            onError: (err, id, context) => {
+                if (context?.previousAnomalies) {
+                    queryClient.setQueryData(['admin', 'anomalies'], context.previousAnomalies);
+                }
+                notify.error(`Failed to fix anomaly #${id}.`);
+            },
+            onSettled: () => {
+                queryClient.invalidate(['admin', 'anomalies']);
+            },
+        }
+    );
+
+    const handleFix = (id: number) => {
+        fixAnomaly(id);
+    };
 
     const renderAnomalyRow = (a: DataAnomaly) => (
       <div key={a.id} className={cn("flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b last:border-0 transition-colors gap-3", theme.border.light, `hover:${theme.surfaceHighlight}`)} style={{ height: 'auto', minHeight: '73px' }}>
@@ -35,7 +67,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
          <div className="flex items-center gap-4 self-end sm:self-auto">
              <span className={cn("text-xs font-mono px-2 py-1 rounded border hidden md:block truncate max-w-[150px]", theme.surfaceHighlight, theme.border.default, theme.text.tertiary)}>Sample: {a.sample}</span>
              {a.status === 'Detected' && (
-                 <Button size="sm" variant="outline" icon={Check} onClick={() => onFix(a.id)}>Fix</Button>
+                 <Button size="sm" variant="outline" icon={Check} onClick={() => handleFix(a.id)}>Fix</Button>
              )}
              {a.status === 'Fixed' && <span className={cn("text-xs font-bold uppercase", theme.status.success.text)}>Resolved</span>}
          </div>

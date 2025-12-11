@@ -3,18 +3,17 @@ import React from 'react';
 import { Case, TimeEntry, Party } from '../../../types';
 import { Users } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { MatterInfo } from './overview/MatterInfo';
-import { ActiveWorkstreams } from './overview/ActiveWorkstreams';
-import { OverviewSidebar } from './overview/OverviewSidebar';
-import { CaseOverviewStats } from './overview/CaseOverviewStats';
-import { CaseOverviewModals } from './overview/CaseOverviewModals';
+import { MatterInfo } from './MatterInfo';
+import { ActiveWorkstreams } from './ActiveWorkstreams';
+import { OverviewSidebar } from './OverviewSidebar';
+import { CaseOverviewStats } from './CaseOverviewStats';
+import { CaseOverviewModals } from './CaseOverviewModals';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
-// FIX: Corrected import path for useCaseOverview hook.
 import { useCaseOverview } from '../../../hooks/useCaseOverview';
 
 interface CaseOverviewProps {

@@ -15,13 +15,30 @@ import { Button } from '../common/Button';
 import { FilterPanel } from '../common/FilterPanel';
 import { SearchInput, Input } from '../common/Inputs';
 import { useToggle } from '../../hooks/useToggle';
-import { StatusBadge } from '../common/RefactoredCommon';
+import { Badge } from '../common/Badge';
 import { Currency } from '../common/Primitives';
 import { ActiveCaseTable } from './ActiveCaseTable';
 import { UseCaseListReturn } from '../../hooks/useCaseList';
 
 type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;
+};
+
+// Helper function to map case status to badge variant
+const getCaseStatusVariant = (status: CaseStatus): 'success' | 'warning' | 'error' | 'info' | 'neutral' => {
+  switch (status) {
+    case CaseStatus.Settled:
+    case CaseStatus.Closed:
+      return 'success';
+    case CaseStatus.Trial:
+      return 'warning';
+    case CaseStatus.Appeal:
+      return 'error';
+    case CaseStatus.Discovery:
+      return 'info';
+    default:
+      return 'neutral';
+  }
 };
 
 export const CaseListActive: React.FC<CaseListActiveProps> = ({
@@ -97,7 +114,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
                 <h4 className={cn("font-bold text-base leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
             </div>
             <div className={cn("flex items-center justify-between pl-2 pt-2 border-t", theme.border.light)}>
-                <StatusBadge status={c.status} className="text-[10px] px-2 py-0.5" />
+                <Badge variant={getCaseStatusVariant(c.status)} className="text-[10px] px-2 py-0.5">{c.status}</Badge>
                 <Currency value={c.value || 0} className="font-bold text-sm" />
             </div>
             </div>

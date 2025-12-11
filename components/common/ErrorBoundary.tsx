@@ -15,9 +15,6 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  // FIX: Explicitly declare state property for TypeScript
-  public state: State;
-  
   constructor(props: Props) {
     super(props);
     this.state = {

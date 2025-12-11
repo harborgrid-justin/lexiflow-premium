@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { Server, HardDrive, Loader2 } from 'lucide-react';
-// FIX: Added missing imports
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { VirtualGrid } from '../../common/VirtualGrid';
+import { VirtualList } from '../../common/VirtualList';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 
@@ -27,6 +26,7 @@ export const AdminDataRegistry: React.FC = () => {
       <div 
         key={file.name} 
         className="h-full w-full p-2"
+        style={{ height: 80 }}
       >
         <div className={cn("border rounded-lg p-4 transition-all group cursor-default h-full flex items-center justify-between", theme.border.default, `hover:${theme.primary.border}`)}>
             <div className="flex items-center space-x-3">
@@ -64,13 +64,11 @@ export const AdminDataRegistry: React.FC = () => {
         </div>
       </div>
       <div className="flex-1 overflow-auto p-4">
-        <VirtualGrid
+        <VirtualList
             items={dataFiles}
-            itemHeight={80} 
-            itemWidth={350}
+            itemHeight={96} // item height (80) + gap (16)
             renderItem={renderItem}
             height="100%"
-            gap={16}
             emptyMessage="No data registries found."
         />
         <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-md">

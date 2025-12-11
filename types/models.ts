@@ -64,6 +64,22 @@ export interface TenantConfig {
   region: string;
 }
 
+export interface ApiMethod {
+  name: string;
+  http: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  path: string;
+  description: string;
+  params: { name: string; type: string; desc: string }[];
+  response: string; // JSON string example
+}
+
+export interface ApiServiceSpec {
+  name: string;
+  description: string;
+  methods: ApiMethod[];
+}
+
+
 export interface OperatingSummary {
     id?: string;
     balance: number;

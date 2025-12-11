@@ -1,30 +1,29 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Maximize2, Menu, X } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataPlatformSidebar } from './data/DataPlatformSidebar';
-import { useWindow } from '../../context/WindowContext';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { DataPlatformSidebar } from './DataPlatformSidebar';
+import { useWindow } from '../../../context/WindowContext';
 import { Loader2 } from 'lucide-react';
 
 export type PlatformView = string;
 
 // Lazy Load All Sub-Modules
-const PlatformOverview = lazy(() => import('./data/PlatformOverview').then(m => ({ default: m.PlatformOverview })));
-const SchemaArchitect = lazy(() => import('./data/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
-const GovernanceConsole = lazy(() => import('./data/GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
-const PipelineMonitor = lazy(() => import('./data/PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
-const BackupVault = lazy(() => import('./data/BackupVault').then(m => ({ default: m.BackupVault })));
-const QueryConsole = lazy(() => import('./data/QueryConsole').then(m => ({ default: m.QueryConsole })));
-const SecurityMatrix = lazy(() => import('./data/SecurityMatrix').then(m => ({ default: m.SecurityMatrix })));
-const DataCatalog = lazy(() => import('./data/DataCatalog').then(m => ({ default: m.DataCatalog })));
-// FIX: Correct lazy import for a default exported component.
-const ApiGateway = lazy(() => import('./data/ApiGateway'));
-const DataQualityStudio = lazy(() => import('./data/DataQualityStudio').then(m => ({ default: m.DataQualityStudio })));
-const ReplicationManager = lazy(() => import('./data/ReplicationManager').then(m => ({ default: m.ReplicationManager })));
-const LineageGraph = lazy(() => import('./data/LineageGraph').then(m => ({ default: m.LineageGraph })));
-const CostFinOps = lazy(() => import('./data/CostFinOps').then(m => ({ default: m.CostFinOps })));
-const DataLakeExplorer = lazy(() => import('./data/DataLakeExplorer').then(m => ({ default: m.DataLakeExplorer })));
-const ShardingVisualizer = lazy(() => import('./data/ShardingVisualizer').then(m => ({ default: m.ShardingVisualizer })));
+const PlatformOverview = lazy(() => import('./PlatformOverview').then(m => ({ default: m.PlatformOverview })));
+const SchemaArchitect = lazy(() => import('./SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
+const GovernanceConsole = lazy(() => import('./GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
+const PipelineMonitor = lazy(() => import('./PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
+const BackupVault = lazy(() => import('./BackupVault').then(m => ({ default: m.BackupVault })));
+const QueryConsole = lazy(() => import('./QueryConsole').then(m => ({ default: m.QueryConsole })));
+const SecurityMatrix = lazy(() => import('./SecurityMatrix').then(m => ({ default: m.SecurityMatrix })));
+const DataCatalog = lazy(() => import('./DataCatalog').then(m => ({ default: m.DataCatalog })));
+const ApiGateway = lazy(() => import('./ApiGateway').then(m => ({ default: m.ApiGateway })));
+const DataQualityStudio = lazy(() => import('./DataQualityStudio').then(m => ({ default: m.DataQualityStudio })));
+const ReplicationManager = lazy(() => import('./ReplicationManager').then(m => ({ default: m.ReplicationManager })));
+const LineageGraph = lazy(() => import('./LineageGraph').then(m => ({ default: m.LineageGraph })));
+const CostFinOps = lazy(() => import('./CostFinOps').then(m => ({ default: m.CostFinOps })));
+const DataLakeExplorer = lazy(() => import('./DataLakeExplorer').then(m => ({ default: m.DataLakeExplorer })));
+const ShardingVisualizer = lazy(() => import('./ShardingVisualizer').then(m => ({ default: m.ShardingVisualizer })));
 
 interface AdminDatabaseControlProps {
   initialTab?: string;

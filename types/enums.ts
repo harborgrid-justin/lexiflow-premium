@@ -1,3 +1,4 @@
+
 // types/enums.ts
 
 export enum CaseStatus {

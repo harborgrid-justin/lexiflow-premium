@@ -1,3 +1,4 @@
+
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
@@ -95,12 +96,11 @@ export const STORES = {
   OPERATING_SUMMARY: 'operating_summary',
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
   DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
-  CALENDAR_EVENTS: 'calendar_events', // New store for integrations
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 26; // Incremented for new stores
+  private dbVersion = 25; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -223,7 +223,6 @@ export class DatabaseManager {
   async getAll<T>(storeName: string): Promise<T[]> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
-          await yieldToMain(); // Crucial: break sync loop
           return StorageUtils.get(storeName, []);
       }
       return new Promise((resolve, reject) => {
@@ -238,7 +237,6 @@ export class DatabaseManager {
   async get<T>(storeName: string, id: string): Promise<T | undefined> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
-          await yieldToMain();
           const items = StorageUtils.get<T[]>(storeName, []);
           return items.find((i: any) => i.id === id);
       }
@@ -345,7 +343,6 @@ export class DatabaseManager {
   async getByIndex<T>(storeName: string, indexName: string, value: string | any[]): Promise<T[]> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
-          await yieldToMain();
           const items = StorageUtils.get<T[]>(storeName, []);
           const key = Array.isArray(value) ? indexName.split('_')[0] : indexName;
           const val = Array.isArray(value) ? value[0] : value; 

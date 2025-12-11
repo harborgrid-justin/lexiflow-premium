@@ -17,31 +17,38 @@ export interface VirtualListRef {
     scrollToIndex: (index: number) => void;
 }
 
-export const VirtualList = forwardRef<VirtualListRef, VirtualListProps<any>>((
-    { items, height, itemHeight, renderItem, className, emptyMessage = "No items found", footer }, ref
+// We use a generic component definition here compatible with forwardRef
+const VirtualListComponent = <T extends any>(
+    { items, height, itemHeight, renderItem, className, emptyMessage = "No items found", footer }: VirtualListProps<T>, 
+    ref: React.Ref<VirtualListRef>
 ) => {
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
 
-  // Expose scroll method
+  // Expose scroll method via ref
   useImperativeHandle(ref, () => ({
       scrollToIndex: (index: number) => {
           if (containerRef.current) {
               containerRef.current.scrollTop = index * itemHeight;
           }
       }
-  }));
+  }), [itemHeight]);
 
   // Resize Observer to handle responsive container height dynamically
   useEffect(() => {
     if (!containerRef.current) return;
 
     const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerHeight(entry.contentRect.height);
-      }
+      // Use requestAnimationFrame to debounce and prevent ResizeObserver loop error
+      requestAnimationFrame(() => {
+          for (const entry of entries) {
+             if (entry.contentRect) {
+                setContainerHeight(entry.contentRect.height);
+             }
+          }
+      });
     });
 
     observer.observe(containerRef.current);
@@ -51,35 +58,35 @@ export const VirtualList = forwardRef<VirtualListRef, VirtualListProps<any>>((
     return () => observer.disconnect();
   }, []);
 
-  const totalItemsHeight = items.length * itemHeight;
+  const safeItems = items || [];
+  const totalItemsHeight = safeItems.length * itemHeight;
   
   const overscan = 5; 
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const safeHeight = containerHeight || 600; 
   const visibleNodeCount = Math.ceil(safeHeight / itemHeight) + 2 * overscan;
-  const endIndex = Math.min(items.length, startIndex + visibleNodeCount);
+  const endIndex = Math.min(safeItems.length, startIndex + visibleNodeCount);
 
   const visibleItems = useMemo(() => {
     const visible = [];
     for (let i = startIndex; i < endIndex; i++) {
       visible.push({
         index: i,
-        data: items[i],
+        data: safeItems[i],
         top: i * itemHeight
       });
     }
     return visible;
-  }, [items, startIndex, endIndex, itemHeight]);
+  }, [safeItems, startIndex, endIndex, itemHeight]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
-    // Using requestAnimationFrame for scroll update throttling
     requestAnimationFrame(() => {
         setScrollTop(currentScrollTop);
     });
   };
 
-  if (items.length === 0 && !footer) {
+  if (safeItems.length === 0 && !footer) {
     return (
       <div 
         className={cn("flex items-center justify-center text-sm h-full", className, theme.text.tertiary)} 
@@ -109,7 +116,7 @@ export const VirtualList = forwardRef<VirtualListRef, VirtualListProps<any>>((
               height: itemHeight, 
               transform: `translate3d(0, ${top}px, 0)`,
               willChange: 'transform',
-              contentVisibility: 'auto', // Browser Optimization: Skips layout work for off-screen content
+              contentVisibility: 'auto',
               containIntrinsicSize: `0px ${itemHeight}px`
             }}
           >
@@ -132,4 +139,8 @@ export const VirtualList = forwardRef<VirtualListRef, VirtualListProps<any>>((
       </div>
     </div>
   );
-});
+};
+
+export const VirtualList = forwardRef(VirtualListComponent) as <T>(
+  props: VirtualListProps<T> & { ref?: React.Ref<VirtualListRef> }
+) => React.ReactElement;

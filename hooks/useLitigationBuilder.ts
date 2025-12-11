@@ -1,15 +1,7 @@
-import { useState, useCallback } from 'react';
-import { WorkflowNode, WorkflowConnection, NodeType, Port } from '../components/workflow/builder/types';
-import { Playbook } from '../data/mockLitigationPlaybooks';
 
-// FIX: Define LITIGATION_PORTS locally to resolve the import error.
-// The constant was previously imported from a file that did not export it.
-const LITIGATION_PORTS: Record<string, Port[]> = {
-    'Rule 12(b)(6)': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Rule 56': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Motion in Limine': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Default': [{ id: 'success', label: 'Success' }, { id: 'failure', label: 'Failure' }],
-};
+import { useState, useCallback } from 'react';
+import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '../components/workflow/builder/types';
+import { Playbook } from '../data/mockLitigationPlaybooks';
 
 // This is a specialized version of useWorkflowBuilder for the Litigation module
 export const useLitigationBuilder = () => {

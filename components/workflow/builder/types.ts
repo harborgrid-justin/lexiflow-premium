@@ -35,6 +35,13 @@ export interface WorkflowConnection {
   style?: 'solid' | 'dashed';
 }
 
+export const LITIGATION_PORTS: Record<string, Port[]> = {
+    'Rule 12(b)(6)': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
+    'Rule 56': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
+    'Motion in Limine': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
+    'Default': [{ id: 'success', label: 'Success' }, { id: 'failure', label: 'Failure' }],
+};
+
 export const getNodeIcon = (type: NodeType) => {
   switch (type) {
     case 'Start': return React.createElement(Play, { className: "h-4 w-4 text-green-600" });

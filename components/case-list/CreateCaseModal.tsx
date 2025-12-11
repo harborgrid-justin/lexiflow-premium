@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
@@ -7,7 +6,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { CaseTypeToggle } from './case-form/CaseTypeToggle';
 import { CaseFormFields } from './case-form/CaseFormFields';
-// FIX: Ensured import path for JurisdictionSelector is relative to fix module resolution error.
 import { JurisdictionSelector } from './case-form/JurisdictionSelector';
 
 interface CreateCaseModalProps {

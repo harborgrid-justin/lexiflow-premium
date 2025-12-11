@@ -1,3 +1,4 @@
+
 // components/DiscoveryPlatform.tsx
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { PageHeader } from './common/PageHeader';
@@ -16,19 +17,7 @@ import { useNotify } from '../hooks/useNotify';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { LazyLoader } from './common/LazyLoader';
 import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './discovery/layout/DiscoveryNavigation';
-
-const DiscoveryDashboard = lazy(() => import('./discovery/DiscoveryDashboard'));
-const DiscoveryRequests = lazy(() => import('./discovery/DiscoveryRequests'));
-const PrivilegeLog = lazy(() => import('./discovery/PrivilegeLog'));
-const LegalHolds = lazy(() => import('./discovery/LegalHolds'));
-const DiscoveryDocumentViewer = lazy(() => import('./discovery/DiscoveryDocumentViewer'));
-const DiscoveryResponse = lazy(() => import('./discovery/DiscoveryResponse'));
-const DiscoveryProduction = lazy(() => import('./discovery/DiscoveryProduction'));
-const DiscoveryProductions = lazy(() => import('./discovery/DiscoveryProductions'));
-const DiscoveryDepositions = lazy(() => import('./discovery/DiscoveryDepositions'));
-const DiscoveryESI = lazy(() => import('./discovery/DiscoveryESI'));
-const DiscoveryInterviews = lazy(() => import('./discovery/DiscoveryInterviews'));
-
+import { DiscoveryContentRenderer } from './discovery/DiscoveryContentRenderer';
 
 export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
 
@@ -46,8 +35,6 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
   );
   const [contextId, setContextId] = useState<string | null>(null);
 
-  // Enterprise Query: Requests are central to many sub-views
-  // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
       [STORES.REQUESTS, caseId || 'all'], 
       () => DataService.discovery.getRequests(caseId) 
@@ -77,57 +64,22 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
     setActiveTab(targetView);
   };
   
-  const handleBackToDashboard = () => {
-    setActiveTab('dashboard');
+  const handleBack = () => {
+    if (['doc_viewer', 'response', 'production_wizard'].includes(activeTab)) {
+        const parent = getParentTabForView(activeTab);
+        setActiveTab(parent.subTabs[0].id as DiscoveryView);
+    } else {
+        setActiveTab('dashboard');
+    }
     setContextId(null);
   };
 
   const handleSaveResponse = async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
-      // Invalidate query to refresh lists
       queryClient.invalidate([STORES.REQUESTS, caseId || 'all']);
-      alert(`Response saved for ${reqId}. Status updated to Responded.`);
+      notify.success(`Response saved for ${reqId}.`);
       setActiveTab('requests');
   };
-
-  const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
-
-  const tabContentMap = useMemo(() => ({
-    'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} />,
-    'requests': <DiscoveryRequests items={requests} onNavigate={handleNavigate} />,
-    'depositions': <DiscoveryDepositions />,
-    'esi': <DiscoveryESI />,
-    'productions': <DiscoveryProductions onCreateClick={() => setActiveTab('production_wizard')} />,
-    'interviews': <DiscoveryInterviews />,
-    'privilege': <PrivilegeLog />,
-    'holds': <LegalHolds />,
-    'plan': (
-        <div className={cn("p-12 flex flex-col items-center justify-center h-full text-center rounded-lg border-2 border-dashed", theme.border.default)}>
-            <Users className={cn("h-16 w-16 mb-4 opacity-20", theme.text.primary)}/>
-            <p className={cn("font-medium text-lg", theme.text.primary)}>Rule 26(f) Discovery Plan Builder</p>
-            <p className={cn("text-sm mb-6", theme.text.secondary)}>Collaborative editor for joint discovery plans.</p>
-            <Button variant="outline" onClick={handleBackToDashboard}>Return to Dashboard</Button>
-        </div>
-    ),
-  }), [requests, theme, handleNavigate, handleBackToDashboard]);
-
-  if (isWizardView) {
-      return (
-          <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-            <Suspense fallback={<LazyLoader message="Loading Discovery Wizard..." />}>
-              {activeTab === 'doc_viewer' && (
-                  <DiscoveryDocumentViewer docId={contextId || ''} onBack={handleBackToDashboard} />
-              )}
-              {activeTab === 'response' && (
-                  <div className="p-6 h-full"><DiscoveryResponse request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('requests')} onSave={handleSaveResponse} /></div>
-              )}
-              {activeTab === 'production_wizard' && (
-                  <div className="p-6 h-full"><DiscoveryProduction request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('productions')} /></div>
-              )}
-            </Suspense>
-          </div>
-      );
-  }
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
@@ -156,7 +108,15 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
         <div className="h-full overflow-y-auto custom-scrollbar">
             <Suspense fallback={<LazyLoader message="Loading Discovery Module..." />}>
-                {tabContentMap[activeTab as keyof typeof tabContentMap]}
+                <DiscoveryContentRenderer
+                    activeTab={activeTab}
+                    requests={requests}
+                    contextId={contextId}
+                    onNavigate={handleNavigate}
+                    onBack={handleBack}
+                    onSaveResponse={handleSaveResponse}
+                    onCreateProduction={() => setActiveTab('production_wizard')}
+                />
             </Suspense>
         </div>
       </div>

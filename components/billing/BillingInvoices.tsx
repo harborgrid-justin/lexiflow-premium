@@ -8,7 +8,6 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { ChainService } from '../../services/chainService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
@@ -38,22 +37,7 @@ export const BillingInvoices: React.FC = () => {
 
   // Mark Paid Mutation
   const { mutate: markPaid } = useMutation(
-      async (id: string) => {
-          if (!DataService || !DataService.billing) return;
-          // 1. Update Invoice Status in DB
-          await DataService.billing.updateInvoice(id, { status: 'Paid' });
-          
-          // 2. Create Immutable Audit Record
-          const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // In real app, fetch last hash from DB
-          await ChainService.createEntry({
-              timestamp: new Date().toISOString(),
-              user: 'Current User', // Replace with actual user name
-              userId: 'current-user-id' as UserId, // Replace with actual user ID
-              action: 'INVOICE_PAID',
-              resource: `Invoice/${id}`,
-              ip: '127.0.0.1' // Replace with actual IP
-          }, prevHash);
-      },
+      (id: string) => DataService.billing.updateInvoice(id, { status: 'Paid' }),
       {
           onSuccess: () => {
               notify.success("Invoice marked as PAID. Transaction recorded in immutable ledger.");

@@ -2,6 +2,7 @@
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
+import { ChainService } from '../chainService';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -119,8 +120,24 @@ export class BillingRepository extends Repository<TimeEntry> {
     async updateInvoice(id: string, updates: Partial<Invoice>): Promise<Invoice> {
         const invoice = await db.get<Invoice>(STORES.INVOICES, id);
         if (!invoice) throw new Error("Invoice not found");
+        
         const updated = { ...invoice, ...updates };
         await db.put(STORES.INVOICES, updated);
+
+        // DOMAIN LOGIC: If invoice is marked as paid, create an immutable audit record.
+        if (updates.status === 'Paid' && invoice.status !== 'Paid') {
+            const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // In real app, fetch last hash from DB
+            await ChainService.createEntry({
+                timestamp: new Date().toISOString(),
+                user: 'System', // Replace with actual user context
+                userId: 'system' as UserId,
+                action: 'INVOICE_PAID',
+                resource: `Invoice/${id}`,
+                ip: 'internal',
+                newValue: updated.amount
+            }, prevHash);
+        }
+        
         return updated;
     }
     

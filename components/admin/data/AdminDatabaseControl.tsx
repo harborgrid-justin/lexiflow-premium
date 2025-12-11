@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Maximize2, Menu, X } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
@@ -10,14 +11,14 @@ export type PlatformView = string;
 
 // Lazy Load All Sub-Modules
 const PlatformOverview = lazy(() => import('./PlatformOverview').then(m => ({ default: m.PlatformOverview })));
-const SchemaArchitect = lazy(() => import('../../../admin/data/schema/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
+const SchemaArchitect = lazy(() => import('./schema/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
 const GovernanceConsole = lazy(() => import('./GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
 const PipelineMonitor = lazy(() => import('./PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
 const BackupVault = lazy(() => import('./BackupVault').then(m => ({ default: m.BackupVault })));
 const QueryConsole = lazy(() => import('./QueryConsole').then(m => ({ default: m.QueryConsole })));
 const SecurityMatrix = lazy(() => import('./SecurityMatrix').then(m => ({ default: m.SecurityMatrix })));
 const DataCatalog = lazy(() => import('./DataCatalog').then(m => ({ default: m.DataCatalog })));
-const ApiGateway = lazy(() => import('./ApiGateway'));
+const ApiGateway = lazy(() => import('./ApiGateway').then(m => ({ default: m.ApiGateway })));
 const DataQualityStudio = lazy(() => import('./DataQualityStudio').then(m => ({ default: m.DataQualityStudio })));
 const ReplicationManager = lazy(() => import('./ReplicationManager').then(m => ({ default: m.ReplicationManager })));
 const LineageGraph = lazy(() => import('./LineageGraph').then(m => ({ default: m.LineageGraph })));

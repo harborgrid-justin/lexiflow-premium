@@ -2,47 +2,43 @@ import React, { ErrorInfo, ReactNode } from 'react';
 import { RefreshCw, AlertTriangle } from 'lucide-react';
 import { errorHandler } from '../../utils/errorHandler';
 
-interface Props {
+interface ErrorBoundaryProps {
   children?: ReactNode;
   fallback?: ReactNode;
   onReset?: () => void;
   scope?: string;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
 }
 
-export class ErrorBoundary extends React.Component<Props, State> {
-  // FIX: Reverted to constructor-based state and method binding.
-  // The class field and arrow function properties were causing type resolution issues
-  // with `this` context for inherited properties like `props` and `setState`.
-  constructor(props: Props) {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
       error: null,
     };
-    this.handleReset = this.handleReset.bind(this);
   }
 
-  public static getDerivedStateFromError(error: Error): State {
+  public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Update state so the next render will show the fallback UI.
     return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // The error is still logged for observability.
     errorHandler.logError(error, this.props.scope || 'ErrorBoundary');
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
-  private handleReset() {
+  private handleReset = () => {
+    this.props.onReset?.();
     this.setState({ hasError: false, error: null });
-    if (this.props.onReset) {
-      this.props.onReset();
-    }
-  }
-
+  };
+  
   public render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
@@ -50,22 +46,20 @@ export class ErrorBoundary extends React.Component<Props, State> {
       }
 
       return (
-        <div className="flex h-full w-full items-center justify-center p-6 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
-          <div className="text-center max-w-md">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-600 mb-4">
-              <AlertTriangle className="h-6 w-6" />
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">
-              Something went wrong
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-              {this.state.error?.message || 'An unexpected error occurred in this module.'}
-            </p>
+        <div role="alert" className="p-4 m-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="h-6 w-6" />
+            <h3 className="font-bold">An error occurred in {this.props.scope || 'this component'}.</h3>
+          </div>
+          <p className="mt-2 text-sm">
+            {this.state.error?.message || 'An unknown error was caught by the boundary.'}
+          </p>
+          <div className="mt-4 flex gap-2">
             <button
               onClick={this.handleReset}
-              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+              className="px-3 py-1 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700 flex items-center"
             >
-              <RefreshCw className="w-4 h-4 mr-2" />
+              <RefreshCw className="h-3 w-3 inline mr-1" />
               Try Again
             </button>
           </div>

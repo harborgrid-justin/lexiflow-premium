@@ -1,2 +1,2 @@
-// This file is obsolete and can be safely deleted.
-// The main CaseDetail component is now located at: ./case-detail/CaseDetail.tsx
+// This file is obsolete and its contents have been moved to `components/case-detail/CaseDetail.tsx`.
+// It can be safely deleted from the project.

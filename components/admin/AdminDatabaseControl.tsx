@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Maximize2, Menu, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -8,9 +9,9 @@ import { Loader2 } from 'lucide-react';
 
 export type PlatformView = string;
 
-// Lazy Load All Sub-Modules
+// Lazy Load All Sub-Modules with correct paths
 const PlatformOverview = lazy(() => import('./data/PlatformOverview').then(m => ({ default: m.PlatformOverview })));
-const SchemaArchitect = lazy(() => import('../../admin/data/schema/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
+const SchemaArchitect = lazy(() => import('./data/schema/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
 const GovernanceConsole = lazy(() => import('./data/GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
 const PipelineMonitor = lazy(() => import('./data/PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
 const BackupVault = lazy(() => import('./data/BackupVault').then(m => ({ default: m.BackupVault })));

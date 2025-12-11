@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";

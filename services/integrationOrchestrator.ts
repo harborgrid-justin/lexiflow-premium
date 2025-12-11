@@ -5,6 +5,7 @@ import {
     TaskId, UserId, CaseId, TimeEntry, UUID, EvidenceId, 
     EvidenceItem, ConflictCheck, Citation, Invoice
 } from '../types';
+import { ChainService } from './chainService';
 
 /**
  * Enterprise Integration Bus
@@ -23,7 +24,6 @@ export const IntegrationOrchestrator = {
 
         // Dynamic Import to avoid Circular Dependency
         const { DataService } = await import('./dataService');
-        const { ChainService } = await import('./chainService');
 
         try {
             switch (type) {
@@ -148,6 +148,19 @@ export const IntegrationOrchestrator = {
                         await DataService.workflow.deploy('tpl-7', { caseId: p.invoice.caseId }); // tpl-7 is Invoice Approval/Collections in mock
                         actions.push('Deployed Collections Workflow');
                     }
+                    if (p.invoice.status === 'Paid') {
+                        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // In real app, fetch last hash from DB
+                        await ChainService.createEntry({
+                            timestamp: new Date().toISOString(),
+                            user: 'System', // Replace with actual user context
+                            userId: 'system' as UserId,
+                            action: 'INVOICE_PAID',
+                            resource: `Invoice/${p.invoice.id}`,
+                            ip: 'internal',
+                            newValue: p.invoice.amount
+                        }, prevHash);
+                        actions.push('Logged INVOICE_PAID to immutable ledger');
+                    }
                     break;
                 }
 
@@ -159,7 +172,7 @@ export const IntegrationOrchestrator = {
                         timestamp: new Date().toISOString(),
                         user: 'System',
                         userId: 'sys-admin' as UserId,
-                        action: `EVIDENCE_STATUS_${p.newStatus.toUpperCase()}`,
+                        action: `EVIDENCE_STATUS_${p.newStatus.toUpperCase().replace(/\s/g, '_')}`,
                         resource: `Evidence/${p.item.id}`,
                         ip: 'internal',
                         previousValue: p.oldStatus,

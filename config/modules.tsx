@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ModuleRegistry } from '../services/moduleRegistry';
 import { NAVIGATION_ITEMS } from '../constants/navConfig';
@@ -20,7 +19,6 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../components/Dashboard'));
-// FIX: Corrected import path for CaseList component. The original path was '../components/CaseList' which pointed to an empty file.
 const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
 const DocketManager = lazyWithPreload(() => import('../components/DocketManager'));
 const CorrespondenceManager = lazyWithPreload(() => import('../components/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));

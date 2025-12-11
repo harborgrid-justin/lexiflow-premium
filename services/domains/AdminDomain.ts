@@ -1,7 +1,7 @@
-
-import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy } from '../../types';
+import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '../../types';
 import { db, STORES } from '../db';
 import { ChainService } from '../chainService';
+import { MOCK_API_SPEC } from '../../data/mockApiSpec';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -106,5 +106,10 @@ export const AdminService = {
             { id: 'pol2', title: 'Access Control Policy', version: '1.1', status: 'Review', date: '2023-11-30' },
             { id: 'pol3', title: 'GDPR Compliance Guide', version: '3.0', status: 'Active', date: '2024-02-10' }
         ];
+    },
+
+    getApiSpec: async (): Promise<ApiServiceSpec[]> => {
+        await delay(100);
+        return MOCK_API_SPEC;
     }
 };

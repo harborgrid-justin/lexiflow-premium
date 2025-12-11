@@ -1,3 +1,2 @@
-// This file is an obsolete duplicate. 
-// The correct component is located at `components/case-list/CaseList.tsx`.
-// This file can be safely deleted.
+// This file is obsolete and can be safely deleted.
+// The main CaseList component is now located at: ../CaseList.tsx

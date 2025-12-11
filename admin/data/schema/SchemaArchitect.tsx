@@ -1,20 +1,19 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../../components/common/Modal';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { Modal } from '../../../components/common/Modal';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
-// FIX: Corrected import path for SchemaVisualizer due to duplicated directory structure.
-import { SchemaVisualizer } from '../../../../components/admin/data/schema/SchemaVisualizer';
-import { Button } from '../../../../components/common/Button';
+import { SchemaVisualizer } from '../../components/admin/data/schema/SchemaVisualizer';
+import { Button } from '../../../components/common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
-import { useQuery } from '../../../../services/queryClient';
-import { DataService } from '../../../../services/dataService';
-import { SchemaTable } from '../../../../types';
+import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+import { SchemaTable } from '../../../types';
 import { Loader2 } from 'lucide-react';
-import { Input, TextArea } from '../../../../components/common/Inputs';
+import { Input, TextArea } from '../../../components/common/Inputs';
 
 interface SchemaArchitectProps {
   initialTab?: string;

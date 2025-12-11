@@ -14,17 +14,13 @@ interface State {
   error: Error | null;
 }
 
-// FIX: The ErrorBoundary class must extend React.Component to be a valid class component.
-// This provides access to `this.props`, `this.state`, and lifecycle methods like `componentDidCatch`.
 export class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-    };
-    this.handleReset = this.handleReset.bind(this);
-  }
+  // FIX: The constructor was removed and state is initialized as a class property.
+  // This is a more modern syntax and avoids potential issues with `this` context that may have caused the linter/compiler errors.
+  state: State = {
+    hasError: false,
+    error: null,
+  };
 
   public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
@@ -35,7 +31,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
     console.debug('Component Stack:', errorInfo.componentStack);
   }
 
-  private handleReset() {
+  // FIX: The `handleReset` method was converted to an arrow function property.
+  // This automatically binds `this` correctly, so `this.handleReset.bind(this)` in the constructor is no longer needed.
+  private handleReset = () => {
     this.setState({ hasError: false, error: null });
     if (this.props.onReset) {
       this.props.onReset();

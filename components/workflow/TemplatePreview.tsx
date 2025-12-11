@@ -3,7 +3,6 @@ import { Clock, BarChart, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-// FIX: Import from types for consistency
 import { WorkflowTemplateData } from '../../types';
 
 interface TemplatePreviewProps {

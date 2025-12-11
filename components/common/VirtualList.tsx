@@ -89,7 +89,8 @@ const VirtualListComponent = <T extends any>(
   if (safeItems.length === 0 && !footer) {
     return (
       <div 
-        className={cn("flex items-center justify-center text-sm h-full", className, theme.text.tertiary)} 
+        ref={containerRef} // Ensure ref is attached even in empty state for measurements/consistency
+        className={cn("flex items-center justify-center text-sm h-full overflow-hidden", className, theme.text.tertiary)} 
         style={{ height: typeof height === 'number' ? `${height}px` : height }}
       >
         {emptyMessage}

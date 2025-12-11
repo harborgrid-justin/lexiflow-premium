@@ -191,10 +191,19 @@ class QueryClient {
       .catch((rawError) => {
         if (controller.signal.aborted) return;
 
-        const error = rawError instanceof Error ? rawError : new Error(String(rawError));
+        let errorMsg = 'Unknown Query Error';
+        if (rawError instanceof Error) errorMsg = rawError.message;
+        else if (typeof rawError === 'string') errorMsg = rawError;
+        else {
+             try { errorMsg = JSON.stringify(rawError); } catch(e) { errorMsg = String(rawError); }
+        }
+        
+        const error = new Error(errorMsg);
+        // Attach raw error info if possible for inspection
+        (error as any).originalError = rawError;
+        
         errorHandler.logError(error, `QueryFetch:${String(key)}`);
         
-        // FIX: Added dataUpdatedAt to the default object for when no cache entry exists, satisfying the QueryState<T> type.
         const state: QueryState<T> = { 
             ...(this.cache.get(hashedKey) || { data: undefined, dataUpdatedAt: 0 }),
             status: 'error', 

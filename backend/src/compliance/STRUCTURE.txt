@@ -1,0 +1,59 @@
+compliance/
+│
+├── compliance.module.ts              # Main NestJS module
+├── README.md                         # Comprehensive documentation
+│
+├── audit-logs/                       # Audit Logging System
+│   ├── dto/
+│   │   └── audit-log.dto.ts         # DTOs, enums (Actions, Entities)
+│   ├── audit-logs.service.ts        # Audit logging business logic
+│   ├── audit-logs.controller.ts     # REST API endpoints
+│   └── audit-log.interceptor.ts     # Automatic audit logging
+│
+├── conflict-checks/                  # Conflict Check System
+│   ├── dto/
+│   │   └── conflict-check.dto.ts    # DTOs, enums (Types, Status)
+│   ├── conflict-checks.service.ts   # Conflict detection & resolution
+│   └── conflict-checks.controller.ts # REST API endpoints
+│
+├── ethical-walls/                    # Ethical Walls Management
+│   ├── dto/
+│   │   └── ethical-wall.dto.ts      # DTOs, interfaces
+│   ├── ethical-walls.service.ts     # Wall management logic
+│   ├── ethical-walls.controller.ts  # REST API endpoints
+│   └── ethical-wall.guard.ts        # Access enforcement guard
+│
+├── rls-policies/                     # Row-Level Security
+│   ├── dto/
+│   │   └── rls-policy.dto.ts        # DTOs, enums (Operations)
+│   ├── rls-policies.service.ts      # Policy evaluation engine
+│   └── rls-policies.controller.ts   # REST API endpoints
+│
+├── permissions/                      # Granular Permissions
+│   ├── dto/
+│   │   └── permission.dto.ts        # DTOs, enums (Actions, Scopes)
+│   ├── permissions.service.ts       # Permission management
+│   └── permissions.controller.ts    # REST API endpoints
+│
+└── reporting/                        # Compliance Reporting
+    ├── dto/
+    │   └── compliance-report.dto.ts # Report DTOs & interfaces
+    ├── compliance-reporting.service.ts    # Report generation
+    └── compliance-reporting.controller.ts # REST API endpoints
+
+FEATURES:
+=========
+• 6 Subsystems
+• 21 TypeScript files
+• 31 REST API endpoints
+• 10 Audit actions
+• 9 Entity types
+• 4 Conflict check types
+• 8 Permission actions
+• 5 Permission scopes
+• 4 Report types
+• Advanced algorithms (Levenshtein, Soundex)
+• Automatic logging via interceptor
+• Access control via guard
+• Immutable audit trail
+• Export capabilities (CSV, JSON, PDF)

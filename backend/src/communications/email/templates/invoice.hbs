@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background-color: #7c3aed;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 5px 5px 0 0;
+    }
+    .content {
+      background-color: #f9fafb;
+      padding: 30px;
+      border-radius: 0 0 5px 5px;
+    }
+    .invoice-details {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    .amount {
+      font-size: 32px;
+      font-weight: bold;
+      color: #7c3aed;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #7c3aed;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Invoice</h1>
+  </div>
+  <div class="content">
+    <h2>Invoice #{{invoiceNumber}}</h2>
+    <div class="invoice-details">
+      <p><strong>Invoice Number:</strong> {{invoiceNumber}}</p>
+      <p><strong>Due Date:</strong> {{dueDate}}</p>
+      <div class="amount">${{amount}}</div>
+    </div>
+    <p>Please find your invoice attached. Payment is due by {{dueDate}}.</p>
+    <p>If you have any questions about this invoice, please contact our billing department.</p>
+    <a href="{{appUrl}}/billing/invoices/{{invoiceNumber}}" class="button">View Invoice Online</a>
+  </div>
+  <div class="footer">
+    <p>&copy; 2024 LexiFlow. All rights reserved.</p>
+  </div>
+</body>
+</html>

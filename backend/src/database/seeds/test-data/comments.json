@@ -1,0 +1,254 @@
+[
+  {
+    "id": "comment-001",
+    "entityType": "case",
+    "entityId": "case-001",
+    "userId": "user-002",
+    "userName": "Sarah Martinez",
+    "content": "Reviewed opposing counsel's discovery responses. Several objections appear boilerplate and potentially waivable. Recommend meeting and conferring before filing motion to compel.",
+    "isInternal": true,
+    "createdAt": "2025-01-14T10:30:00Z"
+  },
+  {
+    "id": "comment-002",
+    "entityType": "case",
+    "entityId": "case-001",
+    "userId": "user-001",
+    "userName": "James Morrison",
+    "content": "Agreed. Schedule a call with opposing counsel next week. If unproductive, we'll proceed with the motion.",
+    "isInternal": true,
+    "parentCommentId": "comment-001",
+    "createdAt": "2025-01-14T14:15:00Z"
+  },
+  {
+    "id": "comment-003",
+    "entityType": "document",
+    "entityId": "doc-001",
+    "userId": "user-007",
+    "userName": "Jennifer Brown",
+    "content": "Draft motion looks good. Just need to update the case citations in paragraph 5 based on the recent Supreme Court decision.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T11:00:00Z"
+  },
+  {
+    "id": "comment-004",
+    "entityType": "task",
+    "entityId": "task-003",
+    "userId": "user-005",
+    "userName": "David Williams",
+    "content": "Deposition outline is about 70% complete. Need to review expert report one more time before finalizing the technical questions.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T16:45:00Z"
+  },
+  {
+    "id": "comment-005",
+    "entityType": "case",
+    "entityId": "case-002",
+    "userId": "user-002",
+    "userName": "Sarah Martinez",
+    "content": "Expert conference call went extremely well. Dr. Engineering is confident in his analysis and will make an excellent witness. His report should be ready by end of week.",
+    "isInternal": true,
+    "createdAt": "2025-01-17T15:30:00Z"
+  },
+  {
+    "id": "comment-006",
+    "entityType": "case",
+    "entityId": "case-006",
+    "userId": "user-001",
+    "userName": "James Morrison",
+    "content": "Client called with concerns about purchase price adjustment mechanism. Set up call for tomorrow at 2pm to discuss and potentially revise Section 2.3.",
+    "isInternal": false,
+    "createdAt": "2025-01-15T13:00:00Z"
+  },
+  {
+    "id": "comment-007",
+    "entityType": "case",
+    "entityId": "case-006",
+    "userId": "user-004",
+    "userName": "Emily Johnson",
+    "content": "Reviewed the escrow agreement. Seller's counsel pushing for 12-month holdback instead of 18. Will discuss strategy with James before responding.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T16:20:00Z"
+  },
+  {
+    "id": "comment-008",
+    "entityType": "document",
+    "entityId": "doc-015",
+    "userId": "user-019",
+    "userName": "Karen Harris",
+    "content": "Client approved the property settlement agreement with minor changes to the furniture division. Making final edits now.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T09:45:00Z"
+  },
+  {
+    "id": "comment-009",
+    "entityType": "case",
+    "entityId": "case-007",
+    "userId": "user-018",
+    "userName": "Brian Johnson",
+    "content": "Opposing counsel indicated willingness to mediate. Client is open to it. Recommend proceeding with mediation before trial prep escalates costs.",
+    "isInternal": true,
+    "createdAt": "2025-01-14T11:30:00Z"
+  },
+  {
+    "id": "comment-010",
+    "entityType": "invoice",
+    "entityId": "inv-008",
+    "userId": "user-010",
+    "userName": "Daniel Garcia",
+    "content": "Invoice is now 15 days overdue. Client hasn't responded to payment reminders. Recommend follow-up call from attorney.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T10:00:00Z"
+  },
+  {
+    "id": "comment-011",
+    "entityType": "case",
+    "entityId": "case-009",
+    "userId": "user-024",
+    "userName": "Carlos Rodriguez",
+    "content": "Prosecutor offered plea deal: reduce to misdemeanor with probation. Client is considering. Meeting scheduled for Friday to discuss.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T14:00:00Z"
+  },
+  {
+    "id": "comment-012",
+    "entityType": "case",
+    "entityId": "case-012",
+    "userId": "user-034",
+    "userName": "Ryan Adams",
+    "content": "USPTO office action raises some prior art concerns. Will need to amend claims 1-3 and add detailed explanation. Calling client to discuss strategy.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T13:15:00Z"
+  },
+  {
+    "id": "comment-013",
+    "entityType": "task",
+    "entityId": "task-012",
+    "userId": "user-007",
+    "userName": "Jennifer Brown",
+    "content": "Medical records review complete. Created 45-page chronology with key events highlighted. Several concerning deviations from standard of care identified.",
+    "isInternal": true,
+    "createdAt": "2025-01-17T17:00:00Z"
+  },
+  {
+    "id": "comment-014",
+    "entityType": "case",
+    "entityId": "case-005",
+    "userId": "user-002",
+    "userName": "Sarah Martinez",
+    "content": "Jennifer's chronology is excellent work. This clearly shows the chain of errors. Let's schedule a team meeting to discuss expert witness strategy.",
+    "isInternal": true,
+    "parentCommentId": "comment-013",
+    "createdAt": "2025-01-17T17:30:00Z"
+  },
+  {
+    "id": "comment-015",
+    "entityType": "case",
+    "entityId": "case-013",
+    "userId": "user-034",
+    "userName": "Ryan Adams",
+    "content": "Trademark search results show potential issues with pending application in same class. Need to review and advise client on likelihood of confusion analysis.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T10:45:00Z"
+  },
+  {
+    "id": "comment-016",
+    "entityType": "document",
+    "entityId": "doc-025",
+    "userId": "user-026",
+    "userName": "Donald Young",
+    "content": "Plea negotiation memo drafted and ready for review. Included analysis of potential sentencing under different scenarios.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T16:00:00Z"
+  },
+  {
+    "id": "comment-017",
+    "entityType": "case",
+    "entityId": "case-003",
+    "userId": "user-004",
+    "userName": "Emily Johnson",
+    "content": "Site visit completed. Photos and measurements taken. Boundary dispute is more complex than initially thought - may need surveyor expert.",
+    "isInternal": true,
+    "createdAt": "2025-01-14T15:30:00Z"
+  },
+  {
+    "id": "comment-018",
+    "entityType": "expense",
+    "entityId": "exp-003",
+    "userId": "user-001",
+    "userName": "James Morrison",
+    "content": "Approved. Expert's analysis was thorough and will be crucial for our case.",
+    "isInternal": true,
+    "createdAt": "2024-11-26T11:15:00Z"
+  },
+  {
+    "id": "comment-019",
+    "entityType": "case",
+    "entityId": "case-011",
+    "userId": "user-018",
+    "userName": "Brian Johnson",
+    "content": "Bankruptcy petition filed successfully. 341 meeting scheduled for February 12. Client well-prepared and understands the process.",
+    "isInternal": false,
+    "createdAt": "2025-01-10T14:00:00Z"
+  },
+  {
+    "id": "comment-020",
+    "entityType": "case",
+    "entityId": "case-014",
+    "userId": "user-020",
+    "userName": "Matthew Clark",
+    "content": "Immigration client has gathered most required documents. Still waiting on certified translation of foreign business records. Should arrive next week.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T11:30:00Z"
+  },
+  {
+    "id": "comment-021",
+    "entityType": "task",
+    "entityId": "task-007",
+    "userId": "user-001",
+    "userName": "James Morrison",
+    "content": "Seller pushed back on indemnification cap. May need to restructure escrow to address their concerns. Drafting alternative proposal.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T10:00:00Z"
+  },
+  {
+    "id": "comment-022",
+    "entityType": "document",
+    "entityId": "doc-008",
+    "userId": "user-004",
+    "userName": "Emily Johnson",
+    "content": "Discovery responses look complete. Just need client to verify accuracy of financial information in responses to interrogatories 8-12.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T14:45:00Z"
+  },
+  {
+    "id": "comment-023",
+    "entityType": "case",
+    "entityId": "case-008",
+    "userId": "user-021",
+    "userName": "Nancy Lewis",
+    "content": "Court evaluator scheduled home visits for both parents. Prepared client for what to expect. Visits scheduled for next week.",
+    "isInternal": true,
+    "createdAt": "2025-01-16T15:00:00Z"
+  },
+  {
+    "id": "comment-024",
+    "entityType": "case",
+    "entityId": "case-004",
+    "userId": "user-005",
+    "userName": "David Williams",
+    "content": "Deposition went very well. Plaintiff's testimony largely supports our defenses. Transcript should be expedited - critical for summary judgment motion.",
+    "isInternal": true,
+    "createdAt": "2024-12-06T17:00:00Z"
+  },
+  {
+    "id": "comment-025",
+    "entityType": "case",
+    "entityId": "case-010",
+    "userId": "user-026",
+    "userName": "Donald Young",
+    "content": "Toxicology expert reviewed blood test results. His analysis supports our challenge to the test procedures. Should significantly strengthen motion to suppress.",
+    "isInternal": true,
+    "createdAt": "2025-01-15T16:30:00Z"
+  }
+]

@@ -1,0 +1,389 @@
+[
+  {
+    "id": "audit-001",
+    "auditType": "Trust Account Reconciliation",
+    "organizationId": "org-001",
+    "auditor": "user-010",
+    "auditDate": "2024-12-31",
+    "status": "Completed",
+    "scope": "Monthly trust account reconciliation for all client trust accounts",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "Minor discrepancy in check register ($2.50) - resolved",
+        "resolution": "Mathematical error corrected in December statements"
+      }
+    ],
+    "conclusion": "Trust accounts properly maintained and reconciled. All client funds accounted for.",
+    "nextAuditDate": "2025-01-31",
+    "attachments": ["trust-recon-dec-2024.pdf", "bank-statements-dec-2024.pdf"]
+  },
+  {
+    "id": "audit-002",
+    "auditType": "Conflict of Interest Check",
+    "organizationId": "org-001",
+    "caseId": "case-013",
+    "auditor": "user-001",
+    "auditDate": "2024-11-15",
+    "status": "Completed",
+    "scope": "Conflict check for new trademark infringement matter - Tech Brand case",
+    "findings": [],
+    "conclusion": "No conflicts identified. Matter approved for engagement.",
+    "clearanceGranted": true,
+    "clearanceBy": "user-001",
+    "notes": "Comprehensive search conducted across all current and former clients"
+  },
+  {
+    "id": "audit-003",
+    "auditType": "Document Retention Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-009",
+    "auditDate": "2024-10-15",
+    "status": "Completed",
+    "scope": "Annual document retention and destruction audit",
+    "findings": [
+      {
+        "severity": "Medium",
+        "description": "12 closed case files from 2016 eligible for destruction but not processed",
+        "resolution": "Files scheduled for secure destruction per retention policy"
+      },
+      {
+        "severity": "Low",
+        "description": "Digital storage organization could be improved",
+        "resolution": "Implementing new folder structure Q1 2025"
+      }
+    ],
+    "conclusion": "Generally compliant with retention policies. Improvements recommended.",
+    "nextAuditDate": "2025-10-15",
+    "recommendations": [
+      "Update retention policy to include electronic communications",
+      "Implement automated retention scheduling"
+    ]
+  },
+  {
+    "id": "audit-004",
+    "auditType": "IOLTA Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-010",
+    "auditDate": "2024-11-30",
+    "status": "Completed",
+    "scope": "Quarterly IOLTA account compliance review",
+    "findings": [],
+    "conclusion": "All IOLTA requirements met. Interest properly disbursed to State Bar.",
+    "clearanceGranted": true,
+    "nextAuditDate": "2025-02-28",
+    "certificationIssued": true
+  },
+  {
+    "id": "audit-005",
+    "auditType": "Cybersecurity Assessment",
+    "organizationId": "org-001",
+    "auditor": "user-046",
+    "auditDate": "2024-09-30",
+    "status": "Completed",
+    "scope": "Annual cybersecurity and data protection assessment",
+    "findings": [
+      {
+        "severity": "High",
+        "description": "Multi-factor authentication not enabled for all users",
+        "resolution": "MFA implementation completed organization-wide"
+      },
+      {
+        "severity": "Medium",
+        "description": "Some workstations missing latest security patches",
+        "resolution": "Automated patch management system deployed"
+      },
+      {
+        "severity": "Low",
+        "description": "Password complexity policy could be strengthened",
+        "resolution": "New password policy implemented requiring 14+ characters"
+      }
+    ],
+    "conclusion": "Security posture improved. Critical vulnerabilities addressed.",
+    "nextAuditDate": "2025-09-30",
+    "certificationIssued": false,
+    "recommendations": [
+      "Conduct quarterly security awareness training",
+      "Implement annual penetration testing",
+      "Review and update incident response plan"
+    ]
+  },
+  {
+    "id": "audit-006",
+    "auditType": "Client File Review",
+    "organizationId": "org-001",
+    "auditor": "user-001",
+    "auditDate": "2024-12-15",
+    "status": "Completed",
+    "scope": "Random sample review of 25 client files for completeness and compliance",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "3 files missing signed engagement letters",
+        "resolution": "Engagement letters obtained and filed"
+      },
+      {
+        "severity": "Low",
+        "description": "Billing time entries could be more detailed in 5 files",
+        "resolution": "Training provided to associates on time entry best practices"
+      }
+    ],
+    "conclusion": "Files generally well-maintained. Minor improvements implemented.",
+    "nextAuditDate": "2025-06-15",
+    "filesReviewed": 25
+  },
+  {
+    "id": "audit-007",
+    "auditType": "AML/KYC Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-010",
+    "auditDate": "2024-08-31",
+    "status": "Completed",
+    "scope": "Anti-money laundering and Know Your Customer compliance review",
+    "findings": [
+      {
+        "severity": "Medium",
+        "description": "Client verification documentation incomplete for 2 new clients",
+        "resolution": "Additional documentation obtained and verified"
+      }
+    ],
+    "conclusion": "AML/KYC procedures generally followed. Documentation improved.",
+    "nextAuditDate": "2025-08-31",
+    "certificationIssued": true
+  },
+  {
+    "id": "audit-008",
+    "auditType": "Billing Accuracy Audit",
+    "organizationId": "org-001",
+    "auditor": "user-010",
+    "auditDate": "2024-11-15",
+    "status": "Completed",
+    "scope": "Review of billing rates, time entries, and invoice accuracy for Q3 2024",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "Minor calculation errors in 3 invoices (< $100 each)",
+        "resolution": "Errors corrected and credit memos issued"
+      }
+    ],
+    "conclusion": "Billing processes accurate and compliant. 99.8% accuracy rate.",
+    "nextAuditDate": "2025-02-15",
+    "invoicesReviewed": 450,
+    "accuracyRate": 99.8
+  },
+  {
+    "id": "audit-009",
+    "auditType": "Professional Liability Insurance",
+    "organizationId": "org-001",
+    "auditor": "user-001",
+    "auditDate": "2024-12-01",
+    "status": "Completed",
+    "scope": "Annual review of professional liability insurance coverage",
+    "findings": [],
+    "conclusion": "Coverage adequate and compliant with state bar requirements.",
+    "policyNumber": "PLI-2024-987654",
+    "coverageAmount": 5000000,
+    "expirationDate": "2025-12-01",
+    "certificationIssued": true
+  },
+  {
+    "id": "audit-010",
+    "auditType": "Continuing Legal Education",
+    "organizationId": "org-001",
+    "auditor": "user-009",
+    "auditDate": "2024-12-20",
+    "status": "Completed",
+    "scope": "CLE compliance audit for all attorneys",
+    "findings": [
+      {
+        "severity": "Medium",
+        "description": "2 associates need to complete ethics credits by year-end",
+        "resolution": "Ethics courses scheduled and completed"
+      }
+    ],
+    "conclusion": "All attorneys compliant with CLE requirements for 2024.",
+    "nextAuditDate": "2025-12-20",
+    "attorneysReviewed": 30,
+    "complianceRate": 100
+  },
+  {
+    "id": "audit-011",
+    "auditType": "Data Privacy Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-046",
+    "auditDate": "2024-10-31",
+    "status": "Completed",
+    "scope": "GDPR and CCPA compliance review",
+    "findings": [
+      {
+        "severity": "Medium",
+        "description": "Privacy policy needs updating for CCPA amendments",
+        "resolution": "Privacy policy updated and published"
+      },
+      {
+        "severity": "Low",
+        "description": "Data processing agreements missing for 3 vendors",
+        "resolution": "DPAs executed with all third-party vendors"
+      }
+    ],
+    "conclusion": "Data privacy practices compliant. Policies updated.",
+    "nextAuditDate": "2025-10-31",
+    "certificationIssued": true
+  },
+  {
+    "id": "audit-012",
+    "auditType": "Conflict of Interest Check",
+    "organizationId": "org-002",
+    "caseId": "case-005",
+    "auditor": "user-011",
+    "auditDate": "2024-12-01",
+    "status": "Completed",
+    "scope": "Conflict check for medical malpractice case",
+    "findings": [],
+    "conclusion": "No conflicts identified. Matter approved.",
+    "clearanceGranted": true,
+    "clearanceBy": "user-011"
+  },
+  {
+    "id": "audit-013",
+    "auditType": "Trust Account Reconciliation",
+    "organizationId": "org-002",
+    "auditor": "user-012",
+    "auditDate": "2024-11-30",
+    "status": "Completed",
+    "scope": "Monthly trust account reconciliation",
+    "findings": [],
+    "conclusion": "All trust accounts properly reconciled and maintained.",
+    "nextAuditDate": "2024-12-31"
+  },
+  {
+    "id": "audit-014",
+    "auditType": "Case Management System Audit",
+    "organizationId": "org-001",
+    "auditor": "user-046",
+    "auditDate": "2024-11-01",
+    "status": "Completed",
+    "scope": "Review of case management system data integrity and backups",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "Backup verification process could be automated",
+        "resolution": "Automated backup verification implemented"
+      }
+    ],
+    "conclusion": "System functioning properly. Backups verified and secure.",
+    "nextAuditDate": "2025-05-01",
+    "backupsVerified": true
+  },
+  {
+    "id": "audit-015",
+    "auditType": "Engagement Letter Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-009",
+    "auditDate": "2024-12-10",
+    "status": "Completed",
+    "scope": "Review of engagement letters for 2024 new matters",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "Standard engagement letter template needs updating for fee changes",
+        "resolution": "Template updated with current rate schedule"
+      }
+    ],
+    "conclusion": "98% of matters have properly executed engagement letters.",
+    "nextAuditDate": "2025-06-10",
+    "mattersReviewed": 85,
+    "complianceRate": 98
+  },
+  {
+    "id": "audit-016",
+    "auditType": "Financial Controls Review",
+    "organizationId": "org-003",
+    "auditor": "user-044",
+    "auditDate": "2024-09-30",
+    "status": "Completed",
+    "scope": "Quarterly financial controls and segregation of duties review",
+    "findings": [
+      {
+        "severity": "Medium",
+        "description": "Need additional separation between billing and collections",
+        "resolution": "Billing specialist role created to improve controls"
+      }
+    ],
+    "conclusion": "Financial controls adequate with recommended improvements.",
+    "nextAuditDate": "2024-12-31"
+  },
+  {
+    "id": "audit-017",
+    "auditType": "E-Discovery Protocol Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-002",
+    "auditDate": "2024-11-20",
+    "status": "Completed",
+    "scope": "Review of e-discovery procedures and technology",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "E-discovery protocols need updating for new case types",
+        "resolution": "Protocols updated and staff training conducted"
+      }
+    ],
+    "conclusion": "E-discovery practices meet current standards.",
+    "nextAuditDate": "2025-11-20",
+    "certificationIssued": true
+  },
+  {
+    "id": "audit-018",
+    "auditType": "Client Satisfaction Audit",
+    "organizationId": "org-001",
+    "auditor": "user-009",
+    "auditDate": "2024-12-01",
+    "status": "Completed",
+    "scope": "Annual client satisfaction survey and feedback analysis",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "Response time to client calls could be improved",
+        "resolution": "Implemented client communication protocol with 4-hour response target"
+      }
+    ],
+    "conclusion": "Overall client satisfaction: 92%. Strong performance across all metrics.",
+    "nextAuditDate": "2025-12-01",
+    "surveyResponses": 125,
+    "satisfactionScore": 92
+  },
+  {
+    "id": "audit-019",
+    "auditType": "Conflict of Interest Check",
+    "organizationId": "org-004",
+    "caseId": "case-009",
+    "auditor": "user-024",
+    "auditDate": "2024-12-14",
+    "status": "Completed",
+    "scope": "Conflict check for criminal defense matter",
+    "findings": [],
+    "conclusion": "No conflicts identified. Engagement approved.",
+    "clearanceGranted": true,
+    "clearanceBy": "user-024"
+  },
+  {
+    "id": "audit-020",
+    "auditType": "Staff Training Compliance",
+    "organizationId": "org-001",
+    "auditor": "user-009",
+    "auditDate": "2024-12-15",
+    "status": "Completed",
+    "scope": "Annual review of mandatory staff training completion",
+    "findings": [
+      {
+        "severity": "Low",
+        "description": "3 staff members need to complete annual ethics training",
+        "resolution": "Training completed before year-end deadline"
+      }
+    ],
+    "conclusion": "100% compliance with mandatory training requirements.",
+    "nextAuditDate": "2025-12-15",
+    "staffReviewed": 45,
+    "complianceRate": 100
+  }
+]

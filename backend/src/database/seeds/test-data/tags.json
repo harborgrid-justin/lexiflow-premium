@@ -1,0 +1,290 @@
+[
+  {
+    "id": "tag-001",
+    "name": "urgent",
+    "category": "priority",
+    "color": "#FF0000",
+    "description": "Matters requiring immediate attention",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-002",
+    "name": "high-value",
+    "category": "client",
+    "color": "#FFD700",
+    "description": "High-value clients and matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-003",
+    "name": "litigation",
+    "category": "practice-area",
+    "color": "#1E90FF",
+    "description": "Litigation and dispute resolution matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-004",
+    "name": "corporate",
+    "category": "practice-area",
+    "color": "#32CD32",
+    "description": "Corporate and transactional matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-005",
+    "name": "intellectual-property",
+    "category": "practice-area",
+    "color": "#9370DB",
+    "description": "IP-related matters including patents, trademarks, copyrights",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-006",
+    "name": "family-law",
+    "category": "practice-area",
+    "color": "#FF69B4",
+    "description": "Family law matters including divorce, custody, support",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-007",
+    "name": "criminal-defense",
+    "category": "practice-area",
+    "color": "#DC143C",
+    "description": "Criminal defense matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-008",
+    "name": "discovery",
+    "category": "phase",
+    "color": "#4682B4",
+    "description": "Matters in discovery phase",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-009",
+    "name": "trial-prep",
+    "category": "phase",
+    "color": "#FF4500",
+    "description": "Trial preparation phase",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-010",
+    "name": "settlement-negotiation",
+    "category": "phase",
+    "color": "#20B2AA",
+    "description": "Active settlement negotiations",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-011",
+    "name": "mediation",
+    "category": "process",
+    "color": "#DDA0DD",
+    "description": "Mediation proceedings",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-012",
+    "name": "arbitration",
+    "category": "process",
+    "color": "#BC8F8F",
+    "description": "Arbitration proceedings",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-013",
+    "name": "pro-bono",
+    "category": "billing",
+    "color": "#008080",
+    "description": "Pro bono matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-014",
+    "name": "contingency",
+    "category": "billing",
+    "color": "#DAA520",
+    "description": "Contingency fee matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-015",
+    "name": "retainer",
+    "category": "billing",
+    "color": "#2E8B57",
+    "description": "Retainer-based matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-016",
+    "name": "flat-fee",
+    "category": "billing",
+    "color": "#8FBC8F",
+    "description": "Flat fee arrangements",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-017",
+    "name": "complex",
+    "category": "complexity",
+    "color": "#800080",
+    "description": "Complex matters requiring specialized expertise",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-018",
+    "name": "confidential",
+    "category": "security",
+    "color": "#2F4F4F",
+    "description": "Highly confidential matters - restricted access",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-019",
+    "name": "regulatory",
+    "category": "type",
+    "color": "#4B0082",
+    "description": "Regulatory compliance and government matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-020",
+    "name": "appeals",
+    "category": "type",
+    "color": "#8B4513",
+    "description": "Appellate matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-021",
+    "name": "class-action",
+    "category": "type",
+    "color": "#CD5C5C",
+    "description": "Class action litigation",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-022",
+    "name": "international",
+    "category": "scope",
+    "color": "#4169E1",
+    "description": "International or cross-border matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-023",
+    "name": "technology",
+    "category": "industry",
+    "color": "#00CED1",
+    "description": "Technology sector clients and matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-024",
+    "name": "healthcare",
+    "category": "industry",
+    "color": "#FF6347",
+    "description": "Healthcare industry clients and matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-025",
+    "name": "finance",
+    "category": "industry",
+    "color": "#006400",
+    "description": "Financial services clients and matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-026",
+    "name": "real-estate",
+    "category": "industry",
+    "color": "#8B0000",
+    "description": "Real estate related matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-027",
+    "name": "employment",
+    "category": "practice-area",
+    "color": "#FF8C00",
+    "description": "Employment and labor matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-028",
+    "name": "environmental",
+    "category": "practice-area",
+    "color": "#228B22",
+    "description": "Environmental law matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-029",
+    "name": "tax",
+    "category": "practice-area",
+    "color": "#B8860B",
+    "description": "Tax law matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-030",
+    "name": "bankruptcy",
+    "category": "practice-area",
+    "color": "#A9A9A9",
+    "description": "Bankruptcy and insolvency matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-031",
+    "name": "immigration",
+    "category": "practice-area",
+    "color": "#6495ED",
+    "description": "Immigration law matters",
+    "organizationId": "org-001",
+    "isActive": true
+  },
+  {
+    "id": "tag-032",
+    "name": "estate-planning",
+    "category": "practice-area",
+    "color": "#DEB887",
+    "description": "Estate planning and probate matters",
+    "organizationId": "org-001",
+    "isActive": true
+  }
+]

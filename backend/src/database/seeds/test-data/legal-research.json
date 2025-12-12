@@ -1,0 +1,317 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "title": "Federal Rules of Civil Procedure - Rule 56 Summary Judgment Analysis",
+    "researchType": "case_law",
+    "jurisdiction": "Federal",
+    "citation": "Fed. R. Civ. P. 56",
+    "summary": "Comprehensive analysis of summary judgment standards under Rule 56, including the burden of proof, genuine disputes of material fact, and the standard of review applied by courts.",
+    "keyFindings": "Summary judgment is appropriate when there is no genuine dispute as to any material fact and the movant is entitled to judgment as a matter of law. The burden is on the moving party to establish the absence of a genuine issue.",
+    "practiceArea": "Civil Litigation",
+    "tags": ["summary judgment", "civil procedure", "federal rules", "motion practice"],
+    "citations": ["Celotex Corp. v. Catrett, 477 U.S. 317 (1986)", "Anderson v. Liberty Lobby, Inc., 477 U.S. 242 (1986)"],
+    "relevantCases": ["Celotex Corp. v. Catrett", "Matsushita Elec. Indus. Co. v. Zenith Radio Corp."],
+    "status": "published",
+    "researchDate": "2024-11-15",
+    "author": "Sarah Mitchell",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-11-15",
+      "reviewedBy": "John Anderson"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "title": "Delaware Corporate Law - Fiduciary Duties of Directors in M&A Transactions",
+    "researchType": "statutory",
+    "jurisdiction": "Delaware",
+    "citation": "8 Del. C. § 141",
+    "summary": "Analysis of Revlon duties and the enhanced scrutiny standard applied to board decisions in change of control transactions under Delaware law.",
+    "keyFindings": "When a board decides to sell the company, directors must act as auctioneers to maximize shareholder value. The board's duty changes from the preservation of the corporate entity to the maximization of the company's value at a sale.",
+    "practiceArea": "Corporate Law",
+    "tags": ["M&A", "fiduciary duties", "Delaware law", "Revlon duties", "board governance"],
+    "citations": ["Revlon, Inc. v. MacAndrews & Forbes Holdings, Inc., 506 A.2d 173 (Del. 1986)"],
+    "relevantCases": ["Revlon, Inc. v. MacAndrews", "Paramount Communications Inc. v. QVC Network Inc."],
+    "status": "published",
+    "researchDate": "2024-10-20",
+    "author": "Michael Chen",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-10-20",
+      "reviewedBy": "Patricia Williams"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "title": "ERISA Section 502(a) - Breach of Fiduciary Duty Claims",
+    "researchType": "statutory",
+    "jurisdiction": "Federal",
+    "citation": "29 U.S.C. § 1132(a)",
+    "summary": "Examination of civil enforcement provisions under ERISA, focusing on claims for breach of fiduciary duty and available remedies.",
+    "keyFindings": "ERISA provides a comprehensive civil enforcement scheme allowing participants and beneficiaries to bring actions for breach of fiduciary duty. Remedies include equitable relief, plan reformation, and surcharge.",
+    "practiceArea": "Employment Law",
+    "tags": ["ERISA", "fiduciary duty", "employee benefits", "civil enforcement"],
+    "citations": ["29 U.S.C. § 1132(a)", "29 U.S.C. § 1104"],
+    "relevantCases": ["LaRue v. DeWolff, Boberg & Associates, Inc.", "Tibble v. Edison International"],
+    "status": "published",
+    "researchDate": "2024-09-12",
+    "author": "Jennifer Lopez",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-09-12",
+      "reviewedBy": "Robert Thompson"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "title": "Patent Infringement - Doctrine of Equivalents Analysis",
+    "researchType": "case_law",
+    "jurisdiction": "Federal",
+    "citation": "35 U.S.C. § 271",
+    "summary": "Analysis of the doctrine of equivalents in patent infringement cases, including the function-way-result test and prosecution history estoppel.",
+    "keyFindings": "Under the doctrine of equivalents, a product or process that does not literally infringe may still be found to infringe if it performs substantially the same function in substantially the same way to obtain substantially the same result.",
+    "practiceArea": "Intellectual Property",
+    "tags": ["patent law", "infringement", "doctrine of equivalents", "prosecution history"],
+    "citations": ["Graver Tank & Mfg. Co. v. Linde Air Products Co., 339 U.S. 605 (1950)"],
+    "relevantCases": ["Warner-Jenkinson Co. v. Hilton Davis Chemical Co.", "Festo Corp. v. Shoketsu Kinzoku Kogyo Kabushiki Co."],
+    "status": "published",
+    "researchDate": "2024-08-25",
+    "author": "David Kim",
+    "metadata": {
+      "confidence": "medium",
+      "lastUpdated": "2024-08-25",
+      "reviewedBy": "Lisa Wang"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "title": "Title VII Disparate Impact - Griggs Standard and Employer Defenses",
+    "researchType": "case_law",
+    "jurisdiction": "Federal",
+    "citation": "42 U.S.C. § 2000e-2",
+    "summary": "Comprehensive review of disparate impact theory under Title VII, including the Griggs v. Duke Power framework and business necessity defense.",
+    "keyFindings": "Facially neutral employment practices that have a disproportionate adverse impact on protected groups violate Title VII unless the practice is job-related and consistent with business necessity.",
+    "practiceArea": "Employment Law",
+    "tags": ["Title VII", "disparate impact", "discrimination", "employment testing"],
+    "citations": ["Griggs v. Duke Power Co., 401 U.S. 424 (1971)"],
+    "relevantCases": ["Griggs v. Duke Power Co.", "Wards Cove Packing Co. v. Atonio", "Ricci v. DeStefano"],
+    "status": "published",
+    "researchDate": "2024-07-18",
+    "author": "Amanda Rodriguez",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-07-18",
+      "reviewedBy": "James Brown"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "title": "Securities Act Section 11 - Material Misstatement Liability",
+    "researchType": "statutory",
+    "jurisdiction": "Federal",
+    "citation": "15 U.S.C. § 77k",
+    "summary": "Analysis of Section 11 liability for material misstatements or omissions in registration statements, including available defenses.",
+    "keyFindings": "Section 11 imposes strict liability on issuers for material misstatements in registration statements. Non-issuer defendants may establish a due diligence defense by demonstrating reasonable investigation.",
+    "practiceArea": "Securities Law",
+    "tags": ["securities", "IPO", "registration statement", "due diligence", "Section 11"],
+    "citations": ["15 U.S.C. § 77k", "Escott v. BarChris Construction Corp., 283 F. Supp. 643 (S.D.N.Y. 1968)"],
+    "relevantCases": ["Escott v. BarChris Construction Corp.", "In re WorldCom, Inc. Securities Litigation"],
+    "status": "published",
+    "researchDate": "2024-06-10",
+    "author": "Steven Park",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-06-10",
+      "reviewedBy": "Emily Davis"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "title": "HIPAA Privacy Rule - Permitted Disclosures for Treatment, Payment, and Operations",
+    "researchType": "regulatory",
+    "jurisdiction": "Federal",
+    "citation": "45 C.F.R. § 164.506",
+    "summary": "Detailed analysis of permitted uses and disclosures of protected health information under the HIPAA Privacy Rule without patient authorization.",
+    "keyFindings": "Covered entities may use and disclose PHI for treatment, payment, and healthcare operations without patient authorization, subject to the minimum necessary standard.",
+    "practiceArea": "Healthcare Law",
+    "tags": ["HIPAA", "privacy", "PHI", "healthcare compliance"],
+    "citations": ["45 C.F.R. § 164.506", "45 C.F.R. § 164.502"],
+    "relevantCases": [],
+    "status": "published",
+    "researchDate": "2024-05-22",
+    "author": "Dr. Maria Garcia",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-05-22",
+      "reviewedBy": "Thomas Wilson"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "title": "Fair Housing Act - Reasonable Accommodation Requirements for Disabled Tenants",
+    "researchType": "statutory",
+    "jurisdiction": "Federal",
+    "citation": "42 U.S.C. § 3604(f)(3)(B)",
+    "summary": "Analysis of landlord obligations to provide reasonable accommodations for disabled tenants under the Fair Housing Act.",
+    "keyFindings": "Landlords must make reasonable accommodations in rules, policies, practices, or services when necessary to afford disabled persons equal opportunity to use and enjoy a dwelling. The accommodation must not impose undue financial or administrative burden.",
+    "practiceArea": "Real Estate Law",
+    "tags": ["fair housing", "disability", "reasonable accommodation", "landlord-tenant"],
+    "citations": ["42 U.S.C. § 3604(f)", "24 C.F.R. § 100.204"],
+    "relevantCases": ["United States v. California Mobile Home Park Management Co.", "Shapiro v. Cadman Towers, Inc."],
+    "status": "published",
+    "researchDate": "2024-04-15",
+    "author": "Rachel Green",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-04-15",
+      "reviewedBy": "Daniel Martinez"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "title": "Bankruptcy Code Section 363 - Sale of Assets Outside Ordinary Course",
+    "researchType": "statutory",
+    "jurisdiction": "Federal",
+    "citation": "11 U.S.C. § 363",
+    "summary": "Examination of Section 363 sales in bankruptcy proceedings, including good faith purchaser protections and appeal rights.",
+    "keyFindings": "Section 363(b) allows debtors to sell property outside the ordinary course of business after notice and hearing. Good faith purchasers receive strong protections, including mooting of appeals if the sale order is not stayed.",
+    "practiceArea": "Bankruptcy",
+    "tags": ["bankruptcy", "asset sale", "363 sale", "good faith purchaser"],
+    "citations": ["11 U.S.C. § 363", "In re Lionel Corp., 722 F.2d 1063 (2d Cir. 1983)"],
+    "relevantCases": ["In re Lionel Corp.", "In re Chrysler LLC"],
+    "status": "published",
+    "researchDate": "2024-03-08",
+    "author": "Christopher Lee",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-03-08",
+      "reviewedBy": "Nicole Turner"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440010",
+    "title": "Environmental Law - CERCLA Liability and Innocent Landowner Defense",
+    "researchType": "statutory",
+    "jurisdiction": "Federal",
+    "citation": "42 U.S.C. § 9607",
+    "summary": "Analysis of liability under CERCLA (Superfund) and the innocent landowner defense for contaminated property acquisitions.",
+    "keyFindings": "CERCLA imposes strict, joint and several liability on current owners of contaminated property. The innocent landowner defense requires demonstrating appropriate inquiry into previous ownership and uses prior to acquisition.",
+    "practiceArea": "Environmental Law",
+    "tags": ["CERCLA", "Superfund", "environmental liability", "due diligence"],
+    "citations": ["42 U.S.C. § 9607", "42 U.S.C. § 9601(35)"],
+    "relevantCases": ["United States v. Fleet Factors Corp.", "Redwing Carriers, Inc. v. Saraland Apartments"],
+    "status": "published",
+    "researchDate": "2024-02-14",
+    "author": "Brian Anderson",
+    "metadata": {
+      "confidence": "medium",
+      "lastUpdated": "2024-02-14",
+      "reviewedBy": "Sandra Collins"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "title": "Trademark Dilution - Famous Mark Protection Under Lanham Act Section 43(c)",
+    "researchType": "statutory",
+    "jurisdiction": "Federal",
+    "citation": "15 U.S.C. § 1125(c)",
+    "summary": "Comprehensive analysis of federal trademark dilution law, including fame requirements, blurring and tarnishment theories, and available defenses.",
+    "keyFindings": "The Trademark Dilution Revision Act protects famous marks from uses that blur or tarnish their distinctiveness, even in the absence of consumer confusion. Fame must be national in scope.",
+    "practiceArea": "Intellectual Property",
+    "tags": ["trademark", "dilution", "famous marks", "Lanham Act"],
+    "citations": ["15 U.S.C. § 1125(c)", "Moseley v. V Secret Catalogue, Inc., 537 U.S. 418 (2003)"],
+    "relevantCases": ["Moseley v. V Secret Catalogue", "Louis Vuitton Malletier S.A. v. Haute Diggity Dog, LLC"],
+    "status": "published",
+    "researchDate": "2024-01-20",
+    "author": "Jessica Taylor",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2024-01-20",
+      "reviewedBy": "Mark Johnson"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "title": "California Labor Code Section 226.7 - Meal and Rest Break Penalties",
+    "researchType": "statutory",
+    "jurisdiction": "California",
+    "citation": "Cal. Lab. Code § 226.7",
+    "summary": "Analysis of California's strict meal and rest break requirements and the premium pay penalties for non-compliance.",
+    "keyFindings": "Employers must provide 30-minute meal breaks and 10-minute rest breaks at specified intervals. Failure to provide compliant breaks requires payment of one hour of premium pay at the employee's regular rate.",
+    "practiceArea": "Employment Law",
+    "tags": ["California labor law", "meal breaks", "rest breaks", "wage and hour"],
+    "citations": ["Cal. Lab. Code § 226.7", "Cal. Lab. Code § 512"],
+    "relevantCases": ["Brinker Restaurant Corp. v. Superior Court", "Augustus v. ABM Security Services, Inc."],
+    "status": "published",
+    "researchDate": "2023-12-10",
+    "author": "Kevin Martinez",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2023-12-10",
+      "reviewedBy": "Laura Hernandez"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "title": "Federal Arbitration Act - Unconscionability and Class Action Waivers",
+    "researchType": "case_law",
+    "jurisdiction": "Federal",
+    "citation": "9 U.S.C. § 1 et seq.",
+    "summary": "Review of Supreme Court jurisprudence on arbitration agreements, particularly enforceability of class action waivers in consumer and employment contexts.",
+    "keyFindings": "The FAA preempts state laws that single out arbitration agreements for disfavored treatment. Class action waivers in arbitration agreements are generally enforceable, even if they prevent effective vindication of federal statutory rights.",
+    "practiceArea": "Civil Litigation",
+    "tags": ["arbitration", "class action", "FAA", "unconscionability"],
+    "citations": ["AT&T Mobility LLC v. Concepcion, 563 U.S. 333 (2011)", "Epic Systems Corp. v. Lewis, 138 S. Ct. 1612 (2018)"],
+    "relevantCases": ["AT&T Mobility v. Concepcion", "Epic Systems Corp. v. Lewis"],
+    "status": "published",
+    "researchDate": "2023-11-05",
+    "author": "Angela White",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2023-11-05",
+      "reviewedBy": "Paul Robinson"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "title": "GDPR Article 6 - Lawful Basis for Processing Personal Data",
+    "researchType": "regulatory",
+    "jurisdiction": "European Union",
+    "citation": "GDPR Art. 6",
+    "summary": "Analysis of the six lawful bases for processing personal data under GDPR, with focus on consent and legitimate interests grounds.",
+    "keyFindings": "Controllers must identify and document a lawful basis before processing personal data. Consent must be freely given, specific, informed, and unambiguous. Legitimate interests require balancing test considering data subject rights.",
+    "practiceArea": "Privacy Law",
+    "tags": ["GDPR", "data protection", "consent", "legitimate interests"],
+    "citations": ["Regulation (EU) 2016/679, Art. 6"],
+    "relevantCases": ["Planet49 GmbH (C-673/17)", "Fashion ID (C-40/17)"],
+    "status": "published",
+    "researchDate": "2023-10-18",
+    "author": "Sophie Mueller",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2023-10-18",
+      "reviewedBy": "Hans Schmidt"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "title": "New York CPLR Section 3212 - Summary Judgment Motion Practice",
+    "researchType": "statutory",
+    "jurisdiction": "New York",
+    "citation": "N.Y. C.P.L.R. § 3212",
+    "summary": "Detailed analysis of New York's summary judgment procedures, including timing requirements, burden of proof, and standards for opposition.",
+    "keyFindings": "Moving party must make prima facie showing of entitlement to judgment as a matter of law through admissible evidence. Burden then shifts to opponent to demonstrate existence of triable issues of fact.",
+    "practiceArea": "Civil Litigation",
+    "tags": ["New York practice", "summary judgment", "CPLR", "motion practice"],
+    "citations": ["N.Y. C.P.L.R. § 3212", "Zuckerman v. City of New York, 49 N.Y.2d 557 (1980)"],
+    "relevantCases": ["Zuckerman v. City of New York", "Alvarez v. Prospect Hospital"],
+    "status": "published",
+    "researchDate": "2023-09-22",
+    "author": "Robert Jackson",
+    "metadata": {
+      "confidence": "high",
+      "lastUpdated": "2023-09-22",
+      "reviewedBy": "Michelle Adams"
+    }
+  }
+]

@@ -4,3 +4,4 @@ export { UserResolver } from './user.resolver';
 export { BillingResolver } from './billing.resolver';
 export { DiscoveryResolver } from './discovery.resolver';
 export { AnalyticsResolver } from './analytics.resolver';
+export { ComplianceResolver } from './compliance.resolver';

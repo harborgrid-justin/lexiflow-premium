@@ -75,3 +75,41 @@ export class ExportAuditLogsDto {
   entityType?: AuditEntityType;
   action?: AuditAction;
 }
+
+export class AuditRetentionPolicyDto {
+  id: string;
+  name: string;
+  description: string;
+  retentionDays: number;
+  entityTypes?: AuditEntityType[];
+  actions?: AuditAction[];
+  autoDelete: boolean;
+  archiveBeforeDelete: boolean;
+  createdAt: Date;
+  organizationId: string;
+}
+
+export class CreateRetentionPolicyDto {
+  name: string;
+  description: string;
+  retentionDays: number;
+  entityTypes?: AuditEntityType[];
+  actions?: AuditAction[];
+  autoDelete: boolean;
+  archiveBeforeDelete: boolean;
+  organizationId: string;
+}
+
+export class AuditSessionDto {
+  sessionId: string;
+  userId: string;
+  userName: string;
+  startTime: Date;
+  endTime?: Date;
+  ipAddress: string;
+  userAgent: string;
+  loginMethod?: string;
+  logoutMethod?: string;
+  activitiesCount: number;
+  organizationId: string;
+}

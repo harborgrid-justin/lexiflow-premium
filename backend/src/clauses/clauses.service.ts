@@ -165,4 +165,147 @@ export class ClausesService {
       order: { usageCount: 'DESC', createdAt: 'DESC' },
     });
   }
+
+  /**
+   * Interpolate variables in clause content
+   */
+  interpolateClause(clause: Clause, variables: Record<string, any>): string {
+    let interpolatedContent = clause.content;
+
+    // Simple variable interpolation using {{variableName}} syntax
+    Object.entries(variables).forEach(([key, value]) => {
+      const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+      interpolatedContent = interpolatedContent.replace(regex, String(value));
+    });
+
+    // Check for default variables
+    if (clause.variables) {
+      Object.entries(clause.variables).forEach(([key, defaultValue]) => {
+        if (!(key in variables)) {
+          const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+          interpolatedContent = interpolatedContent.replace(regex, String(defaultValue));
+        }
+      });
+    }
+
+    return interpolatedContent;
+  }
+
+  /**
+   * Get clause with interpolated content
+   */
+  async getInterpolatedClause(
+    id: string,
+    variables: Record<string, any>,
+  ): Promise<{ clause: Clause; interpolatedContent: string }> {
+    const clause = await this.findOne(id);
+    const interpolatedContent = this.interpolateClause(clause, variables);
+
+    // Increment usage count
+    await this.incrementUsage(id);
+
+    return {
+      clause,
+      interpolatedContent,
+    };
+  }
+
+  /**
+   * Extract variables from clause content
+   */
+  extractVariables(content: string): string[] {
+    const variableRegex = /{{\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\s*}}/g;
+    const variables = new Set<string>();
+    let match;
+
+    while ((match = variableRegex.exec(content)) !== null) {
+      variables.add(match[1]);
+    }
+
+    return Array.from(variables);
+  }
+
+  /**
+   * Validate clause variables
+   */
+  async validateClauseVariables(
+    id: string,
+    variables: Record<string, any>,
+  ): Promise<{
+    valid: boolean;
+    missingVariables: string[];
+    extraVariables: string[];
+  }> {
+    const clause = await this.findOne(id);
+    const requiredVariables = this.extractVariables(clause.content);
+    const providedVariables = Object.keys(variables);
+
+    const missingVariables = requiredVariables.filter(
+      (v) => !providedVariables.includes(v) && !(clause.variables && v in clause.variables),
+    );
+    const extraVariables = providedVariables.filter(
+      (v) => !requiredVariables.includes(v),
+    );
+
+    return {
+      valid: missingVariables.length === 0,
+      missingVariables,
+      extraVariables,
+    };
+  }
+
+  /**
+   * Batch interpolate multiple clauses
+   */
+  async batchInterpolate(
+    clauseIds: string[],
+    variables: Record<string, any>,
+  ): Promise<Array<{ clauseId: string; interpolatedContent: string }>> {
+    const results = [];
+
+    for (const clauseId of clauseIds) {
+      try {
+        const { clause, interpolatedContent } = await this.getInterpolatedClause(
+          clauseId,
+          variables,
+        );
+        results.push({
+          clauseId: clause.id,
+          interpolatedContent,
+        });
+      } catch (error) {
+        this.logger.warn(`Failed to interpolate clause ${clauseId}`, error);
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * Preview clause with variables
+   */
+  async previewClause(
+    id: string,
+    variables: Record<string, any>,
+  ): Promise<{
+    original: string;
+    interpolated: string;
+    variables: string[];
+    missingVariables: string[];
+  }> {
+    const clause = await this.findOne(id);
+    const interpolatedContent = this.interpolateClause(clause, variables);
+    const requiredVariables = this.extractVariables(clause.content);
+    const providedVariables = Object.keys(variables);
+    const missingVariables = requiredVariables.filter(
+      (v) => !providedVariables.includes(v) && !(clause.variables && v in clause.variables),
+    );
+
+    return {
+      original: clause.content,
+      interpolated: interpolatedContent,
+      variables: requiredVariables,
+      missingVariables,
+    };
+  }
 }

@@ -16,12 +16,16 @@ import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody } from '@nestj
 import { Response } from 'express';
 import { DocumentVersionsService } from './document-versions.service';
 import { CreateVersionDto } from './dto/create-version.dto';
+import { VersionComparisonService } from './services/version-comparison.service';
+import { ChangeTrackingService } from './services/change-tracking.service';
 
 @ApiTags('document-versions')
 @Controller('api/v1/documents/:documentId/versions')
 export class DocumentVersionsController {
   constructor(
     private readonly documentVersionsService: DocumentVersionsService,
+    private readonly versionComparisonService: VersionComparisonService,
+    private readonly changeTrackingService: ChangeTrackingService,
   ) {}
 
   @Post()
@@ -125,5 +129,49 @@ export class DocumentVersionsController {
       version,
       caseId,
     );
+  }
+
+  @Get('compare/detailed')
+  @ApiOperation({ summary: 'Get detailed diff between two versions' })
+  @ApiResponse({ status: 200, description: 'Detailed comparison completed' })
+  async getDetailedComparison(
+    @Param('documentId', ParseUUIDPipe) documentId: string,
+    @Query('v1', ParseIntPipe) version1: number,
+    @Query('v2', ParseIntPipe) version2: number,
+    @Query('format') format?: 'html' | 'unified' | 'json',
+  ) {
+    // This would need to fetch the actual content and compare
+    // For now, returning a placeholder response
+    return {
+      message: 'Detailed comparison endpoint - implement with actual document content',
+      documentId,
+      version1,
+      version2,
+      format: format || 'json',
+    };
+  }
+
+  @Get('changes')
+  @ApiOperation({ summary: 'Get all changes for a document' })
+  @ApiResponse({ status: 200, description: 'Changes retrieved successfully' })
+  async getChanges(@Param('documentId', ParseUUIDPipe) documentId: string) {
+    return await this.changeTrackingService.getDocumentChanges(documentId);
+  }
+
+  @Get('changes/summary')
+  @ApiOperation({ summary: 'Get change summary for a document' })
+  @ApiResponse({ status: 200, description: 'Change summary retrieved successfully' })
+  async getChangeSummary(@Param('documentId', ParseUUIDPipe) documentId: string) {
+    return await this.changeTrackingService.generateChangeSummary(documentId);
+  }
+
+  @Get('changes/recent')
+  @ApiOperation({ summary: 'Get recent changes for a document' })
+  @ApiResponse({ status: 200, description: 'Recent changes retrieved successfully' })
+  async getRecentChanges(
+    @Param('documentId', ParseUUIDPipe) documentId: string,
+    @Query('limit', ParseIntPipe) limit?: number,
+  ) {
+    return await this.changeTrackingService.getRecentChanges(documentId, limit || 10);
   }
 }

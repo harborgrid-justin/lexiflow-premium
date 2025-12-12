@@ -8,11 +8,16 @@ import {
   ConflictCheckStatus,
   ConflictResult,
   ConflictCheckType,
+  BatchConflictCheckDto,
+  HistoricalConflictSearchDto,
+  PartyConflictCheckDto,
+  ConflictNotification,
 } from './dto/conflict-check.dto';
 
 @Injectable()
 export class ConflictChecksService {
   private conflictChecks: Map<string, ConflictCheckDto> = new Map();
+  private notifications: Map<string, ConflictNotification> = new Map();
 
   // Mock database of existing clients/matters for conflict checking
   private existingClients = [
@@ -257,6 +262,277 @@ export class ConflictChecksService {
       .replace(/0/g, '');
 
     return (firstLetter + soundexCode + '000').slice(0, 4);
+  }
+
+  // Historical Conflict Search
+  async searchHistoricalConflicts(dto: HistoricalConflictSearchDto): Promise<ConflictCheckDto[]> {
+    const minScore = dto.minMatchScore || 0.7;
+    let checks = Array.from(this.conflictChecks.values());
+
+    // Filter by date range
+    if (dto.startDate) {
+      checks = checks.filter((check) => check.createdAt >= dto.startDate);
+    }
+    if (dto.endDate) {
+      checks = checks.filter((check) => check.createdAt <= dto.endDate);
+    }
+
+    // Filter by status
+    if (!dto.includeResolved) {
+      checks = checks.filter((check) => check.status !== ConflictCheckStatus.RESOLVED);
+    }
+    if (!dto.includeWaived) {
+      checks = checks.filter((check) => check.status !== ConflictCheckStatus.WAIVED);
+    }
+
+    // Search by name matching
+    const results: ConflictCheckDto[] = [];
+    const searchTermLower = dto.searchTerm.toLowerCase();
+
+    for (const check of checks) {
+      // Check target name
+      const targetMatchScore = this.calculateNameMatch(dto.searchTerm, check.targetName);
+
+      if (targetMatchScore >= minScore) {
+        results.push(check);
+        continue;
+      }
+
+      // Check matched entities in conflicts
+      for (const conflict of check.conflicts) {
+        const matchScore = this.calculateNameMatch(dto.searchTerm, conflict.matchedEntity);
+        if (matchScore >= minScore) {
+          results.push(check);
+          break;
+        }
+      }
+    }
+
+    return results.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  // Batch Conflict Check
+  async runBatchCheck(dto: BatchConflictCheckDto): Promise<ConflictCheckDto[]> {
+    const results: ConflictCheckDto[] = [];
+
+    for (const target of dto.targets) {
+      const checkDto: RunConflictCheckDto = {
+        requestedBy: dto.requestedBy,
+        requestedByName: dto.requestedByName,
+        checkType: dto.checkType,
+        targetName: target.name,
+        targetEntity: target.entityId,
+        organizationId: dto.organizationId,
+      };
+
+      const result = await this.runCheck(checkDto);
+      results.push(result);
+    }
+
+    return results;
+  }
+
+  // Party Conflict Check
+  async checkPartyConflicts(dto: PartyConflictCheckDto): Promise<ConflictCheckDto> {
+    const allConflicts: ConflictResult[] = [];
+
+    // Check each party against existing clients and cases
+    for (const party of dto.parties) {
+      const conflicts = await this.performConflictCheck({
+        requestedBy: dto.requestedBy,
+        requestedByName: dto.requestedByName,
+        checkType: ConflictCheckType.CLIENT_VS_OPPOSING,
+        targetName: party.name,
+        caseId: dto.caseId,
+        organizationId: dto.organizationId,
+      });
+
+      // Add party role to conflict details
+      conflicts.forEach((conflict) => {
+        conflict.details = `${conflict.details} (Party role: ${party.role})`;
+      });
+
+      allConflicts.push(...conflicts);
+    }
+
+    // Check for conflicts between parties
+    for (let i = 0; i < dto.parties.length; i++) {
+      for (let j = i + 1; j < dto.parties.length; j++) {
+        const party1 = dto.parties[i];
+        const party2 = dto.parties[j];
+        const matchScore = this.calculateNameMatch(party1.name, party2.name);
+
+        if (matchScore > 0.8) {
+          allConflicts.push({
+            conflictType: ConflictCheckType.CLIENT_VS_CLIENT,
+            matchedEntity: party2.name,
+            matchedEntityId: 'party_match',
+            matchScore,
+            details: `Potential conflict between parties: ${party1.name} (${party1.role}) and ${party2.name} (${party2.role})`,
+            severity: matchScore > 0.95 ? 'critical' : 'high',
+          });
+        }
+      }
+    }
+
+    const conflictCheck: ConflictCheckDto = {
+      id: this.generateId(),
+      requestedBy: dto.requestedBy,
+      requestedByName: dto.requestedByName,
+      checkType: ConflictCheckType.CLIENT_VS_OPPOSING,
+      targetName: dto.parties.map((p) => p.name).join(', '),
+      targetEntity: dto.caseId,
+      conflicts: allConflicts,
+      status: allConflicts.length > 0 ? ConflictCheckStatus.CONFLICT_FOUND : ConflictCheckStatus.CLEAR,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      organizationId: dto.organizationId,
+    };
+
+    this.conflictChecks.set(conflictCheck.id, conflictCheck);
+
+    // Send notification if conflicts found
+    if (allConflicts.length > 0) {
+      await this.sendConflictNotification(conflictCheck, 'conflict_found');
+    }
+
+    return conflictCheck;
+  }
+
+  // Notifications
+  async sendConflictNotification(
+    conflictCheck: ConflictCheckDto,
+    type: 'conflict_found' | 'conflict_resolved' | 'waiver_required',
+  ): Promise<ConflictNotification> {
+    const notification: ConflictNotification = {
+      id: this.generateId(),
+      conflictCheckId: conflictCheck.id,
+      recipientUserId: conflictCheck.requestedBy,
+      recipientEmail: `${conflictCheck.requestedByName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+      notificationType: type,
+      message: this.generateNotificationMessage(conflictCheck, type),
+      sentAt: new Date(),
+    };
+
+    this.notifications.set(notification.id, notification);
+    return notification;
+  }
+
+  async getNotifications(userId: string): Promise<ConflictNotification[]> {
+    return Array.from(this.notifications.values())
+      .filter((notif) => notif.recipientUserId === userId)
+      .sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime());
+  }
+
+  async markNotificationRead(notificationId: string): Promise<ConflictNotification> {
+    const notification = this.notifications.get(notificationId);
+    if (!notification) {
+      throw new Error(`Notification with ID ${notificationId} not found`);
+    }
+
+    notification.readAt = new Date();
+    this.notifications.set(notificationId, notification);
+    return notification;
+  }
+
+  private generateNotificationMessage(
+    conflictCheck: ConflictCheckDto,
+    type: 'conflict_found' | 'conflict_resolved' | 'waiver_required',
+  ): string {
+    const conflictCount = conflictCheck.conflicts.length;
+    const criticalCount = conflictCheck.conflicts.filter((c) => c.severity === 'critical').length;
+
+    switch (type) {
+      case 'conflict_found':
+        return `Conflict check for "${conflictCheck.targetName}" found ${conflictCount} potential conflict(s)${criticalCount > 0 ? ` (${criticalCount} critical)` : ''}. Review required.`;
+      case 'conflict_resolved':
+        return `Conflict check for "${conflictCheck.targetName}" has been resolved.`;
+      case 'waiver_required':
+        return `Conflict check for "${conflictCheck.targetName}" requires waiver approval.`;
+      default:
+        return `Update on conflict check for "${conflictCheck.targetName}".`;
+    }
+  }
+
+  // Advanced name matching with fuzzy logic
+  async findSimilarClients(name: string, threshold: number = 0.7): Promise<Array<{
+    clientId: string;
+    clientName: string;
+    matchScore: number;
+    cases: string[];
+  }>> {
+    const results = [];
+
+    for (const client of this.existingClients) {
+      const matchScore = this.calculateNameMatch(name, client.name);
+
+      if (matchScore >= threshold) {
+        results.push({
+          clientId: client.id,
+          clientName: client.name,
+          matchScore,
+          cases: client.cases,
+        });
+      }
+    }
+
+    return results.sort((a, b) => b.matchScore - a.matchScore);
+  }
+
+  // Get conflict statistics
+  async getConflictStatistics(organizationId: string): Promise<{
+    totalChecks: number;
+    conflictsFound: number;
+    resolved: number;
+    waived: number;
+    pending: number;
+    byCheckType: Record<string, number>;
+    bySeverity: Record<string, number>;
+    averageResolutionTime: number;
+  }> {
+    const checks = Array.from(this.conflictChecks.values()).filter(
+      (check) => check.organizationId === organizationId,
+    );
+
+    const conflictsFound = checks.filter((c) => c.status === ConflictCheckStatus.CONFLICT_FOUND);
+    const resolved = checks.filter((c) => c.status === ConflictCheckStatus.RESOLVED);
+    const waived = checks.filter((c) => c.status === ConflictCheckStatus.WAIVED);
+    const pending = checks.filter((c) => c.status === ConflictCheckStatus.PENDING);
+
+    const byCheckType: Record<string, number> = {};
+    const bySeverity: Record<string, number> = {};
+
+    checks.forEach((check) => {
+      byCheckType[check.checkType] = (byCheckType[check.checkType] || 0) + 1;
+
+      check.conflicts.forEach((conflict) => {
+        bySeverity[conflict.severity] = (bySeverity[conflict.severity] || 0) + 1;
+      });
+    });
+
+    // Calculate average resolution time
+    let totalResolutionTime = 0;
+    let resolvedCount = 0;
+    resolved.forEach((check) => {
+      if (check.resolution) {
+        const resolutionTime = check.resolution.resolvedAt.getTime() - check.createdAt.getTime();
+        totalResolutionTime += resolutionTime;
+        resolvedCount++;
+      }
+    });
+
+    const averageResolutionTime = resolvedCount > 0 ? totalResolutionTime / resolvedCount : 0;
+
+    return {
+      totalChecks: checks.length,
+      conflictsFound: conflictsFound.length,
+      resolved: resolved.length,
+      waived: waived.length,
+      pending: pending.length,
+      byCheckType,
+      bySeverity,
+      averageResolutionTime: Math.round(averageResolutionTime / (1000 * 60 * 60)), // Convert to hours
+    };
   }
 
   private generateId(): string {

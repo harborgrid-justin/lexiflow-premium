@@ -1,0 +1,58 @@
+[
+  {
+    "caseNumber": "CASE-2025-001",
+    "motionType": "motion_to_dismiss",
+    "title": "Motion to Dismiss for Failure to State a Claim",
+    "description": "Defendant moves to dismiss plaintiff's complaint under FRCP 12(b)(6) for failure to state a claim upon which relief can be granted.",
+    "filingDate": "2025-02-01",
+    "hearingDate": "2025-03-15",
+    "status": "pending",
+    "filedBy": "Jones Corporation",
+    "notes": "Oral arguments scheduled"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "motionType": "motion_for_summary_judgment",
+    "title": "Motion for Summary Judgment",
+    "description": "Plaintiff moves for summary judgment on liability based on undisputed material facts.",
+    "filingDate": "2025-02-10",
+    "hearingDate": "2025-04-01",
+    "status": "pending",
+    "filedBy": "Emily Johnson",
+    "notes": "Briefing schedule set"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "motionType": "motion_to_compel",
+    "title": "Motion to Compel Discovery Responses",
+    "description": "Plaintiff moves to compel defendant to respond to outstanding discovery requests.",
+    "filingDate": "2025-02-05",
+    "hearingDate": "2025-02-28",
+    "status": "pending",
+    "filedBy": "Linda Garcia",
+    "notes": "Meet and confer requirement satisfied"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "motionType": "motion_in_limine",
+    "title": "Motion in Limine to Exclude Expert Testimony",
+    "description": "Motion to exclude defendant's expert testimony as unreliable under Daubert standard.",
+    "filingDate": "2025-01-20",
+    "hearingDate": "2025-03-01",
+    "status": "granted",
+    "filedBy": "John Peterson",
+    "outcome": "Motion granted in part, denied in part",
+    "notes": "Expert may testify on limited topics"
+  },
+  {
+    "caseNumber": "CASE-2025-010",
+    "motionType": "motion_to_suppress",
+    "title": "Motion to Suppress Evidence",
+    "description": "Defense motion to suppress breathalyzer results and field sobriety test evidence due to Fourth Amendment violations.",
+    "filingDate": "2025-02-01",
+    "hearingDate": "2025-03-10",
+    "status": "pending",
+    "filedBy": "Richard Lee",
+    "notes": "Evidentiary hearing required"
+  }
+]

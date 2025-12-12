@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { Motion } from './entities/motion.entity';
 import { CreateMotionDto } from './dto/create-motion.dto';
 import { UpdateMotionDto } from './dto/update-motion.dto';
+import { DeadlineTrackingService, CreateDeadlineDto } from './deadline-tracking.service';
 
 @Injectable()
 export class MotionsService {
   constructor(
     @InjectRepository(Motion)
     private readonly motionRepository: Repository<Motion>,
+    private readonly deadlineService: DeadlineTrackingService,
   ) {}
 
   async findAllByCaseId(caseId: string): Promise<Motion[]> {
@@ -45,5 +47,83 @@ export class MotionsService {
   async remove(id: string): Promise<void> {
     await this.findOne(id);
     await this.motionRepository.softDelete(id);
+  }
+
+  /**
+   * Create a deadline for a motion
+   */
+  async createDeadline(createDto: CreateDeadlineDto) {
+    await this.findOne(createDto.motionId); // Ensure motion exists
+    return this.deadlineService.create(createDto);
+  }
+
+  /**
+   * Get deadlines for a motion
+   */
+  async getDeadlines(motionId: string) {
+    await this.findOne(motionId);
+    return this.deadlineService.findByMotionId(motionId);
+  }
+
+  /**
+   * Get all deadlines for a case
+   */
+  async getCaseDeadlines(caseId: string) {
+    return this.deadlineService.findByCaseId(caseId);
+  }
+
+  /**
+   * Get upcoming deadlines
+   */
+  async getUpcomingDeadlines(days: number = 7, userId?: string) {
+    return this.deadlineService.getUpcomingDeadlines(days, userId);
+  }
+
+  /**
+   * Get overdue deadlines
+   */
+  async getOverdueDeadlines(userId?: string) {
+    return this.deadlineService.getOverdueDeadlines(userId);
+  }
+
+  /**
+   * Complete a deadline
+   */
+  async completeDeadline(id: string, userId: string, notes?: string) {
+    return this.deadlineService.completeDeadline(id, userId, notes);
+  }
+
+  /**
+   * Get deadline alerts
+   */
+  async getDeadlineAlerts(userId?: string, days: number = 7) {
+    return this.deadlineService.getDeadlineAlerts(userId, days);
+  }
+
+  /**
+   * Get deadline statistics
+   */
+  async getDeadlineStatistics(params: { caseId?: string; userId?: string }) {
+    return this.deadlineService.getDeadlineStatistics(params);
+  }
+
+  /**
+   * Find motions by status
+   */
+  async findByStatus(caseId: string, status: string): Promise<Motion[]> {
+    return this.motionRepository.find({
+      where: { caseId, status: status as any },
+      order: { filedDate: 'DESC', createdAt: 'DESC' },
+    });
+  }
+
+  /**
+   * Find motions by type
+   */
+  async findByType(caseId: string, type: string): Promise<Motion[]> {
+    return this.motionRepository.find({
+      where: { caseId, type: type as any },
+      order: { filedDate: 'DESC', createdAt: 'DESC' },
+    });
   }
 }

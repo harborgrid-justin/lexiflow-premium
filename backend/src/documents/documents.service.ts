@@ -11,6 +11,7 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
 import { FileStorageService } from '../file-storage/file-storage.service';
+import { MetadataExtractionService } from './services/metadata-extraction.service';
 
 @Injectable()
 export class DocumentsService {
@@ -20,6 +21,7 @@ export class DocumentsService {
     @InjectRepository(Document)
     private documentRepository: Repository<Document>,
     private fileStorageService: FileStorageService,
+    private metadataExtractionService: MetadataExtractionService,
   ) {}
 
   /**
@@ -51,6 +53,33 @@ export class DocumentsService {
         document.mimeType = fileResult.mimetype;
         document.fileSize = fileResult.size;
         document.checksum = fileResult.checksum;
+
+        // Extract metadata
+        try {
+          const metadata = await this.metadataExtractionService.extractMetadata(
+            file.buffer,
+            file.mimetype,
+          );
+
+          // Update document with extracted metadata
+          if (metadata.pageCount) document.pageCount = metadata.pageCount;
+          if (metadata.wordCount) document.wordCount = metadata.wordCount;
+          if (metadata.language) document.language = metadata.language;
+          if (metadata.author && !document.author) document.author = metadata.author;
+
+          // Extract full text content for search
+          const textContent = await this.metadataExtractionService.extractTextContent(
+            file.buffer,
+            file.mimetype,
+          );
+          if (textContent) {
+            document.fullTextContent = textContent;
+          }
+
+          this.logger.log('Document metadata extracted successfully');
+        } catch (error) {
+          this.logger.warn('Failed to extract metadata, continuing without it', error);
+        }
       }
 
       const savedDocument = await this.documentRepository.save(document);

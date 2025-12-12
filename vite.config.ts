@@ -8,6 +8,13 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        proxy: {
+          '/api': {
+            target: env.VITE_API_BASE_URL || 'http://localhost:3000',
+            changeOrigin: true,
+            secure: false,
+          },
+        },
       },
       plugins: [react()],
       define: {
@@ -17,7 +24,29 @@ export default defineConfig(({ mode }) => {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
+          '@components': path.resolve(__dirname, './components'),
+          '@context': path.resolve(__dirname, './context'),
+          '@services': path.resolve(__dirname, './services'),
+          '@types': path.resolve(__dirname, './types'),
+          '@hooks': path.resolve(__dirname, './hooks'),
+          '@utils': path.resolve(__dirname, './utils'),
+          '@config': path.resolve(__dirname, './config'),
         }
-      }
+      },
+      optimizeDeps: {
+        include: ['react', 'react-dom', 'react-router-dom'],
+      },
+      build: {
+        sourcemap: true,
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ['react', 'react-dom', 'react-router-dom'],
+              ui: ['lucide-react', 'framer-motion'],
+              charts: ['recharts'],
+            },
+          },
+        },
+      },
     };
 });

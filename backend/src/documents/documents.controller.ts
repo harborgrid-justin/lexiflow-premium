@@ -24,6 +24,10 @@ import { DocumentFilterDto } from './dto/document-filter.dto';
 import { ProcessingJobsService } from '../processing-jobs/processing-jobs.service';
 import { JobType } from '../processing-jobs/dto/job-status.dto';
 import { OcrRequestDto } from '../ocr/dto/ocr-request.dto';
+import { DocumentTemplateService } from './services/document-template.service';
+import { CreateTemplateDto } from './dto/create-template.dto';
+import { UpdateTemplateDto } from './dto/update-template.dto';
+import { GenerateFromTemplateDto } from './dto/generate-from-template.dto';
 
 @ApiTags('documents')
 @Controller('api/v1/documents')
@@ -32,6 +36,7 @@ export class DocumentsController {
     private readonly documentsService: DocumentsService,
     @Inject(ProcessingJobsService)
     private readonly processingJobsService: ProcessingJobsService,
+    private readonly templateService: DocumentTemplateService,
   ) {}
 
   @Post()
@@ -167,5 +172,82 @@ export class DocumentsController {
       jobId: job.id,
       documentId: id,
     };
+  }
+}
+
+@ApiTags('document-templates')
+@Controller('api/v1/document-templates')
+export class DocumentTemplatesController {
+  constructor(private readonly templateService: DocumentTemplateService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Create a new document template' })
+  @ApiResponse({ status: 201, description: 'Template created successfully' })
+  async create(@Body() createTemplateDto: CreateTemplateDto) {
+    return await this.templateService.create(createTemplateDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all document templates' })
+  @ApiResponse({ status: 200, description: 'Templates retrieved successfully' })
+  async findAll(
+    @Query('category') category?: string,
+    @Query('isActive') isActive?: boolean,
+  ) {
+    return await this.templateService.findAll(category, isActive);
+  }
+
+  @Get('most-used')
+  @ApiOperation({ summary: 'Get most used templates' })
+  @ApiResponse({ status: 200, description: 'Most used templates retrieved' })
+  async getMostUsed(@Query('limit') limit?: number) {
+    return await this.templateService.getMostUsed(limit || 10);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get template by ID' })
+  @ApiResponse({ status: 200, description: 'Template found' })
+  @ApiResponse({ status: 404, description: 'Template not found' })
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.templateService.findOne(id);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a template' })
+  @ApiResponse({ status: 200, description: 'Template updated successfully' })
+  @ApiResponse({ status: 404, description: 'Template not found' })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateTemplateDto: UpdateTemplateDto,
+  ) {
+    return await this.templateService.update(id, updateTemplateDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a template' })
+  @ApiResponse({ status: 200, description: 'Template deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Template not found' })
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    await this.templateService.remove(id);
+    return { message: 'Template deleted successfully' };
+  }
+
+  @Post('generate')
+  @ApiOperation({ summary: 'Generate document from template' })
+  @ApiResponse({ status: 201, description: 'Document generated successfully' })
+  @ApiResponse({ status: 404, description: 'Template not found' })
+  async generateDocument(@Body() generateDto: GenerateFromTemplateDto) {
+    const content = await this.templateService.generateFromTemplate(
+      generateDto.templateId,
+      generateDto.variables,
+    );
+    return { content };
+  }
+
+  @Post('validate')
+  @ApiOperation({ summary: 'Validate template syntax' })
+  @ApiResponse({ status: 200, description: 'Template validated' })
+  async validateTemplate(@Body() body: { content: string }) {
+    return await this.templateService.validateTemplate(body.content);
   }
 }

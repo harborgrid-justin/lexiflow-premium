@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsController } from './notifications.controller';
 import { NotificationsService } from './notifications.service';
+import { NotificationsGateway } from './notifications.gateway';
 
 /**
  * Notifications Module
  *
  * Provides notification management functionality
- * Includes user preferences and notification delivery
+ * Includes user preferences, notification delivery, and real-time WebSocket notifications
  *
  * @module NotificationsModule
  */
@@ -17,7 +18,7 @@ import { NotificationsService } from './notifications.service';
     // TypeOrmModule.forFeature([SystemNotification, NotificationPreference]),
   ],
   controllers: [NotificationsController],
-  providers: [NotificationsService],
-  exports: [NotificationsService],
+  providers: [NotificationsService, NotificationsGateway],
+  exports: [NotificationsService, NotificationsGateway],
 })
 export class NotificationsModule {}

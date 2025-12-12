@@ -1,0 +1,122 @@
+[
+  {
+    "caseNumber": "CASE-2025-001",
+    "entryNumber": 1,
+    "entryDate": "2025-01-15",
+    "description": "Complaint Filed",
+    "filingParty": "Robert Smith",
+    "documentType": "complaint"
+  },
+  {
+    "caseNumber": "CASE-2025-001",
+    "entryNumber": 2,
+    "entryDate": "2025-01-20",
+    "description": "Summons Issued",
+    "filingParty": "Clerk of Court",
+    "documentType": "summons"
+  },
+  {
+    "caseNumber": "CASE-2025-001",
+    "entryNumber": 3,
+    "entryDate": "2025-02-01",
+    "description": "Answer to Complaint",
+    "filingParty": "Jones Corporation",
+    "documentType": "answer"
+  },
+  {
+    "caseNumber": "CASE-2025-001",
+    "entryNumber": 4,
+    "entryDate": "2025-02-01",
+    "description": "Motion to Dismiss",
+    "filingParty": "Jones Corporation",
+    "documentType": "motion"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "entryNumber": 1,
+    "entryDate": "2025-02-01",
+    "description": "Complaint for Product Liability",
+    "filingParty": "Emily Johnson",
+    "documentType": "complaint"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "entryNumber": 2,
+    "entryDate": "2025-02-05",
+    "description": "Proof of Service",
+    "filingParty": "Emily Johnson",
+    "documentType": "service"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "entryNumber": 3,
+    "entryDate": "2025-02-10",
+    "description": "Motion for Summary Judgment",
+    "filingParty": "Emily Johnson",
+    "documentType": "motion"
+  },
+  {
+    "caseNumber": "CASE-2025-003",
+    "entryNumber": 1,
+    "entryDate": "2025-01-20",
+    "description": "Petition for Quiet Title",
+    "filingParty": "Mary Thompson",
+    "documentType": "petition"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "entryNumber": 1,
+    "entryDate": "2024-12-10",
+    "description": "Employment Discrimination Complaint",
+    "filingParty": "Linda Garcia",
+    "documentType": "complaint"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "entryNumber": 2,
+    "entryDate": "2024-12-20",
+    "description": "Initial Case Management Conference Order",
+    "filingParty": "Court",
+    "documentType": "order"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "entryNumber": 3,
+    "entryDate": "2025-01-10",
+    "description": "Plaintiff's Initial Disclosures",
+    "filingParty": "Linda Garcia",
+    "documentType": "disclosure"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "entryNumber": 4,
+    "entryDate": "2025-02-05",
+    "description": "Motion to Compel Discovery",
+    "filingParty": "Linda Garcia",
+    "documentType": "motion"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "entryNumber": 1,
+    "entryDate": "2025-01-05",
+    "description": "Medical Malpractice Complaint",
+    "filingParty": "John Peterson",
+    "documentType": "complaint"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "entryNumber": 2,
+    "entryDate": "2025-01-15",
+    "description": "Certificate of Merit",
+    "filingParty": "John Peterson",
+    "documentType": "certificate"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "entryNumber": 3,
+    "entryDate": "2025-01-20",
+    "description": "Motion in Limine",
+    "filingParty": "John Peterson",
+    "documentType": "motion"
+  }
+]

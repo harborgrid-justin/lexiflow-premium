@@ -1,0 +1,87 @@
+[
+  {
+    "caseNumber": "CASE-2025-001",
+    "requestType": "interrogatories",
+    "title": "First Set of Interrogatories to Defendant",
+    "description": "25 interrogatories regarding the breach of contract allegations, timeline of events, and damages calculations.",
+    "requestDate": "2025-02-15",
+    "dueDate": "2025-03-17",
+    "status": "pending",
+    "requestedBy": "Robert Smith"
+  },
+  {
+    "caseNumber": "CASE-2025-001",
+    "requestType": "requests_for_production",
+    "title": "First Request for Production of Documents",
+    "description": "Request for all contracts, purchase orders, invoices, correspondence, and related documents.",
+    "requestDate": "2025-02-15",
+    "dueDate": "2025-03-17",
+    "status": "pending",
+    "requestedBy": "Robert Smith"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "requestType": "requests_for_admission",
+    "title": "Requests for Admission - Product Defect",
+    "description": "Requests for admission regarding manufacturing process, quality control, and known defects.",
+    "requestDate": "2025-02-20",
+    "dueDate": "2025-03-22",
+    "status": "pending",
+    "requestedBy": "Emily Johnson"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "requestType": "interrogatories",
+    "title": "Interrogatories - Manufacturing and Safety",
+    "description": "Interrogatories regarding product design, testing, safety warnings, and prior incidents.",
+    "requestDate": "2025-02-18",
+    "dueDate": "2025-03-20",
+    "status": "responded",
+    "requestedBy": "Emily Johnson",
+    "respondedDate": "2025-03-15"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "requestType": "requests_for_production",
+    "title": "Employment Records Production Request",
+    "description": "Request for personnel file, performance reviews, emails, and HR investigation records.",
+    "requestDate": "2025-01-20",
+    "dueDate": "2025-02-20",
+    "status": "partial",
+    "requestedBy": "Linda Garcia",
+    "notes": "Some documents produced under protective order"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "requestType": "interrogatories",
+    "title": "Interrogatories Regarding Termination Decision",
+    "description": "Interrogatories about decision-making process, alleged discrimination, and company policies.",
+    "requestDate": "2025-01-25",
+    "dueDate": "2025-02-25",
+    "status": "overdue",
+    "requestedBy": "Linda Garcia",
+    "notes": "Motion to compel filed"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "requestType": "requests_for_production",
+    "title": "Medical Records and Hospital Policies",
+    "description": "Request for complete medical records, surgical notes, hospital policies, and staff credentials.",
+    "requestDate": "2025-01-15",
+    "dueDate": "2025-02-15",
+    "status": "responded",
+    "requestedBy": "John Peterson",
+    "respondedDate": "2025-02-10"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "requestType": "interrogatories",
+    "title": "Expert Witness Interrogatories",
+    "description": "Interrogatories regarding defendant's expert witnesses, qualifications, and opinions.",
+    "requestDate": "2025-01-25",
+    "dueDate": "2025-02-25",
+    "status": "responded",
+    "requestedBy": "John Peterson",
+    "respondedDate": "2025-02-20"
+  }
+]

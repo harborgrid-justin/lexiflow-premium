@@ -11,7 +11,11 @@ import { DocumentResolver } from './resolvers/document.resolver';
 import { UserResolver } from './resolvers/user.resolver';
 import { BillingResolver } from './resolvers/billing.resolver';
 import { DiscoveryResolver } from './resolvers/discovery.resolver';
+import { AnalyticsResolver } from './resolvers/analytics.resolver';
+import { SubscriptionsResolver } from './subscriptions/subscriptions.resolver';
 import { DataLoaderModule } from './dataloaders/dataloader.module';
+import { ComplexityPlugin } from './plugins/complexity.plugin';
+import { DepthLimitPlugin } from './plugins/depth-limit.plugin';
 
 @Module({
   imports: [
@@ -78,6 +82,12 @@ import { DataLoaderModule } from './dataloaders/dataloader.module';
     UserResolver,
     BillingResolver,
     DiscoveryResolver,
+    AnalyticsResolver,
+    SubscriptionsResolver,
+
+    // Plugins
+    ComplexityPlugin,
+    DepthLimitPlugin,
   ],
   exports: [NestGraphQLModule],
 })

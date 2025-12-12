@@ -1,0 +1,932 @@
+[
+  {
+    "description": "Initial client consultation and case assessment",
+    "hours": 2.0,
+    "billableRate": 400,
+    "date": "2025-01-15",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-001",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Legal research on breach of contract remedies",
+    "hours": 4.5,
+    "billableRate": 300,
+    "date": "2025-01-16",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-001",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Drafted complaint and supporting documents",
+    "hours": 6.0,
+    "billableRate": 350,
+    "date": "2025-01-17",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-001",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Reviewed and finalized complaint for filing",
+    "hours": 2.5,
+    "billableRate": 400,
+    "date": "2025-01-18",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-001",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Court filing and service of process coordination",
+    "hours": 1.5,
+    "billableRate": 150,
+    "date": "2025-01-19",
+    "isBillable": true,
+    "taskType": "ADMINISTRATIVE",
+    "caseNumber": "CASE-2025-001",
+    "userEmail": "david.williams@lexiflow.com"
+  },
+  {
+    "description": "Product liability expert consultation",
+    "hours": 3.0,
+    "billableRate": 400,
+    "date": "2025-02-01",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-002",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Review medical records and injury documentation",
+    "hours": 5.0,
+    "billableRate": 200,
+    "date": "2025-02-02",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-002",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Research on California product liability law",
+    "hours": 4.0,
+    "billableRate": 300,
+    "date": "2025-02-03",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-002",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft expert witness retention letter",
+    "hours": 1.5,
+    "billableRate": 300,
+    "date": "2025-02-04",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-002",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Conference call with defense counsel",
+    "hours": 1.0,
+    "billableRate": 400,
+    "date": "2025-02-05",
+    "isBillable": true,
+    "taskType": "PHONE_CALL",
+    "caseNumber": "CASE-2025-002",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Property survey review and analysis",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2025-01-20",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-003",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Title search and easement research",
+    "hours": 4.5,
+    "billableRate": 200,
+    "date": "2025-01-21",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-003",
+    "userEmail": "david.williams@lexiflow.com"
+  },
+  {
+    "description": "Client meeting regarding property boundaries",
+    "hours": 1.5,
+    "billableRate": 350,
+    "date": "2025-01-22",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-003",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Draft demand letter to opposing party",
+    "hours": 2.0,
+    "billableRate": 300,
+    "date": "2025-01-23",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-003",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "EEOC filing and documentation preparation",
+    "hours": 3.5,
+    "billableRate": 350,
+    "date": "2024-12-10",
+    "isBillable": true,
+    "taskType": "ADMINISTRATIVE",
+    "caseNumber": "CASE-2025-004",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Research on age and disability discrimination",
+    "hours": 5.0,
+    "billableRate": 300,
+    "date": "2024-12-11",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-004",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Interview witnesses and collect statements",
+    "hours": 4.0,
+    "billableRate": 200,
+    "date": "2024-12-12",
+    "isBillable": true,
+    "taskType": "INVESTIGATION",
+    "caseNumber": "CASE-2025-004",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Review employment contract and personnel files",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2024-12-13",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-004",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Draft federal court complaint",
+    "hours": 6.0,
+    "billableRate": 350,
+    "date": "2024-12-14",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-004",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Medical malpractice case intake and evaluation",
+    "hours": 2.5,
+    "billableRate": 400,
+    "date": "2025-01-05",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-005",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Comprehensive medical records review",
+    "hours": 8.0,
+    "billableRate": 200,
+    "date": "2025-01-06",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-005",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Research on informed consent requirements",
+    "hours": 4.0,
+    "billableRate": 350,
+    "date": "2025-01-07",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-005",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Consultation with medical expert witness",
+    "hours": 3.0,
+    "billableRate": 400,
+    "date": "2025-01-08",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-005",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Draft medical malpractice complaint",
+    "hours": 7.0,
+    "billableRate": 350,
+    "date": "2025-01-09",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-005",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Due diligence document review - financial statements",
+    "hours": 6.0,
+    "billableRate": 450,
+    "date": "2024-11-15",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2024-089",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Research on Delaware merger law requirements",
+    "hours": 4.0,
+    "billableRate": 350,
+    "date": "2024-11-16",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2024-089",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft merger agreement initial version",
+    "hours": 8.0,
+    "billableRate": 450,
+    "date": "2024-11-17",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-089",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Negotiation meeting with target company counsel",
+    "hours": 3.5,
+    "billableRate": 450,
+    "date": "2024-11-18",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2024-089",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Revise merger agreement based on negotiations",
+    "hours": 5.0,
+    "billableRate": 400,
+    "date": "2024-11-19",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-089",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "SEC registration statement preparation",
+    "hours": 10.0,
+    "billableRate": 450,
+    "date": "2025-01-10",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-006",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Research on SEC disclosure requirements",
+    "hours": 5.0,
+    "billableRate": 350,
+    "date": "2025-01-11",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-006",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Review financial statements for S-1",
+    "hours": 6.0,
+    "billableRate": 400,
+    "date": "2025-01-12",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-006",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Conference with underwriters and auditors",
+    "hours": 4.0,
+    "billableRate": 450,
+    "date": "2025-01-13",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-006",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Draft underwriting agreement",
+    "hours": 6.0,
+    "billableRate": 400,
+    "date": "2025-01-14",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-006",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Commercial lease negotiation and review",
+    "hours": 4.0,
+    "billableRate": 400,
+    "date": "2024-10-01",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2024-095",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Draft franchise agreement template",
+    "hours": 8.0,
+    "billableRate": 350,
+    "date": "2024-10-02",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-095",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Client meeting on expansion strategy",
+    "hours": 2.0,
+    "billableRate": 400,
+    "date": "2024-10-03",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2024-095",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Review and finalize all expansion documents",
+    "hours": 5.0,
+    "billableRate": 350,
+    "date": "2024-12-14",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2024-095",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Initial divorce consultation with client",
+    "hours": 2.0,
+    "billableRate": 350,
+    "date": "2024-12-01",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-007",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Gather financial documents and asset information",
+    "hours": 4.0,
+    "billableRate": 200,
+    "date": "2024-12-02",
+    "isBillable": true,
+    "taskType": "ADMINISTRATIVE",
+    "caseNumber": "CASE-2025-007",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Research on community property division",
+    "hours": 3.0,
+    "billableRate": 300,
+    "date": "2024-12-03",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-007",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Draft petition for dissolution of marriage",
+    "hours": 4.0,
+    "billableRate": 350,
+    "date": "2024-12-04",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-007",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Prepare financial disclosure declarations",
+    "hours": 5.0,
+    "billableRate": 200,
+    "date": "2024-12-05",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-007",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Custody evaluation review and strategy",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2024-12-06",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-007",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Custody modification case assessment",
+    "hours": 1.5,
+    "billableRate": 350,
+    "date": "2025-01-25",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-008",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Research on custody modification standards",
+    "hours": 3.0,
+    "billableRate": 300,
+    "date": "2025-01-26",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-008",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Draft motion to modify custody order",
+    "hours": 4.0,
+    "billableRate": 350,
+    "date": "2025-01-27",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-008",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Prepare supporting declarations and evidence",
+    "hours": 3.0,
+    "billableRate": 200,
+    "date": "2025-01-28",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-008",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Emergency restraining order preparation",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2024-11-20",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-103",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Emergency court hearing representation",
+    "hours": 2.0,
+    "billableRate": 350,
+    "date": "2024-11-21",
+    "isBillable": true,
+    "taskType": "COURT_APPEARANCE",
+    "caseNumber": "CASE-2024-103",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Follow-up hearing preparation and client support",
+    "hours": 2.5,
+    "billableRate": 350,
+    "date": "2024-12-09",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2024-103",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Permanent restraining order hearing",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2024-12-10",
+    "isBillable": true,
+    "taskType": "COURT_APPEARANCE",
+    "caseNumber": "CASE-2024-103",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Initial consultation on securities fraud charges",
+    "hours": 2.5,
+    "billableRate": 450,
+    "date": "2024-12-15",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-009",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Review indictment and discovery materials",
+    "hours": 6.0,
+    "billableRate": 400,
+    "date": "2024-12-16",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-009",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Research on securities fraud defenses",
+    "hours": 5.0,
+    "billableRate": 350,
+    "date": "2024-12-17",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-009",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft motion to suppress illegally obtained evidence",
+    "hours": 6.0,
+    "billableRate": 400,
+    "date": "2024-12-18",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-009",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Forensic accounting expert consultation",
+    "hours": 3.0,
+    "billableRate": 450,
+    "date": "2024-12-19",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-009",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "DUI case initial consultation",
+    "hours": 1.5,
+    "billableRate": 350,
+    "date": "2025-01-18",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-010",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Review arrest report and police video",
+    "hours": 2.5,
+    "billableRate": 300,
+    "date": "2025-01-19",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-010",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Research on field sobriety test challenges",
+    "hours": 3.0,
+    "billableRate": 300,
+    "date": "2025-01-20",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-010",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft motion to suppress field sobriety tests",
+    "hours": 4.0,
+    "billableRate": 350,
+    "date": "2025-01-21",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-010",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "DMV hearing representation",
+    "hours": 2.0,
+    "billableRate": 350,
+    "date": "2025-01-22",
+    "isBillable": true,
+    "taskType": "HEARING",
+    "caseNumber": "CASE-2025-010",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Assault case review and plea negotiation",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2024-12-18",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2024-098",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Draft plea agreement with prosecution",
+    "hours": 2.5,
+    "billableRate": 350,
+    "date": "2024-12-19",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-098",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Plea hearing court appearance",
+    "hours": 1.5,
+    "billableRate": 350,
+    "date": "2024-12-20",
+    "isBillable": true,
+    "taskType": "COURT_APPEARANCE",
+    "caseNumber": "CASE-2024-098",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Chapter 7 bankruptcy consultation",
+    "hours": 2.0,
+    "billableRate": 300,
+    "date": "2025-01-12",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-011",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Gather financial documents and credit reports",
+    "hours": 3.0,
+    "billableRate": 150,
+    "date": "2025-01-13",
+    "isBillable": true,
+    "taskType": "ADMINISTRATIVE",
+    "caseNumber": "CASE-2025-011",
+    "userEmail": "david.williams@lexiflow.com"
+  },
+  {
+    "description": "Prepare bankruptcy schedules and statements",
+    "hours": 6.0,
+    "billableRate": 200,
+    "date": "2025-01-14",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-011",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Review and finalize Chapter 7 petition",
+    "hours": 2.5,
+    "billableRate": 300,
+    "date": "2025-01-15",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-011",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "341 meeting preparation with client",
+    "hours": 1.5,
+    "billableRate": 300,
+    "date": "2025-01-16",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-011",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Chapter 11 initial consultation with business owner",
+    "hours": 3.0,
+    "billableRate": 400,
+    "date": "2024-11-05",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2024-091",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Business financial analysis and viability assessment",
+    "hours": 8.0,
+    "billableRate": 350,
+    "date": "2024-11-06",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2024-091",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft Chapter 11 plan of reorganization",
+    "hours": 10.0,
+    "billableRate": 400,
+    "date": "2024-11-07",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-091",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Prepare disclosure statement",
+    "hours": 6.0,
+    "billableRate": 350,
+    "date": "2024-11-08",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2024-091",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Creditor meeting and negotiation",
+    "hours": 4.0,
+    "billableRate": 400,
+    "date": "2024-11-09",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2024-091",
+    "userEmail": "justin@lexiflow.com"
+  },
+  {
+    "description": "Patent application consultation and invention review",
+    "hours": 3.0,
+    "billableRate": 450,
+    "date": "2025-01-08",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-012",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Prior art search and patentability analysis",
+    "hours": 6.0,
+    "billableRate": 350,
+    "date": "2025-01-09",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-012",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft patent claims and specifications",
+    "hours": 8.0,
+    "billableRate": 450,
+    "date": "2025-01-10",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-012",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Prepare patent drawings and technical documentation",
+    "hours": 5.0,
+    "billableRate": 200,
+    "date": "2025-01-11",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-012",
+    "userEmail": "david.williams@lexiflow.com"
+  },
+  {
+    "description": "Review and finalize patent application",
+    "hours": 3.0,
+    "billableRate": 450,
+    "date": "2025-01-12",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-012",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Trademark infringement assessment consultation",
+    "hours": 2.0,
+    "billableRate": 450,
+    "date": "2025-02-01",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-013",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Trademark search and registration review",
+    "hours": 3.0,
+    "billableRate": 350,
+    "date": "2025-02-02",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-013",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Draft trademark infringement complaint",
+    "hours": 5.0,
+    "billableRate": 450,
+    "date": "2025-02-03",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-013",
+    "userEmail": "emily.johnson@lexiflow.com"
+  },
+  {
+    "description": "Prepare preliminary injunction motion",
+    "hours": 4.0,
+    "billableRate": 400,
+    "date": "2025-02-04",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-013",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "EB-5 visa consultation and eligibility review",
+    "hours": 2.5,
+    "billableRate": 350,
+    "date": "2024-12-20",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-014",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Review business plan and financial projections",
+    "hours": 4.0,
+    "billableRate": 300,
+    "date": "2024-12-21",
+    "isBillable": true,
+    "taskType": "REVIEW",
+    "caseNumber": "CASE-2025-014",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Draft EB-5 petition and supporting documents",
+    "hours": 8.0,
+    "billableRate": 350,
+    "date": "2024-12-22",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-014",
+    "userEmail": "sarah.martinez@lexiflow.com"
+  },
+  {
+    "description": "Prepare source of funds documentation",
+    "hours": 6.0,
+    "billableRate": 200,
+    "date": "2024-12-23",
+    "isBillable": true,
+    "taskType": "ADMINISTRATIVE",
+    "caseNumber": "CASE-2025-014",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Asylum case consultation and intake",
+    "hours": 2.0,
+    "billableRate": 300,
+    "date": "2025-01-22",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-015",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Research country conditions and persecution evidence",
+    "hours": 6.0,
+    "billableRate": 300,
+    "date": "2025-01-23",
+    "isBillable": true,
+    "taskType": "RESEARCH",
+    "caseNumber": "CASE-2025-015",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Draft I-589 asylum application",
+    "hours": 5.0,
+    "billableRate": 300,
+    "date": "2025-01-24",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-015",
+    "userEmail": "michael.chen@lexiflow.com"
+  },
+  {
+    "description": "Prepare supporting declarations and evidence",
+    "hours": 4.0,
+    "billableRate": 200,
+    "date": "2025-01-25",
+    "isBillable": true,
+    "taskType": "DRAFTING",
+    "caseNumber": "CASE-2025-015",
+    "userEmail": "lisa.anderson@lexiflow.com"
+  },
+  {
+    "description": "Expert witness consultation on country conditions",
+    "hours": 2.0,
+    "billableRate": 350,
+    "date": "2025-01-26",
+    "isBillable": true,
+    "taskType": "CLIENT_MEETING",
+    "caseNumber": "CASE-2025-015",
+    "userEmail": "michael.chen@lexiflow.com"
+  }
+]

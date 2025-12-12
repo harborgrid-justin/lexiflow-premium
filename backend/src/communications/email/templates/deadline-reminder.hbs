@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deadline Reminder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background-color: #dc2626;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 5px 5px 0 0;
+    }
+    .content {
+      background-color: #f9fafb;
+      padding: 30px;
+      border-radius: 0 0 5px 5px;
+    }
+    .deadline-box {
+      background-color: #fef2f2;
+      border: 2px solid #dc2626;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .deadline-date {
+      font-size: 24px;
+      font-weight: bold;
+      color: #dc2626;
+      margin: 10px 0;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #dc2626;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>⚠️ Deadline Reminder</h1>
+  </div>
+  <div class="content">
+    <h2>Upcoming Deadline</h2>
+    <div class="deadline-box">
+      <h3>{{deadlineTitle}}</h3>
+      <p class="deadline-date">{{deadlineDate}}</p>
+      <p><strong>Case:</strong> #{{caseNumber}}</p>
+    </div>
+    <p>This is a reminder about an upcoming deadline. Please ensure all necessary actions are completed before the deadline.</p>
+    <a href="{{appUrl}}/cases/{{caseNumber}}" class="button">View Case Details</a>
+  </div>
+  <div class="footer">
+    <p>&copy; 2024 LexiFlow. All rights reserved.</p>
+  </div>
+</body>
+</html>

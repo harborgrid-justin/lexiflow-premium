@@ -21,15 +21,14 @@ export const HolographicDock: React.FC = () => {
           className={cn(
             "pointer-events-auto w-72 backdrop-blur-xl border shadow-2xl rounded-xl overflow-hidden transform transition-all duration-300 translate-y-0 opacity-100 cursor-pointer flex items-center justify-between p-4 group animate-in slide-in-from-right-10",
             "hover:scale-105 hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
-            theme.surface,
-            "bg-opacity-90",
-            "border-opacity-40",
+            theme.surface.default,
+            "bg-opacity-90 dark:bg-opacity-90", // Enforce opacity on top of theme surface
             theme.border.default
           )}
           onClick={() => restoreWindow(win.id)}
         >
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-inner shrink-0">
+            <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-inner shrink-0", theme.primary.DEFAULT)}>
                 <Layers className="h-5 w-5" />
             </div>
             <div className="flex flex-col min-w-0">
@@ -40,14 +39,14 @@ export const HolographicDock: React.FC = () => {
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
              <button 
                 onClick={(e) => { e.stopPropagation(); restoreWindow(win.id); }} 
-                className="p-1.5 hover:bg-blue-50 text-blue-600 rounded-full transition-colors"
+                className={cn("p-1.5 rounded-full transition-colors", theme.primary.light, theme.primary.text)}
                 title="Restore"
              >
                 <Maximize2 className="h-4 w-4"/>
              </button>
              <button 
                 onClick={(e) => { e.stopPropagation(); closeWindow(win.id); }} 
-                className="p-1.5 hover:bg-red-50 text-red-600 rounded-full transition-colors"
+                className={cn("p-1.5 rounded-full transition-colors", theme.action.danger.hover, theme.status.error.text)}
                 title="Close"
              >
                 <X className="h-4 w-4"/>

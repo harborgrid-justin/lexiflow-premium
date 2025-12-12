@@ -44,29 +44,29 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
                 onClick={() => onSelect(root)}
                 className={cn(
                     "p-6 rounded-xl border-2 shadow-lg w-64 text-center cursor-pointer transition-transform hover:scale-105 z-10",
-                    theme.surface,
+                    theme.surface.default,
                     theme.border.default
                 )}
             >
-                <Building2 className="h-8 w-8 mx-auto text-blue-600 mb-2"/>
+                <Building2 className={cn("h-8 w-8 mx-auto mb-2", theme.primary.text)}/>
                 <h3 className={cn("font-bold text-lg", theme.text.primary)}>{root.name}</h3>
                 <p className="text-xs text-slate-500 uppercase tracking-wide">Parent Entity</p>
             </div>
 
             {/* Connector */}
-            <div className={cn("h-8 w-0.5 -my-4", theme.border.default, "bg-slate-300 dark:bg-slate-700")}></div>
-            <div className={cn("w-96 h-0.5", theme.border.default, "bg-slate-300 dark:bg-slate-700")}></div>
+            <div className={cn("h-8 w-0.5 -my-4", theme.border.default, "bg-current opacity-30")}></div>
+            <div className={cn("w-96 h-0.5", theme.border.default, "bg-current opacity-30")}></div>
             
             {/* Children */}
             <div className="flex gap-8">
                 {children.map(child => (
                     <div key={child.id} className="flex flex-col items-center">
-                        <div className={cn("h-8 w-0.5 -mt-8 mb-2", theme.border.default, "bg-slate-300 dark:bg-slate-700")}></div>
+                        <div className={cn("h-8 w-0.5 -mt-8 mb-2", theme.border.default, "bg-current opacity-30")}></div>
                         <div 
                             onClick={() => onSelect(child)}
                             className={cn(
                                 "p-4 rounded-lg border shadow-sm w-48 text-center cursor-pointer hover:border-blue-400 transition-colors",
-                                theme.surface,
+                                theme.surface.default,
                                 theme.border.default
                             )}
                         >

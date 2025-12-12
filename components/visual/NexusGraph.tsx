@@ -103,11 +103,11 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
       if (type === 'party') return chartTheme.colors.blue;
       if (type === 'org') return chartTheme.colors.purple;
       if (type === 'evidence') return chartTheme.colors.amber;
-      return mode === 'dark' ? '#f8fafc' : '#1e293b'; // Root default
+      return theme.chart.text; // Use theme chart text token instead of manual check
   };
 
   return (
-    <div ref={containerRef} className={cn("h-full flex flex-col relative overflow-hidden rounded-xl border shadow-inner", theme.surface, theme.border.default)}>
+    <div ref={containerRef} className={cn("h-full flex flex-col relative overflow-hidden rounded-xl border shadow-inner", theme.surface.default, theme.border.default)}>
         <GraphOverlay scale={scale} setScale={setScale} onReheat={reheat} isStable={isStable} nodeCount={nodesMeta.length} />
         <div className="flex-1 overflow-hidden cursor-move">
             <svg 
@@ -116,7 +116,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
             >
                 <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
                     {physicsState.current.links.map((_, i) => (
-                        <line key={`link-${i}`} ref={el => { if(el) linkRefs.current[i] = el; }} stroke={mode === 'dark' ? '#475569' : '#cbd5e1'} strokeWidth="1.5" strokeOpacity="0.4" />
+                        <line key={`link-${i}`} ref={el => { if(el) linkRefs.current[i] = el; }} stroke={theme.chart.grid} strokeWidth="1.5" strokeOpacity="0.4" />
                     ))}
                     {nodesMeta.map((node, i) => (
                         <g 
@@ -127,11 +127,11 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
                         >
                             <circle 
                                 r={node.type === 'root' ? 40 : node.type === 'org' ? 30 : 18} 
-                                fill={node.type === 'root' ? getStroke('root') : (mode === 'dark' ? '#0f172a' : "white")} 
+                                fill={node.type === 'root' ? getStroke('root') : theme.surface.default} 
                                 stroke={getStroke(node.type)}
                                 strokeWidth={node.type === 'root' ? 0 : 3} 
                             />
-                            <text y={node.type === 'root' ? 46 : 32} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
+                            <text y={node.type === 'root' ? 46 : 32} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", theme.mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
                         </g>
                     ))}
                 </g>

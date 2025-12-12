@@ -38,11 +38,11 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
       const days = GanttHelpers.generateTimeScale(viewStartDate, 90, step);
 
       return (
-        <div className="flex h-8 border-b">
+        <div className={cn("flex h-8 border-b", theme.border.default)}>
           {days.map((d, i) => (
              <div 
                 key={i} 
-                className={cn("border-r text-[10px] font-bold uppercase p-2 flex-shrink-0 text-slate-400 select-none", theme.border.default)}
+                className={cn("border-r text-[10px] font-bold uppercase p-2 flex-shrink-0 select-none", theme.border.default, theme.text.tertiary)}
                 style={{ width: pixelsPerDay * step }}
               >
                   {d.label}
@@ -53,9 +53,9 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
   };
 
   return (
-      <div className="flex-1 flex flex-col overflow-hidden bg-slate-50 relative" ref={timelineRef}>
+      <div className={cn("flex-1 flex flex-col overflow-hidden relative", theme.surface.highlight)} ref={timelineRef}>
           <div className="flex-1 overflow-auto custom-scrollbar relative">
-              <div className="sticky top-0 z-20 bg-slate-50 border-b shadow-sm min-w-max">
+              <div className={cn("sticky top-0 z-20 border-b shadow-sm min-w-max", theme.surface.highlight, theme.border.default)}>
                   {renderTimeScale()}
               </div>
               
@@ -82,7 +82,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                               {tasks.filter(t => true).slice(0, 10).map((task) => (
                                   <div 
                                     key={task.id} 
-                                    className={cn("h-10 relative flex items-center hover:bg-black/5 transition-colors", activeTaskId === task.id && "bg-blue-50/50")}
+                                    className={cn("h-10 relative flex items-center transition-colors", activeTaskId === task.id ? cn(theme.primary.light, "bg-opacity-50") : "hover:bg-black/5 dark:hover:bg-white/5")}
                                   >
                                       <div 
                                           className={cn(
@@ -97,7 +97,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                                           onMouseLeave={() => onHoverTask(null)}
                                           onClick={(e) => {
                                               if (e.defaultPrevented) return; // Don't open if dragged
-                                              openWindow(`task-${task.id}`, `Task: ${task.title}`, <div className="p-6 bg-white h-full"><h2 className="text-xl font-bold mb-2">{task.title}</h2><p className="text-slate-600 mb-4">{task.description}</p><Badge variant="neutral">{task.status}</Badge></div>)
+                                              openWindow(`task-${task.id}`, `Task: ${task.title}`, <div className={cn("p-6 h-full", theme.surface.default)}><h2 className={cn("text-xl font-bold mb-2", theme.text.primary)}>{task.title}</h2><p className={cn("mb-4", theme.text.secondary)}>{task.description}</p><Badge variant="neutral">{task.status}</Badge></div>)
                                           }}
                                       >
                                           <span className="truncate drop-shadow-md z-10 pr-2">{task.title}</span>

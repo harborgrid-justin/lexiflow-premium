@@ -39,9 +39,9 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   };
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Day Headers */}
-      <div className={cn("grid grid-cols-7 border-b", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("grid grid-cols-7 border-b", theme.surface.highlight, theme.border.default)}>
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
           <div key={d} className={cn("py-2 text-center text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>
             {d}
@@ -50,10 +50,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
       </div>
 
       {/* Grid Cells */}
-      <div className={cn("flex-1 grid grid-cols-7 auto-rows-fr gap-px", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("flex-1 grid grid-cols-7 auto-rows-fr gap-px", theme.border.default, theme.surface.highlight)}>
         {/* Previous Month Padding */}
         {paddingDays.map((_, i) => (
-          <div key={`padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surfaceHighlight)} />
+          <div key={`padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
 
         {/* Days */}
@@ -67,8 +67,8 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
               onClick={() => onDateClick?.(dateObj)}
               className={cn(
                 "p-2 min-h-[120px] flex flex-col transition-colors group relative",
-                theme.surface,
-                `hover:${theme.surfaceHighlight}`,
+                theme.surface.default,
+                `hover:${theme.surface.highlight}`,
                 today ? cn(theme.primary.light, "ring-1 ring-inset", theme.primary.border) : ""
               )}
             >
@@ -81,7 +81,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
                 </span>
                 
                 {/* Add button placeholder - visible on hover */}
-                <button className={cn("opacity-0 group-hover:opacity-100 p-1 rounded transition-opacity", theme.surfaceHighlight, theme.text.tertiary)}>
+                <button className={cn("opacity-0 group-hover:opacity-100 p-1 rounded transition-opacity", theme.surface.highlight, theme.text.tertiary)}>
                   <span className="sr-only">Add Event</span>
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -98,7 +98,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
         {/* Next Month Padding to fill grid if needed */}
         {Array.from({ length: (42 - (daysInMonth + startDayOfWeek)) % 7 }).map((_, i) => (
-           <div key={`end-padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surfaceHighlight)} />
+           <div key={`end-padding-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
       </div>
     </div>

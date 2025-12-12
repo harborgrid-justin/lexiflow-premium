@@ -33,11 +33,11 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
   const chartTheme = useChartTheme();
   
   const CHART_COLORS = [
-      chartTheme.colors.blue, 
-      chartTheme.colors.purple,
+      chartTheme.colors.blue, // theme.chart.colors.primary
+      chartTheme.colors.purple, // theme.chart.colors.secondary
       chartTheme.colors.purple, 
-      chartTheme.colors.emerald, 
-      chartTheme.colors.amber
+      chartTheme.colors.emerald, // theme.chart.colors.success
+      chartTheme.colors.amber    // theme.chart.colors.warning
   ];
 
   return (

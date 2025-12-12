@@ -14,13 +14,13 @@ export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'stre
 
   const getColor = (val: number) => {
     if (type === 'strength') {
-      if (val >= 80) return 'bg-green-500';
-      if (val >= 50) return 'bg-blue-500';
-      return 'bg-amber-500';
+      if (val >= 80) return theme.chart.colors.success; // Green
+      if (val >= 50) return theme.chart.colors.primary; // Blue
+      return theme.chart.colors.warning; // Amber
     } else { // Risk
-      if (val >= 80) return 'bg-red-500';
-      if (val >= 50) return 'bg-amber-500';
-      return 'bg-green-500'; // Low risk is good
+      if (val >= 80) return theme.chart.colors.danger; // Red
+      if (val >= 50) return theme.chart.colors.warning; // Amber
+      return theme.chart.colors.success; // Green (Low risk is good)
     }
   };
 
@@ -34,8 +34,8 @@ export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'stre
       )}
       <div className={cn("w-full rounded-full h-2 overflow-hidden", theme.surfaceHighlight)}>
         <div 
-          className={`${getColor(value)} h-full rounded-full transition-all duration-500`} 
-          style={{ width: `${Math.max(0, Math.min(100, value))}%` }} 
+          className="h-full rounded-full transition-all duration-500" 
+          style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundColor: getColor(value) }} 
         />
       </div>
     </div>

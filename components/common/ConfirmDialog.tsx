@@ -33,7 +33,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
-      <div className={cn("p-6", theme.surface)}>
+      <div className={cn("p-6", theme.surface.default)}>
         <div className="flex items-start gap-4 mb-4">
           <div className={cn("p-3 rounded-full shrink-0 border", style.bg, style.text, theme.border.light)}>
             {variant === 'info' ? <Info className="h-6 w-6"/> : <AlertTriangle className="h-6 w-6" />}

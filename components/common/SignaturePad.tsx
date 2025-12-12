@@ -19,7 +19,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
   const [localSigning, setLocalSigning] = useState(false);
 
   const handleClick = () => {
-    if (value) return; // Prevent re-signing on simple click if already signed, use clear button
+    if (value) return; 
     
     setLocalSigning(true);
     setTimeout(() => {
@@ -50,13 +50,13 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           <div className={cn(
             "w-10 h-10 rounded-full flex items-center justify-center transition-all",
             value 
-              ? "bg-blue-600 text-white" 
+              ? cn(theme.primary.DEFAULT, theme.text.inverse) 
               : cn(theme.surface, theme.border.default, "border text-slate-400 group-hover:border-slate-300")
           )}>
             {loading ? <RefreshCcw className="h-5 w-5 animate-spin"/> : value ? <CheckCircle className="h-6 w-6"/> : <PenTool className="h-5 w-5"/>}
           </div>
           <div>
-            <span className={cn("block text-sm font-bold", value ? "text-blue-900 dark:text-blue-200" : theme.text.primary)}>
+            <span className={cn("block text-sm font-bold", value ? theme.primary.text : theme.text.primary)}>
               {value ? 'Signed & Verified' : label}
             </span>
             <span className={cn("text-xs", theme.text.secondary)}>{subtext}</span>
@@ -67,7 +67,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
              <div className="absolute top-0 right-0 p-2">
                  <button 
                     onClick={handleClear}
-                    className="p-1 rounded-full bg-slate-200 hover:bg-red-100 hover:text-red-500 text-slate-500 transition-colors"
+                    className={cn("p-1 rounded-full transition-colors", theme.action.danger.hover, theme.text.secondary)}
                     title="Clear Signature"
                     aria-label="Clear Signature"
                  >

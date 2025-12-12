@@ -14,10 +14,10 @@ export const CaseOverviewStats: React.FC = () => {
       openWindow(
           winId,
           `Detail: ${title}`,
-          <div className="p-6 flex flex-col items-center justify-center h-full text-center">
+          <div className={cn("p-6 flex flex-col items-center justify-center h-full text-center", theme.text.primary)}>
               <h3 className="text-xl font-bold mb-2">{title} Breakdown</h3>
-              <p className="text-slate-500">Detailed analytics and historical data for this metric would appear here.</p>
-              <button className="mt-4 text-blue-600 underline" onClick={() => closeWindow(winId)}>Close</button>
+              <p className={theme.text.secondary}>Detailed analytics and historical data for this metric would appear here.</p>
+              <button className={cn("mt-4 underline", theme.primary.text)} onClick={() => closeWindow(winId)}>Close</button>
           </div>
       );
   };
@@ -25,19 +25,19 @@ export const CaseOverviewStats: React.FC = () => {
   return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-            { label: "Total Billed", value: "124,500", icon: DollarSign, color: "text-green-600" },
-            { label: "Upcoming Events", value: "3", icon: Clock, color: "text-blue-600" },
-            { label: "Open Tasks", value: "12", icon: CheckCircle, color: "text-purple-600" },
-            { label: "Risk Score", value: "Low", icon: TrendingUp, color: "text-amber-500" }
+            { label: "Total Billed", value: "124,500", icon: DollarSign, color: theme.status.success.text },
+            { label: "Upcoming Events", value: "3", icon: Clock, color: theme.primary.text },
+            { label: "Open Tasks", value: "12", icon: CheckCircle, color: theme.chart.colors.purple },
+            { label: "Risk Score", value: "Low", icon: TrendingUp, color: theme.status.warning.text }
         ].map((stat, i) => (
             <div 
                 key={i} 
                 onClick={() => handleDetail(stat.label)}
                 className={cn(
                     "p-4 rounded-lg border shadow-sm flex flex-col justify-center cursor-pointer group relative overflow-hidden", 
-                    theme.surface, theme.border.default,
+                    theme.surface.default, theme.border.default,
                     `hover:${theme.surfaceHighlight}`,
-                    "hover:border-blue-300 transition-all"
+                    `hover:${theme.primary.border} transition-all`
                 )}
             >
                 <p className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>{stat.label}</p>
@@ -45,7 +45,7 @@ export const CaseOverviewStats: React.FC = () => {
                     <stat.icon className={cn("h-4 w-4 mr-1", stat.color)}/> {stat.value}
                 </div>
                 <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ExternalLink className="h-3 w-3 text-slate-400"/>
+                    <ExternalLink className={cn("h-3 w-3", theme.text.tertiary)}/>
                 </div>
             </div>
         ))}

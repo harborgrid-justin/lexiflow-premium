@@ -24,10 +24,10 @@ export const FileAttachment: React.FC<FileAttachmentProps> = ({
   return (
     <div className={cn(
       "flex items-center p-3 rounded-lg transition-all group overflow-hidden",
-      variant === 'card' ? cn(theme.surface, theme.border.default, "border hover:shadow-md") : "",
+      variant === 'card' ? cn(theme.surface.default, theme.border.default, "border hover:shadow-md") : "",
       className
     )}>
-      <div className={cn("p-2 rounded-lg mr-3 shrink-0", theme.surfaceHighlight)}>
+      <div className={cn("p-2 rounded-lg mr-3 shrink-0", theme.surface.highlight)}>
         <FileIcon type={type} className="h-6 w-6" />
       </div>
       
@@ -48,7 +48,7 @@ export const FileAttachment: React.FC<FileAttachmentProps> = ({
         {onPreview && (
           <button 
             onClick={(e) => { e.stopPropagation(); onPreview(); }} 
-            className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}
+            className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
             title="Preview"
           >
             <Eye className="h-4 w-4" />
@@ -56,7 +56,7 @@ export const FileAttachment: React.FC<FileAttachmentProps> = ({
         )}
         <button 
           onClick={(e) => { e.stopPropagation(); onDownload ? onDownload() : null; }} 
-          className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}
+          className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
           title="Download"
         >
           <Download className="h-4 w-4" />

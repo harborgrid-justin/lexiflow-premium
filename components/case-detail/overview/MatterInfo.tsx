@@ -41,11 +41,11 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
     { label: 'Magistrate Judge', value: caseData.magistrateJudge || 'N/A', icon: Scale },
     { label: 'Opposing Counsel', value: caseData.opposingCounsel || 'N/A', icon: Briefcase },
     { label: 'Originating Case', value: caseData.origCaseNumber || 'N/A', icon: BookOpen },
-    caseData.dateTerminated ? { label: 'Date Terminated', value: caseData.dateTerminated, icon: Calendar, color: 'text-red-600' } : null,
+    caseData.dateTerminated ? { label: 'Date Terminated', value: caseData.dateTerminated, icon: Calendar, color: theme.status.error.text } : null,
   ];
 
   return (
-    <Card title="Matter Particulars" className={cn("border-t-4", `border-t-blue-600`)}>
+    <Card title="Matter Particulars" className={cn("border-t-4", theme.primary.border)}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
             {items.filter((item): item is InfoItem => Boolean(item)).map((item, i) => (
                 <div key={i} className="min-w-0">
@@ -64,7 +64,7 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
             </div>
             
             {(caseData.origJudgmentDate || caseData.noticeOfAppealDate || caseData.solDate) && (
-                <div className={cn("col-span-1 sm:col-span-2 flex flex-wrap gap-4 p-2 bg-slate-50 rounded text-xs border border-slate-100", theme.text.secondary)}>
+                <div className={cn("col-span-1 sm:col-span-2 flex flex-wrap gap-4 p-2 rounded text-xs border", theme.surfaceHighlight, theme.border.subtle, theme.text.secondary)}>
                    {caseData.origJudgmentDate && (
                        <span className="flex items-center"><Gavel className="h-3 w-3 mr-1 opacity-50"/> <strong>Orig. Judgment:</strong>&nbsp;{caseData.origJudgmentDate}</span>
                    )}
@@ -72,7 +72,7 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
                        <span className="flex items-center"><AlertCircle className="h-3 w-3 mr-1 opacity-50"/> <strong>Notice of Appeal:</strong>&nbsp;{caseData.noticeOfAppealDate}</span>
                    )}
                    {caseData.solDate && (
-                       <span className="flex items-center text-red-600"><AlertCircle className="h-3 w-3 mr-1"/> <strong>SOL Expiry:</strong>&nbsp;{caseData.solDate}</span>
+                       <span className={cn("flex items-center", theme.status.error.text)}><AlertCircle className="h-3 w-3 mr-1"/> <strong>SOL Expiry:</strong>&nbsp;{caseData.solDate}</span>
                    )}
                 </div>
             )}

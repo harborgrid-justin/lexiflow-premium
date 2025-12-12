@@ -23,10 +23,10 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', class
   };
 
   const indicatorColors = {
-    online: 'bg-emerald-500',
-    offline: 'bg-slate-400',
-    busy: 'bg-rose-500',
-    away: 'bg-amber-500'
+    online: theme.chart.colors.success,
+    offline: theme.chart.colors.neutral,
+    busy: theme.chart.colors.danger,
+    away: theme.chart.colors.warning
   };
 
   const displayName = name || '?';
@@ -40,7 +40,8 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', class
   } else if (charCode % 4 === 2) {
      colorClass = cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border);
   } else if (charCode % 4 === 3) {
-     colorClass = "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/50 dark:text-purple-400 dark:border-purple-900";
+     // Previously hardcoded purple, now utilizing chart secondary or status info with manual override if needed for variety
+     colorClass = cn(theme.status.neutral.bg, theme.primary.text, theme.status.neutral.border);
   }
 
   return (
@@ -54,12 +55,14 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', class
         {initials}
       </div>
       {indicatorStatus && (
-        <span className={cn(
-          "absolute bottom-0 right-0 block rounded-full ring-2",
-          theme.surface.default === 'bg-white' ? 'ring-white' : 'ring-slate-900', // Adapt ring to surface based on the actual theme token, not hardcoded string
-          indicatorColors[indicatorStatus],
-          size === 'xs' ? 'h-1.5 w-1.5' : 'h-2.5 w-2.5'
-        )} />
+        <span 
+            className={cn(
+                "absolute bottom-0 right-0 block rounded-full ring-2",
+                theme.surface.default.includes('slate-9') ? 'ring-slate-900' : 'ring-white',
+                size === 'xs' ? 'h-1.5 w-1.5' : 'h-2.5 w-2.5'
+            )} 
+            style={{ backgroundColor: indicatorColors[indicatorStatus] }}
+        />
       )}
     </div>
   );

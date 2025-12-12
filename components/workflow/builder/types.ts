@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Layers, Milestone, MessageSquare } from 'lucide-react';
+import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Milestone, MessageSquare } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
 export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event' | 'Milestone' | 'Comment';
@@ -59,57 +59,60 @@ export const getNodeIcon = (type: NodeType) => {
 
 export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) => {
   const base = cn("absolute flex flex-col rounded-xl border-2 shadow-md cursor-pointer transition-all duration-200 select-none", `hover:shadow-xl hover:-translate-y-0.5`);
-  const selected = isSelected ? "ring-4 ring-blue-500/40 ring-offset-2 dark:ring-offset-slate-900 z-20" : "z-10";
-  
+  const selected = isSelected ? "ring-4 ring-offset-2 z-20" : "z-10";
+  // Dynamically injecting ring color class requires safelisting or careful construction. 
+  // For now, relying on theme token mapping via `cn`.
+  const selectedRingColor = theme.border.focused; 
+
   let color = theme.border.default;
   let size = "";
   let padding = "";
 
   switch (type) {
     case 'Start': 
-      color = "border-green-300 dark:border-green-700 bg-gradient-to-br from-white to-green-50 dark:from-slate-800 dark:to-green-900/30";
+      color = cn(theme.status.success.border, theme.status.success.bg);
       size = "w-32 h-14";
       padding = "p-3 items-center justify-center rounded-full";
       break;
     case 'End': 
-      color = "border-red-300 dark:border-red-700 bg-gradient-to-br from-white to-red-50 dark:from-slate-800 dark:to-red-900/30";
+      color = cn(theme.status.error.border, theme.status.error.bg);
       size = "w-32 h-14";
       padding = "p-3 items-center justify-center rounded-full";
       break;
     case 'Decision': 
-      color = "border-purple-300 dark:border-purple-700 bg-gradient-to-br from-white to-purple-50 dark:from-slate-800 dark:to-purple-900/30";
+      color = cn(theme.border.default, "bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800");
       size = "w-32 h-32 rotate-45 !rounded-2xl"; 
       break;
     case 'Milestone':
-        color = "border-teal-300 dark:border-teal-700 bg-gradient-to-br from-white to-teal-50 dark:from-slate-800 dark:to-teal-900/30";
+        color = cn(theme.border.default, "bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800");
         size = "w-32 h-32 rotate-45 !rounded-3xl";
         break;
     case 'Task':
-      color = cn("border-slate-200 dark:border-slate-700", "bg-white dark:bg-slate-800");
+      color = cn(theme.border.default, theme.surface.default);
       size = "w-48 h-22 !rounded-lg"; // Height changed to h-22
       padding = "p-0"; // Internal padding
       break;
     case 'Delay':
-      color = "border-amber-300 dark:border-amber-700 border-dashed bg-amber-50/30";
+      color = cn(theme.status.warning.border, theme.status.warning.bg, "border-dashed");
       size = "w-40 h-20";
       padding = "p-3 items-center justify-center";
       break;
     case 'Event':
-        color = "border-pink-300 dark:border-pink-700 bg-gradient-to-br from-white to-pink-50 dark:from-slate-800 dark:to-pink-900/30";
+        color = cn(theme.border.default, "bg-pink-50 dark:bg-pink-900/20 border-pink-200 dark:border-pink-800");
         size = "w-40 h-16";
         padding = "p-3 items-center justify-center rounded-full";
         break;
     case 'Phase':
-      color = "border-slate-300/80 dark:border-slate-700/80 bg-slate-100/20 dark:bg-slate-900/20 backdrop-blur-sm !rounded-2xl";
+      color = cn(theme.border.default, theme.surface.highlight, "backdrop-blur-sm !rounded-2xl");
       // Size will be dynamic
       padding = "p-0 justify-start items-start";
-      return `absolute flex flex-col cursor-pointer transition-all select-none ${color} ${padding} ${isSelected ? 'ring-2 ring-indigo-400 z-0' : 'z-0'}`;
+      return `absolute flex flex-col cursor-pointer transition-all select-none ${color} ${padding} ${isSelected ? 'ring-2 z-0' : 'z-0'}`;
     case 'Comment':
-        color = "border-yellow-300 bg-yellow-100/80 dark:bg-yellow-900/30 shadow-none";
+        color = cn(theme.status.warning.bg, "border-yellow-300 dark:border-yellow-700 shadow-none");
         size = "w-48 h-auto";
         padding = "p-3";
         break;
   }
 
-  return `${base} ${color} ${size} ${padding} ${selected}`;
+  return `${base} ${color} ${size} ${padding} ${selected} ${isSelected ? selectedRingColor : ''}`;
 };

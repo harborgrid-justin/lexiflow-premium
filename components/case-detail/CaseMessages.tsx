@@ -54,7 +54,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   }
 
   return (
-    <div className={cn("flex flex-col h-[500px] md:h-[600px] max-h-[80vh] rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-[500px] md:h-[600px] max-h-[80vh] rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Thread Header */}
       <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surfaceHighlight)}>
         <div>
@@ -87,7 +87,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
                     "p-4 rounded-2xl text-sm shadow-sm relative break-words whitespace-pre-wrap w-full",
                     isMe 
                         ? cn(theme.primary.DEFAULT, theme.text.inverse, "rounded-tr-none") 
-                        : cn(theme.surface, theme.text.primary, theme.border.default, "border rounded-tl-none")
+                        : cn(theme.surface.default, theme.text.primary, theme.border.default, "border rounded-tl-none")
                 )}>
                    {msg.text}
                    {msg.attachments && (
@@ -107,7 +107,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
       </div>
 
       {/* Input Area */}
-      <div className={cn("p-4 border-t shrink-0", theme.surface, theme.border.default)}>
+      <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
          <div className="flex items-center gap-3">
             <button className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}>
                 <Paperclip className="h-5 w-5"/>

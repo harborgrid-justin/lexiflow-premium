@@ -17,7 +17,7 @@ export const PipelineDAG: React.FC = () => {
     ];
 
     return (
-        <div className={cn("flex flex-col h-full bg-slate-50 dark:bg-slate-900 overflow-hidden relative", theme.surface)}>
+        <div className={cn("flex flex-col h-full bg-slate-50 dark:bg-slate-900 overflow-hidden relative", theme.surface.default)}>
             <div className="absolute inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: `radial-gradient(${mode === 'dark' ? '#334155' : '#cbd5e1'} 1px, transparent 1px)`, backgroundSize: '24px 24px' }}></div>
             
             <div className="relative z-10 flex flex-1 items-center justify-center p-10 overflow-auto">

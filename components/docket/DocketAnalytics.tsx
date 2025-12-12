@@ -102,7 +102,7 @@ export const DocketAnalytics: React.FC = () => {
             { label: 'Most Active Case', value: 'Martinez v. TechCorp', sub: `${entries.filter(e => e.caseId === 'C-2024-001').length} Entries YTD` },
             { label: 'Upcoming Hearings', value: entries.filter(e => e.type === 'Hearing').length.toString(), sub: 'Next 30 Days' }
         ].map((stat, i) => (
-            <div key={i} className={cn("p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+            <div key={i} className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>{stat.label}</p>
                 <p className={cn("text-2xl font-bold mb-1", theme.text.primary)}>{stat.value}</p>
                 <p className={cn("text-xs", theme.text.secondary)}>{stat.sub}</p>

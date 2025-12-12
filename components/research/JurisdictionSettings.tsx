@@ -16,7 +16,7 @@ export const JurisdictionSettings: React.FC = () => {
                     <Globe className={cn("h-5 w-5 mt-1", theme.text.tertiary)}/>
                     <div className="flex-1">
                         <label className={cn("block text-sm font-bold mb-1", theme.text.primary)}>Primary Jurisdiction</label>
-                        <select className={cn("w-full p-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}>
+                        <select className={cn("w-full p-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}>
                             <option>Federal (All Circuits)</option>
                             <option>California (State & Federal)</option>
                             <option>New York (State & Federal)</option>

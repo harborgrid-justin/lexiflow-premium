@@ -51,7 +51,7 @@ export const DataLakeExplorer: React.FC = () => {
              openWindow(
                 `preview-${file.id}`,
                 `Preview: ${file.name}`,
-                <div className={cn("h-full", theme.surface)}>
+                <div className={cn("h-full", theme.surface.default)}>
                     <DocumentPreviewPanel 
                         document={{
                             id: file.id,
@@ -76,7 +76,7 @@ export const DataLakeExplorer: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full animate-fade-in">
-            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.default, theme.border.default)}>
                 <div>
                     <h3 className={cn("text-lg font-bold flex items-center gap-2", theme.text.primary)}>
                         <HardDrive className="h-5 w-5 text-indigo-600"/> Data Lake Storage
@@ -90,13 +90,13 @@ export const DataLakeExplorer: React.FC = () => {
             </div>
 
             <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surfaceHighlight, theme.border.default)}>
-                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface}`)}><Home className="h-4 w-4"/></button>
+                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><Home className="h-4 w-4"/></button>
                 {currentPath.slice(1).map((folder, i) => (
                     <React.Fragment key={folder}>
                         <ChevronRight className="h-4 w-4 text-slate-400"/>
                         <button 
                             onClick={() => handleBreadcrumb(i + 1)}
-                            className={cn("px-2 py-0.5 rounded font-medium", i === currentPath.length - 2 ? theme.text.primary : theme.text.secondary, `hover:${theme.surface}`)}
+                            className={cn("px-2 py-0.5 rounded font-medium", i === currentPath.length - 2 ? theme.text.primary : theme.text.secondary, `hover:${theme.surface.default}`)}
                         >
                             {folder}
                         </button>

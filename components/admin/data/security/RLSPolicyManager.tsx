@@ -86,7 +86,7 @@ export const RLSPolicyManager: React.FC = () => {
                  <EmptyListState label="No policies defined" icon={Shield} />
             ) : (
                 policies.map(p => (
-                    <div key={p.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface, theme.border.default)}>
+                    <div key={p.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-3">
                                 <div className={cn("p-2 rounded bg-blue-50 text-blue-600")}>

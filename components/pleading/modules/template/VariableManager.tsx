@@ -26,7 +26,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
       
       <div className="space-y-3">
         {variables.map((variable) => (
-          <div key={variable.id} className={cn("p-3 rounded border", theme.surface, theme.border.default)}>
+          <div key={variable.id} className={cn("p-3 rounded border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between mb-1">
               <span className={cn("text-xs font-mono font-medium", theme.primary.text)}>{`{{${variable.key}}}`}</span>
               <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded text-slate-500", theme.surfaceHighlight)}>{variable.source}</span>
@@ -34,7 +34,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
             <p className={cn("text-xs mb-2", theme.text.secondary)}>{variable.label}</p>
             <div className="relative">
               <input
-                className={cn("w-full text-sm p-2 border rounded outline-none focus:ring-1 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full text-sm p-2 border rounded outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 value={variable.value}
                 onChange={(e) => onUpdateVariable(variable.id, e.target.value)}
                 placeholder="No value set"

@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { CustodianInterview } from '../../../types';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/common/Table';
-import { Badge } from '../../../components/common/Badge';
-import { Button } from '../../../components/common/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
+import { Badge } from '../../common/Badge';
+import { Button } from '../../common/Button';
 import { User, Calendar, CheckSquare } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';

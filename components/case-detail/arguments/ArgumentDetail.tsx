@@ -61,11 +61,11 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                 <Input 
                     value={argument.title} 
                     onChange={(e) => onUpdate({ ...argument, title: e.target.value })}
-                    className={cn("text-lg font-bold border-transparent bg-transparent px-2 -ml-2 transition-all", theme.text.primary, `hover:${theme.surface}`, `hover:${theme.border.light}`, `focus:${theme.surface}`, `focus:${theme.border.default}`)}
+                    className={cn("text-lg font-bold border-transparent bg-transparent px-2 -ml-2 transition-all", theme.text.primary, `hover:${theme.surface.default}`, `hover:${theme.border.light}`, `focus:${theme.surface.default}`, `focus:${theme.border.default}`)}
                 />
             </div>
             <div className="flex items-center gap-2">
-                <button onClick={onClose} className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface}`)}>
+                <button onClick={onClose} className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                     <X className="h-5 w-5"/>
                 </button>
             </div>
@@ -97,8 +97,8 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     {isLinkingCitation && (
                         <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surfaceHighlight, theme.border.default)}>
                             {allCitations.map(cit => (
-                                <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface}`)}>
-                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface, argument.relatedCitationIds.includes(cit.id) ? "border-blue-500" : theme.border.default)}>
+                                <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface.default}`)}>
+                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedCitationIds.includes(cit.id) ? "border-blue-500" : theme.border.default)}>
                                         {argument.relatedCitationIds.includes(cit.id) && <div className="w-2 h-2 bg-blue-500 rounded-full"/>}
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -114,7 +114,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                         {argument.relatedCitationIds.map(id => {
                             const cit = allCitations.find(c => c.id === id);
                             return cit ? (
-                                <div key={id} className={cn("flex items-start p-3 rounded border shadow-sm group", theme.surface, theme.border.default)}>
+                                <div key={id} className={cn("flex items-start p-3 rounded border shadow-sm group", theme.surface.default, theme.border.default)}>
                                     <Scale className="h-5 w-5 text-purple-600 mt-0.5 mr-3 shrink-0"/>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between">
@@ -144,8 +144,8 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     {isLinkingEvidence && (
                         <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surfaceHighlight, theme.border.default)}>
                             {allEvidence.map(ev => (
-                                <div key={ev.id} onClick={() => toggleLink(ev.id, 'evidence')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedEvidenceIds?.includes(ev.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface}`)}>
-                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface, argument.relatedEvidenceIds?.includes(ev.id) ? "border-blue-500" : theme.border.default)}>
+                                <div key={ev.id} onClick={() => toggleLink(ev.id, 'evidence')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedEvidenceIds?.includes(ev.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface.default}`)}>
+                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedEvidenceIds?.includes(ev.id) ? "border-blue-500" : theme.border.default)}>
                                         {argument.relatedEvidenceIds?.includes(ev.id) && <div className="w-2 h-2 bg-blue-500 rounded-full"/>}
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -161,7 +161,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                         {argument.relatedEvidenceIds?.map(id => {
                             const ev = allEvidence.find(e => e.id === id);
                             return ev ? (
-                                <div key={id} className={cn("flex items-start p-3 rounded border shadow-sm group", theme.surface, theme.border.default)}>
+                                <div key={id} className={cn("flex items-start p-3 rounded border shadow-sm group", theme.surface.default, theme.border.default)}>
                                     <Fingerprint className="h-5 w-5 text-amber-600 mt-0.5 mr-3 shrink-0"/>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between">

@@ -51,7 +51,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
             "w-10 h-10 rounded-full flex items-center justify-center transition-all",
             value 
               ? cn(theme.primary.DEFAULT, theme.text.inverse) 
-              : cn(theme.surface, theme.border.default, "border text-slate-400 group-hover:border-slate-300")
+              : cn(theme.surface.default, theme.border.default, "border text-slate-400 group-hover:border-slate-300")
           )}>
             {loading ? <RefreshCcw className="h-5 w-5 animate-spin"/> : value ? <CheckCircle className="h-6 w-6"/> : <PenTool className="h-5 w-5"/>}
           </div>

@@ -36,7 +36,7 @@ const MethodCard: React.FC<{ method: ApiMethod }> = ({ method }) => {
         DELETE: 'bg-red-100 text-red-700',
     };
     return (
-        <div className={cn("p-6 rounded-lg border", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 rounded-lg border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-center mb-4">
                 <h4 className={cn("text-lg font-mono font-bold", theme.text.primary)}>{method.name}</h4>
                 <div className={cn("flex items-center gap-2", theme.text.secondary)}>
@@ -85,7 +85,7 @@ export const ApiGateway: React.FC = () => {
     return (
         <div className="h-full flex">
             {/* Sidebar */}
-            <div className={cn("w-72 border-r flex flex-col", theme.surface, theme.border.default)}>
+            <div className={cn("w-72 border-r flex flex-col", theme.surface.default, theme.border.default)}>
                 <div className={cn("p-4 border-b", theme.border.default)}>
                     <h3 className={cn("font-bold text-sm", theme.text.primary)}>Data Services</h3>
                 </div>

@@ -53,7 +53,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
       openWindow(
           winId,
           `${rule.code} - ${rule.name}`,
-          <div className={cn("h-full flex flex-col p-6 overflow-y-auto", theme.surface)}>
+          <div className={cn("h-full flex flex-col p-6 overflow-y-auto", theme.surface.default)}>
               <h2 className={cn("text-2xl font-bold mb-4", theme.text.primary)}>{rule.name}</h2>
               <div className={cn("prose max-w-none", theme.text.secondary)}>{rule.text}</div>
           </div>
@@ -63,7 +63,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
   if (isLoadingAllRules) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
   
   return (
-    <div className={cn("flex h-full rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("flex h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
         {/* Sidebar: Table of Contents */}
         <div className={cn("w-80 border-r flex flex-col bg-slate-50/50", theme.border.default)}>
             <div className={cn("p-4 border-b", theme.border.default)}>

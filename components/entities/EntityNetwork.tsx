@@ -61,7 +61,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
         <div className="flex-1 border rounded-xl overflow-hidden shadow-sm">
             <NexusGraph caseData={{title: 'Entity Network'} as any} parties={nodes as any} evidence={[]} onNodeClick={(node) => console.log('Node clicked:', node)} />
         </div>
-        <div className={cn("w-80 space-y-4", theme.surface, theme.border.default)}>
+        <div className={cn("w-80 space-y-4", theme.surface.default, theme.border.default)}>
              <h3 className={cn("p-4 font-bold border-b", theme.text.primary, theme.border.default)}>Conflict Clusters</h3>
              <div className="p-4 space-y-3 overflow-y-auto">
                 {components.map((comp, i) => (

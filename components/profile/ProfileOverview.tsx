@@ -16,7 +16,7 @@ export const ProfileOverview: React.FC<ProfileOverviewProps> = ({ profile }) => 
 
   return (
     <div className="p-6 space-y-6 animate-fade-in overflow-y-auto h-full">
-      <div className={cn("flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row gap-6 items-start p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
         <UserAvatar name={profile.name} size="xl" className="w-24 h-24 text-2xl border-4 border-white shadow-md" />
         <div className="flex-1 space-y-2">
           <div className="flex justify-between items-start">

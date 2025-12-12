@@ -60,7 +60,7 @@ export const DeduplicationManager: React.FC = () => {
             <div className="space-y-6">
                 {activeClusters.map(cluster => (
                     <Card key={cluster.id} noPadding className="overflow-hidden">
-                        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
+                        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.default, theme.border.default)}>
                             <h4 className={cn("font-bold text-sm", theme.text.primary)}>Potential Duplicate Group #{cluster.id}</h4>
                             <div className="flex gap-2">
                                 <Button size="sm" variant="ghost" className="text-red-600 hover:bg-red-50" onClick={() => ignoreCluster(cluster.id)}>Ignore</Button>
@@ -72,7 +72,7 @@ export const DeduplicationManager: React.FC = () => {
                             {cluster.duplicates.map(record => (
                                 <div key={record.id} className={cn("p-4 flex items-center justify-between transition-colors", record.id === cluster.masterId ? theme.primary.light : "", `hover:${theme.surfaceHighlight}`)}>
                                     <div className="flex items-center gap-4">
-                                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border", record.id === cluster.masterId ? cn(theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, theme.border.default, theme.surface))}>
+                                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border", record.id === cluster.masterId ? cn(theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, theme.border.default, theme.surface.default))}>
                                             {record.similarityScore}%
                                         </div>
                                         <div>
@@ -85,7 +85,7 @@ export const DeduplicationManager: React.FC = () => {
                                     </div>
                                     
                                     <div className="flex items-center gap-4">
-                                        <span className={cn("text-xs px-2 py-1 rounded border", theme.surface, theme.border.default, theme.text.secondary)}>Match: {record.fieldMatch}</span>
+                                        <span className={cn("text-xs px-2 py-1 rounded border", theme.surface.default, theme.border.default, theme.text.secondary)}>Match: {record.fieldMatch}</span>
                                         {record.id !== cluster.masterId && (
                                             <ArrowRight className="h-4 w-4 text-slate-300"/>
                                         )}

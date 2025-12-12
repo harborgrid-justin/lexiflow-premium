@@ -42,7 +42,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
 
         <div className="flex gap-2 mb-8">
             <input 
-                className={cn("flex-1 p-4 text-lg rounded-lg border shadow-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all", theme.surface, theme.border.default)}
+                className={cn("flex-1 p-4 text-lg rounded-lg border shadow-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all", theme.surface.default, theme.border.default)}
                 placeholder="Enter entity name, tax ID, or alias..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -65,7 +65,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
                 <p>Scanning {entities.length} records...</p>
             </div>
         ) : hasSearched && (
-            <div className={cn("rounded-xl border overflow-hidden animate-in slide-in-from-bottom-4", theme.surface, theme.border.default)}>
+            <div className={cn("rounded-xl border overflow-hidden animate-in slide-in-from-bottom-4", theme.surface.default, theme.border.default)}>
                 <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight)}>
                     <h4 className="font-bold text-sm">Search Results</h4>
                     <span className="text-xs text-slate-500">{results.length} Matches Found</span>

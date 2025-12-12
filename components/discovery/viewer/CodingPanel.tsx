@@ -9,7 +9,7 @@ export const CodingPanel: React.FC = () => {
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-80 border-l flex flex-col shrink-0 shadow-xl animate-in slide-in-from-right duration-200 z-10", theme.surface, theme.border.default)}>
+    <div className={cn("w-80 border-l flex flex-col shrink-0 shadow-xl animate-in slide-in-from-right duration-200 z-10", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b", theme.border.default, theme.surfaceHighlight)}>
             <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>Coding & Metadata</h3>
         </div>
@@ -59,7 +59,7 @@ export const CodingPanel: React.FC = () => {
 
             <div className={cn("pt-4 border-t", theme.border.light)}>
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Notes</label>
-                <textarea className={cn("w-full border rounded-md p-2 text-sm h-24 resize-none focus:ring-2 focus:ring-blue-500 outline-none", theme.border.default, theme.surface, theme.text.primary)} placeholder="Reviewer comments..."></textarea>
+                <textarea className={cn("w-full border rounded-md p-2 text-sm h-24 resize-none focus:ring-2 focus:ring-blue-500 outline-none", theme.border.default, theme.surface.default, theme.text.primary)} placeholder="Reviewer comments..."></textarea>
             </div>
         </div>
 

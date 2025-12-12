@@ -171,7 +171,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
             onClick={() => setIsLiveMode(!isLiveMode)}
             className={cn(
                 "text-xs flex items-center px-2 py-1 rounded border transition-colors",
-                isLiveMode ? "bg-red-50 border-red-200 text-red-600 animate-pulse" : cn(theme.surface, theme.border.default, theme.text.secondary)
+                isLiveMode ? "bg-red-50 border-red-200 text-red-600 animate-pulse" : cn(theme.surface.default, theme.border.default, theme.text.secondary)
             )}
           >
               <Radio className="h-3 w-3 mr-1"/> {isLiveMode ? 'Live Feed Active' : 'Enable Live Feed'}
@@ -186,7 +186,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
           cases={cases}
         />
 
-        <div className={cn("flex-1 rounded-lg border shadow-sm flex flex-col overflow-hidden relative", theme.surface, theme.border.default)}>
+        <div className={cn("flex-1 rounded-lg border shadow-sm flex flex-col overflow-hidden relative", theme.surface.default, theme.border.default)}>
           {!selectedCaseId ? (
             <div className="flex-1 overflow-auto relative">
                {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className="animate-spin h-5 w-5 text-blue-500"/></div>}
@@ -198,7 +198,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
               />
             </div>
           ) : (
-            <div className={cn("flex-1 overflow-auto p-0 flex flex-col", theme.surface)}>
+            <div className={cn("flex-1 overflow-auto p-0 flex flex-col", theme.surface.default)}>
                 <DocketToolbar 
                     activeCaseTitle={activeCase?.title}
                     onAddEntry={() => setIsAddModalOpen(true)}

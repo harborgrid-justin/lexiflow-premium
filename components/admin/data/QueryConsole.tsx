@@ -130,7 +130,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
              <QuerySidebar activeTab={activeSidebarTab} setActiveTab={setActiveSidebarTab} schema={formattedSchema} />
 
              <div className="flex-1 flex flex-col min-w-0">
-                <div className={cn("h-[40%] flex flex-col", theme.surface)}>
+                <div className={cn("h-[40%] flex flex-col", theme.surface.default)}>
                     <div className={cn("flex justify-between items-center p-2 border-b", theme.border.default, theme.surfaceHighlight)}>
                         <div className="flex gap-1">
                             <Button size="xs" variant="secondary" icon={AlignLeft} onClick={handleFormat} isLoading={isFormatting}>Format</Button>
@@ -146,7 +146,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                     />
                 </div>
                 
-                <div className={cn("flex-1 overflow-hidden flex flex-col", theme.surface, "border-t", theme.border.default)}>
+                <div className={cn("flex-1 overflow-hidden flex flex-col", theme.surface.default, "border-t", theme.border.default)}>
                     <div className={cn("p-2 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
                         <Tabs 
                             tabs={['results', 'explain', 'visualize']}

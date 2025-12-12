@@ -1,1 +1,0 @@
-// Obsolete file - Content located at components/rules/LocalRulesMap.tsx

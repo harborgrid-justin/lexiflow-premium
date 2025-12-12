@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Modal } from '../../../components/common/Modal';
-import { Input, TextArea } from '../../../components/common/Inputs';
-import { Button } from '../../../components/common/Button';
+import { Modal } from '../../common/Modal';
+import { Input, TextArea } from '../../common/Inputs';
+import { Button } from '../../common/Button';
 import { Project } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -48,7 +48,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
             <select 
-              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.status}
               onChange={e => setNewProject({...newProject, status: e.target.value as any})}
             >
@@ -61,7 +61,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Priority</label>
             <select 
-              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.priority}
               onChange={e => setNewProject({...newProject, priority: e.target.value as any})}
             >
@@ -85,7 +85,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
             onChange={e => setNewProject({...newProject, dueDate: e.target.value})}
           />
         </div>
-        <div className={cn("flex justify-end pt-4 border-t mt-4", theme.border.light)}>
+        <div className={cn("flex justify-end pt-4 border-t mt-4", theme.border.subtle)}>
           <Button variant="secondary" onClick={onClose} className="mr-2">Cancel</Button>
           <Button variant="primary" onClick={handleSave}>Create Project</Button>
         </div>

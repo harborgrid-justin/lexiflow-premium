@@ -36,7 +36,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
 
   return (
     <div className="h-full flex flex-col animate-in slide-in-from-right duration-200">
-        <div className={cn("p-6 border-b flex justify-between items-center sticky top-0 z-10", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 border-b flex justify-between items-center sticky top-0 z-10", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold text-lg", theme.text.primary)}>Risk Assessment</h3>
                 <p className={cn("text-xs font-mono", theme.text.tertiary)}>ID: {risk.id}</p>
@@ -58,7 +58,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Category</label>
                         <select 
-                            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.category}
                             onChange={(e) => onUpdate({ ...risk, category: e.target.value as RiskCategory })}
                         >
@@ -71,7 +71,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
                         <select 
-                            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.status}
                             onChange={(e) => onUpdate({ ...risk, status: e.target.value as RiskStatus })}
                         >
@@ -104,7 +104,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                         risk.probability === lvl 
                                             ? "bg-blue-600 text-white border-blue-600 shadow-md" 
-                                            : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                            : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
                                     )}
                                 >
                                     {lvl}
@@ -123,7 +123,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                         risk.impact === lvl 
                                             ? "bg-blue-600 text-white border-blue-600 shadow-md" 
-                                            : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                            : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
                                     )}
                                 >
                                     {lvl}
@@ -133,7 +133,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     </div>
                 </div>
 
-                <div className={cn("flex justify-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+                <div className={cn("flex justify-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                     <RiskMatrix probability={risk.probability} impact={risk.impact} />
                 </div>
             </div>
@@ -154,7 +154,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                 <textarea 
                     className={cn(
                         "w-full p-4 border rounded-lg text-sm leading-relaxed h-40 focus:ring-2 focus:ring-blue-500 outline-none resize-none",
-                        theme.surface,
+                        theme.surface.default,
                         theme.border.default,
                         theme.text.primary
                     )}

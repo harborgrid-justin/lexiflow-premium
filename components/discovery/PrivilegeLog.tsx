@@ -65,7 +65,7 @@ export const PrivilegeLog: React.FC = () => {
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
         {logItems.map(item => (
-          <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
+          <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-3">
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-amber-500"/>

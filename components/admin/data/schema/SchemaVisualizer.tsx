@@ -140,7 +140,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
             <div 
                 key={t.name}
                 data-drag-id={t.name}
-                className={cn("w-64 h-fit max-h-full flex flex-col rounded-lg shadow-xl border overflow-hidden flex-shrink-0 absolute cursor-default transition-shadow", theme.surface, theme.border.default)}
+                className={cn("w-64 h-fit max-h-full flex flex-col rounded-lg shadow-xl border overflow-hidden flex-shrink-0 absolute cursor-default transition-shadow", theme.surface.default, theme.border.default)}
                 style={{ transform: `translate(${t.x}px, ${t.y}px)` }}
                 onMouseDown={(e) => handleMouseDown(e, 'item', t.name, { x: t.x, y: t.y })}
                 onContextMenu={(e) => handleContextMenu(e, 'table', { name: t.name })}

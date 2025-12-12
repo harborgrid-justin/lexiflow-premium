@@ -45,7 +45,7 @@ export const ShepardizingTool: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto">
-      <div className={cn("p-6 rounded-lg border flex flex-col md:flex-row gap-4 items-center", theme.surface, theme.border.default)}>
+      <div className={cn("p-6 rounded-lg border flex flex-col md:flex-row gap-4 items-center", theme.surface.default, theme.border.default)}>
         <div className="flex-1 w-full">
             <h3 className={cn("font-bold text-lg flex items-center", theme.text.primary)}><Scale className="h-5 w-5 mr-2 text-blue-600"/> Citation Analysis</h3>
             <p className={cn("text-sm", theme.text.secondary)}>Check appellate history and treatment of a case citation.</p>
@@ -91,7 +91,7 @@ export const ShepardizingTool: React.FC = () => {
                 <Card title="Citing Treatment">
                      <div className="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
                         {result.treatment.map((t, i) => (
-                            <div key={i} className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
+                            <div key={i} className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
                                 <div className="flex justify-between items-center mb-2">
                                     <h5 className={cn("font-bold text-sm", theme.text.primary)}>{t.citingCase}</h5>
                                     {getTreatmentBadge(t.treatment)}

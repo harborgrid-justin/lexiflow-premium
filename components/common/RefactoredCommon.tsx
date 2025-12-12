@@ -58,7 +58,7 @@ export const SearchInputBar: React.FC<React.InputHTMLAttributes<HTMLInputElement
         <div className={cn("relative w-full", className)}>
             <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
             <input 
-                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600", theme.surface.default, theme.border.default, theme.text.primary)}
                 {...props}
             />
         </div>
@@ -69,7 +69,7 @@ export const SearchInputBar: React.FC<React.InputHTMLAttributes<HTMLInputElement
 export const ActionRow: React.FC<{ title: string, subtitle?: string, children?: React.ReactNode, className?: string }> = ({ title, subtitle, children, className }) => {
     const { theme } = useTheme();
     return (
-        <div className={cn("flex flex-col md:flex-row justify-between items-center p-4 rounded-lg border shadow-sm gap-4", theme.surface, theme.border.default, className)}>
+        <div className={cn("flex flex-col md:flex-row justify-between items-center p-4 rounded-lg border shadow-sm gap-4", theme.surface.default, theme.border.default, className)}>
             <div>
                 <h3 className={cn("font-bold text-lg", theme.text.primary)}>{title}</h3>
                 {subtitle && <p className={cn("text-sm", theme.text.secondary)}>{subtitle}</p>}
@@ -103,7 +103,7 @@ export const ModalFooter: React.FC<{ children: React.ReactNode }> = ({ children 
 export const MetricTile: React.FC<{ label: string, value: string | number | React.ReactNode, icon?: any, trend?: string, trendUp?: boolean, className?: string }> = ({ label, value, icon: Icon, trend, trendUp, className }) => {
     const { theme } = useTheme();
     return (
-        <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col justify-between h-full", theme.surface, theme.border.default, className)}>
+        <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col justify-between h-full", theme.surface.default, theme.border.default, className)}>
              <div className="flex justify-between items-start">
                  <div>
                     <p className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>{label}</p>

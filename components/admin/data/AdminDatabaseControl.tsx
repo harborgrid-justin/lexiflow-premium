@@ -74,7 +74,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
     openWindow(
       `data-tool-${activeView}-${Date.now()}`,
       `Data Platform: ${activeView}`,
-      <div className={cn("h-full flex flex-col overflow-hidden", theme.surface)}>{renderContent()}</div>
+      <div className={cn("h-full flex flex-col overflow-hidden", theme.surface.default)}>{renderContent()}</div>
     );
   };
 
@@ -91,7 +91,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
       {/* Sidebar Container */}
       <div className={cn(
           "absolute inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 md:relative md:translate-x-0 border-r shadow-xl md:shadow-none",
-          theme.surface, 
+          theme.surface.default, 
           theme.border.default,
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       )}>
@@ -106,7 +106,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Mobile Header Toggle */}
         <div className={cn("md:hidden p-4 border-b flex justify-between items-center", theme.background, theme.border.default)}>
-            <button onClick={() => setIsMobileMenuOpen(true)} className={cn("p-2 rounded-md", theme.surfaceHighlight)}>
+            <button onClick={() => setIsMobileMenuOpen(true)} className={cn("p-2 rounded-md", theme.surface.highlight)}>
                 <Menu className={cn("h-5 w-5", theme.text.primary)} />
             </button>
             <span className={cn("font-bold text-sm", theme.text.primary)}>Data Platform</span>
@@ -114,7 +114,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
         </div>
 
         <div className="absolute top-4 right-4 z-10 hidden md:block">
-            <button onClick={handleUndock} className={cn("p-2 backdrop-blur border rounded-lg shadow-sm transition-all", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.text.primary}`)} title="Open in Window">
+            <button onClick={handleUndock} className={cn("p-2 backdrop-blur border rounded-lg shadow-sm transition-all", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.text.primary}`)} title="Open in Window">
                 <Maximize2 className="h-4 w-4"/>
             </button>
         </div>

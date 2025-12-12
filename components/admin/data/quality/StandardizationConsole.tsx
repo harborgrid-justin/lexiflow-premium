@@ -58,7 +58,7 @@ export const StandardizationConsole: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <div className={cn("p-6 rounded-lg border flex flex-col md:flex-row justify-between items-center gap-4", theme.surface, theme.border.default)}>
+            <div className={cn("p-6 rounded-lg border flex flex-col md:flex-row justify-between items-center gap-4", theme.surface.default, theme.border.default)}>
                 <div>
                     <h3 className={cn("font-bold text-lg", theme.text.primary)}>Standardization Engine</h3>
                     <p className={cn("text-sm", theme.text.secondary)}>Define transformations to ensure data consistency across the platform.</p>
@@ -82,7 +82,7 @@ export const StandardizationConsole: React.FC = () => {
                         key={rule.id} 
                         className={cn(
                             "p-4 rounded-xl border transition-all cursor-pointer relative overflow-hidden group",
-                            theme.surface,
+                            theme.surface.default,
                             rule.isActive ? cn("border-blue-500 ring-1 ring-blue-500") : theme.border.default
                         )}
                         onClick={() => toggleRule(rule.id)}

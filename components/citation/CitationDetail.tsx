@@ -45,7 +45,7 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
   };
 
   return (
-    <div className={cn("h-full flex flex-col border-l shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface, theme.border.default)}>
+    <div className={cn("h-full flex flex-col border-l shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Authority Detail</h4>
             <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
@@ -71,7 +71,7 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
                 {isLoading ? (
                     <div className="text-center py-4"><Loader2 className="animate-spin h-5 w-5 mx-auto text-slate-400"/></div>
                 ) : linkedCases.map(c => (
-                    <div key={c.id} className={cn("p-3 rounded border flex items-center justify-between group cursor-pointer transition-colors", theme.surface, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                    <div key={c.id} className={cn("p-3 rounded border flex items-center justify-between group cursor-pointer transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
                         <div className="flex items-center gap-3 min-w-0">
                             <div className="bg-blue-100 p-1.5 rounded text-blue-600 shrink-0"><BookOpen className="h-4 w-4"/></div>
                             <div className="min-w-0">

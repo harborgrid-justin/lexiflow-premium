@@ -10,7 +10,7 @@ export const WorkflowAutomations: React.FC = () => {
   return (
     <div className="grid grid-cols-1 gap-6">
         {/* Automation Visualization Cards */}
-        <div className={cn("p-6 rounded-xl border shadow-sm relative overflow-hidden group", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 rounded-xl border shadow-sm relative overflow-hidden group", theme.surface.default, theme.border.default)}>
             <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
             <div className="flex justify-between items-start">
                 <div className="flex items-start gap-4">
@@ -28,7 +28,7 @@ export const WorkflowAutomations: React.FC = () => {
             </div>
         </div>
 
-        <div className={cn("p-6 rounded-xl border shadow-sm relative overflow-hidden group", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 rounded-xl border shadow-sm relative overflow-hidden group", theme.surface.default, theme.border.default)}>
             <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
             <div className="flex justify-between items-start">
                 <div className="flex items-start gap-4">

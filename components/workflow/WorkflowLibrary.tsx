@@ -46,7 +46,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
         </div>
       </div>
 
-      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm sticky top-0 z-10", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm sticky top-0 z-10", theme.surface.default, theme.border.default)}>
         <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
           {categories.map(cat => (
             <button
@@ -96,7 +96,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
             `hover:${theme.surfaceHighlight}`
           )}
         >
-          <div className={cn("p-4 rounded-full shadow-sm mb-4", theme.surface)}>
+          <div className={cn("p-4 rounded-full shadow-sm mb-4", theme.surface.default)}>
             <Plus className="h-8 w-8" />
           </div>
           <span className="font-bold">Design New Workflow</span>

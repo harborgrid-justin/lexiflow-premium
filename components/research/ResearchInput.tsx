@@ -37,7 +37,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
   }, [query]);
 
   return (
-    <div className={cn("border-b px-6 py-4 shadow-sm z-10 shrink-0", theme.surface, theme.border.default)}>
+    <div className={cn("border-b px-6 py-4 shadow-sm z-10 shrink-0", theme.surface.default, theme.border.default)}>
       <h2 className={cn("text-xl font-bold mb-4 flex items-center", theme.text.primary)}>
           <BookOpen className={cn("h-6 w-6 mr-2", theme.primary.text)}/> Legal Research Center
       </h2>

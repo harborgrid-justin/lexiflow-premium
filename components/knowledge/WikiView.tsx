@@ -36,14 +36,14 @@ export const WikiView: React.FC = () => {
   };
 
   return (
-    <div className={cn("flex h-full rounded-lg border overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("flex h-full rounded-lg border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Sidebar */}
       <div className={cn("w-80 border-r flex flex-col shrink-0", theme.surfaceHighlight, theme.border.default)}>
         <div className="p-4 border-b">
           <div className="relative">
             <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
             <input 
-                className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface, theme.border.default)}
+                className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface.default, theme.border.default)}
                 placeholder="Search articles..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -58,7 +58,7 @@ export const WikiView: React.FC = () => {
               onClick={() => handleSelectArticle(article.id)}
               className={cn(
                 "w-full text-left p-3 rounded-lg flex items-center justify-between transition-colors",
-                activeArticleId === article.id ? "bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300" : `hover:${theme.surface}`
+                activeArticleId === article.id ? "bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300" : `hover:${theme.surface.default}`
               )}
             >
               <div className="flex-1 min-w-0">

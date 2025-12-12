@@ -69,7 +69,7 @@ export const LegalHolds: React.FC = () => {
        {/* Mobile Card View */}
        <div className="md:hidden space-y-4">
          {holds.map(hold => (
-           <div key={hold.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
+           <div key={hold.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
              <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-blue-500"/>

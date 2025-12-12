@@ -94,7 +94,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
           onSave={(task) => { notify.success("Task added"); setIsTaskModalOpen(false); }} 
       />
 
-      <div className={cn("p-4 border-b flex flex-col md:flex-row gap-4 justify-between shrink-0", theme.surface, theme.border.default)}>
+      <div className={cn("p-4 border-b flex flex-col md:flex-row gap-4 justify-between shrink-0", theme.surface.default, theme.border.default)}>
           <div className="flex items-center gap-4">
               <div className={cn("p-2 rounded-lg bg-indigo-50 border border-indigo-100")}>
                   <Layers className="h-5 w-5 text-indigo-600"/>

@@ -80,7 +80,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
 
   return (
     <div className="space-y-4 h-full flex flex-col">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm shrink-0", theme.surface, theme.border.default)}>
+        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm shrink-0", theme.surface.default, theme.border.default)}>
             <div className="w-full max-w-md relative">
                 <SearchInputBar 
                     value={searchTerm} 
@@ -102,7 +102,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
             </select>
         </div>
 
-        <div className={cn("flex-1 min-h-0 flex flex-col border rounded-lg overflow-hidden shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("flex-1 min-h-0 flex flex-col border rounded-lg overflow-hidden shadow-sm", theme.surface.default, theme.border.default)}>
              {/* Fixed Header */}
              <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider", theme.border.default, theme.surfaceHighlight, theme.text.secondary)}>
                 <div className="w-[35%]">Entity Name</div>

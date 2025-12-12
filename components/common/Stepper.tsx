@@ -36,8 +36,8 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, onStepClic
                   isCompleted 
                     ? cn(theme.primary.DEFAULT, "border-transparent text-white") 
                     : isActive 
-                      ? cn(theme.surface, theme.primary.border, theme.primary.text) 
-                      : cn(theme.surface, theme.border.default, theme.text.tertiary)
+                      ? cn(theme.surface.default, theme.primary.border, theme.primary.text) 
+                      : cn(theme.surface.default, theme.border.default, theme.text.tertiary)
                 )}
               >
                 {isCompleted ? <Check className="h-4 w-4" /> : stepNum}
@@ -45,7 +45,7 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, onStepClic
               <span 
                 className={cn(
                   "mt-2 text-xs font-medium px-2 py-0.5 rounded",
-                  theme.surface, 
+                  theme.surface.default, 
                   isActive ? theme.primary.text : theme.text.secondary
                 )}
               >

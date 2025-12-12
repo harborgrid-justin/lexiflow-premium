@@ -59,7 +59,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
 
       {!readOnly && (
         <div className="relative">
-          <div className={cn("flex items-center border rounded-md transition-shadow focus-within:ring-1 focus-within:ring-blue-500", theme.surface, theme.border.default)}>
+          <div className={cn("flex items-center border rounded-md transition-shadow focus-within:ring-1 focus-within:ring-blue-500", theme.surface.default, theme.border.default)}>
             <Search className={cn("h-4 w-4 ml-2", theme.text.tertiary)}/>
             <input 
               className={cn("flex-1 px-2 py-2 text-sm outline-none bg-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
@@ -73,7 +73,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
           </div>
           
           {isOpen && searchTerm && (
-            <div className={cn("absolute top-full left-0 right-0 mt-1 border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto", theme.surface, theme.border.default)}>
+            <div className={cn("absolute top-full left-0 right-0 mt-1 border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto", theme.surface.default, theme.border.default)}>
               {availableRules.length > 0 ? (
                 availableRules.filter(r => !selectedRules.includes(r.code)).map(rule => (
                   <div 

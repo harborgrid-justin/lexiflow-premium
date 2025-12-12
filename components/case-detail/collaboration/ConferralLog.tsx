@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
 import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '../../../types';
-import { Button } from '../../../components/common/Button';
-import { Badge } from '../../../components/common/Badge';
-import { Input, TextArea } from '../../../components/common/Inputs';
-import { Modal } from '../../../components/common/Modal';
+import { Button } from '../../common/Button';
+import { Badge } from '../../common/Badge';
+import { Input, TextArea } from '../../common/Inputs';
+import { Modal } from '../../common/Modal';
 import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -89,10 +89,10 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
       <div className="space-y-4">
         {sessions.map(session => (
-          <div key={session.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:border-blue-300", theme.surface, theme.border.default)}>
+          <div key={session.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:border-blue-300", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-3">
-                <div className={cn("p-2 rounded-full", theme.surfaceHighlight, theme.text.secondary)}>
+                <div className={cn("p-2 rounded-full", theme.surface.highlight, theme.text.secondary)}>
                   {getMethodIcon(session.method)}
                 </div>
                 <div>
@@ -107,7 +107,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
               {getResultBadge(session.result)}
             </div>
             
-            <div className={cn("ml-11 mt-2 text-sm p-3 rounded border", theme.surfaceHighlight, theme.text.secondary, theme.border.light)}>
+            <div className={cn("ml-11 mt-2 text-sm p-3 rounded border", theme.surface.highlight, theme.text.secondary, theme.border.subtle)}>
               {session.notes}
             </div>
             
@@ -147,7 +147,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Method</label>
               <select 
-                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.method}
                 onChange={e => setNewSession({...newSession, method: e.target.value as any})}
               >
@@ -178,7 +178,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Outcome</label>
               <select 
-                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.result}
                 onChange={e => setNewSession({...newSession, result: e.target.value as any})}
               >
@@ -196,7 +196,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             />
           </div>
 
-          <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.light)}>
+          <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.subtle)}>
             <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
             <Button variant="primary" onClick={handleSave}>Log Session</Button>
           </div>
@@ -204,3 +204,4 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
       </Modal>
     </div>
   );
+};

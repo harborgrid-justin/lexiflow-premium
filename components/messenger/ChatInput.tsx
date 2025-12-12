@@ -45,7 +45,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className={cn("p-4 border-t shrink-0", theme.surface, theme.border.default)}>
+    <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
         {pendingAttachments.length > 0 && (
           <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
             {pendingAttachments.map((att, i) => (
@@ -91,7 +91,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <input type="file" ref={fileInputRef} className="hidden" onChange={onFileSelect} />
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className={cn("p-2 rounded-full transition-colors mb-0.5", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface}`)}
+            className={cn("p-2 rounded-full transition-colors mb-0.5", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface.default}`)}
             title="Attach File"
           >
             <Paperclip className="h-5 w-5"/>
@@ -111,7 +111,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onClick={onSend}
             disabled={!inputText.trim() && pendingAttachments.length === 0}
             className={cn("p-2 rounded-full transition-all mb-0.5", 
-                inputText.trim() || pendingAttachments.length > 0 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") : cn(theme.surface, theme.text.tertiary, theme.border.default, "border")
+                inputText.trim() || pendingAttachments.length > 0 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm") : cn(theme.surface.default, theme.text.tertiary, theme.border.default, "border")
             )}
           >
             <Send className="h-5 w-5 ml-0.5"/>

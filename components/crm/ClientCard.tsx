@@ -17,7 +17,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onGenerateToken 
     const { theme } = useTheme();
 
     return (
-        <div className={cn("p-6 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-4">
             <div className={cn("h-12 w-12 rounded-full flex items-center justify-center font-bold text-lg border", theme.primary.light, theme.primary.text, theme.primary.border)}>
                 {client.name.substring(0, 2)}

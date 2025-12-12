@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/common/Table';
-import { Badge } from '../../../components/common/Badge';
-import { Button } from '../../../components/common/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
+import { Badge } from '../../common/Badge';
+import { Button } from '../../common/Button';
 import { Gavel, Calendar, FileText, MessageSquare, GitBranch, Users } from 'lucide-react';
 import { Motion } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
@@ -77,7 +77,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 <TableCell>
                   <div className="flex flex-wrap gap-1 max-w-[150px]">
                     {motion.linkedRules && motion.linkedRules.length > 0 ? motion.linkedRules.map(r => (
-                      <span key={r} className={cn("text-[9px] border px-1 rounded", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>{r}</span>
+                      <span key={r} className={cn("text-[9px] border px-1 rounded", theme.surface.highlight, theme.text.secondary, theme.border.default)}>{r}</span>
                     )) : '-'}
                   </div>
                 </TableCell>
@@ -109,7 +109,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
         {motions.map(motion => (
-          <div key={motion.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
+          <div key={motion.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-2">
               <h4 className={cn("font-bold text-sm flex items-center gap-2", theme.text.primary)}>
                 <Gavel className="h-4 w-4 text-blue-500" />
@@ -119,7 +119,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
             </div>
             <div className={cn("text-xs mb-3", theme.text.secondary)}>{motion.type} • Filed: {motion.filingDate || 'Draft'}</div>
             
-            <div className={cn("flex justify-between items-center mb-3 p-2 rounded", theme.surfaceHighlight)}>
+            <div className={cn("flex justify-between items-center mb-3 p-2 rounded", theme.surface.highlight)}>
                 <div className="flex items-center text-xs">
                     <Users className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
                     <span className={cn("mr-2", theme.text.secondary)}>Conferral:</span>
@@ -128,7 +128,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
             </div>
 
             {motion.hearingDate && (
-              <div className={cn("p-3 rounded border space-y-2 mb-3", theme.surfaceHighlight, theme.border.light)}>
+              <div className={cn("p-3 rounded border space-y-2 mb-3", theme.surface.highlight, theme.border.subtle)}>
                 <div className="flex items-center justify-between text-xs">
                   <span className={cn("font-medium flex items-center", theme.text.secondary)}><Calendar className="h-3 w-3 mr-1"/> Hearing</span>
                   <span className={cn("font-bold", theme.text.primary)}>{motion.hearingDate}</span>
@@ -140,14 +140,14 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
               </div>
             )}
             
-            <div className={cn("flex justify-end gap-2 pt-2 border-t", theme.border.light)}>
+            <div className={cn("flex justify-end gap-2 pt-2 border-t", theme.border.subtle)}>
               <Button size="sm" variant="outline" className="flex-1" icon={GitBranch} onClick={() => onTaskClick(motion)}>To Workflow</Button>
               <Button size="sm" variant="outline" className="flex-1">Details</Button>
             </div>
           </div>
         ))}
         {motions.length === 0 && (
-          <div className={cn("text-center py-8 italic rounded-lg", theme.surfaceHighlight, theme.text.tertiary)}>No active motions.</div>
+          <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No active motions.</div>
         )}
       </div>
     </>

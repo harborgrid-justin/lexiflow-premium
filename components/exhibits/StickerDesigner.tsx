@@ -80,7 +80,7 @@ export const StickerDesigner: React.FC = () => {
                         <div>
                             <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>Prefix</label>
                             <input 
-                                className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)}
+                                className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                                 value={config.prefix}
                                 onChange={e => setConfig({...config, prefix: e.target.value})}
                             />
@@ -89,7 +89,7 @@ export const StickerDesigner: React.FC = () => {
                             <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>Start #</label>
                             <input 
                                 type="number"
-                                className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)}
+                                className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                                 value={config.startNumber}
                                 onChange={e => setConfig({...config, startNumber: parseInt(e.target.value)})}
                             />
@@ -99,7 +99,7 @@ export const StickerDesigner: React.FC = () => {
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>Case / Footer Text</label>
                         <input 
-                            className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)}
+                            className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                             value={config.footer}
                             onChange={e => setConfig({...config, footer: e.target.value})}
                         />

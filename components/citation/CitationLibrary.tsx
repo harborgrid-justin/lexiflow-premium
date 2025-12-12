@@ -88,7 +88,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
 
     const renderMobileRow = (cit: Citation) => (
         <div className="px-2 py-1.5 h-[110px]">
-            <div key={cit.id} onClick={() => onSelect(cit)} className={cn("p-4 rounded-lg shadow-sm border h-full flex flex-col justify-between", theme.surface, theme.border.default)}>
+            <div key={cit.id} onClick={() => onSelect(cit)} className={cn("p-4 rounded-lg shadow-sm border h-full flex flex-col justify-between", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
                         {getSignalIcon(cit.shepardsSignal)}

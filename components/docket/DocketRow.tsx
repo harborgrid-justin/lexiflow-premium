@@ -50,7 +50,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
             className={cn(
                 "flex items-center border-b transition-colors cursor-pointer px-6 group",
                 theme.border.light,
-                theme.surface,
+                theme.surface.default,
                 `hover:${theme.surfaceHighlight}`
             )}
             style={{ height: 72 }}

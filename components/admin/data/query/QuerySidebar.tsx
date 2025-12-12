@@ -14,7 +14,7 @@ export const QuerySidebar: React.FC<QuerySidebarProps> = ({ activeTab, setActive
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-full md:w-72 border-b md:border-b-0 md:border-r p-0 flex flex-col shrink-0", theme.surface, theme.border.default)}>
+    <div className={cn("w-full md:w-72 border-b md:border-b-0 md:border-r p-0 flex flex-col shrink-0", theme.surface.default, theme.border.default)}>
         <div className={cn("flex border-b", theme.border.default)}>
             <button onClick={() => setActiveTab('schema')} className={cn("flex-1 py-3 text-xs font-bold uppercase", activeTab === 'schema' ? cn("border-b-2", theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, `hover:${theme.text.primary}`))}><Database className="h-4 w-4 mx-auto"/></button>
             <button onClick={() => setActiveTab('history')} className={cn("flex-1 py-3 text-xs font-bold uppercase", activeTab === 'history' ? cn("border-b-2", theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, `hover:${theme.text.primary}`))}><Clock className="h-4 w-4 mx-auto"/></button>

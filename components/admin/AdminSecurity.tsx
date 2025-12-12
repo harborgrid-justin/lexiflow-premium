@@ -46,13 +46,13 @@ export const AdminSecurity: React.FC = () => {
     <div className="space-y-6 animate-fade-in p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card title="Authentication Policy">
-                <div className={cn("divide-y", theme.border.light)}>
+                <div className={cn("divide-y", theme.border.subtle)}>
                     {controls.map((ctrl) => {
                         const Icon = getIcon(ctrl.type);
                         return (
                             <div key={ctrl.id} className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
                                 <div className="flex items-start gap-3">
-                                    <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
+                                    <div className={cn("p-2 rounded-lg", theme.surface.highlight)}>
                                         <Icon className={cn("h-5 w-5", theme.text.secondary)}/>
                                     </div>
                                     <div>

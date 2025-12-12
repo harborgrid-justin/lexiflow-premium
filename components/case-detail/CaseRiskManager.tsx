@@ -110,7 +110,7 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
             />
         </div>
 
-        <div className={cn("flex-1 flex flex-col rounded-lg border shadow-sm overflow-hidden min-h-0", theme.surface, theme.border.default)}>
+        <div className={cn("flex-1 flex flex-col rounded-lg border shadow-sm overflow-hidden min-h-0", theme.surface.default, theme.border.default)}>
             <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
                 <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Risk Register</h3>
                 <Button size="sm" variant="ghost" icon={Plus} onClick={handleAddRisk}>Add</Button>

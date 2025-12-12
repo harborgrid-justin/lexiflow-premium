@@ -19,7 +19,7 @@ export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdi
             className="p-2 h-full w-full"
         >
             <div 
-                className={cn("border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-md group p-4", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}
+                className={cn("border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-md group p-4", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}
                 onClick={() => onEdit(item)}
             >
                 <div className="flex items-start justify-between mb-2">

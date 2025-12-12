@@ -62,7 +62,7 @@ export const HRManager: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold text-lg", theme.text.primary)}>Staff Directory</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage attorney profiles, utilization targets, and performance.</p>

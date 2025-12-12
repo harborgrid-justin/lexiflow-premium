@@ -102,7 +102,7 @@ export const DataDictionary: React.FC = () => {
                                 "px-3 py-1.5 text-xs font-medium rounded-full transition-colors border",
                                 activeDomain === dom 
                                     ? cn(theme.primary.light, theme.primary.text, theme.primary.border) 
-                                    : cn(theme.surface, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                    : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
                             )}
                          >
                              {dom}
@@ -111,7 +111,7 @@ export const DataDictionary: React.FC = () => {
                  </div>
             </div>
 
-            <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col", theme.surface, theme.border.default)}>
+            <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col", theme.surface.default, theme.border.default)}>
                  <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.border.default, theme.surfaceHighlight, theme.text.secondary)}>
                     <div className="w-[25%]">Table Name</div>
                     <div className="w-[20%]">Column / Field</div>

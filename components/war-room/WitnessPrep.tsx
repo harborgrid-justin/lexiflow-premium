@@ -51,7 +51,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
       return (
           <div className="flex flex-col h-full space-y-6 animate-in slide-in-from-right duration-300">
               {/* Witness Header */}
-              <div className={cn("flex justify-between items-start p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+              <div className={cn("flex justify-between items-start p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                   <div className="flex items-center gap-6">
                       <button onClick={handleCloseDetail} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
                           <ArrowLeft className="h-6 w-6"/>
@@ -76,7 +76,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                   <Card title="Examination Outline" className="flex flex-col h-full">
                       <div className="flex-1 relative">
                           <textarea 
-                              className={cn("w-full h-full p-4 resize-none outline-none font-serif text-base leading-relaxed border rounded-md", theme.surface, theme.border.default, theme.text.primary)}
+                              className={cn("w-full h-full p-4 resize-none outline-none font-serif text-base leading-relaxed border rounded-md", theme.surface.default, theme.border.default, theme.text.primary)}
                               value={outline}
                               onChange={(e) => setOutline(e.target.value)}
                               placeholder="Draft your questions here..."

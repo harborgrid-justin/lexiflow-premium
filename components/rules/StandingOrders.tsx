@@ -30,14 +30,14 @@ export const StandingOrders: React.FC = () => {
                     <div className="flex-1 space-y-3">
                         <h5 className={cn("text-xs font-bold uppercase border-b pb-1 mb-2", theme.text.tertiary, theme.border.light)}>Active Orders</h5>
                         {/* Mock Orders based on judge tendencies */}
-                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
                             <div className="flex items-center gap-2">
                                 <FileIcon />
                                 <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>Civil Pre-Trial Order</span>
                             </div>
                             <Download className={cn("h-4 w-4", theme.text.tertiary)}/>
                         </div>
-                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
                             <div className="flex items-center gap-2">
                                 <FileIcon />
                                 <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>Discovery Protocols</span>

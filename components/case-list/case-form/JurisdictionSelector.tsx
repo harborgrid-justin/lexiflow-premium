@@ -69,7 +69,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
         <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>{label}</label>
             <select
-                className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                 value={value || ''}
                 onChange={e => onChange(e.target.value)}
                 disabled={disabled}
@@ -85,14 +85,14 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
             <div className="grid grid-cols-2 gap-2">
                 <button
                     onClick={() => handleSystemSelect('Federal')}
-                    className={cn("p-4 border rounded-lg text-center", theme.border.default, system === 'Federal' ? "bg-blue-50 border-blue-300 ring-1 ring-blue-200" : `hover:${theme.surface}`)}
+                    className={cn("p-4 border rounded-lg text-center", theme.border.default, system === 'Federal' ? "bg-blue-50 border-blue-300 ring-1 ring-blue-200" : `hover:${theme.surface.default}`)}
                 >
                     <Globe className="h-6 w-6 mx-auto text-blue-600 mb-1"/>
                     <span className="text-sm font-bold text-blue-800">Federal</span>
                 </button>
                 <button
                     onClick={() => handleSystemSelect('State')}
-                    className={cn("p-4 border rounded-lg text-center", theme.border.default, system === 'State' ? "bg-green-50 border-green-300 ring-1 ring-green-200" : `hover:${theme.surface}`)}
+                    className={cn("p-4 border rounded-lg text-center", theme.border.default, system === 'State' ? "bg-green-50 border-green-300 ring-1 ring-green-200" : `hover:${theme.surface.default}`)}
                 >
                     <Building className="h-6 w-6 mx-auto text-green-600 mb-1"/>
                     <span className="text-sm font-bold text-green-800">State</span>

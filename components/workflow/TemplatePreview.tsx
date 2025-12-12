@@ -26,7 +26,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
     <div 
       className={cn(
         "rounded-xl border shadow-sm transition-all cursor-pointer group overflow-hidden flex flex-col h-full",
-        theme.surface,
+        theme.surface.default,
         theme.border.default,
         `hover:shadow-md hover:${theme.primary.border}`
       )}
@@ -64,19 +64,19 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
             <div key={i} className="flex items-center gap-3">
               <div className={cn(
                 "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold z-10 border-2",
-                theme.surface,
+                theme.surface.default,
                 i === 0 ? cn(theme.primary.DEFAULT, theme.text.inverse, "shadow-sm border-transparent") : cn(theme.border.default, theme.text.tertiary)
               )}>
                 {i + 1}
               </div>
-              <div className={cn("text-xs font-medium px-2 py-1 rounded border shadow-sm flex-1 truncate", theme.surface, theme.border.light, theme.text.secondary)}>
+              <div className={cn("text-xs font-medium px-2 py-1 rounded border shadow-sm flex-1 truncate", theme.surface.default, theme.border.light, theme.text.secondary)}>
                 {stage}
               </div>
             </div>
           ))}
           {data.stages.length > 4 && (
             <div className="flex items-center gap-3">
-              <div className={cn("w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold z-10 border-2", theme.surface, theme.border.default)}>
+              <div className={cn("w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold z-10 border-2", theme.surface.default, theme.border.default)}>
                 +
               </div>
               <span className={cn("text-[10px] italic", theme.text.tertiary)}>
@@ -88,7 +88,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
       </div>
 
       {/* Footer */}
-      <div className={cn("p-3 border-t flex justify-between items-center text-xs", theme.surface, theme.border.light, theme.text.secondary)}>
+      <div className={cn("p-3 border-t flex justify-between items-center text-xs", theme.surface.default, theme.border.light, theme.text.secondary)}>
         <div className="flex gap-1">
           {data.tags.slice(0, 2).map(tag => (
             <span key={tag} className={cn("px-1.5 py-0.5 rounded text-[10px]", theme.surfaceHighlight)}>{tag}</span>

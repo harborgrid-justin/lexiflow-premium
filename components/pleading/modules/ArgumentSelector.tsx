@@ -40,7 +40,7 @@ export const ArgumentSelector: React.FC<ArgumentSelectorProps> = ({ caseId, onIn
             )}
 
             {argumentsList.map((arg) => (
-                <div key={arg.id} className={cn("p-3 rounded-lg border group hover:shadow-sm transition-all", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}>
+                <div key={arg.id} className={cn("p-3 rounded-lg border group hover:shadow-sm transition-all", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                     <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
                             <span className={cn("text-xs font-bold px-1.5 py-0.5 rounded", theme.surfaceHighlight, theme.text.primary)}>

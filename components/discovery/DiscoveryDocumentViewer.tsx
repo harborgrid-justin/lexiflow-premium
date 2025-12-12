@@ -49,7 +49,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
   return (
     <div className={cn("flex flex-col h-full animate-fade-in absolute inset-0 z-10", theme.background)}>
         {/* Review Toolbar */}
-        <div className={cn("h-14 border-b flex justify-between items-center px-4 shrink-0 shadow-md z-20", theme.surface, theme.border.default)}>
+        <div className={cn("h-14 border-b flex justify-between items-center px-4 shrink-0 shadow-md z-20", theme.surface.default, theme.border.default)}>
             <div className="flex items-center gap-4">
                 <button onClick={onBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
                     <ArrowLeft className="h-5 w-5"/>
@@ -87,7 +87,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
             {/* Document Canvas */}
             <div className={cn("flex-1 overflow-auto relative flex justify-center p-8", theme.surfaceHighlight)}>
                 <div 
-                    className={cn("shadow-2xl min-h-[1100px] w-full max-w-4xl transition-transform origin-top duration-200 ease-out", theme.surface)}
+                    className={cn("shadow-2xl min-h-[1100px] w-full max-w-4xl transition-transform origin-top duration-200 ease-out", theme.surface.default)}
                     style={{ transform: `scale(${scale / 100})` }}
                 >
                     {/* Simulated Document Header */}

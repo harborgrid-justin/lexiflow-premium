@@ -22,7 +22,7 @@ export const DocketFilterPanel: React.FC<DocketFilterPanelProps> = ({
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-full md:w-64 rounded-lg border shadow-sm flex flex-col shrink-0", theme.surface, theme.border.default)}>
+    <div className={cn("w-full md:w-64 rounded-lg border shadow-sm flex flex-col shrink-0", theme.surface.default, theme.border.default)}>
       <div className={cn("p-4 border-b", theme.border.default)}>
         <h3 className={cn("font-bold flex items-center", theme.text.primary)}><Filter className="h-4 w-4 mr-2"/> Docket Filters</h3>
       </div>

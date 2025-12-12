@@ -24,7 +24,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
           
           <div className="space-y-3">
             {(selectedItem.chunks && selectedItem.chunks.length > 0) ? selectedItem.chunks.map((c, idx) => (
-              <div key={c.id || idx} className={cn("flex flex-col p-3 border rounded-lg transition-colors group", theme.surface, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+              <div key={c.id || idx} className={cn("flex flex-col p-3 border rounded-lg transition-colors group", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center">
                         <div className={cn("p-2 rounded mr-3", theme.primary.light)}>

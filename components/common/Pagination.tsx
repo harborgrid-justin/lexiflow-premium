@@ -15,7 +15,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
   const { theme } = useTheme();
 
   return (
-    <div className={cn("flex items-center justify-between border-t px-4 py-3 sm:px-6", theme.surface, theme.border.default, className)}>
+    <div className={cn("flex items-center justify-between border-t px-4 py-3 sm:px-6", theme.surface.default, theme.border.default, className)}>
       <div className="flex flex-1 items-center justify-between">
         <div>
           <p className={cn("text-sm", theme.text.secondary)}>
@@ -30,7 +30,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
               className={cn(
                 "relative inline-flex items-center rounded-l-md px-3 py-2 ring-1 ring-inset focus:z-20 focus:outline-offset-0 disabled:opacity-50 min-h-[44px] min-w-[44px] justify-center transition-colors",
                 theme.border.default,
-                theme.surface,
+                theme.surface.default,
                 theme.text.secondary,
                 `hover:${theme.surfaceHighlight}`
               )}
@@ -54,7 +54,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
               className={cn(
                 "relative inline-flex items-center rounded-r-md px-3 py-2 ring-1 ring-inset focus:z-20 focus:outline-offset-0 disabled:opacity-50 min-h-[44px] min-w-[44px] justify-center transition-colors",
                 theme.border.default,
-                theme.surface,
+                theme.surface.default,
                 theme.text.secondary,
                 `hover:${theme.surfaceHighlight}`
               )}

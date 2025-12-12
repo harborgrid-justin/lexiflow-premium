@@ -87,7 +87,7 @@ export const SLAMonitor: React.FC = () => {
   if (isLoading) return <div className="flex justify-center p-6"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
-    <div className={cn("rounded-lg border p-4 shadow-sm", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg border p-4 shadow-sm", theme.surface.default, theme.border.default)}>
       <h3 className={cn("font-bold mb-4 flex items-center justify-between", theme.text.primary)}>
         <span className="flex items-center"><Clock className="h-5 w-5 mr-2 text-blue-600" /> SLA Live Monitor</span>
         <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" title="Live Tracking"></span>

@@ -128,7 +128,7 @@ export const CRMDashboard: React.FC = () => {
               { name: 'OmniGlobal Inc.', revenue: '$850k', status: 'Active' },
               { name: 'StartUp Ventures', revenue: '$420k', status: 'Pending Renewal' },
             ].map((acc, idx) => (
-              <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface, theme.border.default)}>
+              <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface.default, theme.border.default)}>
                 <div>
                   <p className={cn("font-bold text-sm", theme.text.primary)}>{acc.name}</p>
                   <p className={cn("text-xs", theme.text.secondary)}>{acc.status}</p>

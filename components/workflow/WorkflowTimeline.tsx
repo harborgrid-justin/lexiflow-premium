@@ -22,7 +22,7 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
             const isExpanded = expandedStage === stage.id;
             const isActive = stage.status === 'Active';
             return (
-                <div key={stage.id} className={cn("rounded-xl border transition-all duration-300", theme.surface, isActive ? "border-blue-300 shadow-md ring-1 ring-blue-100" : theme.border.default)}>
+                <div key={stage.id} className={cn("rounded-xl border transition-all duration-300", theme.surface.default, isActive ? "border-blue-300 shadow-md ring-1 ring-blue-100" : theme.border.default)}>
                     {/* Stage Header */}
                     <div 
                         className={cn("p-4 flex items-center justify-between cursor-pointer rounded-t-xl transition-colors", `hover:${theme.surfaceHighlight}`)}
@@ -54,7 +54,7 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                         <div className={cn("p-4 pt-0 space-y-3 rounded-b-xl border-t", theme.surfaceHighlight, theme.border.light)}>
                             <div className="h-2"></div>
                             {stage.tasks.map((task) => (
-                                <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface, theme.border.default, "hover:border-blue-300")}>
+                                <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface.default, theme.border.default, "hover:border-blue-300")}>
                                     <button 
                                         onClick={() => onToggleTask(stage.id, task.id)}
                                         className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${

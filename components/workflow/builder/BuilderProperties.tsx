@@ -23,7 +23,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
   return (
     <div className={cn(
       "absolute md:static inset-y-0 right-0 w-80 border-l z-30 shadow-2xl md:shadow-none transition-transform duration-300",
-      theme.surface,
+      theme.surface.default,
       theme.border.default,
       isOpen ? 'translate-x-0' : 'translate-x-full md:hidden'
     )}>
@@ -61,7 +61,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
                   <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Assignee Role</label>
                     <select 
-                      className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary, "focus:ring-2 focus:ring-blue-500")}
+                      className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary, "focus:ring-2 focus:ring-blue-500")}
                       value={selectedNode.config.assignee || ''}
                       onChange={(e) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, assignee: e.target.value } })}
                     >

@@ -88,7 +88,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
   );
 
   return (
-    <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in flex flex-col h-full", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in flex flex-col h-full", theme.surface.default, theme.border.default)}>
       <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold", theme.text.primary)}>Master Docket</h3>

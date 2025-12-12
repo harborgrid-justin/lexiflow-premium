@@ -86,7 +86,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
       openWindow(
           winId,
           `Preview: ${att.name}`,
-          <div className={cn("h-full flex flex-col", theme.surface)}>
+          <div className={cn("h-full flex flex-col", theme.surface.default)}>
              <DocumentPreviewPanel 
                 document={{ 
                     id: 'temp', title: att.name, type: att.type === 'image' ? 'JPG' : 'PDF', 
@@ -103,7 +103,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
   if (!activeConversation) {
     return (
       <div className={cn("flex-1 flex flex-col items-center justify-center p-8 h-full", theme.surfaceHighlight, theme.text.tertiary)}>
-        <div className={cn("h-24 w-24 rounded-full flex items-center justify-center mb-6", theme.surface)}>
+        <div className={cn("h-24 w-24 rounded-full flex items-center justify-center mb-6", theme.surface.default)}>
           <Lock className="h-12 w-12 opacity-50"/>
         </div>
         <h3 className={cn("text-xl font-bold", theme.text.secondary)}>Secure Messenger</h3>
@@ -133,7 +133,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
       </div>
 
       {pendingAttachments.length > 0 && (
-        <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface, theme.border.light)}>
+        <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface.default, theme.border.light)}>
           {pendingAttachments.map((att, i) => (
             <div key={i} className="relative group cursor-pointer" onClick={() => handlePreviewAttachment(att)}>
               <FileAttachment name={att.name} size={att.size} type={att.type} className="w-48 shadow-sm"/>

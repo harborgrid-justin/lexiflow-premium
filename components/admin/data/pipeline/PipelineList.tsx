@@ -28,7 +28,7 @@ export const PipelineList: React.FC<PipelineListProps> = ({ pipelines, selectedJ
                     "flex items-center justify-between p-4 rounded-lg border shadow-sm cursor-pointer transition-all hover:shadow-md",
                     selectedJob?.id === p.id 
                         ? cn(theme.primary.light, theme.primary.border, "ring-1 ring-blue-300") 
-                        : cn(theme.surface, theme.border.default)
+                        : cn(theme.surface.default, theme.border.default)
                 )}
             >
                 <div className="flex items-center gap-4">

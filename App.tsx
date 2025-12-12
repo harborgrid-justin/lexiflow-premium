@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Sidebar } from './components/Sidebar';
+import { Sidebar } from './components/layout/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { AppHeader } from './components/layout/AppHeader';
 import { ThemeProvider } from './context/ThemeContext';

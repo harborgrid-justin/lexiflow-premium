@@ -106,7 +106,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                     <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.type}
                         onChange={(e) => setFormData({...formData, type: e.target.value as CommunicationType})}
                     >
@@ -119,7 +119,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Matter Reference</label>
                     <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
                         onChange={(e) => setFormData({...formData, caseId: e.target.value})}
                     >
@@ -151,7 +151,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                     </Button>
                 </div>
                 <textarea 
-                    className={cn("w-full p-4 border rounded-lg text-sm font-serif h-48 resize-none outline-none focus:ring-2 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                    className={cn("w-full p-4 border rounded-lg text-sm font-serif h-48 resize-none outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     placeholder="Type your message here..."

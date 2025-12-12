@@ -19,7 +19,7 @@ export const SchemaCodeEditor: React.FC<SchemaCodeEditorProps> = ({ ddl }) => {
 
   return (
     <div className="h-full p-6">
-        <div className={cn("h-full rounded-lg border shadow-inner flex flex-col overflow-hidden", theme.border.default, theme.surface)}>
+        <div className={cn("h-full rounded-lg border shadow-inner flex flex-col overflow-hidden", theme.border.default, theme.surface.default)}>
             <div className={cn("px-4 py-2 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
                 <span className={cn("text-xs font-mono", theme.text.secondary)}>schema.sql</span>
                 <div className="flex gap-2 items-center">

@@ -21,7 +21,7 @@ export const SplitView: React.FC<SplitViewProps> = ({
   return (
     <div className={cn(
       "flex-1 flex flex-col md:flex-row rounded-lg overflow-hidden min-h-0",
-      theme.surface,
+      theme.surface.default,
       theme.border.default,
       "border shadow-sm",
       className
@@ -36,7 +36,7 @@ export const SplitView: React.FC<SplitViewProps> = ({
       </div>
       <div className={cn(
         "flex-1 flex flex-col min-w-0 h-full",
-        theme.surface, // Replaced bg-white
+        theme.surface.default, // Replaced bg-white
         !showSidebarOnMobile ? 'flex' : 'hidden md:flex'
       )}>
         {content}

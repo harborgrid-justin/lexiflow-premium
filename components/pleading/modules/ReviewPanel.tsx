@@ -65,7 +65,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
             {comments.length === 0 && <div className={cn("text-center text-xs py-8", theme.text.tertiary)}>No comments yet.</div>}
             
             {comments.map(c => (
-                <div key={c.id} className={cn("p-3 rounded-lg border text-sm group", c.resolved ? "opacity-60 bg-slate-50 dark:bg-slate-900" : cn(theme.surface, "shadow-sm"), theme.border.default)}>
+                <div key={c.id} className={cn("p-3 rounded-lg border text-sm group", c.resolved ? "opacity-60 bg-slate-50 dark:bg-slate-900" : cn(theme.surface.default, "shadow-sm"), theme.border.default)}>
                     <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
                             <div className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">
@@ -88,7 +88,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
         <div className={cn("p-3 border-t", theme.border.default)}>
             <div className="relative">
                 <input 
-                    className={cn("w-full pl-3 pr-10 py-2 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                    className={cn("w-full pl-3 pr-10 py-2 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     placeholder="Add comment..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}

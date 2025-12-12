@@ -23,7 +23,7 @@ export const CaseListExperts: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {experts.map(exp => (
-        <div key={exp.id} className={cn("p-6 rounded-lg border shadow-sm hover:shadow-md transition-all group", theme.surface, theme.border.default)}>
+        <div key={exp.id} className={cn("p-6 rounded-lg border shadow-sm hover:shadow-md transition-all group", theme.surface.default, theme.border.default)}>
           <div className="flex justify-between items-start mb-4">
             <div className="h-12 w-12 bg-indigo-100 rounded-full flex items-center justify-center font-bold text-indigo-700 text-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
               {exp.name.charAt(0)}

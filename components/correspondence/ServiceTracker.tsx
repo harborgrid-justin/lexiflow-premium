@@ -30,7 +30,7 @@ export const ServiceTracker: React.FC<ServiceTrackerProps> = ({ jobs, onSelect, 
                     onClick={() => onSelect(job)}
                     className={cn(
                         "p-5 rounded-xl border shadow-sm cursor-pointer transition-all hover:shadow-md group flex flex-col",
-                        theme.surface,
+                        theme.surface.default,
                         theme.border.default,
                         selectedId === job.id ? "ring-2 ring-blue-500 border-blue-500" : `hover:${theme.primary.border}`
                     )}

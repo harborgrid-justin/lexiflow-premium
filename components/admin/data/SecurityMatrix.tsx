@@ -22,17 +22,17 @@ export const SecurityMatrix: React.FC<SecurityMatrixProps> = ({ initialTab = 'ma
 
   return (
     <div className="flex flex-col h-full">
-        <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surface.default, theme.border.default)}>
             <div className={cn("flex gap-2 p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
                 <button 
                     onClick={() => setActiveView('matrix')}
-                    className={cn("px-4 py-1.5 text-xs font-bold rounded transition-all", activeView === 'matrix' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}
+                    className={cn("px-4 py-1.5 text-xs font-bold rounded transition-all", activeView === 'matrix' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}
                 >
                     Access Matrix
                 </button>
                 <button 
                     onClick={() => setActiveView('policies')}
-                    className={cn("px-4 py-1.5 text-xs font-bold rounded transition-all", activeView === 'policies' ? cn(theme.surface, "shadow", theme.primary.text) : theme.text.secondary)}
+                    className={cn("px-4 py-1.5 text-xs font-bold rounded transition-all", activeView === 'policies' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}
                 >
                     RLS Policies
                 </button>

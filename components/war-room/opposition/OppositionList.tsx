@@ -39,7 +39,7 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
   };
 
   return (
-    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.surface)}>
+    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.surface.default)}>
         <TableContainer>
             <TableHeader>
                 <TableHead>Entity Name</TableHead>

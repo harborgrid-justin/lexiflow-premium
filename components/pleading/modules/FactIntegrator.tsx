@@ -43,7 +43,7 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
         {timelineEvents.map((evt) => (
-          <div key={evt.id} className={cn("p-3 rounded-lg border group hover:border-blue-300 transition-colors", theme.surface, theme.border.default)}>
+          <div key={evt.id} className={cn("p-3 rounded-lg border group hover:border-blue-300 transition-colors", theme.surface.default, theme.border.default)}>
              <div className="flex justify-between items-start mb-1">
                 <span className={cn("flex items-center text-xs font-bold", theme.primary.text)}>
                   <Calendar className="h-3 w-3 mr-1" /> {evt.date}

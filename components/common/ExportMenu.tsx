@@ -32,7 +32,7 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onExport }) => {
       {isOpen && (
         <div className={cn(
           "absolute right-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100",
-          theme.surface,
+          theme.surface.default,
           theme.border.default,
           "border"
         )}>

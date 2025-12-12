@@ -121,12 +121,12 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <div className={cn("p-4 border-b shrink-0 flex items-center justify-between", theme.surface, theme.border.default)}>
+      <div className={cn("p-4 border-b shrink-0 flex items-center justify-between", theme.surface.default, theme.border.default)}>
         <h3 className="text-lg font-bold">Gantt Timeline View</h3>
         <div className="flex items-center gap-2">
            <button 
               onClick={() => setShowCriticalPath(!showCriticalPath)}
-              className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : cn(theme.surface, "text-slate-500"))}
+              className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : cn(theme.surface.default, "text-slate-500"))}
             >
                 <TrendingUp className="h-3 w-3 mr-1"/> Critical Path
             </button>

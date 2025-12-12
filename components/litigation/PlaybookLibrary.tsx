@@ -109,7 +109,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
   return (
     <div className="flex flex-col h-full">
         {/* Filters Header */}
-        <div className={cn("p-4 border-b space-y-4 shrink-0", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 border-b space-y-4 shrink-0", theme.surface.default, theme.border.default)}>
             <div className="flex flex-col md:flex-row justify-between gap-4">
                 <div className="relative flex-1">
                     <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5", theme.text.tertiary)} />
@@ -122,14 +122,14 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
                     <select 
-                        className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
                     >
                         {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                     <select 
-                        className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedDifficulty}
                         onChange={(e) => setSelectedDifficulty(e.target.value)}
                     >

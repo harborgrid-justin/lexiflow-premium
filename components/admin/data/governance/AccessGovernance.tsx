@@ -71,7 +71,7 @@ export const AccessGovernance: React.FC = () => {
   if (isLoading) return <div className={cn("p-8 text-center", theme.text.secondary)}>Loading Access Matrix...</div>;
 
   return (
-    <div className={cn("h-full w-full rounded-lg border shadow-sm overflow-auto relative", theme.surface, theme.border.default)}>
+    <div className={cn("h-full w-full rounded-lg border shadow-sm overflow-auto relative", theme.surface.default, theme.border.default)}>
         <table className="w-full text-sm text-left border-collapse">
             <thead className={cn("text-xs uppercase font-bold", theme.text.secondary)}>
                 <tr>
@@ -84,7 +84,7 @@ export const AccessGovernance: React.FC = () => {
             <tbody className={cn("divide-y", theme.border.light)}>
                 {resources.map(res => (
                     <tr key={res} className={cn("transition-colors", `hover:${theme.surfaceHighlight}`)}>
-                        <td className={cn("px-6 py-4 font-medium flex items-center gap-2 sticky left-0 z-10 border-r", theme.surface, theme.text.primary, theme.border.default)}>
+                        <td className={cn("px-6 py-4 font-medium flex items-center gap-2 sticky left-0 z-10 border-r", theme.surface.default, theme.text.primary, theme.border.default)}>
                             <Shield className="h-4 w-4 text-blue-500 shrink-0"/> {res}
                         </td>
                         {roles.map(role => {

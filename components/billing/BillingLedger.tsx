@@ -69,7 +69,7 @@ export const BillingLedger: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center gap-4 mb-4">
-          <div className={cn("flex p-1 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+          <div className={cn("flex p-1 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <button 
                 onClick={() => setActiveTab('operating')}
                 className={cn(

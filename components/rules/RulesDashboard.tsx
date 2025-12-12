@@ -36,7 +36,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card title="Quick Access Library" subtitle="Frequently accessed rule sets">
                 <div className="space-y-3">
-                    <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface, theme.border.default)} onClick={() => onNavigate('federal_evidence')}>
+                    <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface.default, theme.border.default)} onClick={() => onNavigate('federal_evidence')}>
                         <div className="flex items-center gap-3">
                             <div className="bg-blue-100 p-2 rounded-lg text-blue-700"><BookOpen className="h-6 w-6"/></div>
                             <div>
@@ -47,7 +47,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
                         <ArrowRight className={cn("h-5 w-5", theme.text.tertiary)}/>
                     </div>
 
-                    <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface, theme.border.default)} onClick={() => onNavigate('federal_civil')}>
+                    <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface.default, theme.border.default)} onClick={() => onNavigate('federal_civil')}>
                         <div className="flex items-center gap-3">
                             <div className="bg-purple-100 p-2 rounded-lg text-purple-700"><Scale className="h-6 w-6"/></div>
                             <div>
@@ -58,7 +58,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
                         <ArrowRight className={cn("h-5 w-5", theme.text.tertiary)}/>
                     </div>
 
-                    <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface, theme.border.default)} onClick={() => onNavigate('local')}>
+                    <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface.default, theme.border.default)} onClick={() => onNavigate('local')}>
                         <div className="flex items-center gap-3">
                             <div className="bg-emerald-100 p-2 rounded-lg text-emerald-700"><MapPin className="h-6 w-6"/></div>
                             <div>

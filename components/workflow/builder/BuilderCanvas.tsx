@@ -248,7 +248,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                     break;
                 case 'Phase':
                     nodeContent = (
-                        <div className={cn("h-10 px-4 flex items-center border-b rounded-t-2xl backdrop-blur-sm", theme.surface, theme.border.default, "bg-opacity-80 dark:bg-opacity-60")}>
+                        <div className={cn("h-10 px-4 flex items-center border-b rounded-t-2xl backdrop-blur-sm", theme.surface.default, theme.border.default, "bg-opacity-80 dark:bg-opacity-60")}>
                             <span className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>{node.label}</span>
                         </div>
                     );

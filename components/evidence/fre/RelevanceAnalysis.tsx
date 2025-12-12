@@ -23,7 +23,7 @@ export const RelevanceAnalysis: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className={cn("flex items-center gap-3 p-2 rounded-lg border", theme.surface, theme.border.default)}>
+            <div className={cn("flex items-center gap-3 p-2 rounded-lg border", theme.surface.default, theme.border.default)}>
                 <Filter className={cn("h-4 w-4", theme.text.secondary)}/>
                 <select className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
                     <option value="">Select Evidence to Analyze...</option>

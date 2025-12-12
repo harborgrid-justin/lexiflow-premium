@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card } from '../../../components/common/Card';
+import { Card } from '../../common/Card';
 import { CheckCircle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -14,7 +14,7 @@ export const EvidenceFRCPStatus: React.FC = () => {
         <CheckCircle className="h-5 w-5 text-green-500 mr-2"/>
         <span className={cn("text-sm font-medium", theme.text.primary)}>Disclosed to Opposing Counsel</span>
       </div>
-      <div className={cn("text-xs p-3 rounded border", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
+      <div className={cn("text-xs p-3 rounded border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>
         Included in Initial Disclosures Packet v2 sent on 2024-02-01. Bates Range: 00145-00152.
       </div>
     </Card>

@@ -68,7 +68,7 @@ export const AdminHierarchy: React.FC = () => {
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg overflow-hidden border shadow-sm", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg overflow-hidden border shadow-sm", theme.surface.default, theme.border.default)}>
       <div className={cn("p-4 border-b flex justify-between items-center shadow-sm z-10 shrink-0", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center gap-2", theme.text.primary)}>
@@ -83,7 +83,7 @@ export const AdminHierarchy: React.FC = () => {
         
         {/* Orgs */}
         <div className={cn("w-full md:w-1/4 md:min-w-[250px] border-b md:border-b-0 md:border-r flex flex-col h-auto md:h-full shrink-0", theme.border.default, theme.surface.default)}>
-            <div className={cn("p-3 border-b font-bold text-xs uppercase tracking-wide shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.tertiary)}>Organizations</div>
+            <div className={cn("p-3 border-b font-bold text-xs uppercase tracking-wide shrink-0", theme.surface.highlight, theme.border.default, theme.text.tertiary)}>Organizations</div>
             <div className="flex-1 overflow-x-auto md:overflow-y-auto flex md:block">
                 {orgs.map(org => (
                     <OrgListItem 
@@ -118,12 +118,12 @@ export const AdminHierarchy: React.FC = () => {
 
         {/* Users */}
         <div className={cn("flex-1 flex flex-col min-w-[300px] h-full overflow-hidden", theme.surface.default)}>
-            <div className={cn("p-3 border-b flex justify-between items-center shrink-0", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("p-3 border-b flex justify-between items-center shrink-0", theme.surface.highlight, theme.border.default)}>
                 <span className={cn("font-bold text-xs uppercase tracking-wide truncate max-w-[200px]", theme.text.tertiary)}>{selectedGroupId ? `${orgGroups.find(g => g.id === selectedGroupId)?.name}` : 'All Users'}</span>
                 <div className="flex gap-2"><span className={cn("text-xs border px-2 py-0.5 rounded", theme.surface.default, theme.border.default, theme.text.secondary)}>{displayedUsers.length}</span><button className={cn("hover:bg-blue-50 p-1 rounded", theme.text.primary)}><Plus className="h-4 w-4"/></button></div>
             </div>
             <div className="flex-1 overflow-y-auto">
-                <table className={cn("hidden md:table min-w-full divide-y", theme.border.light)}>
+                <table className={cn("hidden md:table min-w-full divide-y", theme.border.subtle)}>
                     <thead className={cn("sticky top-0", theme.surface.default)}>
                     <tr>
                         <th className={cn("px-4 py-2 text-left text-xs font-semibold", theme.text.secondary)}>Name</th>
@@ -132,13 +132,13 @@ export const AdminHierarchy: React.FC = () => {
                         <th className={cn("px-4 py-2 text-right text-xs font-semibold", theme.text.secondary)}>Status</th>
                     </tr>
                     </thead>
-                    <tbody className={cn("divide-y", theme.border.light)}>
+                    <tbody className={cn("divide-y", theme.border.subtle)}>
                         {displayedUsers.map(user => (
                             <UserListItem key={user.id} user={user} />
                         ))}
                     </tbody>
                 </table>
-                <div className={cn("md:hidden divide-y", theme.border.light)}>
+                <div className={cn("md:hidden divide-y", theme.border.subtle)}>
                     {displayedUsers.map(user => (
                         <UserListItem key={user.id} user={user} viewMode="card" />
                     ))}
@@ -148,3 +148,6 @@ export const AdminHierarchy: React.FC = () => {
       </div>
     </div>
   );
+};
+
+export default AdminHierarchy;

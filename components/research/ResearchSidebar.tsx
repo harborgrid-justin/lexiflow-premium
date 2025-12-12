@@ -16,7 +16,7 @@ export const ResearchSidebar: React.FC<ResearchSidebarProps> = ({
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-80 border-r flex flex-col hidden md:flex shrink-0", theme.surface, theme.border.default)}>
+    <div className={cn("w-80 border-r flex flex-col hidden md:flex shrink-0", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b font-bold text-xs uppercase tracking-wide", theme.border.default, theme.text.tertiary)}>
             Recent Sessions
         </div>
@@ -41,7 +41,7 @@ export const ResearchSidebar: React.FC<ResearchSidebarProps> = ({
                     </p>
                     <div className="mt-2 flex items-center justify-between">
                         <span className={cn("text-[10px]", theme.text.tertiary)}>{session.timestamp}</span>
-                        <span className={cn("text-[10px] px-1.5 py-0.5 rounded border", theme.surface, theme.border.default, theme.text.secondary)}>{session.sources.length} Sources</span>
+                        <span className={cn("text-[10px] px-1.5 py-0.5 rounded border", theme.surface.default, theme.border.default, theme.text.secondary)}>{session.sources.length} Sources</span>
                     </div>
                 </div>
             ))}

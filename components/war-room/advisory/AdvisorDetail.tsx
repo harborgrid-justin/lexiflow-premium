@@ -38,7 +38,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
             <div className="space-y-4">
                 <SectionTitle className="border-b pb-2">Deliverables</SectionTitle>
                 <div className="space-y-3">
-                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors hover:border-blue-300 cursor-pointer", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors hover:border-blue-300 cursor-pointer", theme.surface.default, theme.border.default)}>
                         <FileText className="h-5 w-5 text-red-500 shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <p className={cn("text-sm font-bold truncate", theme.text.primary)}>Initial Expert Report</p>
@@ -46,7 +46,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
                         </div>
                         <Download className="h-4 w-4 text-slate-400 hover:text-blue-600"/>
                     </div>
-                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors hover:border-blue-300 cursor-pointer", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors hover:border-blue-300 cursor-pointer", theme.surface.default, theme.border.default)}>
                         <FileText className="h-5 w-5 text-blue-500 shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <p className={cn("text-sm font-bold truncate", theme.text.primary)}>Rebuttal to Defense Expert</p>

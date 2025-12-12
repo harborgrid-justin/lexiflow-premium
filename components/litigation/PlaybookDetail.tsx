@@ -98,7 +98,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClos
                               <p className="text-xs text-slate-500 mb-3 uppercase tracking-wide font-bold">{stage.duration}</p>
                               <div className="grid grid-cols-1 gap-2">
                                   {stage.criticalTasks.map((task, tIdx) => (
-                                      <div key={tIdx} className={cn("p-3 rounded border flex items-center gap-3", theme.surface, theme.border.default)}>
+                                      <div key={tIdx} className={cn("p-3 rounded border flex items-center gap-3", theme.surface.default, theme.border.default)}>
                                           <CheckCircle className="h-4 w-4 text-slate-400"/>
                                           <span className="text-sm">{task}</span>
                                       </div>
@@ -118,7 +118,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClos
                       </h3>
                       <div className="space-y-3">
                           {playbook.authorities?.map((auth, i) => (
-                              <div key={i} className={cn("p-4 rounded-lg border group hover:border-purple-300 transition-all cursor-pointer", theme.surface, theme.border.default)} onClick={() => handleLaunchResearch(auth.citation)}>
+                              <div key={i} className={cn("p-4 rounded-lg border group hover:border-purple-300 transition-all cursor-pointer", theme.surface.default, theme.border.default)} onClick={() => handleLaunchResearch(auth.citation)}>
                                   <div className="flex justify-between items-start mb-1">
                                       <span className="text-xs font-bold uppercase text-purple-600">{auth.type}</span>
                                       <ExternalLink className="h-3 w-3 text-slate-400 opacity-0 group-hover:opacity-100"/>

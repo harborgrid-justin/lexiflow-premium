@@ -51,7 +51,7 @@ export const RedactionStudioView: React.FC = () => {
                         <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.light,
-                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface}`
+                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
                         </button>
@@ -59,7 +59,7 @@ export const RedactionStudioView: React.FC = () => {
                 </div>
             </div>
             {/* Editor View */}
-            <div className={cn("flex-1 flex", theme.surface)}>
+            <div className={cn("flex-1 flex", theme.surface.default)}>
                 {selectedDoc ? (
                     <>
                         <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>

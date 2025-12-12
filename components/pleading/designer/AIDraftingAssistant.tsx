@@ -46,7 +46,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
 
   return (
     <div className={cn("flex flex-col h-full", theme.surfaceHighlight)}>
-        <div className={cn("p-4 border-b", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 border-b", theme.surface.default, theme.border.default)}>
             <h3 className={cn("text-sm font-bold flex items-center gap-2", theme.text.primary)}>
                 <Sparkles className="h-4 w-4 text-purple-600" /> AI Co-Counsel
             </h3>
@@ -61,7 +61,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="e.g., Draft an introduction arguing that the court lacks personal jurisdiction..."
                     rows={4}
-                    className={theme.surface}
+                    className={theme.surface.default}
                 />
             </div>
 
@@ -76,7 +76,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
                                 "flex-1 py-1.5 text-xs font-medium rounded border transition-colors",
                                 tone === t 
                                     ? "bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900/30 dark:border-purple-700 dark:text-purple-300" 
-                                    : cn(theme.surface, theme.border.default, theme.text.secondary)
+                                    : cn(theme.surface.default, theme.border.default, theme.text.secondary)
                             )}
                         >
                             {t}
@@ -105,7 +105,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
                             </button>
                         </div>
                     </div>
-                    <div className={cn("p-3 rounded border text-sm font-serif leading-relaxed mb-3 max-h-60 overflow-y-auto", theme.surface, theme.border.default, theme.text.primary)}>
+                    <div className={cn("p-3 rounded border text-sm font-serif leading-relaxed mb-3 max-h-60 overflow-y-auto", theme.surface.default, theme.border.default, theme.text.primary)}>
                         {generatedText}
                     </div>
                     <Button onClick={() => onInsert(generatedText)} variant="secondary" className="w-full">

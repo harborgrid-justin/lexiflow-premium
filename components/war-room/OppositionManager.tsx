@@ -47,7 +47,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Header Toolbar */}
       <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">

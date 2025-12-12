@@ -45,7 +45,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                 onClick={() => onSelectProcess && onSelectProcess(bp.id)}
             >
                 <div className="flex items-center gap-3">
-                <div className={cn("p-2 rounded border shadow-sm transition-all", theme.surface, theme.border.default, `group-hover:shadow-md`)}>
+                <div className={cn("p-2 rounded border shadow-sm transition-all", theme.surface.default, theme.border.default, `group-hover:shadow-md`)}>
                     {getProcessIcon(bp.name)}
                 </div>
                 <div>
@@ -97,7 +97,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
         
         {/* New Process Card */}
         <div className={cn("border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-8 transition-all cursor-pointer min-h-[200px]", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)}>
-            <div className={cn("p-4 rounded-full shadow-sm mb-3", theme.surface)}>
+            <div className={cn("p-4 rounded-full shadow-sm mb-3", theme.surface.default)}>
             <Play className="h-6 w-6"/>
             </div>
             <span className="font-bold text-sm">Design New Workflow</span>

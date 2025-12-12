@@ -26,7 +26,7 @@ export const EnhancedWorkflowPanel: React.FC = () => {
         </div>
       </div>
 
-      <div className={cn("rounded-lg border shadow-sm flex flex-col flex-1 overflow-hidden", theme.surface, theme.border.default)}>
+      <div className={cn("rounded-lg border shadow-sm flex flex-col flex-1 overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b", theme.border.default)}>
           <Tabs 
             tabs={['tasks', 'dependencies', 'approvals', 'history']} 

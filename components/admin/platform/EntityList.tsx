@@ -41,7 +41,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
 
   const renderRow = (item: GenericRecord) => {
     return (
-        <div key={item.id} className={cn("flex items-center border-b h-[60px] px-6 transition-colors", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+        <div key={item.id} className={cn("flex items-center border-b h-[60px] px-6 transition-colors", theme.border.subtle, `hover:${theme.surface.highlight}`)}>
             <div className={cn("w-32 font-mono text-xs truncate pr-4", theme.text.tertiary)}>{item.id}</div>
             
             {activeCategory === 'users' && (
@@ -86,7 +86,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
             )}
 
             <div className="w-24 flex justify-end gap-2">
-                <button onClick={() => onEdit(item)} className={cn("p-1.5 rounded transition-colors text-blue-600", `hover:${theme.surfaceHighlight}`)}><Edit2 className="h-4 w-4"/></button>
+                <button onClick={() => onEdit(item)} className={cn("p-1.5 rounded transition-colors text-blue-600", `hover:${theme.surface.highlight}`)}><Edit2 className="h-4 w-4"/></button>
                 <button onClick={() => onDelete(item.id)} className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"><Trash2 className="h-4 w-4"/></button>
             </div>
         </div>
@@ -104,8 +104,8 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
   return (
     <div className="flex flex-col h-full">
         {/* Desktop Virtual List */}
-        <div className={cn("hidden md:flex flex-col h-full", theme.surface)}>
-            <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+        <div className={cn("hidden md:flex flex-col h-full", theme.surface.default)}>
+            <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                 <div className="w-32">ID</div>
                 {renderHeader()}
                 <div className="w-24 text-right">Actions</div>
@@ -123,7 +123,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
         {/* Mobile Card View (Simple map) */}
         <div className="md:hidden space-y-3 p-4 overflow-y-auto">
             {items.map((item) => (
-            <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
+            <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-start mb-2">
                 <span className={cn("text-xs font-mono", theme.text.secondary)}>{item.id}</span>
                 <div className="flex gap-2">

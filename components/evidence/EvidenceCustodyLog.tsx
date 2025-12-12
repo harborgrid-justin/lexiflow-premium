@@ -42,7 +42,7 @@ export const EvidenceCustodyLog: React.FC = () => {
 
   return (
     <div className="space-y-4 animate-fade-in">
-      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
            <h3 className={cn("font-bold", theme.text.primary)}>Master Chain of Custody</h3>
            <p className={cn("text-sm", theme.text.secondary)}>Audit trail for all evidence transfers across the firm.</p>

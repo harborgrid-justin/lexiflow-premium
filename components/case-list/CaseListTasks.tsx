@@ -114,14 +114,14 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
     <div className="space-y-4 h-full flex flex-col">
       {isModalOpen && <TaskCreationModal isOpen={true} onClose={() => setIsModalOpen(false)} onSave={handleAddTask} />}
       
-      <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
             <h3 className={cn("font-bold", theme.text.primary)}>Task Manager</h3>
             <p className={cn("text-sm", theme.text.secondary)}>Cross-module workflow & assignments</p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
             <select 
-              className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface, theme.border.default, theme.text.primary)} 
+              className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
               value={filter} 
               onChange={e => setFilter(e.target.value)}
             >
@@ -138,7 +138,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
         </div>
       </div>
 
-      <div className={cn("rounded-lg border shadow-sm flex-1 overflow-hidden", theme.surface, theme.border.default)}>
+      <div className={cn("rounded-lg border shadow-sm flex-1 overflow-hidden", theme.surface.default, theme.border.default)}>
         {isLoading ? <LazyLoader /> : (
           <VirtualList 
             items={filteredTasks}

@@ -25,7 +25,7 @@ export const HearsayAnalyzer: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surface.default, theme.border.default)}>
                 <FileText className={cn("h-5 w-5", theme.text.secondary)}/>
                 <select className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
                     <option value="">Select Document to Analyze...</option>

@@ -72,7 +72,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
 
   return (
     <div className="space-y-6">
-      <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold", theme.text.primary)}>{activePlan.title}</h3>
           <p className={cn("text-xs", theme.text.secondary)}>Last updated: {activePlan.lastUpdated}</p>
@@ -117,7 +117,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
               {editingSectionId === section.id ? (
                 <div>
                   <textarea 
-                    className={cn("w-full p-3 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-100 min-h-[100px]", theme.border.default, theme.surface, theme.text.primary)}
+                    className={cn("w-full p-3 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-100 min-h-[100px]", theme.border.default, theme.surface.default, theme.text.primary)}
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                   />

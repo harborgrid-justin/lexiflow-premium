@@ -23,7 +23,7 @@ export const AuditLogControls: React.FC<AuditLogControlsProps> = ({
     const { theme } = useTheme();
 
     return (
-        <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surface.highlight, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold flex items-center gap-2", theme.text.primary)}>
                     <Shield className="h-5 w-5 text-blue-600"/> Immutable Audit Ledger
@@ -31,9 +31,9 @@ export const AuditLogControls: React.FC<AuditLogControlsProps> = ({
                 <p className={cn("text-xs mt-1", theme.text.secondary)}>Cryptographically chained events.</p>
             </div>
             <div className="flex flex-wrap gap-2 w-full md:w-auto justify-end items-center">
-                <div className={cn("flex p-0.5 rounded-lg border mr-2", theme.surface, theme.border.default)}>
-                    <button onClick={() => setViewMode('table')} className={cn("p-1.5 rounded", viewMode === 'table' ? cn(theme.surfaceHighlight, "text-blue-600") : theme.text.tertiary)}><LayoutList className="h-4 w-4"/></button>
-                    <button onClick={() => setViewMode('visual')} className={cn("p-1.5 rounded", viewMode === 'visual' ? cn(theme.surfaceHighlight, "text-blue-600") : theme.text.tertiary)}><GitCommit className="h-4 w-4"/></button>
+                <div className={cn("flex p-0.5 rounded-lg border mr-2", theme.surface.default, theme.border.default)}>
+                    <button onClick={() => setViewMode('table')} className={cn("p-1.5 rounded", viewMode === 'table' ? cn(theme.surface.highlight, "text-blue-600") : theme.text.tertiary)}><LayoutList className="h-4 w-4"/></button>
+                    <button onClick={() => setViewMode('visual')} className={cn("p-1.5 rounded", viewMode === 'visual' ? cn(theme.surface.highlight, "text-blue-600") : theme.text.tertiary)}><GitCommit className="h-4 w-4"/></button>
                 </div>
                 <div className="flex gap-1 mr-2">
                     <Button size="sm" variant="ghost" onClick={handleReset} className={theme.text.secondary}><RefreshCw className="h-4 w-4"/></Button>

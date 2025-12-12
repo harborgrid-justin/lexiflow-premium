@@ -123,7 +123,7 @@ export const FormsSigningView: React.FC = () => {
     const ListButton = ({ id, label, count }: { id: FilterCategory, label: string, count: number }) => (
         <button onClick={() => setActiveList(id)} className={cn(
             "w-full text-left p-3 rounded-md text-sm font-medium flex justify-between items-center transition-colors",
-            activeList === id ? cn(theme.surface, theme.primary.text) : `hover:${theme.surface}`
+            activeList === id ? cn(theme.surface.default, theme.primary.text) : `hover:${theme.surface.default}`
         )}>
             <span>{label}</span>
             <span className={cn("px-2 py-0.5 rounded-full text-xs", activeList === id ? "bg-blue-100 text-blue-700" : "bg-slate-200 text-slate-600")}>{count}</span>
@@ -139,7 +139,7 @@ export const FormsSigningView: React.FC = () => {
                     <div className="relative mt-2">
                         <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
                         <input 
-                            className={cn("w-full pl-8 pr-2 py-1.5 text-xs border rounded-md outline-none", theme.surface, theme.border.default)}
+                            className={cn("w-full pl-8 pr-2 py-1.5 text-xs border rounded-md outline-none", theme.surface.default, theme.border.default)}
                             placeholder="Search documents..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -157,7 +157,7 @@ export const FormsSigningView: React.FC = () => {
                         <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.light,
-                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface}`
+                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
                             <div className={cn("text-xs opacity-70 flex items-center mt-1", selectedDoc?.id === doc.id ? "" : theme.text.secondary)}>
@@ -172,7 +172,7 @@ export const FormsSigningView: React.FC = () => {
                 </div>
             </div>
             {/* Editor */}
-            <div className={cn("flex-1 flex flex-col", theme.surface)}>
+            <div className={cn("flex-1 flex flex-col", theme.surface.default)}>
                 {selectedDoc ? (
                     <>
                         <AcrobatToolbar 

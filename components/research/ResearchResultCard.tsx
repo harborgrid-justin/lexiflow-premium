@@ -24,7 +24,7 @@ export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, 
             ref={ref}
             className={cn(
                 "p-4 rounded-lg border transition-all shadow-sm flex flex-col group cursor-pointer",
-                theme.surface,
+                theme.surface.default,
                 theme.border.default,
                 `hover:${theme.primary.border}`,
                 isRead && 'border-green-200 dark:border-green-800'

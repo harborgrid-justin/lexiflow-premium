@@ -97,7 +97,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
   };
 
   return (
-    <div className={cn("flex flex-col h-full", theme.surface)}>
+    <div className={cn("flex flex-col h-full", theme.surface.default)}>
         {/* Header */}
         <div className={cn("p-6 border-b flex justify-between items-center", theme.border.default)}>
             <div>
@@ -143,7 +143,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                              <div>
                                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Enforcement Action</label>
                                 <select 
-                                    className={cn("w-full p-2 border rounded-md text-sm outline-none", theme.border.default, theme.surface, theme.text.primary)}
+                                    className={cn("w-full p-2 border rounded-md text-sm outline-none", theme.border.default, theme.surface.default, theme.text.primary)}
                                     value={rule.action}
                                     onChange={(e) => setRule({...rule, action: e.target.value as any})}
                                 >
@@ -172,7 +172,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                         onChange={e => updateCondition(cond.id, 'field', e.target.value)}
                                     />
                                     <select 
-                                        className={cn("w-32 p-2 text-sm border rounded", theme.border.default, theme.surface, theme.text.primary)}
+                                        className={cn("w-32 p-2 text-sm border rounded", theme.border.default, theme.surface.default, theme.text.primary)}
                                         value={cond.operator}
                                         onChange={e => updateCondition(cond.id, 'operator', e.target.value)}
                                     >
@@ -184,7 +184,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                         <option value="IS NULL">IS NULL</option>
                                     </select>
                                     <input 
-                                        className={cn("flex-1 p-2 text-sm border rounded", theme.border.default, theme.surface, theme.text.primary)} 
+                                        className={cn("flex-1 p-2 text-sm border rounded", theme.border.default, theme.surface.default, theme.text.primary)} 
                                         placeholder="Value"
                                         value={cond.value}
                                         onChange={e => updateCondition(cond.id, 'value', e.target.value)}
@@ -205,14 +205,14 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                     <h4 className={cn("font-bold text-xs uppercase mb-3 flex items-center", theme.text.secondary)}>
                         <Code className="h-4 w-4 mr-2"/> Generated Query
                     </h4>
-                    <div className={cn("rounded-lg p-4 border overflow-x-auto", theme.surface, theme.border.default)}>
+                    <div className={cn("rounded-lg p-4 border overflow-x-auto", theme.surface.default, theme.border.default)}>
                         <pre className={cn("text-xs font-mono leading-relaxed whitespace-pre-wrap", theme.text.primary)}>
                             {generatedSQL}
                         </pre>
                     </div>
                  </div>
 
-                 <div className={cn("rounded-lg border shadow-sm flex-1 flex flex-col p-4", theme.surface, theme.border.default)}>
+                 <div className={cn("rounded-lg border shadow-sm flex-1 flex flex-col p-4", theme.surface.default, theme.border.default)}>
                     <h4 className={cn("font-bold text-xs uppercase mb-4 flex items-center", theme.text.secondary)}>
                         <Database className="h-4 w-4 mr-2"/> Impact Simulation
                     </h4>

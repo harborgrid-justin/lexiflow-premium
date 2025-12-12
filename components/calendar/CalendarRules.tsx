@@ -17,7 +17,7 @@ export const CalendarRules: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
-      <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <h3 className={cn("font-bold mb-4 flex items-center", theme.text.primary)}>
             <Book className={cn("h-5 w-5 mr-2", theme.primary.text)}/> Active Rule Sets
         </h3>
@@ -39,7 +39,7 @@ export const CalendarRules: React.FC = () => {
         <button className={cn("mt-4 text-sm font-medium hover:underline", theme.primary.text)}>+ Add Jurisdiction</button>
       </div>
 
-      <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <h3 className={cn("font-bold mb-4 flex items-center", theme.text.primary)}>
             <Settings className={cn("h-5 w-5 mr-2", theme.text.secondary)}/> Automation Triggers
         </h3>

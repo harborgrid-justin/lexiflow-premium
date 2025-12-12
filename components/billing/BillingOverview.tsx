@@ -132,7 +132,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
       </div>
 
       {/* Top Accounts */}
-      <div className={cn("rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+      <div className={cn("rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
             <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
                 <Users className={cn("h-5 w-5 mr-2", theme.primary.text)}/> Top Revenue Accounts

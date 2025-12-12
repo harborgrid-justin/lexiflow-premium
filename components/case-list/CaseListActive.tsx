@@ -102,7 +102,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
             onMouseEnter={() => prefetchCaseDetails(c.id)}
             className={cn(
                 "p-4 shadow-sm border active:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden h-full flex flex-col justify-between rounded-lg",
-                theme.surface, theme.border.default
+                theme.surface.default, theme.border.default
             )}
             >
             <div className={cn("absolute left-0 top-0 bottom-0 w-1", c.status === 'Trial' ? "bg-amber-500" : c.status === 'Discovery' ? "bg-blue-500" : "bg-slate-300")}></div>
@@ -140,14 +140,14 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
           />
           <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
-              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
                   <option value="All">All Statuses</option>
                   {Object.values(CaseStatus).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
           </div>
           <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
                   <option value="All">All Types</option>
                   <option value="Litigation">Litigation</option>
                   <option value="Appeal">Appeal</option>

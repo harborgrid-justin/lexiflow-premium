@@ -84,7 +84,7 @@ export const MotionForSanctions: React.FC = () => {
                 <Input label="Motion Title" value={newMotion.title || ''} onChange={e => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
                 <div>
                     <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Basis</label>
-                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={e => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
+                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={e => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
                         <option value="Rule 37(a)">Rule 37(a) - Compel</option>
                         <option value="Rule 37(b)">Rule 37(b) - Failure to Comply with Order</option>
                         <option value="Rule 37(c)">Rule 37(c) - Failure to Disclose/Admit</option>

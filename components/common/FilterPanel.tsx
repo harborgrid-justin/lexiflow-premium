@@ -21,7 +21,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose, onCle
   return (
     <div className={cn(
       "border rounded-lg p-4 animate-in slide-in-from-top-2 mb-4 shadow-sm",
-      theme.surface,
+      theme.surface.default,
       theme.border.default,
       className
     )}>

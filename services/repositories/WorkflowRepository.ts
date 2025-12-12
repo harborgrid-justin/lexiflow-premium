@@ -1,7 +1,6 @@
-
 import { BUSINESS_PROCESSES } from '../../data/models/firmProcess';
 import { TEMPLATE_LIBRARY } from '../../data/models/workflowTemplates';
-import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId } from '../../types';
+import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 import { SystemEventType } from '../../types/integrationTypes';
@@ -89,6 +88,29 @@ export const WorkflowRepository = {
         return newTasks;
     },
     
+    deployStrategyToCase: async (caseId: string, payload: { phases: CasePhase[], tasks: WorkflowTask[] }) => {
+        // 1. Clear existing generated items for this case
+        const [existingPhases, existingTasks] = await Promise.all([
+            db.getByIndex<CasePhase>(STORES.PHASES, 'caseId', caseId),
+            db.getByIndex<WorkflowTask>(STORES.TASKS, 'caseId', caseId)
+        ]);
+    
+        for (const phase of existingPhases) {
+            await db.delete(STORES.PHASES, phase.id);
+        }
+        // Only delete auto-generated tasks to avoid wiping manual ones.
+        // For this demo, we'll assume all tasks for a case are part of the plan.
+        for (const task of existingTasks) {
+            await db.delete(STORES.TASKS, task.id);
+        }
+        
+        // 2. Bulk insert new items
+        await db.bulkPut(STORES.PHASES, payload.phases);
+        await db.bulkPut(STORES.TASKS, payload.tasks);
+    
+        return { success: true };
+    },
+
     runAutomation: async (scope: string) => { 
         await delay(800); 
         console.log(`[API] Running automation scope: ${scope}`);

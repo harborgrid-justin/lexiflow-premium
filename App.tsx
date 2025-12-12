@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
@@ -30,6 +29,7 @@ const InnerApp: React.FC = () => {
     handleNavigation,
     handleSelectCase,
     handleSelectCaseById,
+    navigateToCaseTab,
     handleBackToMain,
     handleSearchResultClick,
     handleNeuralCommand,
@@ -88,6 +88,7 @@ const InnerApp: React.FC = () => {
           selectedCase={selectedCase}
           handleSelectCase={handleSelectCase}
           handleSelectCaseById={handleSelectCaseById}
+          navigateToCaseTab={navigateToCaseTab}
           handleBackToMain={handleBackToMain}
           setActiveView={handleNavigation}
           initialTab={initialTab}

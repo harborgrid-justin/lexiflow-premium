@@ -1,7 +1,6 @@
-
 import { Repository } from './core/Repository';
 import { STORES, db } from './db';
-import { CaseRepository, PhaseService } from './domains/CaseDomain';
+import { CaseRepository, PhaseRepository } from './domains/CaseDomain';
 import { ComplianceService } from './domains/ComplianceDomain';
 import { AdminService } from './domains/AdminDomain';
 import { CorrespondenceService } from './domains/CommunicationDomain';
@@ -179,7 +178,7 @@ export const DataService = {
       constructor() { super(STORES.RULES); } 
   }(),
 
-  phases: PhaseService,
+  phases: new PhaseRepository(),
   
   organization: {
     getOrgs: async () => db.getAll<Organization>(STORES.ORGS),

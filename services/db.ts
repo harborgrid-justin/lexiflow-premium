@@ -1,4 +1,3 @@
-
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
@@ -93,11 +92,12 @@ export const STORES = {
   OPERATING_SUMMARY: 'operating_summary',
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
   DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
+  PHASES: 'case_phases',
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 25; // Incremented for new stores
+  private dbVersion = 26; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -162,8 +162,8 @@ export class DatabaseManager {
             if (this.db) {
                 this.db.close();
             }
-            // Removed disruptive alert/reload. Application should handle reconnection or show a passive notification.
-            console.log("Database version changed. Please reload at your convenience.");
+            alert("A new version of the application is available. The page will now reload to apply updates.");
+            window.location.reload();
         };
 
         this.db.onclose = () => {

@@ -45,12 +45,12 @@ export class CaseRepository extends Repository<Case> {
     }
 }
 
-export const PhaseService = {
-    getByCaseId: async (caseId: string): Promise<CasePhase[]> => {
-        await delay(50);
-        
-        // Specific Logic for 1:24-cv-01442-LMB-IDD
-        if (caseId === '1:24-cv-01442-LMB-IDD') {
+export class PhaseRepository extends Repository<CasePhase> {
+    constructor() { super(STORES.PHASES); }
+    getByCaseId = async (caseId: string): Promise<CasePhase[]> => {
+        const phases = await this.getByIndex('caseId', caseId);
+        // Fallback to mock for demo case if nothing is in DB
+        if (phases.length === 0 && caseId === '1:24-cv-01442-LMB-IDD') {
              return [
                 { id: 'p1', caseId: caseId as CaseId, name: 'Strategy & Pleadings', startDate: '2024-11-01', duration: 30, status: 'Completed', color: 'bg-blue-500' },
                 { id: 'p2', caseId: caseId as CaseId, name: 'Discovery', startDate: '2024-12-01', duration: 90, status: 'Active', color: 'bg-indigo-500' },
@@ -60,13 +60,6 @@ export const PhaseService = {
                 { id: 'p6', caseId: caseId as CaseId, name: 'Trial', startDate: '2025-06-01', duration: 14, status: 'Pending', color: 'bg-slate-800' }
             ];
         }
-
-        return [
-            { id: 'p1', caseId: caseId as CaseId, name: 'Intake & Investigation', startDate: '2023-11-15', duration: 45, status: 'Completed', color: 'bg-green-500' },
-            { id: 'p2', caseId: caseId as CaseId, name: 'Pleadings', startDate: '2024-01-01', duration: 60, status: 'Completed', color: 'bg-blue-500' },
-            { id: 'p3', caseId: caseId as CaseId, name: 'Discovery', startDate: '2024-03-01', duration: 180, status: 'Active', color: 'bg-blue-600' },
-            { id: 'p4', caseId: caseId as CaseId, name: 'Pre-Trial Motions', startDate: '2024-09-01', duration: 90, status: 'Pending', color: 'bg-slate-300' },
-            { id: 'p5', caseId: caseId as CaseId, name: 'Trial', startDate: '2024-12-01', duration: 14, status: 'Pending', color: 'bg-slate-300' }
-        ];
+        return phases;
     }
-};
+}

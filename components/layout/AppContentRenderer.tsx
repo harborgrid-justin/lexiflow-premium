@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy } from 'react';
 import { AppView, User } from '../../types';
 import { ModuleRegistry } from '../../services/moduleRegistry';
@@ -16,6 +15,7 @@ interface AppContentRendererProps {
   selectedCase: any | null; 
   handleSelectCase: (c: any) => void;
   handleSelectCaseById: (id: string) => void;
+  navigateToCaseTab: (caseId: string, tab: string) => void;
   handleBackToMain: () => void;
   setActiveView: (view: AppView) => void;
   initialTab?: string;
@@ -27,6 +27,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
   selectedCase,
   handleSelectCase,
   handleSelectCaseById,
+  navigateToCaseTab,
   handleBackToMain,
   setActiveView,
   initialTab
@@ -76,6 +77,10 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
       dynamicProps.onNavigateToCase = handleSelectCaseById;
     }
     
+    if (activeView === PATHS.LITIGATION_BUILDER) {
+        dynamicProps.navigateToCaseTab = navigateToCaseTab;
+    }
+
     if (activeView === PATHS.BILLING) {
       dynamicProps.navigateTo = (v: string) => setActiveView(v as AppView);
     }

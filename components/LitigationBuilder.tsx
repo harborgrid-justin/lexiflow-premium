@@ -10,11 +10,11 @@ import { useLitigationBuilder } from '../hooks/useLitigationBuilder';
 import { ContextMenuItem } from './common/ContextMenu';
 import { Edit2, Copy, Trash2, Layout, BoxSelect } from 'lucide-react';
 
-// Lazy Load sub-components
-const StrategyCanvas = lazy(() => import('./litigation/StrategyCanvas'));
-const PlaybookLibrary = lazy(() => import('./litigation/PlaybookLibrary'));
-const OutcomeSimulator = lazy(() => import('./litigation/OutcomeSimulator'));
-const LitigationGanttView = lazy(() => import('./litigation/LitigationGanttView'));
+// Lazy Load sub-components with named export handling
+const StrategyCanvas = lazy(() => import('./litigation/StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));
+const PlaybookLibrary = lazy(() => import('./litigation/PlaybookLibrary').then(m => ({ default: m.PlaybookLibrary })));
+const OutcomeSimulator = lazy(() => import('./litigation/OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
+const LitigationGanttView = lazy(() => import('./litigation/LitigationGanttView').then(m => ({ default: m.LitigationGanttView })));
 
 const LITIGATION_TABS = [
   {

@@ -1,3 +1,4 @@
+
 import React, { useMemo } from 'react';
 import { LegalEntity } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
@@ -42,33 +43,35 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
             <div 
                 onClick={() => onSelect(root)}
                 className={cn(
-                    "p-6 rounded-xl border-2 shadow-lg bg-white w-64 text-center cursor-pointer transition-transform hover:scale-105 z-10",
+                    "p-6 rounded-xl border-2 shadow-lg w-64 text-center cursor-pointer transition-transform hover:scale-105 z-10",
+                    theme.surface,
                     theme.border.default
                 )}
             >
                 <Building2 className="h-8 w-8 mx-auto text-blue-600 mb-2"/>
-                <h3 className="font-bold text-lg text-slate-800">{root.name}</h3>
+                <h3 className={cn("font-bold text-lg", theme.text.primary)}>{root.name}</h3>
                 <p className="text-xs text-slate-500 uppercase tracking-wide">Parent Entity</p>
             </div>
 
             {/* Connector */}
-            <div className="h-8 w-0.5 bg-slate-300 -my-4"></div>
-            <div className="w-96 h-0.5 bg-slate-300"></div>
+            <div className={cn("h-8 w-0.5 -my-4", theme.border.default, "bg-slate-300 dark:bg-slate-700")}></div>
+            <div className={cn("w-96 h-0.5", theme.border.default, "bg-slate-300 dark:bg-slate-700")}></div>
             
             {/* Children */}
             <div className="flex gap-8">
                 {children.map(child => (
                     <div key={child.id} className="flex flex-col items-center">
-                        <div className="h-8 w-0.5 bg-slate-300 -mt-8 mb-2"></div>
+                        <div className={cn("h-8 w-0.5 -mt-8 mb-2", theme.border.default, "bg-slate-300 dark:bg-slate-700")}></div>
                         <div 
                             onClick={() => onSelect(child)}
                             className={cn(
-                                "p-4 rounded-lg border shadow-sm bg-white w-48 text-center cursor-pointer hover:border-blue-400 transition-colors",
+                                "p-4 rounded-lg border shadow-sm w-48 text-center cursor-pointer hover:border-blue-400 transition-colors",
+                                theme.surface,
                                 theme.border.default
                             )}
                         >
                             {child.type === 'Individual' ? <User className="h-5 w-5 mx-auto text-green-600 mb-1"/> : <Building2 className="h-5 w-5 mx-auto text-slate-600 mb-1"/>}
-                            <h4 className="font-bold text-sm text-slate-800 truncate">{child.name}</h4>
+                            <h4 className={cn("font-bold text-sm truncate", theme.text.primary)}>{child.name}</h4>
                             <p className="text-[10px] text-slate-500">{child.roles[0]}</p>
                         </div>
                     </div>

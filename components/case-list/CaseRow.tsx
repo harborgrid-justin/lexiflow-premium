@@ -2,7 +2,7 @@
 import React, { memo } from 'react';
 import { User, Eye } from 'lucide-react';
 import { Case } from '../../types';
-import { StatusBadge } from '../common/RefactoredCommon';
+import { StatusBadge } from '../common/StatusBadge';
 import { Currency } from '../common/Primitives';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';

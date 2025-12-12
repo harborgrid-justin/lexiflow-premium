@@ -1,6 +1,5 @@
 
-
-import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
 import { Prompts } from "./ai/prompts";
 import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "./ai/schemas";
@@ -9,12 +8,14 @@ import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingCh
 
 export * from '../types/ai';
 
+// Singleton-like accessor to ensure consistent config and prevent unnecessary instantiation overhead
+const getClient = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+
 export const GeminiService = {
     async analyzeDocument(content: string): Promise<AnalyzedDoc> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Analysis(content),
                     config: {
@@ -33,10 +34,9 @@ export const GeminiService = {
     },
 
     async critiqueBrief(text: string): Promise<BriefCritique> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-3-pro-preview',
                     contents: Prompts.Critique(text),
                     config: {
@@ -61,10 +61,9 @@ export const GeminiService = {
     },
 
     async reviewContract(text: string): Promise<string> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Review(text)
                 });
@@ -76,9 +75,8 @@ export const GeminiService = {
     },
 
     async *streamDraft(context: string, type: string): AsyncGenerator<string, void, unknown> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         try {
-            const responseStream = await ai.models.generateContentStream({
+            const responseStream = await getClient().models.generateContentStream({
                 model: 'gemini-2.5-flash',
                 contents: Prompts.Draft(context, type)
             });
@@ -91,10 +89,9 @@ export const GeminiService = {
     },
 
     async refineTimeEntry(desc: string): Promise<string> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Refine(desc)
                 });
@@ -106,10 +103,9 @@ export const GeminiService = {
     },
 
     async generateDraft(prompt: string, type: string): Promise<string> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Draft(prompt, type)
                 });
@@ -121,10 +117,9 @@ export const GeminiService = {
     },
 
     async predictIntent(query: string): Promise<IntentResult> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Intent(query),
                     config: {
@@ -142,10 +137,9 @@ export const GeminiService = {
     },
 
     async parseDocket(text: string): Promise<Partial<ParsedDocket>> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Docket(text),
                     config: {
@@ -164,10 +158,9 @@ export const GeminiService = {
     },
 
     async conductResearch(query: string): Promise<ResearchResponse> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Research(query),
                     config: {
@@ -196,10 +189,9 @@ export const GeminiService = {
     },
 
     async generateReply(lastMsg: string, role: string): Promise<string> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
                 });
@@ -211,10 +203,9 @@ export const GeminiService = {
     },
 
     async shepardizeCitation(citation: string): Promise<ShepardizeResult | null> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await ai.models.generateContent({
+                const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-3-pro-preview',
                     contents: Prompts.Shepardize(citation),
                     config: {
@@ -233,10 +224,9 @@ export const GeminiService = {
 
     // --- NEW FOR LITIGATION BUILDER ---
     async generateStrategyFromPrompt(prompt: string): Promise<{ nodes: any[], connections: any[] } | null> {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                 const response: GenerateContentResponse = await ai.models.generateContent({
+                 const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-3-pro-preview',
                     contents: Prompts.Strategy(prompt),
                     config: {
@@ -254,10 +244,9 @@ export const GeminiService = {
     },
 
     async lintStrategy(graphData: any): Promise<{ suggestions: any[] } | null> {
-         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         return withRetry(async () => {
             try {
-                 const response: GenerateContentResponse = await ai.models.generateContent({
+                 const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Lint(JSON.stringify(graphData)),
                     config: {

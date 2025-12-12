@@ -44,7 +44,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
       <div 
         key={ent.id} 
         onClick={() => onSelect(ent)} 
-        className={cn("flex items-center border-b h-[72px] px-6 hover:bg-slate-50 transition-colors cursor-pointer group", theme.border.light)}
+        className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.light, `hover:${theme.surfaceHighlight}`)}
       >
         <div className="w-[35%] flex items-center gap-3 pr-4">
             <div className={cn("p-2 rounded-lg border shadow-sm", theme.surfaceHighlight, theme.border.default)}>
@@ -102,9 +102,9 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
             </select>
         </div>
 
-        <div className={cn("flex-1 min-h-0 flex flex-col border rounded-lg overflow-hidden shadow-sm bg-white", theme.border.default)}>
+        <div className={cn("flex-1 min-h-0 flex flex-col border rounded-lg overflow-hidden shadow-sm", theme.surface, theme.border.default)}>
              {/* Fixed Header */}
-             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50", theme.border.default, theme.text.secondary)}>
+             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider", theme.border.default, theme.surfaceHighlight, theme.text.secondary)}>
                 <div className="w-[35%]">Entity Name</div>
                 <div className="w-[15%]">Type</div>
                 <div className="w-[20%]">Roles</div>
@@ -115,7 +115,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
              {/* Virtual Body */}
              <div className="flex-1 relative">
                 {filtered.length === 0 ? (
-                     <div className="flex items-center justify-center h-full text-sm text-slate-400">
+                     <div className={cn("flex items-center justify-center h-full text-sm", theme.text.tertiary)}>
                          {isSearching ? "Searching..." : "No entities found."}
                      </div>
                 ) : (

@@ -2,22 +2,10 @@
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Badge } from './Badge';
 import { Loader2, Search } from 'lucide-react';
 
-// 1. StatusBadge: Unified status coloring logic with better A11y
-export const StatusBadge: React.FC<{ status: string, className?: string }> = ({ status, className }) => {
-  const { theme } = useTheme();
-  let variant: 'success' | 'warning' | 'error' | 'info' | 'neutral' = 'neutral';
-  const s = String(status).toLowerCase();
-  
-  if (['active', 'completed', 'paid', 'cleared', 'success', 'admitted', 'served', 'final', 'connected', 'good', 'healthy'].includes(s)) variant = 'success';
-  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress', 'scheduled', 'marked', 'syncing', 'staging'].includes(s)) variant = 'warning';
-  else if (['overdue', 'breached', 'critical', 'high', 'failed', 'error', 'excluded', 'blocked', 'revoked', 'suspended', 'degraded'].includes(s)) variant = 'error';
-  else if (['discovery', 'open', 'info', 'processing', 'appealing', 'litigation'].includes(s)) variant = 'info';
-
-  return <Badge variant={variant} className={className}>{status}</Badge>;
-};
+// Re-export the standardized component to maintain import compatibility
+export { StatusBadge } from './StatusBadge';
 
 // 2. CentredLoader: Standard full-container loading spinner
 export const CentredLoader: React.FC<{ className?: string, message?: string }> = ({ className, message }) => {

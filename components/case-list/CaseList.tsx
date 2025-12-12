@@ -1,3 +1,4 @@
+
 // components/case-list/CaseList.tsx
 import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Case, ParsedDocket, CaseStatus, AppView, CaseId } from '../../types';
@@ -84,11 +85,6 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
       }
   );
 
-  const renderContent = () => {
-    // Delegation to CaseListContent
-    return <CaseListContent activeTab={activeTab} onSelectCase={onSelectCase} caseListProps={{ filteredCases, ...filterProps }} />;
-  };
-
   return (
     <>
       <TabbedPageLayout
@@ -106,7 +102,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
       >
         <Suspense fallback={<LazyLoader message="Loading Module..." />}>
           <div className={cn("h-full flex flex-col", isPending && 'opacity-60 transition-opacity')}>
-            {renderContent()}
+             <CaseListContent activeTab={activeTab} onSelectCase={onSelectCase} caseListProps={{ filteredCases, ...filterProps }} />
           </div>
         </Suspense>
       </TabbedPageLayout>

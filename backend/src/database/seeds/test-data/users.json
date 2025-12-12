@@ -1,0 +1,119 @@
+[
+  {
+    "email": "justin@lexiflow.com",
+    "firstName": "Justin",
+    "lastName": "Admin",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "ADMIN",
+    "phone": "+1-555-0101",
+    "title": "Managing Partner",
+    "barNumber": "CA123456",
+    "practiceAreas": ["Civil Litigation", "Corporate Law"],
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "sarah.martinez@lexiflow.com",
+    "firstName": "Sarah",
+    "lastName": "Martinez",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "ATTORNEY",
+    "phone": "+1-555-0102",
+    "title": "Senior Partner",
+    "barNumber": "CA234567",
+    "practiceAreas": ["Family Law", "Estate Planning"],
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "michael.chen@lexiflow.com",
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "ATTORNEY",
+    "phone": "+1-555-0103",
+    "title": "Associate Attorney",
+    "barNumber": "CA345678",
+    "practiceAreas": ["Criminal Defense", "Civil Rights"],
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "emily.johnson@lexiflow.com",
+    "firstName": "Emily",
+    "lastName": "Johnson",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "ATTORNEY",
+    "phone": "+1-555-0104",
+    "title": "Associate Attorney",
+    "barNumber": "CA456789",
+    "practiceAreas": ["IP Law", "Technology Law"],
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "david.williams@lexiflow.com",
+    "firstName": "David",
+    "lastName": "Williams",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "PARALEGAL",
+    "phone": "+1-555-0105",
+    "title": "Senior Paralegal",
+    "certificationNumber": "CP-2019-001",
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "lisa.anderson@lexiflow.com",
+    "firstName": "Lisa",
+    "lastName": "Anderson",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "PARALEGAL",
+    "phone": "+1-555-0106",
+    "title": "Paralegal",
+    "certificationNumber": "CP-2021-002",
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "jennifer.brown@lexiflow.com",
+    "firstName": "Jennifer",
+    "lastName": "Brown",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "LEGAL_SECRETARY",
+    "phone": "+1-555-0107",
+    "title": "Legal Secretary",
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "robert.smith@client.com",
+    "firstName": "Robert",
+    "lastName": "Smith",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "CLIENT",
+    "phone": "+1-555-0201",
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "patricia.davis@client.com",
+    "firstName": "Patricia",
+    "lastName": "Davis",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "CLIENT",
+    "phone": "+1-555-0202",
+    "isActive": true,
+    "emailVerified": true
+  },
+  {
+    "email": "guest@lexiflow.com",
+    "firstName": "Guest",
+    "lastName": "User",
+    "password": "$2b$10$qW8FvZ5W5RlJVqGxL4x7xOZKJ7xGx9fJ0vKJ0J7xGx9fJ0vKJ0J7x",
+    "role": "GUEST",
+    "phone": "+1-555-0999",
+    "isActive": true,
+    "emailVerified": false
+  }
+]

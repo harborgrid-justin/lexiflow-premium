@@ -88,7 +88,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
   return (
     <div className={cn(
       "absolute md:static inset-y-0 right-0 w-80 border-l z-30 shadow-2xl md:shadow-none transition-transform duration-300 flex flex-col",
-      theme.surface,
+      theme.surface.default,
       theme.border.default,
       isOpen ? 'translate-x-0' : 'translate-x-full'
     )}>

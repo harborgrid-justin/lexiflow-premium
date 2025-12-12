@@ -88,7 +88,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
         <div className={cn("p-3 border-t", theme.border.default)}>
             <div className="relative">
                 <input 
-                    className={cn("w-full pl-3 pr-10 py-2 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                    className={cn("w-full pl-3 pr-10 py-2 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     placeholder="Add comment..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}

@@ -81,7 +81,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
       />
 
       {/* Header */}
-      <div className={cn("flex flex-col md:flex-row justify-between items-center p-6 rounded-xl border shadow-sm gap-4 shrink-0", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row justify-between items-center p-6 rounded-xl border shadow-sm gap-4 shrink-0", theme.surface.default, theme.border.default)}>
           <div>
               <h3 className={cn("text-lg font-bold mb-1", theme.text.primary)}>Case Projects</h3>
               <p className={cn("text-sm", theme.text.secondary)}>Manage parallel workstreams and group cross-functional tasks.</p>

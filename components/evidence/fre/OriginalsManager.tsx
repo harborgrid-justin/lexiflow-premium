@@ -19,7 +19,7 @@ export const OriginalsManager: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface.default, theme.border.default)}>
                 <Copy className={cn("h-5 w-5 mt-0.5 shrink-0", theme.text.secondary)}/>
                 <div>
                     <h4 className="font-bold text-sm">FRE 1002: Requirement of the Original</h4>

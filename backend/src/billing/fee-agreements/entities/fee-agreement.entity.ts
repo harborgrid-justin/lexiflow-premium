@@ -107,7 +107,7 @@ export class FeeAgreement {
   includedHours: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  overage Rate: number;
+  overageRate: number;
 
   // Expense handling
   @Column({ type: 'boolean', default: true })

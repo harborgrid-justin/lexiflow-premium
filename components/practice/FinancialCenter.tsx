@@ -19,7 +19,7 @@ export const FinancialCenter: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 p-1 rounded-lg border", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 p-1 rounded-lg border", theme.surface.default, theme.border.default)}>
           <div className="flex gap-1 p-1">
             <button 
                 onClick={() => setActiveTab('operating')}

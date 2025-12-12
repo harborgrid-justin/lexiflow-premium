@@ -35,7 +35,7 @@ export const EntityVendorOps: React.FC<EntityVendorOpsProps> = ({ entities, onSe
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {vendors.map(vendor => (
-                    <div key={vendor.id} className={cn("p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer", theme.surface, theme.border.default)} onClick={() => onSelect(vendor)}>
+                    <div key={vendor.id} className={cn("p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer", theme.surface.default, theme.border.default)} onClick={() => onSelect(vendor)}>
                         <div className="flex justify-between items-start mb-2">
                             <div className="flex items-center gap-2">
                                 <Briefcase className="h-4 w-4 text-indigo-600"/>

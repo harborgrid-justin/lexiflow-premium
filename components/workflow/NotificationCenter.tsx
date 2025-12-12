@@ -47,7 +47,7 @@ export const NotificationCenter: React.FC = () => {
   );
 
   return (
-    <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
       <div className={cn("p-3 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
         <h4 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
           <Bell className={cn("h-4 w-4 mr-2", theme.primary.text)} /> Notifications

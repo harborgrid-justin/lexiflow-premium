@@ -36,7 +36,7 @@ export const DataProfiler: React.FC = () => {
                 <Card key={idx} noPadding>
                     <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
                         <div className="flex items-center gap-3">
-                            <div className={cn("p-2 rounded border", theme.surface, theme.border.default)}>
+                            <div className={cn("p-2 rounded border", theme.surface.default, theme.border.default)}>
                                 {getIcon(profile.type)}
                             </div>
                             <div>

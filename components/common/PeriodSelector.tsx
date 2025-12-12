@@ -31,7 +31,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   const { theme } = useTheme();
 
   return (
-    <div className={cn("inline-flex p-1 rounded-lg border", theme.surface, theme.border.default, className)}>
+    <div className={cn("inline-flex p-1 rounded-lg border", theme.surface.default, theme.border.default, className)}>
       {periods.map((period) => {
         const isActive = selected === period.value;
         return (

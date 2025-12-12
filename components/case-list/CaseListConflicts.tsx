@@ -57,7 +57,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
         <input 
           className={cn(
             "w-full pl-12 pr-28 py-4 rounded-full border shadow-sm outline-none focus:ring-2 focus:ring-blue-500 text-lg transition-all",
-            theme.surface,
+            theme.surface.default,
             theme.border.default,
             theme.text.primary
           )} 

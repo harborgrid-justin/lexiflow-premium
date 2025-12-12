@@ -16,7 +16,7 @@ export const ComplianceWalls: React.FC<ComplianceWallsProps> = ({ walls }) => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold text-lg", theme.text.primary)}>Information Barriers</h3>
                 <p className={cn("text-sm", theme.text.secondary)}>Manage ethical walls and restrict access to sensitive matters.</p>

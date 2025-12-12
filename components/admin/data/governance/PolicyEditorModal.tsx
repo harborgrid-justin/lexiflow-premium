@@ -82,7 +82,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Target Table</label>
                     <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.table}
                         onChange={e => setFormData({...formData, table: e.target.value})}
                     >
@@ -95,7 +95,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                  <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Command Type</label>
                     <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.cmd}
                         onChange={e => setFormData({...formData, cmd: e.target.value as SqlCmd})}
                     >
@@ -117,7 +117,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                                     "px-2 py-1 text-xs border rounded transition-colors",
                                     selectedRoles.has(role) 
                                         ? "bg-blue-600 text-white border-blue-600" 
-                                        : cn(theme.surface, theme.border.default, theme.text.secondary)
+                                        : cn(theme.surface.default, theme.border.default, theme.text.secondary)
                                 )}
                             >
                                 {role}

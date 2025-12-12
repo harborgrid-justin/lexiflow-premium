@@ -23,7 +23,7 @@ export const RequestForAdmission: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
                     <CheckSquare className="h-5 w-5 mr-2 text-purple-600"/> Requests for Admission (Rule 36)

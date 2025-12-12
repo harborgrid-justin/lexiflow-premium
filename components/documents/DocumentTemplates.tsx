@@ -28,7 +28,7 @@ export const DocumentTemplates: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("p-6 rounded-lg shadow-sm border flex justify-between items-center", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 rounded-lg shadow-sm border flex justify-between items-center", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>
                     <Wand2 className="h-5 w-5 mr-2 text-purple-600"/> Automated Drafting
@@ -44,7 +44,7 @@ export const DocumentTemplates: React.FC = () => {
                     key={tpl.id} 
                     className={cn(
                         "group p-5 rounded-xl border shadow-sm transition-all cursor-pointer hover:shadow-md", 
-                        theme.surface, 
+                        theme.surface.default, 
                         theme.border.default,
                         `hover:${theme.primary.border}`
                     )}

@@ -55,7 +55,7 @@ export const DocketSettings: React.FC = () => {
                     <p className={cn("font-medium text-sm", theme.text.primary)}>Auto-Sync Frequency</p>
                     <p className={cn("text-xs", theme.text.secondary)}>Check for new filings automatically.</p>
                 </div>
-                <select className={cn("text-sm border rounded px-3 py-1.5 outline-none", theme.surface, theme.border.default, theme.text.primary)}>
+                <select className={cn("text-sm border rounded px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)}>
                     <option>Every 15 minutes</option>
                     <option>Every hour</option>
                     <option>Daily</option>

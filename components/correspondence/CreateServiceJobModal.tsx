@@ -89,7 +89,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Case</label>
                     <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
                         onChange={(e) => setFormData({...formData, caseId: e.target.value})}
                     >
@@ -102,7 +102,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Document to Serve</label>
                     {formData.caseId ? (
                         <select 
-                            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={formData.documentTitle || ''}
                             onChange={(e) => setFormData({...formData, documentTitle: e.target.value})}
                         >
@@ -125,7 +125,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                             <div>
                                 <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Mail Service</label>
                                 <select
-                                    className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                                    className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                     value={formData.mailType || ''}
                                     onChange={(e) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
                                 >

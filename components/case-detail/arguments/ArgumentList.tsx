@@ -32,7 +32,7 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
                 onClick={() => onSelect(arg.id)}
                 className={cn(
                     "group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-md",
-                    theme.surface,
+                    theme.surface.default,
                     selectedId === arg.id 
                         ? "border-blue-500 ring-1 ring-blue-500 shadow-md z-10" 
                         : cn(theme.border.default, `hover:${theme.primary.border}`)

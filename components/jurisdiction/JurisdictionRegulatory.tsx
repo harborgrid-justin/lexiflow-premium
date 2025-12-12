@@ -28,7 +28,7 @@ export const JurisdictionRegulatory: React.FC = () => {
                 <div>
                     <h4 className={cn("font-bold", theme.text.primary)}>{body.name}</h4>
                     <p className={cn("text-sm", theme.text.secondary)}>{body.desc}</p>
-                    <div className={cn("mt-2 text-xs font-mono border px-2 py-1 rounded inline-block", theme.surface, theme.border.default, theme.text.tertiary)}>
+                    <div className={cn("mt-2 text-xs font-mono border px-2 py-1 rounded inline-block", theme.surface.default, theme.border.default, theme.text.tertiary)}>
                         Ref: {body.ref}
                     </div>
                 </div>

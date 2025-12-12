@@ -89,7 +89,7 @@ export const LitigationPalette: React.FC<LitigationPaletteProps> = ({ isOpen, on
   return (
     <div className={cn(
       "absolute md:static inset-y-0 left-0 w-72 border-r z-10 transition-transform duration-300 shadow-xl md:shadow-none flex flex-col",
-      theme.surface,
+      theme.surface.default,
       theme.border.default,
       isOpen ? 'translate-x-0' : '-translate-x-full md:w-0 md:overflow-hidden'
     )}>
@@ -111,7 +111,7 @@ export const LitigationPalette: React.FC<LitigationPaletteProps> = ({ isOpen, on
                                 onDragStart={(e) => handleDragStart(e, item.type, item.label)}
                                 className={cn(
                                     "flex items-center gap-3 p-3 border rounded-lg cursor-grab active:cursor-grabbing hover:shadow-md transition-all group",
-                                    theme.surface,
+                                    theme.surface.default,
                                     theme.border.default,
                                     `hover:${theme.primary.border}`
                                 )}

@@ -84,7 +84,7 @@ export const BackupVault: React.FC = () => {
             
             {/* Cold Storage & Info */}
             <div className="space-y-6">
-                 <div className={cn("p-4 border rounded-lg", theme.surface, theme.border.default)}>
+                 <div className={cn("p-4 border rounded-lg", theme.surface.default, theme.border.default)}>
                      <h4 className={cn("text-sm font-bold uppercase mb-4", theme.text.secondary)}>Archival Storage (Glacier)</h4>
                      <div className="space-y-4">
                          <div className="flex items-center gap-3">

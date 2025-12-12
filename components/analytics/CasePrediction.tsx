@@ -77,7 +77,7 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
             </div>
         </Card>
 
-        <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface.default, theme.border.default)}>
             <div className="p-2 bg-purple-100 rounded-full text-purple-600 shrink-0">
                 <BrainCircuit className="h-5 w-5"/>
             </div>

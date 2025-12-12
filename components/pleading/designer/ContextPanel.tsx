@@ -43,7 +43,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
                 <div className="relative mb-4">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
                     <input 
-                        className={cn("w-full pl-9 pr-3 py-1.5 text-xs border rounded-md outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full pl-9 pr-3 py-1.5 text-xs border rounded-md outline-none", theme.surface.input, theme.border.default, theme.text.primary)}
                         placeholder="Search case context..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
@@ -62,4 +62,32 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
             </div>
 
             <div className="flex-1 overflow-y-auto p-2 space-y-2">
-                {isLoading ? <Loader2 className="animate-spin m-4"
+                {isLoading ? (
+                    <Loader2 className="animate-spin m-4" />
+                ) : filteredItems.length === 0 ? (
+                    <p className={cn("text-xs text-center p-4", theme.text.tertiary)}>No items found.</p>
+                ) : (
+                    filteredItems.map(item => (
+                        <div
+                            key={item.id}
+                            className={cn(
+                                "p-2 rounded border text-xs cursor-pointer group transition-colors",
+                                theme.surface.default, theme.border.subtle,
+                                "hover:border-blue-300"
+                            )}
+                            onClick={() => onInsertFact(item.text)}
+                        >
+                            <p className={cn("font-medium mb-1", theme.text.primary)}>{item.text}</p>
+                            <div className="flex items-center justify-between">
+                                <span className={cn("text-[10px]", theme.text.tertiary)}>{item.source}</span>
+                                <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 text-blue-600" />
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default ContextPanel;

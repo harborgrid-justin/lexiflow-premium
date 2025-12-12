@@ -13,7 +13,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ templateName, 
 
   return (
     <div className="p-6 max-w-2xl mx-auto w-full">
-        <div className={cn("p-6 rounded-lg border space-y-4", theme.surface, theme.border.default)}>
+        <div className={cn("p-6 rounded-lg border space-y-4", theme.surface.default, theme.border.default)}>
             <h3 className={cn("font-bold text-lg border-b pb-2 mb-4", theme.text.primary, theme.border.default)}>General Configuration</h3>
             <div>
                 <label className={cn("block text-sm font-medium mb-1", theme.text.secondary)}>Template Name</label>

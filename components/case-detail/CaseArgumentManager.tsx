@@ -55,7 +55,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
   };
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Header Toolbar */}
       <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
@@ -75,7 +75,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
             />
         </div>
         <div className="flex gap-2">
-            <div className={cn("hidden md:flex items-center border rounded-lg px-3", theme.surface, theme.border.default)}>
+            <div className={cn("hidden md:flex items-center border rounded-lg px-3", theme.surface.default, theme.border.default)}>
                 <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
                 <select 
                     className={cn("text-sm bg-transparent outline-none py-1.5", theme.text.primary)}
@@ -104,7 +104,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
 
         {/* Right Inspector */}
         {activeArgumentId && activeArgument && (
-            <div className={cn("flex-1 flex flex-col overflow-hidden animate-in slide-in-from-right duration-200", theme.surface)}>
+            <div className={cn("flex-1 flex flex-col overflow-hidden animate-in slide-in-from-right duration-200", theme.surface.default)}>
                 <ArgumentDetail 
                     argument={activeArgument} 
                     onUpdate={handleUpdateArgument}

@@ -361,7 +361,7 @@ export function useMutation<T, V = void>(
     setError(null);
     
     const opts = optionsRef.current;
-    let context: MutationContext | void;
+    let context: MutationContext | void = undefined;
     
     if (opts?.onMutate) {
         try {

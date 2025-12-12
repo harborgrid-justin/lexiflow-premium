@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { Modal } from '../../../../components/common/Modal';
+import { Modal } from '../../../common/Modal';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
 import { SchemaVisualizer } from './SchemaVisualizer';
-import { Button } from '../../../../components/common/Button';
+import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';

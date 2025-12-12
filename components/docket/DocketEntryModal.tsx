@@ -25,7 +25,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
   if (!entry) return null;
 
   const content = (
-      <div className={cn("p-6 h-full overflow-y-auto", theme.surface)}>
+      <div className={cn("p-6 h-full overflow-y-auto", theme.surface.default)}>
         <div className={cn("flex justify-between items-start mb-6 border-b pb-4", theme.border.light)}>
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -99,7 +99,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
             <h4 className={cn("text-sm font-bold mb-3 flex items-center", theme.text.primary)}><Scale className="h-4 w-4 mr-2"/> Rules Engine: Triggered Events</h4>
             <div className="space-y-2">
               {entry.triggersDeadlines.map(dl => (
-                <div key={dl.id} className={cn("flex justify-between items-center p-3 border rounded-lg shadow-sm", theme.surface, theme.border.default)}>
+                <div key={dl.id} className={cn("flex justify-between items-center p-3 border rounded-lg shadow-sm", theme.surface.default, theme.border.default)}>
                   <div className="flex items-center gap-3">
                     <Calendar className={cn("h-5 w-5", dl.status === 'Satisfied' ? theme.status.success.text : theme.status.warning.text)}/>
                     <div>

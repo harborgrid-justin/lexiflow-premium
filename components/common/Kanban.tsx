@@ -39,7 +39,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, count, childr
         <div className="flex items-center gap-2">
           <span className={cn("font-bold text-sm", theme.text.primary)}>{title}</span>
           {count !== undefined && (
-            <span className={cn("px-2 py-0.5 rounded-full text-xs font-bold border", theme.surface, theme.border.default, theme.text.secondary)}>
+            <span className={cn("px-2 py-0.5 rounded-full text-xs font-bold border", theme.surface.default, theme.border.default, theme.text.secondary)}>
               {count}
             </span>
           )}
@@ -71,7 +71,7 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({ children, onDragStart, i
       onClick={onClick}
       className={cn(
         "p-3 rounded-lg shadow-sm border cursor-pointer transition-all duration-200 group active:scale-95 touch-manipulation",
-        theme.surface,
+        theme.surface.default,
         theme.border.default,
         isDragging ? cn("opacity-50 ring-2 rotate-2 scale-95", theme.primary.border) : `hover:${theme.primary.border} hover:shadow-md`,
         className

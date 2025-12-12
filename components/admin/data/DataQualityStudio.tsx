@@ -156,7 +156,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                     </div>
                     <div className="grid grid-cols-1 gap-3">
                         {rules.map(rule => (
-                            <div key={rule.id} className={cn("p-4 rounded-lg border shadow-sm flex flex-col sm:flex-row sm:items-center justify-between group transition-colors gap-4", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}>
+                            <div key={rule.id} className={cn("p-4 rounded-lg border shadow-sm flex flex-col sm:flex-row sm:items-center justify-between group transition-colors gap-4", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <h5 className={cn("font-bold text-sm", theme.text.primary)}>{rule.name}</h5>
@@ -175,7 +175,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                                 </div>
                                 <div className="flex items-center gap-2 self-end sm:self-auto">
                                     <div className={cn("w-10 h-5 rounded-full p-1 cursor-pointer transition-colors", rule.enabled ? theme.status.success.text.replace('text-', 'bg-') : cn(theme.status.neutral.bg, "dark:bg-slate-700"))}>
-                                        <div className={cn("w-3 h-3 rounded-full shadow-sm transition-transform", theme.surface, rule.enabled ? "translate-x-5" : "")}></div>
+                                        <div className={cn("w-3 h-3 rounded-full shadow-sm transition-transform", theme.surface.default, rule.enabled ? "translate-x-5" : "")}></div>
                                     </div>
                                     <Button size="sm" variant="ghost" icon={Edit2} onClick={() => { setEditingRule(rule); setIsRuleBuilderOpen(true); }} />
                                 </div>

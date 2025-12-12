@@ -18,7 +18,7 @@ export const CaseDocumentItem: React.FC<CaseDocumentItemProps> = ({ doc, analyzi
   const isAnalyzing = analyzingId === doc.id;
 
   return (
-    <div className={cn("p-4 rounded-lg border shadow-sm transition-all flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", theme.surface, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+    <div className={cn("p-4 rounded-lg border shadow-sm transition-all flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div className={cn("p-3 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
           <FileText className={cn("h-6 w-6", theme.primary.text)} />

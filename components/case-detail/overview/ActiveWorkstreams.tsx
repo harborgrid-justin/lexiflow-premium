@@ -15,7 +15,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
   if (activeProjects.length === 0) return null;
 
   return (
-    <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
             <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
                 <Briefcase className={cn("h-4 w-4 mr-2", theme.primary.text)}/> Active Workstreams
@@ -27,7 +27,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
                 const done = proj.tasks.filter(t => t.status === 'Done').length;
                 const pct = total === 0 ? 0 : Math.round((done / total) * 100);
                 return (
-                    <div key={proj.id} className={cn("flex items-center gap-4 p-3 border rounded-lg", theme.surface, theme.border.default)}>
+                    <div key={proj.id} className={cn("flex items-center gap-4 p-3 border rounded-lg", theme.surface.default, theme.border.default)}>
                         <div className="flex-1">
                             <div className="flex justify-between mb-1">
                                 <span className={cn("text-sm font-bold", theme.text.primary)}>{proj.title}</span>

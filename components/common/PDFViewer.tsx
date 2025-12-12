@@ -188,7 +188,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   return (
     <div ref={containerRef} className={cn("flex flex-col items-center p-8 min-h-full relative overflow-auto w-full", theme.background)}>
       {loading && (
-        <div className={cn("absolute inset-0 flex flex-col items-center justify-center z-20 backdrop-blur-sm", theme.surface, "bg-opacity-80")}>
+        <div className={cn("absolute inset-0 flex flex-col items-center justify-center z-20 backdrop-blur-sm", theme.surface.default, "bg-opacity-80")}>
           <Loader2 className="h-10 w-10 animate-spin text-blue-600 mb-3" />
           <span className={cn("text-sm font-medium", theme.text.secondary)}>Rendering...</span>
         </div>
@@ -201,7 +201,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
          </div>
       ) : (
          <div 
-            className={cn("relative shadow-2xl border transition-all duration-200 ease-out origin-top", theme.surface, theme.border.default)}
+            className={cn("relative shadow-2xl border transition-all duration-200 ease-out origin-top", theme.surface.default, theme.border.default)}
             style={{ width: dimensions.width, height: dimensions.height }}
          >
             <canvas ref={canvasRef} className="block absolute inset-0" />

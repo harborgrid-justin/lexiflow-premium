@@ -102,8 +102,8 @@ export const EntityNavigation: React.FC<EntityNavigationProps> = ({
                         className={cn(
                             "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
                             activeTab === tab.id 
-                                ? cn(theme.surface, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
-                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface}`)
+                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
+                                : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
                         )}
                     >
                         <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>

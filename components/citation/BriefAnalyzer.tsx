@@ -4,9 +4,9 @@ import {
   FileText, Search, Loader2, BrainCircuit, ShieldAlert, CheckCircle2, 
   AlertTriangle, Scale, BookOpen, ArrowRight, Network, Plus, Save, ExternalLink
 } from 'lucide-react';
-import { Button } from '../../components/common/Button';
-import { Card } from '../../components/common/Card';
-import { Tabs } from '../../components/common/Tabs';
+import { Button } from '../common/Button';
+import { Card } from '../common/Card';
+import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
@@ -15,7 +15,7 @@ import { AnalysisEngine } from '../../services/analysisEngine';
 import { Citation, Case, BriefAnalysisSession } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { RiskMeter } from '../../components/common/RiskMeter';
+import { RiskMeter } from '../common/RiskMeter';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 
@@ -135,20 +135,20 @@ export const BriefAnalyzer: React.FC = () => {
   return (
     <div className="h-full flex flex-col lg:flex-row gap-6 animate-fade-in">
         {/* Left Pane: Editor / Input */}
-        <div className={cn("flex-1 flex flex-col min-h-[500px] rounded-xl shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
-            <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex-1 flex flex-col min-h-[500px] rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
                 <h3 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
                     <FileText className="h-4 w-4 mr-2 text-blue-600"/> Brief Editor
                 </h3>
                 <span className={cn("text-xs font-mono", theme.text.tertiary)}>{text.length} chars</span>
             </div>
             <textarea 
-                className={cn("flex-1 w-full p-6 font-serif text-base leading-relaxed outline-none resize-none", theme.text.primary, theme.surface)}
+                className={cn("flex-1 w-full p-6 font-serif text-base leading-relaxed outline-none resize-none", theme.text.primary, theme.surface.input)}
                 placeholder="Paste your brief, motion, or opposing counsel's filing here for analysis..."
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <div className={cn("p-4 border-t flex justify-between", theme.border.default, theme.surfaceHighlight)}>
+            <div className={cn("p-4 border-t flex justify-between", theme.border.default, theme.surface.highlight)}>
                  <div className="flex gap-2">
                      {critique && (
                          <>
@@ -184,8 +184,8 @@ export const BriefAnalyzer: React.FC = () => {
         </div>
 
         {/* Right Pane: Intelligence Hub */}
-        <div className={cn("w-full lg:w-[450px] flex flex-col rounded-xl shadow-sm border overflow-hidden", theme.surface, theme.border.default)}>
-             <div className={cn("px-4 pt-4 border-b", theme.border.light)}>
+        <div className={cn("w-full lg:w-[450px] flex flex-col rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+             <div className={cn("px-4 pt-4 border-b", theme.border.subtle)}>
                  <Tabs 
                     tabs={[
                         { id: 'authority', label: 'Authority', icon: Scale },
@@ -199,7 +199,7 @@ export const BriefAnalyzer: React.FC = () => {
                  />
              </div>
 
-             <div className={cn("flex-1 overflow-y-auto p-6", theme.surfaceHighlight)}>
+             <div className={cn("flex-1 overflow-y-auto p-6", theme.surface.highlight)}>
                  {!critique && !isAnalyzing && extractedCitations.length === 0 && (
                      <div className={cn("flex flex-col items-center justify-center h-full text-center p-8", theme.text.tertiary)}>
                          <BrainCircuit className="h-16 w-16 mb-4 opacity-20"/>

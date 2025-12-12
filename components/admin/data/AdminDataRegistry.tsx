@@ -30,7 +30,7 @@ export const AdminDataRegistry: React.FC = () => {
       >
         <div className={cn("border rounded-lg p-4 transition-all group cursor-default h-full flex items-center justify-between", theme.border.default, `hover:${theme.primary.border}`)}>
             <div className="flex items-center space-x-3">
-              <div className={cn("p-2 rounded transition-colors group-hover:bg-blue-50 group-hover:text-blue-600", theme.surfaceHighlight)}>
+              <div className={cn("p-2 rounded transition-colors group-hover:bg-blue-50 group-hover:text-blue-600", theme.surface.highlight)}>
                 <HardDrive className={cn("h-5 w-5 group-hover:text-blue-600", theme.text.secondary)}/>
               </div>
               <div>
@@ -56,7 +56,7 @@ export const AdminDataRegistry: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
         <h3 className={cn("font-bold", theme.text.primary)}>System Data Registries</h3>
         <div className={cn("text-xs flex items-center gap-2", theme.text.secondary)}>
           <Server className="h-3 w-3"/>

@@ -98,7 +98,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                     onClick={() => setActiveTab('list')}
                     className={cn(
                         "px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all",
-                        activeTab === 'list' ? cn(theme.primary.DEFAULT, theme.text.inverse) : cn(theme.surface, theme.border.default, "border hover:border-slate-300")
+                        activeTab === 'list' ? cn(theme.primary.DEFAULT, theme.text.inverse) : cn(theme.surface.default, theme.border.default, "border hover:border-slate-300")
                     )}
                 >
                     <Layers className="h-4 w-4 mr-2"/> Exhibits
@@ -107,7 +107,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                     onClick={() => setActiveTab('sticker')}
                     className={cn(
                         "px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all",
-                        activeTab === 'sticker' ? cn(theme.primary.DEFAULT, theme.text.inverse) : cn(theme.surface, theme.border.default, "border hover:border-slate-300")
+                        activeTab === 'sticker' ? cn(theme.primary.DEFAULT, theme.text.inverse) : cn(theme.surface.default, theme.border.default, "border hover:border-slate-300")
                     )}
                 >
                     <PenTool className="h-4 w-4 mr-2"/> Sticker Designer
@@ -116,7 +116,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                     onClick={() => setActiveTab('stats')}
                     className={cn(
                         "px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all",
-                        activeTab === 'stats' ? cn(theme.primary.DEFAULT, theme.text.inverse) : cn(theme.surface, theme.border.default, "border hover:border-slate-300")
+                        activeTab === 'stats' ? cn(theme.primary.DEFAULT, theme.text.inverse) : cn(theme.surface.default, theme.border.default, "border hover:border-slate-300")
                     )}
                 >
                     <BarChart2 className="h-4 w-4 mr-2"/> Analytics
@@ -163,7 +163,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
         )}
 
         {/* Main Content Area */}
-        <div className={cn("flex-1 overflow-y-auto p-6 custom-scrollbar", theme.surface)}>
+        <div className={cn("flex-1 overflow-y-auto p-6 custom-scrollbar", theme.surface.default)}>
             {activeTab === 'list' && (
                 <div className="space-y-4">
                     {/* List Toolbar */}
@@ -171,7 +171,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                         <div className="relative w-72">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
                             <input 
-                                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface, theme.border.default)}
+                                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default)}
                                 placeholder="Search exhibits..."
                             />
                         </div>

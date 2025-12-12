@@ -109,7 +109,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
               <div>
                   <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                   <select 
-                      className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                      className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                       value={entryType}
                       onChange={(e) => setEntryType(e.target.value as DocketEntryType)}
                   >
@@ -138,7 +138,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
              <div>
                  <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Action Type</label>
                  <select 
-                    className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                    className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={structActionType}
                     onChange={e => setStructActionType(e.target.value)}
                  >
@@ -162,7 +162,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
              <div>
                  <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Verb / Action</label>
                  <select 
-                    className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                    className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={structVerb}
                     onChange={e => setStructVerb(e.target.value)}
                  >
@@ -179,7 +179,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                  <div className="relative">
                     <input 
                         list="parties" 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={structFiler}
                         onChange={e => setStructFiler(e.target.value)}
                         placeholder="Select or type..."

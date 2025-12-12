@@ -20,8 +20,8 @@ export const OrgListItem: React.FC<OrgListItemProps> = ({ org, isSelected, onSel
             className={cn(
                 "p-4 border-b cursor-pointer transition-all group relative min-w-[280px] md:min-w-0 inline-block md:block",
                 isSelected 
-                    ? cn("border-l-4 border-l-blue-600 md:border-b-0", theme.surfaceHighlight) 
-                    : cn("border-l-4 border-l-transparent md:border-b", theme.border.light, `hover:${theme.surfaceHighlight}`)
+                    ? cn("border-l-4 border-l-blue-600 md:border-b-0", theme.surface.highlight) 
+                    : cn("border-l-4 border-l-transparent md:border-b", theme.border.subtle, `hover:${theme.surface.highlight}`)
             )}
         >
             <div className="flex justify-between items-start">
@@ -52,7 +52,7 @@ export const GroupListItem: React.FC<GroupListItemProps> = ({ group, isSelected,
             onClick={() => onSelect(group.id)} 
             className={cn(
                 "p-3 rounded-lg cursor-pointer border transition-all min-w-[200px] md:min-w-0",
-                isSelected ? cn(theme.surface, "border-blue-300 shadow-sm") : cn("bg-transparent border-transparent", `hover:${theme.surface}`)
+                isSelected ? cn(theme.surface.default, "border-blue-300 shadow-sm") : cn("bg-transparent border-transparent", `hover:${theme.surface.default}`)
             )}
         >
             <div className="flex justify-between items-center mb-1">
@@ -61,7 +61,7 @@ export const GroupListItem: React.FC<GroupListItemProps> = ({ group, isSelected,
             </div>
             <div className="mt-2 flex flex-wrap gap-1">
                 {group.permissions.slice(0, 2).map(p => (
-                    <span key={p} className={cn("text-[9px] px-1.5 py-0.5 rounded border", theme.surface, theme.border.default, theme.text.secondary)}>
+                    <span key={p} className={cn("text-[9px] px-1.5 py-0.5 rounded border", theme.surface.default, theme.border.default, theme.text.secondary)}>
                         {p.replace('_', ' ')}
                     </span>
                 ))}
@@ -80,7 +80,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({ user, viewMode = 'ta
 
     if (viewMode === 'card') {
         return (
-            <div className={cn("p-4 flex items-center justify-between border-b last:border-0", theme.border.light)}>
+            <div className={cn("p-4 flex items-center justify-between border-b last:border-0", theme.border.subtle)}>
                 <div className="flex items-center">
                     <UserAvatar name={user.name} size="sm" className="mr-3"/>
                     <div>
@@ -94,7 +94,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({ user, viewMode = 'ta
     }
 
     return (
-        <tr className={cn("transition-colors", `hover:${theme.surfaceHighlight}`)}>
+        <tr className={cn("transition-colors", `hover:${theme.surface.highlight}`)}>
             <td className="px-4 py-3">
                 <div className="flex items-center">
                     <UserAvatar name={user.name} size="sm" className="mr-3"/>

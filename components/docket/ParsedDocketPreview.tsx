@@ -50,7 +50,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
                     {parsedData.parties?.map((p: any, i: number) => (
-                    <div key={i} className={cn("flex flex-col text-sm p-2 rounded border", theme.surface, theme.border.light)}>
+                    <div key={i} className={cn("flex flex-col text-sm p-2 rounded border", theme.surface.default, theme.border.light)}>
                         <div className="flex justify-between">
                             <span className={cn("font-medium", theme.text.primary)}>{p.name || 'Unknown Party'}</span>
                             <span className={cn("text-xs px-2 py-0.5 rounded", theme.surfaceHighlight, theme.text.secondary)}>{p.role || 'Party'}</span>
@@ -71,7 +71,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
                     {parsedData.deadlines?.length > 0 ? parsedData.deadlines.map((d: any, i: number) => (
-                    <div key={i} className={cn("flex justify-between items-center text-sm p-2 rounded border", theme.surface, theme.border.light)}>
+                    <div key={i} className={cn("flex justify-between items-center text-sm p-2 rounded border", theme.surface.default, theme.border.light)}>
                         <span className="text-red-600 font-medium">{d.date}</span>
                         <span className={cn("text-xs", theme.text.secondary)}>{d.title}</span>
                     </div>
@@ -87,7 +87,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
             </div>
             <div className="max-h-64 overflow-y-auto p-2 space-y-2">
                 {parsedData.docketEntries?.slice().reverse().slice(0, 8).map((e: any, i: number) => (
-                <div key={i} className={cn("text-sm p-2 rounded border group", theme.surface, theme.border.light)}>
+                <div key={i} className={cn("text-sm p-2 rounded border group", theme.surface.default, theme.border.light)}>
                     <div className="flex gap-2 mb-1 justify-between">
                         <div className="flex gap-2">
                             <span className={cn("font-mono text-xs px-1 rounded flex items-center", theme.surfaceHighlight, theme.text.secondary)}>

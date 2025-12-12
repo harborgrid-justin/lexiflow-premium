@@ -62,7 +62,7 @@ export const UserProfileManager: React.FC = () => {
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
-      <div className={cn("h-full", theme.surface)}>
+      <div className={cn("h-full", theme.surface.default)}>
         {renderContent()}
       </div>
     </TabbedPageLayout>

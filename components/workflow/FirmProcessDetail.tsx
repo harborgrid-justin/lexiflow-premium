@@ -100,7 +100,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
         )}
 
         {activeTab === 'instances' && (
-          <div className={cn("rounded-lg border shadow-sm flex-1 overflow-auto", theme.surface, theme.border.default)}>
+          <div className={cn("rounded-lg border shadow-sm flex-1 overflow-auto", theme.surface.default, theme.border.default)}>
             <table className={cn("min-w-full divide-y", theme.border.default)}>
               <thead className={cn("sticky top-0", theme.surfaceHighlight)}>
                 <tr>
@@ -111,7 +111,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
                   <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>Current Step</th>
                 </tr>
               </thead>
-              <tbody className={cn("divide-y", theme.surface, theme.border.light)}>
+              <tbody className={cn("divide-y", theme.surface.default, theme.border.light)}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <tr key={i}>
                     <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-mono", theme.text.secondary)}>BP-{2040+i}</td>

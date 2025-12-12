@@ -15,7 +15,7 @@ export const HierarchyColumn: React.FC<HierarchyColumnProps> = ({ title, onAdd, 
   const { theme } = useTheme();
   return (
     <div className={cn("flex flex-col h-auto md:h-full shrink-0", widthClass, theme.border.default)}>
-      <div className={cn("p-3 border-b flex justify-between items-center shrink-0", theme.surface, theme.border.default)}>
+      <div className={cn("p-3 border-b flex justify-between items-center shrink-0", theme.surface.default, theme.border.default)}>
         <span className={cn("font-bold text-xs uppercase tracking-wide truncate max-w-[200px]", theme.text.tertiary)}>
           {title}
         </span>

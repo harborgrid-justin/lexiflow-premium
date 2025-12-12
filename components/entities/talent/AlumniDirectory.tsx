@@ -38,7 +38,7 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {alumni.map(person => (
-                <div key={person.id} className={cn("p-5 rounded-xl border shadow-sm transition-all hover:shadow-md group", theme.surface, theme.border.default)}>
+                <div key={person.id} className={cn("p-5 rounded-xl border shadow-sm transition-all hover:shadow-md group", theme.surface.default, theme.border.default)}>
                     <div className="flex justify-between items-start mb-4">
                         <UserAvatar name={person.name} size="lg" className="border-2 border-white shadow-sm"/>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

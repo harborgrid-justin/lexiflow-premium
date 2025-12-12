@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Card } from '../../../components/common/Card';
-import { Badge } from '../../../components/common/Badge';
-import { EvidenceTypeIcon } from '../../../components/common/EvidenceTypeIcon';
+import { Card } from '../../common/Card';
+import { Badge } from '../../common/Badge';
+import { EvidenceTypeIcon } from '../../common/EvidenceTypeIcon';
 import { EvidenceItem } from '../../../types';
 import { GeminiService } from '../../../services/geminiService';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
@@ -40,7 +40,7 @@ export const EvidenceParticulars: React.FC<EvidenceParticularsProps> = ({ select
                 AI Analyze
               </button>
             </div>
-            <p className={cn("p-4 rounded-md border leading-relaxed text-sm", theme.surfaceHighlight, theme.border.default, theme.text.primary)}>
+            <p className={cn("p-4 rounded-md border leading-relaxed text-sm", theme.surface.highlight, theme.border.default, theme.text.primary)}>
               {selectedItem.description}
             </p>
             {aiSummary && (
@@ -85,7 +85,7 @@ export const EvidenceParticulars: React.FC<EvidenceParticularsProps> = ({ select
             <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Tags & Metadata</label>
             <div className="flex flex-wrap gap-2">
               {selectedItem.tags.map(t => (
-                <span key={t} className={cn("px-2 py-1 rounded text-xs border flex items-center", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                <span key={t} className={cn("px-2 py-1 rounded text-xs border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                   <Activity className={cn("h-3 w-3 mr-1 opacity-50", theme.text.tertiary)}/> {t}
                 </span>
               ))}

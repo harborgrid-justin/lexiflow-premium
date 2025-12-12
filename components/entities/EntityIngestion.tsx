@@ -51,7 +51,7 @@ export const EntityIngestion: React.FC = () => {
             </Card>
         </div>
 
-        <div className={cn("p-4 rounded-lg border bg-amber-50 border-amber-200 text-amber-900 flex items-start gap-3", theme.surface)}>
+        <div className={cn("p-4 rounded-lg border bg-amber-50 border-amber-200 text-amber-900 flex items-start gap-3", theme.surface.default)}>
             <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5"/>
             <div>
                 <h4 className="font-bold text-sm">Data Hygiene Warning</h4>

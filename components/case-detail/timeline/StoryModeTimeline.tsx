@@ -66,7 +66,7 @@ export const StoryModeTimeline: React.FC<StoryModeTimelineProps> = ({ events }) 
                         <div className="w-5/12">
                             <div className={cn(
                                 "p-5 rounded-xl border shadow-sm relative transition-transform hover:-translate-y-1",
-                                theme.surface, theme.border.default
+                                theme.surface.default, theme.border.default
                             )}>
                                 {/* Arrow */}
                                 <div className={cn(

@@ -20,7 +20,7 @@ export const QAView: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full space-y-6 animate-fade-in">
-      <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <h3 className={cn("font-bold text-lg mb-2", theme.text.primary)}>Ask the Firm</h3>
         <p className={cn("text-sm mb-4", theme.text.secondary)}>Post a question to the firm-wide knowledge base. Experts will be notified.</p>
         <div className="flex gap-2">
@@ -34,7 +34,7 @@ export const QAView: React.FC = () => {
 
       <div className="space-y-4">
         {qaItems.map(item => (
-            <div key={item.id} className={cn("p-6 rounded-lg border shadow-sm transition-all", theme.surface, theme.border.default)}>
+            <div key={item.id} className={cn("p-6 rounded-lg border shadow-sm transition-all", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-start mb-4">
                     <h4 className={cn("font-bold text-lg flex items-start gap-3", theme.text.primary)}>
                         <MessageCircle className={cn("h-6 w-6 mt-0.5", theme.primary.text)}/>

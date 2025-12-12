@@ -79,7 +79,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
     const renderItem = (item: PleadingDocument) => (
         <div 
             key={item.id} 
-            className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-md group", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}
+            className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-md group", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}
             onClick={() => onEdit(item.id)}
         >
             <div className="flex items-start justify-between mb-2">
@@ -120,7 +120,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
                         <select 
-                            className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+                            className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={newDocData.caseId}
                             onChange={e => setNewDocData({...newDocData, caseId: e.target.value})}
                         >
@@ -138,7 +138,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                                     onClick={() => setNewDocData({...newDocData, templateId: t.id})}
                                     className={cn(
                                         "p-3 border rounded cursor-pointer transition-colors flex items-center gap-2",
-                                        newDocData.templateId === t.id ? cn("border-blue-500 bg-blue-50", theme.text.primary) : cn(theme.border.default, theme.surface, theme.text.secondary)
+                                        newDocData.templateId === t.id ? cn("border-blue-500 bg-blue-50", theme.text.primary) : cn(theme.border.default, theme.surface.default, theme.text.secondary)
                                     )}
                                 >
                                     <LayoutTemplate className="h-4 w-4"/>

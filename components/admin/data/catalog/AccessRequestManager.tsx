@@ -18,7 +18,7 @@ export const AccessRequestManager: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in p-6">
-            <div className={cn("p-4 border rounded-lg flex justify-between items-center", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 border rounded-lg flex justify-between items-center", theme.surface.default, theme.border.default)}>
                 <h4 className={cn("font-bold", theme.text.primary)}>Pending Requests</h4>
                 <Badge variant="warning">{requests.filter(r => r.status === 'Pending').length} Pending</Badge>
             </div>

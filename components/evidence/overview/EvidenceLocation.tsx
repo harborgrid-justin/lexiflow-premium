@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Card } from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
+import { Card } from '../../common/Card';
+import { Button } from '../../common/Button';
 import { MapPin } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -22,7 +22,7 @@ export const EvidenceLocation: React.FC<EvidenceLocationProps> = ({ location }) 
         <h3 className={cn("font-bold", theme.text.primary)}>{location}</h3>
         <p className={cn("text-xs mt-1", theme.text.secondary)}>Last Verified: Today, 09:00 AM</p>
       </div>
-      <div className={cn("border-t pt-4 mt-4", theme.border.light)}>
+      <div className={cn("border-t pt-4 mt-4", theme.border.subtle)}>
         <Button variant="outline" size="sm" className="w-full">Request Transfer</Button>
       </div>
     </Card>

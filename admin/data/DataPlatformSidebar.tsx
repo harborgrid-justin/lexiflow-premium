@@ -38,7 +38,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
   };
 
   return (
-    <div className={cn("w-full h-full flex flex-col shrink-0", theme.surface)}>
+    <div className={cn("w-full h-full flex flex-col shrink-0", theme.surface.default)}>
       <div className={cn("p-4 border-b shrink-0", theme.border.default, theme.surfaceHighlight)}>
         <h3 className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>Data Platform</h3>
         <p className={cn("text-xs mt-1 font-mono flex items-center gap-1", theme.text.tertiary)}>

@@ -48,7 +48,7 @@ export const AuthenticationManager: React.FC = () => {
                             <TableCell className={cn("font-mono", theme.text.secondary)}>{item.id}</TableCell>
                             <TableCell className={cn("font-medium", theme.text.primary)}>{item.title}</TableCell>
                             <TableCell>
-                                <select className={cn("text-xs p-1 border rounded", theme.surface, theme.border.default)}>
+                                <select className={cn("text-xs p-1 border rounded", theme.surface.default, theme.border.default)}>
                                     <option>Pending</option>
                                     <option>Self-Authenticated</option>
                                     <option>Testimony</option>

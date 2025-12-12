@@ -23,7 +23,7 @@ export const SchemaSnapshots: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {snapshots.map(snap => (
-                    <div key={snap.id} className={cn("p-5 rounded-xl border shadow-sm hover:shadow-md transition-all group", theme.surface, theme.border.default)}>
+                    <div key={snap.id} className={cn("p-5 rounded-xl border shadow-sm hover:shadow-md transition-all group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-4">
                             <div className={cn("p-2 rounded-lg bg-blue-100 text-blue-600")}>
                                 <Database className="h-6 w-6"/>

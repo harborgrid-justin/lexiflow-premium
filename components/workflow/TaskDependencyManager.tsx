@@ -49,7 +49,7 @@ export const TaskDependencyManager: React.FC = () => {
                 </div>
                 <div className={cn(
                     "p-3 rounded-lg border shadow-sm flex-1",
-                    theme.surface,
+                    theme.surface.default,
                     theme.border.default,
                     task.type === 'active' ? "ring-2 ring-blue-100" : task.type === 'locked' ? "opacity-75" : ""
                 )}>

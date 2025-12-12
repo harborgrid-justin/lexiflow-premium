@@ -57,7 +57,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
       return (
         <div key={entry.id} className="px-2 py-1.5 h-[140px]">
              <div 
-                className={cn("p-4 rounded-lg border shadow-sm h-full flex flex-col justify-between transition-colors active:bg-slate-50", theme.surface, theme.border.default)}
+                className={cn("p-4 rounded-lg border shadow-sm h-full flex flex-col justify-between transition-colors active:bg-slate-50", theme.surface.default, theme.border.default)}
                 onClick={() => onSelectEntry(entry)}
              >
                 <div className="flex justify-between items-start">
@@ -90,7 +90,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
   };
 
   return (
-    <div className={cn("flex flex-col h-full", theme.surface)}>
+    <div className={cn("flex flex-col h-full", theme.surface.default)}>
         {/* Desktop Header */}
         <div className={cn("hidden md:flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
             <div className="w-20 shrink-0">Seq / Pacer</div>

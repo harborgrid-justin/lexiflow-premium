@@ -41,10 +41,10 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
   if (!request) return <div>No request selected.</div>;
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border animate-fade-in", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border animate-fade-in", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
             <div className="flex items-center">
-                <button onClick={onBack} className={cn("mr-3 p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface}`)}>
+                <button onClick={onBack} className={cn("mr-3 p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.default}`)}>
                     <ArrowLeft className="h-5 w-5"/>
                 </button>
                 <div>
@@ -67,7 +67,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
                     <Badge variant="neutral">{request.type}</Badge>
                 </div>
                 <h3 className={cn("font-bold mb-2", theme.text.primary)}>{request.title}</h3>
-                <p className={cn("text-sm leading-relaxed mb-6 p-4 rounded border", theme.surface, theme.border.default, theme.text.secondary)}>
+                <p className={cn("text-sm leading-relaxed mb-6 p-4 rounded border", theme.surface.default, theme.border.default, theme.text.secondary)}>
                     {request.description}
                 </p>
                 
@@ -97,7 +97,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
             {/* Right: Editor */}
             <div className="flex-1 flex flex-col relative">
                 <textarea 
-                    className={cn("flex-1 w-full p-8 font-serif text-base leading-relaxed outline-none resize-none", theme.surface, theme.text.primary)}
+                    className={cn("flex-1 w-full p-8 font-serif text-base leading-relaxed outline-none resize-none", theme.surface.default, theme.text.primary)}
                     value={draftResponse}
                     onChange={(e) => setDraftResponse(e.target.value)}
                     placeholder="Draft your legal response here..."

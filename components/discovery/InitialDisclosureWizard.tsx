@@ -45,7 +45,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
 
   return (
     <div className="max-w-4xl mx-auto h-full flex flex-col">
-       <div className={cn("p-6 rounded-lg border mb-6 text-center", theme.surface, theme.border.default)}>
+       <div className={cn("p-6 rounded-lg border mb-6 text-center", theme.surface.default, theme.border.default)}>
           <h2 className={cn("text-2xl font-bold mb-2", theme.text.primary)}>FRCP Rule 26(a)(1) Initial Disclosures</h2>
           <p className={cn("text-sm", theme.text.secondary)}>Mandatory exchange of information without awaiting a discovery request.</p>
        </div>

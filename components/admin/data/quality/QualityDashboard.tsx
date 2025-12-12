@@ -77,21 +77,21 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
   return (
     <div className="space-y-6 animate-fade-in">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>Overall Health</p>
                 <div className="flex items-center mt-2">
                     <div className={cn("text-3xl font-bold mr-3", theme.status.success.text)}>94%</div>
                     <span className={cn("text-xs font-bold px-2 py-0.5 rounded border", theme.status.success.bg, theme.status.success.text, theme.status.success.border)}>Good</span>
                 </div>
             </div>
-            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>Critical Errors</p>
                     <div className="flex items-center mt-2">
                     <div className={cn("text-3xl font-bold mr-3", theme.status.error.text)}>{anomalies.filter(a => a.status === 'Detected').length}</div>
                     <span className={cn("text-xs font-bold px-2 py-0.5 rounded border", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}>Action Required</span>
                     </div>
             </div>
-            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                     <p className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>Rows Scanned</p>
                     <div className="flex items-center mt-2">
                     <div className={cn("text-3xl font-bold mr-3", theme.primary.text)}>1.2M</div>

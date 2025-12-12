@@ -26,7 +26,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive
           "p-4 border-b border-l-4 cursor-pointer transition-all group flex flex-col justify-center",
           theme.border.light,
           isActive 
-              ? cn(theme.surface, "border-l-blue-600 shadow-sm") 
+              ? cn(theme.surface.default, "border-l-blue-600 shadow-sm") 
               : cn("bg-transparent border-l-transparent", `hover:${theme.surfaceHighlight}`)
         )}
       >

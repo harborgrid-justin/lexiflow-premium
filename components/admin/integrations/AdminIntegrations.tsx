@@ -35,7 +35,7 @@ export const AdminIntegrations: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {integrations.map((app) => (
                 <Card key={app.id} noPadding className={cn("flex flex-col h-full hover:shadow-md transition-shadow", app.status === 'Disconnected' ? "opacity-75" : "")}>
-                    <div className={cn("p-5 border-b flex justify-between items-start", theme.border.light)}>
+                    <div className={cn("p-5 border-b flex justify-between items-start", theme.border.subtle)}>
                         <div className="flex items-center gap-3">
                             <div className={cn("h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold shadow-sm", app.color)}>
                                 {app.icon}
@@ -61,7 +61,7 @@ export const AdminIntegrations: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={cn("p-3 border-t bg-opacity-50 flex gap-2", theme.surfaceHighlight, theme.border.light)}>
+                    <div className={cn("p-3 border-t bg-opacity-50 flex gap-2", theme.surface.highlight, theme.border.subtle)}>
                         {app.status === 'Connected' ? (
                             <>
                                 <Button size="sm" variant="ghost" className="flex-1" icon={RefreshCw}>Sync</Button>

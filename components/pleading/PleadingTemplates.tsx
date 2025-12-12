@@ -18,7 +18,7 @@ export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates,
             <div
                 key={template.id}
                 onClick={() => onCreateFromTemplate(template)}
-                className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-lg group", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}
+                className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-lg group", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}
             >
                 <div className="flex items-start justify-between mb-2">
                     <div className={cn("p-2 rounded bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400")}><LayoutTemplate className="h-6 w-6"/></div>

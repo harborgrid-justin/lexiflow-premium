@@ -51,7 +51,7 @@ export const AdminPlatformManager: React.FC = () => {
   };
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg overflow-hidden border", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg overflow-hidden border", theme.surface.default, theme.border.default)}>
       <RecordModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
@@ -68,12 +68,12 @@ export const AdminPlatformManager: React.FC = () => {
         />
 
         {/* Main Content */}
-        <div className={cn("flex-1 flex flex-col overflow-hidden", theme.surface)}>
-          <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("flex-1 flex flex-col overflow-hidden", theme.surface.default)}>
+          <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
             <div className="relative flex-1 md:max-w-xs mr-2">
               <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
               <input 
-                className={cn("w-full pl-10 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full pl-10 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 placeholder={`Search ${activeCategory}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

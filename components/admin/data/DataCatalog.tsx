@@ -90,7 +90,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                                     onClick={() => setSelectedDomain(domain.name)}
                                     className={cn(
                                         "p-5 rounded-lg border transition-all cursor-pointer group relative overflow-hidden hover:shadow-md",
-                                        theme.surface,
+                                        theme.surface.default,
                                         theme.border.default,
                                         `hover:${theme.primary.border}`
                                     )}
@@ -120,7 +120,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                                 <h2 className={cn("text-2xl font-bold", theme.text.primary)}>{selectedDomain} <span className={cn("font-normal text-lg", theme.text.tertiary)}>/ Tables</span></h2>
                             </div>
                             {/* In a real implementation, this would drill down into specific tables of the domain */}
-                            <div className={cn("rounded-lg border shadow-sm p-8 text-center", theme.surface, theme.border.default, theme.text.secondary)}>
+                            <div className={cn("rounded-lg border shadow-sm p-8 text-center", theme.surface.default, theme.border.default, theme.text.secondary)}>
                                 <p>Domain-specific table view coming soon. Use the Dictionary tab for full listing.</p>
                                 <Button className="mt-4" onClick={() => setActiveTab('dictionary')}>Go to Dictionary</Button>
                             </div>

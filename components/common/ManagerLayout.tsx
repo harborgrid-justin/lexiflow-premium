@@ -36,7 +36,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
 
       <div className="flex-1 flex overflow-hidden px-6 pb-6 gap-6 min-h-0">
         {sidebar && (
-            <div className={cn("w-64 border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto", theme.surface, theme.border.default)}>
+            <div className={cn("w-64 border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto", theme.surface.default, theme.border.default)}>
                 {sidebar}
             </div>
         )}

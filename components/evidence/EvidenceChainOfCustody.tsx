@@ -101,7 +101,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
 
   return (
     <div className="space-y-6">
-      <div className={cn("p-4 rounded-lg border flex justify-between items-center", theme.surface, theme.border.default)}>
+      <div className={cn("p-4 rounded-lg border flex justify-between items-center", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold", theme.text.primary)}>Chain of Custody Log</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Immutable audit trail of evidence handling.</p>
@@ -109,7 +109,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
         <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Log New Event</Button>
       </div>
 
-      <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+      <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b font-bold text-xs uppercase tracking-wider", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
           Event History ({selectedItem.chainOfCustody.length})
         </div>
@@ -118,7 +118,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
             <div className={cn("text-center py-8 italic", theme.text.tertiary)}>No custody events recorded.</div>
           )}
           {selectedItem.chainOfCustody.map(event => (
-            <div key={event.id} className={cn("p-4 flex items-start gap-4", theme.surface, theme.border.light)}>
+            <div key={event.id} className={cn("p-4 flex items-start gap-4", theme.surface.default, theme.border.light)}>
               <div className={cn("p-2 rounded-full shrink-0", theme.primary.light)}>
                 <Layers className={cn("h-5 w-5", theme.primary.text)}/>
               </div>

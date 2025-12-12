@@ -109,7 +109,7 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
 
       {/* Foreground Content */}
       <div
-        className={cn("relative z-10 transition-transform duration-200 ease-out", theme.surface)}
+        className={cn("relative z-10 transition-transform duration-200 ease-out", theme.surface.default)}
         style={{ transform: `translateX(${offsetX}px)` }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}

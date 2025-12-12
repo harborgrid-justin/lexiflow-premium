@@ -33,7 +33,7 @@ export const ParallelTasksManager: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {tasks.map(task => (
-          <div key={task.id} className={cn("p-4 rounded-lg border shadow-sm relative overflow-hidden group hover:shadow-md transition-all", theme.surface, theme.border.default)}>
+          <div key={task.id} className={cn("p-4 rounded-lg border shadow-sm relative overflow-hidden group hover:shadow-md transition-all", theme.surface.default, theme.border.default)}>
             <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
             <div className="flex justify-between items-start mb-2">
               <span className={cn("text-[10px] uppercase font-bold tracking-wider truncate max-w-[100px]", theme.text.tertiary)}>{task.relatedModule || 'General'} Track</span>

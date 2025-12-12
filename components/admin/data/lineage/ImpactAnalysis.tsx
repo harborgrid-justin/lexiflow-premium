@@ -38,7 +38,7 @@ export const ImpactAnalysis: React.FC = () => {
                         {dep.type === 'Table' ? <Database className="h-6 w-6 text-blue-500"/> : dep.type === 'Pipeline' ? <Layers className="h-6 w-6 text-purple-500"/> : <FileText className="h-6 w-6 text-green-500"/>}
                     </div>
                     <div className="ml-8 flex-1">
-                        <div className={cn("p-4 rounded-lg border shadow-sm flex justify-between items-center", theme.surface, theme.border.default)}>
+                        <div className={cn("p-4 rounded-lg border shadow-sm flex justify-between items-center", theme.surface.default, theme.border.default)}>
                             <div>
                                 <h4 className={cn("font-bold text-sm", theme.text.primary)}>{dep.name}</h4>
                                 <span className={cn("text-xs uppercase font-bold", theme.text.tertiary)}>{dep.type}</span>

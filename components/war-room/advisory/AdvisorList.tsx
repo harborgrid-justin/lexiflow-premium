@@ -31,7 +31,7 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
   const { theme } = useTheme();
 
   return (
-    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.surface)}>
+    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.surface.default)}>
         <TableContainer>
             <TableHeader>
                 <TableHead>Advisor Name</TableHead>

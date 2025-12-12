@@ -22,7 +22,7 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
   return (
     <div className={cn(
       "absolute md:static inset-y-0 left-0 w-64 border-r z-10 transition-transform duration-300 shadow-xl md:shadow-none flex flex-col",
-      theme.surface,
+      theme.surface.default,
       theme.border.default,
       isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:w-16 lg:w-64'
     )}>
@@ -47,7 +47,7 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
               onClick={() => onAddNode(item.type as NodeType)}
               className={cn(
                 "w-full flex items-center gap-3 p-3 border rounded-lg transition-all group cursor-grab active:cursor-grabbing hover:shadow-md hover:-translate-y-0.5",
-                theme.surface,
+                theme.surface.default,
                 theme.border.default,
                 `hover:${theme.primary.border}`
               )}
@@ -55,7 +55,7 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
               <div className={cn("group-hover:text-slate-400", theme.text.tertiary)}>
                  <GripVertical className="h-4 w-4" />
               </div>
-              <div className={cn("p-2 rounded-md shadow-sm border", theme.surface, theme.border.light)}>
+              <div className={cn("p-2 rounded-md shadow-sm border", theme.surface.default, theme.border.light)}>
                 {getNodeIcon(item.type as NodeType)}
               </div>
               <div className="md:hidden lg:block">

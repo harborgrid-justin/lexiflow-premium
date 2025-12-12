@@ -23,8 +23,8 @@ export const EntitySidebar: React.FC<EntitySidebarProps> = ({ activeCategory, se
   ];
 
   return (
-    <div className={cn("w-full md:w-64 border-b md:border-b-0 md:border-r flex flex-col", theme.surface, theme.border.default)}>
-      <div className={cn("p-4 border-b hidden md:block", theme.border.light)}>
+    <div className={cn("w-full md:w-64 border-b md:border-b-0 md:border-r flex flex-col", theme.surface.default, theme.border.default)}>
+      <div className={cn("p-4 border-b hidden md:block", theme.border.subtle)}>
         <h3 className={cn("font-bold flex items-center text-sm uppercase tracking-wide", theme.text.primary)}>
           <Database className="h-4 w-4 mr-2 text-blue-600"/> Data Entities
         </h3>
@@ -41,14 +41,14 @@ export const EntitySidebar: React.FC<EntitySidebarProps> = ({ activeCategory, se
                 "flex-shrink-0 w-auto md:w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all border",
                 activeCategory === cat.id 
                   ? cn(theme.primary.light, theme.primary.text, "shadow-sm", theme.primary.border) 
-                  : cn("border-transparent", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.text.primary}`)
+                  : cn("border-transparent", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
               )}
             >
               <div className="flex items-center">
                 <Icon className={cn("h-4 w-4 mr-2 md:mr-3", activeCategory === cat.id ? "text-blue-600" : theme.text.tertiary)} />
                 {cat.label}
               </div>
-              <span className={cn("hidden md:inline-block px-2 py-0.5 rounded-full text-xs border shadow-sm", theme.surface, theme.border.default, theme.text.secondary)}>{count}</span>
+              <span className={cn("hidden md:inline-block px-2 py-0.5 rounded-full text-xs border shadow-sm", theme.surface.default, theme.border.default, theme.text.secondary)}>{count}</span>
             </button>
           );
         })}

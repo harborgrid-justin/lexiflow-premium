@@ -34,7 +34,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
           <select 
-            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={formData.matterType}
             onChange={e => setFormData({...formData, matterType: e.target.value as MatterType})}
           >

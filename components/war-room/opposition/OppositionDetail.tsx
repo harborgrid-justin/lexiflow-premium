@@ -58,14 +58,14 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             <div className="space-y-4">
                 <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Case History</h4>
                 <div className="space-y-3">
-                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-1">
                             <span className="text-xs font-bold text-blue-600">Smith v. Jones</span>
                             <span className="text-[10px] text-slate-400">2022</span>
                         </div>
                         <p className="text-xs text-slate-600">Opposing Lead Counsel. Result: Settlement.</p>
                     </div>
-                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-1">
                             <span className="text-xs font-bold text-blue-600">State v. Corp</span>
                             <span className="text-[10px] text-slate-400">2020</span>

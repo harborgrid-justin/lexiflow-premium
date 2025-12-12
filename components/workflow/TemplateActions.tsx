@@ -12,7 +12,7 @@ export const TemplateActions: React.FC = () => {
       <button className={cn("p-2 rounded transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
         <MoreHorizontal className="h-5 w-5" />
       </button>
-      <div className={cn("absolute right-0 top-full mt-1 w-32 border rounded-lg shadow-lg hidden group-hover:block z-20 py-1", theme.surface, theme.border.default)}>
+      <div className={cn("absolute right-0 top-full mt-1 w-32 border rounded-lg shadow-lg hidden group-hover:block z-20 py-1", theme.surface.default, theme.border.default)}>
         <button className={cn("w-full text-left px-3 py-2 text-xs flex items-center transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
           <Edit3 className="h-3 w-3 mr-2" /> Edit
         </button>

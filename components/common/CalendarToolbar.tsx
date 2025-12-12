@@ -27,14 +27,14 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
   const { theme } = useTheme();
 
   return (
-    <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 p-4 rounded-lg border", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
       <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
         <h2 className={cn("text-lg font-bold min-w-[140px]", theme.text.primary)}>{label}</h2>
         
         <div className={cn("flex items-center rounded-lg p-0.5 border", theme.surfaceHighlight, theme.border.default)}>
           <button 
             onClick={onPrev} 
-            className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface}`)}
+            className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface.default}`)}
             aria-label="Previous Month"
           >
             <ChevronLeft className="h-4 w-4"/>
@@ -47,7 +47,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
           </button>
           <button 
             onClick={onNext} 
-            className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface}`)}
+            className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface.default}`)}
             aria-label="Next Month"
           >
             <ChevronRight className="h-4 w-4"/>
@@ -62,7 +62,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
               onClick={() => onViewChange('month')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
-                view === 'month' ? cn(theme.surface, "shadow text-blue-600") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
+                view === 'month' ? cn(theme.surface.default, "shadow text-blue-600") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
               <Grid className="h-4 w-4"/>
@@ -71,7 +71,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
               onClick={() => onViewChange('list')}
               className={cn(
                 "p-1.5 rounded-md transition-all",
-                view === 'list' ? cn(theme.surface, "shadow text-blue-600") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
+                view === 'list' ? cn(theme.surface.default, "shadow text-blue-600") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
               )}
             >
               <List className="h-4 w-4"/>

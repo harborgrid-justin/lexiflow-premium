@@ -102,7 +102,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                                     key={item.id} 
                                     className={cn(
                                         "flex items-start p-3 rounded border transition-colors", 
-                                        theme.surface, theme.border.default
+                                        theme.surface.default, theme.border.default
                                     )}
                                 >
                                     <div className={cn("w-24 font-mono text-xs font-bold shrink-0", theme.text.secondary)}>{item.date}</div>
@@ -122,7 +122,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                             warRoomData.motions.filter((m) => m.status !== 'Decided').slice(0, 3).map((m) => (
                                 <div 
                                     key={m.id}
-                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer transition-colors", theme.surfaceHighlight, theme.border.default, `hover:${theme.surface}`)}
+                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer transition-colors", theme.surfaceHighlight, theme.border.default, `hover:${theme.surface.default}`)}
                                     onClick={() => onNavigate('binder')}
                                 >
                                     <div>

@@ -20,7 +20,7 @@ export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({
   const [isExportOpen, setIsExportOpen] = useState(false);
 
   return (
-    <div className={cn("h-14 border-b px-4 flex justify-between items-center z-20 shrink-0 shadow-sm", theme.surface, theme.border.default)}>
+    <div className={cn("h-14 border-b px-4 flex justify-between items-center z-20 shrink-0 shadow-sm", theme.surface.default, theme.border.default)}>
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" icon={Menu} onClick={onToggleSidebar} className="p-2"/>
         <span className={cn("h-6 w-px", theme.border.default)}></span>
@@ -28,21 +28,21 @@ export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({
       </div>
       <div className="flex items-center gap-2">
         <div className={cn("flex rounded-lg p-1 mr-2 border", theme.surfaceHighlight, theme.border.default)}>
-          <button onClick={() => setScale(s => Math.max(0.2, s - 0.1))} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface}`)}><ZoomOut className="h-4 w-4"/></button>
+          <button onClick={() => setScale(s => Math.max(0.2, s - 0.1))} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><ZoomOut className="h-4 w-4"/></button>
           <div 
             onClick={() => setScale(1)}
             className={cn("px-2 text-xs flex items-center font-mono w-14 justify-center cursor-pointer", theme.text.secondary, `hover:${theme.text.primary}`)}
           >
             {Math.round(scale * 100)}%
           </div>
-          <button onClick={() => setScale(s => Math.min(2, s + 0.1))} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface}`)}><ZoomIn className="h-4 w-4"/></button>
+          <button onClick={() => setScale(s => Math.min(2, s + 0.1))} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><ZoomIn className="h-4 w-4"/></button>
         </div>
         <Button variant="secondary" size="sm" onClick={onZoomToFit}>Zoom to Fit</Button>
         
         <div className="relative">
           <Button variant="secondary" size="sm" icon={Download} onClick={() => setIsExportOpen(!isExportOpen)}>Export</Button>
           {isExportOpen && (
-            <div className={cn("absolute top-full right-0 mt-2 w-40 rounded-md shadow-lg py-1 z-50", theme.surface, theme.border.default, "border")}>
+            <div className={cn("absolute top-full right-0 mt-2 w-40 rounded-md shadow-lg py-1 z-50", theme.surface.default, theme.border.default, "border")}>
               <button onClick={() => { onExport('svg'); setIsExportOpen(false); }} className={cn("w-full text-left px-3 py-1.5 text-sm", `hover:${theme.surfaceHighlight}`)}>as SVG Image</button>
               <button onClick={() => { onExport('markdown'); setIsExportOpen(false); }} className={cn("w-full text-left px-3 py-1.5 text-sm", `hover:${theme.surfaceHighlight}`)}>as Markdown Outline</button>
             </div>

@@ -56,7 +56,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
 
     return (
         <div className={cn("flex flex-col h-full animate-in slide-in-from-right duration-200", theme.surfaceHighlight)}>
-            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface, theme.border.default)}>
+            <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.default, theme.border.default)}>
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" icon={ArrowLeft} onClick={onClose}>Back</Button>
                     <div>
@@ -102,7 +102,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                         <div>
                                             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Domain Owner</label>
                                             <select 
-                                                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                                                className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                                 value={formData.domain}
                                                 onChange={e => setFormData({...formData, domain: e.target.value as any})}
                                             >
@@ -129,7 +129,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                                         "flex items-center p-2 rounded border cursor-pointer transition-colors",
                                                         formData.classification === cls 
                                                             ? cn(theme.primary.light, theme.primary.border, "border-l-4 border-l-blue-600") 
-                                                            : cn(theme.surface, theme.border.default)
+                                                            : cn(theme.surface.default, theme.border.default)
                                                     )}
                                                 >
                                                     <Shield className={cn("h-4 w-4 mr-2", formData.classification === cls ? "text-blue-600" : theme.text.tertiary)}/>
@@ -182,7 +182,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                 </div>
                             </Card>
 
-                            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+                            <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                                 <h4 className={cn("font-bold text-sm mb-3 flex items-center gap-2", theme.text.primary)}>
                                     <Activity className="h-4 w-4 text-blue-500"/> Usage Stats
                                 </h4>

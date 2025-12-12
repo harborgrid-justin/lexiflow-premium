@@ -47,8 +47,8 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
   };
 
   return (
-    <div className={cn("w-full h-full flex flex-col shrink-0", theme.surface)}>
-      <div className={cn("p-4 border-b shrink-0", theme.border.default, theme.surfaceHighlight)}>
+    <div className={cn("w-full h-full flex flex-col shrink-0", theme.surface.default)}>
+      <div className={cn("p-4 border-b shrink-0", theme.border.default, theme.surface.highlight)}>
         <h3 className={cn("font-bold text-xs uppercase tracking-wider", theme.text.secondary)}>Data Platform</h3>
         <p className={cn("text-xs mt-1 font-mono flex items-center gap-1", theme.text.tertiary)}>
           <Server className="h-3 w-3"/> v{tenantConfig?.version} {tenantConfig?.tier}
@@ -71,7 +71,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 group",
                   isActive 
                     ? cn(theme.primary.light, theme.primary.text) 
-                    : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)
+                    : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                 )}
               >
                 <div className="flex items-center">
@@ -95,7 +95,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id
                           ? cn(theme.primary.light, theme.primary.text)
-                          : cn(theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surfaceHighlight}`)
+                          : cn(theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)
                       )}
                     >
                       <sub.icon className={cn("h-3 w-3 mr-2", activeView === sub.id ? "opacity-100" : "opacity-70")}/>
@@ -108,7 +108,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
           );
         })}
       </nav>
-      <div className={cn("p-4 border-t shrink-0", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("p-4 border-t shrink-0", theme.border.default, theme.surface.highlight)}>
         <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
             <span className={cn("text-xs font-mono", theme.text.secondary)}>Cluster Healthy</span>

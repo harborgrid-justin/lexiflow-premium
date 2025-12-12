@@ -64,11 +64,11 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
   };
 
   const content = (
-      <div className={cn("p-6 space-y-4 h-full overflow-y-auto", theme.surface)}>
+      <div className={cn("p-6 space-y-4 h-full overflow-y-auto", theme.surface.default)}>
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Motion Type</label>
           <select 
-            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.type}
             onChange={(e) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
           >
@@ -91,7 +91,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Hearing Date (Optional)</label>
           <input 
             type="date"
-            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+            className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.hearingDate || ''}
             onChange={(e) => setNewMotion({...newMotion, hearingDate: e.target.value})}
           />
@@ -115,7 +115,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Link Exhibits / Documents</label>
             <div className={cn("border rounded-md p-2 max-h-32 overflow-y-auto", theme.surfaceHighlight, theme.border.default)}>
                 {documents.map(doc => (
-                    <div key={doc.id} className={cn("flex items-center p-1 rounded cursor-pointer", `hover:${theme.surface}`)} onClick={() => handleToggleDoc(doc.id)}>
+                    <div key={doc.id} className={cn("flex items-center p-1 rounded cursor-pointer", `hover:${theme.surface.default}`)} onClick={() => handleToggleDoc(doc.id)}>
                         <div className={`w-4 h-4 mr-2 border rounded flex items-center justify-center ${newMotion.documents?.includes(doc.id) ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>
                             {newMotion.documents?.includes(doc.id) && <CheckSquare className="h-3 w-3 text-white"/>}
                         </div>

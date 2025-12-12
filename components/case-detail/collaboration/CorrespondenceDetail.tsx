@@ -181,7 +181,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
 
                     <div>
                         <h4 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Content Preview</h4>
-                        <div className={cn("p-4 rounded border text-sm italic leading-relaxed", theme.surface, theme.border.default, theme.text.secondary)}>
+                        <div className={cn("p-4 rounded border text-sm italic leading-relaxed", theme.surface.default, theme.border.default, theme.text.secondary)}>
                             "{item.preview}..."
                         </div>
                     </div>

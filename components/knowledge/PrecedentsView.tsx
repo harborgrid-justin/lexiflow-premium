@@ -20,7 +20,7 @@ export const PrecedentsView: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
       {precedents.map(item => (
-        <div key={item.id} className={cn("p-6 rounded-xl border shadow-sm transition-all hover:shadow-md cursor-pointer group flex flex-col", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}>
+        <div key={item.id} className={cn("p-6 rounded-xl border shadow-sm transition-all hover:shadow-md cursor-pointer group flex flex-col", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
           <div className="flex items-center justify-between mb-3">
             <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
                 <FileText className={cn("h-6 w-6", theme.primary.text)}/>

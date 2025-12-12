@@ -17,9 +17,9 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, d
   const { theme } = useTheme();
 
   return (
-    <div className={cn("border rounded-lg overflow-hidden", theme.surface, theme.border.default, className)}>
+    <div className={cn("border rounded-lg overflow-hidden", theme.surface.default, theme.border.default, className)}>
       <div 
-        className={cn("p-4 flex items-center justify-between cursor-pointer transition-colors", theme.surfaceHighlight, `hover:${theme.surface}`)}
+        className={cn("p-4 flex items-center justify-between cursor-pointer transition-colors", theme.surfaceHighlight, `hover:${theme.surface.default}`)}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className={cn("font-medium select-none flex-1", theme.text.primary)}>{title}</div>

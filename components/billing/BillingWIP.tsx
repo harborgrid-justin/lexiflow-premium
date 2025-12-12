@@ -82,7 +82,7 @@ export const BillingWIP: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col md:flex-row justify-between items-center gap-4", theme.surface, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col md:flex-row justify-between items-center gap-4", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold text-lg", theme.text.primary)}>Work In Progress</h3>
                 <p className={cn("text-sm", theme.text.secondary)}>Review and approve time entries before invoicing.</p>

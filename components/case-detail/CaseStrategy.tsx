@@ -91,7 +91,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             {modalType === 'Defense' && (
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default)} onChange={e => setNewItem({...newItem, type: e.target.value})}>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} onChange={e => setNewItem({...newItem, type: e.target.value})}>
                         <option value="Affirmative">Affirmative</option>
                         <option value="Procedural">Procedural</option>
                         <option value="Factual">Factual</option>

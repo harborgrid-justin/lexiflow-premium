@@ -22,7 +22,7 @@ export const StageEditor: React.FC = () => {
       <h4 className={cn("font-bold mb-3", theme.text.primary)}>Edit Workflow Stages</h4>
       <div className="space-y-2">
         {stages.map((stage, idx) => (
-          <div key={idx} className={cn("flex items-center gap-2 p-2 rounded border shadow-sm group", theme.surface, theme.border.default)}>
+          <div key={idx} className={cn("flex items-center gap-2 p-2 rounded border shadow-sm group", theme.surface.default, theme.border.default)}>
             <GripVertical className={cn("h-4 w-4 cursor-move", theme.text.tertiary)} />
             <input 
               className={cn("flex-1 text-sm bg-transparent outline-none font-medium", theme.text.primary)}

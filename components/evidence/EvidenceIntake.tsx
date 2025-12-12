@@ -146,7 +146,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                         <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Evidence Title</label>
                         <input 
                             type="text" 
-                            className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)} 
+                            className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)} 
                             placeholder="e.g. Hard Drive S/N 12345"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -155,7 +155,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                       <div>
                         <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Evidence Type</label>
                         <select 
-                            className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)}
+                            className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)}
                             value={type}
                             onChange={(e) => setType(e.target.value)}
                         >
@@ -176,7 +176,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                       <div className="sm:col-span-2">
                           <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Description & Context</label>
                           <textarea 
-                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)} 
+                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)} 
                              rows={4} 
                              value={description}
                              onChange={(e) => setDescription(e.target.value)}
@@ -187,7 +187,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                           <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>Custodian</label>
                           <input 
                              type="text" 
-                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface)} 
+                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)} 
                              placeholder="Person/Entity in possession"
                              value={custodian}
                              onChange={(e) => setCustodian(e.target.value)}

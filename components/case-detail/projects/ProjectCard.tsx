@@ -45,7 +45,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
     return (
-        <div className={cn("rounded-xl border transition-all duration-300 shadow-sm overflow-hidden", theme.surface, project.priority === 'Critical' ? 'border-l-4 border-l-red-500' : theme.border.default)}>
+        <div className={cn("rounded-xl border transition-all duration-300 shadow-sm overflow-hidden", theme.surface.default, project.priority === 'Critical' ? 'border-l-4 border-l-red-500' : theme.border.default)}>
             {/* Project Header */}
             <div 
               className={cn("p-5 flex flex-col md:flex-row md:items-center justify-between cursor-pointer gap-4", `hover:${theme.surfaceHighlight}`)}
@@ -89,7 +89,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               <div className={cn("p-5 pt-0 border-t bg-slate-50/50", theme.border.light)}>
                 <div className="space-y-3 mt-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
                   {project.tasks.map((task) => (
-                    <div key={task.id} className={cn("group flex flex-col md:flex-row gap-3 items-start md:items-center p-3 rounded-lg border transition-all hover:shadow-sm", theme.surface, theme.border.default, "hover:border-blue-300")}>
+                    <div key={task.id} className={cn("group flex flex-col md:flex-row gap-3 items-start md:items-center p-3 rounded-lg border transition-all hover:shadow-sm", theme.surface.default, theme.border.default, "hover:border-blue-300")}>
                       <button 
                         onClick={() => onUpdateTaskStatus(project.id, task.id)}
                         className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
@@ -117,7 +117,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                       {task.relatedModule && onNavigateToModule && (
                         <button 
                           onClick={() => onNavigateToModule(task.relatedModule!)}
-                          className={cn("w-full md:w-auto px-3 py-1.5 border rounded text-xs font-medium flex items-center justify-center gap-2 transition-all whitespace-nowrap", theme.surfaceHighlight, theme.text.secondary, theme.border.default, `hover:${theme.surface}`, "hover:text-blue-600 hover:border-blue-200")}
+                          className={cn("w-full md:w-auto px-3 py-1.5 border rounded text-xs font-medium flex items-center justify-center gap-2 transition-all whitespace-nowrap", theme.surfaceHighlight, theme.text.secondary, theme.border.default, `hover:${theme.surface.default}`, "hover:text-blue-600 hover:border-blue-200")}
                         >
                           {getModuleIcon(task.relatedModule)}
                           {task.actionLabel || `Go to ${task.relatedModule}`}
@@ -132,7 +132,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
                   <button 
                     onClick={() => onAddTask(project.id)}
-                    className={cn("w-full py-2 text-xs font-medium rounded border border-dashed transition-colors flex items-center justify-center gap-1", theme.text.primary, theme.border.default, `hover:${theme.surface}`, `hover:${theme.primary.text}`)}
+                    className={cn("w-full py-2 text-xs font-medium rounded border border-dashed transition-colors flex items-center justify-center gap-1", theme.text.primary, theme.border.default, `hover:${theme.surface.default}`, `hover:${theme.primary.text}`)}
                   >
                     <Plus className="h-3 w-3"/> Add Task to Project
                   </button>

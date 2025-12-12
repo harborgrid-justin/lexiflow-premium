@@ -27,7 +27,7 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, onSel
                 key={c.id} 
                 className={cn(
                   "rounded-lg border shadow-sm p-5 transition-all group relative",
-                  theme.surface,
+                  theme.surface.default,
                   theme.border.default,
                   `hover:shadow-md hover:${theme.primary.border}`
                 )}
@@ -76,7 +76,7 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, onSel
                         {onManageWorkflow && (
                             <button 
                                 onClick={(e) => { e.stopPropagation(); onManageWorkflow(c.id); }}
-                                className={cn("p-1 rounded transition-colors ml-1", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface}`)}
+                                className={cn("p-1 rounded transition-colors ml-1", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface.default}`)}
                                 title="Manage Workflow Engine"
                             >
                                 <Settings className="h-4 w-4"/>

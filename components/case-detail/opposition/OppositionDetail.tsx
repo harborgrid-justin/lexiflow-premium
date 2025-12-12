@@ -15,7 +15,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface, theme.border.default)}>
+    <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Entity Dossier</h4>
             <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
@@ -59,14 +59,14 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             <div className="space-y-4">
                 <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Case History</h4>
                 <div className="space-y-3">
-                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-1">
                             <span className="text-xs font-bold text-blue-600">Smith v. Jones</span>
                             <span className="text-[10px] text-slate-400">2022</span>
                         </div>
                         <p className={cn("text-xs", theme.text.secondary)}>Opposing Lead Counsel. Result: Settlement.</p>
                     </div>
-                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface, theme.border.default)}>
+                    <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-1">
                             <span className="text-xs font-bold text-blue-600">State v. Corp</span>
                             <span className="text-[10px] text-slate-400">2020</span>

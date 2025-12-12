@@ -55,7 +55,7 @@ export const ActiveResearch: React.FC = () => {
   const activeSession = history.find(s => s.id === activeSessionId) || history[0];
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg border overflow-hidden shadow-sm", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg border overflow-hidden shadow-sm", theme.surface.default, theme.border.default)}>
       <ResearchInput 
         query={query} 
         setQuery={setQuery} 
@@ -68,7 +68,7 @@ export const ActiveResearch: React.FC = () => {
           activeSessionId={activeSessionId} 
           onSelectSession={setActiveSessionId} 
         />
-        <div className={cn("flex-1 overflow-y-auto p-6 transition-colors", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-y-auto p-6 transition-colors", theme.surface.highlight)}>
             <ResearchResults session={activeSession} onViewSource={handleViewSource} />
         </div>
       </div>

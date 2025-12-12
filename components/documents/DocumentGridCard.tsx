@@ -24,7 +24,7 @@ export const DocumentGridCard: React.FC<DocumentGridCardProps> = ({ doc, isSelec
             }}
             className={cn(
                 "h-full w-full border rounded-lg p-4 flex flex-col items-center justify-between cursor-pointer transition-all hover:shadow-md relative group",
-                theme.surface,
+                theme.surface.default,
                 theme.border.default,
                 isSelected ? cn("ring-2 ring-blue-500", theme.primary.light) : `hover:${theme.surfaceHighlight}`
             )}

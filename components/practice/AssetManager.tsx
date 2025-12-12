@@ -106,7 +106,7 @@ export const AssetManager: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in h-full flex flex-col">
-      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm shrink-0", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm shrink-0", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold text-lg", theme.text.primary)}>IT & Asset Management</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Track hardware, software licenses, and office inventory.</p>
@@ -157,7 +157,7 @@ export const AssetManager: React.FC = () => {
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                       <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newAsset.type}
                         onChange={e => setNewAsset({...newAsset, type: e.target.value as any})}
                       >

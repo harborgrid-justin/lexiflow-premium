@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
 import { ConferralLog } from './ConferralLog';
 import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
-import { Card } from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
+import { Card } from '../../common/Card';
+import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/dataService';
@@ -34,7 +34,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
           onClick={() => setActiveView('conferral')}
           className={cn(
             "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",
-            activeView === 'conferral' ? cn(theme.primary.light, theme.primary.text, theme.primary.border, "shadow-sm") : cn(theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)
+            activeView === 'conferral' ? cn(theme.primary.light, theme.primary.text, theme.primary.border, "shadow-sm") : cn(theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)
           )}
         >
           <Users className="h-5 w-5"/>
@@ -48,7 +48,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
           onClick={() => setActiveView('plans')}
           className={cn(
             "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",
-            activeView === 'plans' ? cn(theme.primary.light, theme.primary.text, theme.primary.border, "shadow-sm") : cn(theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)
+            activeView === 'plans' ? cn(theme.primary.light, theme.primary.text, theme.primary.border, "shadow-sm") : cn(theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)
           )}
         >
           <FileText className="h-5 w-5"/>
@@ -62,7 +62,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
           onClick={() => setActiveView('stipulations')}
           className={cn(
             "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",
-            activeView === 'stipulations' ? cn(theme.primary.light, theme.primary.text, theme.primary.border, "shadow-sm") : cn(theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)
+            activeView === 'stipulations' ? cn(theme.primary.light, theme.primary.text, theme.primary.border, "shadow-sm") : cn(theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)
           )}
         >
           <CalendarClock className="h-5 w-5"/>
@@ -98,7 +98,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
                         <div className={cn("text-lg font-mono font-bold", theme.text.primary)}>{stip.proposedDate}</div>
                     </div>
                     </div>
-                    <div className={cn("mt-4 pt-4 border-t flex gap-3", theme.border.light)}>
+                    <div className={cn("mt-4 pt-4 border-t flex gap-3", theme.border.subtle)}>
                     <Button size="sm" variant="primary" className={cn("bg-green-600 hover:bg-green-700 border-transparent", theme.text.inverse)}>Accept</Button>
                     <Button size="sm" variant="danger">Reject</Button>
                     <Button size="sm" variant="secondary">Counter-Propose</Button>

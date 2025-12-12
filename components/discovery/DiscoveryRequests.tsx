@@ -89,7 +89,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
   return (
     <div className="animate-fade-in space-y-4 h-full flex flex-col">
         {/* Desktop Table */}
-        <div className={cn("hidden md:flex flex-col flex-1 border rounded-lg overflow-hidden", theme.surface, theme.border.default)}>
+        <div className={cn("hidden md:flex flex-col flex-1 border rounded-lg overflow-hidden", theme.surface.default, theme.border.default)}>
             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
                 <div className="w-[30%]">Request</div>
                 <div className="w-[15%]">Type</div>
@@ -118,7 +118,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
                     <div 
                         key={req.id} 
                         onClick={() => onNavigate('response', req.id)} 
-                        className={cn("p-4 rounded-lg shadow-sm border cursor-pointer active:scale-[0.98] transition-transform", theme.surface, theme.border.default)}
+                        className={cn("p-4 rounded-lg shadow-sm border cursor-pointer active:scale-[0.98] transition-transform", theme.surface.default, theme.border.default)}
                     >
                         <div className="flex justify-between items-start mb-2">
                             <span className={cn("text-xs font-mono", theme.text.secondary)}>{req.id}</span>

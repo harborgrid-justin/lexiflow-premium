@@ -38,7 +38,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
 
     return (
         <div className={cn("absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl z-30", theme.text.primary)}>
-            <div className={cn("p-2 rounded-xl shadow-2xl border backdrop-blur-md", theme.surface, "bg-opacity-80", theme.border.default)}>
+            <div className={cn("p-2 rounded-xl shadow-2xl border backdrop-blur-md", theme.surface.default, "bg-opacity-80", theme.border.default)}>
                 <div className="relative flex items-center gap-2">
                     <div className="pl-2">
                          <Sparkles className="h-5 w-5 text-purple-500"/>

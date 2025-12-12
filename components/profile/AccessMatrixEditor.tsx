@@ -53,7 +53,7 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
                     <Shield className="h-5 w-5 text-blue-600"/> Granular Access Matrix
                 </h3>
                 <p className={cn("text-sm", theme.text.secondary)}>
-                    Fine-grained permissions overriding standard role-based access. Evaluation order: Deny > Allow.
+                    Fine-grained permissions overriding standard role-based access. Evaluation order: Deny {'>'} Allow.
                 </p>
             </div>
             <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Permission</Button>

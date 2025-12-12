@@ -49,7 +49,7 @@ export const Examinations: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
                     <Stethoscope className="h-5 w-5 mr-2 text-rose-500"/> Physical & Mental Examinations (Rule 35)
@@ -102,7 +102,7 @@ export const Examinations: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                      <div>
                          <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                         <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)} value={newExam.type} onChange={e => setNewExam({...newExam, type: e.target.value as any})}>
+                         <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={e => setNewExam({...newExam, type: e.target.value as any})}>
                              <option value="">Select...</option>
                              <option value="Physical">Physical</option>
                              <option value="Mental">Mental</option>

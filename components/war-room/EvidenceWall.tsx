@@ -139,7 +139,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
                         onClick={() => handleFilterClick(f)}
                         className={cn(
                             "px-3 py-1.5 text-xs font-medium rounded-md transition-all",
-                            filter === f ? cn(theme.surface, theme.text.primary, "shadow") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
+                            filter === f ? cn(theme.surface.default, theme.text.primary, "shadow") : cn(theme.text.secondary, `hover:${theme.text.primary}`)
                         )}
                     >
                         {f}

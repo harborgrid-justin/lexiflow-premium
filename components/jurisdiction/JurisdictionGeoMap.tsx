@@ -142,7 +142,7 @@ export const JurisdictionGeoMap: React.FC = () => {
   }, [isAnimating]);
 
   return (
-    <div className={cn("h-full flex flex-col rounded-lg shadow-sm border overflow-hidden min-h-[500px]", theme.surface, theme.border.default)}>
+    <div className={cn("h-full flex flex-col rounded-lg shadow-sm border overflow-hidden min-h-[500px]", theme.surface.default, theme.border.default)}>
       <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default)}>
         <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
             <Map className={cn("h-5 w-5 mr-2", theme.primary.text)}/> Jurisdiction Map
@@ -170,7 +170,7 @@ export const JurisdictionGeoMap: React.FC = () => {
         />
         
         {/* HUD Overlay */}
-        <div className={cn("absolute bottom-4 left-4 p-3 backdrop-blur rounded-lg border shadow-sm text-xs pointer-events-none bg-opacity-90", theme.surface, theme.border.default)}>
+        <div className={cn("absolute bottom-4 left-4 p-3 backdrop-blur rounded-lg border shadow-sm text-xs pointer-events-none bg-opacity-90", theme.surface.default, theme.border.default)}>
             <div className={cn("flex items-center gap-2 mb-1", theme.text.secondary)}>
                 <Layers className="h-3 w-3"/>
                 <span>Active Nodes: {nodesRef.current.length}</span>

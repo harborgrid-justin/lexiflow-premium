@@ -37,7 +37,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   return (
     <div className="flex flex-col h-full space-y-6 animate-fade-in min-h-0">
       {/* Header */}
-      <div className={cn("flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0 p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex items-center gap-4">
           <button onClick={onBack} className={cn("p-2 rounded-full transition-colors border border-transparent", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.border.default}`)}>
             <ArrowLeft className="h-5 w-5" />
@@ -73,7 +73,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
       </div>
 
       {/* Main Content Area */}
-      <div className={cn("flex-1 rounded-lg shadow-sm border flex flex-col overflow-hidden min-h-0", theme.surface, theme.border.default)}>
+      <div className={cn("flex-1 rounded-lg shadow-sm border flex flex-col overflow-hidden min-h-0", theme.surface.default, theme.border.default)}>
         <div className={cn("border-b px-4 pt-2", theme.border.default)}>
           <Tabs 
             tabs={['visualizer', 'tasks', 'audit', 'settings']} 
@@ -87,7 +87,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
         <div className={cn("flex-1 overflow-y-auto p-6", theme.surfaceHighlight)}>
           {activeTab === 'visualizer' && (
             <div className="space-y-6">
-              <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+              <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                  <h3 className={cn("font-bold mb-4", theme.text.primary)}>Dependency Graph</h3>
                  <TaskDependencyManager />
               </div>
@@ -133,7 +133,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
                       <p className={cn("font-bold text-sm", theme.text.primary)}>SLA Breach Notifications</p>
                       <p className={cn("text-xs", theme.text.secondary)}>Email partners immediately when critical path is delayed.</p>
                     </div>
-                    <div className={cn("h-6 w-11 rounded-full relative cursor-pointer", theme.border.default, theme.surfaceHighlight)}><div className={cn("absolute left-1 top-1 h-4 w-4 rounded-full shadow-sm", theme.surface)}></div></div>
+                    <div className={cn("h-6 w-11 rounded-full relative cursor-pointer", theme.border.default, theme.surfaceHighlight)}><div className={cn("absolute left-1 top-1 h-4 w-4 rounded-full shadow-sm", theme.surface.default)}></div></div>
                   </div>
                 </div>
               </Card>

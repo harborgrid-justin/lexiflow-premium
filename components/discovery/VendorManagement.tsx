@@ -46,7 +46,7 @@ export const VendorManagement: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
                     <Briefcase className="h-5 w-5 mr-2 text-indigo-600"/> Vendor Management (Rule 28)
@@ -97,7 +97,7 @@ export const VendorManagement: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                      <div>
                          <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Service Type</label>
-                         <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default)} value={newVendor.serviceType} onChange={e => setNewVendor({...newVendor, serviceType: e.target.value as any})}>
+                         <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newVendor.serviceType} onChange={e => setNewVendor({...newVendor, serviceType: e.target.value as any})}>
                              <option value="Court Reporting">Court Reporting</option>
                              <option value="Videography">Videography</option>
                              <option value="Forensics">Forensics</option>

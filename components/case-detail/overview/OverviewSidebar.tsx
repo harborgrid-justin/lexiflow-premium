@@ -29,7 +29,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
   return (
     <div className="space-y-6 w-full">
         {/* Quick Actions */}
-        <div className={cn("p-5 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
+        <div className={cn("p-5 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <h3 className={cn("text-sm font-bold uppercase tracking-wide mb-4", theme.text.primary)}>Quick Actions</h3>
             <div className="space-y-2">
                 {actions.map((action) => (
@@ -49,7 +49,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
         </div>
 
         {/* Innovative Linking Solution: Connected Matters Visualization */}
-        <div className={cn("rounded-lg border shadow-sm p-5", theme.surface, theme.border.default)}>
+        <div className={cn("rounded-lg border shadow-sm p-5", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-center mb-3">
                 <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
                     <Link className="h-3 w-3 mr-2 text-blue-600 shrink-0"/> Linked Matters
@@ -74,12 +74,12 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
                             )}
                         >
                             {/* Connector Node */}
-                            <div className={cn("absolute -left-[19px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2", theme.surface, theme.primary.border)}></div>
+                            <div className={cn("absolute -left-[19px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2", theme.surface.default, theme.primary.border)}></div>
                             
                             <div className="flex justify-between items-start">
                                 <div className="flex-1 min-w-0 pr-2">
                                     <span className={cn("font-bold text-xs truncate block group-hover:underline", theme.text.primary)} title={lc.title}>{lc.title}</span>
-                                    <span className={cn("text-xs uppercase font-bold px-1.5 py-0.5 rounded border mt-1 inline-block", theme.surface, theme.border.default, theme.text.secondary)}>{lc.matterType}</span>
+                                    <span className={cn("text-xs uppercase font-bold px-1.5 py-0.5 rounded border mt-1 inline-block", theme.surface.default, theme.border.default, theme.text.secondary)}>{lc.matterType}</span>
                                 </div>
                                 <ExternalLink className={cn("h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0", theme.primary.text)}/>
                             </div>

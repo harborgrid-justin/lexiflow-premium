@@ -141,7 +141,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Jurisdiction Type</label>
                       <select 
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={editingRule.type || 'Local'}
                         onChange={e => setEditingRule({...editingRule, type: e.target.value as any})}
                       >

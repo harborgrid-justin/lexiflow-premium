@@ -79,7 +79,7 @@ export const CaseListIntake: React.FC = () => {
                   "mt-3 w-full py-2 border-2 border-dashed rounded-lg text-xs font-bold transition-all flex items-center justify-center",
                   theme.border.default,
                   theme.text.secondary,
-                  `hover:${theme.surface}`,
+                  `hover:${theme.surface.default}`,
                   `hover:${theme.primary.text}`,
                   `hover:${theme.primary.border}`
                 )}

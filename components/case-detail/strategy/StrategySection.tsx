@@ -30,7 +30,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
       </div>
 
       {type === 'Citation' ? (
-         <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface, theme.border.default)}>
+         <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
             {(items as Citation[]).map((cit) => (
                 <div key={cit.id} className={cn("p-3 border-b last:border-0 transition-colors group relative", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
                     <div className="flex justify-between items-start mb-1">

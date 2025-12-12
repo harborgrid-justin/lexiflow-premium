@@ -88,7 +88,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                 {/* Details Panel - Full width on mobile when active */}
                 <div className={cn(
                     "flex-1 flex flex-col h-full lg:w-1/2 absolute lg:static inset-0 z-10 transition-transform duration-300",
-                    theme.surface,
+                    theme.surface.default,
                     selectedJob ? "translate-x-0" : "translate-x-full lg:translate-x-0 lg:hidden"
                 )}>
                     {selectedJob ? (
@@ -104,7 +104,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                             <ArrowLeft className="h-5 w-5"/>
                                         </button>
                                         <h2 className={cn("text-xl font-bold", theme.text.primary)}>{selectedJob.name}</h2>
-                                        <span className={cn("text-xs font-mono px-1.5 py-0.5 rounded", theme.surface, theme.border.default, theme.text.secondary)}>{selectedJob.id}</span>
+                                        <span className={cn("text-xs font-mono px-1.5 py-0.5 rounded", theme.surface.default, theme.border.default, theme.text.secondary)}>{selectedJob.id}</span>
                                     </div>
                                     <p className={cn("text-sm", theme.text.secondary)}>Pipeline Configuration & Logs</p>
                                 </div>
@@ -130,7 +130,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                 <div className={cn("p-2 text-xs font-bold uppercase tracking-wider flex items-center border-b", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
                                     <FileText className="h-3 w-3 mr-2"/> Live Logs
                                 </div>
-                                <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface, theme.text.primary)}>
+                                <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface.default, theme.text.primary)}>
                                     {selectedJob.logs.map((log, i) => (
                                         <div key={i} className={cn("mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2")}>
                                             <span className={cn("mr-2", theme.text.tertiary)}>{new Date().toLocaleTimeString()}</span>
@@ -162,7 +162,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                     {connectors.map(conn => {
                         const Icon = getIcon(conn.type);
                         return (
-                        <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface, theme.border.default)}>
+                        <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>
                             <div className="flex justify-between items-start mb-4">
                                 <div className={cn("p-3 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
                                     <Icon className={cn("h-6 w-6", conn.color)}/>

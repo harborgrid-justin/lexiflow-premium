@@ -41,7 +41,7 @@ export const MarketingDashboard: React.FC = () => {
           <p className="text-xs text-indigo-100 mt-4">Potential revenue from tracked leads.</p>
         </div>
         
-        <div className={cn("rounded-lg p-6 border shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("rounded-lg p-6 border shadow-sm", theme.surface.default, theme.border.default)}>
           <div className="flex justify-between items-start">
             <div>
               <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Avg Conversion Rate</p>
@@ -52,7 +52,7 @@ export const MarketingDashboard: React.FC = () => {
           <p className="text-xs text-green-600 mt-4 font-bold">↑ 2.1% from last month</p>
         </div>
 
-        <div className={cn("rounded-lg p-6 border shadow-sm", theme.surface, theme.border.default)}>
+        <div className={cn("rounded-lg p-6 border shadow-sm", theme.surface.default, theme.border.default)}>
           <div className="flex justify-between items-start">
             <div>
               <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Cost Per Acquisition</p>

@@ -28,7 +28,7 @@ export const CaseListResources: React.FC = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {resources.map((res, i) => (
-          <div key={i} className={cn("p-6 rounded-lg border shadow-sm transition-all hover:border-blue-300", theme.surface, theme.border.default)}>
+          <div key={i} className={cn("p-6 rounded-lg border shadow-sm transition-all hover:border-blue-300", theme.surface.default, theme.border.default)}>
             <div className="flex items-center gap-4 mb-4">
               <UserAvatar name={res.name} size="lg"/>
               <div>

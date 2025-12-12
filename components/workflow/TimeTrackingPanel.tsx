@@ -60,7 +60,7 @@ export const TimeTrackingPanel: React.FC = () => {
   };
 
   return (
-    <div className={cn("rounded-lg p-4 shadow-md flex items-center justify-between border", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg p-4 shadow-md flex items-center justify-between border", theme.surface.default, theme.border.default)}>
       <div className="flex items-center gap-3">
         <div className={cn("p-2 rounded-full", isActive ? "animate-pulse bg-green-100 text-green-600" : theme.primary.light)}>
           <Clock className={cn("h-5 w-5", isActive ? "text-green-600" : theme.primary.text)} />

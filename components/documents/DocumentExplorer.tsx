@@ -77,7 +77,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
             <DocumentFilters currentFolder={currentFolder} setCurrentFolder={setCurrentFolder} />
         </div>
 
-        <div className={cn("flex-1 flex flex-col min-w-0 relative", theme.surface)}>
+        <div className={cn("flex-1 flex flex-col min-w-0 relative", theme.surface.default)}>
             <DocumentToolbar 
                 selectedDocsCount={selectedDocs.length} searchTerm={searchTerm} setSearchTerm={setSearchTerm}
                 viewMode={viewMode} setViewMode={setViewMode} isDetailsOpen={isDetailsOpen} setIsDetailsOpen={setIsDetailsOpen}
@@ -109,7 +109,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
         </div>
 
         {isDetailsOpen && previewDoc && (
-            <div className={cn("w-96 border-l flex-shrink-0 shadow-xl z-20 absolute right-0 top-0 bottom-0 md:static", theme.surface, theme.border.default)}>
+            <div className={cn("w-96 border-l flex-shrink-0 shadow-xl z-20 absolute right-0 top-0 bottom-0 md:static", theme.surface.default, theme.border.default)}>
                 <DocumentPreviewPanel 
                     document={previewDoc} onViewHistory={setSelectedDocForHistory} onUpdate={updateDocument}
                     userRole={currentUserRole} onCloseMobile={() => setIsDetailsOpen(false)}

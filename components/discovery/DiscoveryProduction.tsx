@@ -38,10 +38,10 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
   };
 
   return (
-    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border animate-fade-in", theme.surface, theme.border.default)}>
+    <div className={cn("flex flex-col h-full rounded-lg shadow-sm border animate-fade-in", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
             <div className="flex items-center">
-                <button onClick={onBack} className={cn("mr-3 p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface}`)}>
+                <button onClick={onBack} className={cn("mr-3 p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.default}`)}>
                     <ArrowLeft className="h-5 w-5"/>
                 </button>
                 <div>
@@ -60,15 +60,15 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Bates Numbering</label>
                             <div className="flex gap-2">
-                                <input className={cn("w-20 p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)} placeholder="Prefix" value={config.batesPrefix} onChange={e => setConfig({...config, batesPrefix: e.target.value})} />
-                                <input className={cn("flex-1 p-2 border rounded text-sm font-mono", theme.surface, theme.border.default, theme.text.primary)} type="number" value={config.startNumber} onChange={e => setConfig({...config, startNumber: parseInt(e.target.value)})} />
+                                <input className={cn("w-20 p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} placeholder="Prefix" value={config.batesPrefix} onChange={e => setConfig({...config, batesPrefix: e.target.value})} />
+                                <input className={cn("flex-1 p-2 border rounded text-sm font-mono", theme.surface.default, theme.border.default, theme.text.primary)} type="number" value={config.startNumber} onChange={e => setConfig({...config, startNumber: parseInt(e.target.value)})} />
                             </div>
                             <p className={cn("text-xs mt-1", theme.text.tertiary)}>Next: {config.batesPrefix}{String(config.startNumber).padStart(6, '0')}</p>
                         </div>
                         
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Format</label>
-                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)} value={config.format} onChange={e => setConfig({...config, format: e.target.value})}>
+                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.format} onChange={e => setConfig({...config, format: e.target.value})}>
                                 <option value="PDF">PDF + Text</option>
                                 <option value="Native">Native Only</option>
                                 <option value="TIFF">TIFF (Single Page)</option>
@@ -88,7 +88,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Confidentiality Stamp</label>
-                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)} value={config.stampConfidential} onChange={e => setConfig({...config, stampConfidential: e.target.value})}>
+                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.stampConfidential} onChange={e => setConfig({...config, stampConfidential: e.target.value})}>
                                 <option value="None">None</option>
                                 <option value="CONFIDENTIAL">CONFIDENTIAL</option>
                                 <option value="ATTORNEY EYES ONLY">ATTORNEY EYES ONLY</option>
@@ -104,7 +104,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
             </div>
 
             {/* Upload/Review Area */}
-            <div className={cn("flex-1 p-8 overflow-y-auto", theme.surface)}>
+            <div className={cn("flex-1 p-8 overflow-y-auto", theme.surface.default)}>
                 <div className="max-w-3xl mx-auto space-y-6">
                     <div className="grid grid-cols-3 gap-4 mb-6">
                         <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
@@ -142,7 +142,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                             </h4>
                             <div className="space-y-2">
                                 {uploadedFiles.map((f, idx) => (
-                                    <div key={idx} className={cn("flex justify-between items-center text-sm p-3 shadow-sm border rounded transition-colors", theme.surface, theme.border.default, `hover:${theme.primary.border}`)}>
+                                    <div key={idx} className={cn("flex justify-between items-center text-sm p-3 shadow-sm border rounded transition-colors", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                                         <span className={cn("flex items-center font-medium", theme.text.primary)}><FileText className="h-4 w-4 mr-3 text-blue-500"/> {f}</span>
                                         <div className={cn("flex items-center text-xs", theme.text.tertiary)}>
                                             <span className={cn("mr-3 font-mono px-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>

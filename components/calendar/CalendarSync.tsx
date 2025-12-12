@@ -21,7 +21,7 @@ export const CalendarSync: React.FC = () => {
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 
   return (
-    <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in", theme.surface.default, theme.border.default)}>
       <div className={cn("p-6 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold text-lg", theme.text.primary)}>Calendar Integrations</h3>

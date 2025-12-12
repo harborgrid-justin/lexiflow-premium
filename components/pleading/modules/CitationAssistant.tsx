@@ -34,7 +34,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
         <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
             <input 
-                className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface, theme.border.default, theme.text.primary)}
+                className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 placeholder="Search saved authorities..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -44,7 +44,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
         {filtered.map(c => (
-            <div key={c.id} className={cn("p-3 rounded-lg border group", theme.surface, theme.border.default)}>
+            <div key={c.id} className={cn("p-3 rounded-lg border group", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-start mb-1">
                     <span className={cn("font-mono text-xs font-bold hover:underline cursor-pointer", theme.primary.text)}>{c.citation}</span>
                     <SignalChecker citation={c.citation} status={c.shepardsSignal as any || 'Unknown'} />

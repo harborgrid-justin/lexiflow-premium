@@ -17,7 +17,7 @@ export const CalendarTeam: React.FC = () => {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in", theme.surface, theme.border.default)}>
+    <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in", theme.surface.default, theme.border.default)}>
       <div className={cn("p-4 border-b", theme.surfaceHighlight, theme.border.default)}>
         <h3 className={cn("font-bold", theme.text.primary)}>Team Availability (This Week)</h3>
       </div>

@@ -84,7 +84,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                                onClick={() => toggleRequest(req.id)}
                                className={cn(
                                    "p-3 rounded border cursor-pointer transition-all",
-                                   selectedRequests.includes(req.id) ? cn(theme.status.error.bg, theme.status.error.border) : cn(theme.surface, theme.border.default)
+                                   selectedRequests.includes(req.id) ? cn(theme.status.error.bg, theme.status.error.border) : cn(theme.surface.default, theme.border.default)
                                )}
                            >
                                <div className="flex items-start gap-3">
@@ -113,7 +113,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                            <label className={cn("text-xs font-bold", theme.text.primary)}>Conference Date</label>
                            <input 
                                type="date" 
-                               className={cn("w-full p-2 border rounded text-sm", theme.surface, theme.border.default, theme.text.primary)}
+                               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                value={meetConferDate}
                                onChange={(e) => setMeetConferDate(e.target.value)}
                            />
@@ -136,7 +136,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
            {/* Right: Preview */}
            <div className={cn("flex-1 p-8 overflow-y-auto", theme.surfaceHighlight)}>
                {draft ? (
-                   <div className={cn("max-w-3xl mx-auto shadow-lg p-10 min-h-[800px] border", theme.surface, theme.border.default)}>
+                   <div className={cn("max-w-3xl mx-auto shadow-lg p-10 min-h-[800px] border", theme.surface.default, theme.border.default)}>
                         <div dangerouslySetInnerHTML={{ __html: draft }} className={cn("prose max-w-none font-serif text-sm leading-loose", theme.text.primary)} />
                         <div className={cn("mt-8 pt-8 border-t flex justify-end gap-3", theme.border.light)}>
                             <Button variant="secondary">Save as Draft</Button>

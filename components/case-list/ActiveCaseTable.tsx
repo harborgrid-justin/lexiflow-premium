@@ -7,7 +7,6 @@ import { VirtualList } from '../common/VirtualList';
 import { EmptyListState } from '../common/RefactoredCommon';
 import { CaseRow } from './CaseRow';
 import { Case } from '../../types';
-import { Currency } from '../common/Primitives';
 
 interface ActiveCaseTableProps {
   filteredCases: Case[];

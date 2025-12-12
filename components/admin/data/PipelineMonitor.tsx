@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2 } from 'lucide-react';
+import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2, GitMerge } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
@@ -9,6 +9,7 @@ import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { PipelineJob, Connector } from '../../../types';
 import { PipelineList } from './pipeline/PipelineList';
+import { PipelineDAG } from './pipeline/PipelineDAG';
 
 interface PipelineMonitorProps {
     initialTab?: string;
@@ -16,11 +17,12 @@ interface PipelineMonitorProps {
 
 export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = 'monitor' }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'monitor' | 'connectors'>('monitor');
+  const [activeTab, setActiveTab] = useState<'monitor' | 'visual' | 'connectors'>('monitor');
   const [selectedJob, setSelectedJob] = useState<PipelineJob | null>(null);
   
   useEffect(() => {
       if (initialTab === 'connectors') setActiveTab('connectors');
+      else if (initialTab === 'dag') setActiveTab('visual');
       else setActiveTab('monitor');
   }, [initialTab]);
   
@@ -66,7 +68,8 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
             </div>
             <Tabs 
                 tabs={[
-                    { id: 'monitor', label: 'DAG Monitor', icon: Activity },
+                    { id: 'monitor', label: 'Jobs', icon: Activity },
+                    { id: 'visual', label: 'Topology', icon: GitMerge },
                     { id: 'connectors', label: 'Connectors', icon: Database }
                 ]}
                 activeTab={activeTab}
@@ -147,6 +150,10 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                     )}
                 </div>
             </div>
+        )}
+        
+        {activeTab === 'visual' && (
+            <PipelineDAG />
         )}
 
         {activeTab === 'connectors' && (

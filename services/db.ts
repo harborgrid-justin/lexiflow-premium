@@ -2,9 +2,6 @@
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
-// Helper to unblock main thread
-const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
-
 export const STORES = {
   CASES: 'cases',
   TASKS: 'tasks',
@@ -100,7 +97,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 25; // Incremented for new stores
+  private dbVersion = 25;
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -165,12 +162,12 @@ export class DatabaseManager {
             if (this.db) {
                 this.db.close();
             }
-            alert("A new version of the application is available. The page will now reload to apply updates.");
-            window.location.reload();
+            // Optional: Notify user or reload
+            // window.location.reload();
         };
 
         this.db.onclose = () => {
-            console.error("Database connection was unexpectedly closed. Future operations will attempt to re-initialize.");
+            console.warn("Database connection closed. Re-initialization will occur on next request.");
             this.initPromise = null;
             this.db = null;
         };
@@ -182,7 +179,7 @@ export class DatabaseManager {
       request.onerror = (event) => {
         console.error("IDB Error:", (event.target as IDBOpenDBRequest).error);
         this.mode = 'LocalStorage'; 
-        resolve();
+        resolve(); // Fallback resolve
       };
     });
 
@@ -190,10 +187,15 @@ export class DatabaseManager {
   }
 
   private async buildIndices() {
+      // Defer index building to avoid blocking init
       setTimeout(async () => {
-        const cases = await this.getAll<any>(STORES.CASES);
-        cases.forEach(c => this.titleIndex.insert(c.title.toLowerCase(), c.id));
-        console.log("B-Tree index for case titles built.");
+        try {
+            if (!this.db) return;
+            const cases = await this.getAll<any>(STORES.CASES);
+            cases.forEach(c => this.titleIndex.insert(c.title.toLowerCase(), c.id));
+        } catch (e) {
+            console.warn("Index build skipped due to connection state.");
+        }
       }, 500);
   }
 
@@ -212,11 +214,16 @@ export class DatabaseManager {
           return items.length;
       }
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readonly');
-          const store = transaction.objectStore(storeName);
-          const request = store.count();
-          request.onsuccess = () => resolve(request.result);
-          request.onerror = () => reject(request.error);
+          try {
+              if (!this.db) throw new Error("DB not ready");
+              const transaction = this.db.transaction([storeName], 'readonly');
+              const store = transaction.objectStore(storeName);
+              const request = store.count();
+              request.onsuccess = () => resolve(request.result);
+              request.onerror = () => reject(request.error);
+          } catch (e) {
+              reject(e);
+          }
       });
   }
 
@@ -226,11 +233,16 @@ export class DatabaseManager {
           return StorageUtils.get(storeName, []);
       }
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readonly');
-          const store = transaction.objectStore(storeName);
-          const request = store.getAll();
-          request.onsuccess = () => resolve(request.result as T[]);
-          request.onerror = () => reject(request.error);
+          try {
+              if (!this.db) throw new Error("DB not ready");
+              const transaction = this.db.transaction([storeName], 'readonly');
+              const store = transaction.objectStore(storeName);
+              const request = store.getAll();
+              request.onsuccess = () => resolve(request.result as T[]);
+              request.onerror = () => reject(request.error);
+          } catch (e) {
+              reject(e);
+          }
       });
   }
 
@@ -241,41 +253,82 @@ export class DatabaseManager {
           return items.find((i: any) => i.id === id);
       }
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readonly');
-          const store = transaction.objectStore(storeName);
-          const request = store.get(id);
-          request.onsuccess = () => resolve(request.result as T);
-          request.onerror = () => reject(request.error);
+          try {
+              if (!this.db) throw new Error("DB not ready");
+              const transaction = this.db.transaction([storeName], 'readonly');
+              const store = transaction.objectStore(storeName);
+              const request = store.get(id);
+              request.onsuccess = () => resolve(request.result as T);
+              request.onerror = () => reject(request.error);
+          } catch (e) {
+              reject(e);
+          }
       });
   }
 
-  private flushBuffer = () => {
-    if (!this.db || this.writeBuffer.length === 0) return;
+  private flushBuffer = async () => {
+    // If no items, clear timer and exit
+    if (this.writeBuffer.length === 0) {
+        this.flushTimer = null;
+        return;
+    }
+
+    // Try to recover connection if missing
+    if (!this.db) {
+        try {
+            await this.init();
+        } catch (e) {
+            // If recovery fails, reject all pending ops to prevent hanging
+            const ops = [...this.writeBuffer];
+            this.writeBuffer = [];
+            this.flushTimer = null;
+            ops.forEach(op => op.reject(e));
+            return;
+        }
+    }
+
+    // Double check connection status after attempted recovery
+    if (!this.db) {
+        const ops = [...this.writeBuffer];
+        this.writeBuffer = [];
+        this.flushTimer = null;
+        ops.forEach(op => op.reject(new Error("Database connection unavailable")));
+        return;
+    }
 
     const ops = [...this.writeBuffer];
     this.writeBuffer = [];
     this.flushTimer = null;
 
     const storeNames = Array.from(new Set(ops.map(o => o.store)));
-    const transaction = this.db.transaction(storeNames, 'readwrite');
     
-    transaction.oncomplete = () => {
-        ops.forEach(op => op.resolve());
-    };
+    try {
+        const transaction = this.db.transaction(storeNames, 'readwrite');
+        
+        transaction.oncomplete = () => {
+            ops.forEach(op => op.resolve());
+        };
 
-    transaction.onerror = (e) => {
+        transaction.onerror = (e) => {
+            const err = (e.target as IDBTransaction).error;
+            ops.forEach(op => op.reject(err));
+        };
+
+        ops.forEach(op => {
+            const store = transaction.objectStore(op.store);
+            try {
+                if (op.type === 'put') store.put(op.item);
+                else if (op.type === 'delete') store.delete(op.item);
+            } catch(e) {
+                // Individual op errors inside a transaction usually bubble to transaction.onerror,
+                // but catching sync errors here prevents full crash.
+                console.warn("Operation failed during flush:", e);
+            }
+        });
+    } catch (e) {
+        // Handle synchronous errors (e.g. InvalidStateError if DB closed mid-flight)
         ops.forEach(op => op.reject(e));
-    };
-
-    ops.forEach(op => {
-        const store = transaction.objectStore(op.store);
-        try {
-            if (op.type === 'put') store.put(op.item);
-            else if (op.type === 'delete') store.delete(op.item);
-        } catch(e) {
-            console.error("Coalesced Write Error", e);
-        }
-    });
+    }
   }
 
   async put<T>(storeName: string, item: T): Promise<void> {
@@ -312,15 +365,20 @@ export class DatabaseManager {
       }
 
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readwrite');
-          const store = transaction.objectStore(storeName);
-          
-          transaction.oncomplete = () => resolve();
-          transaction.onerror = (event) => reject((event.target as IDBTransaction).error);
+          try {
+              if (!this.db) throw new Error("DB not ready");
+              const transaction = this.db.transaction([storeName], 'readwrite');
+              const store = transaction.objectStore(storeName);
+              
+              transaction.oncomplete = () => resolve();
+              transaction.onerror = (event) => reject((event.target as IDBTransaction).error);
 
-          items.forEach(item => {
-              store.put(item);
-          });
+              items.forEach(item => {
+                  store.put(item);
+              });
+          } catch(e) {
+              reject(e);
+          }
       });
   }
 
@@ -349,20 +407,25 @@ export class DatabaseManager {
           return items.filter((i: any) => i[key] === val);
       }
       return new Promise((resolve, reject) => {
-          const transaction = this.db!.transaction([storeName], 'readonly');
-          const store = transaction.objectStore(storeName);
-          if (!store.indexNames.contains(indexName)) {
-               const request = store.getAll();
-               request.onsuccess = () => {
-                   const all = request.result as any[];
-                   resolve(all.filter(i => i[indexName] === value)); 
-               };
-               return;
+          try {
+              if (!this.db) throw new Error("DB not ready");
+              const transaction = this.db.transaction([storeName], 'readonly');
+              const store = transaction.objectStore(storeName);
+              if (!store.indexNames.contains(indexName)) {
+                   const request = store.getAll();
+                   request.onsuccess = () => {
+                       const all = request.result as any[];
+                       resolve(all.filter(i => i[indexName] === value)); 
+                   };
+                   return;
+              }
+              const index = store.index(indexName);
+              const request = index.getAll(value);
+              request.onsuccess = () => resolve(request.result as T[]);
+              request.onerror = () => reject(request.error);
+          } catch(e) {
+              reject(e);
           }
-          const index = store.index(indexName);
-          const request = index.getAll(value);
-          request.onsuccess = () => resolve(request.result as T[]);
-          request.onerror = () => reject(request.error);
       });
   }
 
@@ -373,15 +436,19 @@ export class DatabaseManager {
       }
       
       return new Promise((resolve, reject) => {
-          if (!this.db) return reject("DB not ready");
-          if (!this.db.objectStoreNames.contains('files')) {
-              console.error("File store not found, cannot save file.");
-              return resolve();
+          try {
+              if (!this.db) throw new Error("DB not ready");
+              if (!this.db.objectStoreNames.contains('files')) {
+                  console.error("File store not found, cannot save file.");
+                  return resolve();
+              }
+              const tx = this.db.transaction(['files'], 'readwrite');
+              tx.objectStore('files').put(file, id);
+              tx.oncomplete = () => resolve();
+              tx.onerror = () => reject(tx.error);
+          } catch(e) {
+              reject(e);
           }
-          const tx = this.db.transaction(['files'], 'readwrite');
-          tx.objectStore('files').put(file, id);
-          tx.oncomplete = () => resolve();
-          tx.onerror = () => reject(tx.error);
       });
   }
   
@@ -391,11 +458,15 @@ export class DatabaseManager {
           return null;
       }
       return new Promise((resolve) => {
-           if (!this.db || !this.db.objectStoreNames.contains('files')) return resolve(null);
-           const tx = this.db.transaction(['files'], 'readonly');
-           const req = tx.objectStore('files').get(id);
-           req.onsuccess = () => resolve(req.result);
-           req.onerror = () => resolve(null);
+           try {
+               if (!this.db || !this.db.objectStoreNames.contains('files')) return resolve(null);
+               const tx = this.db.transaction(['files'], 'readonly');
+               const req = tx.objectStore('files').get(id);
+               req.onsuccess = () => resolve(req.result);
+               req.onerror = () => resolve(null);
+           } catch(e) {
+               resolve(null);
+           }
       });
   }
 }

@@ -9,6 +9,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
+import { Formatters } from '../../../utils/formatters';
 
 interface OperatingLedgerProps {
     expenses: FirmExpense[];
@@ -28,15 +29,15 @@ export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) =>
         <div className={cn("rounded-lg p-6 shadow-lg border grid grid-cols-1 md:grid-cols-3 gap-6", mode === 'dark' ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200")}>
             <div className={cn("border-r pr-6", theme.border.light)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Operating Balance</p>
-                <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>${summary?.balance.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>{Formatters.currency(summary?.balance)}</p>
             </div>
             <div className={cn("border-r pr-6", theme.border.light)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Expenses (MTD)</p>
-                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> ${summary?.expensesMtd.toLocaleString()}</p>
+                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> {Formatters.currency(summary?.expensesMtd)}</p>
             </div>
             <div>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Cash Flow (MTD)</p>
-                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.success.text)}><ArrowUpRight className="h-5 w-5 mr-1"/> ${summary?.cashFlowMtd.toLocaleString()}</p>
+                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.success.text)}><ArrowUpRight className="h-5 w-5 mr-1"/> {Formatters.currency(summary?.cashFlowMtd)}</p>
             </div>
         </div>
 
@@ -53,11 +54,11 @@ export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) =>
               <TableBody>
                 {expenses.map(ex => (
                   <TableRow key={ex.id}>
-                    <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{ex.date}</TableCell>
+                    <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{Formatters.date(ex.date)}</TableCell>
                     <TableCell className={cn("font-medium", theme.text.primary)}>{ex.vendor}</TableCell>
                     <TableCell><Badge variant="neutral">{ex.category}</Badge></TableCell>
                     <TableCell className={cn("text-sm", theme.text.secondary)}>{ex.description}</TableCell>
-                    <TableCell className={cn("font-mono font-bold text-right", theme.text.primary)}>${ex.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</TableCell>
+                    <TableCell className={cn("font-mono font-bold text-right", theme.text.primary)}>{Formatters.currency(ex.amount)}</TableCell>
                     <TableCell className="text-right">
                       <Badge variant={ex.status === 'Paid' ? 'success' : 'warning'}>{ex.status}</Badge>
                     </TableCell>

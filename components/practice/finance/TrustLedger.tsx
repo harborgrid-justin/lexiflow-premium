@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Card } from '../../common/Card';
 import { Landmark, FileText } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { Formatters } from '../../../utils/formatters';
 
 interface TrustLedgerProps {
     trustAccounts: any[];
@@ -27,7 +29,7 @@ export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
                 </div>
             </div>
             <div className="text-right mt-4 md:mt-0">
-                <p className={cn("text-4xl font-mono font-bold tracking-tight", theme.status.success.text)}>{`$${totalLiability.toLocaleString(undefined, {minimumFractionDigits: 2})}`}</p>
+                <p className={cn("text-4xl font-mono font-bold tracking-tight", theme.status.success.text)}>{Formatters.currency(totalLiability)}</p>
                 <p className={cn("text-xs font-bold uppercase mt-1 flex items-center justify-end", theme.status.success.text)}><FileText className="h-3 w-3 mr-1"/> Reconciled: Today 09:00 AM</p>
             </div>
         </div>
@@ -51,7 +53,7 @@ export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
                                 </div>
                             </TableCell>
                             <TableCell className={theme.text.secondary}>{c.lastTransaction}</TableCell>
-                            <TableCell className={cn("text-right font-mono font-bold", theme.text.primary)}>${c.balance.toLocaleString(undefined, {minimumFractionDigits: 2})}</TableCell>
+                            <TableCell className={cn("text-right font-mono font-bold", theme.text.primary)}>{Formatters.currency(c.balance)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

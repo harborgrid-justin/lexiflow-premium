@@ -74,7 +74,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
     openWindow(
       `data-tool-${activeView}-${Date.now()}`,
       `Data Platform: ${activeView}`,
-      <div className="h-full flex flex-col bg-white overflow-hidden">{renderContent()}</div>
+      <div className={cn("h-full flex flex-col overflow-hidden", theme.surface)}>{renderContent()}</div>
     );
   };
 

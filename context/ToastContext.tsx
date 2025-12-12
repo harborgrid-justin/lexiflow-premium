@@ -11,6 +11,7 @@ interface Toast {
   type: ToastType;
   priority: number; // Higher is more important
   timestamp: number;
+  count?: number; // For coalesced toasts
 }
 
 interface ToastContextType {
@@ -68,9 +69,18 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (toasts.length < MAX_VISIBLE_TOASTS) {
         processQueue();
     }
-  }, [toasts.length]);
+  }, [toasts.length, processQueue]);
 
   const addToast = useCallback((message: string, type: ToastType = 'info') => {
+    // DEDUPLICATION: Check if identical toast is already visible or in queue
+    const isDuplicateVisible = toasts.some(t => t.message === message && t.type === type);
+    const isDuplicateQueued = queueRef.current.some(t => t.message === message && t.type === type);
+
+    if (isDuplicateVisible || isDuplicateQueued) {
+        // Optional: We could increment a counter on the visible toast here
+        return;
+    }
+
     const id = Math.random().toString(36).substring(2, 9);
     const newToast: Toast = { 
         id, 
@@ -82,11 +92,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
     queueRef.current.push(newToast);
     processQueue();
-  }, [processQueue]);
+  }, [toasts, processQueue]);
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
-    // Removal triggers useEffect which calls processQueue
   }, []);
 
   return (

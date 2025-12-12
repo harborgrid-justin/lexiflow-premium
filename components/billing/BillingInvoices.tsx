@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
@@ -11,6 +12,7 @@ import { Invoice } from '../../types';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
+import { Formatters } from '../../utils/formatters';
 
 export const BillingInvoices: React.FC = () => {
   const { theme } = useTheme();
@@ -104,7 +106,7 @@ export const BillingInvoices: React.FC = () => {
                         <TableCell>{inv.date}</TableCell>
                         <TableCell>{inv.dueDate}</TableCell>
                         <TableCell className={cn("text-right font-mono font-bold", theme.text.primary)}>
-                            ${inv.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                            {Formatters.currency(inv.amount)}
                         </TableCell>
                         <TableCell>
                             <Badge variant={

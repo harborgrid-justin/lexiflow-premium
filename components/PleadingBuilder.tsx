@@ -15,12 +15,13 @@ import { Modal } from './common/Modal';
 import { Input } from './common/Inputs';
 import { LazyLoader } from './common/LazyLoader';
 
-const PleadingDesigner = lazy(() => import('./pleading/PleadingDesigner'));
-const PleadingDrafts = lazy(() => import('./pleading/PleadingDrafts'));
-const PleadingTemplates = lazy(() => import('./pleading/PleadingTemplates'));
-const ClauseLibrary = lazy(() => import('./ClauseLibrary'));
-const PleadingFilingQueue = lazy(() => import('./pleading/PleadingFilingQueue'));
-const PleadingAnalytics = lazy(() => import('./pleading/PleadingAnalytics'));
+// Lazy imports with named export handling
+const PleadingDesigner = lazy(() => import('./pleading/PleadingDesigner')); // Export default exists
+const PleadingDrafts = lazy(() => import('./pleading/PleadingDrafts').then(m => ({ default: m.PleadingDrafts })));
+const PleadingTemplates = lazy(() => import('./pleading/PleadingTemplates').then(m => ({ default: m.PleadingTemplates })));
+const ClauseLibrary = lazy(() => import('./ClauseLibrary')); // Export default exists
+const PleadingFilingQueue = lazy(() => import('./pleading/PleadingFilingQueue').then(m => ({ default: m.PleadingFilingQueue })));
+const PleadingAnalytics = lazy(() => import('./pleading/PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
 
 
 interface PleadingBuilderProps {

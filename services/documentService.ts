@@ -1,6 +1,7 @@
 
 import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../types';
 import { db, STORES } from './db';
+import { Formatters } from '../utils/formatters';
 
 // Helper to yield control to the main thread
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
@@ -16,13 +17,13 @@ export const DocumentService = {
           id,
           caseId: (meta.caseId || 'General') as CaseId,
           title: file.name,
-          type: meta.type || file.type.split('/')[1].toUpperCase(),
+          type: meta.type || file.type.split('/')[1]?.toUpperCase() || 'FILE',
           content: 'Binary content stored in secure blob storage.',
           uploadDate: new Date().toISOString().split('T')[0],
           lastModified: new Date().toISOString().split('T')[0],
           tags: ['Uploaded', 'Local'],
           versions: [],
-          fileSize: this.formatBytes(file.size),
+          fileSize: Formatters.fileSize(file.size), // Use shared formatter
           sourceModule: meta.sourceModule || 'General',
           status: 'Draft',
           isEncrypted: false
@@ -92,14 +93,8 @@ export const DocumentService = {
       };
   },
 
-  formatBytes(bytes: number, decimals = 2) {
-    if (!+bytes) return '0 Bytes';
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
-  },
+  // Re-export for compatibility if needed, but components should prefer Formatters.fileSize
+  formatBytes: Formatters.fileSize,
 
   async verifyIntegrity(hash: string): Promise<{ verified: boolean; timestamp: string; block: number }> {
       return new Promise(resolve => {

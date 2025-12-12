@@ -1,3 +1,4 @@
+
 import React, { useMemo } from 'react';
 import { LegalEntity } from '../../types';
 import { Card } from '../common/Card';
@@ -34,7 +35,7 @@ export const EntityVendorOps: React.FC<EntityVendorOpsProps> = ({ entities, onSe
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {vendors.map(vendor => (
-                    <div key={vendor.id} className={cn("p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer bg-white", theme.border.default)} onClick={() => onSelect(vendor)}>
+                    <div key={vendor.id} className={cn("p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer", theme.surface, theme.border.default)} onClick={() => onSelect(vendor)}>
                         <div className="flex justify-between items-start mb-2">
                             <div className="flex items-center gap-2">
                                 <Briefcase className="h-4 w-4 text-indigo-600"/>
@@ -46,9 +47,9 @@ export const EntityVendorOps: React.FC<EntityVendorOpsProps> = ({ entities, onSe
                             </div>
                         </div>
                         <p className={cn("text-xs mb-3", theme.text.secondary)}>{vendor.type} • {vendor.city}</p>
-                        <div className="flex justify-between items-center text-xs pt-2 border-t border-slate-100">
+                        <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.light)}>
                             <span className={theme.text.tertiary}>Hourly Rate</span>
-                            <span className="font-mono font-bold text-slate-800 flex items-center"><DollarSign className="h-3 w-3"/> {vendor.riskScore * 10 + 200}</span>
+                            <span className={cn("font-mono font-bold flex items-center", theme.text.primary)}><DollarSign className="h-3 w-3"/> {vendor.riskScore * 10 + 200}</span>
                         </div>
                     </div>
                 ))}

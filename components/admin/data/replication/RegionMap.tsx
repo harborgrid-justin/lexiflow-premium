@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Globe, ArrowRight } from 'lucide-react';
+import { Globe, ArrowRight, Server, Wifi } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 
@@ -11,55 +11,60 @@ interface RegionMapProps {
 export const RegionMap: React.FC<RegionMapProps> = ({ primaryRegion }) => {
   const { theme, mode } = useTheme();
   const gridColor = mode === 'dark' ? '#334155' : '#e2e8f0';
+  const isPrimaryEast = primaryRegion === 'US-East';
 
   return (
-    <div className={cn("relative h-96 rounded-xl p-8 overflow-hidden flex items-center justify-center border shadow-2xl", theme.surface, theme.border.default)}>
+    <div className={cn("relative h-96 rounded-xl p-8 overflow-hidden flex items-center justify-center border shadow-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white", theme.border.default)}>
+        {/* Background Grid */}
         <div 
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 opacity-10"
             style={{
-                backgroundImage: `radial-gradient(${gridColor} 1px, transparent 1px)`,
-                backgroundSize: '20px 20px'
+                backgroundImage: `radial-gradient(white 1px, transparent 1px)`,
+                backgroundSize: '30px 30px'
             }}
         ></div>
         
-        <div className="flex items-center gap-16 relative z-10">
-            <div className="text-center group">
+        {/* World Map Stylized (SVG Overlay could go here, using CSS for now) */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+             <Globe className="w-96 h-96"/>
+        </div>
+
+        <div className="flex items-center gap-32 relative z-10 w-full max-w-4xl justify-center">
+            {/* US East Node */}
+            <div className="text-center relative group">
+                <div className="absolute -inset-4 bg-blue-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className={cn(
-                    "w-24 h-24 rounded-full flex items-center justify-center shadow-lg mb-4 transition-all duration-500",
-                    primaryRegion === 'US-East' 
-                        ? cn(theme.primary.DEFAULT, "shadow-blue-500/50 scale-110 border-4 border-blue-400") 
-                        : cn(theme.surfaceHighlight, "border-2", theme.border.default)
+                    "w-28 h-28 rounded-full flex flex-col items-center justify-center shadow-2xl transition-all duration-500 relative border-4 bg-slate-900",
+                    isPrimaryEast ? "border-blue-500 shadow-blue-500/50 scale-110" : "border-slate-600 opacity-80"
                 )}>
-                    <Globe className={cn("h-12 w-12", primaryRegion === 'US-East' ? theme.text.inverse : theme.text.tertiary)}/>
+                    <Server className={cn("h-10 w-10 mb-1", isPrimaryEast ? "text-blue-400" : "text-slate-500")}/>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">US-East</span>
                 </div>
-                <p className={cn("font-bold text-lg", theme.text.primary)}>US-East</p>
-                <p className={cn("text-xs mt-1 font-mono uppercase tracking-wide", primaryRegion === 'US-East' ? theme.status.success.text : theme.text.secondary)}>
-                    {primaryRegion === 'US-East' ? 'Primary (Read/Write)' : 'Replica (Read-Only)'}
-                </p>
+                {isPrimaryEast && <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">PRIMARY</div>}
             </div>
 
-            <div className="flex flex-col gap-2 items-center">
-                <div className={cn("h-1 w-48 rounded-full overflow-hidden relative", theme.surfaceHighlight)}>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 animate-shimmer" style={{backgroundSize: '200% 100%'}}></div>
+            {/* Connection Pipeline */}
+            <div className="flex-1 h-2 bg-slate-700/50 rounded-full relative overflow-hidden mx-4 max-w-xs">
+                {/* Data Packets Animation */}
+                <div className={cn("absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-50", isPrimaryEast ? "animate-data-stream" : "animate-data-stream-reverse")}></div>
+                
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 px-3 py-1 rounded-full border border-slate-700 flex items-center gap-2 shadow-sm z-10">
+                    <Wifi className="h-3 w-3 text-green-400 animate-pulse"/>
+                    <span className="text-[10px] font-mono text-green-400 font-bold">12ms</span>
                 </div>
-                <span className={cn("text-xs text-center flex items-center justify-center px-3 py-1 rounded-full border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
-                    <ArrowRight className={cn("h-3 w-3 mr-1", theme.status.success.text)}/> 12ms Lag
-                </span>
             </div>
 
-            <div className="text-center group">
+            {/* EU West Node */}
+            <div className="text-center relative group">
+                 <div className="absolute -inset-4 bg-purple-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className={cn(
-                    "w-24 h-24 rounded-full flex items-center justify-center shadow-lg mb-4 transition-all duration-500",
-                    primaryRegion === 'EU-West' 
-                        ? cn(theme.primary.DEFAULT, "shadow-blue-500/50 scale-110 border-4 border-blue-400") 
-                        : cn(theme.surfaceHighlight, "border-2", theme.border.default)
+                    "w-28 h-28 rounded-full flex flex-col items-center justify-center shadow-2xl transition-all duration-500 relative border-4 bg-slate-900",
+                    !isPrimaryEast ? "border-purple-500 shadow-purple-500/50 scale-110" : "border-slate-600 opacity-80"
                 )}>
-                    <Globe className={cn("h-12 w-12", primaryRegion === 'EU-West' ? theme.text.inverse : theme.text.tertiary)}/>
+                    <Server className={cn("h-10 w-10 mb-1", !isPrimaryEast ? "text-purple-400" : "text-slate-500")}/>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">EU-West</span>
                 </div>
-                <p className={cn("font-bold text-lg", theme.text.primary)}>EU-West</p>
-                <p className={cn("text-xs mt-1 font-mono uppercase tracking-wide", primaryRegion === 'EU-West' ? theme.status.success.text : theme.text.secondary)}>
-                    {primaryRegion === 'EU-West' ? 'Primary (Read/Write)' : 'Replica (Read-Only)'}
-                </p>
+                {!isPrimaryEast && <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">PRIMARY</div>}
             </div>
         </div>
     </div>

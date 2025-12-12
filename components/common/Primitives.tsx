@@ -3,39 +3,43 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Loader2, FileText, Image as ImageIcon, Film, Music, Box, Shield, Activity, Calendar, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useTheme } from '../../context/ThemeContext';
+import { Formatters } from '../../utils/formatters';
+import { StatusRegistry } from '../../utils/statusRegistry';
 
-// 1. Status Dot
+// 1. Status Dot - Now uses Registry
 export const StatusDot: React.FC<{ status: string; size?: string; className?: string }> = ({ status, size = "w-2.5 h-2.5", className }) => {
   const { theme } = useTheme();
-  let color = theme.status.neutral.bg; // Default fallback
-  const s = status.toLowerCase();
+  const variant = StatusRegistry.getVariant(status);
   
-  if (['active', 'online', 'paid', 'cleared', 'success', 'completed', 'good', 'healthy', 'connected', 'admitted'].includes(s)) color = "bg-emerald-500";
-  else if (['pending', 'away', 'warning', 'review', 'draft', 'in progress', 'syncing', 'marked'].includes(s)) color = "bg-amber-500";
-  else if (['error', 'offline', 'overdue', 'breached', 'critical', 'rejected', 'disconnected', 'failed', 'excluded'].includes(s)) color = "bg-rose-500";
-  else if (['processing', 'info', 'open'].includes(s)) color = "bg-blue-500";
+  // Map variant to color classes
+  let color = theme.status.neutral.bg; 
+  if (variant === 'success') color = "bg-emerald-500";
+  if (variant === 'warning') color = "bg-amber-500";
+  if (variant === 'error') color = "bg-rose-500";
+  if (variant === 'info') color = "bg-blue-500";
 
   return <div className={cn(size, "rounded-full shrink-0 transition-colors duration-500", color, className)} title={status} />;
 };
 
-// 2. Currency Display
+// 2. Currency Display - Now uses Formatter
 export const Currency: React.FC<{ value: number; className?: string; hideSymbol?: boolean }> = ({ value, className = "", hideSymbol = false }) => {
   const { theme } = useTheme();
+  const formatted = Formatters.currency(value);
   return (
     <span className={cn("font-mono tracking-tight", theme.text.primary, className)}>
-      {!hideSymbol && "$"}
-      {value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+      {!hideSymbol && formatted}
+      {hideSymbol && formatted.replace('$', '')}
     </span>
   );
 };
 
-// 3. Date Text
+// 3. Date Text - Now uses Formatter
 export const DateText: React.FC<{ date: string; className?: string; icon?: boolean }> = ({ date, className = "", icon = false }) => {
   const { theme } = useTheme();
   return (
     <span className={cn("flex items-center text-xs", theme.text.secondary, className)}>
       {icon && <Calendar className="h-3 w-3 mr-1 opacity-70" />}
-      {date}
+      {Formatters.date(date)}
     </span>
   );
 };
@@ -177,7 +181,7 @@ export const MetricCard: React.FC<{
 
   return (
     <div className={cn(
-      theme.surface, 
+      theme.surface.default, 
       theme.border.default, 
       "rounded-xl border p-5 shadow-sm transition-all hover:shadow-md flex flex-col justify-between h-full relative overflow-hidden",
       className
@@ -196,7 +200,7 @@ export const MetricCard: React.FC<{
           </div>
         </div>
         {Icon && (
-          <div className={cn("p-2.5 rounded-lg bg-opacity-10", theme.surfaceHighlight)}>
+          <div className={cn("p-2.5 rounded-lg bg-opacity-10", theme.surface.highlight)}>
             <Icon className={cn("h-5 w-5", theme.text.secondary)}/>
           </div>
         )}

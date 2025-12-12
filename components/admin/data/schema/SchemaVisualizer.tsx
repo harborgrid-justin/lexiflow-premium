@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useMemo } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
@@ -56,7 +57,41 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
       setContextMenu({ x: e.clientX, y: e.clientY, items });
   };
   
+  // Calculate Relationships for ERD Lines
+  const relationships = useMemo(() => {
+      const links: { x1: number, y1: number, x2: number, y2: number, from: string, to: string }[] = [];
+      // Explicitly type the map to avoid inference issues with [string, TableData] vs (string | TableData)[]
+      const tableMap = new Map<string, TableData>();
+      tables.forEach(t => tableMap.set(t.name, t));
+      
+      const TABLE_WIDTH = 256;
+      const ROW_HEIGHT = 37; // Approx height of header/row
+      
+      tables.forEach(t => {
+          t.columns.forEach((col, idx) => {
+              if (col.fk) {
+                  const targetTableName = col.fk.split('.')[0];
+                  const targetTable = tableMap.get(targetTableName);
+                  
+                  if (targetTable) {
+                      // Simple anchoring: Right of source to Left of target
+                      links.push({
+                          x1: t.x + TABLE_WIDTH,
+                          y1: t.y + (idx * 32) + 60, // approximate offset
+                          x2: targetTable.x,
+                          y2: targetTable.y + 30, // Connect to header of target
+                          from: t.name,
+                          to: targetTableName
+                      });
+                  }
+              }
+          });
+      });
+      return links;
+  }, [tables]);
+
   const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
+  const lineColor = mode === 'dark' ? '#64748b' : '#94a3b8';
 
   return (
     <div 
@@ -71,19 +106,46 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
       />
       
       <div 
-        className="w-full h-full"
+        className="w-full h-full transform-gpu"
         style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0' }}
       >
+        {/* Connection Layer */}
+        <svg className="absolute top-0 left-0 w-[10000px] h-[10000px] pointer-events-none overflow-visible -z-10">
+            <defs>
+                <marker id="arrow-end" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill={lineColor} />
+                </marker>
+                 <marker id="circle-start" markerWidth="8" markerHeight="8" refX="5" refY="5">
+                    <circle cx="5" cy="5" r="3" fill={lineColor} />
+                </marker>
+            </defs>
+            {relationships.map((rel, i) => {
+                const midX = (rel.x1 + rel.x2) / 2;
+                return (
+                    <path 
+                        key={i}
+                        d={`M ${rel.x1} ${rel.y1} C ${midX} ${rel.y1}, ${midX} ${rel.y2}, ${rel.x2} ${rel.y2}`}
+                        stroke={lineColor}
+                        strokeWidth="2"
+                        fill="none"
+                        markerEnd="url(#arrow-end)"
+                        markerStart="url(#circle-start)"
+                        className="opacity-50"
+                    />
+                );
+            })}
+        </svg>
+
         {tables.map(t => (
             <div 
                 key={t.name}
                 data-drag-id={t.name}
-                className={cn("w-64 h-fit max-h-full flex flex-col rounded-lg shadow-md border overflow-hidden flex-shrink-0 absolute cursor-default", theme.surface, theme.border.default)}
+                className={cn("w-64 h-fit max-h-full flex flex-col rounded-lg shadow-xl border overflow-hidden flex-shrink-0 absolute cursor-default transition-shadow", theme.surface, theme.border.default)}
                 style={{ transform: `translate(${t.x}px, ${t.y}px)` }}
                 onMouseDown={(e) => handleMouseDown(e, 'item', t.name, { x: t.x, y: t.y })}
                 onContextMenu={(e) => handleContextMenu(e, 'table', { name: t.name })}
             >
-                <div className={cn("p-3 border-b flex justify-between items-center shrink-0 cursor-move", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("p-3 border-b flex justify-between items-center shrink-0 cursor-move bg-gradient-to-r", theme.surfaceHighlight, theme.border.default)}>
                     <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}><Database className="h-3 w-3 mr-2 text-blue-600"/> {t.name}</h4>
                 </div>
                 <div className={cn("divide-y overflow-y-auto", theme.border.light)}>
@@ -94,7 +156,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                                 {c.fk && <LinkIcon className="h-3 w-3 mr-2 text-blue-400"/>}
                                 <span className={cn("text-xs font-mono", c.pk ? cn("font-bold", theme.text.primary) : theme.text.secondary)}>{c.name}</span>
                             </div>
-                            <span className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>{c.type}</span>
+                            <span className={cn("text-[10px] font-bold uppercase opacity-70", theme.text.tertiary)}>{c.type.split('(')[0]}</span>
                         </div>
                     ))}
                 </div>

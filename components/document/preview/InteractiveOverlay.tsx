@@ -1,7 +1,9 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { X, Move } from 'lucide-react';
 import { PDFTool } from './AcrobatToolbar';
 import { cn } from '../../../utils/cn';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface Point { x: number; y: number }
 
@@ -33,6 +35,7 @@ interface InteractiveOverlayProps {
 export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({ 
   activeTool, dimensions, onFieldClick, existingFields = [], onFieldsUpdate 
 }) => {
+  const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [drawings, setDrawings] = useState<Drawing[]>([]);
   const [fields, setFields] = useState<Field[]>(existingFields);
@@ -115,7 +118,7 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
         const last = currentPath[currentPath.length - 1];
         ctx.moveTo(last.x, last.y);
         ctx.lineTo(pos.x, pos.y);
-        ctx.strokeStyle = activeTool === 'highlight' ? '#fde047' : '#ef4444';
+        ctx.strokeStyle = activeTool === 'highlight' ? theme.chart.colors.warning : theme.chart.colors.danger;
         ctx.lineWidth = activeTool === 'highlight' ? 12 : 2;
         ctx.globalAlpha = activeTool === 'highlight' ? 0.4 : 1.0;
         ctx.stroke();
@@ -129,7 +132,7 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
         id: `d-${Date.now()}`,
         type: activeTool === 'highlight' ? 'highlight' : 'pen',
         points: currentPath,
-        color: activeTool === 'highlight' ? '#fde047' : '#ef4444',
+        color: activeTool === 'highlight' ? theme.chart.colors.warning : theme.chart.colors.danger,
         width: activeTool === 'highlight' ? 12 : 2,
         opacity: activeTool === 'highlight' ? 0.4 : 1.0
       };
@@ -163,7 +166,9 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
                 <div 
                     key={field.id}
                     className={cn(
-                        "absolute pointer-events-auto border-2 border-blue-500 bg-blue-50/80 rounded flex items-center justify-center group cursor-pointer shadow-lg transition-transform hover:scale-105",
+                        "absolute pointer-events-auto border-2 rounded flex items-center justify-center group cursor-pointer shadow-lg transition-transform hover:scale-105",
+                        theme.primary.border,
+                        theme.surface.highlight,
                         field.type === 'signature' ? "w-40 h-16" :
                         field.type === 'text' ? "w-48 h-8" :
                         "w-32 h-10"
@@ -172,18 +177,18 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
                     onClick={() => onFieldClick(field)}
                 >
                     {field.value ? (
-                        <span className={cn("font-handwriting text-xl text-blue-900", field.type === 'date' && "font-mono text-sm font-bold")}>{field.value}</span>
+                        <span className={cn("font-handwriting text-xl", theme.primary.text, field.type === 'date' && "font-mono text-sm font-bold")}>{field.value}</span>
                     ) : (
-                        <span className="text-xs font-bold uppercase text-blue-400 tracking-widest">{field.type}</span>
+                        <span className={cn("text-xs font-bold uppercase tracking-widest", theme.text.tertiary)}>{field.type}</span>
                     )}
                     
                     <button 
                         onClick={(e) => { e.stopPropagation(); handleDeleteField(field.id); }}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                        className={cn("absolute -top-2 -right-2 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm", theme.status.error.bg)}
                     >
                         <X className="h-3 w-3"/>
                     </button>
-                    <div className="absolute top-0 left-0 p-1 opacity-0 group-hover:opacity-50"><Move className="h-3 w-3 text-blue-500"/></div>
+                    <div className={cn("absolute top-0 left-0 p-1 opacity-0 group-hover:opacity-50", theme.primary.text)}><Move className="h-3 w-3"/></div>
                 </div>
             ))}
         </div>

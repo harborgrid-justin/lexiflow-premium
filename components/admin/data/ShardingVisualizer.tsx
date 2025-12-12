@@ -38,7 +38,8 @@ export const ShardingVisualizer: React.FC = () => {
         // Draw ring
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = theme.border.default.replace('border-','');
+        // Extract border color from class if possible or fallback
+        ctx.strokeStyle = theme.chart.grid; 
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -54,10 +55,11 @@ export const ShardingVisualizer: React.FC = () => {
             
             ctx.beginPath();
             ctx.arc(x, y, 10, 0, 2 * Math.PI);
-            ctx.fillStyle = mappedNode === nodeName ? '#2563eb' : '#94a3b8';
+            ctx.fillStyle = mappedNode === nodeName ? theme.chart.colors.primary : theme.chart.colors.neutral;
             ctx.fill();
             
-            ctx.fillStyle = theme.text.primary.replace('text-','');
+            ctx.fillStyle = theme.chart.text;
+            ctx.font = '12px sans-serif';
             ctx.fillText(nodeName.split(':')[0], x + 15, y + 5);
         });
         
@@ -69,7 +71,7 @@ export const ShardingVisualizer: React.FC = () => {
             const y = center.y + radius * Math.sin(angle);
             ctx.beginPath();
             ctx.arc(x, y, 5, 0, 2 * Math.PI);
-            ctx.fillStyle = '#ef4444';
+            ctx.fillStyle = theme.chart.colors.danger;
             ctx.fill();
         }
 
@@ -99,23 +101,23 @@ export const ShardingVisualizer: React.FC = () => {
                 <div className="lg:col-span-2 relative h-96 lg:h-auto">
                     <canvas ref={canvasRef} width="800" height="600" className="w-full h-full"></canvas>
                 </div>
-                <div className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
+                <div className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
                     <h4 className={cn("text-sm font-bold mb-4", theme.text.primary)}>Simulation</h4>
                     <div className="space-y-4">
                         <div>
                             <label className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Data Key</label>
-                            <input value={key} onChange={e => setKey(e.target.value)} className={cn("w-full p-2 border rounded font-mono text-sm", theme.surface, theme.border.default)} />
+                            <input value={key} onChange={e => setKey(e.target.value)} className={cn("w-full p-2 border rounded font-mono text-sm", theme.surface.input, theme.border.default, theme.text.primary)} />
                         </div>
                         <div className="flex items-center justify-center gap-4 text-center">
                             <Database className={cn("h-8 w-8", theme.text.primary)}/>
-                            <ArrowRight className="h-6 w-6 text-slate-400"/>
+                            <ArrowRight className={cn("h-6 w-6", theme.text.tertiary)}/>
                             <div className={cn("p-3 rounded-lg border", theme.primary.light, theme.primary.border)}>
                                 <Server className={cn("h-8 w-8", theme.primary.text)}/>
                             </div>
                         </div>
-                        <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded">
-                            <p className="text-xs text-blue-800">Key '{key}' maps to</p>
-                            <p className="font-bold text-blue-900">{mappedNode}</p>
+                        <div className={cn("text-center p-4 rounded border", theme.surface.highlight, theme.border.default)}>
+                            <p className={cn("text-xs", theme.text.secondary)}>Key '{key}' maps to</p>
+                            <p className={cn("font-bold", theme.primary.text)}>{mappedNode}</p>
                         </div>
                     </div>
                 </div>

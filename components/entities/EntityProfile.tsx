@@ -32,26 +32,26 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
 
   if (isLoadingEntity || !entity) {
       return (
-          <div className={cn("h-full flex items-center justify-center border-l", theme.surface, theme.border.default)}>
+          <div className={cn("h-full flex items-center justify-center border-l", theme.surface.default, theme.border.default)}>
               <div className="animate-pulse flex flex-col items-center">
-                  <div className="h-16 w-16 bg-slate-200 rounded-full mb-4"></div>
-                  <div className="h-4 w-32 bg-slate-200 rounded"></div>
+                  <div className={cn("h-16 w-16 rounded-full mb-4", theme.surface.highlight)}></div>
+                  <div className={cn("h-4 w-32 rounded", theme.surface.highlight)}></div>
               </div>
           </div>
       );
   }
 
   return (
-    <div className={cn("h-full flex flex-col border-l shadow-xl", theme.surface, theme.border.default)}>
+    <div className={cn("h-full flex flex-col border-l shadow-xl", theme.surface.default, theme.border.default)}>
         {/* Header */}
-        <div className={cn("p-6 border-b", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-6 border-b", theme.surface.highlight, theme.border.default)}>
             <div className="flex justify-between items-start mb-4">
                 <h2 className={cn("text-2xl font-bold", theme.text.primary)}>{entity.name}</h2>
-                <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-5 w-5"/></button>
+                <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}><X className="h-5 w-5"/></button>
             </div>
             <div className="flex gap-2 mb-4">
-                {entity.roles.map(r => <span key={r} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-bold uppercase">{r}</span>)}
-                <span className={cn("px-2 py-0.5 rounded text-xs border", theme.surface, theme.border.default, theme.text.secondary)}>{entity.type}</span>
+                {entity.roles.map(r => <span key={r} className={cn("px-2 py-0.5 rounded text-xs font-bold uppercase", theme.status.info.bg, theme.status.info.text)}>{r}</span>)}
+                <span className={cn("px-2 py-0.5 rounded text-xs border", theme.surface.default, theme.border.default, theme.text.secondary)}>{entity.type}</span>
             </div>
             <div className={cn("flex flex-wrap gap-4 text-sm", theme.text.secondary)}>
                 {entity.city && <span className="flex items-center"><MapPin className="h-3 w-3 mr-1"/> {entity.city}, {entity.state}</span>}
@@ -73,7 +73,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {activeTab === 'overview' && (
                 <div className="space-y-6 animate-in fade-in">
-                    <div className={cn("p-4 rounded-lg border", theme.surface, theme.border.default)}>
+                    <div className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
                         <h4 className={cn("font-bold text-sm mb-3 uppercase tracking-wide", theme.text.secondary)}>Contact Information</h4>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                             <div><span className={cn("block text-xs uppercase", theme.text.tertiary)}>Phone</span> <span className={theme.text.primary}>{entity.phone || '-'}</span></div>
@@ -82,12 +82,12 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
                         </div>
                     </div>
 
-                    <div className={cn("p-4 rounded-lg border", entity.riskScore > 50 ? "bg-red-50 border-red-100" : "bg-green-50 border-green-100")}>
-                        <h4 className={cn("font-bold text-sm mb-2 flex items-center", entity.riskScore > 50 ? "text-red-800" : "text-green-800")}>
+                    <div className={cn("p-4 rounded-lg border", entity.riskScore > 50 ? cn(theme.status.error.bg, theme.status.error.border) : cn(theme.status.success.bg, theme.status.success.border))}>
+                        <h4 className={cn("font-bold text-sm mb-2 flex items-center", entity.riskScore > 50 ? theme.status.error.text : theme.status.success.text)}>
                             <ShieldAlert className="h-4 w-4 mr-2"/> Risk Profile
                         </h4>
-                        <p className={cn("text-xs mb-2", entity.riskScore > 50 ? "text-red-700" : "text-green-700")}>Risk Score: <strong>{entity.riskScore}/100</strong></p>
-                        <div className={cn("w-full rounded-full h-1.5", entity.riskScore > 50 ? "bg-red-200" : "bg-green-200")}>
+                        <p className={cn("text-xs mb-2", entity.riskScore > 50 ? theme.status.error.text : theme.status.success.text)}>Risk Score: <strong>{entity.riskScore}/100</strong></p>
+                        <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}>
                             <div className={cn("h-1.5 rounded-full", entity.riskScore > 50 ? "bg-red-600" : "bg-green-600")} style={{width: `${entity.riskScore}%`}}></div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
             {activeTab === 'relationships' && (
                 <div className="space-y-3 animate-in fade-in">
                     {relationships.map(rel => (
-                        <div key={rel.id} className={cn("p-3 rounded border flex items-center justify-between", theme.surface, theme.border.default)}>
+                        <div key={rel.id} className={cn("p-3 rounded border flex items-center justify-between", theme.surface.default, theme.border.default)}>
                             <div className="flex items-center gap-3">
                                 <Link className={cn("h-4 w-4", theme.text.tertiary)}/>
                                 <div>
@@ -115,8 +115,8 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
 
             {activeTab === 'matters' && (
                 <div className="space-y-3 animate-in fade-in">
-                     <div className={cn("p-3 rounded border flex items-center gap-3", theme.surface, theme.border.default)}>
-                        <Briefcase className="h-5 w-5 text-blue-500"/>
+                     <div className={cn("p-3 rounded border flex items-center gap-3", theme.surface.default, theme.border.default)}>
+                        <Briefcase className={cn("h-5 w-5", theme.primary.text)}/>
                         <div>
                             <p className={cn("text-sm font-bold", theme.text.primary)}>Martinez v. TechCorp</p>
                             <p className={cn("text-xs", theme.text.secondary)}>Role: Defendant</p>

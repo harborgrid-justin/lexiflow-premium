@@ -10,7 +10,6 @@ import { LineageNode, LineageLink } from '../../../../types';
 interface LineageCanvasProps {
     isAnimating: boolean;
     setIsAnimating: (v: boolean) => void;
-    // Removed legacy props for cleaner API
     data?: { nodes: LineageNode[], links: LineageLink[] }; 
 }
 
@@ -75,8 +74,7 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
             
             // Draw Links
             ctx.lineWidth = 2;
-            const isDark = mode === 'dark';
-            ctx.strokeStyle = isDark ? '#475569' : '#cbd5e1'; 
+            ctx.strokeStyle = theme.chart.grid; 
 
             for (let i = 0; i < state.links.length; i++) {
                 const link = state.links[i];
@@ -108,14 +106,14 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
                 
                 ctx.beginPath();
                 ctx.arc(x, y, type === 0 ? 30 : 20, 0, Math.PI * 2);
-                ctx.fillStyle = type === 0 ? '#3b82f6' : type === 1 ? '#8b5cf6' : type === 2 ? '#10b981' : '#f59e0b';
+                ctx.fillStyle = type === 0 ? theme.chart.colors.primary : type === 1 ? theme.chart.colors.secondary : type === 2 ? theme.chart.colors.success : theme.chart.colors.warning;
                 ctx.fill();
                 ctx.lineWidth = 3;
-                ctx.strokeStyle = isDark ? '#1e293b' : '#fff';
+                ctx.strokeStyle = theme.surface.default.includes('slate-900') ? '#1e293b' : '#fff';
                 ctx.stroke();
                 
                 if (nodesMeta && nodesMeta[i]) {
-                    ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
+                    ctx.fillStyle = theme.chart.text;
                     ctx.font = '10px Inter, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.fillText(nodesMeta[i].label, x, y + 40);
@@ -135,25 +133,25 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
             isMounted = false;
             cancelAnimationFrame(frameId);
         };
-    }, [isAnimating, physicsState, nodesMeta, mode]);
+    }, [isAnimating, physicsState, nodesMeta, mode, theme]);
 
     return (
-        <div ref={containerRef} className="w-full h-full relative bg-slate-50 dark:bg-slate-900/50">
+        <div ref={containerRef} className={cn("w-full h-full relative", theme.surface.highlight)}>
             <canvas ref={canvasRef} className="block w-full h-full"/>
             <div className="absolute top-4 right-4 flex flex-col gap-2">
-                <button onClick={() => reheat()} className={cn("p-2 border rounded-lg shadow-sm transition-colors", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+                <button onClick={() => reheat()} className={cn("p-2 border rounded-lg shadow-sm transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                     <RefreshCw className="h-5 w-5"/>
                 </button>
-                <button onClick={() => setIsAnimating(!isAnimating)} className={cn("p-2 border rounded-lg shadow-sm transition-colors", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+                <button onClick={() => setIsAnimating(!isAnimating)} className={cn("p-2 border rounded-lg shadow-sm transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                     {isAnimating ? <Pause className="h-5 w-5"/> : <Play className="h-5 w-5"/>}
                 </button>
             </div>
-            <div className={cn("absolute bottom-6 left-6 p-4 backdrop-blur rounded-lg border shadow-sm text-xs space-y-2 pointer-events-none bg-opacity-90", theme.surface, theme.border.default)}>
+            <div className={cn("absolute bottom-6 left-6 p-4 backdrop-blur-sm rounded-lg border shadow-sm text-xs space-y-2 pointer-events-none bg-opacity-90", theme.surface.default, theme.border.default)}>
                 <div className={cn("font-bold uppercase mb-1", theme.text.tertiary)}>Legend</div>
-                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-blue-500"></div> Source System</div>
-                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-purple-500"></div> Storage / Warehouse</div>
-                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-green-500"></div> Transformation</div>
-                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-amber-500"></div> Report / Output</div>
+                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full" style={{backgroundColor: theme.chart.colors.primary}}></div> Source System</div>
+                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full" style={{backgroundColor: theme.chart.colors.secondary}}></div> Storage / Warehouse</div>
+                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full" style={{backgroundColor: theme.chart.colors.success}}></div> Transformation</div>
+                <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full" style={{backgroundColor: theme.chart.colors.warning}}></div> Report / Output</div>
             </div>
         </div>
     );

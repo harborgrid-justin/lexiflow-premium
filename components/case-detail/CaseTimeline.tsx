@@ -32,13 +32,13 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
 
   const getColor = (type: string) => {
     switch (type) {
-      case 'document': return 'bg-blue-500 border-blue-500';
-      case 'task': return 'bg-green-500 border-green-500';
-      case 'billing': return 'bg-amber-500 border-amber-500';
-      case 'milestone': return 'bg-purple-600 border-purple-600';
-      case 'motion': return 'bg-indigo-600 border-indigo-600';
-      case 'hearing': return 'bg-red-500 border-red-500';
-      default: return 'bg-slate-400 border-slate-400';
+      case 'document': return cn(theme.status.info.bg, theme.status.info.border, theme.status.info.text);
+      case 'task': return cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text);
+      case 'billing': return cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text);
+      case 'milestone': return "bg-purple-100 border-purple-500 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400";
+      case 'motion': return "bg-indigo-100 border-indigo-500 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400";
+      case 'hearing': return cn(theme.status.error.bg, theme.status.error.border, theme.status.error.text);
+      default: return cn(theme.surface.highlight, theme.border.default, theme.text.tertiary);
     }
   };
 
@@ -63,14 +63,14 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
       <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surface.highlight)}>
         <div className="flex items-center gap-2">
             <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>Case Timeline</h3>
-            <span className={cn("text-xs bg-slate-200 text-slate-600 px-1.5 rounded-full")}>{filteredEvents.length}</span>
+            <span className={cn("text-xs px-1.5 rounded-full", theme.surface.default, theme.border.default, theme.text.secondary, "border")}>{filteredEvents.length}</span>
         </div>
         
         <div className="flex gap-2">
             <div className="relative">
                 <Filter className={cn("absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3", theme.text.tertiary)} />
                 <select 
-                    className={cn("pl-6 pr-2 py-1 text-xs border rounded bg-transparent outline-none appearance-none", theme.border.default, theme.text.primary)}
+                    className={cn("pl-6 pr-2 py-1 text-xs border rounded bg-transparent outline-none appearance-none cursor-pointer", theme.border.default, theme.text.primary)}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
                 >
@@ -83,17 +83,17 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                 </select>
             </div>
             
-            <div className="flex bg-slate-200/50 p-0.5 rounded-lg">
+            <div className={cn("flex p-0.5 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                 <button
                     onClick={() => setViewMode('list')}
-                    className={cn("p-1.5 rounded transition-all", viewMode === 'list' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}
+                    className={cn("p-1.5 rounded transition-all", viewMode === 'list' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.tertiary)}
                     title="List View"
                 >
                     <List className="h-4 w-4"/>
                 </button>
                 <button
                     onClick={() => setViewMode('story')}
-                    className={cn("p-1.5 rounded transition-all", viewMode === 'story' ? "bg-white shadow text-blue-600" : "text-slate-500 hover:text-slate-700")}
+                    className={cn("p-1.5 rounded transition-all", viewMode === 'story' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.tertiary)}
                     title="Story Mode"
                 >
                     <BookOpen className="h-4 w-4"/>

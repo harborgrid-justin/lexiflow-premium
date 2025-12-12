@@ -52,9 +52,9 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className
                 onClick={() => onChange(tab.id)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 className={cn(
-                  "whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium transition-all duration-200 flex items-center gap-2 relative top-px outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-t",
+                  "whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium transition-all duration-200 flex items-center gap-2 relative top-px outline-none rounded-t",
                   isActive
-                    ? cn("border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400")
+                    ? cn(theme.border.focused.split(' ')[0], theme.primary.text) // Use border color portion
                     : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`, `hover:border-slate-300`)
                 )}
                 role="tab"
@@ -84,10 +84,11 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className
             onClick={() => onChange(tab.id)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className={cn(
-              "flex-1 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-w-[80px] outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+              "flex-1 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-w-[80px] outline-none",
+              theme.border.focused.replace('border-', 'focus-visible:ring-').split(' ')[0], // Hacky but reuses the theme color for ring
               isActive
                 ? cn(theme.surface.default, theme.text.primary, "shadow-sm ring-1 ring-black/5")
-                : cn("bg-transparent text-slate-500 hover:text-slate-700")
+                : cn("bg-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
             )}
             role="tab"
             aria-selected={isActive}

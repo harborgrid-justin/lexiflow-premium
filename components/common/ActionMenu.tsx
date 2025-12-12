@@ -35,7 +35,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
       </button>
 
       {isOpen && (
-        <div className={cn("absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface, theme.border.default, "border")}>
+        <div className={cn("absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default, "border")}>
           <div className="py-1" role="menu">
             {actions.map((action, index) => {
               const Icon = action.icon;
@@ -50,7 +50,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
                   className={cn(
                     "w-full text-left px-4 py-2 text-xs flex items-center gap-2 transition-colors",
                     action.variant === 'danger' 
-                      ? cn(theme.status.error.text, `hover:${theme.status.error.bg}`)
+                      ? cn(theme.status.error.text, theme.action.danger.hover)
                       : cn(theme.text.primary, `hover:${theme.surfaceHighlight}`)
                   )}
                   role="menuitem"

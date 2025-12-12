@@ -1,12 +1,14 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { PleadingDocument } from '../../../../types/pleadingTypes';
+import { useTheme } from '../../../../context/ThemeContext';
 
 interface LogicOverlayProps {
     document: PleadingDocument;
 }
 
 export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDoc }) => {
+    const { theme } = useTheme();
     const svgRef = useRef<SVGSVGElement>(null);
     const [paths, setPaths] = useState<React.ReactElement[]>([]);
     const rafRef = useRef<number | null>(null);
@@ -50,19 +52,20 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
                 const endY = startY + pseudoRandomY;
 
                 const controlX1 = startX + (endX - startX) / 2;
+                const strokeColor = section.linkedArgumentId ? theme.chart.colors.secondary : theme.chart.colors.warning;
                 
                 return (
                     <g key={section.id}>
                         <path 
                             d={`M ${startX} ${startY} C ${controlX1} ${startY}, ${controlX1} ${endY}, ${endX} ${endY}`}
-                            stroke={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} 
+                            stroke={strokeColor} 
                             strokeWidth="2" 
                             fill="none"
                             strokeDasharray="5,5"
                             className="animate-dash"
                         />
-                        <circle cx={startX} cy={startY} r="3" fill="white" stroke={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} strokeWidth={1.5} />
-                        <circle cx={endX} cy={endY} r="3" fill={section.linkedArgumentId ? "#8b5cf6" : "#f59e0b"} />
+                        <circle cx={startX} cy={startY} r="3" fill={theme.surface.default} stroke={strokeColor} strokeWidth={1.5} />
+                        <circle cx={endX} cy={endY} r="3" fill={strokeColor} />
                     </g>
                 );
             });
@@ -82,7 +85,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
             window.removeEventListener('scroll', scheduleUpdate, true);
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
         }
-    }, [pleadingDoc]);
+    }, [pleadingDoc, theme]);
 
     return (
         <svg 

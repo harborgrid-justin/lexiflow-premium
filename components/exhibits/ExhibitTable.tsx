@@ -23,10 +23,10 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
 
   const getPartyColor = (party: string) => {
       switch(party) {
-          case 'Plaintiff': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-          case 'Defense': return 'bg-blue-100 text-blue-800 border-blue-200';
-          case 'Joint': return 'bg-purple-100 text-purple-800 border-purple-200';
-          default: return 'bg-slate-100 text-slate-800 border-slate-200';
+          case 'Plaintiff': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800';
+          case 'Defense': return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800';
+          case 'Joint': return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800';
+          default: return cn(theme.surface.highlight, theme.text.secondary, theme.border.default);
       }
   };
 
@@ -35,7 +35,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
       openWindow(
           winId,
           `Exhibit ${ex.exhibitNumber}`,
-          <div className="h-full bg-white">
+          <div className={cn("h-full", theme.surface.default)}>
              <DocumentPreviewPanel 
                 document={{
                     id: ex.id,
@@ -62,8 +62,8 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
       return (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {exhibits.map(ex => (
-                  <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface, theme.border.default)}>
-                      <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surfaceHighlight, theme.border.light)}>
+                  <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface.default, theme.border.default)}>
+                      <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surface.highlight, theme.border.light)}>
                           <FileIcon type={ex.fileType} className="h-16 w-16 opacity-30"/>
                           <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party))}>
                               {ex.exhibitNumber}
@@ -86,7 +86,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
   }
 
   const renderRow = (ex: TrialExhibit) => (
-      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 transition-colors", theme.surface, theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 transition-colors", theme.surface.default, theme.border.light, `hover:${theme.surface.highlight}`)}>
             <div className="w-[15%]">
                 <span className={cn("font-mono font-bold text-sm px-2 py-1 rounded border", getPartyColor(ex.party))}>
                     {ex.exhibitNumber}
@@ -106,14 +106,14 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
                 <StatusBadge status={ex.status} />
             </div>
             <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={(e) => { e.stopPropagation(); handleViewExhibit(ex); }} className="text-slate-400 hover:text-blue-600"><Eye className="h-4 w-4"/></button>
+                <button onClick={(e) => { e.stopPropagation(); handleViewExhibit(ex); }} className={cn("hover:text-blue-600", theme.text.tertiary)}><Eye className="h-4 w-4"/></button>
             </div>
       </div>
   );
 
   return (
-    <div className={cn("flex flex-col h-full border rounded-lg overflow-hidden", theme.surface, theme.border.default)}>
-        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+    <div className={cn("flex flex-col h-full border rounded-lg overflow-hidden", theme.surface.default, theme.border.default)}>
+        <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
             <div className="w-[15%]">Exhibit #</div>
             <div className="w-[30%]">Description</div>
             <div className="w-[15%]">Party</div>

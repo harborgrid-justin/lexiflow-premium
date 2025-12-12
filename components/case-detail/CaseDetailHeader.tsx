@@ -73,12 +73,12 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                         <div className="flex items-center gap-3 shrink-0">
                             <div className="hidden md:flex gap-3">
                                 {typeof openTasks === 'number' && openTasks > 0 && (
-                                    <span className="flex items-center text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-200 animate-in fade-in">
+                                    <span className={cn("flex items-center text-xs font-bold px-2 py-1 rounded border animate-in fade-in", theme.status.warning.text, theme.status.warning.bg, theme.status.warning.border)}>
                                         <CheckSquare className="h-3 w-3 mr-1"/> {openTasks} Open Tasks
                                     </span>
                                 )}
                                 {typeof unreadMessages === 'number' && unreadMessages > 0 && (
-                                    <span className="flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded border border-rose-200 animate-pulse">
+                                    <span className={cn("flex items-center text-xs font-bold px-2 py-1 rounded border animate-pulse", theme.status.error.text, theme.status.error.bg, theme.status.error.border)}>
                                         <MessageCircle className="h-3 w-3 mr-1"/> {unreadMessages} Unread
                                     </span>
                                 )}

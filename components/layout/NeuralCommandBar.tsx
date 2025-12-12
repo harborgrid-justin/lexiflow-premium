@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
@@ -32,15 +32,10 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   
   useClickOutside(searchRef, () => setShowResults(false));
   
-  // Removed heavy Trie building. Rely on optimized SearchService.search which yields to main thread.
-  // This drastically improves initial application load time.
-
   useEffect(() => {
     const performSearch = async () => {
       if (debouncedSearch.length >= 2 && !isProcessingIntent) {
-        // Direct Service call (now optimized with yieldToMain)
         const serviceResults = await SearchService.search(debouncedSearch);
-        
         setResults(serviceResults.slice(0, 10));
         setShowResults(true);
       } else {
@@ -105,9 +100,11 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
             placeholder={isProcessingIntent ? "Analyzing intent..." : "Search or type a command (e.g., 'Draft motion for Martinez')..."} 
             className={cn(
                 "w-full pl-10 pr-10 py-2.5 rounded-xl text-sm outline-none transition-all border shadow-sm font-medium",
-                theme.surface,
+                theme.surface.input,
                 theme.text.primary,
-                isProcessingIntent ? "border-purple-500 ring-2 ring-purple-500/20 bg-purple-50/10" : cn(theme.border.default, "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20")
+                isProcessingIntent 
+                  ? "border-purple-500 ring-2 ring-purple-500/20" 
+                  : cn(theme.border.default, "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20")
             )} 
             value={globalSearch}
             onChange={(e) => setGlobalSearch(e.target.value)}
@@ -119,20 +116,20 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
         {globalSearch && !isProcessingIntent && (
             <button 
             onClick={() => { setGlobalSearch(''); setShowResults(false); }}
-            className={cn("absolute right-3 top-1/2 -translate-y-1/2 hover:text-slate-600", theme.text.tertiary)}
+            className={cn("absolute right-3 top-1/2 -translate-y-1/2", theme.text.tertiary, `hover:${theme.text.primary}`)}
             >
             <X className="h-4 w-4" />
             </button>
         )}
 
         {showResults && (
-            <div className={cn("absolute top-full left-0 right-0 mt-2 rounded-lg shadow-2xl border overflow-hidden max-h-96 overflow-y-auto z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface, theme.border.default)}>
+            <div className={cn("absolute top-full left-0 right-0 mt-2 rounded-lg shadow-2xl border overflow-hidden max-h-96 overflow-y-auto z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default)}>
                 <div className={cn("bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-2 border-b flex justify-between items-center", theme.border.default)}>
                     <span className="text-[10px] font-bold text-purple-600 uppercase tracking-wider flex items-center">
                         <Sparkles className="h-3 w-3 mr-1"/> AI Command Ready
                     </span>
                     <span className={cn("text-[9px] flex items-center gap-1", theme.text.secondary)}>
-                        <kbd className="border rounded px-1 font-mono">↵</kbd> to execute
+                        <kbd className={cn("border rounded px-1 font-mono", theme.border.default)}>↵</kbd> to execute
                     </span>
                 </div>
 
@@ -154,16 +151,16 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
                                 className={cn(
                                     "w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors border-b last:border-0",
                                     activeIndex === index 
-                                        ? cn("bg-blue-50 dark:bg-blue-900/30 border-blue-100 dark:border-blue-800") 
-                                        : cn(theme.border.light, `hover:${theme.surfaceHighlight}`)
+                                        ? cn(theme.surface.highlight, theme.border.default) 
+                                        : cn(theme.surface.default, theme.border.light)
                                 )}
                             >
                                 <div className="flex-1 min-w-0">
                                     <p className={cn("text-sm font-bold truncate", theme.text.primary)}>
-                                        <HighlightedText text={result.title} query={globalSearch} />
+                                        <HighlightedText text={result.title} query={globalSearch} highlightClassName="bg-yellow-200 dark:bg-yellow-900/50 text-slate-900 dark:text-yellow-100" />
                                     </p>
                                     <p className={cn("text-xs truncate", theme.text.secondary)}>
-                                        <HighlightedText text={result.subtitle} query={globalSearch} />
+                                        <HighlightedText text={result.subtitle} query={globalSearch} highlightClassName="bg-yellow-200 dark:bg-yellow-900/50 text-slate-900 dark:text-yellow-100" />
                                     </p>
                                 </div>
                                 

@@ -27,7 +27,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, title, children
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" 
+        className={cn("fixed inset-0 transition-opacity", theme.backdrop)} 
         onClick={onClose}
       />
       
@@ -35,11 +35,11 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, title, children
       <div className={cn(
         "relative w-full h-full flex flex-col animate-in slide-in-from-right duration-300 shadow-2xl", 
         width,
-        theme.surface
+        theme.surface.default
       )}>
-        <div className={cn("flex items-center justify-between p-4 border-b", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex items-center justify-between p-4 border-b", theme.surface.highlight, theme.border.default)}>
           <h3 className={cn("font-bold text-lg", theme.text.primary)}>{title}</h3>
-          <button onClick={onClose} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface}`)}>
+          <button onClick={onClose} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.default}`)}>
             <X className="h-5 w-5" />
           </button>
         </div>

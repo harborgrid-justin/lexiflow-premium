@@ -29,7 +29,7 @@ export const Input: React.FC<InputProps> = ({ label, error, className = '', ...p
         style={mode === 'dark' ? { colorScheme: 'dark' } : {}}
         {...props}
       />
-      {error && <p className="mt-1 text-xs text-rose-600 font-medium">{error}</p>}
+      {error && <p className={cn("mt-1 text-xs font-medium", theme.status.error.text)}>{error}</p>}
     </div>
   );
 };

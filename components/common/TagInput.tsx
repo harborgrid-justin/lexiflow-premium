@@ -40,7 +40,11 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, sugge
       </div>
       <div className="relative">
         <input
-          className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors", theme.surface, theme.border.default, theme.text.primary)}
+          className={cn(
+              "w-full px-3 py-2 border rounded-md text-sm outline-none transition-colors", 
+              theme.surface.default, theme.border.default, theme.text.primary,
+              theme.border.focused
+          )}
           placeholder={placeholder}
           value={input}
           onChange={e => setInput(e.target.value)}
@@ -55,7 +59,7 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, sugge
               key={s} 
               type="button"
               onClick={() => onAdd(s)} 
-              className={cn("text-xs px-2 py-1 border rounded transition-colors", theme.surface, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}
+              className={cn("text-xs px-2 py-1 border rounded transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}
             >
               + {s}
             </button>

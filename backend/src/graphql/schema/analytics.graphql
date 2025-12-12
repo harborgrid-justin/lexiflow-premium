@@ -1,0 +1,754 @@
+# Analytics Type Definitions for LexiFlow AI Legal Suite
+
+type Analytics {
+  id: ID!
+  reportType: AnalyticsReportType!
+  dateRange: DateRange!
+  generatedAt: DateTime!
+  generatedBy: User
+  data: JSON!
+  summary: AnalyticsSummary!
+}
+
+enum AnalyticsReportType {
+  CASE_METRICS
+  FINANCIAL_PERFORMANCE
+  TIME_UTILIZATION
+  DOCUMENT_ANALYTICS
+  USER_PRODUCTIVITY
+  CLIENT_ANALYTICS
+  PRACTICE_AREA_ANALYSIS
+  COMPLIANCE_METRICS
+  RISK_ASSESSMENT
+  FORECASTING
+  CUSTOM
+}
+
+type DateRange {
+  startDate: DateTime!
+  endDate: DateTime!
+  label: String
+  period: TimePeriod
+}
+
+enum TimePeriod {
+  DAY
+  WEEK
+  MONTH
+  QUARTER
+  YEAR
+  CUSTOM
+}
+
+type AnalyticsSummary {
+  totalRecords: Int!
+  keyMetrics: [KeyMetric!]!
+  insights: [Insight!]!
+  recommendations: [Recommendation!]!
+  trends: [Trend!]!
+}
+
+type KeyMetric {
+  name: String!
+  value: Float!
+  unit: String
+  change: Float
+  changeType: ChangeType!
+  previousValue: Float
+  target: Float
+  status: MetricStatus!
+}
+
+enum ChangeType {
+  INCREASE
+  DECREASE
+  NEUTRAL
+}
+
+enum MetricStatus {
+  GOOD
+  WARNING
+  CRITICAL
+  NEUTRAL
+}
+
+type Insight {
+  category: String!
+  title: String!
+  description: String!
+  severity: InsightSeverity!
+  confidence: Float!
+  relatedMetrics: [String!]!
+  actionable: Boolean!
+}
+
+enum InsightSeverity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+type Recommendation {
+  title: String!
+  description: String!
+  category: String!
+  priority: Priority!
+  expectedImpact: String
+  estimatedEffort: String
+  suggestedActions: [String!]!
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+type Trend {
+  metric: String!
+  direction: TrendDirection!
+  strength: Float!
+  dataPoints: [TrendDataPoint!]!
+  forecast: [ForecastPoint!]!
+}
+
+enum TrendDirection {
+  UPWARD
+  DOWNWARD
+  STABLE
+  VOLATILE
+}
+
+type TrendDataPoint {
+  timestamp: DateTime!
+  value: Float!
+  label: String
+}
+
+type ForecastPoint {
+  timestamp: DateTime!
+  predictedValue: Float!
+  confidence: Float!
+  upperBound: Float!
+  lowerBound: Float!
+}
+
+# Dashboard Analytics
+type DashboardAnalytics {
+  overview: OverviewMetrics!
+  caseMetrics: CaseMetrics!
+  financialMetrics: FinancialMetrics!
+  productivityMetrics: ProductivityMetrics!
+  recentActivity: [Activity!]!
+  upcomingDeadlines: [Deadline!]!
+  alerts: [Alert!]!
+}
+
+type OverviewMetrics {
+  activeCases: Int!
+  totalClients: Int!
+  teamMembers: Int!
+  documentCount: Int!
+  pendingTasks: Int!
+  overdueItems: Int!
+}
+
+type CaseMetrics {
+  total: Int!
+  active: Int!
+  closed: Int!
+  byStatus: [StatusCount!]!
+  byPriority: [PriorityCount!]!
+  byPracticeArea: [PracticeAreaCount!]!
+  averageResolutionTime: Float
+  completionRate: Float!
+  onTimeDeliveryRate: Float!
+}
+
+type StatusCount {
+  status: String!
+  count: Int!
+  percentage: Float!
+}
+
+type PriorityCount {
+  priority: String!
+  count: Int!
+  percentage: Float!
+}
+
+type PracticeAreaCount {
+  area: String!
+  count: Int!
+  revenue: Money
+  percentage: Float!
+}
+
+type FinancialMetrics {
+  totalRevenue: Money!
+  collectedRevenue: Money!
+  outstandingRevenue: Money!
+  workInProgress: Money!
+
+  revenueGrowth: Float!
+  collectionRate: Float!
+  averageRealizationRate: Float!
+
+  revenueByMonth: [MonthlyRevenue!]!
+  revenueByClient: [ClientRevenue!]!
+  revenueByPracticeArea: [PracticeAreaRevenue!]!
+
+  topClients: [ClientRevenue!]!
+  budgetUtilization: Float!
+}
+
+type MonthlyRevenue {
+  month: String!
+  revenue: Money!
+  target: Money
+  growth: Float
+}
+
+type ProductivityMetrics {
+  totalHours: Float!
+  billableHours: Float!
+  nonBillableHours: Float!
+
+  utilizationRate: Float!
+  billableRate: Float!
+
+  hoursByUser: [UserHours!]!
+  hoursByPracticeArea: [PracticeAreaHours!]!
+
+  documentsProcessed: Int!
+  tasksCompleted: Int!
+  averageTaskCompletionTime: Float
+}
+
+type UserHours {
+  user: User!
+  totalHours: Float!
+  billableHours: Float!
+  utilizationRate: Float!
+  revenue: Money
+}
+
+type PracticeAreaHours {
+  area: String!
+  hours: Float!
+  percentage: Float!
+}
+
+type Alert {
+  id: ID!
+  type: AlertType!
+  severity: AlertSeverity!
+  title: String!
+  message: String!
+  actionRequired: Boolean!
+  link: String
+  createdAt: DateTime!
+  dismissedAt: DateTime
+}
+
+enum AlertType {
+  DEADLINE_APPROACHING
+  OVERDUE_TASK
+  BUDGET_EXCEEDED
+  LOW_TRUST_BALANCE
+  COMPLIANCE_ISSUE
+  SYSTEM_ALERT
+  PERFORMANCE_WARNING
+  SECURITY_ALERT
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+# Time Series Analytics
+type TimeSeriesAnalytics {
+  metric: String!
+  dataPoints: [TimeSeriesDataPoint!]!
+  aggregation: AggregationType!
+  statistics: TimeSeriesStatistics!
+}
+
+type TimeSeriesDataPoint {
+  timestamp: DateTime!
+  value: Float!
+  metadata: JSON
+}
+
+enum AggregationType {
+  SUM
+  AVERAGE
+  COUNT
+  MIN
+  MAX
+  MEDIAN
+}
+
+type TimeSeriesStatistics {
+  mean: Float!
+  median: Float!
+  min: Float!
+  max: Float!
+  stdDev: Float!
+  total: Float!
+  trend: TrendDirection!
+}
+
+# Comparative Analytics
+type ComparativeAnalytics {
+  metric: String!
+  current: ComparisonPeriod!
+  previous: ComparisonPeriod!
+  change: Float!
+  changePercentage: Float!
+  trend: TrendDirection!
+}
+
+type ComparisonPeriod {
+  dateRange: DateRange!
+  value: Float!
+  details: JSON
+}
+
+# Cohort Analysis
+type CohortAnalysis {
+  cohortType: CohortType!
+  cohorts: [Cohort!]!
+  metrics: [String!]!
+  dateRange: DateRange!
+}
+
+enum CohortType {
+  CLIENT_ACQUISITION
+  CASE_LIFECYCLE
+  USER_ONBOARDING
+  REVENUE_RETENTION
+  CUSTOM
+}
+
+type Cohort {
+  id: String!
+  name: String!
+  startDate: DateTime!
+  size: Int!
+  metrics: [CohortMetric!]!
+  retention: [RetentionDataPoint!]!
+}
+
+type CohortMetric {
+  name: String!
+  value: Float!
+  period: String
+}
+
+type RetentionDataPoint {
+  period: String!
+  retentionRate: Float!
+  count: Int!
+}
+
+# Funnel Analysis
+type FunnelAnalytics {
+  name: String!
+  stages: [FunnelStage!]!
+  conversionRate: Float!
+  dropoffRate: Float!
+  averageTimeToConvert: Float
+}
+
+type FunnelStage {
+  name: String!
+  order: Int!
+  count: Int!
+  conversionRate: Float!
+  dropoffRate: Float!
+  averageTime: Float
+}
+
+# Heatmap Data
+type HeatmapData {
+  title: String!
+  xAxis: [String!]!
+  yAxis: [String!]!
+  data: [[Float!]!]!
+  colorScheme: String
+}
+
+# Distribution Analytics
+type DistributionAnalytics {
+  metric: String!
+  buckets: [DistributionBucket!]!
+  statistics: DistributionStatistics!
+}
+
+type DistributionBucket {
+  label: String!
+  min: Float
+  max: Float
+  count: Int!
+  percentage: Float!
+}
+
+type DistributionStatistics {
+  mean: Float!
+  median: Float!
+  mode: Float
+  stdDev: Float!
+  skewness: Float
+  kurtosis: Float
+}
+
+# Predictive Analytics
+type PredictiveAnalytics {
+  model: PredictionModel!
+  predictions: [Prediction!]!
+  accuracy: Float!
+  confidence: Float!
+  features: [Feature!]!
+}
+
+type PredictionModel {
+  id: ID!
+  name: String!
+  type: ModelType!
+  version: String!
+  trainedAt: DateTime!
+  trainingSamples: Int!
+  accuracy: Float!
+}
+
+enum ModelType {
+  LINEAR_REGRESSION
+  LOGISTIC_REGRESSION
+  RANDOM_FOREST
+  NEURAL_NETWORK
+  TIME_SERIES
+  CUSTOM
+}
+
+type Prediction {
+  timestamp: DateTime!
+  value: Float!
+  confidence: Float!
+  factors: [PredictionFactor!]!
+}
+
+type PredictionFactor {
+  name: String!
+  impact: Float!
+  value: Float
+}
+
+type Feature {
+  name: String!
+  importance: Float!
+  type: FeatureType!
+}
+
+enum FeatureType {
+  NUMERICAL
+  CATEGORICAL
+  BOOLEAN
+  DATETIME
+  TEXT
+}
+
+# Custom Reports
+type CustomReport {
+  id: ID!
+  name: String!
+  description: String
+  category: String
+
+  # Configuration
+  metrics: [ReportMetric!]!
+  dimensions: [ReportDimension!]!
+  filters: [ReportFilter!]!
+
+  # Visualization
+  chartType: ChartType!
+  layout: JSON
+
+  # Scheduling
+  schedule: ReportSchedule
+  recipients: [User!]!
+
+  # Metadata
+  createdBy: User!
+  createdAt: DateTime!
+  lastRun: DateTime
+  isPublic: Boolean!
+  isFavorite: Boolean!
+}
+
+type ReportMetric {
+  field: String!
+  aggregation: AggregationType!
+  label: String
+  format: String
+}
+
+type ReportDimension {
+  field: String!
+  label: String
+  groupBy: Boolean!
+}
+
+type ReportFilter {
+  field: String!
+  operator: FilterOperator!
+  value: JSON!
+}
+
+enum FilterOperator {
+  EQUALS
+  NOT_EQUALS
+  GREATER_THAN
+  LESS_THAN
+  CONTAINS
+  IN
+  NOT_IN
+  BETWEEN
+  IS_NULL
+  IS_NOT_NULL
+}
+
+enum ChartType {
+  LINE
+  BAR
+  PIE
+  AREA
+  SCATTER
+  HEATMAP
+  GAUGE
+  TABLE
+  FUNNEL
+  SANKEY
+}
+
+type ReportSchedule {
+  frequency: ScheduleFrequency!
+  dayOfWeek: Int
+  dayOfMonth: Int
+  time: String!
+  timezone: String!
+  enabled: Boolean!
+  nextRun: DateTime
+}
+
+enum ScheduleFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  CUSTOM
+}
+
+# Queries
+type Query {
+  # Dashboard
+  dashboardAnalytics(dateRange: DateRangeInput): DashboardAnalytics!
+
+  # Generic analytics
+  analytics(
+    reportType: AnalyticsReportType!
+    dateRange: DateRangeInput!
+    filters: AnalyticsFilters
+  ): Analytics!
+
+  # Time series
+  timeSeriesAnalytics(
+    metric: String!
+    dateRange: DateRangeInput!
+    aggregation: AggregationType!
+    interval: TimePeriod!
+  ): TimeSeriesAnalytics!
+
+  # Comparative
+  comparativeAnalytics(
+    metric: String!
+    currentPeriod: DateRangeInput!
+    previousPeriod: DateRangeInput!
+  ): ComparativeAnalytics!
+
+  # Cohort analysis
+  cohortAnalysis(
+    cohortType: CohortType!
+    dateRange: DateRangeInput!
+    metrics: [String!]!
+  ): CohortAnalysis!
+
+  # Funnel analysis
+  funnelAnalytics(
+    funnelName: String!
+    dateRange: DateRangeInput!
+  ): FunnelAnalytics!
+
+  # Heatmaps
+  heatmapData(
+    metric: String!
+    xAxis: String!
+    yAxis: String!
+    dateRange: DateRangeInput!
+  ): HeatmapData!
+
+  # Distribution
+  distributionAnalytics(
+    metric: String!
+    dateRange: DateRangeInput!
+    bucketCount: Int = 10
+  ): DistributionAnalytics!
+
+  # Predictive
+  predictiveAnalytics(
+    model: String!
+    horizon: Int!
+    features: JSON
+  ): PredictiveAnalytics!
+
+  # Custom reports
+  customReport(id: ID!): CustomReport
+  customReports(
+    category: String
+    isFavorite: Boolean
+  ): [CustomReport!]!
+
+  # Export
+  exportAnalytics(
+    reportType: AnalyticsReportType!
+    dateRange: DateRangeInput!
+    format: ExportFormat!
+  ): ExportResult!
+}
+
+input DateRangeInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  period: TimePeriod
+}
+
+input AnalyticsFilters {
+  caseId: ID
+  clientId: ID
+  userId: ID
+  practiceArea: String
+  department: String
+  customFilters: JSON
+}
+
+enum ExportFormat {
+  PDF
+  EXCEL
+  CSV
+  JSON
+}
+
+type ExportResult {
+  url: String!
+  format: ExportFormat!
+  size: Int!
+  expiresAt: DateTime!
+}
+
+# Mutations
+type Mutation {
+  # Custom reports
+  createCustomReport(input: CreateCustomReportInput!): CustomReport!
+  updateCustomReport(id: ID!, input: UpdateCustomReportInput!): CustomReport!
+  deleteCustomReport(id: ID!): Boolean!
+
+  # Report actions
+  runCustomReport(id: ID!): Analytics!
+  scheduleReport(id: ID!, schedule: ReportScheduleInput!): CustomReport!
+  shareReport(id: ID!, userIds: [ID!]!): CustomReport!
+  favoriteReport(id: ID!, favorite: Boolean!): CustomReport!
+
+  # Predictions
+  trainPredictionModel(input: TrainModelInput!): PredictionModel!
+
+  # Cache management
+  refreshAnalyticsCache(reportType: AnalyticsReportType): Boolean!
+}
+
+input CreateCustomReportInput {
+  name: String!
+  description: String
+  category: String
+  metrics: [ReportMetricInput!]!
+  dimensions: [ReportDimensionInput!]!
+  filters: [ReportFilterInput!]
+  chartType: ChartType!
+  layout: JSON
+  isPublic: Boolean = false
+}
+
+input UpdateCustomReportInput {
+  name: String
+  description: String
+  category: String
+  metrics: [ReportMetricInput!]
+  dimensions: [ReportDimensionInput!]
+  filters: [ReportFilterInput!]
+  chartType: ChartType
+  layout: JSON
+  isPublic: Boolean
+}
+
+input ReportMetricInput {
+  field: String!
+  aggregation: AggregationType!
+  label: String
+  format: String
+}
+
+input ReportDimensionInput {
+  field: String!
+  label: String
+  groupBy: Boolean = false
+}
+
+input ReportFilterInput {
+  field: String!
+  operator: FilterOperator!
+  value: JSON!
+}
+
+input ReportScheduleInput {
+  frequency: ScheduleFrequency!
+  dayOfWeek: Int
+  dayOfMonth: Int
+  time: String!
+  timezone: String!
+  enabled: Boolean = true
+}
+
+input TrainModelInput {
+  name: String!
+  type: ModelType!
+  features: [String!]!
+  target: String!
+  trainingData: JSON!
+  hyperparameters: JSON
+}
+
+# Subscriptions
+type Subscription {
+  analyticsUpdated(reportType: AnalyticsReportType): Analytics!
+  metricAlert(userId: ID!): Alert!
+  reportGenerated(reportId: ID!): CustomReport!
+}
+
+# Custom Scalars
+scalar DateTime
+scalar JSON

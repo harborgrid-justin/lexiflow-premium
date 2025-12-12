@@ -1,0 +1,663 @@
+# Document Type Definitions for LexiFlow AI Legal Suite
+
+type Document {
+  id: ID!
+  title: String!
+  fileName: String!
+  fileSize: Int!
+  mimeType: String!
+  documentType: DocumentType!
+  category: DocumentCategory!
+  status: DocumentStatus!
+  version: String!
+
+  # File storage
+  s3Key: String
+  s3Bucket: String
+  url: String
+  thumbnailUrl: String
+  downloadUrl: String
+
+  # Relationships
+  case: Case
+  caseId: ID
+  uploadedBy: User!
+  folder: Folder
+  versions: [DocumentVersion!]!
+  tags: [Tag!]!
+
+  # Content analysis
+  content: String
+  extractedText: String
+  pageCount: Int
+  wordCount: Int
+  language: String
+
+  # AI Analysis
+  aiAnalysis: DocumentAIAnalysis
+  entities: [ExtractedEntity!]!
+  clauses: [ExtractedClause!]!
+  signatures: [Signature!]!
+
+  # Metadata
+  description: String
+  confidentialityLevel: ConfidentialityLevel!
+  retentionPolicy: RetentionPolicy
+  customMetadata: JSON
+
+  # Security
+  encryption: EncryptionInfo
+  accessControl: DocumentAccessControl
+
+  # Timestamps
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  lastAccessedAt: DateTime
+  expiresAt: DateTime
+}
+
+enum DocumentType {
+  CONTRACT
+  PLEADING
+  MOTION
+  BRIEF
+  CORRESPONDENCE
+  EVIDENCE
+  DISCOVERY
+  DEPOSITION
+  EXPERT_REPORT
+  COURT_ORDER
+  SETTLEMENT
+  MEMO
+  RESEARCH
+  INVOICE
+  OTHER
+}
+
+enum DocumentCategory {
+  LEGAL_DOCUMENT
+  COURT_FILING
+  CLIENT_DOCUMENT
+  INTERNAL_MEMO
+  CORRESPONDENCE
+  EVIDENCE
+  RESEARCH
+  ADMINISTRATIVE
+  FINANCIAL
+}
+
+enum DocumentStatus {
+  DRAFT
+  PENDING_REVIEW
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  FINAL
+  ARCHIVED
+  DELETED
+}
+
+enum ConfidentialityLevel {
+  PUBLIC
+  INTERNAL
+  CONFIDENTIAL
+  HIGHLY_CONFIDENTIAL
+  ATTORNEY_CLIENT_PRIVILEGED
+}
+
+type DocumentVersion {
+  id: ID!
+  document: Document!
+  versionNumber: String!
+  fileName: String!
+  fileSize: Int!
+  s3Key: String
+  changeDescription: String
+  createdBy: User!
+  createdAt: DateTime!
+  isCurrent: Boolean!
+}
+
+type Folder {
+  id: ID!
+  name: String!
+  path: String!
+  parent: Folder
+  children: [Folder!]!
+  documents: [Document!]!
+  case: Case
+  color: String
+  icon: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Tag {
+  id: ID!
+  name: String!
+  color: String
+  category: String
+  usageCount: Int!
+}
+
+type DocumentAIAnalysis {
+  id: ID!
+  document: Document!
+  summary: String
+  keyPoints: [String!]!
+  sentiment: SentimentAnalysis
+  topics: [Topic!]!
+  complexity: ComplexityScore
+  readabilityScore: Float
+  legalIssues: [LegalIssue!]!
+  riskFactors: [RiskFactor!]!
+  recommendations: [String!]!
+  processedAt: DateTime!
+  confidence: Float!
+}
+
+type SentimentAnalysis {
+  overall: String!
+  score: Float!
+  positive: Float!
+  negative: Float!
+  neutral: Float!
+}
+
+type Topic {
+  name: String!
+  relevance: Float!
+  keywords: [String!]!
+}
+
+type ComplexityScore {
+  score: Float!
+  level: String!
+  factors: [String!]!
+}
+
+type LegalIssue {
+  id: ID!
+  category: String!
+  description: String!
+  severity: String!
+  citations: [LegalCitation!]!
+  recommendations: [String!]!
+}
+
+type LegalCitation {
+  title: String!
+  reference: String!
+  jurisdiction: String
+  year: Int
+  relevance: Float!
+}
+
+type ExtractedEntity {
+  id: ID!
+  type: EntityType!
+  text: String!
+  confidence: Float!
+  context: String
+  location: TextLocation
+  metadata: JSON
+}
+
+enum EntityType {
+  PERSON
+  ORGANIZATION
+  LOCATION
+  DATE
+  MONEY
+  STATUTE
+  CASE_LAW
+  CONTRACT_TERM
+  OBLIGATION
+  PARTY
+  COURT
+  JUDGE
+}
+
+type TextLocation {
+  page: Int
+  startOffset: Int!
+  endOffset: Int!
+  boundingBox: BoundingBox
+}
+
+type BoundingBox {
+  left: Float!
+  top: Float!
+  width: Float!
+  height: Float!
+}
+
+type ExtractedClause {
+  id: ID!
+  type: ClauseType!
+  title: String!
+  text: String!
+  riskLevel: String
+  suggestions: [String!]!
+  location: TextLocation
+  alternatives: [AlternativeClause!]!
+}
+
+enum ClauseType {
+  CONFIDENTIALITY
+  NON_COMPETE
+  INDEMNIFICATION
+  LIABILITY_LIMITATION
+  TERMINATION
+  DISPUTE_RESOLUTION
+  GOVERNING_LAW
+  PAYMENT_TERMS
+  INTELLECTUAL_PROPERTY
+  WARRANTY
+  FORCE_MAJEURE
+  ASSIGNMENT
+  SEVERABILITY
+}
+
+type AlternativeClause {
+  text: String!
+  reason: String!
+  riskReduction: Float!
+}
+
+type Signature {
+  id: ID!
+  signerName: String!
+  signerRole: String
+  signatureType: SignatureType!
+  signedAt: DateTime!
+  verified: Boolean!
+  ipAddress: String
+  location: TextLocation
+  certificate: String
+}
+
+enum SignatureType {
+  ELECTRONIC
+  DIGITAL
+  WET_SIGNATURE
+  SCANNED
+}
+
+type EncryptionInfo {
+  encrypted: Boolean!
+  algorithm: String
+  keyId: String
+  encryptedAt: DateTime
+}
+
+type DocumentAccessControl {
+  isPublic: Boolean!
+  allowedUsers: [ID!]!
+  allowedRoles: [String!]!
+  permissions: DocumentPermissions!
+}
+
+type DocumentPermissions {
+  canView: Boolean!
+  canEdit: Boolean!
+  canDelete: Boolean!
+  canShare: Boolean!
+  canDownload: Boolean!
+  canPrint: Boolean!
+}
+
+type RetentionPolicy {
+  retentionPeriod: Int!
+  retentionUnit: TimeUnit!
+  autoDeleteAfterExpiry: Boolean!
+  legalHoldExempt: Boolean!
+}
+
+enum TimeUnit {
+  DAYS
+  MONTHS
+  YEARS
+}
+
+# OCR and Processing
+type OCRResult {
+  id: ID!
+  document: Document!
+  status: ProcessingStatus!
+  text: String
+  confidence: Float
+  language: String
+  pageResults: [PageOCRResult!]!
+  startedAt: DateTime!
+  completedAt: DateTime
+  error: String
+}
+
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+type PageOCRResult {
+  pageNumber: Int!
+  text: String!
+  confidence: Float!
+  blocks: [TextBlock!]!
+}
+
+type TextBlock {
+  text: String!
+  confidence: Float!
+  boundingBox: BoundingBox!
+  type: BlockType!
+}
+
+enum BlockType {
+  PARAGRAPH
+  LINE
+  WORD
+  HEADING
+  TABLE
+  LIST
+  IMAGE
+}
+
+# Document Comparison
+type DocumentComparison {
+  id: ID!
+  document1: Document!
+  document2: Document!
+  differences: [DocumentDifference!]!
+  similarity: Float!
+  comparedBy: User!
+  comparedAt: DateTime!
+}
+
+type DocumentDifference {
+  type: DifferenceType!
+  section: String
+  oldText: String
+  newText: String
+  severity: String!
+  location: TextLocation
+}
+
+enum DifferenceType {
+  ADDITION
+  DELETION
+  MODIFICATION
+  MOVED
+  FORMATTING
+}
+
+# Queries
+type Query {
+  # Single document retrieval
+  document(id: ID!): Document
+
+  # List queries
+  documents(
+    filter: DocumentFilter
+    sort: DocumentSort
+    pagination: PaginationInput
+  ): DocumentConnection!
+
+  # Search
+  searchDocuments(
+    query: String!
+    filters: DocumentFilter
+  ): [Document!]!
+
+  fullTextSearch(
+    query: String!
+    caseId: ID
+    documentTypes: [DocumentType!]
+  ): [SearchResult!]!
+
+  # Folder management
+  folder(id: ID!): Folder
+  folders(caseId: ID): [Folder!]!
+
+  # Document versions
+  documentVersions(documentId: ID!): [DocumentVersion!]!
+
+  # Analysis
+  documentAnalysis(documentId: ID!): DocumentAIAnalysis
+  compareDocuments(id1: ID!, id2: ID!): DocumentComparison!
+
+  # Tags
+  tags(category: String): [Tag!]!
+  popularTags(limit: Int = 20): [Tag!]!
+
+  # Statistics
+  documentStatistics(caseId: ID, dateRange: DateRangeInput): DocumentStatistics!
+}
+
+input DocumentFilter {
+  caseId: ID
+  documentTypes: [DocumentType!]
+  categories: [DocumentCategory!]
+  status: [DocumentStatus!]
+  uploadedBy: ID
+  dateRange: DateRangeInput
+  tags: [String!]
+  folderId: ID
+  confidentialityLevel: [ConfidentialityLevel!]
+  hasAIAnalysis: Boolean
+}
+
+input DocumentSort {
+  field: DocumentSortField!
+  order: SortOrder!
+}
+
+enum DocumentSortField {
+  TITLE
+  FILE_NAME
+  CREATED_AT
+  UPDATED_AT
+  FILE_SIZE
+  DOCUMENT_TYPE
+  STATUS
+}
+
+type DocumentConnection {
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type DocumentEdge {
+  node: Document!
+  cursor: String!
+}
+
+type SearchResult {
+  document: Document!
+  score: Float!
+  highlights: [SearchHighlight!]!
+  context: String
+}
+
+type SearchHighlight {
+  field: String!
+  snippet: String!
+  matches: [String!]!
+}
+
+type DocumentStatistics {
+  totalDocuments: Int!
+  totalSize: Float!
+  documentsByType: [DocumentTypeCount!]!
+  documentsByStatus: [DocumentStatusCount!]!
+  uploadsOverTime: [TimeSeriesPoint!]!
+  averageProcessingTime: Float
+}
+
+type DocumentTypeCount {
+  type: DocumentType!
+  count: Int!
+}
+
+type DocumentStatusCount {
+  status: DocumentStatus!
+  count: Int!
+}
+
+type TimeSeriesPoint {
+  timestamp: DateTime!
+  value: Float!
+  label: String
+}
+
+# Mutations
+type Mutation {
+  # Upload and creation
+  uploadDocument(input: UploadDocumentInput!): Document!
+  createDocument(input: CreateDocumentInput!): Document!
+
+  # Updates
+  updateDocument(id: ID!, input: UpdateDocumentInput!): Document!
+  updateDocumentMetadata(id: ID!, metadata: JSON!): Document!
+
+  # Versioning
+  createDocumentVersion(
+    documentId: ID!
+    file: Upload!
+    changeDescription: String
+  ): DocumentVersion!
+  restoreDocumentVersion(versionId: ID!): Document!
+
+  # Organization
+  moveDocument(id: ID!, folderId: ID!): Document!
+  addDocumentTags(id: ID!, tags: [String!]!): Document!
+  removeDocumentTags(id: ID!, tags: [String!]!): Document!
+
+  # Folders
+  createFolder(input: CreateFolderInput!): Folder!
+  updateFolder(id: ID!, input: UpdateFolderInput!): Folder!
+  deleteFolder(id: ID!, deleteDocuments: Boolean = false): Boolean!
+  moveFolder(id: ID!, parentId: ID): Folder!
+
+  # Processing
+  requestOCR(documentId: ID!): OCRResult!
+  requestAIAnalysis(documentId: ID!): DocumentAIAnalysis!
+  cancelProcessing(documentId: ID!): Boolean!
+
+  # Security
+  updateAccessControl(
+    documentId: ID!
+    accessControl: AccessControlInput!
+  ): Document!
+  shareDocument(
+    documentId: ID!
+    userIds: [ID!]!
+    permissions: PermissionsInput!
+  ): Document!
+
+  # Lifecycle
+  archiveDocument(id: ID!): Document!
+  deleteDocument(id: ID!): Boolean!
+  permanentlyDeleteDocument(id: ID!): Boolean!
+  restoreDocument(id: ID!): Document!
+}
+
+input UploadDocumentInput {
+  file: Upload!
+  title: String
+  documentType: DocumentType!
+  category: DocumentCategory!
+  caseId: ID
+  folderId: ID
+  description: String
+  tags: [String!]
+  confidentialityLevel: ConfidentialityLevel = INTERNAL
+  customMetadata: JSON
+}
+
+input CreateDocumentInput {
+  title: String!
+  fileName: String!
+  documentType: DocumentType!
+  category: DocumentCategory!
+  caseId: ID
+  folderId: ID
+  content: String
+  description: String
+  tags: [String!]
+  confidentialityLevel: ConfidentialityLevel = INTERNAL
+}
+
+input UpdateDocumentInput {
+  title: String
+  documentType: DocumentType
+  category: DocumentCategory
+  status: DocumentStatus
+  description: String
+  confidentialityLevel: ConfidentialityLevel
+  folderId: ID
+}
+
+input CreateFolderInput {
+  name: String!
+  parentId: ID
+  caseId: ID
+  color: String
+  icon: String
+}
+
+input UpdateFolderInput {
+  name: String
+  color: String
+  icon: String
+}
+
+input AccessControlInput {
+  isPublic: Boolean
+  allowedUsers: [ID!]
+  allowedRoles: [String!]
+  permissions: PermissionsInput
+}
+
+input PermissionsInput {
+  canView: Boolean
+  canEdit: Boolean
+  canDelete: Boolean
+  canShare: Boolean
+  canDownload: Boolean
+  canPrint: Boolean
+}
+
+# Subscriptions
+type Subscription {
+  documentUploaded(caseId: ID): Document!
+  documentUpdated(documentId: ID): Document!
+  documentProcessingStatus(documentId: ID!): ProcessingStatusUpdate!
+  documentShared(userId: ID!): DocumentShare!
+}
+
+type ProcessingStatusUpdate {
+  documentId: ID!
+  status: ProcessingStatus!
+  progress: Float
+  message: String
+  completedAt: DateTime
+}
+
+type DocumentShare {
+  document: Document!
+  sharedBy: User!
+  sharedWith: User!
+  permissions: DocumentPermissions!
+  sharedAt: DateTime!
+  message: String
+}
+
+# Custom Scalars
+scalar Upload
+scalar DateTime
+scalar JSON

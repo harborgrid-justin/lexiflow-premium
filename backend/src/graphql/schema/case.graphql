@@ -1,0 +1,540 @@
+# Case Type Definitions for LexiFlow AI Legal Suite
+
+type Case {
+  id: ID!
+  caseNumber: String!
+  title: String!
+  description: String
+  status: CaseStatus!
+  priority: CasePriority!
+  practiceArea: String!
+  jurisdiction: String
+  courtName: String
+  judgeAssigned: String
+  filingDate: DateTime
+  trialDate: DateTime
+  closeDate: DateTime
+
+  # Relationships
+  client: Client!
+  assignedAttorneys: [User!]!
+  caseTeam: [CaseTeamMember!]!
+  documents: [Document!]!
+  phases: [CasePhase!]!
+  timeline: [CaseEvent!]!
+  billing: BillingSummary
+  tasks: [Task!]!
+  parties: [Party!]!
+
+  # Metadata
+  tags: [String!]!
+  customFields: JSON
+  aiInsights: CaseAIInsights
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!
+  lastModifiedBy: User
+}
+
+enum CaseStatus {
+  NEW
+  OPEN
+  IN_PROGRESS
+  PENDING_REVIEW
+  ON_HOLD
+  SETTLED
+  CLOSED
+  ARCHIVED
+  DISMISSED
+}
+
+enum CasePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+  CRITICAL
+}
+
+type CaseTeamMember {
+  id: ID!
+  case: Case!
+  user: User!
+  role: TeamRole!
+  assignedDate: DateTime!
+  permissions: [String!]!
+}
+
+enum TeamRole {
+  LEAD_ATTORNEY
+  ASSOCIATE_ATTORNEY
+  PARALEGAL
+  LEGAL_ASSISTANT
+  EXPERT_WITNESS
+  CONSULTANT
+}
+
+type CasePhase {
+  id: ID!
+  case: Case!
+  name: String!
+  description: String
+  status: PhaseStatus!
+  startDate: DateTime
+  endDate: DateTime
+  deadlines: [Deadline!]!
+  completionPercentage: Float!
+  order: Int!
+}
+
+enum PhaseStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+  CANCELLED
+}
+
+type CaseEvent {
+  id: ID!
+  case: Case!
+  eventType: EventType!
+  title: String!
+  description: String
+  eventDate: DateTime!
+  location: String
+  participants: [String!]!
+  attachments: [Document!]!
+  createdBy: User!
+  createdAt: DateTime!
+}
+
+enum EventType {
+  FILING
+  HEARING
+  DEPOSITION
+  MEETING
+  DEADLINE
+  DISCOVERY
+  MOTION
+  TRIAL
+  SETTLEMENT
+  CORRESPONDENCE
+  NOTE
+}
+
+type Party {
+  id: ID!
+  case: Case!
+  name: String!
+  type: PartyType!
+  role: PartyRole!
+  contactInfo: ContactInfo
+  legalRepresentation: String
+  notes: String
+}
+
+enum PartyType {
+  INDIVIDUAL
+  CORPORATION
+  ORGANIZATION
+  GOVERNMENT_ENTITY
+}
+
+enum PartyRole {
+  PLAINTIFF
+  DEFENDANT
+  PETITIONER
+  RESPONDENT
+  APPELLANT
+  APPELLEE
+  WITNESS
+  THIRD_PARTY
+}
+
+type ContactInfo {
+  email: String
+  phone: String
+  address: Address
+}
+
+type Address {
+  street: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+}
+
+type Deadline {
+  id: ID!
+  title: String!
+  description: String
+  dueDate: DateTime!
+  priority: Priority!
+  status: DeadlineStatus!
+  assignedTo: [User!]!
+  completedAt: DateTime
+  completedBy: User
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum DeadlineStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+type Task {
+  id: ID!
+  title: String!
+  description: String
+  status: TaskStatus!
+  priority: Priority!
+  dueDate: DateTime
+  assignedTo: User
+  completedAt: DateTime
+  tags: [String!]!
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+type CaseAIInsights {
+  riskAssessment: RiskAssessment
+  predictedOutcome: OutcomePrediction
+  similarCases: [SimilarCase!]!
+  keyFactors: [String!]!
+  recommendations: [String!]!
+  confidenceScore: Float
+  lastAnalyzed: DateTime
+}
+
+type RiskAssessment {
+  overallRisk: String!
+  riskScore: Float!
+  factors: [RiskFactor!]!
+  mitigationStrategies: [String!]!
+}
+
+type RiskFactor {
+  category: String!
+  description: String!
+  severity: String!
+  likelihood: Float!
+}
+
+type OutcomePrediction {
+  predictedResult: String!
+  confidence: Float!
+  factors: [String!]!
+  timeline: String
+  financialImpact: FinancialImpact
+}
+
+type FinancialImpact {
+  estimatedCost: Float
+  potentialRecovery: Float
+  riskExposure: Float
+  currency: String!
+}
+
+type SimilarCase {
+  caseNumber: String!
+  title: String!
+  outcome: String!
+  similarity: Float!
+  keyLessons: [String!]!
+}
+
+type BillingSummary {
+  totalBilled: Float!
+  totalPaid: Float!
+  outstanding: Float!
+  currency: String!
+  lastInvoiceDate: DateTime
+}
+
+type Client {
+  id: ID!
+  name: String!
+  type: ClientType!
+  email: String
+  phone: String
+  address: Address
+  industry: String
+  cases: [Case!]!
+  createdAt: DateTime!
+}
+
+enum ClientType {
+  INDIVIDUAL
+  SMALL_BUSINESS
+  CORPORATION
+  GOVERNMENT
+  NON_PROFIT
+}
+
+# Queries
+type Query {
+  # Single case retrieval
+  case(id: ID!): Case
+  caseByNumber(caseNumber: String!): Case
+
+  # List queries
+  cases(
+    filter: CaseFilter
+    sort: CaseSort
+    pagination: PaginationInput
+  ): CaseConnection!
+
+  myCases(
+    status: CaseStatus
+    pagination: PaginationInput
+  ): CaseConnection!
+
+  # Search
+  searchCases(query: String!, filters: CaseFilter): [Case!]!
+
+  # Analytics
+  caseStatistics(dateRange: DateRangeInput): CaseStatistics!
+  casesByStatus: [CaseStatusCount!]!
+  casesByPriority: [CasePriorityCount!]!
+}
+
+input CaseFilter {
+  status: [CaseStatus!]
+  priority: [CasePriority!]
+  practiceArea: [String!]
+  assignedToMe: Boolean
+  clientId: ID
+  dateRange: DateRangeInput
+  tags: [String!]
+}
+
+input CaseSort {
+  field: CaseSortField!
+  order: SortOrder!
+}
+
+enum CaseSortField {
+  CASE_NUMBER
+  TITLE
+  CREATED_AT
+  UPDATED_AT
+  FILING_DATE
+  TRIAL_DATE
+  PRIORITY
+  STATUS
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+input PaginationInput {
+  page: Int = 1
+  limit: Int = 20
+  offset: Int
+}
+
+input DateRangeInput {
+  startDate: DateTime!
+  endDate: DateTime!
+}
+
+type CaseConnection {
+  edges: [CaseEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CaseEdge {
+  node: Case!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type CaseStatistics {
+  totalCases: Int!
+  activeCases: Int!
+  closedCases: Int!
+  averageResolutionTime: Float
+  casesByMonth: [MonthlyCount!]!
+  successRate: Float
+}
+
+type MonthlyCount {
+  month: String!
+  count: Int!
+}
+
+type CaseStatusCount {
+  status: CaseStatus!
+  count: Int!
+}
+
+type CasePriorityCount {
+  priority: CasePriority!
+  count: Int!
+}
+
+# Mutations
+type Mutation {
+  # Case creation and updates
+  createCase(input: CreateCaseInput!): Case!
+  updateCase(id: ID!, input: UpdateCaseInput!): Case!
+  deleteCase(id: ID!): Boolean!
+  archiveCase(id: ID!): Case!
+
+  # Case status management
+  changeCaseStatus(id: ID!, status: CaseStatus!): Case!
+  assignCase(id: ID!, userId: ID!, role: TeamRole!): Case!
+  unassignCase(id: ID!, userId: ID!): Case!
+
+  # Phase management
+  addPhase(caseId: ID!, input: CreatePhaseInput!): CasePhase!
+  updatePhase(id: ID!, input: UpdatePhaseInput!): CasePhase!
+  deletePhase(id: ID!): Boolean!
+
+  # Event management
+  addEvent(caseId: ID!, input: CreateEventInput!): CaseEvent!
+  updateEvent(id: ID!, input: UpdateEventInput!): CaseEvent!
+  deleteEvent(id: ID!): Boolean!
+
+  # Task management
+  addTask(caseId: ID!, input: CreateTaskInput!): Task!
+  updateTask(id: ID!, input: UpdateTaskInput!): Task!
+  completeTask(id: ID!): Task!
+  deleteTask(id: ID!): Boolean!
+}
+
+input CreateCaseInput {
+  caseNumber: String!
+  title: String!
+  description: String
+  practiceArea: String!
+  clientId: ID!
+  status: CaseStatus = NEW
+  priority: CasePriority = MEDIUM
+  jurisdiction: String
+  courtName: String
+  judgeAssigned: String
+  filingDate: DateTime
+  trialDate: DateTime
+  assignedAttorneys: [ID!]
+  tags: [String!]
+  customFields: JSON
+}
+
+input UpdateCaseInput {
+  title: String
+  description: String
+  status: CaseStatus
+  priority: CasePriority
+  practiceArea: String
+  jurisdiction: String
+  courtName: String
+  judgeAssigned: String
+  filingDate: DateTime
+  trialDate: DateTime
+  closeDate: DateTime
+  tags: [String!]
+  customFields: JSON
+}
+
+input CreatePhaseInput {
+  name: String!
+  description: String
+  startDate: DateTime
+  endDate: DateTime
+  order: Int!
+}
+
+input UpdatePhaseInput {
+  name: String
+  description: String
+  status: PhaseStatus
+  startDate: DateTime
+  endDate: DateTime
+  order: Int
+}
+
+input CreateEventInput {
+  eventType: EventType!
+  title: String!
+  description: String
+  eventDate: DateTime!
+  location: String
+  participants: [String!]
+}
+
+input UpdateEventInput {
+  eventType: EventType
+  title: String
+  description: String
+  eventDate: DateTime
+  location: String
+  participants: [String!]
+}
+
+input CreateTaskInput {
+  title: String!
+  description: String
+  priority: Priority = MEDIUM
+  dueDate: DateTime
+  assignedTo: ID
+  tags: [String!]
+}
+
+input UpdateTaskInput {
+  title: String
+  description: String
+  status: TaskStatus
+  priority: Priority
+  dueDate: DateTime
+  assignedTo: ID
+  tags: [String!]
+}
+
+# Subscriptions
+type Subscription {
+  caseCreated: Case!
+  caseUpdated(caseId: ID): Case!
+  caseStatusChanged(caseId: ID): CaseStatusChange!
+  newCaseEvent(caseId: ID!): CaseEvent!
+  taskAssigned(userId: ID!): Task!
+}
+
+type CaseStatusChange {
+  case: Case!
+  previousStatus: CaseStatus!
+  newStatus: CaseStatus!
+  changedBy: User!
+  changedAt: DateTime!
+}
+
+# Custom Scalars
+scalar DateTime
+scalar JSON

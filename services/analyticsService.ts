@@ -142,6 +142,98 @@ export const analyticsService = {
     if (!response.ok) throw new Error('Failed to fetch risk assessment');
     return response.json();
   },
+
+  /**
+   * Get predictive analytics for a case
+   */
+  async getPredictiveAnalytics(caseId: string) {
+    const response = await fetch(`${API_BASE_URL}/analytics/predictive/${caseId}`);
+    if (!response.ok) throw new Error('Failed to fetch predictive analytics');
+    return response.json();
+  },
+
+  /**
+   * Get resource forecasting
+   */
+  async getResourceForecast(practiceArea: string, days: number = 90) {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/resource-forecast?practiceArea=${practiceArea}&days=${days}`,
+    );
+    if (!response.ok) throw new Error('Failed to fetch resource forecast');
+    return response.json();
+  },
+
+  /**
+   * Get trend analysis
+   */
+  async getTrendAnalysis(practiceArea: string, months: number = 24) {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/trends/${practiceArea}?months=${months}`,
+    );
+    if (!response.ok) throw new Error('Failed to fetch trend analysis');
+    return response.json();
+  },
+
+  /**
+   * Get benchmarks
+   */
+  async getBenchmarks(firmId: string, practiceArea?: string) {
+    const url = practiceArea
+      ? `${API_BASE_URL}/analytics/benchmarks/${firmId}?practiceArea=${practiceArea}`
+      : `${API_BASE_URL}/analytics/benchmarks/${firmId}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch benchmarks');
+    return response.json();
+  },
+
+  /**
+   * Get executive dashboard
+   */
+  async getExecutiveDashboard(firmId: string, period: 'month' | 'quarter' | 'year' = 'month') {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/executive-dashboard/${firmId}?period=${period}`,
+    );
+    if (!response.ok) throw new Error('Failed to fetch executive dashboard');
+    return response.json();
+  },
+
+  /**
+   * Get attorney performance
+   */
+  async getAttorneyPerformance(attorneyId: string, period: 'month' | 'quarter' | 'year' = 'year') {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/attorney-performance/${attorneyId}?period=${period}`,
+    );
+    if (!response.ok) throw new Error('Failed to fetch attorney performance');
+    return response.json();
+  },
+
+  /**
+   * Get matter profitability
+   */
+  async getMatterProfitability(caseId: string) {
+    const response = await fetch(`${API_BASE_URL}/analytics/reports/matter-profitability/${caseId}`);
+    if (!response.ok) throw new Error('Failed to fetch matter profitability');
+    return response.json();
+  },
+
+  /**
+   * Get practice area report
+   */
+  async getPracticeAreaReport(practiceArea: string) {
+    const response = await fetch(`${API_BASE_URL}/analytics/reports/practice-area/${practiceArea}`);
+    if (!response.ok) throw new Error('Failed to fetch practice area report');
+    return response.json();
+  },
+
+  /**
+   * Get client analytics
+   */
+  async getClientAnalytics(clientId: string) {
+    const response = await fetch(`${API_BASE_URL}/analytics/reports/client-analytics/${clientId}`);
+    if (!response.ok) throw new Error('Failed to fetch client analytics');
+    return response.json();
+  },
 };
 
 export default analyticsService;

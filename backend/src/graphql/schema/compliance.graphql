@@ -1,0 +1,1268 @@
+# Compliance Type Definitions for LexiFlow AI Legal Suite
+
+type CompliancePolicy {
+  id: ID!
+  name: String!
+  description: String!
+  category: ComplianceCategory!
+  jurisdiction: String
+  framework: ComplianceFramework
+
+  # Requirements
+  requirements: [ComplianceRequirement!]!
+  controls: [ComplianceControl!]!
+
+  # Status
+  status: PolicyStatus!
+  effectiveDate: DateTime!
+  reviewDate: DateTime
+  expiryDate: DateTime
+
+  # Ownership
+  owner: User
+  reviewers: [User!]!
+  approvers: [User!]!
+
+  # Metadata
+  version: String!
+  tags: [String!]!
+  attachments: [Document!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  lastReviewedAt: DateTime
+}
+
+enum ComplianceCategory {
+  DATA_PRIVACY
+  SECURITY
+  REGULATORY
+  ETHICAL
+  FINANCIAL
+  OPERATIONAL
+  LEGAL
+  QUALITY
+  ENVIRONMENTAL
+  CUSTOM
+}
+
+enum ComplianceFramework {
+  GDPR
+  HIPAA
+  SOX
+  PCI_DSS
+  ISO_27001
+  SOC2
+  CCPA
+  NIST
+  ABA_MODEL_RULES
+  STATE_BAR_RULES
+  CUSTOM
+}
+
+enum PolicyStatus {
+  DRAFT
+  PENDING_REVIEW
+  UNDER_REVIEW
+  APPROVED
+  ACTIVE
+  DEPRECATED
+  ARCHIVED
+}
+
+type ComplianceRequirement {
+  id: ID!
+  policy: CompliancePolicy!
+  title: String!
+  description: String!
+  category: String!
+
+  # Implementation
+  implementationStatus: ImplementationStatus!
+  priority: Priority!
+  dueDate: DateTime
+
+  # Evidence
+  evidenceRequired: [String!]!
+  evidenceDocuments: [Document!]!
+
+  # Testing
+  testingFrequency: TestingFrequency
+  lastTestedAt: DateTime
+  nextTestDate: DateTime
+
+  # Assignments
+  assignedTo: User
+  verifiedBy: User
+  verifiedAt: DateTime
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ImplementationStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IMPLEMENTED
+  VERIFIED
+  NON_COMPLIANT
+  EXEMPT
+}
+
+enum TestingFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUALLY
+  ANNUALLY
+  AD_HOC
+}
+
+type ComplianceControl {
+  id: ID!
+  policy: CompliancePolicy!
+  controlId: String!
+  name: String!
+  description: String!
+  type: ControlType!
+
+  # Implementation
+  automationType: AutomationType!
+  implementationDetails: String
+  status: ControlStatus!
+
+  # Effectiveness
+  effectiveness: ControlEffectiveness
+  lastAssessmentDate: DateTime
+  nextAssessmentDate: DateTime
+
+  # Ownership
+  owner: User
+  reviewers: [User!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ControlType {
+  PREVENTIVE
+  DETECTIVE
+  CORRECTIVE
+  DIRECTIVE
+  COMPENSATING
+}
+
+enum AutomationType {
+  FULLY_AUTOMATED
+  SEMI_AUTOMATED
+  MANUAL
+  HYBRID
+}
+
+enum ControlStatus {
+  ACTIVE
+  INACTIVE
+  TESTING
+  FAILED
+  BYPASSED
+}
+
+enum ControlEffectiveness {
+  EFFECTIVE
+  PARTIALLY_EFFECTIVE
+  INEFFECTIVE
+  NOT_TESTED
+}
+
+type ComplianceAudit {
+  id: ID!
+  title: String!
+  description: String
+  type: AuditType!
+  scope: AuditScope!
+
+  # Policies and frameworks
+  policies: [CompliancePolicy!]!
+  frameworks: [ComplianceFramework!]!
+
+  # Schedule
+  status: AuditStatus!
+  plannedStartDate: DateTime!
+  plannedEndDate: DateTime!
+  actualStartDate: DateTime
+  actualEndDate: DateTime
+
+  # Team
+  leadAuditor: User!
+  auditors: [User!]!
+  auditees: [User!]!
+
+  # Results
+  findings: [AuditFinding!]!
+  overallScore: Float
+  complianceRate: Float
+  riskLevel: RiskLevel!
+
+  # Documentation
+  auditPlan: Document
+  auditReport: Document
+  evidenceDocuments: [Document!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  completedAt: DateTime
+}
+
+enum AuditType {
+  INTERNAL
+  EXTERNAL
+  REGULATORY
+  CERTIFICATION
+  SURVEILLANCE
+  INVESTIGATION
+}
+
+enum AuditScope {
+  ORGANIZATION_WIDE
+  DEPARTMENT
+  PROCESS
+  SYSTEM
+  COMPLIANCE_AREA
+  CUSTOM
+}
+
+enum AuditStatus {
+  PLANNED
+  IN_PROGRESS
+  FIELD_WORK_COMPLETE
+  REPORTING
+  COMPLETED
+  CANCELLED
+}
+
+type AuditFinding {
+  id: ID!
+  audit: ComplianceAudit!
+  findingType: FindingType!
+  severity: FindingSeverity!
+
+  title: String!
+  description: String!
+  requirement: ComplianceRequirement
+  control: ComplianceControl
+
+  # Evidence
+  evidence: String
+  evidenceDocuments: [Document!]!
+
+  # Remediation
+  recommendation: String!
+  remediationPlan: RemediationPlan
+  status: FindingStatus!
+
+  # Assignment
+  assignedTo: User
+  verifiedBy: User
+  dueDate: DateTime
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  resolvedAt: DateTime
+}
+
+enum FindingType {
+  NON_COMPLIANCE
+  OBSERVATION
+  BEST_PRACTICE
+  POSITIVE_FINDING
+  AREA_FOR_IMPROVEMENT
+}
+
+enum FindingSeverity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  INFORMATIONAL
+}
+
+enum FindingStatus {
+  OPEN
+  IN_REMEDIATION
+  PENDING_VERIFICATION
+  VERIFIED
+  CLOSED
+  ACCEPTED_RISK
+}
+
+type RemediationPlan {
+  id: ID!
+  finding: AuditFinding!
+  description: String!
+  steps: [RemediationStep!]!
+  owner: User!
+  dueDate: DateTime!
+  status: RemediationStatus!
+  completedAt: DateTime
+  verifiedAt: DateTime
+}
+
+enum RemediationStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  VERIFIED
+  OVERDUE
+  CANCELLED
+}
+
+type RemediationStep {
+  id: ID!
+  order: Int!
+  description: String!
+  assignedTo: User
+  dueDate: DateTime
+  status: StepStatus!
+  completedAt: DateTime
+  evidence: String
+}
+
+enum StepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+  SKIPPED
+}
+
+type RiskAssessment {
+  id: ID!
+  title: String!
+  description: String
+  category: RiskCategory!
+  scope: String
+
+  # Risk identification
+  risks: [IdentifiedRisk!]!
+
+  # Assessment
+  methodology: RiskMethodology!
+  status: AssessmentStatus!
+  assessmentDate: DateTime!
+  nextReviewDate: DateTime
+
+  # Team
+  assessor: User!
+  reviewers: [User!]!
+  approver: User
+
+  # Results
+  overallRiskLevel: RiskLevel!
+  residualRiskLevel: RiskLevel!
+  heatmap: RiskHeatmap
+
+  # Documentation
+  reportDocument: Document
+  supportingDocuments: [Document!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  approvedAt: DateTime
+}
+
+enum RiskCategory {
+  OPERATIONAL
+  FINANCIAL
+  REPUTATIONAL
+  STRATEGIC
+  COMPLIANCE
+  TECHNOLOGY
+  LEGAL
+  SECURITY
+  PRIVACY
+}
+
+enum RiskMethodology {
+  QUALITATIVE
+  QUANTITATIVE
+  SEMI_QUANTITATIVE
+  BOWTIE
+  FMEA
+  CUSTOM
+}
+
+enum AssessmentStatus {
+  DRAFT
+  IN_PROGRESS
+  PENDING_REVIEW
+  APPROVED
+  ACTIVE
+  EXPIRED
+}
+
+type IdentifiedRisk {
+  id: ID!
+  assessment: RiskAssessment!
+  riskId: String!
+  title: String!
+  description: String!
+  category: RiskCategory!
+
+  # Risk scoring
+  likelihood: LikelihoodRating!
+  impact: ImpactRating!
+  inherentRiskScore: Float!
+  inherentRiskLevel: RiskLevel!
+
+  # Current controls
+  existingControls: [ComplianceControl!]!
+  controlEffectiveness: ControlEffectiveness!
+
+  # Residual risk
+  residualLikelihood: LikelihoodRating!
+  residualImpact: ImpactRating!
+  residualRiskScore: Float!
+  residualRiskLevel: RiskLevel!
+
+  # Treatment
+  treatmentPlan: RiskTreatmentPlan
+  owner: User!
+  status: RiskStatus!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum LikelihoodRating {
+  RARE
+  UNLIKELY
+  POSSIBLE
+  LIKELY
+  ALMOST_CERTAIN
+}
+
+enum ImpactRating {
+  NEGLIGIBLE
+  MINOR
+  MODERATE
+  MAJOR
+  CATASTROPHIC
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RiskStatus {
+  IDENTIFIED
+  ASSESSED
+  TREATED
+  ACCEPTED
+  MONITORING
+  CLOSED
+}
+
+type RiskTreatmentPlan {
+  id: ID!
+  risk: IdentifiedRisk!
+  strategy: TreatmentStrategy!
+  description: String!
+  actions: [TreatmentAction!]!
+  targetResidualRisk: RiskLevel!
+  budget: Money
+  status: TreatmentStatus!
+  dueDate: DateTime
+  completedAt: DateTime
+}
+
+enum TreatmentStrategy {
+  AVOID
+  MITIGATE
+  TRANSFER
+  ACCEPT
+  MONITOR
+}
+
+enum TreatmentStatus {
+  PLANNED
+  IN_PROGRESS
+  IMPLEMENTED
+  VERIFIED
+  INEFFECTIVE
+}
+
+type TreatmentAction {
+  id: ID!
+  order: Int!
+  description: String!
+  assignedTo: User
+  dueDate: DateTime
+  status: StepStatus!
+  completedAt: DateTime
+}
+
+type RiskHeatmap {
+  data: [[RiskHeatmapCell!]!]!
+  likelihoodLabels: [String!]!
+  impactLabels: [String!]!
+}
+
+type RiskHeatmapCell {
+  likelihood: Int!
+  impact: Int!
+  count: Int!
+  riskLevel: RiskLevel!
+  risks: [IdentifiedRisk!]!
+}
+
+type ComplianceIncident {
+  id: ID!
+  title: String!
+  description: String!
+  category: IncidentCategory!
+  severity: IncidentSeverity!
+
+  # Affected areas
+  policies: [CompliancePolicy!]!
+  requirements: [ComplianceRequirement!]!
+
+  # Detection
+  detectedBy: User!
+  detectedAt: DateTime!
+  detectionMethod: DetectionMethod!
+
+  # Status
+  status: IncidentStatus!
+  priority: Priority!
+
+  # Investigation
+  investigator: User
+  investigationNotes: String
+  rootCause: String
+  contributingFactors: [String!]!
+
+  # Impact
+  impactAssessment: ImpactAssessment
+  affectedSystems: [String!]!
+  affectedData: String
+
+  # Response
+  responsePlan: IncidentResponse
+  containmentActions: [String!]!
+  remediationActions: [String!]!
+
+  # Reporting
+  reportableToRegulator: Boolean!
+  regulatoryReports: [RegulatoryReport!]!
+  notificationRequired: Boolean!
+  notificationsSent: [IncidentNotification!]!
+
+  # Timeline
+  reportedAt: DateTime
+  containedAt: DateTime
+  resolvedAt: DateTime
+  closedAt: DateTime
+
+  # Documentation
+  incidentReport: Document
+  evidenceDocuments: [Document!]!
+  lessonsLearned: String
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum IncidentCategory {
+  DATA_BREACH
+  PRIVACY_VIOLATION
+  SECURITY_INCIDENT
+  REGULATORY_VIOLATION
+  ETHICAL_BREACH
+  OPERATIONAL_FAILURE
+  POLICY_VIOLATION
+  SYSTEM_FAILURE
+}
+
+enum IncidentSeverity {
+  MINOR
+  MODERATE
+  MAJOR
+  CRITICAL
+  CATASTROPHIC
+}
+
+enum DetectionMethod {
+  AUTOMATED_MONITORING
+  USER_REPORT
+  AUDIT_FINDING
+  EXTERNAL_NOTIFICATION
+  ROUTINE_REVIEW
+  SELF_DISCLOSURE
+}
+
+enum IncidentStatus {
+  REPORTED
+  INVESTIGATING
+  CONTAINED
+  REMEDIATING
+  RESOLVED
+  CLOSED
+  ESCALATED
+}
+
+type ImpactAssessment {
+  financialImpact: Money
+  reputationalImpact: String
+  operationalImpact: String
+  legalImpact: String
+  affectedRecords: Int
+  affectedIndividuals: Int
+  estimatedRecoveryTime: Int
+}
+
+type IncidentResponse {
+  id: ID!
+  incident: ComplianceIncident!
+  responseTeam: [User!]!
+  steps: [ResponseStep!]!
+  communicationPlan: String
+  escalationCriteria: String
+  status: ResponseStatus!
+}
+
+enum ResponseStatus {
+  ACTIVATED
+  IN_PROGRESS
+  COMPLETED
+  STAND_DOWN
+}
+
+type ResponseStep {
+  id: ID!
+  order: Int!
+  action: String!
+  assignedTo: User
+  dueDate: DateTime
+  status: StepStatus!
+  completedAt: DateTime
+  outcome: String
+}
+
+type RegulatoryReport {
+  id: ID!
+  incident: ComplianceIncident!
+  regulator: String!
+  reportType: String!
+  submittedBy: User!
+  submittedAt: DateTime!
+  reference: String
+  response: String
+  followUpRequired: Boolean!
+  document: Document
+}
+
+type IncidentNotification {
+  id: ID!
+  incident: ComplianceIncident!
+  recipientType: NotificationRecipientType!
+  recipients: [String!]!
+  method: NotificationMethod!
+  sentAt: DateTime!
+  sentBy: User!
+  content: String!
+  acknowledgments: [NotificationAcknowledgment!]!
+}
+
+enum NotificationRecipientType {
+  AFFECTED_INDIVIDUALS
+  REGULATOR
+  BUSINESS_PARTNERS
+  INTERNAL_STAKEHOLDERS
+  LEGAL_COUNSEL
+  INSURANCE_PROVIDER
+  PUBLIC
+}
+
+enum NotificationMethod {
+  EMAIL
+  LETTER
+  PHONE
+  PORTAL
+  PUBLIC_NOTICE
+  PRESS_RELEASE
+}
+
+type NotificationAcknowledgment {
+  recipient: String!
+  acknowledgedAt: DateTime!
+  method: String
+}
+
+type ComplianceTraining {
+  id: ID!
+  title: String!
+  description: String!
+  category: TrainingCategory!
+  policies: [CompliancePolicy!]!
+
+  # Content
+  content: String
+  materials: [Document!]!
+  duration: Int
+  format: TrainingFormat!
+
+  # Requirements
+  required: Boolean!
+  frequency: TrainingFrequency
+  targetAudience: [UserRole!]!
+
+  # Status
+  status: TrainingStatus!
+  publishedAt: DateTime
+  expiresAt: DateTime
+
+  # Tracking
+  enrollments: [TrainingEnrollment!]!
+  completionRate: Float!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!
+}
+
+enum TrainingCategory {
+  DATA_PRIVACY
+  INFORMATION_SECURITY
+  ETHICAL_CONDUCT
+  REGULATORY_COMPLIANCE
+  POLICY_AWARENESS
+  RISK_MANAGEMENT
+  INCIDENT_RESPONSE
+}
+
+enum TrainingFormat {
+  ONLINE_MODULE
+  VIDEO
+  DOCUMENT
+  WEBINAR
+  IN_PERSON
+  HYBRID
+}
+
+enum TrainingFrequency {
+  ONCE
+  ANNUALLY
+  SEMI_ANNUALLY
+  QUARTERLY
+  AS_NEEDED
+}
+
+enum TrainingStatus {
+  DRAFT
+  PUBLISHED
+  ACTIVE
+  ARCHIVED
+}
+
+type TrainingEnrollment {
+  id: ID!
+  training: ComplianceTraining!
+  user: User!
+  status: EnrollmentStatus!
+  enrolledAt: DateTime!
+  startedAt: DateTime
+  completedAt: DateTime
+  score: Float
+  attempts: Int!
+  certificateIssued: Boolean!
+  certificate: Document
+}
+
+enum EnrollmentStatus {
+  ENROLLED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  EXPIRED
+  WAIVED
+}
+
+# Queries
+type Query {
+  # Policies
+  compliancePolicy(id: ID!): CompliancePolicy
+  compliancePolicies(
+    filter: PolicyFilter
+    pagination: PaginationInput
+  ): PolicyConnection!
+
+  # Audits
+  complianceAudit(id: ID!): ComplianceAudit
+  complianceAudits(
+    filter: AuditFilter
+    pagination: PaginationInput
+  ): AuditConnection!
+
+  # Risk assessments
+  riskAssessment(id: ID!): RiskAssessment
+  riskAssessments(
+    filter: RiskFilter
+    pagination: PaginationInput
+  ): RiskAssessmentConnection!
+
+  # Incidents
+  complianceIncident(id: ID!): ComplianceIncident
+  complianceIncidents(
+    filter: IncidentFilter
+    pagination: PaginationInput
+  ): IncidentConnection!
+
+  # Training
+  complianceTraining(id: ID!): ComplianceTraining
+  complianceTrainings(
+    category: TrainingCategory
+    status: TrainingStatus
+  ): [ComplianceTraining!]!
+
+  myTrainings(status: EnrollmentStatus): [TrainingEnrollment!]!
+
+  # Dashboards
+  complianceDashboard(dateRange: DateRangeInput): ComplianceDashboard!
+  complianceScore: ComplianceScore!
+
+  # Reports
+  complianceReport(
+    type: ComplianceReportType!
+    dateRange: DateRangeInput!
+  ): ComplianceReport!
+}
+
+input PolicyFilter {
+  category: [ComplianceCategory!]
+  framework: [ComplianceFramework!]
+  status: [PolicyStatus!]
+  ownerId: ID
+}
+
+input AuditFilter {
+  type: [AuditType!]
+  status: [AuditStatus!]
+  dateRange: DateRangeInput
+  leadAuditorId: ID
+}
+
+input RiskFilter {
+  category: [RiskCategory!]
+  riskLevel: [RiskLevel!]
+  status: [RiskStatus!]
+  ownerId: ID
+}
+
+input IncidentFilter {
+  category: [IncidentCategory!]
+  severity: [IncidentSeverity!]
+  status: [IncidentStatus!]
+  dateRange: DateRangeInput
+}
+
+type PolicyConnection {
+  edges: [PolicyEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PolicyEdge {
+  node: CompliancePolicy!
+  cursor: String!
+}
+
+type AuditConnection {
+  edges: [AuditEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type AuditEdge {
+  node: ComplianceAudit!
+  cursor: String!
+}
+
+type RiskAssessmentConnection {
+  edges: [RiskAssessmentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type RiskAssessmentEdge {
+  node: RiskAssessment!
+  cursor: String!
+}
+
+type IncidentConnection {
+  edges: [IncidentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type IncidentEdge {
+  node: ComplianceIncident!
+  cursor: String!
+}
+
+type ComplianceDashboard {
+  overview: ComplianceOverview!
+  policyCompliance: PolicyComplianceMetrics!
+  riskMetrics: RiskMetrics!
+  auditMetrics: AuditMetrics!
+  incidentMetrics: IncidentMetrics!
+  trainingMetrics: TrainingMetrics!
+  recentActivity: [Activity!]!
+  upcomingDeadlines: [Deadline!]!
+}
+
+type ComplianceOverview {
+  overallScore: Float!
+  activePolicies: Int!
+  activeAudits: Int!
+  openFindings: Int!
+  activeRisks: Int!
+  openIncidents: Int!
+  complianceRate: Float!
+}
+
+type PolicyComplianceMetrics {
+  totalPolicies: Int!
+  compliantRequirements: Int!
+  nonCompliantRequirements: Int!
+  complianceRate: Float!
+  byCategory: [CategoryCompliance!]!
+}
+
+type CategoryCompliance {
+  category: ComplianceCategory!
+  compliant: Int!
+  nonCompliant: Int!
+  rate: Float!
+}
+
+type RiskMetrics {
+  totalRisks: Int!
+  byLevel: [RiskLevelCount!]!
+  byCategory: [RiskCategoryCount!]!
+  trendsOverTime: [RiskTrendPoint!]!
+}
+
+type RiskLevelCount {
+  level: RiskLevel!
+  count: Int!
+}
+
+type RiskCategoryCount {
+  category: RiskCategory!
+  count: Int!
+}
+
+type RiskTrendPoint {
+  date: DateTime!
+  criticalCount: Int!
+  highCount: Int!
+  mediumCount: Int!
+  lowCount: Int!
+}
+
+type AuditMetrics {
+  totalAudits: Int!
+  completedAudits: Int!
+  averageComplianceRate: Float!
+  openFindings: Int!
+  closedFindings: Int!
+}
+
+type IncidentMetrics {
+  totalIncidents: Int!
+  openIncidents: Int!
+  resolvedIncidents: Int!
+  averageResolutionTime: Float!
+  bySeverity: [SeverityCount!]!
+  byCategory: [CategoryCount!]!
+}
+
+type SeverityCount {
+  severity: IncidentSeverity!
+  count: Int!
+}
+
+type CategoryCount {
+  category: String!
+  count: Int!
+}
+
+type TrainingMetrics {
+  totalTrainings: Int!
+  requiredTrainings: Int!
+  overallCompletionRate: Float!
+  overdueTrainings: Int!
+}
+
+type ComplianceScore {
+  overall: Float!
+  policyCompliance: Float!
+  riskManagement: Float!
+  auditReadiness: Float!
+  incidentResponse: Float!
+  trainingCompliance: Float!
+  trend: TrendDirection!
+  lastCalculated: DateTime!
+}
+
+type ComplianceReport {
+  id: ID!
+  type: ComplianceReportType!
+  dateRange: DateRange!
+  data: JSON!
+  summary: String!
+  recommendations: [String!]!
+  generatedAt: DateTime!
+  generatedBy: User!
+}
+
+enum ComplianceReportType {
+  POLICY_COMPLIANCE
+  AUDIT_SUMMARY
+  RISK_REGISTER
+  INCIDENT_SUMMARY
+  TRAINING_COMPLETION
+  REGULATORY_SUBMISSION
+  EXECUTIVE_SUMMARY
+  DETAILED_ASSESSMENT
+}
+
+# Mutations
+type Mutation {
+  # Policies
+  createCompliancePolicy(input: CreatePolicyInput!): CompliancePolicy!
+  updateCompliancePolicy(id: ID!, input: UpdatePolicyInput!): CompliancePolicy!
+  deleteCompliancePolicy(id: ID!): Boolean!
+  approvePolicy(id: ID!): CompliancePolicy!
+
+  # Requirements
+  addRequirement(policyId: ID!, input: RequirementInput!): ComplianceRequirement!
+  updateRequirement(id: ID!, input: RequirementInput!): ComplianceRequirement!
+  verifyRequirement(id: ID!): ComplianceRequirement!
+
+  # Controls
+  addControl(policyId: ID!, input: ControlInput!): ComplianceControl!
+  updateControl(id: ID!, input: ControlInput!): ComplianceControl!
+  assessControl(id: ID!, effectiveness: ControlEffectiveness!): ComplianceControl!
+
+  # Audits
+  createAudit(input: CreateAuditInput!): ComplianceAudit!
+  updateAudit(id: ID!, input: UpdateAuditInput!): ComplianceAudit!
+  completeAudit(id: ID!): ComplianceAudit!
+
+  # Findings
+  createFinding(auditId: ID!, input: CreateFindingInput!): AuditFinding!
+  updateFinding(id: ID!, input: UpdateFindingInput!): AuditFinding!
+  resolveFinding(id: ID!, resolution: String!): AuditFinding!
+
+  # Risk assessments
+  createRiskAssessment(input: CreateRiskAssessmentInput!): RiskAssessment!
+  updateRiskAssessment(id: ID!, input: UpdateRiskAssessmentInput!): RiskAssessment!
+  approveRiskAssessment(id: ID!): RiskAssessment!
+
+  # Risks
+  addRisk(assessmentId: ID!, input: AddRiskInput!): IdentifiedRisk!
+  updateRisk(id: ID!, input: UpdateRiskInput!): IdentifiedRisk!
+  createTreatmentPlan(riskId: ID!, input: TreatmentPlanInput!): RiskTreatmentPlan!
+
+  # Incidents
+  reportIncident(input: ReportIncidentInput!): ComplianceIncident!
+  updateIncident(id: ID!, input: UpdateIncidentInput!): ComplianceIncident!
+  closeIncident(id: ID!, summary: String!): ComplianceIncident!
+
+  # Training
+  createTraining(input: CreateTrainingInput!): ComplianceTraining!
+  updateTraining(id: ID!, input: UpdateTrainingInput!): ComplianceTraining!
+  publishTraining(id: ID!): ComplianceTraining!
+  enrollInTraining(trainingId: ID!): TrainingEnrollment!
+  completeTraining(enrollmentId: ID!, score: Float): TrainingEnrollment!
+}
+
+input CreatePolicyInput {
+  name: String!
+  description: String!
+  category: ComplianceCategory!
+  framework: ComplianceFramework
+  jurisdiction: String
+  effectiveDate: DateTime!
+  reviewDate: DateTime
+  ownerId: ID
+  tags: [String!]
+}
+
+input UpdatePolicyInput {
+  name: String
+  description: String
+  status: PolicyStatus
+  reviewDate: DateTime
+  expiryDate: DateTime
+}
+
+input RequirementInput {
+  title: String!
+  description: String!
+  category: String!
+  priority: Priority!
+  dueDate: DateTime
+  testingFrequency: TestingFrequency
+}
+
+input ControlInput {
+  controlId: String!
+  name: String!
+  description: String!
+  type: ControlType!
+  automationType: AutomationType!
+  implementationDetails: String
+}
+
+input CreateAuditInput {
+  title: String!
+  description: String
+  type: AuditType!
+  scope: AuditScope!
+  policyIds: [ID!]!
+  frameworks: [ComplianceFramework!]
+  plannedStartDate: DateTime!
+  plannedEndDate: DateTime!
+  leadAuditorId: ID!
+  auditorIds: [ID!]
+  auditeeIds: [ID!]
+}
+
+input UpdateAuditInput {
+  title: String
+  description: String
+  status: AuditStatus
+  actualStartDate: DateTime
+  actualEndDate: DateTime
+}
+
+input CreateFindingInput {
+  findingType: FindingType!
+  severity: FindingSeverity!
+  title: String!
+  description: String!
+  requirementId: ID
+  recommendation: String!
+  assignedToId: ID
+  dueDate: DateTime
+}
+
+input UpdateFindingInput {
+  status: FindingStatus
+  recommendation: String
+  dueDate: DateTime
+}
+
+input CreateRiskAssessmentInput {
+  title: String!
+  description: String
+  category: RiskCategory!
+  scope: String
+  methodology: RiskMethodology!
+  assessmentDate: DateTime!
+  nextReviewDate: DateTime
+}
+
+input UpdateRiskAssessmentInput {
+  title: String
+  description: String
+  status: AssessmentStatus
+  nextReviewDate: DateTime
+}
+
+input AddRiskInput {
+  riskId: String!
+  title: String!
+  description: String!
+  category: RiskCategory!
+  likelihood: LikelihoodRating!
+  impact: ImpactRating!
+  ownerId: ID!
+}
+
+input UpdateRiskInput {
+  title: String
+  description: String
+  likelihood: LikelihoodRating
+  impact: ImpactRating
+  status: RiskStatus
+}
+
+input TreatmentPlanInput {
+  strategy: TreatmentStrategy!
+  description: String!
+  targetResidualRisk: RiskLevel!
+  budget: Float
+  dueDate: DateTime
+}
+
+input ReportIncidentInput {
+  title: String!
+  description: String!
+  category: IncidentCategory!
+  severity: IncidentSeverity!
+  detectedAt: DateTime!
+  detectionMethod: DetectionMethod!
+  policyIds: [ID!]
+  reportableToRegulator: Boolean!
+  notificationRequired: Boolean!
+}
+
+input UpdateIncidentInput {
+  status: IncidentStatus
+  priority: Priority
+  investigationNotes: String
+  rootCause: String
+  containmentActions: [String!]
+  remediationActions: [String!]
+}
+
+input CreateTrainingInput {
+  title: String!
+  description: String!
+  category: TrainingCategory!
+  policyIds: [ID!]!
+  content: String
+  duration: Int
+  format: TrainingFormat!
+  required: Boolean!
+  frequency: TrainingFrequency
+  targetAudience: [UserRole!]!
+}
+
+input UpdateTrainingInput {
+  title: String
+  description: String
+  content: String
+  duration: Int
+  status: TrainingStatus
+}
+
+# Subscriptions
+type Subscription {
+  incidentReported: ComplianceIncident!
+  findingCreated(auditId: ID): AuditFinding!
+  riskLevelChanged: IdentifiedRisk!
+  trainingDue(userId: ID!): ComplianceTraining!
+  complianceAlerts: Alert!
+}
+
+# Custom Scalars
+scalar DateTime
+scalar JSON

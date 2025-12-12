@@ -325,6 +325,206 @@ export const RISK_ASSESSMENT_QUERY = gql`
   }
 `;
 
+export const ML_SIMILAR_CASES_QUERY = gql`
+  query GetSimilarCases($caseId: ID!, $limit: Int, $minSimilarity: Float) {
+    similarCases(caseId: $caseId, limit: $limit, minSimilarity: $minSimilarity) {
+      caseId
+      caseNumber
+      title
+      similarityScore
+      matchingFactors {
+        factor
+        score
+        weight
+      }
+      outcome
+      relevantInsights
+      matchBreakdown {
+        metadataMatch
+        textSimilarity
+        contextMatch
+        outcomePattern
+      }
+    }
+  }
+`;
+
+export const ML_SENTIMENT_ANALYSIS_QUERY = gql`
+  query GetSentimentAnalysis($caseId: ID!, $entityType: String!) {
+    sentimentAnalysis(caseId: $caseId, entityType: $entityType) {
+      overallSentiment
+      sentimentScore
+      confidence
+      analysis {
+        positiveIndicators
+        negativeIndicators
+        neutralIndicators
+      }
+      timeline {
+        date
+        documentName
+        sentimentScore
+        sentiment
+      }
+      trend
+    }
+  }
+`;
+
+export const ML_RISK_SCORE_QUERY = gql`
+  query GetRiskScore($caseId: ID!) {
+    riskScore(caseId: $caseId) {
+      overallRiskScore
+      riskLevel
+      riskCategories {
+        litigationRisk {
+          score
+          level
+          factors
+        }
+        financialRisk {
+          score
+          level
+          factors
+        }
+        reputationalRisk {
+          score
+          level
+          factors
+        }
+        timelineRisk {
+          score
+          level
+          factors
+        }
+        complianceRisk {
+          score
+          level
+          factors
+        }
+      }
+      probabilisticOutcomes {
+        bestCase {
+          probability
+          description
+        }
+        worstCase {
+          probability
+          description
+        }
+        expectedCase {
+          probability
+          description
+        }
+      }
+      mitigationStrategies {
+        risk
+        strategy
+        priority
+        estimatedImpact
+      }
+    }
+  }
+`;
+
+export const ML_SETTLEMENT_RECOMMENDATION_QUERY = gql`
+  query GetSettlementRecommendation($caseId: ID!) {
+    settlementRecommendation(caseId: $caseId) {
+      recommendedAmount
+      range {
+        minimum
+        maximum
+        confidence
+      }
+      percentiles {
+        p25
+        p50
+        p75
+      }
+      factors {
+        factor
+        contribution
+        weight
+      }
+      comparables {
+        caseId
+        similarity
+        settlementAmount
+        outcome
+      }
+      timeline {
+        optimalTimingDays
+        currentLeverage
+      }
+      negotiationStrategy
+    }
+  }
+`;
+
+export const EXECUTIVE_DASHBOARD_QUERY = gql`
+  query GetExecutiveDashboard($firmId: ID!, $period: String!) {
+    executiveDashboard(firmId: $firmId, period: $period) {
+      summary {
+        totalRevenue
+        revenueGrowth
+        profitMargin
+        activeCases
+        caseGrowth
+        clientRetention
+      }
+      financialMetrics {
+        revenue {
+          current
+          previous
+          growth
+          target
+          performance
+        }
+        collections {
+          collected
+          outstanding
+          realizationRate
+          daysOutstanding
+        }
+        profitability {
+          grossProfit
+          netProfit
+          marginPercent
+          ebitda
+        }
+      }
+      operationalMetrics {
+        caseload {
+          active
+          opened
+          closed
+          winRate
+        }
+        productivity {
+          billableHoursPerAttorney
+          utilizationRate
+          revenuePerAttorney
+          casesPerAttorney
+        }
+      }
+      trends {
+        revenue {
+          period
+          value
+        }
+        caseVolume {
+          period
+          value
+        }
+        profitMargin {
+          period
+          value
+        }
+      }
+    }
+  }
+`;
+
 export const analyticsQueries = {
   CASE_METRICS_QUERY,
   CASE_SPECIFIC_METRICS_QUERY,
@@ -334,6 +534,11 @@ export const analyticsQueries = {
   DISCOVERY_ANALYTICS_QUERY,
   DASHBOARD_QUERY,
   RISK_ASSESSMENT_QUERY,
+  ML_SIMILAR_CASES_QUERY,
+  ML_SENTIMENT_ANALYSIS_QUERY,
+  ML_RISK_SCORE_QUERY,
+  ML_SETTLEMENT_RECOMMENDATION_QUERY,
+  EXECUTIVE_DASHBOARD_QUERY,
 };
 
 export default analyticsQueries;

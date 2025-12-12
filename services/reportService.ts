@@ -121,6 +121,77 @@ export const reportService = {
     if (!response.ok) throw new Error('Failed to cancel scheduled report');
     return response.json();
   },
+
+  /**
+   * Generate executive dashboard report
+   */
+  async generateExecutiveDashboard(firmId: string, period: 'month' | 'quarter' | 'year' = 'month') {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/executive-dashboard/${firmId}?period=${period}`,
+    );
+    if (!response.ok) throw new Error('Failed to generate executive dashboard');
+    return response.json();
+  },
+
+  /**
+   * Generate attorney performance report
+   */
+  async generateAttorneyPerformance(attorneyId: string, period: 'month' | 'quarter' | 'year' = 'year') {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/attorney-performance/${attorneyId}?period=${period}`,
+    );
+    if (!response.ok) throw new Error('Failed to generate attorney performance report');
+    return response.json();
+  },
+
+  /**
+   * Generate matter profitability report
+   */
+  async generateMatterProfitability(caseId: string) {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/matter-profitability/${caseId}`,
+    );
+    if (!response.ok) throw new Error('Failed to generate matter profitability report');
+    return response.json();
+  },
+
+  /**
+   * Generate practice area report
+   */
+  async generatePracticeAreaReport(practiceArea: string) {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/practice-area/${practiceArea}`,
+    );
+    if (!response.ok) throw new Error('Failed to generate practice area report');
+    return response.json();
+  },
+
+  /**
+   * Generate client analytics report
+   */
+  async generateClientAnalytics(clientId: string) {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/client-analytics/${clientId}`,
+    );
+    if (!response.ok) throw new Error('Failed to generate client analytics report');
+    return response.json();
+  },
+
+  /**
+   * Export analytics report to file
+   */
+  async exportAnalyticsReport(
+    reportType: string,
+    reportId: string,
+    format: 'pdf' | 'excel' | 'csv',
+  ) {
+    const response = await fetch(
+      `${API_BASE_URL}/analytics/reports/export/${reportType}/${reportId}?format=${format}`,
+    );
+    if (!response.ok) throw new Error('Failed to export analytics report');
+    const blob = await response.blob();
+    return blob;
+  },
 };
 
 export default reportService;

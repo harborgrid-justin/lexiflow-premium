@@ -1,0 +1,935 @@
+# User Type Definitions for LexiFlow AI Legal Suite
+
+type User {
+  id: ID!
+  email: String!
+  username: String!
+  firstName: String!
+  lastName: String!
+  fullName: String!
+  displayName: String!
+
+  # Profile
+  profile: UserProfile!
+  avatar: String
+  title: String
+  department: String
+  practiceAreas: [String!]!
+  barNumber: String
+  jurisdictions: [Jurisdiction!]!
+
+  # Role and permissions
+  role: UserRole!
+  permissions: [Permission!]!
+  customPermissions: JSON
+
+  # Authentication
+  emailVerified: Boolean!
+  twoFactorEnabled: Boolean!
+  lastLoginAt: DateTime
+  lastActiveAt: DateTime
+
+  # Status
+  status: UserStatus!
+  isActive: Boolean!
+  isSuspended: Boolean!
+  suspendedAt: DateTime
+  suspendedReason: String
+
+  # Relationships
+  organization: Organization
+  teams: [Team!]!
+  assignedCases: [Case!]!
+  createdCases: [Case!]!
+
+  # Activity
+  billingRate: BillingRate
+  timeEntries: [TimeEntry!]!
+  expenses: [Expense!]!
+
+  # Preferences
+  preferences: UserPreferences!
+  notifications: NotificationSettings!
+
+  # Metadata
+  metadata: JSON
+  tags: [String!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  lastPasswordChange: DateTime
+  passwordExpiresAt: DateTime
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  PARTNER
+  SENIOR_ATTORNEY
+  ATTORNEY
+  ASSOCIATE
+  PARALEGAL
+  LEGAL_ASSISTANT
+  BILLING_SPECIALIST
+  CLIENT
+  EXTERNAL_COUNSEL
+  GUEST
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  SUSPENDED
+  ARCHIVED
+}
+
+type UserProfile {
+  bio: String
+  phone: String
+  mobile: String
+  officePhone: String
+  extension: String
+  fax: String
+  address: Address
+  timezone: String!
+  locale: String!
+  dateFormat: String!
+  timeFormat: String!
+  profilePicture: String
+  signature: String
+  socialLinks: SocialLinks
+  education: [Education!]!
+  certifications: [Certification!]!
+  languages: [Language!]!
+}
+
+type Address {
+  street: String
+  suite: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+  formatted: String
+}
+
+type SocialLinks {
+  linkedin: String
+  twitter: String
+  website: String
+  blog: String
+}
+
+type Education {
+  institution: String!
+  degree: String!
+  field: String
+  graduationYear: Int
+  honors: String
+}
+
+type Certification {
+  name: String!
+  issuer: String!
+  issueDate: DateTime
+  expiryDate: DateTime
+  credentialId: String
+  verified: Boolean!
+}
+
+type Language {
+  code: String!
+  name: String!
+  proficiency: LanguageProficiency!
+}
+
+enum LanguageProficiency {
+  NATIVE
+  FLUENT
+  PROFESSIONAL
+  INTERMEDIATE
+  BASIC
+}
+
+type Jurisdiction {
+  id: ID!
+  state: String!
+  country: String!
+  courtType: String
+  admissionDate: DateTime
+  barNumber: String
+  status: JurisdictionStatus!
+}
+
+enum JurisdictionStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  RETIRED
+}
+
+type Permission {
+  id: ID!
+  name: String!
+  resource: String!
+  action: PermissionAction!
+  description: String
+}
+
+enum PermissionAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  APPROVE
+  MANAGE
+  ADMIN
+}
+
+type Team {
+  id: ID!
+  name: String!
+  description: String
+  type: TeamType!
+  lead: User
+  members: [TeamMember!]!
+  cases: [Case!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum TeamType {
+  PRACTICE_GROUP
+  CASE_TEAM
+  DEPARTMENT
+  PROJECT_TEAM
+  COMMITTEE
+}
+
+type TeamMember {
+  user: User!
+  team: Team!
+  role: TeamMemberRole!
+  joinedAt: DateTime!
+}
+
+enum TeamMemberRole {
+  LEAD
+  MEMBER
+  COLLABORATOR
+  OBSERVER
+}
+
+type Organization {
+  id: ID!
+  name: String!
+  displayName: String
+  type: OrganizationType!
+  industry: String
+  website: String
+  phone: String
+  email: String
+  address: Address
+  logo: String
+
+  # Settings
+  settings: OrganizationSettings!
+  subscription: Subscription
+
+  # Relationships
+  users: [User!]!
+  teams: [Team!]!
+  clients: [Client!]!
+
+  # Metadata
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum OrganizationType {
+  LAW_FIRM
+  CORPORATE_LEGAL
+  SOLO_PRACTICE
+  GOVERNMENT
+  NON_PROFIT
+  IN_HOUSE
+}
+
+type OrganizationSettings {
+  billingEnabled: Boolean!
+  timeTrackingEnabled: Boolean!
+  documentManagementEnabled: Boolean!
+  aiAnalysisEnabled: Boolean!
+  complianceTrackingEnabled: Boolean!
+
+  # Customization
+  brandColor: String
+  theme: String
+  customDomain: String
+
+  # Security
+  enforceStrongPasswords: Boolean!
+  requireTwoFactor: Boolean!
+  sessionTimeout: Int!
+  ipWhitelist: [String!]!
+
+  # Features
+  enabledModules: [String!]!
+  integrations: JSON
+}
+
+type Subscription {
+  id: ID!
+  plan: SubscriptionPlan!
+  status: SubscriptionStatus!
+
+  # Limits
+  userLimit: Int
+  storageLimit: Int
+  aiCreditsLimit: Int
+
+  # Usage
+  currentUsers: Int!
+  currentStorage: Int!
+  currentAICredits: Int!
+
+  # Billing
+  billingCycle: BillingCycle!
+  amount: Money!
+  nextBillingDate: DateTime!
+
+  # Dates
+  startDate: DateTime!
+  endDate: DateTime
+  trialEndsAt: DateTime
+  cancelledAt: DateTime
+}
+
+enum SubscriptionPlan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+  CUSTOM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIAL
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+type UserPreferences {
+  theme: Theme!
+  language: String!
+  timezone: String!
+  dateFormat: String!
+  timeFormat: String!
+
+  # Dashboard
+  defaultDashboard: String
+  dashboardWidgets: JSON
+
+  # Email preferences
+  emailDigest: EmailDigestFrequency!
+  emailNotifications: Boolean!
+
+  # Display
+  density: DisplayDensity!
+  sidebarCollapsed: Boolean!
+
+  # Workflow
+  defaultView: String
+  itemsPerPage: Int!
+  autoSaveInterval: Int!
+
+  # Privacy
+  profileVisibility: ProfileVisibility!
+  showOnlineStatus: Boolean!
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  AUTO
+  HIGH_CONTRAST
+}
+
+enum EmailDigestFrequency {
+  REALTIME
+  HOURLY
+  DAILY
+  WEEKLY
+  NEVER
+}
+
+enum DisplayDensity {
+  COMFORTABLE
+  COMPACT
+  SPACIOUS
+}
+
+enum ProfileVisibility {
+  PUBLIC
+  ORGANIZATION
+  TEAM
+  PRIVATE
+}
+
+type NotificationSettings {
+  email: EmailNotificationSettings!
+  push: PushNotificationSettings!
+  inApp: InAppNotificationSettings!
+}
+
+type EmailNotificationSettings {
+  enabled: Boolean!
+  caseAssignments: Boolean!
+  taskAssignments: Boolean!
+  deadlines: Boolean!
+  mentions: Boolean!
+  documentShares: Boolean!
+  billingAlerts: Boolean!
+  systemUpdates: Boolean!
+}
+
+type PushNotificationSettings {
+  enabled: Boolean!
+  urgentOnly: Boolean!
+  quietHours: QuietHours
+}
+
+type QuietHours {
+  enabled: Boolean!
+  startTime: String!
+  endTime: String!
+  timezone: String!
+}
+
+type InAppNotificationSettings {
+  enabled: Boolean!
+  showBadges: Boolean!
+  soundEnabled: Boolean!
+}
+
+type Notification {
+  id: ID!
+  recipient: User!
+  type: NotificationType!
+  title: String!
+  message: String!
+  link: String
+  data: JSON
+
+  read: Boolean!
+  readAt: DateTime
+
+  priority: NotificationPriority!
+  category: NotificationCategory!
+
+  createdAt: DateTime!
+  expiresAt: DateTime
+}
+
+enum NotificationType {
+  CASE_ASSIGNED
+  TASK_ASSIGNED
+  DEADLINE_REMINDER
+  MENTION
+  COMMENT
+  DOCUMENT_SHARED
+  APPROVAL_REQUEST
+  APPROVAL_COMPLETED
+  INVOICE_CREATED
+  PAYMENT_RECEIVED
+  SYSTEM_ALERT
+  MESSAGE
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum NotificationCategory {
+  CASE
+  TASK
+  DOCUMENT
+  BILLING
+  SYSTEM
+  COMMUNICATION
+}
+
+type Activity {
+  id: ID!
+  user: User!
+  action: ActivityAction!
+  entity: String!
+  entityId: ID!
+  description: String!
+  metadata: JSON
+  ipAddress: String
+  userAgent: String
+  createdAt: DateTime!
+}
+
+enum ActivityAction {
+  CREATED
+  UPDATED
+  DELETED
+  VIEWED
+  DOWNLOADED
+  SHARED
+  APPROVED
+  REJECTED
+  ARCHIVED
+  RESTORED
+  EXPORTED
+  IMPORTED
+}
+
+type Session {
+  id: ID!
+  user: User!
+  token: String!
+  ipAddress: String!
+  userAgent: String!
+  location: String
+  device: DeviceInfo
+  lastActivity: DateTime!
+  expiresAt: DateTime!
+  createdAt: DateTime!
+}
+
+type DeviceInfo {
+  type: DeviceType!
+  os: String
+  browser: String
+  fingerprint: String
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  OTHER
+}
+
+# Queries
+type Query {
+  # Current user
+  me: User!
+  myProfile: UserProfile!
+  myNotifications(
+    filter: NotificationFilter
+    pagination: PaginationInput
+  ): NotificationConnection!
+  myActivity(pagination: PaginationInput): ActivityConnection!
+  mySessions: [Session!]!
+
+  # User management
+  user(id: ID!): User
+  userByEmail(email: String!): User
+  users(
+    filter: UserFilter
+    sort: UserSort
+    pagination: PaginationInput
+  ): UserConnection!
+
+  # Search
+  searchUsers(query: String!, filters: UserFilter): [User!]!
+
+  # Organizations
+  organization(id: ID!): Organization
+  myOrganization: Organization
+
+  # Teams
+  team(id: ID!): Team
+  teams(organizationId: ID): [Team!]!
+  myTeams: [Team!]!
+
+  # Permissions
+  myPermissions: [Permission!]!
+  checkPermission(resource: String!, action: PermissionAction!): Boolean!
+
+  # Analytics
+  userAnalytics(userId: ID!, dateRange: DateRangeInput): UserAnalytics!
+  teamAnalytics(teamId: ID!, dateRange: DateRangeInput): TeamAnalytics!
+}
+
+input UserFilter {
+  role: [UserRole!]
+  status: [UserStatus!]
+  department: [String!]
+  practiceArea: [String!]
+  organizationId: ID
+  teamId: ID
+  search: String
+}
+
+input UserSort {
+  field: UserSortField!
+  order: SortOrder!
+}
+
+enum UserSortField {
+  FIRST_NAME
+  LAST_NAME
+  EMAIL
+  CREATED_AT
+  LAST_LOGIN_AT
+  ROLE
+}
+
+input NotificationFilter {
+  read: Boolean
+  type: [NotificationType!]
+  category: [NotificationCategory!]
+  priority: [NotificationPriority!]
+}
+
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  unreadCount: Int!
+}
+
+type NotificationEdge {
+  node: Notification!
+  cursor: String!
+}
+
+type ActivityConnection {
+  edges: [ActivityEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ActivityEdge {
+  node: Activity!
+  cursor: String!
+}
+
+type UserAnalytics {
+  user: User!
+  timeframe: DateRangeInput!
+
+  # Productivity
+  totalHours: Float!
+  billableHours: Float!
+  utilizationRate: Float!
+
+  # Cases
+  activeCases: Int!
+  completedCases: Int!
+  casesByStatus: [CaseStatusCount!]!
+
+  # Revenue
+  totalRevenue: Money!
+  realizationRate: Float!
+
+  # Activity
+  documentsCreated: Int!
+  tasksCompleted: Int!
+  activityTimeline: [TimeSeriesPoint!]!
+}
+
+type TeamAnalytics {
+  team: Team!
+  timeframe: DateRangeInput!
+
+  memberCount: Int!
+  activeCases: Int!
+  completedCases: Int!
+
+  totalHours: Float!
+  totalRevenue: Money!
+
+  topPerformers: [User!]!
+  caseDistribution: [CaseDistribution!]!
+}
+
+type CaseDistribution {
+  user: User!
+  caseCount: Int!
+  percentage: Float!
+}
+
+# Mutations
+type Mutation {
+  # User management
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: ID!, input: UpdateUserInput!): User!
+  deleteUser(id: ID!): Boolean!
+
+  # Profile
+  updateMyProfile(input: UpdateProfileInput!): User!
+  updateAvatar(file: Upload!): User!
+  changePassword(currentPassword: String!, newPassword: String!): Boolean!
+
+  # Preferences
+  updatePreferences(input: UpdatePreferencesInput!): UserPreferences!
+  updateNotificationSettings(input: UpdateNotificationSettingsInput!): NotificationSettings!
+
+  # Two-factor authentication
+  enableTwoFactor: TwoFactorSetup!
+  disableTwoFactor(code: String!): Boolean!
+  verifyTwoFactor(code: String!): Boolean!
+
+  # Notifications
+  markNotificationRead(id: ID!): Notification!
+  markAllNotificationsRead: Int!
+  deleteNotification(id: ID!): Boolean!
+
+  # Sessions
+  revokeSession(sessionId: ID!): Boolean!
+  revokeAllSessions: Boolean!
+
+  # Teams
+  createTeam(input: CreateTeamInput!): Team!
+  updateTeam(id: ID!, input: UpdateTeamInput!): Team!
+  deleteTeam(id: ID!): Boolean!
+  addTeamMember(teamId: ID!, userId: ID!, role: TeamMemberRole!): Team!
+  removeTeamMember(teamId: ID!, userId: ID!): Team!
+
+  # Organization
+  updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization!
+  updateOrganizationSettings(input: UpdateOrganizationSettingsInput!): OrganizationSettings!
+
+  # User status
+  suspendUser(id: ID!, reason: String!): User!
+  unsuspendUser(id: ID!): User!
+  activateUser(id: ID!): User!
+  deactivateUser(id: ID!): User!
+}
+
+input CreateUserInput {
+  email: String!
+  username: String
+  firstName: String!
+  lastName: String!
+  title: String
+  role: UserRole!
+  department: String
+  practiceAreas: [String!]
+  barNumber: String
+  organizationId: ID
+  sendInvitation: Boolean = true
+}
+
+input UpdateUserInput {
+  email: String
+  username: String
+  firstName: String
+  lastName: String
+  title: String
+  role: UserRole
+  department: String
+  practiceAreas: [String!]
+  barNumber: String
+  status: UserStatus
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  title: String
+  bio: String
+  phone: String
+  mobile: String
+  officePhone: String
+  extension: String
+  address: AddressInput
+  timezone: String
+  locale: String
+  socialLinks: SocialLinksInput
+  education: [EducationInput!]
+  certifications: [CertificationInput!]
+  languages: [LanguageInput!]
+}
+
+input AddressInput {
+  street: String
+  suite: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+}
+
+input SocialLinksInput {
+  linkedin: String
+  twitter: String
+  website: String
+  blog: String
+}
+
+input EducationInput {
+  institution: String!
+  degree: String!
+  field: String
+  graduationYear: Int
+  honors: String
+}
+
+input CertificationInput {
+  name: String!
+  issuer: String!
+  issueDate: DateTime
+  expiryDate: DateTime
+  credentialId: String
+}
+
+input LanguageInput {
+  code: String!
+  name: String!
+  proficiency: LanguageProficiency!
+}
+
+input UpdatePreferencesInput {
+  theme: Theme
+  language: String
+  timezone: String
+  dateFormat: String
+  timeFormat: String
+  emailDigest: EmailDigestFrequency
+  emailNotifications: Boolean
+  density: DisplayDensity
+  sidebarCollapsed: Boolean
+  defaultView: String
+  itemsPerPage: Int
+  autoSaveInterval: Int
+  profileVisibility: ProfileVisibility
+  showOnlineStatus: Boolean
+}
+
+input UpdateNotificationSettingsInput {
+  email: EmailNotificationSettingsInput
+  push: PushNotificationSettingsInput
+  inApp: InAppNotificationSettingsInput
+}
+
+input EmailNotificationSettingsInput {
+  enabled: Boolean
+  caseAssignments: Boolean
+  taskAssignments: Boolean
+  deadlines: Boolean
+  mentions: Boolean
+  documentShares: Boolean
+  billingAlerts: Boolean
+  systemUpdates: Boolean
+}
+
+input PushNotificationSettingsInput {
+  enabled: Boolean
+  urgentOnly: Boolean
+  quietHours: QuietHoursInput
+}
+
+input QuietHoursInput {
+  enabled: Boolean
+  startTime: String
+  endTime: String
+  timezone: String
+}
+
+input InAppNotificationSettingsInput {
+  enabled: Boolean
+  showBadges: Boolean
+  soundEnabled: Boolean
+}
+
+type TwoFactorSetup {
+  secret: String!
+  qrCode: String!
+  backupCodes: [String!]!
+}
+
+input CreateTeamInput {
+  name: String!
+  description: String
+  type: TeamType!
+  leadId: ID
+  memberIds: [ID!]
+}
+
+input UpdateTeamInput {
+  name: String
+  description: String
+  leadId: ID
+}
+
+input UpdateOrganizationInput {
+  name: String
+  displayName: String
+  industry: String
+  website: String
+  phone: String
+  email: String
+  address: AddressInput
+  logo: Upload
+}
+
+input UpdateOrganizationSettingsInput {
+  billingEnabled: Boolean
+  timeTrackingEnabled: Boolean
+  documentManagementEnabled: Boolean
+  aiAnalysisEnabled: Boolean
+  complianceTrackingEnabled: Boolean
+  brandColor: String
+  theme: String
+  customDomain: String
+  enforceStrongPasswords: Boolean
+  requireTwoFactor: Boolean
+  sessionTimeout: Int
+  ipWhitelist: [String!]
+  enabledModules: [String!]
+}
+
+# Subscriptions
+type Subscription {
+  notificationReceived(userId: ID!): Notification!
+  userStatusChanged(userId: ID!): UserStatusChange!
+  userOnlineStatus(userId: ID): UserOnlineStatus!
+}
+
+type UserStatusChange {
+  user: User!
+  previousStatus: UserStatus!
+  newStatus: UserStatus!
+  changedAt: DateTime!
+}
+
+type UserOnlineStatus {
+  user: User!
+  isOnline: Boolean!
+  lastSeen: DateTime
+}
+
+# Custom Scalars
+scalar DateTime
+scalar JSON
+scalar Upload

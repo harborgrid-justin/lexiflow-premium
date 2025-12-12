@@ -1,0 +1,879 @@
+[
+  {
+    "id": "wf-001",
+    "name": "New Case Intake and Onboarding",
+    "category": "Case Management",
+    "description": "Comprehensive workflow for onboarding new legal matters from initial consultation through case assignment and file setup.",
+    "trigger": "manual",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Initial Consultation Request",
+        "type": "form",
+        "assignee": "intake_coordinator",
+        "estimatedDuration": 30,
+        "required": true,
+        "actions": ["collect_client_information", "schedule_consultation"]
+      },
+      {
+        "order": 2,
+        "name": "Conflict Check",
+        "type": "automated",
+        "assignee": "system",
+        "estimatedDuration": 5,
+        "required": true,
+        "actions": ["run_conflict_check", "notify_ethics_committee"]
+      },
+      {
+        "order": 3,
+        "name": "Engagement Letter Preparation",
+        "type": "document",
+        "assignee": "assigned_attorney",
+        "estimatedDuration": 60,
+        "required": true,
+        "actions": ["generate_engagement_letter", "send_for_review"]
+      },
+      {
+        "order": 4,
+        "name": "Client Signature",
+        "type": "approval",
+        "assignee": "client",
+        "estimatedDuration": 2880,
+        "required": true,
+        "actions": ["send_for_signature", "wait_for_signature"]
+      },
+      {
+        "order": 5,
+        "name": "Case File Creation",
+        "type": "automated",
+        "assignee": "system",
+        "estimatedDuration": 10,
+        "required": true,
+        "actions": ["create_case_folder", "assign_case_number", "set_up_billing"]
+      },
+      {
+        "order": 6,
+        "name": "Team Assignment",
+        "type": "task",
+        "assignee": "managing_partner",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["assign_lead_attorney", "assign_paralegal", "assign_support_staff"]
+      },
+      {
+        "order": 7,
+        "name": "Initial Case Strategy Meeting",
+        "type": "meeting",
+        "assignee": "case_team",
+        "estimatedDuration": 90,
+        "required": true,
+        "actions": ["schedule_strategy_meeting", "prepare_case_summary"]
+      }
+    ],
+    "variables": ["client_name", "case_type", "assigned_attorney", "case_number"],
+    "notifications": {
+      "onStart": ["intake_coordinator", "managing_partner"],
+      "onComplete": ["assigned_attorney", "client"],
+      "onError": ["system_admin", "intake_coordinator"]
+    },
+    "sla": {
+      "targetCompletionDays": 5,
+      "escalationDays": 7
+    },
+    "tags": ["intake", "onboarding", "case setup"],
+    "createdBy": "Workflow Admin",
+    "lastModified": "2024-11-01",
+    "usageCount": 487
+  },
+  {
+    "id": "wf-002",
+    "name": "Civil Litigation - Discovery Phase",
+    "category": "Litigation",
+    "description": "Structured workflow for managing discovery process in civil litigation matters, from initial disclosures through depositions.",
+    "trigger": "case_phase_change",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Rule 26(f) Conference",
+        "type": "meeting",
+        "assignee": "lead_attorney",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["schedule_conference", "prepare_discovery_plan"]
+      },
+      {
+        "order": 2,
+        "name": "Initial Disclosures",
+        "type": "document",
+        "assignee": "paralegal",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["gather_disclosure_documents", "prepare_initial_disclosures"]
+      },
+      {
+        "order": 3,
+        "name": "Written Discovery - Interrogatories",
+        "type": "document",
+        "assignee": "associate_attorney",
+        "estimatedDuration": 240,
+        "required": false,
+        "actions": ["draft_interrogatories", "review_responses"]
+      },
+      {
+        "order": 4,
+        "name": "Document Production Requests",
+        "type": "document",
+        "assignee": "paralegal",
+        "estimatedDuration": 360,
+        "required": true,
+        "actions": ["draft_production_requests", "manage_document_review"]
+      },
+      {
+        "order": 5,
+        "name": "Deposition Scheduling",
+        "type": "task",
+        "assignee": "paralegal",
+        "estimatedDuration": 180,
+        "required": true,
+        "actions": ["identify_deponents", "schedule_depositions", "send_notices"]
+      },
+      {
+        "order": 6,
+        "name": "Deposition Preparation",
+        "type": "task",
+        "assignee": "lead_attorney",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["prepare_outline", "review_documents", "meet_with_witness"]
+      },
+      {
+        "order": 7,
+        "name": "Expert Discovery",
+        "type": "task",
+        "assignee": "lead_attorney",
+        "estimatedDuration": 720,
+        "required": false,
+        "actions": ["identify_experts", "prepare_expert_reports", "schedule_expert_depositions"]
+      }
+    ],
+    "variables": ["case_id", "discovery_deadline", "lead_attorney", "opposing_counsel"],
+    "notifications": {
+      "deadlineReminders": [30, 14, 7, 3, 1],
+      "onComplete": ["lead_attorney", "client"]
+    },
+    "sla": {
+      "targetCompletionDays": 180,
+      "escalationDays": 210
+    },
+    "tags": ["discovery", "litigation", "civil procedure"],
+    "createdBy": "Litigation Department",
+    "lastModified": "2024-10-15",
+    "usageCount": 234
+  },
+  {
+    "id": "wf-003",
+    "name": "Document Review and Approval",
+    "category": "Document Management",
+    "description": "Multi-step approval workflow for legal documents requiring review and sign-off from multiple stakeholders.",
+    "trigger": "document_submission",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Initial Draft",
+        "type": "document",
+        "assignee": "document_author",
+        "estimatedDuration": 240,
+        "required": true,
+        "actions": ["create_draft", "submit_for_review"]
+      },
+      {
+        "order": 2,
+        "name": "Peer Review",
+        "type": "review",
+        "assignee": "peer_reviewer",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["review_document", "provide_comments"]
+      },
+      {
+        "order": 3,
+        "name": "Revisions",
+        "type": "document",
+        "assignee": "document_author",
+        "estimatedDuration": 60,
+        "required": true,
+        "actions": ["address_comments", "resubmit"]
+      },
+      {
+        "order": 4,
+        "name": "Supervising Attorney Review",
+        "type": "approval",
+        "assignee": "supervising_attorney",
+        "estimatedDuration": 90,
+        "required": true,
+        "actions": ["final_review", "approve_or_reject"]
+      },
+      {
+        "order": 5,
+        "name": "Client Review",
+        "type": "approval",
+        "assignee": "client",
+        "estimatedDuration": 1440,
+        "required": false,
+        "actions": ["send_to_client", "collect_feedback"]
+      },
+      {
+        "order": 6,
+        "name": "Finalization",
+        "type": "automated",
+        "assignee": "system",
+        "estimatedDuration": 5,
+        "required": true,
+        "actions": ["mark_as_final", "update_version", "notify_stakeholders"]
+      }
+    ],
+    "variables": ["document_id", "document_type", "author", "reviewers"],
+    "notifications": {
+      "onStepComplete": true,
+      "onApproval": ["document_author"],
+      "onRejection": ["document_author", "supervising_attorney"]
+    },
+    "sla": {
+      "targetCompletionDays": 3,
+      "escalationDays": 5
+    },
+    "tags": ["document review", "approval", "collaboration"],
+    "createdBy": "Document Management Team",
+    "lastModified": "2024-09-20",
+    "usageCount": 1243
+  },
+  {
+    "id": "wf-004",
+    "name": "Invoice Generation and Approval",
+    "category": "Billing",
+    "description": "Automated workflow for generating, reviewing, and approving client invoices based on time entries and expenses.",
+    "trigger": "monthly_billing_cycle",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Time Entry Review",
+        "type": "review",
+        "assignee": "timekeeper",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["review_time_entries", "correct_errors", "submit_for_approval"]
+      },
+      {
+        "order": 2,
+        "name": "Billing Partner Review",
+        "type": "approval",
+        "assignee": "billing_partner",
+        "estimatedDuration": 60,
+        "required": true,
+        "actions": ["review_time_entries", "adjust_rates", "approve"]
+      },
+      {
+        "order": 3,
+        "name": "Invoice Generation",
+        "type": "automated",
+        "assignee": "system",
+        "estimatedDuration": 5,
+        "required": true,
+        "actions": ["generate_invoice", "calculate_totals", "apply_tax"]
+      },
+      {
+        "order": 4,
+        "name": "Invoice Review",
+        "type": "review",
+        "assignee": "billing_coordinator",
+        "estimatedDuration": 30,
+        "required": true,
+        "actions": ["review_invoice", "check_accuracy"]
+      },
+      {
+        "order": 5,
+        "name": "Client Delivery",
+        "type": "automated",
+        "assignee": "system",
+        "estimatedDuration": 5,
+        "required": true,
+        "actions": ["send_invoice", "log_delivery"]
+      },
+      {
+        "order": 6,
+        "name": "Payment Tracking",
+        "type": "monitoring",
+        "assignee": "accounting",
+        "estimatedDuration": 10080,
+        "required": true,
+        "actions": ["track_payment", "send_reminders", "escalate_overdue"]
+      }
+    ],
+    "variables": ["case_id", "billing_period", "client_id", "total_amount"],
+    "notifications": {
+      "onInvoiceGenerated": ["billing_partner", "client"],
+      "onPaymentReceived": ["billing_partner", "accounting"],
+      "onOverdue": ["billing_partner", "collections"]
+    },
+    "sla": {
+      "targetCompletionDays": 5,
+      "escalationDays": 7
+    },
+    "tags": ["billing", "invoicing", "collections"],
+    "createdBy": "Finance Department",
+    "lastModified": "2024-11-08",
+    "usageCount": 892
+  },
+  {
+    "id": "wf-005",
+    "name": "Contract Negotiation and Execution",
+    "category": "Transactional",
+    "description": "End-to-end workflow for drafting, negotiating, and executing commercial contracts.",
+    "trigger": "manual",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Initial Draft Preparation",
+        "type": "document",
+        "assignee": "transactional_attorney",
+        "estimatedDuration": 360,
+        "required": true,
+        "actions": ["select_template", "customize_terms", "initial_draft"]
+      },
+      {
+        "order": 2,
+        "name": "Internal Review",
+        "type": "review",
+        "assignee": "senior_partner",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["review_draft", "provide_feedback"]
+      },
+      {
+        "order": 3,
+        "name": "Client Review",
+        "type": "approval",
+        "assignee": "client",
+        "estimatedDuration": 2880,
+        "required": true,
+        "actions": ["send_to_client", "collect_comments"]
+      },
+      {
+        "order": 4,
+        "name": "Redline and Negotiate",
+        "type": "task",
+        "assignee": "transactional_attorney",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["exchange_redlines", "negotiate_terms", "track_changes"]
+      },
+      {
+        "order": 5,
+        "name": "Final Review and Approval",
+        "type": "approval",
+        "assignee": "client",
+        "estimatedDuration": 1440,
+        "required": true,
+        "actions": ["final_review", "obtain_approval"]
+      },
+      {
+        "order": 6,
+        "name": "Execution",
+        "type": "task",
+        "assignee": "paralegal",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["coordinate_signatures", "obtain_execution", "distribute_copies"]
+      },
+      {
+        "order": 7,
+        "name": "Filing and Recordkeeping",
+        "type": "automated",
+        "assignee": "system",
+        "estimatedDuration": 10,
+        "required": true,
+        "actions": ["file_executed_contract", "update_database", "set_reminders"]
+      }
+    ],
+    "variables": ["contract_type", "parties", "transaction_value", "closing_date"],
+    "notifications": {
+      "onDraftReady": ["client"],
+      "onExecution": ["all_parties", "transactional_attorney"],
+      "milestoneReminders": true
+    },
+    "sla": {
+      "targetCompletionDays": 30,
+      "escalationDays": 45
+    },
+    "tags": ["contracts", "negotiation", "transactional"],
+    "createdBy": "Corporate Department",
+    "lastModified": "2024-10-22",
+    "usageCount": 345
+  },
+  {
+    "id": "wf-006",
+    "name": "Motion Practice - Federal Court",
+    "category": "Litigation",
+    "description": "Workflow for preparing, filing, and managing motions in federal court including briefing schedule.",
+    "trigger": "manual",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Motion Strategy Conference",
+        "type": "meeting",
+        "assignee": "litigation_team",
+        "estimatedDuration": 90,
+        "required": true,
+        "actions": ["discuss_strategy", "assign_research"]
+      },
+      {
+        "order": 2,
+        "name": "Legal Research",
+        "type": "task",
+        "assignee": "associate_attorney",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["conduct_research", "prepare_memo"]
+      },
+      {
+        "order": 3,
+        "name": "Motion Drafting",
+        "type": "document",
+        "assignee": "lead_attorney",
+        "estimatedDuration": 360,
+        "required": true,
+        "actions": ["draft_motion", "draft_brief", "draft_proposed_order"]
+      },
+      {
+        "order": 4,
+        "name": "Internal Review",
+        "type": "review",
+        "assignee": "senior_partner",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["review_motion", "approve_filing"]
+      },
+      {
+        "order": 5,
+        "name": "Filing",
+        "type": "task",
+        "assignee": "paralegal",
+        "estimatedDuration": 30,
+        "required": true,
+        "actions": ["e-file_motion", "serve_opposing_counsel"]
+      },
+      {
+        "order": 6,
+        "name": "Opposition Response Monitoring",
+        "type": "monitoring",
+        "assignee": "paralegal",
+        "estimatedDuration": 5040,
+        "required": true,
+        "actions": ["track_response_deadline", "notify_team"]
+      },
+      {
+        "order": 7,
+        "name": "Reply Brief",
+        "type": "document",
+        "assignee": "lead_attorney",
+        "estimatedDuration": 240,
+        "required": false,
+        "actions": ["draft_reply", "file_reply"]
+      },
+      {
+        "order": 8,
+        "name": "Oral Argument Preparation",
+        "type": "task",
+        "assignee": "lead_attorney",
+        "estimatedDuration": 480,
+        "required": false,
+        "actions": ["prepare_argument", "moot_court", "attend_hearing"]
+      }
+    ],
+    "variables": ["motion_type", "case_id", "filing_deadline", "hearing_date"],
+    "notifications": {
+      "deadlineReminders": [14, 7, 3, 1],
+      "onFiling": ["client", "litigation_team"],
+      "onRuling": ["client", "litigation_team"]
+    },
+    "sla": {
+      "targetCompletionDays": 21,
+      "escalationDays": 28
+    },
+    "tags": ["motion practice", "litigation", "federal court"],
+    "createdBy": "Litigation Department",
+    "lastModified": "2024-09-30",
+    "usageCount": 412
+  },
+  {
+    "id": "wf-007",
+    "name": "Compliance Audit - HIPAA",
+    "category": "Compliance",
+    "description": "Quarterly HIPAA compliance audit workflow for healthcare clients.",
+    "trigger": "scheduled_quarterly",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Audit Planning",
+        "type": "task",
+        "assignee": "compliance_officer",
+        "estimatedDuration": 240,
+        "required": true,
+        "actions": ["define_scope", "schedule_interviews", "prepare_checklist"]
+      },
+      {
+        "order": 2,
+        "name": "Document Review",
+        "type": "review",
+        "assignee": "compliance_team",
+        "estimatedDuration": 960,
+        "required": true,
+        "actions": ["review_policies", "review_procedures", "identify_gaps"]
+      },
+      {
+        "order": 3,
+        "name": "On-Site Assessment",
+        "type": "task",
+        "assignee": "compliance_officer",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["conduct_interviews", "inspect_facilities", "test_controls"]
+      },
+      {
+        "order": 4,
+        "name": "Findings Analysis",
+        "type": "task",
+        "assignee": "compliance_team",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["analyze_findings", "assess_risks", "prioritize_issues"]
+      },
+      {
+        "order": 5,
+        "name": "Report Preparation",
+        "type": "document",
+        "assignee": "compliance_officer",
+        "estimatedDuration": 360,
+        "required": true,
+        "actions": ["draft_report", "document_findings", "recommend_actions"]
+      },
+      {
+        "order": 6,
+        "name": "Client Presentation",
+        "type": "meeting",
+        "assignee": "compliance_officer",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["present_findings", "discuss_remediation"]
+      },
+      {
+        "order": 7,
+        "name": "Remediation Tracking",
+        "type": "monitoring",
+        "assignee": "compliance_team",
+        "estimatedDuration": 20160,
+        "required": true,
+        "actions": ["track_corrective_actions", "verify_completion"]
+      }
+    ],
+    "variables": ["client_id", "audit_quarter", "findings_count", "risk_level"],
+    "notifications": {
+      "onAuditStart": ["client", "compliance_team"],
+      "onReportComplete": ["client", "managing_partner"],
+      "remediationReminders": [30, 14, 7]
+    },
+    "sla": {
+      "targetCompletionDays": 45,
+      "escalationDays": 60
+    },
+    "tags": ["compliance", "HIPAA", "audit"],
+    "createdBy": "Compliance Group",
+    "lastModified": "2024-11-15",
+    "usageCount": 67
+  },
+  {
+    "id": "wf-008",
+    "name": "Trademark Application - USPTO",
+    "category": "Intellectual Property",
+    "description": "Complete workflow for preparing and filing trademark applications with the USPTO.",
+    "trigger": "manual",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Trademark Search",
+        "type": "task",
+        "assignee": "ip_paralegal",
+        "estimatedDuration": 240,
+        "required": true,
+        "actions": ["conduct_search", "analyze_results", "prepare_report"]
+      },
+      {
+        "order": 2,
+        "name": "Client Consultation",
+        "type": "meeting",
+        "assignee": "ip_attorney",
+        "estimatedDuration": 60,
+        "required": true,
+        "actions": ["discuss_results", "assess_risks", "decide_to_proceed"]
+      },
+      {
+        "order": 3,
+        "name": "Application Preparation",
+        "type": "document",
+        "assignee": "ip_attorney",
+        "estimatedDuration": 360,
+        "required": true,
+        "actions": ["draft_application", "select_classes", "prepare_specimens"]
+      },
+      {
+        "order": 4,
+        "name": "Client Review",
+        "type": "approval",
+        "assignee": "client",
+        "estimatedDuration": 1440,
+        "required": true,
+        "actions": ["send_draft", "obtain_approval"]
+      },
+      {
+        "order": 5,
+        "name": "USPTO Filing",
+        "type": "task",
+        "assignee": "ip_paralegal",
+        "estimatedDuration": 60,
+        "required": true,
+        "actions": ["file_application", "pay_fees", "monitor_status"]
+      },
+      {
+        "order": 6,
+        "name": "Office Action Response",
+        "type": "document",
+        "assignee": "ip_attorney",
+        "estimatedDuration": 480,
+        "required": false,
+        "actions": ["analyze_office_action", "prepare_response", "file_response"]
+      },
+      {
+        "order": 7,
+        "name": "Publication and Opposition Monitoring",
+        "type": "monitoring",
+        "assignee": "ip_paralegal",
+        "estimatedDuration": 8640,
+        "required": true,
+        "actions": ["monitor_publication", "track_opposition_period"]
+      },
+      {
+        "order": 8,
+        "name": "Registration Certificate",
+        "type": "task",
+        "assignee": "ip_paralegal",
+        "estimatedDuration": 30,
+        "required": true,
+        "actions": ["receive_certificate", "update_records", "notify_client"]
+      }
+    ],
+    "variables": ["mark", "owner", "classes", "application_number"],
+    "notifications": {
+      "onFiling": ["client", "ip_attorney"],
+      "onOfficeAction": ["ip_attorney", "client"],
+      "onRegistration": ["client", "ip_attorney"]
+    },
+    "sla": {
+      "targetCompletionDays": 180,
+      "escalationDays": 210
+    },
+    "tags": ["trademark", "USPTO", "IP prosecution"],
+    "createdBy": "IP Department",
+    "lastModified": "2024-10-10",
+    "usageCount": 156
+  },
+  {
+    "id": "wf-009",
+    "name": "Employment Termination - Risk Assessment",
+    "category": "Employment Law",
+    "description": "Workflow for assessing legal risks and managing documentation for employee terminations.",
+    "trigger": "manual",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Initial Risk Assessment",
+        "type": "review",
+        "assignee": "employment_attorney",
+        "estimatedDuration": 120,
+        "required": true,
+        "actions": ["review_personnel_file", "assess_discrimination_risk", "review_performance_history"]
+      },
+      {
+        "order": 2,
+        "name": "HR Consultation",
+        "type": "meeting",
+        "assignee": "employment_attorney",
+        "estimatedDuration": 60,
+        "required": true,
+        "actions": ["meet_with_hr", "discuss_circumstances", "provide_recommendations"]
+      },
+      {
+        "order": 3,
+        "name": "Documentation Review",
+        "type": "review",
+        "assignee": "employment_attorney",
+        "estimatedDuration": 180,
+        "required": true,
+        "actions": ["review_documentation", "ensure_consistency", "identify_gaps"]
+      },
+      {
+        "order": 4,
+        "name": "Termination Package Preparation",
+        "type": "document",
+        "assignee": "employment_attorney",
+        "estimatedDuration": 240,
+        "required": true,
+        "actions": ["draft_termination_letter", "prepare_separation_agreement", "calculate_final_pay"]
+      },
+      {
+        "order": 5,
+        "name": "Client Approval",
+        "type": "approval",
+        "assignee": "client",
+        "estimatedDuration": 1440,
+        "required": true,
+        "actions": ["present_package", "obtain_approval"]
+      },
+      {
+        "order": 6,
+        "name": "Termination Meeting Support",
+        "type": "task",
+        "assignee": "employment_attorney",
+        "estimatedDuration": 120,
+        "required": false,
+        "actions": ["attend_meeting", "provide_legal_support"]
+      },
+      {
+        "order": 7,
+        "name": "Post-Termination Monitoring",
+        "type": "monitoring",
+        "assignee": "employment_attorney",
+        "estimatedDuration": 4320,
+        "required": true,
+        "actions": ["monitor_for_claims", "respond_to_inquiries"]
+      }
+    ],
+    "variables": ["employee_name", "termination_reason", "risk_level", "severance_amount"],
+    "notifications": {
+      "onHighRisk": ["managing_partner", "employment_attorney"],
+      "onClaim": ["employment_attorney", "client", "insurance_carrier"]
+    },
+    "sla": {
+      "targetCompletionDays": 7,
+      "escalationDays": 10
+    },
+    "tags": ["employment", "termination", "risk management"],
+    "createdBy": "Employment Law Group",
+    "lastModified": "2024-11-20",
+    "usageCount": 89
+  },
+  {
+    "id": "wf-010",
+    "name": "Real Estate Closing - Commercial",
+    "category": "Real Estate",
+    "description": "Comprehensive workflow for commercial real estate transactions from due diligence through closing.",
+    "trigger": "manual",
+    "status": "active",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Title Review",
+        "type": "review",
+        "assignee": "real_estate_attorney",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["review_title_commitment", "identify_exceptions", "resolve_defects"]
+      },
+      {
+        "order": 2,
+        "name": "Due Diligence Coordination",
+        "type": "task",
+        "assignee": "paralegal",
+        "estimatedDuration": 1440,
+        "required": true,
+        "actions": ["coordinate_inspections", "review_leases", "verify_zoning"]
+      },
+      {
+        "order": 3,
+        "name": "Purchase Agreement Negotiation",
+        "type": "document",
+        "assignee": "real_estate_attorney",
+        "estimatedDuration": 720,
+        "required": true,
+        "actions": ["draft_agreement", "negotiate_terms", "finalize_contract"]
+      },
+      {
+        "order": 4,
+        "name": "Financing Documentation",
+        "type": "document",
+        "assignee": "real_estate_attorney",
+        "estimatedDuration": 960,
+        "required": true,
+        "actions": ["coordinate_with_lender", "review_loan_documents"]
+      },
+      {
+        "order": 5,
+        "name": "Closing Document Preparation",
+        "type": "document",
+        "assignee": "paralegal",
+        "estimatedDuration": 480,
+        "required": true,
+        "actions": ["prepare_deed", "prepare_closing_statement", "coordinate_signatures"]
+      },
+      {
+        "order": 6,
+        "name": "Final Walkthrough",
+        "type": "task",
+        "assignee": "real_estate_attorney",
+        "estimatedDuration": 240,
+        "required": true,
+        "actions": ["conduct_walkthrough", "verify_condition", "resolve_issues"]
+      },
+      {
+        "order": 7,
+        "name": "Closing",
+        "type": "meeting",
+        "assignee": "real_estate_attorney",
+        "estimatedDuration": 180,
+        "required": true,
+        "actions": ["attend_closing", "execute_documents", "disburse_funds"]
+      },
+      {
+        "order": 8,
+        "name": "Post-Closing",
+        "type": "task",
+        "assignee": "paralegal",
+        "estimatedDuration": 240,
+        "required": true,
+        "actions": ["record_documents", "distribute_copies", "update_records"]
+      }
+    ],
+    "variables": ["property_address", "purchase_price", "buyer", "seller", "closing_date"],
+    "notifications": {
+      "milestoneReminders": true,
+      "onClosing": ["buyer", "seller", "real_estate_attorney"],
+      "deadlineAlerts": [7, 3, 1]
+    },
+    "sla": {
+      "targetCompletionDays": 60,
+      "escalationDays": 75
+    },
+    "tags": ["real estate", "closing", "commercial property"],
+    "createdBy": "Real Estate Group",
+    "lastModified": "2024-10-28",
+    "usageCount": 78
+  }
+]

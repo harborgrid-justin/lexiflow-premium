@@ -1,0 +1,809 @@
+# Billing Type Definitions for LexiFlow AI Legal Suite
+
+type Invoice {
+  id: ID!
+  invoiceNumber: String!
+  status: InvoiceStatus!
+  type: InvoiceType!
+
+  # Relationships
+  case: Case
+  client: Client!
+  billingPeriod: BillingPeriod!
+
+  # Financial details
+  subtotal: Money!
+  taxRate: Float!
+  taxAmount: Money!
+  discount: Money
+  total: Money!
+  amountPaid: Money!
+  amountDue: Money!
+
+  # Line items
+  timeEntries: [TimeEntry!]!
+  expenses: [Expense!]!
+  lineItems: [InvoiceLineItem!]!
+
+  # Dates
+  issueDate: DateTime!
+  dueDate: DateTime!
+  paidDate: DateTime
+  sentDate: DateTime
+
+  # Payment
+  paymentTerms: String!
+  paymentMethod: PaymentMethod
+  paymentReference: String
+  transactions: [PaymentTransaction!]!
+
+  # Metadata
+  notes: String
+  internalNotes: String
+  terms: String
+  attachments: [Document!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!
+}
+
+enum InvoiceStatus {
+  DRAFT
+  PENDING
+  SENT
+  VIEWED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+  REFUNDED
+  WRITTEN_OFF
+}
+
+enum InvoiceType {
+  STANDARD
+  RECURRING
+  RETAINER
+  FINAL
+  PROFORMA
+  CREDIT_NOTE
+  DEBIT_NOTE
+}
+
+type Money {
+  amount: Float!
+  currency: String!
+  formatted: String!
+}
+
+type BillingPeriod {
+  startDate: DateTime!
+  endDate: DateTime!
+  description: String
+}
+
+type TimeEntry {
+  id: ID!
+  description: String!
+  date: DateTime!
+  duration: Float!
+  rate: Money!
+  amount: Money!
+
+  # Relationships
+  user: User!
+  case: Case
+  task: Task
+  invoice: Invoice
+
+  # Categorization
+  billable: Boolean!
+  category: TimeCategory!
+  activityCode: String
+
+  # Status
+  status: TimeEntryStatus!
+  approvedBy: User
+  approvedAt: DateTime
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum TimeCategory {
+  RESEARCH
+  DRAFTING
+  REVIEW
+  MEETING
+  COURT_APPEARANCE
+  CONSULTATION
+  TRAVEL
+  ADMINISTRATIVE
+  COMMUNICATION
+  DISCOVERY
+  TRIAL_PREPARATION
+  OTHER
+}
+
+enum TimeEntryStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  BILLED
+  WRITTEN_OFF
+}
+
+type Expense {
+  id: ID!
+  description: String!
+  date: DateTime!
+  amount: Money!
+  category: ExpenseCategory!
+  receipt: Document
+
+  # Relationships
+  case: Case
+  submittedBy: User!
+  invoice: Invoice
+
+  # Status
+  billable: Boolean!
+  status: ExpenseStatus!
+  approvedBy: User
+  approvedAt: DateTime
+  reimbursed: Boolean!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ExpenseCategory {
+  TRAVEL
+  ACCOMMODATION
+  MEALS
+  FILING_FEES
+  EXPERT_WITNESS
+  COURT_REPORTER
+  PHOTOCOPYING
+  COURIER
+  RESEARCH
+  TECHNOLOGY
+  PARKING
+  OTHER
+}
+
+enum ExpenseStatus {
+  SUBMITTED
+  APPROVED
+  REJECTED
+  BILLED
+  REIMBURSED
+}
+
+type InvoiceLineItem {
+  id: ID!
+  description: String!
+  quantity: Float!
+  unitPrice: Money!
+  amount: Money!
+  taxable: Boolean!
+  category: String
+}
+
+type PaymentMethod {
+  type: PaymentType!
+  details: JSON
+  processor: String
+  lastFour: String
+}
+
+enum PaymentType {
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  WIRE
+  CHECK
+  CASH
+  ACH
+  PAYPAL
+  STRIPE
+  OTHER
+}
+
+type PaymentTransaction {
+  id: ID!
+  invoice: Invoice!
+  amount: Money!
+  paymentMethod: PaymentMethod!
+  status: TransactionStatus!
+  reference: String
+  processedAt: DateTime!
+  processorResponse: JSON
+  fee: Money
+  notes: String
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+type BillingRate {
+  id: ID!
+  name: String!
+  description: String
+  rate: Money!
+  rateType: RateType!
+  effectiveDate: DateTime!
+  endDate: DateTime
+
+  # Applicability
+  user: User
+  role: String
+  practiceArea: String
+  client: Client
+
+  active: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum RateType {
+  HOURLY
+  FIXED
+  CONTINGENCY
+  BLENDED
+  RETAINER
+  SUCCESS_FEE
+}
+
+type Trust {
+  id: ID!
+  client: Client!
+  balance: Money!
+  deposits: [TrustTransaction!]!
+  withdrawals: [TrustTransaction!]!
+  invoices: [Invoice!]!
+  status: TrustStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum TrustStatus {
+  ACTIVE
+  DEPLETED
+  CLOSED
+  FROZEN
+}
+
+type TrustTransaction {
+  id: ID!
+  trust: Trust!
+  type: TrustTransactionType!
+  amount: Money!
+  balance: Money!
+  description: String!
+  reference: String
+  processedAt: DateTime!
+  processedBy: User!
+}
+
+enum TrustTransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  ADJUSTMENT
+  REFUND
+}
+
+type BillingArrangement {
+  id: ID!
+  client: Client!
+  case: Case
+  type: BillingArrangementType!
+  rate: BillingRate
+  description: String
+  terms: String
+
+  # Billing schedule
+  frequency: BillingFrequency
+  nextBillingDate: DateTime
+  autoGenerate: Boolean!
+
+  # Limits
+  budgetLimit: Money
+  retainerAmount: Money
+  contingencyPercentage: Float
+
+  active: Boolean!
+  startDate: DateTime!
+  endDate: DateTime
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum BillingArrangementType {
+  HOURLY
+  FIXED_FEE
+  CONTINGENCY
+  RETAINER
+  BLENDED
+  HYBRID
+}
+
+enum BillingFrequency {
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+  ON_COMPLETION
+  MILESTONE
+}
+
+type BillingReport {
+  id: ID!
+  reportType: BillingReportType!
+  dateRange: BillingPeriod!
+  data: JSON!
+  generatedAt: DateTime!
+  generatedBy: User!
+}
+
+enum BillingReportType {
+  REVENUE_SUMMARY
+  AGING_REPORT
+  TIME_UTILIZATION
+  REALIZATION_RATE
+  COLLECTIONS
+  WIP_REPORT
+  CLIENT_PROFITABILITY
+  ATTORNEY_PRODUCTIVITY
+}
+
+# Analytics
+type BillingAnalytics {
+  totalRevenue: Money!
+  totalOutstanding: Money!
+  collectionsRate: Float!
+  averageRealizationRate: Float!
+  wipValue: Money!
+
+  revenueByPeriod: [RevenueDataPoint!]!
+  revenueByClient: [ClientRevenue!]!
+  revenueByPracticeArea: [PracticeAreaRevenue!]!
+  revenueByAttorney: [AttorneyRevenue!]!
+
+  agingBuckets: AgingReport!
+  topClients: [ClientRevenue!]!
+
+  timeframe: DateRangeInput!
+}
+
+type RevenueDataPoint {
+  period: String!
+  revenue: Money!
+  expenses: Money!
+  profit: Money!
+}
+
+type ClientRevenue {
+  client: Client!
+  revenue: Money!
+  outstanding: Money!
+  percentOfTotal: Float!
+}
+
+type PracticeAreaRevenue {
+  practiceArea: String!
+  revenue: Money!
+  hours: Float!
+  percentOfTotal: Float!
+}
+
+type AttorneyRevenue {
+  attorney: User!
+  revenue: Money!
+  hours: Float!
+  realizationRate: Float!
+  utilizationRate: Float!
+}
+
+type AgingReport {
+  current: Money!
+  days30: Money!
+  days60: Money!
+  days90: Money!
+  days120Plus: Money!
+  total: Money!
+}
+
+# Queries
+type Query {
+  # Invoice queries
+  invoice(id: ID!): Invoice
+  invoiceByNumber(invoiceNumber: String!): Invoice
+  invoices(
+    filter: InvoiceFilter
+    sort: InvoiceSort
+    pagination: PaginationInput
+  ): InvoiceConnection!
+
+  # Time entries
+  timeEntry(id: ID!): TimeEntry
+  timeEntries(
+    filter: TimeEntryFilter
+    sort: TimeEntrySort
+    pagination: PaginationInput
+  ): TimeEntryConnection!
+
+  # Expenses
+  expense(id: ID!): Expense
+  expenses(
+    filter: ExpenseFilter
+    pagination: PaginationInput
+  ): ExpenseConnection!
+
+  # Billing rates
+  billingRates(active: Boolean): [BillingRate!]!
+  billingRate(id: ID!): BillingRate
+
+  # Trust accounts
+  trust(id: ID!): Trust
+  trustsByClient(clientId: ID!): [Trust!]!
+  trustBalance(clientId: ID!): Money!
+
+  # Analytics
+  billingAnalytics(
+    dateRange: DateRangeInput!
+    clientId: ID
+    caseId: ID
+  ): BillingAnalytics!
+
+  # Reports
+  generateAgingReport(asOfDate: DateTime): AgingReport!
+  generateRealizationReport(
+    dateRange: DateRangeInput!
+    userId: ID
+  ): JSON!
+  generateWIPReport(caseId: ID): JSON!
+
+  # Projections
+  revenueProjection(
+    months: Int = 12
+    includeHistorical: Boolean = true
+  ): [RevenueDataPoint!]!
+}
+
+input InvoiceFilter {
+  status: [InvoiceStatus!]
+  clientId: ID
+  caseId: ID
+  dateRange: DateRangeInput
+  amountRange: MoneyRangeInput
+  overdue: Boolean
+}
+
+input InvoiceSort {
+  field: InvoiceSortField!
+  order: SortOrder!
+}
+
+enum InvoiceSortField {
+  INVOICE_NUMBER
+  ISSUE_DATE
+  DUE_DATE
+  TOTAL_AMOUNT
+  STATUS
+  CLIENT_NAME
+}
+
+input TimeEntryFilter {
+  userId: ID
+  caseId: ID
+  dateRange: DateRangeInput
+  billable: Boolean
+  status: [TimeEntryStatus!]
+  category: [TimeCategory!]
+  invoiceId: ID
+}
+
+input TimeEntrySort {
+  field: TimeEntrySortField!
+  order: SortOrder!
+}
+
+enum TimeEntrySortField {
+  DATE
+  DURATION
+  AMOUNT
+  CREATED_AT
+}
+
+input ExpenseFilter {
+  submittedBy: ID
+  caseId: ID
+  dateRange: DateRangeInput
+  category: [ExpenseCategory!]
+  status: [ExpenseStatus!]
+  billable: Boolean
+}
+
+input MoneyRangeInput {
+  min: Float
+  max: Float
+  currency: String
+}
+
+type InvoiceConnection {
+  edges: [InvoiceEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  totalAmount: Money!
+}
+
+type InvoiceEdge {
+  node: Invoice!
+  cursor: String!
+}
+
+type TimeEntryConnection {
+  edges: [TimeEntryEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  totalHours: Float!
+  totalAmount: Money!
+}
+
+type TimeEntryEdge {
+  node: TimeEntry!
+  cursor: String!
+}
+
+type ExpenseConnection {
+  edges: [ExpenseEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  totalAmount: Money!
+}
+
+type ExpenseEdge {
+  node: Expense!
+  cursor: String!
+}
+
+# Mutations
+type Mutation {
+  # Invoice management
+  createInvoice(input: CreateInvoiceInput!): Invoice!
+  updateInvoice(id: ID!, input: UpdateInvoiceInput!): Invoice!
+  deleteInvoice(id: ID!): Boolean!
+
+  # Invoice actions
+  finalizeInvoice(id: ID!): Invoice!
+  sendInvoice(id: ID!, recipients: [String!]!): Invoice!
+  voidInvoice(id: ID!, reason: String!): Invoice!
+  markInvoicePaid(id: ID!, paymentDetails: PaymentInput!): Invoice!
+
+  # Time entries
+  createTimeEntry(input: CreateTimeEntryInput!): TimeEntry!
+  updateTimeEntry(id: ID!, input: UpdateTimeEntryInput!): TimeEntry!
+  deleteTimeEntry(id: ID!): Boolean!
+  submitTimeEntry(id: ID!): TimeEntry!
+  approveTimeEntry(id: ID!): TimeEntry!
+  rejectTimeEntry(id: ID!, reason: String!): TimeEntry!
+
+  # Bulk time entry operations
+  bulkCreateTimeEntries(entries: [CreateTimeEntryInput!]!): [TimeEntry!]!
+  bulkApproveTimeEntries(ids: [ID!]!): [TimeEntry!]!
+
+  # Expenses
+  createExpense(input: CreateExpenseInput!): Expense!
+  updateExpense(id: ID!, input: UpdateExpenseInput!): Expense!
+  deleteExpense(id: ID!): Boolean!
+  approveExpense(id: ID!): Expense!
+  rejectExpense(id: ID!, reason: String!): Expense!
+
+  # Billing rates
+  createBillingRate(input: CreateBillingRateInput!): BillingRate!
+  updateBillingRate(id: ID!, input: UpdateBillingRateInput!): BillingRate!
+  deactivateBillingRate(id: ID!): BillingRate!
+
+  # Trust accounts
+  createTrustAccount(clientId: ID!): Trust!
+  depositToTrust(trustId: ID!, input: TrustDepositInput!): TrustTransaction!
+  withdrawFromTrust(trustId: ID!, input: TrustWithdrawalInput!): TrustTransaction!
+
+  # Billing arrangements
+  createBillingArrangement(input: CreateBillingArrangementInput!): BillingArrangement!
+  updateBillingArrangement(id: ID!, input: UpdateBillingArrangementInput!): BillingArrangement!
+
+  # Payment processing
+  processPayment(input: ProcessPaymentInput!): PaymentTransaction!
+  refundPayment(transactionId: ID!, amount: Float, reason: String): PaymentTransaction!
+}
+
+input CreateInvoiceInput {
+  clientId: ID!
+  caseId: ID
+  type: InvoiceType = STANDARD
+  billingPeriod: BillingPeriodInput!
+  timeEntryIds: [ID!]
+  expenseIds: [ID!]
+  lineItems: [InvoiceLineItemInput!]
+  dueDate: DateTime!
+  paymentTerms: String!
+  notes: String
+  discount: Float
+  taxRate: Float
+}
+
+input UpdateInvoiceInput {
+  status: InvoiceStatus
+  dueDate: DateTime
+  paymentTerms: String
+  notes: String
+  internalNotes: String
+  discount: Float
+}
+
+input BillingPeriodInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  description: String
+}
+
+input InvoiceLineItemInput {
+  description: String!
+  quantity: Float!
+  unitPrice: Float!
+  taxable: Boolean = true
+  category: String
+}
+
+input PaymentInput {
+  amount: Float!
+  currency: String!
+  paymentMethod: PaymentMethodInput!
+  paymentDate: DateTime!
+  reference: String
+  notes: String
+}
+
+input PaymentMethodInput {
+  type: PaymentType!
+  details: JSON
+}
+
+input CreateTimeEntryInput {
+  description: String!
+  date: DateTime!
+  duration: Float!
+  caseId: ID
+  taskId: ID
+  category: TimeCategory!
+  billable: Boolean = true
+  activityCode: String
+}
+
+input UpdateTimeEntryInput {
+  description: String
+  date: DateTime
+  duration: Float
+  category: TimeCategory
+  billable: Boolean
+}
+
+input CreateExpenseInput {
+  description: String!
+  date: DateTime!
+  amount: Float!
+  currency: String!
+  category: ExpenseCategory!
+  caseId: ID
+  billable: Boolean = true
+  receipt: Upload
+}
+
+input UpdateExpenseInput {
+  description: String
+  date: DateTime
+  amount: Float
+  category: ExpenseCategory
+  billable: Boolean
+}
+
+input CreateBillingRateInput {
+  name: String!
+  description: String
+  rate: Float!
+  currency: String!
+  rateType: RateType!
+  effectiveDate: DateTime!
+  endDate: DateTime
+  userId: ID
+  role: String
+  practiceArea: String
+  clientId: ID
+}
+
+input UpdateBillingRateInput {
+  name: String
+  description: String
+  rate: Float
+  endDate: DateTime
+}
+
+input TrustDepositInput {
+  amount: Float!
+  currency: String!
+  description: String!
+  reference: String
+}
+
+input TrustWithdrawalInput {
+  amount: Float!
+  description: String!
+  reference: String
+  invoiceId: ID
+}
+
+input CreateBillingArrangementInput {
+  clientId: ID!
+  caseId: ID
+  type: BillingArrangementType!
+  rateId: ID
+  description: String
+  terms: String
+  frequency: BillingFrequency
+  autoGenerate: Boolean = false
+  budgetLimit: Float
+  retainerAmount: Float
+  contingencyPercentage: Float
+  startDate: DateTime!
+  endDate: DateTime
+}
+
+input UpdateBillingArrangementInput {
+  description: String
+  terms: String
+  frequency: BillingFrequency
+  autoGenerate: Boolean
+  budgetLimit: Float
+  endDate: DateTime
+}
+
+input ProcessPaymentInput {
+  invoiceId: ID!
+  amount: Float!
+  currency: String!
+  paymentMethod: PaymentMethodInput!
+  reference: String
+  notes: String
+}
+
+# Subscriptions
+type Subscription {
+  invoiceCreated(clientId: ID): Invoice!
+  invoiceUpdated(invoiceId: ID): Invoice!
+  invoicePaymentReceived(invoiceId: ID): PaymentTransaction!
+
+  timeEntrySubmitted(caseId: ID): TimeEntry!
+  timeEntryApproved(userId: ID): TimeEntry!
+
+  expenseSubmitted(caseId: ID): Expense!
+  expenseApproved(userId: ID): Expense!
+
+  trustBalanceChanged(trustId: ID!): Trust!
+}
+
+# Custom Scalars
+scalar DateTime
+scalar JSON
+scalar Upload

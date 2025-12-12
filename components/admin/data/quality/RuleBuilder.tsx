@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { X, Plus, Trash2, Play, Save, Code, CheckCircle, Database } from 'lucide-react';
 import { Button } from '../../../common/Button';
 import { Input, TextArea } from '../../../common/Inputs';
@@ -32,8 +32,10 @@ interface RuleBuilderProps {
 
 export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, onCancel }) => {
   const { theme } = useTheme();
-  const [rule, setRule] = useState<QualityRule>(initialRule || {
-    id: `rule-${Date.now()}`,
+  
+  // Deterministic initialization
+  const [rule, setRule] = useState<QualityRule>(() => initialRule || {
+    id: '', // Empty ID for new rules, generated on save if needed
     name: '',
     description: '',
     severity: 'Medium',
@@ -48,7 +50,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
   const addCondition = () => {
     setRule(prev => ({
       ...prev,
-      conditions: [...prev.conditions, { id: `c-${Date.now()}`, field: '', operator: '=', value: '' }]
+      conditions: [...prev.conditions, { id: `c-${crypto.randomUUID()}`, field: '', operator: '=', value: '' }]
     }));
   };
 
@@ -84,6 +86,15 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
       });
     }, 800);
   };
+  
+  const handleSave = () => {
+      // Ensure ID exists before saving
+      const ruleToSave = {
+          ...rule,
+          id: rule.id || `rule-${Date.now()}` // Generate ID only on commit
+      };
+      onSave(ruleToSave);
+  };
 
   return (
     <div className={cn("flex flex-col h-full", theme.surface)}>
@@ -97,7 +108,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
             </div>
             <div className="flex gap-3">
                 <Button variant="secondary" onClick={onCancel}>Cancel</Button>
-                <Button variant="primary" icon={Save} onClick={() => onSave(rule)}>Save Rule</Button>
+                <Button variant="primary" icon={Save} onClick={handleSave}>Save Rule</Button>
             </div>
         </div>
 

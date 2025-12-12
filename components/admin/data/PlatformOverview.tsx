@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MetricCard } from '../../common/Primitives';
 import { Card } from '../../common/Card';
 import { Database, Activity, HardDrive, Server } from 'lucide-react';
@@ -22,14 +22,20 @@ export const PlatformOverview: React.FC = () => {
       { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
 
-  // Live Traffic Simulation Data
-  const [data, setData] = useState(Array.from({ length: 40 }, (_, i) => ({
+  // Initialize with empty array or static placeholder to ensure deterministic first render
+  const [data, setData] = useState<{ time: number; value: number }[]>([]);
+
+  // Hydrate with random simulation data after mount
+  useEffect(() => {
+    setData(Array.from({ length: 40 }, (_, i) => ({
       time: i, value: Math.floor(Math.random() * 500) + 200
-  })));
+    })));
+  }, []);
 
   // Update chart every second to simulate live monitoring
   useInterval(() => {
       setData(currentData => {
+          if (currentData.length === 0) return currentData;
           const nextTime = currentData[currentData.length - 1].time + 1;
           // Random walk logic for somewhat realistic look
           const prevValue = currentData[currentData.length - 1].value;

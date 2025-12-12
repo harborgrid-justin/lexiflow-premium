@@ -20,19 +20,21 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
 }) => {
   const { theme, mode } = useTheme();
 
+  const actions = [
+    { id: 'act-time', label: 'Log Time', icon: Clock, onClick: onShowTimeModal },
+    { id: 'act-link', label: 'Link Docket', icon: Link, onClick: onShowLinkModal },
+    { id: 'act-transfer', label: 'Transfer / Appeal', icon: ArrowRightLeft, onClick: onShowTransferModal },
+  ];
+
   return (
     <div className="space-y-6 w-full">
         {/* Quick Actions */}
         <div className={cn("p-5 rounded-lg shadow-sm border", theme.surface, theme.border.default)}>
             <h3 className={cn("text-sm font-bold uppercase tracking-wide mb-4", theme.text.primary)}>Quick Actions</h3>
             <div className="space-y-2">
-                {[
-                    { label: 'Log Time', icon: Clock, onClick: onShowTimeModal },
-                    { label: 'Link Docket', icon: Link, onClick: onShowLinkModal },
-                    { label: 'Transfer / Appeal', icon: ArrowRightLeft, onClick: onShowTransferModal },
-                ].map((action, i) => (
+                {actions.map((action) => (
                     <button 
-                        key={i} 
+                        key={action.id} 
                         onClick={action.onClick} 
                         className={cn(
                             "w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center border",

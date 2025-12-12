@@ -10,7 +10,8 @@ interface VirtualListProps<T> {
   renderItem: (item: T, index: number) => React.ReactNode;
   className?: string;
   emptyMessage?: string;
-  footer?: React.ReactNode; 
+  footer?: React.ReactNode;
+  getItemKey?: (item: T) => string | number;
 }
 
 export interface VirtualListRef {
@@ -19,7 +20,7 @@ export interface VirtualListRef {
 
 // We use a generic component definition here compatible with forwardRef
 const VirtualListComponent = <T extends any>(
-    { items, height, itemHeight, renderItem, className, emptyMessage = "No items found", footer }: VirtualListProps<T>, 
+    { items, height, itemHeight, renderItem, className, emptyMessage = "No items found", footer, getItemKey }: VirtualListProps<T>, 
     ref: React.Ref<VirtualListRef>
 ) => {
   const { theme } = useTheme();
@@ -86,6 +87,12 @@ const VirtualListComponent = <T extends any>(
     });
   };
 
+  const resolveKey = (item: T, index: number) => {
+      if (getItemKey) return getItemKey(item);
+      if (item && typeof item === 'object' && 'id' in item) return (item as any).id;
+      return index;
+  };
+
   if (safeItems.length === 0 && !footer) {
     return (
       <div 
@@ -108,7 +115,7 @@ const VirtualListComponent = <T extends any>(
       <div style={{ height: totalItemsHeight + (footer ? 60 : 0), position: 'relative' }}>
         {visibleItems.map(({ index, data, top }) => (
           <div 
-            key={index} 
+            key={resolveKey(data, index)}
             style={{ 
               position: 'absolute', 
               top: 0, 

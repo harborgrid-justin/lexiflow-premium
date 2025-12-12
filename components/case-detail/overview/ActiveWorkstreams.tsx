@@ -33,7 +33,14 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
                                 <span className={cn("text-sm font-bold", theme.text.primary)}>{proj.title}</span>
                                 <span className={cn("text-xs font-bold", theme.primary.text)}>{pct}%</span>
                             </div>
-                            <div className={cn("w-full rounded-full h-1.5", theme.surfaceHighlight)}>
+                            <div 
+                                className={cn("w-full rounded-full h-1.5", theme.surfaceHighlight)}
+                                role="progressbar"
+                                aria-valuenow={pct}
+                                aria-valuemin={0}
+                                aria-valuemax={100}
+                                aria-label={`Progress for ${proj.title}`}
+                            >
                                 <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: `${pct}%` }}></div>
                             </div>
                         </div>

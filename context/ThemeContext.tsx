@@ -25,21 +25,28 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const getInitialTheme = (): ThemeMode => {
+  // Principle 35/38: Deterministic First Render
+  // Start with a stable default (e.g. 'light') during initial render/hydration
+  // to avoid mismatched markup. Sync with storage/preference in effect.
+  const [mode, setMode] = useState<ThemeMode>('light');
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Sync with localStorage or system preference after mount
     if (typeof window !== 'undefined' && window.localStorage) {
       const storedPrefs = window.localStorage.getItem('color-theme');
       if (typeof storedPrefs === 'string') {
-        return storedPrefs as ThemeMode;
+        setMode(storedPrefs as ThemeMode);
+        return;
       }
       const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
       if (userMedia.matches) {
-        return 'dark';
+        setMode('dark');
       }
     }
-    return 'light'; 
-  };
-
-  const [mode, setMode] = useState<ThemeMode>(getInitialTheme);
+  }, []);
 
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => {
@@ -55,6 +62,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // Only apply class changes if mounted to avoid side-effects during render phase (though useEffect is post-render)
+    if (!mounted) return;
+    
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(mode);
@@ -64,7 +74,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     if (metaThemeColor) {
         metaThemeColor.setAttribute('content', mode === 'dark' ? '#0f172a' : '#f8fafc');
     }
-  }, [mode]);
+  }, [mode, mounted]);
 
   const value = useMemo(() => ({
     mode,
@@ -74,6 +84,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     isDark: mode === 'dark',
   }), [mode, toggleTheme, setTheme]);
 
+  // Optional: Prevent flash if critical, but standard pattern accepts initial light theme
+  // For strict hydration safety, we render children immediately.
+  
   return (
     <ThemeContext.Provider value={value}>
       {children}

@@ -1,6 +1,5 @@
-
 import React, { useState, Suspense, lazy } from 'react';
-import { GitMerge, Save, Play, Milestone, FileText, Settings } from 'lucide-react';
+import { GitMerge, Save, Play, Milestone, FileText, Settings, Rocket, Loader2 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { cn } from '../utils/cn';
 import { LazyLoader } from './common/LazyLoader';
@@ -33,21 +32,36 @@ const LITIGATION_TABS = [
   }
 ];
 
-export const LitigationBuilder: React.FC = () => {
+interface LitigationBuilderProps {
+  navigateToCaseTab: (caseId: string, tab: string) => void;
+}
+
+export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateToCaseTab }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('canvas');
   
   // LIFTED STATE: `useLitigationBuilder` now lives here as the source of truth
-  const builderProps = useLitigationBuilder();
+  const builderProps = useLitigationBuilder({ navigateToCaseTab });
+  const { cases, selectedCaseId, setSelectedCaseId, deployToCase, isDeploying } = builderProps;
 
   return (
     <TabbedPageLayout
       pageTitle="Litigation Strategy Builder"
       pageSubtitle="Design case lifecycles, map motion sequences, and visualize network boundaries."
       pageActions={
-        <div className="flex gap-2">
-            <Button variant="outline" icon={Settings}>Config</Button>
-            <Button variant="primary" icon={Save}>Save Strategy</Button>
+        <div className="flex gap-2 items-center">
+            <select
+                value={selectedCaseId || ''}
+                onChange={e => setSelectedCaseId(e.target.value)}
+                className={cn("p-2 border rounded text-sm outline-none", theme.surface, theme.border.default, theme.text.primary)}
+            >
+                <option value="">Select a Case to Deploy To...</option>
+                {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+            </select>
+            <Button variant="primary" icon={isDeploying ? Loader2 : Rocket} onClick={deployToCase} disabled={!selectedCaseId || isDeploying}>
+                {isDeploying ? 'Deploying...' : 'Deploy'}
+            </Button>
+            <Button variant="outline" icon={Save}>Save Draft</Button>
         </div>
       }
       tabConfig={LITIGATION_TABS}

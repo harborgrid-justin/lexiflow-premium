@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect, useTransition } from 'react';
 import { useSessionStorage } from './useSessionStorage';
 import { useToast } from '../context/ToastContext';
@@ -126,6 +125,21 @@ export const useAppController = () => {
       });
   }, [setActiveView, setSelectedCaseId]);
 
+  const navigateToCaseTab = useCallback((caseId: string, tab: string) => {
+    startTransition(async () => {
+        const found = await DataService.cases.getById(caseId);
+        if (found) {
+            setInitialTab(tab);
+            setSelectedCase(found);
+            setSelectedCaseId(caseId);
+            setActiveView(PATHS.CASES);
+            addToast(`Opening ${found.title} > ${tab}`, 'info');
+        } else {
+            addToast(`Case ${caseId} not found`, 'error');
+        }
+    });
+  }, [setSelectedCaseId, addToast, setActiveView]);
+
   const handleSearchResultClick = useCallback((result: GlobalSearchResult) => {
     startTransition(() => {
       if (result.type === 'case') {
@@ -201,6 +215,7 @@ export const useAppController = () => {
     handleNavigation,
     handleSelectCase,
     handleSelectCaseById,
+    navigateToCaseTab,
     handleBackToMain,
     handleSearchResultClick,
     handleNeuralCommand,

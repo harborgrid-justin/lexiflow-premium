@@ -1,4 +1,3 @@
-
 import { STORES, DatabaseManager } from './db';
 import { MOCK_CASES } from '../data/models/case';
 import { MOCK_TASKS } from '../data/models/workflowTask';
@@ -27,7 +26,7 @@ import { MOCK_DISCOVERY } from '../data/models/discoveryRequest';
 import { MOCK_CONFLICTS } from '../data/models/conflictCheck';
 import { MOCK_WALLS } from '../data/models/ethicalWall';
 import { MOCK_RULES } from '../data/models/legalRule';
-import { LegalEntity, EntityId } from '../types';
+import { LegalEntity, EntityId, CasePhase, CaseId } from '../types';
 import { MOCK_JUDGE_STATS, MOCK_OUTCOME_DATA } from '../data/models/analyticsStats';
 import { MOCK_OKRS } from '../data/models/strategy';
 import { MALWARE_SIGNATURES } from '../data/models/security';
@@ -51,6 +50,12 @@ import { MOCK_DISCOVERY_FUNNEL, MOCK_DISCOVERY_CUSTODIANS } from '../data/models
 import { MOCK_EXHIBITS } from '../data/models/exhibit';
 import { MOCK_ADVISORS } from '../data/models/advisor';
 import { MOCK_OPPOSITION } from '../data/models/opposition';
+
+const MOCK_PHASES: CasePhase[] = [
+    { id: 'p1', caseId: 'C-2024-001' as CaseId, name: 'Intake & Investigation', startDate: '2023-11-15', duration: 45, status: 'Completed', color: 'bg-green-500' },
+    { id: 'p2', caseId: 'C-2024-001' as CaseId, name: 'Pleadings', startDate: '2024-01-01', duration: 60, status: 'Completed', color: 'bg-blue-500' },
+    { id: 'p3', caseId: 'C-2025-001' as CaseId, name: 'Discovery', startDate: '2025-01-20', duration: 120, status: 'Active', color: 'bg-indigo-500' }
+];
 
 export const Seeder = {
   async seed(db: DatabaseManager) {
@@ -138,6 +143,8 @@ export const Seeder = {
           batchPut(STORES.EXHIBITS, MOCK_EXHIBITS),
           batchPut(STORES.ADVISORS, MOCK_ADVISORS),
           batchPut(STORES.OPPOSITION, MOCK_OPPOSITION),
+          // New
+          batchPut(STORES.PHASES, MOCK_PHASES),
       ]);
       console.log("Seeding Complete.");
   }

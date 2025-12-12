@@ -1,70 +1,112 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: lexiflow_postgres
-    restart: always
+    container_name: lexiflow-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: lexiflow_db
-      POSTGRES_USER: lexiflow_user
-      POSTGRES_PASSWORD: lexiflow_password
+      POSTGRES_DB: ${DB_DATABASE:-lexiflow_db}
+      POSTGRES_USER: ${DB_USERNAME:-lexiflow_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-lexiflow_password}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./scripts/init-postgres.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - lexiflow_network
+      - lexiflow-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U lexiflow_user -d lexiflow_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-lexiflow_user} -d ${DB_DATABASE:-lexiflow_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: lexiflow_pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@lexiflow.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 80
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    networks:
-      - lexiflow_network
-    depends_on:
-      - postgres
-
+  # Redis Cache
   redis:
     image: redis:7-alpine
-    container_name: lexiflow_redis
-    restart: always
+    container_name: lexiflow-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     networks:
-      - lexiflow_network
-    command: redis-server --appendonly yes
+      - lexiflow-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+
+  # pgAdmin - Database Management UI
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: lexiflow-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@lexiflow.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./scripts/pgadmin-servers.json:/pgadmin4/servers.json
+    networks:
+      - lexiflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # NestJS Application (Optional - uncomment when ready)
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: development
+  #   container_name: lexiflow-app
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${PORT:-3000}:3000"
+  #     - "${WS_PORT:-3001}:3001"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #     - ./uploads:/app/uploads
+  #   environment:
+  #     NODE_ENV: ${NODE_ENV:-development}
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #     DB_DATABASE: ${DB_DATABASE:-lexiflow_db}
+  #     DB_USERNAME: ${DB_USERNAME:-lexiflow_user}
+  #     DB_PASSWORD: ${DB_PASSWORD:-lexiflow_password}
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #   networks:
+  #     - lexiflow-network
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   command: npm run start:dev
+
+networks:
+  lexiflow-network:
+    driver: bridge
+    name: lexiflow-network
 
 volumes:
   postgres_data:
-    driver: local
-  pgadmin_data:
-    driver: local
+    name: lexiflow-postgres-data
   redis_data:
-    driver: local
-
-networks:
-  lexiflow_network:
-    driver: bridge
+    name: lexiflow-redis-data
+  pgadmin_data:
+    name: lexiflow-pgadmin-data

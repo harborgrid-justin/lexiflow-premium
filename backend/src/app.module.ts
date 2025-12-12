@@ -55,6 +55,9 @@ import { IntegrationsModule } from './integrations/integrations.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { ApiKeysModule } from './api-keys/api-keys.module';
 
+// Real-time Communication
+import { WebSocketModule } from './websocket/websocket.module';
+
 // App Controller & Service
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -138,6 +141,9 @@ import { AppService } from './app.service';
     IntegrationsModule,
     WebhooksModule,
     ApiKeysModule,
+
+    // Real-time Communication
+    WebSocketModule,
   ],
   controllers: [AppController],
   providers: [

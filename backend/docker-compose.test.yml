@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Test Database
+  postgres-test:
+    image: postgres:15-alpine
+    container_name: lexiflow-postgres-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${TEST_DB_DATABASE:-lexiflow_test_db}
+      POSTGRES_USER: ${TEST_DB_USERNAME:-lexiflow_test_user}
+      POSTGRES_PASSWORD: ${TEST_DB_PASSWORD:-lexiflow_test_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${TEST_DB_PORT:-5433}:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    networks:
+      - lexiflow-test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TEST_DB_USERNAME:-lexiflow_test_user} -d ${TEST_DB_DATABASE:-lexiflow_test_db}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  # Redis Test Cache
+  redis-test:
+    image: redis:7-alpine
+    container_name: lexiflow-redis-test
+    restart: unless-stopped
+    command: redis-server --appendonly no
+    ports:
+      - "${TEST_REDIS_PORT:-6380}:6379"
+    tmpfs:
+      - /data
+    networks:
+      - lexiflow-test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  # Test Runner (Optional - for CI/CD)
+  # app-test:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: test
+  #   container_name: lexiflow-app-test
+  #   environment:
+  #     NODE_ENV: test
+  #     DB_HOST: postgres-test
+  #     DB_PORT: 5432
+  #     DB_DATABASE: ${TEST_DB_DATABASE:-lexiflow_test_db}
+  #     DB_USERNAME: ${TEST_DB_USERNAME:-lexiflow_test_user}
+  #     DB_PASSWORD: ${TEST_DB_PASSWORD:-lexiflow_test_password}
+  #     REDIS_HOST: redis-test
+  #     REDIS_PORT: 6379
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - lexiflow-test-network
+  #   depends_on:
+  #     postgres-test:
+  #       condition: service_healthy
+  #     redis-test:
+  #       condition: service_healthy
+  #   command: npm run test:e2e
+
+networks:
+  lexiflow-test-network:
+    driver: bridge
+    name: lexiflow-test-network

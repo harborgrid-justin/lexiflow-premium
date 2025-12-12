@@ -227,3 +227,141 @@ export class TrustTransactionType {
   @Field(() => Date)
   createdAt: Date;
 }
+
+@ObjectType()
+export class ExpenseType {
+  @Field(() => ID)
+  id: string;
+
+  @Field()
+  description: string;
+
+  @Field()
+  amount: string; // Money scalar
+
+  @Field()
+  category: string;
+
+  @Field({ nullable: true })
+  vendor?: string;
+
+  @Field({ nullable: true })
+  caseId?: string;
+
+  @Field(() => Date)
+  expenseDate: Date;
+
+  @Field()
+  billable: boolean;
+
+  @Field({ nullable: true })
+  receiptUrl?: string;
+
+  @Field(() => UserType)
+  user: UserType;
+
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Field(() => Date)
+  updatedAt: Date;
+}
+
+@ObjectType()
+export class TimeEntryEdge {
+  @Field(() => TimeEntryType)
+  node: TimeEntryType;
+
+  @Field()
+  cursor: string;
+}
+
+@ObjectType()
+export class TimeEntryConnection {
+  @Field(() => [TimeEntryEdge])
+  edges: TimeEntryEdge[];
+
+  @Field(() => PageInfo)
+  pageInfo: PageInfo;
+
+  @Field()
+  totalCount: number;
+}
+
+@ObjectType()
+export class InvoiceEdge {
+  @Field(() => InvoiceType)
+  node: InvoiceType;
+
+  @Field()
+  cursor: string;
+}
+
+@ObjectType()
+export class InvoiceConnection {
+  @Field(() => [InvoiceEdge])
+  edges: InvoiceEdge[];
+
+  @Field(() => PageInfo)
+  pageInfo: PageInfo;
+
+  @Field()
+  totalCount: number;
+}
+
+@ObjectType()
+export class PageInfo {
+  @Field()
+  hasNextPage: boolean;
+
+  @Field()
+  hasPreviousPage: boolean;
+
+  @Field({ nullable: true })
+  startCursor?: string;
+
+  @Field({ nullable: true })
+  endCursor?: string;
+}
+
+@ObjectType()
+export class BillingMetrics {
+  @Field()
+  totalTimeEntries: number;
+
+  @Field()
+  totalHours: number;
+
+  @Field()
+  totalBillable: string; // Money scalar
+
+  @Field()
+  totalExpenses: string; // Money scalar
+
+  @Field()
+  totalInvoiced: string; // Money scalar
+
+  @Field()
+  totalPaid: string; // Money scalar
+
+  @Field()
+  outstandingBalance: string; // Money scalar
+
+  @Field()
+  overdueInvoices: number;
+
+  @Field(() => [BillingByStatusMetric])
+  invoicesByStatus: BillingByStatusMetric[];
+}
+
+@ObjectType()
+export class BillingByStatusMetric {
+  @Field()
+  status: string;
+
+  @Field()
+  count: number;
+
+  @Field()
+  amount: string; // Money scalar
+}

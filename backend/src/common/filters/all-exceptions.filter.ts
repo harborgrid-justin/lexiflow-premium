@@ -5,9 +5,17 @@ import {
   HttpException,
   HttpStatus,
   Logger,
+  Injectable,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { BaseCustomException } from '../exceptions/custom-exceptions';
 
+/**
+ * All Exceptions Filter
+ * Catches all unhandled exceptions including non-HTTP exceptions
+ * This is the last line of defense for error handling
+ */
+@Injectable()
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -25,7 +33,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message =
       exception instanceof HttpException
         ? exception.message
+        : exception instanceof Error
+        ? exception.message
         : 'Internal server error';
+
+    const correlationId =
+      exception instanceof BaseCustomException
+        ? exception.correlationId
+        : this.generateCorrelationId();
 
     const errorResponse = {
       success: false,
@@ -33,25 +48,71 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       method: request.method,
+      correlationId,
       message,
       error:
         exception instanceof Error
           ? {
               name: exception.name,
               message: exception.message,
+              ...(exception instanceof BaseCustomException && {
+                context: exception.context,
+              }),
               stack:
                 process.env.NODE_ENV === 'development'
                   ? exception.stack
                   : undefined,
             }
-          : exception,
+          : { message: 'Unknown error occurred' },
     };
 
-    this.logger.error(
-      `Unhandled Exception: ${request.method} ${request.url} - Status: ${status}`,
-      exception instanceof Error ? exception.stack : JSON.stringify(exception),
-    );
+    // Log with appropriate level and detail
+    this.logException(exception, request, status, correlationId);
 
     response.status(status).json(errorResponse);
+  }
+
+  private logException(
+    exception: unknown,
+    request: Request,
+    status: number,
+    correlationId: string,
+  ): void {
+    const logData = {
+      correlationId,
+      statusCode: status,
+      method: request.method,
+      url: request.url,
+      ip: request.ip,
+      userAgent: request.headers['user-agent'],
+      ...(exception instanceof Error && {
+        errorName: exception.name,
+        errorMessage: exception.message,
+      }),
+      ...(exception instanceof BaseCustomException && {
+        context: exception.context,
+      }),
+    };
+
+    if (status >= 500) {
+      this.logger.error(
+        `Unhandled Server Error: ${exception instanceof Error ? exception.message : 'Unknown error'}`,
+        JSON.stringify(logData),
+      );
+
+      // Log stack trace separately for server errors
+      if (exception instanceof Error && exception.stack) {
+        this.logger.error(exception.stack);
+      }
+    } else {
+      this.logger.warn(
+        `Unhandled Client Error: ${exception instanceof Error ? exception.message : 'Unknown error'}`,
+        JSON.stringify(logData),
+      );
+    }
+  }
+
+  private generateCorrelationId(): string {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }

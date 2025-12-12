@@ -12,6 +12,8 @@ import { UserResolver } from './resolvers/user.resolver';
 import { BillingResolver } from './resolvers/billing.resolver';
 import { DiscoveryResolver } from './resolvers/discovery.resolver';
 import { AnalyticsResolver } from './resolvers/analytics.resolver';
+import { ClientResolver } from './resolvers/client.resolver';
+import { ComplianceResolver } from './resolvers/compliance.resolver';
 import { SubscriptionsResolver } from './subscriptions/subscriptions.resolver';
 import { DataLoaderModule } from './dataloaders/dataloader.module';
 import { ComplexityPlugin } from './plugins/complexity.plugin';
@@ -83,12 +85,14 @@ import { DepthLimitPlugin } from './plugins/depth-limit.plugin';
     BillingResolver,
     DiscoveryResolver,
     AnalyticsResolver,
+    ClientResolver,
+    ComplianceResolver,
     SubscriptionsResolver,
 
     // Plugins
     ComplexityPlugin,
     DepthLimitPlugin,
   ],
-  exports: [NestGraphQLModule],
+  exports: [NestGraphQLModule, DataLoaderModule],
 })
 export class GraphQLModule {}

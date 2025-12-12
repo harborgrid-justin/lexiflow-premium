@@ -9,6 +9,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { EthicalWallsService } from './ethical-walls.service';
 import {
@@ -35,6 +36,55 @@ export class EthicalWallsController {
   @Get('user/:userId')
   async checkWallsForUser(@Param('userId') userId: string) {
     return this.ethicalWallsService.checkWallsForUser(userId);
+  }
+
+  @Get('notifications/:userId')
+  async getNotifications(@Param('userId') userId: string) {
+    return this.ethicalWallsService.getNotifications(userId);
+  }
+
+  @Patch('notifications/:notificationId/read')
+  async markNotificationRead(@Param('notificationId') notificationId: string) {
+    return this.ethicalWallsService.markNotificationRead(notificationId);
+  }
+
+  @Get('audit/:wallId')
+  async getAuditTrail(@Param('wallId') wallId: string) {
+    return this.ethicalWallsService.getAuditTrail(wallId);
+  }
+
+  @Get('audit')
+  async getAllAuditEntries(@Query('organizationId') organizationId?: string) {
+    return this.ethicalWallsService.getAllAuditEntries(organizationId);
+  }
+
+  @Get('breaches/all')
+  async getAllBreaches(@Query('wallId') wallId?: string) {
+    return this.ethicalWallsService.getBreaches(wallId);
+  }
+
+  @Post('breaches')
+  @HttpCode(HttpStatus.CREATED)
+  async reportBreach(@Body() dto: any) {
+    return this.ethicalWallsService.reportBreach(dto);
+  }
+
+  @Patch('breaches/:breachId/resolve')
+  async resolveBreach(
+    @Param('breachId') breachId: string,
+    @Body('resolvedBy') resolvedBy: string,
+  ) {
+    return this.ethicalWallsService.resolveBreach(breachId, resolvedBy);
+  }
+
+  @Get('metrics/:wallId')
+  async getWallMetrics(@Param('wallId') wallId: string) {
+    return this.ethicalWallsService.getWallMetrics(wallId);
+  }
+
+  @Get('metrics/organization/:organizationId')
+  async getAllWallMetrics(@Param('organizationId') organizationId: string) {
+    return this.ethicalWallsService.getAllWallMetrics(organizationId);
   }
 
   @Get(':id')

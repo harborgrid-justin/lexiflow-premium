@@ -25,6 +25,13 @@ import { BillingAnalyticsService } from './billing-analytics/billing-analytics.s
 import { DashboardController } from './dashboard/dashboard.controller';
 import { DashboardService } from './dashboard/dashboard.service';
 
+// ML Engine
+import { MLEngineModule } from './ml-engine/ml-engine.module';
+
+// Risk Assessment
+import { RiskAssessmentModule } from './risk-assessment/risk-assessment.module';
+import { RiskAssessmentController } from './risk-assessment/risk-assessment.controller';
+
 @Module({
   imports: [
     // TypeOrmModule.forFeature([
@@ -37,6 +44,8 @@ import { DashboardService } from './dashboard/dashboard.service';
     //   Judge,
     //   OutcomePredictionData,
     // ]),
+    MLEngineModule,
+    RiskAssessmentModule,
   ],
   controllers: [
     CaseAnalyticsController,
@@ -45,6 +54,7 @@ import { DashboardService } from './dashboard/dashboard.service';
     DiscoveryAnalyticsController,
     BillingAnalyticsController,
     DashboardController,
+    RiskAssessmentController,
   ],
   providers: [
     CaseAnalyticsService,
@@ -61,6 +71,8 @@ import { DashboardService } from './dashboard/dashboard.service';
     DiscoveryAnalyticsService,
     BillingAnalyticsService,
     DashboardService,
+    MLEngineModule,
+    RiskAssessmentModule,
   ],
 })
 export class AnalyticsModule {}

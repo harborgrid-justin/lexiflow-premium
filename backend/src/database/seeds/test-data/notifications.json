@@ -1,0 +1,96 @@
+[
+  {
+    "userEmail": "justin@lexiflow.com",
+    "title": "New Case Assignment",
+    "message": "You have been assigned to CASE-2025-001: Smith v. Jones Corporation",
+    "notificationType": "case_assignment",
+    "priority": "high",
+    "isRead": true,
+    "readAt": "2025-01-15T09:30:00Z",
+    "actionUrl": "/cases/CASE-2025-001"
+  },
+  {
+    "userEmail": "sarah.martinez@lexiflow.com",
+    "title": "Upcoming Deposition",
+    "message": "Deposition scheduled for March 15, 2025 at 9:00 AM - Sarah Johnson",
+    "notificationType": "deadline",
+    "priority": "high",
+    "isRead": false,
+    "actionUrl": "/depositions/scheduled"
+  },
+  {
+    "userEmail": "sarah.martinez@lexiflow.com",
+    "title": "Discovery Response Due Soon",
+    "message": "Discovery responses for CASE-2025-001 due on March 17, 2025",
+    "notificationType": "deadline",
+    "priority": "urgent",
+    "isRead": false,
+    "actionUrl": "/cases/CASE-2025-001/discovery"
+  },
+  {
+    "userEmail": "michael.chen@lexiflow.com",
+    "title": "Motion Hearing Scheduled",
+    "message": "Motion for Summary Judgment hearing set for April 1, 2025 in CASE-2025-002",
+    "notificationType": "court_hearing",
+    "priority": "high",
+    "isRead": true,
+    "readAt": "2025-02-10T14:20:00Z",
+    "actionUrl": "/cases/CASE-2025-002/motions"
+  },
+  {
+    "userEmail": "emily.johnson@lexiflow.com",
+    "title": "Time Entry Approval Required",
+    "message": "5 time entries pending your approval",
+    "notificationType": "approval_request",
+    "priority": "normal",
+    "isRead": false,
+    "actionUrl": "/time-entries/pending"
+  },
+  {
+    "userEmail": "emily.johnson@lexiflow.com",
+    "title": "New Document Uploaded",
+    "message": "Motion to Compel Discovery has been uploaded to CASE-2025-004",
+    "notificationType": "document_upload",
+    "priority": "normal",
+    "isRead": false,
+    "actionUrl": "/cases/CASE-2025-004/documents"
+  },
+  {
+    "userEmail": "david.williams@lexiflow.com",
+    "title": "Task Assignment",
+    "message": "Please review and summarize deposition transcript for CASE-2025-002",
+    "notificationType": "task_assignment",
+    "priority": "normal",
+    "isRead": true,
+    "readAt": "2025-02-12T10:15:00Z",
+    "actionUrl": "/tasks/pending"
+  },
+  {
+    "userEmail": "justin@lexiflow.com",
+    "title": "Invoice Payment Received",
+    "message": "Payment of $8,500.00 received for INV-2025-003",
+    "notificationType": "payment",
+    "priority": "normal",
+    "isRead": true,
+    "readAt": "2025-02-10T15:00:00Z",
+    "actionUrl": "/invoices/INV-2025-003"
+  },
+  {
+    "userEmail": "justin@lexiflow.com",
+    "title": "Overdue Invoice",
+    "message": "Invoice INV-2025-008 is overdue by 2 days",
+    "notificationType": "payment",
+    "priority": "high",
+    "isRead": false,
+    "actionUrl": "/invoices/INV-2025-008"
+  },
+  {
+    "userEmail": "robert.smith@client.com",
+    "title": "Case Status Update",
+    "message": "Motion to Dismiss filed in your case CASE-2025-001",
+    "notificationType": "case_update",
+    "priority": "high",
+    "isRead": false,
+    "actionUrl": "/client/cases/CASE-2025-001"
+  }
+]

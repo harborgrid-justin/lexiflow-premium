@@ -1,0 +1,66 @@
+[
+  {
+    "userEmail": "justin@lexiflow.com",
+    "entityType": "Case",
+    "action": "create",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "timestamp": "2025-01-15T08:30:00Z"
+  },
+  {
+    "userEmail": "sarah.martinez@lexiflow.com",
+    "entityType": "Case",
+    "action": "update",
+    "ipAddress": "192.168.1.105",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "timestamp": "2025-01-16T10:15:00Z"
+  },
+  {
+    "userEmail": "michael.chen@lexiflow.com",
+    "entityType": "Document",
+    "action": "create",
+    "ipAddress": "192.168.1.110",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "timestamp": "2025-02-01T14:20:00Z"
+  },
+  {
+    "userEmail": "emily.johnson@lexiflow.com",
+    "entityType": "TimeEntry",
+    "action": "approve",
+    "ipAddress": "192.168.1.115",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "timestamp": "2025-02-05T16:45:00Z"
+  },
+  {
+    "userEmail": "justin@lexiflow.com",
+    "entityType": "Invoice",
+    "action": "send",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "timestamp": "2025-02-01T10:00:00Z"
+  },
+  {
+    "userEmail": "david.williams@lexiflow.com",
+    "entityType": "Document",
+    "action": "download",
+    "ipAddress": "192.168.1.120",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "timestamp": "2025-02-10T11:30:00Z"
+  },
+  {
+    "userEmail": "sarah.martinez@lexiflow.com",
+    "entityType": "Client",
+    "action": "create",
+    "ipAddress": "192.168.1.105",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "timestamp": "2025-01-10T09:00:00Z"
+  },
+  {
+    "userEmail": "michael.chen@lexiflow.com",
+    "entityType": "Case",
+    "action": "close",
+    "ipAddress": "192.168.1.110",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "timestamp": "2024-12-20T17:00:00Z"
+  }
+]

@@ -3,7 +3,12 @@ import { Reflector } from '@nestjs/core';
 import { Role } from '../../common/enums/role.enum';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { AuthenticatedUser } from '../interfaces/authenticated-user.interface';
+import { hasAnyRole } from '../utils/role-hierarchy.util';
 
+/**
+ * Enhanced Roles Guard with role hierarchy support
+ * Users with higher privilege roles can access resources meant for lower roles
+ */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
@@ -21,6 +26,7 @@ export class RolesGuard implements CanActivate {
     const { user } = context.switchToHttp().getRequest();
     const authenticatedUser = user as AuthenticatedUser;
 
-    return requiredRoles.some((role) => authenticatedUser.role === role);
+    // Use role hierarchy to check if user has sufficient privilege
+    return hasAnyRole(authenticatedUser.role, requiredRoles);
   }
 }

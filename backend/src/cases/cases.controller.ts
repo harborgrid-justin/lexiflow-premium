@@ -55,4 +55,30 @@ export class CasesController {
   async archive(@Param('id') id: string): Promise<CaseResponseDto> {
     return this.casesService.archive(id);
   }
+
+  @Get(':id/timeline')
+  async getTimeline(
+    @Param('id') id: string,
+    @Query('eventType') eventType?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.casesService.getTimeline(id, {
+      eventType,
+      startDate: startDate ? new Date(startDate) : undefined,
+      endDate: endDate ? new Date(endDate) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
+    });
+  }
+
+  @Get(':id/workflow/transitions')
+  async getAvailableTransitions(@Param('id') id: string) {
+    return this.casesService.getAvailableTransitions(id);
+  }
+
+  @Get(':id/statistics')
+  async getStatistics(@Param('id') id: string) {
+    return this.casesService.getStatistics(id);
+  }
 }

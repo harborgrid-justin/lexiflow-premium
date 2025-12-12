@@ -89,3 +89,46 @@ export class QueryConflictChecksDto {
   page?: number;
   limit?: number;
 }
+
+export class BatchConflictCheckDto {
+  requestedBy: string;
+  requestedByName: string;
+  checkType: ConflictCheckType;
+  targets: Array<{
+    name: string;
+    entityId?: string;
+  }>;
+  organizationId: string;
+}
+
+export class HistoricalConflictSearchDto {
+  searchTerm: string;
+  includeResolved?: boolean;
+  includeWaived?: boolean;
+  minMatchScore?: number;
+  startDate?: Date;
+  endDate?: Date;
+  organizationId: string;
+}
+
+export class PartyConflictCheckDto {
+  parties: Array<{
+    name: string;
+    role: 'plaintiff' | 'defendant' | 'witness' | 'attorney' | 'other';
+  }>;
+  caseId?: string;
+  requestedBy: string;
+  requestedByName: string;
+  organizationId: string;
+}
+
+export interface ConflictNotification {
+  id: string;
+  conflictCheckId: string;
+  recipientUserId: string;
+  recipientEmail: string;
+  notificationType: 'conflict_found' | 'conflict_resolved' | 'waiver_required';
+  message: string;
+  sentAt: Date;
+  readAt?: Date;
+}

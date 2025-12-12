@@ -1,0 +1,62 @@
+[
+  {
+    "caseNumber": "CASE-2025-001",
+    "deponentName": "Sarah Johnson",
+    "deponentType": "fact_witness",
+    "scheduledDate": "2025-03-15",
+    "location": "Law Offices of Martinez & Associates, 100 Main Street, Los Angeles, CA 90012",
+    "duration": 240,
+    "status": "scheduled",
+    "notes": "Key witness to contract negotiations and breach events"
+  },
+  {
+    "caseNumber": "CASE-2025-001",
+    "deponentName": "Robert Smith",
+    "deponentType": "party",
+    "scheduledDate": "2025-03-20",
+    "location": "Law Offices of Martinez & Associates, 100 Main Street, Los Angeles, CA 90012",
+    "duration": 360,
+    "status": "scheduled",
+    "notes": "Plaintiff deposition"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "deponentName": "Dr. Michael Stevens",
+    "deponentType": "expert_witness",
+    "scheduledDate": "2025-04-01",
+    "location": "Conference Room, 200 Market Street, San Francisco, CA 94102",
+    "duration": 420,
+    "status": "scheduled",
+    "notes": "Engineering expert on product defect analysis"
+  },
+  {
+    "caseNumber": "CASE-2025-002",
+    "deponentName": "Emily Johnson",
+    "deponentType": "party",
+    "scheduledDate": "2025-03-25",
+    "location": "Defense Counsel Office, 500 California Street, San Francisco, CA 94104",
+    "duration": 300,
+    "status": "completed",
+    "notes": "Plaintiff deposition completed"
+  },
+  {
+    "caseNumber": "CASE-2025-004",
+    "deponentName": "HR Director Patricia Brown",
+    "deponentType": "fact_witness",
+    "scheduledDate": "2025-02-28",
+    "location": "BigCorp Industries, 5000 Corporate Center, Sacramento, CA 95820",
+    "duration": 180,
+    "status": "completed",
+    "notes": "Testimony regarding termination decision and HR investigation"
+  },
+  {
+    "caseNumber": "CASE-2025-005",
+    "deponentName": "Dr. James Anderson",
+    "deponentType": "party",
+    "scheduledDate": "2025-03-10",
+    "location": "Defense Counsel Office, 1000 Professional Plaza, Sacramento, CA 95814",
+    "duration": 480,
+    "status": "scheduled",
+    "notes": "Defendant surgeon deposition"
+  }
+]

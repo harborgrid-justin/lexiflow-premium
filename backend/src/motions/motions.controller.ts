@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -41,5 +42,68 @@ export class MotionsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
     return this.motionsService.remove(id);
+  }
+
+  @Post('motions/:motionId/deadlines')
+  @HttpCode(HttpStatus.CREATED)
+  async createDeadline(@Body() createDto: any) {
+    return this.motionsService.createDeadline(createDto);
+  }
+
+  @Get('motions/:motionId/deadlines')
+  async getDeadlines(@Param('motionId') motionId: string) {
+    return this.motionsService.getDeadlines(motionId);
+  }
+
+  @Get('cases/:caseId/motions/deadlines')
+  async getCaseDeadlines(@Param('caseId') caseId: string) {
+    return this.motionsService.getCaseDeadlines(caseId);
+  }
+
+  @Get('motions/deadlines/upcoming')
+  async getUpcomingDeadlines(@Query('days') days?: string, @Query('userId') userId?: string) {
+    return this.motionsService.getUpcomingDeadlines(
+      days ? parseInt(days, 10) : 7,
+      userId,
+    );
+  }
+
+  @Get('motions/deadlines/overdue')
+  async getOverdueDeadlines(@Query('userId') userId?: string) {
+    return this.motionsService.getOverdueDeadlines(userId);
+  }
+
+  @Post('motions/deadlines/:id/complete')
+  async completeDeadline(
+    @Param('id') id: string,
+    @Body() body: { userId: string; notes?: string },
+  ) {
+    return this.motionsService.completeDeadline(id, body.userId, body.notes);
+  }
+
+  @Get('motions/deadlines/alerts')
+  async getDeadlineAlerts(@Query('userId') userId?: string, @Query('days') days?: string) {
+    return this.motionsService.getDeadlineAlerts(
+      userId,
+      days ? parseInt(days, 10) : 7,
+    );
+  }
+
+  @Get('motions/deadlines/statistics')
+  async getDeadlineStatistics(
+    @Query('caseId') caseId?: string,
+    @Query('userId') userId?: string,
+  ) {
+    return this.motionsService.getDeadlineStatistics({ caseId, userId });
+  }
+
+  @Get('cases/:caseId/motions/by-status/:status')
+  async findByStatus(@Param('caseId') caseId: string, @Param('status') status: string) {
+    return this.motionsService.findByStatus(caseId, status);
+  }
+
+  @Get('cases/:caseId/motions/by-type/:type')
+  async findByType(@Param('caseId') caseId: string, @Param('type') type: string) {
+    return this.motionsService.findByType(caseId, type);
   }
 }

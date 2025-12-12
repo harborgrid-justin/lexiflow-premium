@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
@@ -15,7 +15,7 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   className?: string;
   footer?: React.ReactNode;
-  closeOnBackdrop?: boolean; // New UX prop
+  closeOnBackdrop?: boolean; 
 }
 
 export const Modal: React.FC<ModalProps> = ({ 
@@ -24,12 +24,50 @@ export const Modal: React.FC<ModalProps> = ({
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
   const modalId = React.useId();
+  const modalRef = useRef<HTMLDivElement>(null);
   
   useScrollLock(modalId, isOpen);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Focus Trap
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+
+    const modal = modalRef.current;
+    const focusableElements = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+      if (e.key === 'Escape') {
+          onClose();
+      }
+    };
+
+    // Focus first element on open
+    if (firstElement) firstElement.focus();
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
+  }, [isOpen, onClose]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
       if (closeOnBackdrop) {
@@ -62,7 +100,9 @@ export const Modal: React.FC<ModalProps> = ({
       />
 
       {/* Panel */}
-      <div className={cn(
+      <div 
+        ref={modalRef}
+        className={cn(
         "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-xl",
         theme.surface.default,
         theme.border.default,
@@ -79,8 +119,8 @@ export const Modal: React.FC<ModalProps> = ({
             type="button"
             className={cn("rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500", theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surface.highlight}`)}
             onClick={onClose}
+            aria-label="Close"
           >
-            <span className="sr-only">Close</span>
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TimelineEvent } from '../../types';
 import { FileText, CheckCircle, DollarSign, Flag, Briefcase, Gavel, Calendar, BookOpen, List, Filter } from 'lucide-react';
 import { TimelineItem } from '../common/TimelineItem';
@@ -42,7 +42,9 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
     }
   };
 
-  const filteredEvents = events.filter(e => filterType === 'All' || e.type === filterType);
+  const filteredEvents = useMemo(() => {
+    return events.filter(e => filterType === 'All' || e.type === filterType);
+  }, [events, filterType]);
 
   const renderRow = (event: TimelineEvent, idx: number) => (
       <div key={event.id} className="h-[60px] px-4">
@@ -73,6 +75,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                     className={cn("pl-6 pr-2 py-1 text-xs border rounded bg-transparent outline-none appearance-none cursor-pointer", theme.border.default, theme.text.primary)}
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value)}
+                    aria-label="Filter events by type"
                 >
                     <option value="All">All Types</option>
                     <option value="milestone">Milestones</option>
@@ -88,6 +91,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                     onClick={() => setViewMode('list')}
                     className={cn("p-1.5 rounded transition-all", viewMode === 'list' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.tertiary)}
                     title="List View"
+                    aria-label="List View"
                 >
                     <List className="h-4 w-4"/>
                 </button>
@@ -95,6 +99,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                     onClick={() => setViewMode('story')}
                     className={cn("p-1.5 rounded transition-all", viewMode === 'story' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.tertiary)}
                     title="Story Mode"
+                    aria-label="Story Mode"
                 >
                     <BookOpen className="h-4 w-4"/>
                 </button>

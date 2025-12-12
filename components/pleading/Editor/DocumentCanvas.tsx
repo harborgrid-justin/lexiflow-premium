@@ -27,13 +27,20 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
       setDragOverIndex(null);
       const type = e.dataTransfer.getData('pleading/section-type');
       if (type) {
-          // Add new section logic handled by parent if needed, 
-          // but for reordering internal or adding new we need to lift state.
-          // For simplicity in this demo, assume we just log it or handle via a prop callback 
-          // if we wanted drag-to-insert.
-          // Real implementation would call onAddSection(type, index) passed from parent.
           console.log("Dropped type", type, "at index", index);
       }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onSelectSection(id);
+    }
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (selectedSectionId === id) {
+            onDeleteSection(id);
+        }
+    }
   };
 
   // Renderers for different section types
@@ -41,18 +48,19 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
       switch (section.type) {
           case 'Caption':
               return (
-                  <div className="border border-slate-300 p-4 mb-4 grid grid-cols-2 text-sm font-serif">
-                      <div className="border-r border-slate-300 pr-4">
-                          <p>JUSTIN SAADEIN-MORALES</p>
-                          <p>Plaintiff,</p>
-                          <p className="my-4">v.</p>
-                          <p>WESTRIDGE SWIM & RACQUET CLUB, INC.</p>
-                          <p>Defendant.</p>
-                      </div>
-                      <div className="pl-4">
-                          <p>Case No. {caseId}</p>
-                          <p className="font-bold mt-4 underline">COMPLAINT FOR DAMAGES</p>
-                      </div>
+                  <div className="border-2 border-black p-4 grid grid-cols-2 mb-8" style={{ fontFamily: 'Times New Roman' }}>
+                       <div className="border-r-2 border-black pr-4">
+                           <p>JUSTIN SAADEIN-MORALES</p>
+                           <p>Plaintiff,</p>
+                           <p className="my-4">v.</p>
+                           <p>WESTRIDGE SWIM & RACQUET CLUB, INC.</p>
+                           <p>Defendant.</p>
+                       </div>
+                       <div className="pl-4 flex flex-col justify-center">
+                           Case No. {caseId}<br/>
+                           <span className="font-bold uppercase mt-2">COMPLAINT FOR DAMAGES</span><br/>
+                           JURY TRIAL DEMANDED
+                       </div>
                   </div>
               );
           case 'Heading':
@@ -61,6 +69,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                     className="w-full text-center font-bold font-serif text-lg outline-none bg-transparent placeholder:text-slate-300 uppercase underline"
                     value={section.content}
                     onChange={(e) => onUpdateSection(section.id, { content: e.target.value })}
+                    aria-label="Section Heading"
                   />
               );
           case 'Signature':
@@ -85,6 +94,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                         e.target.style.height = e.target.scrollHeight + 'px';
                     }}
                     placeholder="Type legal content here..."
+                    aria-label="Section Content"
                   />
               );
       }
@@ -94,6 +104,8 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
     <div 
         className="w-[8.5in] min-h-[11in] bg-white shadow-2xl p-[1in] relative transition-all"
         onClick={() => onSelectSection(null)}
+        role="document"
+        aria-label="Pleading Document"
     >
         {sections.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -104,17 +116,34 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
         {sections.map((section, idx) => (
             <div 
                 key={section.id}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => handleKeyDown(e, section.id)}
                 onClick={(e) => { e.stopPropagation(); onSelectSection(section.id); }}
                 className={cn(
-                    "relative group mb-4 p-2 transition-all border-2 border-transparent rounded",
+                    "relative group mb-4 p-2 transition-all border-2 border-transparent rounded focus:outline-none focus:ring-2 focus:ring-blue-500",
                     selectedSectionId === section.id ? "border-blue-400 bg-blue-50/20" : "hover:border-slate-200"
                 )}
+                aria-selected={selectedSectionId === section.id}
             >
                 {/* Controls Overlay */}
                 {selectedSectionId === section.id && (
                     <div className="absolute -right-10 top-0 flex flex-col gap-1">
-                         <button onClick={() => onDeleteSection(section.id)} className="p-2 bg-white shadow rounded-full text-red-500 hover:bg-red-50"><Trash2 className="h-4 w-4"/></button>
-                         <button className="p-2 bg-white shadow rounded-full text-slate-500 cursor-grab active:cursor-grabbing"><GripVertical className="h-4 w-4"/></button>
+                         <button 
+                            onClick={() => onDeleteSection(section.id)} 
+                            className="p-2 bg-white shadow rounded-full text-red-500 hover:bg-red-50"
+                            aria-label="Delete Section"
+                            tabIndex={-1}
+                         >
+                            <Trash2 className="h-4 w-4"/>
+                         </button>
+                         <button 
+                            className="p-2 bg-white shadow rounded-full text-slate-500 cursor-grab active:cursor-grabbing"
+                            aria-label="Drag Section"
+                            tabIndex={-1}
+                         >
+                            <GripVertical className="h-4 w-4"/>
+                         </button>
                     </div>
                 )}
                 

@@ -12,10 +12,11 @@ interface VirtualGridProps<T> {
   emptyMessage?: string;
   gap?: number;
   height: number | string;
+  getItemKey?: (item: T) => string | number;
 }
 
 export function VirtualGrid<T>({ 
-  items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height 
+  items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height, getItemKey 
 }: VirtualGridProps<T>) {
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,6 +90,12 @@ export function VirtualGrid<T>({
     requestAnimationFrame(() => setScrollTop(currentScrollTop));
   };
 
+  const resolveKey = (item: T, index: number) => {
+    if (getItemKey) return getItemKey(item);
+    if (item && typeof item === 'object' && 'id' in item) return (item as any).id;
+    return index;
+  };
+
   if (items.length === 0) {
      return <div className={cn("flex items-center justify-center h-full text-slate-400", theme.text.tertiary)}>{emptyMessage}</div>;
   }
@@ -103,7 +110,7 @@ export function VirtualGrid<T>({
       <div style={{ height: Math.max(totalHeight, containerSize.height), position: 'relative' }}>
         {visibleItems.map(({ index, data, top, left }) => (
           <div
-            key={index}
+            key={resolveKey(data, index)}
             style={{
               position: 'absolute',
               top: 0,

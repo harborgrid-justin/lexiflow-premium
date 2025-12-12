@@ -24,9 +24,9 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }
   if (isLowBandwidth) {
       // Simplified loader for slow connections
       return (
-          <div className="flex items-center justify-center h-full p-8">
+          <div className="flex items-center justify-center h-full p-8" role="status" aria-live="polite">
               <div className="text-center">
-                  <div className={cn("text-sm font-bold mb-2", theme.text.secondary)}>Loading...</div>
+                  <div className={cn("text-sm font-bold mb-2", theme.text.secondary)}>{message}</div>
                   <div className={cn("text-xs", theme.text.tertiary)}>Low Bandwidth Mode Active</div>
               </div>
           </div>
@@ -34,7 +34,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }
   }
 
   return (
-    <div className="h-full w-full p-6 space-y-6 overflow-hidden">
+    <div className="h-full w-full p-6 space-y-6 overflow-hidden" role="status" aria-live="polite" aria-label={message}>
       {/* Skeleton Metrics Row - Matches MetricCard height ~120px */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-pulse">
         {[1, 2, 3, 4].map((i) => (

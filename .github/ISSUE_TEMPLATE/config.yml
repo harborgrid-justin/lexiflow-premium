@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://docs.lexiflow.ai
+    about: Check our documentation for common questions and guides
+  - name: Community Support
+    url: https://community.lexiflow.ai
+    about: Ask questions and get help from the community
+  - name: Support Portal
+    url: https://support.lexiflow.ai
+    about: Get professional support for your LexiFlow subscription

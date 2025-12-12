@@ -6,6 +6,7 @@ import { ConsoleTransport } from './transports/console.transport';
  * Structured logging levels
  */
 export enum LogCategory {
+  FATAL = 'fatal',
   ERROR = 'error',
   WARN = 'warn',
   INFO = 'info',
@@ -63,6 +64,13 @@ export class LoggingService implements LoggerService {
    */
   error(message: string, trace?: string, context?: string): void {
     this.writeLog('error', LogCategory.ERROR, message, context, trace);
+  }
+
+  /**
+   * Log fatal errors (system-critical errors)
+   */
+  fatal(message: string, trace?: string, context?: string): void {
+    this.writeLog('fatal', LogCategory.FATAL, message, context, trace);
   }
 
   /**
@@ -257,5 +265,56 @@ export class LoggingService implements LoggerService {
       // If file logging fails, at least log to console
       console.error('Failed to write log to file:', error);
     });
+  }
+
+  /**
+   * Create a child logger with a specific context
+   */
+  createChildLogger(context: string): LoggingService {
+    const childLogger = new LoggingService(
+      this.fileTransport,
+      this.consoleTransport,
+    );
+    childLogger.setContext(context);
+    return childLogger;
+  }
+
+  /**
+   * Log with custom correlation ID (for request tracing)
+   */
+  logWithCorrelation(
+    level: LogLevel,
+    category: LogCategory,
+    message: string,
+    correlationId: string,
+    context?: Record<string, any>,
+  ): void {
+    const entry: LogEntry = {
+      level,
+      category,
+      message,
+      timestamp: new Date().toISOString(),
+      correlationId,
+      context: {
+        ...context,
+        context: this.context,
+      },
+    };
+
+    this.writeToTransports(entry);
+  }
+
+  /**
+   * Batch log multiple entries (useful for bulk operations)
+   */
+  logBatch(entries: Omit<LogEntry, 'timestamp'>[]): void {
+    const timestamp = new Date().toISOString();
+
+    for (const entry of entries) {
+      this.writeToTransports({
+        ...entry,
+        timestamp,
+      });
+    }
   }
 }

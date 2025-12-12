@@ -19,6 +19,28 @@ export * from './useToggle';
 export * from './useWizard';
 export * from './useWorkerSearch';
 
+// New Utility Hooks
+export * from './usePrevious';
+export * from './useKeyPress';
+export * from './useMediaQuery';
+export * from './useAsync';
+
+// Context Hooks
+export * from './useApp';
+export * from './useAuth';
+export * from './useNotifications';
+export * from './useTheme';
+export * from './useData';
+export * from './useSearch';
+export * from './useBreadcrumb';
+export * from './useLoading';
+export * from './usePermission';
+export * from './useSidebar';
+export * from './usePresence';
+export * from './useWebSocketEvent';
+export * from './useInfiniteScroll';
+export * from './useThrottle';
+
 // Domain Specific Hooks
 export * from './useCalendarView';
 export * from './useCanvasDrag';

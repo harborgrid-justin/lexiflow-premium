@@ -65,6 +65,23 @@ services:
       postgres:
         condition: service_healthy
 
+  # Redis Commander - Redis Management UI
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: lexiflow-redis-commander
+    restart: unless-stopped
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:${REDIS_PASSWORD:-}
+      HTTP_USER: ${REDIS_COMMANDER_USER:-admin}
+      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD:-admin}
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8081}:8081"
+    networks:
+      - lexiflow-network
+    depends_on:
+      redis:
+        condition: service_healthy
+
   # NestJS Application (Optional - uncomment when ready)
   # app:
   #   build:

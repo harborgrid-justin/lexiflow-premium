@@ -1,0 +1,164 @@
+version: '3.8'
+
+# Production-specific docker-compose configuration
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  # PostgreSQL with production settings
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "127.0.0.1:${DB_PORT:-5432}:5432" # Bind to localhost only
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./scripts/init-postgres.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./backups:/backups
+    command: >
+      postgres
+      -c max_connections=200
+      -c shared_buffers=512MB
+      -c effective_cache_size=2GB
+      -c maintenance_work_mem=128MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=32MB
+      -c min_wal_size=2GB
+      -c max_wal_size=8GB
+      -c max_worker_processes=4
+      -c max_parallel_workers_per_gather=2
+      -c max_parallel_workers=4
+      -c max_parallel_maintenance_workers=2
+      -c log_min_duration_statement=1000
+      -c log_line_prefix='%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '
+      -c log_checkpoints=on
+      -c log_connections=on
+      -c log_disconnections=on
+      -c log_lock_waits=on
+      -c log_temp_files=0
+      -c log_autovacuum_min_duration=0
+      -c autovacuum_max_workers=3
+      -c autovacuum_naptime=10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    shm_size: 256mb
+
+  # Redis with production settings
+  redis:
+    image: redis:7-alpine
+    restart: always
+    command: >
+      redis-server
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 1gb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --tcp-backlog 511
+      --timeout 300
+      --tcp-keepalive 300
+      --loglevel notice
+      --maxclients 10000
+      --dir /data
+      --appendfsync everysec
+      --no-appendfsync-on-rewrite no
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379" # Bind to localhost only
+    volumes:
+      - redis_prod_data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # NestJS Application with production settings
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        NODE_ENV: production
+    container_name: lexiflow-app-prod
+    restart: always
+    ports:
+      - "127.0.0.1:${PORT:-3000}:3000" # Bind to localhost (use nginx reverse proxy)
+      - "127.0.0.1:${WS_PORT:-3001}:3001"
+    volumes:
+      - ./uploads:/app/uploads:rw
+      - ./logs:/app/logs:rw
+      - app_cache:/app/.cache:rw
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SYNCHRONIZE: "false"
+      DB_LOGGING: "false"
+      DB_SSL: ${DB_SSL:-false}
+      DB_POOL_MAX: ${DB_POOL_MAX:-50}
+      DB_POOL_MIN: ${DB_POOL_MIN:-10}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-3600}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      RATE_LIMIT_TTL: ${RATE_LIMIT_TTL:-60}
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-100}
+    networks:
+      - lexiflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  # pgAdmin is disabled in production (use external tools)
+  # Redis Commander is disabled in production (use external tools)
+
+volumes:
+  postgres_prod_data:
+    name: lexiflow-postgres-prod-data
+  redis_prod_data:
+    name: lexiflow-redis-prod-data
+  app_cache:
+    name: lexiflow-app-cache

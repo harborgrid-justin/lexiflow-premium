@@ -6,9 +6,12 @@ import {
   HttpStatus,
   Logger,
   Injectable,
+  Inject,
+  Optional,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { BaseCustomException } from '../exceptions/custom-exceptions';
+import { ErrorTrackingService, ErrorSeverity } from '../exceptions/error-tracking.service';
 
 /**
  * All Exceptions Filter
@@ -19,6 +22,11 @@ import { BaseCustomException } from '../exceptions/custom-exceptions';
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
+
+  constructor(
+    @Optional() @Inject(ErrorTrackingService)
+    private readonly errorTrackingService?: ErrorTrackingService,
+  ) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -69,6 +77,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // Log with appropriate level and detail
     this.logException(exception, request, status, correlationId);
 
+    // Track error for potential GitHub issue creation
+    this.trackException(exception, request, status, correlationId);
+
     response.status(status).json(errorResponse);
   }
 
@@ -114,5 +125,56 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   private generateCorrelationId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private trackException(
+    exception: unknown,
+    request: Request,
+    status: number,
+    correlationId: string,
+  ): void {
+    if (!this.errorTrackingService) {
+      return;
+    }
+
+    // Only track errors (not warnings)
+    if (status < 400) {
+      return;
+    }
+
+    const error =
+      exception instanceof Error
+        ? exception
+        : new Error(
+            exception instanceof HttpException
+              ? exception.message
+              : 'Unknown error',
+          );
+
+    const severity = ErrorTrackingService.categorizeSeverity(status, error);
+
+    // Track asynchronously to not block response
+    this.errorTrackingService
+      .trackError({
+        correlationId,
+        error,
+        context:
+          exception instanceof BaseCustomException
+            ? exception.context
+            : undefined,
+        userId: (request as any).user?.id,
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        url: request.url,
+        method: request.method,
+        statusCode: status,
+        severity,
+      })
+      .catch((trackingError) => {
+        this.logger.error(
+          'Failed to track error',
+          trackingError instanceof Error ? trackingError.stack : String(trackingError),
+        );
+      });
   }
 }

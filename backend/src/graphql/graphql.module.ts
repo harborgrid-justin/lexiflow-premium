@@ -14,6 +14,9 @@ import { DiscoveryResolver } from './resolvers/discovery.resolver';
 import { AnalyticsResolver } from './resolvers/analytics.resolver';
 import { ClientResolver } from './resolvers/client.resolver';
 import { ComplianceResolver } from './resolvers/compliance.resolver';
+import { PartyResolver } from './resolvers/party.resolver';
+import { MotionResolver } from './resolvers/motion.resolver';
+import { DocketResolver } from './resolvers/docket.resolver';
 import { SubscriptionsResolver } from './subscriptions/subscriptions.resolver';
 import { DataLoaderModule } from './dataloaders/dataloader.module';
 import { ComplexityPlugin } from './plugins/complexity.plugin';
@@ -87,6 +90,9 @@ import { DepthLimitPlugin } from './plugins/depth-limit.plugin';
     AnalyticsResolver,
     ClientResolver,
     ComplianceResolver,
+    PartyResolver,
+    MotionResolver,
+    DocketResolver,
     SubscriptionsResolver,
 
     // Plugins

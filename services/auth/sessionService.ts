@@ -200,6 +200,46 @@ class SessionService {
     // Return cleanup function
     return () => clearInterval(intervalId);
   }
+
+  /**
+   * Check if session is currently active
+   */
+  isActive(): boolean {
+    return this.hasActiveSession() && !this.isSessionExpired();
+  }
+
+  /**
+   * Get time remaining until session expires (in milliseconds)
+   */
+  getTimeRemaining(): number | null {
+    const lastActivity = this.getLastActivity();
+    if (!lastActivity) return null;
+
+    const now = Date.now();
+    const timeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+    const elapsed = now - lastActivity;
+    const remaining = timeout - elapsed;
+
+    return remaining > 0 ? remaining : 0;
+  }
+
+  /**
+   * Get session expiry time (timestamp)
+   */
+  getExpiryTime(): number | null {
+    const lastActivity = this.getLastActivity();
+    if (!lastActivity) return null;
+
+    const timeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+    return lastActivity + timeout;
+  }
+
+  /**
+   * Update activity and persist session
+   */
+  updateActivity(): void {
+    this.updateLastActivity();
+  }
 }
 
 export const sessionService = new SessionService();

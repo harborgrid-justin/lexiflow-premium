@@ -3,7 +3,7 @@
  * Handles role-based and permission-based access control
  */
 
-import { UserSession } from './sessionService';
+import { UserSession, sessionService } from './sessionService';
 
 /**
  * Role hierarchy (higher level includes all lower level permissions)
@@ -290,6 +290,54 @@ class PermissionService {
       action,
       isWildcard: action === '*',
     };
+  }
+
+  /**
+   * Convenience methods that get current user from session
+   */
+
+  /**
+   * Get current user from session
+   */
+  private getCurrentUser(): UserSession | null {
+    return sessionService.getSession();
+  }
+
+  /**
+   * Check if current user has permission (convenience method)
+   */
+  checkPermission(permission: string): boolean {
+    return this.hasPermission(this.getCurrentUser(), permission);
+  }
+
+  /**
+   * Check if current user has any of the permissions (convenience method)
+   */
+  checkAnyPermission(permissions: string[]): boolean {
+    const user = this.getCurrentUser();
+    return this.hasAnyPermission(user, permissions);
+  }
+
+  /**
+   * Check if current user has all permissions (convenience method)
+   */
+  checkAllPermissions(permissions: string[]): boolean {
+    const user = this.getCurrentUser();
+    return this.hasAllPermissions(user, permissions);
+  }
+
+  /**
+   * Check if current user has role (convenience method)
+   */
+  checkRole(role: string): boolean {
+    return this.hasRole(this.getCurrentUser(), role);
+  }
+
+  /**
+   * Check if current user can access resource (convenience method)
+   */
+  checkAccess(resource: string, action: 'create' | 'read' | 'update' | 'delete'): boolean {
+    return this.canAccess(this.getCurrentUser(), resource, action);
   }
 }
 

@@ -1,8 +1,12 @@
 export { LoginForm } from './LoginForm';
+export { LoginFormEnhanced } from './LoginForm.enhanced';
 export { RegisterForm } from './RegisterForm';
 export { ForgotPasswordForm } from './ForgotPasswordForm';
 export { TwoFactorSetup } from './TwoFactorSetup';
-export { SocialLoginButtons } from './SocialLoginButtons';
 export { MFASetup } from './MFASetup';
-export { PasswordStrength } from './PasswordStrength';
+export { SocialLoginButtons } from './SocialLoginButtons';
+export { OAuthButtons } from './OAuthButtons';
+export { RememberMe } from './RememberMe';
+export { AccountSelector } from './AccountSelector';
 export { SessionTimeout } from './SessionTimeout';
+export { PasswordStrength } from './PasswordStrength';

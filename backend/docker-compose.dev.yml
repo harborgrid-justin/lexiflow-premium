@@ -1,0 +1,111 @@
+version: '3.8'
+
+# Development-specific docker-compose configuration
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  # PostgreSQL with development settings
+  postgres:
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-lexiflow_dev}
+      POSTGRES_USER: ${DB_USERNAME:-lexiflow_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-devpassword123}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./scripts/init-postgres.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/dev-seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    command: >
+      postgres
+      -c log_statement=all
+      -c log_duration=on
+      -c log_min_duration_statement=0
+      -c shared_preload_libraries=pg_stat_statements
+      -c pg_stat_statements.track=all
+
+  # Redis with development settings
+  redis:
+    command: >
+      redis-server
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD:-}
+      --loglevel verbose
+      --save 60 1
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_dev_data:/data
+
+  # NestJS Application with hot reload
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: lexiflow-app-dev
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+      - "${WS_PORT:-3001}:3001"
+      - "9229:9229" # Node.js debug port
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    environment:
+      NODE_ENV: development
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:-lexiflow_dev}
+      DB_USERNAME: ${DB_USERNAME:-lexiflow_user}
+      DB_PASSWORD: ${DB_PASSWORD:-devpassword123}
+      DB_SYNCHRONIZE: ${DB_SYNCHRONIZE:-false}
+      DB_LOGGING: ${DB_LOGGING:-true}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      LOG_LEVEL: ${LOG_LEVEL:-debug}
+    networks:
+      - lexiflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: npm run start:debug
+
+  # pgAdmin for development
+  pgadmin:
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_dev_data:/var/lib/pgadmin
+      - ./scripts/pgadmin-servers.json:/pgadmin4/servers.json
+
+  # Redis Commander for development
+  redis-commander:
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8081}:8081"
+
+  # Mailhog for email testing in development
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: lexiflow-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP server
+      - "8025:8025" # Web UI
+    networks:
+      - lexiflow-network
+
+volumes:
+  postgres_dev_data:
+    name: lexiflow-postgres-dev-data
+  redis_dev_data:
+    name: lexiflow-redis-dev-data
+  pgadmin_dev_data:
+    name: lexiflow-pgadmin-dev-data

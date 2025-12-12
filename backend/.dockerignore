@@ -75,6 +75,11 @@ uploads/*
 *.sqlite3
 *.db
 
+# Backups
+backups
+*.sql
+*.sql.gz
+
 # OS files
 Thumbs.db
 .DS_Store

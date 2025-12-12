@@ -196,7 +196,7 @@ export const downloadFile = async (
   window.URL.revokeObjectURL(url);
 };
 
-// Helper for retrying failed requests
+// Helper for retrying failed requests with exponential backoff
 export const retryRequest = async <T>(
   requestFn: () => Promise<T>,
   maxRetries: number = 3,
@@ -209,13 +209,138 @@ export const retryRequest = async <T>(
       return await requestFn();
     } catch (error) {
       lastError = error;
+      const axiosError = error as AxiosError;
+
+      // Don't retry on certain status codes (4xx client errors except 408, 429)
+      if (axiosError.response) {
+        const status = axiosError.response.status;
+        const retryableStatuses = [408, 429, 500, 502, 503, 504];
+        if (!retryableStatuses.includes(status)) {
+          throw error;
+        }
+      }
+
       if (i < maxRetries - 1) {
-        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        // Exponential backoff with jitter
+        const backoffDelay = delay * Math.pow(2, i) * (1 + Math.random() * 0.1);
+        await new Promise(resolve => setTimeout(resolve, backoffDelay));
       }
     }
   }
 
   throw lastError;
+};
+
+// Request queue for managing concurrent requests
+class RequestQueue {
+  private queue: Array<() => Promise<any>> = [];
+  private running = 0;
+  private maxConcurrent = 6;
+
+  async add<T>(requestFn: () => Promise<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.queue.push(async () => {
+        try {
+          const result = await requestFn();
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      });
+      this.process();
+    });
+  }
+
+  private async process(): Promise<void> {
+    if (this.running >= this.maxConcurrent || this.queue.length === 0) {
+      return;
+    }
+
+    this.running++;
+    const request = this.queue.shift();
+
+    if (request) {
+      try {
+        await request();
+      } finally {
+        this.running--;
+        this.process();
+      }
+    }
+  }
+}
+
+export const requestQueue = new RequestQueue();
+
+// Helper function for batch requests
+export const batchRequests = async <T>(
+  requests: Array<() => Promise<T>>,
+  batchSize: number = 5
+): Promise<T[]> => {
+  const results: T[] = [];
+
+  for (let i = 0; i < requests.length; i += batchSize) {
+    const batch = requests.slice(i, i + batchSize);
+    const batchResults = await Promise.all(batch.map(req => req()));
+    results.push(...batchResults);
+  }
+
+  return results;
+};
+
+// Cache for GET requests
+class RequestCache {
+  private cache = new Map<string, { data: any; timestamp: number }>();
+  private defaultTTL = 5 * 60 * 1000; // 5 minutes
+
+  set(key: string, data: any, ttl: number = this.defaultTTL): void {
+    this.cache.set(key, { data, timestamp: Date.now() + ttl });
+  }
+
+  get(key: string): any | null {
+    const cached = this.cache.get(key);
+    if (!cached) return null;
+
+    if (Date.now() > cached.timestamp) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return cached.data;
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+
+  delete(pattern: string): void {
+    const regex = new RegExp(pattern);
+    for (const key of this.cache.keys()) {
+      if (regex.test(key)) {
+        this.cache.delete(key);
+      }
+    }
+  }
+}
+
+export const requestCache = new RequestCache();
+
+// Helper for cached GET requests
+export const cachedGet = async <T>(
+  url: string,
+  config?: AxiosRequestConfig,
+  ttl?: number
+): Promise<T> => {
+  const cacheKey = `${url}${JSON.stringify(config?.params || {})}`;
+  const cached = requestCache.get(cacheKey);
+
+  if (cached) {
+    return cached;
+  }
+
+  const response = await apiClient.get<T>(url, config);
+  requestCache.set(cacheKey, response.data, ttl);
+  return response.data;
 };
 
 export default apiClient;

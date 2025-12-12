@@ -1,54 +1,73 @@
 ---
 name: Bug Report
-about: Report a bug or error in LexiFlow Premium
+about: Create a report to help us improve LexiFlow
 title: '[BUG] '
-labels: bug
+labels: 'bug, needs-triage'
 assignees: ''
 ---
 
 ## Bug Description
-<!-- A clear and concise description of what the bug is -->
-
-## Environment
-- **Component:** [ ] Backend | [ ] Frontend | [ ] Database | [ ] Integration
-- **Module:** <!-- e.g., Authentication, Case Management, Billing -->
-- **Agent Responsible:** <!-- e.g., Agent 1, Agent 2, etc. -->
-- **Browser/Node Version:** <!-- e.g., Chrome 120, Node 20.x -->
+A clear and concise description of what the bug is.
 
 ## Steps to Reproduce
-1.
-2.
-3.
-4.
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
 
 ## Expected Behavior
-<!-- What should happen -->
+A clear and concise description of what you expected to happen.
 
 ## Actual Behavior
-<!-- What actually happened -->
-
-## Error Message/Stack Trace
-```
-<!-- Paste error message or stack trace here -->
-```
+A clear and concise description of what actually happened.
 
 ## Screenshots
-<!-- If applicable, add screenshots to help explain the problem -->
+If applicable, add screenshots to help explain your problem.
 
-## Related Files
-<!-- List files that may be related to this bug -->
--
--
+## Environment
+**Desktop:**
+- OS: [e.g. Windows 11, macOS 13.0]
+- Browser: [e.g. Chrome 120, Safari 17]
+- Version: [e.g. 1.0.0]
 
-## Severity
-- [ ] Critical (System down, data loss)
-- [ ] High (Major feature broken)
-- [ ] Medium (Feature partially working)
-- [ ] Low (Minor issue, workaround available)
+**Mobile:**
+- Device: [e.g. iPhone 15, Samsung Galaxy S23]
+- OS: [e.g. iOS 17.0, Android 14]
+- Browser: [e.g. Safari, Chrome]
+- Version: [e.g. 1.0.0]
+
+## Error Details
+**Error ID (if available):** `[correlation-id]`
+
+**Console Errors:**
+```
+Paste any console errors here
+```
+
+**Network Errors:**
+```
+Paste any network errors here
+```
 
 ## Additional Context
-<!-- Any other context about the problem -->
+Add any other context about the problem here.
 
----
-**Reported by:** Agent <!-- Agent number -->
-**Date:** <!-- YYYY-MM-DD -->
+## Impact
+- [ ] Blocker - Cannot use the application
+- [ ] High - Major feature is broken
+- [ ] Medium - Feature partially working
+- [ ] Low - Minor inconvenience
+
+## Frequency
+- [ ] Always - Happens every time
+- [ ] Often - Happens frequently
+- [ ] Sometimes - Happens occasionally
+- [ ] Rare - Happened once or twice
+
+## User Type
+- [ ] Administrator
+- [ ] Lawyer/Attorney
+- [ ] Paralegal
+- [ ] Client
+- [ ] Other: ___________

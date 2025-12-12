@@ -9,3 +9,6 @@ export { BillingResolver } from './billing.resolver';
 export { DiscoveryResolver } from './discovery.resolver';
 export { ComplianceResolver } from './compliance.resolver';
 export { AnalyticsResolver } from './analytics.resolver';
+export { PartyResolver } from './party.resolver';
+export { MotionResolver } from './motion.resolver';
+export { DocketResolver } from './docket.resolver';

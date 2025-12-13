@@ -77,7 +77,7 @@ export const DiscoveryESI: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sources.map(source => (
                 <Card key={source.id} noPadding className="flex flex-col h-full hover:border-blue-300 transition-colors">
-                    <div className={cn("p-4 border-b flex justify-between items-start", theme.border.light, theme.surface.highlight)}>
+                    <div className={cn("p-4 border-b flex justify-between items-start", theme.border.default, theme.surface.highlight)}>
                         <div className="flex items-center gap-3">
                             <div className={cn("p-2 rounded border shadow-sm", theme.surface.default, theme.border.default)}>
                                 {getIcon(source.type)}
@@ -138,7 +138,7 @@ export const DiscoveryESI: React.FC = () => {
                         )}
                     </div>
                     
-                    <div className={cn("p-3 border-t flex justify-between items-center text-xs", theme.border.light, theme.surface.highlight, theme.text.tertiary)}>
+                    <div className={cn("p-3 border-t flex justify-between items-center text-xs", theme.border.default, theme.surface.highlight, theme.text.tertiary)}>
                         <span>ID: {source.id}</span>
                         <button className="text-blue-600 hover:underline" onClick={() => handleViewChain(source)}>View Chain of Custody</button>
                     </div>

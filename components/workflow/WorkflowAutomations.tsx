@@ -19,8 +19,8 @@ export const WorkflowAutomations: React.FC = () => {
                         <h4 className={cn("font-bold", theme.text.primary)}>Document Upload Trigger</h4>
                         <p className={cn("text-sm mt-1", theme.text.secondary)}>IF new document contains "Motion" THEN create task "Review Motion".</p>
                         <div className="mt-3 flex gap-2">
-                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>Module: Documents</span>
-                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>Module: Workflow</span>
+                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>Module: Documents</span>
+                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>Module: Workflow</span>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ export const WorkflowAutomations: React.FC = () => {
                         <h4 className={cn("font-bold", theme.text.primary)}>SLA Breach Warning</h4>
                         <p className={cn("text-sm mt-1", theme.text.secondary)}>IF "High Priority" task is overdue {'>'} 24h THEN notify Senior Partner.</p>
                         <div className="mt-3 flex gap-2">
-                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>Role: Senior Partner</span>
+                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>Role: Senior Partner</span>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@ export const WorkflowAutomations: React.FC = () => {
             </div>
         </div>
 
-        <div className={cn("border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)}>
+        <div className={cn("border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
             <Plus className="h-8 w-8 mb-2"/>
             <span className="font-bold">Create New Automation</span>
         </div>

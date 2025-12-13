@@ -36,10 +36,10 @@ export const HearsayAnalyzer: React.FC = () => {
             
             <Card title="Hearsay Statements Identified">
                 {statements.map(stmt => (
-                    <div key={stmt.id} className={cn("p-3 border-b last:border-0", theme.border.light)}>
+                    <div key={stmt.id} className={cn("p-3 border-b last:border-0", theme.border.default)}>
                         <p className={cn("italic text-sm", theme.text.primary)}>"{stmt.text}"</p>
                         <div className="flex justify-between items-center mt-2">
-                            <select className={cn("text-xs p-1 border rounded", theme.surfaceHighlight, theme.border.default)}>
+                            <select className={cn("text-xs p-1 border rounded", theme.surface.highlight, theme.border.default)}>
                                 <option>{stmt.exception}</option>
                                 <option>FRE 803(1) Present Sense Impression</option>
                                 <option>FRE 803(3) Then-Existing Condition</option>

@@ -55,7 +55,7 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
               <div className={cn("group-hover:text-slate-400", theme.text.tertiary)}>
                  <GripVertical className="h-4 w-4" />
               </div>
-              <div className={cn("p-2 rounded-md shadow-sm border", theme.surface.default, theme.border.light)}>
+              <div className={cn("p-2 rounded-md shadow-sm border", theme.surface.default, theme.border.default)}>
                 {getNodeIcon(item.type as NodeType)}
               </div>
               <div className="md:hidden lg:block">
@@ -66,7 +66,7 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
           ))}
         </div>
         
-        <div className={cn("mt-4 pt-4 border-t md:hidden lg:block", theme.border.light)}>
+        <div className={cn("mt-4 pt-4 border-t md:hidden lg:block", theme.border.default)}>
           <div className={cn("p-3 rounded-lg text-xs border", theme.status.info.bg, theme.status.info.border, theme.status.info.text)}>
             <strong>Designer Tip:</strong> Drag components onto the grid. Hold <strong>Space</strong> to pan.
           </div>

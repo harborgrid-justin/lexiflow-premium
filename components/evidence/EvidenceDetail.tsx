@@ -5,8 +5,8 @@ import React from 'react';
 import { Button } from '../common/Button';
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 import { ArrowLeft, FileSearch, Lock, ExternalLink, Stamp } from 'lucide-react';
-import { EvidenceOverview } from './overview/EvidenceOverview';
-import { EvidenceAdmissibility } from './fre/EvidenceAdmissibility';
+import { EvidenceOverview } from './EvidenceOverview';
+import { EvidenceAdmissibility } from './EvidenceAdmissibility';
 import { EvidenceStructure } from './EvidenceStructure';
 import { EvidenceForensics } from './EvidenceForensics';
 import { Tabs } from '../common/Tabs';
@@ -71,13 +71,13 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div className="flex items-center gap-4">
-          <button onClick={handleBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+          <button onClick={handleBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
             <ArrowLeft className="h-6 w-6" />
           </button>
           <div>
             <div className="flex items-center gap-3">
               <h1 className={cn("text-2xl font-bold", theme.text.primary)}>{selectedItem.title}</h1>
-              <span className={cn("font-mono text-sm px-2 py-0.5 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>{selectedItem.id}</span>
+              <span className={cn("font-mono text-sm px-2 py-0.5 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>{selectedItem.id}</span>
             </div>
             <div className="flex items-center gap-2 mt-1">
               <p className={cn("text-sm", theme.text.secondary)}>Associated Case: <span className={cn("font-medium", theme.primary.text)}>{selectedItem.caseId}</span></p>

@@ -50,7 +50,7 @@ export const ServiceTracker: React.FC<ServiceTrackerProps> = ({ jobs, onSelect, 
                         <MapPin className="h-3 w-3 mr-1"/> {job.targetAddress}
                     </div>
 
-                    <div className={cn("mt-auto pt-4 border-t space-y-2", theme.border.light)}>
+                    <div className={cn("mt-auto pt-4 border-t space-y-2", theme.border.default)}>
                         <div className="flex justify-between text-xs">
                             <span className={theme.text.secondary}>Document</span>
                             <span className={cn("font-medium truncate max-w-[120px]", theme.text.primary)}>{job.documentTitle}</span>

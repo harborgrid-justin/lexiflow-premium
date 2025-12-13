@@ -18,33 +18,33 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 }
 
 // Lazy Imports with Strict Relative Paths
-const Dashboard = lazyWithPreload(() => import('../components/Dashboard'));
+const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard'));
 const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
-const DocketManager = lazyWithPreload(() => import('../components/DocketManager'));
-const CorrespondenceManager = lazyWithPreload(() => import('../components/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));
-const MasterWorkflow = lazyWithPreload(() => import('../components/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
-const DocumentManager = lazyWithPreload(() => import('../components/DocumentManager'));
-const WarRoom = lazyWithPreload(() => import('../components/WarRoom').then(m => ({ default: m.WarRoom })));
-const ExhibitManager = lazyWithPreload(() => import('../components/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
-const DiscoveryPlatform = lazyWithPreload(() => import('../components/DiscoveryPlatform').then(m => ({ default: m.DiscoveryPlatform })));
-const EvidenceVault = lazyWithPreload(() => import('../components/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
-const ResearchTool = lazyWithPreload(() => import('../components/ResearchTool'));
-const FirmOperations = lazyWithPreload(() => import('../components/FirmOperations').then(m => ({ default: m.FirmOperations })));
-const BillingDashboard = lazyWithPreload(() => import('../components/BillingDashboard'));
-const ClientCRM = lazyWithPreload(() => import('../components/ClientCRM'));
-const ComplianceDashboard = lazyWithPreload(() => import('../components/ComplianceDashboard'));
+const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager'));
+const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));
+const MasterWorkflow = lazyWithPreload(() => import('../components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
+const DocumentManager = lazyWithPreload(() => import('../components/documents/DocumentManager'));
+const WarRoom = lazyWithPreload(() => import('../components/war-room/WarRoom').then(m => ({ default: m.WarRoom })));
+const ExhibitManager = lazyWithPreload(() => import('../components/exhibits/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
+const DiscoveryPlatform = lazyWithPreload(() => import('../components/discovery/DiscoveryPlatform').then(m => ({ default: m.DiscoveryPlatform })));
+const EvidenceVault = lazyWithPreload(() => import('../components/evidence/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
+const ResearchTool = lazyWithPreload(() => import('../components/research/ResearchTool'));
+const FirmOperations = lazyWithPreload(() => import('../components/practice/FirmOperations').then(m => ({ default: m.FirmOperations })));
+const BillingDashboard = lazyWithPreload(() => import('../components/billing/BillingDashboard'));
+const ClientCRM = lazyWithPreload(() => import('../components/crm/ClientCRM'));
+const ComplianceDashboard = lazyWithPreload(() => import('../components/compliance/ComplianceDashboard'));
 const AdminPanel = lazyWithPreload(() => import('../components/admin/AdminPanel').then(m => ({ default: m.AdminPanel })));
-const SecureMessenger = lazyWithPreload(() => import('../components/SecureMessenger').then(m => ({ default: m.SecureMessenger })));
-const EntityDirector = lazyWithPreload(() => import('../components/EntityDirector').then(m => ({ default: m.EntityDirector })));
-const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
-const AnalyticsDashboard = lazyWithPreload(() => import('../components/AnalyticsDashboard'));
-const JurisdictionManager = lazyWithPreload(() => import('../components/JurisdictionManager'));
-const CalendarView = lazyWithPreload(() => import('../components/CalendarView').then(m => ({ default: m.CalendarView })));
-const RulesPlatform = lazyWithPreload(() => import('../components/RulesPlatform').then(m => ({ default: m.RulesPlatform })));
+const SecureMessenger = lazyWithPreload(() => import('../components/messenger/SecureMessenger').then(m => ({ default: m.SecureMessenger })));
+const EntityDirector = lazyWithPreload(() => import('../components/entities/EntityDirector').then(m => ({ default: m.EntityDirector })));
+const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/data/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
+const AnalyticsDashboard = lazyWithPreload(() => import('../components/analytics/AnalyticsDashboard'));
+const JurisdictionManager = lazyWithPreload(() => import('../components/jurisdiction/JurisdictionManager'));
+const CalendarView = lazyWithPreload(() => import('../components/calendar/CalendarView').then(m => ({ default: m.CalendarView })));
+const RulesPlatform = lazyWithPreload(() => import('../components/rules/RulesPlatform').then(m => ({ default: m.RulesPlatform })));
 const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager').then(m => ({ default: m.UserProfileManager })));
-const PleadingBuilder = lazyWithPreload(() => import('../components/PleadingBuilder').then(m => ({ default: m.PleadingBuilder })));
-const KnowledgeBase = lazyWithPreload(() => import('../components/KnowledgeBase'));
-const LitigationBuilder = lazyWithPreload(() => import('../components/LitigationBuilder').then(m => ({ default: m.LitigationBuilder })));
+const PleadingBuilder = lazyWithPreload(() => import('../components/pleading/PleadingBuilder').then(m => ({ default: m.PleadingBuilder })));
+const KnowledgeBase = lazyWithPreload(() => import('../components/knowledge/KnowledgeBase'));
+const LitigationBuilder = lazyWithPreload(() => import('../components/litigation/LitigationBuilder').then(m => ({ default: m.LitigationBuilder })));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,

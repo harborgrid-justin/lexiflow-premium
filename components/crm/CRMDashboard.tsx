@@ -105,9 +105,9 @@ export const CRMDashboard: React.FC = () => {
               { client: 'OmniGlobal', action: 'Invoice Paid', date: '5 hours ago', user: 'Finance' },
               { client: 'GreenEnergy', action: 'Document Uploaded', date: 'Yesterday', user: 'James Doe' },
             ].map((item, idx) => (
-              <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.light)}>
+              <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
                 <div className="flex items-center gap-3">
-                  <div className={cn("p-2 rounded-full", theme.surfaceHighlight)}>
+                  <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
                     <Activity className={cn("h-4 w-4", theme.text.secondary)} />
                   </div>
                   <div>

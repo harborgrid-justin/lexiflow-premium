@@ -8,7 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { GanttTimeline } from './planning/GanttTimeline';

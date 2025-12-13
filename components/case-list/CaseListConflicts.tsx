@@ -45,7 +45,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
   return (
     <div className="max-w-2xl mx-auto mt-8 space-y-6">
       <div className="text-center">
-        <div className={cn("p-4 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center", theme.surfaceHighlight)}>
+        <div className={cn("p-4 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center", theme.surface.highlight)}>
           <ShieldAlert className={cn("h-10 w-10", theme.text.tertiary)}/>
         </div>
         <h3 className={cn("text-xl font-bold", theme.text.primary)}>Global Conflict Search</h3>

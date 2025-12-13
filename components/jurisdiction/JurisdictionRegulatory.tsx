@@ -23,7 +23,7 @@ export const JurisdictionRegulatory: React.FC = () => {
       <Card title="Administrative Bodies">
         <div className="space-y-4">
           {bodies.map((body, i) => (
-             <div key={i} className={cn("flex items-start p-4 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+             <div key={i} className={cn("flex items-start p-4 border rounded-lg", theme.surface.highlight, theme.border.default)}>
                 <Scale className={cn("h-6 w-6 mr-3 mt-1", body.iconColor)}/>
                 <div>
                     <h4 className={cn("font-bold", theme.text.primary)}>{body.name}</h4>

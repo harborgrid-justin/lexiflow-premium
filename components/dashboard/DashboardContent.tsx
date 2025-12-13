@@ -1,7 +1,7 @@
 import React from 'react';
 import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
-import { User } from '../types';
+import { User } from '../../types';
 
 interface DashboardContentProps {
   activeTab: string;

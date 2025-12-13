@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useCalendarView } from '../../hooks/useCalendarView';
+import { useCalendarView } from '@/hooks/useCalendarView';
 import { CalendarToolbar } from '../common/CalendarToolbar';
 import { CalendarGrid } from '../common/CalendarGrid';
 import { CalendarEvent } from '../common/CalendarEvent';

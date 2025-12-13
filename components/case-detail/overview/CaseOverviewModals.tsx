@@ -42,7 +42,7 @@ export const CaseOverviewModals: React.FC<CaseOverviewModalsProps> = ({
               <p className={cn("text-sm mb-4", theme.text.secondary)}>Select a docket to consolidate or link as a related matter.</p>
               {availableCases.length === 0 && <p className={cn("text-sm italic", theme.text.tertiary)}>No other cases available to link.</p>}
               {availableCases.map(c => (
-                  <div key={c.id} className={cn("flex justify-between items-center p-3 border rounded transition-colors", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                  <div key={c.id} className={cn("flex justify-between items-center p-3 border rounded transition-colors", theme.border.default, `hover:${theme.surface.highlight}`)}>
                       <div>
                           <p className={cn("font-bold text-sm", theme.text.primary)}>{c.title}</p>
                           <p className={cn("text-xs", theme.text.secondary)}>{c.id} • {c.court}</p>
@@ -51,7 +51,7 @@ export const CaseOverviewModals: React.FC<CaseOverviewModalsProps> = ({
                   </div>
               ))}
           </div>
-          <div className={cn("p-4 border-t flex justify-end", theme.border.light)}>
+          <div className={cn("p-4 border-t flex justify-end", theme.border.default)}>
               <Button onClick={() => setShowLinkModal(false)}>Done</Button>
           </div>
       </Modal>

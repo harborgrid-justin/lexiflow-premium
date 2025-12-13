@@ -16,7 +16,7 @@ import { Citation, Case, BriefAnalysisSession } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { RiskMeter } from '../common/RiskMeter';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 
 // Simple sanitizer to strip script tags
@@ -213,3 +213,5 @@ export const BriefAnalyzer: React.FC = () => {
     </div>
   );
 };
+
+export default BriefAnalyzer;

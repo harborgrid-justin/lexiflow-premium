@@ -113,7 +113,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
 
         <div>
             <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Link Exhibits / Documents</label>
-            <div className={cn("border rounded-md p-2 max-h-32 overflow-y-auto", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("border rounded-md p-2 max-h-32 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                 {documents.map(doc => (
                     <div key={doc.id} className={cn("flex items-center p-1 rounded cursor-pointer", `hover:${theme.surface.default}`)} onClick={() => handleToggleDoc(doc.id)}>
                         <div className={`w-4 h-4 mr-2 border rounded flex items-center justify-center ${newMotion.documents?.includes(doc.id) ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>
@@ -141,7 +141,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
           </div>
         </div>
 
-        <div className={cn("pt-4 flex justify-end gap-3 border-t mt-2", theme.border.light)}>
+        <div className={cn("pt-4 flex justify-end gap-3 border-t mt-2", theme.border.default)}>
           <Button variant="secondary" onClick={onClose}>Cancel</Button>
           <Button variant="primary" onClick={() => onSave(newMotion)} icon={ArrowRight}>Create Draft</Button>
         </div>

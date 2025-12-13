@@ -51,7 +51,7 @@ export const EvidenceCustodyLog: React.FC = () => {
             <div className="relative flex-1 md:w-64">
                 <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
                 <input 
-                    className={cn("w-full pl-9 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                    className={cn("w-full pl-9 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.highlight, theme.border.default, theme.text.primary)}
                     placeholder="Search logs..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -79,7 +79,7 @@ export const EvidenceCustodyLog: React.FC = () => {
                     <TableCell>
                         <span className={`px-2 py-1 rounded text-xs font-bold ${
                             evt.action.includes('Collected') ? cn(theme.status.success.bg, theme.status.success.text) : 
-                            evt.action.includes('Transfer') ? cn(theme.status.info.bg, theme.status.info.text) : cn(theme.surfaceHighlight, theme.text.secondary)
+                            evt.action.includes('Transfer') ? cn(theme.status.info.bg, theme.status.info.text) : cn(theme.surface.highlight, theme.text.secondary)
                         }`}>
                             {evt.action}
                         </span>

@@ -33,7 +33,7 @@ export const JurisdictionRules: React.FC<JurisdictionRulesProps> = ({ jurisdicti
       <div className="space-y-2">
         <h4 className={cn("text-xs font-bold uppercase text-slate-500 pl-1")}>Compliance Checks</h4>
         {rules.map((rule) => (
-          <div key={rule.id} className={cn("flex items-start gap-2 p-2 rounded text-xs", theme.surfaceHighlight)}>
+          <div key={rule.id} className={cn("flex items-start gap-2 p-2 rounded text-xs", theme.surface.highlight)}>
             {rule.status === 'Pass' ? (
               <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5" />
             ) : (

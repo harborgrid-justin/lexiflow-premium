@@ -58,7 +58,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
                 onChange={(e) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, description: e.target.value } })}
             />
         </div>
-        <div className={cn("pt-4 mt-auto border-t flex flex-col gap-2", theme.border.light)}>
+        <div className={cn("pt-4 mt-auto border-t flex flex-col gap-2", theme.border.default)}>
             <Button variant="outline" icon={BookOpen}>View Applicable Rule</Button>
             <Button variant="danger" onClick={() => onDeleteNode(selectedNode!.id)}>Remove Node</Button>
         </div>
@@ -74,12 +74,12 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
             onChange={(e) => onUpdateConnection(selectedConnection!.id, { label: e.target.value })}
             placeholder="e.g., Granted, Default"
         />
-        <div className={cn("text-xs p-2 rounded border", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("text-xs p-2 rounded border", theme.surface.highlight, theme.border.default)}>
             <p>From: <span className="font-mono">{selectedConnection!.from}</span></p>
             <p>To: <span className="font-mono">{selectedConnection!.to}</span></p>
         </div>
       </div>
-      <div className={cn("pt-4 mt-auto border-t", theme.border.light)}>
+      <div className={cn("pt-4 mt-auto border-t", theme.border.default)}>
         <Button variant="danger" onClick={() => onDeleteConnection(selectedConnection!.id)}>Delete Connection</Button>
       </div>
     </>
@@ -92,7 +92,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
       theme.border.default,
       isOpen ? 'translate-x-0' : 'translate-x-full'
     )}>
-      <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
           <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
             <Settings className="h-4 w-4 mr-2" /> {selectedConnection ? 'Connection' : 'Node'} Properties
           </h4>

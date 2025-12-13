@@ -42,7 +42,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
       <div 
         key={clause.id} 
         onClick={() => onSelectClause(clause)} 
-        className={cn("flex items-center border-b h-[64px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.light)}
+        className={cn("flex items-center border-b h-[64px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.default)}
       >
           <div className="flex-1 min-w-0 pr-4">
                <div className={cn("font-bold text-sm truncate", theme.text.primary)}>{clause.name}</div>
@@ -68,7 +68,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
                 <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search clauses..." className="border-none shadow-none p-0" />
             </div>
             
-            <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.light)}>
+            <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.default)}>
                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50", theme.border.default, theme.text.secondary)}>
                     <div className="flex-1">Clause Name & Category</div>
                     <div className="w-32">Version & Usage</div>

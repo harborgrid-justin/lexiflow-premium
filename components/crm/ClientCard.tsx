@@ -30,7 +30,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onGenerateToken 
             <Building className="h-3 w-3 mr-1"/> {client.industry}
             </p>
             
-            <div className={cn("grid grid-cols-2 gap-4 text-sm pt-4 border-t", theme.border.light)}>
+            <div className={cn("grid grid-cols-2 gap-4 text-sm pt-4 border-t", theme.border.default)}>
             <div>
                 <p className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>Lifetime Billed</p>
                 <Currency value={client.totalBilled} className={cn("font-bold", theme.text.primary)} />

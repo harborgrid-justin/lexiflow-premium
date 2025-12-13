@@ -14,7 +14,7 @@ export const DocketToolbar: React.FC<DocketToolbarProps> = ({ activeCaseTitle, o
   const { theme } = useTheme();
 
   return (
-    <div className={cn("p-4 border-b flex justify-between items-center sticky top-0 z-10", theme.surfaceHighlight, theme.border.default)}>
+    <div className={cn("p-4 border-b flex justify-between items-center sticky top-0 z-10", theme.surface.highlight, theme.border.default)}>
         <div>
             <h3 className={cn("font-bold text-lg", theme.text.primary)}>Case Docket</h3>
             <p className={cn("text-xs", theme.text.secondary)}>Viewing: {activeCaseTitle}</p>

@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { TimeEntry, UUID, CaseId, UserId } from '../../types';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 export const TimeTrackingPanel: React.FC = () => {
   const { theme } = useTheme();

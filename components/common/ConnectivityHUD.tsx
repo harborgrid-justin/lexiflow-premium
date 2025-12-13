@@ -47,7 +47,7 @@ export const ConnectivityHUD: React.FC = () => {
             ? "text-amber-600 bg-amber-50 hover:bg-amber-100" 
             : syncStatus === 'syncing' 
                 ? "text-blue-600 bg-blue-50 hover:bg-blue-100" 
-                : cn(theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surfaceHighlight}`)
+                : cn(theme.text.tertiary, `hover:${theme.text.secondary}`, `hover:${theme.surface.highlight}`)
         )}
         title={!isOnline ? "Offline Mode" : syncStatus === 'syncing' ? "Syncing..." : "System Online"}
         >

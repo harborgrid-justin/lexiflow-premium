@@ -95,7 +95,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
                 <Card title="Rules Search">
                     <div className="flex gap-2">
                         <input 
-                            className={cn("flex-1 p-2 rounded border text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                            className={cn("flex-1 p-2 rounded border text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.highlight, theme.border.default, theme.text.primary)}
                             placeholder="Search by rule number or keyword..."
                         />
                         <Button variant="primary">Search</Button>

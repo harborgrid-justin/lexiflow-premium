@@ -88,7 +88,7 @@ export const StandardizationConsole: React.FC = () => {
                         onClick={() => toggleRule(rule.id)}
                     >
                         <div className="flex justify-between items-start mb-3">
-                            <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
+                            <div className={cn("p-2 rounded-lg", theme.surface.highlight)}>
                                 {getIcon(rule.operation)}
                             </div>
                             <div className={cn("w-10 h-5 rounded-full p-1 transition-colors", rule.isActive ? "bg-blue-600" : cn(theme.border.default))}>
@@ -98,7 +98,7 @@ export const StandardizationConsole: React.FC = () => {
                         
                         <h4 className={cn("font-bold text-sm mb-1", theme.text.primary)}>{rule.name}</h4>
                         <div className={cn("flex items-center gap-2 text-xs", theme.text.secondary)}>
-                            <span className={cn("font-mono px-1.5 rounded", theme.surfaceHighlight)}>{rule.targetField}</span>
+                            <span className={cn("font-mono px-1.5 rounded", theme.surface.highlight)}>{rule.targetField}</span>
                             <span>•</span>
                             <span>{rule.operation}</span>
                         </div>

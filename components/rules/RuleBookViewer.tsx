@@ -100,7 +100,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
                 <>
                     <div className={cn("p-6 border-b flex justify-between items-start shrink-0", theme.border.default)}>
                         <div>
-                             <span className={cn("text-xs font-bold uppercase tracking-wider px-2 py-1 rounded", theme.surfaceHighlight, theme.text.secondary)}>{type} {selectedRule.code}</span>
+                             <span className={cn("text-xs font-bold uppercase tracking-wider px-2 py-1 rounded", theme.surface.highlight, theme.text.secondary)}>{type} {selectedRule.code}</span>
                              <h2 className={cn("text-2xl font-bold mt-3 leading-tight", theme.text.primary)}>{selectedRule.name}</h2>
                         </div>
                         <div className="flex gap-2">

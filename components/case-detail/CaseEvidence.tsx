@@ -2,7 +2,7 @@ import React from 'react';
 import { EvidenceInventory } from '../evidence/EvidenceInventory';
 import { EvidenceItem } from '../../types';
 import { Loader2 } from 'lucide-react';
-import { useEvidenceVault } from '../../hooks/useEvidenceVault'; 
+import { useEvidenceVault } from '@/hooks/useEvidenceVault'; 
 
 interface CaseEvidenceProps {
   caseId: string;

@@ -14,7 +14,7 @@ import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
 import { CitationDetail } from './CitationDetail';
 import { EmptyState } from '../common/EmptyState';
-import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 interface CitationLibraryProps {
   onSelect: (citation: Citation) => void;
@@ -67,7 +67,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
       <div 
         key={cit.id} 
         onClick={() => onSelect(cit)} 
-        className={cn("flex items-center border-b h-[64px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.light)}
+        className={cn("flex items-center border-b h-[64px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.default)}
       >
           <div className="w-16 flex justify-center" title={cit.shepardsSignal}>{getSignalIcon(cit.shepardsSignal)}</div>
           <div className="w-48"><span className={cn("font-bold font-mono text-xs", theme.primary.text)}>{cit.citation}</span></div>
@@ -137,7 +137,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
                 </div>
             </div>
             
-            <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.light)}>
+            <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.default)}>
                 {isLoading ? <div className="flex items-center justify-center h-full"><Loader2 className="h-6 w-6 animate-spin text-blue-600"/></div>
                 : filteredCitations.length > 0 ? content
                 : <div className="pt-10"><EmptyState icon={BookOpen} title="No Citations Found" description={isSearching ? "Searching..." : "Your firm's citation library is empty or your search returned no results."}/></div>

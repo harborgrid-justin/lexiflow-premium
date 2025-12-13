@@ -48,7 +48,7 @@ export const RuleTreeViewer: React.FC<RuleTreeViewerProps> = ({
                 "w-full flex items-center py-1.5 px-2 rounded cursor-pointer transition-colors text-sm text-left",
                 isSelected
                   ? cn(theme.primary.light, theme.primary.text, "font-medium")
-                  : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)
+                  : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
               )}
             >
               {hasChildren && (

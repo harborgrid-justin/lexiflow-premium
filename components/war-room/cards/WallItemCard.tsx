@@ -21,7 +21,7 @@ export const WallItemCard: React.FC<WallItemCardProps> = ({ item, onView, theme 
 
     return (
         <div className={cn("group relative flex flex-col rounded-xl border shadow-sm transition-all hover:shadow-md cursor-pointer", theme.surface.default, theme.border.default, item.hot ? "ring-2 ring-red-500/20" : "")}>
-            <div className={cn("aspect-[4/3] rounded-t-xl flex items-center justify-center relative overflow-hidden", theme.surfaceHighlight)}>
+            <div className={cn("aspect-[4/3] rounded-t-xl flex items-center justify-center relative overflow-hidden", theme.surface.highlight)}>
                 {getTypeIcon(item.type)}
                 {item.hot && <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">HOT</span>}
                 
@@ -39,7 +39,7 @@ export const WallItemCard: React.FC<WallItemCardProps> = ({ item, onView, theme 
             </div>
             <div className="p-3">
                 <div className="flex justify-between items-start mb-1">
-                    <span className={cn("font-mono text-[10px] font-bold px-1.5 rounded border", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>{item.num.substring(0, 8)}</span>
+                    <span className={cn("font-mono text-[10px] font-bold px-1.5 rounded border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>{item.num.substring(0, 8)}</span>
                     {item.status === 'Admitted' && <CheckCircle className="h-3.5 w-3.5 text-green-500"/>}
                     {item.status === 'Excluded' && <AlertTriangle className="h-3.5 w-3.5 text-red-500"/>}
                 </div>

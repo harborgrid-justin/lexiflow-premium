@@ -1,21 +1,21 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { UserRole, LegalDocument } from '../../types';
 import { DocumentVersions } from '../DocumentVersions';
-import { useDocumentManager } from '../../hooks/useDocumentManager';
+import { useDocumentManager } from '@/hooks/useDocumentManager';
 import { DocumentTable } from '../document/DocumentTable';
 import { DocumentFilters } from '../document/DocumentFilters';
 import { DocumentToolbar } from '../document/DocumentToolbar';
 import { DocumentDragOverlay } from '../document/DocumentDragOverlay';
 import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
 import { TagManagementModal } from '../document/TagManagementModal';
-import { useSelection } from '../../hooks/useSelection';
+import { useSelection } from '@/hooks/useSelection';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useDocumentDragDrop } from '../../hooks/useDocumentDragDrop';
+import { useDocumentDragDrop } from '@/hooks/useDocumentDragDrop';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { DocumentGridCard } from './DocumentGridCard';
 
@@ -73,7 +73,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
     >
         {isDragging && <DocumentDragOverlay onDrop={handleDrop} onDragLeave={handleDragLeave} />}
         
-        <div className={cn("w-64 border-r flex-shrink-0 hidden md:flex", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("w-64 border-r flex-shrink-0 hidden md:flex", theme.border.default, theme.surface.highlight)}>
             <DocumentFilters currentFolder={currentFolder} setCurrentFolder={setCurrentFolder} />
         </div>
 
@@ -93,7 +93,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
                         onRowClick={setPreviewDoc}
                     />
                 ) : (
-                    <div className={cn("h-full p-4", theme.surfaceHighlight)}>
+                    <div className={cn("h-full p-4", theme.surface.highlight)}>
                         <VirtualGrid 
                             items={filtered} 
                             height="100%"

@@ -24,7 +24,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
           
           <div className="space-y-3">
             {(selectedItem.chunks && selectedItem.chunks.length > 0) ? selectedItem.chunks.map((c, idx) => (
-              <div key={c.id || idx} className={cn("flex flex-col p-3 border rounded-lg transition-colors group", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+              <div key={c.id || idx} className={cn("flex flex-col p-3 border rounded-lg transition-colors group", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center">
                         <div className={cn("p-2 rounded mr-3", theme.primary.light)}>
@@ -37,7 +37,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
                     </div>
                     <Button size="sm" variant="ghost" className="text-xs">View Content</Button>
                 </div>
-                <div className={cn("p-2 rounded border text-xs font-mono flex items-center", theme.surfaceHighlight, theme.border.light, theme.text.secondary)}>
+                <div className={cn("p-2 rounded border text-xs font-mono flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                     <Link className={cn("h-3 w-3 mr-2", theme.text.tertiary)}/>
                     Hash: {c.hash}
                 </div>
@@ -64,7 +64,7 @@ export const EvidenceStructure: React.FC<EvidenceStructureProps> = ({ selectedIt
                 </div>
                 <h4 className={cn("font-bold text-sm", theme.text.primary)}>Ingestion & Hashing</h4>
                 <p className={cn("text-xs mt-1", theme.text.secondary)}>Master file uploaded and SHA-256 hash generated.</p>
-                <div className={cn("mt-2 p-2 rounded text-[10px] font-mono border break-all", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                <div className={cn("mt-2 p-2 rounded text-[10px] font-mono border break-all", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                     UUID: {selectedItem.trackingUuid}
                 </div>
             </div>

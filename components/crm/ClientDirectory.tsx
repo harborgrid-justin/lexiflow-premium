@@ -11,8 +11,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useMutation } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
-import { useNotify } from '../../hooks/useNotify';
-import { useClients } from '../../hooks/useDomainData';
+import { useNotify } from '@/hooks/useNotify';
+import { useClients } from '@/hooks/useDomainData';
 import { ClientCard } from './ClientCard';
 
 interface ClientDirectoryProps {

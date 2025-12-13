@@ -34,7 +34,7 @@ export const JurisdictionState: React.FC = () => {
         onChange={setFilter} 
         placeholder="Search state courts..." 
         actions={
-          <div className={cn("text-xs font-medium px-3 py-1.5 rounded-full border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+          <div className={cn("text-xs font-medium px-3 py-1.5 rounded-full border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
             Showing {filteredStates.length} jurisdictions
           </div>
         }

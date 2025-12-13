@@ -84,13 +84,13 @@ export const PDFEditorView: React.FC = () => {
     return (
         <div className="flex h-full">
             {/* Document List Sidebar */}
-            <div className={cn("w-72 border-r flex flex-col shrink-0", theme.border.default, theme.surfaceHighlight)}>
+            <div className={cn("w-72 border-r flex flex-col shrink-0", theme.border.default, theme.surface.highlight)}>
                 <div className={cn("p-4 border-b font-bold", theme.text.primary)}>PDF Documents</div>
                 <div className="flex-1 overflow-y-auto">
                     {isLoading ? <Loader2 className="animate-spin m-4"/> : documents.map(doc => (
                         <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
-                            theme.border.light,
+                            theme.border.default,
                             selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
@@ -110,7 +110,7 @@ export const PDFEditorView: React.FC = () => {
                             pageNum={pageNum} setPageNum={setPageNum}
                             totalPages={10} // Mock
                         />
-                        <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
+                        <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
                                 <InteractiveOverlay activeTool={activeTool} dimensions={pageDims} onFieldClick={handleFieldClick} />
                             </PDFViewer>

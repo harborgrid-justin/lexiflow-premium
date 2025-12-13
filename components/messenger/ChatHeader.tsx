@@ -18,7 +18,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation, onBack }) 
   return (
     <div className={cn("h-16 px-4 md:px-6 border-b flex justify-between items-center shadow-sm z-10 relative shrink-0", theme.surface.default, theme.border.default)}>
         <div className="flex items-center gap-3 overflow-hidden">
-          <button onClick={onBack} className={cn("md:hidden p-2 -ml-2 rounded-full", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+          <button onClick={onBack} className={cn("md:hidden p-2 -ml-2 rounded-full", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
             <ArrowLeft className="h-5 w-5"/>
           </button>
           <UserAvatar name={conversation.name} size="md" indicatorStatus={conversation.status} />

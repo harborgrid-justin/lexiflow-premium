@@ -8,7 +8,7 @@ import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentService } from '../../services/documentService';
 import { DataService } from '../../services/dataService';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';

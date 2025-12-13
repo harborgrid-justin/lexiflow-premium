@@ -132,7 +132,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
                 {isPending && <div className="absolute right-12 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
             </div>
             
-            <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex p-1 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                 {['All', 'Hot Docs', 'Admitted', 'Motions'].map(f => (
                     <button
                         key={f}

@@ -101,7 +101,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
             <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={e => setNewItem({...newItem, description: e.target.value})} />
             
-            <div className={cn("flex justify-end pt-4 border-t", theme.border.light)}>
+            <div className={cn("flex justify-end pt-4 border-t", theme.border.default)}>
                 <Button variant="primary" onClick={handleSave}>Save {modalType}</Button>
             </div>
         </div>

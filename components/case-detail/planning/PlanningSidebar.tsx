@@ -23,18 +23,18 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
 
   return (
     <div className={cn("w-96 border-r flex flex-col overflow-hidden shadow-lg z-10", theme.surface.default, theme.border.default)}>
-        <div className={cn("h-8 border-b flex items-center px-4 font-bold text-xs uppercase", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+        <div className={cn("h-8 border-b flex items-center px-4 font-bold text-xs uppercase", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
             Work Breakdown Structure
         </div>
         <div className="flex-1 overflow-y-auto custom-scrollbar">
             {phases.map(phase => (
-                <div key={phase.id} className={cn("border-b last:border-0", theme.border.light)}>
+                <div key={phase.id} className={cn("border-b last:border-0", theme.border.default)}>
                     <div 
                     className={cn(
                         "flex items-center justify-between p-3 cursor-pointer transition-colors sticky top-0 z-10 border-b border-transparent",
                         theme.surface.default,
-                        `hover:${theme.surfaceHighlight}`,
-                        collapsedPhases.has(phase.id) && cn("border-b", theme.border.light)
+                        `hover:${theme.surface.highlight}`,
+                        collapsedPhases.has(phase.id) && cn("border-b", theme.border.default)
                     )}
                     onClick={() => onTogglePhase(phase.id)}
                     >
@@ -46,7 +46,7 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
                     </div>
 
                     {!collapsedPhases.has(phase.id) && (
-                        <div className={cn(theme.surfaceHighlight)}>
+                        <div className={cn(theme.surface.highlight)}>
                             {/* Simple mock filter for tasks belonging to phase - in real app would check ID */}
                             {tasks.filter(t => true).slice(0, 3).map(task => (
                                 <div 

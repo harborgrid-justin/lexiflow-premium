@@ -23,7 +23,7 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className={cn("flex flex-col md:flex-row justify-between items-start md:items-center p-4 rounded-lg border gap-4", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row justify-between items-start md:items-center p-4 rounded-lg border gap-4", theme.surface.highlight, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold", theme.text.primary)}>Conflict Checks</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Search history and run new clearance reports.</p>
@@ -66,7 +66,7 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
                   {c.foundIn.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
                       {c.foundIn.map((hit, i) => (
-                        <span key={i} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                        <span key={i} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                           {hit}
                         </span>
                       ))}

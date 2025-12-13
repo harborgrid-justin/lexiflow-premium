@@ -85,7 +85,7 @@ export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }
   };
 
   return (
-    <div className={cn("w-80 border-l flex flex-col", theme.surfaceHighlight, theme.border.default)}>
+    <div className={cn("w-80 border-l flex flex-col", theme.surface.highlight, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.default, theme.border.default)}>
             <h3 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
                 <ShieldAlert className="h-4 w-4 mr-2 text-amber-600"/> PII Detection

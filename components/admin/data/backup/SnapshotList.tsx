@@ -40,7 +40,7 @@ export const SnapshotList: React.FC<SnapshotListProps> = ({ snapshots, isLoading
                     <TableRow key={snap.id}>
                         <TableCell>
                             <div className="flex items-center gap-3">
-                                <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
+                                <div className={cn("p-2 rounded-lg", theme.surface.highlight)}>
                                     {getSnapshotIcon(snap.type)}
                                 </div>
                                 <div>

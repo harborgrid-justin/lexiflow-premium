@@ -145,12 +145,12 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                 onMouseDown={(e) => handleMouseDown(e, 'item', t.name, { x: t.x, y: t.y })}
                 onContextMenu={(e) => handleContextMenu(e, 'table', { name: t.name })}
             >
-                <div className={cn("p-3 border-b flex justify-between items-center shrink-0 cursor-move bg-gradient-to-r", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("p-3 border-b flex justify-between items-center shrink-0 cursor-move bg-gradient-to-r", theme.surface.highlight, theme.border.default)}>
                     <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}><Database className="h-3 w-3 mr-2 text-blue-600"/> {t.name}</h4>
                 </div>
-                <div className={cn("divide-y overflow-y-auto", theme.border.light)}>
+                <div className={cn("divide-y overflow-y-auto", theme.border.default)}>
                     {t.columns.map((c: TableColumn, i: number) => (
-                        <div key={i} className={cn("px-3 py-2 flex justify-between items-center group transition-colors", `hover:${theme.surfaceHighlight}`)} onContextMenu={(e) => handleContextMenu(e, 'column', { tableName: t.name, column: c })}>
+                        <div key={i} className={cn("px-3 py-2 flex justify-between items-center group transition-colors", `hover:${theme.surface.highlight}`)} onContextMenu={(e) => handleContextMenu(e, 'column', { tableName: t.name, column: c })}>
                             <div className="flex items-center">
                                 {c.pk && <Key className="h-3 w-3 mr-2 text-yellow-500"/>}
                                 {c.fk && <LinkIcon className="h-3 w-3 mr-2 text-blue-400"/>}
@@ -160,7 +160,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                         </div>
                     ))}
                 </div>
-                <button onClick={() => onAddColumn(t.name)} className={cn("w-full py-2 text-xs flex items-center justify-center transition-colors font-medium border-t shrink-0", theme.border.default, theme.primary.text, `hover:${theme.surfaceHighlight}`)}>
+                <button onClick={() => onAddColumn(t.name)} className={cn("w-full py-2 text-xs flex items-center justify-center transition-colors font-medium border-t shrink-0", theme.border.default, theme.primary.text, `hover:${theme.surface.highlight}`)}>
                     <Plus className="h-3 w-3 mr-1"/> Add Column
                 </button>
             </div>

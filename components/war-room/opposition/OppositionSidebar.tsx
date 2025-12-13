@@ -31,7 +31,7 @@ export const OppositionSidebar: React.FC<OppositionSidebarProps> = ({ activeCate
                         onClick={() => onSelectCategory(cat.id)}
                         className={cn(
                             "w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex justify-between items-center",
-                            activeCategory === cat.id ? cn(theme.surfaceHighlight, theme.primary.text, "shadow-sm border border-slate-200") : theme.text.secondary
+                            activeCategory === cat.id ? cn(theme.surface.highlight, theme.primary.text, "shadow-sm border border-slate-200") : theme.text.secondary
                         )}
                     >
                         <div className="flex items-center">

@@ -18,7 +18,21 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@types/*": ["types/*"],
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
+      "@components/*": ["components/*"],
+      "@context/*": ["context/*"],
+      "@config/*": ["config/*"],
+      "@data/*": ["data/*"],
+      "@theme/*": ["theme/*"],
+      "@services/*": ["services/*"],
+      "@constants/*": ["constants/*"]
+    }
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

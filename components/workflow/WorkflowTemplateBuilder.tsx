@@ -11,7 +11,7 @@ import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Save, Rocket, ArrowLeft } from 'lucide-react';
-import { useWorkflowBuilder } from '../../hooks/useWorkflowBuilder';
+import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
 
 interface WorkflowTemplateBuilderProps {
   initialTemplate?: WorkflowTemplateData | null;

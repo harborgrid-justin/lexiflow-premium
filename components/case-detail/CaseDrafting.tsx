@@ -106,19 +106,19 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
         <div className={cn("flex border-b", theme.border.subtle)}>
           <button
             onClick={() => setActiveMode('edit')}
-            className={`flex-1 py-3 text-sm font-medium ${activeMode !== 'review' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/20' : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)}`}
+            className={`flex-1 py-3 text-sm font-medium ${activeMode !== 'review' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/20' : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)}`}
           >
             Clause Library
           </button>
           <button
             onClick={() => setActiveMode('review')}
-            className={`flex-1 py-3 text-sm font-medium ${activeMode === 'review' ? 'text-amber-600 border-b-2 border-amber-600 bg-amber-50/20' : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)}`}
+            className={`flex-1 py-3 text-sm font-medium ${activeMode === 'review' ? 'text-amber-600 border-b-2 border-amber-600 bg-amber-50/20' : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)}`}
           >
             Risk Analysis
           </button>
         </div>
 
-        <div className={cn("flex-1 overflow-y-auto flex flex-col", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-y-auto flex flex-col", theme.surface.highlight)}>
           {activeMode === 'review' ? (
              <div className="p-4 space-y-4">
                 <div className="bg-amber-50 border border-amber-200 rounded p-3 text-xs text-amber-800 flex items-start">
@@ -135,7 +135,7 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
                         {reviewResult || (
                             <div className={cn("text-center py-8 italic", theme.text.tertiary)}>
                                 Click "Review Risks" to analyze the current document content.
-                                <button onClick={handleReview} className={cn("mt-4 px-4 py-2 border rounded shadow-sm block mx-auto transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>Run Analysis</button>
+                                <button onClick={handleReview} className={cn("mt-4 px-4 py-2 border rounded shadow-sm block mx-auto transition-colors", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>Run Analysis</button>
                             </div>
                         )}
                     </div>

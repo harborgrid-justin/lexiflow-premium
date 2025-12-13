@@ -51,7 +51,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
         {/* Review Toolbar */}
         <div className={cn("h-14 border-b flex justify-between items-center px-4 shrink-0 shadow-md z-20", theme.surface.default, theme.border.default)}>
             <div className="flex items-center gap-4">
-                <button onClick={onBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+                <button onClick={onBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                     <ArrowLeft className="h-5 w-5"/>
                 </button>
                 <div className={cn("h-6 w-px", theme.border.default)}></div>
@@ -65,7 +65,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
             </div>
             
             <div className="flex items-center gap-2">
-                <div className={cn("hidden md:flex items-center rounded px-2 py-1 mr-2 border", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("hidden md:flex items-center rounded px-2 py-1 mr-2 border", theme.surface.highlight, theme.border.default)}>
                     <button onClick={() => setScale(s => Math.max(50, s - 10))} className={cn("p-1 hover:text-blue-400", theme.text.secondary)}><ZoomOut className="h-4 w-4"/></button>
                     <span className={cn("text-xs font-mono w-12 text-center select-none", theme.text.primary)}>{scale}%</span>
                     <button onClick={() => setScale(s => Math.min(200, s + 10))} className={cn("p-1 hover:text-blue-400", theme.text.secondary)}><ZoomIn className="h-4 w-4"/></button>
@@ -74,7 +74,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                 <Button size="sm" variant="primary" icon={Download}>Download</Button>
                 <button 
                     onClick={() => setShowCodingPanel(!showCodingPanel)}
-                    className={cn("ml-2 p-2 rounded transition-colors", showCodingPanel ? "bg-blue-600 text-white" : cn(theme.surfaceHighlight, theme.text.secondary, `hover:${theme.text.primary}`))}
+                    className={cn("ml-2 p-2 rounded transition-colors", showCodingPanel ? "bg-blue-600 text-white" : cn(theme.surface.highlight, theme.text.secondary, `hover:${theme.text.primary}`))}
                 >
                     <Tag className="h-5 w-5"/>
                 </button>
@@ -85,7 +85,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
         <div className="flex-1 flex overflow-hidden">
             
             {/* Document Canvas */}
-            <div className={cn("flex-1 overflow-auto relative flex justify-center p-8", theme.surfaceHighlight)}>
+            <div className={cn("flex-1 overflow-auto relative flex justify-center p-8", theme.surface.highlight)}>
                 <div 
                     className={cn("shadow-2xl min-h-[1100px] w-full max-w-4xl transition-transform origin-top duration-200 ease-out", theme.surface.default)}
                     style={{ transform: `scale(${scale / 100})` }}

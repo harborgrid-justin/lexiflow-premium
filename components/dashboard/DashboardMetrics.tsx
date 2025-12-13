@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { MetricCard } from '../common/Primitives';
 import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
-import { useInterval } from '../../hooks/useInterval';
+import { useInterval } from '@/hooks/useInterval';
 
 interface DashboardMetricsProps {
     stats: {

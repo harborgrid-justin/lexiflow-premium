@@ -23,7 +23,7 @@ export const RecentFiles: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surface.highlight, theme.border.default)}>
             <Clock className={cn("h-5 w-5", theme.text.secondary)}/>
             <div>
                 <h3 className={cn("font-bold text-sm", theme.text.primary)}>Recently Accessed</h3>

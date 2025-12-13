@@ -74,7 +74,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
 
        <div className="flex-1 flex overflow-hidden">
            {/* Left: Configuration */}
-           <div className={cn("w-96 border-r p-6 overflow-y-auto space-y-6", theme.surfaceHighlight, theme.border.default)}>
+           <div className={cn("w-96 border-r p-6 overflow-y-auto space-y-6", theme.surface.highlight, theme.border.default)}>
                
                <Card title="1. Select Deficient Requests">
                    <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -134,11 +134,11 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
            </div>
 
            {/* Right: Preview */}
-           <div className={cn("flex-1 p-8 overflow-y-auto", theme.surfaceHighlight)}>
+           <div className={cn("flex-1 p-8 overflow-y-auto", theme.surface.highlight)}>
                {draft ? (
                    <div className={cn("max-w-3xl mx-auto shadow-lg p-10 min-h-[800px] border", theme.surface.default, theme.border.default)}>
                         <div dangerouslySetInnerHTML={{ __html: draft }} className={cn("prose max-w-none font-serif text-sm leading-loose", theme.text.primary)} />
-                        <div className={cn("mt-8 pt-8 border-t flex justify-end gap-3", theme.border.light)}>
+                        <div className={cn("mt-8 pt-8 border-t flex justify-end gap-3", theme.border.default)}>
                             <Button variant="secondary">Save as Draft</Button>
                             <Button variant="primary" icon={Gavel}>File with Court</Button>
                         </div>

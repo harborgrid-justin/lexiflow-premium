@@ -58,7 +58,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
   };
   
   const renderRow = (item: any) => (
-      <div key={item.id} className={cn("flex items-center border-b h-[64px] px-6 transition-colors group", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+      <div key={item.id} className={cn("flex items-center border-b h-[64px] px-6 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>
           <div className={cn("w-1/4 font-bold whitespace-nowrap", theme.text.primary)}>
                 <div className="flex items-center">
                   <Calendar className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
@@ -89,7 +89,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
 
   return (
     <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in flex flex-col h-full", theme.surface.default, theme.border.default)}>
-      <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold", theme.text.primary)}>Master Docket</h3>
           <p className={cn("text-xs flex items-center mt-1", theme.text.secondary)}>
@@ -105,7 +105,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
       
       {isLoading ? <LazyLoader /> : (
           <div className="flex-1 flex flex-col min-h-0">
-             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                 <div className="w-1/4">Date</div>
                 <div className="w-1/4">Time</div>
                 <div className="w-1/2">Matter / Docket</div>

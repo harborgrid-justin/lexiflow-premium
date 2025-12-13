@@ -39,19 +39,19 @@ export const DocketFilterPanel: React.FC<DocketFilterPanelProps> = ({
           <div className="space-y-1">
             <button 
                 onClick={() => setActiveTab('all')} 
-                className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'all' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`))}
+                className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'all' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
             >
                 All Entries
             </button>
             <button 
                 onClick={() => setActiveTab('filings')} 
-                className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'filings' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`))}
+                className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'filings' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
             >
                 Filings Only
             </button>
             <button 
                 onClick={() => setActiveTab('orders')} 
-                className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'orders' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`))}
+                className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'orders' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
             >
                 Orders & Judgments
             </button>
@@ -66,7 +66,7 @@ export const DocketFilterPanel: React.FC<DocketFilterPanelProps> = ({
                 <button 
                   key={c.id} 
                   onClick={() => setSelectedCaseId(c.id)}
-                  className={cn("w-full text-left px-3 py-2 rounded text-sm truncate transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}
+                  className={cn("w-full text-left px-3 py-2 rounded text-sm truncate transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
                 >
                   <div className="font-medium truncate">{c.title}</div>
                   <div className={cn("text-xs", theme.text.tertiary)}>{c.id}</div>

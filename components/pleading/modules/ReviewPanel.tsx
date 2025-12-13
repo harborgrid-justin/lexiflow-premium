@@ -51,7 +51,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
                  <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
                     <MessageSquare className="h-4 w-4 mr-2" /> Review Studio
                 </h3>
-                <span className={cn("text-xs font-mono px-2 py-0.5 rounded", theme.surfaceHighlight)}>{comments.filter(c => !c.resolved).length} Open</span>
+                <span className={cn("text-xs font-mono px-2 py-0.5 rounded", theme.surface.highlight)}>{comments.filter(c => !c.resolved).length} Open</span>
             </div>
             <button 
                 onClick={handleRequestReview}

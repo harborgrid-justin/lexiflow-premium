@@ -34,7 +34,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({ tabs, activeTab, o
                 "whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors min-w-fit",
                 isActive
                   ? cn(theme.primary.text, "border-current")
-                  : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.border.light}`)
+                  : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.border.default}`)
               )}
               aria-current={isActive ? 'page' : undefined}
             >

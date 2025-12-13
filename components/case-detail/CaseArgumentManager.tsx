@@ -57,7 +57,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Header Toolbar */}
-      <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
             <div className="p-2 bg-blue-100 rounded-lg text-blue-600 border border-blue-200">
                 <Target className="h-5 w-5"/>
@@ -117,7 +117,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
         )}
         
         {!activeArgumentId && (
-            <div className={cn("hidden lg:flex flex-1 items-center justify-center", theme.surfaceHighlight, theme.text.tertiary)}>
+            <div className={cn("hidden lg:flex flex-1 items-center justify-center", theme.surface.highlight, theme.text.tertiary)}>
                 <div className="text-center">
                     <Target className="h-16 w-16 mx-auto mb-4 opacity-20"/>
                     <h3 className="text-lg font-medium">Select an argument to refine</h3>

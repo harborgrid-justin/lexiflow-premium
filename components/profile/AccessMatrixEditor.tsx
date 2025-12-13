@@ -75,7 +75,7 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
                         <TableRow key={perm.id}>
                             <TableCell className="font-mono text-xs font-bold text-slate-700">{perm.resource}</TableCell>
                             <TableCell>
-                                <span className={cn("px-2 py-1 rounded text-xs border font-medium", theme.surfaceHighlight, theme.border.default)}>
+                                <span className={cn("px-2 py-1 rounded text-xs border font-medium", theme.surface.highlight, theme.border.default)}>
                                     {perm.action.toUpperCase()}
                                 </span>
                             </TableCell>

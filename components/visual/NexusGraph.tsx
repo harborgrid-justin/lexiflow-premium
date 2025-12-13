@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Case, Party, EvidenceItem, NexusNodeData } from '../../types';
 import { GraphOverlay } from './GraphOverlay';
-import { useNexusGraph } from '../../hooks/useNexusGraph';
+import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { useChartTheme } from '../common/ChartHelpers';
 
 interface NexusGraphProps {

@@ -65,12 +65,12 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
       <div 
         key={item.id} 
         onClick={() => onItemClick(item)}
-        className={cn("flex items-center border-b h-[72px] px-6 hover:bg-slate-50 transition-colors cursor-pointer group", theme.border.light)}
+        className={cn("flex items-center border-b h-[72px] px-6 hover:bg-slate-50 transition-colors cursor-pointer group", theme.border.default)}
       >
           <div className="w-[15%] font-mono text-xs text-slate-500">{item.id}</div>
           <div className="w-[25%]">
               <div className="flex items-center">
-                    <div className={cn("mr-3 p-1.5 rounded border self-start md:self-center", theme.surfaceHighlight, theme.border.default)}><EvidenceTypeIcon type={item.type}/></div>
+                    <div className={cn("mr-3 p-1.5 rounded border self-start md:self-center", theme.surface.highlight, theme.border.default)}><EvidenceTypeIcon type={item.type}/></div>
                     <div className="min-w-0">
                         <div className={cn("font-medium", theme.text.primary)}>{item.title}</div>
                         <div className={cn("text-xs text-slate-400 md:truncate")}>{item.description}</div>

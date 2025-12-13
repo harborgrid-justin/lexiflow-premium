@@ -26,13 +26,13 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
       <div className="flex items-center gap-2 mb-2">
         <Icon className={`h-5 w-5 ${colorClass}`}/>
         <h4 className={cn("font-bold uppercase text-sm tracking-wide", theme.text.primary)}>{title}</h4>
-        <span className={cn("text-xs px-2 py-0.5 rounded-full", theme.surfaceHighlight, theme.text.secondary)}>{items.length}</span>
+        <span className={cn("text-xs px-2 py-0.5 rounded-full", theme.surface.highlight, theme.text.secondary)}>{items.length}</span>
       </div>
 
       {type === 'Citation' ? (
          <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
             {(items as Citation[]).map((cit) => (
-                <div key={cit.id} className={cn("p-3 border-b last:border-0 transition-colors group relative", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+                <div key={cit.id} className={cn("p-3 border-b last:border-0 transition-colors group relative", theme.border.default, `hover:${theme.surface.highlight}`)}>
                     <div className="flex justify-between items-start mb-1">
                         <div className="flex items-center">
                             {cit.shepardsSignal === 'Positive' && <CheckCircle className="h-3 w-3 text-green-500 mr-1.5"/>}
@@ -67,13 +67,13 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                 {type === 'Argument' && (
                    <>
                        <RiskMeter value={(typedItem as LegalArgument).strength} label="Strength" type="strength" />
-                       <div className={cn("mt-3 pt-3 border-t flex flex-col gap-2", theme.border.light)}>
+                       <div className={cn("mt-3 pt-3 border-t flex flex-col gap-2", theme.border.default)}>
                            {/* Citations & Evidence Links Logic */}
                            <div className="flex gap-1 flex-wrap">
                                {(typedItem as LegalArgument).relatedCitationIds.map(cid => {
                                    const cit = citations.find(c => c.id === cid);
                                    return cit ? (
-                                       <span key={cid} className={cn("text-[10px] px-1.5 py-0.5 rounded flex items-center border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                                       <span key={cid} className={cn("text-[10px] px-1.5 py-0.5 rounded flex items-center border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                                            <BookOpen className="h-3 w-3 mr-1"/> {cit.citation}
                                        </span>
                                    ) : null;
@@ -92,7 +92,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                 )}
                 
                 {type === 'Defense' && (
-                    <div className={cn("flex justify-between items-center pt-2 border-t", theme.border.light)}>
+                    <div className={cn("flex justify-between items-center pt-2 border-t", theme.border.default)}>
                         <span className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>{(typedItem as Defense).type}</span>
                         <button className={cn("hover:text-blue-600", theme.text.tertiary)}><ExternalLink className="h-3 w-3"/></button>
                     </div>

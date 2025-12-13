@@ -104,9 +104,9 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   }, [results]);
 
   const renderResultRow = (row: any, index: number) => (
-      <div key={index} className={cn("flex border-b transition-colors h-8", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+      <div key={index} className={cn("flex border-b transition-colors h-8", theme.border.default, `hover:${theme.surface.highlight}`)}>
           {Object.values(row).map((v: any, j) => (
-              <div key={j} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.light)}>
+              <div key={j} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.default)}>
                   {String(v)}
               </div>
           ))}
@@ -119,7 +119,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
             <Modal isOpen={true} onClose={() => setShareModalOpen(false)} title="Share Query">
                 <div className="p-6 space-y-4">
                     <p className={cn("text-sm", theme.text.secondary)}>Share a secure link to this saved query with your team.</p>
-                    <div className={cn("flex gap-2 p-2 rounded border", theme.surfaceHighlight, theme.border.default)}>
+                    <div className={cn("flex gap-2 p-2 rounded border", theme.surface.highlight, theme.border.default)}>
                         <span className="text-sm font-mono truncate">https://lexiflow.ai/query/sh_...</span>
                         <CopyButton text="https://lexiflow.ai/query/sh_..." />
                     </div>
@@ -131,7 +131,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
 
              <div className="flex-1 flex flex-col min-w-0">
                 <div className={cn("h-[40%] flex flex-col", theme.surface.default)}>
-                    <div className={cn("flex justify-between items-center p-2 border-b", theme.border.default, theme.surfaceHighlight)}>
+                    <div className={cn("flex justify-between items-center p-2 border-b", theme.border.default, theme.surface.highlight)}>
                         <div className="flex gap-1">
                             <Button size="xs" variant="secondary" icon={AlignLeft} onClick={handleFormat} isLoading={isFormatting}>Format</Button>
                             <Button size="xs" variant="secondary" icon={Bot} onClick={handleExplain}>Explain</Button>
@@ -147,7 +147,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                 </div>
                 
                 <div className={cn("flex-1 overflow-hidden flex flex-col", theme.surface.default, "border-t", theme.border.default)}>
-                    <div className={cn("p-2 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+                    <div className={cn("p-2 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
                         <Tabs 
                             tabs={['results', 'explain', 'visualize']}
                             activeTab={activeResultsTab}
@@ -166,9 +166,9 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                     <div className="flex-1 overflow-hidden relative">
                         {activeResultsTab === 'results' && results && results.length > 0 && (
                             <div className="flex flex-col h-full">
-                                <div className={cn("flex border-b font-bold text-xs", theme.surfaceHighlight, theme.border.default)}>
+                                <div className={cn("flex border-b font-bold text-xs", theme.surface.highlight, theme.border.default)}>
                                     {Object.keys(results[0]).map(k => (
-                                        <div key={k} className={cn("flex-1 px-4 py-2 border-r last:border-r-0 truncate", theme.border.light, theme.text.secondary)}>{k}</div>
+                                        <div key={k} className={cn("flex-1 px-4 py-2 border-r last:border-r-0 truncate", theme.border.default, theme.text.secondary)}>{k}</div>
                                     ))}
                                 </div>
                                 <div className="flex-1 relative">

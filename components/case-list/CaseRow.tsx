@@ -28,7 +28,7 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
         <div 
             role="button"
             tabIndex={0}
-            className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6 group outline-none focus:bg-slate-50 focus:ring-1 focus:ring-inset focus:ring-blue-500", theme.border.light)}
+            className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6 group outline-none focus:bg-slate-50 focus:ring-1 focus:ring-inset focus:ring-blue-500", theme.border.default)}
             onMouseEnter={() => onPrefetch(caseData.id)}
             onClick={() => onSelect(caseData)}
             onKeyDown={handleKeyDown}
@@ -58,7 +58,7 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
             <div className="w-[5%] flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity">
                 <button 
                     onClick={(e) => { e.stopPropagation(); onSelect(caseData); }} 
-                    className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)} 
+                    className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)} 
                     title="View Details"
                     tabIndex={-1}
                 >

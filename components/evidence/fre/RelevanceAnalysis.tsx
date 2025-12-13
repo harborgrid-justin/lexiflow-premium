@@ -60,7 +60,7 @@ export const RelevanceAnalysis: React.FC = () => {
                         <RiskMeter value={30} label="Prejudicial Effect" type="risk"/>
                     </div>
                  </div>
-                 <div className={cn("mt-6 pt-6 border-t flex justify-between items-center", theme.border.light)}>
+                 <div className={cn("mt-6 pt-6 border-t flex justify-between items-center", theme.border.default)}>
                     <Badge variant="success">Likely Admissible</Badge>
                     <Button variant="ghost" icon={Wand2}>AI Suggest Argument</Button>
                  </div>

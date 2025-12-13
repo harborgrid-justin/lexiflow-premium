@@ -101,7 +101,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
                         {policies.map(pol => (
                             <div key={pol.id} className={cn("flex items-center justify-between p-4 border rounded-lg shadow-sm transition-all hover:shadow-md", theme.surface.default, theme.border.default)}>
                                 <div className="flex items-center gap-4">
-                                    <div className={cn("p-2 rounded-lg", theme.surfaceHighlight, theme.text.secondary)}><FileText className="h-6 w-6"/></div>
+                                    <div className={cn("p-2 rounded-lg", theme.surface.highlight, theme.text.secondary)}><FileText className="h-6 w-6"/></div>
                                     <div>
                                         <h4 className={cn("font-bold text-sm", theme.text.primary)}>{pol.title}</h4>
                                         <p className={cn("text-xs", theme.text.secondary)}>Version {pol.version} • Updated {pol.date}</p>

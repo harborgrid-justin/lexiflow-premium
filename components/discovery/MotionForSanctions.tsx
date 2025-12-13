@@ -65,7 +65,7 @@ export const MotionForSanctions: React.FC = () => {
                     </div>
                     <h4 className={cn("font-bold text-lg mb-2", theme.text.primary)}>{s.title}</h4>
                     <p className={cn("text-sm mb-4", theme.text.secondary)}>{s.description}</p>
-                    <div className={cn("pt-4 border-t flex justify-end gap-2", theme.border.light)}>
+                    <div className={cn("pt-4 border-t flex justify-end gap-2", theme.border.default)}>
                         <Button size="sm" variant="outline">View Brief</Button>
                         <Button size="sm" variant="ghost" className="text-red-600">Delete</Button>
                     </div>

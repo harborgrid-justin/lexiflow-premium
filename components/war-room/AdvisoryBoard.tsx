@@ -49,7 +49,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Header Toolbar */}
-      <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
             <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Advisory Board</h3>
             <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>

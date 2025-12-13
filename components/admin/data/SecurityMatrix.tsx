@@ -23,7 +23,7 @@ export const SecurityMatrix: React.FC<SecurityMatrixProps> = ({ initialTab = 'ma
   return (
     <div className="flex flex-col h-full">
         <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surface.default, theme.border.default)}>
-            <div className={cn("flex gap-2 p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex gap-2 p-1 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                 <button 
                     onClick={() => setActiveView('matrix')}
                     className={cn("px-4 py-1.5 text-xs font-bold rounded transition-all", activeView === 'matrix' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}
@@ -43,7 +43,7 @@ export const SecurityMatrix: React.FC<SecurityMatrixProps> = ({ initialTab = 'ma
             </div>
         </div>
 
-        <div className={cn("flex-1 overflow-hidden p-6", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-hidden p-6", theme.surface.highlight)}>
             {activeView === 'matrix' ? (
                 <AccessMatrix />
             ) : (

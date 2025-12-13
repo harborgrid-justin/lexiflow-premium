@@ -22,7 +22,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   return (
     <div className={cn("p-3 rounded-lg border shadow-sm flex flex-col md:flex-row gap-3 items-center sticky top-0 z-20", theme.surface.default, theme.border.default)}>
         <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto no-scrollbar">
-          <div className={cn("flex items-center border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow", theme.surfaceHighlight, theme.border.default)}>
+          <div className={cn("flex items-center border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow", theme.surface.highlight, theme.border.default)}>
             <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
             <select 
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
@@ -34,7 +34,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
             </select>
           </div>
 
-          <div className={cn("flex items-center border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow", theme.surfaceHighlight, theme.border.default)}>
+          <div className={cn("flex items-center border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-blue-500 transition-shadow", theme.surface.highlight, theme.border.default)}>
             <SlidersHorizontal className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
             <select 
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}

@@ -100,7 +100,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
   return (
     <div className="space-y-6">
       {/* 1. Meta Data */}
-      <div className={cn("p-4 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
           <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.secondary)}>Entry Metadata</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Input label="Date Filed" type="date" value={date} onChange={e => setDate(e.target.value)} />
@@ -206,14 +206,14 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
       </div>
 
       {/* 3. Preview */}
-      <div className={cn("p-4 rounded-lg border-l-4 border-l-purple-500", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("p-4 rounded-lg border-l-4 border-l-purple-500", theme.border.default, theme.surface.highlight)}>
           <h5 className={cn("text-xs font-bold mb-1 uppercase", theme.text.tertiary)}>Generated Docket Text</h5>
           <p className={cn("text-sm font-medium font-serif leading-relaxed", theme.text.primary)}>
               "{previewText}"
           </p>
       </div>
 
-      <div className={cn("flex justify-between items-center pt-4 border-t", theme.border.light)}>
+      <div className={cn("flex justify-between items-center pt-4 border-t", theme.border.default)}>
           <label className={cn("flex items-center text-sm cursor-pointer font-medium", theme.primary.text)}>
               <input 
                   type="checkbox" 

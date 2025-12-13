@@ -35,7 +35,7 @@ export const RiskList: React.FC<RiskListProps> = ({ risks, selectedId, onSelect 
   };
 
   return (
-    <div className={cn("divide-y", theme.border.light)}>
+    <div className={cn("divide-y", theme.border.default)}>
         {risks.map(risk => (
             <div 
                 key={risk.id}
@@ -43,7 +43,7 @@ export const RiskList: React.FC<RiskListProps> = ({ risks, selectedId, onSelect 
                 className={cn(
                     "p-4 cursor-pointer border-l-4 transition-colors group",
                     getScoreColor(risk.probability, risk.impact),
-                    selectedId === risk.id ? theme.surfaceHighlight : `hover:${theme.surfaceHighlight}`
+                    selectedId === risk.id ? theme.surface.highlight : `hover:${theme.surface.highlight}`
                 )}
             >
                 <div className="flex justify-between items-start mb-1">

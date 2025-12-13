@@ -89,7 +89,7 @@ export const MarketingDashboard: React.FC = () => {
         <Card title="Active Marketing Campaigns">
           <div className="space-y-4">
             {campaigns.map((camp) => (
-              <div key={camp.id} className={cn("p-3 border rounded-lg flex justify-between items-center transition-colors", camp.status === 'Upcoming' ? "opacity-70" : "", theme.surfaceHighlight, theme.border.default)}>
+              <div key={camp.id} className={cn("p-3 border rounded-lg flex justify-between items-center transition-colors", camp.status === 'Upcoming' ? "opacity-70" : "", theme.surface.highlight, theme.border.default)}>
                 <div>
                   <h4 className={cn("font-bold text-sm", theme.text.primary)}>{camp.name}</h4>
                   <p className={cn("text-xs", theme.text.secondary)}>Target: {camp.target}</p>

@@ -43,7 +43,7 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
   return (
     <div className={cn("flex h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
         {/* Sidebar: Sections */}
-        <div className={cn("w-72 border-r flex flex-col", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("w-72 border-r flex flex-col", theme.border.default, theme.surface.highlight)}>
             <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default)}>
                 <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Binder Sections</h3>
                 <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
@@ -89,7 +89,7 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                     <div className="flex-1 overflow-y-auto p-6">
                         <div className="grid grid-cols-1 gap-3">
                             {activeSection.documents.map(doc => (
-                                <div key={doc.id} className={cn("flex items-center justify-between p-4 rounded-lg border transition-all group cursor-pointer", theme.border.default, theme.surface.default, `hover:${theme.surfaceHighlight}`)}>
+                                <div key={doc.id} className={cn("flex items-center justify-between p-4 rounded-lg border transition-all group cursor-pointer", theme.border.default, theme.surface.default, `hover:${theme.surface.highlight}`)}>
                                     <div className="flex items-center gap-4 overflow-hidden">
                                         <div className={cn("p-3 rounded-lg text-blue-600 shrink-0", theme.primary.light)}>
                                             <File className="h-6 w-6"/>

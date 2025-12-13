@@ -69,12 +69,12 @@ export const TagList: React.FC<{ tags: string[]; limit?: number }> = ({ tags, li
   return (
     <div className="flex flex-wrap gap-1.5">
       {tags.slice(0, limit).map(t => (
-        <span key={t} className={cn("px-2 py-0.5 rounded text-[10px] font-medium border", theme.surfaceHighlight, theme.text.secondary, theme.border.light)}>
+        <span key={t} className={cn("px-2 py-0.5 rounded text-[10px] font-medium border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>
           {t}
         </span>
       ))}
       {tags.length > limit && (
-        <span className={cn("px-2 py-0.5 rounded text-[10px] font-medium opacity-70", theme.surfaceHighlight, theme.text.secondary)}>+{tags.length - limit}</span>
+        <span className={cn("px-2 py-0.5 rounded text-[10px] font-medium opacity-70", theme.surface.highlight, theme.text.secondary)}>+{tags.length - limit}</span>
       )}
     </div>
   );

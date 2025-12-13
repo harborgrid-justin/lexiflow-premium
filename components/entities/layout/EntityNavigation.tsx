@@ -94,7 +94,7 @@ export const EntityNavigation: React.FC<EntityNavigationProps> = ({
 
         {/* Sub-Navigation (Pills) */}
         {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (
                     <button 
                         key={tab.id} 

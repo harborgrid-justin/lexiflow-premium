@@ -49,7 +49,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({
             <Card title="Compliance Frameworks">
                 <div className="space-y-4">
                     {['GDPR', 'SOC 2 Type II', 'CCPA', 'HIPAA'].map(fw => (
-                        <div key={fw} className={cn("flex items-center justify-between p-3 rounded border", theme.surfaceHighlight, theme.border.default)}>
+                        <div key={fw} className={cn("flex items-center justify-between p-3 rounded border", theme.surface.highlight, theme.border.default)}>
                             <div className="flex items-center gap-2">
                                 <Scale className={cn("h-5 w-5", theme.text.secondary)}/>
                                 <span className={cn("font-bold text-sm", theme.text.primary)}>{fw}</span>
@@ -63,7 +63,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({
             <Card title="Active Rules" action={<Button size="sm" variant="outline" onClick={handleScan}>{isScanning ? `Scanning ${scanProgress}%` : 'Run Scan'}</Button>}>
                 <div className="space-y-2">
                     {rules.map(r => (
-                        <div key={r.id} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div key={r.id} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.border.default, `hover:${theme.surface.highlight}`)}>
                             <div>
                                 <p className={cn("text-sm font-bold", theme.text.primary)}>{r.name}</p>
                                 <p className={cn("text-xs", theme.text.secondary)}>{r.status} • {r.impact}</p>

@@ -42,7 +42,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border animate-fade-in", theme.surface.default, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
             <div className="flex items-center">
                 <button onClick={onBack} className={cn("mr-3 p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.default}`)}>
                     <ArrowLeft className="h-5 w-5"/>
@@ -62,7 +62,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
             {/* Left: Request Context */}
-            <div className={cn("w-full md:w-1/3 border-r p-6 overflow-y-auto", theme.border.default, theme.surfaceHighlight)}>
+            <div className={cn("w-full md:w-1/3 border-r p-6 overflow-y-auto", theme.border.default, theme.surface.highlight)}>
                 <div className="mb-4">
                     <Badge variant="neutral">{request.type}</Badge>
                 </div>

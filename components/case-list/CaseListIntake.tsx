@@ -98,7 +98,7 @@ export const CaseListIntake: React.FC = () => {
                   <h4 className={cn("font-bold text-sm line-clamp-1 transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{lead.client}</h4>
                 </div>
                 <p className={cn("text-xs mb-3 line-clamp-1", theme.text.secondary)}>{lead.title}</p>
-                <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.light)}>
+                <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.default)}>
                   <span className={cn("font-mono font-medium flex items-center", theme.status.success.text)}>
                       <DollarSign className="h-3 w-3 mr-0.5"/>
                       {lead.value.replace('$','')}

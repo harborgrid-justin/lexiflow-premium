@@ -40,7 +40,7 @@ export const JurisdictionArbitration: React.FC = () => {
       <Card title="Panel Selection">
         <div className="space-y-4">
           <p className={cn("text-sm", theme.text.secondary)}>Manage preferred arbitrators and strike lists.</p>
-          <div className={cn("p-3 rounded text-sm font-medium border", theme.surfaceHighlight, theme.text.primary, theme.border.light)}>
+          <div className={cn("p-3 rounded text-sm font-medium border", theme.surface.highlight, theme.text.primary, theme.border.default)}>
             <span className={cn("block text-xs uppercase mb-1", theme.text.tertiary)}>Pending Selection</span>
             TechCorp v. StartUp Inc (AAA Case #4492)
           </div>

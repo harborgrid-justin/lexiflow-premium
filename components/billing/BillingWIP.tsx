@@ -10,7 +10,7 @@ import { DataService } from '../../services/dataService';
 import { TimeEntry } from '../../types';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 export const BillingWIP: React.FC = () => {
   const { theme } = useTheme();

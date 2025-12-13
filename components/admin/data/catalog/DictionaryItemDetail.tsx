@@ -55,7 +55,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
     };
 
     return (
-        <div className={cn("flex flex-col h-full animate-in slide-in-from-right duration-200", theme.surfaceHighlight)}>
+        <div className={cn("flex flex-col h-full animate-in slide-in-from-right duration-200", theme.surface.highlight)}>
             <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.default, theme.border.default)}>
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" icon={ArrowLeft} onClick={onClose}>Back</Button>
@@ -164,11 +164,11 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                         <div className="space-y-6">
                             <Card title="Tech Specs">
                                 <div className="space-y-3 text-sm">
-                                    <div className={cn("flex justify-between border-b pb-2", theme.border.light)}>
+                                    <div className={cn("flex justify-between border-b pb-2", theme.border.default)}>
                                         <span className={theme.text.secondary}>Source System</span>
                                         <span className="font-medium">{formData.sourceSystem}</span>
                                     </div>
-                                    <div className={cn("flex justify-between border-b pb-2", theme.border.light)}>
+                                    <div className={cn("flex justify-between border-b pb-2", theme.border.default)}>
                                         <span className={theme.text.secondary}>Last Updated</span>
                                         <span className="font-mono text-xs">{new Date().toLocaleDateString()}</span>
                                     </div>
@@ -176,7 +176,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                         <span className={theme.text.secondary}>Quality Score</span>
                                         <Badge variant="success">{formData.dataQualityScore}/100</Badge>
                                     </div>
-                                    <div className={cn("w-full rounded-full h-1.5 mt-2", theme.surfaceHighlight)}>
+                                    <div className={cn("w-full rounded-full h-1.5 mt-2", theme.surface.highlight)}>
                                         <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${formData.dataQualityScore}%` }}></div>
                                     </div>
                                 </div>

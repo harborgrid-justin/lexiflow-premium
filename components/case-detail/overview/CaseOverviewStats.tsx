@@ -36,7 +36,7 @@ export const CaseOverviewStats: React.FC = () => {
                 className={cn(
                     "p-4 rounded-lg border shadow-sm flex flex-col justify-center cursor-pointer group relative overflow-hidden", 
                     theme.surface.default, theme.border.default,
-                    `hover:${theme.surfaceHighlight}`,
+                    `hover:${theme.surface.highlight}`,
                     `hover:${theme.primary.border} transition-all`
                 )}
             >

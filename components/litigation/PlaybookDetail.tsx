@@ -7,8 +7,8 @@ import { Button } from '../common/Button';
 import { Tabs } from '../common/Tabs';
 import { CheckCircle, Clock, BookOpen, Target, ArrowRight, Shield, Layers, Scale, FileText, ExternalLink } from 'lucide-react';
 import { useWindow } from '../../context/WindowContext';
-import { ResearchTool } from '../ResearchTool';
-import { WarRoom } from '../WarRoom';
+import { ResearchTool } from '../research/ResearchTool';
+import { WarRoom } from '../war-room/WarRoom';
 
 interface PlaybookDetailProps {
   playbook: Playbook;
@@ -52,7 +52,7 @@ export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClos
                <span className={cn("px-2 py-0.5 rounded text-xs font-bold border", theme.primary.light, theme.primary.border, theme.primary.text)}>
                    {playbook.category}
                </span>
-               <span className={cn("px-2 py-0.5 rounded text-xs font-bold border", theme.surfaceHighlight, theme.border.default)}>
+               <span className={cn("px-2 py-0.5 rounded text-xs font-bold border", theme.surface.highlight, theme.border.default)}>
                    {playbook.jurisdiction}
                </span>
            </div>

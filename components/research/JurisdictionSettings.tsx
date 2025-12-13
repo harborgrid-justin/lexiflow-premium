@@ -39,7 +39,7 @@ export const JurisdictionSettings: React.FC = () => {
             </div>
         </Card>
 
-        <div className={cn("p-4 rounded-lg border flex items-center justify-between", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border flex items-center justify-between", theme.surface.highlight, theme.border.default)}>
             <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-600"/>
                 <span className={cn("text-sm font-medium", theme.text.primary)}>Shepard's / KeyCite Integration Active</span>

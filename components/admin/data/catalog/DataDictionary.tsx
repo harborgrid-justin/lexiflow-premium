@@ -58,7 +58,7 @@ export const DataDictionary: React.FC = () => {
         <div 
             key={item.id} 
             onClick={() => handleSelect(item)}
-            className={cn("flex items-center border-b h-16 px-6 cursor-pointer transition-colors group", theme.border.light, `hover:${theme.surfaceHighlight}`)}
+            className={cn("flex items-center border-b h-16 px-6 cursor-pointer transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}
         >
             <div className={cn("w-[25%] font-mono text-sm font-medium truncate", theme.text.secondary)} title={item.table}>{item.table}</div>
             <div className={cn("w-[20%] font-bold text-sm truncate", theme.primary.text)} title={item.column}>{item.column}</div>
@@ -102,7 +102,7 @@ export const DataDictionary: React.FC = () => {
                                 "px-3 py-1.5 text-xs font-medium rounded-full transition-colors border",
                                 activeDomain === dom 
                                     ? cn(theme.primary.light, theme.primary.text, theme.primary.border) 
-                                    : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                    : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                             )}
                          >
                              {dom}
@@ -112,7 +112,7 @@ export const DataDictionary: React.FC = () => {
             </div>
 
             <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col", theme.surface.default, theme.border.default)}>
-                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.border.default, theme.surfaceHighlight, theme.text.secondary)}>
+                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.border.default, theme.surface.highlight, theme.text.secondary)}>
                     <div className="w-[25%]">Table Name</div>
                     <div className="w-[20%]">Column / Field</div>
                     <div className="w-[15%]">Data Type</div>

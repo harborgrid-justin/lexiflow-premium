@@ -69,7 +69,7 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({
   
   return (
     <div className={cn("flex-1 overflow-hidden flex flex-col", theme.surface.default, isPending ? "opacity-70 transition-opacity" : "")}>
-        <div className={cn("flex items-center px-4 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+        <div className={cn("flex items-center px-4 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
             <div className="w-10 flex-shrink-0 flex justify-center">
                 <input type="checkbox" onChange={selectAll} checked={isAllSelected} className="rounded text-blue-600 focus:ring-blue-500 cursor-pointer"/>
             </div>

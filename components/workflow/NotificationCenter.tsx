@@ -48,7 +48,7 @@ export const NotificationCenter: React.FC = () => {
 
   return (
     <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
-      <div className={cn("p-3 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-3 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
         <h4 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
           <Bell className={cn("h-4 w-4 mr-2", theme.primary.text)} /> Notifications
         </h4>
@@ -59,7 +59,7 @@ export const NotificationCenter: React.FC = () => {
             <div className={cn("p-4 text-center text-xs italic", theme.text.tertiary)}>No new notifications.</div>
         )}
         {notifications.map(n => (
-          <div key={n.id} className={cn("p-3 transition-colors group flex justify-between items-start", n.read ? "opacity-60" : "", `hover:${theme.surfaceHighlight}`)}>
+          <div key={n.id} className={cn("p-3 transition-colors group flex justify-between items-start", n.read ? "opacity-60" : "", `hover:${theme.surface.highlight}`)}>
             <div className="flex-1">
                 <p className={cn("text-xs mb-1", theme.text.primary)}>{n.text}</p>
                 <span className={cn("text-[10px]", theme.text.tertiary)}>{n.time}</span>

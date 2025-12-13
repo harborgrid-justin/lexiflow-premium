@@ -89,7 +89,7 @@ export const DataLakeExplorer: React.FC = () => {
                 </div>
             </div>
 
-            <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surface.highlight, theme.border.default)}>
                 <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><Home className="h-4 w-4"/></button>
                 {currentPath.slice(1).map((folder, i) => (
                     <React.Fragment key={folder}>
@@ -121,7 +121,7 @@ export const DataLakeExplorer: React.FC = () => {
                                 <TableRow><TableCell colSpan={7} className={cn("text-center py-12", theme.text.tertiary)}>Folder is empty</TableCell></TableRow>
                             )}
                             {items.map(item => (
-                                <TableRow key={item.id} className={cn("cursor-pointer", `hover:${theme.surfaceHighlight}`)} onClick={() => handleFileClick(item)}>
+                                <TableRow key={item.id} className={cn("cursor-pointer", `hover:${theme.surface.highlight}`)} onClick={() => handleFileClick(item)}>
                                     <TableCell onClick={e => e.stopPropagation()}>
                                         <input 
                                             type="checkbox" 
@@ -144,12 +144,12 @@ export const DataLakeExplorer: React.FC = () => {
                                         <span className={cn("text-[10px] px-2 py-0.5 rounded-full border", 
                                             item.tier === 'Hot' ? cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border) :
                                             item.tier === 'Cool' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
-                                            cn(theme.surfaceHighlight, theme.text.secondary, theme.border.default)
+                                            cn(theme.surface.highlight, theme.text.secondary, theme.border.default)
                                         )}>{item.tier}</span>
                                     </TableCell>
                                     <TableCell className={cn("text-xs", theme.text.secondary)}>{item.modified}</TableCell>
                                     <TableCell className="text-right">
-                                        <button className={cn("p-1 rounded", theme.text.tertiary, `hover:${theme.surfaceHighlight}`)} onClick={e => e.stopPropagation()}>
+                                        <button className={cn("p-1 rounded", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={e => e.stopPropagation()}>
                                             <MoreHorizontal className="h-4 w-4"/>
                                         </button>
                                     </TableCell>

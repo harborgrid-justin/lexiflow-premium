@@ -9,7 +9,7 @@ import { FileAttachment } from '../common/FileAttachment';
 import { GeminiService } from '../../services/geminiService';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
-import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useInterval } from '../../hooks/useInterval';
@@ -102,7 +102,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
 
   if (!activeConversation) {
     return (
-      <div className={cn("flex-1 flex flex-col items-center justify-center p-8 h-full", theme.surfaceHighlight, theme.text.tertiary)}>
+      <div className={cn("flex-1 flex flex-col items-center justify-center p-8 h-full", theme.surface.highlight, theme.text.tertiary)}>
         <div className={cn("h-24 w-24 rounded-full flex items-center justify-center mb-6", theme.surface.default)}>
           <Lock className="h-12 w-12 opacity-50"/>
         </div>
@@ -115,7 +115,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
   }
 
   return (
-    <div className={cn("flex-1 flex flex-col h-full", theme.surfaceHighlight)}>
+    <div className={cn("flex-1 flex flex-col h-full", theme.surface.highlight)}>
       <ChatHeader conversation={activeConversation} onBack={() => setActiveConvId(null)} />
       
       <div className="flex-1 overflow-hidden relative">
@@ -133,7 +133,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
       </div>
 
       {pendingAttachments.length > 0 && (
-        <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface.default, theme.border.light)}>
+        <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface.default, theme.border.default)}>
           {pendingAttachments.map((att, i) => (
             <div key={i} className="relative group cursor-pointer" onClick={() => handlePreviewAttachment(att)}>
               <FileAttachment name={att.name} size={att.size} type={att.type} className="w-48 shadow-sm"/>

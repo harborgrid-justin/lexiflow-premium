@@ -3,18 +3,18 @@ import React, { Suspense, lazy, useState, useTransition } from 'react';
 import {
   RefreshCw
 } from 'lucide-react';
-import { Button } from './common/Button';
-import { PeriodSelector } from './common/PeriodSelector';
-import { ExportMenu } from './common/ExportMenu';
-import { useMutation } from '../services/queryClient';
-import { DataService } from '../services/dataService';
-import { useNotify } from '../hooks/useNotify';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
-import { cn } from '../utils/cn';
-import { BILLING_TAB_CONFIG, BillingView } from '../config/billingDashboardConfig';
-import { BillingDashboardContent } from './billing/BillingDashboardContent';
+import { Button } from '../common/Button';
+import { PeriodSelector } from '../common/PeriodSelector';
+import { ExportMenu } from '../common/ExportMenu';
+import { useMutation } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { useNotify } from '../../hooks/useNotify';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { cn } from '../../utils/cn';
+import { BILLING_TAB_CONFIG, BillingView } from '../../config/billingDashboardConfig';
+import { BillingDashboardContent } from './BillingDashboardContent';
 
 interface BillingDashboardProps {
   navigateTo?: (view: string) => void;

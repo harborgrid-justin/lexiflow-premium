@@ -89,7 +89,7 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
             />
         </div>
 
-        <div className={cn("flex-1 overflow-hidden relative", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-hidden relative", theme.surface.highlight)}>
             {activeTab === 'graph' && (
                 <LineageCanvas 
                     isAnimating={isAnimating} 

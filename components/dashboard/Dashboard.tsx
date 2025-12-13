@@ -1,15 +1,15 @@
 
-// components/Dashboard.tsx
+// components/dashboard/Dashboard.tsx
 import React, { Suspense, useTransition } from 'react';
-import { Button } from './common/Button';
+import { Button } from '../common/Button';
 import { LayoutDashboard, CheckSquare, Bell, Download, PieChart, Activity, ShieldCheck } from 'lucide-react';
-import { LazyLoader } from './common/LazyLoader';
-import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { cn } from '../utils/cn';
-import { DASHBOARD_TAB_CONFIG } from '../config/dashboardConfig';
-import { DashboardContent } from './dashboard/DashboardContent';
-import { User } from '../types';
+import { LazyLoader } from '../common/LazyLoader';
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { cn } from '../../utils/cn';
+import { DASHBOARD_TAB_CONFIG } from '../../config/dashboardConfig';
+import { DashboardContent } from './DashboardContent';
+import { User } from '../../types';
 
 interface DashboardProps {
   onSelectCase: (caseId: string) => void;

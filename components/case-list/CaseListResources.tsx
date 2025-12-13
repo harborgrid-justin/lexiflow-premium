@@ -38,7 +38,7 @@ export const CaseListResources: React.FC = () => {
             </div>
             <div className="space-y-4">
               <ProgressBar label="Utilization" value={res.utilization} colorClass={res.utilization > 90 ? 'bg-red-500' : 'bg-blue-600'} />
-              <div className={cn("flex justify-between text-sm pt-2 border-t", theme.border.light)}>
+              <div className={cn("flex justify-between text-sm pt-2 border-t", theme.border.default)}>
                 <span className={theme.text.secondary}>Active Matters</span>
                 <span className={cn("font-bold", theme.text.primary)}>{res.cases}</span>
               </div>

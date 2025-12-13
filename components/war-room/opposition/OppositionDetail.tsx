@@ -33,7 +33,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Strategic Analysis</h4>
+                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Strategic Analysis</h4>
                 
                 <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
                     <div className="flex justify-between items-center">
@@ -56,7 +56,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Case History</h4>
+                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Case History</h4>
                 <div className="space-y-3">
                     <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-1">
@@ -76,7 +76,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Intel</h4>
+                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Intel</h4>
                 <div className="grid grid-cols-2 gap-3">
                     <Button variant="outline" size="sm" className="text-xs"><FileText className="h-3 w-3 mr-1"/> Publications</Button>
                     <Button variant="outline" size="sm" className="text-xs"><Gavel className="h-3 w-3 mr-1"/> Rulings</Button>

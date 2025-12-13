@@ -31,7 +31,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
       <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
         <h2 className={cn("text-lg font-bold min-w-[140px]", theme.text.primary)}>{label}</h2>
         
-        <div className={cn("flex items-center rounded-lg p-0.5 border", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex items-center rounded-lg p-0.5 border", theme.surface.highlight, theme.border.default)}>
           <button 
             onClick={onPrev} 
             className={cn("p-1.5 rounded-md transition-all shadow-sm", theme.text.secondary, `hover:${theme.surface.default}`)}
@@ -57,7 +57,7 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
 
       <div className="flex items-center gap-2 w-full sm:w-auto">
         {onViewChange && (
-          <div className={cn("flex rounded-lg p-0.5 border", theme.surfaceHighlight, theme.border.default)}>
+          <div className={cn("flex rounded-lg p-0.5 border", theme.surface.highlight, theme.border.default)}>
             <button 
               onClick={() => onViewChange('month')}
               className={cn(

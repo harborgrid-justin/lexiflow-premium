@@ -111,7 +111,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ currentFolder,
             ))}
         </div>
 
-        <div className={cn("p-4 border-t", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-t", theme.surface.highlight, theme.border.default)}>
             <div className="flex items-center gap-2 mb-2">
                 <Cloud className={cn("h-4 w-4", theme.primary.text)}/>
                 <span className={cn("text-xs font-bold", theme.text.secondary)}>Storage Quota</span>

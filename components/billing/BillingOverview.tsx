@@ -94,8 +94,8 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                     contentStyle={chartTheme.tooltipStyle}
                 />
                 <Legend iconType="circle" />
-                <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.slate} name="Billed" radius={[0, 0, 4, 4]} isAnimationActive={true} />
-                <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.blue} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} isAnimationActive={true} />
+                <Bar dataKey="billed" stackId="a" fill={chartTheme.colors.secondary} name="Billed" radius={[0, 0, 4, 4]} isAnimationActive={true} />
+                <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.primary} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} isAnimationActive={true} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -115,7 +115,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                             isAnimationActive={true}
                         >
                             {realizationData.map((e: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartTheme.colors.emerald : chartTheme.colors.rose} />
+                                <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
                             ))}
                         </Pie>
                         <Tooltip contentStyle={chartTheme.tooltipStyle}/>
@@ -133,7 +133,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
 
       {/* Top Accounts */}
       <div className={cn("rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
             <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
                 <Users className={cn("h-5 w-5 mr-2", theme.primary.text)}/> Top Revenue Accounts
             </h3>

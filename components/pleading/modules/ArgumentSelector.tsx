@@ -43,7 +43,7 @@ export const ArgumentSelector: React.FC<ArgumentSelectorProps> = ({ caseId, onIn
                 <div key={arg.id} className={cn("p-3 rounded-lg border group hover:shadow-sm transition-all", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                     <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
-                            <span className={cn("text-xs font-bold px-1.5 py-0.5 rounded", theme.surfaceHighlight, theme.text.primary)}>
+                            <span className={cn("text-xs font-bold px-1.5 py-0.5 rounded", theme.surface.highlight, theme.text.primary)}>
                                 {arg.strength}% Strength
                             </span>
                         </div>
@@ -53,7 +53,7 @@ export const ArgumentSelector: React.FC<ArgumentSelectorProps> = ({ caseId, onIn
                     <h4 className={cn("font-bold text-sm mb-1", theme.text.primary)}>{arg.title}</h4>
                     <p className={cn("text-xs line-clamp-3 mb-3", theme.text.secondary)}>{arg.description}</p>
                     
-                    <div className={cn("flex items-center justify-between pt-2 border-t", theme.border.light)}>
+                    <div className={cn("flex items-center justify-between pt-2 border-t", theme.border.default)}>
                          <div className="flex gap-1">
                              {arg.relatedCitationIds.length > 0 && <span className="text-[10px] text-purple-600 bg-purple-50 px-1.5 rounded">{arg.relatedCitationIds.length} Cites</span>}
                              {arg.relatedEvidenceIds.length > 0 && <span className="text-[10px] text-amber-600 bg-amber-50 px-1.5 rounded">{arg.relatedEvidenceIds.length} Evid</span>}

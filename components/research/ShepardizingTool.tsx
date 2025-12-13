@@ -56,7 +56,7 @@ export const ShepardizingTool: React.FC = () => {
                 onChange={e => setCitation(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSearch()}
                 placeholder="e.g., 410 U.S. 113"
-                className={cn("flex-1 p-2 border rounded-md text-sm font-mono", theme.surfaceHighlight, theme.border.default)}
+                className={cn("flex-1 p-2 border rounded-md text-sm font-mono", theme.surface.highlight, theme.border.default)}
             />
             <Button onClick={handleSearch} isLoading={isLoading} disabled={!citation || isLoading}>
                 {isLoading ? 'Analyzing...' : 'Shepardize'}
@@ -76,7 +76,7 @@ export const ShepardizingTool: React.FC = () => {
                 <Card title="Appellate History">
                     <div className="space-y-3">
                         {result.history.map((h, i) => (
-                            <div key={i} className={cn("flex items-center gap-3 p-3 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+                            <div key={i} className={cn("flex items-center gap-3 p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                                 {getHistoryIcon(h.action)}
                                 <div>
                                     <p className={cn("text-sm font-medium", theme.text.primary)}>{h.action}</p>

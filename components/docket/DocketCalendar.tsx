@@ -41,7 +41,7 @@ export const DocketCalendar: React.FC = () => {
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
-      <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4">
           <div className={cn("p-2 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <Calendar className={cn("h-6 w-6", theme.primary.text)} />
@@ -54,21 +54,21 @@ export const DocketCalendar: React.FC = () => {
           </div>
         </div>
         <div className={cn("flex gap-1 p-1 rounded-md border", theme.surface.default, theme.border.default)}>
-          <button onClick={prevMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={() => setCurrentDate(new Date())} className={cn("px-3 text-sm font-medium rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>Today</button>
-          <button onClick={nextMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}><ChevronRight className="h-5 w-5" /></button>
+          <button onClick={prevMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={() => setCurrentDate(new Date())} className={cn("px-3 text-sm font-medium rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}>Today</button>
+          <button onClick={nextMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}><ChevronRight className="h-5 w-5" /></button>
         </div>
       </div>
 
-      <div className={cn("flex-1 p-px grid grid-cols-7 gap-px overflow-y-auto", theme.surfaceHighlight)}>
+      <div className={cn("flex-1 p-px grid grid-cols-7 gap-px overflow-y-auto", theme.surface.highlight)}>
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className={cn("p-2 text-center text-xs font-bold uppercase tracking-wider sticky top-0 z-10 border-b", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
+          <div key={day} className={cn("p-2 text-center text-xs font-bold uppercase tracking-wider sticky top-0 z-10 border-b", theme.surface.highlight, theme.text.secondary, theme.border.default)}>
             {day}
           </div>
         ))}
         
         {paddingDays.map(i => (
-          <div key={`pad-${i}`} className={cn("min-h-[120px] opacity-50", theme.surfaceHighlight)} />
+          <div key={`pad-${i}`} className={cn("min-h-[120px] opacity-50", theme.surface.highlight)} />
         ))}
 
         {daysArray.map(day => {
@@ -76,7 +76,7 @@ export const DocketCalendar: React.FC = () => {
           const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
           
           return (
-            <div key={day} className={cn("p-2 min-h-[120px] flex flex-col transition-colors group relative", theme.surface.default, `hover:${theme.surfaceHighlight}`, isToday && cn(theme.primary.light, "bg-opacity-50"))}>
+            <div key={day} className={cn("p-2 min-h-[120px] flex flex-col transition-colors group relative", theme.surface.default, `hover:${theme.surface.highlight}`, isToday && cn(theme.primary.light, "bg-opacity-50"))}>
               <div className="flex justify-between items-start mb-2">
                 <span className={cn(
                   "text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full transition-colors",

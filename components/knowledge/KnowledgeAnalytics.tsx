@@ -98,7 +98,7 @@ export const KnowledgeAnalytics: React.FC = () => {
                         { title: 'Standard Billing Codes & Rates 2024', views: 180, author: 'Finance Team' },
                         { title: 'Remote Deposition Protocols', views: 120, author: 'James Doe' },
                     ].map((article, i) => (
-                        <div key={i} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+                        <div key={i} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.surface.highlight, theme.border.default)}>
                             <div>
                                 <p className={cn("font-medium text-sm", theme.text.primary)}>{article.title}</p>
                                 <p className="text-xs">Author: {article.author}</p>

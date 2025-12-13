@@ -28,7 +28,7 @@ export const SchemaSnapshots: React.FC = () => {
                             <div className={cn("p-2 rounded-lg bg-blue-100 text-blue-600")}>
                                 <Database className="h-6 w-6"/>
                             </div>
-                            <span className={cn("text-xs font-mono px-2 py-1 rounded", theme.surfaceHighlight, theme.text.secondary)}>{snap.size}</span>
+                            <span className={cn("text-xs font-mono px-2 py-1 rounded", theme.surface.highlight, theme.text.secondary)}>{snap.size}</span>
                         </div>
                         <h4 className={cn("font-bold text-base mb-1", theme.text.primary)}>{snap.name}</h4>
                         <p className={cn("text-xs font-mono text-slate-400 mb-4")}>{snap.id}</p>
@@ -42,7 +42,7 @@ export const SchemaSnapshots: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className={cn("mt-4 pt-4 border-t flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity", theme.border.light)}>
+                        <div className={cn("mt-4 pt-4 border-t flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity", theme.border.default)}>
                             <Button size="sm" variant="outline" className="flex-1" icon={RefreshCw}>Restore</Button>
                             <Button size="sm" variant="ghost" className="flex-1" icon={Download}>Export</Button>
                         </div>

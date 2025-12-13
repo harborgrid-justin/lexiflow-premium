@@ -49,7 +49,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         {pendingAttachments.length > 0 && (
           <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
             {pendingAttachments.map((att, i) => (
-              <div key={i} className={cn("flex items-center rounded-full px-3 py-1 text-xs border shrink-0", theme.surfaceHighlight, theme.border.default)}>
+              <div key={i} className={cn("flex items-center rounded-full px-3 py-1 text-xs border shrink-0", theme.surface.highlight, theme.border.default)}>
                 <FileText className={cn("h-3 w-3 mr-2", theme.text.secondary)}/>
                 <span className={cn("max-w-[100px] truncate", theme.text.primary)}>{att.name}</span>
                 <button onClick={() => setPendingAttachments(prev => prev.filter((_, idx) => idx !== i))} className={cn("ml-2 hover:text-rose-500", theme.text.tertiary)}>
@@ -87,7 +87,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           </div>
         </div>
 
-        <div className={cn("flex items-end gap-2 border rounded-xl px-2 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all shadow-sm", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex items-end gap-2 border rounded-xl px-2 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all shadow-sm", theme.surface.highlight, theme.border.default)}>
           <input type="file" ref={fileInputRef} className="hidden" onChange={onFileSelect} />
           <button 
             onClick={() => fileInputRef.current?.click()}

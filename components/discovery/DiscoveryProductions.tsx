@@ -87,7 +87,7 @@ export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
                             </div>
                         </TableCell>
                         <TableCell>{prod.date}</TableCell>
-                        <TableCell><span className={cn("font-mono text-xs px-1.5 py-0.5 rounded border", theme.surfaceHighlight, theme.border.default)}>{prod.batesRange}</span></TableCell>
+                        <TableCell><span className={cn("font-mono text-xs px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.border.default)}>{prod.batesRange}</span></TableCell>
                         <TableCell className={cn("text-xs", theme.text.secondary)}>{prod.docCount} docs ({prod.size})</TableCell>
                         <TableCell>{prod.format}</TableCell>
                         <TableCell>

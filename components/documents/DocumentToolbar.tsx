@@ -73,7 +73,7 @@ export const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
                         placeholder="Search by name, tag, or content..." 
                         className={cn(
                             "w-full pl-10 pr-4 py-2 border rounded-md text-sm outline-none transition-all",
-                            theme.surfaceHighlight,
+                            theme.surface.highlight,
                             theme.border.default,
                             theme.text.primary,
                             "focus:ring-2 focus:ring-blue-500 focus:bg-white"
@@ -84,7 +84,7 @@ export const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
         </div>
         
         <div className={cn("flex gap-2 items-center ml-4 border-l pl-4", theme.border.default)}>
-            <div className={cn("flex p-0.5 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex p-0.5 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                 <button 
                     onClick={() => setViewMode('list')}
                     className={cn(
@@ -108,14 +108,14 @@ export const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
                     <Grid className="h-4 w-4"/>
                 </button>
             </div>
-            <button className={cn("p-2 rounded transition-colors", theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surfaceHighlight}`)}><Filter className="h-4 w-4"/></button>
+            <button className={cn("p-2 rounded transition-colors", theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)}><Filter className="h-4 w-4"/></button>
             <button 
                 onClick={() => setIsDetailsOpen(!isDetailsOpen)}
                 className={cn(
                     "p-2 rounded transition-colors",
                     isDetailsOpen 
                         ? cn(theme.primary.text, theme.primary.light)
-                        : cn(theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surfaceHighlight}`)
+                        : cn(theme.text.secondary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)
                 )}
                 title="Toggle Inspector"
             >

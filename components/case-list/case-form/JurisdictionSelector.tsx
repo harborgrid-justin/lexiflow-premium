@@ -81,7 +81,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
     );
 
     return (
-        <div className={cn("p-4 rounded-lg border space-y-4", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border space-y-4", theme.surface.highlight, theme.border.default)}>
             <div className="grid grid-cols-2 gap-2">
                 <button
                     onClick={() => handleSystemSelect('Federal')}

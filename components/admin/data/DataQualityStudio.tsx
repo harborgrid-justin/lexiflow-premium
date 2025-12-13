@@ -139,7 +139,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
             />
         </div>
 
-        <div className={cn("flex-1 overflow-y-auto p-6", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-y-auto p-6", theme.surface.highlight)}>
             {activeTab === 'dashboard' && (
                 <QualityDashboard anomalies={anomalies} history={history} onFix={handleFix} />
             )}
@@ -167,7 +167,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                                         )}>{rule.severity}</span>
                                     </div>
                                     <div className="flex gap-2 items-center flex-wrap">
-                                        <code className={cn("text-xs px-2 py-1 rounded font-mono", theme.surfaceHighlight, theme.text.secondary)}>
+                                        <code className={cn("text-xs px-2 py-1 rounded font-mono", theme.surface.highlight, theme.text.secondary)}>
                                             {rule.conditions.length > 0 ? `${rule.conditions[0].field} ${rule.conditions[0].operator} ...` : 'No conditions'}
                                         </code>
                                         <span className={cn("text-xs", theme.text.tertiary)}>{rule.description}</span>

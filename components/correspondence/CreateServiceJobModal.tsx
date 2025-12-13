@@ -202,7 +202,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                 />
             </div>
 
-            <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.light)}>
+            <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.default)}>
                 <Button variant="secondary" onClick={onClose}>Cancel</Button>
                 <Button variant="primary" onClick={handleSave}>Create Job</Button>
             </div>

@@ -1,19 +1,19 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { GitMerge, Save, Play, Milestone, FileText, Settings, Rocket, Loader2 } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { LazyLoader } from './common/LazyLoader';
-import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { Button } from './common/Button';
-import { useLitigationBuilder } from '../hooks/useLitigationBuilder';
-import { ContextMenuItem } from './common/ContextMenu';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { LazyLoader } from '../common/LazyLoader';
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { Button } from '../common/Button';
+import { useLitigationBuilder } from '../../hooks/useLitigationBuilder';
+import { ContextMenuItem } from '../common/ContextMenu';
 import { Edit2, Copy, Trash2, Layout, BoxSelect } from 'lucide-react';
 
 // Lazy Load sub-components with named export handling
-const StrategyCanvas = lazy(() => import('./litigation/StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));
-const PlaybookLibrary = lazy(() => import('./litigation/PlaybookLibrary').then(m => ({ default: m.PlaybookLibrary })));
-const OutcomeSimulator = lazy(() => import('./litigation/OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
-const LitigationGanttView = lazy(() => import('./litigation/LitigationGanttView').then(m => ({ default: m.LitigationGanttView })));
+const StrategyCanvas = lazy(() => import('./StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));
+const PlaybookLibrary = lazy(() => import('./PlaybookLibrary').then(m => ({ default: m.PlaybookLibrary })));
+const OutcomeSimulator = lazy(() => import('./OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
+const LitigationGanttView = lazy(() => import('./LitigationGanttView').then(m => ({ default: m.LitigationGanttView })));
 
 const LITIGATION_TABS = [
   {

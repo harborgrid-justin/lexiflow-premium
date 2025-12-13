@@ -36,7 +36,7 @@ export const PipelineList: React.FC<PipelineListProps> = ({ pipelines, selectedJ
                         p.status === 'Running' ? "bg-blue-100 text-blue-600 animate-pulse" : 
                         p.status === 'Failed' ? "bg-red-100 text-red-600" : 
                         p.status === 'Success' ? "bg-green-100 text-green-600" :
-                        cn(theme.surfaceHighlight, theme.text.secondary)
+                        cn(theme.surface.highlight, theme.text.secondary)
                     )}>
                         {p.status === 'Running' ? <Activity className="h-5 w-5"/> : p.status === 'Failed' ? <XCircle className="h-5 w-5"/> : <GitMerge className="h-5 w-5"/>}
                     </div>
@@ -53,7 +53,7 @@ export const PipelineList: React.FC<PipelineListProps> = ({ pipelines, selectedJ
                         p.status === 'Running' ? "bg-blue-50 border-blue-200 text-blue-700" :
                         p.status === 'Failed' ? "bg-red-50 border-red-200 text-red-700" :
                         p.status === 'Success' ? "bg-green-50 border-green-200 text-green-700" :
-                        cn(theme.surfaceHighlight, theme.border.default, theme.text.secondary)
+                        cn(theme.surface.highlight, theme.border.default, theme.text.secondary)
                     )}>{p.status}</span>
                     <ChevronRight className={cn("h-4 w-4", theme.text.tertiary)}/>
                 </div>

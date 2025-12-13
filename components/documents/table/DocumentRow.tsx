@@ -60,7 +60,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
             />
         </div>
         <div className="flex-1 min-w-0 flex items-center pr-4">
-            <div className={cn("p-2 rounded-lg mr-3 border transition-colors", theme.surface.highlight, theme.border.default, `group-hover:${theme.border.light}`)}>
+            <div className={cn("p-2 rounded-lg mr-3 border transition-colors", theme.surface.highlight, theme.border.default, `group-hover:${theme.border.default}`)}>
                 <FileIcon type={doc.type} className="h-5 w-5" />
             </div>
             <div className="min-w-0">

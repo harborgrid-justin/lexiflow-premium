@@ -51,7 +51,7 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, o
                 <Input label="Salary" type="number" value={newStaff.salary || ''} onChange={e => setNewStaff({...newStaff, salary: Number(e.target.value)})}/>
               </div>
 
-              <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.light)}>
+              <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.default)}>
                   <Button variant="secondary" onClick={onClose}>Cancel</Button>
                   <Button variant="primary" onClick={handleSave}>Create Profile</Button>
               </div>

@@ -25,7 +25,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         {showValue && <span className={cn("font-bold", theme.text.primary)}>{value}%</span>}
       </div>
       <div 
-        className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}
+        className={cn("w-full rounded-full h-2", theme.surface.highlight)}
         role="progressbar"
         aria-labelledby={`progress-label-${label.replace(/\s+/g, '-').toLowerCase()}`}
         aria-valuenow={value}

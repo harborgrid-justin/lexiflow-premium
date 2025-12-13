@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Badge } from '../common/Badge';
-import { CommunicationItem } from '../../types';
+import { CommunicationItem } from '@types/';
 import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { cn } from '@utils/cn';
 import { VirtualList } from '../common/VirtualList';
 
 interface CommunicationLogProps {
@@ -22,8 +22,8 @@ export const CommunicationLog: React.FC<CommunicationLogProps> = ({ items, onSel
         onClick={() => onSelect(item)}
         className={cn(
             "flex items-center border-b px-4 h-[60px] cursor-pointer transition-colors hover:bg-slate-50", 
-            theme.border.light,
-            selectedId === item.id ? theme.surfaceHighlight : ""
+            theme.border.default,
+            selectedId === item.id ? theme.surface.highlight : ""
         )}
     >
         <div className="w-24 shrink-0">

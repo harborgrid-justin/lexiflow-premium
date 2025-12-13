@@ -16,7 +16,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
 
   return (
     <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Entity Dossier</h4>
             <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
         </div>
@@ -34,9 +34,9 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Strategic Analysis</h4>
+                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Strategic Analysis</h4>
                 
-                <div className={cn("p-4 rounded-lg border space-y-3", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("p-4 rounded-lg border space-y-3", theme.surface.highlight, theme.border.default)}>
                     <div className="flex justify-between items-center">
                         <span className={cn("text-xs font-medium", theme.text.secondary)}>Aggression Index</span>
                         <div className="flex gap-1">
@@ -57,7 +57,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Case History</h4>
+                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Case History</h4>
                 <div className="space-y-3">
                     <div className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-1">
@@ -77,7 +77,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
 
             <div className="space-y-4">
-                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.light)}>Intel</h4>
+                <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Intel</h4>
                 <div className="grid grid-cols-2 gap-3">
                     <Button variant="outline" size="sm" className="text-xs"><FileText className="h-3 w-3 mr-1"/> Publications</Button>
                     <Button variant="outline" size="sm" className="text-xs"><Gavel className="h-3 w-3 mr-1"/> Rulings</Button>
@@ -87,7 +87,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
         </div>
 
-        <div className={cn("p-4 border-t flex gap-2", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-t flex gap-2", theme.surface.highlight, theme.border.default)}>
             <Button variant="outline" className="flex-1">Flag Risk</Button>
             <Button variant="primary" className="flex-1">View Full Profile</Button>
         </div>

@@ -105,7 +105,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
         <Card title="Recent Custody Transfers">
           <div className="space-y-4">
             {recentEvents.map((evt, idx) => (
-              <div key={idx} className={cn("flex items-start pb-3 border-b last:border-0 last:pb-0", theme.border.light)}>
+              <div key={idx} className={cn("flex items-start pb-3 border-b last:border-0 last:pb-0", theme.border.default)}>
                 <div className={cn("p-2 rounded-full mr-3 shrink-0", theme.primary.light)}>
                   <Activity className={cn("h-4 w-4", theme.primary.text)} />
                 </div>

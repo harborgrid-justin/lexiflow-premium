@@ -63,7 +63,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                   {/* Grid Lines */}
                   <div className="absolute inset-0 pointer-events-none z-0 flex">
                       {Array.from({length: 90}).map((_, i) => (
-                          <div key={i} className={cn("border-r h-full", theme.border.light)} style={{ width: pixelsPerDay * (zoom === 'Month' ? 30 : 7) }} />
+                          <div key={i} className={cn("border-r h-full", theme.border.default)} style={{ width: pixelsPerDay * (zoom === 'Month' ? 30 : 7) }} />
                       ))}
                       {/* Today Line */}
                       <div className="absolute top-0 bottom-0 w-px bg-red-500 z-10" style={{ left: `${((new Date().getTime() - viewStartDate.getTime()) / (1000 * 60 * 60 * 24)) * pixelsPerDay}px` }}>

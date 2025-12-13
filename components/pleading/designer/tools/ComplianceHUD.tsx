@@ -30,7 +30,7 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score: p
 
     return (
         <div className={cn("absolute top-8 right-8 w-64 h-auto bg-white/80 backdrop-blur-md rounded-lg shadow-2xl border flex-col z-30 hidden lg:flex", theme.border.default)}>
-            <div className={cn("p-3 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("p-3 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
                 <h3 className={cn("font-bold text-xs uppercase tracking-wider flex items-center gap-2", theme.text.tertiary)}>
                     <Zap className="h-4 w-4 text-amber-500"/> Genius Linter
                 </h3>
@@ -47,7 +47,7 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score: p
                 <div>
                     <div className="space-y-2">
                         {issues.map(issue => (
-                            <div key={issue.id} className={cn("p-2 rounded border text-xs flex gap-2 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                            <div key={issue.id} className={cn("p-2 rounded border text-xs flex gap-2 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                                 <div className="mt-0.5">
                                     {issue.type === 'error' && <AlertOctagon className="h-4 w-4 text-red-500"/>}
                                     {issue.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-500"/>}

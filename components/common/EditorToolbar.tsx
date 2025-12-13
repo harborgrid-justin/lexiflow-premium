@@ -17,11 +17,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ wordCount, onCmd, 
       theme.text.primary,
       `hover:${theme.surface.default}`,
       `hover:${theme.primary.text}`,
-      `hover:${theme.border.light}`
+      `hover:${theme.border.default}`
   );
 
   return (
-    <div className={cn("flex items-center gap-1 p-2 border-b flex-wrap", theme.surfaceHighlight, theme.border.default)}>
+    <div className={cn("flex items-center gap-1 p-2 border-b flex-wrap", theme.surface.highlight, theme.border.default)}>
       <div className={cn("flex items-center gap-0.5 border-r pr-2 mr-2", theme.border.default)}>
         <select className={cn("bg-transparent text-sm font-medium h-8 border-none outline-none cursor-pointer rounded px-1 transition-colors", theme.text.primary, `hover:${theme.surface.default}`)} onChange={(e) => onCmd('formatBlock', e.target.value)}>
             <option value="p">Normal</option>

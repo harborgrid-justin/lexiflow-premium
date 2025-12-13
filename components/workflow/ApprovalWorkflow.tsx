@@ -49,7 +49,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
       </h3>
       
       {requests.length === 0 ? (
-        <div className={cn("text-center p-6 rounded-lg border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+        <div className={cn("text-center p-6 rounded-lg border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
           No pending approvals required.
         </div>
       ) : (
@@ -73,7 +73,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
                 </span>
               </div>
               
-              <p className={cn("text-sm p-3 rounded border mb-4", theme.surfaceHighlight, theme.border.light, theme.text.primary)}>
+              <p className={cn("text-sm p-3 rounded border mb-4", theme.surface.highlight, theme.border.default, theme.text.primary)}>
                 {req.description}
               </p>
 

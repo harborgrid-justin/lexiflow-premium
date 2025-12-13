@@ -23,7 +23,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, descr
       theme.text.tertiary,
       className
     )}>
-      <div className={cn("p-4 rounded-full mb-4", theme.surfaceHighlight)}>
+      <div className={cn("p-4 rounded-full mb-4", theme.surface.highlight)}>
         <Icon className={cn("h-12 w-12 opacity-40", theme.text.tertiary)} />
       </div>
       <h3 className={cn("text-lg font-semibold mb-1", theme.text.primary)}>{title}</h3>

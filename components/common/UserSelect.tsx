@@ -43,7 +43,7 @@ export const UserSelect: React.FC<UserSelectProps> = ({ label, value, onChange, 
           ))}
         </select>
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          {selectedUser ? <UserAvatar name={selectedUser.name} size="sm" /> : <div className={cn("w-6 h-6 rounded-full border", theme.surfaceHighlight, theme.border.default)}/>}
+          {selectedUser ? <UserAvatar name={selectedUser.name} size="sm" /> : <div className={cn("w-6 h-6 rounded-full border", theme.surface.highlight, theme.border.default)}/>}
         </div>
         <ChevronDown className={cn("absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)} />
       </div>

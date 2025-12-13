@@ -122,7 +122,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                             warRoomData.motions.filter((m) => m.status !== 'Decided').slice(0, 3).map((m) => (
                                 <div 
                                     key={m.id}
-                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer transition-colors", theme.surfaceHighlight, theme.border.default, `hover:${theme.surface.default}`)}
+                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer transition-colors", theme.surface.highlight, theme.border.default, `hover:${theme.surface.default}`)}
                                     onClick={() => onNavigate('binder')}
                                 >
                                     <div>
@@ -160,7 +160,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                 <Card title="Active Tasks">
                     <div className="space-y-2">
                         {warRoomData.tasks?.slice(0, 5).map((task, i) => (
-                            <div key={i} className={cn("flex items-start gap-3 p-2 rounded transition-colors cursor-pointer group", `hover:${theme.surfaceHighlight}`)}>
+                            <div key={i} className={cn("flex items-start gap-3 p-2 rounded transition-colors cursor-pointer group", `hover:${theme.surface.highlight}`)}>
                                 <CheckSquare className={cn("h-4 w-4 mt-0.5 shrink-0 group-hover:text-blue-600", theme.text.tertiary)}/>
                                 <span className={cn("text-sm truncate", theme.text.secondary, "group-hover:text-slate-900 dark:group-hover:text-slate-100")}>{task.title}</span>
                             </div>

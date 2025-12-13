@@ -21,7 +21,7 @@ export const EvidenceLocation: React.FC<EvidenceLocationProps> = ({ location }) 
         <h3 className={cn("font-bold", theme.text.primary)}>{location}</h3>
         <p className={cn("text-xs mt-1", theme.text.secondary)}>Last Verified: Today, 09:00 AM</p>
       </div>
-      <div className={cn("border-t pt-4 mt-4", theme.border.light)}>
+      <div className={cn("border-t pt-4 mt-4", theme.border.default)}>
         <Button variant="outline" size="sm" className="w-full">Request Transfer</Button>
       </div>
     </Card>

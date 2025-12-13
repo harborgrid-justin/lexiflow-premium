@@ -104,7 +104,7 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
                    <div className="bg-amber-500 h-2 rounded-full w-[45%]"></div>
                 </div>
               </div>
-              <div className={cn("pt-4 border-t flex justify-between items-center", theme.border.light)}>
+              <div className={cn("pt-4 border-t flex justify-between items-center", theme.border.default)}>
                  <span className={cn("text-xs", theme.text.secondary)}>Next Production Volume Due: March 31</span>
                  <Button size="sm" variant="outline" icon={ArrowRight} onClick={() => onNavigate('productions')}>Create Production Set</Button>
               </div>

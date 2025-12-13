@@ -14,7 +14,7 @@ export const WarRoomSidebar: React.FC<WarRoomSidebarProps> = ({ caseData }) => {
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-64 border-r hidden md:block", theme.surfaceHighlight, theme.border.default)}>
+    <div className={cn("w-64 border-r hidden md:block", theme.surface.highlight, theme.border.default)}>
         <div className="p-4">
             <SectionTitle className="px-2">Quick Access</SectionTitle>
             <div className="space-y-1">

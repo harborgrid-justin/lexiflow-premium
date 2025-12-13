@@ -50,7 +50,7 @@ export const DocumentTemplates: React.FC = () => {
                     )}
                 >
                     <div className="flex justify-between items-start mb-3">
-                        <div className={cn("p-2 rounded-lg", theme.surfaceHighlight)}>
+                        <div className={cn("p-2 rounded-lg", theme.surface.highlight)}>
                             <FileText className={cn("h-6 w-6", theme.primary.text)}/>
                         </div>
                         {tpl.popular && (
@@ -60,7 +60,7 @@ export const DocumentTemplates: React.FC = () => {
                     <h4 className={cn("font-bold text-sm mb-1", theme.text.primary)}>{tpl.title}</h4>
                     <p className={cn("text-xs mb-4", theme.text.secondary)}>{tpl.category}</p>
                     
-                    <div className={cn("pt-3 border-t flex justify-between items-center", theme.border.light)}>
+                    <div className={cn("pt-3 border-t flex justify-between items-center", theme.border.default)}>
                         <span className={cn("text-xs font-medium", theme.text.tertiary)}>v2.4</span>
                         <span className={cn("text-xs font-bold flex items-center transition-colors", theme.primary.text, "group-hover:translate-x-1")}>
                             Start Draft <ArrowRight className="h-3 w-3 ml-1"/>

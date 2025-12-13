@@ -27,7 +27,7 @@ export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({
         <span className={cn("text-sm font-bold uppercase tracking-wider ml-2", theme.text.tertiary)}>Strategy Canvas</span>
       </div>
       <div className="flex items-center gap-2">
-        <div className={cn("flex rounded-lg p-1 mr-2 border", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex rounded-lg p-1 mr-2 border", theme.surface.highlight, theme.border.default)}>
           <button onClick={() => setScale(s => Math.max(0.2, s - 0.1))} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><ZoomOut className="h-4 w-4"/></button>
           <div 
             onClick={() => setScale(1)}
@@ -43,8 +43,8 @@ export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({
           <Button variant="secondary" size="sm" icon={Download} onClick={() => setIsExportOpen(!isExportOpen)}>Export</Button>
           {isExportOpen && (
             <div className={cn("absolute top-full right-0 mt-2 w-40 rounded-md shadow-lg py-1 z-50", theme.surface.default, theme.border.default, "border")}>
-              <button onClick={() => { onExport('svg'); setIsExportOpen(false); }} className={cn("w-full text-left px-3 py-1.5 text-sm", `hover:${theme.surfaceHighlight}`)}>as SVG Image</button>
-              <button onClick={() => { onExport('markdown'); setIsExportOpen(false); }} className={cn("w-full text-left px-3 py-1.5 text-sm", `hover:${theme.surfaceHighlight}`)}>as Markdown Outline</button>
+              <button onClick={() => { onExport('svg'); setIsExportOpen(false); }} className={cn("w-full text-left px-3 py-1.5 text-sm", `hover:${theme.surface.highlight}`)}>as SVG Image</button>
+              <button onClick={() => { onExport('markdown'); setIsExportOpen(false); }} className={cn("w-full text-left px-3 py-1.5 text-sm", `hover:${theme.surface.highlight}`)}>as Markdown Outline</button>
             </div>
           )}
         </div>

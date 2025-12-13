@@ -58,7 +58,7 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
                 </div>
             ))}
             
-            <div className={cn("col-span-1 sm:col-span-2 p-3 rounded border", theme.surfaceHighlight, theme.border.light)}>
+            <div className={cn("col-span-1 sm:col-span-2 p-3 rounded border", theme.surfaceHighlight, theme.border.default)}>
                 <dt className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>Case Abstract</dt>
                 <dd className={cn("text-sm leading-relaxed max-h-32 overflow-y-auto custom-scrollbar", theme.text.secondary)}>{caseData.description}</dd>
             </div>

@@ -23,7 +23,7 @@ export const SavedAuthorities: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex items-center gap-3 p-4 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex items-center gap-3 p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
             <Bookmark className={cn("h-5 w-5", theme.text.secondary)}/>
             <div>
                 <h3 className={cn("font-bold text-sm", theme.text.primary)}>Bookmarked Authorities</h3>

@@ -23,7 +23,7 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
   const { theme } = useTheme();
 
   const variants = {
-    default: cn(theme.surface.highlight, theme.text.primary, theme.border.default, `hover:${theme.border.light}`),
+    default: cn(theme.surface.highlight, theme.text.primary, theme.border.default, `hover:${theme.border.default}`),
     critical: cn(theme.status.error.bg, theme.status.error.border, theme.status.error.text, "hover:opacity-80"),
     success: cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text, "hover:opacity-80"),
     warning: cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text, "hover:opacity-80"),

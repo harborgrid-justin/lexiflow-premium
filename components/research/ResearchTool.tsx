@@ -5,15 +5,15 @@ import {
   Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp,
   BrainCircuit, Map, Calculator, FileText, Bookmark, Library
 } from 'lucide-react';
-import { LazyLoader } from './common/LazyLoader';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { DataService } from '../services/dataService';
-import { JudgeProfile, Clause } from '../types';
-import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { RESEARCH_TAB_CONFIG } from '../config/researchToolConfig';
-import { ResearchToolContent } from './research/ResearchToolContent';
+import { LazyLoader } from '../common/LazyLoader';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { DataService } from '../../services/dataService';
+import { JudgeProfile, Clause } from '../../types';
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { RESEARCH_TAB_CONFIG } from '../../config/researchToolConfig';
+import { ResearchToolContent } from './ResearchToolContent';
 
 const ClauseHistoryModal = lazy(() => import('./ClauseHistoryModal'));
 
@@ -71,7 +71,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
                                     "flex items-center text-xs font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap",
                                     activeView === tab.id
                                         ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
-                                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                 )}
                              >
                                  <tab.icon className="h-3 w-3 mr-1.5"/>

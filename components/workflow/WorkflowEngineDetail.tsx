@@ -12,7 +12,7 @@ import { AuditTrailViewer } from './AuditTrailViewer';
 import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 interface WorkflowEngineDetailProps {
   id: string;
@@ -39,7 +39,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
       {/* Header */}
       <div className={cn("flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex items-center gap-4">
-          <button onClick={onBack} className={cn("p-2 rounded-full transition-colors border border-transparent", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.border.default}`)}>
+          <button onClick={onBack} className={cn("p-2 rounded-full transition-colors border border-transparent", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.border.default}`)}>
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
@@ -48,7 +48,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
               <Badge variant={status === 'Active' ? 'success' : 'warning'}>{status}</Badge>
             </div>
             <div className={cn("flex items-center gap-3 mt-1 text-xs", theme.text.secondary)}>
-                <span className={cn("font-mono px-1.5 py-0.5 rounded", theme.surfaceHighlight)}>ID: {id}</span>
+                <span className={cn("font-mono px-1.5 py-0.5 rounded", theme.surface.highlight)}>ID: {id}</span>
                 <span>•</span>
                 <span>Engine v2.5</span>
             </div>
@@ -84,7 +84,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           />
         </div>
         
-        <div className={cn("flex-1 overflow-y-auto p-6", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-y-auto p-6", theme.surface.highlight)}>
           {activeTab === 'visualizer' && (
             <div className="space-y-6">
               <div className={cn("p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
@@ -113,27 +113,27 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           {activeTab === 'settings' && (
             <div className="max-w-3xl mx-auto space-y-6">
               <Card title="Workflow Configuration">
-                <div className={cn("divide-y", theme.border.light)}>
-                  <div className={cn("flex items-center justify-between p-4 transition-colors", `hover:${theme.surfaceHighlight}`)}>
+                <div className={cn("divide-y", theme.border.default)}>
+                  <div className={cn("flex items-center justify-between p-4 transition-colors", `hover:${theme.surface.highlight}`)}>
                     <div>
                       <p className={cn("font-bold text-sm", theme.text.primary)}>Strict Dependency Enforcement</p>
                       <p className={cn("text-xs", theme.text.secondary)}>Prevents starting tasks before prerequisites are met.</p>
                     </div>
                     <div className="h-6 w-11 bg-blue-600 rounded-full relative cursor-pointer"><div className="absolute right-1 top-1 h-4 w-4 bg-white rounded-full shadow-sm"></div></div>
                   </div>
-                  <div className={cn("flex items-center justify-between p-4 transition-colors", `hover:${theme.surfaceHighlight}`)}>
+                  <div className={cn("flex items-center justify-between p-4 transition-colors", `hover:${theme.surface.highlight}`)}>
                     <div>
                       <p className={cn("font-bold text-sm", theme.text.primary)}>Auto-Assign Reviewers</p>
                       <p className={cn("text-xs", theme.text.secondary)}>Based on current team load balancing algorithm.</p>
                     </div>
                     <div className="h-6 w-11 bg-blue-600 rounded-full relative cursor-pointer"><div className="absolute right-1 top-1 h-4 w-4 bg-white rounded-full shadow-sm"></div></div>
                   </div>
-                  <div className={cn("flex items-center justify-between p-4 transition-colors", `hover:${theme.surfaceHighlight}`)}>
+                  <div className={cn("flex items-center justify-between p-4 transition-colors", `hover:${theme.surface.highlight}`)}>
                     <div>
                       <p className={cn("font-bold text-sm", theme.text.primary)}>SLA Breach Notifications</p>
                       <p className={cn("text-xs", theme.text.secondary)}>Email partners immediately when critical path is delayed.</p>
                     </div>
-                    <div className={cn("h-6 w-11 rounded-full relative cursor-pointer", theme.border.default, theme.surfaceHighlight)}><div className={cn("absolute left-1 top-1 h-4 w-4 rounded-full shadow-sm", theme.surface.default)}></div></div>
+                    <div className={cn("h-6 w-11 rounded-full relative cursor-pointer", theme.border.default, theme.surface.highlight)}><div className={cn("absolute left-1 top-1 h-4 w-4 rounded-full shadow-sm", theme.surface.default)}></div></div>
                   </div>
                 </div>
               </Card>

@@ -115,7 +115,7 @@ export const JurisdictionLocalRules: React.FC = () => {
               <TableCell className={cn("text-xs max-w-sm truncate", theme.text.secondary)} title={r.summary}>{r.summary}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                    <button onClick={() => openEdit(r)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)}><Edit2 className="h-4 w-4"/></button>
+                    <button onClick={() => openEdit(r)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}><Edit2 className="h-4 w-4"/></button>
                     <button onClick={() => handleDelete(r.id)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.status.error.text}`, `hover:${theme.status.error.bg}`)}><Trash2 className="h-4 w-4"/></button>
                 </div>
               </TableCell>
@@ -166,7 +166,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                 value={editingRule.summary || ''}
                 onChange={e => setEditingRule({...editingRule, summary: e.target.value})}
               />
-              <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.light)}>
+              <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.default)}>
                   <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
                   <Button variant="primary" onClick={handleSave}>Save Rule</Button>
               </div>

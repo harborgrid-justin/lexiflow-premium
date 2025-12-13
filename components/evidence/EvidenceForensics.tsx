@@ -127,10 +127,10 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
                       </div>
                       <div>
                           <h4 className={cn("font-bold text-sm", theme.text.primary)}>UUID Tracking Active</h4>
-                          <p className={cn("text-xs mt-1", theme.text.secondary)}>Asset ID: <span className={cn("font-mono px-1 rounded", theme.surfaceHighlight)}>{selectedItem.trackingUuid}</span></p>
+                          <p className={cn("text-xs mt-1", theme.text.secondary)}>Asset ID: <span className={cn("font-mono px-1 rounded", theme.surface.highlight)}>{selectedItem.trackingUuid}</span></p>
                       </div>
                   </div>
-                  <div className={cn("pt-4 mt-4 border-t", theme.border.light)}>
+                  <div className={cn("pt-4 mt-4 border-t", theme.border.default)}>
                       <Button variant="secondary" className="w-full" onClick={() => DataService.evidence.generateReport(selectedItem.id)}>Generate Forensic Report</Button>
                   </div>
               </div>

@@ -93,7 +93,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                 )}>
                     {selectedJob ? (
                         <>
-                            <div className={cn("p-6 border-b flex justify-between items-start", theme.border.default, theme.surfaceHighlight)}>
+                            <div className={cn("p-6 border-b flex justify-between items-start", theme.border.default, theme.surface.highlight)}>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         {/* Mobile Back Button */}
@@ -127,7 +127,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                             </div>
 
                             <div className="flex-1 p-0 flex flex-col min-h-0">
-                                <div className={cn("p-2 text-xs font-bold uppercase tracking-wider flex items-center border-b", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
+                                <div className={cn("p-2 text-xs font-bold uppercase tracking-wider flex items-center border-b", theme.surface.highlight, theme.text.secondary, theme.border.default)}>
                                     <FileText className="h-3 w-3 mr-2"/> Live Logs
                                 </div>
                                 <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface.default, theme.text.primary)}>
@@ -164,17 +164,17 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                         return (
                         <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>
                             <div className="flex justify-between items-start mb-4">
-                                <div className={cn("p-3 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+                                <div className={cn("p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                                     <Icon className={cn("h-6 w-6", conn.color)}/>
                                 </div>
                                 <div className="flex gap-1">
-                                    <button className={cn("p-1.5 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`, `hover:${theme.surfaceHighlight}`)}><Settings className="h-4 w-4"/></button>
+                                    <button className={cn("p-1.5 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)}><Settings className="h-4 w-4"/></button>
                                 </div>
                             </div>
                             <h4 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{conn.name}</h4>
                             <p className={cn("text-sm mb-4", theme.text.secondary)}>{conn.type}</p>
                             
-                            <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.light)}>
+                            <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
                                 <span className={cn(
                                     "text-xs font-bold px-2 py-0.5 rounded-full border",
                                     conn.status === 'Healthy' ? cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border) : 
@@ -186,7 +186,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                         </div>
                     )})}
                     
-                    <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)}>
+                    <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
                         <Plus className="h-10 w-10 mb-2"/>
                         <span className="font-medium">Add New Source</span>
                     </button>

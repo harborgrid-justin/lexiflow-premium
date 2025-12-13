@@ -1,17 +1,36 @@
+/**
+ * CaseMotions.tsx
+ * 
+ * Motion practice management interface with filing deadlines, conferral tracking,
+ * and hearing scheduling.
+ * 
+ * @module components/case-detail/motions/CaseMotions
+ * @category Case Management - Motions
+ */
+
+// External Dependencies
 import React, { useState } from 'react';
-import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
-import { Button } from '../../common/Button';
 import { Plus, RefreshCw } from 'lucide-react';
+
+// Internal Dependencies - Components
+import { Button } from '../../common/Button';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
 import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
 import { useNotify } from '../../../hooks/useNotify';
 import { useWindow } from '../../../context/WindowContext';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../../services/dataService';
+import { STORES } from '../../../services/db';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
 
 interface CaseMotionsProps {
   caseId: string;

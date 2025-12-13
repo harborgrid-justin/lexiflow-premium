@@ -1,13 +1,31 @@
+/**
+ * MotionModal.tsx
+ * 
+ * Motion creation/editing modal with rule selector, document linking,
+ * and AI-assisted brief generation.
+ * 
+ * @module components/case-detail/motions/MotionModal
+ * @category Case Management - Motions
+ */
 
+// External Dependencies
 import React, { useState, useEffect } from 'react';
+import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { Button } from '../../common/Button';
 import { RuleSelector } from '../../common/RuleSelector';
-import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
-import { Motion, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Motion, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
 
 interface MotionModalProps {
   isOpen: boolean;
@@ -96,7 +114,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             onChange={(e) => setNewMotion({...newMotion, hearingDate: e.target.value})}
           />
           {newMotion.hearingDate && (
-            <div className="mt-2 text-xs text-blue-600 flex items-center gap-4 bg-blue-50 p-2 rounded border border-blue-100">
+            <div className={cn("mt-2 text-xs flex items-center gap-4 p-2 rounded border", theme.text.link, theme.surface.highlight, theme.border.default)}>
               <span><Clock className="h-3 w-3 inline mr-1"/> Opp: {newMotion.oppositionDueDate}</span>
               <span><Clock className="h-3 w-3 inline mr-1"/> Reply: {newMotion.replyDueDate}</span>
             </div>
@@ -116,7 +134,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             <div className={cn("border rounded-md p-2 max-h-32 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                 {documents.map(doc => (
                     <div key={doc.id} className={cn("flex items-center p-1 rounded cursor-pointer", `hover:${theme.surface.default}`)} onClick={() => handleToggleDoc(doc.id)}>
-                        <div className={`w-4 h-4 mr-2 border rounded flex items-center justify-center ${newMotion.documents?.includes(doc.id) ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>
+                        <div className={cn("w-4 h-4 mr-2 border rounded flex items-center justify-center", newMotion.documents?.includes(doc.id) ? cn(theme.action.primary.bg, theme.action.primary.border) : 'bg-white border-slate-300')}>
                             {newMotion.documents?.includes(doc.id) && <CheckSquare className="h-3 w-3 text-white"/>}
                         </div>
                         <span className={cn("text-xs truncate", theme.text.primary)}>{doc.title}</span>

@@ -1,23 +1,48 @@
+/**
+ * BriefAnalyzer.tsx
+ * 
+ * AI-powered brief analysis tool using Google Gemini for citation validation,
+ * argument strength assessment, and counter-argument identification.
+ * 
+ * @module components/citation/BriefAnalyzer
+ * @category Legal Research - AI Analysis
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
 import { 
   FileText, Search, Loader2, BrainCircuit, ShieldAlert, CheckCircle2, 
   AlertTriangle, Scale, BookOpen, ArrowRight, Network, Plus, Save, ExternalLink
 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Tabs } from '../common/Tabs';
+import { RiskMeter } from '../common/RiskMeter';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
+import { useWindow } from '../../context/WindowContext';
+
+// Services & Utils
 import { DataService } from '../../services/dataService';
 import { GeminiService, BriefCritique } from '../../services/geminiService';
 import { AnalysisEngine } from '../../services/analysisEngine';
-import { Citation, Case, BriefAnalysisSession } from '../../types';
-import { useQuery, useMutation } from '../../services/queryClient';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
-import { RiskMeter } from '../common/RiskMeter';
-import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../context/WindowContext';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Citation, Case, BriefAnalysisSession } from '../../types';
 
 // Simple sanitizer to strip script tags
 const sanitizeHtml = (html: string) => {

@@ -1,13 +1,32 @@
+/**
+ * CorrespondenceDetail.tsx
+ * 
+ * Detailed view for correspondence items and service of process tracking,
+ * with document linking, task creation, and delivery confirmation.
+ * 
+ * @module components/case-detail/collaboration/CorrespondenceDetail
+ * @category Case Management - Correspondence
+ */
+
+// External Dependencies
 import React, { useState } from 'react';
-import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '../../../types';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../../common/Button';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { DataService } from '../../../services/dataService';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
 import { useNotify } from '../../../hooks/useNotify';
 import { useMutation } from '../../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../../services/dataService';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '../../../types';
 
 interface CorrespondenceDetailProps {
   item: CommunicationItem | ServiceJob;
@@ -187,9 +206,9 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                     </div>
 
                     {item.hasAttachment && (
-                        <div className="p-3 border rounded-lg flex items-center justify-between hover:bg-slate-50 cursor-pointer">
+                        <div className={cn("p-3 border rounded-lg flex items-center justify-between cursor-pointer", theme.border.default, theme.surface.default, "hover:shadow-sm")}>
                             <div className="flex items-center gap-2">
-                                <FileText className="h-4 w-4 text-blue-600"/>
+                                <FileText className={cn("h-4 w-4", theme.text.link)}/>
                                 <span className="text-sm font-medium">Attachment.pdf</span>
                             </div>
                             <Download className="h-4 w-4 text-slate-400"/>
@@ -201,7 +220,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             {isService(item) && (
                 <>
                     <div className="text-center pb-4 border-b border-slate-100">
-                        <div className={cn("w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center", item.method === 'Mail' ? "bg-purple-100 text-purple-600" : "bg-blue-100 text-blue-600")}>
+                        <div className={cn("w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center", theme.surface.highlight, theme.action.primary.text)}>
                             {item.method === 'Mail' ? <Truck className="h-6 w-6"/> : <MapPin className="h-6 w-6"/>}
                         </div>
                         <h3 className={cn("text-lg font-bold", theme.text.primary)}>{item.targetPerson}</h3>
@@ -269,7 +288,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                             {item.trackingNumber && (
                                 <div className="flex justify-between">
                                     <span className={theme.text.tertiary}>Tracking #:</span>
-                                    <span className="font-mono text-blue-600">{item.trackingNumber}</span>
+                                    <span className={cn("font-mono", theme.text.link)}>{item.trackingNumber}</span>
                                 </div>
                             )}
                              {item.addressedTo && (
@@ -286,7 +305,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
 
                         {item.gpsCoordinates && (
                             <div className={cn("p-3 rounded bg-slate-50 border border-slate-100 text-xs flex items-center gap-2", theme.text.secondary)}>
-                                <Navigation className="h-3 w-3 text-blue-500"/>
+                                <Navigation className={cn("h-3 w-3", theme.text.link)}/>
                                 GPS Verified: {item.gpsCoordinates}
                             </div>
                         )}

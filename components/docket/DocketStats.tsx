@@ -1,6 +1,18 @@
+/**
+ * DocketStats.tsx
+ * 
+ * Summary metric cards for docket activity: recent filings, orders,
+ * pending deadlines, and sync status.
+ * 
+ * @module components/docket/DocketStats
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
 import { FileText, Gavel, AlertCircle, RefreshCw } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { MetricCard } from '../common/Primitives';
 
 export const DocketStats: React.FC = () => {

@@ -1,34 +1,34 @@
 
 import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
 import { Search, Plus } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { useQuery } from '../services/queryClient';
-import { DataService } from '../services/dataService';
-import { STORES } from '../services/db';
-import { LegalEntity, EntityId } from '../types';
-import { useWindow } from '../context/WindowContext'; // Holographic DOM
-import { LazyLoader } from './common/LazyLoader';
-import { EntityNavigation, DirectorView, getEntityParentTab, getEntityFirstTab } from './entities/layout/EntityNavigation';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { LegalEntity, EntityId } from '../../types';
+import { useWindow } from '../../context/WindowContext'; // Holographic DOM
+import { LazyLoader } from '../common/LazyLoader';
+import { EntityNavigation, DirectorView, getEntityParentTab, getEntityFirstTab } from './layout/EntityNavigation';
 
 // Sub-components
-const EntityGrid = React.lazy(() => import('./entities/EntityGrid').then(m => ({ default: m.EntityGrid })));
-const EntityNetwork = React.lazy(() => import('./entities/EntityNetwork').then(m => ({ default: m.EntityNetwork })));
-const EntityOrgChart = React.lazy(() => import('./entities/EntityOrgChart').then(m => ({ default: m.EntityOrgChart })));
-const EntityProfile = React.lazy(() => import('./entities/EntityProfile').then(m => ({ default: m.EntityProfile })));
-const ConflictCheckPanel = React.lazy(() => import('./entities/ConflictCheckPanel').then(m => ({ default: m.ConflictCheckPanel })));
-const EntityAnalytics = React.lazy(() => import('./entities/EntityAnalytics').then(m => ({ default: m.EntityAnalytics })));
-const EntityIngestion = React.lazy(() => import('./entities/EntityIngestion').then(m => ({ default: m.EntityIngestion })));
-const EntityGovernance = React.lazy(() => import('./entities/EntityGovernance').then(m => ({ default: m.EntityGovernance })));
-const EntityVendorOps = React.lazy(() => import('./entities/EntityVendorOps').then(m => ({ default: m.EntityVendorOps })));
-const EntityMap = React.lazy(() => import('./entities/EntityMap').then(m => ({ default: m.EntityMap })));
-const UboRegister = React.lazy(() => import('./entities/ubo/UboRegister').then(m => ({ default: m.UboRegister })));
-const KycManager = React.lazy(() => import('./entities/ubo/KycManager').then(m => ({ default: m.KycManager })));
-const PerformanceScorecards = React.lazy(() => import('./entities/counsel/PerformanceScorecards').then(m => ({ default: m.PerformanceScorecards })));
-const RateNegotiation = React.lazy(() => import('./entities/counsel/RateNegotiation').then(m => ({ default: m.RateNegotiation })));
-const AlumniDirectory = React.lazy(() => import('./entities/talent/AlumniDirectory').then(m => ({ default: m.AlumniDirectory })));
+const EntityGrid = React.lazy(() => import('./EntityGrid').then(m => ({ default: m.EntityGrid })));
+const EntityNetwork = React.lazy(() => import('./EntityNetwork').then(m => ({ default: m.EntityNetwork })));
+const EntityOrgChart = React.lazy(() => import('./EntityOrgChart').then(m => ({ default: m.EntityOrgChart })));
+const EntityProfile = React.lazy(() => import('./EntityProfile').then(m => ({ default: m.EntityProfile })));
+const ConflictCheckPanel = React.lazy(() => import('./ConflictCheckPanel').then(m => ({ default: m.ConflictCheckPanel })));
+const EntityAnalytics = React.lazy(() => import('./EntityAnalytics').then(m => ({ default: m.EntityAnalytics })));
+const EntityIngestion = React.lazy(() => import('./EntityIngestion').then(m => ({ default: m.EntityIngestion })));
+const EntityGovernance = React.lazy(() => import('./EntityGovernance').then(m => ({ default: m.EntityGovernance })));
+const EntityVendorOps = React.lazy(() => import('./EntityVendorOps').then(m => ({ default: m.EntityVendorOps })));
+const EntityMap = React.lazy(() => import('./EntityMap').then(m => ({ default: m.EntityMap })));
+const UboRegister = React.lazy(() => import('./ubo/UboRegister').then(m => ({ default: m.UboRegister })));
+const KycManager = React.lazy(() => import('./ubo/KycManager').then(m => ({ default: m.KycManager })));
+const PerformanceScorecards = React.lazy(() => import('./counsel/PerformanceScorecards').then(m => ({ default: m.PerformanceScorecards })));
+const RateNegotiation = React.lazy(() => import('./counsel/RateNegotiation').then(m => ({ default: m.RateNegotiation })));
+const AlumniDirectory = React.lazy(() => import('./talent/AlumniDirectory').then(m => ({ default: m.AlumniDirectory })));
 
 interface EntityDirectorProps {
     initialTab?: DirectorView;

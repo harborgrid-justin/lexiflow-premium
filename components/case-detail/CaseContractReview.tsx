@@ -1,9 +1,22 @@
+/**
+ * CaseContractReview.tsx
+ * 
+ * AI-powered contract review interface using Gemini API for clause analysis,
+ * risk identification, and compliance checking.
+ * 
+ * @module components/case-detail/CaseContractReview
+ * @category Case Management - Contract Analysis
+ */
 
-
+// External Dependencies
 import React, { useState } from 'react';
 import { ShieldAlert, Upload, FileText, Cpu, AlertTriangle } from 'lucide-react';
-import { GeminiService } from '../../services/geminiService';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { GeminiService } from '../../services/geminiService';
 import { cn } from '../../utils/cn';
 
 export const CaseContractReview: React.FC = () => {
@@ -25,9 +38,9 @@ export const CaseContractReview: React.FC = () => {
       <div className={cn("flex-1 flex flex-col rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <FileText className="mr-2 h-5 w-5 text-blue-600" /> Contract Text
+            <FileText className={cn("mr-2 h-5 w-5", theme.text.link)} /> Contract Text
           </h3>
-          <button className={cn("text-xs flex items-center hover:text-blue-600", theme.text.secondary)}>
+          <button className={cn("text-xs flex items-center transition-colors", theme.text.secondary, `hover:${theme.text.link}`)}>
             <Upload className="h-3 w-3 mr-1" /> Import Doc
           </button>
         </div>
@@ -52,19 +65,19 @@ export const CaseContractReview: React.FC = () => {
       <div className={cn("flex-1 rounded-lg shadow-sm border flex flex-col overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b", theme.border.default, theme.surface.highlight)}>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <AlertTriangle className="mr-2 h-5 w-5 text-amber-500" /> AI Risk Analysis
+            <AlertTriangle className={cn("mr-2 h-5 w-5", theme.status.warning.text)} /> AI Risk Analysis
           </h3>
         </div>
         <div className="flex-1 p-6 overflow-y-auto">
           {result ? (
             <div className="prose prose-sm prose-indigo max-w-none">
-              <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4">
+              <div className={cn("border-l-4 p-4 mb-4", theme.surface.highlight, theme.status.warning.border)}>
                 <div className="flex">
                   <div className="flex-shrink-0">
-                    <AlertTriangle className="h-5 w-5 text-amber-400" aria-hidden="true" />
+                    <AlertTriangle className={cn("h-5 w-5", theme.status.warning.text)} aria-hidden="true" />
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm text-amber-700">
+                    <p className={cn("text-sm", theme.text.secondary)}>
                       Gemini has identified potential risks in this contract. Please review the redlines below.
                     </p>
                   </div>

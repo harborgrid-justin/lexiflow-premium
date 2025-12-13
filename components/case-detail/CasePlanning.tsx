@@ -1,18 +1,36 @@
+/**
+ * CasePlanning.tsx
+ * 
+ * Gantt-style case planning interface with phase management, task dependencies,
+ * zoom controls, and critical path analysis.
+ * 
+ * @module components/case-detail/CasePlanning
+ * @category Case Management - Planning & Gantt
+ */
 
+// External Dependencies
 import React, { useState, useMemo } from 'react';
 import { Layers, Plus, TrendingUp } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
-import { Case, CasePhase, WorkflowTask } from '../../types';
-import { DataService } from '../../services/dataService';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '@/hooks/useNotify';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { GanttTimeline } from './planning/GanttTimeline';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
 import { Pathfinding } from '../../utils/pathfinding';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Case, CasePhase, WorkflowTask } from '../../types';
 
 interface CasePlanningProps {
   caseData: Case;

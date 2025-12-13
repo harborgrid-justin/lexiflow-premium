@@ -1,22 +1,46 @@
+/**
+ * DiscoveryPlatform.tsx
+ * 
+ * Main discovery management platform with multi-level navigation for requests,
+ * productions, depositions, ESI, legal holds, and privilege logs.
+ * 
+ * @module components/discovery/DiscoveryPlatform
+ * @category Discovery - Platform
+ */
 
-// components/discovery/DiscoveryPlatform.tsx
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { PageHeader } from '../common/PageHeader';
-import { Button } from '../common/Button';
-import { DiscoveryRequest } from '../types';
 import { 
   MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
   Mic2, Database, Package, ClipboardList, FileText
 } from 'lucide-react';
-import { DataService } from '../services/dataService';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { useNotify } from '../hooks/useNotify';
-import { useSessionStorage } from '../hooks/useSessionStorage';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
 import { LazyLoader } from '../common/LazyLoader';
 import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './layout/DiscoveryNavigation';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { DiscoveryRequest } from '../../types';
 
 // FIX: Import all lazy loaded components for DiscoveryPlatform
 const DiscoveryDashboard = lazy(() => import('./DiscoveryDashboard'));

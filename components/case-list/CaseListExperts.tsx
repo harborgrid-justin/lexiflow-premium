@@ -1,13 +1,34 @@
+/**
+ * CaseListExperts.tsx
+ * 
+ * Expert witness management view with specialization tracking,
+ * availability status, and retention information.
+ * 
+ * @module components/case-list/CaseListExperts
+ * @category Case Management - Expert Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+import { Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
-import { Loader2 } from 'lucide-react';
 
 export const CaseListExperts: React.FC = () => {
   const { theme } = useTheme();

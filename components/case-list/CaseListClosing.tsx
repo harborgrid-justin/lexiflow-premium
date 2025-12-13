@@ -1,11 +1,32 @@
+/**
+ * CaseListClosing.tsx
+ * 
+ * AI-powered case closing workflow with automated checklist generation
+ * for closing binders and final documentation.
+ * 
+ * @module components/case-list/CaseListClosing
+ * @category Case Management - Closing Workflow
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { FileCheck, ArrowRight, Wand2, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useNotify } from '../../hooks/useNotify';
+
+// Services & Utils
 import { GeminiService } from '../../services/geminiService';
-import { useNotify } from '@/hooks/useNotify';
+import { cn } from '../../utils/cn';
 
 export const CaseListClosing: React.FC = () => {
   const { theme } = useTheme();

@@ -1,14 +1,40 @@
+/**
+ * PrivilegeLog.tsx
+ * 
+ * FRCP 26(b)(5) privilege log for documenting withheld documents
+ * claiming attorney-client or work product privilege.
+ * 
+ * @module components/discovery/PrivilegeLog
+ * @category Discovery - Privilege
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
+import { Wand2, Plus, Shield, Mail, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Wand2, Plus, Shield, Mail, Loader2 } from 'lucide-react';
-import { DataService } from '../../services/dataService';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { PrivilegeLogEntry } from '../../types';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { PrivilegeLogEntry } from '../../types';
 
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();

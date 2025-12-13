@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Download, Eye, MoreVertical, Clock, CheckSquare, Book, Tag } from 'lucide-react';
-import { LegalDocument } from '../../types';
-import { Badge } from '../common/Badge';
-import { FileIcon, TagList } from '../common/Primitives';
-import { TableRow, TableCell } from '../common/Table';
-import { cn } from '../../utils/cn';
+import { LegalDocument } from '../../../types';
+import { Badge } from '../../common/Badge';
+import { FileIcon, TagList } from '../../common/Primitives';
+import { TableRow, TableCell } from '../../common/Table';
+import { cn } from '../../../utils/cn';
 
 interface DocumentRowProps {
   doc: LegalDocument;

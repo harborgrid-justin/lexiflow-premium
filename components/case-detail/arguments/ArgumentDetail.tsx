@@ -1,15 +1,33 @@
+/**
+ * ArgumentDetail.tsx
+ * 
+ * Detailed argument editor with tabs for core info, authorities, evidence,
+ * and AI-powered analysis using Gemini.
+ * 
+ * @module components/case-detail/arguments/ArgumentDetail
+ * @category Case Management - Arguments
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { LegalArgument, EvidenceItem, Citation } from '../../../types';
+import { X, Save, Trash2, Wand2, Plus, Fingerprint, Scale, AlertTriangle } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Input } from '../../common/Inputs';
 import { Tabs } from '../../common/Tabs';
-import { X, Save, Trash2, Wand2, Plus, Fingerprint, Scale, AlertTriangle } from 'lucide-react';
-import { GeminiService } from '../../../services/geminiService';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { ArgumentCoreInfo } from './ArgumentCoreInfo';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { GeminiService } from '../../../services/geminiService';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { LegalArgument, EvidenceItem, Citation } from '../../../types';
 
 interface ArgumentDetailProps {
   argument: LegalArgument;
@@ -97,9 +115,9 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     {isLinkingCitation && (
                         <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                             {allCitations.map(cit => (
-                                <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface.default}`)}>
-                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedCitationIds.includes(cit.id) ? "border-blue-500" : theme.border.default)}>
-                                        {argument.relatedCitationIds.includes(cit.id) && <div className="w-2 h-2 bg-blue-500 rounded-full"/>}
+                                <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id) ? theme.surface.highlight : `hover:${theme.surface.default}`)}>
+                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedCitationIds.includes(cit.id) ? theme.action.primary.border : theme.border.default)}>
+                                        {argument.relatedCitationIds.includes(cit.id) && <div className={cn("w-2 h-2 rounded-full", theme.action.primary.bg)}/>}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className={cn("text-xs font-bold truncate", theme.text.primary)}>{cit.citation}</p>
@@ -115,10 +133,10 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                             const cit = allCitations.find(c => c.id === id);
                             return cit ? (
                                 <div key={id} className={cn("flex items-start p-3 rounded border shadow-sm group", theme.surface.default, theme.border.default)}>
-                                    <Scale className="h-5 w-5 text-purple-600 mt-0.5 mr-3 shrink-0"/>
+                                    <Scale className={cn("h-5 w-5 mt-0.5 mr-3 shrink-0", theme.action.primary.text)}/>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between">
-                                            <p className={cn("text-sm font-bold hover:underline cursor-pointer text-blue-700 dark:text-blue-400")}>{cit.citation}</p>
+                                            <p className={cn("text-sm font-bold hover:underline cursor-pointer", theme.text.link)}>{cit.citation}</p>
                                             <button onClick={() => toggleLink(id, 'citation')} className={cn("opacity-0 group-hover:opacity-100 hover:text-red-500", theme.text.tertiary)}><Trash2 className="h-4 w-4"/></button>
                                         </div>
                                         <p className={cn("text-xs font-medium", theme.text.primary)}>{cit.title}</p>
@@ -144,9 +162,9 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     {isLinkingEvidence && (
                         <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                             {allEvidence.map(ev => (
-                                <div key={ev.id} onClick={() => toggleLink(ev.id, 'evidence')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedEvidenceIds?.includes(ev.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface.default}`)}>
-                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedEvidenceIds?.includes(ev.id) ? "border-blue-500" : theme.border.default)}>
-                                        {argument.relatedEvidenceIds?.includes(ev.id) && <div className="w-2 h-2 bg-blue-500 rounded-full"/>}
+                                <div key={ev.id} onClick={() => toggleLink(ev.id, 'evidence')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedEvidenceIds?.includes(ev.id) ? theme.surface.highlight : `hover:${theme.surface.default}`)}>
+                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedEvidenceIds?.includes(ev.id) ? theme.action.primary.border : theme.border.default)}>
+                                        {argument.relatedEvidenceIds?.includes(ev.id) && <div className={cn("w-2 h-2 rounded-full", theme.action.primary.bg)}/>}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className={cn("text-xs font-bold truncate", theme.text.primary)}>{ev.title}</p>
@@ -162,7 +180,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                             const ev = allEvidence.find(e => e.id === id);
                             return ev ? (
                                 <div key={id} className={cn("flex items-start p-3 rounded border shadow-sm group", theme.surface.default, theme.border.default)}>
-                                    <Fingerprint className="h-5 w-5 text-amber-600 mt-0.5 mr-3 shrink-0"/>
+                                    <Fingerprint className={cn("h-5 w-5 mt-0.5 mr-3 shrink-0", theme.status.warning.text)}/>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between">
                                             <p className={cn("text-sm font-bold", theme.text.primary)}>{ev.title}</p>

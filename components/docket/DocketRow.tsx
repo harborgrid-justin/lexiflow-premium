@@ -1,11 +1,28 @@
+/**
+ * DocketRow.tsx
+ * 
+ * Individual docket entry row with type icons, badges, and action buttons.
+ * 
+ * @module components/docket/DocketRow
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
 import { Gavel, FileText, Clock, Bell, Lock, Eye, Hash, ExternalLink } from 'lucide-react';
-import { DocketEntry, DocketEntryType } from '../../types';
+
+// Internal Dependencies - Components
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { DocketEntry, DocketEntryType } from '../../types';
 
 interface DocketRowProps {
     entry: DocketEntry;
@@ -34,7 +51,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
             const { actionType, actionVerb, documentTitle, filer, additionalText } = entry.structuredData;
             return (
                 <span className="text-sm">
-                    <span className="font-semibold text-blue-700 dark:text-blue-400">{actionType}</span>
+                    <span className={cn("font-semibold", theme.text.link)}>{actionType}</span>
                     {documentTitle && <span className={cn("font-bold", theme.text.primary)}> {documentTitle}</span>}
                     {actionVerb && <span className={theme.text.secondary}> {actionVerb}</span>}
                     {filer && <span className={cn("italic", theme.text.secondary)}> by {filer}</span>}
@@ -120,7 +137,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
                         variant="ghost" 
                         icon={ExternalLink} 
                         onClick={(e) => { e.stopPropagation(); onSelect(entry); }}
-                        className="text-slate-500 hover:text-blue-600"
+                        className={cn("text-slate-500 transition-colors", `hover:${theme.text.link}`)}
                     >
                         Details
                     </Button>

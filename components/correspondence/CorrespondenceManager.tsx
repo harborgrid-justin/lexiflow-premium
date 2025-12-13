@@ -1,19 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { Mail, MapPin, Plus, Filter, Send, Inbox, ShieldCheck } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
-import { CommunicationLog } from './correspondence/CommunicationLog';
-import { ServiceTracker } from './correspondence/ServiceTracker';
-import { CorrespondenceDetail } from './correspondence/CorrespondenceDetail';
-import { ComposeMessageModal } from './correspondence/ComposeMessageModal';
-import { CreateServiceJobModal } from './correspondence/CreateServiceJobModal';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { CommunicationItem, ServiceJob } from '../types';
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
+import { CommunicationLog } from './CommunicationLog';
+import { ServiceTracker } from './ServiceTracker';
+import { CorrespondenceDetail } from './CorrespondenceDetail';
+import { ComposeMessageModal } from './ComposeMessageModal';
+import { CreateServiceJobModal } from './CreateServiceJobModal';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { CommunicationItem, ServiceJob } from '../../types';
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 interface CorrespondenceManagerProps {
     initialTab?: 'communications' | 'process';

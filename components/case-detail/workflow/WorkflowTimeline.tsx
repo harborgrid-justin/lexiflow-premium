@@ -1,9 +1,28 @@
+/**
+ * WorkflowTimeline.tsx
+ * 
+ * Stage-based workflow timeline with collapsible task lists,
+ * assignee avatars, and module navigation.
+ * 
+ * @module components/case-detail/workflow/WorkflowTimeline
+ * @category Case Management - Workflow
+ */
+
+// External Dependencies
 import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../../types';
+
+// Internal Dependencies - Components
 import { UserAvatar } from '../../common/UserAvatar';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../../types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];
@@ -21,7 +40,7 @@ return (
             const isExpanded = expandedStage === stage.id;
             const isActive = stage.status === 'Active';
             return (
-                <div key={stage.id} className={cn("rounded-xl border transition-all duration-300", theme.surface.default, isActive ? "border-blue-300 shadow-md ring-1 ring-blue-100" : theme.border.default)}>
+                <div key={stage.id} className={cn("rounded-xl border transition-all duration-300", theme.surface.default, isActive ? cn(theme.action.primary.border, "shadow-md ring-1", theme.surface.highlight) : theme.border.default)}>
                     {/* Stage Header */}
                     <div 
                         className={cn("p-4 flex items-center justify-between cursor-pointer rounded-t-xl transition-colors", `hover:${theme.surface.highlight}`)}
@@ -30,15 +49,15 @@ return (
                         <div className="flex items-center gap-4">
                             <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 text-xs font-bold ${
                                 stage.status === 'Completed' ? 'bg-green-100 border-green-500 text-green-700' :
-                                stage.status === 'Active' ? 'bg-blue-100 border-blue-500 text-blue-700' :
+                                stage.status === 'Active' ? cn(theme.surface.highlight, theme.action.primary.border, theme.action.primary.text) :
                                 `bg-slate-50 ${theme.border.default} ${theme.text.tertiary}`
                             }`}>
                                 {stage.status === 'Completed' ? <CheckCircle className="h-5 w-5"/> : index + 1}
                             </div>
                             <div>
-                                <h4 className={cn("font-bold text-lg", isActive ? "text-blue-900 dark:text-blue-200" : theme.text.primary)}>{stage.title}</h4>
+                                <h4 className={cn("font-bold text-lg", isActive ? theme.action.primary.text : theme.text.primary)}>{stage.title}</h4>
                                 <div className={cn("flex items-center gap-2 text-xs", theme.text.secondary)}>
-                                    <span className={cn("px-2 py-0.5 rounded-full", isActive ? "bg-blue-100 text-blue-700" : "bg-slate-100 dark:bg-slate-800")}>{stage.status}</span>
+                                    <span className={cn("px-2 py-0.5 rounded-full", isActive ? cn(theme.surface.highlight, theme.action.primary.text) : "bg-slate-100 dark:bg-slate-800")}>{stage.status}</span>
                                     <span>• {stage.tasks.length} tasks</span>
                                 </div>
                             </div>
@@ -53,14 +72,15 @@ return (
                         <div className={cn("p-4 pt-0 space-y-3 rounded-b-xl border-t", theme.surface.highlight, theme.border.default)}>
                             <div className="h-2"></div>
                             {stage.tasks.map((task) => (
-                                <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface.default, theme.border.default, "hover:border-blue-300")}>
+                                <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface.default, theme.border.default, `hover:border-[${theme.action.primary.border}]`)}>
                                     <button 
                                         onClick={() => onToggleTask(stage.id, task.id)}
-                                        className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                        className={cn(
+                                            "shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
                                             task.status === 'Done' 
                                             ? 'bg-green-500 border-green-500 text-white' 
-                                            : `border-slate-300 hover:border-blue-500 text-transparent`
-                                        }`}
+                                            : `border-slate-300 text-transparent`, `hover:border-[${theme.action.primary.border}]`
+                                        )}
                                     >
                                         <CheckCircle className="h-4 w-4 fill-current"/>
                                     </button>

@@ -1,15 +1,41 @@
+/**
+ * DiscoveryRequests.tsx
+ * 
+ * Discovery request tracking table with status indicators, due dates,
+ * and task creation integration for managing discovery obligations.
+ * 
+ * @module components/discovery/DiscoveryRequests
+ * @category Discovery - Requests
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
+import { Wand2, Upload, CheckSquare } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableHead } from '../common/Table';
-import { DiscoveryRequest } from '../../types';
-import { Wand2, Upload, CheckSquare } from 'lucide-react';
 import { TaskCreationModal } from '../common/TaskCreationModal';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
 import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
+
+// Utils
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { DiscoveryRequest } from '../../types';
 
 interface DiscoveryRequestsProps {
   onNavigate: (view: DiscoveryView, id?: string) => void;

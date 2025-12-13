@@ -1,19 +1,37 @@
+/**
+ * CaseDocuments.tsx
+ * 
+ * Document management interface with AI analysis, task creation, compliance scanning,
+ * and lazy-loaded document assembly integration.
+ * 
+ * @module components/case-detail/CaseDocuments
+ * @category Case Management - Documents & Analysis
+ */
 
+// External Dependencies
 import React, { useState, useRef, lazy, Suspense } from 'react';
-import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../types';
 import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TaskCreationModal } from '../common/TaskCreationModal';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useWindow } from '../../context/WindowContext';
-import { DocumentService } from '../../services/documentService';
-import { DataService } from '../../services/dataService';
-import { useNotify } from '@/hooks/useNotify';
-import { queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 import { Button } from '../common/Button';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+import { useNotify } from '../../hooks/useNotify';
+
+// Internal Dependencies - Services & Utils
+import { DocumentService } from '../../services/documentService';
+import { DataService } from '../../services/dataService';
+import { queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../types';
 import { SystemEventType } from '../../types/integrationTypes';
 
 const DocumentAssembly = lazy(() => import('../DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
@@ -39,7 +57,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     openWindow(
       id,
       'Drafting Wizard',
-      <Suspense fallback={<Loader2 className="animate-spin text-blue-600 h-8 w-8" />}>
+      <Suspense fallback={<Loader2 className={cn("animate-spin h-8 w-8", theme.text.link)} />}>
         <DocumentAssembly
           windowId={id}
           caseTitle="Current Case"
@@ -139,18 +157,18 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         <div className="flex gap-2">
           <input
             placeholder="Search documents..."
-            className={cn("px-4 py-2 border rounded-md text-sm w-full md:w-64 outline-none focus:ring-2", theme.surface.default, theme.border.default, theme.text.primary, "focus:ring-blue-500")}
+            className={cn("px-4 py-2 border rounded-md text-sm w-full md:w-64 outline-none focus:ring-2", theme.surface.default, theme.border.default, theme.text.primary, `focus:ring-[${theme.action.primary.border}]`)}
           />
         </div>
         <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto items-center">
           <label className={cn("flex items-center text-sm cursor-pointer select-none", theme.text.secondary)}>
             <input
               type="checkbox"
-              className="mr-2 rounded text-blue-600 focus:ring-blue-500"
+              className={cn("mr-2 rounded", theme.action.primary.text, `focus:ring-[${theme.action.primary.border}]`)}
               checked={logAsEvidence}
               onChange={(e) => setLogAsEvidence(e.target.checked)}
             />
-            <ShieldCheck className={cn("h-4 w-4 mr-1", logAsEvidence ? "text-blue-600" : theme.text.tertiary)} />
+            <ShieldCheck className={cn("h-4 w-4 mr-1", logAsEvidence ? theme.text.link : theme.text.tertiary)} />
             Log as Evidence
           </label>
           <button onClick={handleOpenWizard} className={cn("flex-1 md:flex-none flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm hover:shadow", theme.primary.DEFAULT, theme.text.inverse, theme.primary.hover)}>

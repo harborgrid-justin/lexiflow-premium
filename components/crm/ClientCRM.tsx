@@ -1,22 +1,22 @@
 
 import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Client, EntityId } from '../types';
+import { Client, EntityId } from '../../types';
 import {
   UserPlus, LayoutDashboard, List, GitPullRequest,
   BarChart3, Users, TrendingUp
 } from 'lucide-react';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
-import { Button } from './common/Button';
-import { DataService } from '../services/dataService';
-import { useQuery } from '../services/queryClient';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
-import { STORES } from '../services/db';
-import { cn } from '../utils/cn';
-import { CRM_TAB_CONFIG, CRMView } from '../config/crmConfig';
-import { ClientCRMContent } from './crm/ClientCRMContent';
+import { Button } from '../common/Button';
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { STORES } from '../../services/db';
+import { cn } from '../../utils/cn';
+import { CRM_TAB_CONFIG, CRMView } from '../../config/crmConfig';
+import { ClientCRMContent } from './ClientCRMContent';
 
 interface ClientCRMProps {
     initialTab?: CRMView;

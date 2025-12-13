@@ -1,17 +1,42 @@
+/**
+ * CaseListDocket.tsx
+ * 
+ * Unified docket management view combining upcoming hearings,
+ * pending motions, and court calendar deadlines.
+ * 
+ * @module components/case-list/CaseListDocket
+ * @category Case Management - Docket Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo, useState, useEffect } from 'react';
 import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { Case } from '../../types';
-import { DataService } from '../../services/dataService';
 import { VirtualList } from '../common/VirtualList';
 import { LazyLoader } from '../common/LazyLoader';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case } from '../../types';
 
 interface CaseListDocketProps {
   onSelectCase?: (c: Case) => void;

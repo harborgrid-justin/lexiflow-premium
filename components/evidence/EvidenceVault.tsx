@@ -1,18 +1,18 @@
 
 // components/EvidenceVault.tsx
 import React, { useMemo, useCallback, useState, useEffect, Suspense, lazy } from 'react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
 import { Plus, Search } from 'lucide-react';
-import { useEvidenceVault, ViewMode } from '../hooks/useEvidenceVault';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { LazyLoader } from './common/LazyLoader';
-import { EVIDENCE_PARENT_TABS } from '../config/evidenceVaultConfig';
-import { EvidenceVaultContent } from './evidence/EvidenceVaultContent';
-import { EvidenceItem } from '../types';
+import { useEvidenceVault, ViewMode } from '../../hooks/useEvidenceVault';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { LazyLoader } from '../common/LazyLoader';
+import { EVIDENCE_PARENT_TABS } from '../../config/evidenceVaultConfig';
+import { EvidenceVaultContent } from './EvidenceVaultContent';
+import { EvidenceItem } from '../../types';
 
-const EvidenceDetail = lazy(() => import('./evidence/EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));
+const EvidenceDetail = lazy(() => import('./EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));
 
 interface EvidenceVaultProps {
   onNavigateToCase?: (caseId: string) => void;

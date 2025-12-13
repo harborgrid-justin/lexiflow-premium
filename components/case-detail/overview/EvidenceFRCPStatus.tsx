@@ -1,7 +1,23 @@
+/**
+ * EvidenceFRCPStatus.tsx
+ * 
+ * FRCP 26(a) initial disclosure compliance status indicator.
+ * 
+ * @module components/case-detail/overview/EvidenceFRCPStatus
+ * @category Case Management - Evidence
+ */
+
+// External Dependencies
 import React from 'react';
-import { Card } from '../../common/Card';
 import { CheckCircle } from 'lucide-react';
+
+// Internal Dependencies - Components
+import { Card } from '../../common/Card';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {

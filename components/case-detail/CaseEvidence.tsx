@@ -1,8 +1,25 @@
+/**
+ * CaseEvidence.tsx
+ * 
+ * Case-scoped evidence management wrapper that delegates to EvidenceInventory
+ * component with filtering and intake capabilities.
+ * 
+ * @module components/case-detail/CaseEvidence
+ * @category Case Management - Evidence Management
+ */
+
+// External Dependencies
 import React from 'react';
-import { EvidenceInventory } from '../evidence/EvidenceInventory';
-import { EvidenceItem } from '../../types';
 import { Loader2 } from 'lucide-react';
-import { useEvidenceVault } from '@/hooks/useEvidenceVault'; 
+
+// Internal Dependencies - Components
+import { EvidenceInventory } from '../evidence/EvidenceInventory';
+
+// Internal Dependencies - Hooks & Context
+import { useEvidenceVault } from '../../hooks/useEvidenceVault';
+
+// Types & Interfaces
+import { EvidenceItem } from '../../types'; 
 
 interface CaseEvidenceProps {
   caseId: string;

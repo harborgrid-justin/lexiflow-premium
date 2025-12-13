@@ -1,30 +1,30 @@
 
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { Plus, RefreshCw, Play, Loader2 } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
-import { DataService } from '../services/dataService';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
+import { DataService } from '../../services/dataService';
 
 // Direct Imports to optimize Tree-Shaking and HMR
-import { CaseWorkflowList } from './workflow/CaseWorkflowList';
-import { FirmProcessList } from './workflow/FirmProcessList';
-import { EnhancedWorkflowPanel } from './workflow/EnhancedWorkflowPanel';
-import { WorkflowTemplateBuilder } from './workflow/WorkflowTemplateBuilder';
-import { WorkflowAnalyticsDashboard } from './workflow/WorkflowAnalyticsDashboard';
-import { WorkflowConfig } from './workflow/WorkflowConfig';
-import { WorkflowEngineDetail } from './workflow/WorkflowEngineDetail';
-import { FirmProcessDetail } from './workflow/FirmProcessDetail';
-import { WorkflowLibrary } from './workflow/WorkflowLibrary';
-import { TemplatePreview } from './workflow/TemplatePreview';
-import { WorkflowTemplateData } from '../types';
+import { CaseWorkflowList } from './CaseWorkflowList';
+import { FirmProcessList } from './FirmProcessList';
+import { EnhancedWorkflowPanel } from './EnhancedWorkflowPanel';
+import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
+import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
+import { WorkflowConfig } from './WorkflowConfig';
+import { WorkflowEngineDetail } from './WorkflowEngineDetail';
+import { FirmProcessDetail } from './FirmProcessDetail';
+import { WorkflowLibrary } from './WorkflowLibrary';
+import { TemplatePreview } from './TemplatePreview';
+import { WorkflowTemplateData } from '../../types';
 
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { WORKFLOW_TABS } from './workflow/WorkflowTabs';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { WORKFLOW_TABS } from './WorkflowTabs';
 import { Case } from '../types';
-import { useQuery, useMutation } from '../services/queryClient';
-import { useNotify } from '../hooks/useNotify';
-import { STORES } from '../services/db';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
+import { STORES } from '../../services/db';
 
 interface MasterWorkflowProps {
   onSelectCase: (caseId: string) => void;

@@ -1,10 +1,28 @@
+/**
+ * StoryModeTimeline.tsx
+ * 
+ * Narrative-style timeline displaying only significant case milestones
+ * with visual flow and phase transitions.
+ * 
+ * @module components/case-detail/timeline/StoryModeTimeline
+ * @category Case Management - Timeline
+ */
 
+// External Dependencies
 import React from 'react';
-import { TimelineEvent } from '../../../types';
-import { Card } from '../../common/Card';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
+
+// Internal Dependencies - Components
+import { Card } from '../../common/Card';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { TimelineEvent } from '../../../types';
 
 interface StoryModeTimelineProps {
   events: TimelineEvent[];
@@ -29,9 +47,9 @@ export const StoryModeTimeline: React.FC<StoryModeTimelineProps> = ({ events }) 
 
   const getColor = (type: string) => {
       switch(type) {
-          case 'milestone': return 'bg-purple-600';
+          case 'milestone': return theme.action.primary.bg;
           case 'hearing': return 'bg-red-600';
-          case 'motion': return 'bg-blue-600';
+          case 'motion': return theme.action.primary.bg;
           default: return 'bg-slate-500';
       }
   };
@@ -73,7 +91,7 @@ export const StoryModeTimeline: React.FC<StoryModeTimelineProps> = ({ events }) 
                                     "absolute top-6 w-3 h-3 rotate-45 border-l border-b",
                                     isLeft ? "-right-[7px] border-r border-t-0 border-l-0 border-b-0" : "-left-[7px]",
                                     theme.border.default,
-                                    theme.surface
+                                    theme.surface.default
                                 )}></div>
                                 
                                 <span className={cn("text-xs font-bold uppercase tracking-wider mb-1 block", getColor(evt.type).replace('bg-', 'text-'))}>

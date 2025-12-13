@@ -1,13 +1,30 @@
+/**
+ * CaseWorkflow.tsx
+ * 
+ * Case workflow management with AI-generated stages, task tracking,
+ * and automation configuration interface.
+ * 
+ * @module components/case-detail/CaseWorkflow
+ * @category Case Management - Workflow & Automation
+ */
 
-
+// External Dependencies
 import React, { useState } from 'react';
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../types';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 import { WorkflowAutomations } from './workflow/WorkflowAutomations';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../types';
 
 interface CaseWorkflowProps {
   stages: WorkflowStage[];
@@ -52,10 +69,10 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
               <h3 className={cn("text-lg font-bold mb-1", theme.text.primary)}>Workflow Status</h3>
               <div className={cn("flex items-center justify-between text-sm mb-2", theme.text.secondary)}>
                   <span>{completedTasks} of {totalTasks} Tasks Complete</span>
-                  <span className="font-bold text-blue-600">{progress}%</span>
+                  <span className={cn("font-bold", theme.text.link)}>{progress}%</span>
               </div>
               <div className={cn("w-full rounded-full h-2.5", theme.surface.highlight)}>
-                  <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-1000 ease-out" style={{ width: `${progress}%` }}></div>
+                  <div className={cn("h-2.5 rounded-full transition-all duration-1000 ease-out", theme.action.primary.bg)} style={{ width: `${progress}%` }}></div>
               </div>
           </div>
           

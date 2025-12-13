@@ -1,8 +1,23 @@
+/**
+ * DocketToolbar.tsx
+ * 
+ * Sticky toolbar for docket sheet with case title and add entry action.
+ * 
+ * @module components/docket/DocketToolbar
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
 import { Plus } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 
 interface DocketToolbarProps {

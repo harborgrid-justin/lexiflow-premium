@@ -1,12 +1,38 @@
+/**
+ * CreateCaseModal.tsx
+ * 
+ * Modal dialog for creating new cases with jurisdiction selection,
+ * matter type configuration, and pre-filing vs filed case toggles.
+ * 
+ * @module components/case-list/CreateCaseModal
+ * @category Case Management - Forms
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
-import { Case, CaseStatus, MatterType, JurisdictionObject, CaseId } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { CaseTypeToggle } from './case-form/CaseTypeToggle';
 import { CaseFormFields } from './case-form/CaseFormFields';
 import { JurisdictionSelector } from './case-form/JurisdictionSelector';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case, CaseStatus, MatterType, JurisdictionObject, CaseId } from '../../types';
 
 interface CreateCaseModalProps {
   isOpen: boolean;

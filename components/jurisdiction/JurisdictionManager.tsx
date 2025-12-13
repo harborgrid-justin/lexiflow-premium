@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo, useCallback, useEffect, Suspense, useTransition } from 'react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
 import { Globe, Scale, Building2, Shield, Users, Map as MapIcon, Plus, Gavel } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { LazyLoader } from './common/LazyLoader';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { LazyLoader } from '../common/LazyLoader';
 
 const JurisdictionFederal = React.lazy(() => import('./jurisdiction/JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));
 const JurisdictionState = React.lazy(() => import('./jurisdiction/JurisdictionState').then(m => ({ default: m.JurisdictionState })));

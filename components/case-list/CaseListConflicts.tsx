@@ -1,13 +1,38 @@
+/**
+ * CaseListConflicts.tsx
+ * 
+ * Conflict check management dashboard for ethical screening.
+ * Displays potential conflicts requiring resolution before case acceptance.
+ * 
+ * @module components/case-list/CaseListConflicts
+ * @category Case Management - Compliance
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { ShieldAlert, Search, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { Case, ConflictCheck } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case, ConflictCheck } from '../../types';
 
 interface CaseListConflictsProps {
   onSelectCase?: (c: Case) => void;

@@ -1,16 +1,34 @@
+/**
+ * ConferralLog.tsx
+ * 
+ * Good faith conferral tracking for FRCP compliance with method documentation,
+ * result tracking, and chronological session history.
+ * 
+ * @module components/case-detail/collaboration/ConferralLog
+ * @category Case Management - Collaboration
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '../../../types';
+import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Input, TextArea } from '../../common/Inputs';
 import { Modal } from '../../common/Modal';
-import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '../../../types';
 
 interface ConferralLogProps {
   caseId: string;
@@ -75,7 +93,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
     addSession(session);
   };
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>;
 
   return (
     <div className="space-y-6">
@@ -89,7 +107,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
       <div className="space-y-4">
         {sessions.map(session => (
-          <div key={session.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:border-blue-300", theme.surface.default, theme.border.default)}>
+          <div key={session.id} className={cn("p-4 rounded-lg border shadow-sm transition-all", theme.surface.default, theme.border.default, `hover:border-[${theme.action.primary.border}]`)}>
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-3">
                 <div className={cn("p-2 rounded-full", theme.surface.highlight, theme.text.secondary)}>
@@ -112,7 +130,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             </div>
             
             {session.nextSteps && (
-              <div className="ml-11 mt-2 flex items-center gap-2 text-xs text-blue-600">
+              <div className={cn("ml-11 mt-2 flex items-center gap-2 text-xs", theme.text.link)}>
                 <CheckCircle className="h-3 w-3"/>
                 <span className="font-medium">Next: {session.nextSteps}</span>
               </div>

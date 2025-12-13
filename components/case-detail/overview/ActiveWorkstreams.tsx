@@ -1,9 +1,24 @@
+/**
+ * ActiveWorkstreams.tsx
+ * 
+ * Dashboard widget displaying active project workstreams with progress tracking.
+ * 
+ * @module components/case-detail/overview/ActiveWorkstreams
+ * @category Case Management - Overview
+ */
 
+// External Dependencies
 import React from 'react';
 import { Briefcase } from 'lucide-react';
-import { Project, Case } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Project, Case } from '../../../types';
 
 interface ActiveWorkstreamsProps {
   activeProjects: Project[];
@@ -16,7 +31,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
 
   return (
     <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
                 <Briefcase className={cn("h-4 w-4 mr-2", theme.primary.text)}/> Active Workstreams
             </h3>
@@ -34,7 +49,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
                                 <span className={cn("text-xs font-bold", theme.primary.text)}>{pct}%</span>
                             </div>
                             <div 
-                                className={cn("w-full rounded-full h-1.5", theme.surfaceHighlight)}
+                                className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}
                                 role="progressbar"
                                 aria-valuenow={pct}
                                 aria-valuemin={0}

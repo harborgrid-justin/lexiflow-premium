@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Plus, UserPlus, AlertTriangle, Loader2 } from 'lucide-react';
-import { Modal } from './common/Modal';
-import { Button } from './common/Button';
-import { Input } from './common/Inputs';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { DataService } from '../services/dataService';
-import { useDebounce } from '../hooks/useDebounce';
+import { Modal } from '../common/Modal';
+import { Button } from '../common/Button';
+import { Input } from '../common/Inputs';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { useDebounce } from '../../hooks/useDebounce';
 
 interface ClientIntakeModalProps {
   onClose: () => void;

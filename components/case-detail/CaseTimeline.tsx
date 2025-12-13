@@ -1,12 +1,30 @@
+/**
+ * CaseTimeline.tsx
+ * 
+ * Chronological case activity view with list and story modes, type filtering,
+ * and virtualized scrolling for large event histories.
+ * 
+ * @module components/case-detail/CaseTimeline
+ * @category Case Management - Timeline & Events
+ */
 
+// External Dependencies
 import React, { useState, useMemo } from 'react';
-import { TimelineEvent } from '../../types';
 import { FileText, CheckCircle, DollarSign, Flag, Briefcase, Gavel, Calendar, BookOpen, List, Filter } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TimelineItem } from '../common/TimelineItem';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { TimelineEvent } from '../../types';
 
 interface CaseTimelineProps {
   events: TimelineEvent[];
@@ -35,7 +53,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
       case 'document': return cn(theme.status.info.bg, theme.status.info.border, theme.status.info.text);
       case 'task': return cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text);
       case 'billing': return cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text);
-      case 'milestone': return "bg-purple-100 border-purple-500 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400";
+      case 'milestone': return cn(theme.surface.highlight, theme.border.default, theme.action.primary.text);
       case 'motion': return "bg-indigo-100 border-indigo-500 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400";
       case 'hearing': return cn(theme.status.error.bg, theme.status.error.border, theme.status.error.text);
       default: return cn(theme.surface.highlight, theme.border.default, theme.text.tertiary);

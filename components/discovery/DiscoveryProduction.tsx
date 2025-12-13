@@ -1,11 +1,37 @@
+/**
+ * DiscoveryProduction.tsx
+ * 
+ * Document production interface with Bates stamping, OCR, and load file generation.
+ * Handles document upload, metadata extraction, and production formatting.
+ * 
+ * @module components/discovery/DiscoveryProduction
+ * @category Discovery - Production
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { ArrowLeft, Upload, FileText, Check, Settings, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
-import { DiscoveryRequest } from '../../types';
-import { DocumentService } from '../../services/documentService';
 import { Card } from '../common/Card';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Services & Utils
+import { DocumentService } from '../../services/documentService';
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { DiscoveryRequest } from '../../types';
 
 interface DiscoveryProductionProps {
   request: DiscoveryRequest | null;

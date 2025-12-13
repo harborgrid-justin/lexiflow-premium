@@ -1,20 +1,44 @@
+/**
+ * CitationLibrary.tsx
+ * 
+ * Searchable citation database with virtual scrolling and Shepardization indicators.
+ * Provides quick access to case citations with validation status and related cases.
+ * 
+ * @module components/citation/CitationLibrary
+ * @category Legal Research - Citation Database
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { Citation } from '../../types';
-import { DataService } from '../../services/dataService';
+import { CheckCircle, AlertTriangle, X, Book, Scale, FileText, ExternalLink, Loader2, BookOpen } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
-import { CheckCircle, AlertTriangle, X, Book, Scale, FileText, ExternalLink, Loader2, BookOpen } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
-import { useWindow } from '../../context/WindowContext';
 import { CitationDetail } from './CitationDetail';
 import { EmptyState } from '../common/EmptyState';
-import { useWorkerSearch } from '@/hooks/useWorkerSearch';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useQuery } from '../../services/queryClient';
+import { useWindow } from '../../context/WindowContext';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================\nimport { Citation } from '../../types';
 
 interface CitationLibraryProps {
   onSelect: (citation: Citation) => void;

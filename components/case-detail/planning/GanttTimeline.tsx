@@ -1,12 +1,30 @@
+/**
+ * GanttTimeline.tsx
+ * 
+ * Interactive Gantt chart timeline with drag-to-reschedule, zoom controls,
+ * and dependency visualization.
+ * 
+ * @module components/case-detail/planning/GanttTimeline
+ * @category Case Management - Planning
+ */
 
+// External Dependencies
 import React, { useRef } from 'react';
-import { WorkflowTask, CasePhase } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useWindow } from '../../../context/WindowContext';
+
+// Internal Dependencies - Components
 import { Badge } from '../../common/Badge';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+import { useWindow } from '../../../context/WindowContext';
 import { useGanttDrag } from '../../../hooks/useGanttDrag';
+
+// Internal Dependencies - Services & Utils
 import { GanttHelpers } from '../../../utils/ganttHelpers';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { WorkflowTask, CasePhase } from '../../../types';
 
 interface GanttTimelineProps {
   phases: CasePhase[];
@@ -89,7 +107,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                                               "absolute h-6 rounded-full border shadow-sm flex items-center px-2 text-xs font-bold text-white cursor-pointer select-none group overflow-hidden",
                                               task.status === 'Done' ? "bg-slate-400 border-slate-500" :
                                               task.priority === 'High' ? "bg-red-500 border-red-600" :
-                                              "bg-blue-500 border-blue-600"
+                                              cn(theme.action.primary.bg, theme.action.primary.border)
                                           )}
                                           style={GanttHelpers.getTaskStyle(task, viewStartDate, pixelsPerDay)}
                                           onMouseDown={(e) => onMouseDown(e, task.id, 'move')}

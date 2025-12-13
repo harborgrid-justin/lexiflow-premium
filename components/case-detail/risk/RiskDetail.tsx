@@ -1,13 +1,32 @@
+/**
+ * RiskDetail.tsx
+ * 
+ * Detailed risk editor with AI-powered mitigation suggestions,
+ * risk matrix visualization, and probability/impact controls.
+ * 
+ * @module components/case-detail/risk/RiskDetail
+ * @category Case Management - Risk Assessment
+ */
+
+// External Dependencies
 import React, { useState } from 'react';
-import { Risk, RiskLevel, RiskCategory, RiskStatus } from '../../../types';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../../common/Button';
 import { Input, TextArea } from '../../common/Inputs';
 import { RiskMatrix } from './RiskMatrix';
-import { GeminiService } from '../../../services/geminiService';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { Modal } from '../../common/Modal';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { GeminiService } from '../../../services/geminiService';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Risk, RiskLevel, RiskCategory, RiskStatus } from '../../../types';
 
 interface RiskDetailProps {
   risk: Risk;
@@ -103,7 +122,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                                     className={cn(
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                         risk.probability === lvl 
-                                            ? "bg-blue-600 text-white border-blue-600 shadow-md" 
+                                            ? cn(theme.action.primary.bg, "text-white", theme.action.primary.border, "shadow-md") 
                                             : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                     )}
                                 >
@@ -122,7 +141,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                                     className={cn(
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                         risk.impact === lvl 
-                                            ? "bg-blue-600 text-white border-blue-600 shadow-md" 
+                                            ? cn(theme.action.primary.bg, "text-white", theme.action.primary.border, "shadow-md") 
                                             : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                     )}
                                 >

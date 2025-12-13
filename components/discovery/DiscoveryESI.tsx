@@ -1,19 +1,44 @@
+/**
+ * DiscoveryESI.tsx
+ * 
+ * Electronically Stored Information (ESI) management for discovery.
+ * Tracks data sources, collection status, and custodial chain for digital evidence.
+ * 
+ * @module components/discovery/DiscoveryESI
+ * @category Discovery - ESI
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { ESISource } from '../../types';
-import { DataService } from '../../services/dataService';
+import { Database, HardDrive, Mail, Server, Shield, Play, CheckCircle, Plus, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Database, HardDrive, Mail, Server, Shield, Play, CheckCircle, Plus, Loader2 } from 'lucide-react';
 import { ProgressBar } from '../common/ProgressBar';
+import { EvidenceCustodyLog } from '../evidence/EvidenceCustodyLog';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
-import { EvidenceCustodyLog } from '../evidence/EvidenceCustodyLog';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { ESISource } from '../../types';
 
 export const DiscoveryESI: React.FC = () => {
   const { theme, mode } = useTheme();

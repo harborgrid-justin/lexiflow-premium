@@ -1,9 +1,27 @@
+/**
+ * MobileTimelineOverlay.tsx
+ * 
+ * Mobile-only slide-in overlay displaying case timeline,
+ * animated from right with backdrop blur.
+ * 
+ * @module components/case-detail/MobileTimelineOverlay
+ * @category Case Management - Mobile UI
+ */
 
+// External Dependencies
 import React from 'react';
 import { X } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Internal Dependencies - Components
 import { CaseTimeline } from './CaseTimeline';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
 import { TimelineEvent } from '../../types';
 
 interface MobileTimelineOverlayProps {

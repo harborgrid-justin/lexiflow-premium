@@ -1,13 +1,38 @@
+/**
+ * CitationManager.tsx
+ * 
+ * Main citation management interface with tabbed navigation between
+ * citation library and AI-powered brief analyzer.
+ * 
+ * @module components/citation/CitationManager
+ * @category Legal Research - Citation Management
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, Suspense, lazy } from 'react';
-import { Citation } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { Plus, BookOpen, FileText } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { Plus, BookOpen, FileText } from 'lucide-react';
 import { Tabs } from '../common/Tabs';
 import { LazyLoader } from '../common/LazyLoader';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Citation } from '../../types';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));

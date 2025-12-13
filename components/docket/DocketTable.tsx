@@ -1,14 +1,32 @@
+/**
+ * DocketTable.tsx
+ * 
+ * Virtualized table view of docket entries with infinite scroll support
+ * and entry type filtering.
+ * 
+ * @module components/docket/DocketTable
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
-import { DocketEntry, DocketEntryType } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { VirtualList } from '../common/VirtualList';
 import { InfiniteScrollTrigger } from '../common/InfiniteScrollTrigger';
 import { DocketRow } from './DocketRow';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { DocketEntry, DocketEntryType } from '../../types';
 
 interface DocketTableProps {
   entries: DocketEntry[];
@@ -82,7 +100,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
                 
                 <div className="flex justify-between items-center mt-2 border-t pt-2 border-slate-100 dark:border-slate-800">
                     <span className={cn("text-[10px] truncate max-w-[150px]", theme.primary.text)}>{entry.caseId}</span>
-                    {entry.documentId && <span className="text-[10px] font-bold text-blue-600 flex items-center"><FileText className="h-3 w-3 mr-1"/> Document</span>}
+                    {entry.documentId && <span className={cn("text-[10px] font-bold flex items-center", theme.text.link)}><FileText className="h-3 w-3 mr-1"/> Document</span>}
                 </div>
              </div>
         </div>

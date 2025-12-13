@@ -1,10 +1,26 @@
+/**
+ * OverviewSidebar.tsx
+ * 
+ * Right sidebar with quick actions (time entry, case linking, transfer),
+ * linked matters, and analytics access.
+ * 
+ * @module components/case-detail/overview/OverviewSidebar
+ * @category Case Management - Overview
+ */
 
+// External Dependencies
 import React from 'react';
 import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'lucide-react';
-import { Case } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { useNotify } from '../../../hooks/useNotify';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Case } from '../../../types';
 
 interface OverviewSidebarProps {
   caseData: Case;
@@ -52,7 +68,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
         <div className={cn("rounded-lg border shadow-sm p-5", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-center mb-3">
                 <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
-                    <Link className="h-3 w-3 mr-2 text-blue-600 shrink-0"/> Linked Matters
+                    <Link className={cn("h-3 w-3 mr-2 shrink-0", theme.text.link)}/> Linked Matters
                 </h4>
                 <button onClick={onShowLinkModal} className={cn("p-1 rounded transition-colors", `hover:${theme.surface.highlight}`, theme.primary.text)}>
                     <Plus className="h-4 w-4"/>

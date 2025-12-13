@@ -1,11 +1,32 @@
+/**
+ * CaseListReporters.tsx
+ * 
+ * Court reporter management view for deposition scheduling
+ * and transcript coordination.
+ * 
+ * @module components/case-list/CaseListReporters
+ * @category Case Management - Reporter Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Mic2, Plus, User } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
 import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
 
 export const CaseListReporters: React.FC = () => {

@@ -1,14 +1,32 @@
+/**
+ * CaseProjects.tsx
+ * 
+ * Project management interface for case workstreams with task tracking,
+ * milestone visualization, and progress monitoring.
+ * 
+ * @module components/case-detail/projects/CaseProjects
+ * @category Case Management - Projects
+ */
 
+// External Dependencies
 import React, { useState, useEffect } from 'react';
-import { Project, WorkflowTask, ProjectId, CaseId } from '../../../types';
 import { Plus, Briefcase } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../../common/Button';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+
+// Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/dataService';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Project, WorkflowTask, ProjectId, CaseId } from '../../../types';
 
 interface CaseProjectsProps {
   projects: Project[]; // These come from parent initially, but we will fetch internal as well
@@ -94,7 +112,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
             <div className={cn("text-center py-12 rounded-xl border-2 border-dashed h-64 flex flex-col items-center justify-center", theme.surface.highlight, theme.border.default)}>
                 <Briefcase className={cn("h-12 w-12 mx-auto mb-3", theme.text.tertiary)}/>
                 <p className={cn("font-medium", theme.text.secondary)}>No projects yet.</p>
-                <button onClick={() => setIsNewProjectModalOpen(true)} className="text-blue-600 text-sm hover:underline mt-2">Create your first project</button>
+                <button onClick={() => setIsNewProjectModalOpen(true)} className={cn("text-sm hover:underline mt-2", theme.text.link)}>Create your first project</button>
             </div>
         ) : (
             <ProjectList 

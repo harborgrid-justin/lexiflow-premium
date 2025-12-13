@@ -5,14 +5,14 @@ import {
   Folder, Clock, Star, FileText, LayoutTemplate,
   PenTool, Share2, CheckCircle, FileSignature, Edit, Eraser, Cpu
 } from 'lucide-react';
-import { Button } from './common/Button';
-import { UserRole } from '../types';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
-import { cn } from '../utils/cn';
-import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../config/documentManagerConfig';
-import { DocumentManagerContent } from './documents/DocumentManagerContent';
+import { Button } from '../common/Button';
+import { UserRole } from '../../types';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { cn } from '../../utils/cn';
+import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../config/documentManagerConfig';
+import { DocumentManagerContent } from './DocumentManagerContent';
 
 interface DocumentManagerProps {
   currentUserRole?: UserRole;

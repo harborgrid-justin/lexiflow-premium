@@ -1,13 +1,31 @@
+/**
+ * CaseArgumentManager.tsx
+ * 
+ * Legal argument construction and management with search, filtering,
+ * and evidence linking capabilities.
+ * 
+ * @module components/case-detail/CaseArgumentManager
+ * @category Case Management - Arguments & Evidence
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { Case, LegalArgument, EvidenceItem } from '../../types';
 import { Target, Plus, Filter, Search } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { ArgumentList } from './arguments/ArgumentList';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
 import { SearchToolbar } from '../common/SearchToolbar';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Case, LegalArgument, EvidenceItem } from '../../types';
 
 interface CaseArgumentManagerProps {
   caseData: Case;
@@ -59,7 +77,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
       {/* Header Toolbar */}
       <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
-            <div className="p-2 bg-blue-100 rounded-lg text-blue-600 border border-blue-200">
+            <div className={cn("p-2 rounded-lg border", theme.surface.highlight, theme.text.link, theme.border.default)}>
                 <Target className="h-5 w-5"/>
             </div>
             <div>

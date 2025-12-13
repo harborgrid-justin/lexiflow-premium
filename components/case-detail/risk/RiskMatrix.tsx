@@ -1,7 +1,23 @@
+/**
+ * RiskMatrix.tsx
+ * 
+ * Visual 3x3 risk matrix plotting probability vs impact with color-coded severity.
+ * 
+ * @module components/case-detail/risk/RiskMatrix
+ * @category Case Management - Risk Assessment
+ */
+
+// External Dependencies
 import React from 'react';
-import { RiskLevel } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { RiskLevel } from '../../../types';
 
 interface RiskMatrixProps {
   probability: RiskLevel;

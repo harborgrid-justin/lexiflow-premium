@@ -1,10 +1,28 @@
+/**
+ * RiskList.tsx
+ * 
+ * Scrollable list of identified risks with category icons, severity badges,
+ * and selection highlighting.
+ * 
+ * @module components/case-detail/risk/RiskList
+ * @category Case Management - Risk Assessment
+ */
 
+// External Dependencies
 import React from 'react';
-import { Risk } from '../../../types';
-import { Badge } from '../../common/Badge';
 import { Shield, DollarSign, Zap, Eye } from 'lucide-react';
+
+// Internal Dependencies - Components
+import { Badge } from '../../common/Badge';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Risk } from '../../../types';
 
 interface RiskListProps {
   risks: Risk[];

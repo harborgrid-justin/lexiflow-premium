@@ -1,11 +1,36 @@
+/**
+ * CaseRow.tsx
+ * 
+ * Memoized case table row component for virtual scrolling performance.
+ * Displays case metadata with keyboard navigation and hover prefetching.
+ * 
+ * @module components/case-list/CaseRow
+ * @category Case Management - Table Components
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { memo } from 'react';
 import { User, Eye } from 'lucide-react';
-import { Case } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { StatusBadge } from '../common/StatusBadge';
 import { Currency } from '../common/Primitives';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case } from '../../types';
 
 interface CaseRowProps {
     caseData: Case;

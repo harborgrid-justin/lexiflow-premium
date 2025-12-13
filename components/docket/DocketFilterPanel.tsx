@@ -1,10 +1,27 @@
+/**
+ * DocketFilterPanel.tsx
+ * 
+ * Sidebar filter panel for docket entries with search and case selection.
+ * 
+ * @module components/docket/DocketFilterPanel
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
 import { Filter } from 'lucide-react';
-import { Case } from '../../types';
+
+// Internal Dependencies - Components
 import { SearchToolbar } from '../common/SearchToolbar';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Case } from '../../types';
 
 interface DocketFilterPanelProps {
   searchTerm: string;

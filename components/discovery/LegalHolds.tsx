@@ -1,14 +1,40 @@
+/**
+ * LegalHolds.tsx
+ * 
+ * Legal hold management for litigation preservation obligations.
+ * Tracks custodians, scope, and compliance with FRCP 37(e) requirements.
+ * 
+ * @module components/discovery/LegalHolds
+ * @category Discovery - Preservation
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
+import { AlertCircle, Plus, User, Building2, Calendar, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { AlertCircle, Plus, User, Building2, Calendar, Loader2 } from 'lucide-react';
-import { DataService } from '../../services/dataService';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { LegalHold } from '../../types';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { LegalHold } from '../../types';
 
 export const LegalHolds: React.FC = () => {
   const { theme } = useTheme();

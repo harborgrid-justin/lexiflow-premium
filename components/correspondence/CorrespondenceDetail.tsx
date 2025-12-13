@@ -8,7 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { DataService } from '../../services/dataService';
-import { useNotify } from '@/hooks/useNotify';
+import { useNotify } from '../../hooks/useNotify';
 import { useMutation } from '../../services/queryClient';
 
 interface CorrespondenceDetailProps {

@@ -4,8 +4,8 @@ import { SearchToolbar } from '../common/SearchToolbar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
-import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
-import { WarRoomData, LegalDocument, EvidenceItem, Motion } from '../../types';
+import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
+import { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../types';
 import { WallItemCard } from './cards/WallItemCard';
 import { Loader2 } from 'lucide-react';
 
@@ -95,7 +95,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
           <div className={cn("h-full", theme.background)}>
               <DocumentPreviewPanel 
                  document={{
-                     id: item.id,
+                     id: item.id as DocumentId,
                      title: item.title,
                      type: item.type,
                      content: item.desc || '',
@@ -103,7 +103,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
                      lastModified: new Date().toISOString(),
                      tags: item.hot ? ['Hot'] : [],
                      versions: [],
-                     caseId: caseId,
+                     caseId: caseId as CaseId,
                      status: item.status
                  }}
                  onViewHistory={() => {}}

@@ -1,11 +1,32 @@
+/**
+ * CaseListIntake.tsx
+ * 
+ * Kanban board for lead intake and case conversion pipeline.
+ * Drag-and-drop workflow from initial contact through case creation.
+ * 
+ * @module components/case-list/CaseListIntake
+ * @category Case Management - Intake Pipeline
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 
 export const CaseListIntake: React.FC = () => {
   const { theme } = useTheme();

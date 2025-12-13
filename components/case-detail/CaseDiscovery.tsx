@@ -1,5 +1,18 @@
+/**
+ * CaseDiscovery.tsx
+ * 
+ * Case-scoped discovery platform wrapper embedding the full DiscoveryPlatform
+ * component with case-specific context.
+ * 
+ * @module components/case-detail/CaseDiscovery
+ * @category Case Management - Discovery
+ */
+
+// External Dependencies
 import React from 'react';
-import { DiscoveryPlatform } from '../DiscoveryPlatform';
+
+// Internal Dependencies - Components
+import { DiscoveryPlatform } from '../discovery/DiscoveryPlatform';
 
 interface CaseDiscoveryProps {
   caseId: string;

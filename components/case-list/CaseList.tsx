@@ -1,13 +1,27 @@
+/**
+ * CaseList.tsx
+ * 
+ * Main case management dashboard with tabbed interface for different case views.
+ * Provides unified navigation across active cases, intake pipeline, dockets,
+ * tasks, conflicts, resources, trust accounting, closing, and archives.
+ * 
+ * @module components/case-list/CaseList
+ * @category Case Management - List Views
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, useTransition } from 'react';
-import { Case } from '../../types';
-import { useCaseList } from '../../hooks/useCaseList';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { Plus, Download } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 import { Button } from '../common/Button';
-import { Plus, Download } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { CASE_LIST_TAB_CONFIG } from '../../config/caseListConfig';
 import { CaseListActive } from './CaseListActive';
 import { CaseListIntake } from './CaseListIntake';
 import { CaseListDocket } from './CaseListDocket';
@@ -19,6 +33,19 @@ import { CaseListClosing } from './CaseListClosing';
 import { CaseListArchived } from './CaseListArchived';
 import { CreateCaseModal } from './CreateCaseModal';
 
+// Hooks
+import { useCaseList } from '../../hooks/useCaseList';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { CASE_LIST_TAB_CONFIG } from '../../config/caseListConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case } from '../../types';
+
 export type CaseListView = 'active' | 'intake' | 'docket' | 'tasks' | 'conflicts' | 'resources' | 'trust' | 'closing' | 'archived';
 
 interface CaseListProps {
@@ -26,7 +53,24 @@ interface CaseListProps {
   initialTab?: CaseListView;
 }
 
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * CaseList - Tabbed case management dashboard
+ * 
+ * Features:
+ * - 9 specialized views (active, intake, docket, tasks, conflicts, resources, trust, closing, archived)
+ * - Session-persisted active tab
+ * - Smooth transitions between views
+ * - Create case modal integration
+ * - Export functionality
+ */
 export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
+  // ==========================================================================
+  // HOOKS - State & Transitions
+  // ==========================================================================
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('case_list_active_tab', initialTab || 'active');
   
@@ -48,12 +92,26 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
     resetFilters 
   } = caseListData;
 
+  // ==========================================================================
+  // CALLBACKS
+  // ==========================================================================
+  
   const setActiveTab = (tab: string) => {
     startTransition(() => {
       _setActiveTab(tab);
     });
   };
 
+  const handleCreateCase = (newCase: Case) => {
+    setIsModalOpen(false);
+    // Case is created via DataService in the modal's onSave handler
+    // Query invalidation happens automatically
+  };
+
+  // ==========================================================================
+  // RENDER HELPERS
+  // ==========================================================================
+  
   const renderContent = () => {
     switch (activeTab) {
       case 'active':
@@ -109,7 +167,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
 
   return (
     <>
-      {isModalOpen && <CreateCaseModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <CreateCaseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleCreateCase} />}
       
       <TabbedPageLayout
         pageTitle="Matter Management"

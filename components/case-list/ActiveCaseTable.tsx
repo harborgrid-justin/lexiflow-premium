@@ -1,11 +1,36 @@
+/**
+ * ActiveCaseTable.tsx
+ * 
+ * Virtual scrolling table for active case listings with sortable columns.
+ * Optimized for large datasets using windowing for performance.
+ * 
+ * @module components/case-list/ActiveCaseTable
+ * @category Case Management - Table Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useCallback } from 'react';
 import { ArrowUp, ArrowDown, Briefcase } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { VirtualList } from '../common/VirtualList';
 import { EmptyListState } from '../common/RefactoredCommon';
 import { CaseRow } from './CaseRow';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 import { Case } from '../../types';
 
 interface ActiveCaseTableProps {
@@ -17,10 +42,31 @@ interface ActiveCaseTableProps {
   prefetchCaseDetails: (id: string) => void;
 }
 
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * ActiveCaseTable - Virtualized sortable case table
+ * 
+ * Features:
+ * - Virtual scrolling for 1000+ cases
+ * - Sortable columns (title, type, client, value)
+ * - Responsive desktop layout
+ * - Empty state handling
+ * - Row prefetching on hover
+ */
 export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({ 
   filteredCases, sortedCases, requestSort, sortConfig, onSelectCase, prefetchCaseDetails 
 }) => {
+  // ==========================================================================
+  // HOOKS - Context
+  // ==========================================================================
   const { theme } = useTheme();
+
+  // ==========================================================================
+  // RENDER HELPERS
+  // ==========================================================================
 
   const SortIcon = ({ column }: { column: keyof Case }) => {
     if (sortConfig.key !== column) return <div className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-25" />;

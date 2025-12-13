@@ -1,8 +1,24 @@
+/**
+ * EvidenceLocation.tsx
+ * 
+ * Evidence physical location card with map integration placeholder.
+ * 
+ * @module components/case-detail/overview/EvidenceLocation
+ * @category Case Management - Evidence
+ */
+
+// External Dependencies
 import React from 'react';
+import { MapPin } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
-import { MapPin } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
 
 interface EvidenceLocationProps {

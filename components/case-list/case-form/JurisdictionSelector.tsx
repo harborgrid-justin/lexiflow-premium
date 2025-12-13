@@ -1,9 +1,34 @@
+/**
+ * JurisdictionSelector.tsx
+ * 
+ * Hierarchical jurisdiction selector supporting Federal (circuit/district) and
+ * State (state/court level/county) court systems. Dynamically loads court options
+ * based on selected hierarchy level.
+ * 
+ * @module components/case-list/case-form/JurisdictionSelector
+ * @category Case Management - Forms
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect, useMemo } from 'react';
-import { JurisdictionObject } from '../../../types';
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '../../../data/federalHierarchy';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { Globe, Building } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Utils & Data
+import { cn } from '../../../utils/cn';
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '../../../data/federalHierarchy';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { JurisdictionObject } from '../../../types';
 
 interface JurisdictionSelectorProps {
   onJurisdictionChange: (data: { finalCourt: string; jurisdictionConfig: JurisdictionObject } | null) => void;

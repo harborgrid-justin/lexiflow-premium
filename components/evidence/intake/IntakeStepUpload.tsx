@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
-import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { DocumentService } from '../../../../services/documentService';
+import { Button } from '../../common/Button';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { DocumentService } from '../../../services/documentService';
 
 interface IntakeStepUploadProps {
     file: File | null;

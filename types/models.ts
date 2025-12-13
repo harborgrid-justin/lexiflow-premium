@@ -450,7 +450,9 @@ export interface Message { id: string; senderId: UserId | 'me'; text: string; ti
 export interface Conversation extends BaseEntity { name: string; role: string; status: string; unread: number; isExternal: boolean; messages: Message[]; draft?: string; }
 export interface SystemNotification extends BaseEntity { text: string; time: string; read: boolean; type?: string; }
 export interface JudgeMotionStat { name: string; grant: number; deny: number; }
-export interface JudgeProfile extends BaseEntity { name: string; court: string; grantRateDismiss: number; grantRateSummary: number; avgCaseDuration: number; tendencies: string[]; }
+export interface JudgeProfile extends BaseEntity {
+motionStats: never[]; name: string; court: string; grantRateDismiss: number; grantRateSummary: number; avgCaseDuration: number; tendencies: string[]; 
+}
 export interface OpposingCounselProfile extends BaseEntity { name: string; firm: string; settlementRate: number; trialRate: number; avgSettlementVariance: number; }
 export interface LegalEntity extends BaseEntity { id: EntityId; name: string; type: EntityType; roles: EntityRole[]; email?: string; phone?: string; website?: string; address?: string; city?: string; state?: string; country?: string; taxId?: string; company?: string; title?: string; barNumber?: string; jurisdiction?: string; status: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased'; riskScore: number; tags: string[]; notes?: string; linkedUserId?: UserId; avatar?: string; externalIds?: Record<string, string>; aliases?: string[]; }
 export interface EntityRelationship extends BaseEntity { sourceId: EntityId; targetId: EntityId; type: 'Employment' | 'Subsidiary' | 'Counsel_For' | 'Sued_By' | 'Witness_For' | 'Family' | 'Conflict' | 'Board_Member'; description?: string; startDate?: string; endDate?: string; active: boolean; weight?: number; }

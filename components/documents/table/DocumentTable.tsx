@@ -1,14 +1,14 @@
 
 import React, { useState, useMemo, useCallback, useTransition } from 'react';
 import { Download, Eye, MoreVertical, ArrowUp, ArrowDown } from 'lucide-react';
-import { LegalDocument } from '../../types';
-import { Modal } from '../common/Modal';
-import { RuleSelector } from '../common/RuleSelector';
-import { Button } from '../common/Button';
+import { LegalDocument } from '../../../types';
+import { Modal } from '../../common/Modal';
+import { RuleSelector } from '../../common/RuleSelector';
+import { Button } from '../../common/Button';
 import { DocumentRow } from './DocumentRow';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { VirtualList } from '../common/VirtualList';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { VirtualList } from '../../common/VirtualList';
 
 interface DocumentTableProps {
   documents: LegalDocument[];

@@ -1,12 +1,33 @@
+/**
+ * CaseListResources.tsx
+ * 
+ * Resource utilization dashboard showing attorney/paralegal allocation
+ * and capacity across active cases.
+ * 
+ * @module components/case-list/CaseListResources
+ * @category Case Management - Resource Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+import { Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { UserAvatar } from '../common/UserAvatar';
 import { ProgressBar } from '../common/ProgressBar';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
-import { Loader2 } from 'lucide-react';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 
 export const CaseListResources: React.FC = () => {
   const { theme } = useTheme();

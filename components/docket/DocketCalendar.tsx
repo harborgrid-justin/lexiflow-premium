@@ -1,11 +1,28 @@
+/**
+ * DocketCalendar.tsx
+ * 
+ * Calendar view of docket deadlines with month navigation and daily
+ * deadline indicators.
+ * 
+ * @module components/docket/DocketCalendar
+ * @category Case Management - Docket
+ */
+
+// External Dependencies
 import React, { useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useQuery } from '../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { DocketEntry } from '../../types';
-import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Types & Interfaces
+import { DocketEntry } from '../../types';
 
 export const DocketCalendar: React.FC = () => {
   const { theme } = useTheme();

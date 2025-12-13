@@ -1,12 +1,25 @@
 
+/**
+ * @module EvidenceDashboard
+ * @category Evidence
+ * @description Dashboard view for the Evidence Vault.
+ * Displays high-level metrics, charts, and recent activity for evidence items.
+ */
+
 import React, { useState, useEffect } from 'react';
+import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+
+// Common Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { MetricCard } from '../common/Primitives';
-import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Services & Types
 import { DataService } from '../../services/dataService';
 import { EvidenceItem } from '../../types';
 import { ViewMode } from '../../hooks/useEvidenceVault';
@@ -40,9 +53,9 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   }, []);
 
   const data = [
-    { name: 'Physical', value: stats.physical, color: '#d97706' }, // amber-600
-    { name: 'Digital', value: stats.digital, color: '#2563eb' }, // blue-600
-    { name: 'Document', value: stats.total - stats.digital - stats.physical, color: '#475569' }, // slate-600
+    { name: 'Physical', value: stats.physical, color: theme.chart.colors.warning },
+    { name: 'Digital', value: stats.digital, color: theme.chart.colors.primary },
+    { name: 'Document', value: stats.total - stats.digital - stats.physical, color: theme.chart.colors.neutral },
   ];
 
   return (

@@ -34,11 +34,7 @@ import { STORES } from '../../services/db';
 // TYPES & INTERFACES
 // ============================================================================
 import { Citation, Case } from '../../types';
-
-interface CitationDetailProps {
-  citation: Citation;
-  onClose: () => void;
-}
+import { CitationDetailProps } from './types';
 
 export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClose }) => {
   const { theme } = useTheme();

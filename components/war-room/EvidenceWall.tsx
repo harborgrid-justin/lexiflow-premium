@@ -1,13 +1,28 @@
 
+/**
+ * @module EvidenceWall
+ * @category WarRoom
+ * @description Visual grid of evidence, documents, and motions.
+ * Supports filtering, searching, and opening items in preview windows.
+ */
+
 import React, { useState, useMemo, useTransition } from 'react';
-import { SearchToolbar } from '../common/SearchToolbar';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useWindow } from '../../context/WindowContext';
-import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
-import { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../types';
-import { WallItemCard } from './cards/WallItemCard';
 import { Loader2 } from 'lucide-react';
+
+// Common Components
+import { SearchToolbar } from '../common/SearchToolbar';
+import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
+
+// Context & Utils
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+import { cn } from '../../utils/cn';
+
+// Types
+import { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../types';
+
+// Sub-components
+import { WallItemCard } from './cards/WallItemCard';
 
 interface EvidenceWallProps {
   caseId: string;
@@ -129,7 +144,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
         <div className="flex justify-between items-center gap-4 shrink-0">
             <div className="flex-1 relative">
                 <SearchToolbar value={searchTerm} onChange={handleSearch} placeholder="Search exhibits & filings..." className="w-full"/>
-                {isPending && <div className="absolute right-12 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
+                {isPending && <div className="absolute right-12 top-1/2 -translate-y-1/2"><Loader2 className={cn("h-4 w-4 animate-spin", theme.primary.text)}/></div>}
             </div>
             
             <div className={cn("flex p-1 rounded-lg border", theme.surface.highlight, theme.border.default)}>

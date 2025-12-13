@@ -1,8 +1,19 @@
 
+/**
+ * @module EvidenceLocation
+ * @category Evidence
+ * @description Displays the physical or digital location of an evidence item.
+ * Includes functionality to request a transfer.
+ */
+
 import React from 'react';
+import { MapPin } from 'lucide-react';
+
+// Common Components
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
-import { MapPin } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 

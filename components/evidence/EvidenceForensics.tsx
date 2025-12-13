@@ -1,12 +1,25 @@
 
+/**
+ * @module EvidenceForensics
+ * @category Evidence
+ * @description Displays digital forensics information for an evidence item.
+ * Includes file attributes, cryptographic hashes, and integrity verification status.
+ */
+
 import React, { useState } from 'react';
-import { Card } from '../common/Card';
-import { EvidenceItem } from '../../types';
 import { ShieldCheck, Link, RefreshCw, CheckCircle, AlertOctagon } from 'lucide-react';
+
+// Common Components
+import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { DataService } from '../../services/dataService';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Services & Types
+import { DataService } from '../../services/dataService';
+import { EvidenceItem } from '../../types';
 
 interface EvidenceForensicsProps {
   selectedItem: EvidenceItem;

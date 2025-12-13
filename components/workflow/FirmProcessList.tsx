@@ -3,20 +3,12 @@ import React from 'react';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { UserPlus, FileCheck, RefreshCw, Play, Database, ShieldAlert, Scale, Archive, Lock, MoreHorizontal, Search } from 'lucide-react';
+import { MoreHorizontal, Search } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { EmptyState } from '../common/EmptyState';
-
-interface Process {
-  id: string;
-  name: string;
-  status: string;
-  triggers: string;
-  tasks: number;
-  completed: number;
-  owner: string;
-}
+import { Process } from './types';
+import { getProcessIcon } from './utils';
 
 interface FirmProcessListProps {
   processes: Process[];
@@ -35,17 +27,6 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
       />
     );
   }
-
-  const getProcessIcon = (name: string) => {
-    if (name.includes('Client') || name.includes('Onboarding')) return <UserPlus className="h-5 w-5 text-blue-600"/>;
-    if (name.includes('Billing') || name.includes('Bill')) return <FileCheck className="h-5 w-5 text-green-600"/>;
-    if (name.includes('Discovery') || name.includes('Data') || name.includes('Log')) return <Database className="h-5 w-5 text-purple-600"/>;
-    if (name.includes('Audit') || name.includes('Compliance') || name.includes('Risk') || name.includes('Conflict')) return <ShieldAlert className="h-5 w-5 text-red-600"/>;
-    if (name.includes('Admission') || name.includes('Pro Hac')) return <Scale className="h-5 w-5 text-indigo-600"/>;
-    if (name.includes('Closing') || name.includes('Archive')) return <Archive className="h-5 w-5 text-slate-600"/>;
-    if (name.includes('Hold') || name.includes('Enforcement')) return <Lock className="h-5 w-5 text-amber-600"/>;
-    return <RefreshCw className="h-5 w-5 text-gray-600"/>;
-  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

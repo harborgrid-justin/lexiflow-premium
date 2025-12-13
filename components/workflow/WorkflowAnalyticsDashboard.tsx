@@ -4,11 +4,8 @@ import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, CartesianGrid } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
 import { DataService } from '../../services/dataService';
-
-interface WorkflowAnalyticsData {
-    completion: { name: string; completed: number }[];
-    status: { name: string; value: number; color: string }[];
-}
+import { WorkflowAnalyticsData } from './types';
+import { getChartColors } from './constants';
 
 export const WorkflowAnalyticsDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
@@ -22,12 +19,7 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
       load();
   }, []);
   
-  const chartColors = {
-    grid: mode === 'dark' ? '#334155' : '#e2e8f0',
-    text: mode === 'dark' ? '#94a3b8' : '#64748b',
-    tooltipBg: mode === 'dark' ? '#1e293b' : '#ffffff',
-    tooltipBorder: mode === 'dark' ? '#334155' : '#e2e8f0'
-  };
+  const chartColors = getChartColors(mode);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

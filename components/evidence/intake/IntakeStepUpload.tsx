@@ -1,9 +1,22 @@
 
+/**
+ * @module IntakeStepUpload
+ * @category Evidence
+ * @description File upload step for the evidence intake wizard.
+ * Handles file selection, drag-and-drop, and displays processing status.
+ */
+
 import React from 'react';
 import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
+
+// Common Components
 import { Button } from '../../common/Button';
+
+// Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+
+// Services
 import { DocumentService } from '../../../services/documentService';
 
 interface IntakeStepUploadProps {

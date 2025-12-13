@@ -1,12 +1,23 @@
+/**
+ * @module WitnessPrep
+ * @category WarRoom
+ * @description Component for managing witness preparation, including status tracking, examination outlines, and exhibit bundles.
+ */
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { FileText, CheckCircle, Clock, ArrowLeft, Plus, Link as LinkIcon, AlertCircle } from 'lucide-react';
+
+// Common Components
 import { Card } from '../common/Card';
 import { UserAvatar } from '../common/UserAvatar';
 import { Button } from '../common/Button';
-import { FileText, CheckCircle, Clock, ArrowLeft, Plus, Link as LinkIcon, AlertCircle } from 'lucide-react';
+import { Modal } from '../common/Modal';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Modal } from '../common/Modal';
+
+// Types
 import { WarRoomData } from '../../types';
 
 interface WitnessPrepProps {

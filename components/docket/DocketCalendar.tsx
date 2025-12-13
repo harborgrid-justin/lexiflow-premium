@@ -21,6 +21,15 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 
+import { 
+    getDaysInMonth, 
+    getFirstDayOfMonth, 
+    getPaddingDays, 
+    getDaysArray, 
+    getAllDeadlines, 
+    getDeadlinesForDay 
+} from './docketCalendar.utils';
+
 // Types & Interfaces
 import { DocketEntry } from '../../types';
 
@@ -34,24 +43,15 @@ export const DocketCalendar: React.FC = () => {
       DataService.docket.getAll
   );
 
-  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-  const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-  const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const paddingDays = Array.from({ length: firstDay }, (_, i) => i);
+  const daysInMonth = getDaysInMonth(currentDate);
+  const firstDay = getFirstDayOfMonth(currentDate);
+  const daysArray = getDaysArray(currentDate);
+  const paddingDays = getPaddingDays(currentDate);
 
   // Extract all deadlines from docket entries
-  const allDeadlines = entries.flatMap(entry => 
-    entry.triggersDeadlines?.map(dl => ({
-      ...dl,
-      caseId: entry.caseId,
-      entryTitle: entry.title
-    })) || []
-  );
+  const allDeadlines = getAllDeadlines(entries);
 
-  const getDeadlinesForDay = (day: number) => {
-    const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return allDeadlines.filter(d => d.date === dateStr);
-  };
+  const deadlinesForDay = (day: number) => getDeadlinesForDay(day, currentDate, allDeadlines);
 
   const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -89,7 +89,7 @@ export const DocketCalendar: React.FC = () => {
         ))}
 
         {daysArray.map(day => {
-          const deadlines = getDeadlinesForDay(day);
+          const deadlines = deadlinesForDay(day);
           const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
           
           return (

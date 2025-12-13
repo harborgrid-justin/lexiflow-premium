@@ -1,14 +1,29 @@
 
+/**
+ * @module CommandCenter
+ * @category WarRoom
+ * @description Central dashboard for the War Room, displaying key metrics, status, and recent activity.
+ * Provides navigation to other War Room modules.
+ */
+
 import React from 'react';
+import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertTriangle } from 'lucide-react';
+
+// Common Components
 import { Card } from '../common/Card';
 import { MetricCard } from '../common/Primitives';
-import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertTriangle } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Services
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { DataService } from '../../services/dataService';
-import { WarRoomData, WorkflowTask, DocketEntry, Motion, SanctionMotion } from '../../types';
+
+// Types
+import { WarRoomData, SanctionMotion } from '../../types';
 
 interface CommandCenterProps {
   caseId: string;

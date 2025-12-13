@@ -4,11 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { LayoutTemplate, ArrowRight } from 'lucide-react';
-
-interface PleadingTemplatesProps {
-    templates: PleadingTemplate[];
-    onCreateFromTemplate: (template: PleadingTemplate) => void;
-}
+import { PleadingTemplatesProps } from './types';
 
 export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates, onCreateFromTemplate }) => {
     const { theme } = useTheme();

@@ -9,10 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useNotify } from '../../hooks/useNotify';
 import { useWizard } from '../../hooks/useWizard';
-
-interface InitialDisclosureWizardProps {
-  onComplete: () => void;
-}
+import { InitialDisclosureWizardProps } from './types';
 
 export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = ({ onComplete }) => {
   const { theme } = useTheme();

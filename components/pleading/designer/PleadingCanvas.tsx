@@ -2,15 +2,7 @@ import React from 'react';
 import { PleadingDocument, FormattingRule, PleadingSection, Case } from '../../../types';
 import { GripVertical } from 'lucide-react';
 import { cn } from '../../../utils/cn';
-
-interface PleadingCanvasProps {
-    document: PleadingDocument;
-    rules: FormattingRule;
-    readOnly: boolean;
-    viewMode: 'write' | 'logic' | 'preview';
-    onUpdateSection: (id: string, updates: Partial<PleadingSection>) => void;
-    relatedCase: Case | null;
-}
+import { ViewMode, PleadingCanvasProps } from '../types';
 
 const PleadingCanvas: React.FC<PleadingCanvasProps> = ({ 
     document, rules, readOnly, viewMode, onUpdateSection, relatedCase 

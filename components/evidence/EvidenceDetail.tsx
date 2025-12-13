@@ -1,23 +1,37 @@
 
 
 
+/**
+ * @module EvidenceDetail
+ * @category Evidence
+ * @description Detailed view for a single evidence item.
+ * Orchestrates sub-views (Overview, Admissibility, Chain of Custody, Forensics) via tabs.
+ */
+
 import React from 'react';
-import { Button } from '../common/Button';
-import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 import { ArrowLeft, FileSearch, Lock, ExternalLink, Stamp } from 'lucide-react';
+
+// Common Components
+import { Button } from '../common/Button';
+import { Tabs } from '../common/Tabs';
+
+// Sub-components
 import { EvidenceOverview } from './EvidenceOverview';
 import { EvidenceAdmissibility } from './EvidenceAdmissibility';
 import { EvidenceStructure } from './EvidenceStructure';
 import { EvidenceForensics } from './EvidenceForensics';
-import { Tabs } from '../common/Tabs';
+import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useNotify } from '../../hooks/useNotify';
+
+// Services & Types
 import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
-import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
-
+import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 
 interface EvidenceDetailProps {
   selectedItem: EvidenceItem;

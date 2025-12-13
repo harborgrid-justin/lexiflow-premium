@@ -8,15 +8,7 @@ import { AuditLogEntry } from '../../types';
 import { useQuery, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
-
-interface AuditEvent {
-  id: string;
-  timestamp: string;
-  user: string;
-  action: string;
-  detail: string;
-  type: 'success' | 'warning' | 'info';
-}
+import { AuditEvent } from './types';
 
 export const AuditTrailViewer: React.FC = () => {
   const { theme } = useTheme();

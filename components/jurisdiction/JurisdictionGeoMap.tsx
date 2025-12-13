@@ -5,16 +5,13 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useWindow } from '../../context/WindowContext';
-
-interface MapNode {
-  x: number;
-  y: number;
-  label: string;
-  type: 'federal' | 'state';
-  radius: number;
-  vx: number;
-  vy: number;
-}
+import { 
+  MapNode, 
+  initializeNodeVelocity, 
+  findClickedNode, 
+  renderJurisdictionMap,
+  resizeCanvas 
+} from './utils';
 
 export const JurisdictionGeoMap: React.FC = () => {
   const { theme } = useTheme();
@@ -28,7 +25,7 @@ export const JurisdictionGeoMap: React.FC = () => {
       const loadNodes = async () => {
           const nodes = await DataService.jurisdiction.getMapNodes();
           if (nodes.length > 0) {
-            nodesRef.current = nodes.map((n: any) => ({ ...n, vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5 }));
+            nodesRef.current = initializeNodeVelocity(nodes);
           }
       };
       loadNodes();
@@ -41,11 +38,7 @@ export const JurisdictionGeoMap: React.FC = () => {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      const clickedNode = nodesRef.current.find(node => {
-          const dx = node.x - x;
-          const dy = node.y - y;
-          return Math.sqrt(dx*dx + dy*dy) < node.radius + 5;
-      });
+      const clickedNode = findClickedNode(nodesRef.current, x, y);
 
       if (clickedNode) {
           const winId = `geo-${clickedNode.label}`;
@@ -74,49 +67,7 @@ export const JurisdictionGeoMap: React.FC = () => {
     const render = () => {
       if (!canvas) return;
       
-      // 1. Clear Canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // 2. Update Physics (Imperative)
-      nodesRef.current.forEach(node => {
-        node.x += node.vx;
-        node.y += node.vy;
-
-        // Bounce off walls
-        if (node.x < 20 || node.x > canvas.width - 20) node.vx *= -1;
-        if (node.y < 20 || node.y > canvas.height - 20) node.vy *= -1;
-      });
-
-      // 3. Draw Connections
-      ctx.lineWidth = 1;
-      nodesRef.current.forEach((nodeA, i) => {
-        nodesRef.current.slice(i + 1).forEach(nodeB => {
-           const dist = Math.hypot(nodeA.x - nodeB.x, nodeA.y - nodeB.y);
-           if (dist < 300) {
-             ctx.beginPath();
-             ctx.moveTo(nodeA.x, nodeA.y);
-             ctx.lineTo(nodeB.x, nodeB.y);
-             ctx.strokeStyle = `rgba(148, 163, 184, ${1 - dist / 300})`; // Fade by distance
-             ctx.stroke();
-           }
-        });
-      });
-
-      // 4. Draw Nodes
-      nodesRef.current.forEach(node => {
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, 2 * Math.PI);
-        ctx.fillStyle = node.type === 'federal' ? '#3b82f6' : '#10b981'; // Blue vs Emerald
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#fff';
-        ctx.stroke();
-
-        // Label
-        ctx.fillStyle = '#475569';
-        ctx.font = '10px Inter';
-        ctx.fillText(node.label, node.x + 12, node.y + 3);
-      });
+      renderJurisdictionMap(ctx, canvas, nodesRef.current);
 
       if (isAnimating) {
         frameRef.current = requestAnimationFrame(render);
@@ -124,12 +75,7 @@ export const JurisdictionGeoMap: React.FC = () => {
     };
 
     // Handle Resize
-    const resize = () => {
-        if (canvas.parentElement) {
-            canvas.width = canvas.parentElement.clientWidth || 800;
-            canvas.height = canvas.parentElement.clientHeight || 500;
-        }
-    };
+    const resize = () => resizeCanvas(canvas);
     window.addEventListener('resize', resize);
     resize(); // Initial size
 

@@ -12,6 +12,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { filterRules } from './utils';
 
 export const JurisdictionLocalRules: React.FC = () => {
   const { theme } = useTheme();
@@ -74,11 +75,7 @@ export const JurisdictionLocalRules: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const filteredRules = rules.filter(r => 
-    r.code.toLowerCase().includes(filter.toLowerCase()) ||
-    r.name.toLowerCase().includes(filter.toLowerCase()) || 
-    r.type.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredRules = filterRules(rules, filter);
 
   return (
     <div className="space-y-6">

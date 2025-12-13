@@ -1,13 +1,26 @@
+/**
+ * @module HearsayAnalyzer
+ * @category Evidence
+ * @description AI-powered tool for identifying potential hearsay in evidence documents.
+ * Suggests applicable exceptions under FRE 803/804.
+ */
+
 import React from 'react';
+import { FileWarning, FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
+
+// Common Components
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
-import { FileWarning, FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
+
+// Context & Utils
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+// Services & Types
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
 import { EvidenceItem } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 
 export const HearsayAnalyzer: React.FC = () => {
     const { theme } = useTheme();

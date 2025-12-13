@@ -1,17 +1,30 @@
 
+/**
+ * @module EvidenceInventory
+ * @category Evidence
+ * @description Main list view for the Evidence Vault.
+ * Supports filtering, searching (via web worker), and task creation for evidence items.
+ */
+
 import React, { useState } from 'react';
+import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
+
+// Common Components
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
-import { EvidenceItem } from '../../types';
-import { EvidenceFilters } from '../../hooks/useEvidenceVault';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { EvidenceTypeIcon } from '../common/EvidenceTypeIcon';
 import { FilterPanel } from '../common/FilterPanel';
+import { VirtualList } from '../common/VirtualList';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { VirtualList } from '../common/VirtualList';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+import { EvidenceFilters } from '../../hooks/useEvidenceVault';
+
+// Types
+import { EvidenceItem } from '../../types';
 
 interface EvidenceInventoryProps {
   items: EvidenceItem[];

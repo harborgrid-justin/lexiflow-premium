@@ -1,9 +1,18 @@
+/**
+ * @module OppositionList
+ * @category WarRoom
+ * @description List view of opposition entities with strategic metrics.
+ */
+
 import React from 'react';
+import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
+
+// Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { UserAvatar } from '../../common/UserAvatar';
-import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
@@ -32,14 +41,14 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
 
   const getAggressionColor = (level: string) => {
       switch(level) {
-          case 'High': return 'text-red-600 bg-red-50 border-red-200';
+          case 'High': return 'text-rose-600 bg-rose-50 border-rose-200';
           case 'Medium': return 'text-amber-600 bg-amber-50 border-amber-200';
-          default: return 'text-green-600 bg-green-50 border-green-200';
+          default: return 'text-emerald-600 bg-emerald-50 border-emerald-200';
       }
   };
 
   return (
-    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.surface.default)}>
+    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.layout.surface)}>
         <TableContainer>
             <TableHeader>
                 <TableHead>Entity Name</TableHead>
@@ -91,7 +100,7 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
                         </TableCell>
                         <TableCell>
                             <div className={cn("flex items-center gap-2 font-mono text-sm", theme.text.primary)}>
-                                <TrendingUp className="h-4 w-4 text-slate-400"/>
+                                <TrendingUp className={cn("h-4 w-4", theme.text.tertiary)}/>
                                 {ent.winRate}%
                             </div>
                         </TableCell>

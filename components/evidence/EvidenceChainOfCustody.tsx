@@ -3,20 +3,33 @@
 
 
 
+/**
+ * @module EvidenceChainOfCustody
+ * @category Evidence
+ * @description Manages the immutable chain of custody log for evidence items.
+ * Supports adding new events, digital signatures, and viewing the audit trail.
+ */
+
 import React, { useState } from 'react';
-import { Button } from '../common/Button';
 import { User, Layers, Plus, ShieldCheck, AlertOctagon, Link } from 'lucide-react';
-import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
+
+// Common Components
+import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { SignaturePad } from '../common/SignaturePad';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { ChainService } from '../../services/chainService';
 import { useNotify } from '../../hooks/useNotify';
+
+// Services & Types
+import { ChainService } from '../../services/chainService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { DataService } from '../../services/dataService';
+import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
 
 interface EvidenceChainOfCustodyProps {
   selectedItem: EvidenceItem;

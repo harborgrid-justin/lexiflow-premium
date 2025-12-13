@@ -1,15 +1,28 @@
+/**
+ * @module RelevanceAnalysis
+ * @category Evidence
+ * @description Analyzes probative value vs. unfair prejudice under FRE 401/403.
+ * Provides a risk meter and argument builder for admissibility hearings.
+ */
+
 import React from 'react';
+import { Filter, ThumbsUp, ThumbsDown, Scale, Wand2 } from 'lucide-react';
+
+// Common Components
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
-import { Filter, ThumbsUp, ThumbsDown, Scale, Wand2 } from 'lucide-react';
 import { RiskMeter } from '../../common/RiskMeter';
+
+// Context & Utils
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+// Services & Types
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
 import { EvidenceItem } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 
 export const RelevanceAnalysis: React.FC = () => {
     const { theme } = useTheme();

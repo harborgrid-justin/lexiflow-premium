@@ -1,14 +1,27 @@
 
+/**
+ * @module EvidenceAdmissibility
+ * @category Evidence
+ * @description Component for managing and viewing the admissibility status of evidence items.
+ * Allows linking Federal Rules of Evidence (FRE) and tracking challenges.
+ */
+
 import React, { useState } from 'react';
+import { ShieldAlert, CheckCircle, Scale, Plus } from 'lucide-react';
+
+// Common Components
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { ShieldAlert, CheckCircle, Scale, Plus } from 'lucide-react';
-import { EvidenceItem } from '../../types';
 import { RuleSelector } from '../common/RuleSelector';
 import { Modal } from '../common/Modal';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Types
+import { EvidenceItem } from '../../types';
 
 interface EvidenceAdmissibilityProps {
   selectedItem: EvidenceItem;
@@ -49,7 +62,10 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h4 className={cn("font-bold text-sm", theme.text.primary)}>Rules of Evidence Checklist</h4>
-            <button onClick={() => setIsRuleModalOpen(true)} className="text-xs text-blue-600 hover:underline flex items-center">
+            <button 
+                onClick={() => setIsRuleModalOpen(true)} 
+                className={cn("text-xs hover:underline flex items-center", theme.primary.text)}
+            >
                 <Plus className="h-3 w-3 mr-1"/> Add Rule
             </button>
           </div>
@@ -58,8 +74,8 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
             {rules.map(rule => (
                 <div key={rule} className={cn("flex items-center justify-between p-3 border rounded", theme.surface.highlight, theme.border.default)}>
                     <div className="flex items-center">
-                        <div className="w-5 h-5 rounded-full border-2 border-green-500 flex items-center justify-center mr-3">
-                            <CheckCircle className="h-3 w-3 text-green-500"/>
+                        <div className={cn("w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3", theme.status.success.border)}>
+                            <CheckCircle className={cn("h-3 w-3", theme.status.success.text)}/>
                         </div>
                         <span className={cn("text-sm font-medium", theme.text.primary)}>{rule}</span>
                     </div>

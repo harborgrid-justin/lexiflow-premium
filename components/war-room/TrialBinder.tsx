@@ -1,9 +1,22 @@
 
+/**
+ * @module TrialBinder
+ * @category WarRoom
+ * @description Digital trial binder organizing motions, orders, filings, and witness prep materials.
+ * Provides a hierarchical view of case documents.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { Folder, FileText, ChevronRight, Gavel, BookOpen, Plus, File, Scale, MoreVertical } from 'lucide-react';
+
+// Common Components
+import { Button } from '../common/Button';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Button } from '../common/Button';
+
+// Types
 import { WarRoomData } from '../../types';
 
 interface TrialBinderProps {
@@ -58,12 +71,12 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                         className={cn(
                             "w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all",
                             selectedSectionId === section.id 
-                                ? cn(theme.surface.default, "shadow-sm text-blue-600 border", theme.border.default) 
+                                ? cn(theme.surface.default, "shadow-sm border", theme.primary.text, theme.border.default) 
                                 : cn(theme.text.secondary, `hover:${theme.surface.default}`)
                         )}
                     >
                         <div className="flex items-center gap-3">
-                            <section.icon className={cn("h-4 w-4", selectedSectionId === section.id ? "text-blue-600" : theme.text.tertiary)}/>
+                            <section.icon className={cn("h-4 w-4", selectedSectionId === section.id ? theme.primary.text : theme.text.tertiary)}/>
                             {section.title}
                         </div>
                         <div className="flex items-center gap-2">
@@ -91,7 +104,7 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                             {activeSection.documents.map(doc => (
                                 <div key={doc.id} className={cn("flex items-center justify-between p-4 rounded-lg border transition-all group cursor-pointer", theme.border.default, theme.surface.default, `hover:${theme.surface.highlight}`)}>
                                     <div className="flex items-center gap-4 overflow-hidden">
-                                        <div className={cn("p-3 rounded-lg text-blue-600 shrink-0", theme.primary.light)}>
+                                        <div className={cn("p-3 rounded-lg shrink-0", theme.primary.light, theme.primary.text)}>
                                             <File className="h-6 w-6"/>
                                         </div>
                                         <div className="min-w-0">

@@ -4,11 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { FileText, Clock } from 'lucide-react';
-
-interface PleadingDraftsProps {
-    pleadings: PleadingDocument[];
-    onEdit: (doc: PleadingDocument) => void;
-}
+import { PleadingDraftsProps } from './types';
 
 export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdit }) => {
     const { theme } = useTheme();

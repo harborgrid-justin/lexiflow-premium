@@ -1,9 +1,20 @@
 
+/**
+ * @module EvidenceOverview
+ * @category Evidence
+ * @description Overview tab for evidence details.
+ * Aggregates particulars, location, and FRCP status components.
+ */
+
 import React from 'react';
-import { EvidenceItem } from '../../types';
+
+// Sub-components
 import { EvidenceParticulars } from './overview/EvidenceParticulars';
 import { EvidenceLocation } from './overview/EvidenceLocation';
 import { EvidenceFRCPStatus } from './overview/EvidenceFRCPStatus';
+
+// Types
+import { EvidenceItem } from '../../types';
 
 interface EvidenceOverviewProps {
   selectedItem: EvidenceItem;

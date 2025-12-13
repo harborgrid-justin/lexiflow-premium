@@ -5,18 +5,7 @@ import { DataService } from '../../services/dataService';
 import { CodingPanel } from './viewer/CodingPanel';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-
-interface DiscoveryDocumentViewerProps {
-  docId: string;
-  onBack: () => void;
-}
-
-interface ViewerDocumentState {
-    title: string;
-    content: string;
-    type: string;
-    date: string;
-}
+import { DiscoveryDocumentViewerProps, ViewerDocumentState } from './types';
 
 export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = ({ docId, onBack }) => {
   const { theme } = useTheme();

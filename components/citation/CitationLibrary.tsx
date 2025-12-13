@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { CheckCircle, AlertTriangle, X, Book, Scale, FileText, ExternalLink, Loader2, BookOpen } from 'lucide-react';
+import { ExternalLink, Loader2, BookOpen } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -38,11 +38,10 @@ import { STORES } from '../../services/db';
 
 // ============================================================================
 // TYPES & INTERFACES
-// ============================================================================\nimport { Citation } from '../../types';
-
-interface CitationLibraryProps {
-  onSelect: (citation: Citation) => void;
-}
+// ============================================================================
+import { Citation } from '../../types';
+import { CitationLibraryProps } from './types';
+import { getSignalIcon, getTypeIcon } from './utils';
 
 export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) => {
     const { theme } = useTheme();
@@ -72,21 +71,6 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
         );
     };
 
-    const getSignalIcon = (signal?: string) => {
-        switch(signal) {
-            case 'Positive': return <CheckCircle className="h-4 w-4 text-green-500"/>;
-            case 'Caution': return <AlertTriangle className="h-4 w-4 text-amber-500"/>;
-            case 'Negative': return <X className="h-4 w-4 text-red-500"/>;
-            default: return <Book className="h-4 w-4 text-slate-400"/>;
-        }
-    };
-
-    const getTypeIcon = (type: string) => {
-        if (type === 'Case Law') return <Scale className={cn("h-4 w-4", theme.text.secondary)}/>;
-        if (type === 'Statute') return <FileText className={cn("h-4 w-4", theme.text.secondary)}/>;
-        return <Book className={cn("h-4 w-4", theme.text.secondary)}/>;
-    };
-
     const renderRow = (cit: Citation) => (
       <div 
         key={cit.id} 
@@ -98,7 +82,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
           <div className="flex-1 min-w-0 pr-4">
                <div className={cn("font-medium text-sm truncate", theme.text.primary)} title={cit.title}>{cit.title}</div>
           </div>
-          <div className="w-32 flex items-center gap-2">{getTypeIcon(cit.type)}<span className="text-xs">{cit.type}</span></div>
+          <div className="w-32 flex items-center gap-2">{getTypeIcon(cit.type, theme)}<span className="text-xs">{cit.type}</span></div>
           <div className="w-24">
               <Badge variant={cit.relevance === 'High' ? 'success' : cit.relevance === 'Medium' ? 'info' : 'neutral'}>{cit.relevance}</Badge>
           </div>

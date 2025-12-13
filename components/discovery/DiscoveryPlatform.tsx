@@ -55,13 +55,7 @@ const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions'));
 const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
 const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 
-
-export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
-
-interface DiscoveryPlatformProps {
-    initialTab?: DiscoveryView;
-    caseId?: string; // Integration Point: Optional Scoping
-}
+import { DiscoveryView, DiscoveryPlatformProps } from './types';
 
 export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();

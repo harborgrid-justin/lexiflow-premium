@@ -27,7 +27,7 @@ import { VirtualList } from '../common/VirtualList';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
-import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
+import { DiscoveryView } from './types';
 
 // Utils
 import { cn } from '../../utils/cn';
@@ -36,11 +36,7 @@ import { cn } from '../../utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { DiscoveryRequest } from '../../types';
-
-interface DiscoveryRequestsProps {
-  onNavigate: (view: DiscoveryView, id?: string) => void;
-  items?: DiscoveryRequest[];
-}
+import { DiscoveryRequestsProps } from './types';
 
 export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {
   const { theme } = useTheme();

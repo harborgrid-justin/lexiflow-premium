@@ -1,15 +1,28 @@
+/**
+ * @module EvidenceIntake
+ * @category Evidence
+ * @description Wizard-based interface for ingesting new evidence.
+ * Handles file upload, metadata extraction, malware scanning, and blockchain hashing.
+ */
+
 import React, { useState, useRef } from 'react';
+import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
+
+// Common Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
-import { DocumentService } from '../../services/documentService';
-import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../types';
 import { Stepper } from '../common/Stepper';
-import { useWizard } from '../../hooks/useWizard';
-import { useNotify } from '../../hooks/useNotify';
 import { TagInput } from '../common/TagInput';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useWizard } from '../../hooks/useWizard';
+import { useNotify } from '../../hooks/useNotify';
+
+// Services & Types
+import { DocumentService } from '../../services/documentService';
+import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../types';
 
 interface EvidenceIntakeProps {
   handleBack: () => void;

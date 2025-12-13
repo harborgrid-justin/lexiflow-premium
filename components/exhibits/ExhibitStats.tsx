@@ -1,10 +1,26 @@
+/**
+ * @module ExhibitStats
+ * @category Exhibits
+ * @description Analytics dashboard for trial exhibits. Visualizes admissibility rates,
+ * party distribution, and other key metrics using Recharts.
+ */
+
 import React from 'react';
+import { 
+  PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid 
+} from 'recharts';
+import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-react';
+
+// Common Components
 import { MetricCard } from '../common/Primitives';
 import { Card } from '../common/Card';
-import { TrialExhibit } from '../../types';
-import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
+
+// Types
+import { TrialExhibit } from '../../types';
 
 interface ExhibitStatsProps {
   exhibits: TrialExhibit[];

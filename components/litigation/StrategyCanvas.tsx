@@ -9,7 +9,6 @@
  */
 
 import React, { useState, useRef, useCallback } from 'react';
-import { Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
 
 // Internal Components
 import { BuilderToolbar } from '../workflow/builder/BuilderToolbar';
@@ -25,6 +24,12 @@ import { useTheme } from '../../context/ThemeContext';
 import { NodeType } from '../workflow/builder/types';
 import { StrategyCanvasProps } from './types';
 import { LITIGATION_DESCRIPTIONS } from './constants';
+import { 
+  calculateDropPosition, 
+  calculateCanvasMousePosition,
+  generateNodeContextMenuItems,
+  generateCanvasContextMenuItems 
+} from './utils';
 
 export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
   nodes, connections, addNode, updateNode, deleteNode, 
@@ -56,9 +61,7 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
     if (!type && !litType) return;
     if (!canvasRef.current) return;
 
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = (event.clientX - rect.left - pan.x) / scale - 75;
-    const y = (event.clientY - rect.top - pan.y) / scale - 40;
+    const { x, y } = calculateDropPosition(event, canvasRef.current, pan, scale);
     
     const finalType: NodeType = (type || 'Task') as NodeType;
     const id = addNode(finalType, x, y, litType);
@@ -74,10 +77,8 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (draggingNodeId && canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left - pan.x) / scale - dragOffset.x;
-      const y = (e.clientY - rect.top - pan.y) / scale - dragOffset.y;
-      updateNode(draggingNodeId, { x, y });
+      const pos = calculateCanvasMousePosition(e, canvasRef.current, pan, scale);
+      updateNode(draggingNodeId, { x: pos.x - dragOffset.x, y: pos.y - dragOffset.y });
     }
   }, [draggingNodeId, dragOffset, scale, pan, updateNode]);
 
@@ -85,10 +86,8 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
     e.stopPropagation();
     const node = nodes.find(n => n.id === id);
     if (node && canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const mouseX = (e.clientX - rect.left - pan.x) / scale;
-      const mouseY = (e.clientY - rect.top - pan.y) / scale;
-      setDragOffset({ x: mouseX - node.x, y: mouseY - node.y });
+      const mousePos = calculateCanvasMousePosition(e, canvasRef.current, pan, scale);
+      setDragOffset({ x: mousePos.x - node.x, y: mousePos.y - node.y });
       setDraggingNodeId(id);
       setSelectedNodeId(id);
       setSelectedConnectionId(null);
@@ -124,27 +123,21 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
         const node = nodes.find(n => n.id === nodeId);
         if (!node) return;
         
-        setContextMenu({
-            x: e.clientX, y: e.clientY,
-            items: [
-                { label: 'Edit Properties', icon: Edit2, action: () => { setSelectedNodeId(nodeId); setIsPropertiesOpen(true); } },
-                { label: 'Duplicate Node', icon: Copy, action: () => addNode(node.type, node.x + 20, node.y + 20, node.label) },
-                { label: 'Delete Node', icon: Trash2, danger: true, action: () => deleteNode(nodeId) }
-            ]
-        });
+        const items = generateNodeContextMenuItems(
+          nodeId,
+          (id) => { setSelectedNodeId(id); setIsPropertiesOpen(true); },
+          (id) => {
+            const n = nodes.find(n => n.id === id);
+            if (n) addNode(n.type, n.x + 20, n.y + 20, n.label);
+          },
+          deleteNode
+        );
+        setContextMenu({ x: e.clientX, y: e.clientY, items });
     } else { // Canvas context menu
         if (!canvasRef.current) return;
-        const rect = canvasRef.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left - pan.x) / scale;
-        const y = (e.clientY - rect.top - pan.y) / scale;
-        setContextMenu({
-            x: e.clientX, y: e.clientY,
-            items: [
-                { label: 'Add Task Node', icon: Layout, action: () => addNode('Task', x - 75, y - 40) },
-                { label: 'Add Decision Node', icon: GitBranch, action: () => addNode('Decision', x - 56, y - 56) },
-                { label: 'Add Phase Container', icon: BoxSelect, action: () => addNode('Phase', x - 300, y - 200) }
-            ]
-        });
+        const position = calculateCanvasMousePosition(e, canvasRef.current, pan, scale);
+        const items = generateCanvasContextMenuItems(position, addNode);
+        setContextMenu({ x: e.clientX, y: e.clientY, items });
     }
   };
 

@@ -1,17 +1,30 @@
 
+/**
+ * @module ExhibitManager
+ * @category Exhibits
+ * @description Main container for the Exhibit Pro module. Manages exhibit lists,
+ * digital stickering, and analytics views. Supports both standalone and embedded modes.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { 
   StickyNote, Filter, Layers, Users, Printer, Plus, Search, 
   BarChart2, PenTool, Layout, Grid, List, Loader2 
 } from 'lucide-react';
+
+// Common Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 import { ExhibitStats } from './ExhibitStats';
-import { TrialExhibit } from '../../types';
+
+// Context & Utils
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
+// Data & Types
+import { CaseId, TrialExhibit } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
@@ -47,7 +60,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
   const handleAddExhibit = () => {
       const newExhibit: TrialExhibit = {
           id: `ex-${Date.now()}`,
-          caseId: caseId || 'General', 
+          caseId: (caseId || 'General') as CaseId, 
           exhibitNumber: `PX-${exhibits.length + 1}`,
           title: 'New Evidence Document',
           dateMarked: new Date().toISOString().split('T')[0],
@@ -86,7 +99,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
         {/* Case Context Header if Embedded */}
         {caseId && (
             <div className="flex justify-between items-center mb-4">
-                 <h3 className={cn("text-lg font-bold text-slate-700", theme.text.primary)}>Case Exhibits</h3>
+                 <h3 className={cn("text-lg font-bold", theme.text.primary)}>Case Exhibits</h3>
                  <Button variant="primary" icon={Plus} size="sm" onClick={handleAddExhibit}>Add Exhibit</Button>
             </div>
         )}
@@ -128,7 +141,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar (Filters) - Only visible in List Mode */}
         {activeTab === 'list' && (
-            <div className={cn("w-64 border-r flex flex-col shrink-0 bg-slate-50/50 hidden md:flex", theme.border.default)}>
+            <div className={cn("w-64 border-r flex flex-col shrink-0 hidden md:flex", theme.border.default, theme.surface.raised)}>
                 <div className="p-4 border-b">
                     <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Binders</h4>
                     <div className="space-y-1">
@@ -142,7 +155,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                                 )}
                             >
                                 {p} Exhibits
-                                <span className={cn("text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600")}>
+                                <span className={cn("text-xs px-2 py-0.5 rounded-full", theme.surface.highlight, theme.text.secondary)}>
                                     {p === 'All' ? filteredExhibits.length : filteredExhibits.filter(e => e.party === p).length}
                                 </span>
                             </button>
@@ -153,7 +166,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                     <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Witnesses</h4>
                     <div className="space-y-1 max-h-64 overflow-y-auto">
                         {Array.from(new Set(filteredExhibits.map(e => e.witness).filter(Boolean))).map(w => (
-                            <button key={w as string} className={cn("w-full text-left px-3 py-1.5 rounded text-sm text-slate-600 hover:bg-slate-100 flex items-center")}>
+                            <button key={w as string} className={cn("w-full text-left px-3 py-1.5 rounded text-sm flex items-center", theme.text.secondary, theme.action.ghost.hover)}>
                                 <Users className="h-3 w-3 mr-2 opacity-50"/> {w}
                             </button>
                         ))}
@@ -169,16 +182,16 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                     {/* List Toolbar */}
                     <div className="flex justify-between items-center mb-4">
                         <div className="relative w-72">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
+                            <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
                             <input 
-                                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default)}
+                                className={cn("w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500", theme.surface.default, theme.border.default)}
                                 placeholder="Search exhibits..."
                             />
                         </div>
                         <div className="flex gap-2">
-                            <div className={cn("flex bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
-                                <button onClick={() => setViewMode('list')} className={cn("p-1.5 rounded transition-colors", viewMode === 'list' ? "bg-white shadow text-blue-600" : "text-slate-500")}><List className="h-4 w-4"/></button>
-                                <button onClick={() => setViewMode('grid')} className={cn("p-1.5 rounded transition-colors", viewMode === 'grid' ? "bg-white shadow text-blue-600" : "text-slate-500")}><Grid className="h-4 w-4"/></button>
+                            <div className={cn("flex p-1 rounded-lg border", theme.border.default, theme.surface.default)}>
+                                <button onClick={() => setViewMode('list')} className={cn("p-1.5 rounded transition-colors", viewMode === 'list' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><List className="h-4 w-4"/></button>
+                                <button onClick={() => setViewMode('grid')} className={cn("p-1.5 rounded transition-colors", viewMode === 'grid' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><Grid className="h-4 w-4"/></button>
                             </div>
                             <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)}>Filter</Button>
                         </div>

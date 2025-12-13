@@ -1,10 +1,20 @@
 
+/**
+ * @module AdvisorList
+ * @category WarRoom
+ * @description List view of advisors with filtering, sorting, and status indicators.
+ */
+
 import React from 'react';
+import { Phone, Mail, MoreHorizontal, FileText, CheckSquare } from 'lucide-react';
+
+// Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { UserAvatar } from '../../common/UserAvatar';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { Phone, Mail, MoreHorizontal, FileText, CheckSquare } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
@@ -54,8 +64,8 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                                 <div>
                                     <p className={cn("font-bold text-sm", theme.text.primary)}>{adv.name}</p>
                                     <div className="flex items-center gap-2 mt-0.5">
-                                        <button className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)} onClick={(e) => { e.stopPropagation(); window.location.href=`mailto:${adv.email}`; }}><Mail className="h-3 w-3"/></button>
-                                        <button className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)} onClick={(e) => { e.stopPropagation(); }}><Phone className="h-3 w-3"/></button>
+                                        <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={(e) => { e.stopPropagation(); window.location.href=`mailto:${adv.email}`; }}><Mail className="h-3 w-3"/></button>
+                                        <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={(e) => { e.stopPropagation(); }}><Phone className="h-3 w-3"/></button>
                                     </div>
                                 </div>
                             </div>
@@ -77,8 +87,8 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                                     <span>Trial Prep</span>
                                     <span className="font-bold">{adv.readiness}%</span>
                                 </div>
-                                <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight, "border border-slate-200")}>
-                                    <div className={cn("h-full rounded-full transition-all", adv.readiness === 100 ? "bg-green-500" : "bg-blue-500")} style={{ width: `${adv.readiness}%` }}></div>
+                                <div className={cn("w-full rounded-full h-1.5 border", theme.surface.highlight, theme.border.default)}>
+                                    <div className={cn("h-full rounded-full transition-all", adv.readiness === 100 ? "bg-emerald-500" : theme.primary.bg)} style={{ width: `${adv.readiness}%` }}></div>
                                 </div>
                             </div>
                         </TableCell>
@@ -89,9 +99,9 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                             <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button size="sm" variant="ghost" icon={CheckSquare} title="Tasks"/>
                                 <Button size="sm" variant="ghost" icon={FileText} title="Reports">
-                                    {adv.reports > 0 && <span className="ml-1 text-[10px] bg-blue-100 text-blue-700 px-1.5 rounded-full">{adv.reports}</span>}
+                                    {adv.reports > 0 && <span className={cn("ml-1 text-[10px] px-1.5 rounded-full", theme.primary.light, theme.primary.text)}>{adv.reports}</span>}
                                 </Button>
-                                <button className={cn("p-1.5 rounded hover:bg-slate-100", theme.text.secondary)}><MoreHorizontal className="h-4 w-4"/></button>
+                                <button className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}><MoreHorizontal className="h-4 w-4"/></button>
                             </div>
                         </TableCell>
                     </TableRow>

@@ -7,6 +7,7 @@ import { Case, Party, EvidenceItem, NexusNodeData } from '../../types';
 import { GraphOverlay } from './GraphOverlay';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { useChartTheme } from '../common/ChartHelpers';
+import { buildGraphData, getNodeStrokeColor, getNodeRadius, getNodeLabelYOffset } from './utils';
 
 interface NexusGraphProps {
   caseData: Case;
@@ -36,30 +37,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
       return () => observer.disconnect();
   }, []);
 
-  const graphData = useMemo(() => {
-    // Explicitly type the nodes array using SimulationNode compatible structure
-    const nodes: NexusNodeData[] = [
-        { id: 'root', type: 'root', label: caseData.title ? caseData.title.substring(0, 20) + '...' : 'Untitled Case', original: caseData },
-        ...parties.map(p => ({ id: p.id, type: (p.type === 'Corporation' ? 'org' : 'party') as 'org' | 'party', label: p.name, original: p })),
-        ...evidence.map(e => ({ id: e.id, type: 'evidence' as const, label: e.title.substring(0, 15) + '...', original: e }))
-    ];
-    
-    // Create links with temporary placeholder indices
-    const rawLinks = [
-        ...parties.map(p => ({ sourceId: 'root', targetId: p.id, strength: 0.8 })),
-        ...evidence.map(e => ({ sourceId: 'root', targetId: e.id, strength: 0.3 }))
-    ];
-
-    const links = rawLinks.map(l => ({ 
-        sourceIndex: 0, 
-        targetIndex: 0, 
-        strength: l.strength, 
-        source: l.sourceId, 
-        target: l.targetId 
-    }));
-
-    return { nodes, links };
-  }, [caseData, parties, evidence]);
+  const graphData = useMemo(() => buildGraphData(caseData, parties, evidence), [caseData, parties, evidence]);
 
   // Hook receives updated dimensions to recenter physics
   const { nodesMeta, isStable, reheat, physicsState } = useNexusGraph(containerRef, graphData);
@@ -99,12 +77,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
       return () => cancelAnimationFrame(frameId);
   }, [isStable, nodesMeta]);
 
-  const getStroke = (type: string) => {
-      if (type === 'party') return chartTheme.colors.blue;
-      if (type === 'org') return chartTheme.colors.purple;
-      if (type === 'evidence') return chartTheme.colors.amber;
-      return theme.chart.text; // Use theme chart text token instead of manual check
-  };
+  const getStroke = (type: string) => getNodeStrokeColor(type, chartTheme, theme.chart.text);
 
   return (
     <div ref={containerRef} className={cn("h-full flex flex-col relative overflow-hidden rounded-xl border shadow-inner", theme.surface.default, theme.border.default)}>
@@ -126,12 +99,12 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
                           onClick={() => onNodeClick(graphData.nodes[i])}
                         >
                             <circle 
-                                r={node.type === 'root' ? 40 : node.type === 'org' ? 30 : 18} 
+                                r={getNodeRadius(node.type)} 
                                 fill={node.type === 'root' ? getStroke('root') : theme.surface.default} 
                                 stroke={getStroke(node.type)}
                                 strokeWidth={node.type === 'root' ? 0 : 3} 
                             />
-                            <text y={node.type === 'root' ? 46 : 32} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", theme.mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
+                            <text y={getNodeLabelYOffset(node.type)} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", theme.mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
                         </g>
                     ))}
                 </g>

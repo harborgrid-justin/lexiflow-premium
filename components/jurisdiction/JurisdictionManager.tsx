@@ -1,11 +1,12 @@
 
-import React, { useState, useMemo, useCallback, useEffect, Suspense, useTransition } from 'react';
+import React, { useState, Suspense, useTransition } from 'react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { Globe, Scale, Building2, Shield, Users, Map as MapIcon, Plus, Gavel } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { LazyLoader } from '../common/LazyLoader';
+import { JURISDICTION_TABS, JurisdictionView } from './utils';
 
 const JurisdictionFederal = React.lazy(() => import('./JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));
 const JurisdictionState = React.lazy(() => import('./JurisdictionState').then(m => ({ default: m.JurisdictionState })));
@@ -14,18 +15,6 @@ const JurisdictionInternational = React.lazy(() => import('./JurisdictionInterna
 const JurisdictionArbitration = React.lazy(() => import('./JurisdictionArbitration').then(m => ({ default: m.JurisdictionArbitration })));
 const JurisdictionLocalRules = React.lazy(() => import('./JurisdictionLocalRules').then(m => ({ default: m.JurisdictionLocalRules })));
 const JurisdictionGeoMap = React.lazy(() => import('./JurisdictionGeoMap').then(m => ({ default: m.JurisdictionGeoMap })));
-
-type JurisdictionView = 'federal' | 'state' | 'regulatory' | 'international' | 'arbitration' | 'local' | 'map';
-
-const TABS = [
-  { id: 'federal', label: 'Federal', icon: Scale },
-  { id: 'state', label: 'State', icon: Building2 },
-  { id: 'map', label: 'Geo Map', icon: MapIcon },
-  { id: 'regulatory', label: 'Regulatory', icon: Shield },
-  { id: 'international', label: 'International', icon: Globe },
-  { id: 'arbitration', label: 'Arbitration', icon: Users },
-  { id: 'local', label: 'Local Rules', icon: Gavel },
-];
 
 export const JurisdictionManager: React.FC = () => {
   const { theme } = useTheme();
@@ -61,7 +50,7 @@ export const JurisdictionManager: React.FC = () => {
         />
         <div className={cn("border-b overflow-x-auto no-scrollbar", theme.border.default)}>
           <nav className="-mb-px flex space-x-8">
-            {TABS.map(tab => (
+            {JURISDICTION_TABS.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as JurisdictionView)}

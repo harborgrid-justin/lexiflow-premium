@@ -143,6 +143,9 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
                     nodes={nodes} connections={connections} selectedNodeId={selectedNodeId} 
                     scale={scale} pan={pan} setPan={setPan} canvasRef={canvasRef} 
                     onMouseDownNode={handleMouseDownNode} onBackgroundClick={() => setSelectedNodeId(null)}
+                    selectedConnectionId={null}
+                    onSelectConnection={() => {}}
+                    onAddConnection={() => {}}
                 />
                 <BuilderProperties isOpen={isPropertiesOpen} onClose={() => setIsPropertiesOpen(false)} selectedNode={nodes.find(n => n.id === selectedNodeId) || null} onUpdateNode={updateNode} onDeleteNode={deleteNode} />
             </div>

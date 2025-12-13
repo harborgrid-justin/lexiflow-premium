@@ -1,40 +1,36 @@
+/**
+ * LitigationBuilder.tsx
+ * 
+ * Main container for the Litigation Strategy Builder module.
+ * Orchestrates the visual strategy map, Gantt view, and outcome simulation.
+ * 
+ * @module components/litigation/LitigationBuilder
+ */
+
 import React, { useState, Suspense, lazy } from 'react';
-import { GitMerge, Save, Play, Milestone, FileText, Settings, Rocket, Loader2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { Save, Rocket, Loader2 } from 'lucide-react';
+
+// Internal Components
 import { LazyLoader } from '../common/LazyLoader';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { Button } from '../common/Button';
-import { useLitigationBuilder } from '../../hooks/useLitigationBuilder';
-import { ContextMenuItem } from '../common/ContextMenu';
-import { Edit2, Copy, Trash2, Layout, BoxSelect } from 'lucide-react';
 
-// Lazy Load sub-components with named export handling
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useLitigationBuilder } from '../../hooks/useLitigationBuilder';
+
+// Utils
+import { cn } from '../../utils/cn';
+
+// Constants & Types
+import { LITIGATION_TABS } from './constants';
+import { LitigationBuilderProps } from './types';
+
+// Lazy Load sub-components
 const StrategyCanvas = lazy(() => import('./StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));
 const PlaybookLibrary = lazy(() => import('./PlaybookLibrary').then(m => ({ default: m.PlaybookLibrary })));
 const OutcomeSimulator = lazy(() => import('./OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
 const LitigationGanttView = lazy(() => import('./LitigationGanttView').then(m => ({ default: m.LitigationGanttView })));
-
-const LITIGATION_TABS = [
-  {
-    id: 'design', label: 'Strategy Design', icon: GitMerge,
-    subTabs: [
-      { id: 'canvas', label: 'Visual Map', icon: GitMerge },
-      { id: 'timeline', label: 'Gantt View', icon: Milestone },
-      { id: 'templates', label: 'Playbooks', icon: FileText },
-    ]
-  },
-  {
-    id: 'analysis', label: 'Analysis', icon: Play,
-    subTabs: [
-      { id: 'simulate', label: 'Outcome Simulator', icon: Play },
-    ]
-  }
-];
-
-interface LitigationBuilderProps {
-  navigateToCaseTab: (caseId: string, tab: string) => void;
-}
 
 export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateToCaseTab }) => {
   const { theme } = useTheme();

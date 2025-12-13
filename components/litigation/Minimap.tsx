@@ -1,14 +1,16 @@
+/**
+ * Minimap.tsx
+ * 
+ * Minimap navigation for the Strategy Canvas.
+ * 
+ * @module components/litigation/Minimap
+ */
 
-import React, { useRef, useEffect, useCallback, useMemo } from 'react';
-import { WorkflowNode } from '../workflow/builder/types';
+import React, { useRef, useMemo, useCallback } from 'react';
+
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-
-interface MinimapProps {
-  nodes: WorkflowNode[];
-  viewport: { x: number; y: number; width: number; height: number; scale: number };
-  onPan: (pos: { x: number; y: number }) => void;
-}
+import { MinimapProps } from './types';
 
 const MINIMAP_WIDTH = 200;
 const MINIMAP_HEIGHT = 150;

@@ -1,25 +1,31 @@
 
+/**
+ * LitigationGanttView.tsx
+ * 
+ * Timeline visualization of the litigation strategy.
+ * Transforms node-based graph data into a Gantt chart format.
+ * 
+ * @module components/litigation/LitigationGanttView
+ */
+
 import React, { useState, useMemo, useCallback } from 'react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { Plus, TrendingUp } from 'lucide-react';
+
+// Internal Components
 import { PlanningSidebar } from '../case-detail/planning/PlanningSidebar';
 import { GanttTimeline } from '../case-detail/planning/GanttTimeline';
-import { WorkflowNode, NodeType, WorkflowConnection, Port } from '../workflow/builder/types';
-import { CasePhase, WorkflowTask, TaskId, ProjectId, CaseId } from '../../types';
 import { Button } from '../common/Button';
-import { Plus, TrendingUp } from 'lucide-react';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils
+import { cn } from '../../utils/cn';
 import { Pathfinding } from '../../utils/pathfinding';
 
-type ZoomLevel = 'Quarter' | 'Month' | 'Week' | 'Day';
-
-// Define props interface for lifted state
-interface LitigationGanttViewProps {
-  nodes: WorkflowNode[];
-  connections: WorkflowConnection[];
-  addNode: (type: NodeType, x: number, y: number, label?: string) => string;
-  updateNode: (id: string, updates: Partial<WorkflowNode>) => void;
-  deleteNode: (id: string) => void;
-}
+// Types
+import { CasePhase, WorkflowTask, TaskId, CaseId } from '../../types';
+import { LitigationGanttViewProps, ZoomLevel } from './types';
 
 export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes, connections, updateNode, addNode }) => {
   const { theme } = useTheme();

@@ -445,8 +445,28 @@ export interface JointPlan extends BaseEntity { caseId: CaseId; title: string; l
 export interface StipulationRequest extends BaseEntity { title: string; requestingParty: string; proposedDate: string; status: string; reason: string; caseId?: CaseId; }
 export interface CommunicationItem extends BaseEntity { caseId: CaseId; userId: UserId; subject: string; date: string; type: string; direction: string; sender: string; recipient: string; preview: string; hasAttachment: boolean; status: string; isPrivileged: boolean; }
 export interface ServiceJob extends BaseEntity { caseId: CaseId; requestorId: UserId; documentTitle: string; targetPerson: string; targetAddress: string; serverName: string; method: ServiceMethod; mailType?: string; trackingNumber?: string; addressedTo?: string; status: ServiceStatus; dueDate: string; attempts: number; servedDate?: string; gpsCoordinates?: string; notes?: string; signerName?: string; attemptHistory?: { date: string; result: string; lat?: number; long?: number }[]; }
-export interface Attachment { name: string; size?: string; type?: string; sender?: string; date?: string; url?: string; }
-export interface Message { id: string; senderId: UserId | 'me'; text: string; timestamp: string; status?: 'sent' | 'delivered' | 'read'; isPrivileged?: boolean; attachments?: Attachment[]; }
+export interface Attachment { 
+  id?: string;
+  name: string; 
+  size?: string | number; 
+  type?: string; 
+  sender?: string; 
+  date?: string; 
+  url?: string; 
+}
+
+export interface Message extends BaseEntity { 
+  conversationId?: string;
+  senderId: UserId | 'me' | string; 
+  text: string; 
+  content?: string;
+  timestamp: string; 
+  status?: 'sent' | 'delivered' | 'read'; 
+  read?: boolean;
+  isPrivileged?: boolean; 
+  attachments?: Attachment[]; 
+}
+
 export interface Conversation extends BaseEntity { name: string; role: string; status: string; unread: number; isExternal: boolean; messages: Message[]; draft?: string; }
 export interface SystemNotification extends BaseEntity { text: string; time: string; read: boolean; type?: string; }
 export interface JudgeMotionStat { name: string; grant: number; deny: number; }

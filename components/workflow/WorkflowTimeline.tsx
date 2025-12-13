@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
 import { WorkflowStage, WorkflowTask } from '../../../types';
-import { UserAvatar } from '../../common/UserAvatar';
+import { UserAvatar } from '../common/UserAvatar';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 

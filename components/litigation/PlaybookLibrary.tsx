@@ -1,18 +1,23 @@
 
-import React, { useState, useMemo } from 'react';
-import { Search, Filter, BookOpen, Clock, BarChart2, Plus, ArrowRight, Shield, Globe, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { Button } from '../common/Button';
-import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlaybooks';
-import { VirtualGrid } from '../common/VirtualGrid';
-import { useWindow } from '../../context/WindowContext';
-import { PlaybookDetail } from './PlaybookDetail';
-import { Layers } from 'lucide-react';
+/**
+ * PlaybookLibrary.tsx
+ * 
+ * Library of litigation playbooks that can be applied to the strategy canvas.
+ * 
+ * @module components/litigation/PlaybookLibrary
+ */
 
-interface PlaybookLibraryProps {
-    onApply: (playbook: Playbook) => void;
-}
+import React, { useState, useMemo } from 'react';
+import { Search, Globe, CheckCircle, Layers } from 'lucide-react';
+
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+import { cn } from '../../utils/cn';
+import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlaybooks';
+
+import { VirtualGrid } from '../common/VirtualGrid';
+import { PlaybookDetail } from './PlaybookDetail';
+import { PlaybookLibraryProps } from './types';
 
 export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => {
   const { theme } = useTheme();
@@ -157,4 +162,5 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
     </div>
   );
 };
+
 export default PlaybookLibrary;

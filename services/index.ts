@@ -50,7 +50,7 @@ export * from './domains/SecurityDomain';
 
 // Repositories
 export * from './repositories/AnalysisRepository';
-export * from './repositories/BillingRepository';
+// export * from './repositories/BillingRepository';
 export * from './repositories/CitationRepository';
 export * from './repositories/ClauseRepository';
 export * from './repositories/ClientRepository';

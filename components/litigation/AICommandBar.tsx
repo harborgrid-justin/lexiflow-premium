@@ -1,15 +1,21 @@
 
+/**
+ * AICommandBar.tsx
+ * 
+ * Floating command bar for AI-assisted strategy generation.
+ * 
+ * @module components/litigation/AICommandBar
+ */
+
 import React, { useState } from 'react';
-import { Sparkles, Loader2, Wand2 } from 'lucide-react';
+import { Sparkles, Wand2 } from 'lucide-react';
+
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { GeminiService } from '../../services/geminiService';
 import { useNotify } from '../../hooks/useNotify';
-
-interface AICommandBarProps {
-  onGenerate: (graph: { nodes: any[], connections: any[] }) => void;
-}
+import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
     const { theme } = useTheme();

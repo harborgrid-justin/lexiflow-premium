@@ -70,3 +70,5 @@ export const RequestForAdmission: React.FC = () => {
     </div>
   );
 };
+
+export default RequestForAdmission;

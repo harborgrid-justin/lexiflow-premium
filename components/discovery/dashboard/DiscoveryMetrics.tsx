@@ -11,7 +11,7 @@ interface DiscoveryMetricsProps {
   onNavigate: (view: string) => void;
 }
 
-export const DiscoveryMetrics: React.FC<DiscoveryMetricsProps> = ({ stats, onNavigate }) => {
+const DiscoveryMetrics: React.FC<DiscoveryMetricsProps> = ({ stats, onNavigate }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="cursor-pointer" onClick={() => onNavigate('requests')}>
@@ -43,3 +43,5 @@ export const DiscoveryMetrics: React.FC<DiscoveryMetricsProps> = ({ stats, onNav
     </div>
   );
 };
+
+export default DiscoveryMetrics;

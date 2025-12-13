@@ -90,3 +90,5 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
     </Modal>
   );
 };
+
+export default DiscoveryResponseModal;

@@ -1,9 +1,11 @@
 
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
-import { Plus, RefreshCw, Play, Loader2 } from 'lucide-react';
+import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { DataService } from '../../services/dataService';
+import { ErrorBoundary } from '../common/ErrorBoundary';
+import { EmptyState } from '../common/EmptyState';
 
 // Direct Imports to optimize Tree-Shaking and HMR
 import { CaseWorkflowList } from './CaseWorkflowList';
@@ -16,7 +18,7 @@ import { WorkflowEngineDetail } from './WorkflowEngineDetail';
 import { FirmProcessDetail } from './FirmProcessDetail';
 import { WorkflowLibrary } from './WorkflowLibrary';
 import { TemplatePreview } from './TemplatePreview';
-import { WorkflowTemplateData } from '../../types';
+import { WorkflowTemplateData, WorkflowTask } from '../../types';
 
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -50,15 +52,25 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   };
   
   // Enterprise Data Access
-  const { data: cases = [], isLoading: casesLoading } = useQuery<Case[]>(
+  const { data: cases = [], isLoading: casesLoading, isError: casesError } = useQuery<Case[]>(
       [STORES.CASES, 'all'],
       DataService.cases.getAll
   );
 
-  const { data: firmProcesses = [], isLoading: procsLoading } = useQuery<any[]>(
+  const { data: firmProcesses = [], isLoading: procsLoading, isError: procsError } = useQuery<any[]>(
       [STORES.PROCESSES, 'all'],
       DataService.workflow.getProcesses
   );
+
+  const { data: tasks = [] } = useQuery<WorkflowTask[]>(
+      [STORES.TASKS, 'all'],
+      DataService.workflow.getTasks
+  );
+
+  const tasksDueToday = useMemo(() => {
+      const today = new Date().toISOString().split('T')[0];
+      return tasks.filter(t => t.dueDate === today && t.status !== 'Done' && t.status !== 'Completed').length;
+  }, [tasks]);
 
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
@@ -110,22 +122,20 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
     setSelectedTemplate(null);
   };
 
-  const getCaseProgress = (status: string) => {
-    switch(status) {
-      case 'Discovery': return 45;
-      case 'Trial': return 80;
-      case 'Settled': return 100;
-      default: return 10;
-    }
+  const getCaseProgress = (caseId: string) => {
+      // Calculate real progress from tasks
+      const caseTasks = tasks.filter(t => t.caseId === caseId);
+      if (caseTasks.length === 0) return 0;
+      const completed = caseTasks.filter(t => t.status === 'Done' || t.status === 'Completed').length;
+      return Math.round((completed / caseTasks.length) * 100);
   };
 
-  const getNextTask = (status: string) => {
-    switch(status) {
-      case 'Discovery': return 'Review Production Set 2';
-      case 'Trial': return 'Prepare Witness List';
-      case 'Settled': return 'Execute Final Release';
-      default: return 'Draft Complaint';
-    }
+  const getNextTask = (caseId: string) => {
+      const caseTasks = tasks.filter(t => t.caseId === caseId && t.status !== 'Done' && t.status !== 'Completed');
+      if (caseTasks.length === 0) return "All tasks completed";
+      // Sort by due date
+      caseTasks.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+      return caseTasks[0].title;
   };
 
   if (viewMode === 'detail' && selectedId) {
@@ -141,8 +151,23 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   }
 
   const isLoading = casesLoading || procsLoading;
+  const hasError = casesError || procsError;
+
+  if (hasError) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <EmptyState 
+          title="Unable to load workflow data" 
+          description="There was a problem connecting to the local database. Please try refreshing." 
+          icon={AlertTriangle}
+          action={<Button onClick={() => window.location.reload()} icon={RefreshCw}>Reload Application</Button>}
+        />
+      </div>
+    );
+  }
 
   return (
+    <ErrorBoundary scope="MasterWorkflow">
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
         <PageHeader 
@@ -166,7 +191,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
               </div>
               <div className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Tasks Due Today</p>
-                <p className={cn("text-2xl font-bold", theme.status.warning.text)}>14</p>
+                <p className={cn("text-2xl font-bold", theme.status.warning.text)}>{tasksDueToday}</p>
               </div>
               <div className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Automations Ran</p>
@@ -210,5 +235,6 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
         </div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 };

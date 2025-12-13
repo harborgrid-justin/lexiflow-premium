@@ -16,14 +16,41 @@ export const TaskDependencyManager: React.FC = () => {
       DataService.tasks.getAll
   );
 
-  // Mock dependency derivation for visualization
+  // Real dependency derivation
   const dependencies = React.useMemo(() => {
-      if (tasks.length < 3) return [];
-      return [
-          { ...tasks[0], type: 'completed' },
-          { ...tasks[1], type: 'active' },
-          { ...tasks[2], type: 'locked' }
-      ];
+      // Filter tasks that have dependencies or are dependencies of others
+      // For visualization, we'll just take a chain of tasks if they exist, 
+      // or create a synthetic chain from tasks sorted by due date if no explicit dependencies exist (fallback for demo data)
+      
+      const tasksWithDeps = tasks.filter(t => t.dependencies && t.dependencies.length > 0);
+      
+      if (tasksWithDeps.length > 0) {
+          // If we have real dependencies, use them. 
+          // For this simple list view, we'll just show the first few tasks with dependencies.
+          return tasksWithDeps.slice(0, 5).map(t => {
+              const isCompleted = t.status === 'Done' || t.status === 'Completed';
+              const isActive = t.status === 'In Progress';
+              return {
+                  ...t,
+                  type: isCompleted ? 'completed' : isActive ? 'active' : 'locked'
+              };
+          });
+      }
+
+      // Fallback: Sort by due date and show as a sequence
+      const sortedTasks = [...tasks]
+        .filter(t => t.status !== 'Done' && t.status !== 'Completed')
+        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+        .slice(0, 5);
+
+      return sortedTasks.map((t, idx) => {
+          const isCompleted = t.status === 'Done' || t.status === 'Completed';
+          const isActive = idx === 0; // First one is active
+          return {
+              ...t,
+              type: isCompleted ? 'completed' : isActive ? 'active' : 'locked'
+          };
+      });
   }, [tasks]);
 
   if (isLoading) return <div className="flex justify-center p-6"><Loader2 className="animate-spin text-blue-600"/></div>;

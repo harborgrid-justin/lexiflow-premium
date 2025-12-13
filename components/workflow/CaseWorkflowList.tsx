@@ -1,27 +1,38 @@
 
 import React from 'react';
-import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings } from 'lucide-react';
+import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { Case } from '../../types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '@utils/cn';
+import { cn } from '../../utils/cn';
+import { EmptyState } from '../common/EmptyState';
 
 interface CaseWorkflowListProps {
   cases: Case[];
   onSelectCase: (id: string) => void;
   onManageWorkflow?: (id: string) => void;
-  getCaseProgress: (status: string) => number;
-  getNextTask: (status: string) => string;
+  getCaseProgress: (caseId: string) => number;
+  getNextTask: (caseId: string) => string;
 }
 
 export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, onSelectCase, onManageWorkflow, getCaseProgress, getNextTask }) => {
   const { theme } = useTheme();
 
+  if (!cases || cases.length === 0) {
+    return (
+      <EmptyState 
+        title="No Active Case Workflows" 
+        description="There are no cases with active workflows at the moment. Start a new case to see it here."
+        icon={Search}
+      />
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4">
         {cases.map(c => {
-            const progress = getCaseProgress(c.status);
+            const progress = getCaseProgress(c.id);
             return (
             <div 
                 key={c.id} 
@@ -68,7 +79,7 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, onSel
                         {progress === 100 ? <CheckCircle className="h-5 w-5 text-green-500"/> : <Clock className="h-5 w-5 text-amber-500"/>}
                         <div>
                             <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Current Step</p>
-                            <p className={cn("text-sm font-semibold", theme.text.primary)}>{getNextTask(c.status)}</p>
+                            <p className={cn("text-sm font-semibold", theme.text.primary)}>{getNextTask(c.id)}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1">

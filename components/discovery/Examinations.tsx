@@ -120,3 +120,5 @@ export const Examinations: React.FC = () => {
     </div>
   );
 };
+
+export default Examinations;

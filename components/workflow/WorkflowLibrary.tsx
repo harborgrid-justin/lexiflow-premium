@@ -1,11 +1,15 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Shield, Plus } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Search, Shield, Plus, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
 import { TemplatePreview } from './TemplatePreview';
 import { DataService } from '../../services/dataService';
 import { WorkflowTemplateData } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { EmptyState } from '../common/EmptyState';
+import { Button } from '../common/Button';
 
 interface WorkflowLibraryProps {
   onCreate: (template?: WorkflowTemplateData) => void;
@@ -15,17 +19,13 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   const { theme } = useTheme();
   const [templateSearch, setTemplateSearch] = useState('');
   const [templateCategory, setTemplateCategory] = useState('All');
-  const [templates, setTemplates] = useState<WorkflowTemplateData[]>([]);
+  
+  const { data: templates = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
+    [STORES.TEMPLATES, 'all'],
+    DataService.workflow.getTemplates
+  );
   
   const categories = ['All', 'Litigation', 'Corporate', 'Operations', 'HR', 'IT/Security'];
-
-  useEffect(() => {
-      const loadTemplates = async () => {
-          const data = await DataService.workflow.getTemplates();
-          setTemplates(data);
-      };
-      loadTemplates();
-  }, []);
 
   const filteredTemplates = useMemo(() => {
     return templates.filter(t => {
@@ -35,6 +35,25 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
       return matchesSearch && matchesCategory;
     });
   }, [templateSearch, templateCategory, templates]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center p-10">
+        <Loader2 className="animate-spin text-blue-600 h-8 w-8"/>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <EmptyState 
+        title="Error Loading Templates" 
+        description="Could not load workflow templates."
+        icon={AlertTriangle}
+        action={<Button onClick={() => refetch()} icon={RefreshCw}>Retry</Button>}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">

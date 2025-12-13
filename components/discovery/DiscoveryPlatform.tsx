@@ -43,7 +43,7 @@ import { STORES } from '../../services/db';
 import { DiscoveryRequest } from '../../types';
 
 // FIX: Import all lazy loaded components for DiscoveryPlatform
-const DiscoveryDashboard = lazy(() => import('./DiscoveryDashboard'));
+const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
 const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
 const PrivilegeLog = lazy(() => import('./PrivilegeLog'));
 const LegalHolds = lazy(() => import('./LegalHolds'));
@@ -189,3 +189,5 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
     </div>
   );
 };
+
+export default DiscoveryPlatform;

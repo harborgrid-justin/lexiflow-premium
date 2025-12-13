@@ -12,7 +12,7 @@ import { Loader2 } from 'lucide-react';
 // Map theme colors to chart
 const CHART_COLORS = ['#94a3b8', '#64748b', '#3b82f6', '#22c55e'];
 
-export const DiscoveryCharts: React.FC = () => {
+const DiscoveryCharts: React.FC = () => {
   const { mode } = useTheme();
   const chartTheme = useChartTheme();
   
@@ -86,3 +86,5 @@ export const DiscoveryCharts: React.FC = () => {
     </div>
   );
 };
+
+export default DiscoveryCharts;

@@ -106,3 +106,5 @@ export const TranscriptManager: React.FC = () => {
     </div>
   );
 };
+
+export default TranscriptManager;

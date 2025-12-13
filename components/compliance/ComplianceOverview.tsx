@@ -16,6 +16,7 @@ interface RiskChartData {
     name: string;
     value: number;
     color: string;
+    [key: string]: any;
 }
 
 export const ComplianceOverview: React.FC = () => {

@@ -70,3 +70,5 @@ export const CodingPanel: React.FC = () => {
     </div>
   );
 };
+
+export default CodingPanel;

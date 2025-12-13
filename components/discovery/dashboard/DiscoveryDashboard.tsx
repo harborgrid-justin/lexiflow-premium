@@ -8,8 +8,8 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
-import { DiscoveryMetrics } from './DiscoveryMetrics';
-import { DiscoveryCharts } from './DiscoveryCharts';
+import DiscoveryMetrics from './DiscoveryMetrics';
+import DiscoveryCharts from './DiscoveryCharts';
 import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
 import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../../types';
 
@@ -17,7 +17,7 @@ interface DiscoveryDashboardProps {
     onNavigate: (view: DiscoveryView, id?: string) => void;
 }
 
-export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) => {
+const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
 
   // Parallel Queries for Dashboard Stats
@@ -139,3 +139,5 @@ export const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNaviga
     </div>
   );
 };
+
+export default DiscoveryDashboard;

@@ -52,3 +52,5 @@ export const InterviewModal: React.FC<InterviewModalProps> = ({ isOpen, onClose,
     </Modal>
   );
 };
+
+export default InterviewModal;

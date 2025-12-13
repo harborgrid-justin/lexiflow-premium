@@ -1,34 +1,114 @@
+/**
+ * VendorManagement.tsx
+ *
+ * Vendor management for discovery services including court reporters, videographers, and interpreters.
+ * Manages vendor relationships, ratings, and service coordination for discovery proceedings.
+ *
+ * @module components/discovery/VendorManagement
+ * @category Discovery - Vendors
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the LexiFlow theme provider for consistent styling across light/dark modes.
+ *
+ * Key patterns:
+ * - useTheme() hook provides: theme, isDark, mode, toggleTheme, setTheme
+ * - theme.text.primary/secondary/tertiary for text colors
+ * - theme.surface.default/raised/overlay for backgrounds
+ * - theme.border.default/focused/error for borders
+ * - theme.action.primary/secondary/ghost/danger for buttons
+ * - theme.status.success/warning/error/info for status indicators
+ *
+ * Convention: Use semantic tokens from theme, NOT raw Tailwind colors
+ * ✅ className={theme.text.primary}
+ * ❌ className="text-slate-900 dark:text-white"
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
+import { Briefcase, Phone, Mail, Star, Plus } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Briefcase, Phone, Mail, Star, Plus } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { Vendor } from '../../types';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Vendor } from '../../types';
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+const SERVICE_TYPES = [
+  { value: 'Court Reporting', label: 'Court Reporting' },
+  { value: 'Videography', label: 'Videography' },
+  { value: 'Forensics', label: 'Forensics' },
+  { value: 'Translation', label: 'Translation' },
+] as const;
+
+const STATUS_OPTIONS = [
+  { value: 'Active', label: 'Active', variant: 'success' as const },
+  { value: 'Preferred', label: 'Preferred', variant: 'info' as const },
+  { value: 'Blocked', label: 'Blocked', variant: 'error' as const },
+] as const;
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * VendorManagement - Vendor management component
+ *
+ * Manages discovery service vendors including court reporters, videographers,
+ * and interpreters with rating and status tracking.
+ */
 export const VendorManagement: React.FC = () => {
+  // ==========================================================================
+  // HOOKS - Context & State
+  // ==========================================================================
   const { theme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newVendor, setNewVendor] = useState<Partial<Vendor>>({});
 
+  // ==========================================================================
+  // HOOKS - Data Fetching
+  // ==========================================================================
   const { data: vendors = [] } = useQuery<Vendor[]>(
       [STORES.VENDORS, 'all'],
-      DataService.discovery.getVendors
+      () => DataService.discovery.getVendors()
   );
 
   const { mutate: addVendor } = useMutation(
       DataService.discovery.addVendor,
       {
           invalidateKeys: [[STORES.VENDORS, 'all']],
-          onSuccess: () => { setIsModalOpen(false); setNewVendor({}); }
+          onSuccess: () => {
+              setIsModalOpen(false);
+              setNewVendor({});
+          }
       }
   );
+
+  // ==========================================================================
+  // CALLBACKS - Event Handlers
+  // ==========================================================================
 
   const handleSave = () => {
       if (!newVendor.name) return;
@@ -44,77 +124,172 @@ export const VendorManagement: React.FC = () => {
       } as Vendor);
   };
 
+  // ==========================================================================
+  // RENDER HELPERS
+  // ==========================================================================
+
+  const getStatusVariant = (status: string) => {
+    const option = STATUS_OPTIONS.find(opt => opt.value === status);
+    return option?.variant || 'neutral';
+  };
+
+  // ==========================================================================
+  // MAIN RENDER
+  // ==========================================================================
+
   return (
-    <div className="space-y-6 animate-fade-in">
-        <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
-            <div>
-                <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-                    <Briefcase className="h-5 w-5 mr-2 text-indigo-600"/> Vendor Management (Rule 28)
-                </h3>
-                <p className={cn("text-sm", theme.text.secondary)}>Court reporters, videographers, and interpreters.</p>
-            </div>
-            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Vendor</Button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className={`text-xl font-semibold ${theme.text.primary}`}>Vendor Management</h2>
+          <p className={theme.text.secondary}>Manage court reporters, videographers, and interpreters</p>
         </div>
+        <Button
+          variant="primary"
+          icon={Plus}
+          onClick={() => setIsModalOpen(true)}
+        >
+          Add Vendor
+        </Button>
+      </div>
 
-        <TableContainer>
-            <TableHeader>
-                <TableHead>Vendor Name</TableHead>
-                <TableHead>Service Type</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Rating</TableHead>
-            </TableHeader>
-            <TableBody>
-                {vendors.map(v => (
-                    <TableRow key={v.id}>
-                        <TableCell className={cn("font-bold", theme.text.primary)}>{v.name}</TableCell>
-                        <TableCell>{v.serviceType}</TableCell>
-                        <TableCell>
-                            <div className="text-xs">
-                                <p>{v.contactName}</p>
-                                <p className={theme.text.secondary}>{v.phone}</p>
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <Badge variant={v.status === 'Preferred' ? 'success' : v.status === 'Blocked' ? 'error' : 'neutral'}>{v.status}</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                            <div className="flex justify-end items-center text-yellow-500 gap-1">
-                                <span className={cn("font-bold text-sm", theme.text.primary)}>{v.rating}</span> <Star className="h-4 w-4 fill-current"/>
-                            </div>
-                        </TableCell>
-                    </TableRow>
-                ))}
-                {vendors.length === 0 && (
-                    <TableRow><TableCell colSpan={5} className={cn("text-center py-8 italic", theme.text.tertiary)}>No vendors listed.</TableCell></TableRow>
-                )}
-            </TableBody>
-        </TableContainer>
+      {/* Vendors Table */}
+      <TableContainer>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Vendor Name</TableHead>
+            <TableHead>Service Type</TableHead>
+            <TableHead>Contact</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Rating</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {vendors.map((vendor) => (
+            <TableRow key={vendor.id}>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Briefcase className={`h-4 w-4 ${theme.text.secondary}`} />
+                  <span className={`font-medium ${theme.text.primary}`}>{vendor.name}</span>
+                </div>
+              </TableCell>
+              <TableCell className={theme.text.secondary}>{vendor.serviceType}</TableCell>
+              <TableCell className={theme.text.secondary}>
+                <div className="text-sm">
+                  <p>{vendor.contactName}</p>
+                  <p className="text-xs">{vendor.phone}</p>
+                </div>
+              </TableCell>
+              <TableCell>
+                <Badge variant={getStatusVariant(vendor.status)}>
+                  {vendor.status}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-1 text-yellow-500">
+                  <span className={`font-medium text-sm ${theme.text.primary}`}>{vendor.rating}</span>
+                  <Star className="h-4 w-4 fill-current" />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </TableContainer>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Vendor">
-            <div className="p-6 space-y-4">
-                <Input label="Vendor Name" value={newVendor.name || ''} onChange={e => setNewVendor({...newVendor, name: e.target.value})}/>
-                <div className="grid grid-cols-2 gap-4">
-                     <div>
-                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Service Type</label>
-                         <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newVendor.serviceType} onChange={e => setNewVendor({...newVendor, serviceType: e.target.value as any})}>
-                             <option value="Court Reporting">Court Reporting</option>
-                             <option value="Videography">Videography</option>
-                             <option value="Forensics">Forensics</option>
-                             <option value="Translation">Translation</option>
-                         </select>
-                     </div>
-                     <Input label="Contact Person" value={newVendor.contactName || ''} onChange={e => setNewVendor({...newVendor, contactName: e.target.value})}/>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                     <Input label="Phone" value={newVendor.phone || ''} onChange={e => setNewVendor({...newVendor, phone: e.target.value})}/>
-                     <Input label="Email" value={newVendor.email || ''} onChange={e => setNewVendor({...newVendor, email: e.target.value})}/>
-                </div>
-                <div className="flex justify-end pt-4">
-                    <Button variant="primary" onClick={handleSave}>Save Vendor</Button>
-                </div>
+      {/* Add Vendor Modal */}
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Add New Vendor"
+        >
+          <div className="space-y-4">
+            <div>
+              <label className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
+                Vendor Name *
+              </label>
+              <Input
+                value={newVendor.name || ''}
+                onChange={(e) => setNewVendor(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Enter vendor name"
+                required
+              />
             </div>
+
+            <div>
+              <label className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
+                Service Type
+              </label>
+              <select
+                className={`w-full h-10 px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all ${theme.surface.input} ${theme.border.default} ${theme.text.primary} ${theme.border.focused}`}
+                value={newVendor.serviceType || 'Court Reporting'}
+                onChange={(e) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as any }))}
+              >
+                {SERVICE_TYPES.map(type => (
+                  <option key={type.value} value={type.value}>{type.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
+                Contact Person
+              </label>
+              <Input
+                value={newVendor.contactName || ''}
+                onChange={(e) => setNewVendor(prev => ({ ...prev, contactName: e.target.value }))}
+                placeholder="Enter contact person"
+              />
+            </div>
+
+            <div>
+              <label className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
+                Phone
+              </label>
+              <Input
+                value={newVendor.phone || ''}
+                onChange={(e) => setNewVendor(prev => ({ ...prev, phone: e.target.value }))}
+                placeholder="Enter phone number"
+              />
+            </div>
+
+            <div>
+              <label className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
+                Email
+              </label>
+              <Input
+                type="email"
+                value={newVendor.email || ''}
+                onChange={(e) => setNewVendor(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="Enter email address"
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                variant="secondary"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleSave}
+                disabled={!newVendor.name}
+              >
+                Add Vendor
+              </Button>
+            </div>
+          </div>
         </Modal>
+      )}
     </div>
   );
 };
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+export default VendorManagement;

@@ -30,21 +30,20 @@ export const SLAMonitor: React.FC = () => {
   // Initialize
   useEffect(() => {
       if (tasks.length > 0) {
-          // Take a few tasks and give them mock "tight" deadlines for demo
-          const items = tasks.slice(0, 5).map((t, i) => {
-             const now = Date.now();
-             // Stagger deadlines: 1 overdue, 1 close, others fine
-             const offset = i === 0 ? -10000000 : i === 1 ? 3600000 * 2 : 3600000 * 24 * (i+1); 
+          const items = tasks
+            .filter(t => t.dueDate && t.status !== 'Done' && t.status !== 'Completed')
+            .map(t => {
+             const dueTime = new Date(t.dueDate).getTime();
              
              return {
                 id: t.id,
                 task: t.title,
-                dueTime: now + offset,
+                dueTime: dueTime,
                 status: 'On Track' as const,
-                progress: 50
+                progress: 0 // Will be calculated in tick
              };
           });
-          setSLAs(items);
+          setSLAs(items.slice(0, 10)); // Limit to 10 for display
       }
   }, [tasks]);
 
@@ -52,7 +51,10 @@ export const SLAMonitor: React.FC = () => {
   useInterval(() => {
       setSLAs(prev => prev.map(sla => {
           const now = Date.now();
-          const totalDuration = 7 * 24 * 60 * 60 * 1000; // Assume 7 day SLA basis for visual bar
+          // Assume 7 day SLA basis for visual bar if start date is unknown, 
+          // or use a fixed window ending at due date.
+          // For better visualization, let's assume a 5-day window ending at due date.
+          const totalDuration = 5 * 24 * 60 * 60 * 1000; 
           const startTime = sla.dueTime - totalDuration;
           
           // Calculate percentages
@@ -64,7 +66,7 @@ export const SLAMonitor: React.FC = () => {
           
           let status: SLAItem['status'] = 'On Track';
           if (msLeft < 0) status = 'Breached';
-          else if (hoursLeft < 4) status = 'At Risk';
+          else if (hoursLeft < 24) status = 'At Risk';
 
           return { ...sla, progress, status };
       }));

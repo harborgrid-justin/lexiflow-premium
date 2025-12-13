@@ -1,22 +1,28 @@
 
+/**
+ * LitigationProperties.tsx
+ * 
+ * Properties panel for editing selected nodes or connections in the strategy canvas.
+ * Allows configuring node labels, probabilities, and descriptions.
+ * 
+ * @module components/litigation/LitigationProperties
+ */
+
 import React from 'react';
-import { Settings, X, BookOpen, Trash2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { Settings, X, BookOpen } from 'lucide-react';
+
+// Internal Components
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
-import { WorkflowNode, WorkflowConnection } from '../workflow/builder/types';
 
-interface LitigationPropertiesProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedNode: WorkflowNode | null;
-  selectedConnection: WorkflowConnection | null;
-  onUpdateNode: (id: string, updates: Partial<WorkflowNode>) => void;
-  onDeleteNode: (id: string) => void;
-  onUpdateConnection: (id: string, updates: Partial<WorkflowConnection>) => void;
-  onDeleteConnection: (id: string) => void;
-}
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils
+import { cn } from '../../utils/cn';
+
+// Types
+import { LitigationPropertiesProps } from './types';
 
 export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
   isOpen, onClose, selectedNode, selectedConnection, onUpdateNode, onDeleteNode, onUpdateConnection, onDeleteConnection

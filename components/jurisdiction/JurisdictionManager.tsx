@@ -7,13 +7,13 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { LazyLoader } from '../common/LazyLoader';
 
-const JurisdictionFederal = React.lazy(() => import('./jurisdiction/JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));
-const JurisdictionState = React.lazy(() => import('./jurisdiction/JurisdictionState').then(m => ({ default: m.JurisdictionState })));
-const JurisdictionRegulatory = React.lazy(() => import('./jurisdiction/JurisdictionRegulatory').then(m => ({ default: m.JurisdictionRegulatory })));
-const JurisdictionInternational = React.lazy(() => import('./jurisdiction/JurisdictionInternational').then(m => ({ default: m.JurisdictionInternational })));
-const JurisdictionArbitration = React.lazy(() => import('./jurisdiction/JurisdictionArbitration').then(m => ({ default: m.JurisdictionArbitration })));
-const JurisdictionLocalRules = React.lazy(() => import('./jurisdiction/JurisdictionLocalRules').then(m => ({ default: m.JurisdictionLocalRules })));
-const JurisdictionGeoMap = React.lazy(() => import('./jurisdiction/JurisdictionGeoMap').then(m => ({ default: m.JurisdictionGeoMap })));
+const JurisdictionFederal = React.lazy(() => import('./JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));
+const JurisdictionState = React.lazy(() => import('./JurisdictionState').then(m => ({ default: m.JurisdictionState })));
+const JurisdictionRegulatory = React.lazy(() => import('./JurisdictionRegulatory').then(m => ({ default: m.JurisdictionRegulatory })));
+const JurisdictionInternational = React.lazy(() => import('./JurisdictionInternational').then(m => ({ default: m.JurisdictionInternational })));
+const JurisdictionArbitration = React.lazy(() => import('./JurisdictionArbitration').then(m => ({ default: m.JurisdictionArbitration })));
+const JurisdictionLocalRules = React.lazy(() => import('./JurisdictionLocalRules').then(m => ({ default: m.JurisdictionLocalRules })));
+const JurisdictionGeoMap = React.lazy(() => import('./JurisdictionGeoMap').then(m => ({ default: m.JurisdictionGeoMap })));
 
 type JurisdictionView = 'federal' | 'state' | 'regulatory' | 'international' | 'arbitration' | 'local' | 'map';
 

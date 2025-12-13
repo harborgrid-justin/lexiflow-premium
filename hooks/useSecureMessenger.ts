@@ -4,7 +4,7 @@ import { DataService } from '../services/dataService';
 import { Conversation, Message, Attachment } from '../types';
 import { Scheduler } from '../utils/scheduler';
 
-export { Conversation, Message, Attachment };
+
 
 export const useSecureMessenger = () => {
   const [view, setView] = useState<'chats' | 'contacts' | 'files' | 'archived'>('chats');

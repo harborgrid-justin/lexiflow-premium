@@ -2,30 +2,11 @@
 
 // Data files
 export * from './federalHierarchy';
-export * from './jurisdictionData';
-export * from './mockAdmin';
-export * from './mockAnalytics';
 export * from './mockApiSpec';
-export * from './mockBilling';
-export * from './mockCases';
-export * from './mockClauses';
-export * from './mockClients';
-export * from './mockCollaboration';
-export * from './mockCompliance';
-export * from './mockDashboard';
-export * from './mockDiscovery';
-export * from './mockDocket';
-export * from './mockDocuments';
-export * from './mockEvidence';
-export * from './mockFirmProcesses';
 export * from './mockHierarchy';
 export * from './mockKnowledge';
 export * from './mockLitigationPlaybooks';
 export * from './mockMotions';
-export * from './mockPlaybooks';
-export * from './mockRules';
-export * from './mockUsers';
-export * from './mockWorkflow';
 export * from './workflowTemplates';
 
 // Models

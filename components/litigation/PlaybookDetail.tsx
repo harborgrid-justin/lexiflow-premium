@@ -1,20 +1,24 @@
 
+/**
+ * PlaybookDetail.tsx
+ * 
+ * Detailed view of a litigation playbook, including workflow stages, strategy, and assets.
+ * 
+ * @module components/litigation/PlaybookDetail
+ */
+
 import React, { useState } from 'react';
-import { Playbook } from '../../data/mockLitigationPlaybooks';
+import { CheckCircle, Clock, BookOpen, Target, Shield, Layers, Scale, FileText, ExternalLink } from 'lucide-react';
+
 import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
 import { cn } from '../../utils/cn';
+
 import { Button } from '../common/Button';
 import { Tabs } from '../common/Tabs';
-import { CheckCircle, Clock, BookOpen, Target, ArrowRight, Shield, Layers, Scale, FileText, ExternalLink } from 'lucide-react';
-import { useWindow } from '../../context/WindowContext';
 import { ResearchTool } from '../research/ResearchTool';
 import { WarRoom } from '../war-room/WarRoom';
-
-interface PlaybookDetailProps {
-  playbook: Playbook;
-  onClose: () => void;
-  onApply: (playbook: Playbook) => void;
-}
+import { PlaybookDetailProps } from './types';
 
 export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClose, onApply }) => {
   const { theme } = useTheme();

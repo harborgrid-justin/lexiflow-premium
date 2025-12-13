@@ -23,7 +23,7 @@ import { WorkflowTemplateData, WorkflowTask } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { WORKFLOW_TABS } from './WorkflowTabs';
-import { Case } from '../types';
+import { Case } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 import { STORES } from '../../services/db';

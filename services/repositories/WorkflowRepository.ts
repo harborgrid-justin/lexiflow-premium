@@ -4,6 +4,7 @@ import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhas
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 import { SystemEventType } from '../../types/integrationTypes';
+import { StorageUtils } from '../../utils/storage';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -55,13 +56,6 @@ export const WorkflowRepository = {
             ] 
         }; 
     },
-    
-import { StorageUtils } from '../../utils/storage';
-
-// ... existing imports
-
-export const WorkflowRepository = {
-    // ... existing methods
 
     getSettings: async () => { 
         await delay(50); 
@@ -112,7 +106,7 @@ export const WorkflowRepository = {
         const now = new Date();
         
         // Instantiate tasks from template stages
-        template.stages.forEach((stage, idx) => {
+        template.stages.forEach((stage: string, idx: number) => {
              const dueDate = new Date(now);
              dueDate.setDate(dueDate.getDate() + (idx + 1) * 2); // Stagger deadlines
 

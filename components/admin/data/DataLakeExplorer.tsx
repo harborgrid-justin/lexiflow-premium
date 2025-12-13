@@ -8,7 +8,7 @@ import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useWindow } from '../../../context/WindowContext';
-import { DocumentPreviewPanel } from '../../document/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '../../documents/viewer/DocumentPreviewPanel';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { DataLakeItem } from '../../../types';

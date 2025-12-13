@@ -7,7 +7,7 @@ const ResearchHistory = lazy(() => import('./ResearchHistory').then(m => ({ defa
 const SavedAuthorities = lazy(() => import('./SavedAuthorities').then(m => ({ default: m.SavedAuthorities })));
 const JurisdictionSettings = lazy(() => import('./JurisdictionSettings').then(m => ({ default: m.JurisdictionSettings })));
 const ShepardizingTool = lazy(() => import('./ShepardizingTool').then(m => ({ default: m.ShepardizingTool })));
-const ClauseLibrary = lazy(() => import('../ClauseLibrary'));
+const ClauseLibrary = lazy(() => import('../clauses/ClauseLibrary'));
 
 // Placeholders for tools until implemented
 const BluebookFormatter = () => <div className="p-8 text-center text-slate-500">Bluebook Auto-Formatter (Coming Soon)</div>;

@@ -1,26 +1,30 @@
 
+/**
+ * StrategyCanvas.tsx
+ * 
+ * Interactive canvas for designing litigation strategies using a node-based interface.
+ * Supports drag-and-drop, zooming, panning, and context menus.
+ * 
+ * @module components/litigation/StrategyCanvas
+ */
+
 import React, { useState, useRef, useCallback } from 'react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
+
+// Internal Components
 import { BuilderToolbar } from '../workflow/builder/BuilderToolbar';
 import { BuilderCanvas } from '../workflow/builder/BuilderCanvas';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
-import { WorkflowNode, NodeType, WorkflowConnection } from '../workflow/builder/types';
 import { ContextMenu, ContextMenuItem } from '../common/ContextMenu';
-import { Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
 
-// Define props interface for lifted state
-interface StrategyCanvasProps {
-  nodes: WorkflowNode[];
-  connections: WorkflowConnection[];
-  addNode: (type: NodeType, x: number, y: number, label?: string) => string;
-  updateNode: (id: string, updates: Partial<WorkflowNode>) => void;
-  deleteNode: (id: string) => void;
-  addConnection: (from: string, to: string, fromPort?: string) => void;
-  updateConnection: (id: string, updates: Partial<WorkflowConnection>) => void;
-  deleteConnection: (id: string) => void;
-}
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Types
+import { NodeType } from '../workflow/builder/types';
+import { StrategyCanvasProps } from './types';
+import { LITIGATION_DESCRIPTIONS } from './constants';
 
 export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
   nodes, connections, addNode, updateNode, deleteNode, 
@@ -39,6 +43,10 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLDivElement>(null);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; items: ContextMenuItem[] } | null>(null);
+
+  const getLitigationDesc = (type: string): string => {
+    return LITIGATION_DESCRIPTIONS[type] || 'Standard litigation event.';
+  };
 
   const onDrop = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -184,12 +192,3 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
     </div>
   );
 };
-
-function getLitigationDesc(type: string): string {
-    switch(type) {
-        case 'Rule 12(b)(6)': return 'Motion to Dismiss for failure to state a claim. Standard: Assuming all facts true, plaintiff cannot win.';
-        case 'Rule 56': return 'Summary Judgment. Standard: No genuine dispute of material fact.';
-        case 'Rule 50': return 'Directed Verdict / Judgment as a Matter of Law.';
-        default: return 'Standard litigation event.';
-    }
-}

@@ -1,16 +1,25 @@
 
+/**
+ * LitigationPalette.tsx
+ * 
+ * Sidebar palette containing draggable nodes for the strategy canvas.
+ * Grouped by litigation phases and event types.
+ * 
+ * @module components/litigation/LitigationPalette
+ */
+
 import React from 'react';
-import { 
-    X, GripVertical, Gavel, Scale, FileText, AlertTriangle, Flag, Mic2, Search, Users, 
-    MessageSquare, ScrollText, Milestone, ClipboardCheck, ArrowUpRightSquare 
-} from 'lucide-react';
+import { X, GripVertical } from 'lucide-react';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils
 import { cn } from '../../utils/cn';
 
-interface LitigationPaletteProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+// Types & Constants
+import { LitigationPaletteProps } from './types';
+import { PALETTE_SECTIONS } from './constants';
 
 export const LitigationPalette: React.FC<LitigationPaletteProps> = ({ isOpen, onClose }) => {
   const { theme } = useTheme();
@@ -20,71 +29,6 @@ export const LitigationPalette: React.FC<LitigationPaletteProps> = ({ isOpen, on
     e.dataTransfer.setData('application/litigation-node', litType); // Specific metadata
     e.dataTransfer.effectAllowed = 'move';
   };
-
-  const sections = [
-      {
-          title: 'Macro Phases (Boundaries)',
-          items: [
-              { label: 'Pleading Phase', type: 'Phase', icon: FileText, desc: 'Complaint to Answer' },
-              { label: 'Discovery Phase', type: 'Phase', icon: Search, desc: 'Fact & Expert Discovery' },
-              { label: 'Pre-Trial Phase', type: 'Phase', icon: Scale, desc: 'Dispositive Motions' },
-              { label: 'Trial Phase', type: 'Phase', icon: Gavel, desc: 'Voir Dire to Verdict' },
-          ]
-      },
-       {
-          title: 'Case Milestones & Events',
-          items: [
-              { label: 'Complaint Filed', type: 'Start', icon: Milestone, desc: 'Initiation of Lawsuit' },
-              { label: 'Answer Due', type: 'Event', icon: Milestone, desc: 'Deadline for Response' },
-              { label: 'Discovery Cutoff', type: 'Event', icon: Milestone, desc: 'End of Discovery Period' },
-              { label: 'Trial Date', type: 'Event', icon: Gavel, desc: 'Scheduled Trial Start' },
-          ]
-      },
-      {
-          title: 'Dispositive Motions',
-          items: [
-              { label: 'Rule 12(b)(6)', type: 'Decision', icon: Scale, desc: 'Motion to Dismiss' },
-              { label: 'Rule 56', type: 'Decision', icon: FileText, desc: 'Summary Judgment' },
-              { label: 'Rule 12(c)', type: 'Decision', icon: FileText, desc: 'Judgment on Pleadings' },
-              { label: 'Rule 11', type: 'Decision', icon: AlertTriangle, desc: 'Sanctions Motion' },
-          ]
-      },
-      {
-          title: 'Discovery & Procedural Tools',
-          items: [
-              { label: 'Rule 26(f) Conference', type: 'Task', icon: ClipboardCheck, desc: 'Initial Discovery Plan' },
-              { label: 'Deposition', type: 'Task', icon: Mic2, desc: 'Oral Testimony' },
-              { label: 'Interrogatories', type: 'Task', icon: FileText, desc: 'Written Questions' },
-              { label: 'Request for Admission', type: 'Task', icon: ClipboardCheck, desc: 'Fact Admissions' },
-              { label: 'Subpoena', type: 'Task', icon: ScrollText, desc: 'Third-Party Discovery' },
-          ]
-      },
-      {
-          title: 'ADR & Settlement',
-          items: [
-              { label: 'Mediation', type: 'Event', icon: MessageSquare, desc: 'Third-party resolution' },
-              { label: 'Settlement Conf', type: 'Event', icon: Users, desc: 'Judicial Conference' },
-              { label: 'Offer of Judgment', type: 'Decision', icon: FileText, desc: 'Rule 68 Offer' },
-          ]
-      },
-      {
-          title: 'Trial & Post-Trial',
-          items: [
-              { label: 'Motion in Limine', type: 'Decision', icon: Gavel, desc: 'Exclude Evidence' },
-              { label: 'Rule 50', type: 'Decision', icon: AlertTriangle, desc: 'Directed Verdict' },
-              { label: 'Rule 59', type: 'Decision', icon: Flag, desc: 'Motion for New Trial' },
-          ]
-      },
-      {
-          title: 'Appellate Procedure',
-          items: [
-              { label: 'Notice of Appeal', type: 'End', icon: ArrowUpRightSquare, desc: 'Initiate Appeal' },
-              { label: 'Appellant\'s Brief', type: 'Task', icon: FileText, desc: 'Opening Brief' },
-              { label: 'Appellee\'s Brief', type: 'Task', icon: FileText, desc: 'Response Brief' },
-              { label: 'Oral Argument', type: 'Event', icon: Mic2, desc: 'Appellate Hearing' },
-          ]
-      }
-  ];
 
   return (
     <div className={cn(
@@ -100,7 +44,7 @@ export const LitigationPalette: React.FC<LitigationPaletteProps> = ({ isOpen, on
 
       <div className="p-4 h-full flex flex-col overflow-y-auto custom-scrollbar">
         <div className="space-y-6">
-            {sections.map((section, idx) => (
+            {PALETTE_SECTIONS.map((section, idx) => (
                 <div key={idx}>
                     <h5 className={cn("text-[10px] font-bold uppercase tracking-wide mb-3 pl-1", theme.text.tertiary)}>{section.title}</h5>
                     <div className="space-y-2">

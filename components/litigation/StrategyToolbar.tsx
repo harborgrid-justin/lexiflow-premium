@@ -1,17 +1,19 @@
 
+/**
+ * StrategyToolbar.tsx
+ * 
+ * Toolbar for the Strategy Canvas, providing zoom, export, and sidebar toggle controls.
+ * 
+ * @module components/litigation/StrategyToolbar
+ */
+
 import React, { useState } from 'react';
-import { Menu, ZoomIn, ZoomOut, Download, GitMerge } from 'lucide-react';
+import { Menu, ZoomIn, ZoomOut, Download } from 'lucide-react';
+
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
-
-interface StrategyToolbarProps {
-  scale: number;
-  setScale: (scale: number | ((s: number) => number)) => void;
-  onToggleSidebar: () => void;
-  onZoomToFit: () => void;
-  onExport: (format: 'svg' | 'markdown') => void;
-}
+import { StrategyToolbarProps } from './types';
 
 export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({
   scale, setScale, onToggleSidebar, onZoomToFit, onExport

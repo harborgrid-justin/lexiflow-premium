@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Badge } from '../../common/Badge';
 import { WorkflowNode, WorkflowConnection, getNodeIcon, getNodeStyles, NodeType } from './types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { useNotify } from '../../../hooks/useNotify';
 
 interface BuilderCanvasProps {
   nodes: WorkflowNode[];
@@ -12,8 +13,8 @@ interface BuilderCanvasProps {
   onSelectConnection: (id: string) => void;
   scale: number;
   pan: { x: number; y: number };
-  setPan: (pan: { x: number; y: number }) => void;
-  canvasRef: React.RefObject<HTMLDivElement>;
+  setPan: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>;
+  canvasRef: React.RefObject<HTMLDivElement | null>;
   onMouseDownNode: (e: React.MouseEvent, id: string) => void;
   onBackgroundClick: () => void;
   onAddConnection: (from: string, to: string, fromPort?: string) => void;
@@ -24,9 +25,57 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
   scale, pan, setPan, canvasRef, onMouseDownNode, onBackgroundClick, onAddConnection
 }) => {
   const { theme, mode } = useTheme();
+  const notify = useNotify();
   const [isPanning, setIsPanning] = useState(false);
-  const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
   const [drawingConnection, setDrawingConnection] = useState<{ from: string; fromPort: string; x1: number; y1: number; x2: number; y2: number } | null>(null);
+  const [hoveredPort, setHoveredPort] = useState<{ nodeId: string; portId: string } | null>(null);
+
+  // Refs for event handlers to avoid dependency cycles
+  const panRef = useRef(pan);
+  const scaleRef = useRef(scale);
+  const drawingConnectionRef = useRef(drawingConnection);
+  const isPanningRef = useRef(isPanning);
+  const lastMousePosRef = useRef({ x: 0, y: 0 });
+
+  // Sync refs with state
+  useEffect(() => {
+    panRef.current = pan;
+    scaleRef.current = scale;
+    drawingConnectionRef.current = drawingConnection;
+    isPanningRef.current = isPanning;
+  }, [pan, scale, drawingConnection, isPanning]);
+
+  const validateConnection = useCallback((fromId: string, toId: string) => {
+    if (fromId === toId) return { valid: false, reason: "Cannot connect a node to itself." };
+    
+    const existing = connections.find(c => c.from === fromId && c.to === toId);
+    if (existing) return { valid: false, reason: "Connection already exists." };
+
+    const fromNode = nodes.find(n => n.id === fromId);
+    const toNode = nodes.find(n => n.id === toId);
+
+    if (fromNode?.type === 'End') return { valid: false, reason: "End node cannot have outgoing connections." };
+    if (toNode?.type === 'Start') return { valid: false, reason: "Start node cannot have incoming connections." };
+
+    // Cycle detection (simple DFS)
+    const hasCycle = (current: string, target: string, visited = new Set<string>()): boolean => {
+        if (current === target) return true;
+        if (visited.has(current)) return false;
+        visited.add(current);
+        
+        const outgoing = connections.filter(c => c.from === current);
+        return outgoing.some(c => hasCycle(c.to, target, new Set(visited)));
+    };
+
+    if (hasCycle(toId, fromId)) return { valid: false, reason: "Connection would create a cycle." };
+
+    return { valid: true };
+  }, [connections, nodes]);
+
+  const isConnectionValid = useMemo(() => {
+      if (!drawingConnection || !hoveredPort) return true;
+      return validateConnection(drawingConnection.from, hoveredPort.nodeId).valid;
+  }, [drawingConnection, hoveredPort, validateConnection]);
 
   const getNodeDimensions = (type: NodeType) => {
       let w = 160, h = 80;
@@ -67,58 +116,60 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
     return { path, midX, midY };
   }, [nodes]);
 
-  // FIX: Robust drag handling with global window event listeners
+  // Global event listeners for drag operations
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       // Panning logic
-      if (isPanning) {
-        setLastMousePos(prevPos => {
-          const dx = e.clientX - prevPos.x;
-          const dy = e.clientY - prevPos.y;
+      if (isPanningRef.current) {
+          const dx = e.clientX - lastMousePosRef.current.x;
+          const dy = e.clientY - lastMousePosRef.current.y;
           setPan(p => ({ x: p.x + dx, y: p.y + dy }));
-          return { x: e.clientX, y: e.clientY };
-        });
+          lastMousePosRef.current = { x: e.clientX, y: e.clientY };
       }
       
       // Connection drawing logic
-      if (drawingConnection && canvasRef.current) {
+      if (drawingConnectionRef.current && canvasRef.current) {
         const rect = canvasRef.current.getBoundingClientRect();
+        const currentPan = panRef.current;
+        const currentScale = scaleRef.current;
+
         setDrawingConnection(prev => {
           if (!prev) return null;
           return {
             ...prev,
-            x2: (e.clientX - rect.left - pan.x) / scale,
-            y2: (e.clientY - rect.top - pan.y) / scale,
+            x2: (e.clientX - rect.left - currentPan.x) / currentScale,
+            y2: (e.clientY - rect.top - currentPan.y) / currentScale,
           };
         });
       }
     };
 
     const handleMouseUp = (e: MouseEvent) => {
-      setIsPanning(false);
+      if (isPanningRef.current) {
+        setIsPanning(false);
+      }
+      
       // If a connection is being drawn when mouse is released globally, it means
       // it wasn't dropped on a valid port, so we cancel it.
-      if (drawingConnection) {
+      if (drawingConnectionRef.current) {
         setDrawingConnection(null);
+        setHoveredPort(null);
       }
     };
     
-    // Attach listeners only when a drag operation (panning or connecting) is active
-    if (isPanning || drawingConnection) {
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
-    }
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isPanning, drawingConnection, pan, scale, lastMousePos, setPan]);
+  }, [setPan, canvasRef]); // Stable dependencies
 
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
     if (e.button === 1 || e.shiftKey || e.metaKey) {
         setIsPanning(true);
-        setLastMousePos({ x: e.clientX, y: e.clientY });
+        lastMousePosRef.current = { x: e.clientX, y: e.clientY };
         e.preventDefault();
     } else {
         onBackgroundClick();
@@ -149,12 +200,27 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
   const handlePortMouseUp = (e: React.MouseEvent, toNodeId: string) => {
       if (drawingConnection) {
           e.stopPropagation();
-          if (drawingConnection.from !== toNodeId) {
+          const validation = validateConnection(drawingConnection.from, toNodeId);
+          
+          if (validation.valid) {
             onAddConnection(drawingConnection.from, toNodeId, drawingConnection.fromPort);
+          } else {
+            notify.error(validation.reason || "Invalid connection");
           }
           setDrawingConnection(null);
+          setHoveredPort(null);
       }
   };
+
+  const handlePortMouseEnter = (nodeId: string, portId: string) => {
+      if (drawingConnection && drawingConnection.from !== nodeId) {
+          setHoveredPort({ nodeId, portId });
+      }
+  }
+
+  const handlePortMouseLeave = () => {
+      setHoveredPort(null);
+  }
 
   const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
   const bgColor = mode === 'dark' ? '#0f172a' : '#f8fafc';
@@ -212,7 +278,11 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
               const dist = Math.abs(x2 - x1);
               const curvature = Math.max(dist * 0.5, 50);
               const path = `M ${x1} ${y1} C ${x1 + curvature} ${y1}, ${x2 - curvature} ${y2}, ${x2} ${y2}`;
-              return <path d={path} stroke="#2563eb" strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd="url(#arrow-selected)" />;
+              
+              const strokeColor = isConnectionValid ? "#2563eb" : "#ef4444";
+              const markerEnd = isConnectionValid ? "url(#arrow-selected)" : "url(#arrow-denied)";
+
+              return <path d={path} stroke={strokeColor} strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd={markerEnd} />;
           })()}
         </svg>
 
@@ -274,8 +344,18 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                 
                 {/* Ports */}
                 {node.type !== 'Start' && node.type !== 'Phase' && (
-                    <div className={cn("absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 border-2 rounded-full transition-all bg-white dark:bg-slate-800 shadow-sm group-hover:scale-110 hover:!border-blue-500 dark:border-slate-600 dark:hover:!border-blue-400 flex items-center justify-center z-10")} data-port-id="input" onMouseUp={(e) => handlePortMouseUp(e, node.id)}>
-                        <div className="w-2 h-2 rounded-full bg-transparent group-hover:bg-blue-500 transition-colors"/>
+                    <div 
+                        className={cn("absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 border-2 rounded-full transition-all bg-white dark:bg-slate-800 shadow-sm group-hover:scale-110 hover:!border-blue-500 dark:border-slate-600 dark:hover:!border-blue-400 flex items-center justify-center z-10", 
+                            hoveredPort?.nodeId === node.id && hoveredPort?.portId === 'input' && (isConnectionValid ? "!border-green-500 !scale-125" : "!border-red-500 !scale-125")
+                        )} 
+                        data-port-id="input" 
+                        onMouseUp={(e) => handlePortMouseUp(e, node.id)}
+                        onMouseEnter={() => handlePortMouseEnter(node.id, 'input')}
+                        onMouseLeave={handlePortMouseLeave}
+                    >
+                        <div className={cn("w-2 h-2 rounded-full bg-transparent group-hover:bg-blue-500 transition-colors",
+                             hoveredPort?.nodeId === node.id && hoveredPort?.portId === 'input' && (isConnectionValid ? "bg-green-500" : "bg-red-500")
+                        )}/>
                     </div>
                 )}
                 

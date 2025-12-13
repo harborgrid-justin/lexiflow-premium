@@ -4,7 +4,7 @@ import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 import { cn } from '../../utils/cn';
 import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../config/knowledgeBaseConfig';
-import { KnowledgeContent } from './knowledge/KnowledgeContent';
+import { KnowledgeContent } from './KnowledgeContent';
 import { Button } from '../common/Button';
 import { Plus } from 'lucide-react';
 

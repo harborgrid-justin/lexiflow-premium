@@ -1,13 +1,28 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
+/**
+ * OutcomeSimulator.tsx
+ * 
+ * Monte Carlo simulation tool for forecasting litigation outcomes.
+ * Calculates Expected Value (EV) and settlement ranges based on liability probability and damage estimates.
+ * 
+ * @module components/litigation/OutcomeSimulator
+ */
+
+import React, { useState, useMemo } from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
+
+// Internal Components
 import { Card } from '../common/Card';
 import { Input } from '../common/Inputs';
 import { Button } from '../common/Button';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { Calculator, RefreshCw, TrendingUp, DollarSign, Gavel, Users, Scale, AlertTriangle, Search } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useChartTheme } from '../common/ChartHelpers';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils
+import { cn } from '../../utils/cn';
 import { SimulationEngine } from '../../utils/simulationEngine';
 import { Scheduler } from '../../utils/scheduler';
 

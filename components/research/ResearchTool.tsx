@@ -15,7 +15,10 @@ import { cn } from '../../utils/cn';
 import { RESEARCH_TAB_CONFIG } from '../../config/researchToolConfig';
 import { ResearchToolContent } from './ResearchToolContent';
 
-const ClauseHistoryModal = lazy(() => import('../clauses/ClauseHistoryModal'));
+const ClauseHistoryModal = lazy(async () => {
+  const module = await import('../clauses/ClauseHistoryModal');
+  return { default: module.ClauseHistoryModal };
+});
 
 export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();

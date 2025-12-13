@@ -1,10 +1,28 @@
+/**
+ * MatterInfo.tsx
+ * 
+ * Case matter details card with jurisdiction, venue, judge, billing model,
+ * and filing date information.
+ * 
+ * @module components/case-detail/overview/MatterInfo
+ * @category Case Management - Overview
+ */
 
+// External Dependencies
 import React from 'react';
-import { Card } from '../../common/Card';
 import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar, DollarSign } from 'lucide-react';
-import { Case } from '../../../types';
+
+// Internal Dependencies - Components
+import { Card } from '../../common/Card';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Case } from '../../../types';
 
 interface MatterInfoProps {
   caseData: Case;
@@ -58,13 +76,13 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
                 </div>
             ))}
             
-            <div className={cn("col-span-1 sm:col-span-2 p-3 rounded border", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("col-span-1 sm:col-span-2 p-3 rounded border", theme.surface.highlight, theme.border.default)}>
                 <dt className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>Case Abstract</dt>
                 <dd className={cn("text-sm leading-relaxed max-h-32 overflow-y-auto custom-scrollbar", theme.text.secondary)}>{caseData.description}</dd>
             </div>
             
             {(caseData.origJudgmentDate || caseData.noticeOfAppealDate || caseData.solDate) && (
-                <div className={cn("col-span-1 sm:col-span-2 flex flex-wrap gap-4 p-2 rounded text-xs border", theme.surfaceHighlight, theme.border.subtle, theme.text.secondary)}>
+                <div className={cn("col-span-1 sm:col-span-2 flex flex-wrap gap-4 p-2 rounded text-xs border", theme.surface.highlight, theme.border.subtle, theme.text.secondary)}>
                    {caseData.origJudgmentDate && (
                        <span className="flex items-center"><Gavel className="h-3 w-3 mr-1 opacity-50"/> <strong>Orig. Judgment:</strong>&nbsp;{caseData.origJudgmentDate}</span>
                    )}

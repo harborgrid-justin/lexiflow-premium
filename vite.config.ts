@@ -28,6 +28,14 @@ export default defineConfig(({ mode }) => {
           '@services': path.resolve(__dirname, 'services'),
           '@constants': path.resolve(__dirname, 'constants'),
         }
+      },
+      build: {
+        target: 'esnext'
+      },
+      optimizeDeps: {
+        esbuildOptions: {
+          target: 'esnext'
+        }
       }
     };
 });

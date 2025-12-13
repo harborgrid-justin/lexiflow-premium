@@ -1,22 +1,22 @@
 import React, { useState, useMemo, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Target, Monitor, Layers, FileText, Gavel, Users, Mic2, Shield, CheckCircle, Briefcase, Swords, ChevronDown } from 'lucide-react';
-import { Button } from './common/Button';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { DataService } from '../services/dataService';
-import { Case } from '../types';
-import { LazyLoader } from './common/LazyLoader';
-import { useQuery } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { Button } from '../common/Button';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { Case } from '../../types';
+import { LazyLoader } from '../common/LazyLoader';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 // Sub-components
-const CommandCenter = lazy(() => import('./war-room/CommandCenter').then(m => ({ default: m.CommandCenter })));
-const EvidenceWall = lazy(() => import('./war-room/EvidenceWall').then(m => ({ default: m.EvidenceWall })));
-const WitnessPrep = lazy(() => import('./war-room/WitnessPrep').then(m => ({ default: m.WitnessPrep })));
-const TrialBinder = lazy(() => import('./war-room/TrialBinder').then(m => ({ default: m.TrialBinder })));
-const AdvisoryBoard = lazy(() => import('./war-room/AdvisoryBoard').then(m => ({ default: m.AdvisoryBoard })));
-const OppositionManager = lazy(() => import('./war-room/OppositionManager').then(m => ({ default: m.OppositionManager })));
-const WarRoomSidebar = lazy(() => import('./war-room/WarRoomSidebar').then(m => ({ default: m.WarRoomSidebar })));
+const CommandCenter = lazy(() => import('./CommandCenter').then(m => ({ default: m.CommandCenter })));
+const EvidenceWall = lazy(() => import('./EvidenceWall').then(m => ({ default: m.EvidenceWall })));
+const WitnessPrep = lazy(() => import('./WitnessPrep').then(m => ({ default: m.WitnessPrep })));
+const TrialBinder = lazy(() => import('./TrialBinder').then(m => ({ default: m.TrialBinder })));
+const AdvisoryBoard = lazy(() => import('./AdvisoryBoard').then(m => ({ default: m.AdvisoryBoard })));
+const OppositionManager = lazy(() => import('./OppositionManager').then(m => ({ default: m.OppositionManager })));
+const WarRoomSidebar = lazy(() => import('./WarRoomSidebar').then(m => ({ default: m.WarRoomSidebar })));
 
 type WarRoomView = 'command' | 'evidence' | 'witnesses' | 'binder' | 'advisory' | 'opposition';
 

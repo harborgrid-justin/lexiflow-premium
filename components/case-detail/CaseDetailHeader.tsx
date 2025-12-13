@@ -1,15 +1,33 @@
+/**
+ * CaseDetailHeader.tsx
+ * 
+ * Sticky header bar for case detail views showing key case metadata, status badges,
+ * and quick action buttons with live counts for tasks and messages.
+ * 
+ * @module components/case-detail/CaseDetailHeader
+ * @category Case Management - Detail Views
+ */
 
+// External Dependencies
 import React from 'react';
 import { ArrowLeft, MapPin, ArrowUpRight, Calendar, Users, CheckSquare, MessageCircle } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Case } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useWindow } from '../../context/WindowContext';
 import { ClientPortalModal } from '../crm/ClientPortalModal';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
 import { useQuery } from '../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
 import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Case } from '../../types';
 
 interface CaseDetailHeaderProps {
   id: string;

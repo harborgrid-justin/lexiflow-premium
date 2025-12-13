@@ -1,9 +1,25 @@
+/**
+ * ParsedDocketPreview.tsx
+ * 
+ * Preview component for parsed docket data showing case metadata and entry list
+ * before final import.
+ * 
+ * @module components/docket/ParsedDocketPreview
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
 import { Briefcase, Users, Calendar, FileText, CheckCircle, ExternalLink, Hash } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 
 interface ParsedDocketPreviewProps {
@@ -27,13 +43,13 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
 
   return (
     <div className="space-y-6">
-        <Card noPadding className="bg-blue-50 border-blue-100 border">
+        <Card noPadding className={cn("border", theme.surface.highlight, theme.border.default)}>
             <div className="p-4 flex items-start gap-4">
-                <div className="bg-blue-100 p-2 rounded-full"><Briefcase className="h-6 w-6 text-blue-600"/></div>
+                <div className={cn("p-2 rounded-full", theme.surface.highlight)}><Briefcase className={cn("h-6 w-6", theme.text.link)}/></div>
                 <div>
-                    <h4 className="font-bold text-lg text-blue-900">{parsedData.caseInfo?.title || 'Unknown Case'}</h4>
-                    <div className="flex flex-wrap gap-4 text-xs text-blue-700 mt-1">
-                        <span className="font-mono bg-blue-100 px-1 rounded">{parsedData.caseInfo?.id || parsedData.caseInfo?.caseNumber || 'No ID'}</span>
+                    <h4 className={cn("font-bold text-lg", theme.text.link)}>{parsedData.caseInfo?.title || 'Unknown Case'}</h4>
+                    <div className={cn("flex flex-wrap gap-4 text-xs mt-1", theme.text.link)}>
+                        <span className={cn("font-mono px-1 rounded", theme.surface.highlight)}>{parsedData.caseInfo?.id || parsedData.caseInfo?.caseNumber || 'No ID'}</span>
                         <span>{parsedData.caseInfo?.court || 'Court N/A'}</span>
                         {parsedData.caseInfo?.judge && <span>Judge: {parsedData.caseInfo?.judge}</span>}
                         <span className="bg-white border px-1 rounded">{parsedData.caseInfo?.matterType || 'General'}</span>
@@ -96,11 +112,11 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                             <span className={cn("text-xs font-medium", theme.text.primary)}>{e.date}</span>
                             <span className={`text-[10px] px-1 rounded border ${e.type === 'Order' ? 'bg-red-50 text-red-600 border-red-100' : `${theme.surface.highlight} ${theme.text.secondary}`}`}>{e.type}</span>
                         </div>
-                        {e.docLink && <ExternalLink className="h-3 w-3 text-blue-400 opacity-50 group-hover:opacity-100"/>}
+                        {e.docLink && <ExternalLink className={cn("h-3 w-3 opacity-50 group-hover:opacity-100", theme.text.link)}/>}
                     </div>
                     <div className="flex gap-2">
                         {e.structuredData && (
-                             <span className="text-[9px] bg-blue-50 text-blue-700 border border-blue-100 px-1 rounded font-mono uppercase">
+                             <span className={cn("text-[9px] px-1 rounded font-mono uppercase border", theme.surface.highlight, theme.text.link, theme.border.default)}>
                                  {e.structuredData.actionType} {e.structuredData.actionVerb}
                              </span>
                         )}

@@ -1,16 +1,33 @@
+/**
+ * CaseMessages.tsx
+ * 
+ * Case-specific messaging interface with privilege indicators, attachments,
+ * and session-persisted draft messages.
+ * 
+ * @module components/case-detail/CaseMessages
+ * @category Case Management - Communications
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { Case, Conversation, Message, User } from '../../types';
-import { Send, Paperclip, Lock, Shield, FileText } from 'lucide-react';
+import { Send, Paperclip, Lock, Shield, FileText, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
 import { UserAvatar } from '../common/UserAvatar';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Internal Dependencies - Services & Utils
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
-import { Loader2 } from 'lucide-react';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Case, Conversation, Message, User } from '../../types';
 
 interface CaseMessagesProps {
   caseData: Case;
@@ -46,7 +63,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   };
 
   if (isLoading) {
-      return <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-blue-600"/></div>
+      return <div className="flex items-center justify-center h-full"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>
   }
 
   if (!conversation) {
@@ -59,7 +76,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
       <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surface.highlight)}>
         <div>
           <h3 className={cn("font-bold flex items-center gap-2", theme.text.primary)}>
-            <Lock className="h-4 w-4 text-blue-600"/> Case Communication Thread
+            <Lock className={cn("h-4 w-4", theme.text.link)}/> Case Communication Thread
           </h3>
           <p className={cn("text-xs", theme.text.secondary)}>Participants: Firm Staff, Client ({caseData.client})</p>
         </div>

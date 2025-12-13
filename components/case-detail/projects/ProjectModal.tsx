@@ -1,11 +1,28 @@
+/**
+ * ProjectModal.tsx
+ * 
+ * Project creation/editing modal with name, description, lead, and deadline fields.
+ * 
+ * @module components/case-detail/projects/ProjectModal
+ * @category Case Management - Projects
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
+
+// Internal Dependencies - Components
 import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { Button } from '../../common/Button';
-import { Project } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Project } from '../../../types';
 
 interface ProjectModalProps {
   isOpen: boolean;

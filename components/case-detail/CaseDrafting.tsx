@@ -1,15 +1,33 @@
+/**
+ * CaseDrafting.tsx
+ * 
+ * AI-assisted document drafting interface with clause library integration,
+ * history tracking, and Gemini-powered generation.
+ * 
+ * @module components/case-detail/CaseDrafting
+ * @category Case Management - Document Drafting
+ */
 
+// External Dependencies
 import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
-import { GeminiService } from '../../services/geminiService';
-import { Clause } from '../../types';
+
+// Internal Dependencies - Components
 import { AdvancedEditor } from '../AdvancedEditor';
-import { DataService } from '../../services/dataService';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { ClauseList as ClausePanel } from '../clauses/ClauseList';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useQuery } from '../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { GeminiService } from '../../services/geminiService';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Clause } from '../../types';
 
 const ClauseHistoryModal = lazy(() => import('../ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
@@ -72,8 +90,8 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full relative">
       <div className="lg:col-span-2 flex flex-col h-full space-y-4">
         <div className={cn("p-2 rounded-lg border shadow-sm flex gap-2 items-center", theme.surface.default, theme.border.default)}>
-             <button onClick={handleAiAssist} className="bg-purple-100 p-2 rounded-md hover:bg-purple-200 transition-colors" title="AI Assist">
-                <Wand2 className="h-5 w-5 text-purple-600"/>
+             <button onClick={handleAiAssist} className={cn("p-2 rounded-md transition-colors", theme.surface.highlight, theme.action.primary.text, `hover:${theme.surface.active}`)} title="AI Assist">
+                <Wand2 className={cn("h-5 w-5", theme.action.primary.text)}/>
              </button>
              <input
                 value={draftPrompt}
@@ -106,13 +124,13 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
         <div className={cn("flex border-b", theme.border.subtle)}>
           <button
             onClick={() => setActiveMode('edit')}
-            className={`flex-1 py-3 text-sm font-medium ${activeMode !== 'review' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/20' : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)}`}
+            className={cn("flex-1 py-3 text-sm font-medium", activeMode !== 'review' ? cn(theme.text.link, "border-b-2", theme.action.primary.border, theme.surface.highlight) : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
           >
             Clause Library
           </button>
           <button
             onClick={() => setActiveMode('review')}
-            className={`flex-1 py-3 text-sm font-medium ${activeMode === 'review' ? 'text-amber-600 border-b-2 border-amber-600 bg-amber-50/20' : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)}`}
+            className={cn("flex-1 py-3 text-sm font-medium", activeMode === 'review' ? cn(theme.status.warning.text, "border-b-2", theme.status.warning.border, theme.surface.highlight) : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
           >
             Risk Analysis
           </button>

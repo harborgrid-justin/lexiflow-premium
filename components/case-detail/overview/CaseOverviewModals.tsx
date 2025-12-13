@@ -1,12 +1,30 @@
+/**
+ * CaseOverviewModals.tsx
+ * 
+ * Modal collection for overview quick actions including time entry,
+ * case linking, and matter transfer workflows.
+ * 
+ * @module components/case-detail/overview/CaseOverviewModals
+ * @category Case Management - Overview
+ */
 
+// External Dependencies
 import React from 'react';
+import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TimeEntryModal } from '../../common/TimeEntryModal';
 import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
-import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
-import { Case } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Case } from '../../../types';
 
 interface CaseOverviewModalsProps {
   caseData: Case;

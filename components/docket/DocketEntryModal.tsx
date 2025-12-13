@@ -1,13 +1,31 @@
+/**
+ * DocketEntryModal.tsx
+ * 
+ * Modal dialog for viewing detailed docket entry information with actions
+ * for printing, downloading, and linking to timeline.
+ * 
+ * @module components/docket/DocketEntryModal
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React from 'react';
+import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag, Copy } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag, Copy } from 'lucide-react';
-import { DocketEntry } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { CopyButton } from '../common/CopyButton';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { DocketEntry } from '../../types';
 
 interface DocketEntryModalProps {
   entry: DocketEntry | null;

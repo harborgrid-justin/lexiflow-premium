@@ -1,10 +1,26 @@
+/**
+ * CaseDocumentItem.tsx
+ * 
+ * Individual document card component with AI analysis trigger,
+ * task creation, and tag display.
+ * 
+ * @module components/case-detail/documents/CaseDocumentItem
+ * @category Case Management - Documents
+ */
 
+// External Dependencies
 import React from 'react';
-import { LegalDocument } from '../../../types';
 import { FileText, Wand2, CheckSquare, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../../common/Button';
-import { cn } from '../../../utils/cn';
 import { TagList } from '../../common/Primitives';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { LegalDocument } from '../../../types';
 
 interface CaseDocumentItemProps {
   doc: LegalDocument;

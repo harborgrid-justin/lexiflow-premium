@@ -1,11 +1,11 @@
 import React, { Suspense, useTransition } from 'react';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
-import { cn } from '../utils/cn';
-import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../config/knowledgeBaseConfig';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { cn } from '../../utils/cn';
+import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../config/knowledgeBaseConfig';
 import { KnowledgeContent } from './knowledge/KnowledgeContent';
-import { Button } from './common/Button';
+import { Button } from '../common/Button';
 import { Plus } from 'lucide-react';
 
 interface KnowledgeBaseProps {

@@ -4,7 +4,7 @@ import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/dataService';
 import { DocumentService } from '../../../services/documentService';
 import { PDFViewer } from '../../common/PDFViewer';
-import { PIIPanel } from '../../document/preview/PIIPanel';
+import { PIIPanel } from '../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';

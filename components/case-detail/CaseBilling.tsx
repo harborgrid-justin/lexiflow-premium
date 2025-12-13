@@ -1,14 +1,31 @@
+/**
+ * CaseBilling.tsx
+ * 
+ * Case-specific billing summary with time entries, billed/unbilled totals,
+ * and export functionality for invoicing.
+ * 
+ * @module components/case-detail/CaseBilling
+ * @category Case Management - Billing & Time Tracking
+ */
 
-
+// External Dependencies
 import React from 'react';
-import { TimeEntry, BillingModel } from '../../types';
 import { Download, Clock, DollarSign, TrendingUp, AlertCircle } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { TimeEntry, BillingModel } from '../../types';
 
 interface CaseBillingProps {
     billingModel: BillingModel;
@@ -39,7 +56,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         <p className="text-2xl font-mono font-bold mt-1">${unbilledTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                     </div>
                     <div className="w-full bg-slate-700 h-1 mt-4 rounded-full overflow-hidden">
-                        <div className="bg-blue-500 h-full" style={{width: '65%'}}></div>
+                        <div className={cn("h-full", theme.action.primary.bg)} style={{width: '65%'}}></div>
                     </div>
                 </div>
                 <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>
@@ -53,7 +70,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                     <p className={cn("text-xs uppercase font-bold tracking-wider", theme.text.secondary)}>Hours Logged</p>
                     <div className="flex items-end justify-between">
                         <p className={cn("text-2xl font-bold", theme.text.primary)}>{totalHours.toFixed(1)} <span className={cn("text-sm font-normal", theme.text.tertiary)}>hrs</span></p>
-                        <Clock className="h-5 w-5 text-blue-600 mb-1"/>
+                        <Clock className={cn("h-5 w-5 mb-1", theme.text.link)}/>
                     </div>
                 </div>
                 <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>

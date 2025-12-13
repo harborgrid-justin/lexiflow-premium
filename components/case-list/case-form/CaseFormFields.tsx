@@ -1,8 +1,34 @@
+/**
+ * CaseFormFields.tsx
+ * 
+ * Form fields for case creation including title, client, matter type,
+ * value, and description. Adapts placeholders based on pre-filing vs filed status.
+ * 
+ * @module components/case-list/case-form/CaseFormFields
+ * @category Case Management - Forms
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Input, TextArea } from '../../common/Inputs';
-import { Case, MatterType } from '../../../types';
+
+// Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Utils
 import { cn } from '../../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case, MatterType } from '../../../types';
 
 interface CaseFormFieldsProps {
   formData: Partial<Case>;
@@ -56,16 +82,15 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
       {!isPreFiling && (
         <div className="grid grid-cols-2 gap-6 pt-4 border-t border-slate-100">
             <Input 
-              label="Case Number" 
+              label="Original Case Number" 
               placeholder="e.g. 1:24-cv-00123"
-              value={formData.id} 
-              onChange={e => setFormData({...formData, id: e.target.value})}
-              required
+              value={formData.origCaseNumber || ''} 
+              onChange={e => setFormData({...formData, origCaseNumber: e.target.value})}
             />
             <Input 
               label="Assigned Judge" 
               placeholder="Presiding Judge"
-              value={formData.judge} 
+              value={formData.judge || ''} 
               onChange={e => setFormData({...formData, judge: e.target.value})}
             />
         </div>

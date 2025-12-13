@@ -1,7 +1,21 @@
+/**
+ * WorkflowAutomations.tsx
+ * 
+ * Workflow automation visualization showing trigger-action rules
+ * for document processing, deadline monitoring, and notifications.
+ * 
+ * @module components/case-detail/workflow/WorkflowAutomations
+ * @category Case Management - Workflow
+ */
 
+// External Dependencies
 import React from 'react';
 import { Zap, Clock, Plus } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
 
 export const WorkflowAutomations: React.FC = () => {
@@ -11,10 +25,10 @@ export const WorkflowAutomations: React.FC = () => {
     <div className="grid grid-cols-1 gap-6">
         {/* Automation Visualization Cards */}
         <div className={cn("p-6 rounded-xl border shadow-sm relative overflow-hidden group", theme.surface.default, theme.border.default)}>
-            <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+            <div className={cn("absolute top-0 left-0 w-1 h-full", theme.status.warning.bg)}></div>
             <div className="flex justify-between items-start">
                 <div className="flex items-start gap-4">
-                    <div className="bg-amber-100 p-3 rounded-full text-amber-600"><Zap className="h-6 w-6"/></div>
+                    <div className={cn("p-3 rounded-full", theme.surface.highlight, theme.status.warning.text)}><Zap className="h-6 w-6"/></div>
                     <div>
                         <h4 className={cn("font-bold", theme.text.primary)}>Document Upload Trigger</h4>
                         <p className={cn("text-sm mt-1", theme.text.secondary)}>IF new document contains "Motion" THEN create task "Review Motion".</p>
@@ -29,10 +43,10 @@ export const WorkflowAutomations: React.FC = () => {
         </div>
 
         <div className={cn("p-6 rounded-xl border shadow-sm relative overflow-hidden group", theme.surface.default, theme.border.default)}>
-            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+            <div className={cn("absolute top-0 left-0 w-1 h-full", theme.action.primary.bg)}></div>
             <div className="flex justify-between items-start">
                 <div className="flex items-start gap-4">
-                    <div className="bg-blue-100 p-3 rounded-full text-blue-600"><Clock className="h-6 w-6"/></div>
+                    <div className={cn("p-3 rounded-full", theme.surface.highlight, theme.text.link)}><Clock className="h-6 w-6"/></div>
                     <div>
                         <h4 className={cn("font-bold", theme.text.primary)}>SLA Breach Warning</h4>
                         <p className={cn("text-sm mt-1", theme.text.secondary)}>IF "High Priority" task is overdue {'>'} 24h THEN notify Senior Partner.</p>
@@ -45,7 +59,7 @@ export const WorkflowAutomations: React.FC = () => {
             </div>
         </div>
 
-        <div className={cn("border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer", theme.border.default, theme.text.tertiary, "hover:border-blue-400 hover:text-blue-500 hover:bg-white")}>
+        <div className={cn("border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer", theme.border.default, theme.text.tertiary, `hover:border-[${theme.action.primary.border}]`, `hover:${theme.text.link}`, `hover:${theme.surface.default}`)}>
             <Plus className="h-8 w-8 mb-2"/>
             <span className="font-bold">Create New Automation</span>
         </div>

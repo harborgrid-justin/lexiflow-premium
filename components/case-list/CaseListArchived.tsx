@@ -1,13 +1,39 @@
+/**
+ * CaseListArchived.tsx
+ * 
+ * View for archived/closed cases with restore functionality.
+ * Displays historical case data in table format.
+ * 
+ * @module components/case-list/CaseListArchived
+ * @category Case Management - Archive Views
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+import { Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { Case } from '../../types';
 import { useQuery } from '../../services/queryClient';
-import { Loader2 } from 'lucide-react';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case } from '../../types';
 
 interface CaseListArchivedProps {
   onSelectCase?: (c: Case) => void;

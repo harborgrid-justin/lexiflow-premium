@@ -1,10 +1,28 @@
+/**
+ * PlanningSidebar.tsx
+ * 
+ * Collapsible phase/task hierarchy sidebar for Gantt planning view
+ * with task counts and status badges.
+ * 
+ * @module components/case-detail/planning/PlanningSidebar
+ * @category Case Management - Planning
+ */
 
+// External Dependencies
 import React from 'react';
 import { ChevronRight, ChevronDown, GripVertical, AlertCircle, Plus } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Badge } from '../../common/Badge';
-import { CasePhase, WorkflowTask } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { CasePhase, WorkflowTask } from '../../../types';
 
 interface PlanningSidebarProps {
   phases: CasePhase[];
@@ -53,7 +71,7 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
                                 key={task.id} 
                                 className={cn(
                                     "flex items-center gap-3 pl-8 pr-3 py-2 text-sm cursor-pointer border-l-2 border-transparent group transition-colors", 
-                                    activeTaskId === task.id ? cn(theme.primary.light, "border-blue-500") : `hover:${theme.surface.default} hover:border-blue-300`
+                                    activeTaskId === task.id ? cn(theme.primary.light, theme.action.primary.border) : `hover:${theme.surface.default}`, `hover:border-[${theme.action.primary.border}]`
                                 )}
                                 onMouseEnter={() => onHoverTask(task.id)}
                                 >

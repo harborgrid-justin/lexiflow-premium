@@ -1,11 +1,30 @@
+/**
+ * StrategySection.tsx
+ * 
+ * Reusable strategy section component displaying arguments, defenses, or citations
+ * with supporting evidence and authority links.
+ * 
+ * @module components/case-detail/strategy/StrategySection
+ * @category Case Management - Legal Strategy
+ */
+
+// External Dependencies
 import React from 'react';
+import { ExternalLink, BookOpen, CheckCircle, Box, Scale, AlertTriangle, X } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { RiskMeter } from '../../common/RiskMeter';
 import { Button } from '../../common/Button';
-import { ExternalLink, BookOpen, CheckCircle, Box, Scale, AlertTriangle, X } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
 import { LegalArgument, Defense, Citation, EvidenceItem } from '../../../types';
 
 interface StrategySectionProps {
@@ -24,7 +43,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className={`h-5 w-5 ${colorClass}`}/>
+        <Icon className={cn("h-5 w-5", colorClass)}/>
         <h4 className={cn("font-bold uppercase text-sm tracking-wide", theme.text.primary)}>{title}</h4>
         <span className={cn("text-xs px-2 py-0.5 rounded-full", theme.surface.highlight, theme.text.secondary)}>{items.length}</span>
       </div>
@@ -36,7 +55,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                     <div className="flex justify-between items-start mb-1">
                         <div className="flex items-center">
                             {cit.shepardsSignal === 'Positive' && <CheckCircle className="h-3 w-3 text-green-500 mr-1.5"/>}
-                            {cit.shepardsSignal === 'Caution' && <AlertTriangle className="h-3 w-3 text-amber-500 mr-1.5"/>}
+                            {cit.shepardsSignal === 'Caution' && <AlertTriangle className={cn("h-3 w-3 mr-1.5", theme.status.warning.text)}/>}
                             {cit.shepardsSignal === 'Negative' && <X className="h-3 w-3 text-red-500 mr-1.5"/>}
                             <span className="font-bold text-sm text-blue-700 hover:underline cursor-pointer">{cit.citation}</span>
                         </div>
@@ -94,7 +113,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                 {type === 'Defense' && (
                     <div className={cn("flex justify-between items-center pt-2 border-t", theme.border.default)}>
                         <span className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>{(typedItem as Defense).type}</span>
-                        <button className={cn("hover:text-blue-600", theme.text.tertiary)}><ExternalLink className="h-3 w-3"/></button>
+                        <button className={cn("transition-colors", theme.text.tertiary, `hover:${theme.text.link}`)}><ExternalLink className="h-3 w-3"/></button>
                     </div>
                 )}
               </div>

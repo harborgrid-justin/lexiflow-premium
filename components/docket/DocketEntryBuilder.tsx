@@ -1,15 +1,33 @@
+/**
+ * DocketEntryBuilder.tsx
+ * 
+ * Form builder for creating and editing docket entries with task generation
+ * and rule association capabilities.
+ * 
+ * @module components/docket/DocketEntryBuilder
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React, { useState, useEffect } from 'react';
-import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId } from '../../types';
+import { FileText, Save, CheckSquare } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Input, TextArea } from '../common/Inputs';
 import { Button } from '../common/Button';
 import { RuleSelector } from '../common/RuleSelector';
 import { UserSelect } from '../common/UserSelect';
-import { FileText, Save, CheckSquare } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { useNotify } from '../../hooks/useNotify';
+
+// Types & Interfaces
+import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId } from '../../types';
 
 interface DocketEntryBuilderProps {
   initialData?: Partial<DocketEntry>;
@@ -122,7 +140,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
               </div>
           </div>
           <div className="mt-3 flex items-center">
-             <input type="checkbox" id="sealed" className="rounded text-blue-600 mr-2" checked={isSealed} onChange={e => setIsSealed(e.target.checked)}/>
+             <input type="checkbox" id="sealed" className={cn("rounded mr-2", theme.action.primary.text)} checked={isSealed} onChange={e => setIsSealed(e.target.checked)}/>
              <label htmlFor="sealed" className={cn("text-sm font-medium", theme.text.secondary)}>Seal this entry</label>
           </div>
       </div>
@@ -206,7 +224,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
       </div>
 
       {/* 3. Preview */}
-      <div className={cn("p-4 rounded-lg border-l-4 border-l-purple-500", theme.border.default, theme.surface.highlight)}>
+      <div className={cn("p-4 rounded-lg border-l-4", theme.action.primary.border, theme.border.default, theme.surface.highlight)}>
           <h5 className={cn("text-xs font-bold mb-1 uppercase", theme.text.tertiary)}>Generated Docket Text</h5>
           <p className={cn("text-sm font-medium font-serif leading-relaxed", theme.text.primary)}>
               "{previewText}"
@@ -217,7 +235,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
           <label className={cn("flex items-center text-sm cursor-pointer font-medium", theme.primary.text)}>
               <input 
                   type="checkbox" 
-                  className="mr-2 rounded text-blue-600"
+                  className={cn("mr-2 rounded", theme.action.primary.text)}
                   checked={createReviewTask}
                   onChange={(e) => setCreateReviewTask(e.target.checked)}
               />

@@ -1,9 +1,23 @@
+/**
+ * CaseOverviewStats.tsx
+ * 
+ * Key performance metrics dashboard with revenue, time, and task completion stats.
+ * Clickable cards open detailed views in holographic windows.
+ * 
+ * @module components/case-detail/overview/CaseOverviewStats
+ * @category Case Management - Overview
+ */
 
+// External Dependencies
 import React from 'react';
 import { DollarSign, Clock, CheckCircle, TrendingUp, ExternalLink } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 import { useWindow } from '../../../context/WindowContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../../utils/cn';
 
 export const CaseOverviewStats: React.FC = () => {
   const { theme } = useTheme();

@@ -1,14 +1,33 @@
+/**
+ * DiscoveryPlanBuilder.tsx
+ * 
+ * Collaborative FRCP 26(f) discovery plan builder with section-by-section
+ * editing, status tracking, and agreement export.
+ * 
+ * @module components/case-detail/collaboration/DiscoveryPlanBuilder
+ * @category Case Management - Discovery Planning
+ */
+
+// External Dependencies
 import React, { useState } from 'react';
-import { JointPlan, PlanSection } from '../../../types';
+import { FileText, CheckCircle, AlertCircle, Edit2, Save, Download, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
-import { FileText, CheckCircle, AlertCircle, Edit2, Save, Download, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { JointPlan, PlanSection } from '../../../types';
 
 interface DiscoveryPlanBuilderProps {
   caseId: string;
@@ -58,7 +77,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
     updatePlan(updatedPlan);
   };
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>;
 
   if (!activePlan) {
     return (

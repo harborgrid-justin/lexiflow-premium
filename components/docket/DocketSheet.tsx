@@ -1,22 +1,40 @@
+/**
+ * DocketSheet.tsx
+ * 
+ * Main docket sheet view displaying case docket entries with filtering,
+ * search, and modal editing capabilities.
+ * 
+ * @module components/docket/DocketSheet
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React, { useState, useMemo, useEffect } from 'react';
 import { Loader2, Radio } from 'lucide-react';
-import { DataService } from '../../services/dataService';
-import { DocketEntry, Case, DocketId, CaseId } from '../../types';
+
+// Internal Dependencies - Components
+import { Modal } from '../common/Modal';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketTable } from './DocketTable';
-import { Modal } from '../common/Modal';
+import { DocketToolbar } from './DocketToolbar';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
-import { DocketToolbar } from './DocketToolbar';
 import { useInterval } from '../../hooks/useInterval';
+import { useQuery, useMutation } from '../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { STORES } from '../../services/db';
+
+// Types & Interfaces
+import { DocketEntry, Case, DocketId, CaseId } from '../../types';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';
@@ -189,7 +207,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
         <div className={cn("flex-1 rounded-lg border shadow-sm flex flex-col overflow-hidden relative", theme.surface.default, theme.border.default)}>
           {!selectedCaseId ? (
             <div className="flex-1 overflow-auto relative">
-               {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className="animate-spin h-5 w-5 text-blue-500"/></div>}
+               {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className={cn("animate-spin h-5 w-5", theme.text.link)}/></div>}
               <DocketTable 
                 entries={sortedEntries} 
                 onSelectEntry={openOrbitalEntry} 
@@ -205,7 +223,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                 />
                 
                 <div className="flex-1 relative">
-                    {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className="animate-spin h-5 w-5 text-blue-500"/></div>}
+                    {isSearching && <div className="absolute top-2 right-2 z-10"><Loader2 className={cn("animate-spin h-5 w-5", theme.text.link)}/></div>}
                     <DocketTable 
                         entries={sortedEntries} 
                         onSelectEntry={openOrbitalEntry} 

@@ -1,6 +1,21 @@
+/**
+ * CaseDetailNavigation.tsx
+ * 
+ * Two-level navigation component for case detail tabs with parent/child hierarchy
+ * and active state indicators.
+ * 
+ * @module components/case-detail/layout/CaseDetailNavigation
+ * @category Case Management - Navigation
+ */
+
+// External Dependencies
 import React, { useMemo } from 'react';
-import { useTheme } from '@context/ThemeContext';
-import { cn } from '@utils/cn';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../../utils/cn';
 import { CASE_DETAIL_TABS } from '../CaseDetailConfig';
 
 interface CaseDetailNavigationProps {

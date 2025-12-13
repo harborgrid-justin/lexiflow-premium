@@ -1,10 +1,10 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Wand2, RotateCcw } from 'lucide-react';
-import { GeminiService } from '../services/geminiService';
-import { EditorToolbar } from './common/EditorToolbar';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
+import { GeminiService } from '../../services/geminiService';
+import { EditorToolbar } from '../common/EditorToolbar';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
 
 interface AdvancedEditorProps {
   initialContent: string;

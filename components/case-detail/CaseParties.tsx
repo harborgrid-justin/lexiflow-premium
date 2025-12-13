@@ -1,18 +1,36 @@
+/**
+ * CaseParties.tsx
+ * 
+ * Party management interface with grouping capabilities, contact information,
+ * and hierarchical organization structure (parent entities, groups).
+ * 
+ * @module components/case-detail/CaseParties
+ * @category Case Management - Parties & Contacts
+ */
 
+// External Dependencies
 import React, { useState, useEffect } from 'react';
-import { Party, PartyId, Organization } from '../../types';
+import { Plus, Edit2, Trash2, User, Building, Gavel, Link, Layers, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
-import { Plus, Edit2, Trash2, User, Building, Gavel, Link, Layers, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { Scheduler } from '../../utils/scheduler';
 import { useQuery } from '../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
+import { Scheduler } from '../../utils/scheduler';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Party, PartyId, Organization } from '../../types';
 
 interface CasePartiesProps {
   parties?: Party[];
@@ -149,7 +167,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                                     <div className="min-w-0">
                                         <div className="truncate font-semibold">{party.name}</div>
                                         {linkedOrg && (
-                                            <div className="text-[10px] text-blue-600 flex items-center mt-0.5">
+                                            <div className={cn("text-[10px] flex items-center mt-0.5", theme.text.link)}>
                                                 <Link className="h-3 w-3 mr-1"/> Linked: {linkedOrg.name}
                                             </div>
                                         )}
@@ -184,7 +202,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                                                     <Briefcase className={cn("h-3 w-3 shrink-0", theme.text.tertiary)}/> {att.name}
                                                 </div>
                                                 {att.firm && <div className={cn("text-[10px] ml-4 truncate", theme.text.secondary)}>{att.firm}</div>}
-                                                {att.email && <div className="text-[10px] text-blue-600 ml-4 hover:underline cursor-pointer truncate" onClick={()=>window.location.href=`mailto:${att.email}`}>{att.email}</div>}
+                                                {att.email && <div className={cn("text-[10px] ml-4 hover:underline cursor-pointer truncate", theme.text.link)} onClick={()=>window.location.href=`mailto:${att.email}`}>{att.email}</div>}
                                             </div>
                                         ))}
                                     </div>

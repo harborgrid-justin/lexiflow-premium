@@ -1,12 +1,30 @@
+/**
+ * MotionList.tsx
+ * 
+ * Tabular list of motions with status badges, conferral indicators,
+ * and deadline tracking.
+ * 
+ * @module components/case-detail/motions/MotionList
+ * @category Case Management - Motions
+ */
 
+// External Dependencies
 import React from 'react';
+import { Gavel, Calendar, FileText, MessageSquare, GitBranch, Users } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { Gavel, Calendar, FileText, MessageSquare, GitBranch, Users } from 'lucide-react';
-import { Motion } from '../../../types';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Motion } from '../../../types';
 
 interface MotionListProps {
   motions: Motion[];
@@ -57,7 +75,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                   <div>
                       {motion.title}
                       {motion.documents && motion.documents.length > 0 && (
-                          <div className="text-[10px] text-blue-600 flex items-center mt-0.5">
+                          <div className={cn("text-[10px] flex items-center mt-0.5", theme.text.link)}>
                               <FileText className="h-3 w-3 mr-1"/> {motion.documents.length} Exhibits Linked
                           </div>
                       )}
@@ -84,7 +102,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 <TableCell>
                     <div className="flex flex-col gap-1">
                         {getConferralBadge(motion.conferralStatus)}
-                        <button className="text-[10px] text-blue-600 hover:underline flex items-center">
+                        <button className={cn("text-[10px] hover:underline flex items-center", theme.text.link)}>
                             <MessageSquare className="h-3 w-3 mr-1"/> Log Session
                         </button>
                     </div>
@@ -92,7 +110,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <Button size="sm" variant="ghost" className="text-indigo-600" onClick={() => onTaskClick(motion)} icon={GitBranch}>To Workflow</Button>
-                    <Button size="sm" variant="ghost" className="text-blue-600">Details</Button>
+                    <Button size="sm" variant="ghost" className={theme.text.link}>Details</Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -112,7 +130,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
           <div key={motion.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-2">
               <h4 className={cn("font-bold text-sm flex items-center gap-2", theme.text.primary)}>
-                <Gavel className="h-4 w-4 text-blue-500" />
+                <Gavel className={cn("h-4 w-4", theme.text.link)} />
                 {motion.title}
               </h4>
               <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>

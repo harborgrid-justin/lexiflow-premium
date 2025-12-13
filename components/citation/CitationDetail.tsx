@@ -1,14 +1,39 @@
+/**
+ * CitationDetail.tsx
+ * 
+ * Detailed citation view with AI-powered analysis, Shepardization status,
+ * and linked cases. Shows treatment history and citing authority strength.
+ * 
+ * @module components/citation/CitationDetail
+ * @category Legal Research - Citation Details
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { Citation, Case } from '../../types';
+import { X, BookOpen, ExternalLink, CheckCircle, AlertTriangle, Link, Wand2, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
+import { Button } from '../common/Button';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
 import { DataService } from '../../services/dataService';
 import { GeminiService } from '../../services/geminiService';
-import { X, BookOpen, ExternalLink, CheckCircle, AlertTriangle, Link, Wand2, Loader2 } from 'lucide-react';
-import { Button } from '../common/Button';
-import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Citation, Case } from '../../types';
 
 interface CitationDetailProps {
   citation: Citation;

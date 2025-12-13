@@ -1,22 +1,70 @@
+/**
+ * CasePrediction.tsx
+ * 
+ * AI-powered case outcome prediction using historical data and machine learning
+ * to forecast settlement ranges, dismissal probability, and optimal strategies.
+ * 
+ * @module components/analytics/CasePrediction
+ * @category Analytics - Predictive Modeling
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Card } from '../common/Card';
 import { TrendingUp, BrainCircuit } from 'lucide-react';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip } from 'recharts';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
+import { Card } from '../common/Card';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { OutcomePredictionData } from '../../types';
 import { useChartTheme } from '../common/ChartHelpers';
 
+// Utils
+import { cn } from '../../utils/cn';
+
+// Types
+import type { OutcomePredictionData } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CasePredictionProps {
+  /** Historical outcome data for prediction modeling */
   outcomeData: OutcomePredictionData[];
 }
 
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * CasePrediction - AI-driven outcome forecasting
+ * 
+ * Uses historical data from similar cases to predict:
+ * - Probability of dismissal vs. settlement vs. trial
+ * - Expected value range for settlements
+ * - Strategic recommendations based on patterns
+ */
 export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) => {
+  // ==========================================================================
+  // HOOKS - Context
+  // ==========================================================================
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
+  // ==========================================================================
+  // MAIN RENDER
+  // ==========================================================================
+  
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+      {/* Radar Chart - Case Strengths */}
       <Card title="Case Strength Assessment">
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -27,9 +75,9 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
               <Radar 
                 name="Current Case" 
                 dataKey="A" 
-                stroke={chartTheme.colors.purple} 
+                stroke={chartTheme.colors.primary} 
                 strokeWidth={2}
-                fill={chartTheme.colors.purple} 
+                fill={chartTheme.colors.primary} 
                 fillOpacity={0.5} 
               />
               <Tooltip 
@@ -40,7 +88,9 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
         </div>
       </Card>
 
+      {/* Right Column - Predictions & Recommendations */}
       <div className="flex flex-col gap-6">
+        {/* Probability Meters */}
         <Card title="Outcome Forecast">
             <div className="space-y-6">
             <div>
@@ -58,7 +108,7 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
                     <span className="font-bold">68%</span>
                 </div>
                 <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
-                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: '68%' }}></div>
+                    <div className={cn("h-2 rounded-full", theme.action.primary.bg)} style={{ width: '68%' }}></div>
                 </div>
             </div>
             
@@ -77,8 +127,9 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
             </div>
         </Card>
 
+        {/* AI Recommendation Box */}
         <div className={cn("p-4 rounded-lg border flex items-start gap-3", theme.surface.default, theme.border.default)}>
-            <div className="p-2 bg-purple-100 rounded-full text-purple-600 shrink-0">
+            <div className={cn("p-2 rounded-full shrink-0", theme.surface.highlight, theme.text.link)}>
                 <BrainCircuit className="h-5 w-5"/>
             </div>
             <div>

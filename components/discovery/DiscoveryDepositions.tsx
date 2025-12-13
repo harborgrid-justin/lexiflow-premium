@@ -1,18 +1,44 @@
+/**
+ * DiscoveryDepositions.tsx
+ * 
+ * Deposition scheduling and management interface with witness tracking,
+ * location details, and transcript association.
+ * 
+ * @module components/discovery/DiscoveryDepositions
+ * @category Discovery - Depositions
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
+import { Mic2, Calendar, FileText, CheckSquare, Video, MapPin, User, Plus } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Deposition, CaseId, UUID } from '../../types';
-import { DataService } from '../../services/dataService';
-import { Mic2, Calendar, FileText, CheckSquare, Video, MapPin, User, Plus } from 'lucide-react';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Deposition, CaseId, UUID } from '../../types';
 
 export const DiscoveryDepositions: React.FC = () => {
   const { theme } = useTheme();

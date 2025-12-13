@@ -1,15 +1,31 @@
+/**
+ * DocketImportModal.tsx
+ * 
+ * Multi-step modal for importing docket data from text or XML with AI parsing
+ * and preview capabilities.
+ * 
+ * @module components/docket/DocketImportModal
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { Modal } from './common/Modal';
-import { Button } from './common/Button';
-import { GeminiService } from '../services/geminiService';
-import { XmlDocketParser } from '../services/xmlDocketParser';
 import { ArrowRight, FileCode, Sparkles } from 'lucide-react';
-import { ParsedDocketPreview } from './docket/ParsedDocketPreview';
-import { Stepper } from './common/Stepper';
-import { useNotify } from '../hooks/useNotify';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
+
+// Internal Dependencies - Components
+import { Modal } from '../common/Modal';
+import { Button } from '../common/Button';
+import { ParsedDocketPreview } from './ParsedDocketPreview';
+import { Stepper } from '../common/Stepper';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
+import { GeminiService } from '../../services/geminiService';
+import { XmlDocketParser } from '../../services/xmlDocketParser';
 
 interface DocketImportModalProps {
   isOpen: boolean;
@@ -69,13 +85,13 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
               <div className={cn("flex gap-4 border-b pb-1 mb-4", theme.border.default)}>
                   <button 
                       onClick={() => setMode('text')} 
-                      className={cn("pb-2 text-sm font-medium flex items-center gap-2 transition-colors", mode === 'text' ? "text-blue-600 border-b-2 border-blue-600" : theme.text.secondary)}
+                      className={cn("pb-2 text-sm font-medium flex items-center gap-2 transition-colors", mode === 'text' ? cn(theme.text.link, "border-b-2", theme.action.primary.border) : theme.text.secondary)}
                   >
                       <Sparkles className="h-4 w-4"/> AI Text Parse (PDF/Web)
                   </button>
                   <button 
                       onClick={() => setMode('xml')} 
-                      className={cn("pb-2 text-sm font-medium flex items-center gap-2 transition-colors", mode === 'xml' ? "text-blue-600 border-b-2 border-blue-600" : theme.text.secondary)}
+                      className={cn("pb-2 text-sm font-medium flex items-center gap-2 transition-colors", mode === 'xml' ? cn(theme.text.link, "border-b-2", theme.action.primary.border) : theme.text.secondary)}
                   >
                       <FileCode className="h-4 w-4"/> CM/ECF XML Export
                   </button>

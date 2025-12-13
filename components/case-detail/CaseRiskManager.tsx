@@ -1,17 +1,35 @@
+/**
+ * CaseRiskManager.tsx
+ * 
+ * Risk assessment and management dashboard with risk matrix visualization,
+ * impact/probability tracking, and mitigation planning.
+ * 
+ * @module components/case-detail/CaseRiskManager
+ * @category Case Management - Risk Assessment
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { Case, Risk } from '../../types';
 import { ShieldAlert, Plus, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
 import { MetricCard } from '../common/Primitives';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { RiskList } from './risk/RiskList';
 import { RiskDetail } from './risk/RiskDetail';
-import { DataService } from '../../services/dataService';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Case, Risk } from '../../types';
 
 interface CaseRiskManagerProps {
   caseData: Case;
@@ -82,7 +100,7 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
   const highRisks = risks.filter(r => r.probability === 'High' || r.impact === 'High').length;
   const exposure = risks.length * 150000; // Mock calculation
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>;
 
   return (
     <div className="flex flex-col h-full space-y-6">

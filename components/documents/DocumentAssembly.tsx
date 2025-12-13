@@ -2,18 +2,18 @@
 // components/DocumentAssembly.tsx
 import React, { useState, useEffect } from 'react';
 import { X, Wand2, Activity, Minus } from 'lucide-react';
-import { GeminiService } from '../services/geminiService';
-import { LegalDocument, DocumentId, CaseId } from '../types';
-import { useWindow } from '../context/WindowContext';
-import { DataService } from '../services/dataService';
-import { useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { useNotify } from '../hooks/useNotify';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { Step1TemplateSelection } from './document-assembly/Step1TemplateSelection';
-import { Step2FormConfiguration } from './document-assembly/Step2FormConfiguration';
-import { Step3DraftReview } from './document-assembly/Step3DraftReview';
+import { GeminiService } from '../../services/geminiService';
+import { LegalDocument, DocumentId, CaseId } from '../../types';
+import { useWindow } from '../../context/WindowContext';
+import { DataService } from '../../services/dataService';
+import { useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+import { useNotify } from '../../hooks/useNotify';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { Step1TemplateSelection } from '../document-assembly/Step1TemplateSelection';
+import { Step2FormConfiguration } from '../document-assembly/Step2FormConfiguration';
+import { Step3DraftReview } from '../document-assembly/Step3DraftReview';
 
 interface DocumentAssemblyProps {
   onClose: () => void;

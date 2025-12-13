@@ -1,27 +1,87 @@
+/**
+ * SettlementCalculator.tsx
+ * 
+ * Monte Carlo simulation engine for settlement value forecasting.
+ * Runs probabilistic simulations to determine expected value ranges
+ * and optimal settlement targets based on case parameters.
+ * 
+ * @module components/analytics/SettlementCalculator
+ * @category Analytics - Settlement Modeling
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
+import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Card } from '../common/Card';
 import { Input } from '../common/Inputs';
 import { Button } from '../common/Button';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useChartTheme } from '../common/ChartHelpers';
+
+// Utils & Services
+import { cn } from '../../utils/cn';
 import { SimulationEngine } from '../../utils/simulationEngine';
 import { Scheduler } from '../../utils/scheduler';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+interface SimulationMetrics {
+  ev: number;    // Expected value
+  p25: number;   // 25th percentile (conservative)
+  p75: number;   // 75th percentile (aggressive)
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * SettlementCalculator - Monte Carlo settlement simulation
+ * 
+ * Features:
+ * - Configurable damage range and liability probability
+ * - 1,000+ iteration Monte Carlo simulation
+ * - Visual distribution of potential outcomes
+ * - Expected value and percentile calculations
+ * - Strategic settlement recommendations
+ */
 export const SettlementCalculator: React.FC = () => {
+  // ==========================================================================
+  // HOOKS - Context
+  // ==========================================================================
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
+
+  // ==========================================================================
+  // HOOKS - State
+  // ==========================================================================
   const [low, setLow] = useState(500000);
   const [high, setHigh] = useState(1500000);
   const [liabilityProb, setLiabilityProb] = useState(75);
   const [iterations, setIterations] = useState(1000);
   const [isCalculating, setIsCalculating] = useState(false);
   const [results, setResults] = useState<any[]>([]);
-  const [metrics, setMetrics] = useState({ ev: 0, p25: 0, p75: 0 });
+  const [metrics, setMetrics] = useState<SimulationMetrics>({ ev: 0, p25: 0, p75: 0 });
 
+  // ==========================================================================
+  // CALLBACKS - Simulation Engine
+  // ==========================================================================
+  
+  /**
+   * Runs Monte Carlo simulation off-thread via Scheduler
+   * to prevent UI blocking during intensive calculations
+   */
   const runSimulation = () => {
     setIsCalculating(true);
     
@@ -43,7 +103,7 @@ export const SettlementCalculator: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
       <Card className="flex flex-col h-full">
-        <div className="flex items-center gap-2 mb-4 text-blue-600">
+        <div className={cn("flex items-center gap-2 mb-4", theme.text.link)}>
            <Calculator className="h-5 w-5"/>
            <h3 className="font-bold">Simulation Parameters</h3>
         </div>
@@ -103,19 +163,19 @@ export const SettlementCalculator: React.FC = () => {
               <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={chartTheme.colors.emerald} stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor={chartTheme.colors.emerald} stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartTheme.colors.success} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={chartTheme.colors.success} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="range" fontSize={10} tickLine={false} axisLine={false} stroke={chartTheme.text} />
                 <YAxis hide />
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                 <Tooltip 
-                  cursor={{stroke: chartTheme.colors.emerald, strokeWidth: 1}}
+                  cursor={{stroke: chartTheme.colors.success, strokeWidth: 1}}
                   contentStyle={chartTheme.tooltipStyle}
                 />
-                <Area type="monotone" dataKey="count" stroke={chartTheme.colors.emerald} fillOpacity={1} fill="url(#colorCount)" />
-                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke={chartTheme.colors.rose} strokeDasharray="3 3" label="EV" />
+                <Area type="monotone" dataKey="count" stroke={chartTheme.colors.success} fillOpacity={1} fill="url(#colorCount)" />
+                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke={chartTheme.colors.danger} strokeDasharray="3 3" label="EV" />
               </AreaChart>
             </ResponsiveContainer>
          </div>

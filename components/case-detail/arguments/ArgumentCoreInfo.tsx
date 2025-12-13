@@ -1,10 +1,29 @@
+/**
+ * ArgumentCoreInfo.tsx
+ * 
+ * Core argument information editor with narrative text area,
+ * element tagging, and AI analysis trigger.
+ * 
+ * @module components/case-detail/arguments/ArgumentCoreInfo
+ * @category Case Management - Arguments
+ */
+
+// External Dependencies
 import React from 'react';
-import { LegalArgument, RiskStatus } from '../../../types';
+import { Wand2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { TextArea } from '../../common/Inputs';
 import { Button } from '../../common/Button';
-import { Wand2 } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { LegalArgument, RiskStatus } from '../../../types';
 
 interface ArgumentCoreInfoProps {
   argument: LegalArgument;

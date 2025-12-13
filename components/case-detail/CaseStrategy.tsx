@@ -1,13 +1,31 @@
+/**
+ * CaseStrategy.tsx
+ * 
+ * Legal strategy management with arguments, defenses, citations, and supporting evidence.
+ * Tabbed interface for organizing strategic elements.
+ * 
+ * @module components/case-detail/CaseStrategy
+ * @category Case Management - Legal Strategy
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { Citation, LegalArgument, Defense, EvidenceItem } from '../../types';
 import { Target, Shield, Plus, Scale } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { StrategySection } from './strategy/StrategySection';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+
+// Types & Interfaces
+import { Citation, LegalArgument, Defense, EvidenceItem } from '../../types';
 
 interface CaseStrategyProps {
   citations?: Citation[];
@@ -64,7 +82,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             items={args} 
             type="Argument" 
             icon={Target} 
-            colorClass="text-blue-600" 
+            colorClass={theme.text.link}
             evidence={evidence}
             citations={citations}
         />
@@ -73,14 +91,14 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             items={defenses} 
             type="Defense" 
             icon={Shield} 
-            colorClass="text-amber-600" 
+            colorClass={theme.status.warning.text}
         />
         <StrategySection 
             title="Authority" 
             items={citations} 
             type="Citation" 
             icon={Scale} 
-            colorClass="text-purple-600" 
+            colorClass={theme.action.primary.text}
         />
       </div>
 

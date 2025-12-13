@@ -1,30 +1,61 @@
+/**
+ * CaseListActive.tsx
+ * 
+ * Active cases view with advanced filtering, sorting, and search.
+ * Supports desktop table view and mobile swipeable cards.
+ * 
+ * @module components/case-list/CaseListActive
+ * @category Case Management - Active Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useCallback } from 'react';
-import { Case, CaseStatus } from '../../types';
 import { Filter } from 'lucide-react';
-import { useSort } from '@/hooks/useSort';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { VirtualList } from '../common/VirtualList';
 import { SwipeableItem } from '../common/SwipeableItem';
-import { DataService } from '../../services/dataService';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '@/hooks/useNotify';
 import { Button } from '../common/Button';
 import { FilterPanel } from '../common/FilterPanel';
 import { SearchInput, Input } from '../common/Inputs';
-import { useToggle } from '@/hooks/useToggle';
 import { Badge } from '../common/Badge';
 import { Currency } from '../common/Primitives';
 import { ActiveCaseTable } from './ActiveCaseTable';
-import { UseCaseListReturn } from '@/hooks/useCaseList';
+
+// Hooks & Context
+import { useSort } from '../../hooks/useSort';
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+import { useToggle } from '../../hooks/useToggle';
+import { UseCaseListReturn } from '../../hooks/useCaseList';
+import { useMutation, queryClient } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
+import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { Case, CaseStatus } from '../../types';
 
 type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;
 };
 
-// Helper function to map case status to badge variant
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Maps case status to badge variant for consistent visual representation
+ */
 const getCaseStatusVariant = (status: CaseStatus): 'success' | 'warning' | 'error' | 'info' | 'neutral' => {
   switch (status) {
     case CaseStatus.Settled:
@@ -41,18 +72,38 @@ const getCaseStatusVariant = (status: CaseStatus): 'success' | 'warning' | 'erro
   }
 };
 
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * CaseListActive - Active cases list with filtering and sorting
+ * 
+ * Features:
+ * - Multi-criteria filtering (status, type, date range, search)
+ * - Desktop table view with virtual scrolling
+ * - Mobile swipeable card view with archive action
+ * - Real-time search and filter panel
+ * - Case prefetching on hover
+ */
 export const CaseListActive: React.FC<CaseListActiveProps> = ({
   filteredCases,
   statusFilter, setStatusFilter, typeFilter, setTypeFilter,
   searchTerm, setSearchTerm, dateFrom, setDateFrom, dateTo, setDateTo,
   resetFilters, onSelectCase
 }) => {
+  // ==========================================================================
+  // HOOKS - Context & Custom Hooks
+  // ==========================================================================
   const { theme } = useTheme();
   const notify = useNotify();
   const { isOpen: showFilters, toggle: toggleFilters } = useToggle(false);
   
   const { items: sortedCases, requestSort, sortConfig } = useSort<Case>(filteredCases, 'filingDate', 'desc');
 
+  // ==========================================================================
+  // HOOKS - Mutations
+  // ==========================================================================
   const { mutate: archiveCase } = useMutation(
       DataService.cases.archive,
       {

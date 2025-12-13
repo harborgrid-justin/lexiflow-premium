@@ -1,6 +1,24 @@
+/**
+ * CaseTypeToggle.tsx
+ * 
+ * Toggle control for selecting between pre-filing matter and active litigation.
+ * Affects form field labels and validation requirements.
+ * 
+ * @module components/case-list/case-form/CaseTypeToggle
+ * @category Case Management - Forms
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { cn } from '../../../utils/cn';
 import { FilePlus, Scale } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils
+import { cn } from '../../../utils/cn';
 
 interface CaseTypeToggleProps {
   isPreFiling: boolean;

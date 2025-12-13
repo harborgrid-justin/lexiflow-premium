@@ -1,11 +1,29 @@
+/**
+ * ArgumentList.tsx
+ * 
+ * Scrollable list of legal arguments with risk meters, status badges,
+ * and selection highlighting.
+ * 
+ * @module components/case-detail/arguments/ArgumentList
+ * @category Case Management - Arguments
+ */
 
+// External Dependencies
 import React from 'react';
-import { LegalArgument } from '../../../types';
+import { Scale, Fingerprint, ChevronRight, BookOpen } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { RiskMeter } from '../../common/RiskMeter';
 import { Badge } from '../../common/Badge';
-import { Scale, Fingerprint, ChevronRight, BookOpen } from 'lucide-react';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { LegalArgument } from '../../../types';
 
 interface ArgumentListProps {
   argumentsList: LegalArgument[];
@@ -34,7 +52,7 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
                     "group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-md",
                     theme.surface.default,
                     selectedId === arg.id 
-                        ? "border-blue-500 ring-1 ring-blue-500 shadow-md z-10" 
+                        ? cn(theme.action.primary.border, "ring-1 shadow-md z-10") 
                         : cn(theme.border.default, `hover:${theme.primary.border}`)
                 )}
             >
@@ -50,7 +68,7 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
 
                 <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
                     <div className="flex gap-3">
-                        <div className={cn("flex items-center text-xs px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100", !arg.relatedCitationIds.length && "opacity-50 grayscale")}>
+                        <div className={cn("flex items-center text-xs px-2 py-1 rounded border", theme.surface.highlight, theme.action.primary.text, theme.border.default, !arg.relatedCitationIds.length && "opacity-50 grayscale")}>
                             <Scale className="h-3 w-3 mr-1.5"/>
                             <span className="font-bold">{arg.relatedCitationIds.length}</span>
                         </div>
@@ -65,7 +83,7 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
                     </div>
                 </div>
 
-                <div className={cn("absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity", selectedId === arg.id && "opacity-100 text-blue-500")}>
+                <div className={cn("absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity", selectedId === arg.id && cn("opacity-100", theme.action.primary.text))}>
                     <ChevronRight className="h-6 w-6"/>
                 </div>
             </div>

@@ -1,19 +1,33 @@
+/**
+ * DocketManager.tsx
+ * 
+ * Top-level docket management interface with tabbed navigation for viewing
+ * docket entries, calendars, analytics, and sync settings.
+ * 
+ * @module components/docket/DocketManager
+ * @category Case Management - Docket
+ */
 
+// External Dependencies
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { 
   FileText, Calendar, BarChart2, Settings, List, Clock, Gavel, 
   RefreshCw, Download, BookOpen
 } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
 
-// Sub-components
-import { DocketSheet } from './docket/DocketSheet';
-import { DocketCalendar } from './docket/DocketCalendar';
-import { DocketAnalytics } from './docket/DocketAnalytics';
-import { DocketSettings } from './docket/DocketSettings';
+// Internal Dependencies - Components
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
+import { DocketSheet } from './DocketSheet';
+import { DocketCalendar } from './DocketCalendar';
+import { DocketAnalytics } from './DocketAnalytics';
+import { DocketSettings } from './DocketSettings';
+
+// Internal Dependencies - Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
+import { cn } from '../../utils/cn';
 
 type DocketView = 'all' | 'filings' | 'orders' | 'calendar' | 'upcoming' | 'stats' | 'sync';
 

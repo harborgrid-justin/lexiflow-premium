@@ -1,16 +1,41 @@
+/**
+ * CaseListTasks.tsx
+ * 
+ * Task management view with filtering by category (all, discovery, pleadings, evidence, trial).
+ * Virtual scrolling for performance with large task lists.
+ * 
+ * @module components/case-list/CaseListTasks
+ * @category Case Management - Task Views
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { Plus, FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Badge } from '../common/Badge';
 import { TaskCreationModal } from '../common/TaskCreationModal';
-import { WorkflowTask, Case } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
 import { VirtualList } from '../common/VirtualList';
 import { LazyLoader } from '../common/LazyLoader';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { WorkflowTask, Case } from '../../types';
 
 interface CaseListTasksProps {
   onSelectCase?: (c: Case) => void;

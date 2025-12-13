@@ -1,23 +1,72 @@
+/**
+ * JudgeAnalytics.tsx
+ * 
+ * Displays comprehensive analytics for judicial behavior patterns including
+ * motion ruling statistics, case timeline preferences, and judicial tendencies.
+ * 
+ * @module components/analytics/JudgeAnalytics
+ * @category Analytics - Judge Intelligence
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Card } from '../common/Card';
 import { Gavel, Clock, Scale } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { JudgeProfile, JudgeMotionStat } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
+import { Card } from '../common/Card';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useChartTheme } from '../common/ChartHelpers';
 
+// Utils
+import { cn } from '../../utils/cn';
+
+// Types
+import type { JudgeProfile, JudgeMotionStat } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface JudgeAnalyticsProps {
+  /** Judge profile data including rulings and tendencies */
   judge: JudgeProfile;
+  /** Statistical breakdown of motion rulings */
   stats: JudgeMotionStat[];
 }
 
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * JudgeAnalytics - Judicial behavior pattern visualization
+ * 
+ * Provides data-driven insights into:
+ * - Motion ruling patterns (grants vs. denials)
+ * - Average case duration
+ * - Documented judicial tendencies
+ */
 export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) => {
+  // ==========================================================================
+  // HOOKS - Context
+  // ==========================================================================
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
+  // ==========================================================================
+  // MAIN RENDER
+  // ==========================================================================
+  
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+      {/* Judge Profile Card */}
       <Card className="lg:col-span-1 flex flex-col h-full">
         <div className="flex items-center space-x-4 mb-6">
           <div className={cn("p-4 rounded-full", theme.surface.highlight)}>
@@ -51,6 +100,7 @@ export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) 
         </div>
       </Card>
 
+      {/* Motion Statistics Chart */}
       <Card className="lg:col-span-2" title="Motion Ruling Statistics">
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -70,8 +120,8 @@ export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) 
                 contentStyle={chartTheme.tooltipStyle}
               />
               <Legend verticalAlign="bottom" height={36}/>
-              <Bar dataKey="grant" name="Granted %" stackId="a" fill={chartTheme.colors.emerald} radius={[0, 0, 0, 0]} barSize={24} />
-              <Bar dataKey="deny" name="Denied %" stackId="a" fill={chartTheme.colors.rose} radius={[0, 4, 4, 0]} barSize={24} />
+              <Bar dataKey="grant" name="Granted %" stackId="a" fill={chartTheme.colors.success} radius={[0, 0, 0, 0]} barSize={24} />
+              <Bar dataKey="deny" name="Denied %" stackId="a" fill={chartTheme.colors.danger} radius={[0, 4, 4, 0]} barSize={24} />
             </BarChart>
           </ResponsiveContainer>
         </div>

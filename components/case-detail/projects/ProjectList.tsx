@@ -1,7 +1,20 @@
+/**
+ * ProjectList.tsx
+ * 
+ * Scrollable list of project cards with expand/collapse functionality.
+ * 
+ * @module components/case-detail/projects/ProjectList
+ * @category Case Management - Projects
+ */
 
+// External Dependencies
 import React, { useState } from 'react';
-import { Project, WorkflowTask } from '../../../types';
+
+// Internal Dependencies - Components
 import { ProjectCard } from './ProjectCard';
+
+// Types & Interfaces
+import { Project, WorkflowTask } from '../../../types';
 
 interface ProjectListProps {
   projects: Project[];

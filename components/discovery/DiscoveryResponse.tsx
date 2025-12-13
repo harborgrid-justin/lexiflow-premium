@@ -1,11 +1,37 @@
+/**
+ * DiscoveryResponse.tsx
+ * 
+ * AI-assisted discovery response drafting using Google Gemini.
+ * Generates objections and substantive responses to discovery requests.
+ * 
+ * @module components/discovery/DiscoveryResponse
+ * @category Discovery - Response Drafting
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Wand2, Save, FileText } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
-import { DiscoveryRequest } from '../../types';
-import { GeminiService } from '../../services/geminiService';
 import { Badge } from '../common/Badge';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Services & Utils
+import { GeminiService } from '../../services/geminiService';
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+import { DiscoveryRequest } from '../../types';
 
 interface DiscoveryResponseProps {
   request: DiscoveryRequest | null;

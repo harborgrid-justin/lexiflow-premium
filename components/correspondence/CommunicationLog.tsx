@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Badge } from '../common/Badge';
-import { CommunicationItem } from '@types/';
+import { CommunicationItem } from '../../types';
 import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '@utils/cn';
+import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
 
 interface CommunicationLogProps {

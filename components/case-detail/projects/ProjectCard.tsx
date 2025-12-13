@@ -1,10 +1,27 @@
+/**
+ * ProjectCard.tsx
+ * 
+ * Expandable project card with progress bar, task list, and module navigation.
+ * 
+ * @module components/case-detail/projects/ProjectCard
+ * @category Case Management - Projects
+ */
 
+// External Dependencies
 import React from 'react';
-import { Project, WorkflowTask } from '../../../types';
 import { User, Calendar, CheckCircle, ChevronDown, ChevronUp, Plus, Layout, FileText, DollarSign, Scale, Gavel, Box } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { Badge } from '../../common/Badge';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Internal Dependencies - Services & Utils
 import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { Project, WorkflowTask } from '../../../types';
 
 interface ProjectCardProps {
     project: Project;
@@ -75,10 +92,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                     <span>{progress}%</span>
                   </div>
                   <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}>
-                    <div className="bg-blue-600 h-1.5 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
+                    <div className={cn("h-1.5 rounded-full transition-all", theme.action.primary.bg)} style={{ width: `${progress}%` }}></div>
                   </div>
                 </div>
-                <button className={cn("hover:text-blue-600", theme.text.tertiary)}>
+                <button className={cn("transition-colors", theme.text.tertiary, `hover:${theme.text.link}`)}>
                   {isExpanded ? <ChevronUp className="h-5 w-5"/> : <ChevronDown className="h-5 w-5"/>}
                 </button>
               </div>
@@ -89,13 +106,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               <div className={cn("p-5 pt-0 border-t bg-slate-50/50", theme.border.default)}>
                 <div className="space-y-3 mt-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
                   {project.tasks.map((task) => (
-                    <div key={task.id} className={cn("group flex flex-col md:flex-row gap-3 items-start md:items-center p-3 rounded-lg border transition-all hover:shadow-sm", theme.surface.default, theme.border.default, "hover:border-blue-300")}>
+                    <div key={task.id} className={cn("group flex flex-col md:flex-row gap-3 items-start md:items-center p-3 rounded-lg border transition-all hover:shadow-sm", theme.surface.default, theme.border.default)}>
                       <button 
                         onClick={() => onUpdateTaskStatus(project.id, task.id)}
                         className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                           task.status === 'Done' 
                           ? 'bg-green-500 border-green-500 text-white' 
-                          : 'border-slate-300 hover:border-blue-500 text-transparent'
+                          : cn('text-transparent', theme.border.default, `hover:${theme.action.primary.border}`)
                         }`}
                       >
                         <CheckCircle className="h-3.5 w-3.5 fill-current"/>
@@ -117,7 +134,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                       {task.relatedModule && onNavigateToModule && (
                         <button 
                           onClick={() => onNavigateToModule(task.relatedModule!)}
-                          className={cn("w-full md:w-auto px-3 py-1.5 border rounded text-xs font-medium flex items-center justify-center gap-2 transition-all whitespace-nowrap", theme.surface.highlight, theme.text.secondary, theme.border.default, `hover:${theme.surface.default}`, "hover:text-blue-600 hover:border-blue-200")}
+                          className={cn("w-full md:w-auto px-3 py-1.5 border rounded text-xs font-medium flex items-center justify-center gap-2 transition-all whitespace-nowrap", theme.surface.highlight, theme.text.secondary, theme.border.default, `hover:${theme.surface.default}`, `hover:${theme.text.link}`, `hover:${theme.action.primary.border}`)}
                         >
                           {getModuleIcon(task.relatedModule)}
                           {task.actionLabel || `Go to ${task.relatedModule}`}

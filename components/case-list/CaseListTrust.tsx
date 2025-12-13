@@ -1,11 +1,32 @@
+/**
+ * CaseListTrust.tsx
+ * 
+ * Trust accounting ledger view for IOLTA compliance and client fund management.
+ * Displays trust balances, transactions, and reconciliation status.
+ * 
+ * @module components/case-list/CaseListTrust
+ * @category Case Management - Trust Accounting
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { CheckSquare, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Services & Utils
+import { DataService } from '../../services/dataService';
+import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
 
 export const CaseListTrust: React.FC = () => {

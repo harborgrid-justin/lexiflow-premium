@@ -1,16 +1,34 @@
+/**
+ * CaseCollaboration.tsx
+ * 
+ * Multi-party collaboration hub with conferral logs, discovery plan builder,
+ * and stipulation management.
+ * 
+ * @module components/case-detail/collaboration/CaseCollaboration
+ * @category Case Management - Collaboration
+ */
 
+// External Dependencies
 import React, { useState, useEffect } from 'react';
 import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
+
+// Internal Dependencies - Components
 import { ConferralLog } from './ConferralLog';
 import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
+
+// Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
-import { StipulationRequest } from '../../../types';
 import { useQuery } from '../../../services/queryClient';
+
+// Internal Dependencies - Services & Utils
+import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { cn } from '../../../utils/cn';
+
+// Types & Interfaces
+import { StipulationRequest } from '../../../types';
 
 interface CaseCollaborationProps {
   caseId: string;
@@ -83,7 +101,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
               <Button variant="primary" icon={PenTool}>Propose Stipulation</Button>
             </div>
             {loadingStips ? (
-                 <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>
+                 <div className="flex justify-center p-12"><Loader2 className={cn("animate-spin", theme.text.link)}/></div>
             ) : (
                 stipulations.map(stip => (
                 <Card key={stip.id} className="border-l-4 border-l-amber-500">

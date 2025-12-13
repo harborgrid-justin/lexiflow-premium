@@ -1,28 +1,79 @@
+/**
+ * AnalyticsDashboard.tsx
+ * 
+ * Main analytics dashboard providing predictive insights and data-driven analysis
+ * for litigation strategy, judge behavior, opposing counsel patterns, and case outcomes.
+ * 
+ * @module components/analytics/AnalyticsDashboard
+ * @category Analytics - Intelligence & Prediction
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useTransition } from 'react';
-import { Button } from '../common/Button';
 import { Download } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
+import { Button } from '../common/Button';
 import { LazyLoader } from '../common/LazyLoader';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { ANALYTICS_TAB_CONFIG } from '../../config/analyticsDashboardConfig';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
+
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { ANALYTICS_TAB_CONFIG } from '../../config/analyticsDashboardConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type AnalyticsView = 'judge' | 'counsel' | 'prediction';
 
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * AnalyticsDashboard - Predictive intelligence hub for litigation strategy
+ * 
+ * Features:
+ * - Judge analytics with ruling patterns and tendencies
+ * - Opposing counsel behavioral analysis
+ * - Case outcome predictions using historical data
+ * - Monte Carlo settlement simulations
+ */
 export const AnalyticsDashboard: React.FC = () => {
+  // ==========================================================================
+  // HOOKS - Context & State
+  // ==========================================================================
   const { theme } = useTheme();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'judge');
 
+  // ==========================================================================
+  // CALLBACKS - Event Handlers
+  // ==========================================================================
+  
+  /**
+   * Handles tab changes with React transition for smoother UX
+   */
   const setActiveTab = (tab: string) => {
     startTransition(() => {
         _setActiveTab(tab);
     });
   };
 
+  // ==========================================================================
+  // MAIN RENDER
+  // ==========================================================================
+  
   return (
     <TabbedPageLayout
       pageTitle="Analytics & Prediction"

@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { LegalDocument, UserRole } from '../../types';
-import { TagList } from '../common/Primitives';
-import { Button } from '../common/Button';
+import { LegalDocument, UserRole } from '../../../types';
+import { TagList } from '../../common/Primitives';
+import { Button } from '../../common/Button';
 import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useWindow } from '../../context/WindowContext';
-import { DocumentService } from '../../services/documentService';
-import { DataService } from '../../services/dataService';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { useWindow } from '../../../context/WindowContext';
+import { DocumentService } from '../../../services/documentService';
+import { DataService } from '../../../services/dataService';
+import { useMutation, queryClient } from '../../../services/queryClient';
+import { STORES } from '../../../services/db';
 import { useNotify } from '@/hooks/useNotify';
-import { PreviewHeader } from './preview/PreviewHeader';
-import { PreviewContent } from './preview/PreviewContent';
-import { PIIPanel } from './preview/PIIPanel';
+import { PreviewHeader } from '../preview/PreviewHeader';
+import { PreviewContent } from '../preview/PreviewContent';
+import { PIIPanel } from '../preview/PIIPanel';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 
 interface DocumentPreviewPanelProps {

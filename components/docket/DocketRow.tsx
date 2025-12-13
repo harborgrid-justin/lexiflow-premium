@@ -49,16 +49,16 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
         <div 
             className={cn(
                 "flex items-center border-b transition-colors cursor-pointer px-6 group",
-                theme.border.light,
+                theme.border.default,
                 theme.surface.default,
-                `hover:${theme.surfaceHighlight}`
+                `hover:${theme.surface.highlight}`
             )}
             style={{ height: 72 }}
             onClick={() => onSelect(entry)}
         >
             {/* Seq & PACER */}
             <div className="w-20 shrink-0 flex flex-col items-start justify-center gap-1">
-                <span className={cn("font-mono text-xs px-1.5 py-0.5 rounded font-bold", theme.surfaceHighlight, theme.text.secondary)} title="Internal Seq">#{entry.sequenceNumber}</span>
+                <span className={cn("font-mono text-xs px-1.5 py-0.5 rounded font-bold", theme.surface.highlight, theme.text.secondary)} title="Internal Seq">#{entry.sequenceNumber}</span>
                 {entry.pacerSequenceNumber && (
                     <span className={cn("font-mono text-[10px] px-1.5 py-0.5 rounded border flex items-center", theme.border.default, theme.text.tertiary)} title="PACER Seq">
                         <Hash className="h-2 w-2 mr-0.5"/> {entry.pacerSequenceNumber}

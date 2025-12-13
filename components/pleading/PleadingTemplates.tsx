@@ -25,7 +25,7 @@ export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates,
                 </div>
                 <h4 className={cn("font-bold text-sm mb-1 flex-1", theme.text.primary)}>{template.name}</h4>
                 <p className={cn("text-xs mb-3 opacity-70", theme.text.secondary)}>{template.category}</p>
-                <div className={cn("mt-auto text-xs flex items-center justify-end pt-2 border-t font-bold", theme.border.light, theme.primary.text)}>
+                <div className={cn("mt-auto text-xs flex items-center justify-end pt-2 border-t font-bold", theme.border.default, theme.primary.text)}>
                     Use Template <ArrowRight className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity"/>
                 </div>
             </div>

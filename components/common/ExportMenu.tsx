@@ -39,19 +39,19 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onExport }) => {
           <div className="py-1">
             <button
               onClick={() => { onExport('pdf'); setIsOpen(false); }}
-              className={cn("w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}
+              className={cn("w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}
             >
               <FileText className="h-4 w-4 text-red-500"/> PDF Report
             </button>
             <button
               onClick={() => { onExport('csv'); setIsOpen(false); }}
-              className={cn("w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}
+              className={cn("w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}
             >
               <Table className="h-4 w-4 text-green-500"/> CSV Data
             </button>
             <button
               onClick={() => { onExport('xml'); setIsOpen(false); }}
-              className={cn("w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}
+              className={cn("w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}
             >
               <FileCode className="h-4 w-4 text-blue-500"/> XML (LEDES)
             </button>

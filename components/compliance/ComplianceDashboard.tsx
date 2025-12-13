@@ -2,7 +2,7 @@
 import React, { Suspense, lazy, useTransition } from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '../common/Button';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 import { cn } from '../../utils/cn';

@@ -51,7 +51,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
     };
 
     const renderAnomalyRow = (a: DataAnomaly) => (
-      <div key={a.id} className={cn("flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b last:border-0 transition-colors gap-3", theme.border.light, `hover:${theme.surfaceHighlight}`)} style={{ height: 'auto', minHeight: '73px' }}>
+      <div key={a.id} className={cn("flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b last:border-0 transition-colors gap-3", theme.border.default, `hover:${theme.surface.highlight}`)} style={{ height: 'auto', minHeight: '73px' }}>
          <div className="flex items-start sm:items-center gap-4 flex-1">
              <div className={cn("p-2 rounded-full shrink-0", a.status === 'Fixed' ? cn(theme.status.success.bg, theme.status.success.text) : cn(theme.status.warning.bg, theme.status.warning.text))}>
                  {a.status === 'Fixed' ? <CheckCircle2 className="h-5 w-5"/> : <AlertOctagon className="h-5 w-5"/>}
@@ -61,11 +61,11 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
                      {a.table}.{a.field}
                      {a.status === 'Fixing' && <RefreshCw className={cn("h-3 w-3 animate-spin", theme.primary.text)}/>}
                  </h4>
-                 <p className={cn("text-xs truncate", theme.text.secondary)}>{a.issue} • <span className={cn("font-mono px-1 rounded", theme.surfaceHighlight)}>{a.count} rows</span></p>
+                 <p className={cn("text-xs truncate", theme.text.secondary)}>{a.issue} • <span className={cn("font-mono px-1 rounded", theme.surface.highlight)}>{a.count} rows</span></p>
              </div>
          </div>
          <div className="flex items-center gap-4 self-end sm:self-auto">
-             <span className={cn("text-xs font-mono px-2 py-1 rounded border hidden md:block truncate max-w-[150px]", theme.surfaceHighlight, theme.border.default, theme.text.tertiary)}>Sample: {a.sample}</span>
+             <span className={cn("text-xs font-mono px-2 py-1 rounded border hidden md:block truncate max-w-[150px]", theme.surface.highlight, theme.border.default, theme.text.tertiary)}>Sample: {a.sample}</span>
              {a.status === 'Detected' && (
                  <Button size="sm" variant="outline" icon={Check} onClick={() => handleFix(a.id)}>Fix</Button>
              )}

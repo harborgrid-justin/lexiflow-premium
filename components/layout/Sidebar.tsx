@@ -1,11 +1,11 @@
-// components/Sidebar.tsx
+// components/layout/Sidebar.tsx
 import React from 'react';
-import { User, AppView } from '../types';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { SidebarHeader } from './sidebar/SidebarHeader';
-import { SidebarNav } from './sidebar/SidebarNav';
-import { SidebarFooter } from './sidebar/SidebarFooter';
+import { User, AppView } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { SidebarHeader } from '../sidebar/SidebarHeader';
+import { SidebarNav } from '../sidebar/SidebarNav';
+import { SidebarFooter } from '../sidebar/SidebarFooter';
 
 interface SidebarProps {
   activeView: AppView;
@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
 
         <SidebarNav 
           activeView={activeView}
-          setActiveView={(view) => {
+          setActiveView={(view: AppView) => {
             setActiveView(view);
             if (window.innerWidth < 768) onClose();
           }}

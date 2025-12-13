@@ -60,7 +60,7 @@ export const BackupVault: React.FC = () => {
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto h-full overflow-y-auto">
         {/* Header Actions */}
-        <div className={cn("p-6 rounded-xl border flex flex-col md:flex-row justify-between items-center gap-4", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-6 rounded-xl border flex flex-col md:flex-row justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
             <div>
                 <h3 className={cn("text-lg font-bold flex items-center gap-2", theme.text.primary)}>
                     <ShieldCheck className="h-5 w-5 text-green-600"/> Automated Recovery Vault

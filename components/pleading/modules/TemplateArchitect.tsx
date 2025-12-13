@@ -23,7 +23,7 @@ export const TemplateArchitect: React.FC<TemplateArchitectProps> = ({ variables 
         <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
           <LayoutTemplate className="h-4 w-4 mr-2" /> Template Architect
         </h3>
-        <div className={cn("flex p-0.5 rounded-lg", theme.surfaceHighlight)}>
+        <div className={cn("flex p-0.5 rounded-lg", theme.surface.highlight)}>
            <button 
              onClick={() => setActiveTab('variables')}
              className={cn("p-1.5 rounded-md transition-colors", activeTab === 'variables' ? cn(theme.surface.default, "shadow text-blue-600") : "text-slate-500")}

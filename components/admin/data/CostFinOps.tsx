@@ -95,7 +95,7 @@ export const CostFinOps: React.FC = () => {
                          <p className="text-xs text-amber-700 mt-1">Pinecone index usage at 85% of monthly budget. Projected to exceed in 3 days.</p>
                      </div>
                  </div>
-                 <div className={cn("p-4 border rounded-lg flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+                 <div className={cn("p-4 border rounded-lg flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
                      <div>
                          <h4 className={cn("font-bold text-sm", theme.text.primary)}>Daily Compute Cap</h4>
                          <p className={cn("text-xs", theme.text.secondary)}>Used: $45 / $100</p>

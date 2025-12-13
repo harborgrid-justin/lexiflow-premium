@@ -75,7 +75,7 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities, onSelect }) 
                            </div>
                       </TableCell>
                       <TableCell>
-                          <span className={cn("text-xs font-mono px-2 py-1 rounded border", theme.surfaceHighlight, theme.border.default)}>
+                          <span className={cn("text-xs font-mono px-2 py-1 rounded border", theme.surface.highlight, theme.border.default)}>
                              {corp.id.length % 2 === 0 ? "Equity Interest" : "Senior Officer"}
                           </span>
                       </TableCell>

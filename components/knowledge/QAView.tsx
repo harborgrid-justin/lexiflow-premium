@@ -25,7 +25,7 @@ export const QAView: React.FC = () => {
         <p className={cn("text-sm mb-4", theme.text.secondary)}>Post a question to the firm-wide knowledge base. Experts will be notified.</p>
         <div className="flex gap-2">
             <input 
-                className={cn("flex-1 px-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                className={cn("flex-1 px-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.highlight, theme.border.default, theme.text.primary)}
                 placeholder="Type your question..."
             />
             <Button variant="primary">Ask Question</Button>
@@ -43,11 +43,11 @@ export const QAView: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center gap-2 text-xs mb-6 pl-9">
-                    <div className={cn("w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold", theme.surfaceHighlight, theme.text.secondary)}>JD</div>
+                    <div className={cn("w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold", theme.surface.highlight, theme.text.secondary)}>JD</div>
                     <span className={theme.text.secondary}>{item.asker} • {item.time}</span>
                 </div>
 
-                <div className={cn("ml-9 p-4 rounded-lg border-l-4", theme.surfaceHighlight, theme.status.success.border)}>
+                <div className={cn("ml-9 p-4 rounded-lg border-l-4", theme.surface.highlight, theme.status.success.border)}>
                     <p className={cn("text-sm leading-relaxed mb-3", theme.text.primary)}>
                         {item.answer}
                     </p>

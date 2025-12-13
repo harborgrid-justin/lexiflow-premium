@@ -11,7 +11,7 @@ import { DataService } from '../../services/dataService';
 import { Invoice } from '../../types';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { Formatters } from '../../utils/formatters';
 
 export const BillingInvoices: React.FC = () => {
@@ -64,7 +64,7 @@ export const BillingInvoices: React.FC = () => {
             placeholder="Search invoices..."
             actions={
                 <div className="flex gap-2">
-                    <div className={cn("flex items-center px-3 py-1.5 border rounded-md", theme.surfaceHighlight, theme.border.default)}>
+                    <div className={cn("flex items-center px-3 py-1.5 border rounded-md", theme.surface.highlight, theme.border.default)}>
                         <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
                         <select 
                             className={cn("bg-transparent text-sm outline-none border-none cursor-pointer", theme.text.primary)}

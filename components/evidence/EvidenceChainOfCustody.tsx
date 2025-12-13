@@ -110,7 +110,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
       </div>
 
       <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
-        <div className={cn("p-4 border-b font-bold text-xs uppercase tracking-wider", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+        <div className={cn("p-4 border-b font-bold text-xs uppercase tracking-wider", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
           Event History ({selectedItem.chainOfCustody.length})
         </div>
         <div className="divide-y max-h-96 overflow-y-auto custom-scrollbar">
@@ -118,7 +118,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
             <div className={cn("text-center py-8 italic", theme.text.tertiary)}>No custody events recorded.</div>
           )}
           {selectedItem.chainOfCustody.map(event => (
-            <div key={event.id} className={cn("p-4 flex items-start gap-4", theme.surface.default, theme.border.light)}>
+            <div key={event.id} className={cn("p-4 flex items-start gap-4", theme.surface.default, theme.border.default)}>
               <div className={cn("p-2 rounded-full shrink-0", theme.primary.light)}>
                 <Layers className={cn("h-5 w-5", theme.primary.text)}/>
               </div>
@@ -129,7 +129,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
                 </p>
                 {event.notes && <p className={cn("text-xs italic mt-2", theme.text.secondary)}>{event.notes}</p>}
                 {(event as any).hash && (
-                  <div className={cn("mt-2 p-2 rounded text-[10px] font-mono border break-all", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                  <div className={cn("mt-2 p-2 rounded text-[10px] font-mono border break-all", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                      <Link className={cn("h-3 w-3 inline mr-1", theme.text.tertiary)}/>
                      Hash: {(event as any).hash.substring(0, 12)}...
                   </div>
@@ -185,7 +185,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
             subtext="I certify this event is accurate and occurred as logged." 
           />
           
-          <div className={cn("pt-4 flex justify-end gap-3 border-t mt-4", theme.border.light)}>
+          <div className={cn("pt-4 flex justify-end gap-3 border-t mt-4", theme.border.default)}>
             <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
             <Button variant="primary" onClick={handleSaveEvent} disabled={isUpdating || !isSigned}>
               {isUpdating ? 'Logging...' : 'Save Event'}

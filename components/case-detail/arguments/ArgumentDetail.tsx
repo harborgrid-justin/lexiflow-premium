@@ -52,7 +52,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
   return (
     <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={cn("p-5 border-b flex justify-between items-start", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-5 border-b flex justify-between items-start", theme.surface.highlight, theme.border.default)}>
             <div className="flex-1 mr-4">
                 <div className="flex items-center gap-3 mb-2">
                     <span className={cn("text-xs font-mono border px-1.5 rounded", theme.text.tertiary, theme.border.default)}>ID: {argument.id.slice(-6)}</span>
@@ -61,7 +61,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                 <Input 
                     value={argument.title} 
                     onChange={(e) => onUpdate({ ...argument, title: e.target.value })}
-                    className={cn("text-lg font-bold border-transparent bg-transparent px-2 -ml-2 transition-all", theme.text.primary, `hover:${theme.surface.default}`, `hover:${theme.border.light}`, `focus:${theme.surface.default}`, `focus:${theme.border.default}`)}
+                    className={cn("text-lg font-bold border-transparent bg-transparent px-2 -ml-2 transition-all", theme.text.primary, `hover:${theme.surface.default}`, `hover:${theme.border.default}`, `focus:${theme.surface.default}`, `focus:${theme.border.default}`)}
                 />
             </div>
             <div className="flex items-center gap-2">
@@ -95,7 +95,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     </div>
 
                     {isLinkingCitation && (
-                        <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surfaceHighlight, theme.border.default)}>
+                        <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                             {allCitations.map(cit => (
                                 <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface.default}`)}>
                                     <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedCitationIds.includes(cit.id) ? "border-blue-500" : theme.border.default)}>
@@ -142,7 +142,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     </div>
 
                     {isLinkingEvidence && (
-                        <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surfaceHighlight, theme.border.default)}>
+                        <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                             {allEvidence.map(ev => (
                                 <div key={ev.id} onClick={() => toggleLink(ev.id, 'evidence')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedEvidenceIds?.includes(ev.id) ? "bg-blue-50 dark:bg-blue-900/20" : `hover:${theme.surface.default}`)}>
                                     <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedEvidenceIds?.includes(ev.id) ? "border-blue-500" : theme.border.default)}>
@@ -170,8 +170,8 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                                         </div>
                                         <p className={cn("text-xs mt-1", theme.text.secondary)}>{ev.description}</p>
                                         <div className="flex gap-2 mt-2">
-                                            <span className={cn("text-[10px] border px-1.5 py-0.5 rounded", theme.surfaceHighlight, theme.border.default)}>{ev.id}</span>
-                                            <span className={cn("text-[10px] border px-1.5 py-0.5 rounded", theme.surfaceHighlight, theme.border.default)}>{ev.type}</span>
+                                            <span className={cn("text-[10px] border px-1.5 py-0.5 rounded", theme.surface.highlight, theme.border.default)}>{ev.id}</span>
+                                            <span className={cn("text-[10px] border px-1.5 py-0.5 rounded", theme.surface.highlight, theme.border.default)}>{ev.type}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
             )}
         </div>
 
-        <div className={cn("p-4 border-t flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-t flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <button onClick={() => onDelete(argument.id)} className="text-red-600 text-xs font-bold hover:underline flex items-center"><Trash2 className="h-3 w-3 mr-1"/> Delete</button>
             <Button variant="primary" icon={Save} onClick={onClose}>Save Changes</Button>
         </div>

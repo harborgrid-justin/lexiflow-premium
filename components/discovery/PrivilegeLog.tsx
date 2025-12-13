@@ -22,7 +22,7 @@ export const PrivilegeLog: React.FC = () => {
 
   return (
     <div className="animate-fade-in space-y-4">
-      <div className={cn("flex flex-col md:flex-row justify-between items-start md:items-center p-4 rounded-lg border gap-4", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("flex flex-col md:flex-row justify-between items-start md:items-center p-4 rounded-lg border gap-4", theme.surface.highlight, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold", theme.text.primary)}>Privilege Log (FRCP 26(b)(5))</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Index of withheld documents claiming Attorney-Client or Work Product privilege.</p>
@@ -74,7 +74,7 @@ export const PrivilegeLog: React.FC = () => {
               <Badge variant="warning">{item.basis}</Badge>
             </div>
             
-            <div className={cn("text-sm mb-3 p-2 rounded border", theme.text.primary, theme.surfaceHighlight, theme.border.light)}>
+            <div className={cn("text-sm mb-3 p-2 rounded border", theme.text.primary, theme.surface.highlight, theme.border.default)}>
               {item.desc}
             </div>
 
@@ -89,7 +89,7 @@ export const PrivilegeLog: React.FC = () => {
               </div>
             </div>
 
-            <div className={cn("flex items-start gap-2 pt-3 border-t text-xs mt-2", theme.border.light, theme.text.secondary)}>
+            <div className={cn("flex items-start gap-2 pt-3 border-t text-xs mt-2", theme.border.default, theme.text.secondary)}>
               <Mail className={cn("h-3.5 w-3.5 mt-0.5", theme.text.tertiary)}/>
               <div className="flex-1">
                 <p><strong>From:</strong> {item.author}</p>

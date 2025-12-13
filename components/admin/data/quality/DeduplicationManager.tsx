@@ -70,7 +70,7 @@ export const DeduplicationManager: React.FC = () => {
                         
                         <div className={cn("divide-y border-b", theme.border.default)}>
                             {cluster.duplicates.map(record => (
-                                <div key={record.id} className={cn("p-4 flex items-center justify-between transition-colors", record.id === cluster.masterId ? theme.primary.light : "", `hover:${theme.surfaceHighlight}`)}>
+                                <div key={record.id} className={cn("p-4 flex items-center justify-between transition-colors", record.id === cluster.masterId ? theme.primary.light : "", `hover:${theme.surface.highlight}`)}>
                                     <div className="flex items-center gap-4">
                                         <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border", record.id === cluster.masterId ? cn(theme.primary.text, theme.primary.border) : cn(theme.text.tertiary, theme.border.default, theme.surface.default))}>
                                             {record.similarityScore}%

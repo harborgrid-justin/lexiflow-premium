@@ -24,10 +24,10 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive
         onClick={onSelect}
         className={cn(
           "p-4 border-b border-l-4 cursor-pointer transition-all group flex flex-col justify-center",
-          theme.border.light,
+          theme.border.default,
           isActive 
               ? cn(theme.surface.default, "border-l-blue-600 shadow-sm") 
-              : cn("bg-transparent border-l-transparent", `hover:${theme.surfaceHighlight}`)
+              : cn("bg-transparent border-l-transparent", `hover:${theme.surface.highlight}`)
         )}
       >
         <div className="flex justify-between items-start mb-1">

@@ -26,12 +26,12 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
 
   const content = (
       <div className={cn("p-6 h-full overflow-y-auto", theme.surface.default)}>
-        <div className={cn("flex justify-between items-start mb-6 border-b pb-4", theme.border.light)}>
+        <div className={cn("flex justify-between items-start mb-6 border-b pb-4", theme.border.default)}>
           <div>
             <div className="flex items-center gap-3 mb-2">
               <span className={cn("text-xl font-bold", theme.text.primary)}>Internal Seq #{entry.sequenceNumber}</span>
               {entry.pacerSequenceNumber && (
-                  <span className={cn("text-sm font-mono px-2 py-0.5 border rounded", theme.surfaceHighlight, theme.text.secondary)}>
+                  <span className={cn("text-sm font-mono px-2 py-0.5 border rounded", theme.surface.highlight, theme.text.secondary)}>
                       PACER #{entry.pacerSequenceNumber}
                   </span>
               )}
@@ -71,7 +71,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
                     </div>
                 </div>
                 {entry.structuredData.additionalText && (
-                    <div className={cn("mt-3 pt-3 border-t", theme.border.light)}>
+                    <div className={cn("mt-3 pt-3 border-t", theme.border.default)}>
                         <span className={cn("block text-[10px] font-bold uppercase mb-1", theme.text.secondary)}>Metadata</span>
                         <p className={cn("text-xs", theme.text.secondary)}>{entry.structuredData.additionalText}</p>
                     </div>
@@ -79,7 +79,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
             </div>
         )}
 
-        <div className={cn("p-4 rounded-lg border mb-6", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 rounded-lg border mb-6", theme.surface.highlight, theme.border.default)}>
           <div className="flex justify-between items-center mb-2">
             <h4 className={cn("text-sm font-bold", theme.text.primary)}>Full Text</h4>
             <CopyButton text={entry.description || entry.title} variant="ghost" size="sm" />
@@ -90,7 +90,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
 
         {/* Auto-generated Tags or Rules */}
         <div className="mb-6 flex gap-2">
-            {entry.title.toLowerCase().includes('motion') && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surfaceHighlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
+            {entry.title.toLowerCase().includes('motion') && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surface.highlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
             {entry.type === 'Order' && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}><Scale className="h-3 w-3"/> Ruling</span>}
         </div>
 
@@ -117,7 +117,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
           </div>
         )}
 
-        <div className={cn("flex justify-end pt-4 gap-2 border-t", theme.border.light)}>
+        <div className={cn("flex justify-end pt-4 gap-2 border-t", theme.border.default)}>
           <Button variant="secondary" onClick={onClose}>Close</Button>
           <Button variant="primary" icon={ExternalLink} onClick={() => { onClose(); onViewOnTimeline(entry.caseId); }}>View on Timeline</Button>
         </div>

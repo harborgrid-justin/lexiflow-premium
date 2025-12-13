@@ -37,7 +37,7 @@ export const AdvisorySidebar: React.FC<AdvisorySidebarProps> = ({ activeCategory
                         onClick={() => onSelectCategory(cat.id)}
                         className={cn(
                             "w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex justify-between items-center",
-                            activeCategory === cat.id ? cn(theme.surfaceHighlight, theme.primary.text, "shadow-sm border border-slate-200") : theme.text.secondary
+                            activeCategory === cat.id ? cn(theme.surface.highlight, theme.primary.text, "shadow-sm border border-slate-200") : theme.text.secondary
                         )}
                     >
                         <div className="flex items-center">
@@ -61,7 +61,7 @@ export const AdvisorySidebar: React.FC<AdvisorySidebarProps> = ({ activeCategory
                         onClick={() => onSelectCategory(spec.id)}
                         className={cn(
                             "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center",
-                            activeCategory === spec.id ? cn(theme.surfaceHighlight, theme.primary.text, "font-medium") : theme.text.secondary
+                            activeCategory === spec.id ? cn(theme.surface.highlight, theme.primary.text, "font-medium") : theme.text.secondary
                         )}
                     >
                         <spec.icon className={cn("h-3.5 w-3.5 mr-3 opacity-60")}/>

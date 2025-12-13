@@ -100,7 +100,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                             className={cn(
                                 "border-2 border-dashed rounded-lg p-10 text-center cursor-pointer transition-colors relative overflow-hidden",
                                 theme.border.default,
-                                `hover:${theme.surfaceHighlight}`
+                                `hover:${theme.surface.highlight}`
                             )}
                             onClick={() => fileInputRef.current?.click()}
                         >
@@ -169,7 +169,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                         <input 
                             type="text" 
                             disabled 
-                            className={cn("w-full border rounded-md px-3 py-2 font-mono text-xs", theme.border.default, theme.surfaceHighlight, theme.text.tertiary)}
+                            className={cn("w-full border rounded-md px-3 py-2 font-mono text-xs", theme.border.default, theme.surface.highlight, theme.text.tertiary)}
                             value={generatedData.uuid || 'Pending generation...'}
                         />
                       </div>

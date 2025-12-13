@@ -35,7 +35,7 @@ export const EnhancedWorkflowPanel: React.FC = () => {
           />
         </div>
         
-        <div className={cn("p-6 overflow-y-auto flex-1", theme.surfaceHighlight)}>
+        <div className={cn("p-6 overflow-y-auto flex-1", theme.surface.highlight)}>
           {activeTab === 'tasks' && <ParallelTasksManager />}
           {activeTab === 'dependencies' && <TaskDependencyManager />}
           {activeTab === 'approvals' && (

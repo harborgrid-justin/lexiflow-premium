@@ -26,7 +26,7 @@ export const CalendarRules: React.FC = () => {
         ) : (
             <div className="space-y-3">
             {rules.map((rule, i) => (
-                <div key={i} className={cn("flex items-center justify-between p-3 rounded border transition-colors", theme.surfaceHighlight, theme.border.default, `hover:${theme.border.light}`)}>
+                <div key={i} className={cn("flex items-center justify-between p-3 rounded border transition-colors", theme.surface.highlight, theme.border.default, `hover:${theme.border.default}`)}>
                 <span className={cn("text-sm font-medium", theme.text.secondary)}>{rule}</span>
                 <div className="h-5 w-5 bg-green-500 rounded-full flex items-center justify-center shrink-0">
                     <Check className="h-3 w-3 text-white"/>

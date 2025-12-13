@@ -71,7 +71,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   };
   
   const renderRow = (t: WorkflowTask) => (
-    <div key={t.id} className={cn("p-4 flex items-start transition-colors group h-[90px] border-b", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+    <div key={t.id} className={cn("p-4 flex items-start transition-colors group h-[90px] border-b", theme.border.default, `hover:${theme.surface.highlight}`)}>
         <div className="pt-0.5 mr-4">
             <input 
                 type="checkbox" 
@@ -97,7 +97,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
               </div>
           </div>
           <p className={cn("text-xs mt-1 flex items-center", theme.text.secondary)}>
-              {t.relatedModule && <span className={cn("flex items-center mr-3 px-1.5 py-0.5 rounded", theme.surfaceHighlight)}>{getModuleIcon(t.relatedModule)} {t.relatedModule}</span>}
+              {t.relatedModule && <span className={cn("flex items-center mr-3 px-1.5 py-0.5 rounded", theme.surface.highlight)}>{getModuleIcon(t.relatedModule)} {t.relatedModule}</span>}
               <span className="mr-3">Due: {t.dueDate}</span>
               <span>Assignee: {t.assignee}</span>
           </p>

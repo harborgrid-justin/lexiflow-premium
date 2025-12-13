@@ -10,11 +10,11 @@ import { DocumentService } from '../../services/documentService';
 import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { PreviewHeader } from './preview/PreviewHeader';
 import { PreviewContent } from './preview/PreviewContent';
 import { PIIPanel } from './preview/PIIPanel';
-import { useBlobRegistry } from '../../hooks/useBlobRegistry';
+import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 
 interface DocumentPreviewPanelProps {
   document: LegalDocument | null;
@@ -161,7 +161,7 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
                     </div>
                 )}
                 
-                <div className={cn("pt-4 border-t pb-12 md:pb-0", theme.border.light)}>
+                <div className={cn("pt-4 border-t pb-12 md:pb-0", theme.border.default)}>
                     <Button variant="outline" className="w-full" onClick={() => onViewHistory(document)}>View Version History</Button>
                 </div>
             </div>

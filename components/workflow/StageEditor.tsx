@@ -18,7 +18,7 @@ export const StageEditor: React.FC = () => {
   };
 
   return (
-    <div className={cn("p-4 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+    <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
       <h4 className={cn("font-bold mb-3", theme.text.primary)}>Edit Workflow Stages</h4>
       <div className="space-y-2">
         {stages.map((stage, idx) => (

@@ -48,7 +48,7 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
                     <span>Probability of Dismissal</span>
                     <span className="font-bold">24%</span>
                 </div>
-                <div className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}>
+                <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
                     <div className="bg-red-400 h-2 rounded-full" style={{ width: '24%' }}></div>
                 </div>
             </div>
@@ -57,7 +57,7 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
                     <span>Probability of Settlement</span>
                     <span className="font-bold">68%</span>
                 </div>
-                <div className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}>
+                <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
                     <div className="bg-blue-500 h-2 rounded-full" style={{ width: '68%' }}></div>
                 </div>
             </div>
@@ -92,3 +92,5 @@ export const CasePrediction: React.FC<CasePredictionProps> = ({ outcomeData }) =
     </div>
   );
 };
+
+export default CasePrediction;

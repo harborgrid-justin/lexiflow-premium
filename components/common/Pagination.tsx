@@ -32,7 +32,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
                 theme.border.default,
                 theme.surface.default,
                 theme.text.secondary,
-                `hover:${theme.surfaceHighlight}`
+                `hover:${theme.surface.highlight}`
               )}
             >
               <span className="sr-only">Previous</span>
@@ -56,7 +56,7 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
                 theme.border.default,
                 theme.surface.default,
                 theme.text.secondary,
-                `hover:${theme.surfaceHighlight}`
+                `hover:${theme.surface.highlight}`
               )}
             >
               <span className="sr-only">Next</span>

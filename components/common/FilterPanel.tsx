@@ -25,7 +25,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose, onCle
       theme.border.default,
       className
     )}>
-      <div className={cn("flex justify-between items-center mb-4 border-b pb-2", theme.border.light)}>
+      <div className={cn("flex justify-between items-center mb-4 border-b pb-2", theme.border.default)}>
         <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>{title}</h4>
         <div className="flex items-center gap-3">
           {onClear && (

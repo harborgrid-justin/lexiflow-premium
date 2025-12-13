@@ -10,7 +10,7 @@ import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 import { Loader2 } from 'lucide-react';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 interface CaseMessagesProps {
   caseData: Case;
@@ -56,7 +56,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   return (
     <div className={cn("flex flex-col h-[500px] md:h-[600px] max-h-[80vh] rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Thread Header */}
-      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surfaceHighlight)}>
+      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.border.default, theme.surface.highlight)}>
         <div>
           <h3 className={cn("font-bold flex items-center gap-2", theme.text.primary)}>
             <Lock className="h-4 w-4 text-blue-600"/> Case Communication Thread
@@ -69,7 +69,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
       </div>
 
       {/* Messages Area */}
-      <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surfaceHighlight)}>
+      <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surface.highlight)}>
         {messages.map((msg: Message) => { 
           const isMe = msg.senderId === 'me';
           const user = users.find(u => u.id === msg.senderId);
@@ -109,12 +109,12 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
       {/* Input Area */}
       <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
          <div className="flex items-center gap-3">
-            <button className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}>
+            <button className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}>
                 <Paperclip className="h-5 w-5"/>
             </button>
             <div className="flex-1 relative">
                 <input 
-                  className={cn("w-full border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none", theme.surfaceHighlight, theme.text.primary)}
+                  className={cn("w-full border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none", theme.surface.highlight, theme.text.primary)}
                   placeholder="Type a secure message..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}

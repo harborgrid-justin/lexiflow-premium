@@ -108,7 +108,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
             <select 
-                className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                 value={groupBy}
                 onChange={(e) => setGroupBy(e.target.value as GroupByOption)}
             >
@@ -145,7 +145,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                         <TableRow key={party.id}>
                             <TableCell className={cn("font-medium min-w-[200px]", theme.text.primary)}>
                                 <div className="flex items-start gap-3">
-                                    <div className={cn("p-2 rounded-full mt-0.5", theme.surfaceHighlight)}>{getIcon(party.type)}</div>
+                                    <div className={cn("p-2 rounded-full mt-0.5", theme.surface.highlight)}>{getIcon(party.type)}</div>
                                     <div className="min-w-0">
                                         <div className="truncate font-semibold">{party.name}</div>
                                         {linkedOrg && (
@@ -179,7 +179,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                                 {party.attorneys && party.attorneys.length > 0 ? (
                                     <div className="space-y-2">
                                         {party.attorneys.map((att, idx) => (
-                                            <div key={idx} className={cn("p-2 rounded border text-xs", theme.surfaceHighlight, theme.border.light)}>
+                                            <div key={idx} className={cn("p-2 rounded border text-xs", theme.surface.highlight, theme.border.default)}>
                                                 <div className="font-bold flex items-center gap-1 truncate" title={att.name}>
                                                     <Briefcase className={cn("h-3 w-3 shrink-0", theme.text.tertiary)}/> {att.name}
                                                 </div>
@@ -194,8 +194,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                             </TableCell>
                             <TableCell className="text-right">
                                 <div className="flex justify-end gap-2">
-                                    <button onClick={() => openEdit(party)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`, `hover:${theme.primary.text}`)}><Edit2 className="h-4 w-4"/></button>
-                                    <button onClick={() => handleDelete(party.id)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`, `hover:${theme.status.error.text}`)}><Trash2 className="h-4 w-4"/></button>
+                                    <button onClick={() => openEdit(party)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}><Edit2 className="h-4 w-4"/></button>
+                                    <button onClick={() => handleDelete(party.id)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`, `hover:${theme.status.error.text}`)}><Trash2 className="h-4 w-4"/></button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -206,7 +206,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
       ))}
 
       {parties.length === 0 && (
-         <div className={cn("text-center py-8 italic rounded-lg", theme.surfaceHighlight, theme.text.tertiary)}>No parties recorded.</div>
+         <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No parties recorded.</div>
       )}
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={currentParty.id ? 'Edit Party' : 'Add New Party'}>
@@ -259,7 +259,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                       <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
                         value={currentParty.linkedOrgId || ''} 
-                        onChange={e => setCurrentParty({...currentParty, linkedOrgId: e.target.value})}
+                        onChange={e => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}
                       >
                           <option value="">No Link</option>
                           {orgs.map(org => (
@@ -269,7 +269,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                   </div>
               )}
 
-              <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.light)}>
+              <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.default)}>
                   <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
                   <Button variant="primary" onClick={handleSave}>Save Party</Button>
               </div>

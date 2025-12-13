@@ -44,16 +44,16 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
-                <div className={cn("p-3 border-b flex items-center", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("p-3 border-b flex items-center", theme.surface.highlight, theme.border.default)}>
                     <Users className={cn("h-4 w-4 mr-2", theme.text.secondary)}/>
                     <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Parties Found ({parsedData.parties?.length || 0})</span>
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
                     {parsedData.parties?.map((p: any, i: number) => (
-                    <div key={i} className={cn("flex flex-col text-sm p-2 rounded border", theme.surface.default, theme.border.light)}>
+                    <div key={i} className={cn("flex flex-col text-sm p-2 rounded border", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between">
                             <span className={cn("font-medium", theme.text.primary)}>{p.name || 'Unknown Party'}</span>
-                            <span className={cn("text-xs px-2 py-0.5 rounded", theme.surfaceHighlight, theme.text.secondary)}>{p.role || 'Party'}</span>
+                            <span className={cn("text-xs px-2 py-0.5 rounded", theme.surface.highlight, theme.text.secondary)}>{p.role || 'Party'}</span>
                         </div>
                         {p.counsel && <span className={cn("text-xs mt-1", theme.text.tertiary)}>Counsel: {p.counsel}</span>}
                     </div>
@@ -65,13 +65,13 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
             </div>
 
             <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
-                <div className={cn("p-3 border-b flex items-center", theme.surfaceHighlight, theme.border.default)}>
+                <div className={cn("p-3 border-b flex items-center", theme.surface.highlight, theme.border.default)}>
                     <Calendar className={cn("h-4 w-4 mr-2", theme.text.secondary)}/>
                     <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Events / Deadlines ({parsedData.deadlines?.length || 0})</span>
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
                     {parsedData.deadlines?.length > 0 ? parsedData.deadlines.map((d: any, i: number) => (
-                    <div key={i} className={cn("flex justify-between items-center text-sm p-2 rounded border", theme.surface.default, theme.border.light)}>
+                    <div key={i} className={cn("flex justify-between items-center text-sm p-2 rounded border", theme.surface.default, theme.border.default)}>
                         <span className="text-red-600 font-medium">{d.date}</span>
                         <span className={cn("text-xs", theme.text.secondary)}>{d.title}</span>
                     </div>
@@ -81,20 +81,20 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
         </div>
 
         <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
-            <div className={cn("p-3 border-b flex items-center", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("p-3 border-b flex items-center", theme.surface.highlight, theme.border.default)}>
                 <FileText className={cn("h-4 w-4 mr-2", theme.text.secondary)}/>
                 <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Recent Docket Entries ({parsedData.docketEntries?.length || 0})</span>
             </div>
             <div className="max-h-64 overflow-y-auto p-2 space-y-2">
                 {parsedData.docketEntries?.slice().reverse().slice(0, 8).map((e: any, i: number) => (
-                <div key={i} className={cn("text-sm p-2 rounded border group", theme.surface.default, theme.border.light)}>
+                <div key={i} className={cn("text-sm p-2 rounded border group", theme.surface.default, theme.border.default)}>
                     <div className="flex gap-2 mb-1 justify-between">
                         <div className="flex gap-2">
-                            <span className={cn("font-mono text-xs px-1 rounded flex items-center", theme.surfaceHighlight, theme.text.secondary)}>
+                            <span className={cn("font-mono text-xs px-1 rounded flex items-center", theme.surface.highlight, theme.text.secondary)}>
                                 <Hash className="h-2 w-2 mr-0.5"/> {e.pacerSequenceNumber || e.sequenceNumber || e.entryNumber || '?'}
                             </span>
                             <span className={cn("text-xs font-medium", theme.text.primary)}>{e.date}</span>
-                            <span className={`text-[10px] px-1 rounded border ${e.type === 'Order' ? 'bg-red-50 text-red-600 border-red-100' : `${theme.surfaceHighlight} ${theme.text.secondary}`}`}>{e.type}</span>
+                            <span className={`text-[10px] px-1 rounded border ${e.type === 'Order' ? 'bg-red-50 text-red-600 border-red-100' : `${theme.surface.highlight} ${theme.text.secondary}`}`}>{e.type}</span>
                         </div>
                         {e.docLink && <ExternalLink className="h-3 w-3 text-blue-400 opacity-50 group-hover:opacity-100"/>}
                     </div>

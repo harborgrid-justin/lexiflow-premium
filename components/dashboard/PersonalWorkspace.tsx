@@ -44,7 +44,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                 <div className="space-y-4">
                                     {myTasks.length === 0 && <p className="text-center text-sm text-slate-500 py-8">No pending tasks assigned to you.</p>}
                                     {myTasks.map((task, i) => (
-                                        <div key={i} className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                                        <div key={i} className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                                             <div className="flex items-start gap-4">
                                                 <div className={cn("p-2 rounded-full", task.priority === 'High' ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600")}>
                                                     <CheckSquare className="h-5 w-5"/>

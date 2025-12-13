@@ -26,7 +26,7 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
         <Modal isOpen={true} onClose={() => setIsRuleModalOpen(false)} title="Manage Applicable Rules">
             <div className="p-6 space-y-4">
                 <RuleSelector selectedRules={rules} onRulesChange={setRules} />
-                <div className={cn("flex justify-end pt-4 border-t mt-4", theme.border.light)}>
+                <div className={cn("flex justify-end pt-4 border-t mt-4", theme.border.default)}>
                     <Button onClick={() => setIsRuleModalOpen(false)}>Done</Button>
                 </div>
             </div>
@@ -56,7 +56,7 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
           
           <div className="space-y-2">
             {rules.map(rule => (
-                <div key={rule} className={cn("flex items-center justify-between p-3 border rounded", theme.surfaceHighlight, theme.border.default)}>
+                <div key={rule} className={cn("flex items-center justify-between p-3 border rounded", theme.surface.highlight, theme.border.default)}>
                     <div className="flex items-center">
                         <div className="w-5 h-5 rounded-full border-2 border-green-500 flex items-center justify-center mr-3">
                             <CheckCircle className="h-3 w-3 text-green-500"/>

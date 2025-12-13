@@ -58,7 +58,7 @@ export const ProfileOverview: React.FC<ProfileOverviewProps> = ({ profile }) => 
                   <span className="text-sm font-medium text-slate-500 block mb-2">Skills & Expertise</span>
                   <div className="flex flex-wrap gap-2">
                       {profile.skills.map(skill => (
-                          <span key={skill} className={cn("px-2 py-1 rounded-full text-xs border font-medium", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                          <span key={skill} className={cn("px-2 py-1 rounded-full text-xs border font-medium", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                               {skill}
                           </span>
                       ))}
@@ -71,7 +71,7 @@ export const ProfileOverview: React.FC<ProfileOverviewProps> = ({ profile }) => 
             <Card title="Credentials & Compliance">
                 <div className="space-y-3">
                     {profile.barAdmissions.map((bar, idx) => (
-                        <div key={idx} className={cn("flex items-center justify-between p-3 rounded border", theme.surfaceHighlight, theme.border.default)}>
+                        <div key={idx} className={cn("flex items-center justify-between p-3 rounded border", theme.surface.highlight, theme.border.default)}>
                              <div className="flex items-center gap-3">
                                  <Scale className="h-5 w-5 text-purple-600"/>
                                  <div>

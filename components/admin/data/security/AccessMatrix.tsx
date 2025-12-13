@@ -51,7 +51,7 @@ export const AccessMatrix: React.FC = () => {
           case 'Write': return "bg-blue-50 text-blue-700 border-blue-200";
           case 'Read': return "bg-sky-50 text-sky-700 border-sky-200";
           case 'Own': return "bg-purple-50 text-purple-700 border-purple-200";
-          default: return cn(theme.surfaceHighlight, theme.text.secondary, theme.border.default, "opacity-60");
+          default: return cn(theme.surface.highlight, theme.text.secondary, theme.border.default, "opacity-60");
       }
   };
 
@@ -72,15 +72,15 @@ export const AccessMatrix: React.FC = () => {
         <table className="w-full text-sm text-left border-collapse">
             <thead className={cn("text-xs uppercase font-bold", theme.text.secondary)}>
                 <tr>
-                    <th className={cn("px-6 py-4 sticky top-0 left-0 z-20 border-b border-r min-w-[200px]", theme.surfaceHighlight, theme.border.default)}>Resource Scope</th>
+                    <th className={cn("px-6 py-4 sticky top-0 left-0 z-20 border-b border-r min-w-[200px]", theme.surface.highlight, theme.border.default)}>Resource Scope</th>
                     {roles.map(r => (
-                        <th key={r} className={cn("px-6 py-4 text-center sticky top-0 z-10 border-b", theme.surfaceHighlight, theme.border.default)}>{r}</th>
+                        <th key={r} className={cn("px-6 py-4 text-center sticky top-0 z-10 border-b", theme.surface.highlight, theme.border.default)}>{r}</th>
                     ))}
                 </tr>
             </thead>
-            <tbody className={cn("divide-y", theme.border.light)}>
+            <tbody className={cn("divide-y", theme.border.default)}>
                 {resources.map(res => (
-                    <tr key={res} className={cn("transition-colors", `hover:${theme.surfaceHighlight}`)}>
+                    <tr key={res} className={cn("transition-colors", `hover:${theme.surface.highlight}`)}>
                         <td className={cn("px-6 py-4 font-medium flex items-center gap-2 sticky left-0 z-10 border-r", theme.surface.default, theme.text.primary, theme.border.default)}>
                             <Shield className="h-4 w-4 text-blue-500 shrink-0"/> {res}
                         </td>
@@ -90,7 +90,7 @@ export const AccessMatrix: React.FC = () => {
                                 <td 
                                     key={role} 
                                     onClick={() => cyclePermission(role, res)}
-                                    className={cn("px-6 py-4 text-center cursor-pointer transition-colors border-r last:border-r-0 border-dashed", theme.border.light, `hover:${theme.surfaceHighlight}`)}
+                                    className={cn("px-6 py-4 text-center cursor-pointer transition-colors border-r last:border-r-0 border-dashed", theme.border.default, `hover:${theme.surface.highlight}`)}
                                 >
                                     <div className="flex justify-center">
                                         <span className={cn(
@@ -108,7 +108,7 @@ export const AccessMatrix: React.FC = () => {
                 ))}
             </tbody>
         </table>
-        <div className={cn("p-4 text-xs text-center border-t", theme.text.tertiary, theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 text-xs text-center border-t", theme.text.tertiary, theme.surface.highlight, theme.border.default)}>
             Click any cell to cycle permission levels: None → Read → Write → Full → Own
         </div>
     </div>

@@ -16,7 +16,7 @@ export const SchemaToolbar: React.FC<SchemaToolbarProps> = ({ activeTab, setActi
 
   return (
     <div className={cn("p-4 border-b flex flex-col md:flex-row justify-between items-center gap-4 shrink-0", theme.surface.default, theme.border.default)}>
-        <div className={cn("flex p-1 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("flex p-1 rounded-lg border", theme.surface.highlight, theme.border.default)}>
             <button onClick={() => setActiveTab('visual')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'visual' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><Table className="h-3 w-3 mr-2"/> Visual</button>
             <button onClick={() => setActiveTab('code')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'code' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><Code className="h-3 w-3 mr-2"/> Generate SQL</button>
             <button onClick={() => setActiveTab('history')} className={cn("px-4 py-1.5 text-xs font-medium rounded-md flex items-center", activeTab === 'history' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><GitBranch className="h-3 w-3 mr-2"/> Migrations</button>

@@ -104,7 +104,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                         risk.probability === lvl 
                                             ? "bg-blue-600 text-white border-blue-600 shadow-md" 
-                                            : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                            : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                     )}
                                 >
                                     {lvl}
@@ -123,7 +123,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
                                         risk.impact === lvl 
                                             ? "bg-blue-600 text-white border-blue-600 shadow-md" 
-                                            : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surfaceHighlight}`)
+                                            : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                     )}
                                 >
                                     {lvl}
@@ -165,7 +165,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
             </div>
         </div>
 
-        <div className={cn("p-4 border-t flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-t flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <button onClick={() => onDelete(risk.id)} className="text-red-600 hover:bg-red-50 p-2 rounded transition-colors">
                 <Trash2 className="h-5 w-5"/>
             </button>

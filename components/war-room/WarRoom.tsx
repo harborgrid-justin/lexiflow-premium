@@ -174,7 +174,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                             </select>
                             <ChevronDown className={cn("absolute right-0 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)}/>
                         </div>
-                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded border", theme.surfaceHighlight, theme.text.tertiary, theme.border.default)}>{currentCaseId}</span>
+                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.text.tertiary, theme.border.default)}>{currentCaseId}</span>
                     </div>
                 )}
             </div>
@@ -205,7 +205,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
 
         {/* Sub-Navigation (Pills) */}
         {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (
                     <button 
                         key={tab.id} 

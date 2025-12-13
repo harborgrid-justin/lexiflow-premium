@@ -34,7 +34,7 @@ export const DataProfiler: React.FC = () => {
         <div className="grid grid-cols-1 gap-6">
             {profiles.map((profile, idx) => (
                 <Card key={idx} noPadding>
-                    <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+                    <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
                         <div className="flex items-center gap-3">
                             <div className={cn("p-2 rounded border", theme.surface.default, theme.border.default)}>
                                 {getIcon(profile.type)}
@@ -74,7 +74,7 @@ export const DataProfiler: React.FC = () => {
                             </ResponsiveContainer>
                         </div>
                     </div>
-                    <div className={cn("p-3 border-t flex gap-4 text-xs", theme.border.default, theme.surfaceHighlight)}>
+                    <div className={cn("p-3 border-t flex gap-4 text-xs", theme.border.default, theme.surface.highlight)}>
                          {profile.nulls === 0 ? (
                              <div className="flex items-center text-green-600"><CheckCircle2 className="h-3 w-3 mr-1"/> Completeness Check Passed</div>
                          ) : (

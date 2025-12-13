@@ -38,7 +38,7 @@ export const WikiView: React.FC = () => {
   return (
     <div className={cn("flex h-full rounded-lg border overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Sidebar */}
-      <div className={cn("w-80 border-r flex flex-col shrink-0", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("w-80 border-r flex flex-col shrink-0", theme.surface.highlight, theme.border.default)}>
         <div className="p-4 border-b">
           <div className="relative">
             <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />

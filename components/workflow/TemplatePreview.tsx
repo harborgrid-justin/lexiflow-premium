@@ -33,7 +33,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
       onClick={onClick}
     >
       {/* Header */}
-      <div className={cn("p-5 border-b", theme.border.light, theme.surfaceHighlight)}>
+      <div className={cn("p-5 border-b", theme.border.default, theme.surface.highlight)}>
         <div className="flex justify-between items-start mb-2">
           <Badge variant="neutral" className={theme.surface.default}>{data.category}</Badge>
           {data.auditReady && (
@@ -57,7 +57,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
       </div>
 
       {/* Visual Mini-Map */}
-      <div className={cn("p-5 flex-1 flex flex-col justify-center", theme.surfaceHighlight)}>
+      <div className={cn("p-5 flex-1 flex flex-col justify-center", theme.surface.highlight)}>
         <div className="space-y-3 relative">
           <div className={cn("absolute left-3 top-2 bottom-2 w-0.5 -z-10", theme.border.default)}></div>
           {data.stages.slice(0, 4).map((stage, i) => (
@@ -69,7 +69,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
               )}>
                 {i + 1}
               </div>
-              <div className={cn("text-xs font-medium px-2 py-1 rounded border shadow-sm flex-1 truncate", theme.surface.default, theme.border.light, theme.text.secondary)}>
+              <div className={cn("text-xs font-medium px-2 py-1 rounded border shadow-sm flex-1 truncate", theme.surface.default, theme.border.default, theme.text.secondary)}>
                 {stage}
               </div>
             </div>
@@ -88,10 +88,10 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick 
       </div>
 
       {/* Footer */}
-      <div className={cn("p-3 border-t flex justify-between items-center text-xs", theme.surface.default, theme.border.light, theme.text.secondary)}>
+      <div className={cn("p-3 border-t flex justify-between items-center text-xs", theme.surface.default, theme.border.default, theme.text.secondary)}>
         <div className="flex gap-1">
           {data.tags.slice(0, 2).map(tag => (
-            <span key={tag} className={cn("px-1.5 py-0.5 rounded text-[10px]", theme.surfaceHighlight)}>{tag}</span>
+            <span key={tag} className={cn("px-1.5 py-0.5 rounded text-[10px]", theme.surface.highlight)}>{tag}</span>
           ))}
         </div>
         <span className={cn("flex items-center font-medium transition-colors", `group-hover:${theme.primary.text}`)}>

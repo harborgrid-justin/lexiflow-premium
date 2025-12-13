@@ -50,7 +50,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
               placeholder="Enter natural language query (e.g., 'Standard for piercing corporate veil in Delaware')..."
               className={cn(
                 "w-full pl-12 pr-4 py-3 border rounded-lg outline-none transition-all text-sm shadow-inner",
-                theme.surfaceHighlight,
+                theme.surface.highlight,
                 theme.border.default,
                 theme.text.primary,
                 "focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

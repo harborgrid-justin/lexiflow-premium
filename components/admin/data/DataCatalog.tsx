@@ -79,7 +79,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
             />
         </div>
 
-        <div className={cn("flex-1 overflow-hidden flex flex-col min-h-0", theme.surfaceHighlight)}>
+        <div className={cn("flex-1 overflow-hidden flex flex-col min-h-0", theme.surface.highlight)}>
             {activeTab === 'browse' && (
                 <div className="p-6 h-full overflow-y-auto">
                     {!selectedDomain ? (
@@ -103,7 +103,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                                     </div>
                                     <p className={cn("text-sm mb-4", theme.text.secondary)}>{domain.desc}</p>
                                     <div className="flex gap-2 text-xs">
-                                        <span className={cn("px-2 py-1 rounded flex items-center border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                                        <span className={cn("px-2 py-1 rounded flex items-center border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                                             <Tag className="h-3 w-3 mr-1"/> {domain.count} Tables
                                         </span>
                                     </div>

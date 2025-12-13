@@ -47,7 +47,7 @@ export const EntityVendorOps: React.FC<EntityVendorOpsProps> = ({ entities, onSe
                             </div>
                         </div>
                         <p className={cn("text-xs mb-3", theme.text.secondary)}>{vendor.type} • {vendor.city}</p>
-                        <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.light)}>
+                        <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.default)}>
                             <span className={theme.text.tertiary}>Hourly Rate</span>
                             <span className={cn("font-mono font-bold flex items-center", theme.text.primary)}><DollarSign className="h-3 w-3"/> {vendor.riskScore * 10 + 200}</span>
                         </div>

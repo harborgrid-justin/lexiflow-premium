@@ -6,7 +6,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { LazyLoader } from '../common/LazyLoader';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { ANALYTICS_TAB_CONFIG } from '../../config/analyticsDashboardConfig';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 

@@ -62,7 +62,7 @@ export const AuditTrailViewer: React.FC = () => {
 
   return (
     <div className={cn("rounded-lg border overflow-hidden flex flex-col h-full", theme.surface.default, theme.border.default)}>
-      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b flex justify-between items-center shrink-0", theme.surface.highlight, theme.border.default)}>
         <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
           <History className={cn("h-4 w-4 mr-2", theme.text.tertiary)} /> Workflow Audit Trail
         </h3>

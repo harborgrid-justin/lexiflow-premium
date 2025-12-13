@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react';
 import { Case, CaseStatus } from '../../types';
 import { Filter } from 'lucide-react';
-import { useSort } from '../../hooks/useSort';
+import { useSort } from '@/hooks/useSort';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
@@ -10,15 +10,15 @@ import { SwipeableItem } from '../common/SwipeableItem';
 import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { Button } from '../common/Button';
 import { FilterPanel } from '../common/FilterPanel';
 import { SearchInput, Input } from '../common/Inputs';
-import { useToggle } from '../../hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 import { Badge } from '../common/Badge';
 import { Currency } from '../common/Primitives';
 import { ActiveCaseTable } from './ActiveCaseTable';
-import { UseCaseListReturn } from '../../hooks/useCaseList';
+import { UseCaseListReturn } from '@/hooks/useCaseList';
 
 type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;
@@ -113,7 +113,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
                 </div>
                 <h4 className={cn("font-bold text-base leading-snug line-clamp-2 pl-2", theme.text.primary)}>{c.title}</h4>
             </div>
-            <div className={cn("flex items-center justify-between pl-2 pt-2 border-t", theme.border.light)}>
+            <div className={cn("flex items-center justify-between pl-2 pt-2 border-t", theme.border.default)}>
                 <Badge variant={getCaseStatusVariant(c.status)} className="text-[10px] px-2 py-0.5">{c.status}</Badge>
                 <Currency value={c.value || 0} className="font-bold text-sm" />
             </div>

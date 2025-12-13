@@ -27,11 +27,11 @@ export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) =>
   return (
     <div className="space-y-6">
         <div className={cn("rounded-lg p-6 shadow-lg border grid grid-cols-1 md:grid-cols-3 gap-6", mode === 'dark' ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200")}>
-            <div className={cn("border-r pr-6", theme.border.light)}>
+            <div className={cn("border-r pr-6", theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Operating Balance</p>
                 <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>{Formatters.currency(summary?.balance)}</p>
             </div>
-            <div className={cn("border-r pr-6", theme.border.light)}>
+            <div className={cn("border-r pr-6", theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Expenses (MTD)</p>
                 <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> {Formatters.currency(summary?.expensesMtd)}</p>
             </div>

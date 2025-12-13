@@ -29,7 +29,7 @@ export const SplitView: React.FC<SplitViewProps> = ({
       <div className={cn(
         "w-full md:w-80 lg:w-96 flex flex-col h-full border-r",
         theme.border.default,
-        theme.surfaceHighlight,
+        theme.surface.highlight,
         showSidebarOnMobile ? 'flex' : 'hidden md:flex'
       )}>
         {sidebar}

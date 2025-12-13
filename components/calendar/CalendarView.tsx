@@ -2,20 +2,20 @@
 
 import React, { Suspense, lazy, useTransition } from 'react';
 import { Download, Plus, Calendar, Clock, Users, Gavel, AlertTriangle, Settings, RefreshCw, Layers } from 'lucide-react';
-import { Button } from './common/Button';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from './layout/TabbedPageLayout';
-import { LazyLoader } from './common/LazyLoader';
-import { cn } from '../utils/cn';
+import { Button } from '../common/Button';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { cn } from '../../utils/cn';
 
 // Lazy load sub-components
-const CalendarMaster = lazy(() => import('./calendar/CalendarMaster').then(m => ({ default: m.CalendarMaster })));
-const CalendarDeadlines = lazy(() => import('./calendar/CalendarDeadlines').then(m => ({ default: m.CalendarDeadlines })));
-const CalendarTeam = lazy(() => import('./calendar/CalendarTeam').then(m => ({ default: m.CalendarTeam })));
-const CalendarHearings = lazy(() => import('./calendar/CalendarHearings').then(m => ({ default: m.CalendarHearings })));
-const CalendarSOL = lazy(() => import('./calendar/CalendarSOL').then(m => ({ default: m.CalendarSOL })));
-const CalendarRules = lazy(() => import('./calendar/CalendarRules').then(m => ({ default: m.CalendarRules })));
-const CalendarSync = lazy(() => import('./calendar/CalendarSync').then(m => ({ default: m.CalendarSync })));
+const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));
+const CalendarDeadlines = lazy(() => import('./CalendarDeadlines').then(m => ({ default: m.CalendarDeadlines })));
+const CalendarTeam = lazy(() => import('./CalendarTeam').then(m => ({ default: m.CalendarTeam })));
+const CalendarHearings = lazy(() => import('./CalendarHearings').then(m => ({ default: m.CalendarHearings })));
+const CalendarSOL = lazy(() => import('./CalendarSOL').then(m => ({ default: m.CalendarSOL })));
+const CalendarRules = lazy(() => import('./CalendarRules').then(m => ({ default: m.CalendarRules })));
+const CalendarSync = lazy(() => import('./CalendarSync').then(m => ({ default: m.CalendarSync })));
 
 type CalendarViewType = 'master' | 'team' | 'deadlines' | 'hearings' | 'sol' | 'rules' | 'sync';
 

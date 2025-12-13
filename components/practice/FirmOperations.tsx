@@ -8,8 +8,8 @@ import { LazyLoader } from '../common/LazyLoader';
 
 // Sub-components
 const HRManager = lazy(() => import('./hr/HRManager').then(m => ({ default: m.HRManager })));
-const FinancialCenter = lazy(() => import('./finance/FinancialCenter').then(m => ({ default: m.FinancialCenter })));
-const MarketingDashboard = lazy(() => import('./marketing/MarketingDashboard').then(m => ({ default: m.MarketingDashboard })));
+const FinancialCenter = lazy(() => import('./FinancialCenter').then(m => ({ default: m.FinancialCenter })));
+const MarketingDashboard = lazy(() => import('./MarketingDashboard').then(m => ({ default: m.MarketingDashboard })));
 const AssetManager = lazy(() => import('./AssetManager').then(m => ({ default: m.AssetManager })));
 
 // New Enterprise Modules

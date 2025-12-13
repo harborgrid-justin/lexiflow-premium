@@ -55,7 +55,7 @@ export const JurisdictionGeoMap: React.FC = () => {
               <div className={cn("p-6", theme.text.primary)}>
                   <h3 className="text-xl font-bold mb-2">{clickedNode.label}</h3>
                   <p className={cn("text-sm", theme.text.secondary)}>Type: {clickedNode.type === 'federal' ? 'Federal Circuit' : 'State Court'}</p>
-                  <div className={cn("mt-4 p-4 rounded border", theme.surfaceHighlight, theme.border.default)}>
+                  <div className={cn("mt-4 p-4 rounded border", theme.surface.highlight, theme.border.default)}>
                       <h4 className="font-bold text-sm mb-2">Local Rules</h4>
                       <p className="text-xs">L.R. 7-1 applies to all civil motions.</p>
                   </div>

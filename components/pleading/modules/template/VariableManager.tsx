@@ -15,7 +15,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
 
   return (
     <div className="space-y-4">
-      <div className={cn("flex items-center justify-between p-3 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("flex items-center justify-between p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
         <h4 className={cn("text-xs font-bold uppercase flex items-center", theme.text.secondary)}>
           <Variable className="h-3 w-3 mr-2" /> Dynamic Fields
         </h4>
@@ -29,7 +29,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
           <div key={variable.id} className={cn("p-3 rounded border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between mb-1">
               <span className={cn("text-xs font-mono font-medium", theme.primary.text)}>{`{{${variable.key}}}`}</span>
-              <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded text-slate-500", theme.surfaceHighlight)}>{variable.source}</span>
+              <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded text-slate-500", theme.surface.highlight)}>{variable.source}</span>
             </div>
             <p className={cn("text-xs mb-2", theme.text.secondary)}>{variable.label}</p>
             <div className="relative">

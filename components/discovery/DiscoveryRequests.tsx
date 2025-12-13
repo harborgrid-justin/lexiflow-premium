@@ -49,7 +49,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
   const renderRow = (req: DiscoveryRequest) => {
     const daysLeft = getDaysRemaining(req.dueDate);
     return (
-        <div key={req.id} onClick={() => onNavigate('response', req.id)} className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.light, `hover:${theme.surfaceHighlight}`)}>
+        <div key={req.id} onClick={() => onNavigate('response', req.id)} className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.default, `hover:${theme.surface.highlight}`)}>
              <div className="w-[30%] pr-4">
                  <div className="flex flex-col">
                     <span className={cn("font-medium truncate", theme.text.primary)}>{req.title}</span>
@@ -90,7 +90,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
     <div className="animate-fade-in space-y-4 h-full flex flex-col">
         {/* Desktop Table */}
         <div className={cn("hidden md:flex flex-col flex-1 border rounded-lg overflow-hidden", theme.surface.default, theme.border.default)}>
-            <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+            <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                 <div className="w-[30%]">Request</div>
                 <div className="w-[15%]">Type</div>
                 <div className="w-[15%]">Service Date</div>
@@ -131,7 +131,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
                             <Badge variant="neutral">{req.type}</Badge>
                         </div>
                         
-                        <div className={cn("flex justify-between items-center text-xs p-2 rounded mb-3", theme.surfaceHighlight, theme.text.secondary)}>
+                        <div className={cn("flex justify-between items-center text-xs p-2 rounded mb-3", theme.surface.highlight, theme.text.secondary)}>
                             <span className="flex items-center">Due: {req.dueDate}</span>
                             {req.status !== 'Responded' && (
                                 <span className={`font-bold ${daysLeft < 5 ? 'text-red-600' : theme.text.secondary}`}>

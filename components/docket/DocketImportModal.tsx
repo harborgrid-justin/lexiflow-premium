@@ -90,7 +90,7 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
                 className={cn(
                     "w-full h-64 p-4 border rounded-lg font-mono text-xs focus:ring-2 focus:ring-blue-500 outline-none", 
                     theme.border.default, 
-                    theme.surfaceHighlight, 
+                    theme.surface.highlight, 
                     theme.text.primary
                 )}
                 placeholder={mode === 'xml' ? "<caseSummary>...</caseSummary>" : "Paste docket text here..."}

@@ -26,7 +26,7 @@ export const DocumentGridCard: React.FC<DocumentGridCardProps> = ({ doc, isSelec
                 "h-full w-full border rounded-lg p-4 flex flex-col items-center justify-between cursor-pointer transition-all hover:shadow-md relative group",
                 theme.surface.default,
                 theme.border.default,
-                isSelected ? cn("ring-2 ring-blue-500", theme.primary.light) : `hover:${theme.surfaceHighlight}`
+                isSelected ? cn("ring-2 ring-blue-500", theme.primary.light) : `hover:${theme.surface.highlight}`
             )}
         >
             <div className="absolute top-2 left-2 z-10" onClick={e => e.stopPropagation()}>

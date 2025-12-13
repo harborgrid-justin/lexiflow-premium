@@ -68,7 +68,7 @@ export const ComplianceWalls: React.FC<ComplianceWallsProps> = ({ walls }) => {
                 </div>
             </div>
             
-            <div className={cn("flex md:flex-col items-center justify-center p-4 border-t md:border-t-0 md:border-l gap-2", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex md:flex-col items-center justify-center p-4 border-t md:border-t-0 md:border-l gap-2", theme.surface.highlight, theme.border.default)}>
                <Button variant="ghost" size="sm" className="w-full">Audit Log</Button>
                <Button variant="outline" size="sm" className="w-full">Edit Policy</Button>
             </div>

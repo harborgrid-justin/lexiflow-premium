@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { SearchInputBar } from '../common/RefactoredCommon';
 import { VirtualList } from '../common/VirtualList';
-import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 interface EntityGridProps {
   entities: LegalEntity[];
@@ -44,10 +44,10 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
       <div 
         key={ent.id} 
         onClick={() => onSelect(ent)} 
-        className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.light, `hover:${theme.surfaceHighlight}`)}
+        className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.default, `hover:${theme.surface.highlight}`)}
       >
         <div className="w-[35%] flex items-center gap-3 pr-4">
-            <div className={cn("p-2 rounded-lg border shadow-sm", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("p-2 rounded-lg border shadow-sm", theme.surface.highlight, theme.border.default)}>
                 {getIcon(ent.type)}
             </div>
             <div className="min-w-0">
@@ -60,7 +60,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
         </div>
         <div className="w-[20%]">
              <div className="flex flex-wrap gap-1">
-                {ent.roles.map(r => <span key={r} className={cn("text-[10px] px-1.5 py-0.5 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>{r}</span>)}
+                {ent.roles.map(r => <span key={r} className={cn("text-[10px] px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>{r}</span>)}
             </div>
         </div>
         <div className="w-[15%] text-xs text-slate-500">
@@ -104,7 +104,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
 
         <div className={cn("flex-1 min-h-0 flex flex-col border rounded-lg overflow-hidden shadow-sm", theme.surface.default, theme.border.default)}>
              {/* Fixed Header */}
-             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider", theme.border.default, theme.surfaceHighlight, theme.text.secondary)}>
+             <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider", theme.border.default, theme.surface.highlight, theme.text.secondary)}>
                 <div className="w-[35%]">Entity Name</div>
                 <div className="w-[15%]">Type</div>
                 <div className="w-[20%]">Roles</div>

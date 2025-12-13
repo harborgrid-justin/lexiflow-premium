@@ -166,7 +166,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                 <div key={cond.id} className="flex gap-3 items-center">
                                     <span className={cn("text-xs font-mono w-6 text-center", theme.text.tertiary)}>{idx === 0 ? 'WHERE' : 'AND'}</span>
                                     <input 
-                                        className={cn("flex-1 p-2 text-sm border rounded", theme.border.default, theme.surfaceHighlight, theme.text.primary)} 
+                                        className={cn("flex-1 p-2 text-sm border rounded", theme.border.default, theme.surface.highlight, theme.text.primary)} 
                                         placeholder="Field (e.g. email)"
                                         value={cond.field}
                                         onChange={e => updateCondition(cond.id, 'field', e.target.value)}
@@ -200,7 +200,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
             </div>
 
             {/* Right: Preview & Test */}
-            <div className={cn("w-96 p-6 flex flex-col", theme.surfaceHighlight)}>
+            <div className={cn("w-96 p-6 flex flex-col", theme.surface.highlight)}>
                  <div className="mb-6">
                     <h4 className={cn("font-bold text-xs uppercase mb-3 flex items-center", theme.text.secondary)}>
                         <Code className="h-4 w-4 mr-2"/> Generated Query
@@ -220,7 +220,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                     <div className="flex-1 flex flex-col items-center justify-center text-center">
                         {testStatus === 'idle' && (
                             <>
-                                <div className={cn("p-3 rounded-full mb-3", theme.surfaceHighlight)}><Play className={cn("h-6 w-6", theme.text.tertiary)}/></div>
+                                <div className={cn("p-3 rounded-full mb-3", theme.surface.highlight)}><Play className={cn("h-6 w-6", theme.text.tertiary)}/></div>
                                 <p className={cn("text-sm mb-4", theme.text.secondary)}>Test this rule against a sample dataset to verify logic.</p>
                                 <Button variant="outline" onClick={handleTest}>Run Test</Button>
                             </>

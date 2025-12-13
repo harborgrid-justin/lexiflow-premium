@@ -9,8 +9,8 @@ import { cn } from '../../utils/cn';
 import { ConnectivityHUD } from '../common/ConnectivityHUD';
 import { NeuralCommandBar } from './NeuralCommandBar';
 import { UserAvatar } from '../common/UserAvatar';
-import { useInterval } from '../../hooks/useInterval';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useInterval } from '@/hooks/useInterval';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 interface AppHeaderProps {
   onToggleSidebar: () => void;
@@ -41,7 +41,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
       <div className="flex items-center flex-1 gap-4">
         <button 
             onClick={onToggleSidebar} 
-            className={cn("md:hidden p-2 -ml-2 rounded-lg focus:outline-none transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}
+            className={cn("md:hidden p-2 -ml-2 rounded-lg focus:outline-none transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}
         >
             <Menu className="h-6 w-6" />
         </button>
@@ -65,20 +65,20 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         <div className="relative" ref={quickActionRef}>
              <button 
                 onClick={() => setIsQuickActionOpen(!isQuickActionOpen)}
-                className={cn("flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all text-xs font-bold shadow-sm", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surfaceHighlight}`)}
+                className={cn("flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all text-xs font-bold shadow-sm", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
              >
                  <PlusCircle className="h-4 w-4 text-blue-600"/> Quick Add
              </button>
              
              {isQuickActionOpen && (
                  <div className={cn("absolute top-full right-0 mt-2 w-48 rounded-lg shadow-xl border overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default)}>
-                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
+                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
                          <Clock className="h-4 w-4 text-green-600"/> Log Time
                      </button>
-                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
+                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
                          <FileText className="h-4 w-4 text-blue-600"/> New Document
                      </button>
-                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surfaceHighlight}`)}>
+                     <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
                          <UserPlus className="h-4 w-4 text-purple-600"/> New Client
                      </button>
                  </div>
@@ -87,7 +87,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
         <ConnectivityHUD />
         
-        <button className={cn("relative p-2 rounded-lg transition-colors group", theme.text.tertiary, `hover:${theme.surfaceHighlight} hover:${theme.text.secondary}`)}>
+        <button className={cn("relative p-2 rounded-lg transition-colors group", theme.text.tertiary, `hover:${theme.surface.highlight} hover:${theme.text.secondary}`)}>
             <Bell className="h-5 w-5" />
             <span className="absolute top-2 right-2 h-2 w-2 bg-rose-500 rounded-full border border-white dark:border-slate-800 animate-pulse"></span>
         </button>
@@ -95,7 +95,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         <div className={cn("h-8 w-px mx-1", theme.border.default)}></div>
 
         <button 
-            className={cn("flex items-center gap-3 pl-2 pr-1 py-1 rounded-lg transition-colors group", `hover:${theme.surfaceHighlight}`)} 
+            className={cn("flex items-center gap-3 pl-2 pr-1 py-1 rounded-lg transition-colors group", `hover:${theme.surface.highlight}`)} 
             onClick={onSwitchUser}
             title="Switch User Profile"
         >

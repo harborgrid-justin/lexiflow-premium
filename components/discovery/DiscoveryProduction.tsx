@@ -39,7 +39,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border animate-fade-in", theme.surface.default, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
             <div className="flex items-center">
                 <button onClick={onBack} className={cn("mr-3 p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.default}`)}>
                     <ArrowLeft className="h-5 w-5"/>
@@ -54,7 +54,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
         <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
             {/* Configuration */}
-            <div className={cn("w-full lg:w-96 border-r p-6 space-y-6 overflow-y-auto", theme.border.default, theme.surfaceHighlight)}>
+            <div className={cn("w-full lg:w-96 border-r p-6 space-y-6 overflow-y-auto", theme.border.default, theme.surface.highlight)}>
                 <Card title="Production Settings">
                     <div className="space-y-4">
                         <div>
@@ -107,21 +107,21 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
             <div className={cn("flex-1 p-8 overflow-y-auto", theme.surface.default)}>
                 <div className="max-w-3xl mx-auto space-y-6">
                     <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surface.highlight}`)}>
                             <Database className="h-6 w-6 text-blue-500 mb-2"/>
                             <span className={cn("text-sm font-bold", theme.text.primary)}>Import from Review</span>
                         </div>
-                        <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surface.highlight}`)}>
                             <HardDrive className="h-6 w-6 text-purple-500 mb-2"/>
                             <span className={cn("text-sm font-bold", theme.text.primary)}>Local Upload</span>
                         </div>
-                        <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("border p-4 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer transition-colors", theme.border.default, `hover:${theme.surface.highlight}`)}>
                             <Printer className={cn("h-6 w-6 mb-2", theme.text.secondary)}/>
                             <span className={cn("text-sm font-bold", theme.text.primary)}>Print to Mail</span>
                         </div>
                     </div>
 
-                    <div className={cn("border-2 border-dashed rounded-lg p-10 text-center cursor-pointer transition-colors relative", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                    <div className={cn("border-2 border-dashed rounded-lg p-10 text-center cursor-pointer transition-colors relative", theme.border.default, `hover:${theme.surface.highlight}`)}>
                         <input type="file" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileUpload}/>
                         {uploading ? (
                              <div className="text-blue-600 font-medium animate-pulse">Processing & Bates Stamping...</div>
@@ -136,7 +136,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
                     {uploadedFiles.length > 0 && (
                         <div>
-                            <h4 className={cn("text-sm font-bold uppercase mb-3 border-b pb-2 flex justify-between", theme.text.secondary, theme.border.light)}>
+                            <h4 className={cn("text-sm font-bold uppercase mb-3 border-b pb-2 flex justify-between", theme.text.secondary, theme.border.default)}>
                                 <span>Staged Documents</span>
                                 <span>{uploadedFiles.length} Items</span>
                             </h4>
@@ -145,7 +145,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                                     <div key={idx} className={cn("flex justify-between items-center text-sm p-3 shadow-sm border rounded transition-colors", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                                         <span className={cn("flex items-center font-medium", theme.text.primary)}><FileText className="h-4 w-4 mr-3 text-blue-500"/> {f}</span>
                                         <div className={cn("flex items-center text-xs", theme.text.tertiary)}>
-                                            <span className={cn("mr-3 font-mono px-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                                            <span className={cn("mr-3 font-mono px-1 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                                                 {config.batesPrefix}{String(config.startNumber + idx).padStart(6, '0')}
                                             </span>
                                             <Check className="h-4 w-4 text-green-500"/>

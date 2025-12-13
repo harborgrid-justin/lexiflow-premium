@@ -27,7 +27,7 @@ export const MigrationHistory: React.FC = () => {
                             )}>
                                 {mig.status === 'Applied' ? <CheckCircle className="h-4 w-4"/> : <XCircle className="h-4 w-4"/>}
                             </div>
-                            {idx !== migrations.length - 1 && <div className={cn("w-0.5 flex-1 -mb-4", theme.surfaceHighlight)}></div>}
+                            {idx !== migrations.length - 1 && <div className={cn("w-0.5 flex-1 -mb-4", theme.surface.highlight)}></div>}
                         </div>
                         <div className={cn("flex-1 p-4 rounded-lg border shadow-sm mb-4", theme.surface.default, theme.border.default)}>
                             <div className="flex justify-between items-start mb-2">
@@ -35,7 +35,7 @@ export const MigrationHistory: React.FC = () => {
                                 <span className={cn("text-xs font-mono", theme.text.tertiary)}>{mig.date}</span>
                             </div>
                             <p className={cn("text-sm mb-3", theme.text.secondary)}>{mig.desc}</p>
-                            <div className={cn("flex items-center justify-between pt-3 border-t", theme.border.light)}>
+                            <div className={cn("flex items-center justify-between pt-3 border-t", theme.border.default)}>
                                 <span className={cn("text-xs flex items-center", theme.text.secondary)}>
                                     <Clock className="h-3 w-3 mr-1"/> by {mig.author}
                                 </span>

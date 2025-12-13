@@ -5,14 +5,14 @@ import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { MetricCard } from '../../common/Primitives';
 import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2 } from 'lucide-react';
-import { StaffMember, UserId } from '../../types';
-import { DataService } from '../../services/dataService';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { StaffMember, UserId } from '../../../types';
+import { DataService } from '../../../services/dataService';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
 import { AddStaffModal } from './AddStaffModal';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useStaff } from '../../hooks/useDomainData';
+import { useMutation, queryClient } from '../../../services/queryClient';
+import { STORES } from '../../../services/db';
+import { useStaff } from '../../../hooks/useDomainData';
 
 export const HRManager: React.FC = () => {
   const { theme } = useTheme();
@@ -135,7 +135,7 @@ export const HRManager: React.FC = () => {
                       <span>{staff.currentBillable} hrs</span>
                       <span className={theme.text.tertiary}>/ {staff.billableTarget}</span>
                     </div>
-                    <div className={cn("w-full rounded-full h-1.5", theme.surfaceHighlight)}>
+                    <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}>
                       <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${Math.min(progress, 100)}%` }}></div>
                     </div>
                   </div>

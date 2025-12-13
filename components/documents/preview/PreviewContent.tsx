@@ -49,7 +49,7 @@ export const PreviewContent: React.FC<PreviewContentProps> = ({ document, previe
     if (!isPDF) {
         // Fallback for non-PDFs
         return (
-            <div className={cn("border rounded-lg overflow-hidden flex items-center justify-center min-h-[400px] relative group", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("border rounded-lg overflow-hidden flex items-center justify-center min-h-[400px] relative group", theme.surface.highlight, theme.border.default)}>
                  {isImage && previewUrl ? (
                     <img src={previewUrl} alt="Preview" className="max-w-full max-h-[600px] object-contain" style={isRedactionMode ? { filter: 'blur(8px)' } : {}} />
                  ) : (
@@ -79,7 +79,7 @@ export const PreviewContent: React.FC<PreviewContentProps> = ({ document, previe
             />
 
             {/* PDF Canvas Container */}
-            <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
+            <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                 {previewUrl ? (
                     <PDFViewer 
                         url={previewUrl} 

@@ -65,7 +65,7 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                         <button 
                             key={t} 
                             onClick={() => onAddTag(document.id, t)} 
-                            className={cn("text-xs px-2 py-1 border rounded flex items-center transition-colors", theme.border.default, theme.text.secondary, `hover:${theme.surfaceHighlight}`)}
+                            className={cn("text-xs px-2 py-1 border rounded flex items-center transition-colors", theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}
                         >
                             <Plus className="h-3 w-3 mr-1"/> {t}
                         </button>

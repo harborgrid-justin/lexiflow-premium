@@ -51,7 +51,7 @@ const MethodCard: React.FC<{ method: ApiMethod }> = ({ method }) => {
                     <h5 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Parameters</h5>
                     <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
                         {method.params.map((p, i) => (
-                            <div key={i} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.light)}>
+                            <div key={i} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.default)}>
                                 <code className={cn("font-bold", theme.text.primary)}>{p.name}</code>
                                 <code className={cn("text-purple-600 dark:text-purple-400", theme.text.secondary)}>{p.type}</code>
                                 <p className={cn("text-xs", theme.text.tertiary)}>{p.desc}</p>
@@ -98,7 +98,7 @@ export const ApiGateway: React.FC = () => {
                                 "w-full text-left flex items-center justify-between p-3 rounded-md text-sm font-medium transition-colors",
                                 selectedService?.name === service.name 
                                     ? cn(theme.primary.light, theme.primary.text) 
-                                    : cn(theme.text.secondary, `hover:${theme.surfaceHighlight}`)
+                                    : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                             )}
                         >
                             <div className="flex items-center gap-2">
@@ -112,7 +112,7 @@ export const ApiGateway: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surfaceHighlight)}>
+            <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surface.highlight)}>
                 {selectedService ? (
                     <>
                         <div className="mb-4">

@@ -42,7 +42,7 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           "p-4 rounded-lg border-2 border-dashed transition-all cursor-pointer group relative overflow-hidden",
           value 
             ? cn(theme.status.info.bg, theme.status.info.border) 
-            : cn(theme.surfaceHighlight, theme.border.default, `hover:${theme.border.light}`)
+            : cn(theme.surface.highlight, theme.border.default, `hover:${theme.border.default}`)
         )} 
         onClick={handleClick}
       >

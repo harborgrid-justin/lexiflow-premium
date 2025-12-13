@@ -38,7 +38,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
                         onClick={action.onClick} 
                         className={cn(
                             "w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center border",
-                            theme.surfaceHighlight, theme.text.secondary, theme.border.default,
+                            theme.surface.highlight, theme.text.secondary, theme.border.default,
                             `hover:${theme.primary.light}`, `hover:${theme.primary.text}`, `hover:${theme.primary.border}`
                         )}
                     >
@@ -54,7 +54,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
                 <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
                     <Link className="h-3 w-3 mr-2 text-blue-600 shrink-0"/> Linked Matters
                 </h4>
-                <button onClick={onShowLinkModal} className={cn("p-1 rounded transition-colors", `hover:${theme.surfaceHighlight}`, theme.primary.text)}>
+                <button onClick={onShowLinkModal} className={cn("p-1 rounded transition-colors", `hover:${theme.surface.highlight}`, theme.primary.text)}>
                     <Plus className="h-4 w-4"/>
                 </button>
             </div>
@@ -69,7 +69,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
                             onClick={() => onNavigateToCase && onNavigateToCase(lc)}
                             className={cn(
                                 "relative z-10 p-3 rounded-lg border cursor-pointer transition-all group overflow-hidden",
-                                theme.surfaceHighlight, theme.border.default,
+                                theme.surface.highlight, theme.border.default,
                                 `hover:${theme.primary.border}`, "hover:shadow-md"
                             )}
                         >

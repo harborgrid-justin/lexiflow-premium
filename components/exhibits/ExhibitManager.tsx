@@ -4,17 +4,17 @@ import {
   StickyNote, Filter, Layers, Users, Printer, Plus, Search, 
   BarChart2, PenTool, Layout, Grid, List, Loader2 
 } from 'lucide-react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { ExhibitTable } from './exhibits/ExhibitTable';
-import { StickerDesigner } from './exhibits/StickerDesigner';
-import { ExhibitStats } from './exhibits/ExhibitStats';
-import { TrialExhibit } from '../types';
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { ExhibitTable } from './ExhibitTable';
+import { StickerDesigner } from './StickerDesigner';
+import { ExhibitStats } from './ExhibitStats';
+import { TrialExhibit } from '../../types';
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';
@@ -138,7 +138,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                                 onClick={() => setFilterParty(p)}
                                 className={cn(
                                     "w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex justify-between items-center",
-                                    filterParty === p ? cn(theme.surfaceHighlight, theme.primary.text) : theme.text.secondary
+                                    filterParty === p ? cn(theme.surface.highlight, theme.primary.text) : theme.text.secondary
                                 )}
                             >
                                 {p} Exhibits

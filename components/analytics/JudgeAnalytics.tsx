@@ -20,7 +20,7 @@ export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) 
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
       <Card className="lg:col-span-1 flex flex-col h-full">
         <div className="flex items-center space-x-4 mb-6">
-          <div className={cn("p-4 rounded-full", theme.surfaceHighlight)}>
+          <div className={cn("p-4 rounded-full", theme.surface.highlight)}>
             <Gavel className={cn("h-8 w-8", theme.text.primary)}/>
           </div>
           <div>
@@ -79,3 +79,5 @@ export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) 
     </div>
   );
 };
+
+export default JudgeAnalytics;

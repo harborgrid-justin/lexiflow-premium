@@ -6,7 +6,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { useInterval } from '../../hooks/useInterval';
+import { useInterval } from '@/hooks/useInterval';
 
 interface SLAItem {
   id: string;
@@ -109,7 +109,7 @@ export const SLAMonitor: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surfaceHighlight)}>
+            <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surface.highlight)}>
               <div 
                 className={`h-full rounded-full transition-all duration-1000 ${
                   sla.status === 'Breached' ? 'bg-red-500' : 

@@ -43,7 +43,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
       <div className="flex flex-wrap gap-2 mb-2">
         {selectedRules.map(code => {
           return (
-            <div key={code} className={cn("inline-flex items-center px-2 py-1 rounded border text-xs cursor-default group", theme.surfaceHighlight, theme.border.default, theme.text.primary)}>
+            <div key={code} className={cn("inline-flex items-center px-2 py-1 rounded border text-xs cursor-default group", theme.surface.highlight, theme.border.default, theme.text.primary)}>
               <Book className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
               <span className="font-medium mr-1">{code}</span>
               {!readOnly && (
@@ -78,7 +78,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
                 availableRules.filter(r => !selectedRules.includes(r.code)).map(rule => (
                   <div 
                     key={rule.id} 
-                    className={cn("px-3 py-2 cursor-pointer border-b last:border-0 group transition-colors", theme.border.light, `hover:${theme.surfaceHighlight}`)}
+                    className={cn("px-3 py-2 cursor-pointer border-b last:border-0 group transition-colors", theme.border.default, `hover:${theme.surface.highlight}`)}
                     onClick={() => addRule(rule.code)}
                   >
                     <div className="flex justify-between items-center mb-0.5">
@@ -86,7 +86,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
                         <Book className="h-3 w-3 mr-1.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"/>
                         {rule.code}
                       </span>
-                      <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>{rule.type}</span>
+                      <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>{rule.type}</span>
                     </div>
                     <p className={cn("text-xs truncate pl-4", theme.text.secondary)}>{rule.name}</p>
                     {rule.summary && <p className={cn("text-[10px] truncate pl-4 mt-0.5 italic", theme.text.tertiary)}>{rule.summary}</p>}

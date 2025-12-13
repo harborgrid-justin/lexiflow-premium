@@ -25,7 +25,7 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
   }
 
   return (
-    <div className={cn("flex-1 overflow-y-auto p-4 space-y-3", theme.surfaceHighlight)}>
+    <div className={cn("flex-1 overflow-y-auto p-4 space-y-3", theme.surface.highlight)}>
         {argumentsList.map(arg => (
             <div 
                 key={arg.id}
@@ -48,7 +48,7 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
                     </Badge>
                 </div>
 
-                <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.light)}>
+                <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
                     <div className="flex gap-3">
                         <div className={cn("flex items-center text-xs px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100", !arg.relatedCitationIds.length && "opacity-50 grayscale")}>
                             <Scale className="h-3 w-3 mr-1.5"/>

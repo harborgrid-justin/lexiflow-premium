@@ -30,10 +30,10 @@ export const ResearchSidebar: React.FC<ResearchSidebarProps> = ({
                     onClick={() => onSelectSession(session.id)}
                     className={cn(
                         "p-4 border-b cursor-pointer transition-colors border-l-4",
-                        theme.border.light,
+                        theme.border.default,
                         activeSessionId === session.id 
-                            ? cn("border-l-blue-600", theme.surfaceHighlight)
-                            : cn("border-l-transparent", `hover:${theme.surfaceHighlight}`)
+                            ? cn("border-l-blue-600", theme.surface.highlight)
+                            : cn("border-l-transparent", `hover:${theme.surface.highlight}`)
                     )}
                 >
                     <p className={cn("text-sm font-medium line-clamp-2", activeSessionId === session.id ? theme.primary.text : theme.text.primary)}>

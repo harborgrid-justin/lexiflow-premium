@@ -41,7 +41,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
         {processes.map(bp => (
             <Card key={bp.id} noPadding className={cn("flex flex-col h-full transition-colors group cursor-pointer", `hover:${theme.primary.border}`)}>
             <div 
-                className={cn("p-5 border-b flex justify-between items-start", theme.border.default, theme.surfaceHighlight)}
+                className={cn("p-5 border-b flex justify-between items-start", theme.border.default, theme.surface.highlight)}
                 onClick={() => onSelectProcess && onSelectProcess(bp.id)}
             >
                 <div className="flex items-center gap-3">
@@ -63,7 +63,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                 className="p-5 flex-1 space-y-4"
                 onClick={() => onSelectProcess && onSelectProcess(bp.id)}
             >
-                <div className={cn("flex justify-between text-xs pb-2 border-b", theme.text.secondary, theme.border.light)}>
+                <div className={cn("flex justify-between text-xs pb-2 border-b", theme.text.secondary, theme.border.default)}>
                 <span>Trigger: <strong className={theme.text.primary}>{bp.triggers}</strong></span>
                 <span>Tasks: <strong>{bp.tasks}</strong></span>
                 </div>
@@ -74,14 +74,14 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                     <span className={theme.primary.text}>Processing...</span>
                     <span>{Math.round((bp.completed / bp.tasks) * 100)}%</span>
                     </div>
-                    <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surfaceHighlight)}>
+                    <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surface.highlight)}>
                     <div className={cn("h-1.5 rounded-full animate-progress", theme.primary.DEFAULT)} style={{ width: `${(bp.completed / bp.tasks) * 100}%` }}></div>
                     </div>
                 </div>
                 )}
 
                 {bp.status === 'Idle' && (
-                <div className={cn("flex items-center justify-center h-12 rounded border border-dashed text-xs italic", theme.surfaceHighlight, theme.border.default, theme.text.tertiary)}>
+                <div className={cn("flex items-center justify-center h-12 rounded border border-dashed text-xs italic", theme.surface.highlight, theme.border.default, theme.text.tertiary)}>
                     Waiting for automated trigger...
                 </div>
                 )}
@@ -96,7 +96,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
         ))}
         
         {/* New Process Card */}
-        <div className={cn("border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-8 transition-all cursor-pointer min-h-[200px]", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)}>
+        <div className={cn("border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-8 transition-all cursor-pointer min-h-[200px]", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
             <div className={cn("p-4 rounded-full shadow-sm mb-3", theme.surface.default)}>
             <Play className="h-6 w-6"/>
             </div>

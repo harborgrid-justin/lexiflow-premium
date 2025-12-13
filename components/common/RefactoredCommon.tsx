@@ -93,7 +93,7 @@ export const TabStrip: React.FC<{ children: React.ReactNode, className?: string 
 export const ModalFooter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { theme } = useTheme();
     return (
-        <div className={cn("flex justify-end gap-3 pt-4 border-t mt-4", theme.border.light)}>
+        <div className={cn("flex justify-end gap-3 pt-4 border-t mt-4", theme.border.default)}>
             {children}
         </div>
     );

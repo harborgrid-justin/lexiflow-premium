@@ -26,7 +26,7 @@ export const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) =>
             className={cn(
               "transition-colors py-1 px-1 rounded -ml-1",
               item.onClick 
-                ? cn(`hover:${theme.primary.text}`, `hover:${theme.surfaceHighlight}`)
+                ? cn(`hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)
                 : cn("font-semibold cursor-default", theme.text.primary)
             )}
           >

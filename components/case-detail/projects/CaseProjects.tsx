@@ -91,7 +91,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
 
       <div className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (
-            <div className={cn("text-center py-12 rounded-xl border-2 border-dashed h-64 flex flex-col items-center justify-center", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("text-center py-12 rounded-xl border-2 border-dashed h-64 flex flex-col items-center justify-center", theme.surface.highlight, theme.border.default)}>
                 <Briefcase className={cn("h-12 w-12 mx-auto mb-3", theme.text.tertiary)}/>
                 <p className={cn("font-medium", theme.text.secondary)}>No projects yet.</p>
                 <button onClick={() => setIsNewProjectModalOpen(true)} className="text-blue-600 text-sm hover:underline mt-2">Create your first project</button>

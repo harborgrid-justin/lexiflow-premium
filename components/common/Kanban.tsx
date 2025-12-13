@@ -29,13 +29,13 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, count, childr
     <div 
       className={cn(
         "flex flex-col w-[85vw] md:w-80 rounded-lg h-full border-2 transition-colors duration-200 snap-center shrink-0",
-        theme.surfaceHighlight,
+        theme.surface.highlight,
         isDragOver ? cn(theme.primary.border, theme.primary.light) : "border-transparent"
       )}
       onDragOver={(e) => { e.preventDefault(); }}
       onDrop={onDrop}
     >
-      <div className={cn("flex justify-between items-center p-3 mb-2 rounded-t-lg border-b", theme.border.light)}>
+      <div className={cn("flex justify-between items-center p-3 mb-2 rounded-t-lg border-b", theme.border.default)}>
         <div className="flex items-center gap-2">
           <span className={cn("font-bold text-sm", theme.text.primary)}>{title}</span>
           {count !== undefined && (

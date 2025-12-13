@@ -133,7 +133,7 @@ export const FormsSigningView: React.FC = () => {
     return (
         <div className="flex h-full">
             {/* Sidebar */}
-            <div className={cn("w-72 border-r flex flex-col shrink-0", theme.border.default, theme.surfaceHighlight)}>
+            <div className={cn("w-72 border-r flex flex-col shrink-0", theme.border.default, theme.surface.highlight)}>
                 <div className={cn("p-4 border-b", theme.border.default)}>
                     <h3 className={cn("font-bold", theme.text.primary)}>Forms & Templates</h3>
                     <div className="relative mt-2">
@@ -156,7 +156,7 @@ export const FormsSigningView: React.FC = () => {
                     {isLoading ? <Loader2 className="animate-spin m-4"/> : filteredDocuments.map(doc => (
                         <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
-                            theme.border.light,
+                            theme.border.default,
                             selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
@@ -182,7 +182,7 @@ export const FormsSigningView: React.FC = () => {
                             pageNum={pageNum} setPageNum={setPageNum}
                             totalPages={1}
                         />
-                        <div className={cn("flex-1 relative overflow-auto", theme.surfaceHighlight)}>
+                        <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
                                 <InteractiveOverlay 
                                     activeTool={activeTool} 

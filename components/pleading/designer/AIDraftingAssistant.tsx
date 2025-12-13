@@ -45,7 +45,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
   };
 
   return (
-    <div className={cn("flex flex-col h-full", theme.surfaceHighlight)}>
+    <div className={cn("flex flex-col h-full", theme.surface.highlight)}>
         <div className={cn("p-4 border-b", theme.surface.default, theme.border.default)}>
             <h3 className={cn("text-sm font-bold flex items-center gap-2", theme.text.primary)}>
                 <Sparkles className="h-4 w-4 text-purple-600" /> AI Co-Counsel

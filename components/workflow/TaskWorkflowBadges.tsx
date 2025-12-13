@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { cn } from '@utils/cn';
 
 interface TaskWorkflowBadgesProps {
   status: string | 'Pending' | 'In Progress' | 'Review' | 'Done';
@@ -23,7 +23,7 @@ export const TaskWorkflowBadges: React.FC<TaskWorkflowBadgesProps> = ({ status }
       styles = cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border);
       break;
     case 'Pending':
-      styles = cn(theme.surfaceHighlight, theme.text.tertiary, theme.border.default);
+      styles = cn(theme.surface.highlight, theme.text.tertiary, theme.border.default);
       break;
   }
 

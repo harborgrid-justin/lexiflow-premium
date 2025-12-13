@@ -24,11 +24,11 @@ export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdi
             >
                 <div className="flex items-start justify-between mb-2">
                     <div className={cn("p-2 rounded bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400")}><FileText className="h-6 w-6"/></div>
-                    <span className={cn("text-xs px-2 py-1 rounded-full font-medium border", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>{item.status}</span>
+                    <span className={cn("text-xs px-2 py-1 rounded-full font-medium border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>{item.status}</span>
                 </div>
                 <h4 className={cn("font-bold text-sm mb-1 line-clamp-2 flex-1", theme.text.primary)}>{item.title}</h4>
                 <p className={cn("text-xs mb-3 font-mono opacity-70", theme.text.secondary)}>{item.caseId}</p>
-                <div className={cn("mt-auto text-xs flex items-center pt-2 border-t", theme.border.light, theme.text.tertiary)}>
+                <div className={cn("mt-auto text-xs flex items-center pt-2 border-t", theme.border.default, theme.text.tertiary)}>
                     <Clock className="h-3 w-3 mr-1"/> Last edited: {item.lastAutoSaved ? new Date(item.lastAutoSaved).toLocaleDateString() : 'Just now'}
                 </div>
             </div>

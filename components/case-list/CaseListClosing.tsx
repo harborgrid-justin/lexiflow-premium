@@ -5,7 +5,7 @@ import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { GeminiService } from '../../services/geminiService';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 export const CaseListClosing: React.FC = () => {
   const { theme } = useTheme();
@@ -31,7 +31,7 @@ export const CaseListClosing: React.FC = () => {
 
   return (
     <div className={cn("rounded-lg border p-12 text-center h-full flex flex-col items-center justify-center", theme.surface.default, theme.border.default)}>
-      <div className={cn("w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4", theme.surfaceHighlight)}>
+      <div className={cn("w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4", theme.surface.highlight)}>
         <FileCheck className={cn("h-10 w-10", theme.text.tertiary)}/>
       </div>
       <h3 className={cn("text-xl font-medium", theme.text.primary)}>Closing Binder Generator</h3>

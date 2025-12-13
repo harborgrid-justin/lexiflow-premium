@@ -22,7 +22,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
     <div className="flex flex-col h-full space-y-4 md:space-y-6 animate-fade-in min-h-0">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
         <div className="flex items-center gap-4">
-          <button onClick={onBack} className={cn("p-2 rounded-full transition-colors border border-transparent", theme.text.secondary, `hover:${theme.surfaceHighlight}`, `hover:${theme.border.default}`)}>
+          <button onClick={onBack} className={cn("p-2 rounded-full transition-colors border border-transparent", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.border.default}`)}>
             <ArrowLeft className="h-6 w-6" />
           </button>
           <div>
@@ -58,7 +58,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
               <Card title="Recent Executions">
                 <div className="space-y-2">
                   {[1, 2, 3].map(i => (
-                    <div key={i} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                    <div key={i} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.border.default, `hover:${theme.surface.highlight}`)}>
                       <div>
                         <p className={cn("font-bold text-sm", theme.text.primary)}>Instance #{2040 + i} - TechStartup Inc.</p>
                         <p className={cn("text-xs", theme.text.secondary)}>Started: 2 hours ago</p>
@@ -72,13 +72,13 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
             <div className="space-y-6">
               <Card title="Owner & Roles">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold", theme.surfaceHighlight, theme.text.secondary)}>AT</div>
+                  <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold", theme.surface.highlight, theme.text.secondary)}>AT</div>
                   <div>
                     <p className={cn("font-bold text-sm", theme.text.primary)}>Admin Team</p>
                     <p className={cn("text-xs", theme.text.secondary)}>Process Owner</p>
                   </div>
                 </div>
-                <div className={cn("text-sm space-y-2 border-t pt-3", theme.text.secondary, theme.border.light)}>
+                <div className={cn("text-sm space-y-2 border-t pt-3", theme.text.secondary, theme.border.default)}>
                   <div className="flex justify-between"><span>Approvers:</span> <span className="font-medium">Partners</span></div>
                   <div className="flex justify-between"><span>Executors:</span> <span className="font-medium">Paralegals</span></div>
                 </div>
@@ -102,7 +102,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
         {activeTab === 'instances' && (
           <div className={cn("rounded-lg border shadow-sm flex-1 overflow-auto", theme.surface.default, theme.border.default)}>
             <table className={cn("min-w-full divide-y", theme.border.default)}>
-              <thead className={cn("sticky top-0", theme.surfaceHighlight)}>
+              <thead className={cn("sticky top-0", theme.surface.highlight)}>
                 <tr>
                   <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>Instance ID</th>
                   <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>Subject</th>
@@ -111,7 +111,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
                   <th className={cn("px-6 py-3 text-left text-xs font-medium uppercase tracking-wider", theme.text.secondary)}>Current Step</th>
                 </tr>
               </thead>
-              <tbody className={cn("divide-y", theme.surface.default, theme.border.light)}>
+              <tbody className={cn("divide-y", theme.surface.default, theme.border.default)}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <tr key={i}>
                     <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-mono", theme.text.secondary)}>BP-{2040+i}</td>

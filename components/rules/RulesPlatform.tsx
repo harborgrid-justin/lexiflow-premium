@@ -1,13 +1,13 @@
 
 import React, { Suspense, lazy, useMemo, useCallback, useEffect, useState, useTransition } from 'react';
-import { PageHeader } from './common/PageHeader';
-import { Button } from './common/Button';
+import { PageHeader } from '../common/PageHeader';
+import { Button } from '../common/Button';
 import { Plus, Filter } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { LazyLoader } from './common/LazyLoader';
-import { RULES_PLATFORM_TABS, RulesView } from '../config/rulesPlatformConfig';
-import { RulesPlatformContent } from './rules/RulesPlatformContent';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { LazyLoader } from '../common/LazyLoader';
+import { RULES_PLATFORM_TABS, RulesView } from '../../config/rulesPlatformConfig';
+import { RulesPlatformContent } from './RulesPlatformContent';
 
 interface RulesPlatformProps {
     initialTab?: RulesView;
@@ -67,7 +67,7 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
 
         {/* Sub-Navigation (Pills) */}
         {activeParentTab.subTabs.length > 1 && (
-            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (
                     <button 
                         key={tab.id} 

@@ -74,7 +74,7 @@ export const LedgerVisualizer: React.FC<LedgerVisualizerProps> = ({ chain, integ
                                     <span className={cn("text-xs font-mono", theme.text.tertiary)}>{new Date(block.timestamp).toLocaleTimeString()}</span>
                                 </div>
 
-                                <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-dashed", theme.border.light)}>
+                                <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-dashed", theme.border.default)}>
                                     <div>
                                         <p className={cn("text-[10px] uppercase font-bold mb-1", theme.text.tertiary)}>Previous Hash</p>
                                         <p className={cn("text-[10px] font-mono truncate", theme.text.secondary)} title={block.prevHash}>

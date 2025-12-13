@@ -124,7 +124,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                 <div>
                     <h2 className={cn("text-sm font-bold", theme.text.primary)}>{document.title}</h2>
                     <div className={cn("flex items-center text-xs gap-2", theme.text.secondary)}>
-                        <span className={cn("px-1.5 rounded", theme.surfaceHighlight)}>{document.status}</span>
+                        <span className={cn("px-1.5 rounded", theme.surface.highlight)}>{document.status}</span>
                         <span>Autosaved: {document.lastAutoSaved ? new Date(document.lastAutoSaved).toLocaleTimeString() : 'Just now'}</span>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
 
         <div className="flex-1 flex overflow-hidden">
             {/* Center Canvas */}
-            <div className={cn("flex-1 overflow-y-auto p-8 flex justify-center relative", theme.surfaceHighlight)}>
+            <div className={cn("flex-1 overflow-y-auto p-8 flex justify-center relative", theme.surface.highlight)}>
                  <DocumentCanvas 
                     sections={document.sections}
                     selectedSectionId={selectedSectionId}
@@ -170,8 +170,8 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                             className={cn(
                                 "flex-1 py-3 px-2 flex flex-col items-center justify-center min-w-[50px] border-b-2 transition-colors", 
                                 activeTool === tool.id 
-                                    ? cn("border-blue-600 text-blue-600", theme.surfaceHighlight) 
-                                    : cn("border-transparent text-slate-400 hover:text-slate-600", `hover:${theme.surfaceHighlight}`)
+                                    ? cn("border-blue-600 text-blue-600", theme.surface.highlight) 
+                                    : cn("border-transparent text-slate-400 hover:text-slate-600", `hover:${theme.surface.highlight}`)
                             )}
                             title={tool.title}
                          >

@@ -9,7 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
-import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { StatusBadge, EmptyListState } from '../common/RefactoredCommon';
 
 interface ExhibitTableProps {
@@ -63,7 +63,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {exhibits.map(ex => (
                   <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface.default, theme.border.default)}>
-                      <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surface.highlight, theme.border.light)}>
+                      <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surface.highlight, theme.border.default)}>
                           <FileIcon type={ex.fileType} className="h-16 w-16 opacity-30"/>
                           <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party))}>
                               {ex.exhibitNumber}
@@ -86,7 +86,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
   }
 
   const renderRow = (ex: TrialExhibit) => (
-      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 transition-colors", theme.surface.default, theme.border.light, `hover:${theme.surface.highlight}`)}>
+      <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
             <div className="w-[15%]">
                 <span className={cn("font-mono font-bold text-sm px-2 py-1 rounded border", getPartyColor(ex.party))}>
                     {ex.exhibitNumber}

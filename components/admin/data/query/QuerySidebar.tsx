@@ -24,13 +24,13 @@ export const QuerySidebar: React.FC<QuerySidebarProps> = ({ activeTab, setActive
         <div className="flex-1 overflow-y-auto p-4">
             {activeTab === 'schema' && Object.entries(schema).map(([table, details]: [string, any]) => (
                 <details key={table} className="group mb-2">
-                    <summary className={cn("flex items-center text-sm cursor-pointer p-1.5 rounded list-none transition-colors", `group-hover:${theme.surfaceHighlight}`, theme.text.primary)}>
+                    <summary className={cn("flex items-center text-sm cursor-pointer p-1.5 rounded list-none transition-colors", `group-hover:${theme.surface.highlight}`, theme.text.primary)}>
                         <Table className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/> {table}
                     </summary>
                     <div className="pl-6 pt-1 space-y-1">
                         {details.columns.map((col: any) => (
                             <div key={col.name} className={cn("text-xs flex items-center", theme.text.secondary)}>
-                            <div className={cn("w-2 h-2 rounded-full mr-2", theme.border.default, theme.surfaceHighlight)}></div>
+                            <div className={cn("w-2 h-2 rounded-full mr-2", theme.border.default, theme.surface.highlight)}></div>
                             <span className="font-mono">{col.name}</span>
                             <span className={cn("ml-2 font-sans", theme.text.tertiary)}>({col.type})</span>
                             </div>

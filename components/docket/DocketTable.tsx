@@ -92,7 +92,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
   return (
     <div className={cn("flex flex-col h-full", theme.surface.default)}>
         {/* Desktop Header */}
-        <div className={cn("hidden md:flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+        <div className={cn("hidden md:flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
             <div className="w-20 shrink-0">Seq / Pacer</div>
             <div className="w-24 shrink-0">Date</div>
             {showCaseColumn && <div className="w-32 shrink-0 px-2">Case Ref</div>}

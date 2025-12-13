@@ -18,18 +18,18 @@ export const CalendarTeam: React.FC = () => {
 
   return (
     <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in", theme.surface.default, theme.border.default)}>
-      <div className={cn("p-4 border-b", theme.surfaceHighlight, theme.border.default)}>
+      <div className={cn("p-4 border-b", theme.surface.highlight, theme.border.default)}>
         <h3 className={cn("font-bold", theme.text.primary)}>Team Availability (This Week)</h3>
       </div>
       <div className="p-6">
-        <div className={cn("hidden md:grid grid-cols-8 gap-4 mb-4 border-b pb-2", theme.border.light)}>
+        <div className={cn("hidden md:grid grid-cols-8 gap-4 mb-4 border-b pb-2", theme.border.default)}>
           <div className={cn("col-span-1 font-semibold text-xs uppercase", theme.text.tertiary)}>Team Member</div>
           {days.map(d => <div key={d} className={cn("col-span-1 font-semibold text-xs uppercase text-center", theme.text.tertiary)}>{d}</div>)}
         </div>
         
         <div className="space-y-6 md:space-y-6">
           {team.map((member, idx) => (
-            <div key={idx} className={cn("grid grid-cols-1 md:grid-cols-8 gap-4 items-center border-b md:border-b-0 pb-4 md:pb-0 last:border-0", theme.border.light)}>
+            <div key={idx} className={cn("grid grid-cols-1 md:grid-cols-8 gap-4 items-center border-b md:border-b-0 pb-4 md:pb-0 last:border-0", theme.border.default)}>
               <div className="col-span-1 flex items-center gap-2 mb-2 md:mb-0">
                 <UserAvatar name={member.name} size="sm"/>
                 <div className="overflow-hidden">
@@ -46,7 +46,7 @@ export const CalendarTeam: React.FC = () => {
                             "h-8 w-full rounded-md flex items-center justify-center border transition-colors",
                             status 
                                 ? "bg-green-100 border-green-200" 
-                                : cn(theme.surfaceHighlight, theme.border.default)
+                                : cn(theme.surface.highlight, theme.border.default)
                         )}>
                             <span className={cn("text-[10px] md:text-xs font-medium", status ? "text-green-700" : theme.text.tertiary)}>
                             {status ? 'OK' : '-'}

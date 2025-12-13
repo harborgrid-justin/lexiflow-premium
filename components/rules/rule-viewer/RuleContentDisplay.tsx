@@ -21,9 +21,9 @@ export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selected
         {activeTab === 'text' && (
             <div className="space-y-6 animate-fade-in">
                 {Object.entries(data.text).map(([key, val]: [string, any]) => (
-                    <div key={key} className={cn("pl-4 border-l-2", theme.border.light)}>
+                    <div key={key} className={cn("pl-4 border-l-2", theme.border.default)}>
                         <h4 className={cn("text-sm font-bold mb-2 flex items-center", theme.text.primary)}>
-                            <span className={cn("px-1.5 py-0.5 rounded mr-2 text-xs font-mono", theme.surfaceHighlight, theme.text.secondary)}>({key})</span>
+                            <span className={cn("px-1.5 py-0.5 rounded mr-2 text-xs font-mono", theme.surface.highlight, theme.text.secondary)}>({key})</span>
                             {val.title}
                         </h4>
                         
@@ -56,7 +56,7 @@ export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selected
         {/* History / Statutory Notes */}
         {activeTab === 'history' && data.statutory_notes && (
              <div className="space-y-6 animate-fade-in">
-                 <div className={cn("p-4 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+                 <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                      <h4 className={cn("text-sm font-bold mb-2 flex items-center", theme.text.primary)}><History className="h-4 w-4 mr-2"/> Enactment</h4>
                      <div className={cn("text-xs grid grid-cols-2 gap-4", theme.text.secondary)}>
                          <div><strong>Public Law:</strong> {data.statutory_notes.enactment.public_law}</div>
@@ -69,7 +69,7 @@ export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selected
                      <h4 className={cn("text-sm font-bold mb-3", theme.text.primary)}>Amendments</h4>
                      <ul className="space-y-2">
                          {data.statutory_notes.amendments.map((am: any, i: number) => (
-                             <li key={i} className={cn("text-xs flex items-center p-2 border rounded hover:opacity-80", theme.surfaceHighlight, theme.border.light)}>
+                             <li key={i} className={cn("text-xs flex items-center p-2 border rounded hover:opacity-80", theme.surface.highlight, theme.border.default)}>
                                  <span className={cn("font-medium mr-2", theme.text.primary)}>{am.date}</span>
                                  <span className={theme.text.secondary}>Effective: {am.effective_date}</span>
                              </li>

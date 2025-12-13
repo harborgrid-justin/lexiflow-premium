@@ -20,7 +20,7 @@ export const StandingOrders: React.FC = () => {
             {judges.map((judge) => (
                 <Card key={judge.id} className="flex flex-col h-full">
                     <div className="flex items-start gap-4 mb-4">
-                        <div className={cn("p-3 rounded-full", theme.surfaceHighlight, theme.text.secondary)}><Gavel className="h-6 w-6"/></div>
+                        <div className={cn("p-3 rounded-full", theme.surface.highlight, theme.text.secondary)}><Gavel className="h-6 w-6"/></div>
                         <div>
                             <h4 className={cn("font-bold text-lg", theme.text.primary)}>{judge.name}</h4>
                             <p className={cn("text-xs uppercase tracking-wide", theme.text.secondary)}>{judge.court}</p>
@@ -28,16 +28,16 @@ export const StandingOrders: React.FC = () => {
                     </div>
                     
                     <div className="flex-1 space-y-3">
-                        <h5 className={cn("text-xs font-bold uppercase border-b pb-1 mb-2", theme.text.tertiary, theme.border.light)}>Active Orders</h5>
+                        <h5 className={cn("text-xs font-bold uppercase border-b pb-1 mb-2", theme.text.tertiary, theme.border.default)}>Active Orders</h5>
                         {/* Mock Orders based on judge tendencies */}
-                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                             <div className="flex items-center gap-2">
                                 <FileIcon />
                                 <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>Civil Pre-Trial Order</span>
                             </div>
                             <Download className={cn("h-4 w-4", theme.text.tertiary)}/>
                         </div>
-                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surfaceHighlight}`)}>
+                        <div className={cn("flex items-center justify-between p-2 rounded border cursor-pointer group transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                             <div className="flex items-center gap-2">
                                 <FileIcon />
                                 <span className={cn("text-sm font-medium group-hover:underline", theme.primary.text)}>Discovery Protocols</span>
@@ -46,7 +46,7 @@ export const StandingOrders: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={cn("mt-4 pt-4 border-t flex justify-between items-center", theme.border.light)}>
+                    <div className={cn("mt-4 pt-4 border-t flex justify-between items-center", theme.border.default)}>
                         <span className={cn("text-xs", theme.text.secondary)}>Updated: 2 weeks ago</span>
                         <Button size="sm" variant="ghost" icon={ExternalLink}>Court Page</Button>
                     </div>

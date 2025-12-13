@@ -6,7 +6,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { queryClient } from '../../services/queryClient';
 import { PATHS } from '../../constants/paths';
-import { useHoverIntent } from '../../hooks/useHoverIntent';
+import { useHoverIntent } from '@/hooks/useHoverIntent';
 import { PREFETCH_MAP } from '../../config/prefetchConfig';
 import { Scheduler } from '../../utils/scheduler';
 

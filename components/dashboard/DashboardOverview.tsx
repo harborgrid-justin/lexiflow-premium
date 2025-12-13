@@ -18,7 +18,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   const { data: stats, isLoading: statsLoading } = useQuery(['dashboard', 'stats'], DataService.dashboard.getStats);
   const { data: tasks = [] } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], DataService.tasks.getAll);
   const { data: chartData = [] } = useQuery(['dashboard', 'charts'], DataService.dashboard.getChartData);
-  const { data: alerts = [] } = useQuery(['dashboard', 'alerts'], DataService.dashboard.getRecentAlerts);
+  const { data: rawAlerts = [] } = useQuery(['dashboard', 'alerts'], DataService.dashboard.getRecentAlerts);
+
+  // Transform alerts to match DashboardAlert type
+  const alerts = rawAlerts.map((alert: any) => ({
+    id: typeof alert.id === 'number' ? alert.id : parseInt(String(alert.id), 10),
+    message: alert.message,
+    detail: alert.detail,
+    time: alert.time,
+    caseId: alert.caseId
+  }));
 
   // Optimization: Defer heavy processing of tasks to idle time
   const [activeProjects, setActiveProjects] = useState<any[]>([]);

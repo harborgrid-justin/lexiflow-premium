@@ -14,7 +14,7 @@ export const DocketSettings: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-6">
       <Card title="Court Integrations (CM/ECF)">
         <div className="space-y-6">
-            <div className={cn("flex items-center justify-between p-4 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex items-center justify-between p-4 border rounded-lg", theme.surface.highlight, theme.border.default)}>
                 <div className="flex items-center gap-4">
                     <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">P</div>
                     <div>
@@ -30,7 +30,7 @@ export const DocketSettings: React.FC = () => {
                 </div>
             </div>
 
-            <div className={cn("flex items-center justify-between p-4 border rounded-lg", theme.surfaceHighlight, theme.border.default)}>
+            <div className={cn("flex items-center justify-between p-4 border rounded-lg", theme.surface.highlight, theme.border.default)}>
                 <div className="flex items-center gap-4">
                     <div className="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-700 font-bold text-lg">N</div>
                     <div>

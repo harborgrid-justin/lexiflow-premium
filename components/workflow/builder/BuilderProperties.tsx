@@ -28,7 +28,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
       isOpen ? 'translate-x-0' : 'translate-x-full md:hidden'
     )}>
       <div className="h-full flex flex-col">
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surfaceHighlight)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
           <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
             <Settings className="h-4 w-4 mr-2" /> Configuration
           </h4>
@@ -50,7 +50,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
 
               <div>
                 <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Component Type</label>
-                <div className={cn("flex items-center gap-2 p-2 rounded border text-sm", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                <div className={cn("flex items-center gap-2 p-2 rounded border text-sm", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                     {getNodeIcon(selectedNode.type)}
                     {selectedNode.type}
                 </div>
@@ -93,7 +93,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
                 onChange={(e) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, description: e.target.value } })}
               />
 
-              <div className={cn("pt-4 border-t", theme.border.light)}>
+              <div className={cn("pt-4 border-t", theme.border.default)}>
                 <Button variant="danger" size="sm" icon={Trash2} onClick={() => onDeleteNode(selectedNode.id)} className="w-full">
                   Delete Node
                 </Button>

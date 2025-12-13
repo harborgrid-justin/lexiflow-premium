@@ -7,7 +7,7 @@ import { Case } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
-import { ClientPortalModal } from '../ClientPortalModal';
+import { ClientPortalModal } from '../crm/ClientPortalModal';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 

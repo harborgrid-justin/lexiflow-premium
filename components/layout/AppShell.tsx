@@ -2,8 +2,8 @@
 import React, { memo } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useAutoTimeCapture } from '../../hooks/useAutoTimeCapture';
-import { useGlobalQueryStatus } from '../../hooks/useGlobalQueryStatus';
+import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
+import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
 
 interface AppShellProps {
   sidebar: React.ReactNode;

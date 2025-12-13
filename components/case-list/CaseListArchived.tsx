@@ -35,7 +35,7 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
 
   return (
     <div className="space-y-4">
-      <div className={cn("p-4 rounded text-center text-sm border", theme.surfaceHighlight, theme.text.secondary, theme.border.default)}>
+      <div className={cn("p-4 rounded text-center text-sm border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>
         Showing cases closed in the last 12 months. Older cases are in Cold Storage.
       </div>
       <TableContainer responsive="card">

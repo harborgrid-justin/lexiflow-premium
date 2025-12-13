@@ -53,14 +53,14 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
               {/* Witness Header */}
               <div className={cn("flex justify-between items-start p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                   <div className="flex items-center gap-6">
-                      <button onClick={handleCloseDetail} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surfaceHighlight}`)}>
+                      <button onClick={handleCloseDetail} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                           <ArrowLeft className="h-6 w-6"/>
                       </button>
                       <UserAvatar name={activeWitness.name} size="xl"/>
                       <div>
                           <h2 className={cn("text-2xl font-bold", theme.text.primary)}>{activeWitness.name}</h2>
                           <div className={cn("flex items-center gap-3 mt-1 text-sm", theme.text.secondary)}>
-                              <span className={cn("font-medium px-2 py-0.5 rounded border", theme.surfaceHighlight, theme.border.default)}>{activeWitness.role}</span>
+                              <span className={cn("font-medium px-2 py-0.5 rounded border", theme.surface.highlight, theme.border.default)}>{activeWitness.role}</span>
                               <span>Scheduled: {activeWitness.scheduled}</span>
                           </div>
                       </div>
@@ -116,13 +116,13 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                                 <span>Prep Completion</span>
                                 <span className="font-bold">{w.prep}%</span>
                             </div>
-                            <div className={cn("w-full h-1.5 rounded-full", theme.surfaceHighlight)}>
+                            <div className={cn("w-full h-1.5 rounded-full", theme.surface.highlight)}>
                                 <div className={cn("h-1.5 rounded-full transition-all bg-blue-500")} style={{ width: `${w.prep}%` }}></div>
                             </div>
                         </div>
                     </div>
 
-                    <div className={cn("p-3 border-t flex gap-2", theme.surfaceHighlight, theme.border.default)} onClick={e => e.stopPropagation()}>
+                    <div className={cn("p-3 border-t flex gap-2", theme.surface.highlight, theme.border.default)} onClick={e => e.stopPropagation()}>
                         <Button size="sm" variant="ghost" className="flex-1 text-xs" icon={FileText} onClick={() => setSelectedWitnessId(w.id)}>Outline</Button>
                         <Button size="sm" variant="ghost" className="flex-1 text-xs" icon={LinkIcon} onClick={() => setSelectedWitnessId(w.id)}>Exhibits</Button>
                     </div>

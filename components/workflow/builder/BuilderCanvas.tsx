@@ -225,7 +225,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
                 case 'Task':
                     nodeContent = (
                         <>
-                            <div className={cn("flex items-center gap-2 px-3 py-1.5 border-b rounded-t-lg", theme.border.light)}>
+                            <div className={cn("flex items-center gap-2 px-3 py-1.5 border-b rounded-t-lg", theme.border.default)}>
                                 {getNodeIcon(node.type)}
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{node.type}</span>
                             </div>

@@ -47,7 +47,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase
                     key={alert.id} 
                     className={cn(
                         "relative flex items-start p-3 rounded-lg border transition-all cursor-pointer group",
-                        alert.caseId ? cn(theme.surface.default, theme.border.default, "hover:border-blue-400 hover:shadow-sm") : cn(theme.surface.highlight, theme.border.light)
+                        alert.caseId ? cn(theme.surface.default, theme.border.default, "hover:border-blue-400 hover:shadow-sm") : cn(theme.surface.highlight, theme.border.default)
                     )}
                     onClick={() => alert.caseId && onSelectCase(alert.caseId)}
                 >

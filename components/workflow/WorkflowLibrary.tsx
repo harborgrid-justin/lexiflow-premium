@@ -56,7 +56,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
                 "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors",
                 templateCategory === cat 
                   ? cn(theme.primary.DEFAULT, theme.text.inverse)
-                  : cn(theme.surfaceHighlight, theme.text.secondary, `hover:${theme.border.default}`)
+                  : cn(theme.surface.highlight, theme.text.secondary, `hover:${theme.border.default}`)
               )}
             >
               {cat}
@@ -68,7 +68,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
           <input 
             className={cn(
               "w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none transition-all",
-              theme.surfaceHighlight,
+              theme.surface.highlight,
               theme.border.default,
               theme.text.primary,
               "focus:ring-2 focus:ring-blue-500"
@@ -93,7 +93,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
             theme.text.tertiary,
             `hover:${theme.primary.border}`,
             `hover:${theme.primary.text}`,
-            `hover:${theme.surfaceHighlight}`
+            `hover:${theme.surface.highlight}`
           )}
         >
           <div className={cn("p-4 rounded-full shadow-sm mb-4", theme.surface.default)}>

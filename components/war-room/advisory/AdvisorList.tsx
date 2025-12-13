@@ -46,7 +46,7 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                     <TableRow 
                         key={adv.id} 
                         onClick={() => onSelect(adv)}
-                        className={cn("cursor-pointer", selectedId === adv.id ? theme.surfaceHighlight : "")}
+                        className={cn("cursor-pointer", selectedId === adv.id ? theme.surface.highlight : "")}
                     >
                         <TableCell>
                             <div className="flex items-center gap-3">
@@ -77,7 +77,7 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                                     <span>Trial Prep</span>
                                     <span className="font-bold">{adv.readiness}%</span>
                                 </div>
-                                <div className={cn("w-full rounded-full h-1.5", theme.surfaceHighlight, "border border-slate-200")}>
+                                <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight, "border border-slate-200")}>
                                     <div className={cn("h-full rounded-full transition-all", adv.readiness === 100 ? "bg-green-500" : "bg-blue-500")} style={{ width: `${adv.readiness}%` }}></div>
                                 </div>
                             </div>

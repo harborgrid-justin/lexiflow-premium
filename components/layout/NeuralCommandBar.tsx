@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
-import { useDebounce } from '../../hooks/useDebounce';
-import { useKeyboardNav } from '../../hooks/useKeyboardNav';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useKeyboardNav } from '@/hooks/useKeyboardNav';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
@@ -152,7 +152,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
                                     "w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors border-b last:border-0",
                                     activeIndex === index 
                                         ? cn(theme.surface.highlight, theme.border.default) 
-                                        : cn(theme.surface.default, theme.border.light)
+                                        : cn(theme.surface.default, theme.border.default)
                                 )}
                             >
                                 <div className="flex-1 min-w-0">

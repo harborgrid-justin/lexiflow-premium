@@ -66,7 +66,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
             </div>
         ) : hasSearched && (
             <div className={cn("rounded-xl border overflow-hidden animate-in slide-in-from-bottom-4", theme.surface.default, theme.border.default)}>
-                <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight)}>
+                <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight)}>
                     <h4 className="font-bold text-sm">Search Results</h4>
                     <span className="text-xs text-slate-500">{results.length} Matches Found</span>
                 </div>

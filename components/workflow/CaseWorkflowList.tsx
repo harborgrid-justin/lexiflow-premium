@@ -5,7 +5,7 @@ import { Badge } from '../common/Badge';
 import { Case } from '../../types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { cn } from '@utils/cn';
 
 interface CaseWorkflowListProps {
   cases: Case[];
@@ -40,7 +40,7 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, onSel
                       <div>
                         <h4 className={cn("font-bold text-lg transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{c.title}</h4>
                         <div className={cn("flex items-center gap-3 text-xs mt-1", theme.text.secondary)}>
-                            <span className={cn("font-mono px-1 rounded", theme.surfaceHighlight)}>{c.id}</span>
+                            <span className={cn("font-mono px-1 rounded", theme.surface.highlight)}>{c.id}</span>
                             <Badge variant="neutral">{c.matterType}</Badge>
                             <span className="flex items-center"><Users className="h-3 w-3 mr-1"/> {c.client}</span>
                         </div>
@@ -58,12 +58,12 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, onSel
                         <span className="font-medium">Stage Progress</span>
                         <span className={cn("font-bold", theme.text.primary)}>{progress}%</span>
                       </div>
-                      <div className={cn("w-full rounded-full h-2", theme.surfaceHighlight)}>
+                      <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
                         <div className={`h-2 rounded-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : theme.primary.DEFAULT}`} style={{ width: `${progress}%` }}></div>
                       </div>
                   </div>
                   
-                  <div className={cn("p-3 rounded border flex items-center justify-between", theme.surfaceHighlight, theme.border.default)}>
+                  <div className={cn("p-3 rounded border flex items-center justify-between", theme.surface.highlight, theme.border.default)}>
                       <div className="flex items-center gap-3">
                         {progress === 100 ? <CheckCircle className="h-5 w-5 text-green-500"/> : <Clock className="h-5 w-5 text-amber-500"/>}
                         <div>

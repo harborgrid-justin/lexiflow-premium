@@ -66,7 +66,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
             
             <div className="p-5 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-3">
-                    <span className={cn("text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border", theme.surfaceHighlight, theme.text.secondary)}>
+                    <span className={cn("text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border", theme.surface.highlight, theme.text.secondary)}>
                         {pb.category}
                     </span>
                     <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded border", getDifficultyColor(pb.difficulty))}>
@@ -95,7 +95,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                     </div>
                 )}
 
-                <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.light)}>
+                <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
                     <div className={cn("flex items-center gap-3 text-xs", theme.text.tertiary)}>
                         <span className="flex items-center"><Globe className="h-3 w-3 mr-1"/> {pb.jurisdiction}</span>
                         <span className="flex items-center"><Layers className="h-3 w-3 mr-1"/> {pb.phases} Phs</span>
@@ -114,7 +114,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                 <div className="relative flex-1">
                     <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5", theme.text.tertiary)} />
                     <input 
-                        className={cn("w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                        className={cn("w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.highlight, theme.border.default, theme.text.primary)}
                         placeholder="Search 50+ litigation strategies..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}

@@ -88,7 +88,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             </div>
             <h4 className={cn("font-bold text-sm mb-1 line-clamp-2", theme.text.primary)}>{item.title}</h4>
             <p className={cn("text-xs mb-3 font-mono opacity-70", theme.text.secondary)}>{item.caseId}</p>
-            <div className={cn("mt-auto text-xs flex items-center pt-2 border-t", theme.border.light, theme.text.tertiary)}>
+            <div className={cn("mt-auto text-xs flex items-center pt-2 border-t", theme.border.default, theme.text.tertiary)}>
                 <Clock className="h-3 w-3 mr-1"/> Last edited: {item.lastAutoSaved || 'Just now'}
             </div>
         </div>

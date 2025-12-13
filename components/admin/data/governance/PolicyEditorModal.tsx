@@ -133,7 +133,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                 </label>
                 <div className="relative">
                     <textarea 
-                        className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-32 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                        className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-32 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                         placeholder="e.g. org_id = current_setting('app.current_org_id')::uuid"
                         value={formData.using || ''}
                         onChange={e => setFormData({...formData, using: e.target.value})}
@@ -149,7 +149,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     </label>
                     <div className="relative">
                         <textarea 
-                            className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-24 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surfaceHighlight, theme.border.default, theme.text.primary)}
+                            className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-24 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                             placeholder="Optional. e.g. status != 'Closed' OR role = 'Admin'"
                             value={formData.withCheck || ''}
                             onChange={e => setFormData({...formData, withCheck: e.target.value})}
@@ -159,7 +159,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                 </div>
             )}
 
-            <div className={cn("pt-6 border-t flex justify-end gap-3", theme.border.light)}>
+            <div className={cn("pt-6 border-t flex justify-end gap-3", theme.border.default)}>
                 <Button variant="secondary" onClick={onClose}>Cancel</Button>
                 <Button variant="primary" icon={Check} onClick={handleSave}>Save Policy</Button>
             </div>

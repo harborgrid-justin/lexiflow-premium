@@ -25,7 +25,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             case 'Active': return cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border);
             case 'Completed': return cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border);
             case 'On Hold': return cn(theme.status.warning.bg, theme.status.warning.text, theme.status.warning.border);
-            default: return cn(theme.surfaceHighlight, theme.text.secondary, theme.border.default);
+            default: return cn(theme.surface.highlight, theme.text.secondary, theme.border.default);
         }
     };
 
@@ -48,7 +48,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className={cn("rounded-xl border transition-all duration-300 shadow-sm overflow-hidden", theme.surface.default, project.priority === 'Critical' ? 'border-l-4 border-l-red-500' : theme.border.default)}>
             {/* Project Header */}
             <div 
-              className={cn("p-5 flex flex-col md:flex-row md:items-center justify-between cursor-pointer gap-4", `hover:${theme.surfaceHighlight}`)}
+              className={cn("p-5 flex flex-col md:flex-row md:items-center justify-between cursor-pointer gap-4", `hover:${theme.surface.highlight}`)}
               onClick={onToggleExpand}
             >
               <div className="flex-1 min-w-0">
@@ -74,7 +74,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                     <span>Progress</span>
                     <span>{progress}%</span>
                   </div>
-                  <div className={cn("w-full rounded-full h-1.5", theme.surfaceHighlight)}>
+                  <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}>
                     <div className="bg-blue-600 h-1.5 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
             {/* Task List */}
             {isExpanded && (
-              <div className={cn("p-5 pt-0 border-t bg-slate-50/50", theme.border.light)}>
+              <div className={cn("p-5 pt-0 border-t bg-slate-50/50", theme.border.default)}>
                 <div className="space-y-3 mt-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
                   {project.tasks.map((task) => (
                     <div key={task.id} className={cn("group flex flex-col md:flex-row gap-3 items-start md:items-center p-3 rounded-lg border transition-all hover:shadow-sm", theme.surface.default, theme.border.default, "hover:border-blue-300")}>
@@ -117,7 +117,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                       {task.relatedModule && onNavigateToModule && (
                         <button 
                           onClick={() => onNavigateToModule(task.relatedModule!)}
-                          className={cn("w-full md:w-auto px-3 py-1.5 border rounded text-xs font-medium flex items-center justify-center gap-2 transition-all whitespace-nowrap", theme.surfaceHighlight, theme.text.secondary, theme.border.default, `hover:${theme.surface.default}`, "hover:text-blue-600 hover:border-blue-200")}
+                          className={cn("w-full md:w-auto px-3 py-1.5 border rounded text-xs font-medium flex items-center justify-center gap-2 transition-all whitespace-nowrap", theme.surface.highlight, theme.text.secondary, theme.border.default, `hover:${theme.surface.default}`, "hover:text-blue-600 hover:border-blue-200")}
                         >
                           {getModuleIcon(task.relatedModule)}
                           {task.actionLabel || `Go to ${task.relatedModule}`}

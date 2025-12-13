@@ -29,7 +29,7 @@ export const NexusInspector: React.FC<NexusInspectorProps> = ({ item, onClose })
   
   return (
     <div className={cn("h-full flex flex-col border-l shadow-xl bg-white animate-in slide-in-from-right duration-300", theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.surfaceHighlight, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <h3 className={cn("font-bold text-sm flex items-center gap-2", theme.text.primary)}>
                 {getIcon()} Inspector
             </h3>

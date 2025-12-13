@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense } from 'react';
 import { DiscoveryRequest } from '../../types';
 import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
@@ -47,7 +46,7 @@ export const DiscoveryContentRenderer: React.FC<DiscoveryContentRendererProps> =
 
   // Main Tab Views
   switch(activeTab) {
-    case 'dashboard': return <DiscoveryDashboard onNavigate={onNavigate} />;
+    case 'dashboard': return <DiscoveryDashboard />;
     case 'requests': return <DiscoveryRequests items={requests} onNavigate={onNavigate} />;
     case 'depositions': return <DiscoveryDepositions />;
     case 'esi': return <DiscoveryESI />;
@@ -56,6 +55,6 @@ export const DiscoveryContentRenderer: React.FC<DiscoveryContentRendererProps> =
     case 'privilege': return <PrivilegeLog />;
     case 'holds': return <LegalHolds />;
     // Add other main views here
-    default: return <DiscoveryDashboard onNavigate={onNavigate} />;
+    default: return <DiscoveryDashboard />;
   }
 };

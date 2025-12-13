@@ -62,7 +62,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
 
   if (!activePlan) {
     return (
-      <div className={cn("flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg", theme.surfaceHighlight, theme.border.default, theme.text.tertiary)}>
+      <div className={cn("flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg", theme.surface.highlight, theme.border.default, theme.text.tertiary)}>
         <FileText className="h-12 w-12 mb-3 opacity-20"/>
         <p>No joint discovery plans active.</p>
         <Button variant="outline" className="mt-4" onClick={() => alert("Start New Plan")}>Start Rule 26(f) Report</Button>
@@ -86,7 +86,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
       <div className="space-y-4">
         {activePlan.sections.map(section => (
           <Card key={section.id} noPadding className="overflow-visible">
-            <div className={cn("p-4 border-b flex justify-between items-center rounded-t-lg", theme.surfaceHighlight, theme.border.light)}>
+            <div className={cn("p-4 border-b flex justify-between items-center rounded-t-lg", theme.surface.highlight, theme.border.default)}>
               <h4 className={cn("font-bold text-sm", theme.text.primary)}>{section.title}</h4>
               <div className="flex items-center gap-2">
                 {section.status === 'Agreed' && <span className="text-xs font-bold text-green-600 flex items-center"><CheckCircle className="h-3 w-3 mr-1"/> Agreed</span>}

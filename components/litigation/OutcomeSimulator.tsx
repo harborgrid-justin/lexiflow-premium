@@ -120,12 +120,12 @@ export const OutcomeSimulator: React.FC = () => {
             </ResponsiveContainer>
          </div>
 
-         <div className={cn("grid grid-cols-3 gap-4 mt-6 pt-4 border-t", theme.border.light)}>
+         <div className={cn("grid grid-cols-3 gap-4 mt-6 pt-4 border-t", theme.border.default)}>
             <div className="text-center">
                 <p className={cn("text-xs uppercase", theme.text.secondary)}>Conservative (P25)</p>
                 <p className={cn("font-bold", theme.text.primary)}>${metrics.p25.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
             </div>
-            <div className={cn("text-center border-x", theme.border.light)}>
+            <div className={cn("text-center border-x", theme.border.default)}>
                 <p className={cn("text-xs uppercase", theme.text.secondary)}>Aggressive (P75)</p>
                 <p className={cn("font-bold", theme.text.primary)}>${metrics.p75.toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
             </div>

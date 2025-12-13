@@ -82,7 +82,7 @@ export const AssetManager: React.FC = () => {
 
   // Performance Engine: Virtual Row Renderer
   const renderRow = (asset: FirmAsset) => (
-    <div key={asset.id} className={cn("flex items-center border-b hover:bg-slate-50 h-[60px] px-4 transition-colors", theme.border.light)}>
+    <div key={asset.id} className={cn("flex items-center border-b hover:bg-slate-50 h-[60px] px-4 transition-colors", theme.border.default)}>
         <div className={cn("w-[15%] font-mono text-xs", theme.text.secondary)}>{asset.id}</div>
         <div className={cn("w-[25%] font-medium", theme.text.primary)}>{asset.name}</div>
         <div className="w-[15%]">

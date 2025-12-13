@@ -225,7 +225,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
                     onSave={handleSaveEntry}
                     onCancel={() => setIsAddModalOpen(false)}
                     caseParties={caseParties}
-                    initialData={{ caseId: selectedCaseId || '' as CaseId }}
+                    initialData={{ caseId: (selectedCaseId || '') as CaseId }}
                 />
               </div>
           </Modal>

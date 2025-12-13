@@ -55,7 +55,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
                 <div className="flex gap-2">
                     <button 
                         onClick={() => onInsertCitation(c.citation)}
-                        className={cn("flex-1 py-1 rounded text-xs font-medium border transition-colors flex items-center justify-center gap-1", theme.surfaceHighlight, theme.border.default, `hover:${theme.primary.light} hover:text-blue-600`)}
+                        className={cn("flex-1 py-1 rounded text-xs font-medium border transition-colors flex items-center justify-center gap-1", theme.surface.highlight, theme.border.default, `hover:${theme.primary.light} hover:text-blue-600`)}
                     >
                         <Plus className="h-3 w-3" /> Insert
                     </button>

@@ -48,7 +48,7 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
                 <span className={cn("flex items-center text-xs font-bold", theme.primary.text)}>
                   <Calendar className="h-3 w-3 mr-1" /> {evt.date}
                 </span>
-                <span className={cn("text-[10px] px-1.5 rounded uppercase", theme.surfaceHighlight, theme.text.tertiary)}>{evt.type}</span>
+                <span className={cn("text-[10px] px-1.5 rounded uppercase", theme.surface.highlight, theme.text.tertiary)}>{evt.type}</span>
              </div>
              <p className={cn("text-sm font-medium mb-1", theme.text.primary)}>{evt.title}</p>
              <p className={cn("text-xs line-clamp-2", theme.text.secondary)}>{evt.description}</p>

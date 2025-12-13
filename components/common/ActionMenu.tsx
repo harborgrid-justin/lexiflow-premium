@@ -27,7 +27,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
     <div className="relative inline-block text-left" ref={menuRef}>
       <button 
         onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
-        className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surfaceHighlight}`, `hover:${theme.text.secondary}`)}
+        className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.secondary}`)}
         aria-label="More actions"
         aria-expanded={isOpen}
       >
@@ -51,7 +51,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
                     "w-full text-left px-4 py-2 text-xs flex items-center gap-2 transition-colors",
                     action.variant === 'danger' 
                       ? cn(theme.status.error.text, theme.action.danger.hover)
-                      : cn(theme.text.primary, `hover:${theme.surfaceHighlight}`)
+                      : cn(theme.text.primary, `hover:${theme.surface.highlight}`)
                   )}
                   role="menuitem"
                 >

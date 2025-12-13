@@ -54,7 +54,7 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
                     <TableRow 
                         key={ent.id} 
                         onClick={() => onSelect(ent)}
-                        className={cn("cursor-pointer", selectedId === ent.id ? theme.surfaceHighlight : "")}
+                        className={cn("cursor-pointer", selectedId === ent.id ? theme.surface.highlight : "")}
                     >
                         <TableCell>
                             <div className="flex items-center gap-3">
@@ -79,7 +79,7 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
                             </div>
                         </TableCell>
                         <TableCell>
-                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surfaceHighlight, theme.border.default, theme.text.secondary)}>
+                            <span className={cn("text-xs px-2 py-1 rounded border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                                 {ent.tendency}
                             </span>
                         </TableCell>

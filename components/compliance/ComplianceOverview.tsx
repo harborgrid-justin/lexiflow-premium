@@ -94,7 +94,7 @@ export const ComplianceOverview: React.FC = () => {
                     </ResponsiveContainer>
                 </div>
                 <div className="w-full md:w-1/2 space-y-4 p-4">
-                    <div className={cn("p-4 rounded-lg border", theme.surfaceHighlight, theme.border.default)}>
+                    <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                         <h4 className={cn("font-bold text-sm mb-2", theme.text.primary)}>High Risk Factors</h4>
                         <ul className={cn("space-y-2 text-xs", theme.text.secondary)}>
                             <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-500"/> Politically Exposed Persons (PEP)</li>
@@ -114,7 +114,7 @@ export const ComplianceOverview: React.FC = () => {
                     { title: 'Ethical Wall Update', time: '5 hours ago', severity: 'low' },
                     { title: 'GDPR Data Request', time: 'Yesterday', severity: 'high' },
                 ].map((alert, i) => (
-                    <div key={i} className={cn("flex items-start p-3 rounded-lg border transition-colors", theme.surfaceHighlight, theme.border.default)}>
+                    <div key={i} className={cn("flex items-start p-3 rounded-lg border transition-colors", theme.surface.highlight, theme.border.default)}>
                         <Activity className={cn("h-4 w-4 mt-0.5 mr-3", alert.severity === 'high' ? "text-red-500" : alert.severity === 'medium' ? "text-amber-500" : "text-blue-500")} />
                         <div>
                             <p className={cn("text-sm font-bold", theme.text.primary)}>{alert.title}</p>

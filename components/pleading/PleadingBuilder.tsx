@@ -1,19 +1,19 @@
 
 import React, { useState, Suspense, lazy } from 'react';
-import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../types';
-import { useTheme } from '../context/ThemeContext';
-import { cn } from '../utils/cn';
-import { TabbedPageLayout } from './layout/TabbedPageLayout';
-import { PLEADING_BUILDER_TAB_CONFIG } from '../config/pleadingBuilderConfig';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { Button } from './common/Button';
+import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { PLEADING_BUILDER_TAB_CONFIG } from '../../config/pleadingBuilderConfig';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { Button } from '../common/Button';
 import { Plus, Loader2 } from 'lucide-react';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { DataService } from '../services/dataService';
-import { STORES } from '../services/db';
-import { Modal } from './common/Modal';
-import { Input } from './common/Inputs';
-import { LazyLoader } from './common/LazyLoader';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { Modal } from '../common/Modal';
+import { Input } from '../common/Inputs';
+import { LazyLoader } from '../common/LazyLoader';
 
 // Lazy imports with named export handling
 const PleadingDesigner = lazy(() => import('./pleading/PleadingDesigner')); // Export default exists

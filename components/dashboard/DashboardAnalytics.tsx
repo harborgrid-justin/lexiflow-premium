@@ -64,7 +64,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
         </Card>
 
         <Card title="Priority Workstreams" subtitle="High-impact tasks requiring attention" noPadding>
-            <div className={cn("divide-y", theme.border.light)}>
+            <div className={cn("divide-y", theme.border.default)}>
                 {activeProjects.map(proj => (
                     <div key={proj.id} className={cn("flex flex-col sm:flex-row sm:items-center py-4 px-5 transition-colors group cursor-pointer", `hover:${theme.surface.highlight}`)}>
                         <div className="flex items-center flex-1 min-w-0 mb-3 sm:mb-0">

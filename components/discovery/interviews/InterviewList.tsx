@@ -56,3 +56,5 @@ export const InterviewList: React.FC<InterviewListProps> = ({ interviews, onMana
     </TableContainer>
   );
 };
+
+export default InterviewList;

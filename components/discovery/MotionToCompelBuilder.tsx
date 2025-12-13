@@ -155,3 +155,5 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
     </div>
   );
 };
+
+export default MotionToCompelBuilder;

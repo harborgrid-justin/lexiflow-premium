@@ -102,3 +102,5 @@ export const getFirstTabOfParent = (parentId: string) => {
     const parent = PARENT_TABS.find(p => p.id === parentId);
     return parent && parent.subTabs.length > 0 ? parent.subTabs[0].id as DiscoveryView : 'dashboard';
 };
+
+export default DiscoveryNavigation;

@@ -160,3 +160,5 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
     </div>
   );
 };
+
+export default InitialDisclosureWizard;

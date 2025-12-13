@@ -60,3 +60,5 @@ export const PerpetuateTestimony: React.FC = () => {
     </div>
   );
 };
+
+export default PerpetuateTestimony;

@@ -10,7 +10,7 @@ import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useWindow } from '../../context/WindowContext';
-import { DocumentPreviewPanel } from '../document/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { ActionRow } from '../common/RefactoredCommon';
 
 interface PolicyItem {

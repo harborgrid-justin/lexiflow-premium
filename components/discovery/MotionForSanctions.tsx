@@ -99,3 +99,5 @@ export const MotionForSanctions: React.FC = () => {
     </div>
   );
 };
+
+export default MotionForSanctions;

@@ -3,9 +3,10 @@ import React from 'react';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { UserPlus, FileCheck, RefreshCw, Play, Database, ShieldAlert, Scale, Archive, Lock, MoreHorizontal } from 'lucide-react';
+import { UserPlus, FileCheck, RefreshCw, Play, Database, ShieldAlert, Scale, Archive, Lock, MoreHorizontal, Search } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { EmptyState } from '../common/EmptyState';
 
 interface Process {
   id: string;
@@ -24,6 +25,16 @@ interface FirmProcessListProps {
 
 export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onSelectProcess }) => {
   const { theme } = useTheme();
+
+  if (!processes || processes.length === 0) {
+    return (
+      <EmptyState 
+        title="No Firm Processes" 
+        description="There are no active firm processes defined. Create a new process template to get started."
+        icon={Search}
+      />
+    );
+  }
 
   const getProcessIcon = (name: string) => {
     if (name.includes('Client') || name.includes('Onboarding')) return <UserPlus className="h-5 w-5 text-blue-600"/>;

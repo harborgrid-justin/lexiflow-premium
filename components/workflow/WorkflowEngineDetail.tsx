@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock } from 'lucide-react';
+import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
@@ -13,6 +13,9 @@ import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useNotify } from '@/hooks/useNotify';
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { EmptyState } from '../common/EmptyState';
 
 interface WorkflowEngineDetailProps {
   id: string;
@@ -24,6 +27,12 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useState<'visualizer' | 'tasks' | 'audit' | 'settings'>('visualizer');
+  
+  const { data: engineData, isLoading, isError, refetch } = useQuery(
+    ['workflow-engine', id],
+    () => DataService.workflow.getEngineDetails(id, type)
+  );
+
   const [status, setStatus] = useState('Active');
 
   const handleRebalance = () => {
@@ -33,6 +42,28 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           notify.success("Resources rebalanced. Bottleneck resolved.");
       }, 1500);
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (isError || !engineData) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center">
+        <EmptyState 
+          title="Workflow Engine Error" 
+          description="Could not load workflow engine details."
+          icon={AlertTriangle}
+          action={<Button onClick={() => refetch()} icon={RefreshCw}>Retry</Button>}
+        />
+        <Button variant="ghost" onClick={onBack} className="mt-4">Go Back</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full space-y-6 animate-fade-in min-h-0">
@@ -44,7 +75,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           </button>
           <div>
             <div className="flex items-center gap-3">
-              <h2 className={cn("text-xl font-bold", theme.text.primary)}>{type === 'case' ? 'Martinez v. TechCorp' : 'Client Onboarding v2'}</h2>
+              <h2 className={cn("text-xl font-bold", theme.text.primary)}>{type === 'case' ? `Case Workflow: ${id}` : `Process: ${id}`}</h2>
               <Badge variant={status === 'Active' ? 'success' : 'warning'}>{status}</Badge>
             </div>
             <div className={cn("flex items-center gap-3 mt-1 text-xs", theme.text.secondary)}>
@@ -66,10 +97,10 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 shrink-0">
-        <MetricCard label="Current Stage" value="Discovery Review" icon={GitBranch} className="border-l-4 border-l-blue-500"/>
-        <MetricCard label="Next Deadline" value="2 Days" icon={Clock} className="border-l-4 border-l-amber-500" trend="Critical Path"/>
-        <MetricCard label="Tasks Complete" value="14 / 22" icon={CheckCircle} className="border-l-4 border-l-green-500" trend="64%"/>
-        <MetricCard label="Automation Rate" value="85%" icon={Settings} className="border-l-4 border-l-purple-500" trendUp={true} trend="+5%"/>
+        <MetricCard label="Current Stage" value="In Progress" icon={GitBranch} className="border-l-4 border-l-blue-500"/>
+        <MetricCard label="Next Deadline" value={engineData.nextDeadline} icon={Clock} className="border-l-4 border-l-amber-500" trend="Critical Path"/>
+        <MetricCard label="Tasks Complete" value={`${engineData.tasksCompleted} / ${engineData.tasksTotal}`} icon={CheckCircle} className="border-l-4 border-l-green-500" trend={`${engineData.progress}%`}/>
+        <MetricCard label="Automation Rate" value={engineData.automationRate} icon={Settings} className="border-l-4 border-l-purple-500" trendUp={true} trend="+5%"/>
       </div>
 
       {/* Main Content Area */}

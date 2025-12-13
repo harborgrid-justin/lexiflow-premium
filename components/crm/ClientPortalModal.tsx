@@ -6,7 +6,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { Tabs } from '../common/Tabs';
-import { LazyLoader } from '../common/LazyLoader'; // Import LazyLoader
+import { LazyLoader } from '../common/LazyLoader';
 
 // Lazy load dedicated components for each tab
 const ClientPortalDocuments = lazy(() => import('./client-portal/ClientPortalDocuments').then(m => ({ default: m.ClientPortalDocuments })));

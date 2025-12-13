@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useCallback } from 'react';
-import { WorkflowTemplateData } from '../../types';
+import { WorkflowTemplateData, WorkflowTemplateId } from '../../types';
 import { NodeType } from './builder/types';
 import { BuilderToolbar } from './builder/BuilderToolbar';
 import { BuilderPalette } from './builder/BuilderPalette';
@@ -10,8 +10,11 @@ import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { Save, Rocket, ArrowLeft } from 'lucide-react';
+import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
+import { ErrorBoundary } from '../common/ErrorBoundary';
+import { DataService } from '../../services/dataService';
+import { useNotify } from '../../hooks/useNotify';
 
 interface WorkflowTemplateBuilderProps {
   initialTemplate?: WorkflowTemplateData | null;
@@ -20,6 +23,7 @@ interface WorkflowTemplateBuilderProps {
 
 export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = ({ initialTemplate, onBack }) => {
   const { theme } = useTheme();
+  const notify = useNotify();
   const { nodes, connections, addNode, updateNode, deleteNode } = useWorkflowBuilder(initialTemplate);
   
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -27,6 +31,7 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isPropertiesOpen, setIsPropertiesOpen] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -67,14 +72,60 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
     }
   };
 
+  const handleSave = async () => {
+      setIsSaving(true);
+      try {
+          const template: WorkflowTemplateData = {
+              id: initialTemplate?.id || `wt-${Date.now()}` as WorkflowTemplateId,
+              title: initialTemplate?.title || 'New Workflow Draft',
+              category: 'Custom',
+              complexity: 'Medium',
+              duration: '2 Weeks',
+              tags: ['Draft'],
+              auditReady: false,
+              stages: nodes.filter(n => n.type === 'Task').map(n => n.label),
+              // @ts-ignore - Storing graph data for restoration
+              graphData: { nodes, connections }
+          };
+          
+          await DataService.workflow.saveTemplate(template);
+          notify.success("Workflow template saved.");
+      } catch (error) {
+          console.error(error);
+          notify.error("Failed to save template.");
+      } finally {
+          setIsSaving(false);
+      }
+  };
+
+  const handleDeploy = async () => {
+      if (!initialTemplate?.id) {
+          notify.error("Please save the template first.");
+          return;
+      }
+      setIsSaving(true);
+      try {
+          await DataService.workflow.deploy(initialTemplate.id);
+          notify.success("Workflow deployed successfully.");
+      } catch (error) {
+          console.error(error);
+          notify.error("Failed to deploy workflow.");
+      } finally {
+          setIsSaving(false);
+      }
+  };
+
   return (
+    <ErrorBoundary scope="WorkflowTemplateBuilder">
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
         <PageHeader title={initialTemplate ? "Editing Template" : "New Workflow Draft"} actions={
             <div className="flex gap-2">
                 {onBack && <Button variant="ghost" onClick={onBack} icon={ArrowLeft}>Back</Button>}
-                <Button variant="secondary" icon={Save}>Save Draft</Button>
-                <Button variant="primary" icon={Rocket}>Deploy</Button>
+                <Button variant="secondary" icon={isSaving ? Loader2 : Save} onClick={handleSave} disabled={isSaving}>
+                    {isSaving ? 'Saving...' : 'Save Draft'}
+                </Button>
+                <Button variant="primary" icon={Rocket} onClick={handleDeploy} disabled={isSaving}>Deploy</Button>
             </div>
         }/>
       </div>
@@ -98,5 +149,6 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
          </div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 };

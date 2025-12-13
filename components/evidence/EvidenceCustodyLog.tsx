@@ -1,10 +1,23 @@
 
+/**
+ * @module EvidenceCustodyLog
+ * @category Evidence
+ * @description Displays a master chronological log of custody events for all evidence items.
+ * Provides filtering, searching, and export capabilities for the entire chain of custody audit trail.
+ */
+
 import React, { useState, useMemo } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Search, Filter, Download } from 'lucide-react';
+
+// Common Components
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Services & Types
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';

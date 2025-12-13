@@ -1,14 +1,27 @@
+/**
+ * @module OriginalsManager
+ * @category Evidence
+ * @description Tracks original documents vs. duplicates under FRE 1002/1003.
+ * Logs justifications for admissibility of duplicates.
+ */
+
 import React from 'react';
+import { Copy, CheckCircle, AlertTriangle, FileText, Plus } from 'lucide-react';
+
+// Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { Copy, CheckCircle, AlertTriangle, FileText, Plus } from 'lucide-react';
+
+// Context & Utils
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+// Services & Types
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
 import { EvidenceItem } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 
 export const OriginalsManager: React.FC = () => {
     const { theme } = useTheme();

@@ -32,12 +32,7 @@ import { cn } from '../../utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { DiscoveryRequest } from '../../types';
-
-interface DiscoveryResponseProps {
-  request: DiscoveryRequest | null;
-  onBack: () => void;
-  onSave: (reqId: string, text: string) => void;
-}
+import { DiscoveryResponseProps } from './types';
 
 export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, onBack, onSave }) => {
   const { theme } = useTheme();

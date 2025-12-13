@@ -1,8 +1,18 @@
 
+/**
+ * @module EvidenceVaultContent
+ * @category Evidence
+ * @description Router component for Evidence Vault views.
+ * Renders the appropriate sub-component based on the current view mode.
+ */
+
 import React, { lazy } from 'react';
+
+// Types
 import { ViewMode, EvidenceFilters } from '../../hooks/useEvidenceVault';
 import { EvidenceItem } from '../../types';
 
+// Lazy Loaded Components
 const EvidenceDashboard = lazy(() => import('./EvidenceDashboard').then(m => ({ default: m.EvidenceDashboard })));
 const EvidenceInventory = lazy(() => import('./EvidenceInventory').then(m => ({ default: m.EvidenceInventory })));
 const EvidenceCustodyLog = lazy(() => import('./EvidenceCustodyLog').then(m => ({ default: m.EvidenceCustodyLog })));

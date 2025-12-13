@@ -27,13 +27,12 @@ import { Case } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 import { STORES } from '../../services/db';
+import { WorkflowView } from './types';
 
 interface MasterWorkflowProps {
   onSelectCase: (caseId: string) => void;
   initialTab?: WorkflowView;
 }
-
-type WorkflowView = 'templates' | 'cases' | 'firm' | 'ops_center' | 'analytics' | 'settings';
 
 export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, initialTab }) => {
   const { theme } = useTheme();
@@ -120,22 +119,6 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
     setViewMode('list');
     setSelectedId(null);
     setSelectedTemplate(null);
-  };
-
-  const getCaseProgress = (caseId: string) => {
-      // Calculate real progress from tasks
-      const caseTasks = tasks.filter(t => t.caseId === caseId);
-      if (caseTasks.length === 0) return 0;
-      const completed = caseTasks.filter(t => t.status === 'Done' || t.status === 'Completed').length;
-      return Math.round((completed / caseTasks.length) * 100);
-  };
-
-  const getNextTask = (caseId: string) => {
-      const caseTasks = tasks.filter(t => t.caseId === caseId && t.status !== 'Done' && t.status !== 'Completed');
-      if (caseTasks.length === 0) return "All tasks completed";
-      // Sort by due date
-      caseTasks.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
-      return caseTasks[0].title;
   };
 
   if (viewMode === 'detail' && selectedId) {
@@ -227,7 +210,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
             {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>}
             {!isLoading && activeTab === 'templates' && <WorkflowLibrary onCreate={handleCreateTemplate} />}
-            {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={cases} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} getCaseProgress={getCaseProgress} getNextTask={getNextTask} />}
+            {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={cases} tasks={tasks} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} />}
             {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcesses} onSelectProcess={handleSelectProcess} />}
             {activeTab === 'ops_center' && <EnhancedWorkflowPanel />}
             {activeTab === 'analytics' && <WorkflowAnalyticsDashboard />}

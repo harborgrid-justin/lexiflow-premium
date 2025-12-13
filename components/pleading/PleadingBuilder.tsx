@@ -23,11 +23,7 @@ const ClauseLibrary = lazy(() => import('../clauses/ClauseLibrary')); // Export 
 const PleadingFilingQueue = lazy(() => import('./PleadingFilingQueue').then(m => ({ default: m.PleadingFilingQueue })));
 const PleadingAnalytics = lazy(() => import('./PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
 
-
-interface PleadingBuilderProps {
-  onSelectCase?: (c: Case) => void;
-  caseId?: string;
-}
+import { PleadingBuilderProps } from './types';
 
 export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, caseId }) => {
     const { theme } = useTheme();

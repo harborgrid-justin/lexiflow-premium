@@ -1,15 +1,28 @@
+/**
+ * @module AuthenticationManager
+ * @category Evidence
+ * @description Manages evidence authentication status under FRE 901/902.
+ * Tracks self-authenticating documents, testimony requirements, and stipulations.
+ */
+
 import React from 'react';
+import { Fingerprint, CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
+
+// Common Components
 import { MetricCard } from '../../common/Primitives';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { Fingerprint, CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
+
+// Context & Utils
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+// Services & Types
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
 import { EvidenceItem } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 
 export const AuthenticationManager: React.FC = () => {
     const { theme } = useTheme();

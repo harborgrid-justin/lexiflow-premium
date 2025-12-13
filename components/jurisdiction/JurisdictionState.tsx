@@ -9,6 +9,7 @@ import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { Loader2 } from 'lucide-react';
 import { STORES } from '../../services/db';
+import { filterStates } from './utils';
 
 export const JurisdictionState: React.FC = () => {
   const { theme } = useTheme();
@@ -20,10 +21,7 @@ export const JurisdictionState: React.FC = () => {
       DataService.jurisdiction.getState
   );
 
-  const filteredStates = states.filter(s => 
-      s.name.toLowerCase().includes(filter.toLowerCase()) || 
-      s.region.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredStates = filterStates(states, filter);
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 

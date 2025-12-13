@@ -1,13 +1,28 @@
 
+/**
+ * @module OppositionManager
+ * @category WarRoom
+ * @description Manages opposition intelligence, including counsel, parties, and experts.
+ * Provides filtering, searching, and detailed profiles of opposition entities.
+ */
+
 import React, { useState } from 'react';
 import { Filter, Layout, Plus, Loader2 } from 'lucide-react';
+
+// Common Components
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Sub-components
 import { OppositionSidebar } from './opposition/OppositionSidebar';
 import { OppositionList, OppositionEntity } from './opposition/OppositionList';
 import { OppositionDetail } from './opposition/OppositionDetail';
+
+// Services
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
@@ -44,7 +59,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
     setIsInspectorOpen(true);
   };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
+  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin h-8 w-8", theme.primary.text)}/></div>;
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
@@ -52,7 +67,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
       <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
             <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Opposition Intel</h3>
-            <div className="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
+            <div className={cn("h-6 w-px", theme.border.default)}></div>
             <SearchToolbar 
                 value={searchTerm} 
                 onChange={setSearchTerm} 

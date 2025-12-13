@@ -1,16 +1,29 @@
 
+/**
+ * @module ExhibitTable
+ * @category Exhibits
+ * @description Displays a list or grid of trial exhibits with virtual scrolling support.
+ * Includes party-specific color coding and document preview integration.
+ */
+
 import React from 'react';
+import { Eye, Layers } from 'lucide-react';
+
+// Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { TrialExhibit } from '../../types';
 import { FileIcon } from '../common/Primitives';
 import { Button } from '../common/Button';
-import { Eye, Layers } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { VirtualList } from '../common/VirtualList';
-import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { StatusBadge, EmptyListState } from '../common/RefactoredCommon';
+
+// Context & Utils
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+import { cn } from '../../utils/cn';
+
+// Types
+import { TrialExhibit, DocumentId } from '../../types';
 
 interface ExhibitTableProps {
   exhibits: TrialExhibit[];
@@ -38,7 +51,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
           <div className={cn("h-full", theme.surface.default)}>
              <DocumentPreviewPanel 
                 document={{
-                    id: ex.id,
+                    id: ex.id as DocumentId,
                     title: ex.title,
                     type: ex.fileType,
                     content: ex.description || '',

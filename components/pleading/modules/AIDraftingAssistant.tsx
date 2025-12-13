@@ -6,14 +6,7 @@ import { TextArea } from '../../common/Inputs';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { GeminiService } from '../../../services/geminiService';
-
-interface AIDraftingAssistantProps {
-  onInsert: (text: string) => void;
-  caseContext: {
-    title: string;
-    summary?: string;
-  };
-}
+import { AIDraftingAssistantProps } from '../types';
 
 export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, caseContext }) => {
   const { theme } = useTheme();

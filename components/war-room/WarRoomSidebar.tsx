@@ -1,10 +1,22 @@
 
+/**
+ * @module WarRoomSidebar
+ * @category WarRoom
+ * @description Sidebar for the War Room, displaying quick access links and case logistics.
+ */
+
 import React from 'react';
 import { Target, Gavel } from 'lucide-react';
+
+// Common Components
+import { SectionTitle } from '../common/RefactoredCommon';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Types
 import { Case } from '../../types';
-import { SectionTitle } from '../common/RefactoredCommon';
 
 interface WarRoomSidebarProps {
   caseData: Case;
@@ -19,7 +31,7 @@ export const WarRoomSidebar: React.FC<WarRoomSidebarProps> = ({ caseData }) => {
             <SectionTitle className="px-2">Quick Access</SectionTitle>
             <div className="space-y-1">
                 <div className={cn("flex items-center justify-between px-3 py-2 rounded text-sm font-medium border shadow-sm", theme.text.primary, theme.surface.default, theme.border.default)}>
-                    <span className="flex items-center"><Gavel className="h-4 w-4 mr-2 text-blue-600"/> Judge Profile</span>
+                    <span className="flex items-center"><Gavel className={cn("h-4 w-4 mr-2", theme.primary.text)}/> Judge Profile</span>
                 </div>
                 <div className={cn("flex items-center justify-between px-3 py-2 rounded text-sm font-medium transition-all", theme.text.secondary, `hover:${theme.surface.default} hover:shadow-sm`)}>
                     <span className="flex items-center"><Target className="h-4 w-4 mr-2"/> Opposing Counsel</span>

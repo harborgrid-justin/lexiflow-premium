@@ -11,7 +11,7 @@ export type PlatformView = string;
 
 // Lazy Load All Sub-Modules
 const PlatformOverview = lazy(() => import('./PlatformOverview').then(m => ({ default: m.PlatformOverview })));
-const SchemaArchitect = lazy(() => import('./schema/SchemaArchitect').then(m => ({ default: m.SchemaArchitect })));
+const SchemaArchitect = lazy(() => import('./schema/SchemaArchitect.tsx').then(m => ({ default: m.SchemaArchitect })));
 const GovernanceConsole = lazy(() => import('./GovernanceConsole').then(m => ({ default: m.GovernanceConsole })));
 const PipelineMonitor = lazy(() => import('./PipelineMonitor').then(m => ({ default: m.PipelineMonitor })));
 const BackupVault = lazy(() => import('./BackupVault').then(m => ({ default: m.BackupVault })));

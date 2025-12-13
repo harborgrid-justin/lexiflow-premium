@@ -1,12 +1,7 @@
 import React from 'react';
 import { FormattingRule } from '../../../types';
 import { cn } from '../../../utils/cn';
-
-interface PleadingPaperProps {
-    rules: FormattingRule;
-    children: React.ReactNode;
-    className?: string;
-}
+import { PleadingPaperProps } from '../types';
 
 const PleadingPaper: React.FC<PleadingPaperProps> = ({ rules, children, className }) => {
     

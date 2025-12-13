@@ -25,7 +25,7 @@ import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Utils & Config
 import { cn } from '../../utils/cn';

@@ -6,6 +6,7 @@ import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { performSearch } from './research.utils';
 import { useWindow } from '../../context/WindowContext';
 
 export const ActiveResearch: React.FC = () => {
@@ -18,24 +19,18 @@ export const ActiveResearch: React.FC = () => {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return;
-
     setIsLoading(true);
-    const result = await GeminiService.conductResearch(query);
-    
-    const newSession: ResearchSession = {
-      id: Date.now().toString(),
-      userId: 'current-user' as UserId, 
-      query,
-      response: result.text,
-      sources: result.sources,
-      timestamp: new Date().toLocaleTimeString()
-    };
-
-    setHistory([newSession, ...history]);
-    setActiveSessionId(newSession.id);
-    setIsLoading(false);
-    setQuery('');
+    try {
+        const { newSession, updatedHistory } = await performSearch(query, history);
+        setHistory(updatedHistory);
+        setActiveSessionId(newSession.id);
+        setQuery('');
+    } catch (error) {
+        console.error("Search failed:", error);
+        // Optionally, set an error state to show in the UI
+    } finally {
+        setIsLoading(false);
+    }
   };
   
   const handleViewSource = (url: string, title: string) => {

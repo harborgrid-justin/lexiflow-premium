@@ -12,10 +12,7 @@ import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 import { DiscoveryProduction } from './DiscoveryProduction';
-
-interface DiscoveryProductionsProps {
-    onCreateClick: () => void; // Legacy prop, can be ignored or repurposed
-}
+import { DiscoveryProductionsProps } from './types';
 
 export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
   const { theme } = useTheme();

@@ -6,16 +6,7 @@ import { Card } from '../common/Card';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-
-interface ApprovalRequest {
-  id: string;
-  title: string;
-  requester: string;
-  date: string;
-  status: 'Pending' | 'Approved' | 'Rejected';
-  description: string;
-  priority: 'High' | 'Medium' | 'Low';
-}
+import { ApprovalRequest } from './types';
 
 interface ApprovalWorkflowProps {
   requests?: ApprovalRequest[]; // Can be passed or fetched internally

@@ -1,13 +1,28 @@
 
+/**
+ * @module EvidenceParticulars
+ * @category Evidence
+ * @description Detailed view of evidence particulars including description, type, status, and metadata.
+ * Features AI-powered analysis and blockchain verification display.
+ */
+
 import React, { useState } from 'react';
+import { User, Activity, Link, Sparkles } from 'lucide-react';
+
+// Common Components
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { EvidenceTypeIcon } from '../../common/EvidenceTypeIcon';
-import { EvidenceItem } from '../../../types';
-import { GeminiService } from '../../../services/geminiService';
-import { User, Activity, Link, Sparkles } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+
+// Services
+import { GeminiService } from '../../../services/geminiService';
+
+// Types
+import { EvidenceItem } from '../../../types';
 
 interface EvidenceParticularsProps {
   selectedItem: EvidenceItem;
@@ -34,7 +49,10 @@ export const EvidenceParticulars: React.FC<EvidenceParticularsProps> = ({ select
               <button 
                 onClick={handleAnalyze} 
                 disabled={isAnalyzing}
-                className="text-xs flex items-center text-purple-600 hover:bg-purple-50 px-2 py-1 rounded transition-colors"
+                className={cn(
+                  "text-xs flex items-center px-2 py-1 rounded transition-colors",
+                  "text-purple-600 hover:bg-purple-50" // Keeping specific AI branding colors
+                )}
               >
                 {isAnalyzing ? <span className="animate-spin mr-1">⏳</span> : <Sparkles className="h-3 w-3 mr-1"/>}
                 AI Analyze
@@ -46,7 +64,7 @@ export const EvidenceParticulars: React.FC<EvidenceParticularsProps> = ({ select
             {aiSummary && (
               <div className="mt-4 p-4 bg-purple-50 border border-purple-100 rounded-md animate-fade-in">
                 <h5 className="text-xs font-bold text-purple-700 mb-1 flex items-center"><Sparkles className="h-3 w-3 mr-1"/> AI Summary</h5>
-                <p className="text-sm text-slate-700">{aiSummary}</p>
+                <p className={cn("text-sm", theme.text.primary)}>{aiSummary}</p>
               </div>
             )}
           </div>

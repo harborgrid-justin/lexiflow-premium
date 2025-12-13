@@ -1,10 +1,21 @@
+/**
+ * @module StickerDesigner
+ * @category Exhibits
+ * @description Interactive tool for designing and previewing digital exhibit stickers.
+ * Allows customization of color, prefix, numbering, and shape.
+ */
+
 import React, { useState } from 'react';
+import { Palette, Type, Layout, Save, RefreshCw, ExternalLink } from 'lucide-react';
+
+// Common Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Palette, Type, Layout, Save, RefreshCw, ExternalLink } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
+import { cn } from '../../utils/cn';
 
 export const StickerDesigner: React.FC = () => {
   const { theme } = useTheme();
@@ -23,17 +34,18 @@ export const StickerDesigner: React.FC = () => {
       openWindow(
           winId,
           'Sticker Preview',
-          <div className="flex items-center justify-center h-full bg-slate-100 p-10">
-              <div className="relative w-full max-w-md bg-white shadow-2xl border p-8 aspect-[3/4]">
-                  <div className="absolute inset-0 p-8 text-slate-300 text-xs leading-loose select-none pointer-events-none">
+          <div className={cn("flex items-center justify-center h-full p-10", theme.surface.default)}>
+              <div className={cn("relative w-full max-w-md shadow-2xl border p-8 aspect-[3/4]", theme.surface.raised, theme.border.default)}>
+                  <div className={cn("absolute inset-0 p-8 text-xs leading-loose select-none pointer-events-none", theme.text.tertiary)}>
                        LOREM IPSUM DOLOR SIT AMET... (MOCK DOC CONTENT)
                   </div>
                    <div 
                         className={cn(
-                            "absolute bottom-8 right-8 w-32 h-20 flex flex-col items-center justify-center shadow-md border border-black/10 select-none cursor-move",
-                            config.shape
+                            "absolute bottom-8 right-8 w-32 h-20 flex flex-col items-center justify-center shadow-md border select-none cursor-move",
+                            config.shape,
+                            theme.border.subtle
                         )}
-                        style={{ backgroundColor: config.color }}
+                        style={{ backgroundColor: config.color, borderColor: 'rgba(0,0,0,0.1)' }}
                     >
                         <div className="text-[10px] uppercase font-bold tracking-wider opacity-80 mb-0.5">{config.party || 'EXHIBIT'}</div>
                         <div className="text-2xl font-bold leading-none font-mono tracking-tight">{config.prefix}-{config.startNumber}</div>
@@ -54,23 +66,23 @@ export const StickerDesigner: React.FC = () => {
                         <div className="grid grid-cols-3 gap-2">
                             <button 
                                 onClick={() => setConfig({...config, color: '#fbbf24', prefix: 'PX', party: 'Plaintiff'})}
-                                className={cn("p-2 border rounded text-center text-xs font-bold hover:bg-slate-50", config.color === '#fbbf24' ? "ring-2 ring-blue-500 border-transparent" : "")}
+                                className={cn("p-2 border rounded text-center text-xs font-bold transition-all", theme.border.default, config.color === '#fbbf24' ? "ring-2 border-transparent ring-blue-500" : "")}
                             >
                                 <div className="w-4 h-4 bg-amber-400 mx-auto mb-1 rounded-sm"></div>
                                 Plaintiff
                             </button>
                             <button 
                                 onClick={() => setConfig({...config, color: '#60a5fa', prefix: 'DX', party: 'Defense'})}
-                                className={cn("p-2 border rounded text-center text-xs font-bold hover:bg-slate-50", config.color === '#60a5fa' ? "ring-2 ring-blue-500 border-transparent" : "")}
+                                className={cn("p-2 border rounded text-center text-xs font-bold transition-all", theme.border.default, config.color === '#60a5fa' ? "ring-2 border-transparent ring-blue-500" : "")}
                             >
                                 <div className="w-4 h-4 bg-blue-400 mx-auto mb-1 rounded-sm"></div>
                                 Defense
                             </button>
                             <button 
                                 onClick={() => setConfig({...config, color: '#ffffff', prefix: 'JX', party: 'Joint'})}
-                                className={cn("p-2 border rounded text-center text-xs font-bold hover:bg-slate-50", config.color === '#ffffff' ? "ring-2 ring-blue-500 border-transparent" : "")}
+                                className={cn("p-2 border rounded text-center text-xs font-bold transition-all", theme.border.default, config.color === '#ffffff' ? "ring-2 border-transparent ring-blue-500" : "")}
                             >
-                                <div className="w-4 h-4 bg-white border border-slate-300 mx-auto mb-1 rounded-sm"></div>
+                                <div className={cn("w-4 h-4 bg-white border mx-auto mb-1 rounded-sm", theme.border.default)}></div>
                                 White
                             </button>
                         </div>
@@ -111,25 +123,25 @@ export const StickerDesigner: React.FC = () => {
         </div>
 
         <div className="lg:col-span-2">
-            <div className={cn("h-full rounded-xl border flex flex-col items-center justify-center p-10 bg-slate-100/50", theme.border.default)}>
+            <div className={cn("h-full rounded-xl border flex flex-col items-center justify-center p-10", theme.border.default, theme.surface.default)}>
                 <div className="mb-8 text-center">
                     <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>Live Preview</h3>
                     <p className={cn("text-sm", theme.text.secondary)}>Digital overlay as it will appear on documents.</p>
                 </div>
 
                 {/* Sticker Visualization */}
-                <div className="relative w-64 h-80 bg-white shadow-xl border border-slate-200 p-8 flex items-end justify-end">
-                    <div className="absolute inset-0 p-4 text-[8px] text-slate-300 pointer-events-none select-none">
+                <div className={cn("relative w-64 h-80 shadow-xl border p-8 flex items-end justify-end", theme.surface.default, theme.border.default)}>
+                    <div className={cn("absolute inset-0 p-4 text-[8px] pointer-events-none select-none", theme.text.tertiary)}>
                         lorem ipsum dolor sit amet... (document content)
                     </div>
                     
                     {/* The Sticker */}
                     <div 
                         className={cn(
-                            "w-24 h-16 flex flex-col items-center justify-center shadow-md border border-black/10 select-none cursor-move",
+                            "w-24 h-16 flex flex-col items-center justify-center shadow-md border select-none cursor-move",
                             config.shape
                         )}
-                        style={{ backgroundColor: config.color }}
+                        style={{ backgroundColor: config.color, borderColor: 'rgba(0,0,0,0.1)' }}
                     >
                         <div className="text-[8px] uppercase font-bold tracking-wider opacity-80 mb-0.5">{config.party || 'EXHIBIT'}</div>
                         <div className="text-xl font-bold leading-none font-mono tracking-tight">{config.prefix}-{config.startNumber}</div>

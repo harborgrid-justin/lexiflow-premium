@@ -1,13 +1,26 @@
+/**
+ * @module ExpertEvidenceManager
+ * @category Evidence
+ * @description Manages expert witness testimony and reports under FRE 702.
+ * Tracks Daubert/Frye challenges and expert qualifications.
+ */
+
 import React from 'react';
+import { UserCheck, FileText, Gavel, ShieldAlert } from 'lucide-react';
+
+// Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { UserCheck, FileText, Gavel, ShieldAlert } from 'lucide-react';
+
+// Context & Utils
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+
+// Services & Types
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
 
 export const ExpertEvidenceManager: React.FC = () => {
     const { theme } = useTheme();

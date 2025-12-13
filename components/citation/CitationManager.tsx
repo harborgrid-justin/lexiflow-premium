@@ -33,15 +33,10 @@ import { cn } from '../../utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { Citation } from '../../types';
+import { CitationView, CitationManagerProps } from './types';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));
-
-type CitationView = 'library' | 'analyzer';
-
-interface CitationManagerProps {
-  caseId?: string;
-}
 
 export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
   const { theme } = useTheme();

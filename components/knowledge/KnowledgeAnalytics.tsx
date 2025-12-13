@@ -61,7 +61,7 @@ export const KnowledgeAnalytics: React.FC = () => {
                             <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{fill: chartTheme.text}} />
                             <YAxis fontSize={12} tickLine={false} axisLine={false} tick={{fill: chartTheme.text}} />
                             <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={chartTheme.tooltipStyle} />
-                            <Bar dataKey="views" fill={chartTheme.colors.blue} radius={[4, 4, 0, 0]} barSize={40} />
+                            <Bar dataKey="views" fill={chartTheme.colors.primary} radius={[4, 4, 0, 0]} barSize={40} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

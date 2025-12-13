@@ -32,11 +32,7 @@ import { cn } from '../../utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { DiscoveryRequest } from '../../types';
-
-interface DiscoveryProductionProps {
-  request: DiscoveryRequest | null;
-  onBack: () => void;
-}
+import { DiscoveryProductionProps } from './types';
 
 export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ request, onBack }) => {
   const { theme } = useTheme();

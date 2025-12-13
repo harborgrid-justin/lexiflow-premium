@@ -1,11 +1,24 @@
 
+/**
+ * @module EvidenceStructure
+ * @category Evidence
+ * @description Displays the parsed structure of an evidence document.
+ * Shows individual chunks/pages with their hashes and content previews.
+ */
+
 import React from 'react';
+import { Split, Link, FileText, ArrowDown } from 'lucide-react';
+
+// Common Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Split, Link, FileText, ArrowDown } from 'lucide-react';
-import { EvidenceItem } from '../../types';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Types
+import { EvidenceItem } from '../../types';
 
 interface EvidenceStructureProps {
   selectedItem: EvidenceItem;

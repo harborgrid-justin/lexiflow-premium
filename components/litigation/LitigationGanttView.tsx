@@ -26,6 +26,7 @@ import { Pathfinding } from '../../utils/pathfinding';
 // Types
 import { CasePhase, WorkflowTask, TaskId, CaseId } from '../../types';
 import { LitigationGanttViewProps, ZoomLevel } from './types';
+import { transformNodesToGantt, calculatePixelsPerDay, calculateNodePositionFromDate } from './utils';
 
 export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes, connections, updateNode, addNode }) => {
   const { theme } = useTheme();
@@ -37,64 +38,9 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
   const [showCriticalPath, setShowCriticalPath] = useState(true);
 
   // Memoized transformation logic
-  const { phases, tasks } = useMemo(() => {
-    const ganttPhases: CasePhase[] = [];
-    const ganttTasks: WorkflowTask[] = [];
+  const { phases, tasks } = useMemo(() => transformNodesToGantt(nodes, connections), [nodes, connections]);
 
-    if (nodes.length === 0) return { phases: [], tasks: [] };
-    
-    const sortedNodes = [...nodes].sort((a, b) => a.x - b.x);
-    const minX = sortedNodes.length > 0 ? Math.min(...sortedNodes.map(n => n.x)) : 0;
-    const today = new Date();
-
-    sortedNodes.forEach(node => {
-      if (node.type === 'Phase') {
-        ganttPhases.push({
-          id: node.id,
-          caseId: 'strategy-plan' as CaseId,
-          name: node.label,
-          startDate: '', // Will be calculated later
-          duration: 0,   // Will be calculated later
-          status: 'Active',
-          color: 'bg-indigo-500'
-        });
-      } else if (node.type !== 'Comment' && node.type !== 'Start' && node.type !== 'End') {
-        const startOffsetDays = Math.max(0, Math.floor((node.x - minX) / 20)); // 20px per day
-        const startDate = new Date(today);
-        startDate.setDate(today.getDate() + startOffsetDays);
-        
-        const durationDays = node.type === 'Decision' ? 14 : node.type === 'Event' ? 1 : 7;
-        const dueDate = new Date(startDate);
-        dueDate.setDate(startDate.getDate() + durationDays);
-        
-        const dependencies = connections.filter(c => c.to === node.id).map(c => c.from as TaskId);
-
-        ganttTasks.push({
-          id: node.id as TaskId,
-          caseId: 'strategy-plan' as CaseId,
-          title: node.label,
-          startDate: startDate.toISOString().split('T')[0],
-          dueDate: dueDate.toISOString().split('T')[0],
-          status: 'Pending',
-          assignee: node.config.assignee || 'Unassigned',
-          priority: 'Medium',
-          dependencies
-        });
-      }
-    });
-
-    return { phases: ganttPhases, tasks: ganttTasks };
-  }, [nodes, connections]);
-
-  const pixelsPerDay = useMemo(() => {
-    switch(zoom) {
-        case 'Day': return 60;
-        case 'Week': return 20;
-        case 'Month': return 5;
-        case 'Quarter': return 2;
-        default: return 5;
-    }
-  }, [zoom]);
+  const pixelsPerDay = useMemo(() => calculatePixelsPerDay(zoom), [zoom]);
 
   // A* Critical Path Calculation
   const criticalPathIds = useMemo(() => {
@@ -103,12 +49,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
   }, [tasks, showCriticalPath]);
   
   const handleTaskUpdate = useCallback((taskId: string, start: string, due: string) => {
-    const today = new Date();
-    const newStartDate = new Date(start);
-    const startOffsetDays = (newStartDate.getTime() - today.getTime()) / (1000 * 3600 * 24);
-    
-    const newX = 50 + startOffsetDays * 20;
-    
+    const newX = calculateNodePositionFromDate(start);
     updateNode(taskId, { x: newX });
   }, [updateNode]);
 

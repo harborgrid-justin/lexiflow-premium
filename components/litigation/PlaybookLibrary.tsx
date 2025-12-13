@@ -18,6 +18,7 @@ import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlayboo
 import { VirtualGrid } from '../common/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 import { PlaybookLibraryProps } from './types';
+import { filterPlaybooks, extractCategories, getDifficultyColor, getDifficultyBorderColor } from './utils';
 
 export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => {
   const { theme } = useTheme();
@@ -26,17 +27,12 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
 
-  const categories = ['All', ...Array.from(new Set(LITIGATION_PLAYBOOKS.map(p => p.category)))];
+  const categories = extractCategories(LITIGATION_PLAYBOOKS);
   
-  const filteredPlaybooks = useMemo(() => {
-    return LITIGATION_PLAYBOOKS.filter(pb => {
-        const matchesSearch = pb.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                              pb.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
-        const matchesCategory = selectedCategory === 'All' || pb.category === selectedCategory;
-        const matchesDifficulty = selectedDifficulty === 'All' || pb.difficulty === selectedDifficulty;
-        return matchesSearch && matchesCategory && matchesDifficulty;
-    });
-  }, [searchTerm, selectedCategory, selectedDifficulty]);
+  const filteredPlaybooks = useMemo(() => 
+    filterPlaybooks(LITIGATION_PLAYBOOKS, searchTerm, selectedCategory, selectedDifficulty),
+    [searchTerm, selectedCategory, selectedDifficulty]
+  );
 
   const handleOpenPlaybook = (pb: Playbook) => {
       const winId = `playbook-${pb.id}`;
@@ -45,15 +41,6 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
           `Strategy: ${pb.title}`,
           <PlaybookDetail playbook={pb} onClose={() => closeWindow(winId)} onApply={(p) => { onApply(p); closeWindow(winId); }} />
       );
-  };
-
-  const getDifficultyColor = (diff: string) => {
-      switch(diff) {
-          case 'Low': return 'text-green-600 bg-green-50 border-green-200';
-          case 'Medium': return 'text-blue-600 bg-blue-50 border-blue-200';
-          case 'High': return 'text-purple-600 bg-purple-50 border-purple-200';
-          default: return 'text-slate-600';
-      }
   };
 
   const renderPlaybookCard = (pb: Playbook) => (
@@ -65,9 +52,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
             )}
             onClick={() => handleOpenPlaybook(pb)}
         >
-            <div className={cn("absolute top-0 left-0 w-1 h-full transition-colors", 
-                pb.difficulty === 'High' ? 'bg-purple-500' : pb.difficulty === 'Medium' ? 'bg-blue-500' : 'bg-green-500'
-            )}></div>
+            <div className={cn("absolute top-0 left-0 w-1 h-full transition-colors", getDifficultyBorderColor(pb.difficulty))}></div>
             
             <div className="p-5 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-3">

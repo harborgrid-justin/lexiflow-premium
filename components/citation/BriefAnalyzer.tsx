@@ -43,13 +43,7 @@ import { STORES } from '../../services/db';
 // TYPES & INTERFACES
 // ============================================================================
 import { Citation, Case, BriefAnalysisSession } from '../../types';
-
-// Simple sanitizer to strip script tags
-const sanitizeHtml = (html: string) => {
-    return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
-               .replace(/<iframe\b[^>]*>([\s\S]*?)<\/iframe>/gim, "")
-               .replace(/on\w+="[^"]*"/g, "");
-};
+import { sanitizeHtml } from './utils';
 
 export const BriefAnalyzer: React.FC = () => {
   const { theme } = useTheme();

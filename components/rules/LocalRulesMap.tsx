@@ -5,6 +5,7 @@ import { Card } from '../common/Card';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
+import { groupJurisdictionsByState } from './localRulesMap.utils';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
@@ -19,23 +20,7 @@ export const LocalRulesMap: React.FC = () => {
   );
 
   // Transform flat list into grouped state structure dynamically
-  const stateGroups = useMemo(() => {
-      const groups: Record<string, any> = {};
-      const stateNames: Record<string, string> = { VA: 'Virginia', CA: 'California', NY: 'New York' }; // Lookup for demo names
-      
-      jurisdictions.forEach(j => {
-          if (!groups[j.region]) {
-              groups[j.region] = { id: j.region, name: stateNames[j.region] || j.region, levels: [] };
-          }
-          let level = groups[j.region].levels.find((l: any) => l.name === j.type);
-          if (!level) {
-              level = { name: j.type, courts: [] };
-              groups[j.region].levels.push(level);
-          }
-          level.courts.push(j.name);
-      });
-      return Object.values(groups);
-  }, [jurisdictions]);
+  const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions), [jurisdictions]);
 
   return (
     <div className="h-full flex flex-col space-y-6 animate-fade-in">

@@ -1,15 +1,29 @@
 
-// components/EvidenceVault.tsx
+/**
+ * @module EvidenceVault
+ * @category Evidence
+ * @description Main container for the Evidence Vault module.
+ * Manages state, navigation, and layout for evidence management.
+ */
+
 import React, { useMemo, useCallback, useState, useEffect, Suspense, lazy } from 'react';
+import { Plus, Search } from 'lucide-react';
+
+// Common Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { Plus, Search } from 'lucide-react';
-import { useEvidenceVault, ViewMode } from '../../hooks/useEvidenceVault';
+import { LazyLoader } from '../common/LazyLoader';
+
+// Sub-components
+import { EvidenceVaultContent } from './EvidenceVaultContent';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { LazyLoader } from '../common/LazyLoader';
+import { useEvidenceVault, ViewMode } from '../../hooks/useEvidenceVault';
+
+// Config & Types
 import { EVIDENCE_PARENT_TABS } from '../../config/evidenceVaultConfig';
-import { EvidenceVaultContent } from './EvidenceVaultContent';
 import { EvidenceItem } from '../../types';
 
 const EvidenceDetail = lazy(() => import('./EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));

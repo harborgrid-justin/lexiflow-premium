@@ -1,6 +1,14 @@
 
+/**
+ * @module AdvisorySidebar
+ * @category WarRoom
+ * @description Sidebar for filtering advisors by role and specialty.
+ */
+
 import React from 'react';
 import { Users, Briefcase, Stethoscope, Microscope, BrainCircuit, Gavel } from 'lucide-react';
+
+// Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
@@ -27,8 +35,8 @@ export const AdvisorySidebar: React.FC<AdvisorySidebarProps> = ({ activeCategory
   ];
 
   return (
-    <div className={cn("w-64 border-r flex flex-col shrink-0 bg-slate-50/50 hidden md:flex", theme.border.default)}>
-        <div className="p-4 border-b border-slate-200">
+    <div className={cn("w-64 border-r flex flex-col shrink-0 hidden md:flex", theme.surface.highlight, theme.border.default)}>
+        <div className={cn("p-4 border-b", theme.border.default)}>
             <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Roles</h4>
             <div className="space-y-1">
                 {categories.map(cat => (
@@ -37,14 +45,14 @@ export const AdvisorySidebar: React.FC<AdvisorySidebarProps> = ({ activeCategory
                         onClick={() => onSelectCategory(cat.id)}
                         className={cn(
                             "w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex justify-between items-center",
-                            activeCategory === cat.id ? cn(theme.surface.highlight, theme.primary.text, "shadow-sm border border-slate-200") : theme.text.secondary
+                            activeCategory === cat.id ? cn(theme.surface.default, theme.primary.text, "shadow-sm border", theme.border.default) : theme.text.secondary
                         )}
                     >
                         <div className="flex items-center">
                             <cat.icon className={cn("h-4 w-4 mr-3 opacity-70")}/>
                             {cat.label}
                         </div>
-                        <span className={cn("text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600")}>
+                        <span className={cn("text-xs px-2 py-0.5 rounded-full", theme.surface.highlight, theme.text.secondary)}>
                             {cat.count}
                         </span>
                     </button>
@@ -61,7 +69,7 @@ export const AdvisorySidebar: React.FC<AdvisorySidebarProps> = ({ activeCategory
                         onClick={() => onSelectCategory(spec.id)}
                         className={cn(
                             "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center",
-                            activeCategory === spec.id ? cn(theme.surface.highlight, theme.primary.text, "font-medium") : theme.text.secondary
+                            activeCategory === spec.id ? cn(theme.surface.default, theme.primary.text, "font-medium") : theme.text.secondary
                         )}
                     >
                         <spec.icon className={cn("h-3.5 w-3.5 mr-3 opacity-60")}/>

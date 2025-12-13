@@ -7,14 +7,8 @@ import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useInterval } from '@/hooks/useInterval';
-
-interface SLAItem {
-  id: string;
-  task: string;
-  dueTime: number; // Timestamp
-  status: 'On Track' | 'At Risk' | 'Breached';
-  progress: number;
-}
+import { SLAItem } from './types';
+import { formatDeadline } from './utils';
 
 export const SLAMonitor: React.FC = () => {
   const { theme } = useTheme();
@@ -71,20 +65,6 @@ export const SLAMonitor: React.FC = () => {
           return { ...sla, progress, status };
       }));
   }, 1000); // Update every second
-
-  const formatDeadline = (dueTime: number) => {
-      const diff = dueTime - Date.now();
-      if (diff < 0) return 'OVERDUE';
-      
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-      if (days > 0) return `${days}d ${hours}h`;
-      if (hours > 0) return `${hours}h ${mins}m`;
-      return `${mins}m ${secs}s`;
-  };
 
   if (isLoading) return <div className="flex justify-center p-6"><Loader2 className="animate-spin text-blue-600"/></div>;
 

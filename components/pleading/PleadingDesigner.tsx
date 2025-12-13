@@ -10,6 +10,7 @@ import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { useNotify } from '../../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
+import { ViewMode, PleadingDesignerProps } from './types';
 
 // Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));
@@ -18,13 +19,6 @@ const AIDraftingAssistant = lazy(() => import('./modules/AIDraftingAssistant').t
 const ContextPanel = lazy(() => import('./sidebar/ContextPanel'));
 const ComplianceHUD = lazy(() => import('./tools/ComplianceHUD'));
 const LogicOverlay = lazy(() => import('./visual/LogicOverlay'));
-
-interface PleadingDesignerProps {
-  pleading: PleadingDocument;
-  onBack: () => void;
-}
-
-type ViewMode = 'write' | 'logic' | 'preview';
 
 const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDoc, onBack }) => {
   const { theme } = useTheme();

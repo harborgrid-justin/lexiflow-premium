@@ -1,13 +1,29 @@
+/**
+ * @module WarRoom
+ * @category WarRoom
+ * @description Main container for the War Room module.
+ * Orchestrates sub-modules like Command Center, Evidence Wall, and Witness Prep.
+ * Handles case selection and navigation between strategic views.
+ */
+
 import React, { useState, useMemo, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Target, Monitor, Layers, FileText, Gavel, Users, Mic2, Shield, CheckCircle, Briefcase, Swords, ChevronDown } from 'lucide-react';
+
+// Common Components
 import { Button } from '../common/Button';
+import { LazyLoader } from '../common/LazyLoader';
+
+// Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+
+// Services
 import { DataService } from '../../services/dataService';
-import { Case } from '../../types';
-import { LazyLoader } from '../common/LazyLoader';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Types
+import { Case } from '../../types';
 
 // Sub-components
 const CommandCenter = lazy(() => import('./CommandCenter').then(m => ({ default: m.CommandCenter })));
@@ -226,7 +242,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
       </div>
 
       <div className={cn("flex-1 flex overflow-hidden border-t", theme.border.default)}>
-        <Suspense fallback={<div className="w-64 border-r hidden md:block bg-slate-50/50"></div>}>
+        <Suspense fallback={<div className={cn("w-64 border-r hidden md:block", theme.surface.subtle, theme.border.default)}></div>}>
             <WarRoomSidebar caseData={trialData.case} />
         </Suspense>
         <div className={cn("flex-1 overflow-y-auto px-6 py-6 custom-scrollbar")}>

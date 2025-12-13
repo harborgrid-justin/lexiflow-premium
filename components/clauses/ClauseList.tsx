@@ -7,6 +7,7 @@ import { SearchToolbar } from '../common/SearchToolbar';
 import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { filterClauses } from './clauseList.utils';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
@@ -26,10 +27,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
         DataService.clauses.getAll
     );
 
-    const filteredClauses = useMemo(() => clauses.filter(c => 
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        c.category.toLowerCase().includes(searchTerm.toLowerCase())
-    ), [clauses, searchTerm]);
+    const filteredClauses = useMemo(() => filterClauses(clauses, searchTerm), [clauses, searchTerm]);
     
     const handleCopy = (content: string, id: string, e: React.MouseEvent) => {
         e.stopPropagation();

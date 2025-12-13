@@ -6,6 +6,7 @@ import { MetricCard } from '../common/Primitives';
 import { ShieldAlert, FileText, CheckCircle, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 import { DataService } from '../../services/dataService';
 import { Clause } from '../../types';
 
@@ -21,19 +22,8 @@ export const ClauseAnalytics: React.FC = () => {
       load();
   }, []);
 
-  const riskData = [
-    { name: 'Low Risk', value: clauses.filter(c => c.riskRating === 'Low').length, color: '#10b981' },
-    { name: 'Medium Risk', value: clauses.filter(c => c.riskRating === 'Medium').length, color: '#f59e0b' },
-    { name: 'High Risk', value: clauses.filter(c => c.riskRating === 'High').length, color: '#ef4444' },
-  ];
-
-  const usageData = [...clauses]
-    .sort((a, b) => b.usageCount - a.usageCount)
-    .slice(0, 5)
-    .map(c => ({
-      name: c.name.length > 20 ? c.name.substring(0, 20) + '...' : c.name,
-      usage: c.usageCount
-    }));
+  const riskData = getRiskData(clauses);
+  const usageData = getUsageData(clauses);
 
   return (
     <div className="space-y-6 animate-fade-in">

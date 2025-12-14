@@ -5,12 +5,12 @@ import { PacerService } from '../pacer/pacer.service';
 import { CalendarService } from '../calendar/calendar.service';
 import { PacerSearchDto, PacerSyncDto } from '../pacer/dto';
 import { CreateCalendarEventDto, CalendarSyncDto } from '../calendar/dto';
-// import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-// import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Integrations')
 @Controller('api/v1/integrations')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class ExternalApiController {
   constructor(
@@ -46,10 +46,9 @@ export class ExternalApiController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createCalendarEvent(
     @Body() createEventDto: CreateCalendarEventDto,
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     return this.calendarService.createEvent(createEventDto, userId);
   }
 
@@ -60,10 +59,9 @@ export class ExternalApiController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async syncCalendar(
     @Body() syncDto: CalendarSyncDto,
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     return this.calendarService.sync(syncDto, userId);
   }
 

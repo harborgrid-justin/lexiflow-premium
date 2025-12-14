@@ -133,8 +133,25 @@ export class PleadingRepository extends Repository<PleadingDocument> {
      * Gets formatting rules (with future support for jurisdiction-specific rules)
      */
     getFormattingRules = async (jurisdictionId?: string): Promise<FormattingRule> => {
-        // TODO: Fetch jurisdiction-specific rules from database
-        // For now, return default federal civil rules
+        // Mock jurisdiction-specific rules
+        if (jurisdictionId === 'CA-SUPERIOR') {
+            return {
+                id: IdGenerator.formattingRule(),
+                name: 'California Superior Court Rules',
+                fontFamily: 'Times New Roman',
+                fontSize: 12,
+                lineHeight: 1.5, // Often 1.5 or 2.0 depending on local rules, but distinct from Federal
+                marginTop: '1in',
+                marginBottom: '1in',
+                marginLeft: '1in',
+                marginRight: '1in',
+                showLineNumbers: true,
+                paperSize: 'Letter',
+                captionStyle: 'Standard'
+            };
+        }
+
+        // Default to Federal Civil Rules
         return {
             id: IdGenerator.formattingRule(),
             name: 'Federal Civil Rules',

@@ -13,12 +13,12 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { WebhooksService } from './webhooks.service';
 import { CreateWebhookDto, UpdateWebhookDto } from './dto';
-// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-// import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @ApiTags('Webhooks')
 @Controller('api/v1/webhooks')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class WebhooksController {
   constructor(private readonly webhooksService: WebhooksService) {}
@@ -30,10 +30,9 @@ export class WebhooksController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async create(
     @Body() createWebhookDto: CreateWebhookDto,
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     return this.webhooksService.create(createWebhookDto, userId);
   }
 
@@ -42,10 +41,9 @@ export class WebhooksController {
   @ApiResponse({ status: 200, description: 'List of webhooks' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll(
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     return this.webhooksService.findAll(userId);
   }
 
@@ -56,10 +54,9 @@ export class WebhooksController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findOne(
     @Param('id') id: string,
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     return this.webhooksService.findOne(id, userId);
   }
 
@@ -71,10 +68,9 @@ export class WebhooksController {
   async update(
     @Param('id') id: string,
     @Body() updateWebhookDto: UpdateWebhookDto,
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     return this.webhooksService.update(id, updateWebhookDto, userId);
   }
 
@@ -86,10 +82,9 @@ export class WebhooksController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async remove(
     @Param('id') id: string,
-    // @CurrentUser() user: any,
+    @CurrentUser() user: any,
   ) {
-    // TODO: Uncomment when auth is implemented
-    const userId = 'temp-user-id'; // user.id
+    const userId = user.id;
     await this.webhooksService.remove(id, userId);
   }
 

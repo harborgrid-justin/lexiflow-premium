@@ -9,7 +9,6 @@ import {
 import { JobType, JobStatus } from '../dto/job-status.dto';
 
 @Entity('processing_jobs')
-@Index(['documentId'])
 @Index(['status'])
 @Index(['type'])
 export class ProcessingJob {

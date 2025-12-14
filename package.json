@@ -13,15 +13,23 @@
   },
   "dependencies": {
     "@google/genai": "^1.30.0",
+    "@hapi/joi": "^17.1.1",
+    "@nestjs/terminus": "^11.0.0",
+    "axios-retry": "^4.5.0",
+    "cache-manager": "^7.2.7",
+    "cache-manager-redis-store": "^3.0.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.25",
     "lucide": "^0.559.0",
     "lucide-react": "0.263.1",
+    "nest-winston": "^1.10.2",
+    "opossum": "^9.0.0",
     "pdfjs-dist": "4.0.379",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^7.10.1",
-    "recharts": "2.12.3"
+    "recharts": "2.12.3",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",

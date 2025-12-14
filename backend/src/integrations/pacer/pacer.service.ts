@@ -21,25 +21,19 @@ export class PacerService {
     this.logger.log('Searching PACER with criteria:', searchDto);
 
     try {
-      // TODO: Implement actual PACER API integration
-      // This is a placeholder implementation
-      // const response = await axios.post(
-      //   `${this.pacerBaseUrl}/search`,
-      //   searchDto,
-      //   {
-      //     auth: {
-      //       username: this.pacerUsername,
-      //       password: this.pacerPassword,
-      //     },
-      //   },
-      // );
+      // Mock PACER API integration
+      // In production, this would use axios to call the PACER API
+      // const response = await axios.post(...)
 
-      // For now, return mock data
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Return mock data based on search criteria
       return [
         {
-          caseNumber: '1:23-cv-12345',
+          caseNumber: searchDto.caseNumber || '1:23-cv-12345',
           title: 'Smith v. Jones',
-          court: 'USDC Northern District of California',
+          court: searchDto.court || 'USDC Northern District of California',
           filingDate: new Date('2023-06-15'),
           caseType: 'Civil',
           nature: 'Contract Dispute',
@@ -56,6 +50,19 @@ export class PacerService {
             },
           ],
         },
+        {
+          caseNumber: '2:24-cr-00987',
+          title: 'USA v. Doe',
+          court: searchDto.court || 'USDC Southern District of New York',
+          filingDate: new Date('2024-01-10'),
+          caseType: 'Criminal',
+          nature: 'Fraud',
+          parties: [
+            { name: 'USA', type: 'Plaintiff', role: 'Government' },
+            { name: 'John Doe', type: 'Defendant', role: 'Party' },
+          ],
+          docketEntries: [],
+        }
       ];
     } catch (error: any) {
       this.logger.error('PACER search failed:', error.message);
@@ -70,28 +77,32 @@ export class PacerService {
     this.logger.log(`Syncing case ${syncDto.caseNumber} from PACER`);
 
     try {
-      // TODO: Implement actual PACER API integration
-      // This is a placeholder implementation
-      // const response = await axios.get(
-      //   `${this.pacerBaseUrl}/cases/${syncDto.court}/${syncDto.caseNumber}`,
-      //   {
-      //     auth: {
-      //       username: this.pacerUsername,
-      //       password: this.pacerPassword,
-      //     },
-      //   },
-      // );
+      // Mock PACER API integration
+      // In production, this would use axios to call the PACER API
+      
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1200));
 
-      // For now, return mock data
+      // Return mock data
       return {
         caseNumber: syncDto.caseNumber,
-        title: 'Sample Case from PACER',
+        title: 'Sample Case from PACER (Synced)',
         court: syncDto.court,
         filingDate: new Date(),
         caseType: 'Civil',
         nature: 'Contract Dispute',
-        parties: [],
-        docketEntries: [],
+        parties: [
+           { name: 'Synced Plaintiff', type: 'Plaintiff', role: 'Party' },
+           { name: 'Synced Defendant', type: 'Defendant', role: 'Party' },
+        ],
+        docketEntries: [
+           {
+              entryNumber: '1',
+              filedDate: new Date(),
+              description: 'Complaint (Synced)',
+              filedBy: 'Synced Plaintiff',
+            },
+        ],
       };
     } catch (error: any) {
       this.logger.error('PACER sync failed:', error.message);
@@ -106,17 +117,13 @@ export class PacerService {
     this.logger.log(`Downloading document from PACER: ${documentUrl}`);
 
     try {
-      // TODO: Implement actual PACER document download
-      // const response = await axios.get(documentUrl, {
-      //   auth: {
-      //     username: this.pacerUsername,
-      //     password: this.pacerPassword,
-      //   },
-      //   responseType: 'arraybuffer',
-      // });
-      // return Buffer.from(response.data);
+      // Mock PACER document download
+      // In production, this would use axios with responseType: 'arraybuffer'
+      
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-      return Buffer.from('Mock document content');
+      return Buffer.from(`Mock PDF content for document at ${documentUrl}`);
     } catch (error: any) {
       this.logger.error('PACER document download failed:', error.message);
       throw new BadRequestException('Failed to download document: ' + error.message);
@@ -130,11 +137,16 @@ export class PacerService {
     this.logger.log(`Getting docket sheet for ${caseNumber} in ${court}`);
 
     try {
-      // TODO: Implement actual PACER API integration
+      // Mock PACER API integration
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       return {
         caseNumber,
         court,
-        entries: [],
+        entries: [
+            { date: '2024-01-01', description: 'Case Filed', number: 1 },
+            { date: '2024-01-02', description: 'Summons Issued', number: 2 },
+        ],
       };
     } catch (error: any) {
       this.logger.error('Failed to get docket sheet:', error.message);

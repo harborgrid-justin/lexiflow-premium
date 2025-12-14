@@ -29,11 +29,22 @@ export class CasePhasesController {
     return this.casePhasesService.create(createCasePhaseDto);
   }
 
+  @Get('case-phases/:id')
+  async findOne(@Param('id') id: string): Promise<CasePhase> {
+    return this.casePhasesService.findOne(id);
+  }
+
   @Put('case-phases/:id')
   async update(
     @Param('id') id: string,
     @Body() updateCasePhaseDto: UpdateCasePhaseDto,
   ): Promise<CasePhase> {
     return this.casePhasesService.update(id, updateCasePhaseDto);
+  }
+
+  @Delete('case-phases/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.casePhasesService.remove(id);
   }
 }

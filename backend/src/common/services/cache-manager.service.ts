@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cache } from 'cache-manager';
 
 /**
  * Cache Configuration
@@ -24,7 +23,7 @@ export class CacheManagerService {
   private readonly logger = new Logger(CacheManagerService.name);
   private cache: Map<string, CacheEntry> = new Map();
   private readonly DEFAULT_TTL = 3600; // 1 hour
-  private cleanupInterval: NodeJS.Timer;
+  private cleanupInterval: ReturnType<typeof setInterval>;
 
   constructor() {
     // Start cleanup interval for in-memory cache

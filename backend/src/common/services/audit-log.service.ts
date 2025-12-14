@@ -49,7 +49,7 @@ export enum AuditAction {
 export class AuditLogService {
   private readonly logger = new Logger(AuditLogService.name);
   private pendingLogs: AuditLogEntry[] = [];
-  private flushInterval: NodeJS.Timer;
+  private flushInterval: ReturnType<typeof setInterval>;
 
   constructor() {
     // Flush logs every 30 seconds

@@ -131,7 +131,7 @@ export class QueueManagerService {
 
     const state = await job.getState();
     return {
-      id: job.id,
+      id: String(job.id),
       state,
       progress: job.progress(),
       data: job.data,
@@ -207,11 +207,11 @@ export class QueueManagerService {
     queueName: string,
     grace: number = 3600000, // 1 hour
     status?: 'completed' | 'failed',
-  ): Promise<number[]> {
+  ): Promise<string[]> {
     const queue = this.getOrCreateQueue(queueName);
     const cleaned = await queue.clean(grace, status);
     this.logger.log(`Cleaned ${cleaned.length} ${status} jobs from ${queueName}`);
-    return cleaned;
+    return cleaned.map((job: any) => String(job.id || job));
   }
 
   private getOrCreateQueue(queueName: string): Queue {

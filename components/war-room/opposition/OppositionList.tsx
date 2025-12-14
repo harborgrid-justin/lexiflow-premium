@@ -1,21 +1,35 @@
 /**
- * @module OppositionList
+ * @module components/war-room/opposition/OppositionList
  * @category WarRoom
  * @description List view of opposition entities with strategic metrics.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { UserAvatar } from '../../common/UserAvatar';
 import { Button } from '../../common/Button';
 
-// Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface OppositionEntity {
   id: string;
   name: string;
@@ -31,11 +45,17 @@ export interface OppositionEntity {
 }
 
 interface OppositionListProps {
+  /** Array of opposition entities to display. */
   entities: OppositionEntity[];
+  /** Callback when an entity is selected. */
   onSelect: (entity: OppositionEntity) => void;
+  /** ID of the currently selected entity. */
   selectedId?: string;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSelect, selectedId }) => {
   const { theme } = useTheme();
 
@@ -48,7 +68,7 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
   };
 
   return (
-    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.layout.surface)}>
+    <div className={cn("flex-1 overflow-auto custom-scrollbar p-6", theme.surface.default)}>
         <TableContainer>
             <TableHeader>
                 <TableHead>Entity Name</TableHead>

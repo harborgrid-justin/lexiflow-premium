@@ -1,18 +1,25 @@
-
 /**
- * @module ExhibitManager
+ * @module components/exhibits/ExhibitManager
  * @category Exhibits
- * @description Main container for the Exhibit Pro module. Manages exhibit lists,
- * digital stickering, and analytics views. Supports both standalone and embedded modes.
+ * @description Exhibit manager with digital stickering and presentation tools.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { 
   StickyNote, Filter, Layers, Users, Printer, Plus, Search, 
   BarChart2, PenTool, Layout, Grid, List, Loader2 
 } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { ExhibitTable } from './ExhibitTable';

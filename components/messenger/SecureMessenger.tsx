@@ -1,21 +1,48 @@
+/**
+ * @module components/messenger/SecureMessenger
+ * @category Messenger
+ * @description Secure messaging platform with encryption and contacts.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
-
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
+import { MessageSquare, Users, FileText, Archive } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useSecureMessenger } from '../../hooks/useSecureMessenger';
+
+// Components
 import { MessengerInbox } from './MessengerInbox';
 import { MessengerContacts } from './MessengerContacts';
 import { MessengerFiles } from './MessengerFiles';
 import { MessengerArchived } from './MessengerArchived';
 import { PageHeader } from '../common/PageHeader';
-import { MessageSquare, Users, FileText, Archive } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type MessengerView = 'chats' | 'contacts' | 'files' | 'archived';
 
 interface SecureMessengerProps {
+    /** Initial tab to display. */
     initialTab?: MessengerView;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 const PARENT_TABS = [
   {

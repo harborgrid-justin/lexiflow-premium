@@ -1,18 +1,43 @@
+/**
+ * @module components/practice/VendorProcurement
+ * @category Practice Management
+ * @description Vendor directory, contract lifecycle, and RFP management.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter } from 'lucide-react';
-import { Tabs } from '../common/Tabs';
+import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
+import { Tabs } from '../common/Tabs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
-import { Loader2 } from 'lucide-react';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const VendorProcurement: React.FC = () => {
     const { theme } = useTheme();

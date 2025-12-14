@@ -1,8 +1,29 @@
+/**
+ * @module components/common/PageHeader
+ * @category Common
+ * @description Page header with title and actions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface PageHeaderProps {
   title: string;
   subtitle?: string;

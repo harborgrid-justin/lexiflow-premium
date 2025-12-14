@@ -1,13 +1,41 @@
+/**
+ * @module components/calendar/CalendarHearings
+ * @category Calendar
+ * @description Hearing schedule with courtroom and judge information.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { MapPin, User, Clock, Gavel } from 'lucide-react';
-import { Card } from '../common/Card';
-import { Badge } from '../common/Badge';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Card } from '../common/Card';
+import { Badge } from '../common/Badge';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
 import { CalendarEventItem } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarHearings: React.FC = () => {
   const { theme } = useTheme();

@@ -1,13 +1,40 @@
+/**
+ * @module components/practice/FinancialCenter
+ * @category Practice Management
+ * @description Financial management with operating and trust accounts.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { Button } from '../common/Button';
 import { Plus, Download } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
+import { Button } from '../common/Button';
 import { OperatingLedger } from './finance/OperatingLedger';
 import { TrustLedger } from './finance/TrustLedger';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const FinancialCenter: React.FC = () => {
   const { theme } = useTheme();

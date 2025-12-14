@@ -1,13 +1,41 @@
+/**
+ * @module components/knowledge/WikiView
+ * @category Knowledge
+ * @description Firm wiki with article browser and sanitized content.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useTransition } from 'react';
 import { Search, ChevronRight, Book, Star, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { WikiArticle } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Badge } from '../common/Badge';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { WikiArticle } from '../../types';
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 
 const sanitizeHtml = (html: string) => {
     return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")

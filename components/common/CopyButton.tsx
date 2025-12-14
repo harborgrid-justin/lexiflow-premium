@@ -1,10 +1,33 @@
+/**
+ * @module components/common/CopyButton
+ * @category Common
+ * @description Copy to clipboard button with feedback.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
-import { Button } from './Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from './Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CopyButtonProps {
   text: string;
   label?: string;

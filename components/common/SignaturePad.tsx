@@ -1,9 +1,30 @@
+/**
+ * @module components/common/SignaturePad
+ * @category Common
+ * @description Digital signature pad with animation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { PenTool, CheckCircle, RefreshCcw, X } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface SignaturePadProps {
   value: boolean;
   onChange: (signed: boolean) => void;

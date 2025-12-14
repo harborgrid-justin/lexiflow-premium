@@ -1,11 +1,10 @@
 /**
- * DiscoveryRequests.tsx
- * 
- * Discovery request tracking table with status indicators, due dates,
- * and task creation integration for managing discovery obligations.
- * 
  * @module components/discovery/DiscoveryRequests
- * @category Discovery - Requests
+ * @category Discovery
+ * @description Discovery request tracking table with status indicators and due dates.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
 // ============================================================================

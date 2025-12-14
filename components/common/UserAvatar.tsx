@@ -1,9 +1,32 @@
+/**
+ * @module components/common/UserAvatar
+ * @category Common
+ * @description User avatar with status indicator.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
 import { User } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface UserAvatarProps {
   name: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';

@@ -1,24 +1,40 @@
-
 /**
- * PlaybookLibrary.tsx
- * 
- * Library of litigation playbooks that can be applied to the strategy canvas.
- * 
  * @module components/litigation/PlaybookLibrary
+ * @category Litigation
+ * @description Playbook library with templates for litigation strategies.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
 import { Search, Globe, CheckCircle, Layers } from 'lucide-react';
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
-import { cn } from '../../utils/cn';
-import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlaybooks';
 
+// Components
 import { VirtualGrid } from '../common/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
-import { PlaybookLibraryProps } from './types';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlaybooks';
 import { filterPlaybooks, extractCategories, getDifficultyColor, getDifficultyBorderColor } from './utils';
+
+// Types
+import { PlaybookLibraryProps } from './types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => {
   const { theme } = useTheme();

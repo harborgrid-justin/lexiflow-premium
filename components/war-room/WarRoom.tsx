@@ -1,31 +1,47 @@
 /**
- * @module WarRoom
+ * @module components/war-room/WarRoom
  * @category WarRoom
  * @description Main container for the War Room module.
  * Orchestrates sub-modules like Command Center, Evidence Wall, and Witness Prep.
  * Handles case selection and navigation between strategic views.
+ * 
+ * THEME SYSTEM USAGE:
+ * This component heavily utilizes the `useTheme` hook to apply semantic color tokens for
+ * text, backgrounds, and borders, ensuring consistency across light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useCallback, useEffect, Suspense, lazy } from 'react';
-import { Target, Monitor, Layers, FileText, Gavel, Users, Mic2, Shield, CheckCircle, Briefcase, Swords, ChevronDown } from 'lucide-react';
+import { 
+    Target, Monitor, Layers, FileText, Gavel, Users, Mic2, Shield, 
+    CheckCircle, Briefcase, Swords, ChevronDown 
+} from 'lucide-react';
 
-// Common Components
-import { Button } from '../common/Button';
-import { LazyLoader } from '../common/LazyLoader';
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
 
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-
-// Services
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 
-// Types
-import { Case } from '../../types';
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 
-// Sub-components
+// Components
+import { Button } from '../common/Button';
+import { LazyLoader } from '../common/LazyLoader';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import type { Case } from '../../types';
+
+// Sub-components (Lazy Loaded)
 const CommandCenter = lazy(() => import('./CommandCenter').then(m => ({ default: m.CommandCenter })));
 const EvidenceWall = lazy(() => import('./EvidenceWall').then(m => ({ default: m.EvidenceWall })));
 const WitnessPrep = lazy(() => import('./WitnessPrep').then(m => ({ default: m.WitnessPrep })));
@@ -34,13 +50,22 @@ const AdvisoryBoard = lazy(() => import('./AdvisoryBoard').then(m => ({ default:
 const OppositionManager = lazy(() => import('./OppositionManager').then(m => ({ default: m.OppositionManager })));
 const WarRoomSidebar = lazy(() => import('./WarRoomSidebar').then(m => ({ default: m.WarRoomSidebar })));
 
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type WarRoomView = 'command' | 'evidence' | 'witnesses' | 'binder' | 'advisory' | 'opposition';
 
 interface WarRoomProps {
+    /** Optional pre-selected tab */
     initialTab?: WarRoomView;
-    caseId?: string; // Optional direct case injection
+    /** Optional direct case injection, hiding the case selector */
+    caseId?: string;
 }
 
+// ============================================================================
+// MODULE CONSTANTS
+// ============================================================================
 const PARENT_TABS = [
   {
     id: 'strategy', label: 'Strategy', icon: Target,
@@ -65,51 +90,48 @@ const PARENT_TABS = [
   }
 ];
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [activeTab, setActiveTab] = useState<WarRoomView>('command');
   const [defcon, setDefcon] = useState<'normal' | 'elevated' | 'critical'>('elevated');
-  
-  // Default to the detailed case provided in context, or first available if not found
   const [currentCaseId, setCurrentCaseId] = useState(caseId || '25-1229');
+  const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(null);
 
-  // Fetch all cases for selector if not in scoped mode
+  // ============================================================================
+  // DATA FETCHING
+  // ============================================================================
   const { data: allCases = [] } = useQuery<Case[]>(
       [STORES.CASES, 'all'],
       DataService.cases.getAll,
       { enabled: !caseId }
   );
 
-  // Sync prop change
-  useEffect(() => {
-    if (caseId) setCurrentCaseId(caseId);
-  }, [caseId]);
-
-  // Ensure currentCaseId is valid if initial load happens without prop
-  useEffect(() => {
-      if (!caseId && allCases.length > 0 && !allCases.find(c => c.id === currentCaseId)) {
-          setCurrentCaseId(allCases[0].id);
-      }
-  }, [allCases, currentCaseId, caseId]);
-
-  // Enterprise Data Access for specific case
   const { data: trialData, isLoading } = useQuery(
       [STORES.CASES, currentCaseId, 'warRoom'],
       () => DataService.warRoom.getData(currentCaseId),
       { enabled: !!currentCaseId }
   );
 
-  // Shared state for inter-component linking
-  const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(null);
-
-  useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
-  }, [initialTab]);
-
+  // ============================================================================
+  // MEMOIZED VALUES
+  // ============================================================================
   const activeParentTab = useMemo(() => 
     PARENT_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || PARENT_TABS[0],
   [activeTab]);
 
+  // ============================================================================
+  // EVENT HANDLERS
+  // ============================================================================
   const handleParentTabChange = useCallback((parentId: string) => {
     const parent = PARENT_TABS.find(p => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
@@ -124,7 +146,43 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
       }
   };
 
-  if (isLoading) return <LazyLoader message="Initializing War Room..." />;
+  // ============================================================================
+  // EFFECTS
+  // ============================================================================
+  useEffect(() => {
+    if (caseId) setCurrentCaseId(caseId);
+  }, [caseId]);
+
+  useEffect(() => {
+      if (!caseId && allCases.length > 0 && !allCases.find(c => c.id === currentCaseId)) {
+          setCurrentCaseId(allCases[0].id);
+      }
+  }, [allCases, currentCaseId, caseId]);
+  
+  useEffect(() => {
+      if (initialTab) setActiveTab(initialTab);
+  }, [initialTab]);
+
+  // ============================================================================
+  // RENDER LOGIC
+  // ============================================================================
+  const renderContent = () => {
+    if (!trialData) return null;
+    
+    switch (activeTab) {
+      case 'command': return <CommandCenter caseId={currentCaseId} warRoomData={trialData} onNavigate={handleNavigate} />;
+      case 'evidence': return <EvidenceWall caseId={currentCaseId} warRoomData={trialData} />; 
+      case 'witnesses': return <WitnessPrep caseId={currentCaseId} warRoomData={trialData} initialWitnessId={selectedWitnessId} onClearSelection={() => setSelectedWitnessId(null)} />;
+      case 'binder': return <TrialBinder caseId={currentCaseId} warRoomData={trialData} />;
+      case 'advisory': return <AdvisoryBoard caseId={currentCaseId} />;
+      case 'opposition': return <OppositionManager caseId={currentCaseId} />;
+      default: return <CommandCenter caseId={currentCaseId} warRoomData={trialData} onNavigate={handleNavigate} />;
+    }
+  };
+
+  if (isLoading) {
+    return <LazyLoader message="Initializing War Room..." />;
+  }
 
   if (!trialData) {
       return (
@@ -145,17 +203,9 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
       );
   }
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'command': return <CommandCenter caseId={currentCaseId} warRoomData={trialData} onNavigate={handleNavigate} />;
-      case 'evidence': return <EvidenceWall caseId={currentCaseId} warRoomData={trialData} />; 
-      case 'witnesses': return <WitnessPrep caseId={currentCaseId} warRoomData={trialData} initialWitnessId={selectedWitnessId} onClearSelection={() => setSelectedWitnessId(null)} />;
-      case 'binder': return <TrialBinder caseId={currentCaseId} warRoomData={trialData} />;
-      case 'advisory': return <AdvisoryBoard caseId={currentCaseId} />;
-      case 'opposition': return <OppositionManager caseId={currentCaseId} />;
-      default: return <CommandCenter caseId={currentCaseId} warRoomData={trialData} onNavigate={handleNavigate} />;
-    }
-  };
+  // ============================================================================
+  // MAIN RENDER
+  // ============================================================================
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
@@ -242,7 +292,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
       </div>
 
       <div className={cn("flex-1 flex overflow-hidden border-t", theme.border.default)}>
-        <Suspense fallback={<div className={cn("w-64 border-r hidden md:block", theme.surface.subtle, theme.border.default)}></div>}>
+        <Suspense fallback={<div className={cn("w-64 border-r hidden md:block", theme.surface.highlight, theme.border.default)}></div>}>
             <WarRoomSidebar caseData={trialData.case} />
         </Suspense>
         <div className={cn("flex-1 overflow-y-auto px-6 py-6 custom-scrollbar")}>

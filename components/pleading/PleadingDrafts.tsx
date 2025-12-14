@@ -1,11 +1,37 @@
+/**
+ * @module components/pleading/PleadingDrafts
+ * @category Pleadings
+ * @description Drafts view for in-progress pleadings.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { PleadingDocument } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { VirtualGrid } from '../common/VirtualGrid';
 import { FileText, Clock } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { VirtualGrid } from '../common/VirtualGrid';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { PleadingDocument } from '../../types';
 import { PleadingDraftsProps } from './types';
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdit }) => {
     const { theme } = useTheme();
 

@@ -1,8 +1,29 @@
+/**
+ * @module components/common/DiffViewer
+ * @category Common
+ * @description Side-by-side text diff viewer.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface DiffViewerProps {
   oldText: string;
   newText: string;

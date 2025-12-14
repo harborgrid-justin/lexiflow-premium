@@ -1,17 +1,45 @@
+/**
+ * @module components/admin/AdminPanel
+ * @category Administration
+ * @description System administration panel with security and data management.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useTransition } from 'react';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../../utils/cn';
-import { ADMIN_TAB_CONFIG } from '../../config/adminPanelConfig';
 import { AdminPanelContent } from './AdminPanelContent';
 
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { ADMIN_TAB_CONFIG } from '../../config/adminPanelConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';
 
 interface AdminPanelProps {
+    /** Optional initial tab to display. */
     initialTab?: AdminView;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
   const [isPending, startTransition] = useTransition();

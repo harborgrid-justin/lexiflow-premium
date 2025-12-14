@@ -1,19 +1,44 @@
+/**
+ * @module components/messenger/MessengerChatWindow
+ * @category Messenger
+ * @description Chat window with AI assistance and real-time simulation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect, useRef } from 'react';
-import { Conversation, Attachment } from '../../hooks/useSecureMessenger';
 import { Lock, Shield } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { GeminiService } from '../../services/geminiService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+import { useWindow } from '../../context/WindowContext';
+import { useInterval } from '../../hooks/useInterval';
+import { Conversation, Attachment } from '../../hooks/useSecureMessenger';
+
+// Components
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
 import { FileAttachment } from '../common/FileAttachment';
-import { GeminiService } from '../../services/geminiService';
-import { useNotify } from '../../hooks/useNotify';
-import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useInterval } from '../../hooks/useInterval';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface MessengerChatWindowProps {
   activeConversation: Conversation | undefined;
   activeConvId: string | null;
@@ -89,9 +114,9 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
           <div className={cn("h-full flex flex-col", theme.surface.default)}>
              <DocumentPreviewPanel 
                 document={{ 
-                    id: 'temp', title: att.name, type: att.type === 'image' ? 'JPG' : 'PDF', 
+                    id: 'temp' as any, title: att.name, type: att.type === 'image' ? 'JPG' : 'PDF', 
                     content: 'Preview Content', uploadDate: '', lastModified: '', 
-                    tags: [], versions: [], caseId: 'N/A' 
+                    tags: [], versions: [], caseId: 'N/A' as any 
                 }} 
                 onViewHistory={() => {}} 
                 isOrbital={true} 
@@ -136,7 +161,7 @@ export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
         <div className={cn("px-4 pt-2 border-t flex gap-2 overflow-x-auto shrink-0", theme.surface.default, theme.border.default)}>
           {pendingAttachments.map((att, i) => (
             <div key={i} className="relative group cursor-pointer" onClick={() => handlePreviewAttachment(att)}>
-              <FileAttachment name={att.name} size={att.size} type={att.type} className="w-48 shadow-sm"/>
+              <FileAttachment name={att.name} size={typeof att.size === 'number' ? String(att.size) : att.size} type={att.type} className="w-48 shadow-sm"/>
               <button 
                 onClick={(e) => { e.stopPropagation(); setPendingAttachments(prev => prev.filter((_, idx) => idx !== i)); }}
                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600"

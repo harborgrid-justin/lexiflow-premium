@@ -1,9 +1,30 @@
+/**
+ * @module components/common/Inputs
+ * @category Common
+ * @description Input components with theme support and validation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Search } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;

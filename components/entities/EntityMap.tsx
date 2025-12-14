@@ -1,12 +1,43 @@
+/**
+ * @module components/entities/EntityMap
+ * @category Entities
+ * @description Geographic entity distribution map with jurisdiction overlay.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { LegalEntity } from '../../types';
-import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityMapProps {
+    /** List of entities to display on map. */
     entities: LegalEntity[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const EntityMap: React.FC<EntityMapProps> = ({ entities }) => {
     const { theme } = useTheme();

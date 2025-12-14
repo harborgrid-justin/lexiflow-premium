@@ -1,11 +1,39 @@
+/**
+ * @module components/workflow/WorkflowAnalyticsDashboard
+ * @category Workflow
+ * @description Analytics dashboard for workflow completion and SLA metrics.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
-import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, CartesianGrid } from 'recharts';
-import { useTheme } from '../../context/ThemeContext';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { WorkflowAnalyticsData } from './types';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Card } from '../common/Card';
+
+// Utils & Constants
 import { getChartColors } from './constants';
+
+// Types
+import { WorkflowAnalyticsData } from './types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const WorkflowAnalyticsDashboard: React.FC = () => {
   const { theme, mode } = useTheme();

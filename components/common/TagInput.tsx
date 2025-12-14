@@ -1,9 +1,30 @@
+/**
+ * @module components/common/TagInput
+ * @category Common Components - Forms
+ * @description Tag input component with add/remove functionality and suggestions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.primary, theme.surface, theme.border, theme.text for consistent theming.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { X, Plus } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface TagInputProps {
   tags: string[];
   onAdd: (tag: string) => void;

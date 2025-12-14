@@ -1,15 +1,22 @@
-
 /**
- * @module EvidenceInventory
+ * @module components/evidence/EvidenceInventory
  * @category Evidence
- * @description Main list view for the Evidence Vault.
- * Supports filtering, searching (via web worker), and task creation for evidence items.
+ * @description Main list view with filtering, search, and task creation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TaskCreationModal } from '../common/TaskCreationModal';

@@ -1,8 +1,29 @@
+/**
+ * @module components/common/RiskMeter
+ * @category Common
+ * @description Visual risk/strength meter with percentage bar.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic chart colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface RiskMeterProps {
   value: number; // 0 to 100
   label?: string;

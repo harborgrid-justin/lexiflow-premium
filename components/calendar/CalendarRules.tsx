@@ -1,10 +1,34 @@
+/**
+ * @module components/calendar/CalendarRules
+ * @category Calendar - Rule Management
+ * @description Jurisdiction-specific rule sets and automation triggers for deadlines.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border, theme.primary for consistent theming. Hardcoded green for active status.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Settings, Book, Check, Loader2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services/Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarRules: React.FC = () => {
   const { theme } = useTheme();

@@ -1,19 +1,52 @@
+/**
+ * @module components/entities/EntityProfile
+ * @category Entities
+ * @description Detailed entity profile with relationships and matter history.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { LegalEntity, EntityRelationship } from '../../types';
+import { X, MapPin, Mail, Phone, Globe, ShieldAlert, Link, Briefcase } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { X, MapPin, Mail, Phone, Globe, ShieldAlert, Link, Briefcase } from 'lucide-react';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Button } from '../common/Button';
 import { Tabs } from '../common/Tabs';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { LegalEntity, EntityRelationship } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityProfileProps {
+  /** Entity ID to display. */
   entityId: string;
+  /** Callback when profile is closed. */
   onClose: () => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose }) => {
   const { theme } = useTheme();

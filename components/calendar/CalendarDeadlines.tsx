@@ -1,13 +1,37 @@
+/**
+ * @module components/calendar/CalendarDeadlines
+ * @category Calendar
+ * @description Deadline tracker with automated FRCP calculations.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Badge } from '../common/Badge';
 import { AlertCircle } from 'lucide-react';
-import { DateText } from '../common/Primitives';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Components
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { Badge } from '../common/Badge';
+import { DateText } from '../common/Primitives';
+
+// Types
 import { CalendarEventItem } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarDeadlines: React.FC = () => {
   

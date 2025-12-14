@@ -1,15 +1,42 @@
+/**
+ * @module components/practice/StrategyBoard
+ * @category Practice Management
+ * @description Strategic planning with OKRs and M&A pipeline.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-react';
-import { Tabs } from '../common/Tabs';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
+import { Tabs } from '../common/Tabs';
 import { MetricTile } from '../common/RefactoredCommon';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
 import { Card } from '../common/Card';
 import { ProgressBar } from '../common/ProgressBar';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const StrategyBoard: React.FC = () => {
     const { theme } = useTheme();

@@ -1,11 +1,34 @@
+/**
+ * @module components/messenger/MessageList
+ * @category Messenger
+ * @description Message list with auto-scroll and attachments.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef, useEffect, memo } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { Conversation } from '../../hooks/useSecureMessenger';
+
+// Components
 import { FileAttachment } from '../common/FileAttachment';
 import { ChatBubble } from '../common/ChatBubble';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface MessageListProps {
   conversation: Conversation;
   currentUserId: string;
@@ -38,7 +61,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
                 <div key={i} className="mt-2 w-full max-w-sm">
                   <FileAttachment 
                     name={att.name} 
-                    size={att.size} 
+                    size={(typeof att.size === 'number' ? String(att.size) : att.size) as string | undefined} 
                     type={att.type} 
                     className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface.default)}
                     variant="card"

@@ -1,13 +1,42 @@
+/**
+ * @module components/dashboard/DashboardContent
+ * @category Dashboard
+ * @description Content router for dashboard tabs, delegating to specific dashboard views.
+ *
+ * THEME SYSTEM USAGE:
+ * This component delegates to child components that use the theme system.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
-import { User } from '../../types';
 
+// Types
+import type { User } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface DashboardContentProps {
+  /** Currently active tab identifier. */
   activeTab: string;
+  /** Callback when a case is selected. */
   onSelectCase: (caseId: string) => void;
+  /** Current user information. */
   currentUser: User;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const DashboardContent: React.FC<DashboardContentProps> = ({ activeTab, onSelectCase, currentUser }) => {
   switch (activeTab) {

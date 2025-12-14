@@ -1,19 +1,47 @@
+/**
+ * @module components/compliance/ComplianceDashboard
+ * @category Compliance
+ * @description Compliance monitoring dashboard with conflict checks and ethics tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useTransition } from 'react';
 import { Download } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
 import { Button } from '../common/Button';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../../utils/cn';
-import { COMPLIANCE_TAB_CONFIG } from '../../config/complianceDashboardConfig';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { COMPLIANCE_TAB_CONFIG } from '../../config/complianceDashboardConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type ComplianceView = 'overview' | 'conflicts' | 'walls' | 'policies';
 
 interface ComplianceDashboardProps {
+    /** Optional initial tab to display. */
     initialTab?: ComplianceView;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initialTab }) => {
   const [isPending, startTransition] = useTransition();

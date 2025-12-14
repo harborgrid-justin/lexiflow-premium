@@ -1,25 +1,58 @@
+/**
+ * @module components/visual/NexusGraph
+ * @category Visual
+ * @description Interactive force-directed graph with physics simulation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme and useChartTheme hooks for node colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { NODE_STRIDE, SimulationNode } from '../../utils/nexusPhysics';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { Case, Party, EvidenceItem, NexusNodeData } from '../../types';
-import { GraphOverlay } from './GraphOverlay';
-import { useNexusGraph } from '@/hooks/useNexusGraph';
+import { useNexusGraph } from '../../hooks/useNexusGraph';
 import { useChartTheme } from '../common/ChartHelpers';
+
+// Components
+import { GraphOverlay } from './GraphOverlay';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+import { NODE_STRIDE, SimulationNode } from '../../utils/nexusPhysics';
 import { buildGraphData, getNodeStrokeColor, getNodeRadius, getNodeLabelYOffset } from './utils';
 
+// Types
+import { Case, Party, EvidenceItem, NexusNodeData } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface NexusGraphProps {
+  /** Case data for graph. */
   caseData: Case;
+  /** List of parties. */
   parties: Party[];
+  /** List of evidence items. */
   evidence: EvidenceItem[];
+  /** Callback when node is clicked. */
   onNodeClick: (node: NexusNodeData) => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evidence, onNodeClick }) => {
   const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState(0.8);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [pan, setPan] = useState({ x: 0, y: 0 }); // New pan state
@@ -40,7 +73,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
   const graphData = useMemo(() => buildGraphData(caseData, parties, evidence), [caseData, parties, evidence]);
 
   // Hook receives updated dimensions to recenter physics
-  const { nodesMeta, isStable, reheat, physicsState } = useNexusGraph(containerRef, graphData);
+  const { nodesMeta, isStable, reheat, physicsState } = useNexusGraph(containerRef as React.RefObject<HTMLDivElement>, graphData);
 
   const domRefs = useRef<Map<string, SVGGElement>>(new Map());
   const linkRefs = useRef<SVGLineElement[]>([]);
@@ -104,7 +137,7 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
                                 stroke={getStroke(node.type)}
                                 strokeWidth={node.type === 'root' ? 0 : 3} 
                             />
-                            <text y={getNodeLabelYOffset(node.type)} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", theme.mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
+                            <text y={getNodeLabelYOffset(node.type)} textAnchor="middle" className={cn("text-[10px] font-bold uppercase", mode === 'dark' ? "fill-slate-300" : "fill-slate-600")}>{node.label}</text>
                         </g>
                     ))}
                 </g>

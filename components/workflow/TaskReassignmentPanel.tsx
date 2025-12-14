@@ -1,9 +1,33 @@
+/**
+ * @module components/workflow/TaskReassignmentPanel
+ * @category Workflow
+ * @description Bulk task reassignment interface.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { User, ArrowRight, RefreshCcw } from 'lucide-react';
-import { Button } from '../common/Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const TaskReassignmentPanel: React.FC = () => {
   const { theme } = useTheme();

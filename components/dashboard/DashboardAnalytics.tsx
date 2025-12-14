@@ -1,14 +1,38 @@
+/**
+ * @module components/dashboard/DashboardAnalytics
+ * @category Dashboard
+ * @description Analytics visualization with case phase distribution chart and
+ * active project summaries.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors and chart themes.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { memo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useChartTheme } from '../common/ChartHelpers';
+
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useChartTheme } from '../common/ChartHelpers';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface ProjectSummary {
   id: string;
   title: string;
@@ -24,20 +48,26 @@ export interface ChartDataPoint {
 }
 
 interface DashboardAnalyticsProps {
+  /** Array of active project summaries. */
   activeProjects: ProjectSummary[];
+  /** Chart data for case phase distribution. */
   chartData: ChartDataPoint[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProjects, chartData }) => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
   
   const CHART_COLORS = [
-      chartTheme.colors.blue, // theme.chart.colors.primary
-      chartTheme.colors.purple, // theme.chart.colors.secondary
-      chartTheme.colors.purple, 
-      chartTheme.colors.emerald, // theme.chart.colors.success
-      chartTheme.colors.amber    // theme.chart.colors.warning
+      chartTheme.colors.primary,
+      chartTheme.colors.secondary,
+      chartTheme.colors.secondary, 
+      chartTheme.colors.success,
+      chartTheme.colors.warning
   ];
 
   return (

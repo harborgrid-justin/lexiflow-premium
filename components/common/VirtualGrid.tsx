@@ -1,8 +1,29 @@
+/**
+ * @module components/common/VirtualGrid
+ * @category Common
+ * @description Virtualized grid with responsive columns and scroll optimization.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface VirtualGridProps<T> {
   items: T[];
   itemHeight: number; // Height of the card

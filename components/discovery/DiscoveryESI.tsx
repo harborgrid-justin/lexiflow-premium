@@ -1,11 +1,10 @@
 /**
- * DiscoveryESI.tsx
- * 
- * Electronically Stored Information (ESI) management for discovery.
- * Tracks data sources, collection status, and custodial chain for digital evidence.
- * 
  * @module components/discovery/DiscoveryESI
- * @category Discovery - ESI
+ * @category Discovery
+ * @description ESI management with data sources and custodial chain tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
 // ============================================================================

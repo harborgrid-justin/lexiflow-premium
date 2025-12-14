@@ -1,8 +1,29 @@
+/**
+ * @module components/common/Table
+ * @category Common
+ * @description Table components with responsive card layout.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { memo } from 'react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const TableContainer = memo(function TableContainer({ children, className = '', responsive }: { children: React.ReactNode; className?: string; responsive?: 'card' }) {
   const { theme } = useTheme();
   

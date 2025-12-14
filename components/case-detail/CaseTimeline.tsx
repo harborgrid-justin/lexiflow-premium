@@ -32,7 +32,14 @@ interface CaseTimelineProps {
 }
 
 export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [viewMode, setViewMode] = useState<'list' | 'story'>('list');
   const [filterType, setFilterType] = useState<string>('All');
 

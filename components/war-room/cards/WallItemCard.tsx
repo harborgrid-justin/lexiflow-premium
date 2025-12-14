@@ -1,26 +1,43 @@
-
 /**
- * @module WallItemCard
+ * @module components/war-room/cards/WallItemCard
  * @category WarRoom
  * @description Card component for displaying evidence items on the wall.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Gavel, FileText, Bookmark, Eye, ArrowUpRight, CheckCircle, AlertTriangle } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Components
 import { FileIcon } from '../../common/Primitives';
 
-// Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface WallItemCardProps {
+    /** The wall item data to display. */
     item: any;
+    /** Callback when the view button is clicked. */
     onView: () => void;
-    theme?: any; // Optional to maintain compatibility
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const WallItemCard: React.FC<WallItemCardProps> = ({ item, onView }) => {
     const { theme } = useTheme();
     
@@ -42,7 +59,7 @@ export const WallItemCard: React.FC<WallItemCardProps> = ({ item, onView }) => {
                         <button className={cn("p-2 rounded-full shadow-lg transition-colors", theme.surface.default, theme.text.primary, `hover:${theme.primary.text}`)} title="Open"><ArrowUpRight className="h-4 w-4"/></button>
                         </div>
                         <div className="flex gap-2 mt-2">
-                        <button className={cn("px-3 py-1 text-white text-[10px] font-bold rounded-full shadow flex items-center transition-colors", theme.primary.bg, `hover:${theme.primary.dark}`)} title="Add to Binder">
+                        <button className={cn("px-3 py-1 text-white text-[10px] font-bold rounded-full shadow flex items-center transition-colors", theme.primary.DEFAULT, `hover:${theme.primary.hover}`)} title="Add to Binder">
                             <Bookmark className="h-3 w-3 mr-1"/> Binder
                         </button>
                         </div>

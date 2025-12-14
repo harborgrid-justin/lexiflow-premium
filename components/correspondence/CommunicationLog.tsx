@@ -1,17 +1,49 @@
+/**
+ * @module components/correspondence/CommunicationLog
+ * @category Correspondence
+ * @description Communication log with message threading.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Badge } from '../common/Badge';
-import { CommunicationItem } from '../../types';
 import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
+import { Badge } from '../common/Badge';
 import { VirtualList } from '../common/VirtualList';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { CommunicationItem } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CommunicationLogProps {
+  /** List of communication items. */
   items: CommunicationItem[];
+  /** Callback when an item is selected. */
   onSelect: (item: CommunicationItem) => void;
+  /** Currently selected item ID. */
   selectedId?: string;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CommunicationLog: React.FC<CommunicationLogProps> = ({ items, onSelect, selectedId }) => {
   const { theme } = useTheme();

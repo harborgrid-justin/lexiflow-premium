@@ -1,21 +1,25 @@
 /**
- * DocketManager.tsx
- * 
- * Top-level docket management interface with tabbed navigation for viewing
- * docket entries, calendars, analytics, and sync settings.
- * 
  * @module components/docket/DocketManager
- * @category Case Management - Docket
+ * @category Docket Management
+ * @description Comprehensive docket management with import, filtering, and analytics.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
-// External Dependencies
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { 
   FileText, Calendar, BarChart2, Settings, List, Clock, Gavel, 
   RefreshCw, Download, BookOpen
 } from 'lucide-react';
 
-// Internal Dependencies - Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { DocketSheet } from './DocketSheet';

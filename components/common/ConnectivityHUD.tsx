@@ -1,11 +1,32 @@
+/**
+ * @module components/common/ConnectivityHUD
+ * @category Common
+ * @description Connectivity status HUD with sync indicators.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { useSync } from '../../context/SyncContext';
 import { Wifi, CloudOff, RefreshCw, AlertTriangle, Activity } from 'lucide-react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useSync } from '../../context/SyncContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useInterval } from '../../hooks/useInterval';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const ConnectivityHUD: React.FC = () => {
   const { isOnline, pendingCount, failedCount, syncStatus, retryFailed } = useSync();
   const { theme } = useTheme();

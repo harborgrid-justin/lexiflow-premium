@@ -1,10 +1,31 @@
+/**
+ * @module components/common/ContextMenu
+ * @category Common
+ * @description Right-click context menu with custom actions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef } from 'react';
-import { useClickOutside } from '../../hooks/useClickOutside';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { LucideIcon } from 'lucide-react';
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface ContextMenuItem {
   label: string;
   icon?: LucideIcon;

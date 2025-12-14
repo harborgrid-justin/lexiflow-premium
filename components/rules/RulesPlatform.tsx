@@ -1,17 +1,45 @@
+/**
+ * @module components/rules/RulesPlatform
+ * @category Rules & Procedures
+ * @description Procedural rules platform with federal, state, and local rules.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useMemo, useCallback, useEffect, useState, useTransition } from 'react';
+import { Plus, Filter } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { Plus, Filter } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { LazyLoader } from '../common/LazyLoader';
-import { RULES_PLATFORM_TABS, RulesView } from '../../config/rulesPlatformConfig';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { RULES_PLATFORM_TABS, RulesView } from '../../config/rulesPlatformConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface RulesPlatformProps {
+    /** Optional initial tab to display. */
     initialTab?: RulesView;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
   const { theme } = useTheme();

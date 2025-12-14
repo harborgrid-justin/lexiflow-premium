@@ -1,11 +1,30 @@
+/**
+ * @module components/calendar/CalendarView
+ * @category Calendar
+ * @description Full calendar view with event management and scheduling.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
-
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useTransition } from 'react';
 import { Download, Plus, Calendar, Clock, Users, Gavel, AlertTriangle, Settings, RefreshCw, Layers } from 'lucide-react';
-import { Button } from '../common/Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
+import { Button } from '../common/Button';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
+
+// Utils & Config
 import { cn } from '../../utils/cn';
 
 // Lazy load sub-components

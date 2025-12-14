@@ -1,7 +1,27 @@
+/**
+ * @module components/common/ErrorBoundary
+ * @category Common Components - Error Handling
+ * @description React Error Boundary component with fallback UI and reset functionality.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses hardcoded red color palette for error states - consider theme.status.error in future.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { RefreshCw, AlertTriangle } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils & Constants
 import { errorHandler } from '../../utils/errorHandler';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ErrorBoundaryProps {
   children?: ReactNode;
   fallback?: ReactNode;

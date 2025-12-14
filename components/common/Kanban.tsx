@@ -1,7 +1,29 @@
+/**
+ * @module components/common/Kanban
+ * @category Common
+ * @description Kanban board with drag-and-drop columns and cards.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const KanbanBoard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
   <div className={cn("flex flex-col h-full overflow-hidden", className)}>

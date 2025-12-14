@@ -1,21 +1,36 @@
 /**
- * @module StickerDesigner
- * @category Exhibits
+ * @module components/exhibits/StickerDesigner
+ * @category Exhibits - Design Tools
  * @description Interactive tool for designing and previewing digital exhibit stickers.
  * Allows customization of color, prefix, numbering, and shape.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border for consistent theming. Custom colors for sticker background.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Palette, Type, Layout, Save, RefreshCw, ExternalLink } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
-import { useWindow } from '../../context/WindowContext';
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const StickerDesigner: React.FC = () => {
   const { theme } = useTheme();

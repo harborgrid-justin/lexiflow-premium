@@ -1,8 +1,27 @@
+/**
+ * @module components/common/EvidenceTypeIcon
+ * @category Common
+ * @description Icon selector for evidence types.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses hardcoded colors for evidence type differentiation.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Box, Activity, FileText, Fingerprint } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
 import { EvidenceType } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EvidenceTypeIconProps {
   type: EvidenceType;
   className?: string;

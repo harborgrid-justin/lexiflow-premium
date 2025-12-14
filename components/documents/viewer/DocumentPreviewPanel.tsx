@@ -1,20 +1,45 @@
+/**
+ * @module components/documents/viewer/DocumentPreviewPanel
+ * @category Documents
+ * @description Document preview panel with encryption and redaction.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useEffect, useState, useMemo } from 'react';
-import { LegalDocument, UserRole } from '../../../types';
-import { TagList } from '../../common/Primitives';
-import { Button } from '../../common/Button';
 import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useWindow } from '../../../context/WindowContext';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DocumentService } from '../../../services/documentService';
 import { DataService } from '../../../services/dataService';
 import { useMutation, queryClient } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
-import { useNotify } from '@/hooks/useNotify';
+
+// Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+import { useWindow } from '../../../context/WindowContext';
+import { useNotify } from '../../../hooks/useNotify';
+import { useBlobRegistry } from '../../../hooks/useBlobRegistry';
+
+// Components
+import { TagList } from '../../common/Primitives';
+import { Button } from '../../common/Button';
 import { PreviewHeader } from '../preview/PreviewHeader';
 import { PreviewContent } from '../preview/PreviewContent';
 import { PIIPanel } from '../preview/PIIPanel';
-import { useBlobRegistry } from '@/hooks/useBlobRegistry';
+
+// Utils & Constants
+import { cn } from '../../../utils/cn';
+
+// Types
+import { LegalDocument, UserRole } from '../../../types';
 
 interface DocumentPreviewPanelProps {
   document: LegalDocument | null;

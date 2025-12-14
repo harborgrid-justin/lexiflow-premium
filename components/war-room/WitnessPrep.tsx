@@ -1,52 +1,87 @@
 /**
- * @module WitnessPrep
+ * @module components/war-room/WitnessPrep
  * @category WarRoom
- * @description Component for managing witness preparation, including status tracking, examination outlines, and exhibit bundles.
+ * @description Component for managing witness preparation, including status tracking,
+ * examination outlines, and exhibit bundles.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors for backgrounds,
+ * text, and borders, ensuring a consistent look in both light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect, useMemo } from 'react';
 import { FileText, CheckCircle, Clock, ArrowLeft, Plus, Link as LinkIcon, AlertCircle } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Card } from '../common/Card';
 import { UserAvatar } from '../common/UserAvatar';
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
 // Types
-import { WarRoomData } from '../../types';
+import type { WarRoomData } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface WitnessPrepProps {
+    /** The ID of the current case. */
     caseId: string;
+    /** The comprehensive data object for the war room. */
     warRoomData: WarRoomData;
+    /** Optional pre-selected witness ID to display initially. */
     initialWitnessId?: string | null;
+    /** Callback when witness selection is cleared. */
     onClearSelection?: () => void;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, initialWitnessId, onClearSelection }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
-  const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(initialWitnessId || null);
   
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
+  const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(initialWitnessId || null);
+  const [outline, setOutline] = useState('1. Introduction\n2. Background\n3. Key Events\n   - ...');
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+
+  // ============================================================================
+  // MEMOIZED VALUES
+  // ============================================================================
   const witnesses = useMemo(() => {
       return (warRoomData.witnesses || []).map((p) => ({
           id: p.id,
           name: p.name,
           role: p.role,
-          status: 'Available', // Defaulting as status isn't on Party type
+          status: 'Available',
           scheduled: 'TBD',
           prep: 0,
           linkedExhibits: []
       }));
   }, [warRoomData]);
 
-  const [outline, setOutline] = useState('1. Introduction\n2. Background\n3. Key Events\n   - ...');
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-
-  // Sync prop change
+  // ============================================================================
+  // EFFECTS
+  // ============================================================================
   useEffect(() => {
       if (initialWitnessId) setSelectedWitnessId(initialWitnessId);
   }, [initialWitnessId]);

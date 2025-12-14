@@ -1,16 +1,47 @@
+/**
+ * @module components/compliance/ComplianceConflicts
+ * @category Compliance
+ * @description Conflict check management and resolution tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Search, Plus, User, Filter, Download } from 'lucide-react';
-import { ConflictCheck } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { SearchToolbar } from '../common/SearchToolbar';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { ConflictCheck } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ComplianceConflictsProps {
+  /** List of conflict checks to display. */
   conflicts: ConflictCheck[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ conflicts }) => {
   const { theme } = useTheme();

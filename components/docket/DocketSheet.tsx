@@ -1,18 +1,22 @@
 /**
- * DocketSheet.tsx
- * 
- * Main docket sheet view displaying case docket entries with filtering,
- * search, and modal editing capabilities.
- * 
  * @module components/docket/DocketSheet
- * @category Case Management - Docket
+ * @category Docket Management
+ * @description Main docket sheet view with filtering, search, and editing.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook indirectly through child components.
  */
 
-// External Dependencies
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useEffect } from 'react';
 import { Loader2, Radio } from 'lucide-react';
 
-// Internal Dependencies - Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Modal } from '../common/Modal';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';

@@ -1,11 +1,10 @@
 /**
- * AnalyticsDashboard.tsx
- * 
- * Main analytics dashboard providing predictive insights and data-driven analysis
- * for litigation strategy, judge behavior, opposing counsel patterns, and case outcomes.
- * 
  * @module components/analytics/AnalyticsDashboard
- * @category Analytics - Intelligence & Prediction
+ * @category Analytics
+ * @description Business intelligence dashboard with firm-wide metrics and insights.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
  */
 
 // ============================================================================

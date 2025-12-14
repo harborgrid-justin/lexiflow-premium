@@ -1,19 +1,47 @@
+/**
+ * @module components/discovery/DiscoveryProductions
+ * @category Discovery
+ * @description Production set management with document tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { ProductionSet } from '../../types';
+import { Package, Download, Plus, FileText, Share2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+import { useWindow } from '../../context/WindowContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { Package, Download, Plus, FileText, Share2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '../../hooks/useNotify';
-import { useWindow } from '../../context/WindowContext';
 import { DiscoveryProduction } from './DiscoveryProduction';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { ProductionSet } from '../../types';
 import { DiscoveryProductionsProps } from './types';
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
   const { theme } = useTheme();
   const notify = useNotify();

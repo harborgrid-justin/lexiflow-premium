@@ -1,10 +1,33 @@
 
+/**
+ * @module components/workflow/WorkflowTimeline
+ * @category Workflow
+ * @description Expandable timeline view of workflow stages and tasks.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
-import { WorkflowStage, WorkflowTask } from '../../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { UserAvatar } from '../common/UserAvatar';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { WorkflowStage, WorkflowTask } from '../../types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];

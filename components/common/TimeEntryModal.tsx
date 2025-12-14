@@ -1,14 +1,41 @@
+/**
+ * @module components/common/TimeEntryModal
+ * @category Common Components - Billing
+ * @description Modal for logging billable time with AI refinement of descriptions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.text, theme.primary, theme.surface, theme.border for consistent theming.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services/Data
 import { GeminiService } from '../../services/geminiService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { Input, TextArea } from './Inputs';
-import { TimeEntryPayload, CaseId } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { TimeEntryPayload, CaseId } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface TimeEntryModalProps {
   isOpen: boolean;
   onClose: () => void;

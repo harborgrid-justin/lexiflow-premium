@@ -1,8 +1,29 @@
+/**
+ * @module components/common/VirtualList
+ * @category Common
+ * @description Virtualized list with fixed-height rows and scroll optimization.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface VirtualListProps<T> {
   items: T[];
   height: number | string; // Container height

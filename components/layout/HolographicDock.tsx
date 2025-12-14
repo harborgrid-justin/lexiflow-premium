@@ -1,9 +1,31 @@
+/**
+ * @module components/layout/HolographicDock
+ * @category Layout
+ * @description Dock for minimized holographic windows.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { useWindow } from '../../context/WindowContext';
 import { Maximize2, X, Minimize2, Layers } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const HolographicDock: React.FC = () => {
   const { windows, restoreWindow, closeWindow } = useWindow();

@@ -1,17 +1,41 @@
+/**
+ * @module components/entities/EntityDirector
+ * @category Entities
+ * @description Main entity management hub with navigation and lazy loading.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
 import { Search, Plus } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
-import { LegalEntity, EntityId } from '../../types';
-import { useWindow } from '../../context/WindowContext'; // Holographic DOM
 import { LazyLoader } from '../common/LazyLoader';
 import { EntityNavigation, DirectorView, getEntityParentTab, getEntityFirstTab } from './layout/EntityNavigation';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { LegalEntity, EntityId } from '../../types';
 
 // Sub-components
 const EntityGrid = React.lazy(() => import('./EntityGrid').then(m => ({ default: m.EntityGrid })));

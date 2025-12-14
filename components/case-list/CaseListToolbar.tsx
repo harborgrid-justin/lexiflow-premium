@@ -1,18 +1,52 @@
+/**
+ * @module components/case-list/CaseListToolbar
+ * @category Case Management - Filtering
+ * @description Toolbar for filtering cases by status and type with quick reset.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Filter, RefreshCcw, Download, SlidersHorizontal } from 'lucide-react';
-import { Button } from '../common/Button';
-import { CaseStatus } from '../../types';
+import { Filter, SlidersHorizontal, Download, RefreshCcw } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { CaseStatus } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CaseListToolbarProps {
+  /** Current status filter value. */
   statusFilter: string;
+  /** Callback to set status filter. */
   setStatusFilter: (s: string) => void;
+  /** Current type filter value. */
   typeFilter: string;
+  /** Callback to set type filter. */
   setTypeFilter: (s: string) => void;
+  /** Callback to reset all filters. */
   resetFilters: () => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   statusFilter, setStatusFilter, typeFilter, setTypeFilter, resetFilters

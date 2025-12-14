@@ -1,15 +1,27 @@
-
 /**
- * @module ExhibitTable
- * @category Exhibits
+ * @module components/exhibits/ExhibitTable
+ * @category Exhibits - Table Views
  * @description Displays a list or grid of trial exhibits with virtual scrolling support.
  * Includes party-specific color coding and document preview integration.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border for consistent theming. Hardcoded party colors (yellow/blue/purple).
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Eye, Layers } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useWindow } from '../../context/WindowContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { FileIcon } from '../common/Primitives';
 import { Button } from '../common/Button';
@@ -17,13 +29,15 @@ import { VirtualList } from '../common/VirtualList';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { StatusBadge, EmptyListState } from '../common/RefactoredCommon';
 
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
-import { useWindow } from '../../context/WindowContext';
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
 // Types
 import { TrialExhibit, DocumentId } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 
 interface ExhibitTableProps {
   exhibits: TrialExhibit[];

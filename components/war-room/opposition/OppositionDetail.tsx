@@ -1,33 +1,53 @@
 /**
- * @module OppositionDetail
+ * @module components/war-room/opposition/OppositionDetail
  * @category WarRoom
- * @description Detailed view of an opposition entity, including strategic analysis, case history, and intel.
+ * @description Detailed view of an opposition entity, including strategic analysis,
+ * case history, and intel.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { X, FileText, ExternalLink, ShieldAlert, Gavel, Scale, Activity } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Components
 import { Button } from '../../common/Button';
 
-// Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
 // Types
-import { OppositionEntity } from './OppositionList';
+import type { OppositionEntity } from './OppositionList';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface OppositionDetailProps {
+  /** The opposition entity to display details for. */
   entity: OppositionEntity;
+  /** Callback when the detail panel is closed. */
   onClose: () => void;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onClose }) => {
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.layout.surface, theme.border.default)}>
-        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.subtle, theme.border.default)}>
+    <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Entity Dossier</h4>
             <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
         </div>
@@ -40,14 +60,14 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
                 <h3 className={cn("text-xl font-bold", theme.text.primary)}>{entity.name}</h3>
                 <p className={cn("text-sm", theme.text.secondary)}>{entity.role} at {entity.firm}</p>
                 <div className="flex justify-center gap-2 mt-3">
-                    <span className={cn("text-xs px-2 py-1 rounded font-medium border", theme.surface.subtle, theme.text.secondary, theme.border.default)}>{entity.status}</span>
+                    <span className={cn("text-xs px-2 py-1 rounded font-medium border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>{entity.status}</span>
                 </div>
             </div>
 
             <div className="space-y-4">
                 <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Strategic Analysis</h4>
                 
-                <div className={cn("p-4 rounded-lg border space-y-3", theme.surface.subtle, theme.border.default)}>
+                <div className={cn("p-4 rounded-lg border space-y-3", theme.surface.highlight, theme.border.default)}>
                     <div className="flex justify-between items-center">
                         <span className={cn("text-xs font-medium", theme.text.secondary)}>Aggression Index</span>
                         <div className="flex gap-1">
@@ -98,7 +118,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
             </div>
         </div>
 
-        <div className={cn("p-4 border-t flex gap-2", theme.surface.subtle, theme.border.default)}>
+        <div className={cn("p-4 border-t flex gap-2", theme.surface.highlight, theme.border.default)}>
             <Button variant="outline" className="flex-1">Flag Risk</Button>
             <Button variant="primary" className="flex-1">View Full Profile</Button>
         </div>

@@ -1,15 +1,42 @@
+/**
+ * @module components/practice/FacilitiesManager
+ * @category Practice Management
+ * @description Facilities, lease, and maintenance management.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { MapPin, Key, Wrench, Grid, Users, Plus, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
-import { Tabs } from '../common/Tabs';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
+import { Tabs } from '../common/Tabs';
 import { Card } from '../common/Card';
 import { MetricTile, ActionRow } from '../common/RefactoredCommon';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const FacilitiesManager: React.FC = () => {
     const { theme } = useTheme();

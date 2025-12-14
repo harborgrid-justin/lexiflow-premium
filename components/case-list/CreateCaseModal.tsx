@@ -41,8 +41,14 @@ interface CreateCaseModalProps {
 }
 
 export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClose, onSave }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
   
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [isPreFiling, setIsPreFiling] = useState(true);
   
   const [formData, setFormData] = useState<Partial<Case>>({

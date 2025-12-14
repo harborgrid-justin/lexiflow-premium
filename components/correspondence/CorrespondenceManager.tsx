@@ -1,6 +1,30 @@
+/**
+ * @module components/correspondence/CorrespondenceManager
+ * @category Correspondence
+ * @description Email and letter correspondence management.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { Mail, MapPin, Plus, Filter, Send, Inbox, ShieldCheck } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { CommunicationLog } from './CommunicationLog';
@@ -8,16 +32,24 @@ import { ServiceTracker } from './ServiceTracker';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CreateServiceJobModal } from './CreateServiceJobModal';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { CommunicationItem, ServiceJob } from '../../types';
-import { DataService } from '../../services/dataService';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { CommunicationItem, ServiceJob } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CorrespondenceManagerProps {
+    /** Optional initial tab to display. */
     initialTab?: 'communications' | 'process';
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = ({ initialTab }) => {
   const { theme } = useTheme();

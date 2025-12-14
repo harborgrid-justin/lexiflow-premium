@@ -1,17 +1,49 @@
+/**
+ * @module components/visual/GraphOverlay
+ * @category Visual
+ * @description Graph controls overlay with zoom and physics controls.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { ZoomIn, ZoomOut, RefreshCw, Activity, Layers } from 'lucide-react';
-import { Button } from '../common/Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface GraphOverlayProps {
+  /** Current zoom scale. */
   scale: number;
+  /** Callback to update scale. */
   setScale: React.Dispatch<React.SetStateAction<number>>;
+  /** Callback to reheat physics simulation. */
   onReheat: () => void;
+  /** Whether physics simulation is stable. */
   isStable: boolean;
+  /** Number of nodes in graph. */
   nodeCount: number;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const GraphOverlay: React.FC<GraphOverlayProps> = ({ scale, setScale, onReheat, isStable, nodeCount }) => {
   const { theme } = useTheme();

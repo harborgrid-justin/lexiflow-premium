@@ -1,9 +1,34 @@
+/**
+ * @module components/entities/EntityIngestion
+ * @category Entity Management - Data Import
+ * @description Bulk entity import interface with drag-and-drop, external integrations (Outlook, Salesforce), and data hygiene warnings.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border for consistent theming. Hardcoded amber for warnings.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
+import { UploadCloud, FileSpreadsheet, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { UploadCloud, FileSpreadsheet, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const EntityIngestion: React.FC = () => {
   const { theme } = useTheme();

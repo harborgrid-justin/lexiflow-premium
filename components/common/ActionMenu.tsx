@@ -1,10 +1,31 @@
+/**
+ * @module components/common/ActionMenu
+ * @category Common
+ * @description Dropdown action menu with icons.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useRef } from 'react';
 import { MoreVertical } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useClickOutside } from '../../hooks/useClickOutside';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ActionItem {
   label: string;
   icon?: React.ElementType;

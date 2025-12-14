@@ -1,11 +1,10 @@
 /**
- * DiscoveryPlatform.tsx
- * 
- * Main discovery management platform with multi-level navigation for requests,
- * productions, depositions, ESI, legal holds, and privilege logs.
- * 
  * @module components/discovery/DiscoveryPlatform
- * @category Discovery - Platform
+ * @category Discovery
+ * @description Comprehensive discovery platform with requests, productions, and ESI.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
  */
 
 // ============================================================================

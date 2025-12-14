@@ -1,12 +1,37 @@
+/**
+ * @module components/entities/EntityVendorOps
+ * @category Entity Management - Vendor Management
+ * @description Preferred vendor program dashboard with rate cards, attorney ratings, and cost savings tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border for consistent theming. Hardcoded green for savings metrics.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
-import { LegalEntity } from '../../types';
+import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityVendorOpsProps {
   entities: LegalEntity[];
   onSelect: (e: LegalEntity) => void;

@@ -1,19 +1,51 @@
+/**
+ * @module components/entities/EntityNetwork
+ * @category Entities
+ * @description Entity relationship graph with conflict cluster detection.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
-import { LegalEntity, EntityRelationship } from '../../types';
-import { NexusGraph } from '../visual/NexusGraph';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DisjointSet } from '../../utils/datastructures/disjointSet';
+import { Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
-import { Loader2 } from 'lucide-react';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { NexusGraph } from '../visual/NexusGraph';
 import { Card } from '../common/Card';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+import { DisjointSet } from '../../utils/datastructures/disjointSet';
+
+// Types
+import { LegalEntity, EntityRelationship } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityNetworkProps {
+  /** List of entities for network graph. */
   entities: LegalEntity[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
   const { theme } = useTheme();

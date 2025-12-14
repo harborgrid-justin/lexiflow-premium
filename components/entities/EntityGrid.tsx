@@ -1,18 +1,49 @@
+/**
+ * @module components/entities/EntityGrid
+ * @category Entities
+ * @description Virtual list grid for entities with worker-based search.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo, useState } from 'react';
-import { Badge } from '../common/Badge';
-import { LegalEntity } from '../../types';
 import { Building2, User, Gavel, Briefcase, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+
+// Components
+import { Badge } from '../common/Badge';
 import { SearchInputBar } from '../common/RefactoredCommon';
 import { VirtualList } from '../common/VirtualList';
-import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityGridProps {
+  /** List of entities. */
   entities: LegalEntity[];
+  /** Callback when entity is selected. */
   onSelect: (entity: LegalEntity) => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) => {
   const { theme } = useTheme();

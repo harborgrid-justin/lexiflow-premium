@@ -1,17 +1,44 @@
+/**
+ * @module components/practice/KnowledgeCenter
+ * @category Practice Management
+ * @description Knowledge base with wiki, precedents, and CLE tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { BookOpen, FileText, GraduationCap, Users, BarChart3 } from 'lucide-react';
-import { Tabs } from '../common/Tabs';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
+import { Tabs } from '../common/Tabs';
 import { WikiView } from '../knowledge/WikiView';
 import { PrecedentsView } from '../knowledge/PrecedentsView';
 import { QAView } from '../knowledge/QAView';
 import { KnowledgeAnalytics } from '../knowledge/KnowledgeAnalytics';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const KnowledgeCenter: React.FC = () => {
     const { theme } = useTheme();

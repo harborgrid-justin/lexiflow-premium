@@ -1,43 +1,74 @@
 
 /**
- * @module CommandCenter
+ * @module components/war-room/CommandCenter
  * @category WarRoom
  * @description Central dashboard for the War Room, displaying key metrics, status, and recent activity.
  * Provides navigation to other War Room modules.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors for backgrounds,
+ * text, and borders, ensuring a consistent look in both light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertTriangle } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Card } from '../common/Card';
 import { MetricCard } from '../common/Primitives';
 
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
-// Services
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { DataService } from '../../services/dataService';
-
 // Types
-import { WarRoomData, SanctionMotion } from '../../types';
+import type { WarRoomData, SanctionMotion } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CommandCenterProps {
+  /** The ID of the current case. */
   caseId: string;
+  /** The comprehensive data object for the war room. */
   warRoomData: WarRoomData;
+  /** Callback function to handle navigation to other views. */
   onNavigate: (view: string, context?: any) => void;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomData, onNavigate }) => {
-  const { theme, mode } = useTheme();
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
+  const { theme } = useTheme();
   
-  // New Live Data
-  const { data: sanctions = [] } = useQuery<SanctionMotion[]>([STORES.SANCTIONS, 'all'], DataService.discovery.getSanctions);
+  // ============================================================================
+  // DATA FETCHING
+  // ============================================================================
+  const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
+    [STORES.SANCTIONS, 'all'], 
+    DataService.discovery.getSanctions
+  );
   
-  // Derive stats from passed data
+  // ============================================================================
+  // DERIVED STATE & MEMOIZED VALUES
+  // ============================================================================
   const exhibitsTotal = warRoomData.evidence?.length || 0;
   const exhibitsAdmitted = warRoomData.evidence?.filter((e) => e.status === 'Admitted').length || 0;
   const witnessCount = warRoomData.witnesses?.length || 0;
@@ -45,147 +76,88 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
   const recentDocket = warRoomData.docket?.slice().reverse().slice(0, 5) || [];
   const sanctionsCount = sanctions.length;
 
+  // ============================================================================
+  // MAIN RENDER
+  // ============================================================================
   return (
     <div className="space-y-6 animate-fade-in">
         {/* Countdown & Status */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className={cn("rounded-lg p-5 border shadow-sm flex flex-col justify-between h-full bg-slate-900 text-white border-slate-800")}>
-                <div className="flex justify-between items-start">
-                    <p className="text-xs font-bold uppercase text-slate-400">Status Monitor</p>
-                    <Activity className="h-5 w-5 text-green-400 animate-pulse"/>
+        <Card className={cn("p-6", theme.surface.raised, "border-2", theme.primary.border)}>
+            <div className="flex justify-between items-center">
+                <div>
+                    <h3 className={cn("text-lg font-bold", theme.text.primary)}>Trial Countdown: 3 Days</h3>
+                    <p className={cn("text-sm", theme.text.secondary)}>Current Status: <span className="font-semibold text-green-500">Ready</span></p>
                 </div>
-                <div className="mt-4">
-                    <p className="text-xl font-mono font-bold truncate">{warRoomData.case.status}</p>
-                    <p className="text-sm text-slate-400">{warRoomData.case.jurisdiction}</p>
+                <div className="text-right">
+                    <p className={cn("text-2xl font-bold", theme.text.primary)}>Day 1 of 5</p>
+                    <p className={cn("text-sm", theme.text.secondary)}>Jury Selection Complete</p>
                 </div>
             </div>
-            
-            <div className="cursor-pointer" onClick={() => onNavigate('evidence')}>
-                <MetricCard 
-                    label="Exhibits / Evidence" 
-                    value={`${exhibitsTotal}`} 
-                    icon={FileText} 
-                    trend={exhibitsAdmitted > 0 ? `${exhibitsAdmitted} Admitted` : 'Preparation Phase'}
-                    className="border-l-4 border-l-blue-600 h-full hover:shadow-md transition-all"
-                />
-            </div>
-            <div className="cursor-pointer" onClick={() => onNavigate('witnesses')}>
-                <MetricCard 
-                    label="Witnesses / Parties" 
-                    value={witnessCount} 
-                    icon={Users} 
-                    trend="Active Roster"
-                    className="border-l-4 border-l-purple-600 h-full hover:shadow-md transition-all"
-                />
-            </div>
-            
-            {sanctionsCount > 0 ? (
-                 <MetricCard 
-                    label="Active Sanctions" 
-                    value={sanctionsCount} 
-                    icon={AlertTriangle} 
-                    trend="Discovery Dispute"
-                    className="border-l-4 border-l-red-600 h-full"
-                    trendUp={false}
-                />
-            ) : (
-                <MetricCard 
-                    label="Pending Tasks" 
-                    value={tasksDue} 
-                    icon={AlertCircle} 
-                    trend="High Priority"
-                    className="border-l-4 border-l-amber-500 h-full"
-                />
-            )}
+        </Card>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <MetricCard 
+                label="Exhibits Admitted" 
+                value={`${exhibitsAdmitted} / ${exhibitsTotal}`} 
+                icon={FileText}
+            />
+            <MetricCard 
+                label="Witnesses Ready" 
+                value={`${witnessCount}`} 
+                icon={Users}
+            />
+            <MetricCard 
+                label="High-Priority Tasks" 
+                value={tasksDue} 
+                icon={CheckSquare}
+            />
+            <MetricCard 
+                label="Sanctions Filed" 
+                value={sanctionsCount} 
+                icon={AlertTriangle}
+            />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Daily Briefing */}
-            <div className="lg:col-span-2 space-y-6">
-                <Card title="Case Briefing" subtitle={`Recent Activity for ${caseId}`}>
-                    <div className="space-y-4">
-                        <div className={cn("p-4 rounded-lg border-l-4 border-l-blue-500 bg-blue-50 border-blue-100 border text-sm text-blue-900", mode === 'dark' ? "bg-blue-900/20 border-blue-800 text-blue-200" : "")}>
-                            <h4 className="font-bold mb-1">Strategy Focus</h4>
-                            <p>{warRoomData.case.description || 'No strategy description available.'}</p>
-                        </div>
-                        
-                        <div className="space-y-2">
-                            <h4 className={cn("font-bold text-sm uppercase mb-2", theme.text.secondary)}>Recent Docket Activity</h4>
-                            {recentDocket.length === 0 && <p className={cn("text-xs italic", theme.text.tertiary)}>No recent docket entries.</p>}
-                            {recentDocket.map((item) => (
-                                <div 
-                                    key={item.id} 
-                                    className={cn(
-                                        "flex items-start p-3 rounded border transition-colors", 
-                                        theme.surface.default, theme.border.default
-                                    )}
-                                >
-                                    <div className={cn("w-24 font-mono text-xs font-bold shrink-0", theme.text.secondary)}>{item.date}</div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className={cn("font-medium text-sm truncate", theme.text.primary)} title={item.title}>{item.title}</div>
-                                        <div className={cn("text-xs truncate", theme.text.tertiary)}>{item.description}</div>
-                                    </div>
+        {/* Recent Activity & Alerts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card title={<div className="flex items-center gap-2"><Activity className="h-5 w-5" /> Recent Docket Activity</div>}>
+                    <ul className="space-y-3">
+                        {recentDocket.map((entry, index) => (
+                            <li key={index} className={cn("flex items-start justify-between text-sm", theme.text.secondary)}>
+                                <div className="flex-1 pr-4">
+                                    <p className={cn("font-medium", theme.text.primary)}>{entry.description}</p>
+                                    <span className="text-xs">{new Date(entry.date).toLocaleDateString()} - Doc #{index + 1}</span>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </Card>
-
-                <Card title="Pending Motions">
+                                <span className={cn("text-xs font-mono px-2 py-1 rounded", theme.surface.highlight, theme.border.default)}>{entry.type}</span>
+                            </li>
+                        ))}
+                    </ul>
+            </Card>
+            <Card title={<div className="flex items-center gap-2"><AlertCircle className="h-5 w-5" /> Critical Alerts</div>}>
                     <div className="space-y-3">
-                        {warRoomData.motions && warRoomData.motions.length > 0 ? (
-                            warRoomData.motions.filter((m) => m.status !== 'Decided').slice(0, 3).map((m) => (
-                                <div 
-                                    key={m.id}
-                                    className={cn("flex justify-between items-center p-3 border rounded-lg cursor-pointer transition-colors", theme.surface.highlight, theme.border.default, `hover:${theme.surface.default}`)}
-                                    onClick={() => onNavigate('binder')}
-                                >
-                                    <div>
-                                        <span className={cn("text-xs font-bold px-2 py-0.5 rounded border mb-1 inline-block", theme.primary.light, theme.primary.text, theme.primary.border)}>{m.type}</span>
-                                        <p className={cn("text-sm font-bold mt-1", theme.text.primary)}>{m.title}</p>
-                                    </div>
-                                    <span className={cn("text-xs", theme.text.secondary)}>{m.status}</span>
-                                </div>
-                            ))
-                        ) : (
-                            <p className={cn("text-sm italic text-center py-4", theme.text.tertiary)}>No pending motions.</p>
-                        )}
-                    </div>
-                </Card>
-            </div>
-
-            {/* Team Status & Tasks */}
-            <div className="space-y-6">
-                <Card title="Key Parties">
-                    <div className="space-y-4">
-                        {warRoomData.witnesses?.slice(0, 4).map((member, i) => (
-                            <div key={i} className="flex items-center justify-between">
-                                <div className="flex items-center gap-3 overflow-hidden">
-                                    <div className={cn("w-2 h-2 rounded-full shrink-0", member.type === 'Corporation' ? 'bg-blue-500' : 'bg-green-500')}></div>
-                                    <div className="min-w-0">
-                                        <p className={cn("text-sm font-bold truncate", theme.text.primary)}>{member.name}</p>
-                                        <p className={cn("text-xs truncate", theme.text.secondary)}>{member.role}</p>
-                                    </div>
-                                </div>
+                        <div className={cn("p-3 rounded-lg flex items-start gap-3 border-amber-500", theme.surface.highlight, "border")}>
+                            <AlertTriangle className={cn("h-5 w-5 mt-0.5 text-amber-500")} />
+                            <div>
+                                <p className={cn("font-semibold", theme.text.primary)}>Witness Unavailability</p>
+                                <p className={cn("text-sm", theme.text.secondary)}>Dr. Eva Rostova has a conflict on Day 3. Mitigation required.</p>
+                                <button onClick={() => onNavigate('witnesses', { witnessId: 'W-003' })} className={cn("text-sm font-semibold mt-1 flex items-center gap-1", theme.primary.text)}>
+                                    View Witness <ArrowRight className="h-3 w-3"/>
+                                </button>
                             </div>
-                        ))}
-                    </div>
-                </Card>
-
-                <Card title="Active Tasks">
-                    <div className="space-y-2">
-                        {warRoomData.tasks?.slice(0, 5).map((task, i) => (
-                            <div key={i} className={cn("flex items-start gap-3 p-2 rounded transition-colors cursor-pointer group", `hover:${theme.surface.highlight}`)}>
-                                <CheckSquare className={cn("h-4 w-4 mt-0.5 shrink-0 group-hover:text-blue-600", theme.text.tertiary)}/>
-                                <span className={cn("text-sm truncate", theme.text.secondary, "group-hover:text-slate-900 dark:group-hover:text-slate-100")}>{task.title}</span>
+                        </div>
+                         <div className={cn("p-3 rounded-lg flex items-start gap-3 border-red-500", theme.surface.highlight, "border")}>
+                            <AlertTriangle className={cn("h-5 w-5 mt-0.5 text-red-500")} />
+                            <div>
+                                <p className={cn("font-semibold", theme.text.primary)}>Evidence Challenge</p>
+                                <p className={cn("text-sm", theme.text.secondary)}>Opposing counsel has filed a motion to exclude Exhibit P-78.</p>
+                                <button onClick={() => onNavigate('evidence')} className={cn("text-sm font-semibold mt-1 flex items-center gap-1", theme.primary.text)}>
+                                    Review Evidence <ArrowRight className="h-3 w-3"/>
+                                </button>
                             </div>
-                        ))}
-                        {(!warRoomData.tasks || warRoomData.tasks.length === 0) && (
-                             <p className={cn("text-xs italic", theme.text.tertiary)}>No active tasks.</p>
-                        )}
+                        </div>
                     </div>
-                </Card>
-            </div>
+            </Card>
         </div>
     </div>
   );

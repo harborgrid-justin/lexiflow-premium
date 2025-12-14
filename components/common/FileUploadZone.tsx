@@ -1,11 +1,36 @@
+/**
+ * @module components/common/FileUploadZone
+ * @category Common
+ * @description File upload zone with drag-and-drop and hash verification.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef } from 'react';
 import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DocumentService } from '../../services/documentService';
-import { Button } from './Button';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from './Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface FileUploadZoneProps {
   file: File | null;
   processing: boolean;

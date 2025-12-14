@@ -1,20 +1,25 @@
-
 /**
- * @module EvidenceVault
+ * @module components/evidence/EvidenceVault
  * @category Evidence
- * @description Main container for the Evidence Vault module.
- * Manages state, navigation, and layout for evidence management.
+ * @description Main container for the Evidence Vault module with chain of custody.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo, useCallback, useState, useEffect, Suspense, lazy } from 'react';
 import { Plus, Search } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { LazyLoader } from '../common/LazyLoader';
-
-// Sub-components
 import { EvidenceVaultContent } from './EvidenceVaultContent';
 
 // Context & Utils

@@ -1,49 +1,78 @@
-
 /**
- * @module OppositionManager
+ * @module components/war-room/OppositionManager
  * @category WarRoom
  * @description Manages opposition intelligence, including counsel, parties, and experts.
  * Provides filtering, searching, and detailed profiles of opposition entities.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors for backgrounds,
+ * text, and borders, ensuring a consistent look in both light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Filter, Layout, Plus, Loader2 } from 'lucide-react';
 
-// Common Components
-import { Button } from '../common/Button';
-import { SearchToolbar } from '../common/SearchToolbar';
-
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-
-// Sub-components
-import { OppositionSidebar } from './opposition/OppositionSidebar';
-import { OppositionList, OppositionEntity } from './opposition/OppositionList';
-import { OppositionDetail } from './opposition/OppositionDetail';
-
-// Services
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+import { SearchToolbar } from '../common/SearchToolbar';
+import { OppositionSidebar } from './opposition/OppositionSidebar';
+import { OppositionList, OppositionEntity } from './opposition/OppositionList';
+import { OppositionDetail } from './opposition/OppositionDetail';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface OppositionManagerProps {
+  /** Optional case ID to filter opposition entities. If not provided, shows all entities. */
   caseId?: string;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<OppositionEntity | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
 
-  // Performance Engine: useQuery
+  // ============================================================================
+  // DATA FETCHING
+  // ============================================================================
   const { data: oppositionData = [], isLoading } = useQuery<OppositionEntity[]>(
       [STORES.OPPOSITION, caseId || 'all'],
       () => DataService.warRoom.getOpposition(caseId)
   );
 
+  // ============================================================================
+  // DERIVED STATE
+  // ============================================================================
   const filteredEntities = oppositionData.filter(ent => {
     const matchesCategory = activeCategory === 'All' || 
                             (activeCategory === 'Counsel' && (ent.role === 'Lead Counsel' || ent.role === 'Co-Counsel')) ||

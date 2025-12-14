@@ -1,10 +1,31 @@
+/**
+ * @module components/messenger/ChatInput
+ * @category Messenger
+ * @description Message input with attachments and AI assistance.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef, useEffect } from 'react';
 import { Paperclip, Send, X, FileText, Clock, Sparkles, Loader2 } from 'lucide-react';
-import { Attachment } from '../../hooks/useSecureMessenger';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { Attachment } from '../../hooks/useSecureMessenger';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ChatInputProps {
   inputText: string;
   setInputText: (text: string) => void;

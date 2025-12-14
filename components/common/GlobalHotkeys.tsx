@@ -1,7 +1,26 @@
+/**
+ * @module components/common/GlobalHotkeys
+ * @category Common Components - Navigation
+ * @description Global keyboard shortcuts handler (Cmd+K for command bar, Alt+C/D/W/R for navigation).
+ *
+ * THEME SYSTEM USAGE:
+ * No direct theme usage - purely functional component.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useEffect } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useNotify } from '../../hooks/useNotify';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface GlobalHotkeysProps {
   onToggleCommand: () => void;
   onNavigate: (path: string) => void;

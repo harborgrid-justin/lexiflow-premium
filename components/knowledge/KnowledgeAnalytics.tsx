@@ -1,14 +1,41 @@
+/**
+ * @module components/knowledge/KnowledgeAnalytics
+ * @category Knowledge
+ * @description Knowledge usage analytics with charts.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme and useChartTheme hooks for visualizations.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Card } from '../common/Card';
-import { MetricCard } from '../common/Primitives';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { BookOpen, Users, TrendingUp, Search } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useChartTheme } from '../common/ChartHelpers';
+
+// Components
+import { Card } from '../common/Card';
+import { MetricCard } from '../common/Primitives';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const KnowledgeAnalytics: React.FC = () => {
   const { theme } = useTheme();

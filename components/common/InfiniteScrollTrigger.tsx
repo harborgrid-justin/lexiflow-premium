@@ -1,10 +1,31 @@
+/**
+ * @module components/common/InfiniteScrollTrigger
+ * @category Common
+ * @description Infinite scroll trigger with intersection observer.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useRef, useEffect } from 'react';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface InfiniteScrollTriggerProps {
   onLoadMore: () => void;
   hasMore: boolean;

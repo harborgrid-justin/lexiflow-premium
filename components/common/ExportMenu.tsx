@@ -1,11 +1,34 @@
+/**
+ * @module components/common/ExportMenu
+ * @category Common
+ * @description Export menu with PDF, CSV, and XML options.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useRef } from 'react';
 import { Download, FileText, Table, FileCode } from 'lucide-react';
-import { Button } from './Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useClickOutside } from '../../hooks/useClickOutside';
 
+// Components
+import { Button } from './Button';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ExportMenuProps {
   onExport: (format: 'pdf' | 'csv' | 'xml') => void;
 }

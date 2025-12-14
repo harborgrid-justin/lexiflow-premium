@@ -1,9 +1,30 @@
+/**
+ * @module components/common/StatusBadge
+ * @category Common
+ * @description Status badge with automatic color mapping.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses StatusRegistry to determine color variants.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { Badge } from './Badge';
+
+// Utils & Constants
 import { StatusRegistry } from '../../utils/statusRegistry';
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface StatusBadgeProps {
   status: string;
   className?: string;

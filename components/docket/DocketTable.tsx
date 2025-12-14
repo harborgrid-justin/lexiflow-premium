@@ -1,18 +1,22 @@
 /**
- * DocketTable.tsx
- * 
- * Virtualized table view of docket entries with infinite scroll support
- * and entry type filtering.
- * 
  * @module components/docket/DocketTable
- * @category Case Management - Docket
+ * @category Docket Management
+ * @description Virtualized table view with infinite scroll and filtering.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
  */
 
-// External Dependencies
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
 
-// Internal Dependencies - Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Components
 import { VirtualList } from '../common/VirtualList';
 import { InfiniteScrollTrigger } from '../common/InfiniteScrollTrigger';
 import { DocketRow } from './DocketRow';

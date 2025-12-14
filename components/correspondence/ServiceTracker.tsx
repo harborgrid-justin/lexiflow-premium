@@ -1,17 +1,49 @@
+/**
+ * @module components/correspondence/ServiceTracker
+ * @category Correspondence
+ * @description Process service tracking with delivery confirmation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { ServiceJob } from '../../types';
+import { MapPin, User, FileText, CheckCircle, AlertCircle, Clock, Truck, Package } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
-import { MapPin, User, FileText, CheckCircle, AlertCircle, Clock, Truck, Package } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { ServiceJob } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ServiceTrackerProps {
+  /** List of service jobs. */
   jobs: ServiceJob[];
+  /** Callback when a job is selected. */
   onSelect: (job: ServiceJob) => void;
+  /** Currently selected job ID. */
   selectedId?: string;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const ServiceTracker: React.FC<ServiceTrackerProps> = ({ jobs, onSelect, selectedId }) => {
   const { theme } = useTheme();

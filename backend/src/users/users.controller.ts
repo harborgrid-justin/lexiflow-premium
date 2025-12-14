@@ -21,7 +21,7 @@ import { Permissions } from '../auth/decorators/permissions.decorator';
 import { Role } from '../common/enums/role.enum';
 import { Permission } from '../common/enums/permission.enum';
 
-@Controller('users')
+@Controller('api/v1/users')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

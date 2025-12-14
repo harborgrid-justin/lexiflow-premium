@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+// Evidence
+import { Evidence } from './evidence/entities/evidence.entity';
+import { EvidenceController } from './evidence/evidence.controller';
+import { EvidenceService } from './evidence/evidence.service';
+
 // Discovery Requests
 import { DiscoveryRequest } from './discovery-requests/entities/discovery-request.entity';
 import { DiscoveryRequestsController } from './discovery-requests/discovery-requests.controller';
@@ -49,6 +54,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Evidence,
       DiscoveryRequest,
       Deposition,
       ESISource,
@@ -61,6 +67,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     ]),
   ],
   controllers: [
+    EvidenceController,
     DiscoveryRequestsController,
     DepositionsController,
     ESISourcesController,
@@ -72,6 +79,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     CustodianInterviewsController,
   ],
   providers: [
+    EvidenceService,
     DiscoveryRequestsService,
     DepositionsService,
     ESISourcesService,
@@ -83,6 +91,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     CustodianInterviewsService,
   ],
   exports: [
+    EvidenceService,
     DiscoveryRequestsService,
     DepositionsService,
     ESISourcesService,

@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -18,6 +19,35 @@ import { DocketEntry } from './entities/docket-entry.entity';
 @Controller('api/v1')
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}
+
+  @Get('docket')
+  async findAll(@Query('caseId') caseId?: string): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number; totalPages: number }> {
+    const entries = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
+    return {
+      data: entries,
+      total: entries.length,
+      page: 1,
+      limit: entries.length,
+      totalPages: 1,
+    };
+  }
+
+  @Get('docket/:id')
+  async findOne(@Param('id') id: string): Promise<DocketEntry> {
+    return this.docketService.findOne(id);
+  }
+
+  @Post('docket')
+  @HttpCode(HttpStatus.CREATED)
+  async createDocket(@Body() createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
+    return this.docketService.create(createDocketEntryDto);
+  }
+
+  @Delete('docket/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeDocket(@Param('id') id: string): Promise<void> {
+    return this.docketService.remove(id);
+  }
 
   @Get('cases/:caseId/docket')
   async findAllByCaseId(@Param('caseId') caseId: string): Promise<DocketEntry[]> {

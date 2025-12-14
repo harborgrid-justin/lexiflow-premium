@@ -90,27 +90,52 @@ export class ExternalApiService {
     this.logger.log(`Testing integration: ${integrationName}`);
 
     try {
-      // TODO: Implement actual connection tests for each integration
+      // Mock connection tests based on environment variables
       switch (integrationName.toLowerCase()) {
         case 'pacer':
           // Test PACER connection
-          return !!process.env.PACER_USERNAME;
+          if (!process.env.PACER_USERNAME) {
+            this.logger.warn('PACER_USERNAME not set');
+            return false;
+          }
+          return true;
         case 'google_calendar':
           // Test Google Calendar connection
-          return !!process.env.GOOGLE_CALENDAR_API_KEY;
+          if (!process.env.GOOGLE_CALENDAR_API_KEY) {
+            this.logger.warn('GOOGLE_CALENDAR_API_KEY not set');
+            return false;
+          }
+          return true;
         case 'outlook_calendar':
           // Test Outlook Calendar connection
-          return !!process.env.OUTLOOK_CLIENT_ID;
+          if (!process.env.OUTLOOK_CLIENT_ID) {
+            this.logger.warn('OUTLOOK_CLIENT_ID not set');
+            return false;
+          }
+          return true;
         case 's3':
           // Test S3 connection
-          return !!process.env.AWS_ACCESS_KEY_ID;
+          if (!process.env.AWS_ACCESS_KEY_ID) {
+            this.logger.warn('AWS_ACCESS_KEY_ID not set');
+            return false;
+          }
+          return true;
         case 'elasticsearch':
           // Test Elasticsearch connection
-          return !!process.env.ELASTICSEARCH_NODE;
+          if (!process.env.ELASTICSEARCH_NODE) {
+            this.logger.warn('ELASTICSEARCH_NODE not set');
+            return false;
+          }
+          return true;
         case 'redis':
           // Test Redis connection
-          return !!process.env.REDIS_HOST;
+          if (!process.env.REDIS_HOST) {
+            this.logger.warn('REDIS_HOST not set');
+            return false;
+          }
+          return true;
         default:
+          this.logger.warn(`Unknown integration: ${integrationName}`);
           return false;
       }
     } catch (error: any) {
@@ -125,10 +150,31 @@ export class ExternalApiService {
   async getIntegrationConfig(integrationName: string): Promise<any> {
     this.logger.log(`Getting config for integration: ${integrationName}`);
 
-    // TODO: Implement configuration retrieval for each integration
-    return {
+    // Mock configuration retrieval
+    const config = {
       name: integrationName,
       enabled: true,
+      lastSync: new Date(),
+      status: 'active',
+      settings: {},
     };
+
+    switch (integrationName.toLowerCase()) {
+      case 'pacer':
+        config.settings = {
+          username: process.env.PACER_USERNAME ? '***' : null,
+          baseUrl: process.env.PACER_BASE_URL || 'https://pacer.uscourts.gov',
+        };
+        break;
+      case 'google_calendar':
+        config.settings = {
+          apiKey: process.env.GOOGLE_CALENDAR_API_KEY ? '***' : null,
+        };
+        break;
+      default:
+        break;
+    }
+
+    return config;
   }
 }

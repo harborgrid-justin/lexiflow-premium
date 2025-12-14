@@ -1,0 +1,76 @@
+import { Controller, Get } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  HealthCheckService,
+  HealthCheck,
+  TypeOrmHealthIndicator,
+  MemoryHealthIndicator,
+  DiskHealthIndicator,
+} from '@nestjs/terminus';
+import { RedisHealthIndicator } from './redis-health.indicator';
+
+/**
+ * Health Check Controller
+ * Provides comprehensive health checks for monitoring and orchestration
+ * Compatible with Kubernetes liveness/readiness probes
+ */
+@ApiTags('Health')
+@Controller('health')
+export class HealthController {
+  constructor(
+    private health: HealthCheckService,
+    private db: TypeOrmHealthIndicator,
+    private memory: MemoryHealthIndicator,
+    private disk: DiskHealthIndicator,
+    private redis: RedisHealthIndicator,
+  ) {}
+
+  @Get()
+  @HealthCheck()
+  @ApiOperation({ summary: 'Comprehensive health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  @ApiResponse({ status: 503, description: 'Service is unhealthy' })
+  check() {
+    return this.health.check([
+      // Database health
+      () => this.db.pingCheck('database', { timeout: 3000 }),
+
+      // Redis health (if enabled)
+      () => this.redis.isHealthy('redis'),
+
+      // Memory health (max 300MB heap)
+      () => this.memory.checkHeap('memory_heap', 300 * 1024 * 1024),
+
+      // Memory RSS (max 500MB)
+      () => this.memory.checkRSS('memory_rss', 500 * 1024 * 1024),
+
+      // Disk health (min 10% free)
+      () =>
+        this.disk.checkStorage('disk', {
+          path: '/',
+          thresholdPercent: 0.9,
+        }),
+    ]);
+  }
+
+  @Get('liveness')
+  @HealthCheck()
+  @ApiOperation({ summary: 'Kubernetes liveness probe' })
+  @ApiResponse({ status: 200, description: 'Service is alive' })
+  checkLiveness() {
+    return this.health.check([
+      () => this.memory.checkHeap('memory_heap', 400 * 1024 * 1024),
+    ]);
+  }
+
+  @Get('readiness')
+  @HealthCheck()
+  @ApiOperation({ summary: 'Kubernetes readiness probe' })
+  @ApiResponse({ status: 200, description: 'Service is ready' })
+  checkReadiness() {
+    return this.health.check([
+      () => this.db.pingCheck('database', { timeout: 3000 }),
+      () => this.redis.isHealthy('redis'),
+    ]);
+  }
+}

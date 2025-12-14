@@ -193,8 +193,13 @@ export class InvoicesService {
   async generatePdf(id: string): Promise<{ url: string }> {
     const invoice = await this.findOneWithItems(id);
 
-    // TODO: Implement actual PDF generation logic
-    // This is a placeholder that would integrate with a PDF generation service
+    // Mock PDF generation logic
+    // In a real implementation, this would call a PDF service (e.g., Puppeteer, PDFKit)
+    this.logger.log(`Generating PDF for invoice ${id}`);
+    
+    // Simulate processing time
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const pdfUrl = `/invoices/${id}/invoice-${invoice.invoiceNumber}.pdf`;
 
     invoice.pdfUrl = pdfUrl;

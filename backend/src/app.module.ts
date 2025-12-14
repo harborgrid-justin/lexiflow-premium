@@ -1,9 +1,10 @@
-import { Module, DynamicModule } from '@nestjs/common';
+import { Module, DynamicModule, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
-import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import configuration from './config/configuration';
 import { getDatabaseConfig } from './config/database.config';
 
@@ -13,6 +14,18 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+
+// Health & Monitoring
+import { HealthModule } from './health/health.module';
+
+// Real-time Communication
+import { RealtimeModule } from './realtime/realtime.module';
+
+// Enterprise Infrastructure
+import { SanitizationMiddleware } from './common/middleware/sanitization.middleware';
+import { CorrelationIdInterceptor } from './common/interceptors/correlation-id.interceptor';
+import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
+import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
 
 // Case Management Modules
 import { CasesModule } from './cases/cases.module';
@@ -48,6 +61,7 @@ import { CommunicationsModule } from './communications/communications.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { SearchModule } from './search/search.module';
 import { ReportsModule } from './reports/reports.module';
+import { MetricsModule } from './metrics/metrics.module';
 
 // Integration Modules
 import { GraphQLModule } from './graphql/graphql.module';
@@ -103,9 +117,21 @@ if (isRedisEnabled) {
     // Scheduler for cron jobs
     ScheduleModule.forRoot(),
 
+    // Rate Limiting
+    ThrottlerModule.forRoot([{
+      ttl: 60000, // 1 minute
+      limit: 100, // 100 requests per minute
+    }]),
+
     // Core Infrastructure Modules
     CommonModule,
     DatabaseModule,
+
+    // Health Monitoring
+    HealthModule,
+
+    // Real-time Updates
+    RealtimeModule,
 
     // Authentication & Authorization
     AuthModule,
@@ -145,6 +171,7 @@ if (isRedisEnabled) {
     AnalyticsModule,
     SearchModule,
     ReportsModule,
+    MetricsModule,
 
     // Integration & APIs
     GraphQLModule,
@@ -155,10 +182,35 @@ if (isRedisEnabled) {
   controllers: [AppController],
   providers: [
     AppService,
+    // Global Guards
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    // Global Interceptors
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CorrelationIdInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTransformInterceptor,
+    },
+    // Global Filters
+    {
+      provide: APP_FILTER,
+      useClass: EnterpriseExceptionFilter,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SanitizationMiddleware)
+      .forRoutes('*');
+  }
+}

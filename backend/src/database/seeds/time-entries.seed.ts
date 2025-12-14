@@ -54,11 +54,12 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
 
       const timeEntry = timeEntryRepository.create({
         description: timeEntryData.description,
-        hours: timeEntryData.hours,
-        billableRate: timeEntryData.billableRate,
-        date: new Date(timeEntryData.date),
-        isBillable: timeEntryData.isBillable,
-        taskType: timeEntryData.taskType,
+        duration: timeEntryData.hours,
+        rate: timeEntryData.billableRate,
+        total: timeEntryData.hours * timeEntryData.billableRate,
+        date: new Date(timeEntryData.date).toISOString().split('T')[0],
+        billable: timeEntryData.isBillable,
+        activity: timeEntryData.taskType,
         caseId,
         userId,
         createdAt: new Date(timeEntryData.date),

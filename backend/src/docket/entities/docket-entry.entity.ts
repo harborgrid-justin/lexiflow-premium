@@ -28,6 +28,12 @@ export class DocketEntry extends BaseEntity {
   @Column({ type: 'int' })
   sequenceNumber: number;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  docketNumber: string;
+
+  @Column({ type: 'date' })
+  dateFiled: Date;
+
   @Column({ type: 'date' })
   entryDate: Date;
 
@@ -46,6 +52,12 @@ export class DocketEntry extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   text?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  documentTitle: string;
+
+  @Column({ type: 'varchar', length: 2048, nullable: true })
+  documentUrl: string;
 
   @Column({ type: 'uuid', nullable: true })
   documentId?: string;

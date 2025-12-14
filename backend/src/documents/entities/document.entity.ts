@@ -5,8 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
+import { User } from '../../entities/user.entity';
 
 @Entity('documents')
 @Index(['caseId', 'type'])
@@ -31,6 +34,14 @@ export class Document {
   @Column({ type: 'uuid' })
   @Index()
   caseId: string;
+
+  @Column({ type: 'uuid' })
+  @Index()
+  creatorId: string;
+
+  @ManyToOne(() => User, (user) => user.documents)
+  @JoinColumn({ name: 'creatorId' })
+  creator: User;
 
   @Column({
     type: 'enum',

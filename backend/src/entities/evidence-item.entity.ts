@@ -1,16 +1,16 @@
 import { Entity, Column, Index, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Case } from './case.entity';
+import { Case } from '../cases/entities/case.entity';
 import { ChainOfCustodyEvent } from './chain-of-custody-event.entity';
 
 @Entity('evidence_items')
-@Index(['caseId'])
 @Index(['evidenceNumber'])
 @Index(['evidenceType'])
 @Index(['status'])
 export class EvidenceItem extends BaseEntity {
-  @Column({ type: 'uuid' })
-  caseId: string;
+  @ManyToOne(() => Case, (caseEntity) => caseEntity.evidenceItems)
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'varchar', length: 100, unique: true })
   evidenceNumber: string;
@@ -141,13 +141,6 @@ export class EvidenceItem extends BaseEntity {
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
-
-  // Relations
-  @ManyToOne(() => Case, (caseEntity) => caseEntity.evidenceItems, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'caseId' })
-  case: Case;
 
   @OneToMany(() => ChainOfCustodyEvent, (event) => event.evidenceItem, {
     cascade: true,

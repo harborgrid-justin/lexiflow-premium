@@ -8,6 +8,7 @@ import {
   JoinColumn,
   Index,
 } from 'typeorm';
+import { User } from '../../../entities/user.entity';
 
 export enum TimeEntryStatus {
   DRAFT = 'Draft',
@@ -32,6 +33,10 @@ export class TimeEntry {
   @Column({ name: 'user_id' })
   @Index()
   userId: string;
+
+  @ManyToOne(() => User, (user) => user.timeEntries)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({ type: 'date' })
   date: string;

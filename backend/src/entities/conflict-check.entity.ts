@@ -1,6 +1,6 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Case } from './case.entity';
+import { Case } from '../cases/entities/case.entity';
 
 @Entity('conflict_checks')
 @Index(['caseId'])
@@ -10,6 +10,8 @@ import { Case } from './case.entity';
 export class ConflictCheck extends BaseEntity {
   @Column({ type: 'uuid', nullable: true })
   caseId: string;
+
+  
 
   @Column({ type: 'uuid', nullable: true })
   potentialClientId: string;
@@ -153,11 +155,7 @@ export class ConflictCheck extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
 
-  // Relations
-  @ManyToOne(() => Case, (caseEntity) => caseEntity.conflictChecks, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
+@ManyToOne(() => Case, (caseEntity) => caseEntity.conflictChecks)
   @JoinColumn({ name: 'caseId' })
   case: Case;
 }

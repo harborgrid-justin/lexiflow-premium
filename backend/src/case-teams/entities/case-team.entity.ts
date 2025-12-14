@@ -1,6 +1,7 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../entities/base.entity';
 import { Case } from '../../cases/entities/case.entity';
+import { User } from '../../entities/user.entity';
 
 export enum TeamMemberRole {
   LEAD_ATTORNEY = 'Lead Attorney',
@@ -25,6 +26,10 @@ export class CaseTeamMember extends BaseEntity {
 
   @Column({ type: 'uuid' })
   userId: string;
+
+  @ManyToOne(() => User, (user) => user.caseTeamMemberships)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @Column({ type: 'varchar', length: 255 })
   name: string;

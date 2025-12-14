@@ -1,5 +1,9 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../entities/base.entity';
+import { Client } from '../../entities/client.entity';
+import { EvidenceItem } from '../../entities/evidence-item.entity';
+import { ConflictCheck } from '../../entities/conflict-check.entity';
+import { Party } from '../../entities/party.entity';
 
 export enum CaseType {
   CIVIL = 'Civil',
@@ -83,4 +87,20 @@ export class Case extends BaseEntity {
 
   @Column({ type: 'boolean', default: false })
   isArchived: boolean;
+
+  @Column({ type: 'uuid' })
+  clientId: string;
+
+  @ManyToOne(() => Client, (client) => client.cases)
+  @JoinColumn({ name: 'clientId' })
+  client: Client;
+
+  @OneToMany(() => EvidenceItem, (evidenceItem) => evidenceItem.case)
+  evidenceItems: EvidenceItem[];
+
+  @OneToMany(() => ConflictCheck, (conflictCheck) => conflictCheck.case)
+  conflictChecks: ConflictCheck[];
+
+  @OneToMany(() => Party, (party) => party.case)
+  parties: Party[];
 }

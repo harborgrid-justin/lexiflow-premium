@@ -21,7 +21,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
   }
 
   // Get all users and clients for random assignment
-  const users = await userRepository.find({ where: { role: 'ATTORNEY' } });
+  const users = await userRepository.find({ where: { role: 'senior_associate' } });
   const clients = await clientRepository.find();
 
   if (users.length === 0 || clients.length === 0) {
@@ -36,8 +36,15 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       const attorney = users[Math.floor(Math.random() * users.length)];
       const client = clients[Math.floor(Math.random() * clients.length)];
 
+      const statusMapping = {
+        OPEN: 'Open',
+        IN_PROGRESS: 'Active',
+        CLOSED: 'Closed',
+      };
+
       const caseEntity = caseRepository.create({
         ...caseData,
+        status: statusMapping[caseData.status] || 'Open',
         assignedAttorneyId: attorney.id,
         clientId: client.id,
         createdAt: new Date(caseData.filingDate || Date.now()),

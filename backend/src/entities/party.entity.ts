@@ -1,6 +1,27 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Case } from './case.entity';
+import { Case } from '../cases/entities/case.entity';
+
+export enum PartyRole {
+  PLAINTIFF = 'plaintiff',
+  DEFENDANT = 'defendant',
+  PETITIONER = 'petitioner',
+  RESPONDENT = 'respondent',
+  APPELLANT = 'appellant',
+  APPELLEE = 'appellee',
+  THIRD_PARTY = 'third_party',
+  INTERVENOR = 'intervenor',
+  WITNESS = 'witness',
+  EXPERT = 'expert',
+}
+
+export enum PartyType {
+  INDIVIDUAL = 'individual',
+  CORPORATION = 'corporation',
+  GOVERNMENT = 'government',
+  ORGANIZATION = 'organization',
+  OTHER = 'other',
+}
 
 @Entity('parties')
 @Index(['caseId'])
@@ -15,26 +36,15 @@ export class Party extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: [
-      'plaintiff',
-      'defendant',
-      'petitioner',
-      'respondent',
-      'appellant',
-      'appellee',
-      'third_party',
-      'intervenor',
-      'witness',
-      'expert',
-    ],
+    enum: PartyRole,
   })
-  role: string;
+  role: PartyRole;
 
   @Column({
     type: 'enum',
-    enum: ['individual', 'corporation', 'government', 'organization', 'other'],
+    enum: PartyType,
   })
-  type: string;
+  type: PartyType;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   email: string;
@@ -45,8 +55,32 @@ export class Party extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   address: string;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  city: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  state: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  zipCode: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  country: string;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
-  attorney: string;
+  primaryContactName: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  primaryContactEmail: string;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  primaryContactPhone: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  attorneyName: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  attorneyBarNumber: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   attorneyFirm: string;

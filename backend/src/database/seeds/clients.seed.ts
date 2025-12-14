@@ -19,16 +19,26 @@ export async function seedClients(dataSource: DataSource): Promise<void> {
   }
 
   // Insert clients
+  let clientCounter = 1;
   for (const clientData of clientsData) {
     try {
+      const name =
+        clientData.clientType === 'individual'
+          ? `${clientData.firstName} ${clientData.lastName}`
+          : clientData.companyName;
+
       const client = clientRepository.create({
         ...clientData,
+        name,
+        clientNumber: `C${String(new Date().getFullYear()).slice(-2)}${String(
+          clientCounter++
+        ).padStart(4, '0')}`,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
       await clientRepository.save(client);
     } catch (error) {
-      console.error(`Error seeding client ${clientData.email}:`, error.message);
+      console.error(`Error seeding client:`, error.message);
     }
   }
 

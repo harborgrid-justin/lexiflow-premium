@@ -21,8 +21,18 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Insert users
   for (const userData of usersData) {
     try {
+      const roleMapping = {
+        ADMIN: 'admin',
+        ATTORNEY: 'senior_associate',
+        PARALEGAL: 'paralegal',
+        LEGAL_SECRETARY: 'legal_assistant',
+        CLIENT: 'user',
+        GUEST: 'user',
+      };
+
       const user = userRepository.create({
         ...userData,
+        role: roleMapping[userData.role] || 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
       });

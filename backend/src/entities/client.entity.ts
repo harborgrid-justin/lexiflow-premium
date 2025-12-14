@@ -1,7 +1,7 @@
 import { Entity, Column, Index, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Case } from './case.entity';
-import { Invoice } from './invoice.entity';
+import { Case } from '../cases/entities/case.entity';
+import { Invoice } from '../billing/invoices/entities/invoice.entity';
 
 @Entity('clients')
 @Index(['clientNumber'], { unique: true })

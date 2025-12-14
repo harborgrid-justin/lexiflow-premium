@@ -52,13 +52,13 @@ export class CasePhase extends BaseEntity {
   status: PhaseStatus;
 
   @Column({ type: 'text', nullable: true })
-  description?: string;
+  description: string;
 
   @Column({ type: 'date', nullable: true })
-  startDate?: Date;
+  startDate: Date;
 
   @Column({ type: 'date', nullable: true })
-  endDate?: Date;
+  endDate: Date;
 
   @Column({ type: 'date', nullable: true })
   expectedEndDate?: Date;

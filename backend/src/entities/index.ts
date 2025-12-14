@@ -1,63 +1,51 @@
-// Base Entity
-export { BaseEntity } from './base.entity';
+// This file is a registry of all TypeORM entities in the application.
+// It imports each entity from its respective module and exports them in a 
+// single array for the data source configuration.
 
-// Core Case Management Entities
-export { Case } from './case.entity';
-export { Party } from './party.entity';
-export { CaseTeamMember } from './case-team-member.entity';
-export { CasePhase } from './case-phase.entity';
-export { Motion } from './motion.entity';
-export { DocketEntry } from './docket-entry.entity';
-export { Project } from './project.entity';
+import { BaseEntity } from './base.entity';
 
-// Financial Entities
-export { TimeEntry } from './time-entry.entity';
-export { Invoice } from './invoice.entity';
-export { RateTable } from './rate-table.entity';
-export { TrustTransaction } from './trust-transaction.entity';
-export { FirmExpense } from './firm-expense.entity';
-
-// Document Entities
-export { LegalDocument } from './legal-document.entity';
-export { DocumentVersion } from './document-version.entity';
-export { Clause } from './clause.entity';
-export { PleadingDocument } from './pleading-document.entity';
-
-// Discovery Entities
-export { DiscoveryRequest } from './discovery-request.entity';
-export { Deposition } from './deposition.entity';
-export { ESISource } from './esi-source.entity';
-export { LegalHold } from './legal-hold.entity';
-export { PrivilegeLogEntry } from './privilege-log-entry.entity';
-
-// Evidence Entities
-export { EvidenceItem } from './evidence-item.entity';
-export { ChainOfCustodyEvent } from './chain-of-custody-event.entity';
-export { TrialExhibit } from './trial-exhibit.entity';
-export { Witness } from './witness.entity';
-
-// Users & Auth Entities
-export { User } from './user.entity';
-export { UserProfile } from './user-profile.entity';
-export { Session } from './session.entity';
-
-// Compliance Entities
-export { AuditLog } from './audit-log.entity';
-export { ConflictCheck } from './conflict-check.entity';
-export { EthicalWall } from './ethical-wall.entity';
-
-// Communications Entities
-export { Conversation } from './conversation.entity';
-export { Message } from './message.entity';
-export { Notification } from './notification.entity';
-
-// Organization Entities
-export { Client } from './client.entity';
-export { Organization } from './organization.entity';
-export { LegalEntity } from './legal-entity.entity';
+// Import entities from their respective modules
+import { Case } from '../cases/entities/case.entity';
+import { Party } from './party.entity';
+import { CaseTeamMember } from '../case-teams/entities/case-team.entity';
+import { CasePhase } from '../case-phases/entities/case-phase.entity';
+import { Motion } from '../motions/entities/motion.entity';
+import { DocketEntry } from '../docket/entities/docket-entry.entity';
+import { Project } from '../projects/entities/project.entity';
+import { TimeEntry } from '../billing/time-entries/entities/time-entry.entity';
+import { Invoice } from '../billing/invoices/entities/invoice.entity';
+import { RateTable } from '../billing/rate-tables/entities/rate-table.entity';
+import { TrustTransaction } from '../billing/trust-accounts/entities/trust-transaction.entity';
+import { Expense as FirmExpense } from '../billing/expenses/entities/expense.entity';
+import { Document as LegalDocument } from '../documents/entities/document.entity';
+import { DocumentVersion } from '../document-versions/entities/document-version.entity';
+import { Clause } from '../clauses/entities/clause.entity';
+import { Pleading } from '../pleadings/entities/pleading.entity';
+import { DiscoveryRequest } from '../discovery/discovery-requests/entities/discovery-request.entity';
+import { Deposition } from '../discovery/depositions/entities/deposition.entity';
+import { ESISource } from '../discovery/esi-sources/entities/esi-source.entity';
+import { LegalHold } from '../discovery/legal-holds/entities/legal-hold.entity';
+import { PrivilegeLogEntry } from '../discovery/privilege-log/entities/privilege-log-entry.entity';
+import { EvidenceItem } from './evidence-item.entity';
+import { ChainOfCustodyEvent } from './chain-of-custody-event.entity';
+import { TrialExhibit } from './trial-exhibit.entity';
+import { Witness } from './witness.entity';
+import { User } from './user.entity';
+import { UserProfile } from './user-profile.entity';
+import { Session } from './session.entity';
+import { AuditLog } from './audit-log.entity';
+import { ConflictCheck } from './conflict-check.entity';
+import { EthicalWall } from './ethical-wall.entity';
+import { Conversation } from './conversation.entity';
+import { Message } from './message.entity';
+import { Notification } from './notification.entity';
+import { Client } from './client.entity';
+import { Organization } from './organization.entity';
+import { LegalEntity } from './legal-entity.entity';
 
 // Array of all entities for TypeORM configuration
 export const entities = [
+  BaseEntity,
   // Core Case Management
   Case,
   Party,
@@ -78,7 +66,7 @@ export const entities = [
   LegalDocument,
   DocumentVersion,
   Clause,
-  PleadingDocument,
+  Pleading,
 
   // Discovery
   DiscoveryRequest,

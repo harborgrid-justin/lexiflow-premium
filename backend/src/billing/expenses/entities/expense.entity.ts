@@ -5,7 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { User } from '../../../entities/user.entity';
 
 export enum ExpenseStatus {
   DRAFT = 'Draft',
@@ -47,6 +50,10 @@ export class Expense {
   @Column({ name: 'user_id', type: 'uuid' })
   @Index()
   userId: string;
+
+  @ManyToOne(() => User, (user) => user.expenses)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column({ type: 'date' })
   @Index()

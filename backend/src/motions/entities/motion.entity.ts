@@ -54,19 +54,16 @@ export class Motion extends BaseEntity {
   status: MotionStatus;
 
   @Column({ type: 'text', nullable: true })
-  description?: string;
-
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  filedBy?: string;
+  description: string;
 
   @Column({ type: 'date', nullable: true })
-  filedDate?: Date;
+  filingDate: Date;
 
   @Column({ type: 'date', nullable: true })
-  hearingDate?: Date;
+  hearingDate: Date;
 
   @Column({ type: 'date', nullable: true })
-  decisionDate?: Date;
+  decisionDate: Date;
 
   @Column({ type: 'text', nullable: true })
   relief?: string;

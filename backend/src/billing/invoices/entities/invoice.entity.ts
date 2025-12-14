@@ -6,7 +6,10 @@ import {
   UpdateDateColumn,
   OneToMany,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Client } from '../../../entities/client.entity';
 
 export enum InvoiceStatus {
   DRAFT = 'Draft',
@@ -45,6 +48,10 @@ export class Invoice {
   @Column({ name: 'client_id' })
   @Index()
   clientId: string;
+
+  @ManyToOne(() => Client, (client) => client.invoices)
+  @JoinColumn({ name: 'client_id' })
+  client: Client;
 
   @Column({ type: 'varchar', length: 255 })
   clientName: string;

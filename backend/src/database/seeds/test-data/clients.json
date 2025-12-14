@@ -1,6 +1,6 @@
 [
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "John",
     "lastName": "Peterson",
     "email": "john.peterson@email.com",
@@ -13,7 +13,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Mary",
     "lastName": "Thompson",
     "email": "mary.thompson@email.com",
@@ -26,7 +26,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "James",
     "lastName": "Wilson",
     "email": "james.wilson@email.com",
@@ -39,7 +39,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Linda",
     "lastName": "Garcia",
     "email": "linda.garcia@email.com",
@@ -52,7 +52,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "William",
     "lastName": "Martinez",
     "email": "william.martinez@email.com",
@@ -65,7 +65,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Barbara",
     "lastName": "Rodriguez",
     "email": "barbara.rodriguez@email.com",
@@ -78,7 +78,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Richard",
     "lastName": "Lee",
     "email": "richard.lee@email.com",
@@ -91,7 +91,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Susan",
     "lastName": "Walker",
     "email": "susan.walker@email.com",
@@ -104,7 +104,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Joseph",
     "lastName": "Hall",
     "email": "joseph.hall@email.com",
@@ -117,7 +117,7 @@
     "isActive": true
   },
   {
-    "clientType": "INDIVIDUAL",
+    "clientType": "individual",
     "firstName": "Jessica",
     "lastName": "Allen",
     "email": "jessica.allen@email.com",
@@ -130,7 +130,7 @@
     "isActive": true
   },
   {
-    "clientType": "CORPORATE",
+    "clientType": "corporation",
     "companyName": "TechVentures Inc.",
     "email": "legal@techventures.com",
     "phone": "+1-555-2001",
@@ -144,7 +144,7 @@
     "isActive": true
   },
   {
-    "clientType": "CORPORATE",
+    "clientType": "corporation",
     "companyName": "Global Manufacturing Corp.",
     "email": "legal@globalmanufacturing.com",
     "phone": "+1-555-2002",
@@ -158,7 +158,7 @@
     "isActive": true
   },
   {
-    "clientType": "CORPORATE",
+    "clientType": "corporation",
     "companyName": "Retail Solutions LLC",
     "email": "legal@retailsolutions.com",
     "phone": "+1-555-2003",
@@ -172,7 +172,7 @@
     "isActive": true
   },
   {
-    "clientType": "CORPORATE",
+    "clientType": "corporation",
     "companyName": "Financial Services Group",
     "email": "legal@financialservices.com",
     "phone": "+1-555-2004",
@@ -186,7 +186,7 @@
     "isActive": true
   },
   {
-    "clientType": "CORPORATE",
+    "clientType": "corporation",
     "companyName": "Healthcare Innovations Ltd.",
     "email": "legal@healthcareinnovations.com",
     "phone": "+1-555-2005",

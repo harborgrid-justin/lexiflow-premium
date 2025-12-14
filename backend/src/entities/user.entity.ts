@@ -2,10 +2,10 @@ import { Entity, Column, Index, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { UserProfile } from './user-profile.entity';
 import { Session } from './session.entity';
-import { CaseTeamMember } from './case-team-member.entity';
-import { TimeEntry } from './time-entry.entity';
-import { FirmExpense } from './firm-expense.entity';
-import { LegalDocument } from './legal-document.entity';
+import { CaseTeamMember } from '../case-teams/entities/case-team.entity';
+import { TimeEntry } from '../billing/time-entries/entities/time-entry.entity';
+import { Expense as FirmExpense } from '../billing/expenses/entities/expense.entity';
+import { Document as LegalDocument } from '../documents/entities/document.entity';
 import { AuditLog } from './audit-log.entity';
 
 @Entity('users')

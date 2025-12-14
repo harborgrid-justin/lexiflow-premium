@@ -1,39 +1,46 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createWorker, Worker } from 'tesseract.js';
 import { FileStorageService } from '../file-storage/file-storage.service';
 import { OcrRequestDto, OcrResultDto } from './dto/ocr-request.dto';
 
 @Injectable()
 export class OcrService {
   private readonly logger = new Logger(OcrService.name);
-  private worker: Worker | null = null;
+  private worker: any = null;
   private readonly ocrEnabled: boolean;
+  private initializationAttempted: boolean = false;
 
   constructor(
     private configService: ConfigService,
     private fileStorageService: FileStorageService,
   ) {
-    this.ocrEnabled = this.configService.get<boolean>('OCR_ENABLED') !== false;
+    this.ocrEnabled = this.configService.get<string>('OCR_ENABLED') === 'true';
     if (this.ocrEnabled) {
-      this.initializeWorker();
+      // Defer initialization to avoid blocking startup
+      this.initializeWorkerAsync();
+    } else {
+      this.logger.log('OCR service disabled by configuration');
     }
   }
 
   /**
-   * Initialize Tesseract worker
+   * Initialize Tesseract worker asynchronously (non-blocking)
    */
-  private async initializeWorker(): Promise<void> {
+  private async initializeWorkerAsync(): Promise<void> {
+    if (this.initializationAttempted) return;
+    this.initializationAttempted = true;
+
     try {
       this.logger.log('Initializing Tesseract OCR worker...');
+      const { createWorker } = await import('tesseract.js');
       const languages = this.configService.get<string>('OCR_LANGUAGES') || 'eng';
       this.worker = await createWorker(languages, 1, {
-        logger: (m) => this.logger.debug(JSON.stringify(m)),
+        logger: (m: any) => this.logger.debug(JSON.stringify(m)),
       });
       this.logger.log('Tesseract OCR worker initialized successfully');
     } catch (error) {
-      this.logger.error('Failed to initialize OCR worker', error);
-      // Note: ocrEnabled is readonly, controlled by config
+      this.logger.warn('Failed to initialize OCR worker - OCR features will be unavailable', error instanceof Error ? error.message : error);
+      this.worker = null;
     }
   }
 
@@ -71,7 +78,7 @@ export class OcrService {
         text: text.trim(),
         confidence: confidence,
         language: ocrRequest.languages?.[0] || 'eng',
-        pageCount: 1, // This is simplified; actual page count would need PDF parsing
+        pageCount: 1,
         wordCount,
         processedAt: new Date(),
         processingTime,
@@ -124,7 +131,11 @@ export class OcrService {
   async onModuleDestroy(): Promise<void> {
     if (this.worker) {
       this.logger.log('Terminating Tesseract OCR worker...');
-      await this.worker.terminate();
+      try {
+        await this.worker.terminate();
+      } catch (error) {
+        this.logger.warn('Error terminating OCR worker', error);
+      }
       this.worker = null;
     }
   }

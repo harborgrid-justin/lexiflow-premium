@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { UserType } from './user.type';
-import { DocumentType } from './document.type';
+import { DocumentType, PageInfo } from './document.type';
 
 export enum CaseStatus {
   ACTIVE = 'ACTIVE',
@@ -148,8 +148,8 @@ export class CaseType {
   @Field()
   title: string;
 
-  @Field(() => CaseType)
-  type: CaseType;
+  @Field(() => CaseCategory)
+  category: CaseCategory;
 
   @Field(() => CaseStatus)
   status: CaseStatus;
@@ -207,21 +207,6 @@ export class CaseEdge {
 }
 
 @ObjectType()
-export class PageInfo {
-  @Field()
-  hasNextPage: boolean;
-
-  @Field()
-  hasPreviousPage: boolean;
-
-  @Field({ nullable: true })
-  startCursor?: string;
-
-  @Field({ nullable: true })
-  endCursor?: string;
-}
-
-@ObjectType()
 export class CaseConnection {
   @Field(() => [CaseEdge])
   edges: CaseEdge[];
@@ -231,6 +216,25 @@ export class CaseConnection {
 
   @Field()
   totalCount: number;
+}
+
+// Define metric classes first since they are used by CaseMetrics
+@ObjectType()
+export class CaseTypeMetric {
+  @Field()
+  type: string;
+
+  @Field()
+  count: number;
+}
+
+@ObjectType()
+export class CaseStatusMetric {
+  @Field()
+  status: string;
+
+  @Field()
+  count: number;
 }
 
 @ObjectType()
@@ -252,22 +256,4 @@ export class CaseMetrics {
 
   @Field(() => [CaseStatusMetric])
   byStatus: CaseStatusMetric[];
-}
-
-@ObjectType()
-export class CaseTypeMetric {
-  @Field()
-  type: string;
-
-  @Field()
-  count: number;
-}
-
-@ObjectType()
-export class CaseStatusMetric {
-  @Field()
-  status: string;
-
-  @Field()
-  count: number;
 }

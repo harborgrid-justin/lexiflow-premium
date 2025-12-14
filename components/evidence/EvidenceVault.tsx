@@ -21,11 +21,14 @@ import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
 import { LazyLoader } from '../common/LazyLoader';
 import { EvidenceVaultContent } from './EvidenceVaultContent';
+import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
+import { EvidenceInventorySkeleton, EvidenceDetailSkeleton } from './EvidenceSkeleton';
 
 // Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useEvidenceVault, ViewMode } from '../../hooks/useEvidenceVault';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Config & Types
 import { EVIDENCE_PARENT_TABS } from '../../config/evidenceVaultConfig';
@@ -39,7 +42,7 @@ interface EvidenceVaultProps {
   caseId?: string;
 }
 
-export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, initialTab, caseId }) => {
+const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, initialTab, caseId }) => {
   const { theme } = useTheme();
   const {
     view,
@@ -54,12 +57,34 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
     handleItemClick,
     handleBack,
     handleIntakeComplete,
-    handleCustodyUpdate
+    handleCustodyUpdate,
+    isLoading
   } = useEvidenceVault(caseId);
 
   useEffect(() => {
       if (initialTab) setView(initialTab);
   }, [initialTab, setView]);
+
+  // Keyboard shortcuts for evidence operations
+  useKeyboardShortcuts([
+    {
+      key: 'i',
+      ctrlOrCmd: true,
+      action: () => setView('inventory'),
+      description: 'Go to inventory'
+    },
+    {
+      key: 'n',
+      ctrlOrCmd: true,
+      action: () => setView('intake'),
+      description: 'Log new evidence'
+    },
+    {
+      key: 'Escape',
+      action: handleBack,
+      description: 'Go back'
+    }
+  ]);
 
   const activeParentTab = useMemo(() =>
     EVIDENCE_PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || EVIDENCE_PARENT_TABS[0],
@@ -74,7 +99,7 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
 
   if (view === 'detail' && selectedItem) {
     return (
-      <Suspense fallback={<LazyLoader message="Loading Evidence Details..." />}>
+      <Suspense fallback={<div className={cn("h-full p-6", theme.background)}><EvidenceDetailSkeleton /></div>}>
         <div className={cn("h-full flex flex-col animate-fade-in p-6 overflow-y-auto touch-auto", theme.background)}>
            <EvidenceDetail
               selectedItem={selectedItem}
@@ -86,6 +111,15 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
             />
         </div>
       </Suspense>
+    );
+  }
+  
+  // Show skeleton during initial data load
+  if (isLoading && view === 'inventory') {
+    return (
+      <div className={cn("h-full flex flex-col p-6", theme.background)}>
+        <EvidenceInventorySkeleton />
+      </div>
     );
   }
 
@@ -168,5 +202,14 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = ({ onNavigateToCase, 
         </div>
       </div>
     </div>
+  );
+};
+
+// Export with Error Boundary wrapper
+export const EvidenceVault: React.FC<EvidenceVaultProps> = (props) => {
+  return (
+    <EvidenceErrorBoundary onReset={() => window.location.reload()}>
+      <EvidenceVaultInternal {...props} />
+    </EvidenceErrorBoundary>
   );
 };

@@ -1,7 +1,31 @@
+/**
+ * @module hooks/useRuleSearchAndSelection
+ * @category Hooks - Rules Platform
+ * @description Complex rule search and hierarchical navigation hook with debounced search, auto-expansion
+ * of matching paths, and user-controlled tree expansion. Rebuilds hierarchy from flat rule list, filters
+ * by multi-term search across code/name/text, and manages search vs. user-expanded state with useTransition
+ * for non-blocking UI updates.
+ * 
+ * NO THEME USAGE: Business logic hook for rule search and tree navigation
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useEffect, useMemo, useTransition } from 'react';
-import { LegalRule } from '../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useDebounce } from './useDebounce';
 
+// Types
+import { LegalRule } from '../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface UseRuleSearchAndSelectionResult {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
@@ -15,6 +39,9 @@ interface UseRuleSearchAndSelectionResult {
   selectedRule: LegalRule | undefined;
 }
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useRuleSearchAndSelection = (rules: LegalRule[]): UseRuleSearchAndSelectionResult => {
   const [searchTerm, _setSearchTerm] = useState('');
   const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);

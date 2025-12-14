@@ -12,6 +12,9 @@ import {
   MessageSquare, ScrollText, ClipboardCheck, ArrowUpRightSquare 
 } from 'lucide-react';
 
+// Re-export canvas constants for backward compatibility
+export * from './canvasConstants';
+
 export const LITIGATION_TABS = [
   {
     id: 'design', label: 'Strategy Design', icon: GitMerge,

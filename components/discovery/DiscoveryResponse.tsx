@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Wand2, Save, FileText } from 'lucide-react';
+import { ArrowLeft, Wand2, Save, FileText, Clock } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,10 +23,14 @@ import { Badge } from '../common/Badge';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useAutoSave } from '../../hooks/useAutoSave';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
 import { GeminiService } from '../../services/geminiService';
 import { cn } from '../../utils/cn';
+import { validateDiscoveryRequestSafe } from '../../services/validation/discoverySchemas';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -36,15 +40,65 @@ import { DiscoveryResponseProps } from './types';
 
 export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, onBack, onSave }) => {
   const { theme } = useTheme();
+  const notify = useNotify();
   const [draftResponse, setDraftResponse] = useState('');
   const [isDrafting, setIsDrafting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Array<{ path: string; message: string }>>([]);
+
+  // Auto-save with 2s debounce
+  const { isSaving, lastSaved } = useAutoSave(
+      draftResponse,
+      request ? `discovery-response-draft-${request.id}` : 'discovery-response-draft',
+      2000
+  );
 
   useEffect(() => {
-      // Auto-generate draft on mount if empty
-      if (request && !draftResponse) {
-          handleGenerateResponse();
+      // Restore draft from localStorage on mount
+      if (request) {
+          try {
+              const savedDraft = localStorage.getItem(`discovery-response-draft-${request.id}`);
+              if (savedDraft) {
+                  setDraftResponse(savedDraft);
+                  notify.info('Draft restored from auto-save');
+              } else {
+                  handleGenerateResponse();
+              }
+          } catch (err) {
+              console.error('Failed to restore draft:', err);
+              handleGenerateResponse();
+          }
       }
   }, [request]);
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+s': () => {
+      if (request) handleSave();
+    },
+    'mod+g': () => {
+      handleGenerateResponse();
+    },
+    'escape': () => {
+      onBack();
+    }
+  });
+
+  const handleSave = () => {
+      if (!request) return;
+      
+      // Validate before saving
+      const validation = validateDiscoveryRequestSafe(request);
+      if (!validation.success) {
+          setValidationErrors(validation.error.errors);
+          notify.error('Validation failed. Please check the form.');
+          return;
+      }
+      
+      onSave(request.id, draftResponse);
+      // Clear draft from localStorage
+      localStorage.removeItem(`discovery-response-draft-${request.id}`);
+      notify.success('Response saved successfully');
+  };
 
   const handleGenerateResponse = async () => {
     if (!request) return;
@@ -73,11 +127,21 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({ request, o
                     <p className={cn("text-xs", theme.text.secondary)}>Ref: {request.id} • {request.title}</p>
                 </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+                {isSaving && (
+                    <span className={cn('text-xs flex items-center gap-1', theme.text.secondary)}>
+                        <Clock className="h-3 w-3 animate-spin" /> Saving...
+                    </span>
+                )}
+                {lastSaved && !isSaving && (
+                    <span className={cn('text-xs', theme.text.tertiary)}>
+                        Saved {new Date(lastSaved).toLocaleTimeString()}
+                    </span>
+                )}
                 <Button size="sm" variant="ghost" onClick={handleGenerateResponse} disabled={isDrafting}>
                     {isDrafting ? 'AI Generating...' : 'Re-Generate AI Draft'}
                 </Button>
-                <Button size="sm" variant="primary" icon={Save} onClick={() => onSave(request.id, draftResponse)}>Save & Mark Responded</Button>
+                <Button size="sm" variant="primary" icon={Save} onClick={handleSave}>Save & Mark Responded</Button>
             </div>
         </div>
 

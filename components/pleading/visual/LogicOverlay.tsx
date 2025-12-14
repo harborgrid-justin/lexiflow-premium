@@ -19,7 +19,7 @@ interface LogicNode {
 export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document }) => {
   const { theme } = useTheme();
 
-  // Analyze document sections and create logic flow
+  // Analyze document sections and create logic flow with proper graph connections
   const logicNodes = useMemo<LogicNode[]>(() => {
     return document.sections.map((section, index) => {
       // Determine section type based on PleadingSectionType
@@ -29,25 +29,51 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document }) => {
       
       if (sectionType.includes('heading') || sectionType.includes('caption')) {
         type = 'claim';
-      } else if (contentLower.includes('exhibit') || contentLower.includes('evidence')) {
+      } else if (contentLower.includes('exhibit') || contentLower.includes('evidence') || section.linkedEvidenceIds?.length) {
         type = 'evidence';
-      } else if (contentLower.includes('pursuant to') || contentLower.includes('rule ')) {
+      } else if (contentLower.includes('pursuant to') || contentLower.includes('rule ') || section.linkedArgumentId) {
         type = 'legal';
       } else if (sectionType.includes('signature') || sectionType.includes('certificate')) {
         type = 'conclusion';
       }
 
-      // Calculate strength based on content length and citations
+      // Calculate strength based on content length, citations, and links
       const contentLength = section.content?.length || 0;
       const hasCitations = /\d+\s+[A-Z][a-z]+\.?\s+\d+/.test(section.content || '');
+      const hasEvidence = (section.linkedEvidenceIds?.length || 0) > 0;
+      const hasArgument = !!section.linkedArgumentId;
+      
       const strength: LogicNode['strength'] = 
-        contentLength > 500 && hasCitations ? 'strong' :
-        contentLength > 200 ? 'medium' : 'weak';
+        (contentLength > 500 && hasCitations) || (hasEvidence && hasArgument) ? 'strong' :
+        contentLength > 200 || hasEvidence || hasArgument ? 'medium' : 'weak';
 
-      // Create connections to next sections
+      // Create connections based on actual links and flow
       const connections: string[] = [];
+      
+      // Add sequential connection
       if (index < document.sections.length - 1) {
         connections.push(document.sections[index + 1].id);
+      }
+      
+      // Add connections to linked evidence sections
+      if (section.linkedEvidenceIds?.length) {
+        section.linkedEvidenceIds.forEach(evidenceId => {
+          // Find sections that reference this evidence
+          const linkedSection = document.sections.find(s => 
+            s.content?.includes(evidenceId) || s.id === evidenceId
+          );
+          if (linkedSection && !connections.includes(linkedSection.id)) {
+            connections.push(linkedSection.id);
+          }
+        });
+      }
+      
+      // Add connection to linked argument
+      if (section.linkedArgumentId) {
+        const argumentSection = document.sections.find(s => s.id === section.linkedArgumentId);
+        if (argumentSection && !connections.includes(argumentSection.id)) {
+          connections.push(argumentSection.id);
+        }
       }
 
       return {

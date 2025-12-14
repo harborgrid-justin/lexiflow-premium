@@ -23,6 +23,7 @@ import { DataService } from '../../services/dataService';
 // Hooks
 import { useNotify } from '../../hooks/useNotify';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Components
 import { Button } from '../common/Button';
@@ -31,6 +32,7 @@ import { ExportMenu } from '../common/ExportMenu';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 import { BillingDashboardContent } from './BillingDashboardContent';
+import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
@@ -49,7 +51,7 @@ interface BillingDashboardProps {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
+const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
   const notify = useNotify();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
@@ -61,9 +63,36 @@ export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, 
     });
   };
 
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+w': () => setActiveTab('wip'),
+    'mod+i': () => setActiveTab('invoices'),
+    'mod+e': () => setActiveTab('expenses'),
+    'mod+l': () => setActiveTab('ledger'),
+    'mod+t': () => setActiveTab('trust')
+  });
+
   const { mutate: syncFinancials, isLoading: isSyncing } = useMutation(
-      DataService.billing.sync,
-      { onSuccess: () => notify.success("Financial data synced.") }
+      async () => {
+        // Retry logic: 3 attempts with exponential backoff
+        let lastError;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            return await DataService.billing.sync();
+          } catch (error) {
+            lastError = error;
+            if (attempt < 3) {
+              const delay = Math.min(1000 * Math.pow(2, attempt - 1), 30000); // 1s, 2s, 4s (max 30s)
+              await new Promise(resolve => setTimeout(resolve, delay));
+            }
+          }
+        }
+        throw lastError;
+      },
+      { 
+        onSuccess: () => notify.success("Financial data synced."),
+        onError: () => notify.error("Sync failed after 3 attempts. Please try again later.")
+      }
   );
 
   const { mutate: exportReport } = useMutation(

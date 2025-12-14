@@ -8,13 +8,14 @@
  */
 
 import React, { useState } from 'react';
-import { Sparkles, Wand2 } from 'lucide-react';
+import { Sparkles, Wand2, AlertCircle } from 'lucide-react';
 
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { GeminiService } from '../../services/geminiService';
 import { useNotify } from '../../hooks/useNotify';
+import { AIValidationService } from '../../services/aiValidationService';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
@@ -22,16 +23,35 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
     const notify = useNotify();
     const [prompt, setPrompt] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [remainingRequests, setRemainingRequests] = useState(3);
 
     const handleGenerate = async () => {
         if (!prompt) return;
+
+        // Validate prompt
+        const promptValidation = AIValidationService.validatePrompt(prompt);
+        if (!promptValidation.isValid) {
+            notify.error(promptValidation.errors[0]);
+            setRemainingRequests(AIValidationService.getRemainingRequests());
+            return;
+        }
+
         setIsLoading(true);
         try {
-            const result = await GeminiService.generateStrategyFromPrompt(prompt);
-            if (result && result.nodes && result.connections) {
-                onGenerate(result);
+            const result = await GeminiService.generateStrategyFromPrompt(promptValidation.sanitizedPrompt!);
+            
+            // Validate AI response
+            const responseValidation = AIValidationService.validateAIResponse(result);
+            if (!responseValidation.isValid) {
+                notify.error(`AI validation failed: ${responseValidation.errors[0]}`);
+                return;
+            }
+
+            if (responseValidation.sanitizedResponse) {
+                onGenerate(responseValidation.sanitizedResponse);
                 notify.success('AI generated strategy map!');
                 setPrompt('');
+                setRemainingRequests(AIValidationService.getRemainingRequests());
             } else {
                 notify.error('AI failed to generate a valid graph.');
             }
@@ -61,13 +81,19 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
                         variant="primary"
                         onClick={handleGenerate}
                         isLoading={isLoading}
-                        disabled={isLoading || !prompt}
+                        disabled={isLoading || !prompt || remainingRequests === 0}
                         className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-lg"
                         icon={Wand2}
                     >
                         {isLoading ? 'Generating' : 'Generate'}
                     </Button>
                 </div>
+                {remainingRequests < 3 && (
+                    <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 mt-2 px-2">
+                        <AlertCircle className="h-3 w-3" />
+                        <span>{remainingRequests} request{remainingRequests !== 1 ? 's' : ''} remaining this minute</span>
+                    </div>
+                )}
             </div>
         </div>
     );

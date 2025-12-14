@@ -1,16 +1,45 @@
+/**
+ * @module hooks/useDiscoveryPlatform
+ * @category Hooks - Discovery
+ * @description Discovery platform state management hook with tab navigation, request tracking, deadline
+ * syncing, and deep linking support. Manages activeTab with session storage persistence, contextId for
+ * detail views, and parent tab derivation for hierarchical navigation. Provides handlers for tab changes,
+ * navigation, back navigation, and response saving with cache invalidation.
+ * 
+ * NO THEME USAGE: Business logic hook for discovery platform state
+ */
 
-// hooks/useDiscoveryPlatform.ts
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { useSessionStorage } from './useSessionStorage';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
-import { useNotify } from './useNotify';
-import { DiscoveryRequest } from '../types';
+import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+
+// Hooks & Context
+import { useSessionStorage } from './useSessionStorage';
+import { useNotify } from './useNotify';
+
+// Utils & Constants
 import { getParentTabForView, getFirstTabOfParent } from '../components/discovery/layout/DiscoveryNavigation';
 
+// Types
+import { DiscoveryRequest } from '../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string) => {
   const notify = useNotify();
   

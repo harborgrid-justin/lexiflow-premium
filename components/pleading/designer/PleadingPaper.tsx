@@ -1,12 +1,40 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FormattingRule } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { PleadingPaperProps } from '../types';
 
 const PleadingPaper: React.FC<PleadingPaperProps> = ({ rules, children, className }) => {
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [lineNumbers, setLineNumbers] = useState<number[]>([]);
     
-    // Generate line numbers (usually 1-28 for pleading paper)
-    const lineNumbers = Array.from({ length: 28 }, (_, i) => i + 1);
+    // Calculate actual line numbers based on content height
+    useEffect(() => {
+        if (!contentRef.current || !rules.showLineNumbers) return;
+        
+        const updateLineNumbers = () => {
+            const contentHeight = contentRef.current!.scrollHeight;
+            const lineHeight = parseFloat(rules.fontSize.toString()) * parseFloat(rules.lineHeight.toString());
+            const lineCount = Math.ceil(contentHeight / lineHeight);
+            
+            // Generate line numbers array
+            const numbers = Array.from({ length: Math.max(lineCount, 28) }, (_, i) => i + 1);
+            setLineNumbers(numbers);
+        };
+        
+        // Initial calculation
+        updateLineNumbers();
+        
+        // Create a ResizeObserver to recalculate when content changes
+        const resizeObserver = new ResizeObserver(() => {
+            updateLineNumbers();
+        });
+        
+        resizeObserver.observe(contentRef.current);
+        
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [rules.fontSize, rules.lineHeight, rules.showLineNumbers, children]);
 
     return (
         <div 
@@ -20,14 +48,25 @@ const PleadingPaper: React.FC<PleadingPaperProps> = ({ rules, children, classNam
                 color: 'black'
             }}
         >
-            {/* Pleading Margins (Visual Guide) */}
-            {rules.showLineNumbers && (
+            {/* Pleading Margins (Visual Guide) - Dynamic Line Numbers */}
+            {rules.showLineNumbers && lineNumbers.length > 0 && (
                 <div 
-                    className="absolute top-0 left-0 bottom-0 border-r-2 border-double border-slate-300 flex flex-col items-center pointer-events-none select-none print:border-black"
-                    style={{ paddingTop: rules.marginTop, width: rules.marginLeft }}
+                    className="absolute top-0 left-0 border-r-2 border-double border-slate-300 flex flex-col pointer-events-none select-none print:border-black"
+                    style={{ 
+                        paddingTop: rules.marginTop, 
+                        width: rules.marginLeft,
+                        height: 'fit-content'
+                    }}
                 >
                     {lineNumbers.map(n => (
-                        <div key={n} style={{ height: `calc(${rules.fontSize}pt * ${rules.lineHeight})`}} className="flex items-center justify-center w-full text-xs text-slate-400 print:text-black">
+                        <div 
+                            key={n} 
+                            style={{ 
+                                height: `calc(${rules.fontSize}pt * ${rules.lineHeight})`,
+                                lineHeight: `calc(${rules.fontSize}pt * ${rules.lineHeight})`
+                            }} 
+                            className="flex items-center justify-center w-full text-xs text-slate-400 print:text-black"
+                        >
                             {n}
                         </div>
                     ))}
@@ -35,6 +74,7 @@ const PleadingPaper: React.FC<PleadingPaperProps> = ({ rules, children, classNam
             )}
             
             <div 
+                ref={contentRef}
                 className="relative z-10 h-full"
                 style={{
                     paddingTop: rules.marginTop,

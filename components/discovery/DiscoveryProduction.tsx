@@ -23,10 +23,19 @@ import { Card } from '../common/Card';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useQuery, queryClient } from '../../services/queryClient';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { DocumentService } from '../../services/documentService';
 import { cn } from '../../utils/cn';
+import { discoveryQueryKeys } from '../../services/queryKeys';
+import { validateProductionConfigSafe } from '../../services/validation/discoverySchemas';
+
+// Lazy load DocumentService for bundle optimization
+const loadDocumentService = async () => {
+  const { DocumentService } = await import('../../services/documentService');
+  return DocumentService;
+};
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -38,7 +47,26 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
   const { theme } = useTheme();
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  const [config, setConfig] = useState({
+  const [validationErrors, setValidationErrors] = useState<Array<{ path: string; message: string }>>([]);
+  
+  // Cache production config with 24h TTL
+  const { data: cachedConfig } = useQuery(
+      discoveryQueryKeys.discovery.productions.config(),
+      async () => {
+          // Check cache first
+          const cached = localStorage.getItem('production-config-cache');
+          if (cached) {
+              const parsed = JSON.parse(cached);
+              if (Date.now() - parsed.timestamp < 86400000) { // 24h TTL
+                  return parsed.config;
+              }
+          }
+          return null;
+      },
+      { staleTime: 86400000 } // 24 hours
+  );
+  
+  const [config, setConfig] = useState(cachedConfig || {
       batesPrefix: 'PROD-',
       startNumber: 100,
       format: 'PDF',
@@ -47,16 +75,49 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
       stampConfidential: 'None'
   });
 
+  // Save config to cache when changed
+  useEffect(() => {
+      localStorage.setItem('production-config-cache', JSON.stringify({
+          config,
+          timestamp: Date.now()
+      }));
+  }, [config]);
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+p': () => {
+      handleFinalize();
+    },
+    'escape': () => {
+      onBack();
+    }
+  });
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files.length > 0) {
           setUploading(true);
           const files = Array.from(e.target.files) as File[];
+          
+          // Lazy load DocumentService
+          const DocumentService = await loadDocumentService();
+          
           for (const file of files) {
               await DocumentService.processFile(file); // Simulate processing
               setUploadedFiles(prev => [...prev, file.name]);
           }
           setUploading(false);
       }
+  };
+
+  const handleFinalize = () => {
+      // Validate config before finalizing
+      const validation = validateProductionConfigSafe(config);
+      if (!validation.success) {
+          setValidationErrors(validation.error.errors);
+          return;
+      }
+      alert('Production job queued. You will be notified upon completion.');
+      onBack();
   };
 
   return (
@@ -71,7 +132,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                     <p className={cn("text-xs", theme.text.secondary)}>{request ? `Target: ${request.title}` : 'General Volume'}</p>
                 </div>
             </div>
-            <Button size="sm" variant="primary" onClick={() => { alert('Production job queued. You will be notified upon completion.'); onBack(); }}>Finalize & Produce</Button>
+            <Button size="sm" variant="primary" onClick={handleFinalize}>Finalize & Produce</Button>
         </div>
 
         <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">

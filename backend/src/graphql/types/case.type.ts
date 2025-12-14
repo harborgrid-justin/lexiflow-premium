@@ -9,7 +9,7 @@ export enum CaseStatus {
   ARCHIVED = 'ARCHIVED',
 }
 
-export enum CaseType {
+export enum CaseCategory {
   CIVIL = 'CIVIL',
   CRIMINAL = 'CRIMINAL',
   FAMILY = 'FAMILY',
@@ -21,7 +21,7 @@ export enum CaseType {
 }
 
 registerEnumType(CaseStatus, { name: 'CaseStatus' });
-registerEnumType(CaseType, { name: 'CaseType' });
+registerEnumType(CaseCategory, { name: 'CaseCategory' });
 
 @ObjectType()
 export class PartyType {

@@ -5,8 +5,8 @@
  * Handles file upload, metadata extraction, malware scanning, and blockchain hashing.
  */
 
-import React, { useState, useRef } from 'react';
-import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck, Save } from 'lucide-react';
 
 // Common Components
 import { Card } from '../common/Card';
@@ -19,10 +19,13 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useWizard } from '../../hooks/useWizard';
 import { useNotify } from '../../hooks/useNotify';
+import { useAutoSave } from '../../hooks/useAutoSave';
 
 // Services & Types
 import { DocumentService } from '../../services/documentService';
 import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../types';
+import { validateEvidenceItemSafe } from '../../services/validation/evidenceSchemas';
+import { AdmissibilityStatusEnum } from '../../types/enums';
 
 interface EvidenceIntakeProps {
   handleBack: () => void;
@@ -36,6 +39,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
   const [file, setFile] = useState<File | null>(null);
   const [processing, setProcessing] = useState(false);
   const [processStage, setProcessStage] = useState('');
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   
   const [title, setTitle] = useState('');
   const [custodian, setCustodian] = useState('');
@@ -44,6 +48,40 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
   const [generatedData, setGeneratedData] = useState<{hash?: string, uuid?: string, tags?: string[]}>({});
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Auto-save draft every 2 seconds to localStorage
+  const draftData = {
+    title,
+    custodian,
+    description,
+    type,
+    generatedData,
+    currentStep: wizard.currentStep
+  };
+  
+  const { isSaving, lastSaved } = useAutoSave(
+    'evidence-intake-draft',
+    draftData,
+    { debounceMs: 2000 }
+  );
+  
+  // Restore draft on mount
+  useEffect(() => {
+    const draft = localStorage.getItem('evidence-intake-draft');
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        setTitle(parsed.title || '');
+        setCustodian(parsed.custodian || '');
+        setDescription(parsed.description || '');
+        setType(parsed.type || 'Document');
+        setGeneratedData(parsed.generatedData || {});
+        notify.info('Draft restored from previous session');
+      } catch (e) {
+        console.error('Failed to restore draft', e);
+      }
+    }
+  }, []);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -83,7 +121,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
           collectedBy: 'Current User',
           custodian: custodian || 'Unknown',
           location: 'Evidence Locker / Digital S3',
-          admissibility: 'Pending',
+          admissibility: AdmissibilityStatusEnum.PENDING,
           tags: generatedData.tags || [],
           blockchainHash: generatedData.hash,
           chainOfCustody: [{
@@ -93,19 +131,51 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
               actor: 'Current User',
               notes: 'Intake via Digital Wizard'
           }]
-      };
+      } as any; // Cast needed for BaseEntity fields
+      
+      // Validate before submission
+      const validation = validateEvidenceItemSafe(newItem);
+      if (!validation.success) {
+        setValidationErrors(validation.error.errors.map(e => e.message));
+        notify.error('Validation failed. Please check the form.');
+        return;
+      }
+      
+      // Clear draft after successful submission
+      localStorage.removeItem('evidence-intake-draft');
       onComplete(newItem);
   };
 
   return (
       <div className="max-w-3xl mx-auto py-6 animate-fade-in">
-          <div className="flex items-center mb-6">
-              <button onClick={handleBack} className={cn("mr-4 transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}><ArrowLeft className="h-6 w-6"/></button>
-              <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Evidence Intake Wizard</h2>
+          <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                  <button onClick={handleBack} className={cn("mr-4 transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}><ArrowLeft className="h-6 w-6"/></button>
+                  <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Evidence Intake Wizard</h2>
+              </div>
+              {isSaving && (
+                  <div className="flex items-center text-xs text-blue-600">
+                      <Save className="h-3 w-3 mr-1 animate-pulse"/> Saving draft...
+                  </div>
+              )}
+              {!isSaving && lastSaved && (
+                  <div className="text-xs text-slate-500">
+                      Draft saved {new Date(lastSaved).toLocaleTimeString()}
+                  </div>
+              )}
           </div>
           <Card>
               <div className="space-y-6">
                   <Stepper steps={['Upload & Hash', 'Metadata & Tagging']} currentStep={wizard.currentStep} />
+                  
+                  {validationErrors.length > 0 && (
+                      <div className={cn("p-4 rounded-lg border", theme.status.error.bg, theme.status.error.border)}>
+                          <h4 className={cn("font-bold text-sm mb-2", theme.status.error.text)}>Validation Errors:</h4>
+                          <ul className={cn("text-xs list-disc list-inside", theme.status.error.text)}>
+                              {validationErrors.map((err, idx) => <li key={idx}>{err}</li>)}
+                          </ul>
+                      </div>
+                  )}
 
                   {wizard.currentStep === 1 && (
                     <div className="animate-in fade-in slide-in-from-right-4">

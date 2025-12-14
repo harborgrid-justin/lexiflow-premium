@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { MapPin, User, FileText, CheckCircle, AlertCircle, Clock, Truck, Package } from 'lucide-react';
 
 // ============================================================================
@@ -25,6 +25,7 @@ import { Badge } from '../common/Badge';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { ServiceStatus } from '../../types/enums';
 
 // Types
 import { ServiceJob } from '../../types';
@@ -45,18 +46,34 @@ interface ServiceTrackerProps {
 // COMPONENT
 // ============================================================================
 
-export const ServiceTracker: React.FC<ServiceTrackerProps> = ({ jobs, onSelect, selectedId }) => {
+export const ServiceTracker: React.FC<ServiceTrackerProps> = React.memo(({ jobs, onSelect, selectedId }) => {
   const { theme } = useTheme();
 
-  const getMethodIcon = (method: string, mailType?: string) => {
+  const getMethodIcon = useCallback((method: string, mailType?: string) => {
       if (method === 'Mail') return <Truck className="h-4 w-4 text-purple-600"/>;
       return <User className="h-4 w-4 text-blue-600"/>;
-  };
+  }, []);
+
+  const getBadgeVariant = useCallback((status: string) => {
+    switch (status) {
+      case ServiceStatus.SERVED:
+      case ServiceStatus.FILED:
+        return 'success';
+      case ServiceStatus.OUT_FOR_SERVICE:
+        return 'warning';
+      case ServiceStatus.NON_EST:
+        return 'error';
+      default:
+        return 'neutral';
+    }
+  }, []);
+
+  const memoizedJobs = useMemo(() => jobs, [jobs]);
 
   return (
     <div className="flex-1 overflow-auto custom-scrollbar p-6 bg-slate-50/50">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {jobs.map(job => (
+            {memoizedJobs.map(job => (
                 <div 
                     key={job.id} 
                     onClick={() => onSelect(job)}
@@ -68,10 +85,7 @@ export const ServiceTracker: React.FC<ServiceTrackerProps> = ({ jobs, onSelect, 
                     )}
                 >
                     <div className="flex justify-between items-start mb-3">
-                        <Badge variant={
-                            job.status === 'Served' || job.status === 'Filed' ? 'success' : 
-                            job.status === 'Out for Service' ? 'warning' : 'neutral'
-                        }>
+                        <Badge variant={getBadgeVariant(job.status)}>
                             {job.status}
                         </Badge>
                         <span className={cn("text-xs font-mono", theme.text.tertiary)}>{job.id}</span>
@@ -110,4 +124,6 @@ export const ServiceTracker: React.FC<ServiceTrackerProps> = ({ jobs, onSelect, 
         </div>
     </div>
   );
-};
+});
+
+ServiceTracker.displayName = 'ServiceTracker';

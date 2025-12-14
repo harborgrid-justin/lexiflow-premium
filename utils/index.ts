@@ -8,6 +8,10 @@ export * from './crdt';
 export * from './errorHandler';
 export * from './formatters';
 export * from './ganttHelpers';
+export * from './idGenerator';
+export * from './retryWithBackoff';
+export * from './templateEngine';
+export * from './validation';
 export * from './layoutAlgorithms';
 export * from './nexusPhysics';
 export * from './pathfinding';
@@ -19,6 +23,8 @@ export * from './statusRegistry';
 export * from './storage';
 export * from './stringUtils';
 export * from './trie';
+export * from './docketValidation';
+export * from './cacheManager';
 
 // Datastructures
 export * from './datastructures/bTree';

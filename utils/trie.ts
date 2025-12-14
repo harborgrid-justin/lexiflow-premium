@@ -1,3 +1,15 @@
+/**
+ * @module utils/trie
+ * @category Utils - Data Structures
+ * @description Trie (prefix tree) implementation for efficient prefix-based autocomplete and search.
+ * Provides case-insensitive insert, prefix search with result collection, and clear for reset. Uses
+ * Map-based children for O(m) insert/search where m is key length. Stores arbitrary data at terminal
+ * nodes for autocomplete payloads.
+ */
+
+// ============================================================================
+// TRIE NODE CLASS
+// ============================================================================
 class TrieNode {
     children: Map<string, TrieNode>;
     isEndOfWord: boolean;
@@ -10,6 +22,9 @@ class TrieNode {
     }
 }
 
+// ============================================================================
+// TRIE CLASS
+// ============================================================================
 export class Trie {
     root: TrieNode;
 

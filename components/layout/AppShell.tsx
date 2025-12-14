@@ -1,10 +1,36 @@
+/**
+ * @module components/layout/AppShell
+ * @category Layout
+ * @description Main application shell providing sidebar, header, and content area layout with
+ * passive time tracking indicator, global fetching indicator, and viewport height handling.
+ * Uses CSS containment for performance optimization.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.background - Root background color
+ * - theme.text.primary - Base text color
+ * - theme.surface.default - Header background
+ * - theme.border.default - Header border
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { memo } from 'react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useAutoTimeCapture } from '@/hooks/useAutoTimeCapture';
 import { useGlobalQueryStatus } from '@/hooks/useGlobalQueryStatus';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface AppShellProps {
   sidebar: React.ReactNode;
   headerContent: React.ReactNode;
@@ -14,6 +40,9 @@ interface AppShellProps {
   selectedCaseId?: string | null;
 }
 
+// ========================================
+// SUB-COMPONENTS
+// ========================================
 const PassiveTimeTracker = memo(({ activeView, selectedCaseId }: { activeView: string, selectedCaseId: string | null }) => {
     const { activeTime, isIdle } = useAutoTimeCapture(activeView, selectedCaseId);
     
@@ -28,6 +57,9 @@ const PassiveTimeTracker = memo(({ activeView, selectedCaseId }: { activeView: s
 });
 PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 
+// ========================================
+// COMPONENT
+// ========================================
 export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
   const { isFetching } = useGlobalQueryStatus();

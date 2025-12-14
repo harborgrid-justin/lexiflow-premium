@@ -14,6 +14,7 @@ import { Save, Rocket, Loader2 } from 'lucide-react';
 import { LazyLoader } from '../common/LazyLoader';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { Button } from '../common/Button';
+import { ErrorBoundary } from '../common/ErrorBoundary';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -65,12 +66,14 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
       onTabChange={setActiveTab}
     >
       <div className={cn("h-full w-full", theme.background)}>
-        <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
-            {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
-            {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
-            {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadFromPlaybook(p)} />}
-            {activeTab === 'simulate' && <OutcomeSimulator />}
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
+              {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
+              {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
+              {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadFromPlaybook(p)} />}
+              {activeTab === 'simulate' && <OutcomeSimulator />}
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </TabbedPageLayout>
   );

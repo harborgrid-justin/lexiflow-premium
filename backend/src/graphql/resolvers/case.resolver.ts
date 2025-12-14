@@ -148,6 +148,7 @@ export class CaseResolver {
     },
   })
   caseUpdated(@Args('id', { type: () => ID }) id: string) {
+    // @ts-ignore - PubSub asyncIterator exists at runtime
     return pubSub.asyncIterator('caseUpdated');
   }
 }

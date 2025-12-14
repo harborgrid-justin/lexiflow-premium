@@ -8,6 +8,8 @@
 
 import { CasePhase, WorkflowTask, TaskId, CaseId } from '../../../types';
 import { WorkflowNode, WorkflowConnection } from '../../workflow/builder/types';
+import { GANTT_ZOOM_SCALE, NODE_DURATION_MAP, CANVAS_CONSTANTS } from '../canvasConstants';
+import { DateCalculationService } from '../../../services/dateCalculationService';
 
 export interface TransformedGanttData {
   phases: CasePhase[];
@@ -18,24 +20,14 @@ export interface TransformedGanttData {
  * Calculates pixels per day based on zoom level
  */
 export const calculatePixelsPerDay = (zoom: 'Day' | 'Week' | 'Month' | 'Quarter'): number => {
-  switch(zoom) {
-    case 'Day': return 60;
-    case 'Week': return 20;
-    case 'Month': return 5;
-    case 'Quarter': return 2;
-    default: return 5;
-  }
+  return GANTT_ZOOM_SCALE[zoom] || GANTT_ZOOM_SCALE.Month;
 };
 
 /**
  * Gets duration in days based on node type
  */
 export const getNodeDurationDays = (nodeType: string): number => {
-  switch(nodeType) {
-    case 'Decision': return 14;
-    case 'Event': return 1;
-    default: return 7; // Task or other types
-  }
+  return NODE_DURATION_MAP[nodeType as keyof typeof NODE_DURATION_MAP] || CANVAS_CONSTANTS.DEFAULT_TASK_DURATION;
 };
 
 /**
@@ -68,13 +60,15 @@ export const transformNodesToGantt = (
         color: 'bg-indigo-500'
       });
     } else if (node.type !== 'Comment' && node.type !== 'Start' && node.type !== 'End') {
-      const startOffsetDays = Math.max(0, Math.floor((node.x - minX) / 20)); // 20px per day
-      const startDate = new Date(today);
-      startDate.setDate(today.getDate() + startOffsetDays);
+      const startDate = DateCalculationService.calculateStartDateFromPosition(
+        node.x,
+        CANVAS_CONSTANTS.PIXELS_PER_DAY,
+        minX,
+        today
+      );
       
       const durationDays = getNodeDurationDays(node.type);
-      const dueDate = new Date(startDate);
-      dueDate.setDate(startDate.getDate() + durationDays);
+      const dueDate = DateCalculationService.calculateDueDate(startDate, durationDays);
       
       const dependencies = connections
         .filter(c => c.to === node.id)
@@ -84,8 +78,8 @@ export const transformNodesToGantt = (
         id: node.id as TaskId,
         caseId: 'strategy-plan' as CaseId,
         title: node.label,
-        startDate: startDate.toISOString().split('T')[0],
-        dueDate: dueDate.toISOString().split('T')[0],
+        startDate: DateCalculationService.formatToISO(startDate),
+        dueDate: DateCalculationService.formatToISO(dueDate),
         status: 'Pending',
         assignee: node.config.assignee || 'Unassigned',
         priority: 'Medium',
@@ -104,7 +98,11 @@ export const calculateNodePositionFromDate = (
   startDateStr: string, 
   referenceDate: Date = new Date()
 ): number => {
-  const newStartDate = new Date(startDateStr);
-  const startOffsetDays = (newStartDate.getTime() - referenceDate.getTime()) / (1000 * 3600 * 24);
-  return 50 + startOffsetDays * 20; // 20px per day, starting at x=50
+  const startDate = DateCalculationService.parseFromISO(startDateStr);
+  return DateCalculationService.calculatePositionFromDate(
+    startDate,
+    referenceDate,
+    CANVAS_CONSTANTS.PIXELS_PER_DAY,
+    50
+  );
 };

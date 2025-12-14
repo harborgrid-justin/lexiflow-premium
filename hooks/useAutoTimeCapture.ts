@@ -1,10 +1,28 @@
+/**
+ * @module hooks/useAutoTimeCapture
+ * @category Hooks - Time Tracking
+ * @description Passive time tracking hook monitoring user activity (mousemove, keydown) with idle
+ * detection (1 minute threshold). Uses RAF throttling for performance and tracks active time in
+ * seconds per page/case context. Resets on path or case change.
+ * 
+ * NO THEME USAGE: Utility hook for time tracking logic
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+// ========================================
+// CONSTANTS
+// ========================================
 // define options outside to maintain reference equality
 // Cast to any to avoid TS error about 'passive' property in strict environments
 const EVENT_OPTIONS = { passive: true } as any;
 
+// ========================================
+// HOOK
+// ========================================
 export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string | null) => {
   const [activeTime, setActiveTime] = useState(0);
   const [isIdle, setIsIdle] = useState(false);

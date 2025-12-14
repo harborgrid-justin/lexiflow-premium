@@ -1,10 +1,28 @@
+/**
+ * @module utils/apiUtils
+ * @category Utils - API
+ * @description Enhanced API utilities with circuit breaker, semaphore concurrency control, token bucket
+ * rate limiting, and exponential backoff with jitter. Provides withRetry wrapper for resilient fetch
+ * operations, yieldToMain for non-blocking yielding, Semaphore for bulkhead pattern, and safeParseJSON
+ * for robust JSON parsing with fallback.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils & Constants
 import { apiCircuitBreaker } from './circuitBreaker';
 import { globalRateLimiter } from './rateLimiter';
 
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 // Non-blocking yield to main thread
 export const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
+// ============================================================================
+// SEMAPHORE CLASS
+// ============================================================================
 export class Semaphore {
     private tasks: (() => void)[] = [];
     private count: number;

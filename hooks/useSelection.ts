@@ -1,6 +1,21 @@
+/**
+ * @module hooks/useSelection
+ * @category Hooks - UI Utilities
+ * @description Multi-select hook with single toggle, range selection (Shift+Click), and select all
+ * functionality. Tracks selected IDs, last selected item for range calculations, and provides
+ * selection state helpers (isSelected, isAllSelected, isIndeterminate).
+ * 
+ * NO THEME USAGE: Utility hook for selection state management
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useCallback } from 'react';
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useSelection = <T extends Record<string, any>>(items: T[], idKey: keyof T = 'id' as keyof T) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);

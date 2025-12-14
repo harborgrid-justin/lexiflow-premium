@@ -1,3 +1,14 @@
+/**
+ * @module utils/bloomFilter
+ * @category Utils - Data Structures
+ * @description Bloom Filter implementation using FNV-1a and simple variant hashing for probabilistic
+ * set membership testing. Configurable false positive rate and expected item count. Provides space-efficient
+ * add/test operations with Uint8Array bit storage. Used for IP blacklist checks in admin security.
+ */
+
+// ============================================================================
+// BLOOM FILTER CLASS
+// ============================================================================
 // A simple Bloom Filter implementation using FNV-1a and MurmurHash3-like approximations
 export class BloomFilter {
     private size: number;

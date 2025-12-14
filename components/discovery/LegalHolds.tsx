@@ -24,12 +24,16 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils
 import { DataService } from '../../services/dataService';
 import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+import { discoveryQueryKeys } from '../../services/queryKeys';
+import { LegalHoldStatusEnum } from '../../types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -38,11 +42,75 @@ import { LegalHold } from '../../types';
 
 export const LegalHolds: React.FC = () => {
   const { theme } = useTheme();
+  const notify = useNotify();
 
   const { data: holds = [], isLoading } = useQuery<LegalHold[]>(
-      [STORES.LEGAL_HOLDS, 'all'],
+      discoveryQueryKeys.discovery.holds.all,
       DataService.discovery.getLegalHolds
   );
+
+  // Optimistic mutation with retry logic
+  const { mutate: acknowledgeHold } = useMutation(
+      async (holdId: string) => {
+          return DataService.discovery.acknowledgeHold(holdId);
+      },
+      {
+          // Optimistic update
+          onMutate: async (holdId) => {
+              // Cancel outgoing queries
+              await queryClient.cancelQueries(discoveryQueryKeys.discovery.holds.all);
+              
+              // Snapshot previous value
+              const previousHolds = queryClient.getQueryData<LegalHold[]>(discoveryQueryKeys.discovery.holds.all);
+              
+              // Optimistically update
+              if (previousHolds) {
+                  queryClient.setQueryData<LegalHold[]>(
+                      discoveryQueryKeys.discovery.holds.all,
+                      previousHolds.map(h => 
+                          h.id === holdId 
+                              ? { ...h, status: LegalHoldStatusEnum.ACKNOWLEDGED }
+                              : h
+                      )
+                  );
+              }
+              
+              return { previousHolds };
+          },
+          // Retry logic: 3 attempts with exponential backoff
+          retry: 3,
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+          onError: (err, holdId, context) => {
+              // Rollback on error
+              if (context?.previousHolds) {
+                  queryClient.setQueryData(
+                      discoveryQueryKeys.discovery.holds.all,
+                      context.previousHolds
+                  );
+              }
+              notify.error('Failed to acknowledge legal hold. Please try again.');
+          },
+          onSuccess: () => {
+              notify.success('Legal hold acknowledged successfully');
+          },
+          invalidateKeys: [
+              discoveryQueryKeys.discovery.holds.all,
+              discoveryQueryKeys.discovery.holds.byStatus(LegalHoldStatusEnum.ACKNOWLEDGED)
+          ]
+      }
+  );
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+h': () => {
+      // Open new hold form
+      notify.info('New legal hold form (to be implemented)');
+    },
+    'mod+a': () => {
+      // View all holds
+      notify.info('Viewing all legal holds');
+    }
+  });
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 
@@ -84,7 +152,11 @@ export const LegalHolds: React.FC = () => {
                       }
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">Remind</Button>
+                      {hold.status === LegalHoldStatusEnum.PENDING ? (
+                        <Button variant="ghost" size="sm" onClick={() => acknowledgeHold(hold.id)}>Acknowledge</Button>
+                      ) : (
+                        <Button variant="ghost" size="sm">Remind</Button>
+                      )}
                     </TableCell>
                  </TableRow>
               ))}

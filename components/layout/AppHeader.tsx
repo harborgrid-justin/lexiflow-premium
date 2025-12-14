@@ -1,17 +1,50 @@
+/**
+ * @module components/layout/AppHeader
+ * @category Layout
+ * @description Application header with neural command bar, quick action menu, connectivity HUD,
+ * notifications, system heartbeat indicator, and user profile menu. Provides global search and
+ * AI-powered command execution via NeuralCommandBar.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.text.primary/secondary/tertiary - Header text and icons
+ * - theme.surface.default/highlight - Header background and button hover states
+ * - theme.border.default - Dividers and dropdown borders
+ * - theme.primary colors for active states
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useState } from 'react';
 import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react';
-import { User as UserType } from '../../types';
-import { GlobalSearchResult } from '../../services/searchService';
-import { IntentResult } from '../../services/geminiService';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
 import { ConnectivityHUD } from '../common/ConnectivityHUD';
 import { NeuralCommandBar } from './NeuralCommandBar';
 import { UserAvatar } from '../common/UserAvatar';
+import { ConnectionStatus } from '../common/ConnectionStatus';
+
+// Services & Data
+import { GlobalSearchResult } from '../../services/searchService';
+import { IntentResult } from '../../services/geminiService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useInterval } from '@/hooks/useInterval';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { User as UserType } from '../../types';
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface AppHeaderProps {
   onToggleSidebar: () => void;
   globalSearch: string;
@@ -23,6 +56,9 @@ interface AppHeaderProps {
   onNeuralCommand?: (intent: IntentResult) => void;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const AppHeader: React.FC<AppHeaderProps> = ({ 
   onToggleSidebar, globalSearch, setGlobalSearch, onGlobalSearch, currentUser, onSwitchUser, onSearchResultClick, onNeuralCommand 
 }) => {
@@ -54,8 +90,11 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             onNeuralCommand={onNeuralCommand}
         />
         
+        {/* Connection Status - Shows IndexedDB vs PostgreSQL */}
+        <ConnectionStatus className="hidden lg:flex" />
+        
         {/* System Heartbeat Dot - Desktop only */}
-        <div className={cn("hidden lg:flex items-center gap-2 px-3 py-1 rounded border", theme.surface.highlight, theme.border.default)}>
+        <div className={cn("hidden xl:flex items-center gap-2 px-3 py-1 rounded border", theme.surface.highlight, theme.border.default)}>
              <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000", pulse ? "bg-green-400 opacity-100" : "bg-green-600 opacity-40")}></div>
              <span className={cn("text-[9px] font-mono uppercase tracking-widest", theme.text.tertiary)}>System Online</span>
         </div>

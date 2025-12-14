@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Wand2, Upload, CheckSquare } from 'lucide-react';
 
 // ============================================================================
@@ -26,10 +26,12 @@ import { VirtualList } from '../common/VirtualList';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { DiscoveryView } from './types';
 
 // Utils
 import { cn } from '../../utils/cn';
+import { DiscoveryRequestStatusEnum } from '../../types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -37,18 +39,29 @@ import { cn } from '../../utils/cn';
 import { DiscoveryRequest } from '../../types';
 import { DiscoveryRequestsProps } from './types';
 
-export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {
+const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
+  const [showFilters, setShowFilters] = useState(false);
 
-  const getDaysRemaining = (dueDate: string) => {
+  // Memoized: Calculate days remaining
+  const getDaysRemaining = useCallback((dueDate: string) => {
     const due = new Date(dueDate);
     const now = new Date();
     const diff = Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return diff;
-  };
+  }, []);
 
-  const handleCreateTask = (req: DiscoveryRequest, e: React.MouseEvent) => {
+  // Memoized: Badge variant logic
+  const getBadgeVariant = useCallback((status: string) => {
+    switch(status) {
+      case DiscoveryRequestStatusEnum.OVERDUE: return 'error';
+      case DiscoveryRequestStatusEnum.RESPONDED: return 'success';
+      default: return 'info';
+    }
+  }, []);
+
+  const handleCreateTask = useCallback((req: DiscoveryRequest, e: React.MouseEvent) => {
       e.stopPropagation();
       const winId = `task-create-${req.id}`;
       openWindow(
@@ -65,9 +78,20 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
             />
           </div>
       );
-  };
+  }, [openWindow, closeWindow]);
 
-  const renderRow = (req: DiscoveryRequest) => {
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+n': () => {
+      // Navigate to new request form
+      onNavigate('requests');
+    },
+    'mod+f': () => {
+      setShowFilters(prev => !prev);
+    }
+  });
+
+  const renderRow = useCallback((req: DiscoveryRequest) => {
     const daysLeft = getDaysRemaining(req.dueDate);
     return (
         <div key={req.id} onClick={() => onNavigate('response', req.id)} className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.default, `hover:${theme.surface.highlight}`)}>
@@ -90,7 +114,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
                 </div>
              </div>
              <div className="w-[10%]">
-                 <Badge variant={req.status === 'Overdue' ? 'error' : req.status === 'Responded' ? 'success' : 'info'}>
+                 <Badge variant={getBadgeVariant(req.status)}>
                     {req.status}
                 </Badge>
              </div>
@@ -105,7 +129,7 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
              </div>
         </div>
     );
-  };
+  }, [theme, getBadgeVariant, handleCreateTask, onNavigate, getDaysRemaining]);
 
   return (
     <div className="animate-fade-in space-y-4 h-full flex flex-col">
@@ -179,5 +203,8 @@ export const DiscoveryRequests: React.FC<DiscoveryRequestsProps> = ({ onNavigate
     </div>
   );
 };
+
+// Memoized export for performance optimization
+export const DiscoveryRequests = React.memo(DiscoveryRequestsComponent);
 
 export default DiscoveryRequests;

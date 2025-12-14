@@ -1,6 +1,22 @@
+/**
+ * @module hooks/useCanvasDrag
+ * @category Hooks - Canvas Interaction
+ * @description Canvas drag-and-drop hook supporting pan (with middle mouse, shift, or meta keys)
+ * and item dragging. Provides pan state management, zoom-aware coordinate transformation, and
+ * drag event handlers with window-level mouse tracking.
+ * 
+ * NO THEME USAGE: Utility hook for drag-and-drop logic
+ */
+
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import { useState, useRef, useCallback, useEffect } from 'react';
 import React from 'react';
 
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 type DragType = 'pan' | 'item';
 
 interface DragState {
@@ -16,6 +32,9 @@ interface UseCanvasDragProps {
   zoom?: number;
 }
 
+// ========================================
+// HOOK
+// ========================================
 export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps = {}) => {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragState = useRef<DragState | null>(null);

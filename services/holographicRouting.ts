@@ -1,6 +1,20 @@
+/**
+ * @module services/holographicRouting
+ * @category Services - Navigation
+ * @description Holographic routing service with intent resolution and context-aware deep linking.
+ * Provides cached regex patterns for fuzzy navigation matching, tab resolution for modules, and
+ * context-based route derivation. Supports floating window routing with minimizable dock metaphor.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils & Constants
 import { PATHS } from '../constants/paths';
 
+// ============================================================================
+// CONSTANTS
+// ============================================================================
 // Regex patterns cached for performance
 const Patterns = {
     FINANCE: /money|financ|bill|revenue/i,

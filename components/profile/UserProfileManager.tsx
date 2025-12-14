@@ -1,18 +1,49 @@
+/**
+ * @module components/profile/UserProfileManager
+ * @category User Profile
+ * @description Tabbed user profile management interface with overview, preferences, access matrix,
+ * security settings, and audit logs. Uses TabbedPageLayout with lazy-loaded sub-components and
+ * DataService for profile data fetching.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.surface.default - Page background
+ * - Tab theming handled by TabbedPageLayout component
+ * - Child components handle their own theme integration
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useState, useEffect } from 'react';
-import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { UserCircle, Shield, Settings, Sliders, Activity } from 'lucide-react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
 import { ProfileOverview } from './ProfileOverview';
 import { AccessMatrixEditor } from './AccessMatrixEditor';
 import { SecurityPane } from './SecurityPane';
 import { PreferencePane } from './PreferencePane';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { useQuery } from '../../services/queryClient';
-import { ExtendedUserProfile } from '../../types';
 import { LazyLoader } from '../common/LazyLoader';
 
+// Services & Data
+import { DataService } from '../../services/dataService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useQuery } from '../../services/queryClient';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { ExtendedUserProfile } from '../../types';
+
+// ========================================
+// CONSTANTS
+// ========================================
 const PROFILE_TABS = [
   {
     id: 'general', label: 'General', icon: UserCircle,
@@ -31,6 +62,9 @@ const PROFILE_TABS = [
   }
 ];
 
+// ========================================
+// COMPONENT
+// ========================================
 export const UserProfileManager: React.FC = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('overview');

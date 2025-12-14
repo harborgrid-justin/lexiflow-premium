@@ -136,7 +136,7 @@ export async function findOneRecord<T>(
   criteria: any,
 ): Promise<T | null> {
   const repository = dataSource.getRepository(entityName);
-  return repository.findOne({ where: criteria });
+  return repository.findOne({ where: criteria }) as Promise<T | null>;
 }
 
 /**
@@ -148,5 +148,5 @@ export async function findRecords<T>(
   criteria?: any,
 ): Promise<T[]> {
   const repository = dataSource.getRepository(entityName);
-  return criteria ? repository.find({ where: criteria }) : repository.find();
+  return (criteria ? repository.find({ where: criteria }) : repository.find()) as Promise<T[]>;
 }

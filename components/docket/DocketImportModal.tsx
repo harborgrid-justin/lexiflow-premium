@@ -26,6 +26,8 @@ import { useNotify } from '../../hooks/useNotify';
 import { cn } from '../../utils/cn';
 import { GeminiService } from '../../services/geminiService';
 import { XmlDocketParser } from '../../services/xmlDocketParser';
+import { FallbackDocketParser } from '../../services/fallbackDocketParser';
+import type { FallbackParseResult } from '../../services/fallbackDocketParser';
 
 interface DocketImportModalProps {
   isOpen: boolean;
@@ -39,26 +41,57 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
   const [rawText, setRawText] = useState('');
   const [isParsing, setIsParsing] = useState(false);
   const [parsedData, setParsedData] = useState<any>(null);
+  const [parseConfidence, setParseConfidence] = useState<'high' | 'medium' | 'low' | null>(null);
+  const [parseWarnings, setParseWarnings] = useState<string[]>([]);
   const notify = useNotify();
   const { theme } = useTheme();
 
   const handleParse = async () => {
     if (!rawText.trim()) return;
     setIsParsing(true);
+    setParseConfidence(null);
+    setParseWarnings([]);
     
     try {
         if (mode === 'xml') {
             const result = await XmlDocketParser.parse(rawText);
             setParsedData(result);
+            setParseConfidence('high');
+            notify.success('Parsed XML docket successfully');
         } else {
-            const result = await GeminiService.parseDocket(rawText);
-            setParsedData(result);
+            // Try AI parsing first
+            try {
+                const result = await GeminiService.parseDocket(rawText);
+                setParsedData(result);
+                setParseConfidence('high');
+                notify.success('AI parsed docket successfully');
+            } catch (aiError) {
+                // Fallback to regex parser if AI fails
+                console.warn('AI parsing failed, falling back to regex parser:', aiError);
+                const fallbackResult: FallbackParseResult = FallbackDocketParser.parse(rawText);
+                
+                if (fallbackResult.entries.length === 0) {
+                    throw new Error('No docket entries found in text');
+                }
+                
+                setParsedData(fallbackResult);
+                setParseConfidence(fallbackResult.confidence);
+                setParseWarnings(fallbackResult.warnings);
+                
+                const confidenceMessage = fallbackResult.confidence === 'high' 
+                    ? 'Parsed docket with high confidence' 
+                    : fallbackResult.confidence === 'medium'
+                    ? 'Parsed docket with medium confidence - please review carefully'
+                    : 'Parsed docket with low confidence - manual review required';
+                    
+                notify.success(confidenceMessage);
+            }
         }
-        notify.success('Parsed docket data successfully');
         setStep(2);
     } catch (e) {
-        notify.error("Failed to parse input. Please check the format.");
-        console.error(e);
+        const errorMessage = e instanceof Error ? e.message : 'Failed to parse input';
+        notify.error(`Parse failed: ${errorMessage}. Please check the format.`);
+        console.error('Parse error:', e);
     } finally {
         setIsParsing(false);
     }
@@ -71,6 +104,8 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
       setStep(1);
       setRawText('');
       setParsedData(null);
+      setParseConfidence(null);
+      setParseWarnings([]);
     }, 500);
   };
 
@@ -122,7 +157,52 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
           )}
 
           {step === 2 && parsedData && (
-            <div className="animate-fade-in">
+            <div className="animate-fade-in space-y-4">
+              {/* Parse Quality Indicator */}
+              {parseConfidence && (
+                <div className={cn(
+                  "p-3 rounded-lg border",
+                  parseConfidence === 'high' ? "bg-green-50 border-green-200" :
+                  parseConfidence === 'medium' ? "bg-yellow-50 border-yellow-200" :
+                  "bg-red-50 border-red-200"
+                )}>
+                  <div className="flex items-center justify-between">
+                    <span className={cn(
+                      "text-sm font-medium",
+                      parseConfidence === 'high' ? "text-green-800" :
+                      parseConfidence === 'medium' ? "text-yellow-800" :
+                      "text-red-800"
+                    )}>
+                      Parse Confidence: {parseConfidence.toUpperCase()}
+                    </span>
+                    <span className={cn(
+                      "text-xs",
+                      parseConfidence === 'high' ? "text-green-600" :
+                      parseConfidence === 'medium' ? "text-yellow-600" :
+                      "text-red-600"
+                    )}>
+                      {parseConfidence === 'high' ? 'Proceed with confidence' :
+                       parseConfidence === 'medium' ? 'Review recommended' :
+                       'Manual review required'}
+                    </span>
+                  </div>
+                  {parseWarnings.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {parseWarnings.map((warning, idx) => (
+                        <li key={idx} className={cn(
+                          "text-xs",
+                          parseConfidence === 'high' ? "text-green-700" :
+                          parseConfidence === 'medium' ? "text-yellow-700" :
+                          "text-red-700"
+                        )}>
+                          • {warning}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+              
               <ParsedDocketPreview 
                 parsedData={parsedData} 
                 setStep={setStep} 

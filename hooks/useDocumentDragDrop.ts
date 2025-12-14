@@ -1,10 +1,35 @@
+/**
+ * @module hooks/useDocumentDragDrop
+ * @category Hooks - Document Management
+ * @description Document drag-and-drop hook with drag state tracking, file upload handling, and
+ * QueryClient cache invalidation. Provides drag event handlers for drop zones with upload
+ * progress indication and notification toasts.
+ * 
+ * NO THEME USAGE: Utility hook for drag-drop logic
+ */
+
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useState, useRef } from 'react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Services & Data
 import { DocumentService } from '../services/documentService';
-import { useNotify } from './useNotify';
 import { queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+
+// Hooks & Context
+import { useNotify } from './useNotify';
+
+// Types
 import { CaseId } from '../types';
 
+// ========================================
+// HOOK
+// ========================================
 export const useDocumentDragDrop = (currentFolder: string) => {
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);

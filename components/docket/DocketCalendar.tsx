@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
@@ -43,15 +43,26 @@ export const DocketCalendar: React.FC = () => {
       DataService.docket.getAll
   );
 
-  const daysInMonth = getDaysInMonth(currentDate);
-  const firstDay = getFirstDayOfMonth(currentDate);
-  const daysArray = getDaysArray(currentDate);
-  const paddingDays = getPaddingDays(currentDate);
+  // Memoize date calculations
+  const daysInMonth = useMemo(() => getDaysInMonth(currentDate), [currentDate]);
+  const firstDay = useMemo(() => getFirstDayOfMonth(currentDate), [currentDate]);
+  const daysArray = useMemo(() => getDaysArray(currentDate), [currentDate]);
+  const paddingDays = useMemo(() => getPaddingDays(currentDate), [currentDate]);
 
-  // Extract all deadlines from docket entries
-  const allDeadlines = getAllDeadlines(entries);
+  // Extract all deadlines from docket entries (memoized)
+  const allDeadlines = useMemo(() => getAllDeadlines(entries), [entries]);
 
-  const deadlinesForDay = (day: number) => getDeadlinesForDay(day, currentDate, allDeadlines);
+  // Memoize deadline lookup function
+  const getDeadlines = useMemo(() => {
+    const cache = new Map<string, any[]>();
+    return (day: number) => {
+      const key = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`;
+      if (!cache.has(key)) {
+        cache.set(key, getDeadlinesForDay(day, currentDate, allDeadlines));
+      }
+      return cache.get(key)!;
+    };
+  }, [currentDate, allDeadlines]);
 
   const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -89,7 +100,7 @@ export const DocketCalendar: React.FC = () => {
         ))}
 
         {daysArray.map(day => {
-          const deadlines = deadlinesForDay(day);
+          const deadlines = getDeadlines(day);
           const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
           
           return (

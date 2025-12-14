@@ -11,3 +11,6 @@ export * from './PlaybookDetail';
 export * from './PlaybookLibrary';
 export * from './StrategyCanvas';
 export * from './StrategyToolbar';
+export * from './MemoizedComponents';
+export * from './nodeTypes';
+export * from './canvasConstants';

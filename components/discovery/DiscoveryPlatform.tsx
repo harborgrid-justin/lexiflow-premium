@@ -30,6 +30,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils
 import { DataService } from '../../services/dataService';
@@ -55,8 +56,10 @@ const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
 const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 
 import { DiscoveryView, DiscoveryPlatformProps } from './types';
+import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
+import { DiscoveryRequestsSkeleton, PrivilegeLogSkeleton, LegalHoldsSkeleton, ESIDashboardSkeleton } from './DiscoverySkeleton';
 
-export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
+const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
@@ -75,7 +78,17 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
       DataService.discovery.syncDeadlines,
       {
-          onSuccess: () => notify.success("Synced discovery deadlines with court calendar.")
+          retry: 3,
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+          onSuccess: () => {
+              notify.success("Synced discovery deadlines with court calendar.");
+              queryClient.invalidateQueries([STORES.REQUESTS]);
+              queryClient.invalidateQueries([STORES.CALENDAR]);
+          },
+          onError: (error) => {
+              notify.error('Failed to sync deadlines after 3 attempts. Please try again later.');
+              console.error('Sync error:', error);
+          }
       }
   );
 
@@ -100,6 +113,20 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
     setActiveTab('dashboard');
     setContextId(null);
   };
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+d': () => setActiveTab('dashboard'),
+    'mod+r': () => setActiveTab('requests'),
+    'mod+p': () => setActiveTab('privilege'),
+    'mod+h': () => setActiveTab('holds'),
+    'mod+e': () => setActiveTab('esi'),
+    'escape': () => {
+      if (isWizardView) {
+        handleBackToDashboard();
+      }
+    }
+  });
 
   const handleSaveResponse = async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
@@ -148,6 +175,17 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
       );
   }
 
+  // Show skeletons while loading
+  const renderSkeleton = () => {
+    switch(activeTab) {
+      case 'requests': return <DiscoveryRequestsSkeleton />;
+      case 'privilege': return <PrivilegeLogSkeleton />;
+      case 'holds': return <LegalHoldsSkeleton />;
+      case 'esi': return <ESIDashboardSkeleton />;
+      default: return <LazyLoader message="Loading Discovery Module..." />;
+    }
+  };
+
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className={cn("px-6 pt-6 shrink-0", caseId ? "pt-2" : "")}>
@@ -174,7 +212,7 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
 
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
         <div className="h-full overflow-y-auto custom-scrollbar">
-            <Suspense fallback={<LazyLoader message="Loading Discovery Module..." />}>
+            <Suspense fallback={renderSkeleton()}>
                 {tabContentMap[activeTab as keyof typeof tabContentMap]}
             </Suspense>
         </div>
@@ -182,5 +220,12 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = ({ initialTab
     </div>
   );
 };
+
+// Wrap with error boundary
+export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = (props) => (
+  <DiscoveryErrorBoundary onReset={() => window.location.reload()}>
+    <DiscoveryPlatformInternal {...props} />
+  </DiscoveryErrorBoundary>
+);
 
 export default DiscoveryPlatform;

@@ -1,6 +1,21 @@
+/**
+ * @module hooks/useKeyboardNav
+ * @category Hooks - Keyboard Navigation
+ * @description Keyboard navigation hook for dropdown/list components with arrow keys, Enter to select,
+ * and Escape to close. Manages active index state with circular navigation and auto-reset on list
+ * changes. Provides handleKeyDown callback for event binding.
+ * 
+ * NO THEME USAGE: Utility hook for keyboard interaction logic
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect, useCallback } from 'react';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface UseKeyboardNavProps<T> {
   items: T[];
   isOpen: boolean;
@@ -8,6 +23,9 @@ interface UseKeyboardNavProps<T> {
   onClose: () => void;
 }
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useKeyboardNav = <T>({ items, isOpen, onSelect, onClose }: UseKeyboardNavProps<T>) => {
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 

@@ -1,13 +1,33 @@
+/**
+ * @module services/discoveryService
+ * @category Services - Discovery
+ * @description Discovery service managing all FRCP discovery workflows: depositions, ESI sources,
+ * productions, interviews, requests (Rule 33/34/36), examinations (Rule 35), transcripts (Rule 32),
+ * vendors (Rule 28), sanctions (Rule 37). Provides CRUD operations with case filtering, status
+ * updates, and IndexedDB persistence for each discovery type.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { db, STORES } from './db';
+
+// Types
 import { 
     Deposition, ESISource, ProductionSet, CustodianInterview, 
     DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
     Examination, Vendor, Transcript, SanctionMotion, StipulationRequest 
 } from '../types';
-import { db, STORES } from './db';
 
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// ============================================================================
+// SERVICE
+// ============================================================================
 export const DiscoveryService = {
     // Depositions
     getDepositions: async (caseId?: string) => {

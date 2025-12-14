@@ -57,12 +57,6 @@ import { DataLoaderModule } from './dataloaders/dataloader.module';
         }
         return error;
       },
-
-      // CORS configuration
-      cors: {
-        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-        credentials: true,
-      },
     }),
     DataLoaderModule,
   ],

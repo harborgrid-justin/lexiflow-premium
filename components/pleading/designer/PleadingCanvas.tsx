@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, PleadingSection, Case } from '../../../types';
 import { GripVertical } from 'lucide-react';
 import { cn } from '../../../utils/cn';
@@ -7,7 +7,31 @@ import { ViewMode, PleadingCanvasProps } from '../types';
 const PleadingCanvas: React.FC<PleadingCanvasProps> = ({ 
     document, rules, readOnly, viewMode, onUpdateSection, relatedCase 
 }) => {
-    const renderBlock = (section: PleadingSection) => {
+    // Memoize sorted sections to avoid re-sorting on every render
+    const sortedSections = useMemo(() => {
+        return [...document.sections].sort((a, b) => a.order - b.order);
+    }, [document.sections]);
+
+    // Memoize plaintiff and defendant names
+    const plaintiffName = useMemo(() => 
+        relatedCase?.parties?.filter(p => p.role.includes('Plaintiff') || p.role.includes('Appellant')).map(p => p.name).join(', ') || 'PLAINTIFF NAME',
+        [relatedCase?.parties]
+    );
+
+    const defendantName = useMemo(() => 
+        relatedCase?.parties?.filter(p => p.role.includes('Defendant') || p.role.includes('Appellee')).map(p => p.name).join(', ') || 'DEFENDANT NAME',
+        [relatedCase?.parties]
+    );
+
+    // Memoize update handler to prevent creating new functions on each render
+    const handleContentUpdate = useCallback((sectionId: string) => {
+        return (e: React.FocusEvent<HTMLDivElement>) => {
+            const newContent = e.currentTarget.innerHTML;
+            onUpdateSection(sectionId, { content: newContent });
+        };
+    }, [onUpdateSection]);
+
+    const renderBlock = useCallback((section: PleadingSection) => {
         const isLogicMode = viewMode === 'logic';
         const hasLinks = (section.linkedEvidenceIds?.length || 0) > 0 || !!section.linkedArgumentId;
         
@@ -20,26 +44,32 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
                     isLogicMode && "hover:ring-2 hover:ring-purple-400 rounded-lg p-2 -mx-2 bg-slate-50/50 cursor-pointer",
                     isLogicMode && hasLinks && "ring-1 ring-purple-200 bg-purple-50/30"
                 )}
+                role="article"
+                aria-label={`Section: ${section.type}`}
             >
                 {!readOnly && !isLogicMode && (
                     <div className="absolute -left-10 top-0 opacity-0 group-hover:opacity-100 flex flex-col gap-1 transition-opacity">
-                        <button className="p-1.5 text-slate-400 hover:text-blue-600 bg-white shadow rounded-md cursor-grab active:cursor-grabbing">
+                        <button 
+                            className="p-1.5 text-slate-400 hover:text-blue-600 bg-white shadow rounded-md cursor-grab active:cursor-grabbing"
+                            aria-label="Drag to reorder section"
+                            title="Drag to reorder"
+                        >
                             <GripVertical className="h-4 w-4"/>
                         </button>
                     </div>
                 )}
                 
                 {isLogicMode && (
-                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-purple-400 rounded-full" id={`node-${section.id}`} />
+                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-purple-400 rounded-full" id={`node-${section.id}`} aria-hidden="true" />
                 )}
 
                 {section.type === 'Caption' ? (
-                    <div className="border-2 border-black p-4 grid grid-cols-2 mb-8" style={{ fontFamily: rules.fontFamily }}>
+                    <div className="border-2 border-black p-4 grid grid-cols-2 mb-8" style={{ fontFamily: rules.fontFamily }} role="region" aria-label="Case caption">
                          <div className="border-r-2 border-black pr-4">
-                             {relatedCase?.parties?.filter(p => p.role.includes('Plaintiff') || p.role.includes('Appellant')).map(p => p.name).join(', ') || 'PLAINTIFF NAME'}<br/>
+                             {plaintiffName}<br/>
                              Plaintiff,<br/><br/>
                              v.<br/><br/>
-                             {relatedCase?.parties?.filter(p => p.role.includes('Defendant') || p.role.includes('Appellee')).map(p => p.name).join(', ') || 'DEFENDANT NAME'}<br/>
+                             {defendantName}<br/>
                              Defendant.
                          </div>
                          <div className="pl-4 flex flex-col justify-center">
@@ -55,7 +85,11 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
                         contentEditable={!readOnly}
                         suppressContentEditableWarning
                         dangerouslySetInnerHTML={{__html: section.content}}
-                        onBlur={(e) => onUpdateSection(section.id, { content: e.currentTarget.innerHTML })}
+                        onBlur={handleContentUpdate(section.id)}
+                        role="textbox"
+                        aria-label="Heading"
+                        aria-readonly={readOnly}
+                        tabIndex={readOnly ? -1 : 0}
                     />
                 ) : (
                     <div 
@@ -68,16 +102,20 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
                         contentEditable={!readOnly}
                         suppressContentEditableWarning
                         dangerouslySetInnerHTML={{__html: section.content}}
-                        onBlur={(e) => onUpdateSection(section.id, { content: e.currentTarget.innerHTML })}
+                        onBlur={handleContentUpdate(section.id)}
+                        role="textbox"
+                        aria-label={`Paragraph section ${section.order + 1}`}
+                        aria-readonly={readOnly}
+                        tabIndex={readOnly ? -1 : 0}
                     />
                 )}
             </div>
         );
-    };
+    }, [viewMode, rules.fontFamily, document.filingStatus, document.caseId, document.title, plaintiffName, defendantName, relatedCase?.judge, readOnly, handleContentUpdate]);
 
     return (
-        <div className="pb-20">
-            {document.sections.sort((a,b) => a.order - b.order).map(renderBlock)}
+        <div className="pb-20" role="main" aria-label="Document editor">
+            {sortedSections.map(renderBlock)}
         </div>
     );
 };

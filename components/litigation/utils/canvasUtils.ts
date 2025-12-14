@@ -9,6 +9,7 @@
 import { LucideIcon, Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
 import { NodeType } from '../../workflow/builder/types';
 import { ContextMenuItem } from '../../common/ContextMenu';
+import { CANVAS_CONSTANTS } from '../canvasConstants';
 
 /**
  * Calculates canvas position from drop event
@@ -20,8 +21,8 @@ export const calculateDropPosition = (
   scale: number
 ): { x: number; y: number } => {
   const rect = canvasElement.getBoundingClientRect();
-  const x = (event.clientX - rect.left - pan.x) / scale - 75;
-  const y = (event.clientY - rect.top - pan.y) / scale - 40;
+  const x = (event.clientX - rect.left - pan.x) / scale - CANVAS_CONSTANTS.NODE_WIDTH_HALF;
+  const y = (event.clientY - rect.top - pan.y) / scale - CANVAS_CONSTANTS.NODE_HEIGHT_HALF;
   return { x, y };
 };
 
@@ -80,17 +81,17 @@ export const generateCanvasContextMenuItems = (
     { 
       label: 'Add Task Node', 
       icon: Layout, 
-      action: () => onAddNode('Task', position.x - 75, position.y - 40)
+      action: () => onAddNode('Task', position.x - CANVAS_CONSTANTS.NODE_WIDTH_HALF, position.y - CANVAS_CONSTANTS.NODE_HEIGHT_HALF)
     },
     { 
       label: 'Add Decision Node', 
       icon: GitBranch, 
-      action: () => onAddNode('Decision', position.x - 56, position.y - 56)
+      action: () => onAddNode('Decision', position.x - CANVAS_CONSTANTS.DECISION_NODE_SIZE, position.y - CANVAS_CONSTANTS.DECISION_NODE_SIZE)
     },
     { 
       label: 'Add Phase Container', 
       icon: BoxSelect, 
-      action: () => onAddNode('Phase', position.x - 300, position.y - 200)
+      action: () => onAddNode('Phase', position.x - CANVAS_CONSTANTS.PHASE_WIDTH, position.y - CANVAS_CONSTANTS.PHASE_HEIGHT)
     }
   ];
 };

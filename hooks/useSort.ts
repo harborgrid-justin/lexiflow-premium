@@ -1,5 +1,21 @@
+/**
+ * @module hooks/useSort
+ * @category Hooks - Data Utilities
+ * @description Sorting hook with configurable initial key and direction. Provides memoized sorted
+ * items array and requestSort function for toggling sort direction (asc ↔ desc) on column clicks.
+ * Uses Array.sort with generic comparison logic.
+ * 
+ * NO THEME USAGE: Utility hook for sorting logic
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useMemo } from 'react';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type Direction = 'asc' | 'desc';
 
 interface SortConfig<T> {
@@ -7,6 +23,9 @@ interface SortConfig<T> {
   direction: Direction;
 }
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useSort = <T extends Record<string, any>>(items: T[], initialKey: keyof T, initialDirection: Direction = 'asc') => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T>>({
     key: initialKey,

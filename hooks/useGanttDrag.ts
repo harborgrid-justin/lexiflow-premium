@@ -1,7 +1,27 @@
+/**
+ * @module hooks/useGanttDrag
+ * @category Hooks - Workflow Management
+ * @description Gantt chart drag-and-drop hook with move and resize modes (left/right handles).
+ * Uses RAF for 60fps visual updates without React re-renders, then calculates date changes on
+ * drop based on pixels-per-day ratio. Supports drag modes: move, resize-left, resize-right.
+ * 
+ * NO THEME USAGE: Utility hook for Gantt drag logic
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useRef, useCallback } from 'react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Types
 import { WorkflowTask } from '../types';
 
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 export type DragMode = 'move' | 'resize-left' | 'resize-right';
 
 interface DragOptions {
@@ -10,6 +30,9 @@ interface DragOptions {
     onTaskUpdate: (taskId: string, newStartDate: string, newDueDate: string) => void;
 }
 
+// ========================================
+// HOOK
+// ========================================
 export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions) => {
     const dragRef = useRef<{
         taskId: string;

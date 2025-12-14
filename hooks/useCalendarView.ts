@@ -1,7 +1,31 @@
+/**
+ * @module hooks/useCalendarView
+ * @category Hooks - Calendar
+ * @description Calendar view state management hook with month navigation, event loading, and day-based
+ * event filtering. Manages currentMonth state, loads events from DataService, provides changeMonth/goToToday
+ * navigation helpers, and calculates daysInMonth/firstDay for grid layout. Memoized getEventsForDay
+ * returns events matching YYYY-MM-DD format for efficient day cell rendering.
+ * 
+ * NO THEME USAGE: Utility hook for calendar state management
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useEffect, useMemo, useCallback } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
+
+// Types
 import { CalendarEventItem } from '../types';
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useCalendarView = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [events, setEvents] = useState<CalendarEventItem[]>([]);

@@ -1,9 +1,34 @@
+/**
+ * @module hooks/useCaseOverview
+ * @category Hooks - Case Management
+ * @description Case overview management hook with time tracking, case linking, and appeal transfer workflows.
+ * Manages time entry modal, linked cases modal, transfer modal states, loads related cases, and provides
+ * handlers for time logging (with SyncEngine mutation), case linking, and appeal case creation with
+ * automatic navigation prompt.
+ * 
+ * NO THEME USAGE: Business logic hook for case overview operations
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useEffect } from 'react';
-import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId } from '../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
+
+// Hooks & Context
 import { useSync } from '../context/SyncContext';
 
+// Types
+import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId } from '../types';
+
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEntry) => void, onNavigateToCase?: (c: Case) => void) => {
     const { performMutation } = useSync();
     const [showTimeModal, setShowTimeModal] = useState(false);

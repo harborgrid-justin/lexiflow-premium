@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../../../entities/base.entity';
+import { BaseEntity } from '../../../entities/base.entity';
 import { EvidenceItem } from './evidence-item.entity';
 
 @Entity('trial_exhibits')

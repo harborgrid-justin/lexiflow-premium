@@ -30,6 +30,8 @@ import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { DataService } from '../../services/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
+import { evidenceQueryKeys } from '../../services/queryKeys';
+import { validateCustodyEventSafe, CustodyActionType } from '../../services/validation/evidenceSchemas';
 
 interface EvidenceChainOfCustodyProps {
   selectedItem: EvidenceItem;
@@ -42,13 +44,13 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEvent, setNewEvent] = useState<Partial<ChainOfCustodyEvent>>({
     date: new Date().toISOString().split('T')[0],
-    action: 'Transfer to Storage',
+    action: CustodyActionType.TRANSFER_TO_STORAGE,
     actor: 'Current User'
   });
   const [isSigning, setIsSigning] = useState(false);
   const [isSigned, setIsSigned] = useState(false);
 
-  // Mutation to update evidence item with new custody event
+  // Mutation with optimistic updates and exponential backoff retry
   const { mutate: updateEvidenceWithCustody, isLoading: isUpdating } = useMutation(
       async (payload: { item: EvidenceItem, event: ChainOfCustodyEvent }) => {
           // In a real app, this would involve server-side logic
@@ -66,32 +68,68 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           
           const chainedLog = await ChainService.createEntry({
               timestamp: payload.event.date,
-              // FIX: Cast string to branded type UserId
               userId: 'current-user' as UserId,
               user: payload.event.actor,
               action: `CUSTODY_UPDATE_${payload.event.action.toUpperCase().replace(/\s/g, '_')}`,
               resource: `Evidence/${selectedItem.id}`,
-              ip: '127.0.0.1', // Mock IP
+              ip: '127.0.0.1',
               previousValue: selectedItem.chainOfCustody[0]?.id,
               newValue: payload.event.id
           }, prevHash);
           
-          // Attach the full chained log to the event in case parent needs it
           return { updatedItem, chainedLog };
       },
       {
+          // Exponential backoff retry: 3 attempts, max 30s delay
+          retry: 3,
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+          // Optimistic update: immediately show new event in UI
+          onMutate: async (payload) => {
+              // Cancel outgoing refetches
+              await queryClient.cancelQueries(evidenceQueryKeys.evidence.detail(payload.item.id));
+              
+              // Snapshot previous value for rollback
+              const previousEvidence = queryClient.getQueryData<EvidenceItem[]>(
+                  evidenceQueryKeys.evidence.all
+              );
+              
+              // Optimistically update cache
+              queryClient.setQueryData<EvidenceItem[]>(
+                  evidenceQueryKeys.evidence.all,
+                  (old) => old?.map(item => 
+                      item.id === payload.item.id 
+                          ? { ...item, chainOfCustody: [payload.event, ...item.chainOfCustody] }
+                          : item
+                  ) || []
+              );
+              
+              return { previousEvidence };
+          },
           onSuccess: (data, variables) => {
               if (onCustodyUpdate) {
-                  // Merge the original event data with the hash from the audit log
                   const enrichedEvent = { ...variables.event, hash: data.chainedLog.hash };
                   onCustodyUpdate(enrichedEvent as unknown as ChainOfCustodyEvent); 
               }
               notify.success("Custody log updated and immutably recorded.");
               setIsModalOpen(false);
-              setNewEvent({ date: new Date().toISOString().split('T')[0], action: 'Transfer to Storage', actor: 'Current User' });
+              setNewEvent({ date: new Date().toISOString().split('T')[0], action: CustodyActionType.TRANSFER_TO_STORAGE, actor: 'Current User' });
               setIsSigned(false);
           },
-          onError: () => notify.error("Failed to update custody log.")
+          onError: (error, variables, context: any) => {
+              // Rollback optimistic update on error
+              if (context?.previousEvidence) {
+                  queryClient.setQueryData(
+                      evidenceQueryKeys.evidence.all,
+                      context.previousEvidence
+                  );
+              }
+              notify.error("Failed to update custody log. Changes rolled back.");
+          },
+          invalidateKeys: [
+              evidenceQueryKeys.evidence.all,
+              evidenceQueryKeys.evidence.detail(selectedItem.id),
+              evidenceQueryKeys.evidence.custody(selectedItem.id)
+          ]
       }
   );
 
@@ -104,11 +142,19 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
 
     const event: ChainOfCustodyEvent = {
       id: `cc-${Date.now()}`,
-      date: newEvent.date || new Date().toISOString().split('T')[0],
+      date: newEvent.date || new Date().toISOString(),
       action: newEvent.action,
       actor: newEvent.actor,
       notes: newEvent.notes,
     };
+    
+    // Validate event data before submission
+    const validation = validateCustodyEventSafe(event);
+    if (!validation.success) {
+      notify.error(`Validation failed: ${validation.error.errors[0].message}`);
+      return;
+    }
+    
     updateEvidenceWithCustody({ item: selectedItem, event });
   };
 

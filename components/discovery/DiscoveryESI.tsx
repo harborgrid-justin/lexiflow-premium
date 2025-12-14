@@ -38,15 +38,92 @@ import { STORES } from '../../services/db';
 // TYPES & INTERFACES
 // ============================================================================
 import { ESISource } from '../../types';
+import { discoveryQueryKeys } from '../../services/queryKeys';
+import { ESICollectionStatusEnum } from '../../types/enums';
+
+/**
+ * ESI Collection Queue
+ * Manages concurrent collection jobs with max 3 concurrent operations
+ */
+class CollectionQueue {
+  private queue: Array<{ id: string; source: ESISource }> = [];
+  private running = 0;
+  private maxConcurrent = 3;
+  private onProgress?: (id: string, status: string) => void;
+
+  constructor(maxConcurrent = 3, onProgress?: (id: string, status: string) => void) {
+    this.maxConcurrent = maxConcurrent;
+    this.onProgress = onProgress;
+  }
+
+  async add(id: string, source: ESISource): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.queue.push({ id, source });
+      this.processQueue();
+      
+      // Wait for completion
+      const checkInterval = setInterval(() => {
+        if (!this.queue.find(item => item.id === id) && this.running < this.maxConcurrent) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 500);
+    });
+  }
+
+  private async processQueue(): Promise<void> {
+    while (this.queue.length > 0 && this.running < this.maxConcurrent) {
+      const item = this.queue.shift();
+      if (item) {
+        this.running++;
+        this.collectSource(item.id, item.source)
+          .finally(() => {
+            this.running--;
+            this.processQueue();
+          });
+      }
+    }
+  }
+
+  private async collectSource(id: string, source: ESISource): Promise<void> {
+    try {
+      this.onProgress?.(id, ESICollectionStatusEnum.COLLECTING);
+      
+      // Simulate collection process
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      this.onProgress?.(id, ESICollectionStatusEnum.COLLECTED);
+    } catch (err) {
+      this.onProgress?.(id, ESICollectionStatusEnum.ERROR);
+      throw err;
+    }
+  }
+
+  getQueueLength(): number {
+    return this.queue.length;
+  }
+
+  getRunningCount(): number {
+    return this.running;
+  }
+}
 
 export const DiscoveryESI: React.FC = () => {
   const { theme, mode } = useTheme();
   const notify = useNotify();
   const { openWindow, closeWindow } = useWindow();
+  const collectionQueueRef = React.useRef<CollectionQueue | null>(null);
+
+  // Initialize collection queue
+  if (!collectionQueueRef.current) {
+    collectionQueueRef.current = new CollectionQueue(3, (id, status) => {
+      updateStatus({ id, status });
+    });
+  }
 
   // Enterprise Data Access
   const { data: sources = [] } = useQuery<ESISource[]>(
-      [STORES.DISCOVERY_EXT_ESI, 'all'],
+      discoveryQueryKeys.discovery.esi.all,
       () => DataService.discovery.getESISources()
   );
 
@@ -54,16 +131,26 @@ export const DiscoveryESI: React.FC = () => {
       async (payload: { id: string, status: string }) => {
           return DataService.discovery.updateESISourceStatus(payload.id, payload.status);
       },
-      { invalidateKeys: [[STORES.DISCOVERY_EXT_ESI, 'all']] }
+      { invalidateKeys: [discoveryQueryKeys.discovery.esi.all] }
   );
 
   const { mutate: startCollection, isLoading: isCollecting } = useMutation(
-      DataService.discovery.startCollection,
+      async (sourceId: string) => {
+          const source = sources.find(s => s.id === sourceId);
+          if (!source) throw new Error('Source not found');
+          
+          // Add to collection queue
+          await collectionQueueRef.current?.add(sourceId, source);
+          return DataService.discovery.startCollection(sourceId);
+      },
       {
           onSuccess: (_, id) => {
-              updateStatus({ id: id as string, status: 'Collected' });
-              notify.success("ESI Collection Job started successfully.");
-          }
+              notify.success("ESI Collection Job completed successfully.");
+          },
+          onError: () => {
+              notify.error("Collection failed. Please try again.");
+          },
+          invalidateKeys: [discoveryQueryKeys.discovery.esi.all]
       }
   );
 

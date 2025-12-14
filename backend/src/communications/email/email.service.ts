@@ -65,7 +65,7 @@ export class EmailService {
     to: string | string[];
     template: string;
     context: Record<string, any>;
-    subject?: string;
+    subject: string;
     from?: string;
     cc?: string[];
     bcc?: string[];

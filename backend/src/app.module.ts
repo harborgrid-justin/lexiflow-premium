@@ -50,7 +50,7 @@ import { SearchModule } from './search/search.module';
 import { ReportsModule } from './reports/reports.module';
 
 // Integration Modules
-import { GraphqlModule } from './graphql/graphql.module';
+import { GraphQLModule } from './graphql/graphql.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { ApiKeysModule } from './api-keys/api-keys.module';
@@ -134,7 +134,7 @@ import { AppService } from './app.service';
     ReportsModule,
 
     // Integration & APIs
-    GraphqlModule,
+    GraphQLModule,
     IntegrationsModule,
     WebhooksModule,
     ApiKeysModule,

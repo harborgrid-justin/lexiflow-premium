@@ -1,5 +1,21 @@
+/**
+ * @module services/chainService
+ * @category Services - Security
+ * @description Blockchain-style audit log chaining service with cryptographic integrity verification.
+ * Uses SHA-256 hashing with prevHash linkage to create tamper-evident log chains. Provides entry
+ * creation with hash generation, full chain verification re-calculating all hashes, integrity
+ * reporting with broken block detection, and JSON ledger export for external auditing.
+ */
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
 import { AuditLogEntry, UUID } from '../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface ChainedLogEntry extends AuditLogEntry {
   hash: string;
   prevHash: string;
@@ -12,6 +28,9 @@ export interface IntegrityReport {
     verifiedAt: string;
 }
 
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 const generateHash = async (data: string): Promise<string> => {
   const msgBuffer = new TextEncoder().encode(data);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);

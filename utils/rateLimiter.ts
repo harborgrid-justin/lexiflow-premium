@@ -1,3 +1,14 @@
+/**
+ * @module utils/rateLimiter
+ * @category Utils - Rate Limiting
+ * @description Token bucket rate limiter for request throttling with configurable capacity and refill rate.
+ * Provides smooth request flow control with automatic token refill based on elapsed time. Exports global
+ * rate limiter instance (10 requests burst, 2 per second refill) for API call management.
+ */
+
+// ============================================================================
+// TOKEN BUCKET CLASS
+// ============================================================================
 export class TokenBucket {
     private tokens: number;
     private lastRefill: number;

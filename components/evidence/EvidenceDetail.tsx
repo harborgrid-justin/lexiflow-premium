@@ -26,6 +26,7 @@ import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useNotify } from '../../hooks/useNotify';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Types
 import { DataService } from '../../services/dataService';
@@ -47,6 +48,33 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
 }) => {
   const { theme } = useTheme();
   const notify = useNotify();
+  
+  // Keyboard shortcuts for evidence detail operations
+  useKeyboardShortcuts([
+    {
+      key: 'l',
+      ctrlOrCmd: true,
+      action: () => setActiveTab('custody'),
+      description: 'Log custody transfer'
+    },
+    {
+      key: 'v',
+      ctrlOrCmd: true,
+      action: () => setActiveTab('forensics'),
+      description: 'View forensics'
+    },
+    {
+      key: 'o',
+      ctrlOrCmd: true,
+      action: () => setActiveTab('overview'),
+      description: 'View overview'
+    },
+    {
+      key: 'Escape',
+      action: handleBack,
+      description: 'Go back to inventory'
+    }
+  ]);
 
   const { mutate: promoteToExhibit, isLoading: isPromoting } = useMutation(
       async () => {

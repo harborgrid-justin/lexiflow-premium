@@ -140,7 +140,7 @@ export class MockFactory {
     return {
       id: uuidv4(),
       description: faker.lorem.sentence(),
-      hours: faker.number.float({ min: 0.25, max: 8, precision: 0.25 }),
+      hours: faker.number.float({ min: 0.25, max: 8, multipleOf: 0.25 }),
       billableRate: faker.helpers.arrayElement(billableRates),
       date: faker.date.recent(),
       isBillable: faker.datatype.boolean({ probability: 0.8 }),

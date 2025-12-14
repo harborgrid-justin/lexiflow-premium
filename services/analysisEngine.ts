@@ -1,6 +1,21 @@
+/**
+ * @module services/analysisEngine
+ * @category Services - Analysis
+ * @description Legal text analysis engine with citation extraction (reporters, code sections) and
+ * conflict detection via party name nexus scanning. Uses high-performance regex patterns for
+ * common reporter formats (e.g., 410 U.S. 113, 24 F.3d 100) and USC citations. Scans text against
+ * indexed party names to detect potential conflicts or related matters.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
 import { Citation, Party, Case } from '../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface ExtractionResult {
   citations: string[];
   entities: string[];
@@ -12,6 +27,9 @@ export interface ConflictResult {
   potentialMatches: { caseId: string; caseTitle: string; role: string }[];
 }
 
+// ============================================================================
+// SERVICE
+// ============================================================================
 export const AnalysisEngine = {
   /**
    * Extracts legal citations using high-performance regex patterns.

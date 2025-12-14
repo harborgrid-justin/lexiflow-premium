@@ -12,3 +12,5 @@ export * from './EvidenceOverview';
 export * from './EvidenceStructure';
 export * from './EvidenceVault';
 export * from './EvidenceVaultContent';
+export * from './EvidenceErrorBoundary';
+export * from './EvidenceSkeleton';

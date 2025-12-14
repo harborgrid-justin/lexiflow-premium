@@ -1,6 +1,20 @@
+/**
+ * @module utils/ganttHelpers
+ * @category Utils - Visualization
+ * @description Gantt chart calculation utilities for task positioning and timeline generation. Provides
+ * CSS positioning style calculation from task dates with pixelsPerDay scaling, default 5-day duration
+ * fallback, and offscreen optimization. Generates timeline header dates with configurable step intervals.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
 import { WorkflowTask } from '../types';
 
+// ============================================================================
+// HELPERS
+// ============================================================================
 export const GanttHelpers = {
     /**
      * Calculates CSS positioning style for a Gantt task bar.

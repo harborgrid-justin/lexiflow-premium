@@ -1,11 +1,36 @@
+/**
+ * @module hooks/useDocumentManager
+ * @category Hooks - Document Management
+ * @description Enterprise document management hook with worker-based full-text search, folder/module filtering,
+ * bulk operations (AI summarize), tag management, version history, and optimistic UI updates. Manages
+ * selected documents, preview pane, and DMS navigation with folder context. Uses useWorkerSearch for
+ * non-blocking search across title/content/tags.
+ * 
+ * NO THEME USAGE: Business logic hook for document management
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useMemo } from 'react';
-import { LegalDocument, DocumentVersion } from '../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
+
+// Hooks & Context
 import { useWorkerSearch } from './useWorkerSearch';
 
+// Types
+import { LegalDocument, DocumentVersion } from '../types';
+
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useDocumentManager = () => {
   const [searchTerm, setSearchTerm] = useState('');
   // useDeferredValue is removed in favor of Worker-based search

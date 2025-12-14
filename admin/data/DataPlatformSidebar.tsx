@@ -1,16 +1,47 @@
+/**
+ * @module admin/data/DataPlatformSidebar
+ * @category Admin Panel - Data Platform
+ * @description Hierarchical navigation sidebar for data platform views with expandable menu sections,
+ * active view highlighting, and cluster health monitoring. Manages schema, pipeline, cost, quality,
+ * lineage, governance, and catalog navigation.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.surface.default/highlight - Sidebar background and header sections
+ * - theme.text.primary/secondary/tertiary - Menu labels and descriptions
+ * - theme.border.default - Section dividers and nested menu borders
+ * - theme.primary.light/text - Active view highlighting
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useState, useEffect, useMemo } from 'react';
 import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
-import { PlatformView } from '../AdminDatabaseControl';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 import { DATA_PLATFORM_MENU } from '../../../config/dataPlatformMenu';
 
+// Types
+import { PlatformView } from '../AdminDatabaseControl';
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface DataPlatformSidebarProps {
   activeView: PlatformView;
   onChange: (view: PlatformView) => void;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ activeView, onChange }) => {
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
@@ -46,17 +77,18 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
         </p>
       </div>
       <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">
-        {menu.map(item => {
+        {menu.map((item: { children?: any[]; id: string; icon: React.ComponentType<{ className?: string }>; label: string }) => {
           const hasChildren = item.children && item.children.length > 0;
-          const isExpanded = expanded[item.id];
-          const isActive = activeView === item.id || (activeView.startsWith(item.id + '-'));
+          const itemId = item.id as string;
+          const isExpanded = expanded[itemId];
+          const isActive = activeView === itemId || (activeView.startsWith(itemId + '-'));
 
           return (
             <div key={item.id}>
               <button
                 onClick={() => {
-                  if (hasChildren) toggleExpand(item.id);
-                  else onChange(item.id);
+                  if (hasChildren) toggleExpand(itemId);
+                  else onChange(itemId as PlatformView);
                 }}
                 className={cn(
                   "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 group",
@@ -78,7 +110,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
               
               {hasChildren && isExpanded && (
                 <div className={cn("ml-4 pl-3 border-l space-y-1 mt-1 mb-1", theme.border.default)}>
-                  {item.children?.map(sub => (
+                  {item.children?.map((sub: { id: string; icon: React.ComponentType<{ className?: string }>; label: string }) => (
                     <button
                       key={sub.id}
                       onClick={() => onChange(sub.id)} 

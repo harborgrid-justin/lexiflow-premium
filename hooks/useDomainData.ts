@@ -1,17 +1,37 @@
+/**
+ * @module hooks/useDomainData
+ * @category Hooks - Data Access
+ * @description Centralized domain-specific data fetching hooks with standardized cache keys. Provides
+ * typed hooks for all major entities (cases, documents, docket, evidence, exhibits, staff, clients,
+ * users, projects, conversations, research, schema, pipelines, connectors, data dictionary). Prevents
+ * magic string cache keys across components by exporting domain hooks (useCases, useDocuments, etc.).
+ * 
+ * NO THEME USAGE: Data access utility hooks for domain entities
+ */
 
-import { useQuery } from '../services/queryClient';
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
+// (None - this module uses internal services only)
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
+import { useQuery } from '../services/queryClient';
 import { STORES } from '../services/db';
+
+// Types
 import { 
     Case, LegalDocument, DocketEntry, WorkflowTask, EvidenceItem, 
     TrialExhibit, Project, Conversation, ResearchSession, Client, User,
     SchemaTable, PipelineJob, Connector, DataDictionaryItem
 } from '../types';
 
-/**
- * Domain-specific hooks to standardize data fetching and cache keys.
- * Centralizing these prevents "magic strings" in cache keys across components.
- */
+// ============================================================================
+// DOMAIN DATA HOOKS
+// ============================================================================
 
 // --- CORE LEGAL ---
 export const useCases = () => useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);

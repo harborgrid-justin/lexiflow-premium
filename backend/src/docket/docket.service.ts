@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocketEntry } from './entities/docket-entry.entity';
@@ -8,6 +8,8 @@ import { PacerSyncDto, PacerSyncResultDto } from './dto/pacer-sync.dto';
 
 @Injectable()
 export class DocketService {
+  private readonly logger = new Logger(DocketService.name);
+
   constructor(
     @InjectRepository(DocketEntry)
     private readonly docketRepository: Repository<DocketEntry>,

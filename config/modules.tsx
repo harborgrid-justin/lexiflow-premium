@@ -45,6 +45,8 @@ const UserProfileManager = lazyWithPreload(() => import('../components/profile/U
 const PleadingBuilder = lazyWithPreload(() => import('../components/pleading/PleadingBuilder').then(m => ({ default: m.PleadingBuilder })));
 const KnowledgeBase = lazyWithPreload(() => import('../components/knowledge/KnowledgeBase'));
 const LitigationBuilder = lazyWithPreload(() => import('../components/litigation/LitigationBuilder').then(m => ({ default: m.LitigationBuilder })));
+const ClauseLibrary = lazyWithPreload(() => import('../components/clauses/ClauseLibrary'));
+const CitationManager = lazyWithPreload(() => import('../components/citation/CitationManager'));
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,
@@ -74,6 +76,8 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.PLEADING_BUILDER]: PleadingBuilder,
   [PATHS.LIBRARY]: KnowledgeBase,
   [PATHS.LITIGATION_BUILDER]: LitigationBuilder,
+  [PATHS.CLAUSES]: ClauseLibrary,
+  [PATHS.CITATIONS]: CitationManager,
 };
 
 export const initializeModules = () => {

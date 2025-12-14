@@ -34,6 +34,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
 
   // LITIGATION TOOLS
   { id: PATHS.RESEARCH, label: 'Research', icon: Search, category: 'Litigation Tools' },
+  { id: PATHS.CITATIONS, label: 'Citations', icon: BookOpen, category: 'Litigation Tools' },
   { id: PATHS.WAR_ROOM, label: 'War Room', icon: Target, category: 'Litigation Tools' },
   { id: PATHS.DISCOVERY, label: 'Discovery Center', icon: FileQuestion, category: 'Litigation Tools' },
   { id: PATHS.EVIDENCE, label: 'Evidence Vault', icon: Fingerprint, category: 'Litigation Tools' },
@@ -48,6 +49,12 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
 
   // KNOWLEDGE
   { id: PATHS.LIBRARY, label: 'Knowledge Base', icon: Library, category: 'Knowledge' },
+  { id: PATHS.CLAUSES, label: 'Clause Library', icon: ScrollText, category: 'Knowledge' },
+  { id: PATHS.JURISDICTION, label: 'Jurisdictions', icon: Globe, category: 'Knowledge' },
+  { id: PATHS.RULES_ENGINE, label: 'Rules Engine', icon: Scale, category: 'Knowledge' },
+
+  // ANALYTICS
+  { id: PATHS.ANALYTICS, label: 'Analytics', icon: BarChart3, category: 'Operations' },
 
   // ADMIN
   { id: PATHS.COMPLIANCE, label: 'Compliance', icon: ShieldCheck, category: 'Admin', requiresAdmin: true },

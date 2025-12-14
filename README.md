@@ -44,9 +44,19 @@ LexiFlow uses a sophisticated client-side architecture to simulate a full enterp
 
 ## Getting Started
 
-1. **Install Dependencies**: `npm install`
-2. **Run Dev Server**: `npm run dev`
-3. **Build**: `npm run build`
+### Frontend Development
+1. **Install Dependencies**: `npm install` (from root) or `cd frontend && npm install`
+2. **Run Dev Server**: `npm run dev` (from root) or `cd frontend && npm run dev`
+3. **Build**: `npm run build:frontend` (from root) or `cd frontend && npm run build`
+
+### Backend Development
+1. **Install Dependencies**: `cd backend && npm install`
+2. **Run Dev Server**: `npm run dev:backend` (from root) or `cd backend && npm run start:dev`
+3. **Build**: `npm run build:backend` (from root) or `cd backend && npm run build`
+
+### Full Stack Development
+- **Run Both**: `npm run dev:all` (runs frontend and backend concurrently)
+- **Install All**: `npm run install:all`
 
 ## Key Features to Explore
 - **Holographic Dock**: Minimize windows to a floating dock for multitasking.

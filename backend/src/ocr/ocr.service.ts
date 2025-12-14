@@ -26,14 +26,14 @@ export class OcrService {
   private async initializeWorker(): Promise<void> {
     try {
       this.logger.log('Initializing Tesseract OCR worker...');
-      this.worker = await createWorker();
       const languages = this.configService.get<string>('OCR_LANGUAGES') || 'eng';
-      await this.worker.loadLanguage(languages);
-      await this.worker.initialize(languages);
+      this.worker = await createWorker(languages, 1, {
+        logger: (m) => this.logger.debug(JSON.stringify(m)),
+      });
       this.logger.log('Tesseract OCR worker initialized successfully');
     } catch (error) {
       this.logger.error('Failed to initialize OCR worker', error);
-      this.ocrEnabled = false;
+      // Note: ocrEnabled is readonly, controlled by config
     }
   }
 

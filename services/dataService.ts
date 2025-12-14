@@ -14,6 +14,7 @@ import { IntegrationOrchestrator } from './integrationOrchestrator';
 import { SystemEventType } from '../types/integrationTypes';
 import { JurisdictionService } from './domains/JurisdictionDomain';
 import { KnowledgeRepository } from './domains/KnowledgeDomain';
+import { apiServices, isBackendApiEnabled } from './apiServices';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -79,13 +80,17 @@ class IntegratedBillingRepository extends BillingRepository {
     }
 }
 
+// --- BACKEND API MODE CHECK ---
+const useBackendApi = isBackendApiEnabled();
+
 // --- FACADE ---
 
 export const DataService = {
-  cases: new IntegratedCaseRepository(),
-  docket: new IntegratedDocketRepository(),
-  evidence: new EvidenceRepository(),
-  documents: new IntegratedDocumentRepository(),
+  // Use backend API if enabled, otherwise use IndexedDB
+  cases: useBackendApi ? apiServices.cases : new IntegratedCaseRepository(),
+  docket: useBackendApi ? apiServices.docket : new IntegratedDocketRepository(),
+  evidence: useBackendApi ? apiServices.evidence : new EvidenceRepository(),
+  documents: useBackendApi ? apiServices.documents : new IntegratedDocumentRepository(),
   pleadings: new PleadingRepository(),
   hr: HRRepository,
   workflow: WorkflowRepository,

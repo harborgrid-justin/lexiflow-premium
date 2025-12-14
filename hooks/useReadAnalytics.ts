@@ -1,10 +1,29 @@
+/**
+ * @module hooks/useReadAnalytics
+ * @category Hooks - Analytics
+ * @description Viewport-based read tracking with IntersectionObserver. Monitors time spent visible (50% threshold),
+ * fires onRead callback after configurable threshold, and tracks per-session duration with idle cap (60s max).
+ * Provides ref for element observation, isRead flag, and cumulative duration counter.
+ * 
+ * NO THEME USAGE: Utility hook for read analytics tracking
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useEffect, useRef, useState } from 'react';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ReadAnalyticsOptions {
     thresholdMs?: number;
     onRead?: (id: string, duration: number) => void;
 }
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useReadAnalytics = (id: string, options: ReadAnalyticsOptions = {}) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isRead, setIsRead] = useState(false);

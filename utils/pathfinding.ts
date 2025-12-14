@@ -1,12 +1,30 @@
+/**
+ * @module utils/pathfinding
+ * @category Utils - Graph Algorithms
+ * @description Critical Path Method (CPM) implementation using Kahn's topological sort with longest path
+ * calculation. Identifies project management critical path (tasks that cannot be delayed without affecting
+ * project completion). Builds dependency graph from WorkflowTask dependencies, calculates earliest finish
+ * times, and backtracks from maximum duration node.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
 import { WorkflowTask } from '../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface GraphNode {
     id: string;
     duration: number; // Estimate
     neighbors: string[];
 }
 
+// ============================================================================
+// PATHFINDING ALGORITHMS
+// ============================================================================
 export const Pathfinding = {
     /**
      * Calculates the Critical Path (longest path) in a dependency graph.

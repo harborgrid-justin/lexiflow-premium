@@ -24,6 +24,7 @@ import { STORES } from '../../services/db';
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
 
 // Components
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
@@ -35,6 +36,8 @@ import { LazyLoader } from '../common/LazyLoader';
 // Utils & Config
 import { cn } from '../../utils/cn';
 import { PLEADING_BUILDER_TAB_CONFIG } from '../../config/pleadingBuilderConfig';
+import { IdGenerator } from '../../utils/idGenerator';
+import { validateTemplate } from '../../utils/validation';
 
 // Types
 import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../../types';
@@ -56,6 +59,8 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     const [activeTab, setActiveTab] = useSessionStorage<string>('pleading_builder_tab', 'drafts');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
+    const { success: notifySuccess, error: notifyError } = useNotify();
 
     // Data fetching
     const { data: pleadings = [], isLoading: pleadingsLoading } = useQuery<PleadingDocument[]>(
@@ -65,14 +70,27 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);
     const { data: templates = [] } = useQuery<PleadingTemplate[]>([STORES.PLEADING_TEMPLATES, 'all'], DataService.pleadings.getTemplates);
 
-    const { mutate: createPleading } = useMutation(
-        (doc: PleadingDocument) => DataService.pleadings.add(doc),
+    const { mutate: createPleading, isLoading: isCreating } = useMutation(
+        async (data: { templateId: string; caseId: string; title: string; userId: string }) => {
+            return await DataService.pleadings.createFromTemplate(
+                data.templateId,
+                data.caseId,
+                data.title,
+                data.userId
+            );
+        },
         {
             onSuccess: (newDoc) => {
                 setIsCreateModalOpen(false);
+                setValidationErrors([]);
                 setActivePleading(newDoc);
                 setView('designer');
                 queryClient.invalidate([STORES.PLEADINGS, caseId || 'all']);
+                notifySuccess('Pleading created successfully');
+            },
+            onError: (error: Error) => {
+                notifyError(`Failed to create pleading: ${error.message}`);
+                setValidationErrors([error.message]);
             }
         }
     );
@@ -88,31 +106,49 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     };
     
     const handleCreateSubmit = () => {
-        if (!newDocData.title || !newDocData.caseId || !newDocData.templateId) return;
-        
-        const template = templates.find(t => t.id === newDocData.templateId);
-        const sections: PleadingSection[] = template 
-            ? template.defaultSections.map((s, idx) => ({ 
-                id: `sec-${Date.now()}-${idx}`,
-                type: s.type || 'Paragraph',
-                content: s.content || '',
-                order: idx,
-                meta: s.meta
-             }))
-            : [];
+        // Clear previous errors
+        setValidationErrors([]);
 
-        const doc: PleadingDocument = {
-            id: `plead-${Date.now()}` as any,
-            caseId: newDocData.caseId as CaseId,
-            title: newDocData.title,
-            status: 'Draft',
-            filingStatus: 'Pre-Filing',
-            jurisdictionRulesId: 'default',
-            version: 1,
-            sections: sections,
-            createdBy: 'current-user' as UserId
-        };
-        createPleading(doc);
+        // Validate required fields
+        const errors: string[] = [];
+        
+        if (!newDocData.title?.trim()) {
+            errors.push('Document title is required');
+        }
+        
+        if (!newDocData.caseId) {
+            errors.push('Case must be selected');
+        }
+        
+        if (!newDocData.templateId) {
+            errors.push('Template must be selected');
+        }
+
+        // Validate template if selected
+        if (newDocData.templateId) {
+            const template = templates.find(t => t.id === newDocData.templateId);
+            if (template) {
+                const validation = validateTemplate(template);
+                if (!validation.valid) {
+                    errors.push(...validation.errors.map(e => e.message));
+                }
+            } else {
+                errors.push('Selected template not found');
+            }
+        }
+
+        if (errors.length > 0) {
+            setValidationErrors(errors);
+            return;
+        }
+
+        // Create pleading using repository method with proper type safety
+        createPleading({
+            templateId: newDocData.templateId,
+            caseId: newDocData.caseId,
+            title: newDocData.title.trim(),
+            userId: 'current-user' // TODO: Get from auth context
+        });
     };
 
     const renderContent = () => {
@@ -159,9 +195,19 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
             </Suspense>
         </TabbedPageLayout>
 
-        <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Pleading">
+        <Modal isOpen={isCreateModalOpen} onClose={() => { setIsCreateModalOpen(false); setValidationErrors([]); }} title="Create New Pleading">
             <div className="p-6 space-y-4">
-                <Input label="Document Title" value={newDocData.title} onChange={e => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
+                {validationErrors.length > 0 && (
+                    <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 dark:bg-rose-900/20 dark:border-rose-800">
+                        <div className="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-1">Validation Errors:</div>
+                        <ul className="text-xs text-rose-700 dark:text-rose-400 list-disc list-inside space-y-0.5">
+                            {validationErrors.map((error, idx) => (
+                                <li key={idx}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                <Input label="Document Title" value={newDocData.title} onChange={e => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" required />
                 {!caseId && (
                 <div>
                     <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
@@ -188,8 +234,15 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                 </div>
 
                 <div className="flex justify-end pt-4 gap-2">
-                    <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={handleCreateSubmit} disabled={!newDocData.title || !newDocData.caseId || !newDocData.templateId}>Create & Open</Button>
+                    <Button variant="secondary" onClick={() => { setIsCreateModalOpen(false); setValidationErrors([]); }} disabled={isCreating}>Cancel</Button>
+                    <Button 
+                        variant="primary" 
+                        onClick={handleCreateSubmit} 
+                        disabled={!newDocData.title?.trim() || !newDocData.caseId || !newDocData.templateId || isCreating}
+                        isLoading={isCreating}
+                    >
+                        {isCreating ? 'Creating...' : 'Create & Open'}
+                    </Button>
                 </div>
             </div>
         </Modal>

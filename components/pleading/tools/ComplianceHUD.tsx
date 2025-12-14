@@ -21,7 +21,7 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Calculate compliance checks based on rules and sections
+  // Memoize compliance checks to avoid recalculation on every render
   const checks = useMemo<ComplianceCheck[]>(() => {
     const results: ComplianceCheck[] = [];
     
@@ -80,11 +80,13 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
     });
 
     return results;
-  }, [rules, sections]);
+  }, [rules?.fontFamily, rules?.fontSize, rules?.marginTop, rules?.marginBottom, rules?.lineHeight, sections]);
 
-  const passCount = checks.filter(c => c.status === 'pass').length;
-  const warnCount = checks.filter(c => c.status === 'warn').length;
-  const failCount = checks.filter(c => c.status === 'fail').length;
+  const { passCount, warnCount, failCount } = useMemo(() => ({
+    passCount: checks.filter(c => c.status === 'pass').length,
+    warnCount: checks.filter(c => c.status === 'warn').length,
+    failCount: checks.filter(c => c.status === 'fail').length
+  }), [checks]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

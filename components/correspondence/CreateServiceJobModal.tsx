@@ -6,7 +6,10 @@ import { Input, TextArea } from '../common/Inputs';
 import { ServiceJob, UserId } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
 import { cn } from '../../utils/cn';
+import { validateServiceJobSafe } from '../../services/validation/correspondenceSchemas';
+import { ServiceStatus } from '../../types/enums';
 
 interface CreateServiceJobModalProps {
   isOpen: boolean;
@@ -16,13 +19,15 @@ interface CreateServiceJobModalProps {
 
 export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ isOpen, onClose, onSave }) => {
   const { theme } = useTheme();
+  const notify = useNotify();
   const [formData, setFormData] = useState<Partial<ServiceJob>>({
-    status: 'Draft',
+    status: ServiceStatus.DRAFT,
     attempts: 0,
     method: 'Process Server'
   });
   const [cases, setCases] = useState<any[]>([]);
   const [docs, setDocs] = useState<any[]>([]);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
       const loadData = async () => {
@@ -43,7 +48,16 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
   }, [formData.caseId]);
 
   const handleSave = () => {
-      if (!formData.targetPerson || !formData.caseId || !formData.documentTitle) return;
+      if (!formData.targetPerson || !formData.caseId || !formData.documentTitle || !formData.dueDate) {
+          setValidationErrors({
+              targetPerson: !formData.targetPerson ? 'Target person is required' : '',
+              caseId: !formData.caseId ? 'Case is required' : '',
+              documentTitle: !formData.documentTitle ? 'Document is required' : '',
+              dueDate: !formData.dueDate ? 'Due date is required' : ''
+          });
+          notify.error('Please fill in all required fields');
+          return;
+      }
 
       const newJob: ServiceJob = {
           id: `srv-${Date.now()}`,
@@ -57,14 +71,27 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
           mailType: formData.mailType,
           trackingNumber: formData.trackingNumber,
           addressedTo: formData.addressedTo,
-          status: 'Out for Service',
-          dueDate: formData.dueDate || '',
+          status: ServiceStatus.OUT_FOR_SERVICE,
+          dueDate: formData.dueDate,
           attempts: 0,
           notes: formData.notes
       };
+
+      // Validate with Zod schema
+      const validation = validateServiceJobSafe(newJob);
+      if (!validation.success) {
+          const errors: Record<string, string> = {};
+          validation.error.errors.forEach(err => {
+              errors[err.path[0] as string] = err.message;
+          });
+          setValidationErrors(errors);
+          notify.error('Validation failed: ' + validation.error.errors[0].message);
+          return;
+      }
       
       onSave(newJob);
-      setFormData({ status: 'Draft', attempts: 0, method: 'Process Server' });
+      setFormData({ status: ServiceStatus.DRAFT, attempts: 0, method: 'Process Server' });
+      setValidationErrors({});
   };
 
   return (
@@ -91,7 +118,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
-                        onChange={(e) => setFormData({...formData, caseId: e.target.value})}
+                        onChange={(e) => setFormData({...formData, caseId: e.target.value as any})}
                     >
                         <option value="">Select Case...</option>
                         {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}

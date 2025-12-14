@@ -1,5 +1,21 @@
+/**
+ * @module hooks/useSessionStorage
+ * @category Hooks - Storage
+ * @description Session storage hook with useState-like API, automatic serialization/deserialization,
+ * and cross-tab synchronization via storage events. Provides persistent state that survives page
+ * refreshes but not browser restarts.
+ * 
+ * NO THEME USAGE: Utility hook for session storage persistence
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export function useSessionStorage<T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once

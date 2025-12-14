@@ -1,11 +1,37 @@
+/**
+ * @module hooks/useNexusGraph
+ * @category Hooks - Graph Visualization
+ * @description Force-directed graph physics hook using Web Worker for non-blocking simulation. Creates blob
+ * worker with inlined physics code (repulsion, spring forces, damping, center pull, alpha decay) for
+ * zero-copy ArrayBuffer transfers. Manages node positions via SharedArrayBuffer pattern, provides reheat
+ * for re-animation, and tracks stability with isStable flag when alpha decays below threshold.
+ * 
+ * SYSTEMS ENGINEERING INNOVATION:
+ * Uses "blob worker" pattern to inject physics code directly into worker thread without separate file
+ * build steps. This keeps the physics calculation completely non-blocking while avoiding CORS issues
+ * with worker imports.
+ * 
+ * NO THEME USAGE: Graph physics simulation utility hook
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils & Constants
 import { SerializedNode, NODE_STRIDE, NexusLink, NexusPhysics } from '../utils/nexusPhysics';
 
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 /**
- * SYSTEMS ENGINEERING INNOVATION:
- * We use a "blob worker" to inject the physics code directly into a worker thread without
- * needing separate file build steps. This keeps the physics calculation completely non-blocking.
+ * Creates a blob-based Web Worker with inlined physics simulation code.
+ * This pattern avoids CORS issues with worker imports and keeps physics non-blocking.
+ * @returns Worker instance ready to receive simulation messages
  */
 const createPhysicsWorker = () => {
   const code = `

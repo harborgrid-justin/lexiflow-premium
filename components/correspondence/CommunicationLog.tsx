@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-react';
 
 // ============================================================================
@@ -18,6 +18,7 @@ import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-rea
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Components
 import { Badge } from '../common/Badge';
@@ -25,6 +26,7 @@ import { VirtualList } from '../common/VirtualList';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { CommunicationStatus } from '../../types/enums';
 
 // Types
 import { CommunicationItem } from '../../types';
@@ -45,10 +47,41 @@ interface CommunicationLogProps {
 // COMPONENT
 // ============================================================================
 
-export const CommunicationLog: React.FC<CommunicationLogProps> = ({ items, onSelect, selectedId }) => {
+export const CommunicationLog: React.FC<CommunicationLogProps> = React.memo(({ items, onSelect, selectedId }) => {
   const { theme } = useTheme();
+  const [focusedIndex, setFocusedIndex] = useState(0);
 
-  const renderRow = (item: CommunicationItem) => (
+  // Keyboard navigation
+  useKeyboardShortcuts([
+    {
+      key: 'ArrowDown',
+      callback: () => {
+        const newIndex = Math.min(focusedIndex + 1, items.length - 1);
+        setFocusedIndex(newIndex);
+      },
+      description: 'Move down'
+    },
+    {
+      key: 'ArrowUp',
+      callback: () => {
+        const newIndex = Math.max(focusedIndex - 1, 0);
+        setFocusedIndex(newIndex);
+      },
+      description: 'Move up'
+    },
+    {
+      key: 'Enter',
+      callback: () => {
+        if (items[focusedIndex]) {
+          onSelect(items[focusedIndex]);
+        }
+      },
+      description: 'Open item'
+    }
+  ]);
+
+  // Memoized render function
+  const renderRow = useCallback((item: CommunicationItem) => (
     <div 
         key={item.id} 
         onClick={() => onSelect(item)}
@@ -83,10 +116,19 @@ export const CommunicationLog: React.FC<CommunicationLogProps> = ({ items, onSel
         </div>
         <div className="w-24 shrink-0 text-xs text-right text-slate-500 mr-4">{item.date}</div>
         <div className="w-20 shrink-0 text-right">
-            <Badge variant={item.status === 'Sent' || item.status === 'Read' ? 'success' : 'warning'}>{item.status}</Badge>
+            <Badge variant={
+              item.status === CommunicationStatus.SENT || item.status === CommunicationStatus.READ 
+                ? 'success' 
+                : item.status === CommunicationStatus.FAILED 
+                  ? 'error'
+                  : 'warning'
+            }>{item.status}</Badge>
         </div>
     </div>
-  );
+  ), [theme, selectedId, onSelect]);
+
+  // Memoize items for VirtualList
+  const memoizedItems = useMemo(() => items, [items]);
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -102,7 +144,7 @@ export const CommunicationLog: React.FC<CommunicationLogProps> = ({ items, onSel
         
         <div className="flex-1 min-h-0 relative">
             <VirtualList 
-                items={items}
+                items={memoizedItems}
                 height="100%"
                 itemHeight={60}
                 renderItem={renderRow}
@@ -111,4 +153,6 @@ export const CommunicationLog: React.FC<CommunicationLogProps> = ({ items, onSel
         </div>
     </div>
   );
-};
+});
+
+CommunicationLog.displayName = 'CommunicationLog';

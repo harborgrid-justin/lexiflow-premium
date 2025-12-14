@@ -24,6 +24,9 @@ import { STORES } from '../../services/db';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
+import { useAutoSave } from '../../hooks/useAutoSave';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useCallback } from 'react';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
@@ -32,28 +35,95 @@ import { SearchToolbar } from '../common/SearchToolbar';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { billingQueryKeys } from '../../services/queryKeys';
+import { validateTimeEntrySafe } from '../../services/validation/billingSchemas';
+import { WIPStatusEnum } from '../../types/enums';
 
 // Types
 import { TimeEntry } from '../../types';
 
 // ============================================================================
+// INVOICE GENERATION QUEUE
+// ============================================================================
+class InvoiceGenerationQueue {
+  private queue: Array<{ entries: TimeEntry[]; resolve: (value: any) => void; reject: (error: any) => void }> = [];
+  private processing = 0;
+  private readonly maxConcurrent = 2; // PDF generation is CPU-intensive
+
+  async add(entries: TimeEntry[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.queue.push({ entries, resolve, reject });
+      this.processQueue();
+    });
+  }
+
+  private async processQueue() {
+    if (this.processing >= this.maxConcurrent || this.queue.length === 0) return;
+
+    this.processing++;
+    const item = this.queue.shift();
+    if (!item) {
+      this.processing--;
+      return;
+    }
+
+    try {
+      const primaryCase = item.entries[0].caseId;
+      const clientName = "Client Ref " + primaryCase;
+      const invoice = await DataService.billing.createInvoice(clientName, primaryCase, item.entries);
+      item.resolve(invoice);
+    } catch (error) {
+      item.reject(error);
+    } finally {
+      this.processing--;
+      this.processQueue();
+    }
+  }
+}
+
+const invoiceQueue = new InvoiceGenerationQueue();
+
+// ============================================================================
 // COMPONENT
 // ============================================================================
-export const BillingWIP: React.FC = () => {
+const BillingWIPComponent: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [draftEntry, setDraftEntry] = useState<Partial<TimeEntry> | null>(null);
 
-  // Enterprise Data Access
+  // Enterprise Data Access with query keys
   const { data: entries = [] } = useQuery<TimeEntry[]>(
-      [STORES.BILLING, 'all'],
+      billingQueryKeys.billing.wip(),
       () => (DataService && DataService.billing) ? DataService.billing.getTimeEntries() : Promise.resolve([])
   );
 
+  // Auto-save draft time entry
+  useAutoSave({
+    data: draftEntry,
+    onSave: useCallback(async (entry: Partial<TimeEntry>) => {
+      if (!entry || !entry.description) return;
+      localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
+    }, []),
+    delay: 2000
+  });
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+n': () => {
+      notify.info('New time entry form (to be implemented)');
+    },
+    'mod+g': () => {
+      if (selectedIds.size > 0) {
+        handleGenerateClick();
+      }
+    }
+  });
+
   const filteredEntries = useMemo(() => {
     return entries.filter(e => 
-        e.status === 'Unbilled' &&
+        e.status === WIPStatusEnum.UNBILLED &&
         (e.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         e.caseId.toLowerCase().includes(searchTerm.toLowerCase()))
     );
@@ -62,47 +132,59 @@ export const BillingWIP: React.FC = () => {
   const { mutate: generateInvoice, isLoading: isGenerating } = useMutation(
       async (selectedEntries: TimeEntry[]) => {
           if (!DataService || !DataService.billing) throw new Error("Billing service unavailable");
-          // Group by Case ID first (simplified: take first case found)
           if (selectedEntries.length === 0) throw new Error("No entries selected");
-          const primaryCase = selectedEntries[0].caseId;
-          // Mock client resolution
-          const clientName = "Client Ref " + primaryCase; 
           
-          return DataService.billing.createInvoice(clientName, primaryCase, selectedEntries);
+          // Validate all entries before invoicing
+          const validationErrors: string[] = [];
+          selectedEntries.forEach((entry, index) => {
+            const result = validateTimeEntrySafe(entry as any);
+            if (!result.valid) {
+              validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
+            }
+          });
+          
+          if (validationErrors.length > 0) {
+            notify.error(`Validation failed: ${validationErrors[0]}`);
+            throw new Error('Validation failed');
+          }
+          
+          // Use queue for PDF generation
+          return invoiceQueue.add(selectedEntries);
       },
       {
-          invalidateKeys: [[STORES.BILLING, 'all'], [STORES.INVOICES, 'all']],
+          invalidateKeys: [billingQueryKeys.billing.wip(), billingQueryKeys.billing.invoices()],
           onSuccess: (invoice) => {
               notify.success(`Invoice ${invoice.id} generated for $${invoice.amount.toFixed(2)}`);
               setSelectedIds(new Set());
+              localStorage.removeItem('billing-wip-draft');
           },
           onError: () => notify.error("Failed to generate invoice.")
       }
   );
 
-  const handleGenerateClick = () => {
+  const handleGenerateClick = useCallback(() => {
       const selected = filteredEntries.filter(e => selectedIds.has(e.id));
       if (selected.length === 0) {
           notify.warning("Please select at least one time entry.");
           return;
       }
       generateInvoice(selected);
-  };
+  }, [filteredEntries, selectedIds, generateInvoice, notify]);
 
-  const toggleSelection = (id: string) => {
+  const toggleSelection = useCallback((id: string) => {
       const newSet = new Set(selectedIds);
       if (newSet.has(id)) newSet.delete(id);
       else newSet.add(id);
       setSelectedIds(newSet);
-  };
+  }, [selectedIds]);
 
-  const toggleAll = () => {
+  const toggleAll = useCallback(() => {
       if (selectedIds.size === filteredEntries.length) {
           setSelectedIds(new Set());
       } else {
           setSelectedIds(new Set(filteredEntries.map(e => e.id)));
       }
-  };
+  }, [selectedIds, filteredEntries]);
 
   const totalUnbilled = filteredEntries.reduce((acc, curr) => acc + curr.total, 0);
   const selectedTotal = filteredEntries.filter(e => selectedIds.has(e.id)).reduce((acc, curr) => acc + curr.total, 0);
@@ -190,3 +272,6 @@ export const BillingWIP: React.FC = () => {
     </div>
   );
 };
+
+// Export memoized component
+export const BillingWIP = React.memo(BillingWIPComponent);

@@ -1,8 +1,26 @@
+/**
+ * @module services/moduleRegistry
+ * @category Services - Navigation
+ * @description Module registry service managing dynamic module definitions with intent-based resolution.
+ * Provides batch registration for initialization, module retrieval by ID, intent matching with fuzzy
+ * navigation ("open billing" → "billing" ID), and subscription-based change notifications for dynamic
+ * menu re-rendering.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
 import { ModuleDefinition } from '../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 type RegistryListener = () => void;
 
+// ============================================================================
+// SERVICE CLASS
+// ============================================================================
 class ModuleRegistryService {
   private modules: Map<string, ModuleDefinition> = new Map();
   private listeners: Set<RegistryListener> = new Set();

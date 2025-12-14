@@ -24,6 +24,8 @@ import { STORES } from '../../services/db';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useCallback } from 'react';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
@@ -34,6 +36,8 @@ import { SearchToolbar } from '../common/SearchToolbar';
 // Utils & Constants
 import { cn } from '../../utils/cn';
 import { Formatters } from '../../utils/formatters';
+import { billingQueryKeys } from '../../services/queryKeys';
+import { InvoiceStatusEnum } from '../../types/enums';
 
 // Types
 import { Invoice } from '../../types';
@@ -41,37 +45,92 @@ import { Invoice } from '../../types';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const BillingInvoices: React.FC = () => {
+const BillingInvoicesComponent: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
 
-  // Enterprise Data Access
+  // Enterprise Data Access with query keys
   const { data: invoices = [] } = useQuery<Invoice[]>(
-      [STORES.INVOICES, 'all'],
+      billingQueryKeys.billing.invoices(),
       () => (DataService && DataService.billing) ? DataService.billing.getInvoices() : Promise.resolve([])
   );
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+s': () => {
+      notify.info('Send selected invoice (to be implemented)');
+    },
+    'mod+p': () => {
+      notify.info('Mark invoice as paid (to be implemented)');
+    }
+  });
 
   const { mutate: sendInvoice, isLoading: isSending } = useMutation(
       (id: string) => (DataService && DataService.billing) ? DataService.billing.sendInvoice(id) : Promise.resolve(false),
       {
+          // Optimistic update
+          onMutate: async (id: string) => {
+            const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
+            
+            // Optimistically update to "Sent"
+            queryClient.setQueryData<Invoice[]>(
+              billingQueryKeys.billing.invoices(),
+              (old = []) => old.map(inv => 
+                inv.id === id ? { ...inv, status: InvoiceStatusEnum.SENT } : inv
+              )
+            );
+            
+            return { previousInvoices };
+          },
           onSuccess: (_, id) => {
               notify.success(`Invoice ${id} sent successfully.`);
-              queryClient.invalidate([STORES.INVOICES, 'all']);
+          },
+          onError: (error, id, context: any) => {
+            // Rollback on error
+            if (context?.previousInvoices) {
+              queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
+            }
+            notify.error('Failed to send invoice');
+          },
+          onSettled: () => {
+            queryClient.invalidate(billingQueryKeys.billing.invoices());
           }
       }
   );
 
-  // Mark Paid Mutation
+  // Mark Paid Mutation with optimistic updates
   const { mutate: markPaid } = useMutation(
-      (id: string) => DataService.billing.updateInvoice(id, { status: 'Paid' }),
+      (id: string) => DataService.billing.updateInvoice(id, { status: InvoiceStatusEnum.PAID }),
       {
+          // Optimistic update
+          onMutate: async (id: string) => {
+            const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
+            
+            // Optimistically update to "Paid"
+            queryClient.setQueryData<Invoice[]>(
+              billingQueryKeys.billing.invoices(),
+              (old = []) => old.map(inv => 
+                inv.id === id ? { ...inv, status: InvoiceStatusEnum.PAID } : inv
+              )
+            );
+            
+            return { previousInvoices };
+          },
           onSuccess: () => {
               notify.success("Invoice marked as PAID. Transaction recorded in immutable ledger.");
-              queryClient.invalidate([STORES.INVOICES, 'all']);
           },
-          onError: () => notify.error("Failed to update invoice.")
+          onError: (error, id, context: any) => {
+            // Rollback on error
+            if (context?.previousInvoices) {
+              queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
+            }
+            notify.error("Failed to update invoice.");
+          },
+          onSettled: () => {
+            queryClient.invalidate(billingQueryKeys.billing.invoices());
+          }
       }
   );
 
@@ -82,6 +141,13 @@ export const BillingInvoices: React.FC = () => {
         return matchesSearch && matchesStatus;
       });
   }, [invoices, searchTerm, filterStatus]);
+  
+  const getBadgeVariant = useCallback((status: string) => {
+    if (status === InvoiceStatusEnum.PAID) return 'success';
+    if (status === InvoiceStatusEnum.OVERDUE) return 'error';
+    if (status === InvoiceStatusEnum.DRAFT) return 'neutral';
+    return 'info';
+  }, []);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -136,11 +202,7 @@ export const BillingInvoices: React.FC = () => {
                             {Formatters.currency(inv.amount)}
                         </TableCell>
                         <TableCell>
-                            <Badge variant={
-                                inv.status === 'Paid' ? 'success' : 
-                                inv.status === 'Overdue' ? 'error' : 
-                                inv.status === 'Draft' ? 'neutral' : 'info'
-                            }>
+                            <Badge variant={getBadgeVariant(inv.status)}>
                                 {inv.status}
                             </Badge>
                         </TableCell>
@@ -164,4 +226,7 @@ export const BillingInvoices: React.FC = () => {
         </TableContainer>
     </div>
   );
-}
+};
+
+// Export memoized component
+export const BillingInvoices = React.memo(BillingInvoicesComponent);

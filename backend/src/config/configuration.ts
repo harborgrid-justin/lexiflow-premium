@@ -5,11 +5,15 @@ export default () => ({
 
   // Database
   database: {
-    host: process.env.DATABASE_HOST || 'localhost',
-    port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
-    name: process.env.DATABASE_NAME || 'lexiflow',
-    user: process.env.DATABASE_USER || 'lexiflow_admin',
-    password: process.env.DATABASE_PASSWORD || 'lexiflow_secure_2024',
+    url: process.env.DATABASE_URL,
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    name: process.env.DB_DATABASE || 'lexiflow',
+    user: process.env.DB_USERNAME || 'lexiflow_admin',
+    password: process.env.DB_PASSWORD || 'lexiflow_secure_2024',
+    ssl: process.env.DB_SSL === 'true',
+    sslRejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',
+    logging: process.env.DB_LOGGING === 'true',
   },
 
   // JWT

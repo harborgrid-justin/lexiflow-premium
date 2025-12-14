@@ -1,11 +1,29 @@
+/**
+ * @module hooks/useHoverIntent
+ * @category Hooks - UI Utilities
+ * @description Hover intent hook with configurable timeout delay before triggering onHover callback.
+ * Prevents accidental hovers by requiring sustained mouse presence. Returns stable hover handler
+ * factory for spreading onto elements.
+ * 
+ * NO THEME USAGE: Utility hook for hover detection logic
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import { useRef, useCallback, useEffect } from 'react';
 
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface HoverIntentOptions<T> {
   onHover: (item: T) => void;
   timeout?: number;
 }
 
+// ========================================
+// HOOK
+// ========================================
 export const useHoverIntent = <T>({ onHover, timeout = 300 }: HoverIntentOptions<T>) => {
   const timer = useRef<number | null>(null);
   const onHoverRef = useRef(onHover);

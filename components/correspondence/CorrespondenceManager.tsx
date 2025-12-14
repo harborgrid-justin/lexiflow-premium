@@ -19,10 +19,11 @@ import { Mail, MapPin, Plus, Filter, Send, Inbox, ShieldCheck } from 'lucide-rea
 // Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { correspondenceQueryKeys } from '../../services/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Components
 import { PageHeader } from '../common/PageHeader';
@@ -32,6 +33,8 @@ import { ServiceTracker } from './ServiceTracker';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CreateServiceJobModal } from './CreateServiceJobModal';
+import { CorrespondenceErrorBoundary } from './CorrespondenceErrorBoundary';
+import { CommunicationLogSkeleton, ServiceTrackerSkeleton, CorrespondenceDetailSkeleton } from './CorrespondenceSkeleton';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -51,7 +54,7 @@ interface CorrespondenceManagerProps {
 // COMPONENT
 // ============================================================================
 
-export const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = ({ initialTab }) => {
+const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ initialTab }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'communications' | 'process'>('communications');
   const [selectedItem, setSelectedItem] = useState<CommunicationItem | ServiceJob | null>(null);
@@ -61,35 +64,74 @@ export const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = ({ in
   const [composeInitialData, setComposeInitialData] = useState<Partial<CommunicationItem> | undefined>(undefined);
   const [isServiceJobOpen, setIsServiceJobOpen] = useState(false);
 
-  // Enterprise Data Access
-  const { data: communications = [] } = useQuery<CommunicationItem[]>(
-      [STORES.COMMUNICATIONS, 'all'],
+  // Enterprise Data Access with query key factory
+  const { data: communications = [], isLoading: isLoadingComms } = useQuery<CommunicationItem[]>(
+      correspondenceQueryKeys.correspondence.lists(),
       DataService.correspondence.getCommunications
   );
 
-  const { data: serviceJobs = [] } = useQuery<ServiceJob[]>(
-      [STORES.SERVICE_JOBS, 'all'],
+  const { data: serviceJobs = [], isLoading: isLoadingJobs } = useQuery<ServiceJob[]>(
+      correspondenceQueryKeys.serviceJobs.lists(),
       DataService.correspondence.getServiceJobs
   );
 
   const { mutate: sendCommunication } = useMutation(
       DataService.correspondence.addCommunication,
       {
-          invalidateKeys: [[STORES.COMMUNICATIONS, 'all']],
+          invalidateKeys: [correspondenceQueryKeys.correspondence.lists()],
           onSuccess: () => {
               setIsComposeOpen(false);
               setComposeInitialData(undefined);
-          }
+          },
+          retry: 2,
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
       }
   );
 
   const { mutate: createServiceJob } = useMutation(
       DataService.correspondence.addServiceJob,
       {
-          invalidateKeys: [[STORES.SERVICE_JOBS, 'all']],
-          onSuccess: () => setIsServiceJobOpen(false)
+          invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()],
+          onSuccess: () => setIsServiceJobOpen(false),
+          retry: 2,
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
       }
   );
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'c',
+      cmd: true,
+      callback: () => {
+        if (activeTab === 'communications') {
+          setComposeInitialData(undefined);
+          setIsComposeOpen(true);
+        } else {
+          setIsServiceJobOpen(true);
+        }
+      },
+      description: 'Compose new'
+    },
+    {
+      key: 'r',
+      cmd: true,
+      callback: () => {
+        if (selectedItem && activeTab === 'communications') {
+          handleReply(selectedItem as CommunicationItem);
+        }
+      },
+      description: 'Reply to selected'
+    },
+    {
+      key: 'Escape',
+      callback: () => {
+        setIsInspectorOpen(false);
+        setSelectedItem(null);
+      },
+      description: 'Close inspector'
+    }
+  ]);
 
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
@@ -112,6 +154,7 @@ export const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = ({ in
   };
 
   return (
+    <CorrespondenceErrorBoundary onReset={() => window.location.reload()}>
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
         <PageHeader 
@@ -158,29 +201,43 @@ export const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = ({ in
         {/* Main List Area */}
         <div className={cn("flex-1 flex flex-col min-w-0 rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
             {activeTab === 'communications' ? (
-                <CommunicationLog 
-                    items={communications} 
-                    onSelect={handleSelectItem}
-                    selectedId={selectedItem?.id}
-                />
+                isLoadingComms ? (
+                    <CommunicationLogSkeleton />
+                ) : (
+                    <CommunicationLog 
+                        items={communications} 
+                        onSelect={handleSelectItem}
+                        selectedId={selectedItem?.id}
+                    />
+                )
             ) : (
-                <ServiceTracker 
-                    jobs={serviceJobs}
-                    onSelect={handleSelectItem}
-                    selectedId={selectedItem?.id}
-                />
+                isLoadingJobs ? (
+                    <ServiceTrackerSkeleton />
+                ) : (
+                    <ServiceTracker 
+                        jobs={serviceJobs}
+                        onSelect={handleSelectItem}
+                        selectedId={selectedItem?.id}
+                    />
+                )
             )}
         </div>
 
         {/* Inspector Panel */}
         {isInspectorOpen && selectedItem && (
             <div className="w-96 shrink-0">
-                <CorrespondenceDetail 
-                    item={selectedItem} 
-                    type={activeTab === 'communications' ? 'communication' : 'service'}
-                    onClose={() => setIsInspectorOpen(false)}
-                    onReply={(item) => handleReply(item)}
-                />
+                {(isLoadingComms || isLoadingJobs) && !selectedItem ? (
+                    <CorrespondenceDetailSkeleton />
+                ) : (
+                    <CorrespondenceDetail 
+                        correspondenceItem={{
+                            type: activeTab === 'communications' ? 'communication' : 'service',
+                            item: selectedItem as any
+                        }}
+                        onClose={() => setIsInspectorOpen(false)}
+                        onReply={(item) => handleReply(item)}
+                    />
+                )}
             </div>
         )}
       </div>
@@ -198,5 +255,14 @@ export const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = ({ in
         onSave={createServiceJob}
       />
     </div>
+    </CorrespondenceErrorBoundary>
   );
 };
+
+// Export with error boundary wrapper
+const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = (props) => (
+  <CorrespondenceManagerInternal {...props} />
+);
+
+export default CorrespondenceManager;
+export { CorrespondenceManager };

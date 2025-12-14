@@ -1,9 +1,22 @@
+/**
+ * @module utils/layoutAlgorithms
+ * @category Utils - Layout
+ * @description Layout algorithms for automatic element positioning. Provides grid-based auto-arrangement
+ * with configurable container width, item dimensions, and padding. Calculates row/column positions for
+ * responsive table/card layouts in schema diagrams and visual editors.
+ */
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface TablePosition {
   x: number;
   y: number;
 }
 
+// ============================================================================
+// ALGORITHMS
+// ============================================================================
 export const LayoutAlgorithms = {
   /**
    * Arranges tables in a grid layout.

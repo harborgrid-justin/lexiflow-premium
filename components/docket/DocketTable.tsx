@@ -25,6 +25,7 @@ import { Button } from '../common/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
@@ -48,6 +49,14 @@ export const DocketTable: React.FC<DocketTableProps> = ({
 }) => {
   const { theme } = useTheme();
 
+  // Keyboard navigation
+  const { focusedIndex, containerRef } = useKeyboardNavigation({
+    items: entries,
+    onSelect: onSelectEntry,
+    enabled: true,
+    initialIndex: 0
+  });
+
   const handleViewDoc = (docId: string) => {
       alert(`Opening Document ${docId}`);
   };
@@ -62,6 +71,8 @@ export const DocketTable: React.FC<DocketTableProps> = ({
           onSelect={onSelectEntry}
           onSelectCaseId={onSelectCaseId}
           onViewDoc={handleViewDoc}
+          isFocused={index === focusedIndex}
+          dataIndex={index}
       />
   );
 
@@ -76,11 +87,21 @@ export const DocketTable: React.FC<DocketTableProps> = ({
         }
       };
 
+      const isFocused = index === focusedIndex;
+
       return (
-        <div key={entry.id} className="px-2 py-1.5 h-[140px]">
+        <div key={entry.id} className="px-2 py-1.5 h-[140px]" data-index={index}>
              <div 
-                className={cn("p-4 rounded-lg border shadow-sm h-full flex flex-col justify-between transition-colors active:bg-slate-50", theme.surface.default, theme.border.default)}
+                className={cn(
+                  "p-4 rounded-lg border shadow-sm h-full flex flex-col justify-between transition-colors active:bg-slate-50",
+                  theme.surface.default,
+                  theme.border.default,
+                  isFocused && "ring-2 ring-blue-500"
+                )}
                 onClick={() => onSelectEntry(entry)}
+                role="row"
+                aria-selected={isFocused}
+                tabIndex={isFocused ? 0 : -1}
              >
                 <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
@@ -112,19 +133,26 @@ export const DocketTable: React.FC<DocketTableProps> = ({
   };
 
   return (
-    <div className={cn("flex flex-col h-full", theme.surface.default)}>
+    <div 
+      ref={containerRef}
+      className={cn("flex flex-col h-full", theme.surface.default)}
+      role="table"
+      aria-label="Docket entries table"
+      aria-rowcount={entries.length}
+      tabIndex={0}
+    >
         {/* Desktop Header */}
-        <div className={cn("hidden md:flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
-            <div className="w-20 shrink-0">Seq / Pacer</div>
-            <div className="w-24 shrink-0">Date</div>
-            {showCaseColumn && <div className="w-32 shrink-0 px-2">Case Ref</div>}
-            <div className="flex-1 px-4">Entry Text</div>
-            <div className="w-16 shrink-0 text-center">Doc</div>
-            <div className="w-32 shrink-0 text-right">Status</div>
+        <div className={cn("hidden md:flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)} role="row">
+            <div className="w-20 shrink-0" role="columnheader">Seq / Pacer</div>
+            <div className="w-24 shrink-0" role="columnheader">Date</div>
+            {showCaseColumn && <div className="w-32 shrink-0 px-2" role="columnheader">Case Ref</div>}
+            <div className="flex-1 px-4" role="columnheader">Entry Text</div>
+            <div className="w-16 shrink-0 text-center" role="columnheader">Doc</div>
+            <div className="w-32 shrink-0 text-right" role="columnheader">Status</div>
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 min-h-0 relative">
+        <div className="flex-1 min-h-0 relative" role="rowgroup">
             {/* Desktop View */}
             <div className="hidden md:block h-full">
                 <VirtualList 

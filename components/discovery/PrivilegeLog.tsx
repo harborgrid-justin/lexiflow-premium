@@ -25,11 +25,13 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
 import { DataService } from '../../services/dataService';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { discoveryQueryKeys } from '../../services/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -38,11 +40,19 @@ import { PrivilegeLogEntry } from '../../types';
 
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();
+  const notify = useNotify();
   
   const { data: logItems = [], isLoading } = useQuery<PrivilegeLogEntry[]>(
-      [STORES.PRIVILEGE_LOG, 'all'],
+      discoveryQueryKeys.discovery.privilege.all,
       DataService.discovery.getPrivilegeLog
   );
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    'mod+shift+p': () => {
+      notify.info('Add new privilege log entry (to be implemented)');
+    }
+  });
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 

@@ -1,15 +1,49 @@
+/**
+ * @module components/profile/PreferencePane
+ * @category User Profile
+ * @description User preference management panel with appearance settings (light/dark/system theme),
+ * regional settings (language, timezone), and notification preferences. Provides visual theme
+ * selector and notification toggle switches.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.surface.primary - Preference card backgrounds
+ * - theme.text.primary/secondary - Setting labels and descriptions
+ * - theme.border.default - Card borders and setting separators
+ * - Theme switcher buttons use mode-specific styling (light/dark active states)
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React from 'react';
-import { ExtendedUserProfile } from '../../types';
-import { Card } from '../common/Card';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { Bell, Moon, Sun, Monitor, Globe, Grid } from 'lucide-react';
 
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
+import { Card } from '../common/Card';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { ExtendedUserProfile } from '../../types';
+
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface PreferencePaneProps {
   profile: ExtendedUserProfile;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const PreferencePane: React.FC<PreferencePaneProps> = ({ profile }) => {
   const { theme, setTheme, mode } = useTheme();
 

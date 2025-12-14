@@ -1,10 +1,23 @@
+/**
+ * @module utils/sqlHelpers
+ * @category Utils - SQL
+ * @description SQL formatting and generation utilities for data platform query builder. Provides keyword
+ * capitalization, indentation formatting for SELECT/FROM/WHERE/GROUP BY/ORDER BY clauses, and structured
+ * condition-to-SQL conversion for rule-based query generation.
+ */
 
+// ============================================================================
+// CONSTANTS
+// ============================================================================
 export const SQL_KEYWORDS = [
     'SELECT', 'FROM', 'WHERE', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'ON', 
     'GROUP BY', 'ORDER BY', 'LIMIT', 'OFFSET', 'AS', 'CASE', 'WHEN', 
     'THEN', 'ELSE', 'END', 'AND', 'OR', 'NOT', 'IN', 'IS NULL', 'IS NOT NULL'
 ];
 
+// ============================================================================
+// HELPERS
+// ============================================================================
 export const SqlHelpers = {
     /**
      * Formats a raw SQL string with proper indentation and capitalization.

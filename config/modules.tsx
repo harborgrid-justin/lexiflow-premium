@@ -21,7 +21,7 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard'));
 const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
 const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager'));
-const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager').then(m => ({ default: m.CorrespondenceManager })));
+const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager'));
 const MasterWorkflow = lazyWithPreload(() => import('../components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
 const DocumentManager = lazyWithPreload(() => import('../components/documents/DocumentManager'));
 const WarRoom = lazyWithPreload(() => import('../components/war-room/WarRoom').then(m => ({ default: m.WarRoom })));

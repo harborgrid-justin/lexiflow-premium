@@ -24,18 +24,20 @@ import { DocketEntryModal } from './DocketEntryModal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
+import { DocketTableSkeleton } from '../common/DocketSkeleton';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
-import { useInterval } from '../../hooks/useInterval';
+import { useLiveDocketFeed } from '../../hooks/useLiveDocketFeed';
 import { useQuery, useMutation } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/dataService';
 import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+import { IdGenerator } from '../../utils/idGenerator';
 
 // Types & Interfaces
 import { DocketEntry, Case, DocketId, CaseId } from '../../types';
@@ -55,7 +57,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // --- ENTERPRISE DATA ACCESS ---
-  const { data: docketEntries = [], refetch } = useQuery<DocketEntry[]>(
+  const { data: docketEntries = [], refetch, isLoading } = useQuery<DocketEntry[]>(
       [STORES.DOCKET, 'all'],
       DataService.docket.getAll
   );
@@ -79,26 +81,22 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       }
   );
 
-  // Live Mode Simulator
-  useInterval(() => {
-      if (isLiveMode) {
-          const randomCase = cases[Math.floor(Math.random() * cases.length)];
-          if (randomCase) {
-              const entry: DocketEntry = {
-                  id: `dk-live-${Date.now()}` as DocketId,
-                  sequenceNumber: docketEntries.length + 100,
-                  caseId: randomCase.id,
-                  date: new Date().toISOString().split('T')[0],
-                  type: 'Notice',
-                  title: 'LIVE: Notice of Electronic Filing',
-                  description: 'System generated notice for simulated live feed activity.',
-                  filedBy: 'Court',
-                  isSealed: false
-              };
-              addEntry(entry);
-          }
-      }
-  }, isLiveMode ? 4000 : null);
+  // Live Feed with WebSocket connection management
+  const { status: liveFeedStatus, reconnect: reconnectLiveFeed } = useLiveDocketFeed({
+      caseId: selectedCaseId || undefined,
+      enabled: isLiveMode,
+      onNewEntry: (entry) => {
+          // Use type-safe ID generation
+          const entryWithId = {
+              ...entry,
+              id: IdGenerator.docket(),
+              sequenceNumber: docketEntries.length + 100
+          };
+          addEntry(entryWithId);
+      },
+      reconnectInterval: 5000,
+      maxReconnectAttempts: 5
+  });
 
   const { mutate: deleteEntry } = useMutation(
       DataService.docket.delete,
@@ -184,19 +182,47 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     );
   };
 
+  // Show skeleton while loading
+  if (isLoading) {
+    return (
+      <div className="flex flex-col h-full gap-6">
+        {!selectedCaseId && <DocketStats />}
+        <DocketTableSkeleton rows={15} />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full gap-6">
       {!selectedCaseId && <DocketStats />}
       
-      <div className="flex justify-end px-1">
+      <div className="flex justify-end px-1 gap-2">
+          {isLiveMode && liveFeedStatus === 'error' && (
+            <button
+              onClick={reconnectLiveFeed}
+              className={cn("text-xs px-2 py-1 rounded border", theme.status.error.bg, theme.status.error.border, theme.status.error.text)}
+            >
+              Reconnect Feed
+            </button>
+          )}
           <button 
             onClick={() => setIsLiveMode(!isLiveMode)}
             className={cn(
                 "text-xs flex items-center px-2 py-1 rounded border transition-colors",
-                isLiveMode ? "bg-red-50 border-red-200 text-red-600 animate-pulse" : cn(theme.surface.default, theme.border.default, theme.text.secondary)
+                isLiveMode && liveFeedStatus === 'connected' ? "bg-red-50 border-red-200 text-red-600 animate-pulse" :
+                isLiveMode && liveFeedStatus === 'connecting' ? "bg-yellow-50 border-yellow-200 text-yellow-600" :
+                isLiveMode && liveFeedStatus === 'error' ? "bg-red-100 border-red-300 text-red-700" :
+                cn(theme.surface.default, theme.border.default, theme.text.secondary)
             )}
+            title={isLiveMode ? `Status: ${liveFeedStatus}` : 'Enable live feed'}
           >
-              <Radio className="h-3 w-3 mr-1"/> {isLiveMode ? 'Live Feed Active' : 'Enable Live Feed'}
+              <Radio className="h-3 w-3 mr-1"/> 
+              {isLiveMode ? 
+                liveFeedStatus === 'connected' ? 'Live Feed Active' :
+                liveFeedStatus === 'connecting' ? 'Connecting...' :
+                liveFeedStatus === 'error' ? 'Connection Error' :
+                'Disconnected' 
+              : 'Enable Live Feed'}
           </button>
       </div>
 

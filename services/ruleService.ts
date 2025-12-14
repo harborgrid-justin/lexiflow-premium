@@ -1,11 +1,30 @@
+/**
+ * @module services/ruleService
+ * @category Services - Rules Platform
+ * @description Legal rules service with localStorage persistence. Provides CRUD operations for legal
+ * rules with search filtering by code/name/type, initialization from mock data, and StorageUtils
+ * integration for persistence across sessions.
+ */
 
-import { MOCK_RULES } from '../data/models/legalRule';
-import { LegalRule } from '../types';
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils & Constants
 import { StorageUtils, STORAGE_KEYS } from '../utils/storage';
+import { MOCK_RULES } from '../data/models/legalRule';
 
+// Types
+import { LegalRule } from '../types';
+
+// ============================================================================
+// MODULE STATE
+// ============================================================================
 // Initialize from Storage
 let dbRules: LegalRule[] = StorageUtils.get(STORAGE_KEYS.RULES, [...MOCK_RULES]);
 
+// ============================================================================
+// SERVICE
+// ============================================================================
 export const RuleService = {
   getAll: async (): Promise<LegalRule[]> => {
     return [...dbRules];

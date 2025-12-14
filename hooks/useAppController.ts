@@ -1,18 +1,46 @@
+/**
+ * @module hooks/useAppController
+ * @category Hooks - Application
+ * @description Main application controller hook managing navigation, case selection, user context, global search,
+ * sidebar state, and app initialization. Handles DB initialization with background seeding, case context
+ * restoration from session storage, neural command execution, global search with AI intent parsing,
+ * holographic window management, and view navigation with deep linking support.
+ * 
+ * NO THEME USAGE: Application-level state management hook
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useCallback, useEffect, useTransition } from 'react';
-import { useSessionStorage } from './useSessionStorage';
-import { useToast } from '../context/ToastContext';
-import { useUsers } from './useDomainData';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
-import { GlobalSearchResult } from '../services/searchService';
-import { IntentResult } from '../services/geminiService';
 import { ModuleRegistry } from '../services/moduleRegistry';
 import { HolographicRouting } from '../services/holographicRouting';
 import { db, STORES } from '../services/db';
 import { Seeder } from '../services/dbSeeder';
-import { Case, AppView } from '../types';
-import { PATHS } from '../constants/paths';
 import { queryClient } from '../services/queryClient';
+import { GlobalSearchResult } from '../services/searchService';
+import { IntentResult } from '../services/geminiService';
 
+// Hooks & Context
+import { useSessionStorage } from './useSessionStorage';
+import { useToast } from '../context/ToastContext';
+import { useUsers } from './useDomainData';
+
+// Utils & Constants
+import { PATHS } from '../constants/paths';
+
+// Types
+import { Case, AppView } from '../types';
+
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useAppController = () => {
   const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
   const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, null);

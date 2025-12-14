@@ -1,15 +1,48 @@
+/**
+ * @module components/profile/SecurityPane
+ * @category User Profile
+ * @description Security management panel with MFA configuration, password management, and active
+ * session monitoring. Displays device sessions with ability to revoke access remotely.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.surface.primary - Card backgrounds and session rows
+ * - theme.text.primary/secondary - Security labels and session details
+ * - theme.border.default - Card borders and session dividers
+ * - theme.status.success - MFA enabled indicator
+ */
+
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React from 'react';
-import { ExtendedUserProfile } from '../../types';
+import { Smartphone, Monitor, Globe, LogOut, Key, ShieldCheck, Clock } from 'lucide-react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Smartphone, Monitor, Globe, LogOut, Key, ShieldCheck, Clock } from 'lucide-react';
+
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { ExtendedUserProfile } from '../../types';
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface SecurityPaneProps {
   profile: ExtendedUserProfile;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const SecurityPane: React.FC<SecurityPaneProps> = ({ profile }) => {
   const { theme } = useTheme();
 

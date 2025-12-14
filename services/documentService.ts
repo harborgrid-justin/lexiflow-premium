@@ -1,11 +1,33 @@
+/**
+ * @module services/documentService
+ * @category Services - Document Management
+ * @description Document service handling file uploads with binary blob storage, hash generation,
+ * chunk processing, and blob URL retrieval. Manages document metadata in IndexedDB with separate
+ * binary storage. Provides non-blocking file processing with yielding for large files, mock SHA-256
+ * hash generation, and integrity verification.
+ */
 
-import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../types';
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { db, STORES } from './db';
+
+// Utils & Constants
 import { Formatters } from '../utils/formatters';
 
+// Types
+import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../types';
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 // Helper to yield control to the main thread
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
+// ============================================================================
+// SERVICE
+// ============================================================================
 export const DocumentService = {
   
   // Store a real file into IDB

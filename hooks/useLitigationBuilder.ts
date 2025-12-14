@@ -1,16 +1,52 @@
-import { useState, useCallback } from 'react';
-import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '../components/workflow/builder/types';
-import { Playbook } from '../data/mockLitigationPlaybooks';
-import { useQuery, useMutation } from '../services/queryClient';
-import { DataService } from '../services/dataService';
-import { STORES } from '../services/db';
-import { Case, CasePhase, WorkflowTask, CaseId, TaskId } from '../types';
-import { useNotify } from './useNotify';
+/**
+ * @module hooks/useLitigationBuilder
+ * @category Hooks - Litigation
+ * @description Specialized litigation strategy workflow builder with playbook loading, node/connection
+ * management, and case deployment. Transforms visual workflow graph (nodes/connections) into Gantt
+ * phases/tasks with date calculation based on node X position. Supports decision nodes with ports,
+ * phase containers, and deployToCase mutation for strategy-to-plan conversion.
+ * 
+ * NO THEME USAGE: Business logic hook for litigation workflow building
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
+import { useState, useCallback } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../services/dataService';
+import { useQuery, useMutation } from '../services/queryClient';
+import { STORES } from '../services/db';
+import { GraphValidationService } from '../services/graphValidationService';
+import { DateCalculationService } from '../services/dateCalculationService';
+
+// Hooks & Context
+import { useNotify } from './useNotify';
+import { useAutoSave } from './useAutoSave';
+
+// Utils & Constants
+import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '../components/workflow/builder/types';
+import { TypedWorkflowNode, createTypedNode } from '../components/litigation/nodeTypes';
+import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '../components/litigation/canvasConstants';
+import { Playbook } from '../data/mockLitigationPlaybooks';
+
+// Types
+import { Case, CasePhase, WorkflowTask, CaseId, TaskId } from '../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface UseLitigationBuilderProps {
   navigateToCaseTab: (caseId: string, tab: string) => void;
 }
 
+// ============================================================================
+// HOOK
+// ============================================================================
 // This is a specialized version of useWorkflowBuilder for the Litigation module
 export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilderProps) => {
   const [nodes, setNodes] = useState<WorkflowNode[]>([
@@ -22,9 +58,20 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
   ]);
 
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const notify = useNotify();
 
   const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);
+
+  // Auto-save draft to localStorage
+  useAutoSave({
+    data: { nodes, connections, selectedCaseId },
+    onSave: async (data) => {
+      localStorage.setItem('litigation-strategy-draft', JSON.stringify(data));
+    },
+    delay: CANVAS_CONSTANTS.AUTOSAVE_DEBOUNCE_MS,
+    enabled: true
+  });
   
   const { mutate: deploy, isLoading: isDeploying } = useMutation(
     (payload: { caseId: string; phases: CasePhase[]; tasks: WorkflowTask[] }) => 
@@ -32,16 +79,35 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
     {
         onSuccess: (_, variables) => {
             notify.success('Strategy deployed to case plan!');
+            setValidationErrors([]);
             navigateToCaseTab(variables.caseId, 'Planning');
         },
-        onError: () => notify.error('Failed to deploy strategy.')
+        onError: () => {
+            notify.error('Failed to deploy strategy.');
+        }
     }
   );
 
   const deployToCase = useCallback(() => {
       if (!selectedCaseId) {
-          notify.warning("Please select a target case first.");
+          notify.warning(VALIDATION_MESSAGES.MISSING_CASE_SELECTION);
           return;
+      }
+
+      // Validate graph before deployment
+      const validation = GraphValidationService.validateGraph(
+          nodes as TypedWorkflowNode[],
+          connections
+      );
+
+      if (!validation.isValid) {
+          setValidationErrors(validation.errors.map(e => e.message));
+          notify.error(`Cannot deploy: ${validation.errors[0].message}`);
+          return;
+      }
+
+      if (validation.warnings.length > 0) {
+          notify.warning(`Warning: ${validation.warnings[0].message}`);
       }
 
       // --- Transformation Logic ---
@@ -59,19 +125,23 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
                   startDate: '', duration: 0, status: 'Active', color: 'bg-indigo-500'
               });
           } else if (node.type !== 'Comment' && node.type !== 'Start' && node.type !== 'End') {
-              const startOffsetDays = Math.max(0, Math.floor((node.x - minX) / 20));
-              const startDate = new Date(today);
-              startDate.setDate(today.getDate() + startOffsetDays);
-              const durationDays = node.type === 'Decision' ? 14 : node.type === 'Event' ? 1 : 7;
-              const dueDate = new Date(startDate);
-              dueDate.setDate(startDate.getDate() + durationDays);
+              const startDate = DateCalculationService.calculateStartDateFromPosition(
+                  node.x,
+                  CANVAS_CONSTANTS.PIXELS_PER_DAY,
+                  minX,
+                  today
+              );
+              const durationDays = node.type === 'Decision' ? CANVAS_CONSTANTS.DECISION_DURATION : 
+                                   node.type === 'Event' ? CANVAS_CONSTANTS.EVENT_DURATION : 
+                                   CANVAS_CONSTANTS.DEFAULT_TASK_DURATION;
+              const dueDate = DateCalculationService.calculateDueDate(startDate, durationDays);
               
               ganttTasks.push({
                   id: node.id as TaskId,
                   caseId: selectedCaseId as CaseId,
                   title: node.label,
-                  startDate: startDate.toISOString().split('T')[0],
-                  dueDate: dueDate.toISOString().split('T')[0],
+                  startDate: DateCalculationService.formatToISO(startDate),
+                  dueDate: DateCalculationService.formatToISO(dueDate),
                   status: 'Pending',
                   assignee: node.config.assignee || 'Unassigned',
                   priority: 'Medium',
@@ -172,6 +242,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
     selectedCaseId,
     setSelectedCaseId,
     deployToCase,
-    isDeploying
+    isDeploying,
+    validationErrors
   };
 };

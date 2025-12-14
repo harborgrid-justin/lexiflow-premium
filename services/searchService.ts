@@ -1,9 +1,28 @@
+/**
+ * @module services/searchService
+ * @category Services - Search
+ * @description Global search service with Web Worker-based full-text search across all domains (cases,
+ * clients, tasks, evidence, users, documents, docket, motions, clauses, rules). Manages singleton
+ * worker instance with hydration from DataService, race condition protection via request IDs, and
+ * search history persistence in localStorage.
+ */
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from './dataService';
-import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../types';
-import { StorageUtils } from '../utils/storage';
 import { SearchWorker } from './searchWorker';
 
+// Utils & Constants
+import { StorageUtils } from '../utils/storage';
+
+// Types
+import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export type SearchResultType = 'case' | 'document' | 'client' | 'task' | 'evidence' | 'user' | 'docket' | 'motion' | 'clause' | 'rule';
 
 export interface GlobalSearchResult {
@@ -15,8 +34,14 @@ export interface GlobalSearchResult {
   score?: number;
 }
 
+// ============================================================================
+// CONSTANTS
+// ============================================================================
 const HISTORY_KEY = 'lexiflow_search_history';
 
+// ============================================================================
+// SEARCH ENGINE CLASS
+// ============================================================================
 // Singleton worker instance for Global Search
 class GlobalSearchEngine {
     private worker: Worker;

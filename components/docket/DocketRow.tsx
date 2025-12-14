@@ -30,9 +30,19 @@ interface DocketRowProps {
     onSelect: (entry: DocketEntry) => void;
     onSelectCaseId: (id: string) => void;
     onViewDoc: (id: string) => void;
+    isFocused?: boolean;
+    dataIndex?: number;
 }
 
-export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onSelect, onSelectCaseId, onViewDoc }) => {
+export const DocketRow: React.FC<DocketRowProps> = ({ 
+    entry, 
+    showCaseColumn, 
+    onSelect, 
+    onSelectCaseId, 
+    onViewDoc, 
+    isFocused = false,
+    dataIndex 
+}) => {
     const { theme } = useTheme();
 
     const getIconForType = (type: string) => {
@@ -68,10 +78,16 @@ export const DocketRow: React.FC<DocketRowProps> = ({ entry, showCaseColumn, onS
                 "flex items-center border-b transition-colors cursor-pointer px-6 group",
                 theme.border.default,
                 theme.surface.default,
-                `hover:${theme.surface.highlight}`
+                `hover:${theme.surface.highlight}`,
+                isFocused && "ring-2 ring-inset ring-blue-500 bg-blue-50 dark:bg-blue-900"
             )}
             style={{ height: 72 }}
             onClick={() => onSelect(entry)}
+            role="row"
+            aria-selected={isFocused}
+            aria-rowindex={dataIndex !== undefined ? dataIndex + 1 : undefined}
+            tabIndex={isFocused ? 0 : -1}
+            data-index={dataIndex}
         >
             {/* Seq & PACER */}
             <div className="w-20 shrink-0 flex flex-col items-start justify-center gap-1">

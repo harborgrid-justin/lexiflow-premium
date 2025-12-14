@@ -1,19 +1,53 @@
+/**
+ * @module components/profile/AccessMatrixEditor
+ * @category User Profile
+ * @description Granular permission matrix editor for fine-grained access control beyond role-based
+ * permissions. Provides CRUD operations for resource-level permissions with effect (Allow/Deny),
+ * scope (Global/Region/Office/Personal), expiration, and conditions. Evaluation order: Deny > Allow.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.text.primary/secondary - Headers and permission labels
+ * - theme.surface.highlight - Permission action badges
+ * - theme.border.default - Table borders and modal borders
+ * - theme.status.success/error - Allow/Deny effect indicators
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useState } from 'react';
-import { ExtendedUserProfile, GranularPermission, AccessEffect } from '../../types';
+import { Plus, Trash2, Edit2, Shield, Globe, Lock, Clock } from 'lucide-react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Plus, Trash2, Edit2, Shield, Globe, Lock, Clock } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { ExtendedUserProfile, GranularPermission, AccessEffect } from '../../types';
+
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface AccessMatrixEditorProps {
   profile: ExtendedUserProfile;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile }) => {
   const { theme } = useTheme();
   const [permissions, setPermissions] = useState<GranularPermission[]>(profile.accessMatrix);

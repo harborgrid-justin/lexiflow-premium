@@ -1,11 +1,33 @@
+/**
+ * @module hooks/useEvidenceVault
+ * @category Hooks - Evidence Management
+ * @description Evidence vault management hook with view routing, comprehensive filtering, chain of custody
+ * updates, and intake workflow. Manages evidence inventory, detail views, tab navigation, and multi-field
+ * filtering (search, type, admissibility, custodian, date range, location, tags, blockchain). Provides
+ * mutations for add/update with cache invalidation and optimistic UI updates.
+ * 
+ * NO THEME USAGE: Business logic hook for evidence vault operations
+ */
 
-
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useMemo, useEffect } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
-import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '../types';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 
+// Types
+import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export type ViewMode = 
   'dashboard' | 'inventory' | 'custody' | 'intake' | 'detail' | 
   'authentication' | 'relevance' | 'hearsay' | 'experts' | 'originals';
@@ -26,6 +48,9 @@ export interface EvidenceFilters {
   hasBlockchain: boolean;
 }
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useEvidenceVault = (caseId?: string) => {
   const [view, setView] = useState<ViewMode>('dashboard');
   const [activeTab, setActiveTab] = useState<DetailTab>('overview');
@@ -33,7 +58,7 @@ export const useEvidenceVault = (caseId?: string) => {
   
   // Enterprise Query: Fetch evidence. If caseId provided, filter at source or via selector.
   // Here we fetch all and filter client-side for the demo, but in prod this would be a specific API call.
-  const { data: allEvidenceItems = [] } = useQuery<EvidenceItem[]>(
+  const { data: allEvidenceItems = [], isLoading } = useQuery<EvidenceItem[]>(
       [STORES.EVIDENCE, 'all'],
       DataService.evidence.getAll
   );
@@ -140,6 +165,7 @@ export const useEvidenceVault = (caseId?: string) => {
     handleItemClick,
     handleBack,
     handleIntakeComplete,
-    handleCustodyUpdate
+    handleCustodyUpdate,
+    isLoading
   };
 };

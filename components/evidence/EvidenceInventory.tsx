@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 
 // ============================================================================
@@ -28,7 +28,9 @@ import { VirtualList } from '../common/VirtualList';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { EvidenceFilters } from '../../hooks/useEvidenceVault';
+import { AdmissibilityStatusEnum } from '../../types/enums';
 
 // Types
 import { EvidenceItem } from '../../types';
@@ -42,7 +44,7 @@ interface EvidenceInventoryProps {
   onIntakeClick: () => void;
 }
 
-export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({ 
+const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({ 
   items, filteredItems: propFiltered, filters, setFilters, onItemClick, onIntakeClick 
 }) => {
   const { theme } = useTheme();
@@ -70,18 +72,32 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
       });
   }, [textFiltered, filters]);
 
-  const handleFilterChange = (key: keyof EvidenceFilters, value: any) => {
+  const handleFilterChange = useCallback((key: keyof EvidenceFilters, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-  };
+  }, [setFilters]);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       search: '', type: '', admissibility: '', caseId: '', custodian: '',
       dateFrom: '', dateTo: '', location: '', tags: '', collectedBy: '', hasBlockchain: false
     });
-  };
+  }, [setFilters]);
 
-  const renderRow = (item: EvidenceItem) => (
+  // Memoized badge variant logic
+  const getBadgeVariant = useCallback((admissibility: string) => {
+    switch (admissibility) {
+      case AdmissibilityStatusEnum.ADMISSIBLE:
+        return 'success';
+      case AdmissibilityStatusEnum.CHALLENGED:
+        return 'warning';
+      case AdmissibilityStatusEnum.INADMISSIBLE:
+        return 'error';
+      default:
+        return 'neutral';
+    }
+  }, []);
+
+  const renderRow = useCallback((item: EvidenceItem) => (
       <div 
         key={item.id} 
         onClick={() => onItemClick(item)}
@@ -101,7 +117,7 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
           <div className="w-[15%] text-sm">{item.custodian}</div>
           <div className="w-[15%] text-xs">{item.collectionDate}</div>
           <div className="w-[10%]">
-                <Badge variant={item.admissibility === 'Admissible' ? 'success' : item.admissibility === 'Challenged' ? 'warning' : 'neutral'}>
+                <Badge variant={getBadgeVariant(item.admissibility)}>
                     {item.admissibility}
                 </Badge>
           </div>
@@ -112,7 +128,23 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
                 </div>
           </div>
       </div>
-  );
+  ), [onItemClick, theme, getBadgeVariant]);
+
+  // Keyboard shortcuts for power users
+  useKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrlOrCmd: true,
+      action: onIntakeClick,
+      description: 'Log new evidence'
+    },
+    {
+      key: 'f',
+      ctrlOrCmd: true,
+      action: () => setShowFilters(prev => !prev),
+      description: 'Toggle filters'
+    }
+  ]);
 
   return (
     <div className="space-y-4 h-full flex flex-col">
@@ -180,3 +212,6 @@ export const EvidenceInventory: React.FC<EvidenceInventoryProps> = ({
     </div>
   );
 };
+
+// Export memoized version to prevent unnecessary re-renders
+export const EvidenceInventory = React.memo(EvidenceInventoryComponent);

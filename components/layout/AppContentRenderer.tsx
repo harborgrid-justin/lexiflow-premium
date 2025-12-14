@@ -1,14 +1,46 @@
+/**
+ * @module components/layout/AppContentRenderer
+ * @category Layout
+ * @description Dynamic content renderer for application views with lazy-loaded modules, access
+ * control enforcement, case detail routing, and module prop injection. Routes between registered
+ * modules from ModuleRegistry and handles special case for CaseDetail named export.
+ * 
+ * THEME SYSTEM USAGE:
+ * - No direct theme usage (routing component)
+ * - Child components handle their own theme integration
+ */
+
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { Suspense, lazy } from 'react';
-import { AppView, User } from '../../types';
-import { ModuleRegistry } from '../../services/moduleRegistry';
-import { PATHS } from '../../constants/paths';
-import { LazyLoader } from '../common/LazyLoader';
 import { HelpCircle, Lock } from 'lucide-react';
 
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
+import { LazyLoader } from '../common/LazyLoader';
+
+// Services & Data
+import { ModuleRegistry } from '../../services/moduleRegistry';
+
+// Utils & Constants
+import { PATHS } from '../../constants/paths';
+
+// Types
+import { AppView, User } from '../../types';
+
+// ========================================
+// LAZY LOADED COMPONENTS
+// ========================================
 // OPTIMIZATION: Lazy load CaseDetail to prevent it from being bundled in the main chunk.
 // FIX: Handle named export from CaseDetail
 const CaseDetail = lazy(() => import('../case-detail/CaseDetail').then(m => ({ default: m.CaseDetail })));
 
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface AppContentRendererProps {
   activeView: AppView;
   currentUser: User;
@@ -21,6 +53,9 @@ interface AppContentRendererProps {
   initialTab?: string;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
   activeView,
   currentUser,

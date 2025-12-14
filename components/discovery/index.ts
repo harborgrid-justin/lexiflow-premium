@@ -22,3 +22,5 @@ export * from './PrivilegeLog';
 export * from './RequestForAdmission';
 export * from './TranscriptManager';
 export * from './VendorManagement';
+export * from './DiscoveryErrorBoundary';
+export * from './DiscoverySkeleton';

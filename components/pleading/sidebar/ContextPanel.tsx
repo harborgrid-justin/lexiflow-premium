@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FileText, Plus, Search, BookOpen, Users, Scale, ChevronRight, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -6,6 +6,8 @@ import { Button } from '../../common/Button';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { useDebounce } from '../../../hooks/useDebounce';
+import { DocketEntry } from '../../../types';
 
 interface ContextPanelProps {
   caseId: string;
@@ -24,37 +26,109 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedCategory, setExpandedCategory] = useState<string | null>('facts');
 
+  // Debounce search term for performance
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
   // Fetch case data
-  const { data: caseData, isLoading } = useQuery(
+  const { data: caseData, isLoading: caseLoading } = useQuery(
     [STORES.CASES, caseId],
     () => DataService.cases.getById(caseId)
   );
 
-  // Mock facts for the context panel
-  const facts: CaseFact[] = [
-    { id: '1', content: 'Plaintiff filed initial complaint on January 15, 2024.', source: 'Docket Entry #1', category: 'fact' },
-    { id: '2', content: 'Defendant served answer on February 20, 2024.', source: 'Docket Entry #5', category: 'fact' },
-    { id: '3', content: 'Contract signed between parties on March 1, 2023.', source: 'Exhibit A', category: 'evidence' },
-    { id: '4', content: 'Email correspondence confirming breach dated June 15, 2023.', source: 'Exhibit B', category: 'evidence' },
-    { id: '5', content: 'John Smith - Eyewitness to contract signing.', source: 'Witness List', category: 'witness' },
-    { id: '6', content: 'Breach of contract requires showing of damages. See Hadley v. Baxendale.', source: 'Legal Research', category: 'legal' },
-  ];
-
-  const filteredFacts = facts.filter(f => 
-    f.content.toLowerCase().includes(searchTerm.toLowerCase())
+  // Fetch evidence for the case
+  const { data: evidence = [], isLoading: evidenceLoading } = useQuery<any[]>(
+    [STORES.EVIDENCE, caseId],
+    () => DataService.evidence.getByCaseId(caseId)
   );
 
-  const categories = [
+  // Fetch docket entries
+  const { data: docketEntries = [], isLoading: docketLoading } = useQuery<DocketEntry[]>(
+    [STORES.DOCKET, caseId],
+    () => DataService.docket.getByCaseId(caseId)
+  );
+
+  // Fetch documents
+  const { data: documents = [], isLoading: documentsLoading } = useQuery<any[]>(
+    [STORES.DOCUMENTS, caseId],
+    () => DataService.documents?.getByCaseId?.(caseId) || Promise.resolve([])
+  );
+
+  // Transform real data into facts
+  const facts: CaseFact[] = useMemo(() => {
+    const allFacts: CaseFact[] = [];
+
+    // Add docket entries as facts
+    docketEntries.forEach((entry: any) => {
+      allFacts.push({
+        id: entry.id,
+        content: `${entry.title || entry.description || 'Docket Entry'} - Filed on ${entry.filedDate ? new Date(entry.filedDate).toLocaleDateString() : 'N/A'}`,
+        source: `Docket Entry #${entry.sequenceNumber || entry.id}`,
+        category: 'fact'
+      });
+    });
+
+    // Add evidence
+    evidence.forEach(item => {
+      allFacts.push({
+        id: item.id,
+        content: item.description || item.title || 'Evidence item',
+        source: `Exhibit ${item.exhibitNumber || item.id}`,
+        category: 'evidence'
+      });
+    });
+
+    // Add case parties as witnesses
+    caseData?.parties?.forEach(party => {
+      allFacts.push({
+        id: `party-${party.id || party.name}`,
+        content: `${party.name} - ${party.role}`,
+        source: 'Party List',
+        category: 'witness'
+      });
+    });
+
+    // Add legal standards placeholder (TODO: Implement legal research integration)
+    // Future: Integrate with legal research database
+    if (caseData?.description) {
+      allFacts.push({
+        id: 'legal-case-summary',
+        content: caseData.description,
+        source: 'Case Summary',
+        category: 'legal'
+      });
+    }
+
+    return allFacts;
+  }, [docketEntries, evidence, caseData]);
+
+  // Filter facts based on debounced search term
+  const filteredFacts = useMemo(() => {
+    if (!debouncedSearchTerm) return facts;
+    
+    const searchLower = debouncedSearchTerm.toLowerCase();
+    return facts.filter(f => 
+      f.content.toLowerCase().includes(searchLower) ||
+      f.source.toLowerCase().includes(searchLower)
+    );
+  }, [facts, debouncedSearchTerm]);
+
+  const isLoading = caseLoading || evidenceLoading || docketLoading || documentsLoading;
+
+  // Memoize categories to prevent recalculation
+  const categories = useMemo(() => [
     { id: 'facts', label: 'Key Facts', icon: FileText, items: filteredFacts.filter(f => f.category === 'fact') },
     { id: 'evidence', label: 'Evidence', icon: BookOpen, items: filteredFacts.filter(f => f.category === 'evidence') },
     { id: 'witnesses', label: 'Witnesses', icon: Users, items: filteredFacts.filter(f => f.category === 'witness') },
     { id: 'legal', label: 'Legal Standards', icon: Scale, items: filteredFacts.filter(f => f.category === 'legal') },
-  ];
+  ], [filteredFacts]);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+      <div className="flex items-center justify-center h-full p-4">
+        <div className="text-center">
+          <Loader2 className="h-6 w-6 animate-spin text-blue-600 mx-auto mb-2" />
+          <p className={cn("text-xs", theme.text.secondary)}>Loading case context...</p>
+        </div>
       </div>
     );
   }

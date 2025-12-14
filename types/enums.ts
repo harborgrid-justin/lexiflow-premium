@@ -26,7 +26,126 @@ export type RiskStatus = 'Identified' | 'Mitigated' | 'Accepted' | 'Closed';
 export type CommunicationType = 'Letter' | 'Email' | 'Fax' | 'Notice' | 'Memo';
 export type CommunicationDirection = 'Inbound' | 'Outbound';
 
-export type ServiceStatus = 'Draft' | 'Out for Service' | 'Attempted' | 'Served' | 'Non-Est' | 'Filed';
+// Correspondence status enums with const assertion for type safety
+export const CommunicationStatus = {
+  DRAFT: 'Draft',
+  SENT: 'Sent',
+  DELIVERED: 'Delivered',
+  READ: 'Read',
+  FAILED: 'Failed',
+  ARCHIVED: 'Archived'
+} as const;
+
+export type CommunicationStatusType = typeof CommunicationStatus[keyof typeof CommunicationStatus];
+
+export const ServiceStatus = {
+  DRAFT: 'Draft',
+  OUT_FOR_SERVICE: 'Out for Service',
+  ATTEMPTED: 'Attempted',
+  SERVED: 'Served',
+  NON_EST: 'Non-Est',
+  FILED: 'Filed',
+  RETURNED: 'Returned'
+} as const;
+
+// Billing status enums with const assertion for type safety
+export const InvoiceStatusEnum = {
+  DRAFT: 'Draft',
+  PENDING: 'Pending',
+  SENT: 'Sent',
+  PARTIAL: 'Partial',
+  PAID: 'Paid',
+  OVERDUE: 'Overdue',
+  WRITTEN_OFF: 'Written Off',
+  CANCELLED: 'Cancelled'
+} as const;
+
+export type InvoiceStatus = typeof InvoiceStatusEnum[keyof typeof InvoiceStatusEnum];
+
+export const PaymentStatusEnum = {
+  PENDING: 'Pending',
+  PROCESSING: 'Processing',
+  COMPLETED: 'Completed',
+  FAILED: 'Failed',
+  REFUNDED: 'Refunded'
+} as const;
+
+export type PaymentStatus = typeof PaymentStatusEnum[keyof typeof PaymentStatusEnum];
+
+export const WIPStatusEnum = {
+  UNBILLED: 'Unbilled',
+  READY_TO_BILL: 'Ready to Bill',
+  BILLED: 'Billed',
+  WRITTEN_OFF: 'Written Off'
+} as const;
+
+export type WIPStatus = typeof WIPStatusEnum[keyof typeof WIPStatusEnum];
+
+export const ExpenseStatusEnum = {
+  DRAFT: 'Draft',
+  SUBMITTED: 'Submitted',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
+  BILLED: 'Billed',
+  REIMBURSED: 'Reimbursed'
+} as const;
+
+export type ExpenseStatus = typeof ExpenseStatusEnum[keyof typeof ExpenseStatusEnum];
+
+export const TrustAccountStatusEnum = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  SUSPENDED: 'Suspended',
+  CLOSED: 'Closed'
+} as const;
+
+export type TrustAccountStatus = typeof TrustAccountStatusEnum[keyof typeof TrustAccountStatusEnum];
+
+export type ServiceStatusType = typeof ServiceStatus[keyof typeof ServiceStatus];
+
+// Discovery request status enums
+export const DiscoveryRequestStatusEnum = {
+  SERVED: 'Served',
+  PENDING: 'Pending',
+  RESPONDED: 'Responded',
+  OVERDUE: 'Overdue'
+} as const;
+
+export type DiscoveryRequestStatusType = typeof DiscoveryRequestStatusEnum[keyof typeof DiscoveryRequestStatusEnum];
+
+// ESI collection status enums
+export const ESICollectionStatusEnum = {
+  PENDING: 'Pending',
+  COLLECTING: 'Collecting',
+  COLLECTED: 'Collected',
+  PROCESSING: 'Processing',
+  PROCESSED: 'Processed',
+  PRODUCED: 'Produced',
+  ERROR: 'Error'
+} as const;
+
+export type ESICollectionStatusType = typeof ESICollectionStatusEnum[keyof typeof ESICollectionStatusEnum];
+
+// Legal hold status enums
+export const LegalHoldStatusEnum = {
+  PENDING: 'Pending',
+  ACKNOWLEDGED: 'Acknowledged',
+  REMINDER_SENT: 'Reminder Sent',
+  RELEASED: 'Released'
+} as const;
+
+export type LegalHoldStatusType = typeof LegalHoldStatusEnum[keyof typeof LegalHoldStatusEnum];
+
+// Privilege basis enums
+export const PrivilegeBasisEnum = {
+  ATTORNEY_CLIENT: 'Attorney-Client',
+  WORK_PRODUCT: 'Work Product',
+  JOINT_DEFENSE: 'Joint Defense',
+  COMMON_INTEREST: 'Common Interest'
+} as const;
+
+export type PrivilegeBasisType = typeof PrivilegeBasisEnum[keyof typeof PrivilegeBasisEnum];
+
 export type ServiceMethod = 'Process Server' | 'Mail';
 
 export type ExhibitStatus = 'Marked' | 'Offered' | 'Admitted' | 'Excluded' | 'Withdrawn';
@@ -43,6 +162,29 @@ export type DiscoveryStatus = 'Draft' | 'Served' | 'Responded' | 'Overdue' | 'Cl
 
 export type EvidenceType = 'Physical' | 'Digital' | 'Document' | 'Testimony' | 'Forensic';
 export type AdmissibilityStatus = 'Admissible' | 'Challenged' | 'Inadmissible' | 'Pending';
+
+// Evidence status enums with const assertion for type safety
+export const AdmissibilityStatusEnum = {
+  ADMISSIBLE: 'Admissible',
+  CHALLENGED: 'Challenged',
+  INADMISSIBLE: 'Inadmissible',
+  PENDING: 'Pending'
+} as const;
+
+export type AdmissibilityStatusType = typeof AdmissibilityStatusEnum[keyof typeof AdmissibilityStatusEnum];
+
+export const CustodyActionType = {
+  INITIAL_COLLECTION: 'Initial Collection',
+  TRANSFER_TO_STORAGE: 'Transfer to Storage',
+  TRANSFER_TO_LAB: 'Transfer to Lab',
+  RETURNED_TO_CLIENT: 'Returned to Client',
+  SENT_FOR_ANALYSIS: 'Sent for Analysis',
+  CHECKED_OUT: 'Checked Out',
+  CHECKED_IN: 'Checked In',
+  DISPOSED: 'Disposed'
+} as const;
+
+export type CustodyActionTypeValue = typeof CustodyActionType[keyof typeof CustodyActionType];
 
 export type ConferralResult = 'Agreed' | 'Impasse' | 'Partial Agreement' | 'Pending';
 export type ConferralMethod = 'Email' | 'Phone' | 'In-Person' | 'Video Conference';

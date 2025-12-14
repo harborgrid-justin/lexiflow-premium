@@ -1,15 +1,46 @@
+/**
+ * @module components/layout/MobileBottomNav
+ * @category Layout - Mobile
+ * @description Mobile-only bottom navigation bar displaying primary navigation items with icons
+ * and labels. Fixed at bottom of viewport for thumb-friendly access on mobile devices.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.surface.default - Navigation bar background
+ * - theme.border.default - Top border
+ * - theme.primary.text - Active navigation item
+ * - theme.text.secondary/tertiary - Inactive items
+ */
+
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React from 'react';
-import { AppView } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { NAVIGATION_ITEMS } from '../../constants/navConfig';
 import { Home, Briefcase, FileText, Users, MoreHorizontal } from 'lucide-react';
 
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+import { NAVIGATION_ITEMS } from '../../constants/navConfig';
+
+// Types
+import { AppView } from '../../types';
+
+// ========================================
+// TYPES & INTERFACES
+// ========================================
 interface MobileBottomNavProps {
   activeView: AppView;
   setActiveView: (view: AppView) => void;
 }
 
+// ========================================
+// COMPONENT
+// ========================================
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeView, setActiveView }) => {
   const { theme } = useTheme();
 

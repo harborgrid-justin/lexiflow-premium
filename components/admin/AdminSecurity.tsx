@@ -1,19 +1,53 @@
+/**
+ * @module components/admin/AdminSecurity
+ * @category Admin Panel
+ * @description Admin security dashboard with authentication policy controls, threat detection using
+ * Bloom Filter for IP blacklist checking, and access log monitoring. Provides security settings
+ * toggles and rapid IP verification against botnet database.
+ * 
+ * THEME SYSTEM USAGE:
+ * - theme.surface.primary/highlight - Card backgrounds and control sections
+ * - theme.text.primary/secondary - Setting labels and descriptions
+ * - theme.border.default/subtle - Card borders and control dividers
+ * - theme.status.success/error - IP check results and security status
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import React, { useState, useEffect } from 'react';
+import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+
+// ========================================
+// INTERNAL DEPENDENCIES
+// ========================================
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Services & Data
 import { DataService } from '../../services/dataService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 import { BloomFilter } from '../../utils/bloomFilter';
 
+
+// ========================================
+// BLOOM FILTER INITIALIZATION
+// ========================================
 // Initialize Bloom Filter with 1000 items capacity and 1% false positive rate
 const ipBlacklist = new BloomFilter(1000, 0.01);
 // Seed with some mock malicious IPs
 ['192.168.1.55', '10.0.0.99', '172.16.0.4'].forEach(ip => ipBlacklist.add(ip));
 
+// ========================================
+// COMPONENT
+// ========================================
 export const AdminSecurity: React.FC = () => {
   const { theme } = useTheme();
   const [testIp, setTestIp] = useState('');

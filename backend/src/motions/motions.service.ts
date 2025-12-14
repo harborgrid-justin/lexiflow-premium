@@ -15,7 +15,7 @@ export class MotionsService {
   async findAllByCaseId(caseId: string): Promise<Motion[]> {
     return this.motionRepository.find({
       where: { caseId },
-      order: { filedDate: 'DESC', createdAt: 'DESC' },
+      order: { filingDate: 'DESC', createdAt: 'DESC' },
     });
   }
 

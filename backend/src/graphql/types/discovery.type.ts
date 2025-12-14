@@ -2,7 +2,7 @@ import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { UserType } from './user.type';
 import { DocumentType } from './document.type';
 
-export enum DiscoveryRequestType {
+export enum DiscoveryType {
   INTERROGATORY = 'INTERROGATORY',
   REQUEST_FOR_PRODUCTION = 'REQUEST_FOR_PRODUCTION',
   REQUEST_FOR_ADMISSION = 'REQUEST_FOR_ADMISSION',
@@ -26,7 +26,7 @@ export enum DepositionStatus {
   POSTPONED = 'POSTPONED',
 }
 
-registerEnumType(DiscoveryRequestType, { name: 'DiscoveryRequestType' });
+registerEnumType(DiscoveryType, { name: 'DiscoveryType' });
 registerEnumType(DiscoveryRequestStatus, { name: 'DiscoveryRequestStatus' });
 registerEnumType(DepositionStatus, { name: 'DepositionStatus' });
 

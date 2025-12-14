@@ -1,6 +1,21 @@
+/**
+ * @module hooks/useClickOutside
+ * @category Hooks - UI Utilities
+ * @description Detects clicks outside a referenced element and triggers handler callback. Listens
+ * for both mouse and touch events. Uses ref callback pattern to keep handler fresh without
+ * re-binding listeners.
+ * 
+ * NO THEME USAGE: Utility hook for click detection logic
+ */
 
+// ========================================
+// EXTERNAL DEPENDENCIES
+// ========================================
 import { useEffect, RefObject, useRef } from 'react';
 
+// ========================================
+// HOOK
+// ========================================
 export function useClickOutside<T extends HTMLElement>(
   ref: RefObject<T>,
   handler: (event: MouseEvent | TouchEvent) => void

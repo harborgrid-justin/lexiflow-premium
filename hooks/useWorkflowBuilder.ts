@@ -1,8 +1,31 @@
+/**
+ * @module hooks/useWorkflowBuilder
+ * @category Hooks - Workflow
+ * @description Generic workflow builder hook managing nodes, connections, and visual graph structure. Supports
+ * template initialization (converts stage list to node graph), node CRUD (add/update/delete with type-specific
+ * config like decision ports), and connection CRUD with self-connection prevention and duplicate detection.
+ * Provides base workflow building capabilities for all workflow types (not litigation-specific).
+ * 
+ * NO THEME USAGE: Business logic hook for workflow graph building
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useState, useCallback } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Utils & Constants
 import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '../components/workflow/builder/types';
+
+// Types
 import { WorkflowTemplateData } from '../types';
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null) => {
   const [nodes, setNodes] = useState<WorkflowNode[]>(() => {
     if (initialTemplate) {

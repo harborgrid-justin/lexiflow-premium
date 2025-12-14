@@ -1,12 +1,36 @@
+/**
+ * @module hooks/useSecureMessenger
+ * @category Hooks - Messaging
+ * @description Secure messenger hook managing conversations, messages, contacts, and file attachments
+ * with privilege mode support. Handles conversation sorting, filtering, draft persistence, optimistic
+ * UI updates, and deferred file indexing via Scheduler for performance.
+ * 
+ * NO THEME USAGE: Business logic hook for messaging state management
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useEffect } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../services/dataService';
-import { Conversation, Message, Attachment } from '../types';
+
+// Utils & Constants
 import { Scheduler } from '../utils/scheduler';
+
+// Types
+import { Conversation, Message, Attachment } from '../types';
 
 // Re-export types for consumers
 export type { Conversation, Message, Attachment };
 
+// ============================================================================
+// HOOK
+// ============================================================================
 export const useSecureMessenger = () => {
   const [view, setView] = useState<'chats' | 'contacts' | 'files' | 'archived'>('chats');
   const [conversations, setConversations] = useState<Conversation[]>([]);

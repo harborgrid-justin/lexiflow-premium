@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class AppService {
+  constructor(
+    @InjectDataSource() private dataSource: DataSource,
+  ) {}
+
   getRoot() {
     return {
       name: 'LexiFlow Enterprise API',
@@ -16,15 +22,31 @@ export class AppService {
     };
   }
 
-  getHealth() {
+  async getHealth() {
+    const databaseStatus = await this.checkDatabaseConnection();
+    
     return {
-      status: 'ok',
+      status: databaseStatus.connected ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'development',
       service: 'LexiFlow Enterprise API',
       version: '1.0.0',
+      database: {
+        status: databaseStatus.connected ? 'Connected' : 'Disconnected',
+        type: 'PostgreSQL',
+        isInitialized: this.dataSource.isInitialized,
+      },
     };
+  }
+
+  private async checkDatabaseConnection(): Promise<{ connected: boolean }> {
+    try {
+      await this.dataSource.query('SELECT 1');
+      return { connected: true };
+    } catch (error) {
+      return { connected: false };
+    }
   }
 
   getVersion() {

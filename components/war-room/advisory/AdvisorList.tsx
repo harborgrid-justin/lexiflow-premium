@@ -1,23 +1,36 @@
-
 /**
- * @module AdvisorList
+ * @module components/war-room/advisory/AdvisorList
  * @category WarRoom
  * @description List view of advisors with filtering, sorting, and status indicators.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Phone, Mail, MoreHorizontal, FileText, CheckSquare } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../../context/ThemeContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { UserAvatar } from '../../common/UserAvatar';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 
-// Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface Advisor {
   id: string;
   name: string;
@@ -32,10 +45,17 @@ export interface Advisor {
 }
 
 interface AdvisorListProps {
+  /** Array of advisor objects to display. */
   advisors: Advisor[];
+  /** Callback when an advisor is selected. */
   onSelect: (advisor: Advisor) => void;
+  /** ID of the currently selected advisor. */
   selectedId?: string;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, selectedId }) => {
   const { theme } = useTheme();
@@ -88,7 +108,7 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                                     <span className="font-bold">{adv.readiness}%</span>
                                 </div>
                                 <div className={cn("w-full rounded-full h-1.5 border", theme.surface.highlight, theme.border.default)}>
-                                    <div className={cn("h-full rounded-full transition-all", adv.readiness === 100 ? "bg-emerald-500" : theme.primary.bg)} style={{ width: `${adv.readiness}%` }}></div>
+                                    <div className={cn("h-full rounded-full transition-all", adv.readiness === 100 ? "bg-emerald-500" : theme.primary.DEFAULT)} style={{ width: `${adv.readiness}%` }}></div>
                                 </div>
                             </div>
                         </TableCell>

@@ -1,22 +1,55 @@
+/**
+ * @module components/common/Modal
+ * @category Common Components
+ * @description Modal dialog with backdrop and size variants.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useEffect, useState, useRef } from 'react';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useScrollLock } from '../../hooks/useScrollLock';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 import { tokens } from '../../theme/tokens';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ModalProps {
+  /** Whether the modal is open. */
   isOpen: boolean;
+  /** Callback when the modal is closed. */
   onClose: () => void;
+  /** Modal title. */
   title: React.ReactNode;
+  /** Modal content. */
   children: React.ReactNode;
+  /** Modal size variant. */
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  /** Additional CSS classes. */
   className?: string;
+  /** Optional footer content. */
   footer?: React.ReactNode;
+  /** Whether clicking backdrop closes modal. */
   closeOnBackdrop?: boolean; 
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const Modal: React.FC<ModalProps> = ({ 
     isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true 

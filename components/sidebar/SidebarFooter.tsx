@@ -1,18 +1,52 @@
+/**
+ * @module components/sidebar/SidebarFooter
+ * @category Layout
+ * @description Footer section of the sidebar with user menu and actions.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { ChevronDown, LogOut, Settings } from 'lucide-react';
-import { User as UserType } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useWindow } from '../../context/WindowContext';
-import { PATHS } from '../../constants/paths';
+
+// Components
 import { UserAvatar } from '../common/UserAvatar';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+import { PATHS } from '../../constants/paths';
+
+// Types
+import type { User as UserType } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface SidebarFooterProps {
+  /** Current user information. */
   currentUser: UserType;
+  /** Callback when switch user is triggered. */
   onSwitchUser: () => void;
+  /** Callback for navigation. */
   onNavigate: (path: string) => void;
+  /** Currently active view path. */
   activeView: string;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const SidebarFooter: React.FC<SidebarFooterProps> = ({ currentUser, onSwitchUser, onNavigate, activeView }) => {
   const { theme } = useTheme();

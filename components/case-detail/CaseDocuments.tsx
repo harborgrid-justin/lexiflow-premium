@@ -34,7 +34,7 @@ import { cn } from '../../utils/cn';
 import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../types';
 import { SystemEventType } from '../../types/integrationTypes';
 
-const DocumentAssembly = lazy(() => import('../DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
+const DocumentAssembly = lazy(() => import('../documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 
 interface CaseDocumentsProps {
   documents: LegalDocument[];
@@ -44,13 +44,20 @@ interface CaseDocumentsProps {
 }
 
 export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzingId, onAnalyze, onDocumentCreated }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
-  const [taskModalDoc, setTaskModalDoc] = useState<LegalDocument | null>(null);
   const { openWindow, closeWindow } = useWindow();
+  const notify = useNotify();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
+  const [taskModalDoc, setTaskModalDoc] = useState<LegalDocument | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [logAsEvidence, setLogAsEvidence] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const notify = useNotify();
 
   const handleOpenWizard = () => {
     const id = 'doc-assembly-wizard';
@@ -59,7 +66,6 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
       'Drafting Wizard',
       <Suspense fallback={<Loader2 className={cn("animate-spin h-8 w-8", theme.text.link)} />}>
         <DocumentAssembly
-          windowId={id}
           caseTitle="Current Case"
           onClose={() => closeWindow(id)}
           onSave={(doc) => {

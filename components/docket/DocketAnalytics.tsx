@@ -1,23 +1,29 @@
 /**
- * DocketAnalytics.tsx
- * 
- * Analytics dashboard for docket activity with filing trends, party distribution,
- * and document type breakdowns.
- * 
  * @module components/docket/DocketAnalytics
- * @category Case Management - Docket
+ * @category Docket Management
+ * @description Analytics dashboard with filing trends and document breakdowns.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
-// External Dependencies
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
-// Internal Dependencies - Components
-import { Card } from '../common/Card';
-
-// Internal Dependencies - Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Card } from '../common/Card';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';

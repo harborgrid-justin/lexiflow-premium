@@ -1,20 +1,48 @@
+/**
+ * @module components/practice/AssetManager
+ * @category Practice Management
+ * @description IT asset tracking and management with off-thread search.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
-import { DataService } from '../../services/dataService';
-import { FirmAsset } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
-import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { FirmAsset } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const AssetManager: React.FC = () => {
   const { theme } = useTheme();

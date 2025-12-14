@@ -1,17 +1,42 @@
+/**
+ * @module components/common/TaskCreationModal
+ * @category Common
+ * @description Modal for creating workflow tasks.
+ *
+ * THEME SYSTEM USAGE:
+ * Inherits theme from Modal component.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
+import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { queryClient } from '../../services/queryClient';
+import { MOCK_USERS } from '../../data/models/user';
+
+// Hooks & Context
+import { useNotify } from '../../hooks/useNotify';
+
+// Components
 import { Modal } from './Modal';
 import { Input, TextArea } from './Inputs';
 import { Button } from './Button';
-import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
-import { WorkflowTask, TaskId, ProjectId, CaseId } from '../../types';
 import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
-import { MOCK_USERS } from '../../data/models/user';
-import { DataService } from '../../services/dataService';
-import { useNotify } from '../../hooks/useNotify';
-import { queryClient } from '../../services/queryClient';
 
+// Types
+import { WorkflowTask, TaskId, ProjectId, CaseId } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface TaskCreationModalProps {
   isOpen: boolean;
   onClose: () => void;

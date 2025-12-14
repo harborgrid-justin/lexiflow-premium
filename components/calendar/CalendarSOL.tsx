@@ -1,9 +1,31 @@
+/**
+ * @module components/calendar/CalendarSOL
+ * @category Calendar
+ * @description Statute of limitations tracker with critical alerts.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { AlertTriangle, ShieldAlert, MapPin, Loader2 } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Components
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarSOL: React.FC = () => {
   // Enterprise Data Access

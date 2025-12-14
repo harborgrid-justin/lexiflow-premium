@@ -1,10 +1,33 @@
+/**
+ * @module components/dashboard/DashboardMetrics
+ * @category Dashboard
+ * @description Live-updating metrics cards displaying key firm statistics with
+ * real-time simulation and trend indicators.
+ *
+ * THEME SYSTEM USAGE:
+ * This component delegates to MetricCard which uses the theme system.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { MetricCard } from '../common/Primitives';
 import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
-import { useInterval } from '@/hooks/useInterval';
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
+import { useInterval } from '../../hooks/useInterval';
+
+// Components
+import { MetricCard } from '../common/Primitives';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface DashboardMetricsProps {
+    /** Statistics object with key firm metrics. */
     stats: {
         activeCases: number;
         pendingMotions: number;
@@ -12,6 +35,10 @@ interface DashboardMetricsProps {
         highRisks: number;
     } | null;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const DashboardMetrics: React.FC<DashboardMetricsProps> = ({ stats }) => {
   // Use state to allow local simulation of "Live" updates

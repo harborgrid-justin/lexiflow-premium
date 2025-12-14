@@ -1,8 +1,26 @@
+/**
+ * @module components/practice/FirmOperations
+ * @category Practice Management
+ * @description Centralized firm operations with HR, finance, and marketing.
+ *
+ * THEME SYSTEM USAGE:
+ * Theme applied through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy } from 'react';
 import { Users, TrendingUp, Building2, Briefcase, Laptop, Wallet, BookOpen, ShieldAlert, MapPin, Target, ShoppingCart } from 'lucide-react';
-import { Button } from '../common/Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
+import { Button } from '../common/Button';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 

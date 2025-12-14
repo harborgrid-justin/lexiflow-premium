@@ -1,9 +1,30 @@
+/**
+ * @module components/common/EditorToolbar
+ * @category Common
+ * @description Rich text editor toolbar with formatting controls.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Bold, Italic, Underline, List, AlignLeft, AlignCenter, AlignRight, Highlighter, Save } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EditorToolbarProps {
   wordCount: number;
   onCmd: (cmd: string, val?: string) => void;

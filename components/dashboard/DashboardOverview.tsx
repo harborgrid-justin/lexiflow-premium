@@ -1,17 +1,48 @@
+/**
+ * @module components/dashboard/DashboardOverview
+ * @category Dashboard
+ * @description Main overview dashboard combining metrics, analytics, and sidebar.
+ *
+ * THEME SYSTEM USAGE:
+ * This component delegates to child components that use the theme system.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Components
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardSidebar } from './DashboardSidebar';
-import { DataService } from '../../services/dataService';
 import { LazyLoader } from '../common/LazyLoader';
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { WorkflowTask } from '../../types';
+
+// Utils & Constants
 import { Scheduler } from '../../utils/scheduler';
 
+// Types
+import type { WorkflowTask } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface DashboardOverviewProps {
+  /** Callback when a case is selected. */
   onSelectCase: (caseId: string) => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCase }) => {
   // Enterprise Data Access: Parallel Queries with Caching

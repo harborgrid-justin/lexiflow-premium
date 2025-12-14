@@ -1,10 +1,32 @@
+/**
+ * @module components/calendar/CalendarMaster
+ * @category Calendar
+ * @description Master calendar with month and list views.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { useCalendarView } from '@/hooks/useCalendarView';
+import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useCalendarView } from '../../hooks/useCalendarView';
+
+// Components
 import { CalendarToolbar } from '../common/CalendarToolbar';
 import { CalendarGrid } from '../common/CalendarGrid';
 import { CalendarEvent } from '../common/CalendarEvent';
-import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarMaster: React.FC = () => {
   const {

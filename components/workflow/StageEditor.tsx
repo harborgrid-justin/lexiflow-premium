@@ -1,9 +1,33 @@
+/**
+ * @module components/workflow/StageEditor
+ * @category Workflow
+ * @description Editor for workflow stages with drag-and-drop reordering.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { Button } from '../common/Button';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const StageEditor: React.FC = () => {
   const { theme } = useTheme();

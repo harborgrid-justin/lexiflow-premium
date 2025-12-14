@@ -1,19 +1,42 @@
+/**
+ * @module components/research/ResearchTool
+ * @category Legal Research
+ * @description Legal research tool with case law, statutes, and citation analysis.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
-// components/ResearchTool.tsx
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import {
   Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp,
   BrainCircuit, Map, Calculator, FileText, Bookmark, Library
 } from 'lucide-react';
-import { LazyLoader } from '../common/LazyLoader';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { JudgeProfile, Clause } from '../../types';
-import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+
+// Hooks & Context
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { LazyLoader } from '../common/LazyLoader';
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { ResearchToolContent } from './ResearchToolContent';
+
+// Utils & Config
 import { cn } from '../../utils/cn';
 import { RESEARCH_TAB_CONFIG } from '../../config/researchToolConfig';
-import { ResearchToolContent } from './ResearchToolContent';
+
+// Types
+import { JudgeProfile, Clause } from '../../types';
 
 const ClauseHistoryModal = lazy(async () => {
   const module = await import('../clauses/ClauseHistoryModal');

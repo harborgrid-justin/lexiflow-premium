@@ -1,9 +1,32 @@
+/**
+ * @module components/common/ManagerLayout
+ * @category Common
+ * @description Manager layout with header, sidebar, and content.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { PageHeader } from './PageHeader';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { PageHeader } from './PageHeader';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ManagerLayoutProps {
   title: string;
   subtitle?: string;

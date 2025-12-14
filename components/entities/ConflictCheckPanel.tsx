@@ -1,10 +1,36 @@
+/**
+ * @module components/entities/ConflictCheckPanel
+ * @category Entity Management - Conflict Checks
+ * @description Comprehensive conflict clearance search against all known entities, aliases, and adverse parties.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border. Hardcoded red/green colors for conflict warnings and clearance.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useTransition } from 'react';
-import { LegalEntity } from '../../types';
-import { Button } from '../common/Button';
 import { AlertTriangle, CheckCircle, Shield, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ConflictCheckPanelProps {
   entities: LegalEntity[];
 }

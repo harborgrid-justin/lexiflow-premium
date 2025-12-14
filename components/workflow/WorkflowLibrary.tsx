@@ -1,19 +1,51 @@
+/**
+ * @module components/workflow/WorkflowLibrary
+ * @category Workflow
+ * @description Workflow template library with preview and creation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
 import { Search, Shield, Plus, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
-import { TemplatePreview } from './TemplatePreview';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { WorkflowTemplateData } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { TemplatePreview } from './TemplatePreview';
 import { EmptyState } from '../common/EmptyState';
 import { Button } from '../common/Button';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { WorkflowTemplateData } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface WorkflowLibraryProps {
+  /** Callback when creating a new workflow. */
   onCreate: (template?: WorkflowTemplateData) => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) => {
   const { theme } = useTheme();

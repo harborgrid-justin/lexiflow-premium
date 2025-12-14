@@ -1,10 +1,31 @@
+/**
+ * @module components/common/Primitives
+ * @category Common Components - UI Primitives
+ * @description Collection of small reusable UI primitives including status dots, currency displays, date text, file icons, loading spinners, tags, section headers, and truncated text.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses semantic tokens from theme (surface, text, border, status, primary) for consistent theming.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useEffect, useState, useRef } from 'react';
 import { Loader2, FileText, Image as ImageIcon, Film, Music, Box, Shield, Activity, Calendar, TrendingUp, TrendingDown } from 'lucide-react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 import { Formatters } from '../../utils/formatters';
 import { StatusRegistry } from '../../utils/statusRegistry';
+
+// ============================================================================
+// COMPONENT
 
 // 1. Status Dot - Now uses Registry
 export const StatusDot: React.FC<{ status: string; size?: string; className?: string }> = ({ status, size = "w-2.5 h-2.5", className }) => {

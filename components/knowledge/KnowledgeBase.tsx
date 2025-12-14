@@ -1,16 +1,45 @@
+/**
+ * @module components/knowledge/KnowledgeBase
+ * @category Knowledge Management
+ * @description Central knowledge base with wiki, Q&A, and precedent repositories.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, useTransition } from 'react';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
-import { TabbedPageLayout } from '../layout/TabbedPageLayout';
-import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../../utils/cn';
-import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../config/knowledgeBaseConfig';
-import { KnowledgeContent } from './KnowledgeContent';
-import { Button } from '../common/Button';
 import { Plus } from 'lucide-react';
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
+import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { LazyLoader } from '../common/LazyLoader';
+import { KnowledgeContent } from './KnowledgeContent';
+import { Button } from '../common/Button';
+
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../config/knowledgeBaseConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface KnowledgeBaseProps {
+    /** Optional initial tab to display. */
     initialTab?: KnowledgeView;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ initialTab }) => {
     const [isPending, startTransition] = useTransition();

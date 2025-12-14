@@ -1,22 +1,42 @@
-
 /**
- * @module AdvisorySidebar
+ * @module components/war-room/advisory/AdvisorySidebar
  * @category WarRoom
  * @description Sidebar for filtering advisors by role and specialty.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Users, Briefcase, Stethoscope, Microscope, BrainCircuit, Gavel } from 'lucide-react';
 
-// Context & Utils
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface AdvisorySidebarProps {
+  /** Currently active filter category. */
   activeCategory: string;
+  /** Callback when a category is selected. */
   onSelectCategory: (category: string) => void;
+  /** Count metrics for each category. */
   counts: { all: number; experts: number; consultants: number };
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const AdvisorySidebar: React.FC<AdvisorySidebarProps> = ({ activeCategory, onSelectCategory, counts }) => {
   const { theme } = useTheme();

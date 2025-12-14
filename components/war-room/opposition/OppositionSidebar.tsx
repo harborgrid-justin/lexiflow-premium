@@ -1,22 +1,42 @@
 /**
- * @module OppositionSidebar
+ * @module components/war-room/opposition/OppositionSidebar
  * @category WarRoom
  * @description Sidebar navigation for filtering opposition entities.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Users, Briefcase, Gavel, Microscope, AlertTriangle } from 'lucide-react';
 
-// Context & Utils
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface OppositionSidebarProps {
+  /** Currently active filter category. */
   activeCategory: string;
+  /** Callback when a category is selected. */
   onSelectCategory: (category: string) => void;
+  /** Count metrics for each category. */
   counts: { all: number; counsel: number; parties: number; experts: number };
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const OppositionSidebar: React.FC<OppositionSidebarProps> = ({ activeCategory, onSelectCategory, counts }) => {
   const { theme } = useTheme();
 
@@ -28,7 +48,7 @@ export const OppositionSidebar: React.FC<OppositionSidebarProps> = ({ activeCate
   ];
 
   return (
-    <div className={cn("w-64 border-r flex flex-col shrink-0 hidden md:flex", theme.surface.subtle, theme.border.default)}>
+    <div className={cn("w-64 border-r flex flex-col shrink-0 hidden md:flex", theme.surface.highlight, theme.border.default)}>
         <div className={cn("p-4 border-b", theme.border.default)}>
             <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Categories</h4>
             <div className="space-y-1">

@@ -1,21 +1,53 @@
+/**
+ * @module components/dashboard/Dashboard
+ * @category Dashboard
+ * @description Main dashboard component with real-time firm intelligence and personal
+ * productivity center. Provides tabbed navigation across overview, tasks, and notifications.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook indirectly through child components.
+ */
 
-// components/dashboard/Dashboard.tsx
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, useTransition } from 'react';
+import { Download, ShieldCheck } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
 import { Button } from '../common/Button';
-import { LayoutDashboard, CheckSquare, Bell, Download, PieChart, Activity, ShieldCheck } from 'lucide-react';
 import { LazyLoader } from '../common/LazyLoader';
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { DashboardContent } from './DashboardContent';
+
+// Utils & Config
 import { cn } from '../../utils/cn';
 import { DASHBOARD_TAB_CONFIG } from '../../config/dashboardConfig';
-import { DashboardContent } from './DashboardContent';
-import { User } from '../../types';
 
+// Types
+import type { User } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface DashboardProps {
+  /** Callback when a case is selected from the dashboard. */
   onSelectCase: (caseId: string) => void;
+  /** Optional initial tab to display. */
   initialTab?: string;
+  /** Current user information. */
   currentUser: User;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, currentUser }) => {
   const [isPending, startTransition] = useTransition();

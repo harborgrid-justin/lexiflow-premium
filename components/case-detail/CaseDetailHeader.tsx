@@ -43,10 +43,15 @@ interface CaseDetailHeaderProps {
 export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({ 
   id, title, status, client, clientId, jurisdiction, onBack, onShowTimeline
 }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
 
-  // Enterprise Feature: Live data in header with frequent polling
+  // ============================================================================
+  // DATA FETCHING
+  // ============================================================================
   const { data: openTasks } = useQuery(['tasks', id, 'count'], () => DataService.tasks.countByCaseId(id), { refetchOnWindowFocus: true, staleTime: 5000 });
   const { data: unreadMessages } = useQuery(['messages', id, 'count'], () => DataService.messenger.countUnread(id), { refetchOnWindowFocus: true, staleTime: 5000 });
 
@@ -56,7 +61,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
           winId,
           `Client Portal: ${client}`,
           <ClientPortalModal 
-             client={{ id: clientId || 'unknown', name: client, industry: 'General', status: 'Active', totalBilled: 0, matters: [id] }} 
+             client={{ id: (clientId || 'unknown') as any, name: client, industry: 'General', status: 'Active', totalBilled: 0, matters: [id as any] }} 
              onClose={() => closeWindow(winId)}
           />
       );

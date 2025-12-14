@@ -1,13 +1,37 @@
+/**
+ * @module components/common/PDFViewer
+ * @category Common
+ * @description PDF viewer with canvas rendering.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader2, AlertCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import * as pdfjsLib from 'pdfjs-dist';
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
 // Configure PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface PDFViewerProps {
   url: string | null;
   scale?: number;

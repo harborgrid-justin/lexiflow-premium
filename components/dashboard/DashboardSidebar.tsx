@@ -1,14 +1,39 @@
+/**
+ * @module components/dashboard/DashboardSidebar
+ * @category Dashboard
+ * @description Sidebar panel displaying firm alerts, notifications, and billing statistics.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
+ */
 
-import React, { useEffect, useState } from 'react';
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
-import { DateText } from '../common/Primitives';
-import { AlertCircle, TrendingUp, ArrowRight, FileText } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
+import React from 'react';
+import { AlertCircle, TrendingUp, FileText, ArrowRight } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
+import { DateText } from '../common/Primitives';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 export interface DashboardAlert {
   id: number;
   message: string;
@@ -24,9 +49,15 @@ interface BillingStats {
 }
 
 interface DashboardSidebarProps {
+  /** Callback when a case is selected from an alert. */
   onSelectCase: (caseId: string) => void;
+  /** Array of dashboard alerts to display. */
   alerts: DashboardAlert[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase, alerts }) => {
   const { theme } = useTheme();

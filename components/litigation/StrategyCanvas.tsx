@@ -1,11 +1,11 @@
 
 /**
- * StrategyCanvas.tsx
- * 
- * Interactive canvas for designing litigation strategies using a node-based interface.
- * Supports drag-and-drop, zooming, panning, and context menus.
- * 
  * @module components/litigation/StrategyCanvas
+ * @category Litigation
+ * @description Node-based strategy canvas with drag-and-drop and context menus.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
 import React, { useState, useRef, useCallback } from 'react';

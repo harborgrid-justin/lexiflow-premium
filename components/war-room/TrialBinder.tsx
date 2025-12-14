@@ -1,26 +1,42 @@
-
 /**
- * @module TrialBinder
+ * @module components/war-room/TrialBinder
  * @category WarRoom
  * @description Digital trial binder organizing motions, orders, filings, and witness prep materials.
  * Provides a hierarchical view of case documents.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors for backgrounds,
+ * text, and borders, ensuring a consistent look in both light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
 import { Folder, FileText, ChevronRight, Gavel, BookOpen, Plus, File, Scale, MoreVertical } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Button } from '../common/Button';
 
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
 // Types
-import { WarRoomData } from '../../types';
+import type { WarRoomData } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface TrialBinderProps {
+  /** The ID of the current case. */
   caseId: string;
+  /** The comprehensive data object for the war room. */
   warRoomData: WarRoomData;
 }
 
@@ -31,11 +47,24 @@ interface BinderSection {
   documents: any[];
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [selectedSectionId, setSelectedSectionId] = useState<string>('motions');
 
-  // Memoize sections to prevent expensive re-mapping on every render
+  // ============================================================================
+  // MEMOIZED VALUES
+  // ============================================================================
   const sections: BinderSection[] = useMemo(() => {
       const motions = (warRoomData.motions || []).map((m) => ({ ...m, docType: 'Motion', date: m.filingDate }));
       const orders = (warRoomData.docket || []).filter((d) => d.type === 'Order').map((d) => ({ ...d, docType: 'Order' }));

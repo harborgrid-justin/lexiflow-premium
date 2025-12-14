@@ -1,20 +1,52 @@
+/**
+ * @module components/sidebar/SidebarNav
+ * @category Layout
+ * @description Navigation menu for the sidebar with hover prefetching.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo, useEffect, useState } from 'react';
-import { NavCategory, ModuleDefinition } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { ModuleRegistry } from '../../services/moduleRegistry';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { queryClient } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useHoverIntent } from '../../hooks/useHoverIntent';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 import { PATHS } from '../../constants/paths';
-import { useHoverIntent } from '@/hooks/useHoverIntent';
 import { PREFETCH_MAP } from '../../config/prefetchConfig';
 import { Scheduler } from '../../utils/scheduler';
 
+// Types
+import type { NavCategory, ModuleDefinition } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface SidebarNavProps {
+  /** Currently active view path. */
   activeView: string;
+  /** Callback to set the active view. */
   setActiveView: (view: string) => void;
+  /** Current user's role for permission filtering. */
   currentUserRole: string;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveView, currentUserRole }) => {
   const { theme } = useTheme();
@@ -23,7 +55,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
   useEffect(() => {
     setModules(ModuleRegistry.getAllModules());
     const unsubscribe = ModuleRegistry.subscribe(() => setModules(ModuleRegistry.getAllModules()));
-    return () => unsubscribe();
+    return () => { unsubscribe(); };
   }, []);
 
   const visibleItems = useMemo(() => {

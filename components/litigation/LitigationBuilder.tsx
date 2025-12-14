@@ -1,10 +1,10 @@
 /**
- * LitigationBuilder.tsx
- * 
- * Main container for the Litigation Strategy Builder module.
- * Orchestrates the visual strategy map, Gantt view, and outcome simulation.
- * 
  * @module components/litigation/LitigationBuilder
+ * @category Litigation
+ * @description Strategy builder with visual mapping and Gantt timeline.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
 import React, { useState, Suspense, lazy } from 'react';

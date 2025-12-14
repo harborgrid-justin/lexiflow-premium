@@ -1,8 +1,29 @@
+/**
+ * @module components/common/CalendarGrid
+ * @category Common
+ * @description Monthly calendar grid with custom cell rendering.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CalendarGridProps {
   currentDate: Date;
   renderCell: (date: Date) => React.ReactNode;

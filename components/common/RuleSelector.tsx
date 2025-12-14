@@ -1,13 +1,38 @@
+/**
+ * @module components/common/RuleSelector
+ * @category Common
+ * @description Legal rules selector with search.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
-import { LegalRule } from '../../types';
-import { RuleService } from '../../services/ruleService';
 import { Book, X, Search, Loader2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { RuleService } from '../../services/ruleService';
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useDebounce } from '../../hooks/useDebounce';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { LegalRule } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface RuleSelectorProps {
   selectedRules: string[]; // Array of rule codes like "FRCP 26(f)"
   onRulesChange: (rules: string[]) => void;

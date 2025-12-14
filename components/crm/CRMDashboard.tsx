@@ -1,13 +1,39 @@
+/**
+ * @module components/crm/CRMDashboard
+ * @category CRM
+ * @description Client relationship management with contacts, clients, and leads.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Users, DollarSign, Briefcase, TrendingUp, ArrowUpRight, Activity } from 'lucide-react';
-import { MetricCard } from '../common/Primitives';
-import { Card } from '../common/Card';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, Cell } from 'recharts';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { MetricCard } from '../common/Primitives';
+import { Card } from '../common/Card';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const CRMDashboard: React.FC = () => {
   const { theme } = useTheme();
 

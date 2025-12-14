@@ -1,28 +1,48 @@
-
 /**
- * @module AdvisorDetail
+ * @module components/war-room/advisory/AdvisorDetail
  * @category WarRoom
- * @description Detailed view of a selected advisor, showing profile, deliverables, financials, and conflict check status.
+ * @description Detailed view of a selected advisor, showing profile, deliverables,
+ * financials, and conflict check status.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { X, FileText, Download, Clock, CheckCircle } from 'lucide-react';
 
-// Common Components
-import { Button } from '../../common/Button';
-import { InfoGrid, SectionTitle } from '../../common/RefactoredCommon';
-
-// Context & Utils
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+
+// Components
+import { Button } from '../../common/Button';
+import { SectionTitle } from '../../common/RefactoredCommon';
+
+// Utils & Constants
 import { cn } from '../../../utils/cn';
 
 // Types
-import { Advisor } from './AdvisorList';
+import type { Advisor } from './AdvisorList';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface AdvisorDetailProps {
+  /** The advisor object to display details for. */
   advisor: Advisor;
+  /** Callback when the detail panel is closed. */
   onClose: () => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }) => {
   const { theme } = useTheme();
@@ -50,7 +70,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
             <div className="space-y-4">
                 <SectionTitle className="border-b pb-2">Deliverables</SectionTitle>
                 <div className="space-y-3">
-                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.border.active}`)}>
+                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                         <FileText className="h-5 w-5 text-rose-500 shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <p className={cn("text-sm font-bold truncate", theme.text.primary)}>Initial Expert Report</p>
@@ -58,7 +78,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
                         </div>
                         <Download className={cn("h-4 w-4 transition-colors", theme.text.tertiary, `hover:${theme.primary.text}`)}/>
                     </div>
-                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.border.active}`)}>
+                    <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors cursor-pointer", theme.surface.default, theme.border.default, theme.primary.border)}>
                         <FileText className={cn("h-5 w-5 shrink-0", theme.primary.text)}/>
                         <div className="flex-1 min-w-0">
                             <p className={cn("text-sm font-bold truncate", theme.text.primary)}>Rebuttal to Defense Expert</p>
@@ -70,10 +90,14 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
 
             <div className="space-y-4">
                 <SectionTitle className="border-b pb-2">Financials</SectionTitle>
-                <InfoGrid items={[
-                    { label: "Retainer", value: "$10,000" },
-                    { label: "Incurred", value: "$4,500" }
-                ]} />
+                <div className={cn("grid grid-cols-2 gap-3 text-sm", theme.text.secondary)}>
+                    <div><strong className={theme.text.primary}>Hourly Rate:</strong> ${advisor.rate}</div>
+                    <div><strong className={theme.text.primary}>Total Billed:</strong> $45,000</div>
+                    <div><strong className={theme.text.primary}>Hours Logged:</strong> 120</div>
+                    <div><strong className={theme.text.primary}>Reports Filed:</strong> {advisor.reports}</div>
+                    <div><strong className={theme.text.primary}>Retainer:</strong> $10,000</div>
+                    <div><strong className={theme.text.primary}>Incurred:</strong> $4,500</div>
+                </div>
                 <div className={cn("text-xs flex items-center justify-center pt-2", theme.text.tertiary)}>
                     <Clock className="h-3 w-3 mr-1"/> Last Invoice: 12 days ago
                 </div>

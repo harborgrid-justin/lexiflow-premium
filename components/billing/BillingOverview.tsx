@@ -1,18 +1,51 @@
+/**
+ * @module components/billing/BillingOverview
+ * @category Billing
+ * @description Billing overview with time tracking, invoices, and WIP analytics.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { DollarSign, AlertCircle, Users, Calculator } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useChartTheme } from '../common/ChartHelpers';
+
+// Components
 import { Card } from '../common/Card';
 import { MetricCard, Currency } from '../common/Primitives';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
-import { useChartTheme } from '../common/ChartHelpers';
+
+// Types
 import { WIPStat } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface BillingOverviewProps {
+  /** Optional callback for navigation. */
   onNavigate?: (view: string) => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
   const { theme } = useTheme();

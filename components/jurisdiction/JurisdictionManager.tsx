@@ -1,11 +1,31 @@
+/**
+ * @module components/jurisdiction/JurisdictionManager
+ * @category Jurisdiction
+ * @description Main jurisdiction explorer with federal, state, and international tabs.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, Suspense, useTransition } from 'react';
+import { Plus } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { Plus } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { LazyLoader } from '../common/LazyLoader';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 import { JURISDICTION_TABS, JurisdictionView } from './utils';
 
 const JurisdictionFederal = React.lazy(() => import('./JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));

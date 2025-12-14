@@ -1,13 +1,41 @@
+/**
+ * @module components/knowledge/QAView
+ * @category Knowledge
+ * @description Q&A forum with verified answers.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { MessageCircle, ThumbsUp } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { Button } from '../common/Button';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { QAItem } from '../../types';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { QAItem } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const QAView: React.FC = () => {
   const { theme } = useTheme();

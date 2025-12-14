@@ -1,11 +1,34 @@
+/**
+ * @module components/common/ConfirmDialog
+ * @category Common
+ * @description Confirmation dialog with variants.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+import { AlertTriangle, Info } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { Modal } from './Modal';
 import { Button } from './Button';
-import { AlertTriangle, Info } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ConfirmDialogProps {
   isOpen: boolean;
   onClose: () => void;

@@ -1,9 +1,30 @@
+/**
+ * @module components/compliance/ComplianceRisk
+ * @category Compliance
+ * @description Risk metrics dashboard for compliance monitoring.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, FileText, ShieldAlert } from 'lucide-react';
-import { MetricCard } from '../common/Primitives';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 
+// Components
+import { MetricCard } from '../common/Primitives';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const ComplianceRisk: React.FC = () => {
   const [metrics, setMetrics] = useState({ high: 0, missingDocs: 0, violations: 0 });
 

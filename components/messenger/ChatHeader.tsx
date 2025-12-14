@@ -1,16 +1,45 @@
+/**
+ * @module components/messenger/ChatHeader
+ * @category Messenger
+ * @description Chat header with contact info and actions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { ArrowLeft, Phone, Video, Info, Lock, AlertTriangle } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { Conversation } from '../../hooks/useSecureMessenger';
+
+// Components
 import { UserAvatar } from '../common/UserAvatar';
 import { Button } from '../common/Button';
-import { Conversation } from '../../hooks/useSecureMessenger';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ChatHeaderProps {
+  /** Current conversation. */
   conversation: Conversation;
+  /** Callback to go back. */
   onBack: () => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation, onBack }) => {
   const { theme } = useTheme();
@@ -21,7 +50,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation, onBack }) 
           <button onClick={onBack} className={cn("md:hidden p-2 -ml-2 rounded-full", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
             <ArrowLeft className="h-5 w-5"/>
           </button>
-          <UserAvatar name={conversation.name} size="md" indicatorStatus={conversation.status} />
+          <UserAvatar name={conversation.name} size="md" />
           <div className="min-w-0">
             <h3 className={cn("font-bold flex items-center truncate text-sm md:text-base", theme.text.primary)}>
               {conversation.name}

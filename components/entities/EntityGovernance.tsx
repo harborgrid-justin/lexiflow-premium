@@ -1,12 +1,38 @@
+/**
+ * @module components/entities/EntityGovernance
+ * @category Entity Management - Corporate Governance
+ * @description Corporate registry for managing filing status, board composition, and annual reports.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.text, theme.border for consistent theming. Hardcoded slate-900 for header.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
-import { LegalEntity } from '../../types';
+import { Building2, Calendar, FileCheck } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { Building2, Calendar, FileCheck } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityGovernanceProps {
   entities: LegalEntity[];
   onSelect: (e: LegalEntity) => void;

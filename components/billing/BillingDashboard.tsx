@@ -1,26 +1,54 @@
+/**
+ * @module components/billing/BillingDashboard
+ * @category Billing
+ * @description Main billing dashboard with tabbed navigation for WIP, invoices, and ledger.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useState, useTransition } from 'react';
-import {
-  RefreshCw
-} from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { useMutation } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
+
+// Hooks
+import { useNotify } from '../../hooks/useNotify';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
 import { Button } from '../common/Button';
 import { PeriodSelector } from '../common/PeriodSelector';
 import { ExportMenu } from '../common/ExportMenu';
-import { useMutation } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { useNotify } from '../../hooks/useNotify';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../../utils/cn';
-import { BILLING_TAB_CONFIG, BillingView } from '../../config/billingDashboardConfig';
 import { BillingDashboardContent } from './BillingDashboardContent';
 
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { BILLING_TAB_CONFIG, BillingView } from '../../config/billingDashboardConfig';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface BillingDashboardProps {
+  /** Optional callback for navigation. */
   navigateTo?: (view: string) => void;
-  initialTab?: BillingView;
+  /** Optional initial tab to display. */
+  initialTab?: string;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const BillingDashboard: React.FC<BillingDashboardProps> = ({ navigateTo, initialTab }) => {
   const notify = useNotify();
   const [isPending, startTransition] = useTransition();

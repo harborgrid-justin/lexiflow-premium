@@ -1,10 +1,36 @@
+/**
+ * @module components/workflow/TemplatePreview
+ * @category Workflow
+ * @description Template card preview with stage visualization.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Clock, BarChart, ShieldCheck, ArrowRight } from 'lucide-react';
-import { Badge } from '../common/Badge';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Badge } from '../common/Badge';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
+
+// Types
 import { WorkflowTemplateData } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface TemplatePreviewProps {
   data: WorkflowTemplateData;
   onClick: () => void;

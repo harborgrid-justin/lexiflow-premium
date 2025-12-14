@@ -1,31 +1,45 @@
-
 /**
- * @module EvidenceWall
+ * @module components/war-room/EvidenceWall
  * @category WarRoom
  * @description Visual grid of evidence, documents, and motions.
  * Supports filtering, searching, and opening items in preview windows.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors for backgrounds,
+ * text, and borders, ensuring a consistent look in both light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo, useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
 
-// Common Components
-import { SearchToolbar } from '../common/SearchToolbar';
-import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
-
-// Context & Utils
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
+
+// Components
+import { SearchToolbar } from '../common/SearchToolbar';
+import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
+import { WallItemCard } from './cards/WallItemCard';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
 // Types
-import { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../types';
+import type { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../types';
 
-// Sub-components
-import { WallItemCard } from './cards/WallItemCard';
-
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EvidenceWallProps {
+  /** The ID of the current case. */
   caseId: string;
+  /** The comprehensive data object for the war room. */
   warRoomData: WarRoomData;
 }
 
@@ -41,14 +55,27 @@ interface WallItem {
     original: LegalDocument | EvidenceItem | Motion;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [isPending, startTransition] = useTransition();
 
-  // Memoize heavy mapping logic
+  // ============================================================================
+  // MEMOIZED VALUES
+  // ============================================================================
   const combinedItems = useMemo<WallItem[]>(() => {
       const docs = (warRoomData.documents || []).map((d) => ({
           id: d.id,
@@ -165,7 +192,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
 
         <div className={cn("grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto pb-4 content-start", isPending ? "opacity-70 transition-opacity" : "")}>
             {filteredExhibits.map((ex) => (
-                <WallItemCard key={ex.id} item={ex} onView={() => handleViewItem(ex)} theme={theme} />
+                <WallItemCard key={ex.id} item={ex} onView={() => handleViewItem(ex)} />
             ))}
             
             <div className={cn("border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-6 transition-colors cursor-pointer", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`)}>

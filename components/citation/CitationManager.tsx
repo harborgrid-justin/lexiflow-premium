@@ -1,11 +1,10 @@
 /**
- * CitationManager.tsx
- * 
- * Main citation management interface with tabbed navigation between
- * citation library and AI-powered brief analyzer.
- * 
  * @module components/citation/CitationManager
- * @category Legal Research - Citation Management
+ * @category Citations
+ * @description Citation management with validation and Bluebook formatting.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
  */
 
 // ============================================================================

@@ -1,15 +1,46 @@
+/**
+ * @module components/profile/ProfileOverview
+ * @category Profile
+ * @description User profile overview with attorney information and credentials.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { ExtendedUserProfile } from '../../types';
+import { Briefcase, MapPin, Mail, Phone, Award, ShieldCheck, Clock, Scale } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { UserAvatar } from '../common/UserAvatar';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
-import { Briefcase, MapPin, Mail, Phone, Award, ShieldCheck, Clock, Scale } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { ExtendedUserProfile } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ProfileOverviewProps {
+  /** Extended user profile data. */
   profile: ExtendedUserProfile;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const ProfileOverview: React.FC<ProfileOverviewProps> = ({ profile }) => {
   const { theme } = useTheme();

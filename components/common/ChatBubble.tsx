@@ -1,10 +1,33 @@
+/**
+ * @module components/common/ChatBubble
+ * @category Common
+ * @description Chat message bubble with status indicators.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { memo } from 'react';
-import { UserAvatar } from './UserAvatar';
 import { Shield, CheckCheck, Check } from 'lucide-react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Components
+import { UserAvatar } from './UserAvatar';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ChatBubbleProps {
   text: string;
   sender: string;

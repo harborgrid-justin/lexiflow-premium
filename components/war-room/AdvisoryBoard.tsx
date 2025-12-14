@@ -1,49 +1,78 @@
-
 /**
- * @module AdvisoryBoard
+ * @module components/war-room/AdvisoryBoard
  * @category WarRoom
  * @description Manages the advisory board for a case, including experts and consultants.
  * Provides filtering, searching, and detailed views of advisors.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors for backgrounds,
+ * text, and borders, ensuring a consistent look in both light and dark modes.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
 import { UserPlus, Filter, Layout, Loader2 } from 'lucide-react';
 
-// Common Components
-import { Button } from '../common/Button';
-import { SearchToolbar } from '../common/SearchToolbar';
-
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-
-// Sub-components
-import { AdvisorySidebar } from './advisory/AdvisorySidebar';
-import { AdvisorList, Advisor } from './advisory/AdvisorList';
-import { AdvisorDetail } from './advisory/AdvisorDetail';
-
-// Services
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+import { SearchToolbar } from '../common/SearchToolbar';
+import { AdvisorySidebar } from './advisory/AdvisorySidebar';
+import { AdvisorList, Advisor } from './advisory/AdvisorList';
+import { AdvisorDetail } from './advisory/AdvisorDetail';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface AdvisoryBoardProps {
+  /** Optional case ID to filter advisors. If not provided, shows all advisors. */
   caseId?: string;
 }
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
+  // ============================================================================
+  // HOOKS & CONTEXT
+  // ============================================================================
   const { theme } = useTheme();
+
+  // ============================================================================
+  // STATE MANAGEMENT
+  // ============================================================================
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdvisor, setSelectedAdvisor] = useState<Advisor | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
 
-  // Performance Engine: useQuery
+  // ============================================================================
+  // DATA FETCHING
+  // ============================================================================
   const { data: advisors = [], isLoading } = useQuery<Advisor[]>(
       [STORES.ADVISORS, caseId || 'all'],
       () => DataService.warRoom.getAdvisors(caseId)
   );
 
+  // ============================================================================
+  // DERIVED STATE
+  // ============================================================================
   const filteredAdvisors = advisors.filter(adv => {
     const matchesCategory = activeCategory === 'All' || 
                             (activeCategory === 'Experts' && adv.role === 'Expert Witness') ||

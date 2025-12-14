@@ -1,17 +1,49 @@
+/**
+ * @module components/common/Card
+ * @category Common Components
+ * @description Reusable card container with optional header and footer.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface CardProps {
+  /** Card content. */
   children: React.ReactNode;
+  /** Additional CSS classes. */
   className?: string;
+  /** Remove default padding. */
   noPadding?: boolean;
+  /** Card title. */
   title?: React.ReactNode;
+  /** Card subtitle. */
   subtitle?: string;
+  /** Action button or element. */
   action?: React.ReactNode;
+  /** Footer content. */
   footer?: React.ReactNode;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const Card: React.FC<CardProps> = ({
   children,

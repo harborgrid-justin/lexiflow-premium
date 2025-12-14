@@ -1,7 +1,26 @@
+/**
+ * @module components/common/ChartHelpers
+ * @category Common
+ * @description Chart theme helpers for recharts.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to provide chart colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import { useMemo } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// ============================================================================
+// HOOKS
+// ============================================================================
 export const useChartTheme = () => {
   const { theme } = useTheme();
 

@@ -1,23 +1,53 @@
+/**
+ * @module components/documents/DocumentManager
+ * @category Document Management
+ * @description Main document manager with explorer, templates, and assembly.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
-// components/DocumentManager.tsx
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { Suspense, lazy, useTransition } from 'react';
 import {
   Folder, Clock, Star, FileText, LayoutTemplate,
   PenTool, Share2, CheckCircle, FileSignature, Edit, Eraser, Cpu
 } from 'lucide-react';
-import { Button } from '../common/Button';
-import { UserRole } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+
+// Components
+import { Button } from '../common/Button';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
-import { cn } from '../../utils/cn';
-import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../config/documentManagerConfig';
 import { DocumentManagerContent } from './DocumentManagerContent';
 
+// Utils & Config
+import { cn } from '../../utils/cn';
+import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../config/documentManagerConfig';
+
+// Types
+import { UserRole } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface DocumentManagerProps {
+  /** Current user's role for permission checks. */
   currentUserRole?: UserRole;
+  /** Optional initial tab to display. */
   initialTab?: DocView;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const DocumentManager: React.FC<DocumentManagerProps> = ({ currentUserRole = 'Associate', initialTab }) => {
   const [isPending, startTransition] = useTransition();

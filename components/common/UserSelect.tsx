@@ -1,10 +1,34 @@
+/**
+ * @module components/common/UserSelect
+ * @category Common
+ * @description User dropdown with avatar display.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { UserAvatar } from './UserAvatar';
 import { ChevronDown } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { UserAvatar } from './UserAvatar';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 import { MOCK_USERS } from '../../data/models/user';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface UserOption {
   id: string;
   name: string;

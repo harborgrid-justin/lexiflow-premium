@@ -1,9 +1,30 @@
+/**
+ * @module components/common/SwipeableItem
+ * @category Common
+ * @description Swipeable list item with left/right actions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useRef } from 'react';
 import { Trash2, Archive, Check } from 'lucide-react';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface SwipeableItemProps {
   children: React.ReactNode;
   onSwipeLeft?: () => void;

@@ -1,17 +1,44 @@
+/**
+ * @module components/billing/BillingWIP
+ * @category Billing
+ * @description Work-in-progress time entries ready for invoicing.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
+import { CheckSquare, Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
-import { CheckSquare, Loader2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { TimeEntry } from '../../types';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '@/hooks/useNotify';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { TimeEntry } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const BillingWIP: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();

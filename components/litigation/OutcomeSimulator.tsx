@@ -1,11 +1,11 @@
 
 /**
- * OutcomeSimulator.tsx
- * 
- * Monte Carlo simulation tool for forecasting litigation outcomes.
- * Calculates Expected Value (EV) and settlement ranges based on liability probability and damage estimates.
- * 
  * @module components/litigation/OutcomeSimulator
+ * @category Litigation
+ * @description Monte Carlo simulation for outcome forecasting.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme and useChartTheme hooks for visualizations.
  */
 
 import React, { useState, useMemo } from 'react';
@@ -118,19 +118,19 @@ export const OutcomeSimulator: React.FC = () => {
               <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={chartTheme.colors.emerald} stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor={chartTheme.colors.emerald} stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartTheme.colors.success} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={chartTheme.colors.success} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="range" fontSize={10} tickLine={false} axisLine={false} stroke={chartTheme.text} />
                 <YAxis hide />
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                 <Tooltip 
-                  cursor={{stroke: chartTheme.colors.emerald, strokeWidth: 1}}
+                  cursor={{stroke: chartTheme.colors.success, strokeWidth: 1}}
                   contentStyle={chartTheme.tooltipStyle}
                 />
-                <Area type="monotone" dataKey="count" stroke={chartTheme.colors.emerald} fillOpacity={1} fill="url(#colorCount)" />
-                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke={chartTheme.colors.rose} strokeDasharray="3 3" label="EV" />
+                <Area type="monotone" dataKey="count" stroke={chartTheme.colors.success} fillOpacity={1} fill="url(#colorCount)" />
+                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke={chartTheme.colors.danger} strokeDasharray="3 3" label="EV" />
               </AreaChart>
             </ResponsiveContainer>
          </div>

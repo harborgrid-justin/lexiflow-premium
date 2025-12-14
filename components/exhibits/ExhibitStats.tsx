@@ -1,10 +1,15 @@
 /**
- * @module ExhibitStats
+ * @module components/exhibits/ExhibitStats
  * @category Exhibits
- * @description Analytics dashboard for trial exhibits. Visualizes admissibility rates,
- * party distribution, and other key metrics using Recharts.
+ * @description Analytics dashboard with admissibility rates and party distribution.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { 
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, 
@@ -12,19 +17,30 @@ import {
 } from 'recharts';
 import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-react';
 
-// Common Components
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { MetricCard } from '../common/Primitives';
 import { Card } from '../common/Card';
-
-// Context & Utils
-import { useTheme } from '../../context/ThemeContext';
 
 // Types
 import { TrialExhibit } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface ExhibitStatsProps {
+  /** List of trial exhibits. */
   exhibits: TrialExhibit[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const ExhibitStats: React.FC<ExhibitStatsProps> = ({ exhibits }) => {
   const { theme } = useTheme();

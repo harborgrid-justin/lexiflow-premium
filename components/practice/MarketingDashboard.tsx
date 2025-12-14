@@ -1,13 +1,41 @@
+/**
+ * @module components/practice/MarketingDashboard
+ * @category Practice Management
+ * @description Marketing analytics with campaigns and conversion tracking.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Users, Megaphone, Target, ArrowRight } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { MarketingMetric, MarketingCampaign } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Card } from '../common/Card';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { MarketingMetric, MarketingCampaign } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const MarketingDashboard: React.FC = () => {
   const { theme } = useTheme();

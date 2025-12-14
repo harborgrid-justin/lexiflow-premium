@@ -1,10 +1,33 @@
+/**
+ * @module components/common/FileAttachment
+ * @category Common
+ * @description File attachment card with preview and download.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Download, Eye } from 'lucide-react';
-import { FileIcon } from './Primitives';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Components
+import { FileIcon } from './Primitives';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface FileAttachmentProps {
   name: string;
   size?: string;

@@ -1,14 +1,36 @@
+/**
+ * @module components/jurisdiction/JurisdictionState
+ * @category Jurisdiction
+ * @description State court systems with search and filtering.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState } from 'react';
+import { Loader2 } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
 import { SearchToolbar } from '../common/SearchToolbar';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { useQuery } from '../../services/queryClient';
-import { Loader2 } from 'lucide-react';
-import { STORES } from '../../services/db';
 import { filterStates } from './utils';
 
 export const JurisdictionState: React.FC = () => {

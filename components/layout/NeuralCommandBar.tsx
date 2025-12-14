@@ -1,15 +1,37 @@
+/**
+ * @module components/layout/NeuralCommandBar
+ * @category Layout
+ * @description AI-powered command bar with intent detection and search.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useKeyboardNav } from '@/hooks/useKeyboardNav';
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { HolographicRouting } from '../../services/holographicRouting';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useKeyboardNav } from '../../hooks/useKeyboardNav';
+import { useClickOutside } from '../../hooks/useClickOutside';
+
+// Components
 import { HighlightedText } from '../common/HighlightedText';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 
 interface NeuralCommandBarProps {
   globalSearch: string;

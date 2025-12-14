@@ -1,19 +1,46 @@
+/**
+ * @module components/billing/BillingInvoices
+ * @category Billing
+ * @description Invoice management with creation and distribution.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useMemo } from 'react';
+import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+
+// Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { SearchToolbar } from '../common/SearchToolbar';
-import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
-import { Invoice } from '../../types';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { useNotify } from '@/hooks/useNotify';
 import { Formatters } from '../../utils/formatters';
 
+// Types
+import { Invoice } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const BillingInvoices: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();

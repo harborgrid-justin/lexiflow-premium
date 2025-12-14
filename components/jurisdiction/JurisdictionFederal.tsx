@@ -1,13 +1,35 @@
+/**
+ * @module components/jurisdiction/JurisdictionFederal
+ * @category Jurisdiction
+ * @description Federal court system with circuit and district information.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Badge } from '../common/Badge';
 import { ExternalLink, Landmark, Loader2 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { Badge } from '../common/Badge';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
 
 export const JurisdictionFederal: React.FC = () => {
   const { theme } = useTheme();

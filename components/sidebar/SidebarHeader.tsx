@@ -1,14 +1,45 @@
+/**
+ * @module components/sidebar/SidebarHeader
+ * @category Layout
+ * @description Header section of the sidebar displaying tenant branding.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { Scale, X } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
-import { TenantConfig } from '../../types';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import type { TenantConfig } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface SidebarHeaderProps {
+  /** Callback when close button is clicked. */
   onClose: () => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ onClose }) => {
   const { theme } = useTheme();

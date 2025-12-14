@@ -1,15 +1,46 @@
+/**
+ * @module components/visual/NexusInspector
+ * @category Visual
+ * @description Inspector panel for graph node details.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { X, User, Building, Fingerprint, ExternalLink } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// Components
 import { Button } from '../common/Button';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
 import { Party, EvidenceItem, Case, NexusNodeData } from '../../types';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface NexusInspectorProps {
+  /** Node data to inspect. */
   item: NexusNodeData | null;
+  /** Callback when inspector is closed. */
   onClose: () => void;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const NexusInspector: React.FC<NexusInspectorProps> = ({ item, onClose }) => {
   const { theme } = useTheme();

@@ -1,14 +1,41 @@
+/**
+ * @module components/practice/SecurityOps
+ * @category Practice Management
+ * @description Security operations with malware scanning using suffix tree.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
+import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+
+// Components
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 import { SuffixTree } from '../../utils/datastructures/suffixTree';
-import { useNotify } from '../../hooks/useNotify';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const SecurityOps: React.FC = () => {
     const { theme } = useTheme();

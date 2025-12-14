@@ -1,11 +1,34 @@
+/**
+ * @module components/common/SearchToolbar
+ * @category Common Components - Search
+ * @description Search toolbar with history dropdown and keyboard shortcut support (/).
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border, and theme.border.focused for consistent theming.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useRef } from 'react';
 import { Search, Clock } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services/Data
 import { SearchService } from '../../services/searchService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
 import { useClickOutside } from '../../hooks/useClickOutside';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface SearchToolbarProps {
   value: string;
   onChange: (val: string) => void;

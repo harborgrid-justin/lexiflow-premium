@@ -1,13 +1,41 @@
+/**
+ * @module components/knowledge/PrecedentsView
+ * @category Knowledge
+ * @description Precedents library with document cards.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { FileText, Download } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
-import { Precedent } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { Button } from '../common/Button';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { Precedent } from '../../types';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const PrecedentsView: React.FC = () => {
   const { theme } = useTheme();

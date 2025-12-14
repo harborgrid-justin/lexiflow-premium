@@ -1,20 +1,53 @@
+/**
+ * @module components/dashboard/PersonalWorkspace
+ * @category Dashboard
+ * @description Personal productivity workspace with tasks and notifications.
+ *
+ * THEME SYSTEM USAGE:
+ * This component uses the `useTheme` hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { Card } from '../common/Card';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { NotificationCenter } from '../workflow/NotificationCenter';
 import { CheckSquare, Calendar, ArrowRight, Loader2 } from 'lucide-react';
-import { Button } from '../common/Button';
-import { User, WorkflowTask, CalendarEventItem } from '../../types';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
+import { NotificationCenter } from '../workflow/NotificationCenter';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import type { User, WorkflowTask, CalendarEventItem } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface PersonalWorkspaceProps {
+    /** Active tab in the workspace. */
     activeTab: 'tasks' | 'notifications';
+    /** Current user information. */
     currentUser: User;
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();

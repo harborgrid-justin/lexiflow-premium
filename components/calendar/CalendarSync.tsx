@@ -1,11 +1,37 @@
+/**
+ * @module components/calendar/CalendarSync
+ * @category Calendar - Integrations
+ * @description Calendar sync dashboard for managing 2-way integration with external providers (Outlook, Google Calendar, etc.).
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border for consistent theming. Hardcoded green/red for connection status.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
 import { RefreshCw, CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { Button } from '../common/Button';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services/Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { Button } from '../common/Button';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarSync: React.FC = () => {
   const { theme } = useTheme();

@@ -1,13 +1,38 @@
+/**
+ * @module components/entities/EntityOrgChart
+ * @category Entity Management - Organization Chart
+ * @description Visual hierarchy chart for entity relationships (parent/child companies, individuals).
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border, theme.primary for consistent theming.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
-import { LegalEntity } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
 import { Building2, User, Loader2 } from 'lucide-react';
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { DataService } from '../../services/dataService';
 
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services/Data
+import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/db';
+import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityOrgChartProps {
   entities?: LegalEntity[]; // Optional override
   onSelect: (e: LegalEntity) => void;

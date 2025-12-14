@@ -1,9 +1,31 @@
+/**
+ * @module components/messenger/MessengerInbox
+ * @category Messenger
+ * @description Messenger inbox with split view for conversations.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme indirectly through child components.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useSecureMessenger } from '../../hooks/useSecureMessenger';
+
+// Components
 import { MessengerChatList } from './MessengerChatList';
 import { MessengerChatWindow } from './MessengerChatWindow';
 import { SplitView } from '../layout/SplitView';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const MessengerInbox: React.FC = () => {
   const {

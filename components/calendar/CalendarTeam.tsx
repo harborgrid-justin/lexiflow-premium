@@ -1,10 +1,36 @@
+/**
+ * @module components/calendar/CalendarTeam
+ * @category Calendar - Team Management
+ * @description Team availability grid showing weekly schedule for all team members.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses theme.surface, theme.text, theme.border for consistent theming. Hardcoded green for availability indicators.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { UserAvatar } from '../common/UserAvatar';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services/Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { UserAvatar } from '../common/UserAvatar';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CalendarTeam: React.FC = () => {
   const { theme } = useTheme();

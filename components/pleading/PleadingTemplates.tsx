@@ -1,11 +1,37 @@
+/**
+ * @module components/pleading/PleadingTemplates
+ * @category Pleadings
+ * @description Template library for pleading creation.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
-import { PleadingTemplate } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { VirtualGrid } from '../common/VirtualGrid';
 import { LayoutTemplate, ArrowRight } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { VirtualGrid } from '../common/VirtualGrid';
+
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// Types
+import { PleadingTemplate } from '../../types';
 import { PleadingTemplatesProps } from './types';
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates, onCreateFromTemplate }) => {
     const { theme } = useTheme();
 

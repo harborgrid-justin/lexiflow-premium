@@ -1,4 +1,20 @@
+/**
+ * @module components/case-list/CaseListMisc
+ * @category Case Management - Placeholder
+ * @description Placeholder component for miscellaneous case list functionality.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses hardcoded slate colors - should be replaced with theme tokens.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React from 'react';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const CaseListMisc: React.FC = () => {
     return (

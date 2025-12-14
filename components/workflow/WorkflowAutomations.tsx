@@ -1,11 +1,36 @@
+/**
+ * @module components/workflow/WorkflowAutomations
+ * @category Workflow
+ * @description Workflow automation management with triggers and actions.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
 
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useState, useEffect } from 'react';
 import { Zap, Clock, Plus, Loader2, AlertTriangle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
 import { DataService } from '../../services/dataService';
+
+// Hooks & Context
+import { useTheme } from '../../context/ThemeContext';
+
+// Components
 import { EmptyState } from '../common/EmptyState';
 
+// Utils & Constants
+import { cn } from '../../utils/cn';
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 export const WorkflowAutomations: React.FC = () => {
   const { theme } = useTheme();
   const [automations, setAutomations] = useState<any[]>([]);

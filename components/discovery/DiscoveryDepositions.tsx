@@ -1,11 +1,10 @@
 /**
- * DiscoveryDepositions.tsx
- * 
- * Deposition scheduling and management interface with witness tracking,
- * location details, and transcript association.
- * 
  * @module components/discovery/DiscoveryDepositions
- * @category Discovery - Depositions
+ * @category Discovery
+ * @description Deposition scheduling with witness tracking and transcripts.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
  */
 
 // ============================================================================

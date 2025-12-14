@@ -1,15 +1,46 @@
+/**
+ * @module components/entities/EntityAnalytics
+ * @category Entities
+ * @description Entity analytics with type distribution and risk scoring.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses useTheme hook to apply semantic colors.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
 import React, { useMemo } from 'react';
-import { LegalEntity } from '../../types';
-import { MetricCard } from '../common/Primitives';
-import { Card } from '../common/Card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { Users, Building2, ShieldAlert, Globe } from 'lucide-react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+
+// Components
+import { MetricCard } from '../common/Primitives';
+import { Card } from '../common/Card';
+
+// Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Types
+import { LegalEntity } from '../../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
 interface EntityAnalyticsProps {
+  /** List of entities for analytics. */
   entities: LegalEntity[];
 }
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
 
 export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) => {
   const { theme } = useTheme();

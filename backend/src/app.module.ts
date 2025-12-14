@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
@@ -59,6 +59,28 @@ import { ApiKeysModule } from './api-keys/api-keys.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+// Determine if Redis/Bull should be enabled
+const isRedisEnabled = process.env.REDIS_ENABLED !== 'false' && process.env.DEMO_MODE !== 'true';
+
+// Conditionally include Bull module
+const conditionalImports: any[] = [];
+if (isRedisEnabled) {
+  conditionalImports.push(
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('redis.host'),
+          port: configService.get('redis.port'),
+        },
+      }),
+    }),
+  );
+} else {
+  console.log('📦 Bull/Redis disabled - running in demo mode');
+}
+
 @Module({
   imports: [
     // Configuration
@@ -75,17 +97,8 @@ import { AppService } from './app.service';
       useFactory: getDatabaseConfig,
     }),
 
-    // Bull Queue (Redis-based)
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        redis: {
-          host: configService.get('redis.host'),
-          port: configService.get('redis.port'),
-        },
-      }),
-    }),
+    // Conditionally load Bull/Redis
+    ...conditionalImports,
 
     // Scheduler for cron jobs
     ScheduleModule.forRoot(),

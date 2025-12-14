@@ -21,24 +21,59 @@ export class DashboardQueryDto {
   daysBack?: number = 30;
 }
 
-export class DashboardDataDto {
-  @ApiProperty({ description: 'Summary statistics' })
-  summary: DashboardSummary;
+// Define all leaf classes first (classes with no class dependencies)
 
-  @ApiProperty({ description: 'Recent activity feed' })
-  recentActivity: ActivityItem[];
+export class ChartDataset {
+  @ApiProperty({ description: 'Dataset label' })
+  label: string;
 
-  @ApiProperty({ description: 'Key performance indicators' })
-  kpis: KeyPerformanceIndicator[];
+  @ApiProperty({ description: 'Data values' })
+  data: number[];
 
-  @ApiProperty({ description: 'Alerts and notifications' })
-  alerts: DashboardAlert[];
+  @ApiProperty({ description: 'Background color' })
+  backgroundColor?: string | string[];
 
-  @ApiProperty({ description: 'Charts data' })
-  charts: DashboardChart[];
+  @ApiProperty({ description: 'Border color' })
+  borderColor?: string;
+}
 
-  @ApiProperty({ description: 'Quick stats' })
-  quickStats: QuickStat[];
+export class ChartData {
+  @ApiProperty({ description: 'Data labels' })
+  labels: string[];
+
+  @ApiProperty({ description: 'Datasets', type: [ChartDataset] })
+  datasets: ChartDataset[];
+}
+
+export class DashboardChart {
+  @ApiProperty({ description: 'Chart ID' })
+  id: string;
+
+  @ApiProperty({ description: 'Chart title' })
+  title: string;
+
+  @ApiProperty({ description: 'Chart type' })
+  type: 'line' | 'bar' | 'pie' | 'doughnut' | 'area';
+
+  @ApiProperty({ description: 'Chart data', type: ChartData })
+  data: ChartData;
+}
+
+export class QuickStat {
+  @ApiProperty({ description: 'Stat label' })
+  label: string;
+
+  @ApiProperty({ description: 'Stat value' })
+  value: string | number;
+
+  @ApiProperty({ description: 'Icon name' })
+  icon?: string;
+
+  @ApiProperty({ description: 'Color theme' })
+  color?: string;
+
+  @ApiProperty({ description: 'Link URL' })
+  link?: string;
 }
 
 export class DashboardSummary {
@@ -160,80 +195,25 @@ export class DashboardAlert {
   isRead: boolean;
 }
 
-export class DashboardChart {
-  @ApiProperty({ description: 'Chart ID' })
-  id: string;
+// Now define the composite class that uses the above classes
+export class DashboardDataDto {
+  @ApiProperty({ description: 'Summary statistics', type: DashboardSummary })
+  summary: DashboardSummary;
 
-  @ApiProperty({ description: 'Chart title' })
-  title: string;
+  @ApiProperty({ description: 'Recent activity feed', type: [ActivityItem] })
+  recentActivity: ActivityItem[];
 
-  @ApiProperty({ description: 'Chart type' })
-  type: 'line' | 'bar' | 'pie' | 'doughnut' | 'area';
+  @ApiProperty({ description: 'Key performance indicators', type: [KeyPerformanceIndicator] })
+  kpis: KeyPerformanceIndicator[];
 
-  @ApiProperty({ description: 'Chart data' })
-  data: ChartData;
-}
+  @ApiProperty({ description: 'Alerts and notifications', type: [DashboardAlert] })
+  alerts: DashboardAlert[];
 
-export class ChartData {
-  @ApiProperty({ description: 'Data labels' })
-  labels: string[];
+  @ApiProperty({ description: 'Charts data', type: [DashboardChart] })
+  charts: DashboardChart[];
 
-  @ApiProperty({ description: 'Datasets' })
-  datasets: ChartDataset[];
-}
-
-export class ChartDataset {
-  @ApiProperty({ description: 'Dataset label' })
-  label: string;
-
-  @ApiProperty({ description: 'Data values' })
-  data: number[];
-
-  @ApiProperty({ description: 'Background color' })
-  backgroundColor?: string | string[];
-
-  @ApiProperty({ description: 'Border color' })
-  borderColor?: string;
-}
-
-export class QuickStat {
-  @ApiProperty({ description: 'Stat label' })
-  label: string;
-
-  @ApiProperty({ description: 'Stat value' })
-  value: string | number;
-
-  @ApiProperty({ description: 'Icon name' })
-  icon?: string;
-
-  @ApiProperty({ description: 'Color theme' })
-  color?: string;
-
-  @ApiProperty({ description: 'Link URL' })
-  link?: string;
-}
-
-export class MyCasesSummaryDto {
-  @ApiProperty({ description: 'Total assigned cases' })
-  totalCases: number;
-
-  @ApiProperty({ description: 'Active cases' })
-  activeCases: number;
-
-  @ApiProperty({ description: 'Cases by status' })
-  casesByStatus: { [status: string]: number };
-
-  @ApiProperty({ description: 'Recent cases' })
-  recentCases: CaseSummary[];
-
-  @ApiProperty({ description: 'Cases needing attention' })
-  casesNeedingAttention: CaseSummary[];
-
-  @ApiProperty({ description: 'My billable hours' })
-  myBillableHours: number;
-
-  @ApiProperty({ description: 'My utilization rate' })
-  myUtilizationRate: number;
+  @ApiProperty({ description: 'Quick stats', type: [QuickStat] })
+  quickStats: QuickStat[];
 }
 
 export class CaseSummary {
@@ -268,21 +248,27 @@ export class CaseSummary {
   lastActivity: Date;
 }
 
-export class UpcomingDeadlinesDto {
-  @ApiProperty({ description: 'Deadlines list' })
-  deadlines: DeadlineItem[];
+export class MyCasesSummaryDto {
+  @ApiProperty({ description: 'Total assigned cases' })
+  totalCases: number;
 
-  @ApiProperty({ description: 'Total deadlines count' })
-  totalCount: number;
+  @ApiProperty({ description: 'Active cases' })
+  activeCases: number;
 
-  @ApiProperty({ description: 'Overdue count' })
-  overdueCount: number;
+  @ApiProperty({ description: 'Cases by status' })
+  casesByStatus: { [status: string]: number };
 
-  @ApiProperty({ description: 'This week count' })
-  thisWeekCount: number;
+  @ApiProperty({ description: 'Recent cases', type: [CaseSummary] })
+  recentCases: CaseSummary[];
 
-  @ApiProperty({ description: 'Next 30 days count' })
-  next30DaysCount: number;
+  @ApiProperty({ description: 'Cases needing attention', type: [CaseSummary] })
+  casesNeedingAttention: CaseSummary[];
+
+  @ApiProperty({ description: 'My billable hours' })
+  myBillableHours: number;
+
+  @ApiProperty({ description: 'My utilization rate' })
+  myUtilizationRate: number;
 }
 
 export class DeadlineItem {
@@ -317,18 +303,21 @@ export class DeadlineItem {
   status: 'pending' | 'in-progress' | 'completed' | 'overdue';
 }
 
-export class PendingTasksDto {
-  @ApiProperty({ description: 'Tasks list' })
-  tasks: TaskItem[];
+export class UpcomingDeadlinesDto {
+  @ApiProperty({ description: 'Deadlines list', type: [DeadlineItem] })
+  deadlines: DeadlineItem[];
 
-  @ApiProperty({ description: 'Total tasks count' })
+  @ApiProperty({ description: 'Total deadlines count' })
   totalCount: number;
-
-  @ApiProperty({ description: 'High priority count' })
-  highPriorityCount: number;
 
   @ApiProperty({ description: 'Overdue count' })
   overdueCount: number;
+
+  @ApiProperty({ description: 'This week count' })
+  thisWeekCount: number;
+
+  @ApiProperty({ description: 'Next 30 days count' })
+  next30DaysCount: number;
 }
 
 export class TaskItem {
@@ -366,33 +355,18 @@ export class TaskItem {
   createdAt: Date;
 }
 
-export class BillingSummaryDto {
-  @ApiProperty({ description: 'Current month revenue' })
-  currentMonthRevenue: number;
+export class PendingTasksDto {
+  @ApiProperty({ description: 'Tasks list', type: [TaskItem] })
+  tasks: TaskItem[];
 
-  @ApiProperty({ description: 'Last month revenue' })
-  lastMonthRevenue: number;
+  @ApiProperty({ description: 'Total tasks count' })
+  totalCount: number;
 
-  @ApiProperty({ description: 'Revenue change percentage' })
-  revenueChange: number;
+  @ApiProperty({ description: 'High priority count' })
+  highPriorityCount: number;
 
-  @ApiProperty({ description: 'Unbilled hours' })
-  unbilledHours: number;
-
-  @ApiProperty({ description: 'Unbilled value' })
-  unbilledValue: number;
-
-  @ApiProperty({ description: 'Outstanding invoices' })
-  outstandingInvoices: number;
-
-  @ApiProperty({ description: 'Outstanding amount' })
-  outstandingAmount: number;
-
-  @ApiProperty({ description: 'Collection rate' })
-  collectionRate: number;
-
-  @ApiProperty({ description: 'Recent invoices' })
-  recentInvoices: InvoiceSummary[];
+  @ApiProperty({ description: 'Overdue count' })
+  overdueCount: number;
 }
 
 export class InvoiceSummary {
@@ -422,4 +396,33 @@ export class InvoiceSummary {
 
   @ApiProperty({ description: 'Status' })
   status: 'draft' | 'sent' | 'partial' | 'paid' | 'overdue' | 'void';
+}
+
+export class BillingSummaryDto {
+  @ApiProperty({ description: 'Current month revenue' })
+  currentMonthRevenue: number;
+
+  @ApiProperty({ description: 'Last month revenue' })
+  lastMonthRevenue: number;
+
+  @ApiProperty({ description: 'Revenue change percentage' })
+  revenueChange: number;
+
+  @ApiProperty({ description: 'Unbilled hours' })
+  unbilledHours: number;
+
+  @ApiProperty({ description: 'Unbilled value' })
+  unbilledValue: number;
+
+  @ApiProperty({ description: 'Outstanding invoices' })
+  outstandingInvoices: number;
+
+  @ApiProperty({ description: 'Outstanding amount' })
+  outstandingAmount: number;
+
+  @ApiProperty({ description: 'Collection rate' })
+  collectionRate: number;
+
+  @ApiProperty({ description: 'Recent invoices', type: [InvoiceSummary] })
+  recentInvoices: InvoiceSummary[];
 }

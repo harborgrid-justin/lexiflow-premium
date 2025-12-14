@@ -20,6 +20,22 @@ export enum DocumentAccessLevel {
 registerEnumType(DocumentStatus, { name: 'DocumentStatus' });
 registerEnumType(DocumentAccessLevel, { name: 'DocumentAccessLevel' });
 
+// Define PageInfo first since it's used by other types
+@ObjectType()
+export class PageInfo {
+  @Field()
+  hasNextPage: boolean;
+
+  @Field()
+  hasPreviousPage: boolean;
+
+  @Field({ nullable: true })
+  startCursor?: string;
+
+  @Field({ nullable: true })
+  endCursor?: string;
+}
+
 @ObjectType()
 export class DocumentVersionType {
   @Field(() => ID)
@@ -147,19 +163,4 @@ export class DocumentConnection {
 
   @Field()
   totalCount: number;
-}
-
-@ObjectType()
-export class PageInfo {
-  @Field()
-  hasNextPage: boolean;
-
-  @Field()
-  hasPreviousPage: boolean;
-
-  @Field({ nullable: true })
-  startCursor?: string;
-
-  @Field({ nullable: true })
-  endCursor?: string;
 }

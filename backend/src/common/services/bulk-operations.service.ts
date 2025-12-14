@@ -64,7 +64,7 @@ export class BulkOperationsService {
       try {
         if (options.useTransaction) {
           await repository.manager.transaction(async (manager) => {
-            const inserted = await manager.save(repository.target, batch);
+            const inserted = await manager.save(repository.target, batch as any);
             result.success.push(...(inserted as T[]));
           });
         } else {
@@ -224,7 +224,7 @@ export class BulkOperationsService {
           .createQueryBuilder()
           .insert()
           .into(repository.target)
-          .values(batch)
+          .values(batch as any)
           .orUpdate(
             options.updateColumns || Object.keys(batch[0] || {}),
             conflictColumns,

@@ -3,7 +3,7 @@
  * Handles HTTP requests to the NestJS backend with authentication
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api/v1';
 const BASE_URL = `${API_URL}${API_PREFIX}`;
 

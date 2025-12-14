@@ -54,6 +54,8 @@ const DiscoveryProductions = lazy(() => import('./DiscoveryProductions'));
 const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions'));
 const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
 const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
+const Examinations = lazy(() => import('./Examinations'));
+const Custodians = lazy(() => import('./Custodians'));
 
 import { DiscoveryView, DiscoveryPlatformProps } from './types';
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
@@ -142,6 +144,8 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
     'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} />,
     'requests': <DiscoveryRequests items={requests} onNavigate={handleNavigate} />,
     'depositions': <DiscoveryDepositions />,
+    'examinations': <Examinations />,
+    'custodians': <Custodians />,
     'esi': <DiscoveryESI />,
     'productions': <DiscoveryProductions onCreateClick={() => setActiveTab('production_wizard')} />,
     'interviews': <DiscoveryInterviews />,

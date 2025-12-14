@@ -21,6 +21,7 @@ const PARENT_TABS = [
     id: 'collection', label: 'Collection', icon: Database,
     subTabs: [
       { id: 'esi', label: 'ESI Map', icon: Database },
+      { id: 'custodians', label: 'Custodians', icon: Users },
       { id: 'interviews', label: 'Interviews', icon: ClipboardList },
       { id: 'holds', label: 'Legal Holds', icon: Lock },
     ]
@@ -37,6 +38,7 @@ const PARENT_TABS = [
     id: 'proceedings', label: 'Proceedings', icon: Mic2,
     subTabs: [
       { id: 'depositions', label: 'Depositions', icon: Mic2 },
+      { id: 'examinations', label: 'Examinations', icon: Scale },
       { id: 'plan', label: 'Discovery Plan', icon: Users },
     ]
   }

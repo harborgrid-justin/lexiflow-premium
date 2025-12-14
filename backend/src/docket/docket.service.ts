@@ -13,6 +13,12 @@ export class DocketService {
     private readonly docketRepository: Repository<DocketEntry>,
   ) {}
 
+  async findAll(): Promise<DocketEntry[]> {
+    return this.docketRepository.find({
+      order: { sequenceNumber: 'DESC' },
+    });
+  }
+
   async findAllByCaseId(caseId: string): Promise<DocketEntry[]> {
     return this.docketRepository.find({
       where: { caseId },

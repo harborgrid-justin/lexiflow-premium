@@ -197,7 +197,7 @@ export class AuthApiService {
   }
 
   async getCurrentUser(): Promise<User> {
-    return apiClient.get<User>('/auth/me');
+    return apiClient.get<User>('/auth/profile');
   }
 
   async refreshToken(): Promise<{ accessToken: string; refreshToken: string }> {

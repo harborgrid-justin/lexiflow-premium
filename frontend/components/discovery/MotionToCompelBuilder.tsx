@@ -7,6 +7,7 @@ import { Badge } from '../common/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { sanitizeHtml } from '../../utils/sanitize';
 import { GeminiService } from '../../services/geminiService';
 import { useNotify } from '../../hooks/useNotify';
 
@@ -137,7 +138,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
            <div className={cn("flex-1 p-8 overflow-y-auto", theme.surface.highlight)}>
                {draft ? (
                    <div className={cn("max-w-3xl mx-auto shadow-lg p-10 min-h-[800px] border", theme.surface.default, theme.border.default)}>
-                        <div dangerouslySetInnerHTML={{ __html: draft }} className={cn("prose max-w-none font-serif text-sm leading-loose", theme.text.primary)} />
+                        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(draft) }} className={cn("prose max-w-none font-serif text-sm leading-loose", theme.text.primary)} />
                         <div className={cn("mt-8 pt-8 border-t flex justify-end gap-3", theme.border.default)}>
                             <Button variant="secondary">Save as Draft</Button>
                             <Button variant="primary" icon={Gavel}>File with Court</Button>

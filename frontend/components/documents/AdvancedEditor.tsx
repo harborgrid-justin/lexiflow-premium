@@ -5,6 +5,7 @@ import { GeminiService } from '../../services/geminiService';
 import { EditorToolbar } from '../common/EditorToolbar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 interface AdvancedEditorProps {
   initialContent: string;
@@ -37,9 +38,9 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
       
       // Normalize for comparison (basic check)
       if (initialContent !== currentContent && (!isFocused || !isInternalUpdate.current)) {
-          // Ensure clean HTML insertion
-          const sanitizedContent = initialContent.includes('<') ? initialContent : `<p>${initialContent.replace(/\n/g, '<br/>')}</p>`;
-          editorRef.current.innerHTML = sanitizedContent;
+          // Sanitize and ensure clean HTML insertion
+          const formattedContent = initialContent.includes('<') ? initialContent : `<p>${initialContent.replace(/\n/g, '<br/>')}</p>`;
+          editorRef.current.innerHTML = sanitizeHtml(formattedContent);
           updateStats();
       }
       
@@ -113,8 +114,9 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
         // Perform replacement
         selectionRange.deleteContents();
         // Create an HTML fragment to support formatted return from AI
+        // Sanitize AI response before inserting into DOM
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = refinedText;
+        tempDiv.innerHTML = sanitizeHtml(refinedText);
         
         // Insert nodes
         let lastNode;

@@ -2,6 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, PleadingSection, Case } from '../../../types';
 import { GripVertical } from 'lucide-react';
 import { cn } from '../../../utils/cn';
+import { sanitizeHtml } from '../../../utils/sanitize';
 import { ViewMode, PleadingCanvasProps } from '../types';
 
 const PleadingCanvas: React.FC<PleadingCanvasProps> = ({ 
@@ -79,12 +80,12 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
                          </div>
                     </div>
                 ) : section.type === 'Heading' ? (
-                    <div 
+                    <div
                         className="text-center font-bold uppercase underline mb-4 mt-6 outline-none"
                         style={{textAlign: section.meta?.alignment}}
                         contentEditable={!readOnly}
                         suppressContentEditableWarning
-                        dangerouslySetInnerHTML={{__html: section.content}}
+                        dangerouslySetInnerHTML={{__html: sanitizeHtml(section.content)}}
                         onBlur={handleContentUpdate(section.id)}
                         role="textbox"
                         aria-label="Heading"
@@ -92,16 +93,16 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
                         tabIndex={readOnly ? -1 : 0}
                     />
                 ) : (
-                    <div 
+                    <div
                         className="text-justify outline-none min-h-[1em] empty:before:content-['Type...'] empty:before:text-slate-300"
                         style={{
-                            textAlign: section.meta?.alignment, 
+                            textAlign: section.meta?.alignment,
                             fontWeight: section.meta?.isBold ? 'bold' : 'normal',
                             paddingLeft: `${(section.meta?.indent || 0) * 0.5}in`
                         }}
                         contentEditable={!readOnly}
                         suppressContentEditableWarning
-                        dangerouslySetInnerHTML={{__html: section.content}}
+                        dangerouslySetInnerHTML={{__html: sanitizeHtml(section.content)}}
                         onBlur={handleContentUpdate(section.id)}
                         role="textbox"
                         aria-label={`Paragraph section ${section.order + 1}`}

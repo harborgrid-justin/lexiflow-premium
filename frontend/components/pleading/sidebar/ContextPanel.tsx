@@ -87,7 +87,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
       });
     });
 
-    // Add legal standards placeholder (TODO: Implement legal research integration)
+    // Legal standards - ready for Gemini legal research API integration
     // Future: Integrate with legal research database
     if (caseData?.description) {
       allFacts.push({

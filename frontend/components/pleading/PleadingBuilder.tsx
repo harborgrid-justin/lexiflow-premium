@@ -147,7 +147,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
             templateId: newDocData.templateId,
             caseId: newDocData.caseId,
             title: newDocData.title.trim(),
-            userId: 'current-user' // TODO: Get from auth context
+            userId: localStorage.getItem('userId') || 'current-user'
         });
     };
 

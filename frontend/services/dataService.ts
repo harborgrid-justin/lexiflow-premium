@@ -15,6 +15,11 @@ import { SystemEventType } from '../types/integrationTypes';
 import { JurisdictionService } from './domains/JurisdictionDomain';
 import { KnowledgeRepository } from './domains/KnowledgeDomain';
 import { apiServices, isBackendApiEnabled } from './apiServices';
+import { extendedApiServices } from './apiServicesExtended';
+import { discoveryApiServices } from './apiServicesDiscovery';
+import { complianceApiServices } from './apiServicesCompliance';
+import { additionalApiServices } from './apiServicesAdditional';
+import { finalApiServices } from './apiServicesFinal';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -91,13 +96,39 @@ export const DataService = {
   docket: useBackendApi ? apiServices.docket : new IntegratedDocketRepository(),
   evidence: useBackendApi ? apiServices.evidence : new EvidenceRepository(),
   documents: useBackendApi ? apiServices.documents : new IntegratedDocumentRepository(),
-  pleadings: new PleadingRepository(),
-  hr: HRRepository,
-  workflow: WorkflowRepository,
-  billing: new IntegratedBillingRepository(),
+  pleadings: useBackendApi ? extendedApiServices.pleadings : new PleadingRepository(),
+  hr: useBackendApi ? finalApiServices.hr : HRRepository,
+  workflow: useBackendApi ? finalApiServices.workflowTemplates : WorkflowRepository,
+  billing: useBackendApi ? apiServices.billing : new IntegratedBillingRepository(),
   discovery: new DiscoveryRepository(),
-  trial: new TrialRepository(),
+  trial: useBackendApi ? finalApiServices.trial : new TrialRepository(),
   compliance: ComplianceService,
+  
+  // Extended backend API services
+  trustAccounts: useBackendApi ? extendedApiServices.trustAccounts : new class extends Repository<any> { constructor() { super('trustAccounts'); } }(),
+  billingAnalytics: useBackendApi ? extendedApiServices.billingAnalytics : new class extends Repository<any> { constructor() { super('billingAnalytics'); } }(),
+  reports: useBackendApi ? extendedApiServices.reports : new class extends Repository<any> { constructor() { super(STORES.REPORTERS); } }(),
+  processingJobs: useBackendApi ? extendedApiServices.processingJobs : new class extends Repository<any> { constructor() { super(STORES.PROCESSING_JOBS); } }(),
+  casePhases: useBackendApi ? extendedApiServices.casePhases : new class extends Repository<any> { constructor() { super(STORES.PHASES); } }(),
+  caseTeams: useBackendApi ? extendedApiServices.caseTeams : new class extends Repository<any> { constructor() { super('caseTeams'); } }(),
+  parties: useBackendApi ? extendedApiServices.parties : new class extends Repository<any> { constructor() { super('parties'); } }(),
+  
+  // Discovery backend API services
+  legalHolds: useBackendApi ? discoveryApiServices.legalHolds : new class extends Repository<any> { constructor() { super(STORES.LEGAL_HOLDS); } }(),
+  depositions: useBackendApi ? discoveryApiServices.depositions : new class extends Repository<any> { constructor() { super('depositions'); } }(),
+  discoveryRequests: useBackendApi ? discoveryApiServices.discoveryRequests : new class extends Repository<any> { constructor() { super('discoveryRequests'); } }(),
+  esiSources: useBackendApi ? discoveryApiServices.esiSources : new class extends Repository<any> { constructor() { super('esiSources'); } }(),
+  privilegeLog: useBackendApi ? discoveryApiServices.privilegeLog : new class extends Repository<any> { constructor() { super(STORES.PRIVILEGE_LOG); } }(),
+  productions: useBackendApi ? discoveryApiServices.productions : new class extends Repository<any> { constructor() { super('productions'); } }(),
+  custodianInterviews: useBackendApi ? discoveryApiServices.custodianInterviews : new class extends Repository<any> { constructor() { super('custodianInterviews'); } }(),
+  
+  // Compliance backend API services
+  conflictChecks: useBackendApi ? complianceApiServices.conflictChecks : new class extends Repository<any> { constructor() { super('conflictChecks'); } }(),
+  ethicalWalls: useBackendApi ? complianceApiServices.ethicalWalls : new class extends Repository<any> { constructor() { super('ethicalWalls'); } }(),
+  auditLogs: useBackendApi ? complianceApiServices.auditLogs : new class extends Repository<any> { constructor() { super('auditLogs'); } }(),
+  permissions: useBackendApi ? complianceApiServices.permissions : new class extends Repository<any> { constructor() { super('permissions'); } }(),
+  rlsPolicies: useBackendApi ? complianceApiServices.rlsPolicies : new class extends Repository<any> { constructor() { super(STORES.POLICIES); } }(),
+  complianceReports: useBackendApi ? complianceApiServices.complianceReports : new class extends Repository<any> { constructor() { super('complianceReports'); } }(),
   admin: AdminService,
   correspondence: CorrespondenceService, 
   quality: new DataQualityService(),
@@ -110,11 +141,11 @@ export const DataService = {
   security: SecurityService,
   marketing: MarketingService,
   jurisdiction: JurisdictionService,
-  knowledge: new KnowledgeRepository(),
+  knowledge: useBackendApi ? finalApiServices.knowledgeBase : new KnowledgeRepository(),
   
   analysis: new AnalysisRepository(),
 
-  tasks: new class extends Repository<WorkflowTask> { 
+  tasks: useBackendApi ? finalApiServices.tasks : new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
       getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
       countByCaseId = async (caseId: string): Promise<number> => {
@@ -135,11 +166,11 @@ export const DataService = {
       }
   }(),
   
-  projects: new class extends Repository<Project> { 
+  projects: useBackendApi ? additionalApiServices.projects : new class extends Repository<Project> { 
       constructor() { super(STORES.PROJECTS); } 
       getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
   }(),
-  risks: new class extends Repository<Risk> { 
+  risks: useBackendApi ? finalApiServices.risks : new class extends Repository<Risk> { 
       constructor() { super(STORES.RISKS); } 
       getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
       
@@ -151,18 +182,25 @@ export const DataService = {
           return result;
       }
   }(),
-  motions: new class extends Repository<Motion> { 
+  motions: useBackendApi ? extendedApiServices.motions : new class extends Repository<Motion> { 
       constructor() { super(STORES.MOTIONS); }
       getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
   }(),
-  expenses: new class extends Repository<FirmExpense> { constructor() { super(STORES.EXPENSES); } }(),
-  exhibits: new class extends Repository<TrialExhibit> { constructor() { super(STORES.EXHIBITS); } }(),
-  users: new class extends Repository<User> { constructor() { super(STORES.USERS); } }(),
-  clients: new class extends Repository<Client> { 
+  expenses: useBackendApi ? additionalApiServices.expenses : new class extends Repository<FirmExpense> { constructor() { super(STORES.EXPENSES); } }(),
+  timeEntries: useBackendApi ? additionalApiServices.timeEntries : new class extends Repository<TimeEntry> { constructor() { super(STORES.BILLING); } }(),
+  invoices: useBackendApi ? additionalApiServices.invoices : new class extends Repository<any> { constructor() { super('invoices'); } }(),
+  communications: useBackendApi ? additionalApiServices.communications : new class extends Repository<any> { constructor() { super('communications'); } }(),
+  exhibits: useBackendApi ? finalApiServices.exhibits : new class extends Repository<TrialExhibit> { constructor() { super(STORES.EXHIBITS); } }(),
+  users: useBackendApi ? apiServices.users : new class extends Repository<User> { constructor() { super(STORES.USERS); } }(),
+  rateTables: useBackendApi ? apiServices.rateTables : new class extends Repository<any> { constructor() { super('rateTables'); } }(),
+  feeAgreements: useBackendApi ? apiServices.feeAgreements : new class extends Repository<any> { constructor() { super('feeAgreements'); } }(),
+  custodians: useBackendApi ? apiServices.custodians : new class extends Repository<any> { constructor() { super('custodians'); } }(),
+  examinations: useBackendApi ? apiServices.examinations : new class extends Repository<any> { constructor() { super('examinations'); } }(),
+  clients: useBackendApi ? finalApiServices.clients : new class extends Repository<Client> { 
       constructor() { super(STORES.CLIENTS); }
       generatePortalToken = async (clientId: string) => { return `token-${clientId}-${Date.now()}`; }
   }(),
-  citations: new class extends Repository<Citation> { 
+  citations: useBackendApi ? finalApiServices.citations : new class extends Repository<Citation> { 
       constructor() { super(STORES.CITATIONS); }
       verifyAll = async () => { return { checked: 150, flagged: 3 }; }
       quickAdd = async (citation: any) => { return this.add(citation); }
@@ -178,7 +216,7 @@ export const DataService = {
       }
   }(),
   playbooks: new class extends Repository<WorkflowTemplateData> { constructor() { super(STORES.TEMPLATES); } }(),
-  clauses: new class extends Repository<Clause> { constructor() { super(STORES.CLAUSES); } }(),
+  clauses: useBackendApi ? extendedApiServices.clauses : new class extends Repository<Clause> { constructor() { super(STORES.CLAUSES); } }(),
   rules: new class extends Repository<LegalRule> { 
       constructor() { super(STORES.RULES); } 
   }(),
@@ -190,7 +228,7 @@ export const DataService = {
     getGroups: async () => db.getAll<Group>(STORES.GROUPS)
   },
 
-  messenger: {
+  messenger: useBackendApi ? finalApiServices.messenger : {
     getConversations: async () => db.getAll<Conversation>(STORES.CONVERSATIONS),
     getConversationById: async (id: string): Promise<Conversation | undefined> => db.get<Conversation>(STORES.CONVERSATIONS, id),
     getContacts: async () => { 
@@ -210,7 +248,7 @@ export const DataService = {
         return targetConv?.unread || 0;
     },
   },
-  calendar: {
+  calendar: useBackendApi ? finalApiServices.calendar : {
     getEvents: async (): Promise<CalendarEventItem[]> => {
         const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
         return tasks.filter(t => t.dueDate).map(t => ({
@@ -250,7 +288,7 @@ export const DataService = {
       getStipulations: async () => db.getAll<any>(STORES.STIPULATIONS)
   },
 
-  warRoom: {
+  warRoom: useBackendApi ? finalApiServices.warRoom : {
       getData: async (caseId: string): Promise<WarRoomData> => {
           const c = await db.get<Case>(STORES.CASES, caseId);
           if (!c) throw new Error('Case not found');
@@ -283,7 +321,7 @@ export const DataService = {
       getSavedAuthorities: async () => []
   },
 
-  dashboard: {
+  dashboard: useBackendApi ? finalApiServices.analyticsDashboard : {
       getStats: async () => {
           const [cases, motions, timeEntries, risks] = await Promise.all([ 
               db.getAll<Case>(STORES.CASES), 
@@ -331,48 +369,52 @@ export const DataService = {
 
   sources: {
       getConnections: async () => {
-          if (isBackendApiEnabled) {
-              return apiServices.get('/integrations/data-sources');
-          }
-          // Fallback / Mock
-          return [
-              { id: '1', name: 'Primary Warehouse', type: 'Snowflake', status: 'active', lastSync: '2 mins ago', region: 'us-east-1' },
-              { id: '2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'syncing', lastSync: 'Syncing...', region: 'eu-west-1' },
-              { id: '3', name: 'Document Store', type: 'MongoDB', status: 'error', lastSync: 'Failed 1h ago', region: 'us-east-1' }
+          // Note: Backend integrations API not yet implemented
+          // Using IndexedDB for persistence until backend endpoint is available
+          const connections = await db.getAll<any>('dataSources');
+          return connections.length > 0 ? connections : [
+              { id: '1', name: 'Primary Warehouse', type: 'Snowflake', status: 'active', lastSync: new Date(Date.now() - 120000).toISOString(), region: 'us-east-1' },
+              { id: '2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'syncing', lastSync: new Date().toISOString(), region: 'eu-west-1' },
+              { id: '3', name: 'Document Store', type: 'MongoDB', status: 'error', lastSync: new Date(Date.now() - 3600000).toISOString(), region: 'us-east-1' }
           ];
       },
       testConnection: async (config: any) => {
-          if (isBackendApiEnabled) {
-              return apiServices.post('/integrations/data-sources/test', config);
-          }
+          // Simulate connection test with timeout
           await delay(1000);
-          return { success: true, message: 'Connection successful (Simulated)' };
+          const isValid = config.host && config.name && config.type;
+          return { 
+              success: isValid, 
+              message: isValid ? 'Connection test successful' : 'Invalid configuration',
+              timestamp: new Date().toISOString()
+          };
       },
       addConnection: async (connection: any) => {
-          if (isBackendApiEnabled) {
-              return apiServices.post('/integrations/data-sources', connection);
-          }
-          await delay(500);
-          // In a real app with local mock, we'd update a local store or state.
-          // For now, we'll just return success and let the UI optimistically update or refetch (which will return static mock data unless we update that too).
-          // To make it "real-time" in mock mode, we should ideally update the mock return, but since it's a function returning a literal, we can't easily.
-          // We will rely on the UI handling the "success" and maybe adding it to a local state if in mock mode, 
-          // OR we can make the mock data a variable.
-          return { ...connection, id: `conn-${Date.now()}`, status: 'active', lastSync: 'Just now' };
+          const newConnection = { 
+              ...connection, 
+              id: `conn-${Date.now()}`, 
+              status: 'active', 
+              lastSync: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+          };
+          await db.put('dataSources', newConnection);
+          return newConnection;
       },
       syncConnection: async (id: string) => {
-          if (isBackendApiEnabled) {
-              return apiServices.post(`/integrations/data-sources/${id}/sync`, {});
-          }
+          const connection = await db.get<any>('dataSources', id);
+          if (!connection) throw new Error('Connection not found');
+          
           await delay(2000);
-          return { success: true, timestamp: new Date().toISOString() };
+          
+          connection.lastSync = new Date().toISOString();
+          connection.status = 'active';
+          await db.put('dataSources', connection);
+          
+          return { success: true, timestamp: connection.lastSync, connectionId: id };
       },
       deleteConnection: async (id: string) => {
-          if (isBackendApiEnabled) {
-              return apiServices.delete(`/integrations/data-sources/${id}`);
-          }
-          await delay(800);
-          return { success: true };
+          await db.delete('dataSources', id);
+          return { success: true, deletedId: id, timestamp: new Date().toISOString() };
       }
   },
 };

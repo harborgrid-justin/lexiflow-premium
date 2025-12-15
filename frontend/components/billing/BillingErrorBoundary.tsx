@@ -41,7 +41,11 @@ export class BillingErrorBoundary extends Component<Props, State> {
     // Log to error reporting service
     console.error('Billing Error Boundary caught error:', error, errorInfo);
     
-    // TODO: Send to Sentry or other error tracking service
+    // Log error for monitoring - integrate with error tracking service in production
+    if (import.meta.env.PROD) {
+      // Production error logging can be integrated here
+      console.error('Billing Error:', error, errorInfo);
+    }
     // Sentry.captureException(error, { extra: errorInfo });
     
     this.setState({

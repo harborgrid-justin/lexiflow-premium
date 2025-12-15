@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProcessingJobsController } from './processing-jobs.controller';
 import { ProcessingJobsService } from './processing-jobs.service';
+import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 
 describe('ProcessingJobsController', () => {
   let controller: ProcessingJobsController;

@@ -1,0 +1,95 @@
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, FindOptionsWhere } from 'typeorm';
+import { Exhibit } from './entities/exhibit.entity';
+import { CreateExhibitDto, ExhibitStatus } from './dto/create-exhibit.dto';
+import { UpdateExhibitDto } from './dto/update-exhibit.dto';
+
+@Injectable()
+export class ExhibitsService {
+  constructor(
+    @InjectRepository(Exhibit)
+    private readonly exhibitRepository: Repository<Exhibit>,
+  ) {}
+
+  async create(createDto: CreateExhibitDto): Promise<Exhibit> {
+    const existing = await this.exhibitRepository.findOne({
+      where: { exhibitNumber: createDto.exhibitNumber, caseId: createDto.caseId }
+    });
+
+    if (existing) {
+      throw new ConflictException(`Exhibit ${createDto.exhibitNumber} already exists for this case`);
+    }
+
+    const exhibit = this.exhibitRepository.create(createDto);
+    return await this.exhibitRepository.save(exhibit);
+  }
+
+  async findAll(filters: {
+    caseId?: string;
+    status?: ExhibitStatus;
+    type?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    const { caseId, status, type, search, page = 1, limit = 50 } = filters;
+    
+    const queryBuilder = this.exhibitRepository.createQueryBuilder('exhibit');
+
+    if (caseId) queryBuilder.andWhere('exhibit.caseId = :caseId', { caseId });
+    if (status) queryBuilder.andWhere('exhibit.status = :status', { status });
+    if (type) queryBuilder.andWhere('exhibit.type = :type', { type });
+    if (search) {
+      queryBuilder.andWhere(
+        '(exhibit.exhibitNumber LIKE :search OR exhibit.description LIKE :search)',
+        { search: `%${search}%` }
+      );
+    }
+
+    const [data, total] = await queryBuilder
+      .orderBy('exhibit.exhibitNumber', 'ASC')
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findOne(id: string): Promise<Exhibit> {
+    const exhibit = await this.exhibitRepository.findOne({ where: { id } });
+    
+    if (!exhibit) {
+      throw new NotFoundException(`Exhibit with ID ${id} not found`);
+    }
+
+    return exhibit;
+  }
+
+  async update(id: string, updateDto: UpdateExhibitDto): Promise<Exhibit> {
+    const exhibit = await this.findOne(id);
+    Object.assign(exhibit, updateDto);
+    return await this.exhibitRepository.save(exhibit);
+  }
+
+  async markAdmitted(id: string, admittedBy: string, date: string): Promise<Exhibit> {
+    const exhibit = await this.findOne(id);
+    
+    exhibit.status = ExhibitStatus.ADMITTED;
+    exhibit.admissionDate = new Date(date);
+    exhibit.admittedBy = admittedBy;
+
+    return await this.exhibitRepository.save(exhibit);
+  }
+
+  async remove(id: string): Promise<void> {
+    const exhibit = await this.findOne(id);
+    await this.exhibitRepository.remove(exhibit);
+  }
+}

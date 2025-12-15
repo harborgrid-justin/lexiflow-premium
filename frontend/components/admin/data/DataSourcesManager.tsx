@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { 
   HardDrive, Database, Cloud, Plus, RefreshCw, Trash2, Settings, 
-  Activity, CheckCircle, AlertTriangle, X, Play, Server, ShieldCheck 
+  Activity, CheckCircle, AlertTriangle, X, Play, Server, ShieldCheck, Power 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
+import { useDataSource } from '../../../context/DataSourceContext';
 
 interface DataSourcesManagerProps {
   initialTab?: string;
@@ -178,6 +179,29 @@ const CloudDatabaseView = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: '', host: '', region: 'us-east-1' });
+  
+  return (
+    <div className="space-y-6">
+      {/* Active Data Source Indicator */}
+      <DataSourceSelector />
+      
+      {/* Backend API Service Coverage */}
+      <ServiceCoverageIndicator />
+      
+      <CloudDatabaseContent 
+        theme={theme}
+        isAdding={isAdding}
+        setIsAdding={setIsAdding}
+        selectedProvider={selectedProvider}
+        setSelectedProvider={setSelectedProvider}
+        formData={formData}
+        setFormData={setFormData}
+      />
+    </div>
+  );
+};
+
+const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, setSelectedProvider, formData, setFormData }: any) => {
   
   const { data: connections = [], isLoading } = useQuery<any[]>(
     ['admin', 'sources', 'connections'],
@@ -420,6 +444,9 @@ const LocalStorageView = () => {
 
   return (
     <div className="space-y-6">
+      {/* Active Data Source Indicator */}
+      <DataSourceSelector />
+      
       <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex justify-between items-center mb-6">
           <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
@@ -470,6 +497,176 @@ const LocalStorageView = () => {
   );
 };
 
+const ServiceCoverageIndicator = () => {
+  const { theme } = useTheme();
+  const { currentSource } = useDataSource();
+  const [showDetails, setShowDetails] = useState(false);
+
+  // Services that have backend API integration when PostgreSQL is active
+  const backendEnabledServices = [
+    'cases', 'docket', 'documents', 'evidence', 'billing', 'users',
+    'pleadings', 'trustAccounts', 'billingAnalytics', 'reports', 
+    'processingJobs', 'casePhases', 'caseTeams', 'motions', 'parties',
+    'clauses', 'legalHolds', 'depositions', 'discoveryRequests', 
+    'esiSources', 'privilegeLog', 'productions', 'custodianInterviews',
+    'conflictChecks', 'ethicalWalls', 'auditLogs', 'permissions',
+    'rlsPolicies', 'complianceReports', 'rateTables', 'feeAgreements',
+    'custodians', 'examinations'
+  ];
+
+  const totalServices = 35; // Total number of services in DataService
+  const backendServices = backendEnabledServices.length;
+  const indexedDbOnlyServices = totalServices - backendServices;
+  const coverage = currentSource === 'postgresql' ? backendServices : 0;
+
+  return (
+    <div className={cn("p-5 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className={cn("text-base font-semibold flex items-center gap-2", theme.text.primary)}>
+          <Activity className="h-5 w-5 text-blue-500" /> Backend API Coverage
+        </h3>
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className={cn("text-xs font-medium px-3 py-1.5 rounded-lg border hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors", theme.border.default, theme.text.primary)}
+        >
+          {showDetails ? 'Hide' : 'Show'} Details
+        </button>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className={cn("p-4 rounded-lg", currentSource === 'postgresql' ? "bg-blue-50 dark:bg-blue-900/20" : "bg-gray-50 dark:bg-slate-800")}>
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Backend API</div>
+          <div className={cn("text-2xl font-bold", currentSource === 'postgresql' ? "text-blue-600 dark:text-blue-400" : theme.text.primary)}>
+            {coverage}
+          </div>
+        </div>
+        <div className="p-4 rounded-lg bg-gray-50 dark:bg-slate-800">
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">IndexedDB Only</div>
+          <div className={cn("text-2xl font-bold", theme.text.primary)}>
+            {currentSource === 'postgresql' ? indexedDbOnlyServices : totalServices}
+          </div>
+        </div>
+        <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20">
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Coverage</div>
+          <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            {currentSource === 'postgresql' ? Math.round((coverage / totalServices) * 100) : 0}%
+          </div>
+        </div>
+      </div>
+
+      {currentSource !== 'postgresql' && (
+        <div className={cn("p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-xs flex items-start gap-2", theme.text.primary)}>
+          <AlertTriangle className="h-4 w-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <span>Switch to PostgreSQL data source to enable backend API services.</span>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {showDetails && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+          >
+            <h4 className={cn("text-sm font-semibold mb-3", theme.text.primary)}>
+              Backend-Enabled Services ({backendServices}):
+            </h4>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {backendEnabledServices.map((service) => (
+                <div
+                  key={service}
+                  className={cn(
+                    "px-3 py-2 rounded-lg text-xs font-mono flex items-center gap-2",
+                    currentSource === 'postgresql' 
+                      ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" 
+                      : "bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-400"
+                  )}
+                >
+                  {currentSource === 'postgresql' ? (
+                    <CheckCircle className="h-3 w-3 text-blue-600" />
+                  ) : (
+                    <X className="h-3 w-3 text-gray-400" />
+                  )}
+                  {service}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const DataSourceSelector = () => {
+  const { theme } = useTheme();
+  const { currentSource, switchDataSource } = useDataSource();
+  const [isSwitching, setIsSwitching] = useState(false);
+
+  const sources = [
+    { id: 'indexeddb' as const, name: 'IndexedDB', desc: 'Client-side offline storage', icon: Database, color: 'blue' },
+    { id: 'postgresql' as const, name: 'PostgreSQL', desc: 'Backend database (requires server)', icon: Server, color: 'purple' },
+    { id: 'cloud' as const, name: 'Cloud Database', desc: 'External cloud provider', icon: Cloud, color: 'emerald' },
+  ];
+
+  const handleSwitch = async (sourceId: typeof currentSource) => {
+    if (sourceId === currentSource) return;
+    
+    if (confirm(`Switch to ${sources.find(s => s.id === sourceId)?.name}? This will reload the application and clear all cached data.`)) {
+      setIsSwitching(true);
+      await switchDataSource(sourceId);
+    }
+  };
+
+  return (
+    <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
+      <h3 className={cn("text-lg font-semibold mb-4 flex items-center gap-2", theme.text.primary)}>
+        <Power className="h-5 w-5 text-emerald-500" /> Active Data Source
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {sources.map((source) => {
+          const isActive = currentSource === source.id;
+          const Icon = source.icon;
+          
+          return (
+            <button
+              key={source.id}
+              onClick={() => handleSwitch(source.id)}
+              disabled={isActive || isSwitching}
+              className={cn(
+                "p-4 rounded-xl border-2 transition-all text-left",
+                isActive 
+                  ? `border-${source.color}-500 bg-${source.color}-50 dark:bg-${source.color}-900/20` 
+                  : `border-gray-200 dark:border-gray-700 hover:border-${source.color}-300 dark:hover:border-${source.color}-700`,
+                isActive || isSwitching ? "cursor-default" : "cursor-pointer hover:shadow-md"
+              )}
+            >
+              <div className="flex items-start justify-between mb-2">
+                <Icon className={cn("h-5 w-5", isActive ? `text-${source.color}-600` : "text-gray-400")} />
+                {isActive && (
+                  <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    ACTIVE
+                  </div>
+                )}
+              </div>
+              <h4 className={cn("font-bold text-sm mb-1", theme.text.primary)}>{source.name}</h4>
+              <p className={cn("text-xs", theme.text.secondary)}>{source.desc}</p>
+            </button>
+          );
+        })}
+      </div>
+      {isSwitching && (
+        <div className={cn("mt-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-sm flex items-center gap-2", theme.text.primary)}>
+          <RefreshCw className="h-4 w-4 animate-spin text-blue-600" />
+          Switching data source and reloading application...
+        </div>
+      )}
+    </div>
+  );
+};
+
 const IndexedDBView = () => {
   const { theme } = useTheme();
   const { data: stores = [], isLoading, refetch } = useQuery<any[]>(
@@ -479,6 +676,12 @@ const IndexedDBView = () => {
 
   return (
     <div className="space-y-6">
+      {/* Active Data Source Indicator */}
+      <DataSourceSelector />
+      
+      {/* Backend API Service Coverage */}
+      <ServiceCoverageIndicator />
+      
       <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex justify-between items-center mb-6">
           <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
@@ -486,7 +689,7 @@ const IndexedDBView = () => {
           </h3>
           <button 
             onClick={() => refetch()}
-            className={cn("px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 transition-colors", theme.border.default, theme.text.primary)}
+            className={cn("px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors", theme.border.default, theme.text.primary)}
           >
             <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} /> Refresh
           </button>

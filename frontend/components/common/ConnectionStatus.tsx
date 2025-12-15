@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Database, Cloud, Wifi, WifiOff, AlertCircle } from 'lucide-react';
+import { Database, Cloud, Wifi, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
-import { isBackendApiEnabled } from '../../services/apiServices';
+import { useDataSource } from '../../context/DataSourceContext';
+import { BackendHealthMonitor } from './BackendHealthMonitor';
+import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
 
 interface ConnectionStatusProps {
   className?: string;
@@ -10,7 +12,9 @@ interface ConnectionStatusProps {
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = '' }) => {
   const [isOnline, setIsOnline] = useState(true);
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
-  const useBackendApi = isBackendApiEnabled();
+  const [showHealthMonitor, setShowHealthMonitor] = useState(false);
+  const [showCoverage, setShowCoverage] = useState(false);
+  const { currentSource, isBackendApiEnabled: useBackendApi } = useDataSource();
 
   useEffect(() => {
     // Check backend connection if API mode is enabled
@@ -58,9 +62,11 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
   };
 
   const getStatusText = () => {
-    if (!useBackendApi) return 'IndexedDB (Offline)';
+    if (currentSource === 'indexeddb') return 'IndexedDB (Offline)';
     if (backendStatus === 'checking') return 'Checking...';
-    if (backendStatus === 'connected' && isOnline) return 'PostgreSQL (Online)';
+    // Updated: 35+ core services now integrated with backend
+    if (currentSource === 'postgresql' && backendStatus === 'connected' && isOnline) return 'PostgreSQL (35+ Services)';
+    if (currentSource === 'cloud' && backendStatus === 'connected' && isOnline) return 'Cloud DB (Not Implemented)';
     if (!isOnline) return 'No Internet';
     return 'Backend Offline';
   };
@@ -74,9 +80,41 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
   };
 
   return (
-    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${getStatusColor()} ${className}`}>
-      {getIcon()}
-      <span>{getStatusText()}</span>
-    </div>
+    <>
+      <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${getStatusColor()} ${className}`}>
+          {getIcon()}
+          <span>{getStatusText()}</span>
+        </div>
+        
+        <button
+          onClick={() => setShowCoverage(true)}
+          className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+          title="View Service Coverage"
+        >
+          <Info className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+        </button>
+        
+        {useBackendApi && (
+          <button
+            onClick={() => setShowHealthMonitor(true)}
+            className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+            title="View Backend Health Monitor"
+          >
+            <Activity className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          </button>
+        )}
+      </div>
+
+      <ServiceCoverageIndicator 
+        isOpen={showCoverage} 
+        onClose={() => setShowCoverage(false)} 
+      />
+
+      <BackendHealthMonitor 
+        isOpen={showHealthMonitor} 
+        onClose={() => setShowHealthMonitor(false)} 
+      />
+    </>
   );
 };

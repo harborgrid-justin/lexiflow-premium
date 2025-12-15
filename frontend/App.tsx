@@ -6,6 +6,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import { WindowProvider } from './context/WindowContext';
 import { SyncProvider } from './context/SyncContext';
+import { DataSourceProvider } from './context/DataSourceContext';
 import { HolographicDock } from './components/layout/HolographicDock';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { LazyLoader } from './components/common/LazyLoader';
@@ -103,13 +104,15 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <ErrorBoundary scope="AppRoot">
-        <ToastProvider>
-          <SyncProvider>
-            <WindowProvider>
-              <InnerApp />
-            </WindowProvider>
-          </SyncProvider>
-        </ToastProvider>
+        <DataSourceProvider>
+          <ToastProvider>
+            <SyncProvider>
+              <WindowProvider>
+                <InnerApp />
+              </WindowProvider>
+            </SyncProvider>
+          </ToastProvider>
+        </DataSourceProvider>
       </ErrorBoundary>
     </ThemeProvider>
   );

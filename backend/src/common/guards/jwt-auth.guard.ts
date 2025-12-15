@@ -28,11 +28,18 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
+      const jwtSecret = process.env.JWT_SECRET;
+      if (!jwtSecret) {
+        throw new UnauthorizedException('Server configuration error');
+      }
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET || 'your-secret-key',
+        secret: jwtSecret,
       });
       request.user = payload;
     } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid or expired token');
     }
 

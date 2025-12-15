@@ -4,8 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { validationPipeConfig } from './config/validation';
@@ -13,6 +12,16 @@ import { setupSwagger } from './config/swagger.config';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
+
+  // Process-level error handlers for production stability
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+  });
+
+  process.on('uncaughtException', (error) => {
+    logger.error(`Uncaught Exception: ${error.message}`, error.stack);
+    process.exit(1);
+  });
 
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
@@ -32,11 +41,8 @@ async function bootstrap() {
     credentials: configService.get('cors.credentials'),
   });
 
-  // Global Filters (Exception Handling)
-  app.useGlobalFilters(
-    new AllExceptionsFilter(),
-    new HttpExceptionFilter(),
-  );
+  // Global Filters (Exception Handling) - Use enterprise filter for structured error responses
+  app.useGlobalFilters(new EnterpriseExceptionFilter());
 
   // Global Interceptors
   app.useGlobalInterceptors(
@@ -60,29 +66,25 @@ async function bootstrap() {
 ║                                                                   ║
 ║          LexiFlow Enterprise Backend - API Server                ║
 ║                                                                   ║
-║   🚀 Server: http://localhost:${port}                                  ║
-║   📚 API Docs: http://localhost:${port}/api/docs                       ║
-║   🌍 Environment: ${env.padEnd(50)}║
+║   Server: http://localhost:${port}                                     ║
+║   API Docs: http://localhost:${port}/api/docs                          ║
+║   Environment: ${env.padEnd(53)}║
 ║                                                                   ║
-║   📦 Active Modules:                                              ║
-║   ✅ Authentication & Authorization (JWT, RBAC)                   ║
-║   ✅ User Management                                              ║
-║   ✅ Case Management (Cases, Parties, Teams, Phases)             ║
-║   ✅ Document Management (Documents, Versions, OCR)              ║
-║   ✅ Discovery & E-Discovery                                      ║
-║   ✅ Billing & Finance (Time, Invoices, Trust Accounts)          ║
-║   ✅ Compliance & Audit (Conflict Checks, Ethical Walls)         ║
-║   ✅ Communications (Messaging, Email, Notifications)            ║
-║   ✅ Analytics & Search                                           ║
-║   ✅ GraphQL API & Integrations                                   ║
+║   Active Modules:                                                 ║
+║   - Authentication & Authorization (JWT, RBAC)                    ║
+║   - User Management                                               ║
+║   - Case Management (Cases, Parties, Teams, Phases)              ║
+║   - Document Management (Documents, Versions, OCR)               ║
+║   - Discovery & E-Discovery                                       ║
+║   - Billing & Finance (Time, Invoices, Trust Accounts)           ║
+║   - Compliance & Audit (Conflict Checks, Ethical Walls)          ║
+║   - Communications (Messaging, Email, Notifications)             ║
+║   - Analytics & Search                                            ║
+║   - GraphQL API & Integrations                                    ║
 ║                                                                   ║
-║   🔐 Default Admin Credentials:                                   ║
-║   Email: admin@lexiflow.com                                      ║
-║   Password: Admin123!                                            ║
-║                                                                   ║
-║   📊 Database: PostgreSQL                                         ║
-║   🔄 Queue System: Redis + Bull                                   ║
-║   📡 Real-time: WebSockets                                        ║
+║   Database: PostgreSQL                                            ║
+║   Queue System: Redis + Bull                                      ║
+║   Real-time: WebSockets                                           ║
 ║                                                                   ║
 ╚═══════════════════════════════════════════════════════════════════╝
   `);

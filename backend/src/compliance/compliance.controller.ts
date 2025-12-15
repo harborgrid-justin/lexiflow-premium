@@ -8,7 +8,7 @@ import { UserRole } from '../auth/enums/user-role.enum';
 
 @ApiTags('Compliance')
 @ApiBearerAuth('JWT-auth')
-@Controller('compliance')
+@Controller('api/v1/compliance')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ComplianceController {
   constructor(private readonly complianceService: ComplianceService) {}
@@ -57,7 +57,9 @@ export class ComplianceController {
     try {
       const score = await this.complianceService.getComplianceScore(reportDto.caseId);
       return { report: score, format: reportDto.format };
-    } catch {
+    } catch (error) {
+      // Log error for monitoring and return default response
+      console.error(`Failed to generate compliance report for case ${reportDto.caseId}:`, error);
       return { report: { score: 100, passed: 0, failed: 0, total: 0 }, format: reportDto.format };
     }
   }

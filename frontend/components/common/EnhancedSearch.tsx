@@ -17,6 +17,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { Search, Clock, X, Command, TrendingUp, Hash, Calendar, Tag } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -465,7 +466,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                       "text-sm truncate",
                       selectedIndex === idx ? theme.primary.text : theme.text.primary
                     )}
-                    dangerouslySetInnerHTML={{ __html: ('highlightedText' in item ? item.highlightedText : undefined) || item.text }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(('highlightedText' in item ? item.highlightedText : undefined) || item.text) }}
                   />
                   {'metadata' in item && item.metadata && (
                     <p className={cn(

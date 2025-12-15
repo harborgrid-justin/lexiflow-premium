@@ -27,6 +27,7 @@ import { useNotify } from '../../hooks/useNotify';
 // Services & Utils
 import { GeminiService } from '../../services/geminiService';
 import { cn } from '../../utils/cn';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 export const CaseListClosing: React.FC = () => {
   const { theme } = useTheme();
@@ -61,7 +62,7 @@ export const CaseListClosing: React.FC = () => {
       {checklist ? (
           <div className="w-full max-w-md bg-slate-50 p-4 rounded border text-left text-sm overflow-y-auto max-h-64 mb-4">
               <h4 className="font-bold mb-2 text-slate-700">Proposed Index:</h4>
-              <div dangerouslySetInnerHTML={{ __html: checklist }} />
+              <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(checklist) }} />
               <Button className="w-full mt-4" variant="outline" onClick={() => setChecklist(null)}>Reset</Button>
           </div>
       ) : (

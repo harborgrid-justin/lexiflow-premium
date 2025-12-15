@@ -11,8 +11,6 @@ export class ConflictCheck extends BaseEntity {
   @Column({ type: 'uuid', nullable: true })
   caseId: string;
 
-  
-
   @Column({ type: 'uuid', nullable: true })
   potentialClientId: string;
 
@@ -155,7 +153,7 @@ export class ConflictCheck extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
 
-@ManyToOne(() => Case, (caseEntity) => caseEntity.conflictChecks)
+  @ManyToOne(() => Case, (caseEntity) => caseEntity.conflictChecks)
   @JoinColumn({ name: 'caseId' })
   case: Case;
 }

@@ -8,7 +8,7 @@ import { UserRole } from '../auth/enums/user-role.enum';
 
 @ApiTags('Billing')
 @ApiBearerAuth('JWT-auth')
-@Controller('billing')
+@Controller('api/v1/billing')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}

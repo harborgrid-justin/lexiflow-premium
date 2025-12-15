@@ -26,10 +26,13 @@ import {
   SearchSuggestionsResultDto,
   ReindexResultDto,
 } from './dto/search-result.dto';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
 @ApiTags('Search')
 @Controller('api/v1/search')
-// @UseGuards(JwtAuthGuard) // Uncomment when auth is available
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
@@ -100,13 +103,14 @@ export class SearchController {
 
   @Post('reindex')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Reindex search data (admin only)' })
   @ApiResponse({
     status: 200,
     description: 'Reindex completed',
     type: ReindexResultDto,
   })
-  // @UseGuards(AdminGuard) // Uncomment when admin guard is available
   async reindex(@Query() dto: ReindexDto): Promise<ReindexResultDto> {
     return this.searchService.reindex(dto);
   }

@@ -4,7 +4,6 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import {
@@ -15,10 +14,12 @@ import {
   PendingTasksDto,
   BillingSummaryDto,
 } from './dto/dashboard.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Dashboard')
 @Controller('api/v1/dashboard')
-// @UseGuards(JwtAuthGuard) // Uncomment when auth is available
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
@@ -41,11 +42,8 @@ export class DashboardController {
     description: 'Cases summary retrieved successfully',
     type: MyCasesSummaryDto,
   })
-  @ApiQuery({ name: 'userId', required: false, description: 'User ID (defaults to current user)' })
-  async getMyCases(@Query('userId') userId?: string): Promise<MyCasesSummaryDto> {
-    // In production, get userId from JWT token if not provided
-    const effectiveUserId = userId || 'current-user';
-    return this.dashboardService.getMyCasesSummary(effectiveUserId);
+  async getMyCases(@CurrentUser() user: any): Promise<MyCasesSummaryDto> {
+    return this.dashboardService.getMyCasesSummary(user.sub);
   }
 
   @Get('deadlines')
@@ -55,9 +53,8 @@ export class DashboardController {
     description: 'Deadlines retrieved successfully',
     type: UpcomingDeadlinesDto,
   })
-  @ApiQuery({ name: 'userId', required: false, description: 'User ID (defaults to current user)' })
-  async getDeadlines(@Query('userId') userId?: string): Promise<UpcomingDeadlinesDto> {
-    return this.dashboardService.getUpcomingDeadlines(userId);
+  async getDeadlines(@CurrentUser() user: any): Promise<UpcomingDeadlinesDto> {
+    return this.dashboardService.getUpcomingDeadlines(user.sub);
   }
 
   @Get('tasks')
@@ -67,9 +64,8 @@ export class DashboardController {
     description: 'Tasks retrieved successfully',
     type: PendingTasksDto,
   })
-  @ApiQuery({ name: 'userId', required: false, description: 'User ID (defaults to current user)' })
-  async getTasks(@Query('userId') userId?: string): Promise<PendingTasksDto> {
-    return this.dashboardService.getPendingTasks(userId);
+  async getTasks(@CurrentUser() user: any): Promise<PendingTasksDto> {
+    return this.dashboardService.getPendingTasks(user.sub);
   }
 
   @Get('billing-summary')
@@ -79,8 +75,7 @@ export class DashboardController {
     description: 'Billing summary retrieved successfully',
     type: BillingSummaryDto,
   })
-  @ApiQuery({ name: 'userId', required: false, description: 'User ID (defaults to current user)' })
-  async getBillingSummary(@Query('userId') userId?: string): Promise<BillingSummaryDto> {
-    return this.dashboardService.getBillingSummary(userId);
+  async getBillingSummary(@CurrentUser() user: any): Promise<BillingSummaryDto> {
+    return this.dashboardService.getBillingSummary(user.sub);
   }
 }

@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   Res,
   HttpStatus,
+  HttpCode,
   ParseUUIDPipe,
   Inject,
 } from '@nestjs/common';
@@ -36,6 +37,7 @@ export class DocumentsController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Upload a new document' })
   @ApiConsumes('multipart/form-data')
@@ -112,12 +114,12 @@ export class DocumentsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a document' })
-  @ApiResponse({ status: 200, description: 'Document deleted successfully' })
+  @ApiResponse({ status: 204, description: 'Document deleted successfully' })
   @ApiResponse({ status: 404, description: 'Document not found' })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.documentsService.remove(id);
-    return { message: 'Document deleted successfully' };
   }
 
   @Post(':id/ocr')

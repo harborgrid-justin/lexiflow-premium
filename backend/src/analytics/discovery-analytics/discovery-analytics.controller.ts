@@ -14,10 +14,11 @@ import {
   CaseDiscoveryMetricsDto,
   DiscoveryProductionVolumeDto,
 } from './dto/discovery-analytics.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Discovery')
 @Controller('api/v1/analytics')
-// @UseGuards(JwtAuthGuard) // Uncomment when auth is available
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class DiscoveryAnalyticsController {
   constructor(

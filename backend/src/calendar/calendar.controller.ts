@@ -1,78 +1,65 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CalendarService } from './calendar.service';
+import { CreateCalendarEventDto, UpdateCalendarEventDto } from './dto/calendar.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Calendar')
 @ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('api/v1/calendar')
 export class CalendarController {
-  @Get('events')
-  @ApiOperation({ summary: 'Get calendar events' })
-  async getEvents(@Query() query: any) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 50
-    };
+  constructor(private readonly calendarService: CalendarService) {}
+  @Get()
+  @ApiOperation({ summary: 'Get all calendar events' })
+  @ApiResponse({ status: 200, description: 'Events retrieved' })
+  async findAll(@Query() query: any) {
+    return await this.calendarService.findAll(query);
   }
 
-  @Get('events/:id')
-  @ApiOperation({ summary: 'Get event by ID' })
-  async getEvent(@Param('id') id: string) {
-    return {
-      id,
-      title: 'Court Hearing',
-      date: new Date().toISOString(),
-      type: 'hearing'
-    };
+  @Get('upcoming')
+  @ApiOperation({ summary: 'Get upcoming events' })
+  @ApiResponse({ status: 200, description: 'Upcoming events retrieved' })
+  async getUpcoming(@Query('days') days: number = 7) {
+    const events = await this.calendarService.findUpcoming(days);
+    return { events };
   }
 
-  @Get('team-availability')
-  @ApiOperation({ summary: 'Get team availability' })
-  async getTeamAvailability(@Query('date') date: string) {
-    return [];
+  @Get(':id')
+  @ApiOperation({ summary: 'Get calendar event by ID' })
+  @ApiResponse({ status: 200, description: 'Event found' })
+  async findOne(@Param('id') id: string) {
+    return await this.calendarService.findOne(id);
   }
 
-  @Get('statute-of-limitations')
-  @ApiOperation({ summary: 'Get statute of limitations deadlines' })
-  async getSOL(@Query('caseId') caseId: string) {
-    return [];
-  }
-
-  @Post('events')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create calendar event' })
-  async createEvent(@Body() createDto: any) {
-    return {
-      id: Date.now().toString(),
-      ...createDto,
-      createdAt: new Date().toISOString()
-    };
+  @ApiResponse({ status: 201, description: 'Event created' })
+  async create(@Body() createDto: CreateCalendarEventDto) {
+    return await this.calendarService.create(createDto);
   }
 
-  @Post('sync')
-  @ApiOperation({ summary: 'Sync calendar with external systems' })
-  async sync() {
-    return {
-      synced: 0,
-      errors: 0
-    };
-  }
-
-  @Put('events/:id')
+  @Put(':id')
   @ApiOperation({ summary: 'Update calendar event' })
-  async updateEvent(@Param('id') id: string, @Body() updateDto: any) {
-    return {
-      id,
-      ...updateDto,
-      updatedAt: new Date().toISOString()
-    };
+  @ApiResponse({ status: 200, description: 'Event updated' })
+  async update(@Param('id') id: string, @Body() updateDto: UpdateCalendarEventDto) {
+    return await this.calendarService.update(id, updateDto);
   }
 
-  @Delete('events/:id')
+  @Put(':id/complete')
+  @ApiOperation({ summary: 'Mark event as complete' })
+  @ApiResponse({ status: 200, description: 'Event marked complete' })
+  async markComplete(@Param('id') id: string) {
+    return await this.calendarService.markComplete(id);
+  }
+
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete calendar event' })
-  async deleteEvent(@Param('id') id: string) {
+  @ApiResponse({ status: 204, description: 'Event deleted' })
+  async remove(@Param('id') id: string) {
+    await this.calendarService.remove(id);
     return;
   }
 }

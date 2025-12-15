@@ -32,6 +32,7 @@ export class BillingAnalyticsController {
     description: 'Billing metrics retrieved successfully',
     type: BillingMetricsDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getBillingMetrics(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<BillingMetricsDto> {
@@ -45,6 +46,7 @@ export class BillingAnalyticsController {
     description: 'Billing trends retrieved successfully',
     type: [BillingTrendDataPoint],
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getBillingTrends(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<BillingTrendDataPoint[]> {
@@ -58,6 +60,7 @@ export class BillingAnalyticsController {
     description: 'WIP aging data retrieved successfully',
     type: WipAgingDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getWipAging(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<WipAgingDto> {
@@ -71,6 +74,7 @@ export class BillingAnalyticsController {
     description: 'AR aging data retrieved successfully',
     type: ArAgingDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getArAging(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<ArAgingDto> {
@@ -84,6 +88,7 @@ export class BillingAnalyticsController {
     description: 'Realization analysis retrieved successfully',
     type: RealizationAnalysisDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getRealizationAnalysis(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<RealizationAnalysisDto> {

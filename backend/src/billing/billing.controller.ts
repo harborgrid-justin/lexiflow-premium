@@ -40,76 +40,155 @@ export class BillingController {
   }
 
   @Put('invoices/:id')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Update invoice' })
+  @ApiResponse({ status: 200, description: 'Invoice updated' })
+  @ApiResponse({ status: 404, description: 'Invoice not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Invoice ID' })
   async updateInvoice(@Param('id') id: string, @Body() updateDto: any) {
     return this.billingService.updateInvoice(id, updateDto);
   }
 
   @Delete('invoices/:id')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Delete invoice' })
+  @ApiResponse({ status: 200, description: 'Invoice deleted' })
+  @ApiResponse({ status: 404, description: 'Invoice not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Invoice ID' })
   async deleteInvoice(@Param('id') id: string) {
     return this.billingService.deleteInvoice(id);
   }
 
   @Post('invoices/:id/send')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @ApiOperation({ summary: 'Send invoice to client' })
+  @ApiResponse({ status: 200, description: 'Invoice sent' })
+  @ApiResponse({ status: 404, description: 'Invoice not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Invoice ID' })
   async sendInvoice(@Param('id') id: string) {
     return this.billingService.sendInvoice(id);
   }
 
   @Post('invoices/:id/mark-paid')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Mark invoice as paid' })
+  @ApiResponse({ status: 200, description: 'Invoice marked as paid' })
+  @ApiResponse({ status: 404, description: 'Invoice not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Invoice ID' })
   async markPaid(@Param('id') id: string) {
     return this.billingService.markInvoicePaid(id);
   }
 
   @Get('time-entries')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get all time entries' })
+  @ApiResponse({ status: 200, description: 'List of time entries' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAllTimeEntries() {
     return this.billingService.findAllTimeEntries();
   }
 
   @Get('time-entries/case/:caseId')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get time entries by case' })
+  @ApiResponse({ status: 200, description: 'List of time entries for case' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'caseId', description: 'Case ID' })
   async getTimeEntriesByCase(@Param('caseId') caseId: string) {
     return this.billingService.findTimeEntriesByCaseId(caseId);
   }
 
   @Post('time-entries')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Create time entry' })
+  @ApiResponse({ status: 201, description: 'Time entry created' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createTimeEntry(@Body() createDto: any) {
     return this.billingService.createTimeEntry(createDto);
   }
 
   @Put('time-entries/:id')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Update time entry' })
+  @ApiResponse({ status: 200, description: 'Time entry updated' })
+  @ApiResponse({ status: 404, description: 'Time entry not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Time entry ID' })
   async updateTimeEntry(@Param('id') id: string, @Body() updateDto: any) {
     return this.billingService.updateTimeEntry(id, updateDto);
   }
 
   @Delete('time-entries/:id')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @ApiOperation({ summary: 'Delete time entry' })
+  @ApiResponse({ status: 200, description: 'Time entry deleted' })
+  @ApiResponse({ status: 404, description: 'Time entry not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Time entry ID' })
   async deleteTimeEntry(@Param('id') id: string) {
     return this.billingService.deleteTimeEntry(id);
   }
 
   @Get('time-entries/unbilled/:caseId')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get unbilled time entries for case' })
+  @ApiResponse({ status: 200, description: 'List of unbilled time entries' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'caseId', description: 'Case ID' })
   async getUnbilledTimeEntries(@Param('caseId') caseId: string) {
     return this.billingService.getUnbilledTimeEntries(caseId);
   }
 
   @Get('expenses')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get all expenses' })
+  @ApiResponse({ status: 200, description: 'List of expenses' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getAllExpenses() {
     return this.billingService.findAllExpenses();
   }
 
   @Post('expenses')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Create expense' })
+  @ApiResponse({ status: 201, description: 'Expense created' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createExpense(@Body() createDto: any) {
     return this.billingService.createExpense(createDto);
   }
 
   @Get('expenses/unbilled/:caseId')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get unbilled expenses for case' })
+  @ApiResponse({ status: 200, description: 'List of unbilled expenses' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'caseId', description: 'Case ID' })
   async getUnbilledExpenses(@Param('caseId') caseId: string) {
     return this.billingService.getUnbilledExpenses(caseId);
   }
 
   @Post('generate-invoice')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Generate invoice from unbilled items' })
+  @ApiResponse({ status: 201, description: 'Invoice generated' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async generateInvoice(@Body() body: { caseId: string; clientId: string }) {
     return this.billingService.generateInvoice(body.caseId, body.clientId);
   }
 
   @Get('summary/:caseId')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get billing summary for case' })
+  @ApiResponse({ status: 200, description: 'Billing summary' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'caseId', description: 'Case ID' })
   async getBillingSummary(@Param('caseId') caseId: string) {
     return this.billingService.getBillingSummary(caseId);
   }

@@ -44,6 +44,7 @@ export class SearchController {
     description: 'Search results',
     type: SearchResultDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiQuery({ name: 'query', required: true, description: 'Search query string' })
   @ApiQuery({ name: 'entityType', required: false, enum: SearchEntityType })
   @ApiQuery({ name: 'page', required: false, type: Number })
@@ -59,6 +60,7 @@ export class SearchController {
     description: 'Case search results',
     type: SearchResultDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async searchCases(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
     queryDto.entityType = SearchEntityType.CASE;
     return this.searchService.search(queryDto);
@@ -71,6 +73,7 @@ export class SearchController {
     description: 'Document search results',
     type: SearchResultDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async searchDocuments(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
     queryDto.entityType = SearchEntityType.DOCUMENT;
     return this.searchService.search(queryDto);
@@ -83,6 +86,7 @@ export class SearchController {
     description: 'Client search results',
     type: SearchResultDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async searchClients(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
     queryDto.entityType = SearchEntityType.CLIENT;
     return this.searchService.search(queryDto);
@@ -95,6 +99,7 @@ export class SearchController {
     description: 'Search suggestions',
     type: SearchSuggestionsResultDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getSuggestions(
     @Query() dto: SearchSuggestionsDto,
   ): Promise<SearchSuggestionsResultDto> {
@@ -111,6 +116,8 @@ export class SearchController {
     description: 'Reindex completed',
     type: ReindexResultDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
   async reindex(@Query() dto: ReindexDto): Promise<ReindexResultDto> {
     return this.searchService.reindex(dto);
   }

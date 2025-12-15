@@ -17,8 +17,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["jest", "node"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }

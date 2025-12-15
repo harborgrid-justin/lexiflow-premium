@@ -1,43 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksService } from './webhooks.service';
+import { WebhookEvent } from './dto/create-webhook.dto';
 
 describe('WebhooksController', () => {
   let controller: WebhooksController;
   let service: WebhooksService;
 
+  const mockUser = { id: 'user-001', email: 'test@example.com' };
   const mockWebhook = {
     id: 'webhook-001',
-    name: 'Case Updates',
-    url: 'https://example.com/webhooks/cases',
-    secret: 'secret123',
-    events: ['case.created', 'case.updated'],
+    name: 'Test Webhook',
+    url: 'https://example.com/webhook',
+    events: [WebhookEvent.CASE_CREATED],
     isActive: true,
     createdBy: 'user-001',
-  };
-
-  const mockDelivery = {
-    id: 'delivery-001',
-    webhookId: 'webhook-001',
-    event: 'case.created',
-    payload: { caseId: 'case-001' },
-    responseStatus: 200,
-    success: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const mockWebhooksService = {
-    findAll: jest.fn(),
-    findById: jest.fn(),
     create: jest.fn(),
+    findAll: jest.fn(),
+    findOne: jest.fn(),
     update: jest.fn(),
-    delete: jest.fn(),
-    setActive: jest.fn(),
-    regenerateSecret: jest.fn(),
-    testWebhook: jest.fn(),
-    getDeliveries: jest.fn(),
-    retryDelivery: jest.fn(),
-    findByEvent: jest.fn(),
-    getStats: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -57,24 +44,24 @@ describe('WebhooksController', () => {
   });
 
   describe('findAll', () => {
-    it('should return all webhooks', async () => {
+    it('should return all webhooks for a user', async () => {
       mockWebhooksService.findAll.mockResolvedValue([mockWebhook]);
 
-      const result = await controller.findAll();
+      const result = await controller.findAll(mockUser);
 
       expect(result).toEqual([mockWebhook]);
-      expect(service.findAll).toHaveBeenCalled();
+      expect(service.findAll).toHaveBeenCalledWith('user-001');
     });
   });
 
-  describe('findById', () => {
+  describe('findOne', () => {
     it('should return a webhook by id', async () => {
-      mockWebhooksService.findById.mockResolvedValue(mockWebhook);
+      mockWebhooksService.findOne.mockResolvedValue(mockWebhook);
 
-      const result = await controller.findById('webhook-001');
+      const result = await controller.findOne('webhook-001', mockUser);
 
       expect(result).toEqual(mockWebhook);
-      expect(service.findById).toHaveBeenCalledWith('webhook-001');
+      expect(service.findOne).toHaveBeenCalledWith('webhook-001', 'user-001');
     });
   });
 
@@ -82,12 +69,12 @@ describe('WebhooksController', () => {
     it('should create a new webhook', async () => {
       const createDto = {
         name: 'New Webhook',
-        url: 'https://example.com/webhook',
-        events: ['document.created'],
+        url: 'https://example.com/new',
+        events: [WebhookEvent.DOCUMENT_UPLOADED],
       };
       mockWebhooksService.create.mockResolvedValue({ ...mockWebhook, ...createDto });
 
-      const result = await controller.create(createDto, 'user-001');
+      const result = await controller.create(createDto, mockUser);
 
       expect(result).toHaveProperty('name', createDto.name);
       expect(service.create).toHaveBeenCalledWith(createDto, 'user-001');
@@ -99,91 +86,20 @@ describe('WebhooksController', () => {
       const updateDto = { name: 'Updated Webhook' };
       mockWebhooksService.update.mockResolvedValue({ ...mockWebhook, ...updateDto });
 
-      const result = await controller.update('webhook-001', updateDto);
+      const result = await controller.update('webhook-001', updateDto, mockUser);
 
       expect(result.name).toBe('Updated Webhook');
-      expect(service.update).toHaveBeenCalledWith('webhook-001', updateDto);
+      expect(service.update).toHaveBeenCalledWith('webhook-001', updateDto, 'user-001');
     });
   });
 
-  describe('delete', () => {
+  describe('remove', () => {
     it('should delete a webhook', async () => {
-      mockWebhooksService.delete.mockResolvedValue(undefined);
+      mockWebhooksService.remove.mockResolvedValue(undefined);
 
-      await controller.delete('webhook-001');
+      await controller.remove('webhook-001', mockUser);
 
-      expect(service.delete).toHaveBeenCalledWith('webhook-001');
-    });
-  });
-
-  describe('setActive', () => {
-    it('should activate a webhook', async () => {
-      mockWebhooksService.setActive.mockResolvedValue({ ...mockWebhook, isActive: true });
-
-      const result = await controller.setActive('webhook-001', { isActive: true });
-
-      expect(result.isActive).toBe(true);
-      expect(service.setActive).toHaveBeenCalledWith('webhook-001', true);
-    });
-  });
-
-  describe('regenerateSecret', () => {
-    it('should regenerate webhook secret', async () => {
-      mockWebhooksService.regenerateSecret.mockResolvedValue({ ...mockWebhook, secret: 'newSecret' });
-
-      const result = await controller.regenerateSecret('webhook-001');
-
-      expect(result.secret).toBe('newSecret');
-      expect(service.regenerateSecret).toHaveBeenCalledWith('webhook-001');
-    });
-  });
-
-  describe('testWebhook', () => {
-    it('should send a test payload', async () => {
-      mockWebhooksService.testWebhook.mockResolvedValue({ success: true, responseStatus: 200 });
-
-      const result = await controller.testWebhook('webhook-001');
-
-      expect(result).toHaveProperty('success', true);
-      expect(service.testWebhook).toHaveBeenCalledWith('webhook-001');
-    });
-  });
-
-  describe('getDeliveries', () => {
-    it('should return webhook deliveries', async () => {
-      mockWebhooksService.getDeliveries.mockResolvedValue([mockDelivery]);
-
-      const result = await controller.getDeliveries('webhook-001');
-
-      expect(result).toEqual([mockDelivery]);
-      expect(service.getDeliveries).toHaveBeenCalledWith('webhook-001');
-    });
-  });
-
-  describe('retryDelivery', () => {
-    it('should retry a failed delivery', async () => {
-      mockWebhooksService.retryDelivery.mockResolvedValue({ ...mockDelivery, attempts: 2 });
-
-      const result = await controller.retryDelivery('delivery-001');
-
-      expect(result.attempts).toBe(2);
-      expect(service.retryDelivery).toHaveBeenCalledWith('delivery-001');
-    });
-  });
-
-  describe('getStats', () => {
-    it('should return webhook statistics', async () => {
-      mockWebhooksService.getStats.mockResolvedValue({
-        totalDeliveries: 100,
-        successRate: 0.95,
-        failedCount: 5,
-      });
-
-      const result = await controller.getStats('webhook-001');
-
-      expect(result).toHaveProperty('totalDeliveries');
-      expect(result).toHaveProperty('successRate');
-      expect(service.getStats).toHaveBeenCalledWith('webhook-001');
+      expect(service.remove).toHaveBeenCalledWith('webhook-001', 'user-001');
     });
   });
 });

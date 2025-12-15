@@ -134,6 +134,39 @@ export class UsersService {
     this.users.set(id, user);
   }
 
+  async setMfaEnabled(id: string, enabled: boolean): Promise<AuthenticatedUser> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.mfaEnabled = enabled;
+    user.updatedAt = new Date();
+    this.users.set(id, user);
+
+    return this.toAuthenticatedUser(user);
+  }
+
+  async setActive(id: string, isActive: boolean): Promise<AuthenticatedUser> {
+    const user = this.users.get(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.isActive = isActive;
+    user.updatedAt = new Date();
+    this.users.set(id, user);
+
+    return this.toAuthenticatedUser(user);
+  }
+
+  async findByRole(role: string): Promise<AuthenticatedUser[]> {
+    const users = Array.from(this.users.values()).filter(
+      (u) => u.role === role,
+    );
+    return users.map((u) => this.toAuthenticatedUser(u));
+  }
+
   private toAuthenticatedUser(user: any): AuthenticatedUser {
     return {
       id: user.id,

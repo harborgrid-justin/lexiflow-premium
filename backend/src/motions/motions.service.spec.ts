@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { MotionsService } from './motions.service';
-import { Motion } from './entities/motion.entity';
+import { Motion, MotionType } from './entities/motion.entity';
 
 describe('MotionsService', () => {
   let service: MotionsService;
@@ -13,7 +13,7 @@ describe('MotionsService', () => {
     id: 'motion-001',
     caseId: 'case-001',
     title: 'Motion to Dismiss',
-    type: 'dispositive',
+    type: MotionType.MOTION_TO_DISMISS,
     status: 'pending',
     filedBy: 'defendant',
     filedDate: new Date('2024-01-15'),
@@ -67,16 +67,16 @@ describe('MotionsService', () => {
     });
   });
 
-  describe('findByCaseId', () => {
+  describe('findAllByCaseId', () => {
     it('should return motions for a case', async () => {
       mockRepository.find.mockResolvedValue([mockMotion]);
 
-      const result = await service.findByCaseId('case-001');
+      const result = await service.findAllByCaseId('case-001');
 
       expect(result).toEqual([mockMotion]);
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: { caseId: 'case-001' },
-        order: { filedDate: 'DESC' },
+        order: { filingDate: 'DESC', createdAt: 'DESC' },
       });
     });
   });
@@ -102,7 +102,7 @@ describe('MotionsService', () => {
       const createDto = {
         caseId: 'case-001',
         title: 'Motion for Summary Judgment',
-        type: 'dispositive',
+        type: MotionType.MOTION_FOR_SUMMARY_JUDGMENT,
         filedBy: 'plaintiff',
       };
 
@@ -190,7 +190,7 @@ describe('MotionsService', () => {
         rulingDate: expect.any(Date),
       });
 
-      const result = await service.recordRuling(mockMotion.id, ruling);
+      const result = await service.recordRuling(mockMotion.id, ruling as any);
 
       expect(result.status).toBe('decided');
       expect(result.ruling).toEqual(ruling);

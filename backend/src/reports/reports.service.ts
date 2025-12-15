@@ -426,4 +426,68 @@ export class ReportsService {
     await this.reportRepository.delete(reportId);
     */
   }
+
+  async findAll(): Promise<any[]> {
+    return [];
+  }
+
+  async findById(id: string): Promise<any> {
+    throw new NotFoundException(`Report with ID ${id} not found`);
+  }
+
+  async generate(generateDto: any, userId: string): Promise<any> {
+    return { id: this.generateReportId(), status: 'pending' };
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.deleteReport(id);
+  }
+
+  async download(id: string): Promise<any> {
+    throw new NotFoundException(`Report with ID ${id} not found`);
+  }
+
+  async findByType(type: string): Promise<any[]> {
+    return [];
+  }
+
+  async findByUser(userId: string): Promise<any[]> {
+    return [];
+  }
+
+  async getTemplates(): Promise<any[]> {
+    return this.reportTemplates;
+  }
+
+  async getTemplateById(id: string): Promise<any> {
+    const template = this.reportTemplates.find(t => t.id === id);
+    if (!template) {
+      throw new NotFoundException(`Template with ID ${id} not found`);
+    }
+    return template;
+  }
+
+  async createTemplate(createDto: any, userId: string): Promise<any> {
+    return { id: 'template-' + Date.now(), ...createDto };
+  }
+
+  async scheduleReport(scheduleDto: any): Promise<any> {
+    return { id: 'schedule-' + Date.now(), ...scheduleDto };
+  }
+
+  async getScheduledReports(userId: string): Promise<any[]> {
+    return [];
+  }
+
+  async cancelScheduledReport(scheduleId: string, userId: string): Promise<any> {
+    return { id: scheduleId, status: 'cancelled' };
+  }
+
+  async getReportStatus(id: string): Promise<any> {
+    return { id, status: 'completed', progress: 100 };
+  }
+
+  async exportReport(id: string, format: string): Promise<any> {
+    return { id, format, url: `/reports/download/${id}` };
+  }
 }

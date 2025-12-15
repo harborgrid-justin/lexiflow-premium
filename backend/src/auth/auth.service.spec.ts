@@ -106,7 +106,7 @@ describe('AuthService', () => {
     });
 
     it('should use provided role if specified', async () => {
-      const registerWithRole = { ...registerDto, role: Role.ATTORNEY };
+      const registerWithRole = { ...registerDto, role: Role.ASSOCIATE };
       const newUser = { ...mockUser, ...registerWithRole, id: 'new-user-id' };
       mockUsersService.create.mockResolvedValue(newUser);
       mockJwtService.signAsync
@@ -116,7 +116,7 @@ describe('AuthService', () => {
       await service.register(registerWithRole);
 
       expect(mockUsersService.create).toHaveBeenCalledWith(
-        expect.objectContaining({ role: Role.ATTORNEY }),
+        expect.objectContaining({ role: Role.ASSOCIATE }),
       );
     });
   });
@@ -171,6 +171,16 @@ describe('AuthService', () => {
 
   describe('refresh', () => {
     it('should refresh tokens with valid refresh token', async () => {
+      // First login to store refresh token
+      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('access-token')
+        .mockResolvedValueOnce('refresh-token');
+      const loginResult = await service.login({ email: mockUser.email, password: 'password' });
+
+      // Now set up mocks for refresh - clear previous mocks first
+      jest.clearAllMocks();
       const payload = { sub: mockUser.id, email: mockUser.email, role: mockUser.role, type: 'refresh' };
       mockJwtService.verifyAsync.mockResolvedValue(payload);
       mockUsersService.findById.mockResolvedValue(mockUser);
@@ -178,21 +188,7 @@ describe('AuthService', () => {
         .mockResolvedValueOnce('new-access-token')
         .mockResolvedValueOnce('new-refresh-token');
 
-      // First login to store refresh token
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-      mockJwtService.signAsync
-        .mockResolvedValueOnce('access-token')
-        .mockResolvedValueOnce('refresh-token');
-      await service.login({ email: mockUser.email, password: 'password' });
-
-      // Reset mocks for refresh
-      mockJwtService.verifyAsync.mockResolvedValue(payload);
-      mockJwtService.signAsync
-        .mockResolvedValueOnce('new-access-token')
-        .mockResolvedValueOnce('new-refresh-token');
-
-      const result = await service.refresh('refresh-token');
+      const result = await service.refresh(loginResult.refreshToken);
 
       expect(result).toHaveProperty('accessToken');
       expect(result).toHaveProperty('refreshToken');
@@ -281,11 +277,11 @@ describe('AuthService', () => {
       // First generate a reset token
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
       mockJwtService.signAsync.mockResolvedValue('valid-reset-token');
-      await service.forgotPassword(mockUser.email);
+      const forgotResult = await service.forgotPassword(mockUser.email);
 
       mockUsersService.updatePassword.mockResolvedValue(undefined);
 
-      const result = await service.resetPassword('valid-reset-token', 'newPassword');
+      const result = await service.resetPassword(forgotResult.resetToken, 'newPassword');
 
       expect(result).toHaveProperty('message', 'Password reset successfully');
     });
@@ -305,14 +301,14 @@ describe('AuthService', () => {
       mockUsersService.findById.mockResolvedValue(mfaUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
       mockJwtService.signAsync.mockResolvedValue('mfa-token');
-      await service.login({ email: mfaUser.email, password: 'password' });
+      const loginResult = await service.login({ email: mfaUser.email, password: 'password' });
 
       // Now verify MFA
       mockJwtService.signAsync
         .mockResolvedValueOnce('access-token')
         .mockResolvedValueOnce('refresh-token');
 
-      const result = await service.verifyMfa('mfa-token', '123456');
+      const result = await service.verifyMfa(loginResult.mfaToken, '123456');
 
       expect(result).toHaveProperty('user');
       expect(result).toHaveProperty('accessToken');

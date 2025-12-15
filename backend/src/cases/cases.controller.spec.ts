@@ -4,6 +4,7 @@ import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
+import { CaseStatus, CaseType } from './entities/case.entity';
 
 describe('CasesController', () => {
   let controller: CasesController;
@@ -83,8 +84,8 @@ describe('CasesController', () => {
     it('should pass filter parameters to service', async () => {
       const filterDto: CaseFilterDto = {
         search: 'test',
-        status: 'Active',
-        type: 'Civil',
+        status: CaseStatus.ACTIVE,
+        type: CaseType.CIVIL,
         page: 1,
         limit: 10,
       };
@@ -110,8 +111,8 @@ describe('CasesController', () => {
         title: 'New Case',
         caseNumber: 'CASE-002',
         description: 'New case description',
-        type: 'Criminal',
-        status: 'Pending',
+        type: CaseType.CRIMINAL,
+        status: CaseStatus.OPEN,
         practiceArea: 'Criminal Defense',
         jurisdiction: 'State',
       };
@@ -127,7 +128,7 @@ describe('CasesController', () => {
     it('should update a case', async () => {
       const updateCaseDto: UpdateCaseDto = {
         title: 'Updated Title',
-        status: 'Closed',
+        status: CaseStatus.CLOSED,
       };
 
       const result = await controller.update(mockCaseResponse.id, updateCaseDto);

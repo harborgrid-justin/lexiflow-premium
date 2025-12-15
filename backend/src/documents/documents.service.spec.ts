@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { DocumentsService } from './documents.service';
 import { Document } from './entities/document.entity';
+import { DocumentType, DocumentStatus } from './interfaces/document.interface';
 import { FileStorageService } from '../file-storage/file-storage.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
@@ -18,9 +19,9 @@ describe('DocumentsService', () => {
     id: '123e4567-e89b-12d3-a456-426614174000',
     title: 'Test Document',
     description: 'Test description',
-    type: 'Brief',
+    type: DocumentType.BRIEF,
     caseId: 'case-001',
-    status: 'Draft',
+    status: DocumentStatus.DRAFT,
     author: 'John Doe',
     tags: ['legal', 'brief'],
     filename: 'test.pdf',
@@ -88,9 +89,9 @@ describe('DocumentsService', () => {
     const createDto: CreateDocumentDto = {
       title: 'New Document',
       description: 'New description',
-      type: 'Motion',
+      type: DocumentType.MOTION,
       caseId: 'case-001',
-      status: 'Draft',
+      status: DocumentStatus.DRAFT,
     };
 
     it('should create a document without file', async () => {
@@ -182,7 +183,7 @@ describe('DocumentsService', () => {
     });
 
     it('should apply type filter', async () => {
-      const filterDto: DocumentFilterDto = { type: 'Brief', page: 1, limit: 20 };
+      const filterDto: DocumentFilterDto = { type: DocumentType.BRIEF, page: 1, limit: 20 };
 
       await service.findAll(filterDto);
 
@@ -193,13 +194,13 @@ describe('DocumentsService', () => {
     });
 
     it('should apply status filter', async () => {
-      const filterDto: DocumentFilterDto = { status: 'Draft', page: 1, limit: 20 };
+      const filterDto: DocumentFilterDto = { status: DocumentStatus.DRAFT, page: 1, limit: 20 };
 
       await service.findAll(filterDto);
 
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
         'document.status = :status',
-        { status: 'Draft' },
+        { status: DocumentStatus.DRAFT },
       );
     });
 
@@ -290,7 +291,7 @@ describe('DocumentsService', () => {
   describe('update', () => {
     const updateDto: UpdateDocumentDto = {
       title: 'Updated Title',
-      status: 'Final',
+      status: DocumentStatus.FILED,
     };
 
     it('should update a document', async () => {

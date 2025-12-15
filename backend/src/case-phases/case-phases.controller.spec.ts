@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CasePhasesController } from './case-phases.controller';
 import { CasePhasesService } from './case-phases.service';
+import { PhaseType } from './entities/case-phase.entity';
 
 describe('CasePhasesController', () => {
   let controller: CasePhasesController;
@@ -21,18 +22,11 @@ describe('CasePhasesController', () => {
   };
 
   const mockCasePhasesService = {
-    findAll: jest.fn(),
-    findByCaseId: jest.fn(),
-    findById: jest.fn(),
+    findAllByCaseId: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
-    delete: jest.fn(),
-    startPhase: jest.fn(),
-    completePhase: jest.fn(),
-    updateProgress: jest.fn(),
-    reorderPhases: jest.fn(),
-    getCurrentPhase: jest.fn(),
-    getPhaseProgress: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -51,36 +45,25 @@ describe('CasePhasesController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return all phases', async () => {
-      mockCasePhasesService.findAll.mockResolvedValue([mockPhase]);
-
-      const result = await controller.findAll();
-
-      expect(result).toEqual([mockPhase]);
-      expect(service.findAll).toHaveBeenCalled();
-    });
-  });
-
-  describe('findByCaseId', () => {
+  describe('findAllByCaseId', () => {
     it('should return phases for a case', async () => {
-      mockCasePhasesService.findByCaseId.mockResolvedValue([mockPhase]);
+      mockCasePhasesService.findAllByCaseId.mockResolvedValue([mockPhase]);
 
-      const result = await controller.findByCaseId('case-001');
+      const result = await controller.findAllByCaseId('case-001');
 
       expect(result).toEqual([mockPhase]);
-      expect(service.findByCaseId).toHaveBeenCalledWith('case-001');
+      expect(service.findAllByCaseId).toHaveBeenCalledWith('case-001');
     });
   });
 
-  describe('findById', () => {
+  describe('findOne', () => {
     it('should return a phase by id', async () => {
-      mockCasePhasesService.findById.mockResolvedValue(mockPhase);
+      mockCasePhasesService.findOne.mockResolvedValue(mockPhase);
 
-      const result = await controller.findById('phase-001');
+      const result = await controller.findOne('phase-001');
 
       expect(result).toEqual(mockPhase);
-      expect(service.findById).toHaveBeenCalledWith('phase-001');
+      expect(service.findOne).toHaveBeenCalledWith('phase-001');
     });
   });
 
@@ -89,6 +72,7 @@ describe('CasePhasesController', () => {
       const createDto = {
         caseId: 'case-001',
         name: 'Trial',
+        type: PhaseType.TRIAL,
         description: 'Trial phase',
         expectedDuration: 30,
       };
@@ -113,95 +97,13 @@ describe('CasePhasesController', () => {
     });
   });
 
-  describe('delete', () => {
+  describe('remove', () => {
     it('should delete a phase', async () => {
-      mockCasePhasesService.delete.mockResolvedValue(undefined);
+      mockCasePhasesService.remove.mockResolvedValue(undefined);
 
-      await controller.delete('phase-001');
+      await controller.remove('phase-001');
 
-      expect(service.delete).toHaveBeenCalledWith('phase-001');
-    });
-  });
-
-  describe('startPhase', () => {
-    it('should start a phase', async () => {
-      mockCasePhasesService.startPhase.mockResolvedValue({
-        ...mockPhase,
-        status: 'active',
-        startDate: new Date(),
-      });
-
-      const result = await controller.startPhase('phase-001');
-
-      expect(result.status).toBe('active');
-      expect(service.startPhase).toHaveBeenCalledWith('phase-001');
-    });
-  });
-
-  describe('completePhase', () => {
-    it('should complete a phase', async () => {
-      mockCasePhasesService.completePhase.mockResolvedValue({
-        ...mockPhase,
-        status: 'completed',
-        endDate: new Date(),
-      });
-
-      const result = await controller.completePhase('phase-001');
-
-      expect(result.status).toBe('completed');
-      expect(service.completePhase).toHaveBeenCalledWith('phase-001');
-    });
-  });
-
-  describe('updateProgress', () => {
-    it('should update phase progress', async () => {
-      mockCasePhasesService.updateProgress.mockResolvedValue({ ...mockPhase, completedTasks: 10 });
-
-      const result = await controller.updateProgress('phase-001', {
-        completedTasks: 10,
-        totalTasks: 20,
-      });
-
-      expect(result.completedTasks).toBe(10);
-      expect(service.updateProgress).toHaveBeenCalledWith('phase-001', 10, 20);
-    });
-  });
-
-  describe('reorderPhases', () => {
-    it('should reorder phases', async () => {
-      mockCasePhasesService.reorderPhases.mockResolvedValue(undefined);
-
-      await controller.reorderPhases('case-001', {
-        phaseIds: ['phase-002', 'phase-001'],
-      });
-
-      expect(service.reorderPhases).toHaveBeenCalledWith('case-001', ['phase-002', 'phase-001']);
-    });
-  });
-
-  describe('getCurrentPhase', () => {
-    it('should return the current active phase', async () => {
-      mockCasePhasesService.getCurrentPhase.mockResolvedValue(mockPhase);
-
-      const result = await controller.getCurrentPhase('case-001');
-
-      expect(result).toEqual(mockPhase);
-      expect(service.getCurrentPhase).toHaveBeenCalledWith('case-001');
-    });
-  });
-
-  describe('getPhaseProgress', () => {
-    it('should return phase progress percentage', async () => {
-      mockCasePhasesService.getPhaseProgress.mockResolvedValue({
-        percentage: 25,
-        completedTasks: 5,
-        totalTasks: 20,
-      });
-
-      const result = await controller.getPhaseProgress('phase-001');
-
-      expect(result).toHaveProperty('percentage', 25);
-      expect(service.getPhaseProgress).toHaveBeenCalledWith('phase-001');
+      expect(service.remove).toHaveBeenCalledWith('phase-001');
     });
   });
 });

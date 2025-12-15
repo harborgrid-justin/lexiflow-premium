@@ -212,6 +212,7 @@ export class ProcessingJobsService {
     completed: number;
     failed: number;
     cancelled: number;
+    byStatus: Array<{ status: JobStatus; count: number }>;
   }> {
     const [total, pending, processing, completed, failed, cancelled] = await Promise.all([
       this.jobRepository.count(),
@@ -222,6 +223,13 @@ export class ProcessingJobsService {
       this.jobRepository.count({ where: { status: JobStatus.CANCELLED } }),
     ]);
 
+    const byStatus = await this.jobRepository
+      .createQueryBuilder('job')
+      .select('job.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('job.status')
+      .getRawMany();
+
     return {
       total,
       pending,
@@ -229,6 +237,74 @@ export class ProcessingJobsService {
       completed,
       failed,
       cancelled,
+      byStatus,
     };
+  }
+
+  async findById(id: string): Promise<ProcessingJob> {
+    return this.findOne(id);
+  }
+
+  async findByStatus(status: JobStatus): Promise<ProcessingJob[]> {
+    return this.jobRepository.find({ where: { status } });
+  }
+
+  async findByType(type: JobType): Promise<ProcessingJob[]> {
+    return this.jobRepository.find({ where: { type } });
+  }
+
+  async updateStatus(id: string, status: JobStatus): Promise<ProcessingJob> {
+    return this.updateJobStatus(id, status);
+  }
+
+  async updateProgress(id: string, progress: number): Promise<ProcessingJob> {
+    if (progress < 0 || progress > 100) {
+      throw new Error('Progress must be between 0 and 100');
+    }
+    const job = await this.findOne(id);
+    await this.jobRepository.update(id, { progress });
+    return this.findOne(id);
+  }
+
+  async setResult(id: string, result: any): Promise<ProcessingJob> {
+    const job = await this.findOne(id);
+    await this.jobRepository.update(id, { result, status: JobStatus.COMPLETED, completedAt: new Date() });
+    return this.findOne(id);
+  }
+
+  async setError(id: string, errorMessage: string): Promise<ProcessingJob> {
+    const job = await this.findOne(id);
+    await this.jobRepository.update(id, { error: errorMessage, status: JobStatus.FAILED, completedAt: new Date() });
+    return this.findOne(id);
+  }
+
+  async retryJob(id: string): Promise<ProcessingJob> {
+    const job = await this.findOne(id);
+    if (job.status !== JobStatus.FAILED && job.status !== JobStatus.CANCELLED) {
+      throw new Error('Can only retry failed or cancelled jobs');
+    }
+    await this.jobRepository.update(id, { 
+      status: JobStatus.PENDING, 
+      error: null, 
+      startedAt: null, 
+      completedAt: null 
+    });
+    return this.findOne(id);
+  }
+
+  async getPendingJobs(): Promise<ProcessingJob[]> {
+    return this.findByStatus(JobStatus.PENDING);
+  }
+
+  async cleanupOldJobs(daysOld: number): Promise<number> {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+    const result = await this.jobRepository
+      .createQueryBuilder()
+      .delete()
+      .where('completedAt < :cutoffDate', { cutoffDate })
+      .andWhere('status IN (:...statuses)', { statuses: [JobStatus.COMPLETED, JobStatus.FAILED] })
+      .execute();
+    return result.affected || 0;
   }
 }

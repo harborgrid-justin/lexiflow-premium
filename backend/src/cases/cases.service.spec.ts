@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundException, ConflictException } from '@nestjs/common';
 import { CasesService } from './cases.service';
-import { Case } from './entities/case.entity';
+import { Case, CaseStatus, CaseType } from './entities/case.entity';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
@@ -17,8 +17,8 @@ describe('CasesService', () => {
     title: 'Test Case',
     caseNumber: 'CASE-001',
     description: 'Test description',
-    type: 'Civil',
-    status: 'Active',
+    type: CaseType.CIVIL,
+    status: CaseStatus.ACTIVE,
     practiceArea: 'Litigation',
     jurisdiction: 'Federal',
     court: 'District Court',
@@ -101,24 +101,24 @@ describe('CasesService', () => {
     });
 
     it('should apply status filter', async () => {
-      const filterDto: CaseFilterDto = { status: 'Active', page: 1, limit: 20 };
+      const filterDto: CaseFilterDto = { status: CaseStatus.ACTIVE, page: 1, limit: 20 };
 
       await service.findAll(filterDto);
 
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
         'case.status = :status',
-        { status: 'Active' },
+        { status: CaseStatus.ACTIVE },
       );
     });
 
     it('should apply type filter', async () => {
-      const filterDto: CaseFilterDto = { type: 'Civil', page: 1, limit: 20 };
+      const filterDto: CaseFilterDto = { type: CaseType.CIVIL, page: 1, limit: 20 };
 
       await service.findAll(filterDto);
 
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
         'case.type = :type',
-        { type: 'Civil' },
+        { type: CaseType.CIVIL },
       );
     });
 
@@ -205,8 +205,8 @@ describe('CasesService', () => {
       title: 'New Case',
       caseNumber: 'CASE-002',
       description: 'New case description',
-      type: 'Criminal',
-      status: 'Pending',
+      type: CaseType.CRIMINAL,
+      status: CaseStatus.OPEN,
       practiceArea: 'Criminal Defense',
       jurisdiction: 'State',
     };
@@ -235,7 +235,7 @@ describe('CasesService', () => {
   describe('update', () => {
     const updateCaseDto: UpdateCaseDto = {
       title: 'Updated Title',
-      status: 'Closed',
+      status: CaseStatus.CLOSED,
     };
 
     it('should update a case', async () => {

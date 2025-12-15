@@ -51,6 +51,9 @@ export class ProcessingJob {
   updatedAt: Date;
 
   @Column({ type: 'timestamp', nullable: true })
+  startedAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
   completedAt: Date;
 
   @Column({ type: 'int', nullable: true })

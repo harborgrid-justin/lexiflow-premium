@@ -55,37 +55,37 @@ describe('DiscoveryService', () => {
   };
 
   const mockDiscoveryRequestRepository = {
-    find: jest.fn() as jest.MockedFunction<any>,
-    findOne: jest.fn() as jest.MockedFunction<any>,
-    create: jest.fn() as jest.MockedFunction<any>,
-    save: jest.fn() as jest.MockedFunction<any>,
-    update: jest.fn() as jest.MockedFunction<any>,
-    delete: jest.fn() as jest.MockedFunction<any>,
-    createQueryBuilder: jest.fn() as jest.MockedFunction<any>,
-  } as unknown as Repository<DiscoveryRequest>;
+    find: jest.fn() as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    delete: jest.fn() as jest.Mock,
+    createQueryBuilder: jest.fn() as jest.Mock,
+  };
 
   const mockLegalHoldRepository = {
-    find: jest.fn() as jest.MockedFunction<any>,
-    findOne: jest.fn() as jest.MockedFunction<any>,
-    create: jest.fn() as jest.MockedFunction<any>,
-    save: jest.fn() as jest.MockedFunction<any>,
-    update: jest.fn() as jest.MockedFunction<any>,
-    delete: jest.fn() as jest.MockedFunction<any>,
-  } as unknown as Repository<LegalHold>;
+    find: jest.fn() as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    delete: jest.fn() as jest.Mock,
+  };
 
   const mockCustodianRepository = {
-    find: jest.fn() as jest.MockedFunction<any>,
-    findOne: jest.fn() as jest.MockedFunction<any>,
-    create: jest.fn() as jest.MockedFunction<any>,
-    save: jest.fn() as jest.MockedFunction<any>,
-    update: jest.fn() as jest.MockedFunction<any>,
-    delete: jest.fn() as jest.MockedFunction<any>,
+    find: jest.fn() as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    delete: jest.fn() as jest.Mock,
     createQueryBuilder: jest.fn().mockReturnValue({
       where: jest.fn().mockReturnThis(),
       andWhere: jest.fn().mockReturnThis(),
-      getMany: jest.fn().mockResolvedValue([]) as jest.MockedFunction<any>,
-    }) as jest.MockedFunction<any>,
-  } as unknown as Repository<Custodian>;
+      getMany: jest.fn().mockResolvedValue([]) as jest.Mock,
+    }) as jest.Mock,
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

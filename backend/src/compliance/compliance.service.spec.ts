@@ -6,7 +6,7 @@ import { ComplianceService } from './compliance.service';
 import { ComplianceCheck } from './entities/compliance-check.entity';
 import { AuditLog } from './entities/audit-log.entity';
 import { ComplianceRule } from './entities/compliance-rule.entity';
-import { expect, jest } from '@jest/globals';
+import { it, describe, expect, jest, beforeEach } from '@jest/globals';
 
 describe('ComplianceService', () => {
   let service: ComplianceService;
@@ -49,7 +49,7 @@ describe('ComplianceService', () => {
     updatedAt: new Date(),
   };
 
-  const mockComplianceCheckRepository = {
+  const mockComplianceCheckRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -58,7 +58,7 @@ describe('ComplianceService', () => {
     createQueryBuilder: jest.fn(),
   };
 
-  const mockAuditLogRepository = {
+  const mockAuditLogRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -66,7 +66,7 @@ describe('ComplianceService', () => {
     createQueryBuilder: jest.fn(),
   };
 
-  const mockComplianceRuleRepository = {
+  const mockComplianceRuleRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -202,7 +202,7 @@ describe('ComplianceService', () => {
 
     describe('getAuditLogsByDateRange', () => {
       it('should return audit logs within date range', async () => {
-        const mockQueryBuilder = {
+        const mockQueryBuilder: any = {
           where: jest.fn().mockReturnThis(),
           andWhere: jest.fn().mockReturnThis(),
           orderBy: jest.fn().mockReturnThis(),
@@ -221,7 +221,7 @@ describe('ComplianceService', () => {
 
     describe('searchAuditLogs', () => {
       it('should search audit logs', async () => {
-        const mockQueryBuilder = {
+        const mockQueryBuilder: any = {
           where: jest.fn().mockReturnThis(),
           andWhere: jest.fn().mockReturnThis(),
           orderBy: jest.fn().mockReturnThis(),

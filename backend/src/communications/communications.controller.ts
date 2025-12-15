@@ -3,6 +3,18 @@ import { CommunicationsService } from './communications.service';
 
 @Controller('communications')
 export class CommunicationsController {
+renderTemplate(templateId: string, variables: { caseNumber: string; clientName: string; }) {
+throw new Error('Method not implemented.');
+}
+scheduleMessage(scheduleDto: { communicationId: string; scheduledAt: Date; }) {
+throw new Error('Method not implemented.');
+}
+getScheduledMessages() {
+throw new Error('Method not implemented.');
+}
+getDeliveryStatus(commId: string) {
+throw new Error('Method not implemented.');
+}
   constructor(private readonly communicationsService: CommunicationsService) {}
 
   @Get()

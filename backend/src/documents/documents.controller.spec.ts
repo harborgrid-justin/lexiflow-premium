@@ -1,12 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { DocumentsController } from './documents.controller';
+
+type MulterFile = Express.Multer.File;
 import { DocumentsService } from './documents.service';
 import { ProcessingJobsService } from '../processing-jobs/processing-jobs.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
 import { JobType } from '../processing-jobs/dto/job-status.dto';
+import { DocumentType, DocumentStatus } from './interfaces/document.interface';
+import { describe, expect, jest, it, beforeEach } from '@jest/globals';
 
 describe('DocumentsController', () => {
   let controller: DocumentsController;
@@ -82,7 +86,7 @@ describe('DocumentsController', () => {
     it('should create a document without file', async () => {
       const createDto: CreateDocumentDto = {
         title: 'New Document',
-        type: 'Motion',
+        type: DocumentType.MOTION,
         caseId: 'case-001',
       };
 
@@ -95,22 +99,22 @@ describe('DocumentsController', () => {
     it('should create a document with file', async () => {
       const createDto: CreateDocumentDto = {
         title: 'New Document',
-        type: 'Motion',
+        type: DocumentType.MOTION,
         caseId: 'case-001',
       };
 
-      const mockFile: Express.Multer.File = {
+      const mockFile: File = {
         fieldname: 'file',
         originalname: 'test.pdf',
         encoding: '7bit',
         mimetype: 'application/pdf',
         buffer: Buffer.from('test'),
         size: 1024,
-        stream: null,
         destination: '',
         filename: 'test.pdf',
         path: '',
-      };
+        stream: undefined as any,
+      } as File;
 
       const result = await controller.create(createDto, mockFile);
 
@@ -132,8 +136,8 @@ describe('DocumentsController', () => {
     it('should pass filter parameters', async () => {
       const filterDto: DocumentFilterDto = {
         caseId: 'case-001',
-        type: 'Brief',
-        status: 'Draft',
+        type: DocumentType.BRIEF,
+        status: DocumentStatus.DRAFT,
         page: 1,
         limit: 10,
       };
@@ -176,7 +180,7 @@ describe('DocumentsController', () => {
     it('should update a document', async () => {
       const updateDto: UpdateDocumentDto = {
         title: 'Updated Title',
-        status: 'Final',
+        status: DocumentStatus.APPROVED,
       };
 
       const result = await controller.update(mockDocument.id, updateDto);
@@ -197,7 +201,7 @@ describe('DocumentsController', () => {
 
   describe('triggerOcr', () => {
     it('should create OCR processing job', async () => {
-      const ocrRequestDto = { languages: ['eng', 'spa'] };
+      const ocrRequestDto = { documentId: mockDocument.id, languages: ['eng', 'spa'] };
 
       const result = await controller.triggerOcr(mockDocument.id, ocrRequestDto);
 
@@ -213,7 +217,7 @@ describe('DocumentsController', () => {
     });
 
     it('should use default language if not provided', async () => {
-      const ocrRequestDto = {};
+      const ocrRequestDto = { documentId: mockDocument.id };
 
       await controller.triggerOcr(mockDocument.id, ocrRequestDto);
 

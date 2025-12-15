@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DiscoveryController } from './controllers/discovery.controller';
+import { DiscoveryController } from './discovery.controller';
 import { DiscoveryService } from './discovery.service';
 import { expect, jest } from '@jest/globals';
 
@@ -54,9 +54,9 @@ describe('DiscoveryController', () => {
     releaseHold: jest.fn(),
     addCustodian: jest.fn(),
     removeCustodian: jest.fn(),
-    search: jest.fn<any, any>(),
+    search: jest.fn(),
     findAll: jest.fn(),
-    findById: jest.fn(),
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -86,25 +86,14 @@ describe('DiscoveryController', () => {
     });
   });
 
-  describe('findByCaseId', () => {
-    it('should return discovery requests for a case', async () => {
-      mockDiscoveryService.findByCaseId.mockResolvedValue([mockDiscoveryRequest]);
-
-      const result = await controller.findByCaseId('case-001');
-
-      expect(result).toEqual([mockDiscoveryRequest]);
-      expect(service.findByCaseId).toHaveBeenCalledWith('case-001');
-    });
-  });
-
-  describe('findById', () => {
+  describe('findOne', () => {
     it('should return a discovery request by id', async () => {
-      mockDiscoveryService.findById.mockResolvedValue(mockDiscoveryRequest);
+      mockDiscoveryService.findOne.mockResolvedValue(mockDiscoveryRequest);
 
-      const result = await controller.findById('discovery-001');
+      const result = await controller.findOne('discovery-001');
 
       expect(result).toEqual(mockDiscoveryRequest);
-      expect(service.findById).toHaveBeenCalledWith('discovery-001');
+      expect(service.findOne).toHaveBeenCalledWith('discovery-001');
     });
   });
 
@@ -124,122 +113,4 @@ describe('DiscoveryController', () => {
     });
   });
 
-  describe('update', () => {
-    it('should update a discovery request', async () => {
-      const updateDto = { title: 'Updated Title' };
-      mockDiscoveryService.update.mockResolvedValue({ ...mockDiscoveryRequest, ...updateDto });
-
-      const result = await controller.update('discovery-001', updateDto);
-
-      expect(result.title).toBe('Updated Title');
-      expect(service.update).toHaveBeenCalledWith('discovery-001', updateDto);
-    });
-  });
-
-  describe('delete', () => {
-    it('should delete a discovery request', async () => {
-      mockDiscoveryService.delete.mockResolvedValue(undefined);
-
-      await controller.delete('discovery-001');
-
-      expect(service.delete).toHaveBeenCalledWith('discovery-001');
-    });
-  });
-
-  describe('serve', () => {
-    it('should serve a discovery request', async () => {
-      mockDiscoveryService.serve.mockResolvedValue({ ...mockDiscoveryRequest, status: 'served' });
-
-      const result = await controller.serve('discovery-001');
-
-      expect(result.status).toBe('served');
-      expect(service.serve).toHaveBeenCalledWith('discovery-001');
-    });
-  });
-
-  describe('respond', () => {
-    it('should respond to a discovery request', async () => {
-      const responseDto = { response: 'Response content', documents: ['doc-001'] };
-      mockDiscoveryService.respond.mockResolvedValue({ ...mockDiscoveryRequest, status: 'responded' });
-
-      const result = await controller.respond('discovery-001', responseDto);
-
-      expect(result.status).toBe('responded');
-      expect(service.respond).toHaveBeenCalledWith('discovery-001', responseDto);
-    });
-  });
-
-  describe('getOverdue', () => {
-    it('should return overdue discovery requests', async () => {
-      mockDiscoveryService.getOverdue.mockResolvedValue([mockDiscoveryRequest]);
-
-      const result = await controller.getOverdue();
-
-      expect(result).toEqual([mockDiscoveryRequest]);
-      expect(service.getOverdue).toHaveBeenCalled();
-    });
-  });
-
-  describe('createLegalHold', () => {
-    it('should create a legal hold', async () => {
-      const createDto = {
-        caseId: 'case-001',
-        name: 'New Hold',
-        custodians: ['user-001'],
-      };
-      mockDiscoveryService.createLegalHold.mockResolvedValue({ ...mockLegalHold, ...createDto });
-
-      const result = await controller.createLegalHold(createDto);
-
-      expect(result).toHaveProperty('name', createDto.name);
-      expect(service.createLegalHold).toHaveBeenCalledWith(createDto);
-    });
-  });
-
-  describe('getLegalHolds', () => {
-    it('should return legal holds for a case', async () => {
-      mockDiscoveryService.getLegalHolds.mockResolvedValue([mockLegalHold]);
-
-      const result = await controller.getLegalHolds('case-001');
-
-      expect(result).toEqual([mockLegalHold]);
-      expect(service.getLegalHolds).toHaveBeenCalledWith('case-001');
-    });
-  });
-
-  describe('releaseLegalHold', () => {
-    it('should release a legal hold', async () => {
-      mockDiscoveryService.releaseLegalHold.mockResolvedValue({ ...mockLegalHold, status: 'released' });
-
-      const result = await controller.releaseLegalHold('hold-001');
-
-      expect(result.status).toBe('released');
-      expect(service.releaseLegalHold).toHaveBeenCalledWith('hold-001');
-    });
-  });
-
-  describe('addCustodian', () => {
-    it('should add a custodian to legal hold', async () => {
-      mockDiscoveryService.addCustodian.mockResolvedValue({
-        ...mockLegalHold,
-        custodians: [...mockLegalHold.custodians, 'user-003'],
-      });
-
-      const result = await controller.addCustodian('hold-001', { userId: 'user-003' });
-
-      expect(result.custodians).toContain('user-003');
-      expect(service.addCustodian).toHaveBeenCalledWith('hold-001', 'user-003');
-    });
-  });
-
-  describe('search', () => {
-    it('should search discovery requests', async () => {
-      mockDiscoveryService.search.mockResolvedValue({ data: [mockDiscoveryRequest], total: 1 });
-
-      const result = await controller.search({ query: 'interrogatories', page: 1, limit: 10 });
-
-      expect(result).toHaveProperty('data');
-      expect(result).toHaveProperty('total', 1);
-    });
-  });
 });

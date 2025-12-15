@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommunicationsController } from './communications.controller';
 import { CommunicationsService } from './communications.service';
-import { expect, jest } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 
 describe('CommunicationsController', () => {
   let controller: CommunicationsController;
@@ -186,17 +186,22 @@ describe('CommunicationsController', () => {
 
   describe.skip('renderTemplate', () => {
     it('should render a template with variables', async () => {
+      const templateId = 'template-001';
+      const variables = {
+        caseNumber: '12345',
+        clientName: 'John Doe',
+      };
       const result = {
         subject: 'Update on Your Case: 12345',
         content: 'Dear John Doe...',
       };
-      const data = {
-        caseNumber: '12345',
-        clientName: 'John Doe',
-      });
+      mockCommunicationsService.renderTemplate.mockResolvedValue(result);
 
-      expect(result).toHaveProperty('subject');
-      expect(result).toHaveProperty('content');
+      const rendered = await controller.renderTemplate(templateId, variables);
+
+      expect(rendered).toHaveProperty('subject');
+      expect(rendered).toHaveProperty('content');
+      expect(service.renderTemplate).toHaveBeenCalledWith(templateId, variables);
     });
   });
 
@@ -210,6 +215,12 @@ describe('CommunicationsController', () => {
         scheduleId: 'schedule-001',
         scheduledAt: scheduleDto.scheduledAt,
       };
+      mockCommunicationsService.scheduleMessage.mockResolvedValue(result);
+
+      const scheduled = await controller.scheduleMessage(scheduleDto);
+
+      expect(scheduled).toHaveProperty('scheduleId');
+      expect(service.scheduleMessage).toHaveBeenCalledWith(scheduleDto);
     });
   });
 
@@ -218,17 +229,30 @@ describe('CommunicationsController', () => {
       const result = [
         { id: 'schedule-001', scheduledAt: new Date() },
       ];
+      mockCommunicationsService.getScheduledMessages.mockResolvedValue(result);
+
+      const scheduled = await controller.getScheduledMessages();
+
+      expect(scheduled).toBeInstanceOf(Array);
+      expect(service.getScheduledMessages).toHaveBeenCalled();
     });
   });
 
   describe.skip('getDeliveryStatus', () => {
     it('should return delivery status', async () => {
+      const commId = 'comm-001';
       const result = {
         status: 'delivered',
         deliveredAt: new Date(),
         opens: 2,
         clicks: 1,
       };
+      mockCommunicationsService.getDeliveryStatus.mockResolvedValue(result);
+
+      const status = await controller.getDeliveryStatus(commId);
+
+      expect(status).toHaveProperty('status');
+      expect(service.getDeliveryStatus).toHaveBeenCalledWith(commId);
     });
   });
 });

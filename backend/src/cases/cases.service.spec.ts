@@ -7,6 +7,7 @@ import { Case, CaseStatus, CaseType } from './entities/case.entity';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
+import { it, describe, expect, jest } from '@jest/globals';
 
 describe('CasesService', () => {
   let service: CasesService;
@@ -308,6 +309,98 @@ describe('CasesService', () => {
       await expect(service.archive('non-existent-id')).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  // Additional Tests - Edge Cases and Error Handling
+  describe('findAll - edge cases', () => {
+    it('should return empty array when no cases exist', async () => {
+      mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
+      const filterDto: CaseFilterDto = { page: 1, limit: 20 };
+
+      const result = await service.findAll(filterDto);
+
+      expect(result.data).toEqual([]);
+      expect(result.total).toBe(0);
+      expect(result.totalPages).toBe(0);
+    });
+
+    it('should apply assigned team filter', async () => {
+      const filterDto: CaseFilterDto = { assignedTeamId: 'team-001', page: 1, limit: 20 };
+
+      await service.findAll(filterDto);
+
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
+        'case.assignedTeamId = :assignedTeamId',
+        { assignedTeamId: 'team-001' },
+      );
+    });
+
+    it('should apply lead attorney filter', async () => {
+      const filterDto: CaseFilterDto = { leadAttorneyId: 'attorney-001', page: 1, limit: 20 };
+
+      await service.findAll(filterDto);
+
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
+        'case.leadAttorneyId = :leadAttorneyId',
+        { leadAttorneyId: 'attorney-001' },
+      );
+    });
+
+    it('should use default sorting when not specified', async () => {
+      const filterDto: CaseFilterDto = { page: 1, limit: 20 };
+
+      await service.findAll(filterDto);
+
+      expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith('case.createdAt', 'DESC');
+    });
+
+    it('should calculate correct page offset for pagination', async () => {
+      const filterDto: CaseFilterDto = { page: 5, limit: 10 };
+
+      await service.findAll(filterDto);
+
+      expect(mockQueryBuilder.skip).toHaveBeenCalledWith(40);
+      expect(mockQueryBuilder.take).toHaveBeenCalledWith(10);
+    });
+
+    it('should calculate correct total pages with partial last page', async () => {
+      mockQueryBuilder.getManyAndCount.mockResolvedValue([[mockCase], 25]);
+      const filterDto: CaseFilterDto = { page: 1, limit: 10 };
+
+      const result = await service.findAll(filterDto);
+
+      expect(result.totalPages).toBe(3);
+    });
+  });
+
+  describe('update - edge cases', () => {
+    it('should allow updating to same case number', async () => {
+      mockRepository.findOne
+        .mockResolvedValueOnce(mockCase)
+        .mockResolvedValueOnce(mockCase);
+      mockRepository.update.mockResolvedValue({ affected: 1 });
+
+      await service.update(mockCase.id, { caseNumber: mockCase.caseNumber });
+
+      expect(mockRepository.update).toHaveBeenCalled();
+    });
+
+    it('should update multiple fields simultaneously', async () => {
+      const updateDto: UpdateCaseDto = {
+        title: 'Updated Title',
+        description: 'Updated Description',
+        status: CaseStatus.CLOSED,
+        judge: 'New Judge',
+      };
+      mockRepository.findOne
+        .mockResolvedValueOnce(mockCase)
+        .mockResolvedValueOnce({ ...mockCase, ...updateDto });
+      mockRepository.update.mockResolvedValue({ affected: 1 });
+
+      await service.update(mockCase.id, updateDto);
+
+      expect(mockRepository.update).toHaveBeenCalledWith(mockCase.id, updateDto);
     });
   });
 });

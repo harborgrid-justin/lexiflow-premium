@@ -38,7 +38,7 @@ describe('CommunicationsService', () => {
     updatedAt: new Date(),
   };
 
-  const mockCommunicationRepository = {
+  const mockCommunicationRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -48,7 +48,7 @@ describe('CommunicationsService', () => {
     createQueryBuilder: jest.fn(),
   };
 
-  const mockTemplateRepository = {
+  const mockTemplateRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -348,6 +348,77 @@ describe('CommunicationsService', () => {
         expect(result).toHaveProperty('byType');
         expect(result).toHaveProperty('byStatus');
       });
+    });
+  });
+
+  // Additional Tests - Edge Cases
+  describe('Communications - edge cases', () => {
+    it('should return empty array when no communications exist', async () => {
+      mockCommunicationRepository.find.mockResolvedValue([]);
+
+      const result = await service.findAll();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should return empty array when no communications for case', async () => {
+      mockCommunicationRepository.find.mockResolvedValue([]);
+
+      const result = await service.findByCaseId('non-existent-case');
+
+      expect(result).toEqual([]);
+    });
+
+    it('should throw NotFoundException when deleting non-existent communication', async () => {
+      mockCommunicationRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.delete('non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should return empty array for sent communications when none exist', async () => {
+      mockCommunicationRepository.find.mockResolvedValue([]);
+
+      const result = await service.getSentCommunications('case-001');
+
+      expect(result).toEqual([]);
+    });
+
+    it('should return empty array for draft communications when none exist', async () => {
+      mockCommunicationRepository.find.mockResolvedValue([]);
+
+      const result = await service.getDraftCommunications('case-001');
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('Templates - edge cases', () => {
+    it('should return empty array when no templates exist', async () => {
+      mockTemplateRepository.find.mockResolvedValue([]);
+
+      const result = await service.getAllTemplates();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should throw NotFoundException when updating non-existent template', async () => {
+      mockTemplateRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.updateTemplate('non-existent', { name: 'Updated' })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('should throw NotFoundException when deleting non-existent template', async () => {
+      mockTemplateRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.deleteTemplate('non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw NotFoundException when rendering non-existent template', async () => {
+      mockTemplateRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.renderTemplate('non-existent', {})).rejects.toThrow(NotFoundException);
     });
   });
 });

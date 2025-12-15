@@ -11,8 +11,8 @@ describe('UsersService', () => {
   let service: UsersService;
 
   beforeEach(async () => {
-    (bcrypt.hash as jest.Mock) = jest.fn().mockResolvedValue('hashedPassword');
-    (bcrypt.compare as jest.Mock) = jest.fn().mockResolvedValue(true);
+    (bcrypt.hash as unknown as jest.Mock) = jest.fn().mockResolvedValue('hashedPassword');
+    (bcrypt.compare as unknown as jest.Mock) = jest.fn().mockResolvedValue(true);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [UsersService],

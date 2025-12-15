@@ -165,4 +165,28 @@ export class ClausesService {
       order: { usageCount: 'DESC', createdAt: 'DESC' },
     });
   }
+
+  /**
+   * Duplicate a clause
+   */
+  async duplicate(id: string, userId?: string): Promise<Clause> {
+    const original = await this.findOne(id);
+
+    const duplicated = this.clauseRepository.create({
+      title: `${original.title} (Copy)`,
+      content: original.content,
+      description: original.description,
+      category: original.category,
+      tags: original.tags,
+      isActive: original.isActive,
+      metadata: original.metadata,
+      usageCount: 0,
+      createdBy: userId,
+    });
+
+    const savedClause = await this.clauseRepository.save(duplicated);
+    this.logger.log(`Clause duplicated: ${id} -> ${savedClause.id}`);
+
+    return savedClause;
+  }
 }

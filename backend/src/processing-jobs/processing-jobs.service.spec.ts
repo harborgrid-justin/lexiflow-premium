@@ -33,6 +33,7 @@ describe('ProcessingJobsService', () => {
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
+    count: jest.fn(),
     createQueryBuilder: jest.fn(),
   };
 
@@ -269,7 +270,8 @@ describe('ProcessingJobsService', () => {
     });
 
     it('should not retry a non-failed job', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
+      const completedJob = { ...mockJob, status: JobStatus.COMPLETED };
+      mockRepository.findOne.mockResolvedValue(completedJob);
 
       await expect(service.retryJob(mockJob.id)).rejects.toThrow();
     });

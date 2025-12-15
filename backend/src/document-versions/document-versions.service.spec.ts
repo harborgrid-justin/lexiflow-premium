@@ -5,7 +5,7 @@ import { NotFoundException } from '@nestjs/common';
 import { DocumentVersionsService } from './document-versions.service';
 import { DocumentVersion } from './entities/document-version.entity';
 import { FileStorageService } from '../file-storage/file-storage.service';
-import { jest } from '@jest/globals';
+import { describe, expect, it, jest } from '@jest/globals';
 
 describe('DocumentVersionsService', () => {
   let service: DocumentVersionsService;

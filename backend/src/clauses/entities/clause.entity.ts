@@ -65,4 +65,5 @@ export class Clause {
 
   @Column({ type: 'uuid', nullable: true })
   updatedBy: string;
+metadata: any;
 }

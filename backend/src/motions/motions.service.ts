@@ -63,10 +63,10 @@ export class MotionsService {
 
   async file(id: string): Promise<Motion> {
     const motion = await this.findOne(id);
-    if (motion.status === MotionStatus.FILED as any) {
+    if (motion.status === 'filed' || motion.status === MotionStatus.FILED) {
       throw new BadRequestException('Motion is already filed');
     }
-    motion.status = MotionStatus.FILED as any;
+    motion.status = 'filed' as any;
     motion.filedDate = new Date();
     return this.motionRepository.save(motion);
   }

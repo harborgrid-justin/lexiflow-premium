@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EthicalWallsService } from './ethical-walls.service';
 import {
   CreateEthicalWallDto,
@@ -17,6 +18,8 @@ import {
   QueryEthicalWallsDto,
 } from './dto/ethical-wall.dto';
 
+@ApiTags('Compliance - Ethical Walls')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/compliance/ethical-walls')
 export class EthicalWallsController {
   constructor(private readonly ethicalWallsService: EthicalWallsService) {}

@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProcessingJobsController } from './processing-jobs.controller';
 import { ProcessingJobsService } from './processing-jobs.service';
-import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 
 describe('ProcessingJobsController', () => {
   let controller: ProcessingJobsController;
@@ -40,7 +39,7 @@ describe('ProcessingJobsController', () => {
 
   describe('findAll', () => {
     it('should return all processing jobs', async () => {
-      mockProcessingJobsService.findAll.mockResolvedValue([mockJob]);
+      (mockProcessingJobsService.findAll as jest.Mock).mockResolvedValue([mockJob]);
 
       const result = await controller.findAll();
 
@@ -51,7 +50,7 @@ describe('ProcessingJobsController', () => {
 
   describe('getJob', () => {
     it('should return a job by id', async () => {
-      mockProcessingJobsService.getJobStatus.mockResolvedValue(mockJob);
+      (mockProcessingJobsService.getJobStatus as jest.Mock).mockResolvedValue(mockJob);
 
       const result = await controller.getJobStatus('job-001');
 
@@ -63,7 +62,7 @@ describe('ProcessingJobsController', () => {
   describe('getJobStatus', () => {
     it('should return job status', async () => {
       const status = { id: 'job-001', status: 'PROCESSING', progress: 50 };
-      mockProcessingJobsService.getJobStatus.mockResolvedValue(status);
+      (mockProcessingJobsService.getJobStatus as jest.Mock).mockResolvedValue(status);
 
       const result = await controller.getJobStatus('job-001');
 

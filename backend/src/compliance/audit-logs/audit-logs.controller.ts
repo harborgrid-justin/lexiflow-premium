@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuditLogsService } from './audit-logs.service';
 import {
   QueryAuditLogsDto,
@@ -15,6 +16,8 @@ import {
   AuditEntityType,
 } from './dto/audit-log.dto';
 
+@ApiTags('Compliance - Audit Logs')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/audit-logs')
 export class AuditLogsController {
   constructor(private readonly auditLogsService: AuditLogsService) {}

@@ -10,12 +10,15 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DocketService } from './docket.service';
 import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
 import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';
 import { PacerSyncDto, PacerSyncResultDto } from './dto/pacer-sync.dto';
 import { DocketEntry } from './entities/docket-entry.entity';
 
+@ApiTags('Docket')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1')
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}

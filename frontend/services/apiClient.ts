@@ -3,8 +3,8 @@
  * Handles HTTP requests to the NestJS backend with authentication
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api/v1';
+const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
+const API_PREFIX = (import.meta as any).env?.VITE_API_PREFIX || '/api/v1';
 const BASE_URL = `${API_URL}${API_PREFIX}`;
 
 export interface ApiError {
@@ -21,6 +21,9 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
+// Export type for convenience
+export type { PaginatedResponse as PaginatedApiResponse };
+
 class ApiClient {
   private baseURL: string;
   private authTokenKey: string;
@@ -28,8 +31,8 @@ class ApiClient {
 
   constructor() {
     this.baseURL = BASE_URL;
-    this.authTokenKey = import.meta.env.VITE_AUTH_TOKEN_KEY || 'lexiflow_auth_token';
-    this.refreshTokenKey = import.meta.env.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token';
+    this.authTokenKey = (import.meta as any).env?.VITE_AUTH_TOKEN_KEY || 'lexiflow_auth_token';
+    this.refreshTokenKey = (import.meta as any).env?.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token';
   }
 
   /**
@@ -68,9 +71,9 @@ class ApiClient {
    * Build headers for requests
    */
   private getHeaders(customHeaders: HeadersInit = {}): HeadersInit {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...customHeaders,
+      ...(customHeaders as Record<string, string>),
     };
 
     const token = this.getAuthToken();

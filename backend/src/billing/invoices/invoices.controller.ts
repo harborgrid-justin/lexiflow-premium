@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto, RecordPaymentDto } from './dto/update-invoice.dto';
@@ -17,6 +18,8 @@ import { InvoiceFilterDto } from './dto/invoice-filter.dto';
 import { Invoice } from './entities/invoice.entity';
 import { InvoiceItem } from './entities/invoice-item.entity';
 
+@ApiTags('Billing - Invoices')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/billing/invoices')
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}

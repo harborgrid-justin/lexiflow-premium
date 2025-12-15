@@ -10,12 +10,15 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TimeEntriesService } from './time-entries.service';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
 import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
 import { TimeEntryFilterDto } from './dto/time-entry-filter.dto';
 import { TimeEntry } from './entities/time-entry.entity';
 
+@ApiTags('Billing - Time Entries')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/billing/time-entries')
 export class TimeEntriesController {
   constructor(private readonly timeEntriesService: TimeEntriesService) {}

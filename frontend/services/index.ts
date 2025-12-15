@@ -71,3 +71,11 @@ export * from './repositories/TemplateRepository';
 export * from './repositories/TrialRepository';
 export * from './repositories/UserRepository';
 export * from './repositories/WorkflowRepository';
+
+// ==================== BACKEND API SERVICES ====================
+// Export all backend API integrations (added 2025-12-15)
+export * from './apiClient';
+export * from './apiServices';
+export * from './apiServicesExtended';
+export * from './apiServicesDiscovery';
+export * from './apiServicesCompliance';

@@ -6,6 +6,15 @@ import { Template } from './entities/template.entity';
 
 @Injectable()
 export class CommunicationsService {
+scheduleMessage(scheduleMessage: any) {
+throw new Error('Method not implemented.');
+}
+getScheduledMessages(getScheduledMessages: any) {
+throw new Error('Method not implemented.');
+}
+getDeliveryStatus(getDeliveryStatus: any) {
+throw new Error('Method not implemented.');
+}
   constructor(
     @InjectRepository(Communication)
     private readonly communicationRepository: Repository<Communication>,

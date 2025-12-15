@@ -471,8 +471,12 @@ export class ReportsService {
     return { id: 'template-' + Date.now(), ...createDto };
   }
 
-  async scheduleReport(scheduleDto: any): Promise<any> {
-    return { id: 'schedule-' + Date.now(), ...scheduleDto };
+  async scheduleReport(scheduleDto: any, userId?: string): Promise<any> {
+    return { 
+      scheduleId: 'schedule-' + Date.now(), 
+      nextRun: new Date(Date.now() + 86400000),
+      ...scheduleDto 
+    };
   }
 
   async getScheduledReports(userId: string): Promise<any[]> {

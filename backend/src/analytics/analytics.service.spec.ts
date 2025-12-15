@@ -35,7 +35,7 @@ describe('AnalyticsService', () => {
     updatedAt: new Date(),
   };
 
-  const mockAnalyticsEventRepository = {
+  const mockAnalyticsEventRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),
@@ -43,7 +43,7 @@ describe('AnalyticsService', () => {
     createQueryBuilder: jest.fn(),
   };
 
-  const mockDashboardRepository = {
+  const mockDashboardRepository: any = {
     find: jest.fn(),
     findOne: jest.fn(),
     create: jest.fn(),

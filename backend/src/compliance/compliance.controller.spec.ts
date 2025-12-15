@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ComplianceController } from './controllers/compliance.controller';
+import { ComplianceController } from './compliance.controller';
 import { ComplianceService } from './compliance.service';
-import { expect, jest } from '@jest/globals';
+import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 
 describe('ComplianceController', () => {
   let controller: ComplianceController;
@@ -200,35 +200,39 @@ describe('ComplianceController', () => {
 
   describe.skip('generateComplianceReport', () => {
     it('should generate a compliance report', async () => {
+      const reportDto = {
+        caseId: 'case-001',
+        format: 'pdf',
+      };
       const result = {
         reportId: 'report-001',
         status: 'generated',
       };
-      const data = {
-        caseId: 'case-001',
-        format: 'pdf',
-      });
+      mockComplianceService.generateComplianceReport.mockResolvedValue(result);
 
-      expect(result).toHaveProperty('reportId');
-      expect(service.generateComplianceReport).toHaveBeenCalled();
+      const generatedReport = await controller.generateComplianceReport(reportDto);
+
+      expect(generatedReport).toHaveProperty('reportId');
+      expect(service.generateComplianceReport).toHaveBeenCalledWith(reportDto);
     });
   });
 
   describe('exportAuditLogs', () => {
     it('should export audit logs', async () => {
+      const exportDto = {
+        startDate: new Date('2024-01-01'),
+        endDate: new Date('2024-12-31'),
+        format: 'csv' as const,
+      };
       mockComplianceService.exportAuditLogs.mockResolvedValue({
         filePath: '/exports/audit-logs.csv',
         format: 'csv',
       });
 
-      const result = await controller.exportAuditLogs({
-        startDate: new Date('2024-01-01'),
-        endDate: new Date('2024-12-31'),
-        format: 'csv',
-      });
+      const result = await controller.exportAuditLogs(exportDto);
 
       expect(result).toHaveProperty('filePath');
-      // Method not implemented
+      expect(service.exportAuditLogs).toHaveBeenCalledWith(exportDto);
     });
   });
 });

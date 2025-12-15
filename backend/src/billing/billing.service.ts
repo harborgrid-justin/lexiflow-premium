@@ -29,7 +29,7 @@ export class BillingService {
   }
 
   async createInvoice(data: any): Promise<Invoice> {
-    const invoice = this.invoiceRepository.create(data) as Invoice;
+    const invoice = this.invoiceRepository.create(data) as unknown as Invoice;
     return this.invoiceRepository.save(invoice);
   }
 
@@ -65,7 +65,7 @@ export class BillingService {
   }
 
   async createTimeEntry(data: any): Promise<TimeEntry> {
-    const timeEntry = this.timeEntryRepository.create(data) as TimeEntry;
+    const timeEntry = this.timeEntryRepository.create(data) as unknown as TimeEntry;
     if (data.hours && data.rate) {
       (timeEntry as any).amount = data.hours * data.rate;
     }
@@ -103,7 +103,7 @@ export class BillingService {
   }
 
   async createExpense(data: any): Promise<Expense> {
-    const expense = this.expenseRepository.create(data) as Expense;
+    const expense = this.expenseRepository.create(data) as unknown as Expense;
     return this.expenseRepository.save(expense);
   }
 

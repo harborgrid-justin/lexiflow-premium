@@ -32,7 +32,7 @@ describe('PleadingsService', () => {
 
   const mockRepository = {
     find: jest.fn(),
-    findOne: jest.fn() as jest.Mock,
+    findOne: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
     update: jest.fn(),

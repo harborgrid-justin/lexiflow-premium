@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { ClausesService } from './clauses.service';
 import { Clause } from './entities/clause.entity';
-import { expect, jest } from '@jest/globals';
+import { it, describe, expect, jest } from '@jest/globals';
 
 describe('ClausesService', () => {
   let service: ClausesService;
@@ -24,6 +24,13 @@ describe('ClausesService', () => {
     updatedAt: new Date(),
   };
 
+  const mockQueryBuilder = {
+    andWhere: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
+    addOrderBy: jest.fn().mockReturnThis(),
+    getMany: jest.fn(),
+  };
+
   const mockRepository = {
     find: jest.fn(),
     findOne: jest.fn(),
@@ -31,7 +38,8 @@ describe('ClausesService', () => {
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
-    createQueryBuilder: jest.fn(),
+    remove: jest.fn(),
+    createQueryBuilder: jest.fn(() => mockQueryBuilder),
   };
 
   beforeEach(async () => {
@@ -54,7 +62,7 @@ describe('ClausesService', () => {
 
   describe('findAll', () => {
     it('should return all clauses', async () => {
-      mockRepository.find.mockResolvedValue([mockClause]);
+      mockQueryBuilder.getMany.mockResolvedValue([mockClause]);
 
       const result = await service.findAll();
 
@@ -253,6 +261,63 @@ describe('ClausesService', () => {
 
       expect(result.id).not.toBe(mockClause.id);
       expect(result.title).toContain('(Copy)');
+    });
+  });
+
+  // Additional Tests - Edge Cases
+  describe('findAll - edge cases', () => {
+    it('should return empty array when no clauses exist', async () => {
+      mockQueryBuilder.getMany.mockResolvedValue([]);
+
+      const result = await service.findAll();
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('findByCategory - edge cases', () => {
+    it('should return empty array when no clauses in category', async () => {
+      mockRepository.find.mockResolvedValue([]);
+
+      const result = await service.findByCategory('NonExistent' as any);
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('incrementUsage - edge cases', () => {
+    it('should throw NotFoundException when incrementing non-existent clause', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.incrementUsage('non-existent')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('duplicate - edge cases', () => {
+    it('should throw NotFoundException when duplicating non-existent clause', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.duplicate('non-existent', 'user-001')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getMostUsed - edge cases', () => {
+    it('should return empty array when no clauses exist', async () => {
+      mockRepository.find.mockResolvedValue([]);
+
+      const result = await service.getMostUsed(10);
+
+      expect(result).toEqual([]);
+    });
+
+    it('should respect the limit parameter', async () => {
+      mockRepository.find.mockResolvedValue([mockClause]);
+
+      await service.getMostUsed(3);
+
+      expect(mockRepository.find).toHaveBeenCalledWith(
+        expect.objectContaining({ take: 3 }),
+      );
     });
   });
 });

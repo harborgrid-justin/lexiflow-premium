@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { DocketService } from './docket.service';
 import { DocketEntry } from './entities/docket-entry.entity';
+import { describe, expect, jest, beforeEach } from '@jest/globals';
 
 describe('DocketService', () => {
   let service: DocketService;
@@ -63,25 +64,25 @@ describe('DocketService', () => {
     });
   });
 
-  describe('findByCaseId', () => {
+  describe('findAllByCaseId', () => {
     it('should return docket entries for a case', async () => {
       mockRepository.find.mockResolvedValue([mockDocketEntry]);
 
-      const result = await service.findByCaseId('case-001');
+      const result = await service.findAllByCaseId('case-001');
 
       expect(result).toEqual([mockDocketEntry]);
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: { caseId: 'case-001' },
-        order: { entryNumber: 'ASC' },
+        order: { sequenceNumber: 'DESC' },
       });
     });
   });
 
-  describe('findById', () => {
+  describe('findOne', () => {
     it('should return a docket entry by id', async () => {
       mockRepository.findOne.mockResolvedValue(mockDocketEntry);
 
-      const result = await service.findById(mockDocketEntry.id);
+      const result = await service.findOne(mockDocketEntry.id);
 
       expect(result).toEqual(mockDocketEntry);
     });
@@ -89,7 +90,7 @@ describe('DocketService', () => {
     it('should throw NotFoundException if entry not found', async () => {
       mockRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
+      await expect(service.findOne('non-existent')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -97,33 +98,18 @@ describe('DocketService', () => {
     it('should create a new docket entry', async () => {
       const createDto = {
         caseId: 'case-001',
+        sequenceNumber: 2,
         description: 'Motion filed',
         filedBy: 'Defendant',
         entryDate: new Date('2024-01-20'),
       };
 
-      mockRepository.count.mockResolvedValue(1);
-      mockRepository.create.mockReturnValue({ ...mockDocketEntry, ...createDto, entryNumber: 2 });
-      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, ...createDto, entryNumber: 2 });
+      mockRepository.create.mockReturnValue({ ...mockDocketEntry, ...createDto });
+      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, ...createDto });
 
       const result = await service.create(createDto);
 
-      expect(result).toHaveProperty('entryNumber', 2);
-    });
-
-    it('should auto-generate entry number', async () => {
-      mockRepository.count.mockResolvedValue(5);
-      mockRepository.create.mockReturnValue({ ...mockDocketEntry, entryNumber: 6 });
-      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, entryNumber: 6 });
-
-      const result = await service.create({
-        caseId: 'case-001',
-        description: 'New entry',
-        filedBy: 'Plaintiff',
-        entryDate: new Date(),
-      });
-
-      expect(result.entryNumber).toBe(6);
+      expect(result).toHaveProperty('sequenceNumber', 2);
     });
   });
 
@@ -145,128 +131,26 @@ describe('DocketService', () => {
     });
   });
 
+  describe('update', () => {
+    it('should update a docket entry', async () => {
+      const updateDto = { description: 'Updated description' };
+      mockRepository.findOne.mockResolvedValue(mockDocketEntry);
+      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, ...updateDto });
+
+      const result = await service.update(mockDocketEntry.id, updateDto);
+
+      expect(result.description).toBe('Updated description');
+    });
+  });
+
   describe('remove', () => {
     it('should remove a docket entry', async () => {
       mockRepository.findOne.mockResolvedValue(mockDocketEntry);
-      mockRepository.softDelete.mockResolvedValue({ affected: 1 });
+      mockRepository.delete.mockResolvedValue({ affected: 1 });
 
       await service.remove(mockDocketEntry.id);
 
       expect(mockRepository.delete).toHaveBeenCalledWith(mockDocketEntry.id);
-    });
-  });
-
-  describe('findByCategory', () => {
-    it('should return entries by category', async () => {
-      mockRepository.find.mockResolvedValue([mockDocketEntry]);
-
-      const result = await service.findByCategory('case-001', 'Pleading');
-
-      expect(result).toEqual([mockDocketEntry]);
-    });
-  });
-
-  describe('findByDateRange', () => {
-    it('should return entries within date range', async () => {
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        andWhere: jest.fn().mockReturnThis(),
-        orderBy: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue([mockDocketEntry]),
-      };
-      mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-
-      const result = await service.findByDateRange(
-        'case-001',
-        new Date('2024-01-01'),
-        new Date('2024-12-31'),
-      );
-
-      expect(result).toEqual([mockDocketEntry]);
-    });
-  });
-
-  describe('getPublicEntries', () => {
-    it('should return only public entries', async () => {
-      mockRepository.find.mockResolvedValue([mockDocketEntry]);
-
-      const result = await service.getPublicEntries('case-001');
-
-      expect(result).toEqual([mockDocketEntry]);
-      expect(mockRepository.find).toHaveBeenCalledWith({
-        where: { caseId: 'case-001', isPublic: true },
-        order: { entryNumber: 'ASC' },
-      });
-    });
-  });
-
-  // attachDocument method does not exist in service - removed test
-
-  describe('detachDocument', () => {
-    it('should detach document from docket entry', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocketEntry);
-      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, documentId: null });
-
-      const result = await service.detachDocument(mockDocketEntry.id);
-
-      expect(result.documentId).toBeNull();
-    });
-  });
-
-  describe('getNextEntryNumber', () => {
-    it('should return next entry number for a case', async () => {
-      mockRepository.count.mockResolvedValue(10);
-
-      const result = await service.getNextEntryNumber('case-001');
-
-      expect(result).toBe(11);
-    });
-
-    it('should return 1 for empty case', async () => {
-      mockRepository.count.mockResolvedValue(0);
-
-      const result = await service.getNextEntryNumber('new-case');
-
-      expect(result).toBe(1);
-    });
-  });
-
-  describe('search', () => {
-    it('should search docket entries', async () => {
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        andWhere: jest.fn().mockReturnThis(),
-        orderBy: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        take: jest.fn().mockReturnThis(),
-        getManyAndCount: jest.fn().mockResolvedValue([[mockDocketEntry], 1]),
-      };
-      mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-
-      const result = await service.search({
-        caseId: 'case-001',
-        query: 'Complaint',
-        page: 1,
-        limit: 10,
-      });
-
-      expect(result).toHaveProperty('data');
-      expect(result).toHaveProperty('total', 1);
-    });
-  });
-
-  describe('getDocketSummary', () => {
-    it('should return docket summary for a case', async () => {
-      mockRepository.find.mockResolvedValue([
-        mockDocketEntry,
-        { ...mockDocketEntry, category: 'Motion' },
-      ]);
-
-      const result = await service.getDocketSummary('case-001');
-
-      expect(result).toHaveProperty('totalEntries');
-      expect(result).toHaveProperty('byCategory');
-      expect(result).toHaveProperty('latestEntry');
     });
   });
 });

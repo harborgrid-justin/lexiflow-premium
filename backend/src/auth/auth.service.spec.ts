@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Role } from '../common/enums/role.enum';
+import { describe, it, expect, jest } from '@jest/globals';
 
 jest.mock('bcrypt');
 
@@ -188,7 +189,8 @@ describe('AuthService', () => {
         .mockResolvedValueOnce('new-access-token')
         .mockResolvedValueOnce('new-refresh-token');
 
-      const result = await service.refresh((loginResult as any).refreshToken || 'mock-refresh-token');
+      const refreshToken = (loginResult as any).refreshToken || 'mock-refresh-token';
+      const result = await service.refresh(refreshToken);
 
       expect(result).toHaveProperty('accessToken');
       expect(result).toHaveProperty('refreshToken');
@@ -362,6 +364,106 @@ describe('AuthService', () => {
       const result = await service.validateUser('nonexistent@example.com', 'password');
 
       expect(result).toBeNull();
+    });
+  });
+
+  // Additional Tests - Edge Cases and Security Scenarios
+  describe('register - edge cases', () => {
+    it('should propagate error when user creation fails', async () => {
+      mockUsersService.create.mockRejectedValue(new Error('Database error'));
+
+      const registerDto = {
+        email: 'test@example.com',
+        password: 'password123',
+        firstName: 'Test',
+        lastName: 'User',
+      };
+
+      await expect(service.register(registerDto)).rejects.toThrow('Database error');
+    });
+
+    it('should generate both access and refresh tokens on registration', async () => {
+      const newUser = { ...mockUser, id: 'new-user-id' };
+      mockUsersService.create.mockResolvedValue(newUser);
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('access-token')
+        .mockResolvedValueOnce('refresh-token');
+
+      const result = await service.register({
+        email: 'new@example.com',
+        password: 'password123',
+        firstName: 'New',
+        lastName: 'User',
+      });
+
+      expect(mockJwtService.signAsync).toHaveBeenCalledTimes(2);
+      expect(result.accessToken).toBe('access-token');
+      expect(result.refreshToken).toBe('refresh-token');
+    });
+  });
+
+  describe('refresh - edge cases', () => {
+    it('should throw UnauthorizedException when user not found after token verification', async () => {
+      const payload = { sub: 'non-existent-user', email: mockUser.email, role: mockUser.role, type: 'refresh' };
+      mockJwtService.verifyAsync.mockResolvedValue(payload);
+      mockUsersService.findById.mockResolvedValue(null);
+
+      await expect(service.refresh('valid-refresh-token')).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('changePassword - edge cases', () => {
+    it('should throw UnauthorizedException when user not found by email', async () => {
+      mockUsersService.findById.mockResolvedValue({ ...mockUser, email: 'test@example.com' });
+      mockUsersService.findByEmail.mockResolvedValue(null);
+
+      await expect(
+        service.changePassword(mockUser.id, 'currentPassword', 'newPassword'),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('verifyMfa - edge cases', () => {
+    it('should throw UnauthorizedException for expired MFA token', async () => {
+      await expect(service.verifyMfa('expired-mfa-token', '123456')).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it('should throw UnauthorizedException for non-6-digit MFA code', async () => {
+      const mfaUser = { ...mockUser, mfaEnabled: true };
+      mockUsersService.findByEmail.mockResolvedValue(mfaUser);
+      mockUsersService.findById.mockResolvedValue(mfaUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      mockJwtService.signAsync.mockResolvedValue('mfa-token');
+      await service.login({ email: mfaUser.email, password: 'password' });
+
+      await expect(service.verifyMfa('mfa-token', '12345')).rejects.toThrow(UnauthorizedException);
+      await expect(service.verifyMfa('mfa-token', '1234567')).rejects.toThrow(UnauthorizedException);
+      await expect(service.verifyMfa('mfa-token', 'abcdef')).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('resetPassword - edge cases', () => {
+    it('should invalidate all refresh tokens after password reset', async () => {
+      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      mockJwtService.signAsync.mockResolvedValue('valid-reset-token');
+      const forgotResult = await service.forgotPassword(mockUser.email);
+
+      mockUsersService.updatePassword.mockResolvedValue(undefined);
+      await service.resetPassword(forgotResult.resetToken, 'newPassword');
+
+      expect(mockUsersService.updatePassword).toHaveBeenCalledWith(mockUser.id, 'newPassword');
+    });
+  });
+
+  describe('logout - edge cases', () => {
+    it('should handle logout for already logged out user gracefully', async () => {
+      const result = await service.logout('some-user-id');
+      const secondResult = await service.logout('some-user-id');
+
+      expect(result).toHaveProperty('message', 'Logged out successfully');
+      expect(secondResult).toHaveProperty('message', 'Logged out successfully');
     });
   });
 });

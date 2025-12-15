@@ -2,9 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ApiKeysService, ApiKey } from './api-keys.service';
+import { ApiKeysService } from './api-keys.service';
+import { ApiKey } from './entities/api-key.entity';
 import { ApiKeyScope } from './dto';
-import { expect, jest } from '@jest/globals';
+import { it, beforeEach, describe, expect, jest } from '@jest/globals';
 
 describe('ApiKeysService', () => {
   let service: ApiKeysService;
@@ -42,12 +43,12 @@ describe('ApiKeysService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ApiKeysService,
-        { provide: getRepositoryToken('ApiKey'), useValue: mockRepository },
+        { provide: getRepositoryToken(ApiKey), useValue: mockRepository },
       ],
     }).compile();
 
     service = module.get<ApiKeysService>(ApiKeysService);
-    repository = module.get(getRepositoryToken('ApiKey'));
+    repository = module.get(getRepositoryToken(ApiKey));
 
     jest.clearAllMocks();
   });
@@ -244,6 +245,33 @@ describe('ApiKeysService', () => {
   describe.skip('setRateLimit', () => {
     it('should set rate limit for API key', async () => {
       // Method not implemented
+    });
+  });
+
+  // Additional Tests - Edge Cases
+  describe('findAll - edge cases', () => {
+    it('should return empty array when user has no API keys', async () => {
+      mockRepository.find.mockResolvedValue([]);
+
+      const result = await service.findAll('user-without-keys');
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('revoke - edge cases', () => {
+    it('should throw NotFoundException when revoking non-existent key', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.revoke('non-existent', 'user-001')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getUsageStats - edge cases', () => {
+    it('should throw NotFoundException for non-existent key', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.getUsageStats('non-existent', 'user-001')).rejects.toThrow(NotFoundException);
     });
   });
 });

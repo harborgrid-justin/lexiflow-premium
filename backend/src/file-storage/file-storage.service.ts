@@ -1,16 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
-import { promisify } from 'util';
+import { mkdir, writeFile, readFile, unlink, stat } from 'fs/promises';
 import { StorageFile, FileUploadResult } from './interfaces/storage-file.interface';
-
-const mkdir = promisify(fs.mkdir);
-const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
-const unlink = promisify(fs.unlink);
-const stat = promisify(fs.stat);
 
 @Injectable()
 export class FileStorageService {

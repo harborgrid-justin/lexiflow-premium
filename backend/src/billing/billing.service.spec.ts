@@ -6,6 +6,7 @@ import { BillingService } from './billing.service';
 import { Invoice } from './entities/invoice.entity';
 import { TimeEntry } from './entities/time-entry.entity';
 import { Expense } from './entities/expense.entity';
+import { it, describe, expect, jest, beforeEach } from '@jest/globals';
 
 describe('BillingService', () => {
   let service: BillingService;
@@ -370,6 +371,91 @@ describe('BillingService', () => {
       expect(result).toHaveProperty('totalHours');
       expect(result).toHaveProperty('totalBilled');
       expect(result).toHaveProperty('totalUnbilled');
+    });
+  });
+
+  // Additional Tests - Edge Cases and Business Logic
+  describe('Invoice Operations - edge cases', () => {
+    it('should return empty array when no invoices exist', async () => {
+      mockInvoiceRepository.find.mockResolvedValue([]);
+
+      const result = await service.findAllInvoices();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should throw NotFoundException when updating non-existent invoice', async () => {
+      mockInvoiceRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.updateInvoice('non-existent', { status: 'sent' })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('should throw NotFoundException when deleting non-existent invoice', async () => {
+      mockInvoiceRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.deleteInvoice('non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw NotFoundException when sending non-existent invoice', async () => {
+      mockInvoiceRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.sendInvoice('non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw NotFoundException when marking non-existent invoice as paid', async () => {
+      mockInvoiceRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.markInvoicePaid('non-existent')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('Time Entry Operations - edge cases', () => {
+    it('should throw NotFoundException when updating non-existent time entry', async () => {
+      mockTimeEntryRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.updateTimeEntry('non-existent', { hours: 5 })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('should throw NotFoundException when deleting non-existent time entry', async () => {
+      mockTimeEntryRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.deleteTimeEntry('non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should calculate amount correctly when hours and rate are provided', async () => {
+      const createDto = {
+        caseId: 'case-001',
+        userId: 'user-001',
+        description: 'Work',
+        hours: 5,
+        rate: 150,
+        date: new Date(),
+      };
+
+      const expectedEntry = { ...mockTimeEntry, hours: 5, rate: 150, amount: 750 };
+      mockTimeEntryRepository.create.mockReturnValue(expectedEntry);
+      mockTimeEntryRepository.save.mockResolvedValue(expectedEntry);
+
+      const result = await service.createTimeEntry(createDto);
+
+      expect(result.amount).toBe(750);
+    });
+  });
+
+  describe('generateInvoice - edge cases', () => {
+    it('should generate invoice with zero amount when no billable items', async () => {
+      mockTimeEntryRepository.find.mockResolvedValue([]);
+      mockExpenseRepository.find.mockResolvedValue([]);
+      mockInvoiceRepository.create.mockReturnValue({ ...mockInvoice, amount: 0 });
+      mockInvoiceRepository.save.mockResolvedValue({ ...mockInvoice, amount: 0 });
+
+      const result = await service.generateInvoice('case-001', 'client-001');
+
+      expect(result.amount).toBe(0);
     });
   });
 });

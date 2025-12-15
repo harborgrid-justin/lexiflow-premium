@@ -3,13 +3,17 @@ module.exports = {
   rootDir: 'src',
   testRegex: '.*\\.spec\\.ts$',
   transform: {
-    '^.+\\.(t|j)s$': ['ts-jest', {
+    '^.+\\.ts$': ['ts-jest', {
       tsconfig: {
-        // Inline tsconfig for tests to ensure proper Jest globals
         types: ['jest', 'node'],
         esModuleInterop: true,
         allowSyntheticDefaultImports: true,
+        module: 'commonjs',
+        target: 'ES2021',
       },
+      // Explicitly disable Babel
+      babelConfig: false,
+      isolatedModules: true,
     }],
   },
   collectCoverageFrom: [
@@ -17,8 +21,7 @@ module.exports = {
   ],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
-  // Ensure we don't use Babel
   transformIgnorePatterns: [
-    'node_modules/(?!(@nestjs)/)',
+    '/node_modules/',
   ],
 };

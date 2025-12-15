@@ -30,6 +30,7 @@ describe('ReportsController', () => {
   const mockReportsService = {
     findAll: jest.fn(),
     findById: jest.fn(),
+    findOne: jest.fn(),
     generate: jest.fn(),
     delete: jest.fn(),
     download: jest.fn(),

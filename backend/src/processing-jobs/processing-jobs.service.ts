@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThan } from 'typeorm';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { ProcessingJob } from './entities/processing-job.entity';
@@ -299,12 +299,20 @@ export class ProcessingJobsService {
   async cleanupOldJobs(daysOld: number): Promise<number> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysOld);
-    const result = await this.jobRepository
-      .createQueryBuilder()
-      .delete()
-      .where('completedAt < :cutoffDate', { cutoffDate })
-      .andWhere('status IN (:...statuses)', { statuses: [JobStatus.COMPLETED, JobStatus.FAILED] })
-      .execute();
+    
+    // Find old completed/failed jobs
+    const jobsToDelete = await this.jobRepository.find({
+      where: [
+        { status: JobStatus.COMPLETED, completedAt: LessThan(cutoffDate) },
+        { status: JobStatus.FAILED, completedAt: LessThan(cutoffDate) },
+      ],
+    });
+
+    if (jobsToDelete.length === 0) {
+      return 0;
+    }
+
+    const result = await this.jobRepository.delete(jobsToDelete.map(job => job.id));
     return result.affected || 0;
   }
 }

@@ -24,17 +24,25 @@ describe('ClausesService', () => {
     updatedAt: new Date(),
   };
 
-  const mockQueryBuilder = {
+  const mockQueryBuilder: any = {
     andWhere: jest.fn().mockReturnThis(),
     orderBy: jest.fn().mockReturnThis(),
     addOrderBy: jest.fn().mockReturnThis(),
-    getMany: jest.fn(),
+    getMany: jest.fn().mockResolvedValue([]),
+    where: jest.fn().mockReturnThis(),
+    orWhere: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    take: jest.fn().mockReturnThis(),
+    getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+    select: jest.fn().mockReturnThis(),
+    distinct: jest.fn().mockReturnThis(),
+    getRawMany: jest.fn().mockResolvedValue([]),
   };
 
   const mockRepository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
+    find: jest.fn() as jest.MockedFunction<any>,
+    findOne: jest.fn() as jest.MockedFunction<any>,
+    create: jest.fn() as jest.MockedFunction<any>,
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
@@ -137,6 +145,7 @@ describe('ClausesService', () => {
       expect(result).toEqual([mockClause]);
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: { category: 'Contract', isActive: true },
+        order: { usageCount: 'DESC', createdAt: 'DESC' },
       });
     });
   });

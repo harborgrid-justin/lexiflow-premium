@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { OcrService } from './ocr.service';
 import { DocumentsService } from '../documents/documents.service';
+import { FileStorageService } from '../file-storage/file-storage.service';
 import { describe, expect, jest } from '@jest/globals';
 
 describe('OcrService', () => {
@@ -20,16 +22,37 @@ describe('OcrService', () => {
     markOcrProcessed: jest.fn(),
   };
 
+  const mockConfigService = {
+    get: jest.fn((key: string) => {
+      if (key === 'OCR_ENABLED') return 'false';
+      return undefined;
+    }),
+  };
+
+  const mockFileStorageService = {
+    getFile: jest.fn(),
+    saveFile: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OcrService,
         { provide: DocumentsService, useValue: mockDocumentsService },
+        { provide: ConfigService, useValue: mockConfigService },
+        { provide: FileStorageService, useValue: mockFileStorageService },
       ],
     }).compile();
 
     service = module.get<OcrService>(OcrService);
     documentsService = module.get<DocumentsService>(DocumentsService);
+
+    // Mock OCR worker for tests
+    (service as any).ocrEnabled = true;
+    (service as any).worker = {
+      recognize: jest.fn().mockResolvedValue({ data: { text: 'Extracted text from document', confidence: 95 } }),
+      terminate: jest.fn(),
+    };
 
     jest.clearAllMocks();
   });

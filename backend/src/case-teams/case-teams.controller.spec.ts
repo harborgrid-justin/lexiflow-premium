@@ -17,10 +17,10 @@ describe('CaseTeamsController', () => {
   };
 
   const mockCaseTeamsService = {
-    findAllByCaseId: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    remove: jest.fn(),
+    findAllByCaseId: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    remove: jest.fn() as jest.Mock,
   };
 
   beforeEach(async () => {

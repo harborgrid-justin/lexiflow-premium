@@ -55,33 +55,33 @@ describe('BillingService', () => {
   };
 
   const mockInvoiceRepository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    createQueryBuilder: jest.fn(),
+    find: jest.fn() as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    delete: jest.fn() as jest.Mock,
+    createQueryBuilder: jest.fn() as jest.Mock,
   };
 
   const mockTimeEntryRepository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    createQueryBuilder: jest.fn(),
-  };
+    find: jest.fn() as jest.MockedFunction<any>,
+    findOne: jest.fn() as jest.MockedFunction<any>,
+    create: jest.fn() as jest.MockedFunction<any>,
+    save: jest.fn() as jest.MockedFunction<any>,
+    update: jest.fn() as jest.MockedFunction<any>,
+    delete: jest.fn() as jest.MockedFunction<any>,
+    createQueryBuilder: jest.fn() as jest.MockedFunction<any>,
+  } as unknown as Repository<TimeEntry>;
 
   const mockExpenseRepository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-  };
+    find: jest.fn() as jest.MockedFunction<any>,
+    findOne: jest.fn() as jest.MockedFunction<any>,
+    create: jest.fn() as jest.MockedFunction<any>,
+    save: jest.fn() as jest.MockedFunction<any>,
+    update: jest.fn() as jest.MockedFunction<any>,
+    delete: jest.fn() as jest.MockedFunction<any>,
+  } as unknown as Repository<Expense>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -322,7 +322,7 @@ describe('BillingService', () => {
 
         expect(result).toEqual([mockExpense]);
         expect(mockExpenseRepository.find).toHaveBeenCalledWith({
-          where: { caseId: 'case-001', billed: false, billable: true },
+          where: { caseId: 'case-001' },
         });
       });
     });

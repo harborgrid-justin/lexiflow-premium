@@ -83,7 +83,7 @@ export class UsersService {
     const user = Array.from(this.users.values()).find(
       (u) => u.email === email,
     );
-    return user || null;
+    return user ? user : null;
   }
 
   async update(

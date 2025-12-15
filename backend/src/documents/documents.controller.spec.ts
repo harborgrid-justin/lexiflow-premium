@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { DocumentsController } from './documents.controller';
-
-type MulterFile = Express.Multer.File;
 import { DocumentsService } from './documents.service';
 import { ProcessingJobsService } from '../processing-jobs/processing-jobs.service';
 import { CreateDocumentDto } from './dto/create-document.dto';

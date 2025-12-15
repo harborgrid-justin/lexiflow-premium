@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProcessingJobsController } from './processing-jobs.controller';
 import { ProcessingJobsService } from './processing-jobs.service';
+import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 
 describe('ProcessingJobsController', () => {
   let controller: ProcessingJobsController;
@@ -50,12 +51,12 @@ describe('ProcessingJobsController', () => {
 
   describe('getJob', () => {
     it('should return a job by id', async () => {
-      mockProcessingJobsService.getJob.mockResolvedValue(mockJob);
+      mockProcessingJobsService.getJobStatus.mockResolvedValue(mockJob);
 
-      const result = await controller.getJob('job-001');
+      const result = await controller.getJobStatus('job-001');
 
       expect(result).toEqual(mockJob);
-      expect(service.getJob).toHaveBeenCalledWith('job-001');
+      expect(service.getJobStatus).toHaveBeenCalledWith('job-001');
     });
   });
 

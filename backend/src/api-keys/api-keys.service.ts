@@ -35,7 +35,7 @@ export class ApiKeysService {
    */
   async create(createApiKeyDto: CreateApiKeyDto, userId: string): Promise<ApiKeyWithSecret> {
     // Generate API key
-    const apiKey = this.generateApiKey();
+    const apiKey = 'sk_' + this.generateApiKey();
     const keyHash = await bcrypt.hash(apiKey, 10);
     const keyPrefix = apiKey.substring(0, 8);
 
@@ -77,7 +77,11 @@ export class ApiKeysService {
   async findOne(id: string, userId: string): Promise<ApiKey> {
     const apiKey = this.apiKeys.get(id);
 
-    if (!apiKey || apiKey.userId !== userId) {
+    if (!apiKey) {
+      throw new NotFoundException(`API Key with ID ${id} not found`);
+    }
+
+    if (apiKey.userId !== userId) {
       throw new NotFoundException(`API Key with ID ${id} not found`);
     }
 
@@ -92,7 +96,9 @@ export class ApiKeysService {
 
     const updated: ApiKey = {
       ...apiKey,
-      ...updateApiKeyDto,
+      name: updateApiKeyDto.name ?? apiKey.name,
+      scopes: updateApiKeyDto.scopes ?? apiKey.scopes,
+      expiresAt: updateApiKeyDto.expiresAt ?? apiKey.expiresAt,
       updatedAt: new Date(),
     };
 
@@ -117,22 +123,30 @@ export class ApiKeysService {
     for (const key of this.apiKeys.values()) {
       if (!key.active) continue;
 
-      const isMatch = await bcrypt.compare(apiKey, key.keyHash);
-      if (isMatch) {
-        // Check expiration
-        if (key.expiresAt && key.expiresAt < new Date()) {
-          throw new UnauthorizedException('API key has expired');
+      try {
+        const isMatch = await bcrypt.compare(apiKey, key.keyHash);
+        if (isMatch) {
+          // Check expiration
+          if (key.expiresAt && key.expiresAt < new Date()) {
+            throw new UnauthorizedException('API key has expired');
+          }
+
+          // Check rate limit
+          await this.checkRateLimit(key);
+
+          // Update last used timestamp
+          key.lastUsedAt = new Date();
+          key.requestCount = (key.requestCount || 0) + 1;
+          this.apiKeys.set(key.id, key);
+
+          return key;
         }
-
-        // Check rate limit
-        await this.checkRateLimit(key);
-
-        // Update last used timestamp
-        key.lastUsedAt = new Date();
-        key.requestCount += 1;
-        this.apiKeys.set(key.id, key);
-
-        return key;
+      } catch (error) {
+        // Continue to next key if bcrypt comparison fails
+        if (error instanceof UnauthorizedException) {
+          throw error;
+        }
+        continue;
       }
     }
 
@@ -177,6 +191,7 @@ export class ApiKeysService {
       id: apiKey.id,
       name: apiKey.name,
       totalRequests: apiKey.requestCount,
+      lastUsed: apiKey.lastUsedAt,
       lastUsedAt: apiKey.lastUsedAt,
       currentHourRequests: rateData?.count || 0,
       rateLimit: apiKey.rateLimit,

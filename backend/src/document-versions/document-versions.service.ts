@@ -109,6 +109,39 @@ export class DocumentVersionsService {
   }
 
   /**
+   * Restore a previous version of a document
+   */
+  async restoreVersion(documentId: string, versionNumber: number): Promise<DocumentVersion> {
+    // Get the version to restore
+    const versionToRestore = await this.versionRepository.findOne({
+      where: { documentId, version: versionNumber },
+    });
+
+    if (!versionToRestore) {
+      throw new NotFoundException(`Version ${versionNumber} not found for document ${documentId}`);
+    }
+
+    // Get latest version number
+    const latestVersion = await this.getLatestVersionNumber(documentId);
+
+    // Create new version from old content with proper description
+    const restoredVersion = this.versionRepository.create({
+      documentId: versionToRestore.documentId,
+      version: latestVersion + 1,
+      filename: versionToRestore.filename,
+      filePath: versionToRestore.filePath,
+      mimeType: versionToRestore.mimeType,
+      fileSize: versionToRestore.fileSize,
+      checksum: versionToRestore.checksum,
+      changeDescription: `Restored from version ${versionNumber}`,
+      createdBy: versionToRestore.createdBy,
+      metadata: versionToRestore.metadata,
+    });
+
+    return this.versionRepository.save(restoredVersion);
+  }
+
+  /**
    * Download a specific version
    */
   async downloadVersion(

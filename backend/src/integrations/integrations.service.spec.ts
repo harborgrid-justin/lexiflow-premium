@@ -40,7 +40,7 @@ describe('IntegrationsService', () => {
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
-  };
+  } as unknown as Repository<Integration>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -62,7 +62,7 @@ describe('IntegrationsService', () => {
 
   describe('findAll', () => {
     it('should return all integrations', async () => {
-      mockRepository.find.mockResolvedValue([mockIntegration]);
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       const result = await service.findAll();
 
@@ -72,7 +72,7 @@ describe('IntegrationsService', () => {
 
   describe('findById', () => {
     it('should return an integration by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       const result = await service.findById(mockIntegration.id);
 
@@ -106,9 +106,8 @@ describe('IntegrationsService', () => {
 
   describe('update', () => {
     it('should update an integration', async () => {
-      const updateDto = { name: 'Updated Integration' };
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, ...updateDto });
+      service['integrations'].set(mockIntegration.id, mockIntegration);
+      const updateDto = { name: 'Updated Name' };
 
       const result = await service.update(mockIntegration.id, updateDto);
 
@@ -124,8 +123,7 @@ describe('IntegrationsService', () => {
 
   describe('delete', () => {
     it('should delete an integration', async () => {
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
-      mockRepository.delete.mockResolvedValue({ affected: 1 });
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       await service.delete(mockIntegration.id);
 
@@ -150,8 +148,7 @@ describe('IntegrationsService', () => {
 
   describe('disconnect', () => {
     it('should disconnect an integration', async () => {
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, status: 'disconnected', credentials: null });
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       const result = await service.disconnect(mockIntegration.id);
 
@@ -161,8 +158,8 @@ describe('IntegrationsService', () => {
 
   describe('refreshCredentials', () => {
     it('should refresh integration credentials', async () => {
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, credentials: { accessToken: 'newToken' } });
+      const activeIntegration = { ...mockIntegration, status: 'active' };
+      service['integrations'].set(activeIntegration.id, activeIntegration);
 
       const result = await service.refreshCredentials(mockIntegration.id);
 
@@ -170,34 +167,34 @@ describe('IntegrationsService', () => {
     });
 
     it('should throw BadRequestException if integration not active', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockIntegration, status: 'disconnected' });
+      const inactiveIntegration = { ...mockIntegration, status: 'disconnected' };
+      service['integrations'].set(inactiveIntegration.id, inactiveIntegration);
 
-      await expect(service.refreshCredentials(mockIntegration.id)).rejects.toThrow(BadRequestException);
+      await expect(service.refreshCredentials(inactiveIntegration.id)).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('sync', () => {
     it('should trigger sync for an integration', async () => {
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, lastSync: new Date() });
+      const enabledIntegration = { ...mockIntegration, syncEnabled: true };
+      service['integrations'].set(enabledIntegration.id, enabledIntegration);
 
       const result = await service.sync(mockIntegration.id);
 
-      expect(result).toHaveProperty('success');
-      expect(result).toHaveProperty('recordsSynced');
+      expect(result.lastSyncedAt).toBeDefined();
     });
 
     it('should throw BadRequestException if sync not enabled', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockIntegration, syncEnabled: false });
+      const disabledIntegration = { ...mockIntegration, syncEnabled: false };
+      service['integrations'].set(disabledIntegration.id, disabledIntegration);
 
-      await expect(service.sync(mockIntegration.id)).rejects.toThrow(BadRequestException);
+      await expect(service.sync(disabledIntegration.id)).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('setSyncEnabled', () => {
     it('should enable sync', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockIntegration, syncEnabled: false });
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, syncEnabled: true });
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       const result = await service.setSyncEnabled(mockIntegration.id, true);
 
@@ -207,9 +204,8 @@ describe('IntegrationsService', () => {
 
   describe('updateConfig', () => {
     it('should update integration config', async () => {
-      const newConfig = { clientId: 'newClient123' };
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, config: newConfig });
+      service['integrations'].set(mockIntegration.id, mockIntegration);
+      const newConfig = { clientId: 'newClient' };
 
       const result = await service.updateConfig(mockIntegration.id, newConfig);
 
@@ -219,7 +215,7 @@ describe('IntegrationsService', () => {
 
   describe('findByType', () => {
     it('should return integrations by type', async () => {
-      mockRepository.find.mockResolvedValue([mockIntegration]);
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       const result = await service.findByType('crm');
 
@@ -229,7 +225,7 @@ describe('IntegrationsService', () => {
 
   describe('findByProvider', () => {
     it('should return integrations by provider', async () => {
-      mockRepository.find.mockResolvedValue([mockIntegration]);
+      service['integrations'].set(mockIntegration.id, mockIntegration);
 
       const result = await service.findByProvider('salesforce');
 

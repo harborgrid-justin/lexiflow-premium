@@ -51,6 +51,26 @@ export class ComplianceService {
     });
   }
 
+  async getActiveRules(): Promise<ComplianceRule[]> {
+    return this.complianceRuleRepository.find({
+      where: { isActive: true },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async findAll(): Promise<any[]> {
+    return this.complianceCheckRepository.find();
+  }
+
+  async findOne(id: string): Promise<any> {
+    return this.complianceCheckRepository.findOne({ where: { id } });
+  }
+
+  async create(createDto: any): Promise<any> {
+    const check = this.complianceCheckRepository.create(createDto);
+    return this.complianceCheckRepository.save(check);
+  }
+
   async getComplianceScore(caseId: string): Promise<{ score: number; passed: number; failed: number; total: number }> {
     const checks = await this.complianceCheckRepository.find({
       where: { caseId },
@@ -148,13 +168,6 @@ export class ComplianceService {
   async deleteRule(id: string): Promise<void> {
     await this.getRuleById(id);
     await this.complianceRuleRepository.delete(id);
-  }
-
-  async getActiveRules(): Promise<ComplianceRule[]> {
-    return this.complianceRuleRepository.find({
-      where: { isActive: true },
-      order: { createdAt: 'DESC' },
-    });
   }
 
   async getRulesByCategory(category: string): Promise<ComplianceRule[]> {

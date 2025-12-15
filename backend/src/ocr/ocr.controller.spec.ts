@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OcrController } from './ocr.controller';
 import { OcrService } from './ocr.service';
+import { describe, expect, jest } from '@jest/globals';
 
 describe('OcrController', () => {
   let controller: OcrController;

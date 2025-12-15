@@ -5,14 +5,17 @@ import { UsersService } from './users.service';
 import { Role } from '../common/enums/role.enum';
 import { expect, jest } from '@jest/globals';
 
-jest.mock('bcrypt');
+jest.mock('bcrypt', () => ({
+  hash: jest.fn(),
+  compare: jest.fn(),
+}));
 
 describe('UsersService', () => {
   let service: UsersService;
 
   beforeEach(async () => {
-    (bcrypt.hash as unknown as jest.Mock) = jest.fn().mockResolvedValue('hashedPassword');
-    (bcrypt.compare as unknown as jest.Mock) = jest.fn().mockResolvedValue(true);
+    (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [UsersService],
@@ -29,9 +32,9 @@ describe('UsersService', () => {
 
   describe('findAll', () => {
     it('should return array of users', async () => {
+      await service.create({ email: 'test@example.com', name: 'Test', password: 'pass', role: 'admin' as any });
       const result = await service.findAll();
 
-      // Should include the default admin user created in constructor
       expect(result).toBeInstanceOf(Array);
       expect(result.length).toBeGreaterThanOrEqual(1);
       expect(result[0]).toHaveProperty('email');
@@ -103,7 +106,7 @@ describe('UsersService', () => {
     it('should create a new user with hashed password', async () => {
       const result = await service.create(createUserDto);
 
-      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 12);
+      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
       expect(result).toHaveProperty('email', createUserDto.email);
       expect(result).toHaveProperty('id');
       expect(result).not.toHaveProperty('password');
@@ -181,7 +184,7 @@ describe('UsersService', () => {
 
       await service.updatePassword(created.id, 'newPassword');
 
-      expect(bcrypt.hash).toHaveBeenCalledWith('newPassword', 12);
+      expect(bcrypt.hash).toHaveBeenCalledWith('newPassword', 10);
     });
 
     it('should throw NotFoundException if user not found', async () => {

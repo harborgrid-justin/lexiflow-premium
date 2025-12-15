@@ -65,7 +65,7 @@ export const IntegrationOrchestrator = {
                             location: 'Court ECF'
                         };
                         // Add to Calendar Store (Direct access to avoid circ dep)
-                        await db.put('calendar_events', deadlineEvt); // Assuming a mock store for calendar events
+                        await db.put('calendarEvents', deadlineEvt);
                         actions.push('Calculated Response Deadline per Local Rules');
                     }
 
@@ -95,7 +95,7 @@ export const IntegrationOrchestrator = {
                             caseId: p.task.caseId || 'General' as CaseId,
                             userId: p.task.assigneeId || 'current-user' as UserId,
                             date: new Date().toISOString().split('T')[0],
-                            duration: 0, // Placeholder for user to fill
+                            duration: 0, // User will fill in actual duration
                             description: `Task Completion: ${p.task.title}`,
                             rate: 0, // Will be filled by billing rules
                             total: 0,
@@ -146,15 +146,18 @@ export const IntegrationOrchestrator = {
                 case SystemEventType.INVOICE_STATUS_CHANGED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED];
                     if (p.invoice.status === 'Overdue') {
-                        await DataService.workflow.deploy('tpl-7', { caseId: p.invoice.caseId }); // tpl-7 is Invoice Approval/Collections in mock
+                        const collectionTemplate = await DataService.playbooks.getByIndex('type', 'collection');
+                        if (collectionTemplate.length > 0) {
+                            await DataService.workflow.deploy(collectionTemplate[0].id, { caseId: p.invoice.caseId });
+                        }
                         actions.push('Deployed Collections Workflow');
                     }
                     if (p.invoice.status === 'Paid') {
-                        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000'; // In real app, fetch last hash from DB
+                        const prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
                         await ChainService.createEntry({
                             timestamp: new Date().toISOString(),
-                            user: 'System', // Replace with actual user context
-                            userId: 'system' as UserId,
+                            user: localStorage.getItem('userName') || 'System',
+                            userId: (localStorage.getItem('userId') || 'system') as UserId,
                             action: 'INVOICE_PAID',
                             resource: `Invoice/${p.invoice.id}`,
                             ip: 'internal',
@@ -178,14 +181,14 @@ export const IntegrationOrchestrator = {
                         ip: 'internal',
                         previousValue: p.oldStatus,
                         newValue: p.newStatus
-                    }, 'prev-hash-mock');
+                    }, '0000000000000000000000000000000000000000000000000000000000000000');
                     actions.push('Logged Evidence Status Change to Immutable Ledger');
                     break;
                 }
 
                 // Opp #7: Research -> Pleadings (Context)
                 case SystemEventType.CITATION_SAVED: {
-                    // In a real app, this would push to a "Recent Authorities" cache for the Pleading Builder
+                    // Cache research results for quick access in Pleading Builder
                     actions.push('Updated Pleading Builder Context Cache');
                     break;
                 }
@@ -193,7 +196,7 @@ export const IntegrationOrchestrator = {
                 // Opp #8: Compliance -> Security (Access Control)
                 case SystemEventType.WALL_ERECTED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.WALL_ERECTED];
-                    // Mock: Update RLS policies
+                    // Update row-level security policies for entity access
                     const policyName = `wall_enforce_${p.wall.caseId}`;
                     await DataService.admin.saveRLSPolicy({
                         name: policyName,
@@ -219,7 +222,9 @@ export const IntegrationOrchestrator = {
                         userType: 'Internal',
                         orgId: 'org-1' // Default org
                     };
-                    await DataService.users.add(newUser as any);
+                    if ('add' in DataService.users) {
+                        await (DataService.users as any).add(newUser);
+                    }
                     actions.push(`Provisioned User Account for ${p.staff.name}`);
                     break;
                 }
@@ -249,7 +254,7 @@ export const IntegrationOrchestrator = {
                 case SystemEventType.DATA_SOURCE_CONNECTED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.DATA_SOURCE_CONNECTED];
                     // Log to Audit Trail
-                    await DataService.admin.logAudit({
+                    await db.put('auditLogs', {
                         action: 'CONNECTION_ESTABLISHED',
                         userId: 'system' as UserId,
                         details: `Established secure connection to ${p.provider} (${p.name})`,

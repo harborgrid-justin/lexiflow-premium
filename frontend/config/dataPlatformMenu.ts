@@ -4,7 +4,7 @@ import {
   Table, Code, Activity, History, FileText, Key, BarChart2, FileSearch,
   AlertOctagon, Layers, GitCommit, Users, HardDrive, Cloud
 } from 'lucide-react';
-import { PlatformView } from '../components/admin/AdminDatabaseControl';
+import { PlatformView } from '../components/admin/data/AdminDatabaseControl';
 
 type MenuItem = {
   id: PlatformView;
@@ -42,8 +42,8 @@ export const DATA_PLATFORM_MENU: MenuItem[] = [
     { 
       id: 'pipeline', label: 'ETL Pipelines', icon: GitMerge,
       children: [
-        { id: 'pipeline-dag', label: 'DAG Monitor', icon: Activity },
-        { id: 'pipeline-jobs', label: 'Job History', icon: Activity },
+        { id: 'pipeline-monitor', label: 'Job Monitor', icon: Activity },
+        { id: 'pipeline-visual', label: 'Topology', icon: GitMerge },
         { id: 'pipeline-connectors', label: 'Connectors', icon: Network }
       ]
     },
@@ -56,12 +56,15 @@ export const DATA_PLATFORM_MENU: MenuItem[] = [
       children: [
         { id: 'lineage-graph', label: 'Dependency Graph', icon: GitCommit },
         { id: 'lineage-impact', label: 'Impact Analysis', icon: Layers },
+        { id: 'lineage-history', label: 'Change History', icon: History },
       ]
     },
     { 
       id: 'quality', label: 'Data Quality', icon: Sparkles,
       children: [
         { id: 'quality-dashboard', label: 'Quality Scorecard', icon: BarChart2 },
+        { id: 'quality-standardization', label: 'Standardization', icon: Activity },
+        { id: 'quality-dedupe', label: 'Deduplication', icon: GitMerge },
         { id: 'quality-profiler', label: 'Data Profiler', icon: FileSearch },
         { id: 'quality-rules', label: 'Validation Rules', icon: AlertOctagon },
       ]
@@ -85,8 +88,8 @@ export const DATA_PLATFORM_MENU: MenuItem[] = [
     { 
       id: 'security', label: 'Row Security', icon: Lock,
       children: [
-        { id: 'security-policies', label: 'RLS Policies', icon: FileText },
-        { id: 'security-roles', label: 'DB Roles', icon: ShieldCheck }
+        { id: 'security-matrix', label: 'Access Matrix', icon: Table },
+        { id: 'security-policies', label: 'RLS Policies', icon: FileText }
       ]
     },
     { id: 'replication', label: 'Replication', icon: Repeat },

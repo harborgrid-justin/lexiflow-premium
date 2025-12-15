@@ -64,8 +64,18 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
             <div key={item.id}>
               <button
                 onClick={() => {
-                  if (hasChildren) toggleExpand(item.id);
-                  else onChange(item.id);
+                  if (hasChildren) {
+                    // Navigate to first child
+                    if (item.children && item.children.length > 0) {
+                      onChange(item.children[0].id);
+                    }
+                    // Also expand if not already expanded
+                    if (!isExpanded) {
+                      toggleExpand(item.id);
+                    }
+                  } else {
+                    onChange(item.id);
+                  }
                 }}
                 className={cn(
                   "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 group",
@@ -79,7 +89,13 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   {item.label}
                 </div>
                 {hasChildren && (
-                  <div className={theme.text.tertiary}>
+                  <div 
+                    className={cn(theme.text.tertiary, "hover:text-current transition-colors")}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpand(item.id);
+                    }}
+                  >
                     {isExpanded ? <ChevronDown className="h-3 w-3"/> : <ChevronRight className="h-3 w-3"/>}
                   </div>
                 )}

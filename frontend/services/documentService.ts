@@ -85,8 +85,11 @@ export const DocumentService = {
       
       await yieldToMain();
       
-      // Mock Hash generation for demo
-      const mockHash = '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      // Generate SHA-256 hash using Web Crypto API
+      const fileContent = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', fileContent);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const documentHash = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
       await yieldToMain();
       
       const chunkCount = Math.floor(Math.random() * 5) + 2; 
@@ -107,7 +110,7 @@ export const DocumentService = {
       if (file.name.toLowerCase().includes('email')) tags.push('Correspondence');
       
       return {
-        hash: mockHash,
+        hash: documentHash,
         uuid: uuid,
         chunks: chunks,
         tags: tags,

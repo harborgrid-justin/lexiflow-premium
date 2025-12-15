@@ -69,6 +69,21 @@ import { IntegrationsModule } from './integrations/integrations.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { ApiKeysModule } from './api-keys/api-keys.module';
 
+// New Service Modules - Final 13
+import { TasksModule } from './tasks/tasks.module';
+import { RisksModule } from './risks/risks.module';
+import { HRModule } from './hr/hr.module';
+import { WorkflowModule } from './workflow/workflow.module';
+import { TrialModule } from './trial/trial.module';
+import { ExhibitsModule } from './exhibits/exhibits.module';
+import { ClientsModule } from './clients/clients.module';
+import { CitationsModule } from './citations/citations.module';
+import { CalendarModule } from './calendar/calendar.module';
+import { MessengerModule } from './messenger/messenger.module';
+import { WarRoomModule } from './war-room/war-room.module';
+import { AnalyticsDashboardModule } from './analytics-dashboard/analytics-dashboard.module';
+import { KnowledgeModule } from './knowledge/knowledge.module';
+
 // App Controller & Service
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -178,6 +193,21 @@ if (isRedisEnabled) {
     IntegrationsModule,
     WebhooksModule,
     ApiKeysModule,
+
+    // Final 13 Services - Completing 100% Backend Coverage
+    TasksModule,
+    RisksModule,
+    HRModule,
+    WorkflowModule,
+    TrialModule,
+    ExhibitsModule,
+    ClientsModule,
+    CitationsModule,
+    CalendarModule,
+    MessengerModule,
+    WarRoomModule,
+    AnalyticsDashboardModule,
+    KnowledgeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -22,7 +22,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
   
   useEffect(() => {
       if (initialTab === 'connectors') setActiveTab('connectors');
-      else if (initialTab === 'dag') setActiveTab('visual');
+      else if (initialTab === 'visual') setActiveTab('visual');
       else setActiveTab('monitor');
   }, [initialTab]);
   

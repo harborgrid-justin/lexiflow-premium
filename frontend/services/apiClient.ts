@@ -21,6 +21,23 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
+export type ServiceHealthStatus = 'online' | 'degraded' | 'offline' | 'unknown';
+
+export interface ServiceHealth {
+  status: ServiceHealthStatus;
+  latency?: number; // in milliseconds
+  lastChecked: string;
+  error?: string;
+}
+
+export interface SystemHealth {
+  overall: ServiceHealthStatus;
+  services: {
+    [serviceName: string]: ServiceHealth;
+  };
+  timestamp: string;
+}
+
 // Export type for convenience
 export type { PaginatedResponse as PaginatedApiResponse };
 
@@ -266,6 +283,108 @@ class ApiClient {
     } catch (error) {
       throw new Error('Backend server is not reachable');
     }
+  }
+
+  /**
+   * Check health of a specific service endpoint
+   */
+  async checkServiceHealth(serviceName: string, endpoint: string): Promise<ServiceHealth> {
+    const startTime = performance.now();
+    const lastChecked = new Date().toISOString();
+
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        method: 'HEAD', // Use HEAD to minimize response size
+        headers: this.getHeaders(),
+        signal: AbortSignal.timeout(5000), // 5 second timeout
+      });
+
+      const latency = Math.round(performance.now() - startTime);
+
+      if (response.ok) {
+        return {
+          status: latency > 2000 ? 'degraded' : 'online',
+          latency,
+          lastChecked,
+        };
+      } else {
+        return {
+          status: 'offline',
+          latency,
+          lastChecked,
+          error: `HTTP ${response.status}`,
+        };
+      }
+    } catch (error: any) {
+      return {
+        status: 'offline',
+        lastChecked,
+        error: error.message || 'Network error',
+      };
+    }
+  }
+
+  /**
+   * Check health of all backend services
+   */
+  async checkSystemHealth(): Promise<SystemHealth> {
+    const serviceEndpoints = [
+      { name: 'cases', endpoint: '/cases' },
+      { name: 'docket', endpoint: '/docket' },
+      { name: 'documents', endpoint: '/documents' },
+      { name: 'evidence', endpoint: '/evidence' },
+      { name: 'billing', endpoint: '/billing/invoices' },
+      { name: 'users', endpoint: '/users' },
+      { name: 'pleadings', endpoint: '/pleadings' },
+      { name: 'motions', endpoint: '/motions' },
+      { name: 'parties', endpoint: '/parties' },
+      { name: 'clauses', endpoint: '/clauses' },
+      { name: 'trustAccounts', endpoint: '/billing/trust-accounts' },
+      { name: 'legalHolds', endpoint: '/discovery/legal-holds' },
+      { name: 'depositions', endpoint: '/discovery/depositions' },
+      { name: 'conflictChecks', endpoint: '/compliance/conflict-checks' },
+      { name: 'auditLogs', endpoint: '/compliance/audit-logs' },
+    ];
+
+    const healthChecks = await Promise.allSettled(
+      serviceEndpoints.map(async ({ name, endpoint }) => ({
+        name,
+        health: await this.checkServiceHealth(name, endpoint),
+      }))
+    );
+
+    const services: { [key: string]: ServiceHealth } = {};
+    let onlineCount = 0;
+    let degradedCount = 0;
+    let offlineCount = 0;
+
+    healthChecks.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        const { name, health } = result.value;
+        services[name] = health;
+
+        if (health.status === 'online') onlineCount++;
+        else if (health.status === 'degraded') degradedCount++;
+        else if (health.status === 'offline') offlineCount++;
+      }
+    });
+
+    let overall: ServiceHealthStatus = 'unknown';
+    if (offlineCount === healthChecks.length) {
+      overall = 'offline';
+    } else if (offlineCount > 0 || degradedCount > healthChecks.length / 2) {
+      overall = 'degraded';
+    } else if (onlineCount === healthChecks.length) {
+      overall = 'online';
+    } else {
+      overall = 'degraded';
+    }
+
+    return {
+      overall,
+      services,
+      timestamp: new Date().toISOString(),
+    };
   }
 }
 

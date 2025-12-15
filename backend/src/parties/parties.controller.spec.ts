@@ -54,7 +54,7 @@ describe('PartiesController', () => {
       const createDto = {
         caseId: 'case-001',
         name: 'Jane Smith',
-        type: 'DEFENDANT',
+        type: 'DEFENDANT' as any,
       };
       mockPartiesService.create.mockResolvedValue({ ...mockParty, ...createDto });
 

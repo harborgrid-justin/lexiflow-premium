@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DiscoveryController } from './discovery.controller';
+import { DiscoveryController } from './controllers/discovery.controller';
 import { DiscoveryService } from './discovery.service';
 
 describe('DiscoveryController', () => {
@@ -28,20 +28,20 @@ describe('DiscoveryController', () => {
   };
 
   const mockDiscoveryService = {
-    findAll: jest.fn(),
+    getAll: jest.fn(),
     findByCaseId: jest.fn(),
-    findById: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    getById: jest.fn(),
+    createRequest: jest.fn(),
+    updateRequest: jest.fn(),
+    deleteRequest: jest.fn(),
     findByType: jest.fn(),
     findByStatus: jest.fn(),
-    serve: jest.fn(),
-    respond: jest.fn(),
-    getOverdue: jest.fn(),
-    createLegalHold: jest.fn(),
-    getLegalHolds: jest.fn(),
-    releaseLegalHold: jest.fn(),
+    serveRequest: jest.fn(),
+    respondToRequest: jest.fn(),
+    getOverdueRequests: jest.fn(),
+    createHold: jest.fn(),
+    getHolds: jest.fn(),
+    releaseHold: jest.fn(),
     addCustodian: jest.fn(),
     removeCustodian: jest.fn(),
     search: jest.fn(),

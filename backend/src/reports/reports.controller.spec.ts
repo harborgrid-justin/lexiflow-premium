@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReportsController } from './reports.controller';
 import { ReportsService } from './reports.service';
+import { expect, jest } from '@jest/globals';
 
 describe('ReportsController', () => {
   let controller: ReportsController;
@@ -71,11 +72,11 @@ describe('ReportsController', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('getReport', () => {
     it('should return a report by id', async () => {
-      mockReportsService.findById.mockResolvedValue(mockReport);
+      jest.spyOn(service, 'getReport').mockResolvedValue(mockReport);
 
-      const result = await controller.findById('report-001');
+      const result = await controller.getReport('report-001');
 
       expect(result).toEqual(mockReport);
       expect(service.findById).toHaveBeenCalledWith('report-001');
@@ -99,11 +100,11 @@ describe('ReportsController', () => {
     });
   });
 
-  describe('delete', () => {
+  describe('deleteReport', () => {
     it('should delete a report', async () => {
-      mockReportsService.delete.mockResolvedValue(undefined);
+      jest.spyOn(service, 'deleteReport').mockResolvedValue(undefined);
 
-      await controller.delete('report-001');
+      await controller.deleteReport('report-001');
 
       expect(service.delete).toHaveBeenCalledWith('report-001');
     });

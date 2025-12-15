@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
+import { getQueueToken } from '@nestjs/bull';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { ProcessingJob } from './entities/processing-job.entity';
 import { JobType, JobStatus } from './dto/job-status.dto';
@@ -35,11 +36,19 @@ describe('ProcessingJobsService', () => {
     createQueryBuilder: jest.fn(),
   };
 
+  const mockQueue = {
+    add: jest.fn(),
+    process: jest.fn(),
+    getJob: jest.fn(),
+    getJobs: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProcessingJobsService,
         { provide: getRepositoryToken(ProcessingJob), useValue: mockRepository },
+        { provide: getQueueToken('document-processing'), useValue: mockQueue },
       ],
     }).compile();
 

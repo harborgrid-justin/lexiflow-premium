@@ -63,7 +63,7 @@ describe('ClausesController', () => {
 
   describe('create', () => {
     it('should create a new clause', async () => {
-      const createDto = {
+      const createDto: any = {
         title: 'New Clause',
         content: 'New clause content',
         category: 'Contract',

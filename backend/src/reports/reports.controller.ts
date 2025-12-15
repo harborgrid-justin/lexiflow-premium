@@ -32,6 +32,45 @@ import {
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
 export class ReportsController {
+findAll() {
+throw new Error('Method not implemented.');
+}
+findById(arg0: string) {
+throw new Error('Method not implemented.');
+}
+generate(generateDto: { templateId: string; name: string; parameters: { quarter: string; }; format: string; }, arg1: string) {
+throw new Error('Method not implemented.');
+}
+delete(arg0: string) {
+throw new Error('Method not implemented.');
+}
+download(arg0: string) {
+throw new Error('Method not implemented.');
+}
+findByType(arg0: string) {
+throw new Error('Method not implemented.');
+}
+getTemplateById(arg0: string) {
+throw new Error('Method not implemented.');
+}
+createTemplate(createDto: { name: string; type: string; description: string; }, arg1: string) {
+throw new Error('Method not implemented.');
+}
+scheduleReport(scheduleDto: { templateId: string; name: string; schedule: string; parameters: {}; recipients: string[]; }, arg1: string) {
+throw new Error('Method not implemented.');
+}
+getScheduledReports(arg0: string) {
+throw new Error('Method not implemented.');
+}
+cancelScheduledReport(arg0: string, arg1: string) {
+throw new Error('Method not implemented.');
+}
+getReportStatus(arg0: string) {
+throw new Error('Method not implemented.');
+}
+exportReport(arg0: string, arg1: { format: string; }) {
+throw new Error('Method not implemented.');
+}
   constructor(private readonly reportsService: ReportsService) {}
 
   @Get('templates')

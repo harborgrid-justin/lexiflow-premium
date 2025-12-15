@@ -168,4 +168,95 @@ export class PleadingsService {
       order: { createdAt: 'DESC' },
     });
   }
+
+  /**
+   * Find pleadings by type
+   */
+  async findByType(caseId: string, type: string): Promise<Pleading[]> {
+    return await this.pleadingRepository.find({
+      where: { caseId, type: type as any },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  /**
+   * Get overdue pleadings
+   */
+  async getOverduePleadings(): Promise<Pleading[]> {
+    const today = new Date();
+    return await this.pleadingRepository
+      .createQueryBuilder('pleading')
+      .where('pleading.dueDate < :today', { today })
+      .andWhere('pleading.status != :filed', { filed: PleadingStatus.FILED })
+      .orderBy('pleading.dueDate', 'ASC')
+      .getMany();
+  }
+
+  /**
+   * Attach document to pleading
+   */
+  async attachDocument(id: string, documentId: string): Promise<Pleading> {
+    const pleading = await this.findOne(id);
+    pleading.documentId = documentId;
+    return await this.pleadingRepository.save(pleading);
+  }
+
+  /**
+   * Set hearing date
+   */
+  async setHearingDate(id: string, hearingDate: Date): Promise<Pleading> {
+    const pleading = await this.findOne(id);
+    pleading.hearingDate = hearingDate;
+    return await this.pleadingRepository.save(pleading);
+  }
+
+  /**
+   * Get pleadings due soon
+   */
+  async getDueSoon(days: number): Promise<Pleading[]> {
+    const today = new Date();
+    const futureDate = new Date();
+    futureDate.setDate(today.getDate() + days);
+
+    return await this.pleadingRepository
+      .createQueryBuilder('pleading')
+      .where('pleading.dueDate >= :today', { today })
+      .andWhere('pleading.dueDate <= :futureDate', { futureDate })
+      .andWhere('pleading.status != :filed', { filed: PleadingStatus.FILED })
+      .orderBy('pleading.dueDate', 'ASC')
+      .getMany();
+  }
+
+  /**
+   * Search pleadings
+   */
+  async search(query: {
+    caseId?: string;
+    query?: string;
+    type?: string;
+    status?: PleadingStatus;
+  }): Promise<Pleading[]> {
+    const qb = this.pleadingRepository.createQueryBuilder('pleading');
+
+    if (query.caseId) {
+      qb.andWhere('pleading.caseId = :caseId', { caseId: query.caseId });
+    }
+
+    if (query.query) {
+      qb.andWhere(
+        '(pleading.title ILIKE :search OR pleading.content ILIKE :search)',
+        { search: `%${query.query}%` },
+      );
+    }
+
+    if (query.type) {
+      qb.andWhere('pleading.type = :type', { type: query.type });
+    }
+
+    if (query.status) {
+      qb.andWhere('pleading.status = :status', { status: query.status });
+    }
+
+    return await qb.orderBy('pleading.createdAt', 'DESC').getMany();
+  }
 }

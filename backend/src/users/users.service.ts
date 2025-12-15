@@ -17,8 +17,10 @@ export class UsersService {
   private users: Map<string, any> = new Map();
 
   constructor() {
-    // Create default admin user for testing
-    this.createDefaultAdmin();
+    // Create default admin user for testing only if not in test environment
+    if (process.env.NODE_ENV !== 'test') {
+      this.createDefaultAdmin();
+    }
   }
 
   private async createDefaultAdmin() {
@@ -45,7 +47,7 @@ export class UsersService {
       throw new ConflictException('User with this email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const userId = uuidv4();
 
     const user = {
@@ -127,7 +129,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     user.updatedAt = new Date();
 

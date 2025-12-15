@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Motion } from './entities/motion.entity';
+import { Motion, MotionStatus } from './entities/motion.entity';
 import { CreateMotionDto } from './dto/create-motion.dto';
 import { UpdateMotionDto } from './dto/update-motion.dto';
 
@@ -44,7 +44,7 @@ export class MotionsService {
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
-    await this.motionRepository.softDelete(id);
+    await this.motionRepository.delete(id);
   }
 
   async findAll(): Promise<Motion[]> {
@@ -63,7 +63,10 @@ export class MotionsService {
 
   async file(id: string): Promise<Motion> {
     const motion = await this.findOne(id);
-    motion.status = 'filed' as any;
+    if (motion.status === MotionStatus.FILED as any) {
+      throw new BadRequestException('Motion is already filed');
+    }
+    motion.status = MotionStatus.FILED as any;
     motion.filedDate = new Date();
     return this.motionRepository.save(motion);
   }

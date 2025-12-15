@@ -8,6 +8,21 @@ export class AnalyticsEvent {
   @Column()
   eventType: string;
 
+  @Column()
+  entityType: string;
+
+  @Column()
+  entityId: string;
+
+  @Column()
+  userId: string;
+
+  @Column('jsonb', { nullable: true })
+  metadata: any;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  timestamp: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

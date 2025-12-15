@@ -1,6 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+// Entities
+import { AnalyticsEvent } from './entities/analytics-event.entity';
+import { Dashboard } from './entities/dashboard.entity';
+
+// Main service
+import { AnalyticsService } from './analytics.service';
+
 // Case Analytics
 import { CaseAnalyticsController } from './case-analytics/case-analytics.controller';
 import { CaseAnalyticsService } from './case-analytics/case-analytics.service';
@@ -27,16 +34,7 @@ import { DashboardService } from './dashboard/dashboard.service';
 
 @Module({
   imports: [
-    // TypeOrmModule.forFeature([
-    //   Case,
-    //   LegalDocument,
-    //   TimeEntry,
-    //   Invoice,
-    //   DiscoveryRequest,
-    //   Motion,
-    //   Judge,
-    //   OutcomePredictionData,
-    // ]),
+    TypeOrmModule.forFeature([AnalyticsEvent, Dashboard]),
   ],
   controllers: [
     CaseAnalyticsController,
@@ -47,6 +45,9 @@ import { DashboardService } from './dashboard/dashboard.service';
     DashboardController,
   ],
   providers: [
+    // Main Service
+    AnalyticsService,
+    
     CaseAnalyticsService,
     JudgeStatsService,
     OutcomePredictionsService,
@@ -55,6 +56,9 @@ import { DashboardService } from './dashboard/dashboard.service';
     DashboardService,
   ],
   exports: [
+    // Export main service
+    AnalyticsService,
+    
     CaseAnalyticsService,
     JudgeStatsService,
     OutcomePredictionsService,

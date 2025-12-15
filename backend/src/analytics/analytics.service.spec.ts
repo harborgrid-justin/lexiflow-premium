@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { AnalyticsService } from './analytics.service';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
+import { expect, jest } from '@jest/globals';
 
 describe('AnalyticsService', () => {
   let service: AnalyticsService;

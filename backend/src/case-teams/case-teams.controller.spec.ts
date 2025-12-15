@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CaseTeamsController } from './case-teams.controller';
 import { CaseTeamsService } from './case-teams.service';
+import { jest } from '@jest/globals';
 
 describe('CaseTeamsController', () => {
   let controller: CaseTeamsController;
@@ -51,10 +52,11 @@ describe('CaseTeamsController', () => {
 
   describe('create', () => {
     it('should add a team member', async () => {
-      const createDto = {
+      const createDto: any = {
         caseId: 'case-001',
         userId: 'user-002',
         role: 'ASSOCIATE',
+        name: 'Test Team',
       };
       mockCaseTeamsService.create.mockResolvedValue({ ...mockTeamMember, ...createDto });
 
@@ -67,7 +69,7 @@ describe('CaseTeamsController', () => {
 
   describe('update', () => {
     it('should update a team member', async () => {
-      const updateDto = { role: 'SENIOR_ASSOCIATE' };
+      const updateDto: any = { role: 'SENIOR_ASSOCIATE' };
       mockCaseTeamsService.update.mockResolvedValue({ ...mockTeamMember, ...updateDto });
 
       const result = await controller.update('team-001', updateDto);

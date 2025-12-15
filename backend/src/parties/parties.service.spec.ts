@@ -41,7 +41,10 @@ describe('PartiesService', () => {
       const result = await service.findAllByCaseId('case-001');
 
       expect(result).toEqual(mockParties);
-      expect(mockRepository.find).toHaveBeenCalledWith({ where: { caseId: 'case-001' } });
+      expect(mockRepository.find).toHaveBeenCalledWith({
+        where: { caseId: 'case-001' },
+        order: { createdAt: 'DESC' },
+      });
     });
   });
 });

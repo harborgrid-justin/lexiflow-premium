@@ -39,14 +39,14 @@ describe('PleadingsController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('findAllByCaseId', () => {
+  describe('findByCaseId', () => {
     it('should return pleadings for a case', async () => {
-      mockPleadingsService.findAllByCaseId.mockResolvedValue([mockPleading]);
+      mockPleadingsService.findByCaseId.mockResolvedValue([mockPleading]);
 
-      const result = await controller.findAllByCaseId('case-001');
+      const result = await controller.findByCaseId('case-001');
 
       expect(result).toEqual([mockPleading]);
-      expect(service.findAllByCaseId).toHaveBeenCalledWith('case-001');
+      expect(service.findByCaseId).toHaveBeenCalledWith('case-001');
     });
   });
 

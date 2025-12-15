@@ -14,10 +14,11 @@ import {
   CaseDiscoveryMetricsDto,
   DiscoveryProductionVolumeDto,
 } from './dto/discovery-analytics.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Discovery')
 @Controller('api/v1/analytics')
-// @UseGuards(JwtAuthGuard) // Uncomment when auth is available
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class DiscoveryAnalyticsController {
   constructor(
@@ -31,6 +32,7 @@ export class DiscoveryAnalyticsController {
     description: 'Discovery funnel data retrieved successfully',
     type: DiscoveryFunnelDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getDiscoveryFunnel(
     @Query() query: DiscoveryAnalyticsQueryDto,
   ): Promise<DiscoveryFunnelDto> {
@@ -45,6 +47,8 @@ export class DiscoveryAnalyticsController {
     description: 'Case discovery funnel retrieved successfully',
     type: DiscoveryFunnelDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Case not found' })
   async getCaseDiscoveryFunnel(
     @Param('caseId') caseId: string,
   ): Promise<DiscoveryFunnelDto> {
@@ -58,6 +62,7 @@ export class DiscoveryAnalyticsController {
     description: 'Discovery timeline retrieved successfully',
     type: DiscoveryTimelineDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getDiscoveryTimeline(
     @Query() query: DiscoveryAnalyticsQueryDto,
   ): Promise<DiscoveryTimelineDto> {
@@ -72,6 +77,8 @@ export class DiscoveryAnalyticsController {
     description: 'Case discovery metrics retrieved successfully',
     type: CaseDiscoveryMetricsDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Case not found' })
   async getCaseDiscoveryMetrics(
     @Param('caseId') caseId: string,
   ): Promise<CaseDiscoveryMetricsDto> {
@@ -85,6 +92,7 @@ export class DiscoveryAnalyticsController {
     description: 'Production volume data retrieved successfully',
     type: DiscoveryProductionVolumeDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProductionVolume(
     @Query() query: DiscoveryAnalyticsQueryDto,
   ): Promise<DiscoveryProductionVolumeDto> {

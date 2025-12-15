@@ -7,15 +7,17 @@ import { Custodian } from './entities/custodian.entity';
 
 @Injectable()
 export class DiscoveryService {
-findAll(findAll: any) {
-throw new Error('Method not implemented.');
-}
-findOne(findOne: any) {
-throw new Error('Method not implemented.');
-}
-create(create: any) {
-throw new Error('Method not implemented.');
-}
+  findAll(): Promise<any[]> {
+    return this.findAllRequests();
+  }
+
+  findOne(id: string): Promise<any> {
+    return this.findRequestById(id);
+  }
+
+  create(createDto: any): Promise<any> {
+    return this.createRequest(createDto);
+  }
   constructor(
     @InjectRepository(DiscoveryRequest)
     private discoveryRequestRepository: Repository<DiscoveryRequest>,

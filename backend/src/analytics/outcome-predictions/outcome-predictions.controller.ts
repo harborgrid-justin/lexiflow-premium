@@ -13,10 +13,11 @@ import {
   SimilarCaseDto,
   PredictionAccuracyDto,
 } from './dto/outcome-predictions.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Outcome Predictions')
 @Controller('api/v1/analytics/outcome-predictions')
-// @UseGuards(JwtAuthGuard) // Uncomment when auth is available
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class OutcomePredictionsController {
   constructor(

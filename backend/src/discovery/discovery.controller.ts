@@ -8,7 +8,7 @@ import { UserRole } from '../auth/enums/user-role.enum';
 
 @ApiTags('Discovery')
 @ApiBearerAuth('JWT-auth')
-@Controller('discovery')
+@Controller('api/v1/discovery')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class DiscoveryController {
   constructor(private readonly discoveryService: DiscoveryService) {}

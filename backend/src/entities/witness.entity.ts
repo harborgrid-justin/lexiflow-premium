@@ -1,5 +1,6 @@
-import { Entity, Column, Index } from 'typeorm';
+import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { Case } from '../cases/entities/case.entity';
 
 @Entity('witnesses')
 @Index(['caseId'])
@@ -8,6 +9,10 @@ import { BaseEntity } from './base.entity';
 export class Witness extends BaseEntity {
   @Column({ type: 'uuid' })
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'varchar', length: 255 })
   name: string;

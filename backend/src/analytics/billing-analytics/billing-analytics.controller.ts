@@ -14,10 +14,11 @@ import {
   ArAgingDto,
   RealizationAnalysisDto,
 } from './dto/billing-analytics.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Billing')
 @Controller('api/v1/analytics/billing')
-// @UseGuards(JwtAuthGuard) // Uncomment when auth is available
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class BillingAnalyticsController {
   constructor(

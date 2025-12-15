@@ -85,12 +85,14 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     try {
+      const refreshSecret = this.configService.get<string>('jwt.refreshSecret');
+      if (!refreshSecret) {
+        throw new UnauthorizedException('Server configuration error');
+      }
       const payload = await this.jwtService.verifyAsync<JwtPayload>(
         refreshToken,
         {
-          secret:
-            this.configService.get<string>('JWT_REFRESH_SECRET') ||
-            'your-refresh-secret-key',
+          secret: refreshSecret,
         },
       );
 
@@ -176,11 +178,14 @@ export class AuthService {
     }
 
     // Generate reset token (6 hours expiry)
+    const jwtSecret = this.configService.get<string>('jwt.secret');
+    if (!jwtSecret) {
+      throw new BadRequestException('Server configuration error');
+    }
     const resetToken = await this.jwtService.signAsync(
       { sub: user.id, type: 'reset' },
       {
-        secret:
-          this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
+        secret: jwtSecret,
         expiresIn: '6h',
       },
     );
@@ -198,8 +203,6 @@ export class AuthService {
 
     return {
       message: 'If an account with that email exists, a reset link has been sent',
-      // For development only - remove in production
-      resetToken,
     };
   }
 
@@ -233,15 +236,23 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired MFA token');
     }
 
-    // In production, verify the actual MFA code against TOTP or SMS
-    // For now, accept any 6-digit code for demonstration
+    // Validate code format
     if (!/^\d{6}$/.test(code)) {
-      throw new UnauthorizedException('Invalid MFA code');
+      throw new UnauthorizedException('Invalid MFA code format');
     }
 
+    // Verify the MFA code against user's stored TOTP secret
     const user = await this.usersService.findById(mfaData.userId);
     if (!user) {
       throw new UnauthorizedException('User not found');
+    }
+
+    // TODO: Implement proper TOTP verification using speakeasy or similar library
+    // For now, reject all codes until proper TOTP is implemented
+    // This ensures MFA cannot be bypassed
+    const isValidCode = await this.verifyTotpCode(user, code);
+    if (!isValidCode) {
+      throw new UnauthorizedException('Invalid MFA code');
     }
 
     const tokens = await this.generateTokens(user);
@@ -297,17 +308,21 @@ export class AuthService {
       type: 'refresh',
     };
 
+    const jwtSecret = this.configService.get<string>('jwt.secret');
+    const refreshSecret = this.configService.get<string>('jwt.refreshSecret');
+
+    if (!jwtSecret || !refreshSecret) {
+      throw new UnauthorizedException('Server configuration error');
+    }
+
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(accessPayload, {
-        secret:
-          this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
-        expiresIn: (this.configService.get<string>('JWT_EXPIRATION') || '15m') as any,
+        secret: jwtSecret,
+        expiresIn: (this.configService.get<string>('jwt.expiresIn') || '900') as any,
       }),
       this.jwtService.signAsync(refreshPayload, {
-        secret:
-          this.configService.get<string>('JWT_REFRESH_SECRET') ||
-          'your-refresh-secret-key',
-        expiresIn: (this.configService.get<string>('JWT_REFRESH_EXPIRATION') || '7d') as any,
+        secret: refreshSecret,
+        expiresIn: (this.configService.get<string>('jwt.refreshExpiresIn') || '604800') as any,
       }),
     ]);
 
@@ -318,11 +333,15 @@ export class AuthService {
   }
 
   private async generateMfaToken(userId: string): Promise<string> {
+    const jwtSecret = this.configService.get<string>('jwt.secret');
+    if (!jwtSecret) {
+      throw new UnauthorizedException('Server configuration error');
+    }
+
     const mfaToken = await this.jwtService.signAsync(
       { sub: userId, type: 'mfa' },
       {
-        secret:
-          this.configService.get<string>('JWT_SECRET') || 'your-secret-key',
+        secret: jwtSecret,
         expiresIn: '5m',
       },
     );
@@ -334,5 +353,25 @@ export class AuthService {
     });
 
     return mfaToken;
+  }
+
+  // Verify TOTP code - placeholder for proper implementation
+  // In production, use speakeasy or similar library with user's stored TOTP secret
+  private async verifyTotpCode(
+    user: AuthenticatedUser,
+    code: string,
+  ): Promise<boolean> {
+    // TODO: Implement proper TOTP verification
+    // Example with speakeasy:
+    // return speakeasy.totp.verify({
+    //   secret: user.totpSecret,
+    //   encoding: 'base32',
+    //   token: code,
+    //   window: 1,
+    // });
+
+    // For now, MFA verification requires proper implementation
+    // Returning false ensures MFA cannot be bypassed
+    return false;
   }
 }

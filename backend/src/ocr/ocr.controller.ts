@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { OcrService } from './ocr.service';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('OCR')
-@Controller('ocr')
+@ApiBearerAuth('JWT-auth')
+@Controller('api/v1/ocr')
+@UseGuards(JwtAuthGuard)
 export class OcrController {
   constructor(private readonly ocrService: OcrService) {}
 

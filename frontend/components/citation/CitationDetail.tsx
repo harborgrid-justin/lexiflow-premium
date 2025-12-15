@@ -28,6 +28,7 @@ import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { GeminiService } from '../../services/geminiService';
 import { cn } from '../../utils/cn';
+import { sanitizeHtml } from '../../utils/sanitize';
 import { STORES } from '../../services/db';
 
 // ============================================================================
@@ -118,7 +119,7 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
                 </div>
                 {aiAnalysis ? (
                     <div className={cn("text-sm p-3 bg-purple-50 border border-purple-100 rounded text-slate-800 leading-relaxed")}>
-                        <div dangerouslySetInnerHTML={{__html: aiAnalysis}} />
+                        <div dangerouslySetInnerHTML={{__html: sanitizeHtml(aiAnalysis)}} />
                     </div>
                 ) : (
                     <div className={cn("text-center py-6 text-xs italic", theme.text.tertiary)}>

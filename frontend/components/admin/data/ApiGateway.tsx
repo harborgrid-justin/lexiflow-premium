@@ -5,20 +5,24 @@ import { DataService } from '../../../services/dataService';
 import { ApiServiceSpec, ApiMethod } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { encodeHtmlEntities } from '../../../utils/sanitize';
 import { Loader2, Server, ChevronRight } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 
 // Internal CodeBlock component for syntax highlighting
 const CodeBlock: React.FC<{ code: string }> = ({ code }) => {
     const { theme, mode } = useTheme();
-    
-    // Simple regex highlighting for JSON
-    const highlighted = code
-        .replace(/"([^"]+)":/g, `<span class="${mode === 'dark' ? 'text-purple-300' : 'text-purple-600'}">"$1"</span>:`)
-        .replace(/: "([^"]+)"/g, `: <span class="${mode === 'dark' ? 'text-amber-300' : 'text-amber-700'}">"$1"</span>`)
+
+    // First encode HTML entities to prevent XSS, then apply syntax highlighting
+    const encodedCode = encodeHtmlEntities(code);
+
+    // Simple regex highlighting for JSON (applied to encoded content)
+    const highlighted = encodedCode
+        .replace(/&quot;([^&]+)&quot;:/g, `<span class="${mode === 'dark' ? 'text-purple-300' : 'text-purple-600'}">&quot;$1&quot;</span>:`)
+        .replace(/: &quot;([^&]+)&quot;/g, `: <span class="${mode === 'dark' ? 'text-amber-300' : 'text-amber-700'}">&quot;$1&quot;</span>`)
         .replace(/: (\d+\.?\d*)/g, `: <span class="${mode === 'dark' ? 'text-sky-300' : 'text-sky-600'}">$1</span>`)
         .replace(/: (true|false)/g, `: <span class="${mode === 'dark' ? 'text-rose-400' : 'text-rose-600'}">$1</span>`);
-    
+
     return (
         <pre className={cn("bg-slate-800 text-slate-300 p-4 rounded-lg text-xs font-mono overflow-x-auto", theme.border.default)}>
             <code dangerouslySetInnerHTML={{ __html: highlighted }} />

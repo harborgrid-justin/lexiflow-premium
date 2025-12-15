@@ -13,6 +13,8 @@ import { EnterpriseExceptionFilter } from './filters/enterprise-exception.filter
 import { CorrelationIdInterceptor } from './interceptors/correlation-id.interceptor';
 import { ResponseTransformInterceptor } from './interceptors/response-transform.interceptor';
 import { RateLimiterInterceptor } from './interceptors/rate-limiter.interceptor';
+import { CacheInterceptor } from './interceptors/cache.interceptor';
+import { AuditLogInterceptor } from './interceptors/audit-log.interceptor';
 
 // Enterprise services
 import { CircuitBreakerService } from './services/circuit-breaker.service';
@@ -26,6 +28,11 @@ import { QueueManagerService } from './services/queue-manager.service';
 import { FileUploadService } from './services/file-upload.service';
 import { MetricsService } from './services/metrics.service';
 import { CalendarIntegrationService } from './services/calendar-integration.service';
+import { LoggerService } from './services/logger.service';
+import { EventBusService } from './services/event-bus.service';
+import { TransactionService } from './services/transaction.service';
+import { HealthCheckService } from './services/health-check.service';
+import { EmailService } from './services/email.service';
 
 @Global()
 @Module({
@@ -43,6 +50,8 @@ import { CalendarIntegrationService } from './services/calendar-integration.serv
     CorrelationIdInterceptor,
     ResponseTransformInterceptor,
     RateLimiterInterceptor,
+    CacheInterceptor,
+    AuditLogInterceptor,
 
     // Enterprise services
     CircuitBreakerService,
@@ -56,6 +65,11 @@ import { CalendarIntegrationService } from './services/calendar-integration.serv
     FileUploadService,
     MetricsService,
     CalendarIntegrationService,
+    LoggerService,
+    EventBusService,
+    TransactionService,
+    HealthCheckService,
+    EmailService,
   ],
   exports: [
     // Existing
@@ -70,6 +84,8 @@ import { CalendarIntegrationService } from './services/calendar-integration.serv
     CorrelationIdInterceptor,
     ResponseTransformInterceptor,
     RateLimiterInterceptor,
+    CacheInterceptor,
+    AuditLogInterceptor,
 
     // Enterprise services
     CircuitBreakerService,
@@ -83,6 +99,11 @@ import { CalendarIntegrationService } from './services/calendar-integration.serv
     FileUploadService,
     MetricsService,
     CalendarIntegrationService,
+    LoggerService,
+    EventBusService,
+    TransactionService,
+    HealthCheckService,
+    EmailService,
   ],
 })
 export class CommonModule {}

@@ -1,23 +1,40 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { BillingService } from './billing.service';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../auth/enums/user-role.enum';
 
 @ApiTags('Billing')
+@ApiBearerAuth('JWT-auth')
 @Controller('billing')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 
   @Get('invoices')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get all invoices' })
+  @ApiResponse({ status: 200, description: 'List of invoices' })
   async getAllInvoices() {
     return this.billingService.findAllInvoices();
   }
 
   @Get('invoices/:id')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get invoice by ID' })
+  @ApiResponse({ status: 200, description: 'Invoice details' })
+  @ApiResponse({ status: 404, description: 'Invoice not found' })
+  @ApiParam({ name: 'id', description: 'Invoice ID' })
   async getInvoice(@Param('id') id: string) {
     return this.billingService.findInvoiceById(id);
   }
 
   @Post('invoices')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Create new invoice' })
+  @ApiResponse({ status: 201, description: 'Invoice created' })
   async createInvoice(@Body() createDto: any) {
     return this.billingService.createInvoice(createDto);
   }

@@ -2,6 +2,7 @@
 import React from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
+import { encodeHtmlEntities } from '../../../../utils/sanitize';
 import { CopyButton } from '../../../common/CopyButton';
 
 interface SchemaCodeEditorProps {
@@ -28,13 +29,13 @@ export const SchemaCodeEditor: React.FC<SchemaCodeEditorProps> = ({ ddl }) => {
                 </div>
             </div>
             <pre className={cn("flex-1 p-4 font-mono text-sm overflow-auto leading-relaxed selection:bg-blue-500/30", theme.text.primary)}>
-                <code dangerouslySetInnerHTML={{ 
-                    __html: ddl
+                <code dangerouslySetInnerHTML={{
+                    __html: encodeHtmlEntities(ddl)
                         .replace(/--.*/g, `<span class="${commentColor}">$&</span>`)
                         .replace(/CREATE|TABLE|RETURNS|AS|BEGIN|END;|LANGUAGE|FUNCTION|RETURNS|TRIGGER|BEFORE|UPDATE|ON|FOR|EACH|ROW|EXECUTE|PROCEDURE|INDEX/g, `<span class="${keywordColor}">$&</span>`)
                         .replace(/VARCHAR|UUID|TIMESTAMP|WITH|TIME|ZONE|DEFAULT|BOOLEAN|TEXT|NUMERIC|DATE|INTEGER|TRIGGER/g, `<span class="${typeColor}">$&</span>`)
                         .replace(/PRIMARY KEY|REFERENCES|ON DELETE CASCADE|NOT NULL|UNIQUE/g, `<span class="${specialColor}">$&</span>`)
-                        .replace(/'[^']*'/g, `<span class="${stringColor}">$&</span>`)
+                        .replace(/&#039;[^&]*&#039;/g, `<span class="${stringColor}">$&</span>`)
                 }}/>
             </pre>
         </div>

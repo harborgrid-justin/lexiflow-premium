@@ -1,27 +1,29 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { DocumentVersionsService } from './document-versions.service';
 import { DocumentVersion } from './entities/document-version.entity';
+import { FileStorageService } from '../file-storage/file-storage.service';
+import { jest } from '@jest/globals';
 
 describe('DocumentVersionsService', () => {
   let service: DocumentVersionsService;
   let repository: Repository<DocumentVersion>;
+  let fileStorageService: FileStorageService;
 
   const mockVersion = {
     id: 'version-001',
     documentId: 'doc-001',
-    versionNumber: 1,
+    version: 1,
     filename: 'contract_v1.pdf',
     filePath: '/uploads/case-001/doc-001/1/contract_v1.pdf',
     fileSize: 102400,
     mimeType: 'application/pdf',
     checksum: 'abc123',
-    changes: 'Initial version',
+    changeDescription: 'Initial version',
     createdBy: 'user-001',
     createdAt: new Date(),
-    isLatest: true,
     metadata: {},
   };
 
@@ -36,16 +38,24 @@ describe('DocumentVersionsService', () => {
     count: jest.fn(),
   };
 
+  const mockFileStorageService = {
+    storeFile: jest.fn(),
+    getFile: jest.fn(),
+    deleteFile: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DocumentVersionsService,
         { provide: getRepositoryToken(DocumentVersion), useValue: mockRepository },
+        { provide: FileStorageService, useValue: mockFileStorageService },
       ],
     }).compile();
 
     service = module.get<DocumentVersionsService>(DocumentVersionsService);
     repository = module.get<Repository<DocumentVersion>>(getRepositoryToken(DocumentVersion));
+    fileStorageService = module.get<FileStorageService>(FileStorageService);
 
     jest.clearAllMocks();
   });
@@ -54,200 +64,129 @@ describe('DocumentVersionsService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return all versions', async () => {
-      mockRepository.find.mockResolvedValue([mockVersion]);
-
-      const result = await service.findAll();
-
-      expect(result).toEqual([mockVersion]);
-    });
-  });
-
-  describe('findByDocumentId', () => {
-    it('should return versions for a document', async () => {
-      mockRepository.find.mockResolvedValue([mockVersion]);
-
-      const result = await service.findByDocumentId('doc-001');
-
-      expect(result).toEqual([mockVersion]);
-      expect(mockRepository.find).toHaveBeenCalledWith({
-        where: { documentId: 'doc-001' },
-        order: { versionNumber: 'DESC' },
-      });
-    });
-  });
-
-  describe('findById', () => {
-    it('should return a version by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
-
-      const result = await service.findById(mockVersion.id);
-
-      expect(result).toEqual(mockVersion);
-    });
-
-    it('should throw NotFoundException if version not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
-
-      await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
-    });
-  });
-
   describe('createVersion', () => {
     it('should create a new version', async () => {
       const createDto = {
-        documentId: 'doc-001',
-        filename: 'contract_v2.pdf',
-        filePath: '/uploads/case-001/doc-001/2/contract_v2.pdf',
-        fileSize: 110000,
-        mimeType: 'application/pdf',
-        checksum: 'def456',
-        changes: 'Updated terms section',
+        changeDescription: 'Updated content',
+        metadata: {},
       };
+      const mockFile = {
+        originalname: 'test.pdf',
+        mimetype: 'application/pdf',
+        size: 1024,
+        buffer: Buffer.from('test'),
+      } as any;
 
-      mockRepository.count.mockResolvedValue(1);
-      mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.create.mockReturnValue({ ...mockVersion, ...createDto, versionNumber: 2 });
-      mockRepository.save.mockResolvedValue({ ...mockVersion, ...createDto, versionNumber: 2 });
-
-      const result = await service.createVersion(createDto, 'user-001');
-
-      expect(result).toHaveProperty('versionNumber', 2);
-      expect(result).toHaveProperty('changes', createDto.changes);
-    });
-
-    it('should mark previous version as not latest', async () => {
-      mockRepository.count.mockResolvedValue(1);
-      mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.create.mockReturnValue({ ...mockVersion, versionNumber: 2 });
-      mockRepository.save.mockResolvedValue({ ...mockVersion, versionNumber: 2 });
-
-      await service.createVersion({
-        documentId: 'doc-001',
-        filename: 'file.pdf',
-        filePath: '/path',
-        fileSize: 1000,
-        mimeType: 'application/pdf',
-        checksum: 'xyz',
-      }, 'user-001');
-
-      expect(mockRepository.update).toHaveBeenCalledWith(
-        { documentId: 'doc-001', isLatest: true },
-        { isLatest: false },
-      );
-    });
-  });
-
-  describe('getLatestVersion', () => {
-    it('should return the latest version', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
-
-      const result = await service.getLatestVersion('doc-001');
-
-      expect(result).toEqual(mockVersion);
-      expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { documentId: 'doc-001', isLatest: true },
+      mockRepository.findOne.mockResolvedValue(null);
+      mockRepository.create.mockReturnValue(mockVersion);
+      mockRepository.save.mockResolvedValue(mockVersion);
+      mockFileStorageService.storeFile.mockResolvedValue({
+        filename: 'test.pdf',
+        path: '/uploads/test.pdf',
+        mimetype: 'application/pdf',
+        size: 1024,
+        checksum: 'abc123',
       });
-    });
 
-    it('should return null if no versions exist', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
-
-      const result = await service.getLatestVersion('doc-001');
-
-      expect(result).toBeNull();
-    });
-  });
-
-  describe('getVersionByNumber', () => {
-    it('should return a specific version number', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
-
-      const result = await service.getVersionByNumber('doc-001', 1);
+      const result = await service.createVersion('doc-001', 'case-001', mockFile, createDto, 'user-001');
 
       expect(result).toEqual(mockVersion);
-    });
-
-    it('should throw NotFoundException if version not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
-
-      await expect(service.getVersionByNumber('doc-001', 99)).rejects.toThrow(NotFoundException);
-    });
-  });
-
-  describe('deleteVersion', () => {
-    it('should delete a version', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockVersion, isLatest: false });
-      mockRepository.delete.mockResolvedValue({ affected: 1 });
-
-      await service.deleteVersion(mockVersion.id);
-
-      expect(mockRepository.delete).toHaveBeenCalledWith(mockVersion.id);
-    });
-
-    it('should throw BadRequestException when deleting latest version', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
-
-      await expect(service.deleteVersion(mockVersion.id)).rejects.toThrow(BadRequestException);
-    });
-  });
-
-  describe('compareVersions', () => {
-    it('should return comparison between two versions', async () => {
-      const version1 = { ...mockVersion, versionNumber: 1, fileSize: 100000 };
-      const version2 = { ...mockVersion, id: 'version-002', versionNumber: 2, fileSize: 110000 };
-
-      mockRepository.findOne
-        .mockResolvedValueOnce(version1)
-        .mockResolvedValueOnce(version2);
-
-      const result = await service.compareVersions('version-001', 'version-002');
-
-      expect(result).toHaveProperty('version1');
-      expect(result).toHaveProperty('version2');
-      expect(result).toHaveProperty('sizeDiff');
-    });
-  });
-
-  describe('restoreVersion', () => {
-    it('should restore an older version as the latest', async () => {
-      const oldVersion = { ...mockVersion, versionNumber: 1, isLatest: false };
-      mockRepository.findOne.mockResolvedValue(oldVersion);
-      mockRepository.count.mockResolvedValue(2);
-      mockRepository.update.mockResolvedValue({ affected: 1 });
-      mockRepository.create.mockReturnValue({ ...oldVersion, versionNumber: 3, isLatest: true });
-      mockRepository.save.mockResolvedValue({ ...oldVersion, versionNumber: 3, isLatest: true });
-
-      const result = await service.restoreVersion('version-001', 'user-001');
-
-      expect(result.versionNumber).toBe(3);
-      expect(result.isLatest).toBe(true);
+      expect(mockFileStorageService.storeFile).toHaveBeenCalled();
     });
   });
 
   describe('getVersionHistory', () => {
-    it('should return version history with metadata', async () => {
-      const versions = [
-        { ...mockVersion, versionNumber: 2 },
-        { ...mockVersion, id: 'version-002', versionNumber: 1 },
-      ];
-      mockRepository.find.mockResolvedValue(versions);
+    it('should return all versions for a document', async () => {
+      mockRepository.find.mockResolvedValue([mockVersion]);
 
       const result = await service.getVersionHistory('doc-001');
 
-      expect(result).toHaveLength(2);
-      expect(result[0].versionNumber).toBe(2);
+      expect(result).toEqual([mockVersion]);
+      expect(mockRepository.find).toHaveBeenCalledWith({
+        where: { documentId: 'doc-001' },
+        order: { version: 'DESC' },
+      });
     });
   });
 
-  describe('getVersionCount', () => {
-    it('should return the number of versions', async () => {
-      mockRepository.count.mockResolvedValue(5);
+  describe('getVersion', () => {
+    it('should return a specific version', async () => {
+      mockRepository.findOne.mockResolvedValue(mockVersion);
 
-      const result = await service.getVersionCount('doc-001');
+      const result = await service.getVersion('doc-001', 1);
 
-      expect(result).toBe(5);
+      expect(result).toEqual(mockVersion);
+      expect(mockRepository.findOne).toHaveBeenCalledWith({
+        where: { documentId: 'doc-001', version: 1 },
+      });
+    });
+
+    it('should throw NotFoundException if version not found', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.getVersion('doc-001', 99)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getLatestVersionNumber', () => {
+    it('should return latest version number', async () => {
+      mockRepository.findOne.mockResolvedValue(mockVersion);
+
+      const result = await service.getLatestVersionNumber('doc-001');
+
+      expect(result).toBe(1);
+    });
+
+    it('should return 0 if no versions exist', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      const result = await service.getLatestVersionNumber('doc-001');
+
+      expect(result).toBe(0);
+    });
+  });
+
+  describe('downloadVersion', () => {
+    it('should download a specific version', async () => {
+      mockRepository.findOne.mockResolvedValue(mockVersion);
+      mockFileStorageService.getFile.mockResolvedValue(Buffer.from('test'));
+
+      const result = await service.downloadVersion('doc-001', 1);
+
+      expect(result).toHaveProperty('buffer');
+      expect(result).toHaveProperty('filename', 'contract_v1.pdf');
+      expect(result).toHaveProperty('mimeType', 'application/pdf');
+    });
+  });
+
+  describe('compareVersions', () => {
+    it('should compare two versions', async () => {
+      const version2 = { ...mockVersion, id: 'version-002', version: 2, fileSize: 110000 };
+      mockRepository.findOne.mockResolvedValueOnce(mockVersion);
+      mockRepository.findOne.mockResolvedValueOnce(version2);
+
+      const result = await service.compareVersions('doc-001', 1, 2);
+
+      expect(result).toHaveProperty('version1');
+      expect(result).toHaveProperty('version2');
+      expect(result).toHaveProperty('differences');
+      expect(result.differences.fileSize).toBe(7600);
+    });
+  });
+
+  describe('restoreVersion', () => {
+    it('should restore a previous version', async () => {
+      const restoredVersion = { ...mockVersion, version: 2 };
+      mockRepository.findOne.mockResolvedValueOnce(mockVersion);
+      mockRepository.findOne.mockResolvedValueOnce({ ...mockVersion, version: 1 });
+      mockRepository.create.mockReturnValue(restoredVersion);
+      mockRepository.save.mockResolvedValue(restoredVersion);
+      mockFileStorageService.getFile.mockResolvedValue(Buffer.from('test'));
+
+      const result = await service.restoreVersion('doc-001', 1, 'case-001', 'user-001');
+
+      expect(result.version).toBe(2);
+      expect(result.changeDescription).toContain('Restored from version 1');
     });
   });
 });

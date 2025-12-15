@@ -17,7 +17,7 @@ describe('ProcessingJobsController', () => {
 
   const mockProcessingJobsService = {
     findAll: jest.fn(),
-    findOne: jest.fn(),
+    getJob: jest.fn(),
     getJobStatus: jest.fn(),
   };
 
@@ -48,14 +48,14 @@ describe('ProcessingJobsController', () => {
     });
   });
 
-  describe('findOne', () => {
+  describe('getJob', () => {
     it('should return a job by id', async () => {
-      mockProcessingJobsService.findOne.mockResolvedValue(mockJob);
+      mockProcessingJobsService.getJob.mockResolvedValue(mockJob);
 
-      const result = await controller.findOne('job-001');
+      const result = await controller.getJob('job-001');
 
       expect(result).toEqual(mockJob);
-      expect(service.findOne).toHaveBeenCalledWith('job-001');
+      expect(service.getJob).toHaveBeenCalledWith('job-001');
     });
   });
 

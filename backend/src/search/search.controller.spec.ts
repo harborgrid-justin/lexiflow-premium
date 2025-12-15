@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
+import { expect, jest } from '@jest/globals';
 
 describe('SearchController', () => {
   let controller: SearchController;

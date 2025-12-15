@@ -1,4 +1,13 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+// Entities
+import { ComplianceCheck } from './entities/compliance-check.entity';
+import { AuditLog } from './entities/audit-log.entity';
+import { ComplianceRule } from './entities/compliance-rule.entity';
+
+// Main service
+import { ComplianceService } from './compliance.service';
 
 // Audit Logs
 import { AuditLogsController } from './audit-logs/audit-logs.controller';
@@ -27,6 +36,9 @@ import { ComplianceReportingController } from './reporting/compliance-reporting.
 import { ComplianceReportingService } from './reporting/compliance-reporting.service';
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([ComplianceCheck, AuditLog, ComplianceRule]),
+  ],
   controllers: [
     AuditLogsController,
     ConflictChecksController,
@@ -36,6 +48,9 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
     ComplianceReportingController,
   ],
   providers: [
+    // Main Service
+    ComplianceService,
+    
     // Services
     AuditLogsService,
     ConflictChecksService,
@@ -49,6 +64,9 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
     EthicalWallGuard,
   ],
   exports: [
+    // Export main service
+    ComplianceService,
+    
     // Export services so they can be used in other modules
     AuditLogsService,
     ConflictChecksService,

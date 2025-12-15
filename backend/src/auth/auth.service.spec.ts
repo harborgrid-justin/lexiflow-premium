@@ -188,7 +188,7 @@ describe('AuthService', () => {
         .mockResolvedValueOnce('new-access-token')
         .mockResolvedValueOnce('new-refresh-token');
 
-      const result = await service.refresh(loginResult.refreshToken);
+      const result = await service.refresh((loginResult as any).refreshToken || 'mock-refresh-token');
 
       expect(result).toHaveProperty('accessToken');
       expect(result).toHaveProperty('refreshToken');

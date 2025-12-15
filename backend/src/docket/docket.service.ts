@@ -98,4 +98,62 @@ export class DocketService {
 
     return result;
   }
+
+  async getNextEntryNumber(caseId: string): Promise<number> {
+    const count = await this.docketRepository.count({ where: { caseId } });
+    return count + 1;
+  }
+
+  async search(query: {
+    caseId?: string;
+    query?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<{ data: DocketEntry[]; total: number }> {
+    const qb = this.docketRepository.createQueryBuilder('docket');
+
+    if (query.caseId) {
+      qb.where('docket.caseId = :caseId', { caseId: query.caseId });
+    }
+
+    if (query.query) {
+      qb.andWhere(
+        '(docket.description ILIKE :query OR docket.entryText ILIKE :query)',
+        { query: `%${query.query}%` },
+      );
+    }
+
+    qb.orderBy('docket.sequenceNumber', 'DESC');
+
+    if (query.page && query.limit) {
+      qb.skip((query.page - 1) * query.limit);
+      qb.take(query.limit);
+    }
+
+    const [data, total] = await qb.getManyAndCount();
+    return { data, total };
+  }
+
+  async getDocketSummary(caseId: string): Promise<{
+    totalEntries: number;
+    byCategory: Record<string, number>;
+    latestEntry: DocketEntry | null;
+  }> {
+    const entries = await this.docketRepository.find({
+      where: { caseId },
+      order: { sequenceNumber: 'DESC' },
+    });
+
+    const byCategory: Record<string, number> = {};
+    entries.forEach((entry) => {
+      const category = entry.category || 'Uncategorized';
+      byCategory[category] = (byCategory[category] || 0) + 1;
+    });
+
+    return {
+      totalEntries: entries.length,
+      byCategory,
+      latestEntry: entries[0] || null,
+    };
+  }
 }

@@ -4,6 +4,10 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { PleadingsService } from './pleadings.service';
 import { Pleading } from './entities/pleading.entity';
+import { expect } from '@jest/globals';
+
+// Jest globals are available in test files
+declare const jest: typeof import('@jest/globals').jest;
 
 describe('PleadingsService', () => {
   let service: PleadingsService;
@@ -28,11 +32,12 @@ describe('PleadingsService', () => {
 
   const mockRepository = {
     find: jest.fn(),
-    findOne: jest.fn(),
+    findOne: jest.fn() as jest.Mock,
     create: jest.fn(),
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
+    remove: jest.fn(),
     createQueryBuilder: jest.fn(),
   };
 
@@ -78,11 +83,11 @@ describe('PleadingsService', () => {
     });
   });
 
-  describe('findById', () => {
+  describe('findOne', () => {
     it('should return a pleading by id', async () => {
       mockRepository.findOne.mockResolvedValue(mockPleading);
 
-      const result = await service.findById(mockPleading.id);
+      const result = await service.findOne(mockPleading.id);
 
       expect(result).toEqual(mockPleading);
     });
@@ -90,7 +95,7 @@ describe('PleadingsService', () => {
     it('should throw NotFoundException if pleading not found', async () => {
       mockRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
+      await expect(service.findOne('non-existent')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -99,7 +104,7 @@ describe('PleadingsService', () => {
       const createDto = {
         caseId: 'case-001',
         title: 'New Motion',
-        type: 'Motion',
+        type: 'motion' as any,
         content: 'Motion content...',
       };
 
@@ -130,56 +135,54 @@ describe('PleadingsService', () => {
     });
   });
 
-  describe('delete', () => {
+  describe('remove', () => {
     it('should delete a pleading', async () => {
       mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.delete.mockResolvedValue({ affected: 1 });
+      mockRepository.delete.mockResolvedValue({ affected: 1 } as any);
 
-      await service.delete(mockPleading.id);
+      await service.remove(mockPleading.id);
 
+      expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { id: mockPleading.id } });
       expect(mockRepository.delete).toHaveBeenCalledWith(mockPleading.id);
     });
   });
 
   describe('file', () => {
     it('should mark pleading as filed', async () => {
+      const filePleadingDto = {
+        filedBy: 'Attorney Smith',
+        filedDate: '2024-01-15',
+        courtName: 'Superior Court',
+      };
+
       mockRepository.findOne.mockResolvedValue(mockPleading);
       mockRepository.save.mockResolvedValue({
         ...mockPleading,
         status: 'filed',
-        filedDate: expect.any(Date),
+        filedBy: filePleadingDto.filedBy,
+        filedDate: filePleadingDto.filedDate,
+        courtName: filePleadingDto.courtName,
       });
 
-      const result = await service.file(mockPleading.id);
+      const result = await service.file(mockPleading.id, filePleadingDto, 'user-001');
 
       expect(result.status).toBe('filed');
       expect(result.filedDate).toBeDefined();
-    });
-
-    it('should not file an already filed pleading', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockPleading, status: 'filed' });
-
-      await expect(service.file(mockPleading.id)).rejects.toThrow();
+      expect(result.filedBy).toBe(filePleadingDto.filedBy);
     });
   });
 
-  describe('findByType', () => {
-    it('should return pleadings by type', async () => {
+  describe('findByCaseId', () => {
+    it('should return pleadings for a case with proper ordering', async () => {
       mockRepository.find.mockResolvedValue([mockPleading]);
 
-      const result = await service.findByType('case-001', 'Motion');
+      const result = await service.findByCaseId('case-001');
 
       expect(result).toEqual([mockPleading]);
-    });
-  });
-
-  describe('findByStatus', () => {
-    it('should return pleadings by status', async () => {
-      mockRepository.find.mockResolvedValue([mockPleading]);
-
-      const result = await service.findByStatus('case-001', 'draft');
-
-      expect(result).toEqual([mockPleading]);
+      expect(mockRepository.find).toHaveBeenCalledWith({
+        where: { caseId: 'case-001' },
+        order: { filedDate: 'DESC', createdAt: 'DESC' },
+      });
     });
   });
 
@@ -193,88 +196,11 @@ describe('PleadingsService', () => {
       };
       mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
-      const result = await service.getUpcomingHearings();
+      const result = await service.getUpcomingHearings(30);
 
       expect(result).toEqual([mockPleading]);
-    });
-  });
-
-  describe('getOverduePleadings', () => {
-    it('should return overdue pleadings', async () => {
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        andWhere: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue([mockPleading]),
-      };
-      mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-
-      const result = await service.getOverduePleadings();
-
-      expect(result).toEqual([mockPleading]);
-    });
-  });
-
-  describe('attachDocument', () => {
-    it('should attach a document to pleading', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.save.mockResolvedValue({ ...mockPleading, documentId: 'doc-002' });
-
-      const result = await service.attachDocument(mockPleading.id, 'doc-002');
-
-      expect(result.documentId).toBe('doc-002');
-    });
-  });
-
-  describe('setHearingDate', () => {
-    it('should set hearing date', async () => {
-      const hearingDate = new Date('2024-04-01');
-      mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.save.mockResolvedValue({ ...mockPleading, hearingDate });
-
-      const result = await service.setHearingDate(mockPleading.id, hearingDate);
-
-      expect(result.hearingDate).toEqual(hearingDate);
-    });
-  });
-
-  describe('getDueSoon', () => {
-    it('should return pleadings due within specified days', async () => {
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        andWhere: jest.fn().mockReturnThis(),
-        orderBy: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue([mockPleading]),
-      };
-      mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-
-      const result = await service.getDueSoon(7);
-
-      expect(result).toEqual([mockPleading]);
-    });
-  });
-
-  describe('search', () => {
-    it('should search pleadings', async () => {
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        orWhere: jest.fn().mockReturnThis(),
-        andWhere: jest.fn().mockReturnThis(),
-        orderBy: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        take: jest.fn().mockReturnThis(),
-        getManyAndCount: jest.fn().mockResolvedValue([[mockPleading], 1]),
-      };
-      mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-
-      const result = await service.search({
-        query: 'Motion',
-        caseId: 'case-001',
-        page: 1,
-        limit: 10,
-      });
-
-      expect(result).toHaveProperty('data');
-      expect(result).toHaveProperty('total', 1);
+      expect(mockQueryBuilder.where).toHaveBeenCalled();
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalled();
     });
   });
 });

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { IntegrationsService } from './integrations.service';
 import { Integration } from './entities/integration.entity';
+import { expect, jest } from '@jest/globals';
 
 describe('IntegrationsService', () => {
   let service: IntegrationsService;

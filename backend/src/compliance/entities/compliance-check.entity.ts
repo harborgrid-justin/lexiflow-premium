@@ -8,6 +8,18 @@ export class ComplianceCheck {
   @Column()
   caseId: string;
 
+  @Column()
+  ruleId: string;
+
+  @Column()
+  status: string;
+
+  @Column({ type: 'timestamp' })
+  checkedAt: Date;
+
+  @Column('jsonb', { nullable: true })
+  details: any;
+
   @CreateDateColumn()
   createdAt: Date;
 

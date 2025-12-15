@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('templates')
-export class Template {
+@Entity('integrations')
+export class Integration {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -11,17 +11,11 @@ export class Template {
   @Column()
   type: string;
 
-  @Column()
-  subject: string;
-
-  @Column('text')
-  body: string;
-
-  @Column('jsonb', { default: [] })
-  variables: string[];
+  @Column({ type: 'jsonb', nullable: true })
+  config: Record<string, any>;
 
   @Column({ default: true })
-  isActive: boolean;
+  enabled: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

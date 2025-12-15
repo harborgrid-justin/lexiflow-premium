@@ -106,14 +106,14 @@ describe('DocumentsService', () => {
     });
 
     it('should create a document with file upload', async () => {
-      const mockFile: Express.Multer.File = {
+      const mockFile = {
         fieldname: 'file',
         originalname: 'test.pdf',
         encoding: '7bit',
         mimetype: 'application/pdf',
         buffer: Buffer.from('test'),
         size: 1024,
-        stream: null,
+        stream: null as any,
         destination: '',
         filename: 'test.pdf',
         path: '',

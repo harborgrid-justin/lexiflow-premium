@@ -41,6 +41,11 @@ export enum SystemEventType {
     // Opp #10: Service -> Docket
     SERVICE_COMPLETED = 'SERVICE_COMPLETED',
     
+    // Opp #11: Data Platform -> Infrastructure
+    DATA_SOURCE_CONNECTED = 'DATA_SOURCE_CONNECTED',
+    CLOUD_SYNC_STARTED = 'CLOUD_SYNC_STARTED',
+    CLOUD_SYNC_FAILED = 'CLOUD_SYNC_FAILED',
+
     // Misc
     RISK_ESCALATED = 'RISK_ESCALATED',
     TIME_LOGGED = 'TIME_LOGGED',
@@ -79,6 +84,11 @@ export interface SystemEventPayloads {
 
     // Opp #10
     [SystemEventType.SERVICE_COMPLETED]: { job: ServiceJob };
+
+    // Opp #11
+    [SystemEventType.DATA_SOURCE_CONNECTED]: { connectionId: string; provider: string; name: string };
+    [SystemEventType.CLOUD_SYNC_STARTED]: { connectionId: string; jobType: 'full' | 'incremental' };
+    [SystemEventType.CLOUD_SYNC_FAILED]: { connectionId: string; error: string };
 
     // Misc
     [SystemEventType.RISK_ESCALATED]: { risk: Risk };

@@ -25,6 +25,7 @@ const LineageGraph = lazy(() => import('./LineageGraph').then(m => ({ default: m
 const CostFinOps = lazy(() => import('./CostFinOps').then(m => ({ default: m.CostFinOps })));
 const DataLakeExplorer = lazy(() => import('./DataLakeExplorer').then(m => ({ default: m.DataLakeExplorer })));
 const ShardingVisualizer = lazy(() => import('./ShardingVisualizer').then(m => ({ default: m.ShardingVisualizer })));
+const DataSourcesManager = lazy(() => import('./DataSourcesManager').then(m => ({ default: m.DataSourcesManager })));
 
 interface AdminDatabaseControlProps {
   initialTab?: string;
@@ -48,6 +49,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
     const getSubTab = (prefix: string) => activeView.startsWith(prefix + '-') ? activeView.replace(prefix + '-', '') : undefined;
 
     // Route Mapping
+    if (activeView.startsWith('sources')) return <DataSourcesManager initialTab={getSubTab('sources')} />;
     if (activeView.startsWith('quality')) return <DataQualityStudio initialTab={getSubTab('quality')} />;
     if (activeView.startsWith('lineage')) return <LineageGraph initialTab={getSubTab('lineage')} />;
     if (activeView.startsWith('governance')) return <GovernanceConsole initialTab={getSubTab('governance')} />;

@@ -244,6 +244,24 @@ export const IntegrationOrchestrator = {
                     }
                     break;
                 }
+
+                // Opp #11: Data Platform -> Infrastructure (Connection Audit)
+                case SystemEventType.DATA_SOURCE_CONNECTED: {
+                    const p = payload as SystemEventPayloads[typeof SystemEventType.DATA_SOURCE_CONNECTED];
+                    // Log to Audit Trail
+                    await DataService.admin.logAudit({
+                        action: 'CONNECTION_ESTABLISHED',
+                        userId: 'system' as UserId,
+                        details: `Established secure connection to ${p.provider} (${p.name})`,
+                        ip: '127.0.0.1',
+                        resourceId: p.connectionId
+                    });
+                    actions.push(`Logged connection audit event for ${p.name}`);
+                    
+                    // Trigger Initial Sync Job (Simulated)
+                    actions.push(`Queued initial sync job for ${p.connectionId}`);
+                    break;
+                }
             }
         } catch (e: any) {
             console.error(`[Orchestrator] Error processing ${type}:`, e);

@@ -1,0 +1,520 @@
+import React, { useState } from 'react';
+import { 
+  HardDrive, Database, Cloud, Plus, RefreshCw, Trash2, Settings, 
+  Activity, CheckCircle, AlertTriangle, X, Play, Server, ShieldCheck 
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
+import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
+import { DataService } from '../../../services/dataService';
+
+interface DataSourcesManagerProps {
+  initialTab?: string;
+}
+
+export const DataSourcesManager: React.FC<DataSourcesManagerProps> = ({ initialTab }) => {
+  const { theme } = useTheme();
+  const [activeTab, setActiveTab] = useState(initialTab || 'cloud');
+
+  const tabs = [
+    { id: 'cloud', label: 'Cloud Infrastructure', icon: Cloud },
+    { id: 'local', label: 'Local Storage', icon: HardDrive },
+    { id: 'indexeddb', label: 'IndexedDB Registry', icon: Database },
+  ];
+
+  return (
+    <div className="h-full flex flex-col p-6 overflow-y-auto bg-gray-50/50 dark:bg-slate-900/50">
+      <div className="mb-8">
+        <h2 className={cn("text-3xl font-bold tracking-tight", theme.text.primary)}>Data Sources</h2>
+        <p className={cn("text-base mt-2 max-w-2xl", theme.text.secondary)}>
+          Manage your enterprise data landscape. Connect to cloud warehouses, monitor local storage, and synchronize replication streams in real-time.
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 mb-8 border-b border-gray-200 dark:border-gray-800">
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={cn(
+              "px-4 py-3 text-sm font-medium flex items-center gap-2 border-b-2 transition-all",
+              activeTab === tab.id 
+                ? "border-blue-600 text-blue-600 dark:text-blue-400" 
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            )}
+          >
+            <tab.icon className="h-4 w-4" />
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          {activeTab === 'local' && <LocalStorageView />}
+          {activeTab === 'indexeddb' && <IndexedDBView />}
+          {activeTab === 'cloud' && <CloudDatabaseView />}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const ConnectionCard = ({ connection, onSync, onDelete, onTest }: any) => {
+  const { theme } = useTheme();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400';
+      case 'syncing': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'error': return 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400';
+      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+    }
+  };
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={cn(
+        "relative p-5 rounded-xl border transition-all duration-300 group",
+        theme.surface.default,
+        theme.border.default,
+        "hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700"
+      )}
+    >
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-4">
+          <div className={cn(
+            "p-3 rounded-lg shadow-sm border transition-colors",
+            connection.status === 'error' ? "bg-rose-50 border-rose-200" : "bg-white dark:bg-slate-800 border-gray-200 dark:border-gray-700"
+          )}>
+            {connection.type === 'Snowflake' ? <Database className="h-6 w-6 text-blue-600" /> :
+             connection.type === 'S3' ? <Cloud className="h-6 w-6 text-orange-500" /> :
+             <Server className="h-6 w-6 text-purple-600" />}
+          </div>
+          <div>
+            <h4 className={cn("font-bold text-base", theme.text.primary)}>{connection.name}</h4>
+            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              <span>{connection.type}</span>
+              <span>•</span>
+              <span>{connection.region}</span>
+            </div>
+          </div>
+        </div>
+        <div className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5", getStatusColor(connection.status))}>
+          {connection.status === 'syncing' && <RefreshCw className="h-3 w-3 animate-spin" />}
+          {connection.status === 'active' && <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />}
+          {connection.status}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 mb-4 py-3 border-t border-b border-dashed border-gray-200 dark:border-gray-700">
+        <div>
+          <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Latency</span>
+          <div className={cn("font-mono text-sm font-medium flex items-center gap-1", theme.text.primary)}>
+            <Activity className="h-3 w-3 text-emerald-500" />
+            {connection.status === 'active' ? '45ms' : '-'}
+          </div>
+        </div>
+        <div>
+          <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Last Sync</span>
+          <div className={cn("font-mono text-sm font-medium", theme.text.primary)}>
+            {connection.lastSync}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-2">
+        <button 
+          onClick={() => onSync(connection.id)}
+          disabled={connection.status === 'syncing'}
+          className={cn(
+            "flex-1 py-2 text-xs font-semibold rounded-lg border transition-all flex items-center justify-center gap-2",
+            connection.status === 'syncing' 
+              ? "bg-blue-50 text-blue-600 border-blue-200" 
+              : "hover:bg-gray-50 dark:hover:bg-slate-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300"
+          )}
+        >
+          <RefreshCw className={cn("h-3.5 w-3.5", connection.status === 'syncing' && "animate-spin")} />
+          {connection.status === 'syncing' ? 'Syncing...' : 'Sync Now'}
+        </button>
+        
+        <button 
+          onClick={() => onTest(connection)}
+          className={cn("p-2 rounded-lg border hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-gray-500", theme.border.default)}
+          title="Test Connection"
+        >
+          <ShieldCheck className="h-4 w-4" />
+        </button>
+        
+        <button 
+          onClick={() => onDelete(connection.id)}
+          className={cn("p-2 rounded-lg border hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors text-gray-400", theme.border.default)}
+          title="Delete Connection"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+const CloudDatabaseView = () => {
+  const { theme } = useTheme();
+  const [isAdding, setIsAdding] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
+  const [formData, setFormData] = useState({ name: '', host: '', region: 'us-east-1' });
+  
+  const { data: connections = [], isLoading } = useQuery<any[]>(
+    ['admin', 'sources', 'connections'],
+    DataService.sources.getConnections
+  );
+
+  const addConnectionMutation = useMutation(
+    DataService.sources.addConnection,
+    {
+      onSuccess: (newConnection) => {
+        queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => [...(old || []), newConnection]);
+        setIsAdding(false);
+        setSelectedProvider(null);
+        setFormData({ name: '', host: '', region: 'us-east-1' });
+      }
+    }
+  );
+
+  const syncMutation = useMutation(DataService.sources.syncConnection, {
+    onMutate: async (id) => {
+      const previous = queryClient.getQueryState(['admin', 'sources', 'connections'])?.data;
+      queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => 
+        old?.map(c => c.id === id ? { ...c, status: 'syncing' } : c)
+      );
+      return { previous };
+    },
+    onSuccess: (data, id) => {
+      setTimeout(() => { // Simulate sync time completion for UX
+        queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => 
+          old?.map(c => c.id === id ? { ...c, status: 'active', lastSync: 'Just now' } : c)
+        );
+      }, 2000);
+    }
+  });
+
+  const deleteMutation = useMutation(DataService.sources.deleteConnection, {
+    onSuccess: (_, id) => {
+      queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => 
+        old?.filter(c => c.id !== id)
+      );
+    }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedProvider) return;
+    addConnectionMutation.mutate({
+      ...formData,
+      type: providers.find(p => p.id === selectedProvider)?.name,
+      providerId: selectedProvider
+    });
+  };
+
+  const providers = [
+    { id: 'snowflake', name: 'Snowflake', icon: Database, color: 'text-blue-500' },
+    { id: 'postgres', name: 'PostgreSQL', icon: Database, color: 'text-indigo-500' },
+    { id: 'mongo', name: 'MongoDB', icon: HardDrive, color: 'text-green-500' },
+    { id: 's3', name: 'Amazon S3', icon: Cloud, color: 'text-orange-500' },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Header Actions */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className={cn("text-sm font-medium", theme.text.secondary)}>
+            {connections.length} Active Connections
+          </span>
+        </div>
+        <button 
+          onClick={() => setIsAdding(!isAdding)}
+          className={cn(
+            "px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm",
+            isAdding 
+              ? "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300"
+              : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/25"
+          )}
+        >
+          {isAdding ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          {isAdding ? 'Cancel' : 'New Connection'}
+        </button>
+      </div>
+
+      {/* Add Connection Form */}
+      <AnimatePresence>
+        {isAdding && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className={cn("p-6 rounded-xl border border-blue-100 bg-blue-50/50 dark:bg-blue-900/10 dark:border-blue-800 mb-6")}>
+              {!selectedProvider ? (
+                <>
+                  <h4 className={cn("text-sm font-bold mb-4", theme.text.primary)}>Select Provider</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {providers.map(p => (
+                      <button 
+                        key={p.id} 
+                        onClick={() => setSelectedProvider(p.id)}
+                        className="group flex flex-col items-center justify-center p-6 rounded-xl border bg-white dark:bg-slate-800 hover:border-blue-500 hover:shadow-md transition-all gap-3"
+                      >
+                        <div className={cn("p-3 rounded-full bg-gray-50 dark:bg-slate-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors")}>
+                          <p.icon className={cn("h-6 w-6", p.color)} />
+                        </div>
+                        <span className={cn("text-sm font-medium", theme.text.primary)}>{p.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
+                  <div className="flex items-center gap-2 mb-6">
+                    <button 
+                      type="button" 
+                      onClick={() => setSelectedProvider(null)} 
+                      className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                    >
+                      Providers
+                    </button>
+                    <span className="text-gray-400">/</span>
+                    <span className={cn("text-sm font-bold", theme.text.primary)}>Configure {providers.find(p => p.id === selectedProvider)?.name}</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Connection Name</label>
+                      <input 
+                        type="text" 
+                        required
+                        className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
+                        value={formData.name}
+                        onChange={e => setFormData({...formData, name: e.target.value})}
+                        placeholder="e.g. Production Warehouse"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Host / Endpoint</label>
+                      <input 
+                        type="text" 
+                        required
+                        className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
+                        value={formData.host}
+                        onChange={e => setFormData({...formData, host: e.target.value})}
+                        placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end gap-3 pt-4">
+                    <button 
+                      type="button"
+                      onClick={() => { setIsAdding(false); setSelectedProvider(null); }} 
+                      className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit"
+                      disabled={addConnectionMutation.isLoading}
+                      className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95"
+                    >
+                      {addConnectionMutation.isLoading ? 'Connecting...' : 'Connect Source'}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Active Connections Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <AnimatePresence>
+          {connections.map((conn) => (
+            <ConnectionCard 
+              key={conn.id} 
+              connection={conn} 
+              onSync={(id: string) => syncMutation.mutate(id)}
+              onDelete={(id: string) => deleteMutation.mutate(id)}
+              onTest={(conn: any) => console.log('Testing', conn)}
+            />
+          ))}
+        </AnimatePresence>
+        
+        {/* Empty State */}
+        {connections.length === 0 && !isLoading && (
+          <div className="col-span-full py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-200 rounded-xl">
+            <div className="p-4 rounded-full bg-gray-50 mb-4">
+              <Database className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className={cn("text-lg font-medium", theme.text.primary)}>No connections yet</h3>
+            <p className={cn("text-sm text-gray-500 mt-1 max-w-sm")}>
+              Connect your first data source to start syncing data across your enterprise.
+            </p>
+            <button 
+              onClick={() => setIsAdding(true)}
+              className="mt-4 text-blue-600 font-medium text-sm hover:underline"
+            >
+              Add your first connection
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const LocalStorageView = () => {
+  const { theme } = useTheme();
+  const [files, setFiles] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    const items = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key) {
+        const value = localStorage.getItem(key) || '';
+        const size = (new Blob([value]).size / 1024).toFixed(2) + ' KB';
+        items.push({ name: key, size: size, modified: 'Unknown' });
+      }
+    }
+    setFiles(items);
+  }, []);
+
+  const clearCache = () => {
+    if (confirm('Are you sure you want to clear all local storage? This will reset your preferences.')) {
+      localStorage.clear();
+      setFiles([]);
+    }
+  };
+
+  const deleteItem = (key: string) => {
+    localStorage.removeItem(key);
+    setFiles(prev => prev.filter(f => f.name !== key));
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
+            <HardDrive className="h-5 w-5 text-gray-500" /> Local File Storage
+          </h3>
+          <button 
+            onClick={clearCache}
+            className={cn("px-4 py-2 text-sm font-medium rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors")}
+          >
+            Clear Cache
+          </button>
+        </div>
+        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+          <table className="w-full text-sm text-left">
+            <thead className={cn("text-xs uppercase bg-gray-50 dark:bg-slate-800/50", theme.text.secondary)}>
+              <tr>
+                <th className="px-6 py-3 font-semibold">Key Name</th>
+                <th className="px-6 py-3 font-semibold">Size</th>
+                <th className="px-6 py-3 font-semibold text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {files.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-6 py-12 text-center text-gray-500">No local storage items found.</td>
+                </tr>
+              ) : (
+                files.map((file, index) => (
+                  <tr key={index} className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className={cn("px-6 py-4 font-medium", theme.text.primary)}>{file.name}</td>
+                    <td className={cn("px-6 py-4 font-mono text-xs", theme.text.secondary)}>{file.size}</td>
+                    <td className="px-6 py-4 text-right">
+                      <button 
+                        onClick={() => deleteItem(file.name)}
+                        className={cn("p-2 rounded-lg hover:bg-rose-50 text-gray-400 hover:text-rose-600 transition-colors")}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const IndexedDBView = () => {
+  const { theme } = useTheme();
+  const { data: stores = [], isLoading, refetch } = useQuery<any[]>(
+    ['admin', 'registry'],
+    DataService.catalog.getRegistryInfo
+  );
+
+  return (
+    <div className="space-y-6">
+      <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
+            <Database className="h-5 w-5 text-blue-500" /> IndexedDB Stores
+          </h3>
+          <button 
+            onClick={() => refetch()}
+            className={cn("px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 transition-colors", theme.border.default, theme.text.primary)}
+          >
+            <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} /> Refresh
+          </button>
+        </div>
+        {isLoading ? (
+          <div className="p-12 text-center text-gray-500">Loading store statistics...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {stores.map((store) => (
+              <div key={store.name} className={cn("p-5 rounded-xl border hover:shadow-md transition-all duration-200 group", theme.border.default)}>
+                <div className="flex justify-between items-start mb-3">
+                  <h4 className={cn("font-bold text-sm", theme.text.primary)}>{store.name}</h4>
+                  <div className="p-1.5 rounded-md bg-gray-50 dark:bg-slate-800 text-gray-400 group-hover:text-blue-500 transition-colors">
+                    <Database className="h-4 w-4" />
+                  </div>
+                </div>
+                <div className="flex justify-between items-end mt-4">
+                  <div>
+                    <span className="text-xs text-gray-500 block mb-0.5">Records</span>
+                    <span className={cn("text-lg font-bold", theme.text.primary)}>{store.records.toLocaleString()}</span>
+                  </div>
+                  <span className={cn("font-mono text-xs px-2 py-1 rounded bg-gray-100 dark:bg-slate-800", theme.text.secondary)}>{store.size}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

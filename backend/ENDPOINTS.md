@@ -615,7 +615,25 @@ Complete list of all REST API endpoints organized by module.
 | Communications | 22 |
 | Analytics & Search | 26 |
 | Docket | 8 |
+| Integrations | 5 |
 | Other | 15 |
+
+---
+
+## Integrations (`/api/v1/integrations`)
+
+### Data Sources
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/integrations/data-sources` | List all configured data connections |
+| POST | `/integrations/data-sources/test` | Test connection to external database |
+
+### External APIs
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/integrations/pacer/search` | Search PACER court records |
+| POST | `/integrations/calendar/sync` | Sync with Google/Outlook calendar |
+| GET | `/integrations/status` | Check status of all integrations |
 
 ---
 

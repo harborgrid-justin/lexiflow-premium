@@ -6,6 +6,7 @@ import { getQueueToken } from '@nestjs/bull';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { ProcessingJob } from './entities/processing-job.entity';
 import { JobType, JobStatus } from './dto/job-status.dto';
+import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 
 describe('ProcessingJobsService', () => {
   let service: ProcessingJobsService;

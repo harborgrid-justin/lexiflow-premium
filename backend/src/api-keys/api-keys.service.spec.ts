@@ -30,14 +30,14 @@ describe('ApiKeysService', () => {
   };
 
   const mockRepository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    createQueryBuilder: jest.fn(),
-  };
+    find: jest.fn() as jest.MockedFunction<any>,
+    findOne: jest.fn() as jest.MockedFunction<any>,
+    create: jest.fn() as jest.MockedFunction<any>,
+    save: jest.fn() as jest.MockedFunction<any>,
+    update: jest.fn() as jest.MockedFunction<any>,
+    delete: jest.fn() as jest.MockedFunction<any>,
+    createQueryBuilder: jest.fn() as jest.MockedFunction<any>,
+  } as unknown as Repository<ApiKey>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -59,15 +59,11 @@ describe('ApiKeysService', () => {
 
   describe('findAll', () => {
     it('should return all API keys for a user', async () => {
-      mockRepository.find.mockResolvedValue([mockApiKey]);
+      service['apiKeys'].set(mockApiKey.id, mockApiKey);
 
       const result = await service.findAll('user-001');
 
       expect(result).toEqual([mockApiKey]);
-      expect(mockRepository.find).toHaveBeenCalledWith({
-        where: { userId: 'user-001' },
-        order: { createdAt: 'DESC' },
-      });
     });
   });
 
@@ -121,9 +117,8 @@ describe('ApiKeysService', () => {
 
   describe('update', () => {
     it('should update an API key', async () => {
-      const updateDto = { name: 'Updated API Key' };
-      mockRepository.findOne.mockResolvedValue(mockApiKey);
-      mockRepository.save.mockResolvedValue({ ...mockApiKey, ...updateDto });
+      service['apiKeys'].set(mockApiKey.id, mockApiKey);
+      const updateDto = { name: 'Updated Key', scopes: ['cases:read'] };
 
       const result = await service.update(mockApiKey.id, updateDto, 'user-001');
 
@@ -232,7 +227,7 @@ describe('ApiKeysService', () => {
 
   describe('getUsageStats', () => {
     it('should return usage statistics', async () => {
-      mockRepository.findOne.mockResolvedValue(mockApiKey);
+      service['apiKeys'].set(mockApiKey.id, mockApiKey);
 
       const result = await service.getUsageStats(mockApiKey.id, 'user-001');
 

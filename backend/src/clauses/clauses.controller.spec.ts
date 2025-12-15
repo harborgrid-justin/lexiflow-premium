@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ClausesController } from './clauses.controller';
 import { ClausesService } from './clauses.service';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 
 describe('ClausesController', () => {
   let controller: ClausesController;
@@ -21,7 +22,7 @@ describe('ClausesController', () => {
     create: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
-  };
+  } as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

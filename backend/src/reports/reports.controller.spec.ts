@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReportsController } from './reports.controller';
 import { ReportsService } from './reports.service';
-import { expect, jest } from '@jest/globals';
+import { describe, expect, jest } from '@jest/globals';
 
 describe('ReportsController', () => {
   let controller: ReportsController;
@@ -29,14 +29,13 @@ describe('ReportsController', () => {
 
   const mockReportsService = {
     findAll: jest.fn(),
-    findById: jest.fn(),
-    findOne: jest.fn(),
-    generate: jest.fn(),
-    delete: jest.fn(),
-    download: jest.fn(),
     findByType: jest.fn(),
-    findByUser: jest.fn(),
-    getTemplates: jest.fn(),
+    getReports: jest.fn(),
+    getReportTemplates: jest.fn(),
+    getReportById: jest.fn(),
+    deleteReport: jest.fn(),
+    generateReport: jest.fn(),
+    getDownloadUrl: jest.fn(),
     getTemplateById: jest.fn(),
     createTemplate: jest.fn(),
     scheduleReport: jest.fn(),
@@ -75,12 +74,12 @@ describe('ReportsController', () => {
 
   describe('getReport', () => {
     it('should return a report by id', async () => {
-      jest.spyOn(service, 'getReport').mockResolvedValue(mockReport);
+      mockReportsService.getReportById.mockResolvedValue(mockReport);
 
       const result = await controller.getReport('report-001');
 
       expect(result).toEqual(mockReport);
-      expect(service.findById).toHaveBeenCalledWith('report-001');
+      expect(service.getReportById).toHaveBeenCalledWith('report-001');
     });
   });
 
@@ -90,39 +89,38 @@ describe('ReportsController', () => {
         templateId: 'template-001',
         name: 'Q1 Summary',
         parameters: { quarter: 'Q1' },
-        format: 'pdf',
+        format: 'pdf' as any,
       };
-      mockReportsService.generate.mockResolvedValue({ ...mockReport, ...generateDto });
+      mockReportsService.generateReport.mockResolvedValue({ ...mockReport, ...generateDto });
 
-      const result = await controller.generate(generateDto, 'user-001');
+      const result = await controller.generateReport(generateDto as any);
 
       expect(result).toHaveProperty('name', generateDto.name);
-      expect(service.generate).toHaveBeenCalledWith(generateDto, 'user-001');
+      expect(service.generateReport).toHaveBeenCalledWith(generateDto, 'current-user');
     });
   });
 
   describe('deleteReport', () => {
     it('should delete a report', async () => {
-      jest.spyOn(service, 'deleteReport').mockResolvedValue(undefined);
+      mockReportsService.deleteReport.mockResolvedValue(undefined);
 
       await controller.deleteReport('report-001');
 
-      expect(service.delete).toHaveBeenCalledWith('report-001');
+      expect(service.deleteReport).toHaveBeenCalledWith('report-001');
     });
   });
 
   describe('download', () => {
     it('should return download info', async () => {
-      mockReportsService.download.mockResolvedValue({
-        filePath: '/reports/report-001.pdf',
-        filename: 'Monthly_Case_Summary.pdf',
-        mimeType: 'application/pdf',
+      mockReportsService.getDownloadUrl.mockResolvedValue({
+        downloadUrl: 'http://example.com/reports/report-001.pdf',
+        expiresAt: new Date(),
       });
 
-      const result = await controller.download('report-001');
+      const result = await controller.getDownloadUrl('report-001');
 
-      expect(result).toHaveProperty('filePath');
-      expect(service.download).toHaveBeenCalledWith('report-001');
+      expect(result).toHaveProperty('downloadUrl');
+      expect(service.getDownloadUrl).toHaveBeenCalledWith('report-001');
     });
   });
 
@@ -139,12 +137,12 @@ describe('ReportsController', () => {
 
   describe('getTemplates', () => {
     it('should return all report templates', async () => {
-      mockReportsService.getTemplates.mockResolvedValue([mockTemplate]);
+      mockReportsService.getReportTemplates.mockResolvedValue([mockTemplate]);
 
       const result = await controller.getTemplates();
 
       expect(result).toEqual([mockTemplate]);
-      expect(service.getTemplates).toHaveBeenCalled();
+      expect(service.getReportTemplates).toHaveBeenCalled();
     });
   });
 

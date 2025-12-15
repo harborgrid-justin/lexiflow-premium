@@ -69,6 +69,10 @@ describe('ReportsService', () => {
     reportRepository = module.get<Repository<Report>>(getRepositoryToken(Report));
     templateRepository = module.get<Repository<ReportTemplate>>(getRepositoryToken(ReportTemplate));
 
+    // Seed test data in the service's internal storage
+    (service as any).reports.set(mockReport.id, mockReport);
+    (service as any).reportTemplates = [mockTemplate];
+
     jest.clearAllMocks();
   });
 

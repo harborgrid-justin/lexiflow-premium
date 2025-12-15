@@ -101,9 +101,9 @@ export class PleadingsService {
    * Delete a pleading
    */
   async remove(id: string): Promise<void> {
-    const pleading = await this.findOne(id);
+    await this.findOne(id);
 
-    await this.pleadingRepository.remove(pleading);
+    await this.pleadingRepository.delete(id);
     this.logger.log(`Pleading deleted: ${id}`);
   }
 

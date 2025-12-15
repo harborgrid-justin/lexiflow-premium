@@ -262,8 +262,8 @@ export class ProcessingJobsService {
       throw new Error('Progress must be between 0 and 100');
     }
     const job = await this.findOne(id);
-    await this.jobRepository.update(id, { progress });
-    return this.findOne(id);
+    job.progress = progress;
+    return this.jobRepository.save(job);
   }
 
   async setResult(id: string, result: any): Promise<ProcessingJob> {

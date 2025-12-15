@@ -4,10 +4,6 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { PleadingsService } from './pleadings.service';
 import { Pleading } from './entities/pleading.entity';
-import { expect } from '@jest/globals';
-
-// Jest globals are available in test files
-declare const jest: typeof import('@jest/globals').jest;
 
 describe('PleadingsService', () => {
   let service: PleadingsService;
@@ -61,7 +57,13 @@ describe('PleadingsService', () => {
 
   describe('findAll', () => {
     it('should return all pleadings', async () => {
-      mockRepository.find.mockResolvedValue([mockPleading]);
+      const mockQueryBuilder = {
+        andWhere: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        addOrderBy: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValue([mockPleading]),
+      };
+      mockRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
       const result = await service.findAll();
 
@@ -78,7 +80,7 @@ describe('PleadingsService', () => {
       expect(result).toEqual([mockPleading]);
       expect(mockRepository.find).toHaveBeenCalledWith({
         where: { caseId: 'case-001' },
-        order: { createdAt: 'DESC' },
+        order: { filedDate: 'DESC', createdAt: 'DESC' },
       });
     });
   });
@@ -138,7 +140,7 @@ describe('PleadingsService', () => {
   describe('remove', () => {
     it('should delete a pleading', async () => {
       mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.delete.mockResolvedValue({ affected: 1 } as any);
+      mockRepository.delete.mockResolvedValue({ affected: 1 });
 
       await service.remove(mockPleading.id);
 

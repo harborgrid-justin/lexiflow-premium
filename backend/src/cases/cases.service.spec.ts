@@ -37,21 +37,21 @@ describe('CasesService', () => {
   };
 
   const mockQueryBuilder = {
-    andWhere: jest.fn().mockReturnThis(),
-    orderBy: jest.fn().mockReturnThis(),
-    skip: jest.fn().mockReturnThis(),
-    take: jest.fn().mockReturnThis(),
-    getManyAndCount: jest.fn().mockResolvedValue([[mockCase], 1]),
-    leftJoinAndSelect: jest.fn().mockReturnThis(),
+    andWhere: jest.fn().mockReturnThis() as jest.Mock,
+    orderBy: jest.fn().mockReturnThis() as jest.Mock,
+    skip: jest.fn().mockReturnThis() as jest.Mock,
+    take: jest.fn().mockReturnThis() as jest.Mock,
+    getManyAndCount: jest.fn().mockResolvedValue([[mockCase], 1]) as jest.Mock,
+    leftJoinAndSelect: jest.fn().mockReturnThis() as jest.Mock,
   };
 
   const mockRepository = {
-    createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    softDelete: jest.fn(),
+    createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder) as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    softDelete: jest.fn() as jest.Mock,
   };
 
   beforeEach(async () => {

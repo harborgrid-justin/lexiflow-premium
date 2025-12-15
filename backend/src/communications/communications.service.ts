@@ -51,6 +51,9 @@ throw new Error('Method not implemented.');
 
   async send(id: string): Promise<Communication> {
     const communication = await this.findById(id);
+    if (communication.status === 'sent') {
+      throw new Error('Communication has already been sent');
+    }
     communication.status = 'sent';
     communication.sentAt = new Date();
     const saved = await this.communicationRepository.save(communication);
@@ -81,6 +84,29 @@ throw new Error('Method not implemented.');
       where: { caseId, status: 'draft' },
       order: { createdAt: 'DESC' },
     });
+  }
+
+  async getCommunicationStats(caseId: string): Promise<any> {
+    const all = await this.findByCaseId(caseId);
+    const byType: any = {};
+    const byStatus: any = {};
+    let sent = 0;
+    let draft = 0;
+    
+    all.forEach(c => {
+      byType[c.type] = (byType[c.type] || 0) + 1;
+      byStatus[c.status] = (byStatus[c.status] || 0) + 1;
+      if (c.status === 'sent') sent++;
+      if (c.status === 'draft') draft++;
+    });
+
+    return {
+      total: all.length,
+      sent,
+      draft,
+      byType,
+      byStatus,
+    };
   }
 
   async getAllTemplates(): Promise<Template[]> {
@@ -159,9 +185,6 @@ throw new Error('Method not implemented.');
     const saved = await this.communicationRepository.save(communication);
     return Array.isArray(saved) ? saved[0] : saved;
   }
-
-  async getCommunicationStats(caseId: string): Promise<any> {
-    const communications = await this.findByCaseId(caseId);
     
     const stats = {
       total: communications.length,
@@ -169,6 +192,10 @@ throw new Error('Method not implemented.');
       draft: communications.filter(c => c.status === 'draft').length,
       byType: communications.reduce((acc: any, comm) => {
         acc[comm.type] = (acc[comm.type] || 0) + 1;
+        return acc;
+      }, {}),
+      byStatus: communications.reduce((acc: any, comm) => {
+        acc[comm.status] = (acc[comm.status] || 0) + 1;
         return acc;
       }, {}),
     };

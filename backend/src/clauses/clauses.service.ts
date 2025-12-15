@@ -122,14 +122,15 @@ export class ClausesService {
   /**
    * Increment usage count when clause is used
    */
-  async incrementUsage(id: string): Promise<void> {
+  async incrementUsage(id: string): Promise<Clause> {
     const clause = await this.findOne(id);
 
     clause.usageCount += 1;
     clause.lastUsedAt = new Date();
 
-    await this.clauseRepository.save(clause);
+    const updated = await this.clauseRepository.save(clause);
     this.logger.log(`Clause usage incremented: ${id}`);
+    return updated;
   }
 
   /**
@@ -188,5 +189,30 @@ export class ClausesService {
     this.logger.log(`Clause duplicated: ${id} -> ${savedClause.id}`);
 
     return savedClause;
+  }
+
+  async findByTag(tag: string): Promise<Clause[]> {
+    const query = this.clauseRepository.createQueryBuilder('clause');
+    query.where(':tag = ANY(clause.tags)', { tag });
+    query.andWhere('clause.isActive = :isActive', { isActive: true });
+    return await query.getMany();
+  }
+
+  async search(params: { query: string; page: number; limit: number }): Promise<{ data: Clause[]; total: number }> {
+    const query = this.clauseRepository.createQueryBuilder('clause');
+    query.where('(clause.title ILIKE :search OR clause.content ILIKE :search)', { search: `%${params.query}%` });
+    query.orderBy('clause.usageCount', 'DESC');
+    query.skip((params.page - 1) * params.limit);
+    query.take(params.limit);
+    const [data, total] = await query.getManyAndCount();
+    return { data, total };
+  }
+
+  async getCategories(): Promise<string[]> {
+    const query = this.clauseRepository.createQueryBuilder('clause');
+    query.select('clause.category', 'category');
+    query.distinct(true);
+    const results = await query.getRawMany();
+    return results.map(r => r.category);
   }
 }

@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as crypto from 'crypto';
-import { mkdir, writeFile, readFile, unlink, stat } from 'fs/promises';
+import { mkdir, writeFile, readFile, unlink, stat, readdir } from 'fs/promises';
 import { StorageFile, FileUploadResult } from './interfaces/storage-file.interface';
 
 @Injectable()
@@ -110,7 +110,11 @@ export class FileStorageService {
         await unlink(absolutePath);
         this.logger.log(`File deleted: ${absolutePath}`);
       }
-    } catch (error) {
+    } catch (error: any) {
+      // Ignore ENOENT errors (file already deleted)
+      if (error.code === 'ENOENT') {
+        return;
+      }
       this.logger.error(`Failed to delete file: ${filePath}`, error);
       throw error;
     }
@@ -128,7 +132,10 @@ export class FileStorageService {
    */
   async verifyChecksum(filePath: string, expectedChecksum: string): Promise<boolean> {
     try {
-      const buffer = await this.getFile(filePath);
+      const absolutePath = path.isAbsolute(filePath)
+        ? filePath
+        : path.join(this.uploadDir, filePath);
+      const buffer = await readFile(absolutePath);
       const actualChecksum = await this.calculateChecksum(buffer);
       return actualChecksum === expectedChecksum;
     } catch (error) {
@@ -192,19 +199,25 @@ export class FileStorageService {
   }
 
   async copyFile(sourcePath: string, destPath: string): Promise<void> {
-    const fs = require('fs').promises;
-    await fs.copyFile(sourcePath, destPath);
+    const buffer = await readFile(sourcePath);
+    const destDir = path.dirname(destPath);
+    await mkdir(destDir, { recursive: true });
+    await writeFile(destPath, buffer);
+    this.logger.log(`File copied: ${sourcePath} -> ${destPath}`);
   }
 
   async moveFile(sourcePath: string, destPath: string): Promise<void> {
-    const fs = require('fs').promises;
-    await fs.rename(sourcePath, destPath);
+    const buffer = await readFile(sourcePath);
+    const destDir = path.dirname(destPath);
+    await mkdir(destDir, { recursive: true });
+    await writeFile(destPath, buffer);
+    await unlink(sourcePath);
+    this.logger.log(`File moved: ${sourcePath} -> ${destPath}`);
   }
 
   async listFiles(dirPath: string): Promise<string[]> {
-    const fs = require('fs').promises;
     try {
-      return await fs.readdir(dirPath);
+      return await readdir(dirPath);
     } catch {
       return [];
     }
@@ -214,13 +227,13 @@ export class FileStorageService {
     return {
       totalFiles: 0,
       totalSize: 0,
-      used: 0,
+      usedSpace: 0,
       available: 1000000000,
     };
   }
 
-  async cleanupOrphans(validDocIds: string[]): Promise<number> {
+  async cleanupOrphans(validDocIds: string[]): Promise<{ removed: number }> {
     // Stub implementation
-    return 0;
+    return { removed: 0 };
   }
 }

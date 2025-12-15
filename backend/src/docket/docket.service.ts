@@ -46,14 +46,14 @@ export class DocketService {
   }
 
   async update(id: string, updateDocketEntryDto: UpdateDocketEntryDto): Promise<DocketEntry> {
-    await this.findOne(id);
-    await this.docketRepository.update(id, updateDocketEntryDto);
-    return this.findOne(id);
+    const entry = await this.findOne(id);
+    Object.assign(entry, updateDocketEntryDto);
+    return this.docketRepository.save(entry);
   }
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
-    await this.docketRepository.softDelete(id);
+    await this.docketRepository.delete(id);
   }
 
   async syncFromPacer(pacerSyncDto: PacerSyncDto): Promise<PacerSyncResultDto> {

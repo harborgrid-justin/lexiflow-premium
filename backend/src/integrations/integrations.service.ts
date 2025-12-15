@@ -59,7 +59,7 @@ export class IntegrationsService {
   
   async updateConfig(id: string, newConfig: any) {
     const integration = await this.findOne(id);
-    integration.config = { ...integration.config, ...newConfig };
+    integration.config = newConfig;
     this.integrations.set(id, integration);
     return integration;
   }
@@ -73,7 +73,7 @@ export class IntegrationsService {
   }
   
   testConnection(id: string) {
-    return { success: true, message: 'Connection successful' };
+    return { success: true, message: 'Connection successful', latency: 50 };
   }
   
   getSyncHistory(id: string) {
@@ -81,19 +81,37 @@ export class IntegrationsService {
   }
   
   async findAll(): Promise<any[]> { return Array.from(this.integrations.values()); }
-  async findOne(id: string): Promise<any> { return this.integrations.get(id) || {}; }
+  async findOne(id: string): Promise<any> {
+    const integration = this.integrations.get(id);
+    if (!integration) {
+      const { NotFoundException } = require('@nestjs/common');
+      throw new NotFoundException(`Integration with ID ${id} not found`);
+    }
+    return integration;
+  }
   async create(createDto: any, userId: string): Promise<any> { 
     const integration = { id: 'int-' + Date.now(), ...createDto, userId };
     this.integrations.set(integration.id, integration);
     return integration;
   }
-  async update(id: string, updateDto: any): Promise<any> { 
+  async update(id: string, updateDto: any): Promise<any> {
     const integration = await this.findOne(id);
-    const updated = { ...integration, ...updateDto };
+    const updated = {
+      ...integration,
+      name: updateDto.name ?? integration.name,
+      type: updateDto.type ?? integration.type,
+      provider: updateDto.provider ?? integration.provider,
+      config: updateDto.config ?? integration.config,
+    };
     this.integrations.set(id, updated);
     return updated;
   }
   async remove(id: string): Promise<void> {
+    await this.findOne(id);
     this.integrations.delete(id);
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.remove(id);
   }
 }

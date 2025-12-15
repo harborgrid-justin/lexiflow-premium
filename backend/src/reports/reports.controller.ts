@@ -32,45 +32,6 @@ import {
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
 export class ReportsController {
-findAll() {
-throw new Error('Method not implemented.');
-}
-findById(arg0: string) {
-throw new Error('Method not implemented.');
-}
-generate(generateDto: { templateId: string; name: string; parameters: { quarter: string; }; format: string; }, arg1: string) {
-throw new Error('Method not implemented.');
-}
-delete(arg0: string) {
-throw new Error('Method not implemented.');
-}
-download(arg0: string) {
-throw new Error('Method not implemented.');
-}
-findByType(arg0: string) {
-throw new Error('Method not implemented.');
-}
-getTemplateById(arg0: string) {
-throw new Error('Method not implemented.');
-}
-createTemplate(createDto: { name: string; type: string; description: string; }, arg1: string) {
-throw new Error('Method not implemented.');
-}
-scheduleReport(scheduleDto: { templateId: string; name: string; schedule: string; parameters: {}; recipients: string[]; }, arg1: string) {
-throw new Error('Method not implemented.');
-}
-getScheduledReports(arg0: string) {
-throw new Error('Method not implemented.');
-}
-cancelScheduledReport(arg0: string, arg1: string) {
-throw new Error('Method not implemented.');
-}
-getReportStatus(arg0: string) {
-throw new Error('Method not implemented.');
-}
-exportReport(arg0: string, arg1: { format: string; }) {
-throw new Error('Method not implemented.');
-}
   constructor(private readonly reportsService: ReportsService) {}
 
   @Get('templates')
@@ -86,6 +47,60 @@ throw new Error('Method not implemented.');
 
   @Get()
   @ApiOperation({ summary: 'Get list of generated reports' })
+  async findAll(): Promise<any[]> {
+    return this.reportsService.findAll();
+  }
+
+  @Get('by-type/:type')
+  @ApiOperation({ summary: 'Get reports by type' })
+  async findByType(@Param('type') type: string): Promise<any[]> {
+    return this.reportsService.findByType(type);
+  }
+
+  @Get('templates/:id')
+  @ApiOperation({ summary: 'Get template by id' })
+  async getTemplateById(@Param('id') id: string): Promise<any> {
+    return this.reportsService.getTemplateById(id);
+  }
+
+  @Post('templates')
+  @ApiOperation({ summary: 'Create a new template' })
+  async createTemplate(@Body() createDto: any, @Query('userId') userId: string): Promise<any> {
+    return this.reportsService.createTemplate(createDto, userId);
+  }
+
+  @Post('schedule')
+  @ApiOperation({ summary: 'Schedule recurring report' })
+  async scheduleReport(@Body() scheduleDto: any, @Query('userId') userId: string): Promise<any> {
+    return this.reportsService.scheduleReport(scheduleDto, userId);
+  }
+
+  @Get('scheduled/:userId')
+  @ApiOperation({ summary: 'Get scheduled reports for user' })
+  async getScheduledReports(@Param('userId') userId: string): Promise<any[]> {
+    return this.reportsService.getScheduledReports(userId);
+  }
+
+  @Delete('scheduled/:id')
+  @ApiOperation({ summary: 'Cancel scheduled report' })
+  async cancelScheduledReport(@Param('id') id: string, @Query('userId') userId: string): Promise<void> {
+    return this.reportsService.cancelScheduledReport(id, userId);
+  }
+
+  @Get(':id/status')
+  @ApiOperation({ summary: 'Get report generation status' })
+  async getReportStatus(@Param('id') id: string): Promise<any> {
+    return this.reportsService.getReportStatus(id);
+  }
+
+  @Post(':id/export')
+  @ApiOperation({ summary: 'Export report in different format' })
+  async exportReport(@Param('id') id: string, @Body() exportDto: { format: string }): Promise<any> {
+    return this.reportsService.exportReport(id, exportDto.format as any);
+  }
+
+  @Get('list')
+  @ApiOperation({ summary: 'Get list of generated reports (legacy)' })
   @ApiResponse({
     status: 200,
     description: 'Reports list retrieved successfully',
@@ -120,8 +135,14 @@ throw new Error('Method not implemented.');
     description: 'Report generation initiated',
     type: ReportDto,
   })
+  async generate(@Body() dto: GenerateReportDto, @Query('userId') userId: string): Promise<ReportDto> {
+    return this.reportsService.generateReport(dto, userId || 'current-user');
+  }
+
+  @Post('generateReport')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'Generate a new report (alias)' })
   async generateReport(@Body() dto: GenerateReportDto): Promise<ReportDto> {
-    // In production, get userId from JWT token
     const userId = 'current-user';
     return this.reportsService.generateReport(dto, userId);
   }
@@ -134,6 +155,12 @@ throw new Error('Method not implemented.');
     description: 'Download URL retrieved successfully',
     type: DownloadReportDto,
   })
+  async download(@Param('id') id: string): Promise<DownloadReportDto> {
+    return this.reportsService.getDownloadUrl(id);
+  }
+
+  @Get(':id/getDownloadUrl')
+  @ApiOperation({ summary: 'Get download URL (alias)' })
   async getDownloadUrl(@Param('id') id: string): Promise<DownloadReportDto> {
     return this.reportsService.getDownloadUrl(id);
   }

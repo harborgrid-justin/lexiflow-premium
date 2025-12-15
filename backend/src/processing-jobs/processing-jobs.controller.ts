@@ -40,6 +40,12 @@ export class ProcessingJobsController {
   @ApiOperation({ summary: 'Get job status by ID' })
   @ApiResponse({ status: 200, description: 'Job status retrieved' })
   @ApiResponse({ status: 404, description: 'Job not found' })
+  async getJob(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.processingJobsService.findOne(id);
+  }
+
+  @Get(':id/status')
+  @ApiOperation({ summary: 'Get detailed job status' })
   async getJobStatus(@Param('id', ParseUUIDPipe) id: string) {
     return await this.processingJobsService.getJobStatus(id);
   }

@@ -36,10 +36,11 @@ export class MotionsService {
     return this.motionRepository.save(motion);
   }
 
-  async update(id: string, updateMotionDto: UpdateMotionDto): Promise<Motion> {
-    await this.findOne(id);
-    await this.motionRepository.update(id, updateMotionDto);
-    return this.findOne(id);
+  async update(id: string, updateMotionDto: UpdateMotionDto, userId?: string): Promise<Motion> {
+    const motion = await this.findOne(id);
+    Object.assign(motion, updateMotionDto);
+    // Note: updatedBy tracking handled by BaseEntity updatedAt
+    return this.motionRepository.save(motion);
   }
 
   async remove(id: string): Promise<void> {
@@ -63,10 +64,10 @@ export class MotionsService {
 
   async file(id: string): Promise<Motion> {
     const motion = await this.findOne(id);
-    if (motion.status === 'filed' || motion.status === MotionStatus.FILED) {
+    if (motion.status === MotionStatus.FILED) {
       throw new BadRequestException('Motion is already filed');
     }
-    motion.status = 'filed' as any;
+    motion.status = MotionStatus.FILED;
     motion.filedDate = new Date();
     return this.motionRepository.save(motion);
   }

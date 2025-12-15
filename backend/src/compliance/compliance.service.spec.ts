@@ -133,6 +133,7 @@ describe('ComplianceService', () => {
         expect(result).toEqual([failedCheck]);
         expect(mockComplianceCheckRepository.find).toHaveBeenCalledWith({
           where: { status: 'failed' },
+          order: { checkedAt: 'DESC' },
         });
       });
     });
@@ -323,6 +324,7 @@ describe('ComplianceService', () => {
         expect(result).toEqual([mockComplianceRule]);
         expect(mockComplianceRuleRepository.find).toHaveBeenCalledWith({
           where: { isActive: true },
+          order: { createdAt: 'DESC' },
         });
       });
     });

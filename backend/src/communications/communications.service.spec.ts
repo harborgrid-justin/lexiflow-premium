@@ -178,6 +178,7 @@ describe('CommunicationsService', () => {
         expect(result).toEqual([mockCommunication]);
         expect(mockCommunicationRepository.find).toHaveBeenCalledWith({
           where: { type: 'email' },
+          order: { createdAt: 'DESC' },
         });
       });
     });
@@ -283,6 +284,7 @@ describe('CommunicationsService', () => {
         expect(result).toEqual([mockTemplate]);
         expect(mockTemplateRepository.find).toHaveBeenCalledWith({
           where: { isActive: true },
+          order: { createdAt: 'DESC' },
         });
       });
     });

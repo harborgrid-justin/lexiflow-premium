@@ -11,7 +11,7 @@ jest.mock('fs/promises', () => ({
   readFile: jest.fn(),
   unlink: jest.fn(),
   stat: jest.fn(),
-  readdir: jest.fn(),
+  readdir: jest.fn().mockResolvedValue([]),
   rmdir: jest.fn(),
 }));
 
@@ -36,11 +36,10 @@ describe('FileStorageService', () => {
     mimetype: 'application/pdf',
     buffer: Buffer.from('test file content'),
     size: 17,
-    stream: null as any,
     destination: '',
     filename: 'test-document.pdf',
     path: '',
-  };
+  } as Express.Multer.File;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -64,6 +63,7 @@ describe('FileStorageService', () => {
     it('should store a file and return file info', async () => {
       (fsPromises.mkdir as jest.Mock).mockResolvedValue(undefined);
       (fsPromises.writeFile as jest.Mock).mockResolvedValue(undefined);
+      (fsPromises.stat as jest.Mock).mockResolvedValue({ size: 17 });
 
       const result = await service.storeFile(mockFile, 'case-001', 'doc-001', 1);
 
@@ -79,6 +79,7 @@ describe('FileStorageService', () => {
     it('should create nested directory structure', async () => {
       (fsPromises.mkdir as jest.Mock).mockResolvedValue(undefined);
       (fsPromises.writeFile as jest.Mock).mockResolvedValue(undefined);
+      (fsPromises.stat as jest.Mock).mockResolvedValue({ size: 17 });
 
       await service.storeFile(mockFile, 'case-001', 'doc-001', 1);
 
@@ -91,6 +92,7 @@ describe('FileStorageService', () => {
     it('should generate unique filename', async () => {
       (fsPromises.mkdir as jest.Mock).mockResolvedValue(undefined);
       (fsPromises.writeFile as jest.Mock).mockResolvedValue(undefined);
+      (fsPromises.stat as jest.Mock).mockResolvedValue({ size: 17 });
 
       const result1 = await service.storeFile(mockFile, 'case-001', 'doc-001', 1);
       const result2 = await service.storeFile(mockFile, 'case-001', 'doc-001', 2);
@@ -101,6 +103,7 @@ describe('FileStorageService', () => {
     it('should calculate checksum correctly', async () => {
       (fsPromises.mkdir as jest.Mock).mockResolvedValue(undefined);
       (fsPromises.writeFile as jest.Mock).mockResolvedValue(undefined);
+      (fsPromises.stat as jest.Mock).mockResolvedValue({ size: 17 });
 
       const result = await service.storeFile(mockFile, 'case-001', 'doc-001', 1);
 
@@ -218,6 +221,7 @@ describe('FileStorageService', () => {
       await service.copyFile('/source/path', '/dest/path');
 
       expect(fsPromises.readFile).toHaveBeenCalledWith('/source/path');
+      expect(fsPromises.mkdir).toHaveBeenCalled();
       expect(fsPromises.writeFile).toHaveBeenCalled();
     });
   });
@@ -233,6 +237,7 @@ describe('FileStorageService', () => {
       await service.moveFile('/source/path', '/dest/path');
 
       expect(fsPromises.readFile).toHaveBeenCalledWith('/source/path');
+      expect(fsPromises.mkdir).toHaveBeenCalled();
       expect(fsPromises.writeFile).toHaveBeenCalled();
       expect(fsPromises.unlink).toHaveBeenCalledWith('/source/path');
     });
@@ -240,7 +245,7 @@ describe('FileStorageService', () => {
 
   describe('listFiles', () => {
     it('should list files in directory', async () => {
-      (fsPromises.readdir as jest.Mock).mockResolvedValue(['file1.pdf', 'file2.pdf']);
+      (fsPromises.readdir as jest.Mock).mockResolvedValueOnce(['file1.pdf', 'file2.pdf']);
 
       const result = await service.listFiles('/uploads/case-001');
 

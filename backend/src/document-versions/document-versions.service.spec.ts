@@ -179,8 +179,12 @@ describe('DocumentVersionsService', () => {
       const restoredVersion = { ...mockVersion, version: 2 };
       mockRepository.findOne.mockResolvedValueOnce(mockVersion);
       mockRepository.findOne.mockResolvedValueOnce({ ...mockVersion, version: 1 });
-      mockRepository.create.mockReturnValue(restoredVersion);
-      mockRepository.save.mockResolvedValue(restoredVersion);
+      const restoredVersionWithDescription = {
+        ...restoredVersion,
+        changeDescription: 'Restored from version 1',
+      };
+      mockRepository.create.mockReturnValue(restoredVersionWithDescription);
+      mockRepository.save.mockResolvedValue(restoredVersionWithDescription);
       mockFileStorageService.getFile.mockResolvedValue(Buffer.from('test'));
 
       const result = await service.restoreVersion('doc-001', 1, 'case-001', 'user-001');

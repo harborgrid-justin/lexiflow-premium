@@ -34,7 +34,7 @@ describe('DocketService', () => {
     delete: jest.fn(),
     createQueryBuilder: jest.fn(),
     count: jest.fn(),
-  };
+  } as unknown as Repository<DocketEntry>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -116,8 +116,9 @@ describe('DocketService', () => {
   describe('update', () => {
     it('should update a docket entry', async () => {
       const updateDto = { description: 'Updated description' };
-      mockRepository.findOne.mockResolvedValue(mockDocketEntry);
-      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, ...updateDto });
+      const updatedEntry = { ...mockDocketEntry, ...updateDto };
+      mockRepository.findOne.mockResolvedValue(updatedEntry);
+      mockRepository.update.mockResolvedValue({ affected: 1 });
 
       const result = await service.update(mockDocketEntry.id, updateDto);
 
@@ -128,18 +129,6 @@ describe('DocketService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
-    });
-  });
-
-  describe('update', () => {
-    it('should update a docket entry', async () => {
-      const updateDto = { description: 'Updated description' };
-      mockRepository.findOne.mockResolvedValue(mockDocketEntry);
-      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, ...updateDto });
-
-      const result = await service.update(mockDocketEntry.id, updateDto);
-
-      expect(result.description).toBe('Updated description');
     });
   });
 

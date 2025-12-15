@@ -1,60 +1,64 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { AnalyticsDashboardService } from './analytics-dashboard.service';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../auth/enums/user-role.enum';
 
 @ApiTags('Analytics Dashboard')
 @ApiBearerAuth('JWT-auth')
 @Controller('api/v1/analytics/dashboard')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class AnalyticsDashboardController {
-  @Get('stats')
-  @ApiOperation({ summary: 'Get dashboard statistics' })
-  async getStats(@Query() filters: any) {
-    return {
-      activeCases: 0,
-      pendingMotions: 0,
-      billableHours: 0,
-      highRisks: 0
-    };
+  constructor(private readonly analyticsDashboardService: AnalyticsDashboardService) {}
+
+  @Get('kpis')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @ApiOperation({ summary: 'Get key performance indicators' })
+  @ApiResponse({ status: 200, description: 'KPIs retrieved successfully' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period (e.g., 30d, 90d, 1y)' })
+  async getKPIs(@Query() query: any) {
+    return this.analyticsDashboardService.getKPIs(query);
+  }
+
+  @Get('cases/metrics')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @ApiOperation({ summary: 'Get case metrics' })
+  @ApiResponse({ status: 200, description: 'Case metrics retrieved successfully' })
+  async getCaseMetrics(@Query() query: any) {
+    return this.analyticsDashboardService.getCaseMetrics(query);
+  }
+
+  @Get('financial')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Get financial metrics' })
+  @ApiResponse({ status: 200, description: 'Financial metrics retrieved successfully' })
+  async getFinancialMetrics(@Query() query: any) {
+    return this.analyticsDashboardService.getFinancialMetrics(query);
+  }
+
+  @Get('team/performance')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Get team performance metrics' })
+  @ApiResponse({ status: 200, description: 'Team performance retrieved successfully' })
+  async getTeamPerformance(@Query() query: any) {
+    return this.analyticsDashboardService.getTeamPerformance(query);
+  }
+
+  @Get('clients/metrics')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Get client metrics' })
+  @ApiResponse({ status: 200, description: 'Client metrics retrieved successfully' })
+  async getClientMetrics(@Query() query: any) {
+    return this.analyticsDashboardService.getClientMetrics(query);
   }
 
   @Get('charts/:type')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
   @ApiOperation({ summary: 'Get chart data' })
-  async getChartData(@Param('type') type: string, @Query() filters: any) {
-    return [];
-  }
-
-  @Get('alerts')
-  @ApiOperation({ summary: 'Get recent alerts' })
-  async getRecentAlerts(@Query('limit') limit?: number) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: limit || 10
-    };
-  }
-
-  @Get('cases/:caseId/metrics')
-  @ApiOperation({ summary: 'Get case metrics' })
-  async getCaseMetrics(@Param('caseId') caseId: string) {
-    return {
-      caseId,
-      totalDocuments: 0,
-      totalTasks: 0,
-      completionRate: 0,
-      billableHours: 0
-    };
-  }
-
-  @Get('performance')
-  @ApiOperation({ summary: 'Get performance metrics' })
-  async getPerformanceMetrics(@Query('userId') userId?: string) {
-    return {
-      userId,
-      casesHandled: 0,
-      averageResolutionTime: 0,
-      billableHoursTarget: 0,
-      billableHoursActual: 0,
-      clientSatisfaction: 0
-    };
+  @ApiResponse({ status: 200, description: 'Chart data retrieved successfully' })
+  async getChartData(@Param('type') type: string, @Query() query: any) {
+    return this.analyticsDashboardService.getChartData(type, query);
   }
 }

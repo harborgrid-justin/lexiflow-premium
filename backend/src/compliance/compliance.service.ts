@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { ComplianceCheck } from './entities/compliance-check.entity';
@@ -7,6 +7,8 @@ import { ComplianceRule } from './entities/compliance-rule.entity';
 
 @Injectable()
 export class ComplianceService {
+  private readonly logger = new Logger(ComplianceService.name);
+
   constructor(
     @InjectRepository(ComplianceCheck)
     private readonly complianceCheckRepository: Repository<ComplianceCheck>,
@@ -17,9 +19,11 @@ export class ComplianceService {
   ) {}
 
   async runComplianceCheck(caseId: string): Promise<ComplianceCheck[]> {
+    this.logger.log(`Running compliance check for case: ${caseId}`);
     const activeRules = await this.complianceRuleRepository.find({
       where: { isActive: true },
     });
+    this.logger.debug(`Found ${activeRules.length} active compliance rules`);
 
     const checks: ComplianceCheck[] = [];
     for (const rule of activeRules) {

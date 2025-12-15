@@ -195,40 +195,4 @@ export class DocumentVersionsService {
     };
   }
 
-  /**
-   * Restore a specific version (create a new version based on an old one)
-   */
-  async restoreVersion(
-    documentId: string,
-    versionToRestore: number,
-    caseId: string,
-    userId?: string,
-  ): Promise<DocumentVersion> {
-    const oldVersion = await this.getVersion(documentId, versionToRestore);
-    const newVersionNumber = (await this.getLatestVersionNumber(documentId)) + 1;
-
-    // Get the file from the old version
-    const fileBuffer = await this.fileStorageService.getFile(oldVersion.filePath);
-
-    // Create a new version with the old file
-    const version = this.versionRepository.create({
-      documentId,
-      version: newVersionNumber,
-      filename: oldVersion.filename,
-      filePath: oldVersion.filePath, // This could be copied to a new path
-      mimeType: oldVersion.mimeType,
-      fileSize: oldVersion.fileSize,
-      checksum: oldVersion.checksum,
-      changeDescription: `Restored from version ${versionToRestore}`,
-      metadata: oldVersion.metadata,
-      createdBy: userId,
-    });
-
-    const savedVersion = await this.versionRepository.save(version);
-    this.logger.log(
-      `Version ${versionToRestore} restored as version ${newVersionNumber} for document ${documentId}`,
-    );
-
-    return savedVersion;
-  }
 }

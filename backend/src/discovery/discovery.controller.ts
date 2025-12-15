@@ -7,16 +7,16 @@ export class DiscoveryController {
 
   @Get()
   findAll() {
-    return this.discoveryService.findAll();
+    return this.discoveryService.findAllRequests();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.discoveryService.findOne(id);
+    return this.discoveryService.findRequestById(id);
   }
 
   @Post()
   create(@Body() createDto: any) {
-    return this.discoveryService.create(createDto);
+    return this.discoveryService.createRequest(createDto);
   }
 }

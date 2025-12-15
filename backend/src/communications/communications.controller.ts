@@ -24,7 +24,7 @@ throw new Error('Method not implemented.');
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.communicationsService.findOne(id);
+    return this.communicationsService.findById(id);
   }
 
   @Post()

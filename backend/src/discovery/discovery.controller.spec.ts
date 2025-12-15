@@ -55,8 +55,8 @@ describe('DiscoveryController', () => {
     addCustodian: jest.fn(),
     removeCustodian: jest.fn(),
     search: jest.fn(),
-    findAll: jest.fn(),
-    findOne: jest.fn(),
+    findAll: jest.fn() as jest.MockedFunction<any>,
+    findOne: jest.fn() as jest.MockedFunction<any>,
   };
 
   beforeEach(async () => {

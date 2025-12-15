@@ -83,18 +83,16 @@ export class DocumentVersionsController {
   async downloadVersion(
     @Param('documentId', ParseUUIDPipe) documentId: string,
     @Param('version', ParseIntPipe) version: number,
-    @Res() res: Response,
+    @Res({ passthrough: false }) res: Response,
   ) {
     const { buffer, filename, mimeType } =
       await this.documentVersionsService.downloadVersion(documentId, version);
 
-    res.set({
-      'Content-Type': mimeType,
-      'Content-Disposition': `attachment; filename="${filename}"`,
-      'Content-Length': buffer.length,
-    });
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', buffer.length.toString());
 
-    res.send(buffer);
+    res.end(buffer);
   }
 
   @Get('compare')
@@ -118,12 +116,10 @@ export class DocumentVersionsController {
   async restoreVersion(
     @Param('documentId', ParseUUIDPipe) documentId: string,
     @Param('version', ParseIntPipe) version: number,
-    @Body('caseId') caseId: string,
   ) {
     return await this.documentVersionsService.restoreVersion(
       documentId,
       version,
-      caseId,
     );
   }
 }

@@ -110,8 +110,4 @@ export class IntegrationsService {
     await this.findOne(id);
     this.integrations.delete(id);
   }
-
-  async delete(id: string): Promise<void> {
-    await this.remove(id);
-  }
 }

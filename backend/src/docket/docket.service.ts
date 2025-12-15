@@ -146,7 +146,7 @@ export class DocketService {
 
     const byCategory: Record<string, number> = {};
     entries.forEach((entry) => {
-      const category = entry.category || 'Uncategorized';
+      const category = entry.type || 'Uncategorized';
       byCategory[category] = (byCategory[category] || 0) + 1;
     });
 

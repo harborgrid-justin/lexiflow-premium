@@ -25,6 +25,7 @@ export * from './stringUtils';
 export * from './trie';
 export * from './docketValidation';
 export * from './cacheManager';
+export * from './sanitize';
 
 // Datastructures
 export * from './datastructures/bTree';

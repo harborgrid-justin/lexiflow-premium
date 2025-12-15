@@ -30,7 +30,18 @@ export default defineConfig(({ mode }) => {
         }
       },
       build: {
-        target: 'esnext'
+        target: 'esnext',
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              // Split vendor chunks for better caching
+              'vendor-react': ['react', 'react-dom'],
+              'vendor-ui': ['lucide-react'],
+              // Group recharts separately as it's large
+              'vendor-charts': ['recharts'],
+            },
+          },
+        },
       },
       optimizeDeps: {
         esbuildOptions: {

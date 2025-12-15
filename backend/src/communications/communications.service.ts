@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Communication } from './entities/communication.entity';
@@ -6,15 +6,18 @@ import { Template } from './entities/template.entity';
 
 @Injectable()
 export class CommunicationsService {
-scheduleMessage(scheduleMessage: any) {
-throw new Error('Method not implemented.');
-}
-getScheduledMessages(getScheduledMessages: any) {
-throw new Error('Method not implemented.');
-}
-getDeliveryStatus(getDeliveryStatus: any) {
-throw new Error('Method not implemented.');
-}
+  private readonly logger = new Logger(CommunicationsService.name);
+
+  scheduleMessage(scheduleMessage: any) {
+    throw new Error('Method not implemented.');
+  }
+  getScheduledMessages(getScheduledMessages: any) {
+    throw new Error('Method not implemented.');
+  }
+  getDeliveryStatus(getDeliveryStatus: any) {
+    throw new Error('Method not implemented.');
+  }
+  
   constructor(
     @InjectRepository(Communication)
     private readonly communicationRepository: Repository<Communication>,
@@ -23,12 +26,14 @@ throw new Error('Method not implemented.');
   ) {}
 
   async findAll(): Promise<Communication[]> {
+    this.logger.debug('Fetching all communications');
     return this.communicationRepository.find({
       order: { createdAt: 'DESC' },
     });
   }
 
   async findByCaseId(caseId: string): Promise<Communication[]> {
+    this.logger.debug(`Fetching communications for case: ${caseId}`);
     return this.communicationRepository.find({
       where: { caseId },
       order: { createdAt: 'DESC' },
@@ -36,16 +41,20 @@ throw new Error('Method not implemented.');
   }
 
   async findById(id: string): Promise<Communication> {
+    this.logger.debug(`Fetching communication by id: ${id}`);
     const communication = await this.communicationRepository.findOne({ where: { id } });
     if (!communication) {
+      this.logger.warn(`Communication with ID ${id} not found`);
       throw new NotFoundException(`Communication with ID ${id} not found`);
     }
     return communication;
   }
 
   async create(data: any): Promise<Communication> {
+    this.logger.log(`Creating new communication for case: ${data.caseId}`);
     const communication = this.communicationRepository.create(data);
     const saved = await this.communicationRepository.save(communication);
+    this.logger.log(`Communication created successfully with ID: ${saved.id || (saved as any[])[0]?.id}`);
     return Array.isArray(saved) ? saved[0] : saved;
   }
 

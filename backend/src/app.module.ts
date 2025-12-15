@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import configuration from './config/configuration';
 import { getDatabaseConfig } from './config/database.config';
@@ -84,6 +85,9 @@ import { WarRoomModule } from './war-room/war-room.module';
 import { AnalyticsDashboardModule } from './analytics-dashboard/analytics-dashboard.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 
+// Queue Processing System
+import { QueuesModule } from './queues/queues.module';
+
 // App Controller & Service
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -131,6 +135,13 @@ if (isRedisEnabled) {
 
     // Scheduler for cron jobs
     ScheduleModule.forRoot(),
+
+    // Event Emitter for Domain Events
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      delimiter: '.',
+      maxListeners: 10,
+    }),
 
     // Rate Limiting
     ThrottlerModule.forRoot([{
@@ -208,6 +219,9 @@ if (isRedisEnabled) {
     WarRoomModule,
     AnalyticsDashboardModule,
     KnowledgeModule,
+
+    // Queue Processing System
+    QueuesModule,
   ],
   controllers: [AppController],
   providers: [

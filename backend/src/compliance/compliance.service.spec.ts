@@ -6,6 +6,7 @@ import { ComplianceService } from './compliance.service';
 import { ComplianceCheck } from './entities/compliance-check.entity';
 import { AuditLog } from './entities/audit-log.entity';
 import { ComplianceRule } from './entities/compliance-rule.entity';
+import { expect, jest } from '@jest/globals';
 
 describe('ComplianceService', () => {
   let service: ComplianceService;

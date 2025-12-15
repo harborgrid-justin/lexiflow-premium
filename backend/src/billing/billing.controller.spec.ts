@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BillingController } from './billing.controller';
 import { BillingService } from './billing.service';
-import { jest } from '@jest/globals';
+import { expect, jest } from '@jest/globals';
 
 describe('BillingController', () => {
   let controller: BillingController;
@@ -41,24 +41,24 @@ describe('BillingController', () => {
   };
 
   const mockBillingService = {
-    findAllInvoices: jest.fn().mockResolvedValue([mockInvoice]),
-    findInvoiceById: jest.fn().mockResolvedValue(mockInvoice),
-    createInvoice: jest.fn().mockResolvedValue(mockInvoice),
-    updateInvoice: jest.fn().mockResolvedValue(mockInvoice),
-    deleteInvoice: jest.fn().mockResolvedValue(undefined),
-    sendInvoice: jest.fn().mockResolvedValue({ ...mockInvoice, status: 'sent' }),
-    markInvoicePaid: jest.fn().mockResolvedValue({ ...mockInvoice, status: 'paid' }),
-    findAllTimeEntries: jest.fn().mockResolvedValue([mockTimeEntry]),
-    findTimeEntriesByCaseId: jest.fn().mockResolvedValue([mockTimeEntry]),
-    createTimeEntry: jest.fn().mockResolvedValue(mockTimeEntry),
-    updateTimeEntry: jest.fn().mockResolvedValue(mockTimeEntry),
-    deleteTimeEntry: jest.fn().mockResolvedValue(undefined),
-    getUnbilledTimeEntries: jest.fn().mockResolvedValue([mockTimeEntry]),
-    findAllExpenses: jest.fn().mockResolvedValue([mockExpense]),
-    createExpense: jest.fn().mockResolvedValue(mockExpense),
-    getUnbilledExpenses: jest.fn().mockResolvedValue([mockExpense]),
-    generateInvoice: jest.fn().mockResolvedValue(mockInvoice),
-    getBillingSummary: jest.fn().mockResolvedValue({
+    findAllInvoices: jest.fn<() => Promise<typeof mockInvoice[]>>().mockResolvedValue([mockInvoice]),
+    findInvoiceById: jest.fn<() => Promise<typeof mockInvoice>>().mockResolvedValue(mockInvoice),
+    createInvoice: jest.fn<() => Promise<typeof mockInvoice>>().mockResolvedValue(mockInvoice),
+    updateInvoice: jest.fn<() => Promise<typeof mockInvoice>>().mockResolvedValue(mockInvoice),
+    deleteInvoice: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    sendInvoice: jest.fn<() => Promise<typeof mockInvoice>>().mockResolvedValue({ ...mockInvoice, status: 'sent' }),
+    markInvoicePaid: jest.fn<() => Promise<typeof mockInvoice>>().mockResolvedValue({ ...mockInvoice, status: 'paid' }),
+    findAllTimeEntries: jest.fn<() => Promise<typeof mockTimeEntry[]>>().mockResolvedValue([mockTimeEntry]),
+    findTimeEntriesByCaseId: jest.fn<() => Promise<typeof mockTimeEntry[]>>().mockResolvedValue([mockTimeEntry]),
+    createTimeEntry: jest.fn<() => Promise<typeof mockTimeEntry>>().mockResolvedValue(mockTimeEntry),
+    updateTimeEntry: jest.fn<() => Promise<typeof mockTimeEntry>>().mockResolvedValue(mockTimeEntry),
+    deleteTimeEntry: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    getUnbilledTimeEntries: jest.fn<() => Promise<typeof mockTimeEntry[]>>().mockResolvedValue([mockTimeEntry]),
+    findAllExpenses: jest.fn<() => Promise<typeof mockExpense[]>>().mockResolvedValue([mockExpense]),
+    createExpense: jest.fn<() => Promise<typeof mockExpense>>().mockResolvedValue(mockExpense),
+    getUnbilledExpenses: jest.fn<() => Promise<typeof mockExpense[]>>().mockResolvedValue([mockExpense]),
+    generateInvoice: jest.fn<() => Promise<typeof mockInvoice>>().mockResolvedValue(mockInvoice),
+    getBillingSummary: jest.fn<() => Promise<{ totalHours: number; totalBilled: number; totalUnbilled: number }>>().mockResolvedValue({
       totalHours: 10,
       totalBilled: 2000,
       totalUnbilled: 500,

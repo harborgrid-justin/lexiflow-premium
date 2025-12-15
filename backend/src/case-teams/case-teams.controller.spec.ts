@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CaseTeamsController } from './case-teams.controller';
 import { CaseTeamsService } from './case-teams.service';
-import { jest } from '@jest/globals';
+import { expect, jest } from '@jest/globals';
 
 describe('CaseTeamsController', () => {
   let controller: CaseTeamsController;

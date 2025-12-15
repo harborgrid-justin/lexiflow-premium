@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { ClausesService } from './clauses.service';
 import { Clause } from './entities/clause.entity';
+import { expect, jest } from '@jest/globals';
 
 describe('ClausesService', () => {
   let service: ClausesService;

@@ -5,6 +5,7 @@ import { NotFoundException } from '@nestjs/common';
 import { CommunicationsService } from './communications.service';
 import { Communication } from './entities/communication.entity';
 import { Template } from './entities/template.entity';
+import { expect, jest } from '@jest/globals';
 
 describe('CommunicationsService', () => {
   let service: CommunicationsService;

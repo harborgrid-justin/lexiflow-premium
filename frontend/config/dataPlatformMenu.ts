@@ -2,7 +2,7 @@ import {
   LayoutDashboard, Database, ShieldCheck, GitMerge, Archive, Terminal, 
   Lock, Book, Radio, Sparkles, Repeat, Network, DollarSign, 
   Table, Code, Activity, History, FileText, Key, BarChart2, FileSearch,
-  AlertOctagon, Layers, GitCommit, Users, HardDrive
+  AlertOctagon, Layers, GitCommit, Users, HardDrive, Cloud
 } from 'lucide-react';
 import { PlatformView } from '../components/admin/AdminDatabaseControl';
 
@@ -15,6 +15,14 @@ type MenuItem = {
 
 export const DATA_PLATFORM_MENU: MenuItem[] = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard },
+    { 
+      id: 'sources', label: 'Data Sources', icon: Database,
+      children: [
+        { id: 'sources-local', label: 'Local Storage', icon: HardDrive },
+        { id: 'sources-indexeddb', label: 'IndexedDB', icon: Database },
+        { id: 'sources-cloud', label: 'Cloud Databases', icon: Cloud }
+      ]
+    },
     { 
       id: 'schema', label: 'Schema Architect', icon: Database,
       children: [

@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { MetricsService } from '../common/services/metrics.service';
-import { Public } from '../auth/decorators/public.decorator';
+import { MetricsService } from './metrics.service';
+import { Public } from '../common/decorators/public.decorator';
 
 /**
  * Metrics Controller

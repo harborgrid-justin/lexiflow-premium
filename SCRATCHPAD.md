@@ -32,6 +32,7 @@
 - `frontend/components/admin/data/ApiGateway.tsx` - Added encodeHtmlEntities() for code blocks
 - `frontend/components/discovery/MotionToCompelBuilder.tsx` - Added sanitizeHtml() wrapper
 - `frontend/components/common/EnhancedSearch.tsx` - Added sanitizeHtml() wrapper
+- `frontend/components/admin/data/schema/SchemaCodeEditor.tsx` - Added encodeHtmlEntities() for DDL **(SECOND PASS)**
 
 **Resolution:** Created centralized `frontend/utils/sanitize.ts` with:
 - `sanitizeHtml()` - Removes script tags, iframes, event handlers, javascript: URLs
@@ -96,6 +97,7 @@
 7. `frontend/components/documents/AdvancedEditor.tsx`
 8. `frontend/vite.config.ts`
 9. `frontend/utils/index.ts`
+10. `frontend/components/admin/data/schema/SchemaCodeEditor.tsx` **(SECOND PASS)**
 
 ---
 
@@ -110,6 +112,25 @@
 - [x] Code quality review complete
 - [x] Code splitting configured
 - [x] Sanitization utilities centralized
+- [x] Second-pass review completed
+
+---
+
+## Second Pass Review Results (2025-12-15)
+
+### Additional Finding Fixed
+- **SEC-001-B**: SchemaCodeEditor.tsx DDL code block was missing sanitization
+  - Fixed by adding `encodeHtmlEntities()` before syntax highlighting
+
+### Verified Clean
+- No empty catch blocks
+- No unhandled promises
+- No `eval()` or `new Function()` usage
+- No `document.write()` usage
+- No `target="_blank"` without `rel="noopener"`
+- All images have proper alt/aria-label attributes
+- No exposed environment variables
+- All dangerouslySetInnerHTML usages now properly sanitized
 
 ---
 

@@ -30,14 +30,14 @@ describe('ApiKeysService', () => {
   };
 
   const mockRepository = {
-    find: jest.fn() as jest.MockedFunction<any>,
-    findOne: jest.fn() as jest.MockedFunction<any>,
-    create: jest.fn() as jest.MockedFunction<any>,
-    save: jest.fn() as jest.MockedFunction<any>,
-    update: jest.fn() as jest.MockedFunction<any>,
-    delete: jest.fn() as jest.MockedFunction<any>,
-    createQueryBuilder: jest.fn() as jest.MockedFunction<any>,
-  } as unknown as Repository<ApiKey>;
+    find: jest.fn() as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    delete: jest.fn() as jest.Mock,
+    createQueryBuilder: jest.fn() as jest.Mock,
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

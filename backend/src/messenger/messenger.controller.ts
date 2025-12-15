@@ -1,88 +1,79 @@
-import { Controller, Get, Post, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { MessengerService } from './messenger.service';
+import { CreateConversationDto, CreateMessageDto, UpdateConversationDto } from './dto/messenger.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Messenger')
 @ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('api/v1/messenger')
 export class MessengerController {
+  constructor(private readonly messengerService: MessengerService) {}
   @Get('conversations')
   @ApiOperation({ summary: 'Get all conversations' })
-  async getConversations(@Query() query: any) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 50
-    };
+  @ApiResponse({ status: 200, description: 'Conversations retrieved' })
+  async getConversations(@Request() req, @Query() query: any) {
+    return await this.messengerService.findAllConversations(req.user.id, query);
   }
 
   @Get('conversations/:id')
   @ApiOperation({ summary: 'Get conversation by ID' })
+  @ApiResponse({ status: 200, description: 'Conversation found' })
   async getConversation(@Param('id') id: string) {
-    return {
-      id,
-      subject: 'Case Discussion',
-      participants: [],
-      messages: [],
-      unread: 0
-    };
+    return await this.messengerService.findOneConversation(id);
   }
 
   @Get('conversations/:id/messages')
   @ApiOperation({ summary: 'Get messages in conversation' })
-  async getMessages(@Param('id') id: string) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 50
-    };
+  @ApiResponse({ status: 200, description: 'Messages retrieved' })
+  async getMessages(@Param('id') id: string, @Query() query: any) {
+    return await this.messengerService.getMessages(id, query);
   }
 
   @Get('unread-count')
   @ApiOperation({ summary: 'Get unread message count' })
-  async getUnreadCount(@Query('caseId') caseId?: string) {
-    return {
-      count: 0
-    };
-  }
-
-  @Get('contacts')
-  @ApiOperation({ summary: 'Get messenger contacts' })
-  async getContacts() {
-    return [];
+  @ApiResponse({ status: 200, description: 'Unread count retrieved' })
+  async getUnreadCount(@Request() req) {
+    const count = await this.messengerService.getUnreadCount(req.user.id);
+    return { count };
   }
 
   @Post('conversations')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create conversation' })
-  async createConversation(@Body() createDto: any) {
-    return {
-      id: Date.now().toString(),
-      ...createDto,
-      messages: [],
-      unread: 0,
-      createdAt: new Date().toISOString()
-    };
+  @ApiResponse({ status: 201, description: 'Conversation created' })
+  async createConversation(@Body() createDto: CreateConversationDto) {
+    return await this.messengerService.createConversation(createDto);
   }
 
   @Post('messages')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Send message' })
-  async sendMessage(@Body() messageDto: any) {
-    return {
-      id: Date.now().toString(),
-      ...messageDto,
-      timestamp: new Date().toISOString()
-    };
+  @ApiResponse({ status: 201, description: 'Message sent' })
+  async sendMessage(@Request() req, @Body() messageDto: CreateMessageDto) {
+    return await this.messengerService.sendMessage(messageDto, req.user.id);
   }
 
-  @Post('conversations/:id/mark-read')
-  @ApiOperation({ summary: 'Mark conversation as read' })
+  @Post('messages/:id/mark-read')
+  @ApiOperation({ summary: 'Mark message as read' })
+  @ApiResponse({ status: 200, description: 'Message marked as read' })
   async markRead(@Param('id') id: string) {
-    return {
-      id,
-      unread: 0
-    };
+    return await this.messengerService.markAsRead(id);
+  }
+
+  @Put('conversations/:id')
+  @ApiOperation({ summary: 'Update conversation' })
+  @ApiResponse({ status: 200, description: 'Conversation updated' })
+  async updateConversation(@Param('id') id: string, @Body() updateDto: UpdateConversationDto) {
+    return await this.messengerService.updateConversation(id, updateDto);
+  }
+
+  @Delete('conversations/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete conversation' })
+  @ApiResponse({ status: 204, description: 'Conversation deleted' })
+  async deleteConversation(@Param('id') id: string) {
+    await this.messengerService.deleteConversation(id);
   }
 }

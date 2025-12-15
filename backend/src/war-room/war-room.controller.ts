@@ -1,74 +1,86 @@
-import { Controller, Get, Post, Put, Param, Body, Query } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { WarRoomService } from './war-room.service';
+import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-room.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('War Room')
 @ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('api/v1/war-room')
 export class WarRoomController {
-  @Get(':caseId')
-  @ApiOperation({ summary: 'Get war room data for case' })
-  async getData(@Param('caseId') caseId: string) {
-    return {
-      case: null,
-      witnesses: [],
-      documents: [],
-      motions: [],
-      docket: [],
-      evidence: [],
-      tasks: []
-    };
-  }
-
+  constructor(private readonly warRoomService: WarRoomService) {}
   @Get('advisors')
   @ApiOperation({ summary: 'Get advisors' })
-  async getAdvisors(@Query('caseId') caseId?: string) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 50
-    };
+  @ApiResponse({ status: 200, description: 'Advisors retrieved' })
+  async getAdvisors(@Query() query: any) {
+    return await this.warRoomService.findAllAdvisors(query);
+  }
+
+  @Get('advisors/:id')
+  @ApiOperation({ summary: 'Get advisor by ID' })
+  @ApiResponse({ status: 200, description: 'Advisor found' })
+  async getAdvisor(@Param('id') id: string) {
+    return await this.warRoomService.findOneAdvisor(id);
   }
 
   @Post('advisors')
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create advisor' })
-  async createAdvisor(@Body() createDto: any) {
-    return {
-      id: Date.now().toString(),
-      ...createDto,
-      createdAt: new Date().toISOString()
-    };
+  @ApiResponse({ status: 201, description: 'Advisor created' })
+  async createAdvisor(@Body() createDto: CreateAdvisorDto) {
+    return await this.warRoomService.createAdvisor(createDto);
+  }
+
+  @Delete('advisors/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete advisor' })
+  @ApiResponse({ status: 204, description: 'Advisor deleted' })
+  async deleteAdvisor(@Param('id') id: string) {
+    await this.warRoomService.removeAdvisor(id);
   }
 
   @Get('experts')
   @ApiOperation({ summary: 'Get expert witnesses' })
-  async getExperts(@Query('caseId') caseId?: string) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 50
-    };
+  @ApiResponse({ status: 200, description: 'Experts retrieved' })
+  async getExperts(@Query() query: any) {
+    return await this.warRoomService.findAllExperts(query);
   }
 
-  @Get('opposition')
-  @ApiOperation({ summary: 'Get opposition counsel and parties' })
-  async getOpposition(@Query('caseId') caseId?: string) {
-    return {
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 50
-    };
+  @Get('experts/:id')
+  @ApiOperation({ summary: 'Get expert by ID' })
+  @ApiResponse({ status: 200, description: 'Expert found' })
+  async getExpert(@Param('id') id: string) {
+    return await this.warRoomService.findOneExpert(id);
+  }
+
+  @Post('experts')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create expert' })
+  @ApiResponse({ status: 201, description: 'Expert created' })
+  async createExpert(@Body() createDto: CreateExpertDto) {
+    return await this.warRoomService.createExpert(createDto);
+  }
+
+  @Delete('experts/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete expert' })
+  @ApiResponse({ status: 204, description: 'Expert deleted' })
+  async deleteExpert(@Param('id') id: string) {
+    await this.warRoomService.removeExpert(id);
+  }
+
+  @Get(':caseId/strategy')
+  @ApiOperation({ summary: 'Get case strategy' })
+  @ApiResponse({ status: 200, description: 'Strategy retrieved' })
+  async getStrategy(@Param('caseId') caseId: string) {
+    return await this.warRoomService.getStrategy(caseId);
   }
 
   @Put(':caseId/strategy')
   @ApiOperation({ summary: 'Update case strategy' })
-  async updateStrategy(@Param('caseId') caseId: string, @Body() strategy: any) {
-    return {
-      caseId,
-      ...strategy,
-      updatedAt: new Date().toISOString()
-    };
+  @ApiResponse({ status: 200, description: 'Strategy updated' })
+  async updateStrategy(@Param('caseId') caseId: string, @Body() updateDto: UpdateStrategyDto) {
+    return await this.warRoomService.updateStrategy(caseId, updateDto);
   }
 }

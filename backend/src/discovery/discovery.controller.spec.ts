@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DiscoveryController } from './controllers/discovery.controller';
 import { DiscoveryService } from './discovery.service';
+import { expect, jest } from '@jest/globals';
 
 describe('DiscoveryController', () => {
   let controller: DiscoveryController;
@@ -31,20 +32,31 @@ describe('DiscoveryController', () => {
     getAll: jest.fn(),
     findByCaseId: jest.fn(),
     getById: jest.fn(),
+    create: jest.fn(),
     createRequest: jest.fn(),
+    update: jest.fn(),
     updateRequest: jest.fn(),
+    delete: jest.fn(),
     deleteRequest: jest.fn(),
     findByType: jest.fn(),
     findByStatus: jest.fn(),
+    serve: jest.fn(),
     serveRequest: jest.fn(),
+    respond: jest.fn(),
     respondToRequest: jest.fn(),
+    getOverdue: jest.fn(),
     getOverdueRequests: jest.fn(),
+    createLegalHold: jest.fn(),
     createHold: jest.fn(),
+    getLegalHolds: jest.fn(),
     getHolds: jest.fn(),
+    releaseLegalHold: jest.fn(),
     releaseHold: jest.fn(),
     addCustodian: jest.fn(),
     removeCustodian: jest.fn(),
-    search: jest.fn(),
+    search: jest.fn<any, any>(),
+    findAll: jest.fn(),
+    findById: jest.fn(),
   };
 
   beforeEach(async () => {

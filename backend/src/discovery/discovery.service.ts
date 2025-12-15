@@ -7,6 +7,66 @@ import { Custodian } from './entities/custodian.entity';
 
 @Injectable()
 export class DiscoveryService {
+serve(serve: any) {
+throw new Error('Method not implemented.');
+}
+respond(respond: any) {
+throw new Error('Method not implemented.');
+}
+getOverdue(getOverdue: any) {
+throw new Error('Method not implemented.');
+}
+createLegalHold(createLegalHold: any) {
+throw new Error('Method not implemented.');
+}
+getLegalHolds(getLegalHolds: any) {
+throw new Error('Method not implemented.');
+}
+releaseLegalHold(releaseLegalHold: any) {
+throw new Error('Method not implemented.');
+}
+addCustodian(addCustodian: any) {
+throw new Error('Method not implemented.');
+}
+findAll(findAll: any) {
+throw new Error('Method not implemented.');
+}
+findByCaseId(findByCaseId: any) {
+throw new Error('Method not implemented.');
+}
+findById(findById: any) {
+throw new Error('Method not implemented.');
+}
+create(create: any) {
+throw new Error('Method not implemented.');
+}
+update(update: any) {
+throw new Error('Method not implemented.');
+}
+delete(delete: any) {
+throw new Error('Method not implemented.');
+}
+serve(serve: any) {
+throw new Error('Method not implemented.');
+}
+respond(respond: any) {
+throw new Error('Method not implemented.');
+}
+getOverdue(getOverdue: any) {
+throw new Error('Method not implemented.');
+}
+createLegalHold(createLegalHold: any) {
+throw new Error('Method not implemented.');
+}
+getLegalHolds(getLegalHolds: any) {
+throw new Error('Method not implemented.');
+}
+releaseLegalHold(releaseLegalHold: any) {
+throw new Error('Method not implemented.');
+}
+addCustodian(addCustodian: any) {
+throw new Error('Method not implemented.');
+}
   constructor(
     @InjectRepository(DiscoveryRequest)
     private discoveryRequestRepository: Repository<DiscoveryRequest>,

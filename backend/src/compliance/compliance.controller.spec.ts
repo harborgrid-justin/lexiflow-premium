@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ComplianceController } from './controllers/compliance.controller';
 import { ComplianceService } from './compliance.service';
+import { expect, jest } from '@jest/globals';
 
 describe('ComplianceController', () => {
   let controller: ComplianceController;

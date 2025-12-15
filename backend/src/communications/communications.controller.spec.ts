@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommunicationsController } from './communications.controller';
 import { CommunicationsService } from './communications.service';
+import { expect, jest } from '@jest/globals';
 
 describe('CommunicationsController', () => {
   let controller: CommunicationsController;

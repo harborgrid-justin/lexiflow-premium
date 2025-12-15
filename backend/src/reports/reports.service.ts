@@ -45,30 +45,6 @@ export class ReportsService {
     return [];
   }
 
-  async getTemplateById(id: string): Promise<any> {
-    return { id, name: 'Template' };
-  }
-
-  async createTemplate(createDto: any, userId: string): Promise<any> {
-    return { id: 'template-' + Date.now(), ...createDto, createdBy: userId };
-  }
-
-  async scheduleReport(scheduleDto: any, userId: string): Promise<any> {
-    return { scheduleId: 'schedule-' + Date.now(), ...scheduleDto, userId };
-  }
-
-  async getScheduledReports(userId: string): Promise<any[]> {
-    return [];
-  }
-
-  async cancelScheduledReport(id: string, userId: string): Promise<any> {
-    return { success: true };
-  }
-
-  async getReportStatus(id: string): Promise<any> {
-    return { status: 'completed', id };
-  }
-
   async getReportTemplates(): Promise<ReportTemplateDto[]> {
     const templates: ReportTemplateDto[] = [
       {
@@ -451,13 +427,6 @@ export class ReportsService {
   }
 
   /**
-   * Generate unique report ID
-   */
-  private generateReportId(): string {
-    return `report-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
-
-  /**
    * Delete a report
    */
   async deleteReport(reportId: string): Promise<void> {
@@ -557,6 +526,9 @@ export class ReportsService {
     return { id, format, filePath: `/reports/${id}.${format}`, url: `/reports/download/${id}` };
   }
 
+  /**
+   * Generate unique report ID
+   */
   private generateReportId(): string {
     return `report-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }

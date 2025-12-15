@@ -185,21 +185,4 @@ throw new Error('Method not implemented.');
     const saved = await this.communicationRepository.save(communication);
     return Array.isArray(saved) ? saved[0] : saved;
   }
-    
-    const stats = {
-      total: communications.length,
-      sent: communications.filter(c => c.status === 'sent').length,
-      draft: communications.filter(c => c.status === 'draft').length,
-      byType: communications.reduce((acc: any, comm) => {
-        acc[comm.type] = (acc[comm.type] || 0) + 1;
-        return acc;
-      }, {}),
-      byStatus: communications.reduce((acc: any, comm) => {
-        acc[comm.status] = (acc[comm.status] || 0) + 1;
-        return acc;
-      }, {}),
-    };
-
-    return stats;
-  }
 }

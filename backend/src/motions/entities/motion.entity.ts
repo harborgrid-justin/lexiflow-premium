@@ -56,11 +56,35 @@ export class Motion extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   description: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  filedBy?: string;
+
+  @Column({ type: 'date', nullable: true })
+  filedDate?: Date;
+
   @Column({ type: 'date', nullable: true })
   filingDate: Date;
 
   @Column({ type: 'date', nullable: true })
   hearingDate: Date;
+
+  @Column({ type: 'date', nullable: true })
+  responseDeadline?: Date;
+
+  @Column({ type: 'date', nullable: true })
+  rulingDate?: Date;
+
+  @Column({ type: 'jsonb', nullable: true })
+  ruling?: any;
+
+  @Column({ type: 'jsonb', nullable: true })
+  supportingDocs?: string[];
+
+  @Column({ type: 'jsonb', nullable: true })
+  attachments?: string[];
+
+  @Column({ type: 'jsonb', nullable: true })
+  opposingPartyResponse?: any;
 
   @Column({ type: 'date', nullable: true })
   decisionDate: Date;

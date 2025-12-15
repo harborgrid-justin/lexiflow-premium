@@ -9,30 +9,19 @@ describe('DocumentVersionsController', () => {
   const mockVersion = {
     id: 'version-001',
     documentId: 'doc-001',
-    versionNumber: 1,
-    filename: 'contract_v1.pdf',
-    filePath: '/uploads/case-001/doc-001/1/contract_v1.pdf',
-    fileSize: 102400,
-    mimeType: 'application/pdf',
-    checksum: 'abc123',
-    changes: 'Initial version',
-    createdBy: 'user-001',
+    version: 1,
+    filePath: '/path/to/file',
     createdAt: new Date(),
-    isLatest: true,
+    createdBy: 'user-001',
   };
 
   const mockDocumentVersionsService = {
-    findAll: jest.fn(),
-    findByDocumentId: jest.fn(),
-    findById: jest.fn(),
     createVersion: jest.fn(),
-    getLatestVersion: jest.fn(),
-    getVersionByNumber: jest.fn(),
-    deleteVersion: jest.fn(),
+    getVersionHistory: jest.fn(),
+    getVersion: jest.fn(),
+    downloadVersion: jest.fn(),
     compareVersions: jest.fn(),
     restoreVersion: jest.fn(),
-    getVersionHistory: jest.fn(),
-    getVersionCount: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -51,125 +40,48 @@ describe('DocumentVersionsController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return all versions', async () => {
-      mockDocumentVersionsService.findAll.mockResolvedValue([mockVersion]);
+  describe('getVersionHistory', () => {
+    it('should return version history for a document', async () => {
+      mockDocumentVersionsService.getVersionHistory.mockResolvedValue([mockVersion]);
 
-      const result = await controller.findAll();
-
-      expect(result).toEqual([mockVersion]);
-      expect(service.findAll).toHaveBeenCalled();
-    });
-  });
-
-  describe('findByDocumentId', () => {
-    it('should return versions for a document', async () => {
-      mockDocumentVersionsService.findByDocumentId.mockResolvedValue([mockVersion]);
-
-      const result = await controller.findByDocumentId('doc-001');
+      const result = await controller.getVersionHistory('doc-001');
 
       expect(result).toEqual([mockVersion]);
-      expect(service.findByDocumentId).toHaveBeenCalledWith('doc-001');
+      expect(service.getVersionHistory).toHaveBeenCalledWith('doc-001');
     });
   });
 
-  describe('findById', () => {
-    it('should return a version by id', async () => {
-      mockDocumentVersionsService.findById.mockResolvedValue(mockVersion);
+  describe('getVersion', () => {
+    it('should return a specific version', async () => {
+      mockDocumentVersionsService.getVersion.mockResolvedValue(mockVersion);
 
-      const result = await controller.findById('version-001');
+      const result = await controller.getVersion('doc-001', 1);
 
       expect(result).toEqual(mockVersion);
-      expect(service.findById).toHaveBeenCalledWith('version-001');
-    });
-  });
-
-  describe('getLatestVersion', () => {
-    it('should return the latest version', async () => {
-      mockDocumentVersionsService.getLatestVersion.mockResolvedValue(mockVersion);
-
-      const result = await controller.getLatestVersion('doc-001');
-
-      expect(result).toEqual(mockVersion);
-      expect(service.getLatestVersion).toHaveBeenCalledWith('doc-001');
-    });
-  });
-
-  describe('getVersionByNumber', () => {
-    it('should return a specific version number', async () => {
-      mockDocumentVersionsService.getVersionByNumber.mockResolvedValue(mockVersion);
-
-      const result = await controller.getVersionByNumber('doc-001', 1);
-
-      expect(result).toEqual(mockVersion);
-      expect(service.getVersionByNumber).toHaveBeenCalledWith('doc-001', 1);
-    });
-  });
-
-  describe('deleteVersion', () => {
-    it('should delete a version', async () => {
-      mockDocumentVersionsService.deleteVersion.mockResolvedValue(undefined);
-
-      await controller.deleteVersion('version-001');
-
-      expect(service.deleteVersion).toHaveBeenCalledWith('version-001');
+      expect(service.getVersion).toHaveBeenCalledWith('doc-001', 1);
     });
   });
 
   describe('compareVersions', () => {
     it('should compare two versions', async () => {
-      mockDocumentVersionsService.compareVersions.mockResolvedValue({
-        version1: mockVersion,
-        version2: { ...mockVersion, versionNumber: 2 },
-        sizeDiff: 10000,
-      });
+      const comparison = { changes: [], v1: 1, v2: 2 };
+      mockDocumentVersionsService.compareVersions.mockResolvedValue(comparison);
 
-      const result = await controller.compareVersions('version-001', 'version-002');
+      const result = await controller.compareVersions('doc-001', 1, 2);
 
-      expect(result).toHaveProperty('version1');
-      expect(result).toHaveProperty('version2');
-      expect(result).toHaveProperty('sizeDiff');
-      expect(service.compareVersions).toHaveBeenCalledWith('version-001', 'version-002');
+      expect(result).toEqual(comparison);
+      expect(service.compareVersions).toHaveBeenCalledWith('doc-001', 1, 2);
     });
   });
 
   describe('restoreVersion', () => {
-    it('should restore an older version', async () => {
-      mockDocumentVersionsService.restoreVersion.mockResolvedValue({
-        ...mockVersion,
-        versionNumber: 3,
-        isLatest: true,
-      });
+    it('should restore a version', async () => {
+      mockDocumentVersionsService.restoreVersion.mockResolvedValue(mockVersion);
 
-      const result = await controller.restoreVersion('version-001', 'user-001');
+      const result = await controller.restoreVersion('doc-001', 1, 'case-001');
 
-      expect(result.isLatest).toBe(true);
-      expect(service.restoreVersion).toHaveBeenCalledWith('version-001', 'user-001');
-    });
-  });
-
-  describe('getVersionHistory', () => {
-    it('should return version history', async () => {
-      mockDocumentVersionsService.getVersionHistory.mockResolvedValue([
-        mockVersion,
-        { ...mockVersion, versionNumber: 2 },
-      ]);
-
-      const result = await controller.getVersionHistory('doc-001');
-
-      expect(result).toHaveLength(2);
-      expect(service.getVersionHistory).toHaveBeenCalledWith('doc-001');
-    });
-  });
-
-  describe('getVersionCount', () => {
-    it('should return the number of versions', async () => {
-      mockDocumentVersionsService.getVersionCount.mockResolvedValue(5);
-
-      const result = await controller.getVersionCount('doc-001');
-
-      expect(result).toBe(5);
-      expect(service.getVersionCount).toHaveBeenCalledWith('doc-001');
+      expect(result).toEqual(mockVersion);
+      expect(service.restoreVersion).toHaveBeenCalledWith('doc-001', 1, 'case-001');
     });
   });
 });

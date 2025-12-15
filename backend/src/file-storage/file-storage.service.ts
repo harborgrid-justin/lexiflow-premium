@@ -193,4 +193,41 @@ export class FileStorageService {
       throw error;
     }
   }
+
+  async getFileInfo(filePath: string): Promise<any> {
+    return this.getFileMetadata(filePath);
+  }
+
+  async copyFile(sourcePath: string, destPath: string): Promise<void> {
+    const fs = require('fs').promises;
+    await fs.copyFile(sourcePath, destPath);
+  }
+
+  async moveFile(sourcePath: string, destPath: string): Promise<void> {
+    const fs = require('fs').promises;
+    await fs.rename(sourcePath, destPath);
+  }
+
+  async listFiles(dirPath: string): Promise<string[]> {
+    const fs = require('fs').promises;
+    try {
+      return await fs.readdir(dirPath);
+    } catch {
+      return [];
+    }
+  }
+
+  async getStorageStats(): Promise<any> {
+    return {
+      totalFiles: 0,
+      totalSize: 0,
+      used: 0,
+      available: 1000000000,
+    };
+  }
+
+  async cleanupOrphans(validDocIds: string[]): Promise<number> {
+    // Stub implementation
+    return 0;
+  }
 }

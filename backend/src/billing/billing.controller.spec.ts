@@ -260,7 +260,7 @@ describe('BillingController', () => {
 
   describe('generateInvoice', () => {
     it('should generate invoice from unbilled items', async () => {
-      const result = await controller.generateInvoice('case-001', 'client-001');
+      const result = await controller.generateInvoice({ caseId: 'case-001', clientId: 'client-001' });
 
       expect(result).toEqual(mockInvoice);
       expect(service.generateInvoice).toHaveBeenCalledWith('case-001', 'client-001');

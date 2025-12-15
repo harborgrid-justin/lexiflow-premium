@@ -400,4 +400,18 @@ export class SearchService {
       },
     ];
   }
+
+  async getRecentSearches(userId: string): Promise<any[]> {
+    // Stub implementation - would query search_history table
+    return [];
+  }
+
+  async saveSearch(userId: string, query: string): Promise<any> {
+    // Stub implementation - would save to search_history table
+    return { userId, query, timestamp: new Date() };
+  }
+
+  async clearSearchHistory(userId: string): Promise<void> {
+    // Stub implementation - would delete from search_history table
+  }
 }

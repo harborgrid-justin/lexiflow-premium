@@ -46,4 +46,94 @@ export class MotionsService {
     await this.findOne(id);
     await this.motionRepository.softDelete(id);
   }
+
+  async findAll(): Promise<Motion[]> {
+    return this.motionRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async findById(id: string): Promise<Motion> {
+    return this.findOne(id);
+  }
+
+  async delete(id: string): Promise<void> {
+    return this.remove(id);
+  }
+
+  async file(id: string): Promise<Motion> {
+    const motion = await this.findOne(id);
+    motion.status = 'filed' as any;
+    motion.filedDate = new Date();
+    return this.motionRepository.save(motion);
+  }
+
+  async setHearingDate(id: string, hearingDate: Date): Promise<Motion> {
+    const motion = await this.findOne(id);
+    motion.hearingDate = hearingDate;
+    return this.motionRepository.save(motion);
+  }
+
+  async recordRuling(id: string, ruling: any): Promise<Motion> {
+    const motion = await this.findOne(id);
+    motion.ruling = ruling;
+    motion.status = 'decided' as any;
+    motion.rulingDate = new Date();
+    return this.motionRepository.save(motion);
+  }
+
+  async findByType(caseId: string, type: string): Promise<Motion[]> {
+    return this.motionRepository.find({
+      where: { caseId, type: type as any },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async findByStatus(caseId: string, status: string): Promise<Motion[]> {
+    return this.motionRepository.find({
+      where: { caseId, status: status as any },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getUpcomingHearings(): Promise<Motion[]> {
+    const now = new Date();
+    return this.motionRepository
+      .createQueryBuilder('motion')
+      .where('motion.hearingDate > :now', { now })
+      .orderBy('motion.hearingDate', 'ASC')
+      .getMany();
+  }
+
+  async getPendingResponses(): Promise<Motion[]> {
+    return this.motionRepository.find({
+      where: { status: 'pending' as any },
+      order: { createdAt: 'ASC' },
+    });
+  }
+
+  async attachDocument(id: string, documentId: string): Promise<Motion> {
+    const motion = await this.findOne(id);
+    if (!motion.attachments) {
+      motion.attachments = [];
+    }
+    motion.attachments.push(documentId);
+    return this.motionRepository.save(motion);
+  }
+
+  async search(query: any): Promise<Motion[]> {
+    const qb = this.motionRepository.createQueryBuilder('motion');
+    
+    if (query.query) {
+      qb.where('motion.title LIKE :query OR motion.description LIKE :query', {
+        query: `%${query.query}%`,
+      });
+    }
+    
+    if (query.caseId) {
+      qb.andWhere('motion.caseId = :caseId', { caseId: query.caseId });
+    }
+    
+    return qb.orderBy('motion.createdAt', 'DESC').getMany();
+  }
 }

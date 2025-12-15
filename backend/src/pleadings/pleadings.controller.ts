@@ -10,14 +10,15 @@ import {
   ParseUUIDPipe,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
 import { UpdatePleadingDto } from './dto/update-pleading.dto';
 import { FilePleadingDto } from './dto/file-pleading.dto';
 import { PleadingStatus } from './entities/pleading.entity';
 
-@ApiTags('pleadings')
+@ApiTags('Pleadings')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/pleadings')
 export class PleadingsController {
   constructor(private readonly pleadingsService: PleadingsService) {}

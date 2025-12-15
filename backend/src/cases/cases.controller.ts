@@ -12,7 +12,7 @@ import {
   UseGuards,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
@@ -20,6 +20,7 @@ import { CaseFilterDto } from './dto/case-filter.dto';
 import { CaseResponseDto, PaginatedCaseResponseDto } from './dto/case-response.dto';
 
 @ApiTags('Cases')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/cases')
 export class CasesController {
   constructor(private readonly casesService: CasesService) {}

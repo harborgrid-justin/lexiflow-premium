@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConflictChecksService } from './conflict-checks.service';
 import {
   RunConflictCheckDto,
@@ -16,6 +17,8 @@ import {
   QueryConflictChecksDto,
 } from './dto/conflict-check.dto';
 
+@ApiTags('Compliance - Conflict Checks')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/compliance/conflicts')
 export class ConflictChecksController {
   constructor(

@@ -12,12 +12,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
 import { DocumentVersionsService } from './document-versions.service';
 import { CreateVersionDto } from './dto/create-version.dto';
 
-@ApiTags('document-versions')
+@ApiTags('Document Versions')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/documents/:documentId/versions')
 export class DocumentVersionsController {
   constructor(
@@ -83,8 +84,8 @@ export class DocumentVersionsController {
   async downloadVersion(
     @Param('documentId', ParseUUIDPipe) documentId: string,
     @Param('version', ParseIntPipe) version: number,
-    @Res({ passthrough: false }) res: Response,
-  ) {
+    @Res() res: any,
+  ): Promise<void> {
     const { buffer, filename, mimeType } =
       await this.documentVersionsService.downloadVersion(documentId, version);
 
@@ -92,7 +93,7 @@ export class DocumentVersionsController {
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Length', buffer.length.toString());
 
-    res.end(buffer);
+    res.send(buffer);
   }
 
   @Get('compare')

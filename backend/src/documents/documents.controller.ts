@@ -15,7 +15,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
@@ -26,6 +26,7 @@ import { JobType } from '../processing-jobs/dto/job-status.dto';
 import { OcrRequestDto } from '../ocr/dto/ocr-request.dto';
 
 @ApiTags('documents')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/documents')
 export class DocumentsController {
   constructor(

@@ -10,11 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FeeAgreementsService } from './fee-agreements.service';
 import { CreateFeeAgreementDto } from './dto/create-fee-agreement.dto';
 import { UpdateFeeAgreementDto } from './dto/update-fee-agreement.dto';
 import { FeeAgreement, FeeAgreementStatus } from './entities/fee-agreement.entity';
 
+@ApiTags('Billing - Fee Agreements')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/billing/fee-agreements')
 export class FeeAgreementsController {
   constructor(private readonly feeAgreementsService: FeeAgreementsService) {}

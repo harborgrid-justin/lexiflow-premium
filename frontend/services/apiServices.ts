@@ -3,7 +3,7 @@
  * Domain-specific API adapters that match the DataService interface
  */
 
-import { apiClient } from './apiClient';
+import { apiClient, type PaginatedResponse } from './apiClient';
 import type { 
   Case, 
   DocketEntry, 
@@ -11,22 +11,27 @@ import type {
   EvidenceItem,
   TimeEntry,
   User,
-  PaginatedResponse,
 } from '../types';
 
 /**
  * Check if backend API mode is enabled
+ * @returns true if backend API should be used instead of IndexedDB
  */
 export function isBackendApiEnabled(): boolean {
-  return import.meta.env.VITE_USE_BACKEND_API === 'true';
+  // Check localStorage flag set by environment or user preference
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    const storedValue = localStorage.getItem('VITE_USE_BACKEND_API');
+    if (storedValue) return storedValue === 'true';
+  }
+  return false;
 }
 
 /**
  * Cases API Service
  */
 export class CasesApiService {
-  async getAll(): Promise<Case[]> {
-    const response = await apiClient.get<PaginatedResponse<Case>>('/cases');
+  async getAll(filters?: { status?: string; type?: string; page?: number; limit?: number; sortBy?: string; order?: string }): Promise<Case[]> {
+    const response = await apiClient.get<PaginatedResponse<Case>>('/cases', filters);
     return response.data;
   }
 
@@ -39,15 +44,19 @@ export class CasesApiService {
   }
 
   async update(id: string, caseData: Partial<Case>): Promise<Case> {
-    return apiClient.patch<Case>(`/cases/${id}`, caseData);
+    return apiClient.put<Case>(`/cases/${id}`, caseData);
   }
 
   async delete(id: string): Promise<void> {
     await apiClient.delete(`/cases/${id}`);
   }
 
-  async search(query: string): Promise<Case[]> {
-    const response = await apiClient.get<PaginatedResponse<Case>>('/cases', { search: query });
+  async archive(id: string): Promise<Case> {
+    return apiClient.post<Case>(`/cases/${id}/archive`, {});
+  }
+
+  async search(query: string, filters?: Record<string, any>): Promise<Case[]> {
+    const response = await apiClient.get<PaginatedResponse<Case>>('/cases', { search: query, ...filters });
     return response.data;
   }
 }
@@ -87,8 +96,8 @@ export class DocketApiService {
  * Documents API Service
  */
 export class DocumentsApiService {
-  async getAll(): Promise<LegalDocument[]> {
-    const response = await apiClient.get<PaginatedResponse<LegalDocument>>('/documents');
+  async getAll(filters?: { caseId?: string; type?: string; status?: string; page?: number; limit?: number }): Promise<LegalDocument[]> {
+    const response = await apiClient.get<PaginatedResponse<LegalDocument>>('/documents', filters);
     return response.data;
   }
 
@@ -101,7 +110,7 @@ export class DocumentsApiService {
   }
 
   async update(id: string, doc: Partial<LegalDocument>): Promise<LegalDocument> {
-    return apiClient.patch<LegalDocument>(`/documents/${id}`, doc);
+    return apiClient.put<LegalDocument>(`/documents/${id}`, doc);
   }
 
   async delete(id: string): Promise<void> {
@@ -112,9 +121,57 @@ export class DocumentsApiService {
     return apiClient.upload<LegalDocument>('/documents/upload', file, metadata);
   }
 
-  async getByCaseId(caseId: string): Promise<LegalDocument[]> {
-    const response = await apiClient.get<PaginatedResponse<LegalDocument>>('/documents', { caseId });
+  async bulkUpload(files: File[], metadata: Record<string, any>): Promise<LegalDocument[]> {
+    const formData = new FormData();
+    files.forEach(file => formData.append('files', file));
+    Object.keys(metadata).forEach(key => formData.append(key, metadata[key]));
+    
+    const token = localStorage.getItem('lexiflow_auth_token');
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    // Don't set Content-Type for FormData - browser will set it with boundary
+    
+    const response = await fetch(`${apiClient['baseURL']}/documents/bulk-upload`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+    return response.json();
+  }
+
+  async download(id: string): Promise<Blob> {
+    const response = await fetch(`${apiClient['baseURL']}/documents/${id}/download`, {
+      headers: apiClient['getHeaders'](),
+    });
+    return response.blob();
+  }
+
+  async preview(id: string): Promise<string> {
+    const response = await apiClient.get<{ url: string }>(`/documents/${id}/preview`);
+    return response.url;
+  }
+
+  async redact(id: string, regions: Array<{ page: number; x: number; y: number; width: number; height: number }>): Promise<LegalDocument> {
+    return apiClient.post<LegalDocument>(`/documents/${id}/redact`, { regions });
+  }
+
+  async getVersions(documentId: string): Promise<any[]> {
+    const response = await apiClient.get<PaginatedResponse<any>>(`/documents/${documentId}/versions`);
     return response.data;
+  }
+
+  async restoreVersion(documentId: string, versionId: string): Promise<LegalDocument> {
+    return apiClient.post<LegalDocument>(`/documents/${documentId}/versions/${versionId}/restore`, {});
+  }
+
+  async compareVersions(documentId: string, versionId: string, compareWithId: string): Promise<{ diff: string }> {
+    return apiClient.get<{ diff: string }>(`/documents/${documentId}/versions/${versionId}/compare?compareWith=${compareWithId}`);
+  }
+
+  async getByCaseId(caseId: string): Promise<LegalDocument[]> {
+    return this.getAll({ caseId });
   }
 }
 
@@ -149,17 +206,42 @@ export class EvidenceApiService {
  * Billing API Service
  */
 export class BillingApiService {
-  async getTimeEntries(filters?: { caseId?: string; userId?: string }): Promise<TimeEntry[]> {
+  async getTimeEntries(filters?: { caseId?: string; userId?: string; page?: number; limit?: number }): Promise<TimeEntry[]> {
     const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries', filters);
     return response.data;
+  }
+
+  async getTimeEntryById(id: string): Promise<TimeEntry> {
+    return apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
   }
 
   async addTimeEntry(entry: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<TimeEntry> {
     return apiClient.post<TimeEntry>('/billing/time-entries', entry);
   }
 
+  async addBulkTimeEntries(entries: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<TimeEntry[]> {
+    return apiClient.post<TimeEntry[]>('/billing/time-entries/bulk', { entries });
+  }
+
   async updateTimeEntry(id: string, entry: Partial<TimeEntry>): Promise<TimeEntry> {
-    return apiClient.patch<TimeEntry>(`/billing/time-entries/${id}`, entry);
+    return apiClient.put<TimeEntry>(`/billing/time-entries/${id}`, entry);
+  }
+
+  async approveTimeEntry(id: string): Promise<TimeEntry> {
+    return apiClient.put<TimeEntry>(`/billing/time-entries/${id}/approve`, {});
+  }
+
+  async billTimeEntry(id: string, invoiceId: string): Promise<TimeEntry> {
+    return apiClient.put<TimeEntry>(`/billing/time-entries/${id}/bill`, { invoiceId });
+  }
+
+  async getUnbilledTimeEntries(caseId: string): Promise<TimeEntry[]> {
+    const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/case/${caseId}/unbilled`);
+    return response.data;
+  }
+
+  async getTimeEntryTotals(caseId: string): Promise<{ total: number; billable: number; unbilled: number }> {
+    return apiClient.get<{ total: number; billable: number; unbilled: number }>(`/billing/time-entries/case/${caseId}/totals`);
   }
 
   async deleteTimeEntry(id: string): Promise<void> {
@@ -201,7 +283,7 @@ export class AuthApiService {
   }
 
   async refreshToken(): Promise<{ accessToken: string; refreshToken: string }> {
-    const refreshToken = localStorage.getItem(import.meta.env.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token');
+    const refreshToken = localStorage.getItem('lexiflow_refresh_token');
     if (!refreshToken) {
       throw new Error('No refresh token available');
     }
@@ -210,6 +292,30 @@ export class AuthApiService {
     apiClient.setAuthTokens(response.accessToken, response.refreshToken);
     
     return response;
+  }
+
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    return apiClient.post<{ message: string }>('/auth/forgot-password', { email });
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+    return apiClient.post<{ message: string }>('/auth/reset-password', { token, newPassword });
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
+    return apiClient.post<{ message: string }>('/auth/change-password', { currentPassword, newPassword });
+  }
+
+  async enableMFA(): Promise<{ qrCode: string; secret: string }> {
+    return apiClient.post<{ qrCode: string; secret: string }>('/auth/enable-mfa', {});
+  }
+
+  async verifyMFA(code: string): Promise<{ verified: boolean; backupCodes?: string[] }> {
+    return apiClient.post<{ verified: boolean; backupCodes?: string[] }>('/auth/verify-mfa', { code });
+  }
+
+  async disableMFA(): Promise<{ message: string }> {
+    return apiClient.post<{ message: string }>('/auth/disable-mfa', {});
   }
 }
 
@@ -293,33 +399,34 @@ export interface WebhookConfig {
 }
 
 export class WebhooksApiService {
-  async getAll(): Promise<WebhookConfig[]> {
-    const response = await apiClient.get<PaginatedResponse<WebhookConfig>>('/admin/webhooks');
+  async getAll(filters?: { status?: string; page?: number; limit?: number }): Promise<WebhookConfig[]> {
+    const response = await apiClient.get<PaginatedResponse<WebhookConfig>>('/webhooks', filters);
     return response.data;
   }
 
   async getById(id: string): Promise<WebhookConfig> {
-    return apiClient.get<WebhookConfig>(`/admin/webhooks/${id}`);
+    return apiClient.get<WebhookConfig>(`/webhooks/${id}`);
   }
 
   async create(webhook: Omit<WebhookConfig, 'id' | 'createdAt' | 'lastTriggered' | 'failureCount' | 'status'>): Promise<WebhookConfig> {
-    return apiClient.post<WebhookConfig>('/admin/webhooks', webhook);
+    return apiClient.post<WebhookConfig>('/webhooks', webhook);
   }
 
   async update(id: string, webhook: Partial<WebhookConfig>): Promise<WebhookConfig> {
-    return apiClient.patch<WebhookConfig>(`/admin/webhooks/${id}`, webhook);
+    return apiClient.put<WebhookConfig>(`/webhooks/${id}`, webhook);
   }
 
   async delete(id: string): Promise<void> {
-    await apiClient.delete(`/admin/webhooks/${id}`);
+    await apiClient.delete(`/webhooks/${id}`);
   }
 
   async test(id: string): Promise<{ success: boolean; message: string; statusCode?: number }> {
-    return apiClient.post<{ success: boolean; message: string; statusCode?: number }>(`/admin/webhooks/${id}/test`, {});
+    return apiClient.post<{ success: boolean; message: string; statusCode?: number }>(`/webhooks/${id}/test`, {});
   }
 
-  async getAvailableEvents(): Promise<string[]> {
-    return apiClient.get<string[]>('/admin/webhooks/events');
+  async getDeliveries(id: string, filters?: { page?: number; limit?: number }): Promise<any[]> {
+    const response = await apiClient.get<PaginatedResponse<any>>(`/webhooks/${id}/deliveries`, filters);
+    return response.data;
   }
 }
 
@@ -388,28 +495,37 @@ export interface RateTable {
 
 export class RateTablesApiService {
   async getAll(): Promise<RateTable[]> {
-    const response = await apiClient.get<PaginatedResponse<RateTable>>('/billing/rate-tables');
+    const response = await apiClient.get<PaginatedResponse<RateTable>>('/billing/rates');
     return response.data;
   }
 
   async getById(id: string): Promise<RateTable> {
-    return apiClient.get<RateTable>(`/billing/rate-tables/${id}`);
+    return apiClient.get<RateTable>(`/billing/rates/${id}`);
+  }
+
+  async getActive(): Promise<RateTable[]> {
+    const response = await apiClient.get<PaginatedResponse<RateTable>>('/billing/rates/active');
+    return response.data;
+  }
+
+  async getDefault(firmId: string): Promise<RateTable> {
+    return apiClient.get<RateTable>(`/billing/rates/default/${firmId}`);
+  }
+
+  async getUserRate(firmId: string, userId: string): Promise<{ role: string; hourlyRate: number }> {
+    return apiClient.get<{ role: string; hourlyRate: number }>(`/billing/rates/user-rate/${firmId}/${userId}`);
   }
 
   async create(rateTable: Omit<RateTable, 'id' | 'createdAt' | 'updatedAt'>): Promise<RateTable> {
-    return apiClient.post<RateTable>('/billing/rate-tables', rateTable);
+    return apiClient.post<RateTable>('/billing/rates', rateTable);
   }
 
   async update(id: string, rateTable: Partial<RateTable>): Promise<RateTable> {
-    return apiClient.patch<RateTable>(`/billing/rate-tables/${id}`, rateTable);
+    return apiClient.put<RateTable>(`/billing/rates/${id}`, rateTable);
   }
 
   async delete(id: string): Promise<void> {
-    await apiClient.delete(`/billing/rate-tables/${id}`);
-  }
-
-  async duplicate(id: string, name: string): Promise<RateTable> {
-    return apiClient.post<RateTable>(`/billing/rate-tables/${id}/duplicate`, { name });
+    await apiClient.delete(`/billing/rates/${id}`);
   }
 }
 
@@ -571,18 +687,52 @@ export class ExaminationsApiService {
 
 // Export instances
 export const apiServices = {
+  // Core Services
   cases: new CasesApiService(),
   docket: new DocketApiService(),
   documents: new DocumentsApiService(),
   evidence: new EvidenceApiService(),
+  
+  // Billing Services
   billing: new BillingApiService(),
-  auth: new AuthApiService(),
-  users: new UsersApiService(),
-  notifications: new NotificationsApiService(),
-  webhooks: new WebhooksApiService(),
-  apiKeys: new ApiKeysApiService(),
   rateTables: new RateTablesApiService(),
   feeAgreements: new FeeAgreementsApiService(),
+  
+  // Discovery Services
   custodians: new CustodiansApiService(),
   examinations: new ExaminationsApiService(),
+  
+  // Auth & User Services
+  auth: new AuthApiService(),
+  users: new UsersApiService(),
+  
+  // Communications
+  notifications: new NotificationsApiService(),
+  
+  // Admin Services
+  webhooks: new WebhooksApiService(),
+  apiKeys: new ApiKeysApiService(),
+};
+
+// Re-export extended services for convenience
+export { extendedApiServices } from './apiServicesExtended';
+export { discoveryApiServices } from './apiServicesDiscovery';
+export { complianceApiServices } from './apiServicesCompliance';
+
+/**
+ * Unified API service export - combines all API services
+ * Use this for comprehensive backend integration
+ */
+export const getAllApiServices = () => {
+  // Lazy load to avoid circular dependencies
+  const { extendedApiServices } = require('./apiServicesExtended');
+  const { discoveryApiServices } = require('./apiServicesDiscovery');
+  const { complianceApiServices } = require('./apiServicesCompliance');
+  
+  return {
+    ...apiServices,
+    ...extendedApiServices,
+    ...discoveryApiServices,
+    ...complianceApiServices,
+  };
 };

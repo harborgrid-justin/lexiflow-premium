@@ -10,12 +10,15 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseFilterDto } from './dto/expense-filter.dto';
 import { Expense } from './entities/expense.entity';
 
+@ApiTags('Billing - Expenses')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/billing/expenses')
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}

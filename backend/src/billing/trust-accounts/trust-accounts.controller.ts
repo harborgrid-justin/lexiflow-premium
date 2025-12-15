@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TrustAccountsService } from './trust-accounts.service';
 import { CreateTrustAccountDto } from './dto/create-trust-account.dto';
 import { UpdateTrustAccountDto } from './dto/update-trust-account.dto';
@@ -17,6 +18,8 @@ import { DepositDto, WithdrawalDto, CreateTransactionDto } from './dto/trust-tra
 import { TrustAccount, TrustAccountStatus } from './entities/trust-account.entity';
 import { TrustTransaction } from './entities/trust-transaction.entity';
 
+@ApiTags('Billing - Trust Accounts')
+@ApiBearerAuth('JWT-auth')
 @Controller('api/v1/billing/trust-accounts')
 export class TrustAccountsController {
   constructor(private readonly trustAccountsService: TrustAccountsService) {}

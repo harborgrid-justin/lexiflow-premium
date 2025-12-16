@@ -35,7 +35,7 @@ import { LazyLoader } from '../common/LazyLoader';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { PLEADING_BUILDER_TAB_CONFIG } from '../../config/pleadingBuilderConfig';
+import { PLEADING_BUILDER_TAB_CONFIG } from '../../config/tabs.config';
 import { IdGenerator } from '../../utils/idGenerator';
 import { validateTemplate } from '../../utils/validation';
 

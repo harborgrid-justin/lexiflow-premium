@@ -26,7 +26,7 @@ import { useTheme } from '@context/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@utils/cn';
-import { DATA_PLATFORM_MENU } from '@config/dataPlatformMenu';
+import { DATA_PLATFORM_MENU } from '@config/tabs.config';
 
 // Types
 import { PlatformView } from '../../components/admin/data/AdminDatabaseControl';

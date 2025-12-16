@@ -27,7 +27,7 @@ import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { COMPLIANCE_TAB_CONFIG } from '../../config/complianceDashboardConfig';
+import { COMPLIANCE_TAB_CONFIG } from '../../config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

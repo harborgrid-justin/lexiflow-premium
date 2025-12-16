@@ -7,6 +7,7 @@ import { useChartTheme } from '../../common/ChartHelpers';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 import { Loader2 } from 'lucide-react';
 
 // Map theme colors to chart

@@ -15,7 +15,7 @@ import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
 import { STORES } from '../../services/db';
 import { cn } from '../../utils/cn';
-import { CRM_TAB_CONFIG, CRMView } from '../../config/crmConfig';
+import { CRM_TAB_CONFIG, CRMView } from '../../config/tabs.config';
 import { ClientCRMContent } from './ClientCRMContent';
 
 interface ClientCRMProps {

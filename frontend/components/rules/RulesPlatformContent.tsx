@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { RulesView } from '../../config/rulesPlatformConfig';
+import { RulesView } from '../../config/tabs.config';
 import { LazyLoader } from '../common/LazyLoader';
 
 // Sub-components

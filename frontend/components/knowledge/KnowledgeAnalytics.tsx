@@ -21,6 +21,7 @@ import { BookOpen, Users, TrendingUp, Search } from 'lucide-react';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

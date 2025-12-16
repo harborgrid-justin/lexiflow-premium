@@ -9,6 +9,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { ActionRow } from '../common/RefactoredCommon';

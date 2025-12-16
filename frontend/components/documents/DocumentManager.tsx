@@ -30,7 +30,7 @@ import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../config/documentManagerConfig';
+import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../config/tabs.config';
 
 // Types
 import { UserRole } from '../../types';

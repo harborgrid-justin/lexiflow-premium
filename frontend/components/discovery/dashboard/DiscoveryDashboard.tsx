@@ -8,6 +8,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 import DiscoveryMetrics from './DiscoveryMetrics';
 import DiscoveryCharts from './DiscoveryCharts';
 import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';

@@ -39,7 +39,7 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { CASE_LIST_TAB_CONFIG } from '../../config/caseListConfig';
+import { CASE_LIST_TAB_CONFIG } from '../../config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

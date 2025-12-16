@@ -31,7 +31,7 @@ import { useEvidenceVault, ViewMode } from '../../hooks/useEvidenceVault';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Config & Types
-import { EVIDENCE_PARENT_TABS } from '../../config/evidenceVaultConfig';
+import { EVIDENCE_PARENT_TABS } from '../../config/tabs.config';
 import { EvidenceItem } from '../../types';
 
 const EvidenceDetail = lazy(() => import('./EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));

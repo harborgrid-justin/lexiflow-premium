@@ -36,6 +36,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { DataService } from '../../services/dataService';
 import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES

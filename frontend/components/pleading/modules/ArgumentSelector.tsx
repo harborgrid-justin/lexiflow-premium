@@ -4,6 +4,7 @@ import { Target, GripVertical, CheckCircle, ArrowRight } from 'lucide-react';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 import { Case, LegalArgument } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -17,7 +18,7 @@ export const ArgumentSelector: React.FC<ArgumentSelectorProps> = ({ caseId, onIn
   const { theme } = useTheme();
 
   const { data: caseData } = useQuery<Case>(
-    [STORES.CASES, caseId],
+    queryKeys.cases.detail(caseId),
     () => DataService.cases.getById(caseId)
   );
 

@@ -12,7 +12,7 @@ import {
   LayoutTemplate, FileSignature, Eraser, Cpu, Box, Plus, BookOpen, 
   GraduationCap, Library, Send, Search, Scale, Gavel, Map, Settings, 
   GitCompare, Briefcase, UserPlus, BrainCircuit, TrendingUp, Wallet, 
-  ShieldCheck, Link
+  ShieldCheck, Link, Server, Bookmark
 } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 import { PlatformView } from '../components/admin/data/AdminDatabaseControl';

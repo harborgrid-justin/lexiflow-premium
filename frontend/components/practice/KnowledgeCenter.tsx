@@ -20,6 +20,7 @@ import { BookOpen, FileText, GraduationCap, Users, BarChart3 } from 'lucide-reac
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

@@ -13,7 +13,9 @@ import { useWindow } from '../../context/WindowContext';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { AuditLogControls } from './audit/AuditLogControls';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
 
 interface AdminAuditLogProps {
   // logs prop is removed; component will fetch its own data.
@@ -36,7 +38,6 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
       setLocalLogs(logs as unknown as ChainedLogEntry[]);
   }, [logs]);
 
-  import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
   const handleVerifyChain = async () => {
       setIsVerifying(true);
       await new Promise(r => setTimeout(r, DEBUG_API_SIMULATION_DELAY_MS));

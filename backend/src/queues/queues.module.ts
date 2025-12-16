@@ -7,14 +7,10 @@ import { ReportProcessorService } from './processors/report-processor.service';
 import { NotificationProcessorService } from './processors/notification-processor.service';
 import { BackupProcessorService } from './processors/backup-processor.service';
 import { QueueErrorHandlerService } from './services/queue-error-handler.service';
+import { QUEUE_NAMES } from './constants';
 
-export const QUEUE_NAMES = {
-  DOCUMENT_PROCESSING: 'document-processing',
-  EMAIL: 'email',
-  REPORTS: 'reports',
-  NOTIFICATIONS: 'notifications',
-  BACKUP: 'backup',
-};
+// Re-export for use in other modules
+export { QUEUE_NAMES };
 
 @Module({
   imports: [

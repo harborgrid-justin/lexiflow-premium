@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { QUEUE_NAMES } from '../queues.module';
+import { QUEUE_NAMES } from '../constants';
 
 /**
  * Global error handler for Bull queues
@@ -304,7 +304,7 @@ export class QueueErrorHandlerService implements OnModuleInit {
    * Get statistics for all queues
    */
   async getAllQueueStats() {
-    const queueNames = Object.values(QUEUE_NAMES);
+    const queueNames = Object.values(QUEUE_NAMES) as string[];
     const stats = await Promise.all(
       queueNames.map((name) => this.getQueueStats(name)),
     );

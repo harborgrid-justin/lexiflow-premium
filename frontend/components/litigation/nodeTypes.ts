@@ -1,54 +1,17 @@
 /**
  * nodeTypes.ts
  * 
- * Type-safe discriminated union types for workflow nodes.
- * Provides proper typing for node-specific configuration.
+ * Re-exports shared workflow node types from central location.
+ * Maintains backward compatibility for component imports.
  * 
  * @module components/litigation/nodeTypes
  */
 
-import { NodeType, Port } from '../workflow/builder/types';
+export * from '../../types/workflow-types';
 
-/**
- * Base node properties shared by all node types
- */
-interface BaseNodeProps {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-  width?: number;
-  height?: number;
-  parentId?: string;
-  linkedEntityId?: string;
-  status?: 'complete' | 'in_progress' | 'blocked';
-}
+// Component-specific extensions can be added below if needed
+import { BaseNodeProps, Port, NodeType } from '../../types/workflow-types';
 
-/**
- * Start Node - Entry point of workflow
- */
-export interface StartNode extends BaseNodeProps {
-  type: 'Start';
-  config: {
-    description?: string;
-    triggerCondition?: string;
-  };
-}
-
-/**
- * End Node - Exit point of workflow
- */
-export interface EndNode extends BaseNodeProps {
-  type: 'End';
-  config: {
-    outcome?: 'success' | 'failure' | 'settled';
-    description?: string;
-  };
-}
-
-/**
- * Task Node - Standard work item
- */
 export interface TaskNode extends BaseNodeProps {
   type: 'Task';
   config: {
@@ -159,70 +122,10 @@ export interface CommentNode extends BaseNodeProps {
 }
 
 /**
- * Discriminated Union of all node types
- * This provides compile-time type safety for node operations
+ * Default config factory for each node type (component-specific)
  */
-export type TypedWorkflowNode = 
-  | StartNode 
-  | EndNode 
-  | TaskNode 
-  | DecisionNode 
-  | PhaseNode 
-  | EventNode 
-  | MilestoneNode 
-  | DelayNode 
-  | ParallelNode 
-  | CommentNode;
-
-/**
- * Type guard to check node type
- */
-export function isNodeOfType<T extends TypedWorkflowNode['type']>(
-  node: TypedWorkflowNode,
-  type: T
-): node is Extract<TypedWorkflowNode, { type: T }> {
-  return node.type === type;
-}
-
-/**
- * Helper to create a properly typed node
- */
-export function createTypedNode<T extends NodeType>(
-  type: T,
-  id: string,
-  label: string,
-  x: number,
-  y: number,
-  config: Extract<TypedWorkflowNode, { type: T }>['config'] = {} as any
-): Extract<TypedWorkflowNode, { type: T }> {
-  return {
-    id,
-    type,
-    label,
-    x,
-    y,
-    config,
-  } as Extract<TypedWorkflowNode, { type: T }>;
-}
-
-/**
- * Type-safe node config getter
- * Returns any config type since discriminated unions make precise typing complex
- */
-export function getNodeConfig<T extends NodeType>(
-  node: TypedWorkflowNode,
-  type: T
-): any {
-  if (isNodeOfType(node, type)) {
-    return node.config;
-  }
-  return null;
-}
-
-/**
- * Default config factory for each node type
- */
-export const DEFAULT_NODE_CONFIG: Record<NodeType, Partial<TypedWorkflowNode['config']>> = {
+import { StartNode, EndNode } from '../../types/workflow-types';
+export const DEFAULT_NODE_CONFIG: Record<NodeType, any> = {
   Start: { description: 'Workflow start point' },
   End: { outcome: 'success', description: 'Workflow end point' },
   Task: { priority: 'Medium', estimatedHours: 8, checklist: [] },

@@ -7,9 +7,8 @@
  * @module services/graphValidationService
  */
 
-import { TypedWorkflowNode } from '../components/litigation/nodeTypes';
-import { WorkflowConnection } from '../components/workflow/builder/types';
-import { VALIDATION_MESSAGES, CANVAS_CONSTANTS } from '../components/litigation/canvasConstants';
+import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
+import { VALIDATION_MESSAGES, CANVAS_CONSTANTS } from '@/types/canvas-constants';
 
 /**
  * Validation result interface
@@ -285,7 +284,7 @@ export class GraphValidationService {
 
       // Validate child nodes exist
       const existingNodeIds = new Set(nodes.map(n => n.id));
-      const missingChildren = childNodes.filter(id => !existingNodeIds.has(id));
+      const missingChildren = childNodes.filter((id: string) => !existingNodeIds.has(id));
 
       if (missingChildren.length > 0) {
         warnings.push({

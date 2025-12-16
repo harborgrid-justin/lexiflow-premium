@@ -29,7 +29,7 @@ import { cn } from '@utils/cn';
 import { DATA_PLATFORM_MENU } from '@config/dataPlatformMenu';
 
 // Types
-import { PlatformView } from '../AdminDatabaseControl';
+import { PlatformView } from '../../components/admin/data/AdminDatabaseControl';
 
 // ========================================
 // TYPES & INTERFACES

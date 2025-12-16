@@ -19,6 +19,26 @@ export { UsersApiService } from './api/users-api';
 export { WebhooksApiService } from './api/webhooks-api';
 
 /**
+ * Aggregated API services object for convenience
+ */
+export const apiServices = {
+  apiKeys: new ApiKeysApiService(),
+  auth: new AuthApiService(),
+  billing: new BillingApiService(),
+  cases: new CasesApiService(),
+  custodians: new CustodiansApiService(),
+  docket: new DocketApiService(),
+  documents: new DocumentsApiService(),
+  evidence: new EvidenceApiService(),
+  examinations: new ExaminationsApiService(),
+  feeAgreements: new FeeAgreementsApiService(),
+  notifications: new NotificationsApiService(),
+  rateTables: new RateTablesApiService(),
+  users: new UsersApiService(),
+  webhooks: new WebhooksApiService(),
+};
+
+/**
  * Check if backend API mode is enabled
  * @returns true if backend API should be used instead of IndexedDB
  */

@@ -115,7 +115,7 @@ export const FeeAgreementManagement: React.FC = () => {
       case 'Pending Signature': return 'warning';
       case 'Draft': return 'info';
       case 'Suspended': case 'Terminated': return 'error';
-      default: return 'default';
+      default: return 'neutral';
     }
   };
 

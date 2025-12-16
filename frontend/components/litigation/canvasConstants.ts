@@ -1,16 +1,20 @@
 /**
  * canvasConstants.ts
  * 
- * Centralized constants for Strategy Canvas dimensions, timing, and positioning.
- * Extracted magic numbers for better maintainability and consistency.
+ * Re-exports shared canvas constants from central location.
+ * Maintains backward compatibility for component imports.
  * 
  * @module components/litigation/canvasConstants
  */
 
-/**
- * Canvas Layout Constants
- */
-export const CANVAS_CONSTANTS = {
+export * from '../../types/canvas-constants';
+
+// Import for use in component-specific constants below
+import { CANVAS_CONSTANTS } from '../../types/canvas-constants';
+
+// Component-specific constants can be added below
+/** @deprecated Use CANVAS_CONSTANTS instead */
+const LEGACY_CANVAS_CONSTANTS = {
   // Node Dimensions
   NODE_WIDTH_HALF: 75,          // Half width for positioning calculations
   NODE_HEIGHT_HALF: 40,         // Half height for positioning calculations
@@ -98,34 +102,4 @@ export const NODE_DURATION_MAP = {
   Comment: 0,
 } as const;
 
-/**
- * Keyboard Shortcuts
- */
-export const KEYBOARD_SHORTCUTS = {
-  UNDO: 'ctrl+z',
-  REDO: 'ctrl+shift+z',
-  DELETE: 'delete',
-  COPY: 'ctrl+c',
-  PASTE: 'ctrl+v',
-  DUPLICATE: 'ctrl+d',
-  SELECT_ALL: 'ctrl+a',
-  ZOOM_IN: 'ctrl+=',
-  ZOOM_OUT: 'ctrl+-',
-  ZOOM_RESET: 'ctrl+0',
-  SAVE: 'ctrl+s',
-} as const;
-
-/**
- * Validation Messages
- */
-export const VALIDATION_MESSAGES = {
-  NO_START_NODE: 'Strategy must have a Start node',
-  NO_END_NODE: 'Strategy must have an End node',
-  DISCONNECTED_NODES: 'Some nodes are not connected to the main flow',
-  CIRCULAR_DEPENDENCY: 'Circular dependencies detected in workflow',
-  MISSING_CASE_SELECTION: 'Please select a target case before deployment',
-  MAX_NODES_EXCEEDED: `Strategy cannot exceed ${CANVAS_CONSTANTS.MAX_NODES} nodes`,
-  MAX_CONNECTIONS_EXCEEDED: `Strategy cannot exceed ${CANVAS_CONSTANTS.MAX_CONNECTIONS} connections`,
-  INVALID_CONNECTION: 'Invalid connection between nodes',
-  DUPLICATE_CONNECTION: 'Connection already exists',
-} as const;
+// All KEYBOARD_SHORTCUTS and VALIDATION_MESSAGES are now exported from shared constants above

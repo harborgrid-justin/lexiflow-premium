@@ -20,14 +20,18 @@ import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+import { useMutation, queryClient } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
 
 // Types & Interfaces
 import { Citation, LegalArgument, Defense, EvidenceItem } from '../../types';
 
 interface CaseStrategyProps {
+  caseId: string;
   citations?: Citation[];
   arguments?: LegalArgument[];
   defenses?: Defense[];
@@ -35,12 +39,14 @@ interface CaseStrategyProps {
 }
 
 export const CaseStrategy: React.FC<CaseStrategyProps> = ({ 
+  caseId,
   citations: initialCitations = [], 
   arguments: initialArgs = [], 
   defenses: initialDefenses = [],
   evidence = []
 }) => {
   const { theme } = useTheme();
+  const { success, error: notifyError } = useNotify();
   const [citations, setCitations] = useState(initialCitations);
   const [args, setArgs] = useState(initialArgs);
   const [defenses, setDefenses] = useState(initialDefenses);
@@ -48,18 +54,131 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'Citation' | 'Argument' | 'Defense'>('Citation');
   const [newItem, setNewItem] = useState<any>({});
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{type: string; id: string} | null>(null);
+
+  // Mutation for saving strategy items
+  const { mutate: saveStrategyItem, isLoading: isSaving } = useMutation(
+    async ({ type, item }: { type: string; item: any }) => {
+      const itemWithMeta = {
+        ...item,
+        type,
+        caseId,
+        userId: 'current-user',
+        createdAt: item.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      if (editingItem) {
+        return await DataService.strategy.update(item.id, itemWithMeta);
+      } else {
+        return await DataService.strategy.add(itemWithMeta);
+      }
+    },
+    {
+      onSuccess: (data, variables) => {
+        success(`${variables.type} ${editingItem ? 'updated' : 'saved'} successfully`);
+        queryClient.invalidate(['case-strategy', caseId]);
+      },
+      onError: (error: Error) => {
+        notifyError(`Failed to save: ${error.message}`);
+      }
+    }
+  );
+
+  // Mutation for deleting strategy items
+  const { mutate: deleteStrategyItem } = useMutation(
+    async ({ type, id }: { type: string; id: string }) => {
+      await DataService.strategy.delete(id, type as 'Argument' | 'Defense' | 'Citation');
+      return { type, id };
+    },
+    {
+      onSuccess: (data) => {
+        success(`${data.type} deleted successfully`);
+        queryClient.invalidate(['case-strategy', caseId]);
+        
+        // Update local state
+        if (data.type === 'Citation') {
+          setCitations(citations.filter(c => c.id !== data.id));
+        } else if (data.type === 'Argument') {
+          setArgs(args.filter(a => a.id !== data.id));
+        } else {
+          setDefenses(defenses.filter(d => d.id !== data.id));
+        }
+        
+        setIsDeleteConfirmOpen(false);
+        setItemToDelete(null);
+      },
+      onError: (error: Error) => {
+        notifyError(`Failed to delete: ${error.message}`);
+      }
+    }
+  );
 
   const handleSave = () => {
-    const id = `${Date.now()}`;
-    if (modalType === 'Citation') {
-      setCitations([...citations, { ...newItem, id, relevance: 'Medium' }]);
-    } else if (modalType === 'Argument') {
-      setArgs([...args, { ...newItem, id, strength: 50, status: 'Draft', relatedCitationIds: [], relatedEvidenceIds: [] }]);
-    } else {
-      setDefenses([...defenses, { ...newItem, id, status: 'Asserted' }]);
+    if (!newItem.title && !newItem.citation) {
+      notifyError('Title/Citation is required');
+      return;
     }
+
+    const id = editingItem?.id || crypto.randomUUID();
+    let itemToSave: any;
+
+    if (modalType === 'Citation') {
+      itemToSave = { ...newItem, id, relevance: newItem.relevance || 'Medium' as const };
+      if (editingItem) {
+        setCitations(citations.map(c => c.id === id ? itemToSave : c));
+      } else {
+        setCitations([...citations, itemToSave]);
+      }
+    } else if (modalType === 'Argument') {
+      itemToSave = { 
+        ...newItem, 
+        id, 
+        strength: newItem.strength || 50, 
+        status: newItem.status || 'Draft' as const, 
+        relatedCitationIds: newItem.relatedCitationIds || [], 
+        relatedEvidenceIds: newItem.relatedEvidenceIds || [] 
+      };
+      if (editingItem) {
+        setArgs(args.map(a => a.id === id ? itemToSave : a));
+      } else {
+        setArgs([...args, itemToSave]);
+      }
+    } else {
+      itemToSave = { ...newItem, id, status: newItem.status || 'Asserted' as const, type: newItem.type || 'Affirmative' };
+      if (editingItem) {
+        setDefenses(defenses.map(d => d.id === id ? itemToSave : d));
+      } else {
+        setDefenses([...defenses, itemToSave]);
+      }
+    }
+
+    // Persist to DataService
+    saveStrategyItem({ type: modalType, item: itemToSave });
+    
     setIsModalOpen(false);
     setNewItem({});
+    setEditingItem(null);
+  };
+
+  const handleEdit = (type: 'Citation' | 'Argument' | 'Defense', item: any) => {
+    setModalType(type);
+    setEditingItem(item);
+    setNewItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (type: 'Citation' | 'Argument' | 'Defense', id: string) => {
+    setItemToDelete({ type, id });
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      deleteStrategyItem(itemToDelete);
+    }
   };
 
   return (
@@ -85,6 +204,8 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             colorClass={theme.text.link}
             evidence={evidence}
             citations={citations}
+            onEdit={(item) => handleEdit('Argument', item)}
+            onDelete={(id) => handleDelete('Argument', id)}
         />
         <StrategySection 
             title="Defenses" 
@@ -92,6 +213,8 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             type="Defense" 
             icon={Shield} 
             colorClass={theme.status.warning.text}
+            onEdit={(item) => handleEdit('Defense', item)}
+            onDelete={(id) => handleDelete('Defense', id)}
         />
         <StrategySection 
             title="Authority" 
@@ -99,10 +222,12 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             type="Citation" 
             icon={Scale} 
             colorClass={theme.action.primary.text}
+            onEdit={(item) => handleEdit('Citation', item)}
+            onDelete={(id) => handleDelete('Citation', id)}
         />
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`Add ${modalType}`}>
+      <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditingItem(null); setNewItem({}); }} title={`${editingItem ? 'Edit' : 'Add'} ${modalType}`}>
         <div className="p-6 space-y-4">
             <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={e => setNewItem({...newItem, title: e.target.value, citation: e.target.value})} />
             
@@ -119,9 +244,27 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
             <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={e => setNewItem({...newItem, description: e.target.value})} />
             
-            <div className={cn("flex justify-end pt-4 border-t", theme.border.default)}>
-                <Button variant="primary" onClick={handleSave}>Save {modalType}</Button>
+            <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
+                <Button variant="ghost" onClick={() => { setIsModalOpen(false); setEditingItem(null); setNewItem({}); }}>Cancel</Button>
+                <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+                  {isSaving ? 'Saving...' : `${editingItem ? 'Update' : 'Save'} ${modalType}`}
+                </Button>
             </div>
+        </div>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={isDeleteConfirmOpen} onClose={() => setIsDeleteConfirmOpen(false)} title="Confirm Delete">
+        <div className="p-6">
+          <p className={cn("text-sm mb-6", theme.text.primary)}>
+            Are you sure you want to delete this {itemToDelete?.type?.toLowerCase()}? This action cannot be undone.
+          </p>
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" onClick={() => setIsDeleteConfirmOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={confirmDelete} className="bg-red-600 hover:bg-red-700 border-transparent">
+              Delete
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>

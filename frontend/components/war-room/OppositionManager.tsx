@@ -32,6 +32,7 @@ import { SearchToolbar } from '../common/SearchToolbar';
 import { OppositionSidebar } from './opposition/OppositionSidebar';
 import { OppositionList, OppositionEntity } from './opposition/OppositionList';
 import { OppositionDetail } from './opposition/OppositionDetail';
+import { Modal } from '../common/Modal';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -61,6 +62,10 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<OppositionEntity | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterRole, setFilterRole] = useState<string>('all');
+  const [filterFirm, setFilterFirm] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
 
   // ============================================================================
   // DATA FETCHING
@@ -73,15 +78,30 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   // ============================================================================
   // DERIVED STATE
   // ============================================================================
-  const filteredEntities = oppositionData.filter(ent => {
-    const matchesCategory = activeCategory === 'All' || 
-                            (activeCategory === 'Counsel' && (ent.role === 'Lead Counsel' || ent.role === 'Co-Counsel')) ||
-                            (activeCategory === 'Parties' && ent.role === 'Defendant') ||
-                            (activeCategory === 'Experts' && ent.role === 'Opposing Expert');
-    const matchesSearch = ent.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          ent.firm.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredEntities = React.useMemo(() => {
+    let result = oppositionData.filter(ent => {
+      const matchesCategory = activeCategory === 'All' || 
+                              (activeCategory === 'Counsel' && ent.role.includes('Counsel')) ||
+                              (activeCategory === 'Parties' && ent.role === 'Defendant') ||
+                              (activeCategory === 'Experts' && ent.role === 'Opposing Expert');
+      const matchesSearch = ent.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            ent.firm.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+
+    // Apply filters
+    if (filterRole !== 'all') {
+      result = result.filter(ent => ent.role === filterRole);
+    }
+    if (filterFirm !== 'all') {
+      result = result.filter(ent => ent.firm === filterFirm);
+    }
+    if (filterStatus !== 'all') {
+      result = result.filter(ent => ent.status === filterStatus);
+    }
+
+    return result;
+  }, [oppositionData, activeCategory, searchTerm, filterRole, filterFirm, filterStatus]);
 
   const handleSelectEntity = (entity: OppositionEntity) => {
     setSelectedEntity(entity);
@@ -105,7 +125,14 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
             />
         </div>
         <div className="flex gap-2">
-            <Button variant="secondary" icon={Filter} onClick={() => {}} className="hidden sm:flex">Filter</Button>
+            <Button 
+                variant={isFilterOpen ? "primary" : "secondary"} 
+                icon={Filter} 
+                onClick={() => setIsFilterOpen(!isFilterOpen)} 
+                className="hidden sm:flex"
+            >
+                Filter
+            </Button>
             <Button 
                 variant={isInspectorOpen ? "primary" : "secondary"} 
                 icon={Layout} 
@@ -148,6 +175,63 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
             />
         )}
       </div>
+
+      {/* Filter Modal */}
+      <Modal isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} title="Filter Opposition">
+        <div className="p-6 space-y-4">
+          <div>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
+            <select 
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
+              value={filterRole}
+              onChange={e => setFilterRole(e.target.value)}
+            >
+              <option value="all">All Roles</option>
+              <option value="Lead Counsel">Lead Counsel</option>
+              <option value="Associate Counsel">Associate Counsel</option>
+              <option value="Defendant">Defendant</option>
+              <option value="Opposing Expert">Opposing Expert</option>
+            </select>
+          </div>
+
+          <div>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Firm</label>
+            <select 
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
+              value={filterFirm}
+              onChange={e => setFilterFirm(e.target.value)}
+            >
+              <option value="all">All Firms</option>
+              <option value="Morrison & Foerster LLP">Morrison & Foerster LLP</option>
+              <option value="Baker McKenzie">Baker McKenzie</option>
+              <option value="Jones Day">Jones Day</option>
+            </select>
+          </div>
+
+          <div>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
+            <select 
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
+              value={filterStatus}
+              onChange={e => setFilterStatus(e.target.value)}
+            >
+              <option value="all">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Retained">Retained</option>
+              <option value="Monitoring">Monitoring</option>
+            </select>
+          </div>
+
+          <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
+            <Button variant="ghost" onClick={() => { setFilterRole('all'); setFilterFirm('all'); setFilterStatus('all'); }}>
+              Clear Filters
+            </Button>
+            <Button variant="primary" onClick={() => setIsFilterOpen(false)}>
+              Apply
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

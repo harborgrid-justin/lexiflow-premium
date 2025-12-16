@@ -10,14 +10,16 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
-import { Filter, SlidersHorizontal, Download, RefreshCcw } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSpreadsheet, FileText } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
+import { queryClient } from '../../services/queryClient';
 
 // Components
 import { Button } from '../common/Button';
@@ -52,6 +54,153 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   statusFilter, setStatusFilter, typeFilter, setTypeFilter, resetFilters
 }) => {
   const { theme } = useTheme();
+  const { success, error: notifyError } = useNotify();
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const exportMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+        setShowExportMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSync = async () => {
+    try {
+      setIsSyncing(true);
+      await queryClient.invalidate(['cases']);
+      success('Cases synced successfully');
+    } catch (err) {
+      notifyError('Failed to sync cases');
+      console.error('Sync error:', err);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+      const cases = queryClient.getQueryState(['cases'])?.data as any[] || [];
+      
+      // Filter cases based on current filters
+      const filteredCases = cases.filter(c => {
+        const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
+        const matchesType = typeFilter === 'All' || c.type === typeFilter;
+        return matchesStatus && matchesType;
+      });
+
+      // Create CSV content
+      const headers = ['Case Number', 'Title', 'Status', 'Type', 'Client', 'Created Date'];
+      const rows = filteredCases.map(c => [
+        c.caseNumber || '',
+        c.title || '',
+        c.status || '',
+        c.type || '',
+        c.clientName || '',
+        c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ''
+      ]);
+      
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+
+      // Create and download file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `cases-export-${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      success(`Exported ${filteredCases.length} case(s) to CSV`);
+    } catch (err) {
+      notifyError('Failed to export cases');
+      console.error('Export error:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      setIsExporting(true);
+      setShowExportMenu(false);
+      const cases = queryClient.getQueryState(['cases'])?.data as any[] || [];
+      
+      // Filter cases based on current filters
+      const filteredCases = cases.filter(c => {
+        const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
+        const matchesType = typeFilter === 'All' || c.type === typeFilter;
+        return matchesStatus && matchesType;
+      });
+
+      // Create Excel-compatible XML structure (SpreadsheetML)
+      const headers = ['Case Number', 'Title', 'Status', 'Type', 'Client', 'Created Date', 'Lead Attorney', 'Court', 'Judge'];
+      
+      let xmlContent = `<?xml version="1.0"?>\n`;
+      xmlContent += `<?mso-application progid="Excel.Sheet"?>\n`;
+      xmlContent += `<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\n`;
+      xmlContent += `  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n`;
+      xmlContent += `  <Worksheet ss:Name="Cases">\n`;
+      xmlContent += `    <Table>\n`;
+      
+      // Header row
+      xmlContent += `      <Row>\n`;
+      headers.forEach(header => {
+        xmlContent += `        <Cell><Data ss:Type="String">${header}</Data></Cell>\n`;
+      });
+      xmlContent += `      </Row>\n`;
+      
+      // Data rows
+      filteredCases.forEach(c => {
+        xmlContent += `      <Row>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.caseNumber || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.title || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.status || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.type || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.clientName || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.leadAttorney || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.court || ''}</Data></Cell>\n`;
+        xmlContent += `        <Cell><Data ss:Type="String">${c.judge || ''}</Data></Cell>\n`;
+        xmlContent += `      </Row>\n`;
+      });
+      
+      xmlContent += `    </Table>\n`;
+      xmlContent += `  </Worksheet>\n`;
+      xmlContent += `</Workbook>`;
+
+      // Create and download file
+      const blob = new Blob([xmlContent], { type: 'application/vnd.ms-excel' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `cases-export-${new Date().toISOString().split('T')[0]}.xls`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      success(`Exported ${filteredCases.length} case(s) to Excel`);
+    } catch (err) {
+      notifyError('Failed to export to Excel');
+      console.error('Excel export error:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <div className={cn("p-3 rounded-lg border shadow-sm flex flex-col md:flex-row gap-3 items-center sticky top-0 z-20", theme.surface.default, theme.border.default)}>
@@ -96,8 +245,64 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
         <div className="flex-1"></div>
 
         <div className="flex items-center gap-2 w-full md:w-auto">
-          <Button variant="ghost" size="sm" icon={RefreshCcw} onClick={() => {}} className={theme.text.secondary}>Sync</Button>
-          <Button variant="outline" size="sm" icon={Download} onClick={() => {}}>Export</Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            icon={RefreshCcw} 
+            onClick={handleSync} 
+            disabled={isSyncing}
+            className={theme.text.secondary}
+          >
+            {isSyncing ? 'Syncing...' : 'Sync'}
+          </Button>
+          
+          {/* Export Dropdown */}
+          <div className="relative" ref={exportMenuRef}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              icon={Download} 
+              onClick={() => setShowExportMenu(!showExportMenu)}
+              disabled={isExporting}
+              className="flex items-center gap-1"
+            >
+              {isExporting ? 'Exporting...' : 'Export'}
+              <ChevronDown className="h-3 w-3" />
+            </Button>
+            
+            {showExportMenu && !isExporting && (
+              <div className={cn(
+                "absolute right-0 mt-1 w-48 rounded-lg shadow-lg border z-50",
+                theme.surface.default,
+                theme.border.default
+              )}>
+                <div className="py-1">
+                  <button
+                    onClick={handleExport}
+                    className={cn(
+                      "w-full px-4 py-2 text-left text-sm flex items-center gap-2 transition-colors",
+                      theme.text.primary,
+                      `hover:${theme.surface.highlight}`
+                    )}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Export as CSV
+                  </button>
+                  <button
+                    onClick={handleExportExcel}
+                    className={cn(
+                      "w-full px-4 py-2 text-left text-sm flex items-center gap-2 transition-colors",
+                      theme.text.primary,
+                      `hover:${theme.surface.highlight}`
+                    )}
+                  >
+                    <FileSpreadsheet className="h-4 w-4" />
+                    Export as Excel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
   );

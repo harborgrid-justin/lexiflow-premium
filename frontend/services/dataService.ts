@@ -145,6 +145,52 @@ export const DataService = {
   
   analysis: new AnalysisRepository(),
 
+  // Strategy Management (Arguments, Defenses, Citations)
+  strategy: {
+    getAll: async (caseId: string, type?: 'Argument' | 'Defense' | 'Citation') => {
+      const [args, defs, cits] = await Promise.all([
+        db.getAll<any>(STORES.CASE_STRATEGIES),
+        db.getAll<any>(STORES.CASE_STRATEGIES),
+        db.getAll<Citation>(STORES.CITATIONS)
+      ]);
+      if (type === 'Argument') return args.filter((s: any) => s.type === 'Argument' && s.caseId === caseId);
+      if (type === 'Defense') return defs.filter((s: any) => s.type === 'Defense' && s.caseId === caseId);
+      if (type === 'Citation') return cits.filter((c: any) => c.caseId === caseId);
+      return [...args, ...defs, ...cits].filter((s: any) => s.caseId === caseId);
+    },
+    add: async (item: any) => {
+      const newItem = { ...item, id: item.id || crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+      await db.put(item.type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES, newItem);
+      return newItem;
+    },
+    update: async (id: string, updates: any) => {
+      const store = updates.type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES;
+      const item = await db.get<any>(store, id);
+      if (!item) throw new Error('Strategy item not found');
+      const updated = { ...item, ...updates, updatedAt: new Date().toISOString() };
+      await db.put(store, updated);
+      return updated;
+    },
+    delete: async (id: string, type: 'Argument' | 'Defense' | 'Citation') => {
+      const store = type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES;
+      await db.delete(store, id);
+      return { success: true, id };
+    }
+  },
+
+  // Billing Transactions
+  transactions: {
+    getAll: async (accountType?: 'Operating' | 'Trust') => {
+      const txs = await db.getAll<any>('transactions');
+      return accountType ? txs.filter((t: any) => t.account === accountType) : txs;
+    },
+    add: async (transaction: any) => {
+      const newTx = { ...transaction, id: transaction.id || crypto.randomUUID(), createdAt: new Date().toISOString() };
+      await db.put('transactions', newTx);
+      return newTx;
+    }
+  },
+
   tasks: useBackendApi ? finalApiServices.tasks : new class extends Repository<WorkflowTask> { 
       constructor() { super(STORES.TASKS); }
       getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
@@ -303,7 +349,19 @@ export const DataService = {
       },
       getAdvisors: async (caseId?: string) => {
           const all = await db.getAll<any>(STORES.ADVISORS);
-          return caseId ? all.filter((a: any) => a.caseId === caseId) : all;
+          // Ensure all advisors have required filter fields
+          const enriched = all.map((a: any) => ({
+            ...a,
+            role: a.role || 'Consultant',
+            specialty: a.specialty || 'General',
+            status: a.status || 'Potential',
+            rate: a.rate || 0,
+            email: a.email || '',
+            phone: a.phone || '',
+            readiness: a.readiness || 0,
+            reports: a.reports || 0
+          }));
+          return caseId ? enriched.filter((a: any) => a.caseId === caseId) : enriched;
       },
       getExperts: async () => {
           const all = await db.getAll<any>(STORES.ADVISORS);
@@ -311,7 +369,20 @@ export const DataService = {
       },
       getOpposition: async (caseId?: string) => {
           const all = await db.getAll<any>(STORES.OPPOSITION);
-          return caseId ? all.filter((o: any) => o.caseId === caseId) : all;
+          // Ensure all opposition entities have required filter fields
+          const enriched = all.map((o: any) => ({
+            ...o,
+            role: o.role || 'Lead Counsel',
+            firm: o.firm || 'Unknown Firm',
+            status: o.status || 'Active',
+            aggression: o.aggression || 'Medium',
+            winRate: o.winRate || 0,
+            tendency: o.tendency || 'Unknown',
+            email: o.email || '',
+            phone: o.phone || '',
+            notes: o.notes || ''
+          }));
+          return caseId ? enriched.filter((o: any) => o.caseId === caseId) : enriched;
       }
   },
 

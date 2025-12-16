@@ -32,6 +32,7 @@ import { SearchToolbar } from '../common/SearchToolbar';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 import { AdvisorList, Advisor } from './advisory/AdvisorList';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
+import { Modal } from '../common/Modal';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -61,6 +62,10 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdvisor, setSelectedAdvisor] = useState<Advisor | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterRole, setFilterRole] = useState<string>('all');
+  const [filterSpecialty, setFilterSpecialty] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
 
   // ============================================================================
   // DATA FETCHING
@@ -73,15 +78,30 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // ============================================================================
   // DERIVED STATE
   // ============================================================================
-  const filteredAdvisors = advisors.filter(adv => {
-    const matchesCategory = activeCategory === 'All' || 
-                            (activeCategory === 'Experts' && adv.role === 'Expert Witness') ||
-                            (activeCategory === 'Consultants' && adv.role !== 'Expert Witness') ||
-                            (activeCategory === adv.specialty);
-    const matchesSearch = adv.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          adv.specialty.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredAdvisors = React.useMemo(() => {
+    let result = advisors.filter(adv => {
+      const matchesCategory = activeCategory === 'All' || 
+                              (activeCategory === 'Experts' && adv.role === 'Expert Witness') ||
+                              (activeCategory === 'Consultants' && adv.role !== 'Expert Witness') ||
+                              (activeCategory === adv.specialty);
+      const matchesSearch = adv.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            adv.specialty.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+
+    // Apply filters
+    if (filterRole !== 'all') {
+      result = result.filter(adv => adv.role === filterRole);
+    }
+    if (filterSpecialty !== 'all') {
+      result = result.filter(adv => adv.specialty === filterSpecialty);
+    }
+    if (filterStatus !== 'all') {
+      result = result.filter(adv => adv.status === filterStatus);
+    }
+
+    return result;
+  }, [advisors, activeCategory, searchTerm, filterRole, filterSpecialty, filterStatus]);
 
   const handleSelectAdvisor = (advisor: Advisor) => {
     setSelectedAdvisor(advisor);
@@ -105,7 +125,14 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
             />
         </div>
         <div className="flex gap-2">
-            <Button variant="secondary" icon={Filter} onClick={() => {}} className="hidden sm:flex">Filter</Button>
+            <Button 
+                variant={isFilterOpen ? "primary" : "secondary"} 
+                icon={Filter} 
+                onClick={() => setIsFilterOpen(!isFilterOpen)} 
+                className="hidden sm:flex"
+            >
+                Filter
+            </Button>
             <Button 
                 variant={isInspectorOpen ? "primary" : "secondary"} 
                 icon={Layout} 
@@ -147,6 +174,64 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
             />
         )}
       </div>
+
+      {/* Filter Modal */}
+      <Modal isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} title="Filter Advisors">
+        <div className="p-6 space-y-4">
+          <div>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
+            <select 
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
+              value={filterRole}
+              onChange={e => setFilterRole(e.target.value)}
+            >
+              <option value="all">All Roles</option>
+              <option value="Expert Witness">Expert Witness</option>
+              <option value="Consultant">Consultant</option>
+              <option value="Technical Advisor">Technical Advisor</option>
+            </select>
+          </div>
+
+          <div>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Specialty</label>
+            <select 
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
+              value={filterSpecialty}
+              onChange={e => setFilterSpecialty(e.target.value)}
+            >
+              <option value="all">All Specialties</option>
+              <option value="Medical">Medical</option>
+              <option value="Financial">Financial</option>
+              <option value="Forensic">Forensic</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Technology">Technology</option>
+            </select>
+          </div>
+
+          <div>
+            <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
+            <select 
+              className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
+              value={filterStatus}
+              onChange={e => setFilterStatus(e.target.value)}
+            >
+              <option value="all">All Statuses</option>
+              <option value="Retained">Retained</option>
+              <option value="Consulting">Consulting</option>
+              <option value="Potential">Potential</option>
+            </select>
+          </div>
+
+          <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
+            <Button variant="ghost" onClick={() => { setFilterRole('all'); setFilterSpecialty('all'); setFilterStatus('all'); }}>
+              Clear Filters
+            </Button>
+            <Button variant="primary" onClick={() => setIsFilterOpen(false)}>
+              Apply
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

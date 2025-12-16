@@ -97,6 +97,21 @@ export interface Invoice extends BaseEntity {
 export interface TrustTransaction extends BaseEntity { accountId: string; type: 'Deposit' | 'Withdrawal'; amount: Money; date: string; checkNumber?: string; clearedDate?: string; description: string; }
 export interface FirmExpense extends BaseEntity { date: string; category: string; description: string; amount: number; status: 'Paid' | 'Pending'; vendor: string; }
 export interface TrustSubLedger { id: string; name: string; balance: Money; lastReconciled: string; accountId?: string; }
+
+// Ledger Transaction with Receipt Support
+export interface LedgerTransaction extends BaseEntity {
+  account: 'Operating' | 'Trust' | 'Retainer';
+  type: 'Income' | 'Expense' | 'Deposit' | 'Withdrawal' | 'Transfer';
+  date: string;
+  amount: number;
+  description: string;
+  receiptFile?: {
+    name: string;
+    size: number;
+    type: string;
+    data: string | null; // Base64 or preview URL
+  };
+}
 export interface Employee extends BaseEntity {
   // Core fields (aligned with backend Employee entity)
   firstName: string; // Backend: varchar (required)

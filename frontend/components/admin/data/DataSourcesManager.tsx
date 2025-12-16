@@ -385,7 +385,7 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
               connection={conn} 
               onSync={(id: string) => syncMutation.mutate(id)}
               onDelete={(id: string) => deleteMutation.mutate(id)}
-              onTest={(conn: any) => console.log('Testing', conn)}
+              onTest={(conn: any) => testMutation.mutate(conn.id)}
             />
           ))}
         </AnimatePresence>

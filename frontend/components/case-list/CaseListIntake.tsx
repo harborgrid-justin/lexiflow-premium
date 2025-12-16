@@ -19,10 +19,14 @@ import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
 // ============================================================================
 // Components
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
+import { Modal } from '../common/Modal';
+import { Input, TextArea } from '../common/Inputs';
+import { Button } from '../common/Button';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
 import { DataService } from '../../services/dataService';
@@ -30,8 +34,11 @@ import { cn } from '../../utils/cn';
 
 export const CaseListIntake: React.FC = () => {
   const { theme } = useTheme();
+  const { success, error: notifyError } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [newLead, setNewLead] = useState<any>({});
 
   // Performance Engine: useQuery for Caching & Stale-While-Revalidate
   const { data: leads = [], isLoading } = useQuery(
@@ -42,17 +49,48 @@ export const CaseListIntake: React.FC = () => {
   // Performance Engine: useMutation for Sync Queue
   const { mutate: updateStage } = useMutation(
       async ({ id, stage }: { id: string, stage: string }) => {
-          // In a real scenario, we'd call an API endpoint. 
-          // For local simulation, we update the cache directly to mimic optimistic UI
+          // Update via DataService
+          await DataService.crm.updateLead(id, { stage, updatedAt: new Date().toISOString() });
+          
+          // Return updated cache state
           const current = queryClient.getQueryState<any[]>(['crm', 'leads'])?.data || [];
-          const updated = current.map(l => l.id === id ? { ...l, stage } : l);
-          // Determine which service method to call based on architecture
-          // DataService.crm.updateLead(id, { stage }); 
+          const updated = current.map(l => l.id === id ? { ...l, stage, updatedAt: new Date().toISOString() } : l);
           return updated;
       },
       {
           onSuccess: (updatedData) => {
               queryClient.setQueryData(['crm', 'leads'], updatedData);
+              success('Lead stage updated');
+          },
+          onError: (error: Error) => {
+              notifyError(`Failed to update stage: ${error.message}`);
+          }
+      }
+  );
+
+  // Mutation for adding new leads
+  const { mutate: addLead } = useMutation(
+      async (leadData: any) => {
+          const lead = {
+              ...leadData,
+              id: crypto.randomUUID(),
+              stage: 'New Lead',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+          };
+          await DataService.crm.addLead(lead);
+          return lead;
+      },
+      {
+          onSuccess: (newLead) => {
+              const current = queryClient.getQueryState<any[]>(['crm', 'leads'])?.data || [];
+              queryClient.setQueryData(['crm', 'leads'], [...current, newLead]);
+              success('Lead added successfully');
+              setIsLeadModalOpen(false);
+              setNewLead({});
+          },
+          onError: (error: Error) => {
+              notifyError(`Failed to add lead: ${error.message}`);
           }
       }
   );
@@ -71,8 +109,15 @@ export const CaseListIntake: React.FC = () => {
   };
 
   const handleAddLead = () => {
-      // Simple mock addition for UI demo
-      alert("Lead intake wizard would open here.");
+      setIsLeadModalOpen(true);
+  };
+
+  const handleSaveLead = () => {
+      if (!newLead.name || !newLead.contactEmail) {
+          notifyError('Name and email are required');
+          return;
+      }
+      addLead(newLead);
   };
 
   const stages = ['New Lead', 'Conflict Check', 'Engagement', 'Matter Created'];
@@ -133,6 +178,58 @@ export const CaseListIntake: React.FC = () => {
           </KanbanColumn>
         ))}
       </KanbanBoard>
+
+      {/* Lead Intake Modal */}
+      <Modal isOpen={isLeadModalOpen} onClose={() => setIsLeadModalOpen(false)} title="New Lead Intake">
+        <div className="p-6 space-y-4">
+          <Input 
+            label="Client Name" 
+            placeholder="e.g., John Doe" 
+            value={newLead.name || ''} 
+            onChange={(e) => setNewLead({...newLead, name: e.target.value, client: e.target.value})} 
+            required
+          />
+          <Input 
+            label="Contact Email" 
+            type="email"
+            placeholder="client@example.com" 
+            value={newLead.contactEmail || ''} 
+            onChange={(e) => setNewLead({...newLead, contactEmail: e.target.value})} 
+            required
+          />
+          <Input 
+            label="Phone" 
+            type="tel"
+            placeholder="(555) 123-4567" 
+            value={newLead.contactPhone || ''} 
+            onChange={(e) => setNewLead({...newLead, contactPhone: e.target.value})} 
+          />
+          <Input 
+            label="Matter Title" 
+            placeholder="Brief description of matter" 
+            value={newLead.title || ''} 
+            onChange={(e) => setNewLead({...newLead, title: e.target.value})} 
+          />
+          <Input 
+            label="Estimated Value" 
+            type="number"
+            placeholder="50000" 
+            value={newLead.value?.replace(/[^0-9]/g, '') || ''} 
+            onChange={(e) => setNewLead({...newLead, value: `$${e.target.value}`})} 
+          />
+          <TextArea 
+            label="Notes" 
+            rows={4} 
+            placeholder="Initial consultation notes..." 
+            value={newLead.notes || ''} 
+            onChange={(e) => setNewLead({...newLead, notes: e.target.value})} 
+          />
+          <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
+            <Button variant="ghost" onClick={() => setIsLeadModalOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={handleSaveLead}>Add Lead</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

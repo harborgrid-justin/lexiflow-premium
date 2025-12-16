@@ -156,6 +156,7 @@ export const STORES = {
   DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
   SLAS: 'sla_configs',
   RETENTION_POLICIES: 'retention_policies',
+  TRANSACTIONS: 'transactions', // Ledger transactions with receipt support
 };
 
 export class DatabaseManager {

@@ -1,0 +1,85 @@
+==========================================
+EA-2: Frontend State Management Analysis
+==========================================
+Date: 2025-12-16
+Status: COMPLETE
+Files Analyzed: 50+
+Lines of Documentation: 821
+
+KEY COMPONENTS ANALYZED:
+========================
+✅ QueryClient (custom React Query-like implementation)
+   - Cache: Map with LRU eviction (100 entries)
+   - Listeners: Map<string, Set<function>>
+   - Request deduplication with inflight tracking
+   - AbortController support for cancellation
+   - Global fetching status tracking
+
+✅ SyncEngine (offline-first mutation queue)
+   - localStorage-backed queue persistence
+   - Exponential backoff retry (MAX_RETRIES=3)
+   - ProcessedCache using LinearHash
+   - Integration with SyncContext
+
+✅ Context Providers (5 total)
+   - ThemeContext: Dark/light mode with localStorage
+   - WindowContext: Multi-window management
+   - SyncContext: Queue processing orchestration
+   - DataSourceContext: Backend/IndexedDB switching
+   - ToastContext: Priority-based toast queue
+
+✅ State Management Hooks (10+ analyzed)
+   - useQuery, useMutation
+   - useDomainData (domain-specific data hooks)
+   - useGlobalQueryStatus
+   - useAppController (main app state)
+   - useAutoSave, useHistory, useModal
+   - useSessionStorage, useDebounce
+
+✅ Repository Pattern
+   - Base Repository class with LRU cache (100 capacity)
+   - MicroORM abstraction over IndexedDB
+   - Listener pattern for reactive updates
+
+CRITICAL FINDINGS:
+==================
+🔴 6 UNBOUNDED DATA STRUCTURES (Memory Leak Risks):
+   1. SyncEngine.processedCache - LinearHash grows indefinitely
+   2. QueryClient.listeners - Map of Sets accumulates stale listeners
+   3. QueryClient.globalListeners - Set grows with hook usage
+   4. Repository.listeners - Set per repository instance
+   5. WindowContext.windows - Array of open windows
+   6. ToastContext.queueRef - Toast queue during burst events
+
+⚠️ 5 DUPLICATIVE CODE PATTERNS:
+   1. LRU Cache - 2 implementations (queryClient, Repository)
+   2. Listener Pattern - 4+ implementations
+   3. localStorage access - Inconsistent (direct vs StorageUtils)
+   4. Deep equality/stable stringify - Could be extracted
+   5. Queue processing - 2 implementations (sync, toast)
+
+RECOMMENDATIONS:
+================
+Priority 1 - Memory Leak Prevention:
+✓ Add TTL cleanup to SyncEngine.processedCache (max 10K entries)
+✓ Implement listener garbage collection in QueryClient
+✓ Add max window limit (20) to WindowContext
+✓ Add max queue size (100) to ToastContext
+
+Priority 2 - Code Deduplication:
+✓ Extract shared LRU cache utility
+✓ Standardize localStorage access via StorageUtils
+✓ Extract comparison utilities (fastDeepEqual, stableStringify)
+✓ Create abstract QueueProcessor base class
+
+Priority 3 - Monitoring:
+✓ Add state size monitoring/metrics to QueryClient
+✓ Add performance marks for query timing
+✓ Implement alerts for listener count thresholds
+
+ARCHITECTURE GRADE: B+
+=======================
+Strengths: Clean abstraction, offline-first, LRU caching, request deduplication
+Weaknesses: Unbounded listeners, duplicative patterns, no monitoring
+
+Full report: /home/user/lexiflow-premium/diagrams/EA2-frontend-state-management.md

@@ -3,6 +3,21 @@
  * Re-exports all individual API service classes
  */
 
+import { ApiKeysApiService } from './api/api-keys-api';
+import { AuthApiService } from './api/auth-api';
+import { BillingApiService } from './api/billing-api';
+import { CasesApiService } from './api/cases-api';
+import { CustodiansApiService } from './api/custodians-api';
+import { DocketApiService } from './api/docket-api';
+import { DocumentsApiService } from './api/documents-api';
+import { EvidenceApiService } from './api/evidence-api';
+import { ExaminationsApiService } from './api/examinations-api';
+import { FeeAgreementsApiService } from './api/fee-agreements-api';
+import { NotificationsApiService } from './api/notifications-api';
+import { RateTablesApiService } from './api/rate-tables-api';
+import { UsersApiService } from './api/users-api';
+import { WebhooksApiService } from './api/webhooks-api';
+
 export { ApiKeysApiService } from './api/api-keys-api';
 export { AuthApiService } from './api/auth-api';
 export { BillingApiService } from './api/billing-api';

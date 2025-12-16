@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsInt, Min } from 'class-validator';
+import { IsOptional, IsString, IsInt, Min, IsArray } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -17,6 +17,17 @@ export class QueryKnowledgeDto {
   @IsString()
   @IsOptional()
   tag?: string;
+
+  @ApiPropertyOptional({ description: 'Tags filter', type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  tags?: string[];
+
+  @ApiPropertyOptional({ description: 'Status filter' })
+  @IsString()
+  @IsOptional()
+  status?: string;
 
   @ApiPropertyOptional({ description: 'Page number', default: 1 })
   @IsInt()

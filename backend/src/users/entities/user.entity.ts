@@ -3,6 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',
+  PARTNER = 'partner',
   ATTORNEY = 'attorney',
   PARALEGAL = 'paralegal',
   STAFF = 'staff',

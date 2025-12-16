@@ -16,6 +16,11 @@ export interface AuditLogEntry {
   userAgent?: string;
   timestamp: Date;
   correlationId?: string;
+  description?: string;
+  method?: string;
+  url?: string;
+  status?: string;
+  duration?: number;
 }
 
 export enum AuditAction {

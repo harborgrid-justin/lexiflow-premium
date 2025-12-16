@@ -196,3 +196,5 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
     </div>
   );
 };
+
+export default PipelineMonitor;

@@ -113,3 +113,5 @@ export const PlatformOverview: React.FC = () => {
     </div>
   );
 };
+
+export default PlatformOverview;

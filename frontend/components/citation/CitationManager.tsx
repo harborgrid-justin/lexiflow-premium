@@ -10,20 +10,19 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, Suspense, lazy, useTransition } from 'react';
 import { Plus, BookOpen, FileText } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '../common/PageHeader';
+import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { Button } from '../common/Button';
-import { Tabs } from '../common/Tabs';
 import { LazyLoader } from '../common/LazyLoader';
 
-// Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+// Hooks
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Utils
 import { cn } from '../../utils/cn';
@@ -37,45 +36,59 @@ import { CitationView, CitationManagerProps } from './types';
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));
 
+const TAB_CONFIG: TabConfigItem[] = [
+  { 
+    id: 'citations', 
+    label: 'Citations', 
+    icon: BookOpen,
+    subTabs: [
+      { id: 'library', label: 'Citation Library', icon: BookOpen },
+      { id: 'analyzer', label: 'Brief Analyzer', icon: FileText },
+    ]
+  },
+];
+
 export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
-  const { theme } = useTheme();
-  const [activeView, setActiveView] = useState<CitationView>('library');
+  const [isPending, startTransition] = useTransition();
+  const [activeView, _setActiveView] = useSessionStorage<string>('citation_active_tab', 'library');
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
 
-  const tabs = [
-    { id: 'library', label: 'Citation Library', icon: BookOpen },
-    { id: 'analyzer', label: 'Brief Analyzer', icon: FileText },
-  ];
+  const setActiveView = (tab: string) => {
+    startTransition(() => {
+      _setActiveView(tab);
+    });
+  };
+
+  const renderContent = () => {
+    switch (activeView) {
+      case 'library':
+        return <CitationLibrary onSelect={setSelectedCitation} />;
+      case 'analyzer':
+        return <BriefAnalyzer />;
+      default:
+        return <CitationLibrary onSelect={setSelectedCitation} />;
+    }
+  };
 
   return (
-    <div className={cn("h-full flex flex-col", theme.surface.default)}>
-      <PageHeader
-        title="Citation Manager"
-        subtitle="Manage legal citations and analyze briefs"
-        actions={
-          <Button icon={Plus} size="sm">
-            Add Citation
-          </Button>
-        }
-      />
-
-      <div className={cn("border-b", theme.border.default)}>
-        <Tabs
-          tabs={tabs}
-          activeTab={activeView}
-          onChange={(id: string) => setActiveView(id as CitationView)}
-        />
-      </div>
-
-      <div className="flex-1 overflow-auto p-6">
-        <Suspense fallback={<LazyLoader message="Loading citation data..." />}>
-          {activeView === 'library' && (
-            <CitationLibrary onSelect={setSelectedCitation} />
-          )}
-          {activeView === 'analyzer' && <BriefAnalyzer />}
-        </Suspense>
-      </div>
-    </div>
+    <TabbedPageLayout
+      pageTitle="Citation Manager"
+      pageSubtitle="Manage legal citations and analyze briefs with Bluebook formatting."
+      pageActions={
+        <Button icon={Plus} size="sm">
+          Add Citation
+        </Button>
+      }
+      tabConfig={TAB_CONFIG}
+      activeTabId={activeView}
+      onTabChange={setActiveView}
+    >
+      <Suspense fallback={<LazyLoader message="Loading citation data..." />}>
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+          {renderContent()}
+        </div>
+      </Suspense>
+    </TabbedPageLayout>
   );
 };
 

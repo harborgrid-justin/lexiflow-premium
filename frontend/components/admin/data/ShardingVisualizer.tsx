@@ -125,3 +125,5 @@ export const ShardingVisualizer: React.FC = () => {
         </div>
     );
 };
+
+export default ShardingVisualizer;

@@ -55,3 +55,5 @@ export const SecurityMatrix: React.FC<SecurityMatrixProps> = ({ initialTab = 'ma
     </div>
   );
 };
+
+export default SecurityMatrix;

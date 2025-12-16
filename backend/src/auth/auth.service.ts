@@ -6,27 +6,26 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { authenticator } from 'otplib';
+import * as qrcode from 'qrcode';
+import { v4 as uuidv4 } from 'uuid';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import { Role } from '../common/enums/role.enum';
+import { TokenBlacklistService } from './token-blacklist.service';
+import { TokenStorageService } from './token-storage.service';
 
 @Injectable()
 export class AuthService {
-  // In-memory storage for refresh tokens (replace with Redis in production)
-  private refreshTokens: Map<string, string> = new Map();
-  // In-memory storage for password reset tokens
-  private resetTokens: Map<string, { userId: string; expires: Date }> =
-    new Map();
-  // In-memory storage for MFA tokens
-  private mfaTokens: Map<string, { userId: string; expires: Date }> = new Map();
-
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private tokenBlacklistService: TokenBlacklistService,
+    private tokenStorage: TokenStorageService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -42,8 +41,18 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
-    // Store refresh token
-    this.refreshTokens.set(user.id, tokens.refreshToken);
+    // Store refresh token with TTL
+    const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+    await this.tokenStorage.storeRefreshToken(
+      user.id,
+      {
+        userId: user.id,
+        token: tokens.refreshToken,
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      ttlDays * 24 * 60 * 60,
+    );
 
     return {
       user,
@@ -69,8 +78,18 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
-    // Store refresh token
-    this.refreshTokens.set(user.id, tokens.refreshToken);
+    // Store refresh token with TTL
+    const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+    await this.tokenStorage.storeRefreshToken(
+      user.id,
+      {
+        userId: user.id,
+        token: tokens.refreshToken,
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      ttlDays * 24 * 60 * 60,
+    );
 
     // Log authentication event (in production, use proper audit logging)
     console.log(
@@ -101,8 +120,8 @@ export class AuthService {
       }
 
       // Verify refresh token is in storage
-      const storedToken = this.refreshTokens.get(payload.sub);
-      if (!storedToken || storedToken !== refreshToken) {
+      const storedTokenData = await this.tokenStorage.getRefreshToken(payload.sub);
+      if (!storedTokenData || storedTokenData.token !== refreshToken) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
@@ -113,8 +132,18 @@ export class AuthService {
 
       const tokens = await this.generateTokens(user);
 
-      // Update stored refresh token
-      this.refreshTokens.set(user.id, tokens.refreshToken);
+      // Update stored refresh token with TTL
+      const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+      await this.tokenStorage.storeRefreshToken(
+        user.id,
+        {
+          userId: user.id,
+          token: tokens.refreshToken,
+          createdAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+        },
+        ttlDays * 24 * 60 * 60,
+      );
 
       return tokens;
     } catch (error) {
@@ -122,9 +151,16 @@ export class AuthService {
     }
   }
 
-  async logout(userId: string) {
+  async logout(userId: string, jti?: string, exp?: number) {
     // Remove refresh token from storage
-    this.refreshTokens.delete(userId);
+    await this.tokenStorage.deleteRefreshToken(userId);
+
+    // Blacklist the current access token if JTI is provided
+    if (jti && exp) {
+      const expiresAt = new Date(exp * 1000); // Convert seconds to milliseconds
+      await this.tokenBlacklistService.blacklistToken(jti, expiresAt);
+      console.log(`[AUTH] Blacklisted token ${jti} for user ${userId}`);
+    }
 
     // Log logout event
     console.log(`[AUTH] User ${userId} logged out at ${new Date().toISOString()}`);
@@ -156,15 +192,18 @@ export class AuthService {
 
     await this.usersService.updatePassword(userId, newPassword);
 
-    // Invalidate all refresh tokens
-    this.refreshTokens.delete(userId);
+    // Invalidate all refresh tokens for this user
+    await this.tokenStorage.deleteUserRefreshTokens(userId);
+
+    // Blacklist all existing access tokens for this user
+    await this.tokenBlacklistService.blacklistUserTokens(userId);
 
     // Log password change event
     console.log(
       `[AUTH] User ${userId} changed password at ${new Date().toISOString()}`,
     );
 
-    return { message: 'Password changed successfully' };
+    return { message: 'Password changed successfully. All sessions have been invalidated.' };
   }
 
   async forgotPassword(email: string) {
@@ -177,7 +216,8 @@ export class AuthService {
       };
     }
 
-    // Generate reset token (6 hours expiry)
+    // Generate reset token
+    const ttlHours = parseInt(this.configService.get('RESET_TOKEN_TTL_HOURS', '1'), 10);
     const jwtSecret = this.configService.get<string>('jwt.secret');
     if (!jwtSecret) {
       throw new BadRequestException('Server configuration error');
@@ -186,15 +226,20 @@ export class AuthService {
       { sub: user.id, type: 'reset' },
       {
         secret: jwtSecret,
-        expiresIn: '6h',
+        expiresIn: `${ttlHours}h`,
       },
     );
 
-    // Store reset token
-    this.resetTokens.set(resetToken, {
-      userId: user.id,
-      expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
-    });
+    // Store reset token with TTL
+    await this.tokenStorage.storeResetToken(
+      resetToken,
+      {
+        userId: user.id,
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + ttlHours * 60 * 60 * 1000).toISOString(),
+      },
+      ttlHours * 60 * 60,
+    );
 
     // In production, send email with reset link
     console.log(
@@ -207,32 +252,133 @@ export class AuthService {
   }
 
   async resetPassword(token: string, newPassword: string) {
-    const resetData = this.resetTokens.get(token);
+    const resetData = await this.tokenStorage.getResetToken(token);
 
-    if (!resetData || resetData.expires < new Date()) {
+    if (!resetData || new Date(resetData.expiresAt) < new Date()) {
       throw new BadRequestException('Invalid or expired reset token');
     }
 
     await this.usersService.updatePassword(resetData.userId, newPassword);
 
     // Remove reset token
-    this.resetTokens.delete(token);
+    await this.tokenStorage.deleteResetToken(token);
 
-    // Invalidate all refresh tokens
-    this.refreshTokens.delete(resetData.userId);
+    // Invalidate all refresh tokens for this user
+    await this.tokenStorage.deleteUserRefreshTokens(resetData.userId);
+
+    // Blacklist all existing access tokens for this user
+    await this.tokenBlacklistService.blacklistUserTokens(resetData.userId);
 
     // Log password reset event
     console.log(
       `[AUTH] User ${resetData.userId} reset password at ${new Date().toISOString()}`,
     );
 
-    return { message: 'Password reset successfully' };
+    return { message: 'Password reset successfully. All sessions have been invalidated.' };
+  }
+
+  /**
+   * Setup MFA for a user
+   * Generates a TOTP secret and returns it with a QR code for scanning
+   */
+  async setupMfa(userId: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Generate TOTP secret
+    const secret = authenticator.generateSecret();
+
+    // Store the secret for this user
+    await this.usersService.setTotpSecret(userId, secret);
+
+    // Generate otpauth URL for QR code
+    const otpauthUrl = authenticator.keyuri(
+      user.email,
+      'LexiFlow Premium',
+      secret,
+    );
+
+    // Generate QR code as data URL
+    const qrCodeDataUrl = await qrcode.toDataURL(otpauthUrl);
+
+    return {
+      secret,
+      qrCode: qrCodeDataUrl,
+      otpauthUrl,
+    };
+  }
+
+  /**
+   * Enable MFA for a user after verifying they can generate valid codes
+   */
+  async enableMfa(userId: string, verificationCode: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const totpSecret = await this.usersService.getTotpSecret(userId);
+    if (!totpSecret) {
+      throw new BadRequestException('MFA not set up. Please call /auth/mfa/setup first');
+    }
+
+    // Verify the code
+    const isValid = authenticator.verify({
+      token: verificationCode,
+      secret: totpSecret,
+    });
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid verification code');
+    }
+
+    // Enable MFA for the user
+    await this.usersService.setMfaEnabled(userId, true);
+
+    return { message: 'MFA enabled successfully' };
+  }
+
+  /**
+   * Disable MFA for a user
+   */
+  async disableMfa(userId: string, verificationCode: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (!user.mfaEnabled) {
+      throw new BadRequestException('MFA is not enabled for this user');
+    }
+
+    const totpSecret = await this.usersService.getTotpSecret(userId);
+    if (!totpSecret) {
+      throw new BadRequestException('MFA secret not found');
+    }
+
+    // Verify the code before disabling
+    const isValid = authenticator.verify({
+      token: verificationCode,
+      secret: totpSecret,
+    });
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid verification code');
+    }
+
+    // Disable MFA and clear the secret
+    await this.usersService.setMfaEnabled(userId, false);
+    await this.usersService.setTotpSecret(userId, '');
+
+    return { message: 'MFA disabled successfully' };
   }
 
   async verifyMfa(mfaToken: string, code: string) {
-    const mfaData = this.mfaTokens.get(mfaToken);
+    const mfaData = await this.tokenStorage.getMfaToken(mfaToken);
 
-    if (!mfaData || mfaData.expires < new Date()) {
+    if (!mfaData || new Date(mfaData.expiresAt) < new Date()) {
       throw new UnauthorizedException('Invalid or expired MFA token');
     }
 
@@ -247,9 +393,6 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    // TODO: Implement proper TOTP verification using speakeasy or similar library
-    // For now, reject all codes until proper TOTP is implemented
-    // This ensures MFA cannot be bypassed
     const isValidCode = await this.verifyTotpCode(user, code);
     if (!isValidCode) {
       throw new UnauthorizedException('Invalid MFA code');
@@ -257,11 +400,21 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user);
 
-    // Store refresh token
-    this.refreshTokens.set(user.id, tokens.refreshToken);
+    // Store refresh token with TTL
+    const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+    await this.tokenStorage.storeRefreshToken(
+      user.id,
+      {
+        userId: user.id,
+        token: tokens.refreshToken,
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      ttlDays * 24 * 60 * 60,
+    );
 
     // Remove MFA token
-    this.mfaTokens.delete(mfaToken);
+    await this.tokenStorage.deleteMfaToken(mfaToken);
 
     // Log MFA verification event
     console.log(
@@ -294,11 +447,16 @@ export class AuthService {
   }
 
   private async generateTokens(user: AuthenticatedUser) {
+    // Generate unique JTI for each token to enable blacklisting
+    const accessJti = uuidv4();
+    const refreshJti = uuidv4();
+
     const accessPayload: JwtPayload = {
       sub: user.id,
       email: user.email,
       role: user.role,
       type: 'access',
+      jti: accessJti,
     };
 
     const refreshPayload: JwtPayload = {
@@ -306,6 +464,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       type: 'refresh',
+      jti: refreshJti,
     };
 
     const jwtSecret = this.configService.get<string>('jwt.secret');
@@ -333,6 +492,7 @@ export class AuthService {
   }
 
   private async generateMfaToken(userId: string): Promise<string> {
+    const ttlMinutes = parseInt(this.configService.get('MFA_TOKEN_TTL_MINUTES', '5'), 10);
     const jwtSecret = this.configService.get<string>('jwt.secret');
     if (!jwtSecret) {
       throw new UnauthorizedException('Server configuration error');
@@ -342,36 +502,52 @@ export class AuthService {
       { sub: userId, type: 'mfa' },
       {
         secret: jwtSecret,
-        expiresIn: '5m',
+        expiresIn: `${ttlMinutes}m`,
       },
     );
 
-    // Store MFA token (5 minutes expiry)
-    this.mfaTokens.set(mfaToken, {
-      userId,
-      expires: new Date(Date.now() + 5 * 60 * 1000),
-    });
+    // Store MFA token with TTL
+    await this.tokenStorage.storeMfaToken(
+      mfaToken,
+      {
+        userId,
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + ttlMinutes * 60 * 1000).toISOString(),
+      },
+      ttlMinutes * 60,
+    );
 
     return mfaToken;
   }
 
-  // Verify TOTP code - placeholder for proper implementation
-  // In production, use speakeasy or similar library with user's stored TOTP secret
+  /**
+   * Verify TOTP code using otplib
+   * Validates the 6-digit code against the user's stored TOTP secret
+   */
   private async verifyTotpCode(
     user: AuthenticatedUser,
     code: string,
   ): Promise<boolean> {
-    // TODO: Implement proper TOTP verification
-    // Example with speakeasy:
-    // return speakeasy.totp.verify({
-    //   secret: user.totpSecret,
-    //   encoding: 'base32',
-    //   token: code,
-    //   window: 1,
-    // });
+    if (!user.mfaEnabled) {
+      return false;
+    }
 
-    // For now, MFA verification requires proper implementation
-    // Returning false ensures MFA cannot be bypassed
-    return false;
+    const totpSecret = await this.usersService.getTotpSecret(user.id);
+    if (!totpSecret) {
+      return false;
+    }
+
+    try {
+      // Verify the TOTP code with a window of 1 (allows for time drift)
+      const isValid = authenticator.verify({
+        token: code,
+        secret: totpSecret,
+      });
+
+      return isValid;
+    } catch (error) {
+      console.error('[AUTH] TOTP verification error:', error);
+      return false;
+    }
   }
 }

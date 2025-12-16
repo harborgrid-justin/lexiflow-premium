@@ -14,7 +14,16 @@ export interface Mutation {
 }
 
 const QUEUE_KEY = 'lexiflow_sync_queue';
-const processedCache = new LinearHash<string, boolean>();
+
+// Bounded cache with TTL and size limits
+interface CacheEntry {
+  processed: boolean;
+  timestamp: number;
+}
+
+const MAX_CACHE_SIZE = 10000;
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const processedCache = new LinearHash<string, CacheEntry>();
 
 // Simple Diff Implementation to generate JSON Patch-like structure
 const createPatch = (oldData: any, newData: any) => {
@@ -27,14 +36,72 @@ const createPatch = (oldData: any, newData: any) => {
     return patch;
 };
 
+// Cleanup expired cache entries
+const cleanupCache = () => {
+    const now = Date.now();
+    const keys = processedCache.keys();
+    let cleanedCount = 0;
+
+    for (const key of keys) {
+        const entry = processedCache.get(key);
+        if (entry && (now - entry.timestamp > CACHE_TTL_MS)) {
+            processedCache.delete(key);
+            cleanedCount++;
+        }
+    }
+
+    if (cleanedCount > 0) {
+        console.log(`[SyncEngine] Cleaned ${cleanedCount} expired cache entries`);
+    }
+};
+
+// Enforce cache size limit using LRU-style eviction
+const enforceCacheLimit = () => {
+    const size = processedCache.size();
+    if (size > MAX_CACHE_SIZE) {
+        const keys = processedCache.keys();
+        const entries: [string, CacheEntry][] = [];
+
+        for (const key of keys) {
+            const entry = processedCache.get(key);
+            if (entry) {
+                entries.push([key, entry]);
+            }
+        }
+
+        // Sort by timestamp (oldest first)
+        entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
+
+        // Remove oldest 20% of entries
+        const toRemove = Math.floor(size * 0.2);
+        for (let i = 0; i < toRemove && i < entries.length; i++) {
+            processedCache.delete(entries[i][0]);
+        }
+
+        console.log(`[SyncEngine] Evicted ${toRemove} oldest cache entries to maintain size limit`);
+    }
+};
+
+// Periodic cleanup interval (runs every hour)
+let cleanupInterval: number | null = null;
+const startCleanupTimer = () => {
+    if (cleanupInterval) return;
+
+    cleanupInterval = window.setInterval(() => {
+        cleanupCache();
+        enforceCacheLimit();
+    }, 60 * 60 * 1000); // Every hour
+};
+
 export const SyncEngine = {
   getQueue: (): Mutation[] => {
+    startCleanupTimer(); // Ensure cleanup timer is running
     return StorageUtils.get(QUEUE_KEY, []);
   },
 
   enqueue: (type: string, payload: any, oldPayload?: any): Mutation => {
     const queue = SyncEngine.getQueue();
-    
+
     // Optimization: Calculate patch if updating
     let patch = undefined;
     if (type.includes('UPDATE') && oldPayload) {
@@ -53,7 +120,8 @@ export const SyncEngine = {
       retryCount: 0
     };
 
-    if (processedCache.get(mutation.id)) {
+    const cached = processedCache.get(mutation.id);
+    if (cached) {
         console.log(`[Sync] Skipping duplicate mutation: ${mutation.id}`);
         return mutation; // Don't re-add
     }
@@ -67,7 +135,10 @@ export const SyncEngine = {
     const queue = SyncEngine.getQueue();
     if (queue.length === 0) return undefined;
     const item = queue.shift();
-    if(item) processedCache.set(item.id, true);
+    if(item) {
+        processedCache.set(item.id, { processed: true, timestamp: Date.now() });
+        enforceCacheLimit(); // Check size limit on each dequeue
+    }
     StorageUtils.set(QUEUE_KEY, queue);
     return item;
   },
@@ -102,5 +173,40 @@ export const SyncEngine = {
   
   clear: () => {
     StorageUtils.set(QUEUE_KEY, []);
+  },
+
+  // Manual cache cleanup (for testing or maintenance)
+  cleanupCache: () => {
+    cleanupCache();
+    enforceCacheLimit();
+  },
+
+  // Get cache stats for monitoring
+  getCacheStats: () => {
+    const size = processedCache.size();
+    const keys = processedCache.keys();
+    let oldestTimestamp = Date.now();
+
+    for (const key of keys) {
+        const entry = processedCache.get(key);
+        if (entry && entry.timestamp < oldestTimestamp) {
+            oldestTimestamp = entry.timestamp;
+        }
+    }
+
+    return {
+        size,
+        maxSize: MAX_CACHE_SIZE,
+        oldestEntryAge: Date.now() - oldestTimestamp,
+        ttlMs: CACHE_TTL_MS
+    };
+  },
+
+  // Stop cleanup timer (for cleanup on unmount)
+  stopCleanupTimer: () => {
+    if (cleanupInterval) {
+        clearInterval(cleanupInterval);
+        cleanupInterval = null;
+    }
   }
 };

@@ -1,4 +1,5 @@
 import { Repository } from './core/Repository';
+import { createRepository } from './core/RepositoryFactory';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseRepository } from './domains/CaseDomain';
 import { ComplianceService } from './domains/ComplianceDomain';
@@ -48,10 +49,9 @@ import {
 
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_RULES } from '../data/models/legalRule';
+import { delay } from '../utils/async';
 
 // --- WRAPPERS FOR INTEGRATION ---
-
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 class IntegratedCaseRepository extends CaseRepository {
     add = async (item: Case): Promise<Case> => {
@@ -104,31 +104,31 @@ export const DataService = {
   trial: useBackendApi ? finalApiServices.trial : new TrialRepository(),
   compliance: ComplianceService,
   
-  // Extended backend API services
-  trustAccounts: useBackendApi ? extendedApiServices.trustAccounts : new class extends Repository<any> { constructor() { super('trustAccounts'); } }(),
-  billingAnalytics: useBackendApi ? extendedApiServices.billingAnalytics : new class extends Repository<any> { constructor() { super('billingAnalytics'); } }(),
-  reports: useBackendApi ? extendedApiServices.reports : new class extends Repository<any> { constructor() { super(STORES.REPORTERS); } }(),
-  processingJobs: useBackendApi ? extendedApiServices.processingJobs : new class extends Repository<any> { constructor() { super(STORES.PROCESSING_JOBS); } }(),
-  casePhases: useBackendApi ? extendedApiServices.casePhases : new class extends Repository<any> { constructor() { super(STORES.PHASES); } }(),
-  caseTeams: useBackendApi ? extendedApiServices.caseTeams : new class extends Repository<any> { constructor() { super('caseTeams'); } }(),
-  parties: useBackendApi ? extendedApiServices.parties : new class extends Repository<any> { constructor() { super('parties'); } }(),
-  
-  // Discovery backend API services
-  legalHolds: useBackendApi ? discoveryApiServices.legalHolds : new class extends Repository<any> { constructor() { super(STORES.LEGAL_HOLDS); } }(),
-  depositions: useBackendApi ? discoveryApiServices.depositions : new class extends Repository<any> { constructor() { super('depositions'); } }(),
-  discoveryRequests: useBackendApi ? discoveryApiServices.discoveryRequests : new class extends Repository<any> { constructor() { super('discoveryRequests'); } }(),
-  esiSources: useBackendApi ? discoveryApiServices.esiSources : new class extends Repository<any> { constructor() { super('esiSources'); } }(),
-  privilegeLog: useBackendApi ? discoveryApiServices.privilegeLog : new class extends Repository<any> { constructor() { super(STORES.PRIVILEGE_LOG); } }(),
-  productions: useBackendApi ? discoveryApiServices.productions : new class extends Repository<any> { constructor() { super('productions'); } }(),
-  custodianInterviews: useBackendApi ? discoveryApiServices.custodianInterviews : new class extends Repository<any> { constructor() { super('custodianInterviews'); } }(),
-  
-  // Compliance backend API services
-  conflictChecks: useBackendApi ? complianceApiServices.conflictChecks : new class extends Repository<any> { constructor() { super('conflictChecks'); } }(),
-  ethicalWalls: useBackendApi ? complianceApiServices.ethicalWalls : new class extends Repository<any> { constructor() { super('ethicalWalls'); } }(),
-  auditLogs: useBackendApi ? complianceApiServices.auditLogs : new class extends Repository<any> { constructor() { super('auditLogs'); } }(),
-  permissions: useBackendApi ? complianceApiServices.permissions : new class extends Repository<any> { constructor() { super('permissions'); } }(),
-  rlsPolicies: useBackendApi ? complianceApiServices.rlsPolicies : new class extends Repository<any> { constructor() { super(STORES.POLICIES); } }(),
-  complianceReports: useBackendApi ? complianceApiServices.complianceReports : new class extends Repository<any> { constructor() { super('complianceReports'); } }(),
+  // Extended backend API services - Using RepositoryFactory instead of anonymous classes
+  trustAccounts: useBackendApi ? extendedApiServices.trustAccounts : createRepository<any>('trustAccounts'),
+  billingAnalytics: useBackendApi ? extendedApiServices.billingAnalytics : createRepository<any>('billingAnalytics'),
+  reports: useBackendApi ? extendedApiServices.reports : createRepository<any>(STORES.REPORTERS),
+  processingJobs: useBackendApi ? extendedApiServices.processingJobs : createRepository<any>(STORES.PROCESSING_JOBS),
+  casePhases: useBackendApi ? extendedApiServices.casePhases : createRepository<any>(STORES.PHASES),
+  caseTeams: useBackendApi ? extendedApiServices.caseTeams : createRepository<any>('caseTeams'),
+  parties: useBackendApi ? extendedApiServices.parties : createRepository<any>('parties'),
+
+  // Discovery backend API services - Using RepositoryFactory instead of anonymous classes
+  legalHolds: useBackendApi ? discoveryApiServices.legalHolds : createRepository<any>(STORES.LEGAL_HOLDS),
+  depositions: useBackendApi ? discoveryApiServices.depositions : createRepository<any>('depositions'),
+  discoveryRequests: useBackendApi ? discoveryApiServices.discoveryRequests : createRepository<any>('discoveryRequests'),
+  esiSources: useBackendApi ? discoveryApiServices.esiSources : createRepository<any>('esiSources'),
+  privilegeLog: useBackendApi ? discoveryApiServices.privilegeLog : createRepository<any>(STORES.PRIVILEGE_LOG),
+  productions: useBackendApi ? discoveryApiServices.productions : createRepository<any>('productions'),
+  custodianInterviews: useBackendApi ? discoveryApiServices.custodianInterviews : createRepository<any>('custodianInterviews'),
+
+  // Compliance backend API services - Using RepositoryFactory instead of anonymous classes
+  conflictChecks: useBackendApi ? complianceApiServices.conflictChecks : createRepository<any>('conflictChecks'),
+  ethicalWalls: useBackendApi ? complianceApiServices.ethicalWalls : createRepository<any>('ethicalWalls'),
+  auditLogs: useBackendApi ? complianceApiServices.auditLogs : createRepository<any>('auditLogs'),
+  permissions: useBackendApi ? complianceApiServices.permissions : createRepository<any>('permissions'),
+  rlsPolicies: useBackendApi ? complianceApiServices.rlsPolicies : createRepository<any>(STORES.POLICIES),
+  complianceReports: useBackendApi ? complianceApiServices.complianceReports : createRepository<any>('complianceReports'),
   admin: AdminService,
   correspondence: CorrespondenceService, 
   quality: new DataQualityService(),
@@ -460,15 +460,23 @@ export const DataService = {
           };
       },
       addConnection: async (connection: any) => {
-          const newConnection = { 
-              ...connection, 
-              id: `conn-${Date.now()}`, 
-              status: 'active', 
+          const newConnection = {
+              ...connection,
+              id: `conn-${Date.now()}`,
+              status: 'active',
               lastSync: new Date().toISOString(),
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString()
           };
           await db.put('dataSources', newConnection);
+
+          // Publish integration event
+          await IntegrationOrchestrator.publish(SystemEventType.DATA_SOURCE_CONNECTED, {
+              connectionId: newConnection.id,
+              provider: newConnection.type,
+              name: newConnection.name
+          });
+
           return newConnection;
       },
       syncConnection: async (id: string) => {

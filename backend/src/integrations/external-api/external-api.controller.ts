@@ -5,7 +5,7 @@ import { PacerService } from '../pacer/pacer.service';
 import { CalendarService } from '../calendar/calendar.service';
 import { PacerSearchDto, PacerSyncDto } from '../pacer/dto';
 import { CreateCalendarEventDto, CalendarSyncDto } from '../calendar/dto';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Integrations')

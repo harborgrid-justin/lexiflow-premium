@@ -5,6 +5,7 @@ import { PrivilegeLogEntry } from './entities/privilege-log-entry.entity';
 import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
 import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';
 import { QueryPrivilegeLogEntryDto } from './dto/query-privilege-log-entry.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class PrivilegeLogService {
@@ -69,7 +70,10 @@ export class PrivilegeLogService {
       );
     }
 
-    queryBuilder.orderBy(`privilegeLog.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('privilegeLog', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`privilegeLog.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

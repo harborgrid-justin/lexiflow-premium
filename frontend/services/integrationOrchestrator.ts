@@ -51,7 +51,7 @@ export const IntegrationOrchestrator = {
                 // Opp #2: Docket -> Calendar (Rules Engine)
                 case SystemEventType.DOCKET_INGESTED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED];
-                    
+
                     // Heuristic: If it's a Motion, schedule a Response deadline
                     if (p.entry.title.toLowerCase().includes('motion')) {
                         const deadlineDate = new Date(new Date(p.entry.date).getTime() + (14 * 24 * 60 * 60 * 1000)); // +14 days default
@@ -79,7 +79,8 @@ export const IntegrationOrchestrator = {
                             priority: 'Critical',
                             description: `Court Appearance Required. Docket #${p.entry.sequenceNumber}`
                         };
-                        await db.put('calendar_events', hearingEvt);
+                        // Fixed: Use consistent store name 'calendarEvents'
+                        await db.put('calendarEvents', hearingEvt);
                         actions.push('Synced Hearing to Master Calendar');
                     }
                     break;
@@ -88,12 +89,21 @@ export const IntegrationOrchestrator = {
                 // Opp #3: Task -> Billing (Revenue Capture)
                 case SystemEventType.TASK_COMPLETED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED];
-                    // If task took effort and isn't billed
-                    if (p.task.priority === 'High' || p.task.priority === 'Critical') {
+                    // Only create time entries for tasks that meet ALL criteria:
+                    // 1. Has a valid case assignment (not General/Admin)
+                    // 2. Has High or Critical priority
+                    // 3. Task category indicates billable work
+                    // 4. Task has an assignee
+                    const isBillableCategory = p.task.category && !['Administrative', 'Internal', 'Training'].includes(p.task.category);
+                    const hasValidCase = p.task.caseId && p.task.caseId !== 'General';
+                    const isHighPriority = p.task.priority === 'High' || p.task.priority === 'Critical';
+                    const hasAssignee = p.task.assigneeId;
+
+                    if (hasValidCase && isHighPriority && isBillableCategory && hasAssignee) {
                         const draftTimeEntry: TimeEntry = {
                             id: `time-auto-${Date.now()}` as UUID,
-                            caseId: p.task.caseId || 'General' as CaseId,
-                            userId: p.task.assigneeId || 'current-user' as UserId,
+                            caseId: p.task.caseId as CaseId,
+                            userId: p.task.assigneeId as UserId,
                             date: new Date().toISOString().split('T')[0],
                             duration: 0, // User will fill in actual duration
                             description: `Task Completion: ${p.task.title}`,
@@ -146,11 +156,26 @@ export const IntegrationOrchestrator = {
                 case SystemEventType.INVOICE_STATUS_CHANGED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED];
                     if (p.invoice.status === 'Overdue') {
-                        const collectionTemplate = await DataService.playbooks.getByIndex('type', 'collection');
-                        if (collectionTemplate.length > 0) {
-                            await DataService.workflow.deploy(collectionTemplate[0].id, { caseId: p.invoice.caseId });
+                        // Check if workflow deployment is available
+                        if (DataService.playbooks && DataService.workflow && typeof DataService.workflow.deploy === 'function') {
+                            try {
+                                const collectionTemplate = await DataService.playbooks.getByIndex('type', 'collection');
+                                if (collectionTemplate && collectionTemplate.length > 0) {
+                                    await DataService.workflow.deploy(collectionTemplate[0].id, { caseId: p.invoice.caseId });
+                                    actions.push('Deployed Collections Workflow');
+                                } else {
+                                    // No collection template found - log warning but don't fail
+                                    console.warn('[Orchestrator] No collection workflow template found');
+                                    actions.push('Overdue invoice detected (no collection workflow available)');
+                                }
+                            } catch (err: any) {
+                                console.error('[Orchestrator] Failed to deploy collection workflow:', err);
+                                errors.push(`Collection workflow deployment failed: ${err.message}`);
+                            }
+                        } else {
+                            console.warn('[Orchestrator] Workflow deployment service not available');
+                            actions.push('Overdue invoice detected (workflow service unavailable)');
                         }
-                        actions.push('Deployed Collections Workflow');
                     }
                     if (p.invoice.status === 'Paid') {
                         const prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
@@ -188,7 +213,40 @@ export const IntegrationOrchestrator = {
 
                 // Opp #7: Research -> Pleadings (Context)
                 case SystemEventType.CITATION_SAVED: {
+                    const p = payload as SystemEventPayloads[typeof SystemEventType.CITATION_SAVED];
                     // Cache research results for quick access in Pleading Builder
+                    const cacheEntry = {
+                        id: `cache-${Date.now()}`,
+                        citationId: p.citation.id,
+                        caseId: p.citation.caseId,
+                        authority: p.citation.authority,
+                        citationText: p.citation.citation,
+                        context: p.queryContext,
+                        relevanceScore: p.citation.relevance || 0,
+                        cachedAt: new Date().toISOString()
+                    };
+
+                    // Store in research cache for Pleading Builder quick access
+                    await db.put('researchCache', cacheEntry);
+
+                    // If high relevance, create a suggestion for active pleadings
+                    if (p.citation.relevance && p.citation.relevance >= 8) {
+                        const activePleadings = await DataService.pleadings.getByIndex('status', 'Draft');
+                        const casePleadings = activePleadings.filter(pl => pl.caseId === p.citation.caseId);
+
+                        for (const pleading of casePleadings) {
+                            await db.put('pleadingSuggestions', {
+                                id: `sugg-${Date.now()}-${pleading.id}`,
+                                pleadingId: pleading.id,
+                                citationId: p.citation.id,
+                                suggestionType: 'citation',
+                                priority: 'High',
+                                createdAt: new Date().toISOString()
+                            });
+                        }
+                        actions.push(`Created citation suggestions for ${casePleadings.length} active pleading(s)`);
+                    }
+
                     actions.push('Updated Pleading Builder Context Cache');
                     break;
                 }
@@ -213,19 +271,39 @@ export const IntegrationOrchestrator = {
                 // Opp #9: HR -> Admin (Provisioning)
                 case SystemEventType.STAFF_HIRED: {
                     const p = payload as SystemEventPayloads[typeof SystemEventType.STAFF_HIRED];
-                    // Auto-create User account
-                    const newUser = {
-                        id: p.staff.userId,
-                        name: p.staff.name,
-                        email: p.staff.email,
-                        role: p.staff.role,
-                        userType: 'Internal',
-                        orgId: 'org-1' // Default org
-                    };
-                    if ('add' in DataService.users) {
-                        await (DataService.users as any).add(newUser);
+
+                    // Validate staff member has all required fields
+                    if (!p.staff.userId || !p.staff.name || !p.staff.email || !p.staff.role) {
+                        errors.push('Staff member missing required fields for user provisioning');
+                        break;
                     }
-                    actions.push(`Provisioned User Account for ${p.staff.name}`);
+
+                    // Validate email format
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(p.staff.email)) {
+                        errors.push('Invalid email format for user provisioning');
+                        break;
+                    }
+
+                    // Verify DataService.users has the add method and it's a function
+                    if (DataService.users && typeof DataService.users.add === 'function') {
+                        // Auto-create User account
+                        const newUser = {
+                            id: p.staff.userId,
+                            name: p.staff.name,
+                            email: p.staff.email,
+                            role: p.staff.role,
+                            userType: 'Internal' as const,
+                            orgId: 'org-1', // Default org
+                            status: 'Active',
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        };
+                        await DataService.users.add(newUser);
+                        actions.push(`Provisioned User Account for ${p.staff.name} (${p.staff.email})`);
+                    } else {
+                        errors.push('User provisioning service not available');
+                    }
                     break;
                 }
 

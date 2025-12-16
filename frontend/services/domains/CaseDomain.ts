@@ -2,7 +2,7 @@ import { Case, CasePhase, Party, CaseId } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 export class CaseRepository extends Repository<Case> {
     constructor() { super(STORES.CASES); }

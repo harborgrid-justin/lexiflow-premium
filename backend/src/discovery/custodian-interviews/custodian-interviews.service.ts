@@ -5,6 +5,7 @@ import { CustodianInterview } from './entities/custodian-interview.entity';
 import { CreateCustodianInterviewDto } from './dto/create-custodian-interview.dto';
 import { UpdateCustodianInterviewDto } from './dto/update-custodian-interview.dto';
 import { QueryCustodianInterviewDto } from './dto/query-custodian-interview.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class CustodianInterviewsService {
@@ -67,7 +68,10 @@ export class CustodianInterviewsService {
       );
     }
 
-    queryBuilder.orderBy(`interview.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('interview', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`interview.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

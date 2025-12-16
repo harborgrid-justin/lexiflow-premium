@@ -9,10 +9,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
     constructor() {
         super(STORES.DOCUMENTS);
     }
-    
-    async getByCaseId(caseId: string): Promise<LegalDocument[]> {
-        return this.getByIndex('caseId', caseId);
-    }
+
+    // getByCaseId is inherited from base Repository class
 
     async getFile(id: string): Promise<Blob | null> {
         return db.getFile(id);

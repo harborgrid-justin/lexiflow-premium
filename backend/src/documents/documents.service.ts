@@ -11,6 +11,7 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
 import { FileStorageService } from '../file-storage/file-storage.service';
+import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class DocumentsService {
@@ -129,8 +130,10 @@ export class DocumentsService {
       query.andWhere('document.createdAt <= :endDate', { endDate });
     }
 
-    // Apply sorting
-    query.orderBy(`document.${sortBy}`, sortOrder);
+    // Apply sorting - SQL injection protection
+    const safeSortField = validateSortField('document', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    query.orderBy(`document.${safeSortField}`, safeSortOrder);
 
     // Apply pagination
     const skip = (page - 1) * limit;

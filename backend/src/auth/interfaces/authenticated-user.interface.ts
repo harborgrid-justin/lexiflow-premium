@@ -10,4 +10,6 @@ export interface AuthenticatedUser {
   permissions: Permission[];
   isActive: boolean;
   mfaEnabled: boolean;
+  totpSecret?: string; // Optional - only exposed during MFA setup
+  password?: string; // Optional - only used internally for validation
 }

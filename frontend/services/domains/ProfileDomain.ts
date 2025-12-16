@@ -1,11 +1,9 @@
 import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
+import { delay } from '../../utils/async';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 const CURRENT_USER_ID = 'usr-admin-justin';
-
 export const ProfileDomain = {
     getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
         // In a real app, this comes from session. Here we fetch the admin user from DB.
@@ -29,7 +27,6 @@ export const ProfileDomain = {
                 barAdmissions: []
              };
         }
-
         // Merge with extended profile data structure
         // In a real DB, these fields would likely be on the user record or joined from a profile table.
         return {
@@ -65,48 +62,28 @@ export const ProfileDomain = {
                     { id: 'sess-1', device: 'MacBook Pro', ip: '192.168.1.55', lastActive: 'Just now', current: true },
                     { id: 'sess-2', device: 'iPhone 15', ip: '10.0.0.5', lastActive: '2 hours ago', current: false }
                 ]
-            },
             accessMatrix: user.accessMatrix || [
                 { id: 'perm-1', resource: 'cases', action: '*', effect: 'Allow', scope: 'Global' },
                 { id: 'perm-2', resource: 'billing.invoices', action: 'approve', effect: 'Allow', scope: 'Region', conditions: [{ type: 'Location', operator: 'Equals', value: 'US' }] }
             ]
         };
     },
-
     updateProfile: async (updates: Partial<ExtendedUserProfile>): Promise<ExtendedUserProfile> => {
         const current = await ProfileDomain.getCurrentProfile();
         const updated = { ...current, ...updates };
         await db.put(STORES.USERS, updated);
         return updated;
-    },
-
     updatePreferences: async (prefs: Partial<ExtendedUserProfile['preferences']>): Promise<void> => {
-        const current = await ProfileDomain.getCurrentProfile();
         const updated = { ...current, preferences: { ...current.preferences, ...prefs } };
-        await db.put(STORES.USERS, updated);
-    },
-
     updateSecurity: async (sec: Partial<ExtendedUserProfile['security']>): Promise<void> => {
         await delay(500); // Simulate secure handshake
-        const current = await ProfileDomain.getCurrentProfile();
         const updated = { ...current, security: { ...current.security, ...sec } };
-        await db.put(STORES.USERS, updated);
-    },
-
     addPermission: async (perm: GranularPermission): Promise<GranularPermission> => {
-        const current = await ProfileDomain.getCurrentProfile();
         const newPerm = { ...perm, id: `perm-${Date.now()}` };
         const updated = { ...current, accessMatrix: [...current.accessMatrix, newPerm] };
-        await db.put(STORES.USERS, updated);
         return newPerm;
-    },
-
     revokePermission: async (id: string): Promise<void> => {
-        const current = await ProfileDomain.getCurrentProfile();
         const updated = { ...current, accessMatrix: current.accessMatrix.filter(p => p.id !== id) };
-        await db.put(STORES.USERS, updated);
-    },
-
     getAuditLog: async (userId: string) => {
         // Fetch real audit logs for this user
         const logs = await db.getByIndex<any>(STORES.LOGS, 'userId', userId);
@@ -115,7 +92,6 @@ export const ProfileDomain = {
                 { id: 'log-1', action: 'Login', timestamp: new Date().toISOString(), ip: '192.168.1.55', device: 'MacBook Pro' },
                 { id: 'log-2', action: 'View Case', resource: 'Martinez v. TechCorp', timestamp: new Date(Date.now() - 3600000).toISOString() },
             ];
-        }
         return logs.sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
     }
 };

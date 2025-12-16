@@ -19,7 +19,7 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyMfaDto } from './dto/verify-mfa.dto';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from './guards';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
@@ -71,8 +71,11 @@ export class AuthController {
   @ApiOperation({ summary: 'Logout and invalidate tokens' })
   @ApiResponse({ status: 200, description: 'Logout successful' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async logout(@CurrentUser('id') userId: string) {
-    return this.authService.logout(userId);
+  async logout(@Request() req, @CurrentUser('id') userId: string) {
+    // Extract JTI and expiration from the decoded token
+    const jti = req.user?.jti;
+    const exp = req.user?.exp;
+    return this.authService.logout(userId, jti, exp);
   }
 
   @ApiBearerAuth('JWT-auth')

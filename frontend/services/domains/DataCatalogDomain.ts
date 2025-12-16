@@ -2,7 +2,7 @@ import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink
 import { db, STORES } from '../db';
 import { MOCK_DATA_DICTIONARY } from '../../data/models/dataDictionary';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 export const DataCatalogService = {
     getDictionary: async (): Promise<DataDictionaryItem[]> => { 

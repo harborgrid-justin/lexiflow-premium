@@ -80,8 +80,11 @@ export class User {
   @Column({ type: 'boolean', default: false })
   emailVerified: boolean;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'boolean', default: false })
   twoFactorEnabled: boolean;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  totpSecret: string;
 
   @CreateDateColumn()
   createdAt: Date;

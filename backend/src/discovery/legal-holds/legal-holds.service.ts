@@ -6,6 +6,7 @@ import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';
 import { QueryLegalHoldDto } from './dto/query-legal-hold.dto';
 import { ReleaseLegalHoldDto } from './dto/release-legal-hold.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class LegalHoldsService {
@@ -59,7 +60,10 @@ export class LegalHoldsService {
       );
     }
 
-    queryBuilder.orderBy(`legalHold.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('legalHold', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`legalHold.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

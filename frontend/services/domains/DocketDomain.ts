@@ -6,7 +6,7 @@ import { SystemEventType } from "../../types/integration-types";
 import { IdGenerator } from '../../utils/idGenerator';
 import { retryWithBackoff, RetryError } from '../../utils/retryWithBackoff';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 // ============================================================================
 // ERROR CLASSES

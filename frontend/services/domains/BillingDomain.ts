@@ -1,8 +1,7 @@
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 export class BillingRepository extends Repository<TimeEntry> {
     constructor() { super(STORES.BILLING); }

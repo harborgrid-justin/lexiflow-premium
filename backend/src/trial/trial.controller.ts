@@ -4,7 +4,7 @@ import { TrialService } from './trial.service';
 import { CreateTrialEventDto } from './dto/create-trial-event.dto';
 import { UpdateTrialEventDto } from './dto/update-trial-event.dto';
 import { CreateWitnessPrepDto } from './dto/create-witness-prep.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Trial')
 @ApiBearerAuth('JWT-auth')

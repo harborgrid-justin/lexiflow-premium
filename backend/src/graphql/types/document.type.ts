@@ -1,21 +1,6 @@
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { UserType } from './user.type';
-
-export enum DocumentStatus {
-  DRAFT = 'DRAFT',
-  PENDING_REVIEW = 'PENDING_REVIEW',
-  APPROVED = 'APPROVED',
-  FILED = 'FILED',
-  ARCHIVED = 'ARCHIVED',
-}
-
-export enum DocumentAccessLevel {
-  PUBLIC = 'PUBLIC',
-  INTERNAL = 'INTERNAL',
-  CONFIDENTIAL = 'CONFIDENTIAL',
-  PRIVILEGED = 'PRIVILEGED',
-  ATTORNEY_WORK_PRODUCT = 'ATTORNEY_WORK_PRODUCT',
-}
+import { DocumentStatus, DocumentAccessLevel } from '../../common/enums/document.enum';
 
 registerEnumType(DocumentStatus, { name: 'DocumentStatus' });
 registerEnumType(DocumentAccessLevel, { name: 'DocumentAccessLevel' });

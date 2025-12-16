@@ -6,6 +6,7 @@ import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
 import { PaginatedCaseResponseDto, CaseResponseDto } from './dto/case-response.dto';
+import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class CasesService {
@@ -91,8 +92,10 @@ export class CasesService {
       // queryBuilder.leftJoinAndSelect('case.phases', 'phases');
     }
 
-    // Sorting
-    queryBuilder.orderBy(`case.${sortBy}`, sortOrder);
+    // Sorting - SQL injection protection
+    const safeSortField = validateSortField('case', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`case.${safeSortField}`, safeSortOrder);
 
     // Pagination
     const skip = (page - 1) * limit;

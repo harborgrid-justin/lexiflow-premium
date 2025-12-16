@@ -6,10 +6,13 @@ import {
   OnGatewayDisconnect,
   ConnectedSocket,
   MessageBody,
+  UseGuards,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';
 
 /**
  * WebSocket Event Types
@@ -32,25 +35,44 @@ export enum WSEvent {
 
   // System events
   SYSTEM_ALERT = 'system:alert',
+
+  // Generic room events
+  USER_JOINED = 'user_joined',
+  USER_LEFT = 'user_left',
+  MESSAGE = 'message',
 }
 
 /**
- * WebSocket Gateway
+ * Consolidated WebSocket Gateway
  * Provides real-time updates with JWT authentication
  * Supports rooms for multi-tenant isolation and targeted broadcasts
- * 
- * @example Client
- * const socket = io('http://localhost:3000', {
+ * Combines case-specific rooms with generic room management
+ *
+ * Resource protections:
+ * - Max 5 connections per user (configurable via WS_MAX_CONNECTIONS_PER_USER)
+ * - Max 10K global connections (configurable via WS_MAX_GLOBAL_CONNECTIONS)
+ * - Max 50 room subscriptions per user (configurable via WS_MAX_ROOMS_PER_USER)
+ * - Rate limit: 100 events/minute per client (configurable via WS_RATE_LIMIT_EVENTS_PER_MINUTE)
+ *
+ * @example Client with Auth
+ * const socket = io('http://localhost:3000/events', {
  *   auth: { token: 'jwt-token' }
  * });
  * socket.on('case:updated', (data) => console.log(data));
+ *
+ * @example Generic Room
+ * socket.emit('join_room', { room: 'chat-123', userId: 'user-1' });
  */
+@Injectable()
 @WebSocketGateway({
   cors: {
     origin: process.env.CORS_ORIGIN || '*',
     credentials: true,
   },
   namespace: '/events',
+  maxHttpBufferSize: 1e6, // 1MB max message size
+  pingTimeout: 60000, // 60s ping timeout
+  pingInterval: 25000, // 25s ping interval
 })
 export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -58,8 +80,14 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
 
   private readonly logger = new Logger(RealtimeGateway.name);
   private connectedClients: Map<string, ClientInfo> = new Map();
+  private rooms: Map<string, Set<RoomParticipant>> = new Map();
+  private socketToUser: Map<string, string> = new Map();
 
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private wsRateLimitGuard: WsRateLimitGuard,
+    private wsRoomLimitGuard: WsRoomLimitGuard,
+  ) {}
 
   async handleConnection(client: Socket) {
     try {
@@ -81,6 +109,8 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
         socketId: client.id,
         connectedAt: new Date(),
       });
+
+      this.socketToUser.set(client.id, userId);
 
       // Join user room for targeted messages
       client.join(`user:${userId}`);
@@ -105,17 +135,47 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
       this.logger.log(`Client ${client.id} disconnected (user: ${clientInfo.userId})`);
       this.connectedClients.delete(client.id);
     }
+
+    // Clean up room limits tracking
+    this.wsRoomLimitGuard.cleanupUser(client);
+
+    // Remove from all rooms
+    for (const [roomName, participants] of this.rooms) {
+      const participant = Array.from(participants).find(p => p.socketId === client.id);
+      if (participant) {
+        participants.delete(participant);
+        this.server.to(roomName).emit(WSEvent.USER_LEFT, {
+          socketId: client.id,
+          userId: this.socketToUser.get(client.id),
+        });
+      }
+    }
+
+    this.socketToUser.delete(client.id);
   }
 
   /**
    * Subscribe to case updates
    */
+  @UseGuards(WsRateLimitGuard)
   @SubscribeMessage('subscribe:case')
   handleSubscribeCase(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { caseId: string },
   ) {
-    client.join(`case:${data.caseId}`);
+    const roomId = `case:${data.caseId}`;
+
+    // Check room limit
+    const limitCheck = this.wsRoomLimitGuard.canJoinRoom(client, roomId);
+    if (!limitCheck.allowed) {
+      return {
+        status: 'error',
+        error: limitCheck.reason,
+        currentRoomCount: limitCheck.currentCount,
+      };
+    }
+
+    client.join(roomId);
     this.logger.debug(`Client ${client.id} subscribed to case ${data.caseId}`);
     return { status: 'subscribed', caseId: data.caseId };
   }
@@ -123,20 +183,130 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Unsubscribe from case updates
    */
+  @UseGuards(WsRateLimitGuard)
   @SubscribeMessage('unsubscribe:case')
   handleUnsubscribeCase(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { caseId: string },
   ) {
-    client.leave(`case:${data.caseId}`);
+    const roomId = `case:${data.caseId}`;
+    client.leave(roomId);
+
+    // Update room limit tracking
+    this.wsRoomLimitGuard.leaveRoom(client, roomId);
+
     this.logger.debug(`Client ${client.id} unsubscribed from case ${data.caseId}`);
     return { status: 'unsubscribed', caseId: data.caseId };
   }
 
   /**
+   * Join a generic room
+   */
+  @UseGuards(WsRateLimitGuard)
+  @SubscribeMessage('join_room')
+  handleJoinRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { room: string; userId?: string },
+  ): { success: boolean; error?: string } {
+    const { room, userId } = data;
+
+    // Check room limit
+    const limitCheck = this.wsRoomLimitGuard.canJoinRoom(client, room);
+    if (!limitCheck.allowed) {
+      this.logger.warn(`Client ${client.id} cannot join room ${room}: ${limitCheck.reason}`);
+      client.emit('error', {
+        code: 'ROOM_LIMIT_EXCEEDED',
+        message: limitCheck.reason,
+        currentRoomCount: limitCheck.currentCount,
+      });
+      return { success: false, error: limitCheck.reason };
+    }
+
+    client.join(room);
+
+    if (!this.rooms.has(room)) {
+      this.rooms.set(room, new Set());
+    }
+
+    const participant: RoomParticipant = {
+      socketId: client.id,
+      userId: userId || this.socketToUser.get(client.id),
+      joinedAt: new Date(),
+    };
+
+    this.rooms.get(room)!.add(participant);
+
+    if (userId) {
+      this.socketToUser.set(client.id, userId);
+    }
+
+    this.server.to(room).emit(WSEvent.USER_JOINED, {
+      socketId: client.id,
+      userId: participant.userId,
+      participantCount: this.rooms.get(room)!.size,
+    });
+
+    this.logger.log(`Client ${client.id} joined room: ${room}`);
+    return { success: true };
+  }
+
+  /**
+   * Leave a generic room
+   */
+  @UseGuards(WsRateLimitGuard)
+  @SubscribeMessage('leave_room')
+  handleLeaveRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { room: string },
+  ): void {
+    const { room } = data;
+
+    client.leave(room);
+
+    // Update room limit tracking
+    this.wsRoomLimitGuard.leaveRoom(client, room);
+
+    const roomParticipants = this.rooms.get(room);
+    if (roomParticipants) {
+      const participant = Array.from(roomParticipants).find(p => p.socketId === client.id);
+      if (participant) {
+        roomParticipants.delete(participant);
+      }
+    }
+
+    this.server.to(room).emit(WSEvent.USER_LEFT, {
+      socketId: client.id,
+      userId: this.socketToUser.get(client.id),
+    });
+
+    this.logger.log(`Client ${client.id} left room: ${room}`);
+  }
+
+  /**
+   * Send message to room
+   */
+  @UseGuards(WsRateLimitGuard)
+  @SubscribeMessage('send_message')
+  handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { room: string; message: any },
+  ): void {
+    const { room, message } = data;
+
+    this.server.to(room).emit(WSEvent.MESSAGE, {
+      from: client.id,
+      userId: this.socketToUser.get(client.id),
+      message,
+      timestamp: new Date(),
+    });
+
+    this.logger.debug(`Message sent to room ${room} from ${client.id}`);
+  }
+
+  /**
    * Broadcast to all clients
    */
-  broadcastToAll(event: WSEvent, data: any): void {
+  broadcastToAll(event: WSEvent | string, data: any): void {
     this.server.emit(event, {
       ...data,
       timestamp: new Date().toISOString(),
@@ -146,7 +316,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to specific user
    */
-  broadcastToUser(userId: string, event: WSEvent, data: any): void {
+  broadcastToUser(userId: string, event: WSEvent | string, data: any): void {
     this.server.to(`user:${userId}`).emit(event, {
       ...data,
       timestamp: new Date().toISOString(),
@@ -156,7 +326,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to case room
    */
-  broadcastToCase(caseId: string, event: WSEvent, data: any): void {
+  broadcastToCase(caseId: string, event: WSEvent | string, data: any): void {
     this.server.to(`case:${caseId}`).emit(event, {
       ...data,
       caseId,
@@ -167,10 +337,59 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to multiple users
    */
-  broadcastToUsers(userIds: string[], event: WSEvent, data: any): void {
+  broadcastToUsers(userIds: string[], event: WSEvent | string, data: any): void {
     for (const userId of userIds) {
       this.broadcastToUser(userId, event, data);
     }
+  }
+
+  /**
+   * Emit to specific room
+   */
+  emitToRoom(room: string, event: string, data: any): void {
+    this.server.to(room).emit(event, data);
+    this.logger.debug(`Event ${event} emitted to room ${room}`);
+  }
+
+  /**
+   * Emit to user (alias for broadcastToUser, for backwards compatibility)
+   */
+  emitToUser(userId: string, event: string, data: any): void {
+    for (const [socketId, uid] of this.socketToUser) {
+      if (uid === userId) {
+        this.server.to(socketId).emit(event, data);
+        this.logger.debug(`Event ${event} emitted to user ${userId}`);
+      }
+    }
+  }
+
+  /**
+   * Emit to all (alias for broadcastToAll, for backwards compatibility)
+   */
+  emitToAll(event: string, data: any): void {
+    this.server.emit(event, data);
+    this.logger.debug(`Event ${event} emitted to all clients`);
+  }
+
+  /**
+   * Get room participants
+   */
+  getRoomParticipants(room: string): RoomParticipant[] {
+    return Array.from(this.rooms.get(room) || []);
+  }
+
+  /**
+   * Get room participant count
+   */
+  getRoomCount(room: string): number {
+    return this.rooms.get(room)?.size || 0;
+  }
+
+  /**
+   * Get all rooms
+   */
+  getAllRooms(): string[] {
+    return Array.from(this.rooms.keys());
   }
 
   /**
@@ -194,4 +413,10 @@ interface ClientInfo {
   userId: string;
   socketId: string;
   connectedAt: Date;
+}
+
+interface RoomParticipant {
+  socketId: string;
+  userId?: string;
+  joinedAt: Date;
 }

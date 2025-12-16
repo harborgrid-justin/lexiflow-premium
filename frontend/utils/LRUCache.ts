@@ -1,0 +1,99 @@
+/**
+ * LRU (Least Recently Used) Cache Implementation
+ *
+ * A simple but efficient LRU cache using Map for O(1) operations.
+ * When capacity is reached, the oldest (least recently used) entry is evicted.
+ *
+ * Usage:
+ * ```typescript
+ * const cache = new LRUCache<User>(100);
+ * cache.put('user1', userData);
+ * const user = cache.get('user1');
+ * cache.delete('user1');
+ * cache.clear();
+ * ```
+ */
+export class LRUCache<T> {
+  private capacity: number;
+  private cache: Map<string, T>;
+
+  constructor(capacity: number) {
+    this.capacity = capacity;
+    this.cache = new Map();
+  }
+
+  /**
+   * Get a value from the cache.
+   * Accessing an item moves it to the end (most recently used).
+   */
+  get(key: string): T | undefined {
+    if (!this.cache.has(key)) {
+      return undefined;
+    }
+    const value = this.cache.get(key)!;
+    // Move to end (most recently used)
+    this.cache.delete(key);
+    this.cache.set(key, value);
+    return value;
+  }
+
+  /**
+   * Put a value into the cache.
+   * If key exists, it's updated and moved to end.
+   * If capacity is reached, oldest entry is evicted.
+   */
+  put(key: string, value: T): void {
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    } else if (this.cache.size >= this.capacity) {
+      // Evict oldest (first) entry
+      const oldestKey = this.cache.keys().next().value;
+      if (oldestKey !== undefined) {
+        this.cache.delete(oldestKey);
+      }
+    }
+    this.cache.set(key, value);
+  }
+
+  /**
+   * Delete a specific key from the cache.
+   */
+  delete(key: string): void {
+    this.cache.delete(key);
+  }
+
+  /**
+   * Clear all entries from the cache.
+   */
+  clear(): void {
+    this.cache.clear();
+  }
+
+  /**
+   * Get current cache size.
+   */
+  get size(): number {
+    return this.cache.size;
+  }
+
+  /**
+   * Check if cache contains a key.
+   */
+  has(key: string): boolean {
+    return this.cache.has(key);
+  }
+
+  /**
+   * Get all keys in the cache (from oldest to newest).
+   */
+  keys(): IterableIterator<string> {
+    return this.cache.keys();
+  }
+
+  /**
+   * Get all values in the cache (from oldest to newest).
+   */
+  values(): IterableIterator<T> {
+    return this.cache.values();
+  }
+}

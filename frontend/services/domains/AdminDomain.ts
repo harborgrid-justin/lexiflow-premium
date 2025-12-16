@@ -2,8 +2,7 @@ import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnom
 import { db, STORES } from '../db';
 import { ChainService } from '../chainService';
 import { MOCK_API_SPEC } from '../../data/mockApiSpec';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 export const AdminService = {
     // Real DB Access

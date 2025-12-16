@@ -2,50 +2,17 @@
 import { BaseEntity, UserId } from '../../types';
 import { MicroORM } from './microORM';
 import { errorHandler } from '../../utils/errorHandler';
-
-// Simple LRU Cache Implementation
-class LRUCache<T> {
-  private capacity: number;
-  private cache: Map<string, T>;
-
-  constructor(capacity: number) {
-    this.capacity = capacity;
-    this.cache = new Map();
-  }
-
-  get(key: string): T | undefined {
-    if (!this.cache.has(key)) {
-      return undefined;
-    }
-    const value = this.cache.get(key)!;
-    this.cache.delete(key);
-    this.cache.set(key, value);
-    return value;
-  }
-
-  put(key: string, value: T): void {
-    if (this.cache.has(key)) {
-      this.cache.delete(key);
-    } else if (this.cache.size >= this.capacity) {
-      const oldestKey = this.cache.keys().next().value;
-      if (oldestKey) {
-          this.cache.delete(oldestKey);
-      }
-    }
-    this.cache.set(key, value);
-  }
-
-  delete(key: string): void {
-    this.cache.delete(key);
-  }
-}
+import { LRUCache } from '../../utils/LRUCache';
 
 type Listener<T> = (item: T) => void;
+
+const MAX_LISTENERS_PER_REPO = 1000; // Safety limit to prevent runaway listener accumulation
 
 export abstract class Repository<T extends BaseEntity> {
     private cache: LRUCache<T>;
     private listeners: Set<Listener<T>> = new Set();
     protected orm: MicroORM<T>;
+    private listenerWarningLogged = false;
 
     constructor(protected storeName: string) {
         this.cache = new LRUCache<T>(100);
@@ -56,6 +23,7 @@ export abstract class Repository<T extends BaseEntity> {
         this.getById = this.getById.bind(this);
         this.getByIndex = this.getByIndex.bind(this);
         this.getMany = this.getMany.bind(this);
+        this.getByCaseId = this.getByCaseId.bind(this);
         this.add = this.add.bind(this);
         this.update = this.update.bind(this);
         this.delete = this.delete.bind(this);
@@ -77,11 +45,41 @@ export abstract class Repository<T extends BaseEntity> {
     
     subscribe(listener: Listener<T>) {
         this.listeners.add(listener);
-        return () => this.listeners.delete(listener);
+
+        // Safety check: warn if listeners are accumulating
+        if (this.listeners.size > MAX_LISTENERS_PER_REPO && !this.listenerWarningLogged) {
+            console.warn(`[Repository:${this.storeName}] Listener count exceeded ${MAX_LISTENERS_PER_REPO}. Possible memory leak - ensure components unsubscribe on unmount.`);
+            this.listenerWarningLogged = true;
+        }
+
+        return () => this.removeListener(listener);
+    }
+
+    removeListener(listener: Listener<T>) {
+        this.listeners.delete(listener);
+    }
+
+    clearAllListeners() {
+        const count = this.listeners.size;
+        this.listeners.clear();
+        this.listenerWarningLogged = false;
+        if (count > 0) {
+            console.log(`[Repository:${this.storeName}] Cleared ${count} listeners`);
+        }
+    }
+
+    getListenerCount(): number {
+        return this.listeners.size;
     }
 
     protected notify(item: T) {
-        this.listeners.forEach(l => l(item));
+        this.listeners.forEach(l => {
+            try {
+                l(item);
+            } catch (error) {
+                console.error(`[Repository:${this.storeName}] Error in listener:`, error);
+            }
+        });
     }
 
     protected logAction = async (action: string, resourceId: string, details: string, previousValue?: any, newValue?: any) => {
@@ -144,6 +142,15 @@ export abstract class Repository<T extends BaseEntity> {
             const items = await this.orm.findBy(indexName, value);
             return items.filter(item => !item.deletedAt);
         }, 'getByIndex');
+    }
+
+    /**
+     * Get all items for a specific case.
+     * This is a common pattern across many repositories, so we provide it in the base class.
+     * Override this method if custom logic is needed.
+     */
+    async getByCaseId(caseId: string): Promise<T[]> {
+        return this.getByIndex('caseId', caseId);
     }
 
     async add(item: T): Promise<T> {

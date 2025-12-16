@@ -6,8 +6,6 @@ export class ProjectRepository extends Repository<Project> {
     constructor() {
         super(STORES.PROJECTS);
     }
-    
-    async getByCaseId(caseId: string) {
-        return this.getByIndex('caseId', caseId);
-    }
+
+    // getByCaseId is inherited from base Repository class
 }

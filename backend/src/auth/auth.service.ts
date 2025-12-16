@@ -6,6 +6,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { authenticator } from 'otplib';
+import * as qrcode from 'qrcode';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -15,12 +17,22 @@ import { Role } from '../common/enums/role.enum';
 
 @Injectable()
 export class AuthService {
-  // In-memory storage for refresh tokens (replace with Redis in production)
+  /**
+   * IMPORTANT: In-memory storage for tokens (NOT suitable for production)
+   *
+   * SECURITY CONSIDERATIONS:
+   * - All tokens stored in these Maps will be LOST on server restart
+   * - Does NOT scale across multiple server instances
+   * - No persistence means users will be logged out on restart
+   *
+   * PRODUCTION RECOMMENDATIONS:
+   * - Use Redis for distributed token storage
+   * - Or use PostgreSQL with proper indexing for token lookups
+   * - Implement token cleanup/TTL to prevent memory leaks
+   * - Consider using @Scope(Scope.REQUEST) if stateless design is preferred
+   */
   private refreshTokens: Map<string, string> = new Map();
-  // In-memory storage for password reset tokens
-  private resetTokens: Map<string, { userId: string; expires: Date }> =
-    new Map();
-  // In-memory storage for MFA tokens
+  private resetTokens: Map<string, { userId: string; expires: Date }> = new Map();
   private mfaTokens: Map<string, { userId: string; expires: Date }> = new Map();
 
   constructor(
@@ -229,6 +241,104 @@ export class AuthService {
     return { message: 'Password reset successfully' };
   }
 
+  /**
+   * Setup MFA for a user
+   * Generates a TOTP secret and returns it with a QR code for scanning
+   */
+  async setupMfa(userId: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Generate TOTP secret
+    const secret = authenticator.generateSecret();
+
+    // Store the secret for this user
+    await this.usersService.setTotpSecret(userId, secret);
+
+    // Generate otpauth URL for QR code
+    const otpauthUrl = authenticator.keyuri(
+      user.email,
+      'LexiFlow Premium',
+      secret,
+    );
+
+    // Generate QR code as data URL
+    const qrCodeDataUrl = await qrcode.toDataURL(otpauthUrl);
+
+    return {
+      secret,
+      qrCode: qrCodeDataUrl,
+      otpauthUrl,
+    };
+  }
+
+  /**
+   * Enable MFA for a user after verifying they can generate valid codes
+   */
+  async enableMfa(userId: string, verificationCode: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const totpSecret = await this.usersService.getTotpSecret(userId);
+    if (!totpSecret) {
+      throw new BadRequestException('MFA not set up. Please call /auth/mfa/setup first');
+    }
+
+    // Verify the code
+    const isValid = authenticator.verify({
+      token: verificationCode,
+      secret: totpSecret,
+    });
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid verification code');
+    }
+
+    // Enable MFA for the user
+    await this.usersService.setMfaEnabled(userId, true);
+
+    return { message: 'MFA enabled successfully' };
+  }
+
+  /**
+   * Disable MFA for a user
+   */
+  async disableMfa(userId: string, verificationCode: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (!user.mfaEnabled) {
+      throw new BadRequestException('MFA is not enabled for this user');
+    }
+
+    const totpSecret = await this.usersService.getTotpSecret(userId);
+    if (!totpSecret) {
+      throw new BadRequestException('MFA secret not found');
+    }
+
+    // Verify the code before disabling
+    const isValid = authenticator.verify({
+      token: verificationCode,
+      secret: totpSecret,
+    });
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid verification code');
+    }
+
+    // Disable MFA and clear the secret
+    await this.usersService.setMfaEnabled(userId, false);
+    await this.usersService.setTotpSecret(userId, '');
+
+    return { message: 'MFA disabled successfully' };
+  }
+
   async verifyMfa(mfaToken: string, code: string) {
     const mfaData = this.mfaTokens.get(mfaToken);
 
@@ -247,9 +357,6 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    // TODO: Implement proper TOTP verification using speakeasy or similar library
-    // For now, reject all codes until proper TOTP is implemented
-    // This ensures MFA cannot be bypassed
     const isValidCode = await this.verifyTotpCode(user, code);
     if (!isValidCode) {
       throw new UnauthorizedException('Invalid MFA code');
@@ -355,23 +462,34 @@ export class AuthService {
     return mfaToken;
   }
 
-  // Verify TOTP code - placeholder for proper implementation
-  // In production, use speakeasy or similar library with user's stored TOTP secret
+  /**
+   * Verify TOTP code using otplib
+   * Validates the 6-digit code against the user's stored TOTP secret
+   */
   private async verifyTotpCode(
     user: AuthenticatedUser,
     code: string,
   ): Promise<boolean> {
-    // TODO: Implement proper TOTP verification
-    // Example with speakeasy:
-    // return speakeasy.totp.verify({
-    //   secret: user.totpSecret,
-    //   encoding: 'base32',
-    //   token: code,
-    //   window: 1,
-    // });
+    if (!user.mfaEnabled) {
+      return false;
+    }
 
-    // For now, MFA verification requires proper implementation
-    // Returning false ensures MFA cannot be bypassed
-    return false;
+    const totpSecret = await this.usersService.getTotpSecret(user.id);
+    if (!totpSecret) {
+      return false;
+    }
+
+    try {
+      // Verify the TOTP code with a window of 1 (allows for time drift)
+      const isValid = authenticator.verify({
+        token: code,
+        secret: totpSecret,
+      });
+
+      return isValid;
+    } catch (error) {
+      console.error('[AUTH] TOTP verification error:', error);
+      return false;
+    }
   }
 }

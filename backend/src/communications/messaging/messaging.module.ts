@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 import { MessagingController } from './messaging.controller';
 import { MessagingService } from './messaging.service';
 import { MessagingGateway } from './messaging.gateway';
@@ -9,11 +11,14 @@ import { MessagingGateway } from './messaging.gateway';
  *
  * Provides secure real-time messaging functionality
  * Includes REST API endpoints and WebSocket gateway
+ * WebSocket connections are secured with JWT authentication
  *
  * @module MessagingModule
  */
 @Module({
   imports: [
+    ConfigModule,
+    JwtModule.register({}), // Configuration handled in gateway
     // TypeORM entities will be imported here once created by Agent 1
     // TypeOrmModule.forFeature([Conversation, Message, Attachment]),
   ],

@@ -29,9 +29,8 @@ import { useNotify } from './useNotify';
 import { useAutoSave } from './useAutoSave';
 
 // Utils & Constants
-import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '../components/workflow/builder/types';
-import { TypedWorkflowNode, createTypedNode } from '../components/litigation/nodeTypes';
-import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '../components/litigation/canvasConstants';
+import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS, TypedWorkflowNode, createTypedNode } from '@/types/workflow-types';
+import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants';
 import { Playbook } from '../data/mockLitigationPlaybooks';
 
 // Types
@@ -74,8 +73,11 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
   });
   
   const { mutate: deploy, isLoading: isDeploying } = useMutation(
-    (payload: { caseId: string; phases: CasePhase[]; tasks: WorkflowTask[] }) => 
-        DataService.workflow.deployStrategyToCase(payload.caseId, { phases: payload.phases, tasks: payload.tasks }),
+    async (payload: { caseId: string; phases: CasePhase[]; tasks: WorkflowTask[] }) => {
+        // Use WorkflowRepository directly as this method isn't in the API service yet
+        const WorkflowRepository = await import('../services/repositories/WorkflowRepository').then(m => m.WorkflowRepository);
+        return WorkflowRepository.deployStrategyToCase(payload.caseId, { phases: payload.phases, tasks: payload.tasks });
+    },
     {
         onSuccess: (_, variables) => {
             notify.success('Strategy deployed to case plan!');

@@ -7,6 +7,8 @@ export * from './types/pleading-types';
 export * from './types/pacer';
 export * from './types/result';
 export * from './types/parser';
+export * from './types/workflow-types';
+export * from './types/canvas-constants';
 
 export interface PaginatedResponse<T> {
   data: T[];

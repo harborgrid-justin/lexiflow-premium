@@ -7,9 +7,8 @@
  * @module services/commandHistory
  */
 
-import { CANVAS_CONSTANTS } from '../components/litigation/canvasConstants';
-import { TypedWorkflowNode } from '../components/litigation/nodeTypes';
-import { WorkflowConnection } from '../components/workflow/builder/types';
+import { CANVAS_CONSTANTS } from '@/types/canvas-constants';
+import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 
 /**
  * Base command interface

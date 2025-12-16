@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useCallback } from 'react';
-import { KEYBOARD_SHORTCUTS } from '../components/litigation/canvasConstants';
+import { KEYBOARD_SHORTCUTS } from '@/types/canvas-constants';
 
 export interface KeyboardShortcutHandlers {
   onUndo?: () => void;

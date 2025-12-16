@@ -7,9 +7,8 @@
  * @module services/aiValidationService
  */
 
-import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '../components/litigation/canvasConstants';
-import { TypedWorkflowNode } from '../components/litigation/nodeTypes';
-import { WorkflowConnection } from '../components/workflow/builder/types';
+import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants';
+import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 
 /**
  * Rate limiter state

@@ -1,48 +1,19 @@
+/**
+ * Re-export shared workflow types from central location
+ * Maintains backward compatibility for component imports
+ */
+export * from '../../../types/workflow-types';
 
+// Legacy export for backward compatibility
+import { getNodeIcon as _getNodeIcon, NodeType } from '../../../types/workflow-types';
 import React from 'react';
 import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Milestone, MessageSquare } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
-export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event' | 'Milestone' | 'Comment';
+export const getNodeIcon = _getNodeIcon;
 
-export interface Port {
-  id: string;
-  label: string;
-}
-
-export interface WorkflowNode {
-  id: string;
-  type: NodeType;
-  label: string;
-  x: number;
-  y: number;
-  width?: number;
-  height?: number;
-  config: Record<string, any>;
-  ports?: Port[];
-  parentId?: string; // For grouping
-  linkedEntityId?: string;
-  status?: 'complete' | 'in_progress' | 'blocked';
-}
-
-export interface WorkflowConnection {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  fromPort?: string;
-  toPort?: string;
-  style?: 'solid' | 'dashed';
-}
-
-export const LITIGATION_PORTS: Record<string, Port[]> = {
-    'Rule 12(b)(6)': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Rule 56': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Motion in Limine': [{ id: 'granted', label: 'Granted' }, { id: 'denied', label: 'Denied' }],
-    'Default': [{ id: 'success', label: 'Success' }, { id: 'failure', label: 'Failure' }],
-};
-
-export const getNodeIcon = (type: NodeType) => {
+// Component-specific node styling function
+export const getNodeIconLocal = (type: NodeType) => {
   switch (type) {
     case 'Start': return React.createElement(Play, { className: "h-4 w-4 text-green-600" });
     case 'End': return React.createElement(Square, { className: "h-4 w-4 text-red-600" });

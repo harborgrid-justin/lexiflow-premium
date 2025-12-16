@@ -173,7 +173,7 @@ export const RateTableManagement: React.FC = () => {
                 <span className={cn("font-semibold text-green-600")}>${table.defaultRate}/hr</span>
               </TableCell>
               <TableCell>
-                <Badge variant={table.status === 'Active' ? 'success' : table.status === 'Draft' ? 'warning' : 'default'}>
+                <Badge variant={table.status === 'Active' ? 'success' : table.status === 'Draft' ? 'warning' : 'neutral'}>
                   {table.status}
                 </Badge>
               </TableCell>

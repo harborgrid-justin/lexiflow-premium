@@ -8,10 +8,9 @@
  */
 
 import { useState, useRef, useCallback } from 'react';
-import { TypedWorkflowNode, createTypedNode } from '../components/litigation/nodeTypes';
-import { WorkflowConnection, NodeType } from '../components/workflow/builder/types';
+import { TypedWorkflowNode, createTypedNode, WorkflowConnection, NodeType } from '@/types/workflow-types';
 import { ContextMenuItem } from '../components/common/ContextMenu';
-import { CANVAS_CONSTANTS } from '../components/litigation/canvasConstants';
+import { CANVAS_CONSTANTS } from '@/types/canvas-constants';
 import {
   calculateDropPosition,
   calculateCanvasMousePosition,
@@ -140,7 +139,7 @@ export function useStrategyCanvas({
   const addNode = useCallback(
     (type: NodeType, x: number, y: number, label?: string, litType?: string): string => {
       const id = `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const newNode = createTypedNode(type, id, label || type, x, y);
+      const newNode = createTypedNode(type, label || type, x, y, id);
 
       if (litType && newNode.type === 'Decision') {
         newNode.config.litigationType = litType;

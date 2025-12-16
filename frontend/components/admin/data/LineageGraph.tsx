@@ -112,3 +112,5 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
     </div>
   );
 };
+
+export default LineageGraph;

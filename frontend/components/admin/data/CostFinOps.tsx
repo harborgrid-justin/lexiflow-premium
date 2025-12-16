@@ -109,3 +109,5 @@ export const CostFinOps: React.FC = () => {
     </div>
   );
 };
+
+export default CostFinOps;

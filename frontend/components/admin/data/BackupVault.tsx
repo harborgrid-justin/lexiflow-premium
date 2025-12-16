@@ -134,3 +134,5 @@ export const BackupVault: React.FC = () => {
     </div>
   );
 };
+
+export default BackupVault;

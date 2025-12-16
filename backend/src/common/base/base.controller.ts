@@ -31,7 +31,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: `Get all ${this.resourceName}s` })
+  @ApiOperation({ summary: 'Get all resources' })
   async findAll(@Query() query: QueryPaginationDto) {
     const result = await this.service.findWithPagination(
       query.page,
@@ -48,7 +48,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: `Get ${this.resourceName} by ID` })
+  @ApiOperation({ summary: 'Get resource by ID' })
   async findOne(@Param('id') id: string) {
     const data = await this.service.findById(id);
 
@@ -62,7 +62,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: `Create new ${this.resourceName}` })
+  @ApiOperation({ summary: 'Create new resource' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createDto: any) {
     const data = await this.service.create(createDto);
@@ -77,7 +77,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: `Update ${this.resourceName}` })
+  @ApiOperation({ summary: 'Update resource' })
   async update(@Param('id') id: string, @Body() updateDto: any) {
     const data = await this.service.update(id, updateDto);
 
@@ -91,7 +91,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: `Delete ${this.resourceName}` })
+  @ApiOperation({ summary: 'Delete resource' })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
     await this.service.delete(id);

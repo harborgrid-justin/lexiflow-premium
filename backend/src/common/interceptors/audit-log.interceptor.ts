@@ -12,7 +12,7 @@ import {
   AUDIT_LOG_KEY,
   AuditLogOptions,
 } from '../decorators/audit-log.decorator';
-import { AuditLogService } from '../services/audit-log.service';
+import { AuditLogService, AuditAction } from '../services/audit-log.service';
 
 @Injectable()
 export class AuditLogInterceptor implements NestInterceptor {
@@ -44,8 +44,9 @@ export class AuditLogInterceptor implements NestInterceptor {
         try {
           await this.auditLogService.log({
             userId: user?.id || 'anonymous',
-            action: auditOptions.action,
+            action: auditOptions.action as AuditAction,
             resource: auditOptions.resource,
+            resourceId: request.params?.id || request.params?.[Object.keys(request.params || {})[0]] || 'unknown',
             description:
               auditOptions.description || `${auditOptions.action} performed`,
             ipAddress: request.ip,
@@ -70,8 +71,9 @@ export class AuditLogInterceptor implements NestInterceptor {
         try {
           await this.auditLogService.log({
             userId: user?.id || 'anonymous',
-            action: auditOptions.action,
+            action: auditOptions.action as AuditAction,
             resource: auditOptions.resource,
+            resourceId: request.params?.id || request.params?.[Object.keys(request.params || {})[0]] || 'unknown',
             description: `Failed: ${auditOptions.action}`,
             ipAddress: request.ip,
             userAgent: request.headers['user-agent'],

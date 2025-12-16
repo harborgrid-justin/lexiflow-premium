@@ -197,3 +197,5 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
     </div>
   );
 };
+
+export default QueryConsole;

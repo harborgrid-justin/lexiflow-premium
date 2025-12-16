@@ -210,3 +210,5 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
     </div>
   );
 };
+
+export default DataQualityStudio;

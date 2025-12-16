@@ -140,3 +140,5 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
     </div>
   );
 };
+
+export default DataCatalog;

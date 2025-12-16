@@ -137,3 +137,5 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
     </div>
   );
 };
+
+export default GovernanceConsole;

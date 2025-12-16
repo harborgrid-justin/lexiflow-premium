@@ -182,3 +182,5 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     </div>
   );
 };
+
+export default SchemaArchitect;

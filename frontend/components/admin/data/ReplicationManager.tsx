@@ -99,3 +99,5 @@ export const ReplicationManager: React.FC = () => {
     </div>
   );
 };
+
+export default ReplicationManager;

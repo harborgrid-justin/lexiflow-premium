@@ -2,6 +2,7 @@ import { ObjectType, Field, ID, registerEnumType, HideField } from '@nestjs/grap
 
 export enum UserRole {
   ADMIN = 'ADMIN',
+  PARTNER = 'PARTNER',
   ATTORNEY = 'ATTORNEY',
   PARALEGAL = 'PARALEGAL',
   LEGAL_ASSISTANT = 'LEGAL_ASSISTANT',

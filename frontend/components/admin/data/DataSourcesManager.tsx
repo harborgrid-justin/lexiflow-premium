@@ -721,3 +721,5 @@ const IndexedDBView = () => {
     </div>
   );
 };
+
+export default DataSourcesManager;

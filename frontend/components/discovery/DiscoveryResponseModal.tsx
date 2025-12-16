@@ -6,8 +6,12 @@ import { Badge } from '../common/Badge';
 import { Wand2 } from 'lucide-react';
 import { DiscoveryRequest } from '../../types';
 import { GeminiService } from '../../services/geminiService';
-import { useTheme } from '../../context/ThemeContext'; // Import useTheme
-import { cn } from '../../utils/cn'; // Import cn
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { DataService } from '../../services/dataService';
+import { useMutation, queryClient } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
+import { STORES } from '../../services/db';
 
 interface DiscoveryResponseModalProps {
   request: DiscoveryRequest | null;
@@ -17,7 +21,8 @@ interface DiscoveryResponseModalProps {
 export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ request, onClose }) => {
   const [draftResponse, setDraftResponse] = useState('');
   const [isDrafting, setIsDrafting] = useState(false);
-  const { theme } = useTheme(); // Use theme
+  const { theme } = useTheme();
+  const { notifySuccess, notifyError } = useNotify();
 
   const handleGenerateResponse = async () => {
     if (!request) return;
@@ -31,6 +36,35 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
     setDraftResponse(draft);
     setIsDrafting(false);
   };
+
+  const saveDraftMutation = useMutation(
+    async () => {
+      if (!request || !draftResponse) return;
+      
+      const draftPleading = {
+        caseId: request.caseId || '',
+        title: `Response to ${request.title}`,
+        type: 'response' as const,
+        content: draftResponse,
+        status: 'draft' as const,
+        filedDate: '',
+        dueDate: '',
+        parties: [request.respondingParty, request.propoundingParty],
+      };
+      
+      await DataService.pleadings.add(draftPleading);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidate([STORES.PLEADINGS]);
+        notifySuccess('Response saved to drafts successfully.');
+        onClose();
+      },
+      onError: () => {
+        notifyError('Failed to save response. Please try again.');
+      }
+    }
+  );
 
   const initialDraft = 'Click "Regenerate" to create a legally formatted response with standard objections.';
 
@@ -84,7 +118,13 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
 
         <div className={cn("flex justify-end gap-3 pt-4 border-t border-slate-100", theme.border.default)}>
            <Button variant="secondary" onClick={onClose}>Discard</Button>
-           <Button variant="primary" onClick={() => { alert('Response saved to Drafts.'); onClose(); }}>Save to Matter File</Button>
+           <Button 
+             variant="primary" 
+             onClick={() => saveDraftMutation.mutate()}
+             disabled={saveDraftMutation.isLoading || !draftResponse}
+           >
+             {saveDraftMutation.isLoading ? 'Saving...' : 'Save to Matter File'}
+           </Button>
         </div>
       </div>
     </Modal>

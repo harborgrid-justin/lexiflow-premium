@@ -5,6 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useNotify } from '../../hooks/useNotify';
 
 interface CRMPipelineProps {
   leads: any[];
@@ -12,8 +13,10 @@ interface CRMPipelineProps {
 
 export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
   const { theme } = useTheme();
+  const { notifySuccess } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
+  const [showIntakeModal, setShowIntakeModal] = useState(false);
 
   // Performance Engine: useMutation for Sync Queue
   const { mutate: updateStage } = useMutation(
@@ -52,8 +55,8 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
   };
 
   const handleAddLead = () => {
-      // Simple mock addition for UI demo
-      alert("Lead intake wizard would open here.");
+      setShowIntakeModal(true);
+      notifySuccess('Lead intake wizard opened. Use "New Intake" button in header to add leads.');
   };
 
   const stages = ['New Lead', 'Conflict Check', 'Engagement', 'Matter Created'];

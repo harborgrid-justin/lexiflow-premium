@@ -88,10 +88,14 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
 
   if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
 
+  const handleNodeClick = (node: any) => {
+    // Entity node interaction - can be extended for detailed entity profile viewing
+  };
+
   return (
     <div className="h-full flex gap-6">
         <div className="flex-1 border rounded-xl overflow-hidden shadow-sm">
-            <NexusGraph caseData={{title: 'Entity Network'} as any} parties={nodes as any} evidence={[]} onNodeClick={(node) => console.log('Node clicked:', node)} />
+            <NexusGraph caseData={{title: 'Entity Network'} as any} parties={nodes as any} evidence={[]} onNodeClick={handleNodeClick} />
         </div>
         <div className={cn("w-80 space-y-4", theme.surface.default, theme.border.default)}>
              <h3 className={cn("p-4 font-bold border-b", theme.text.primary, theme.border.default)}>Conflict Clusters</h3>

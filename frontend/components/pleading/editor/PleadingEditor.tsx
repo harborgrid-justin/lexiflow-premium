@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadCloud, Download, FileText } from 'lucide-react';
+import jsPDF from 'jspdf';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -28,6 +29,7 @@ type EditorTool = 'properties' | 'template' | 'facts' | 'research' | 'review' | 
 
 export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initialDoc, onClose }) => {
   const { theme } = useTheme();
+  const { success: notifySuccess, error: notifyError } = useNotify();
   const notify = useNotify();
   const [document, setDocument] = useState<PleadingDocument>(initialDoc);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
@@ -42,8 +44,11 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
       { id: 'v3', key: 'Court', label: 'Court Name', value: 'US District Court', source: 'System' }
   ]);
 
-  const { mutate: saveDocument } = useMutation(
-      (doc: PleadingDocument) => DataService.pleadings.update(doc.id, doc),
+  const { mutate: saveDocument } = useMutation<PleadingDocument, Error, PleadingDocument>(
+      async (doc: PleadingDocument) => {
+          const result = await DataService.pleadings.update(doc.id, doc as any);
+          return result as PleadingDocument;
+      },
       {
           onSuccess: () => {
               setIsSaving(false);
@@ -225,7 +230,79 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
 
                      {activeTool === 'filing' && (
                          <FilingCenter 
-                             onExport={() => alert("Exporting...")}
+                             onExport={() => {
+                                 try {
+                                     const pdf = new jsPDF();
+                                     const pageWidth = pdf.internal.pageSize.getWidth();
+                                     const pageHeight = pdf.internal.pageSize.getHeight();
+                                     const margin = 20;
+                                     const maxWidth = pageWidth - 2 * margin;
+                                     let yPosition = margin;
+
+                                     // Add header
+                                     pdf.setFontSize(16);
+                                     pdf.setFont('helvetica', 'bold');
+                                     const titleLines = pdf.splitTextToSize(document.title, maxWidth);
+                                     titleLines.forEach((line: string) => {
+                                         if (yPosition + 10 > pageHeight - margin) {
+                                             pdf.addPage();
+                                             yPosition = margin;
+                                         }
+                                         pdf.text(line, margin, yPosition);
+                                         yPosition += 10;
+                                     });
+
+                                     yPosition += 10;
+
+                                     // Add document metadata
+                                     pdf.setFontSize(10);
+                                     pdf.setFont('helvetica', 'normal');
+                                     pdf.text(`Status: ${document.status}`, margin, yPosition);
+                                     yPosition += 7;
+                                     pdf.text(`Created: ${document.createdAt ? new Date(document.createdAt).toLocaleDateString() : 'N/A'}`, margin, yPosition);
+                                     yPosition += 15;
+
+                                     // Add sections
+                                     pdf.setFontSize(11);
+                                     document.sections.forEach((section: PleadingSection) => {
+                                         // Section title
+                                         if (section.type === 'Heading') {
+                                             pdf.setFont('helvetica', 'bold');
+                                             pdf.setFontSize(12);
+                                         } else {
+                                             pdf.setFont('helvetica', 'normal');
+                                             pdf.setFontSize(11);
+                                         }
+
+                                         const lines = pdf.splitTextToSize(section.content, maxWidth);
+                                         lines.forEach((line: string) => {
+                                             if (yPosition + 7 > pageHeight - margin) {
+                                                 pdf.addPage();
+                                                 yPosition = margin;
+                                             }
+                                             pdf.text(line, margin, yPosition);
+                                             yPosition += 7;
+                                         });
+
+                                         yPosition += 5; // Add spacing between sections
+                                     });
+
+                                     // Add page numbers
+                                     const totalPages = pdf.internal.pages.length - 1;
+                                     for (let i = 1; i <= totalPages; i++) {
+                                         pdf.setPage(i);
+                                         pdf.setFontSize(9);
+                                         pdf.text(`Page ${i} of ${totalPages}`, pageWidth - margin - 30, pageHeight - 10);
+                                     }
+
+                                     // Save PDF
+                                     pdf.save(`${document.title.replace(/\s+/g, '-')}.pdf`);
+                                     notifySuccess('PDF exported successfully');
+                                 } catch (err) {
+                                     notifyError('Failed to export PDF');
+                                     console.error('Export error:', err);
+                                 }
+                             }}
                              isReady={document.status === 'Final'}
                          />
                      )}

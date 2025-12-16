@@ -35,9 +35,11 @@ interface StrategySectionProps {
   colorClass: string;
   evidence?: EvidenceItem[];
   citations?: Citation[];
+  onEdit?: (item: LegalArgument | Defense | Citation) => void;
+  onDelete?: (id: string) => void;
 }
 
-export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, type, icon: Icon, colorClass, evidence = [], citations = [] }) => {
+export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, type, icon: Icon, colorClass, evidence = [], citations = [], onEdit, onDelete }) => {
   const { theme } = useTheme();
 
   return (
@@ -53,19 +55,28 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
             {(items as Citation[]).map((cit) => (
                 <div key={cit.id} className={cn("p-3 border-b last:border-0 transition-colors group relative", theme.border.default, `hover:${theme.surface.highlight}`)}>
                     <div className="flex justify-between items-start mb-1">
-                        <div className="flex items-center">
+                        <div className="flex items-center flex-1">
                             {cit.shepardsSignal === 'Positive' && <CheckCircle className="h-3 w-3 text-green-500 mr-1.5"/>}
                             {cit.shepardsSignal === 'Caution' && <AlertTriangle className={cn("h-3 w-3 mr-1.5", theme.status.warning.text)}/>}
                             {cit.shepardsSignal === 'Negative' && <X className="h-3 w-3 text-red-500 mr-1.5"/>}
                             <span className="font-bold text-sm text-blue-700 hover:underline cursor-pointer">{cit.citation}</span>
                         </div>
-                        <Badge variant="neutral">{cit.type}</Badge>
+                        <div className="flex items-center gap-2">
+                            {onEdit && (
+                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onEdit(cit); }} className="h-6 px-2 text-[10px]">
+                                Edit
+                              </Button>
+                            )}
+                            {onDelete && (
+                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onDelete(cit.id); }} className="h-6 px-2 text-[10px] text-red-600 hover:text-red-700">
+                                Delete
+                              </Button>
+                            )}
+                            <Badge variant="neutral">{cit.type}</Badge>
+                        </div>
                     </div>
                     <p className={cn("text-xs font-medium mb-1", theme.text.primary)}>{cit.title}</p>
                     <p className={cn("text-xs line-clamp-2", theme.text.secondary)}>{cit.description}</p>
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0"><ExternalLink className="h-4 w-4"/></Button>
-                    </div>
                 </div>
             ))}
             {items.length === 0 && <div className={cn("text-center p-8 text-sm", theme.text.tertiary)}>No citations linked.</div>}
@@ -78,8 +89,22 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
             <Card key={typedItem.id} noPadding className={`border-l-4 hover:shadow-md transition-shadow cursor-pointer ${type === 'Argument' ? 'border-l-blue-500' : 'border-l-amber-500'}`}>
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
-                  <h5 className={cn("font-bold text-sm", theme.text.primary)}>{typedItem.title}</h5>
-                  <Badge variant={typedItem.status === 'Active' || (typedItem as Defense).status === 'Asserted' ? 'success' : 'neutral'}>{typedItem.status}</Badge>
+                  <div className="flex-1">
+                    <h5 className={cn("font-bold text-sm", theme.text.primary)}>{typedItem.title}</h5>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {onEdit && (
+                      <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onEdit(typedItem); }} className="h-7 px-2 text-xs">
+                        Edit
+                      </Button>
+                    )}
+                    {onDelete && (
+                      <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onDelete(typedItem.id); }} className="h-7 px-2 text-xs text-red-600 hover:text-red-700">
+                        Delete
+                      </Button>
+                    )}
+                    <Badge variant={typedItem.status === 'Active' || (typedItem as Defense).status === 'Asserted' ? 'success' : 'neutral'}>{typedItem.status}</Badge>
+                  </div>
                 </div>
                 <p className={cn("text-xs line-clamp-3 mb-3", theme.text.secondary)}>{typedItem.description}</p>
                 

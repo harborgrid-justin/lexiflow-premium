@@ -5,21 +5,23 @@
   "type": "module",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "packages/*"
   ],
   "scripts": {
     "dev": "npm run dev --workspace=frontend",
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run start:dev --workspace=backend",
     "dev:all": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "build": "npm run build --workspace=frontend && npm run build --workspace=backend",
+    "build": "npm run build --workspace=@lexiflow/shared-types && npm run build --workspace=frontend && npm run build --workspace=backend",
+    "build:types": "npm run build --workspace=@lexiflow/shared-types",
     "build:frontend": "npm run build --workspace=frontend",
     "build:backend": "npm run build --workspace=backend",
     "preview": "npm run preview --workspace=frontend",
     "test": "npm run test --workspace=frontend && npm run test --workspace=backend",
     "test:frontend": "npm run test --workspace=frontend",
     "test:backend": "npm run test --workspace=backend",
-    "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend"
+    "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend && npm install --workspace=@lexiflow/shared-types"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

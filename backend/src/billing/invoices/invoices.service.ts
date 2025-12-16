@@ -6,6 +6,7 @@ import { InvoiceItem } from './entities/invoice-item.entity';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto, RecordPaymentDto } from './dto/update-invoice.dto';
 import { InvoiceFilterDto } from './dto/invoice-filter.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class InvoicesService {
@@ -104,8 +105,12 @@ export class InvoicesService {
 
     const total = await query.getCount();
 
+    // SQL injection protection
+    const safeSortField = validateSortField('invoice', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+
     query
-      .orderBy(`invoice.${sortBy}`, sortOrder)
+      .orderBy(`invoice.${safeSortField}`, safeSortOrder)
       .skip((page - 1) * limit)
       .take(limit);
 

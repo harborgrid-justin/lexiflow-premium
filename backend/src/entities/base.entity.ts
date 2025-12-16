@@ -4,6 +4,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
+import { Transform } from 'class-transformer';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -13,6 +14,7 @@ export abstract class BaseEntity {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
+  @Transform(({ value }) => value?.toISOString(), { toPlainOnly: true })
   createdAt: Date;
 
   @UpdateDateColumn({
@@ -20,11 +22,13 @@ export abstract class BaseEntity {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
+  @Transform(({ value }) => value?.toISOString(), { toPlainOnly: true })
   updatedAt: Date;
 
   @DeleteDateColumn({
     type: 'timestamp',
     nullable: true,
   })
+  @Transform(({ value }) => value?.toISOString(), { toPlainOnly: true })
   deletedAt?: Date;
 }

@@ -69,6 +69,7 @@ class QueryClient {
   private inflight: Map<string, Promise<any>> = new Map();
   private abortControllers: Map<string, AbortController> = new Map();
   private globalListeners: Set<(status: { isFetching: number }) => void> = new Set();
+  private listenerCleanupTimer: number | null = null;
 
   private notifyGlobal() {
     const fetchingCount = Array.from(this.cache.values()).filter(s => s.isFetching).length;
@@ -76,9 +77,22 @@ class QueryClient {
   }
 
   public subscribeToGlobalUpdates(listener: (status: { isFetching: number }) => void) {
+    this.startListenerCleanup(); // Ensure periodic cleanup is running
     this.globalListeners.add(listener);
     this.notifyGlobal();
     return () => this.globalListeners.delete(listener);
+  }
+
+  // Get diagnostic stats for monitoring
+  public getStats() {
+    return {
+      cacheSize: this.cache.size,
+      maxCacheSize: MAX_CACHE_SIZE,
+      listenerKeys: this.listeners.size,
+      globalListeners: this.globalListeners.size,
+      inflightQueries: this.inflight.size,
+      emptyListenerSets: Array.from(this.listeners.values()).filter(s => s.size === 0).length
+    };
   }
 
   public hashKey(key: QueryKey): string {
@@ -106,6 +120,40 @@ class QueryClient {
         this.listeners.delete(oldestKey);
       }
     }
+    this.cleanupEmptyListenerSets();
+  }
+
+  // Clean up empty listener Sets that might have been left behind
+  private cleanupEmptyListenerSets() {
+    const keysToDelete: string[] = [];
+
+    for (const [key, listenerSet] of this.listeners.entries()) {
+      if (listenerSet.size === 0) {
+        keysToDelete.push(key);
+      }
+    }
+
+    keysToDelete.forEach(key => this.listeners.delete(key));
+
+    if (keysToDelete.length > 0) {
+      console.log(`[QueryClient] Cleaned up ${keysToDelete.length} empty listener sets`);
+    }
+  }
+
+  // Periodic cleanup for listeners (runs every 5 minutes)
+  private startListenerCleanup() {
+    if (this.listenerCleanupTimer) return;
+
+    this.listenerCleanupTimer = window.setInterval(() => {
+      this.cleanupEmptyListenerSets();
+    }, 5 * 60 * 1000); // Every 5 minutes
+  }
+
+  public stopListenerCleanup() {
+    if (this.listenerCleanupTimer) {
+      clearInterval(this.listenerCleanupTimer);
+      this.listenerCleanupTimer = null;
+    }
   }
 
   getQueryState<T>(key: QueryKey): QueryState<T> | undefined {
@@ -118,22 +166,26 @@ class QueryClient {
   }
 
   subscribe(key: QueryKey, listener: (state: QueryState<any>) => void) {
+    this.startListenerCleanup(); // Ensure periodic cleanup is running
+
     const hashedKey = this.hashKey(key);
     if (!this.listeners.has(hashedKey)) {
       this.listeners.set(hashedKey, new Set());
     }
     this.listeners.get(hashedKey)!.add(listener);
-    
+
     if (this.cache.has(hashedKey)) {
-      this.touch(hashedKey); 
+      this.touch(hashedKey);
       listener(this.cache.get(hashedKey)!);
     }
-    
+
     return () => {
       const listeners = this.listeners.get(hashedKey);
       if (listeners) {
         listeners.delete(listener);
-        if (listeners.size === 0) this.listeners.delete(hashedKey);
+        if (listeners.size === 0) {
+          this.listeners.delete(hashedKey);
+        }
       }
     };
   }

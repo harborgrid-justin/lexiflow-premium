@@ -169,9 +169,11 @@ export class DatabaseManager {
   // Data Structure Integration: B-Tree for sorted indexes
   private titleIndex: BTree<string, string> = new BTree(5);
 
-  // Transaction Coalescing Buffer
+  // Transaction Coalescing Buffer with size limits
   private writeBuffer: { store: string, item: any, type: 'put' | 'delete', resolve: Function, reject: Function }[] = [];
   private flushTimer: number | null = null;
+  private readonly MAX_BUFFER_SIZE = 1000; // Maximum pending operations
+  private readonly FORCE_FLUSH_THRESHOLD = 500; // Force flush at this size
 
   constructor() {
       try {
@@ -351,8 +353,22 @@ export class DatabaseManager {
       }
 
       return new Promise((resolve, reject) => {
+          // Safety check: prevent unbounded buffer growth
+          if (this.writeBuffer.length >= this.MAX_BUFFER_SIZE) {
+              console.warn(`[DB] Write buffer at maximum capacity (${this.MAX_BUFFER_SIZE}), forcing immediate flush`);
+              this.flushBuffer();
+          }
+
           this.writeBuffer.push({ store: storeName, item, type: 'put', resolve, reject });
-          if (!this.flushTimer) {
+
+          // Force flush if buffer is getting large
+          if (this.writeBuffer.length >= this.FORCE_FLUSH_THRESHOLD) {
+              if (this.flushTimer) {
+                  clearTimeout(this.flushTimer);
+                  this.flushTimer = null;
+              }
+              this.flushBuffer();
+          } else if (!this.flushTimer) {
               this.flushTimer = window.setTimeout(this.flushBuffer, 16);
           }
       });
@@ -394,8 +410,22 @@ export class DatabaseManager {
       }
 
       return new Promise((resolve, reject) => {
+        // Safety check: prevent unbounded buffer growth
+        if (this.writeBuffer.length >= this.MAX_BUFFER_SIZE) {
+            console.warn(`[DB] Write buffer at maximum capacity (${this.MAX_BUFFER_SIZE}), forcing immediate flush`);
+            this.flushBuffer();
+        }
+
         this.writeBuffer.push({ store: storeName, item: id, type: 'delete', resolve, reject });
-        if (!this.flushTimer) {
+
+        // Force flush if buffer is getting large
+        if (this.writeBuffer.length >= this.FORCE_FLUSH_THRESHOLD) {
+            if (this.flushTimer) {
+                clearTimeout(this.flushTimer);
+                this.flushTimer = null;
+            }
+            this.flushBuffer();
+        } else if (!this.flushTimer) {
             this.flushTimer = window.setTimeout(this.flushBuffer, 16);
         }
       });
@@ -458,6 +488,16 @@ export class DatabaseManager {
            req.onsuccess = () => resolve(req.result);
            req.onerror = () => resolve(null);
       });
+  }
+
+  // Get buffer stats for monitoring
+  getBufferStats() {
+      return {
+          bufferSize: this.writeBuffer.length,
+          maxBufferSize: this.MAX_BUFFER_SIZE,
+          forceFlushThreshold: this.FORCE_FLUSH_THRESHOLD,
+          hasPendingFlush: this.flushTimer !== null
+      };
   }
 }
 

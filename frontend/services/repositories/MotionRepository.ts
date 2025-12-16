@@ -6,8 +6,6 @@ export class MotionRepository extends Repository<Motion> {
     constructor() {
         super(STORES.MOTIONS);
     }
-    
-    async getByCaseId(caseId: string) {
-        return this.getByIndex('caseId', caseId);
-    }
+
+    // getByCaseId is inherited from base Repository class
 }

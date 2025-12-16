@@ -6,6 +6,7 @@ import { EmailProcessorService } from './processors/email-processor.service';
 import { ReportProcessorService } from './processors/report-processor.service';
 import { NotificationProcessorService } from './processors/notification-processor.service';
 import { BackupProcessorService } from './processors/backup-processor.service';
+import { QueueErrorHandlerService } from './services/queue-error-handler.service';
 
 export const QUEUE_NAMES = {
   DOCUMENT_PROCESSING: 'document-processing',
@@ -103,7 +104,8 @@ export const QUEUE_NAMES = {
     ReportProcessorService,
     NotificationProcessorService,
     BackupProcessorService,
+    QueueErrorHandlerService, // Global error handler for all queues
   ],
-  exports: [BullModule],
+  exports: [BullModule, QueueErrorHandlerService],
 })
 export class QueuesModule {}

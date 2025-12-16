@@ -2,6 +2,20 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
+/**
+ * Consolidated JWT Authentication Guard
+ * Validates JWT tokens and checks public route access
+ * Supports both 'isPublic' metadata key for backwards compatibility
+ *
+ * @example Usage
+ * @UseGuards(JwtAuthGuard)
+ * @Controller('api')
+ * export class MyController {}
+ *
+ * @Public() // Skip authentication for this route
+ * @Get('public')
+ * publicRoute() {}
+ */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
@@ -10,7 +24,7 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Check if route is public
+    // Check if route is public (supports both 'isPublic' and 'IS_PUBLIC_KEY')
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),
       context.getClass(),

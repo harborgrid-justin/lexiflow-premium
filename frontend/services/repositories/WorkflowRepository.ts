@@ -1,12 +1,11 @@
 import { BUSINESS_PROCESSES } from '../../data/models/firmProcess';
+import { delay } from '../../utils/async';
 import { TEMPLATE_LIBRARY } from '../../data/models/workflowTemplates';
 import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 import { SystemEventType } from '../../types/integration-types';
 import { StorageUtils } from '../../utils/storage';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const WorkflowRepository = {
     getProcesses: async () => { 
@@ -17,12 +16,8 @@ export const WorkflowRepository = {
     getTemplates: async () => { 
         const tpls = await db.getAll<any>(STORES.TEMPLATES);
         return tpls.length > 0 ? tpls : TEMPLATE_LIBRARY; 
-    },
-
     getTasks: async () => {
         return db.getAll<WorkflowTask>(STORES.TASKS);
-    },
-    
     getAnalytics: async () => { 
         await delay(50); 
         // Calculate real stats from tasks
@@ -40,7 +35,6 @@ export const WorkflowRepository = {
             return diffHours > 0 && diffHours < 48; // Due within 48 hours
         }).length;
         const onTrack = total - completed - overdue - atRisk;
-
         return { 
             completion: [
                 { name: 'Mon', completed: Math.floor(completed * 0.1) },
@@ -55,35 +49,22 @@ export const WorkflowRepository = {
                 { name: 'Overdue', value: overdue, color: '#ef4444' }
             ] 
         }; 
-    },
-
     getSettings: async () => { 
-        await delay(50); 
         const defaultSettings = [
             { label: 'Auto-Assign Reviewers', enabled: true }, 
             { label: 'SLA Breach Notifications', enabled: false },
             { label: 'Strict Dependency Enforcement', enabled: true }
         ];
         return StorageUtils.get('WORKFLOW_SETTINGS', defaultSettings);
-    },
-
     updateSettings: async (settings: any[]) => {
         await delay(50);
         StorageUtils.set('WORKFLOW_SETTINGS', settings);
         return settings;
-    },
-
     saveTemplate: async (template: WorkflowTemplateData) => {
-        await delay(50);
         await db.put(STORES.TEMPLATES, template);
         return template;
-    },
-    
     getApprovals: async () => { 
-        await delay(50); 
-        const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
         const reviewTasks = tasks.filter(t => t.status === 'Review');
-        
         return reviewTasks.map(t => ({
             id: t.id,
             title: t.title,
@@ -93,23 +74,16 @@ export const WorkflowRepository = {
             description: t.description || 'Approval required for this task.',
             priority: t.priority === 'Critical' ? 'High' : (t.priority === 'High' ? 'High' : 'Medium')
         }));
-    },
-    
     deploy: async (templateId: string, context?: { caseId?: string }) => { 
         console.log(`[API] Deploying workflow ${templateId}...`);
         const template = await db.get<WorkflowTemplateData>(STORES.TEMPLATES, templateId) 
                         || TEMPLATE_LIBRARY.find(t => t.id === templateId);
-        
         if (!template) throw new Error("Template not found");
-
         const newTasks: WorkflowTask[] = [];
-        const now = new Date();
-        
         // Instantiate tasks from template stages
         template.stages.forEach((stage: string, idx: number) => {
              const dueDate = new Date(now);
              dueDate.setDate(dueDate.getDate() + (idx + 1) * 2); // Stagger deadlines
-
              const task: WorkflowTask = {
                  id: `t-auto-${Date.now()}-${idx}` as TaskId,
                  title: stage,
@@ -123,40 +97,28 @@ export const WorkflowRepository = {
              };
              newTasks.push(task);
         });
-
         // Batch insert
         for (const t of newTasks) {
             await db.put(STORES.TASKS, t);
         }
-
         return newTasks;
-    },
-    
     deployStrategyToCase: async (caseId: string, payload: { phases: CasePhase[], tasks: WorkflowTask[] }) => {
         // 1. Clear existing generated items for this case
         const [existingPhases, existingTasks] = await Promise.all([
             db.getByIndex<CasePhase>(STORES.PHASES, 'caseId', caseId),
             db.getByIndex<WorkflowTask>(STORES.TASKS, 'caseId', caseId)
         ]);
-    
         for (const phase of existingPhases) {
             await db.delete(STORES.PHASES, phase.id);
-        }
         // Only delete auto-generated tasks to avoid wiping manual ones.
         // For this demo, we'll assume all tasks for a case are part of the plan.
         for (const task of existingTasks) {
             await db.delete(STORES.TASKS, task.id);
-        }
-        
         // 2. Bulk insert new items
         await db.bulkPut(STORES.PHASES, payload.phases);
         await db.bulkPut(STORES.TASKS, payload.tasks);
-    
         return { success: true };
-    },
-
     getAutomations: async () => {
-        await delay(50);
         // In a real app, these would be stored in a DB table.
         // For now, we return a static list but via the service layer.
         return [
@@ -171,30 +133,21 @@ export const WorkflowRepository = {
                 icon: 'Zap',
                 color: 'amber'
             },
-            {
                 id: 'auto-2',
                 title: 'SLA Breach Warning',
                 description: 'IF "High Priority" task is overdue > 24h THEN notify Senior Partner.',
                 type: 'Monitor',
                 module: 'Tasks',
                 target: 'Notifications',
-                active: true,
                 icon: 'Clock',
                 color: 'blue'
             }
-        ];
-    },
-
     getProcessDetails: async (id: string) => {
-        await delay(50);
         const process = await db.get<any>(STORES.PROCESSES, id);
         // If not found in DB, check static list (for demo purposes)
         const staticProcess = BUSINESS_PROCESSES.find(p => p.id === id);
-        
         if (process || staticProcess) {
             return process || staticProcess;
-        }
-        
         // Fallback mock if absolutely nothing found (shouldn't happen if list is populated)
         return {
             id,
@@ -204,15 +157,11 @@ export const WorkflowRepository = {
             triggers: 'Manual',
             sla: 'N/A'
         };
-    },
-
     runAutomation: async (scope: string) => { 
         await delay(800); 
         console.log(`[API] Running automation scope: ${scope}`);
-        
         const tasks = await db.getAll<any>(STORES.TASKS);
         const overdue = tasks.filter(t => t.status !== 'Done' && new Date(t.dueDate) < new Date());
-        
         if (overdue.length > 0) {
             const notif = {
                 id: `notif-auto-${Date.now()}`,
@@ -222,28 +171,17 @@ export const WorkflowRepository = {
                 type: 'System'
             };
             await db.put(STORES.NOTIFICATIONS, notif);
-        }
-
         return { success: true, processed: tasks.length, actions: overdue.length };
-    },
-    
     syncEngine: async () => { 
-        await delay(800); 
         console.log("[API] Engine synced");
-    },
-
     getEngineDetails: async (id: string, type: 'case' | 'process') => {
         await delay(100);
         // In a real app, this would fetch the specific workflow instance state.
         // For now, we'll aggregate data from tasks.
         const tasks = await db.getByIndex<WorkflowTask>(STORES.TASKS, 'caseId', id);
-        const total = tasks.length;
         const completed = tasks.filter(t => t.status === 'Done').length;
         const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
-        
         // Mock data for now, but derived from real tasks if available
-        return {
-            id,
             type,
             status: 'Active',
             progress,
@@ -251,6 +189,5 @@ export const WorkflowRepository = {
             tasksCompleted: completed,
             nextDeadline: '2 Days', // Mock
             automationRate: '85%' // Mock
-        };
     }
 };

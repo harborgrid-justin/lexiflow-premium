@@ -9,6 +9,7 @@ import { Deposition } from './entities/deposition.entity';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';
 import { QueryDepositionDto } from './dto/query-deposition.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class DepositionsService {
@@ -64,7 +65,10 @@ export class DepositionsService {
       );
     }
 
-    queryBuilder.orderBy(`deposition.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('deposition', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`deposition.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

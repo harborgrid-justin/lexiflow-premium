@@ -28,6 +28,9 @@ interface WindowContextType {
 
 const WindowContext = createContext<WindowContextType | undefined>(undefined);
 
+// Maximum number of windows to prevent memory leaks
+const MAX_WINDOWS = 20;
+
 export const useWindow = () => {
   const context = useContext(WindowContext);
   if (!context) {
@@ -126,20 +129,34 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       if (existing) {
         return prev.map(w => w.id === id ? { ...w, isOpen: true, isMinimized: false, zIndex: maxZIndex + 1 } : w);
       }
-      
+
+      // Safety check: if we've reached max windows, close the oldest one
+      let windowsList = prev;
+      if (prev.length >= MAX_WINDOWS) {
+        // Find oldest window (lowest zIndex among open windows)
+        const openWindows = prev.filter(w => w.isOpen);
+        if (openWindows.length >= MAX_WINDOWS) {
+          const oldestWindow = openWindows.reduce((oldest, current) =>
+            current.zIndex < oldest.zIndex ? current : oldest
+          );
+          console.warn(`[WindowContext] Maximum window limit (${MAX_WINDOWS}) reached. Closing oldest window: ${oldestWindow.title}`);
+          windowsList = prev.filter(w => w.id !== oldestWindow.id);
+        }
+      }
+
       const width = 900;
       const height = 600;
       // Stagger new windows
-      const offset = (prev.length % 10) * 30;
+      const offset = (windowsList.length % 10) * 30;
       const x = typeof window !== 'undefined' ? (window.innerWidth - width) / 2 + offset : 0;
       const y = typeof window !== 'undefined' ? (window.innerHeight - height) / 2 + offset : 0;
-      
-      return [...prev, { 
-          id, 
-          title, 
-          component, 
-          isMinimized: false, 
-          isOpen: true, 
+
+      return [...windowsList, {
+          id,
+          title,
+          component,
+          isMinimized: false,
+          isOpen: true,
           zIndex: maxZIndex + 1,
           position: { x: Math.max(0, x), y: Math.max(0, y) },
           size: { width, height }

@@ -11,6 +11,7 @@ export * from './types/workflow-types';
 export * from './types/canvas-constants';
 export * from './types/financial';
 export * from './types/legal-research';
+export * from './types/type-mappings';
 
 export interface PaginatedResponse<T> {
   data: T[];

@@ -1,6 +1,5 @@
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../types';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 // In-memory simulation of backup state
 let mockSnapshots: BackupSnapshot[] = [

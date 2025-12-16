@@ -8,7 +8,10 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger } from '@nestjs/common';
+import { Logger, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
 
 /**
  * Messaging WebSocket Gateway
@@ -37,21 +40,37 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
   private userSockets = new Map<string, string>(); // userId -> socketId
   private socketUsers = new Map<string, string>(); // socketId -> userId
 
+  constructor(
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
+
   /**
    * Handle client connection
    */
-  handleConnection(client: Socket) {
-    this.logger.log(`Client connected: ${client.id}`);
+  async handleConnection(client: Socket) {
+    try {
+      this.logger.log(`Client attempting to connect: ${client.id}`);
 
-    // Extract user ID from authentication (will be implemented with auth module)
-    const userId = this.extractUserIdFromSocket(client);
+      // Extract user ID from authentication
+      const userId = await this.extractUserIdFromSocket(client);
 
-    if (userId) {
-      this.userSockets.set(userId, client.id);
-      this.socketUsers.set(client.id, userId);
+      if (userId) {
+        this.userSockets.set(userId, client.id);
+        this.socketUsers.set(client.id, userId);
 
-      // Broadcast presence update
-      this.broadcastPresenceUpdate(userId, 'online');
+        this.logger.log(`Client connected: ${client.id} (User: ${userId})`);
+
+        // Broadcast presence update
+        this.broadcastPresenceUpdate(userId, 'online');
+      } else {
+        // Disconnect if authentication fails
+        this.logger.warn(`Client ${client.id} failed authentication`);
+        client.disconnect();
+      }
+    } catch (error) {
+      this.logger.error(`Connection error for client ${client.id}:`, error);
+      client.disconnect();
     }
   }
 
@@ -221,12 +240,49 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
   }
 
   /**
-   * Extract user ID from socket (placeholder for auth integration)
+   * Extract and validate user ID from socket handshake
+   * Supports both Authorization header and token query parameter
+   *
+   * @param client Socket connection
+   * @returns userId if valid, null otherwise
    */
-  private extractUserIdFromSocket(client: Socket): string | null {
-    // TODO: Extract from JWT token in handshake auth
-    // For now, return a placeholder
-    return client.handshake.query.userId as string || null;
+  private async extractUserIdFromSocket(client: Socket): Promise<string | null> {
+    try {
+      // Try to extract token from Authorization header first
+      let token: string | null = null;
+
+      const authHeader = client.handshake.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+
+      // Fallback to query parameter (less secure but common for WebSocket)
+      if (!token && client.handshake.query.token) {
+        token = client.handshake.query.token as string;
+      }
+
+      if (!token) {
+        this.logger.warn('No authentication token provided in WebSocket handshake');
+        return null;
+      }
+
+      // Verify JWT token
+      const jwtSecret = this.configService.get<string>('JWT_SECRET') || 'your-secret-key';
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
+        secret: jwtSecret,
+      });
+
+      // Verify token type is access token
+      if (payload.type !== 'access') {
+        this.logger.warn(`Invalid token type for WebSocket: ${payload.type}`);
+        return null;
+      }
+
+      return payload.sub;
+    } catch (error) {
+      this.logger.error('JWT verification failed for WebSocket connection:', error.message);
+      return null;
+    }
   }
 
   /**

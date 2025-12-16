@@ -5,6 +5,7 @@ import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectFilterDto, PaginatedProjectResponseDto } from './dto/project-filter.dto';
+import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class ProjectsService {
@@ -62,8 +63,10 @@ export class ProjectsService {
       queryBuilder.andWhere('project.assignedTeamId = :assignedTeamId', { assignedTeamId });
     }
 
-    // Sorting
-    queryBuilder.orderBy(`project.${sortBy}`, sortOrder);
+    // Sorting - SQL injection protection
+    const safeSortField = validateSortField('project', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`project.${safeSortField}`, safeSortOrder);
 
     // Pagination
     const skip = (page - 1) * limit;

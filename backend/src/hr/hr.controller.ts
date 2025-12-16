@@ -4,7 +4,7 @@ import { HRService } from './hr.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { CreateTimeOffDto } from './dto/create-time-off.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('HR')
 @ApiBearerAuth('JWT-auth')

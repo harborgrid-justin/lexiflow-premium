@@ -1,18 +1,39 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as crypto from 'crypto';
-import { mkdir, writeFile, readFile, unlink, stat, readdir } from 'fs/promises';
+import * as os from 'os';
+import { mkdir, writeFile, readFile, unlink, stat, readdir, statfs } from 'fs/promises';
 import { StorageFile, FileUploadResult } from './interfaces/storage-file.interface';
 
 @Injectable()
 export class FileStorageService {
   private readonly logger = new Logger(FileStorageService.name);
   private readonly uploadDir: string;
+  private readonly maxFileSize: number;
+  private readonly minDiskSpace: number;
+  private readonly allowedMimeTypes: string[];
 
   constructor(private configService: ConfigService) {
     this.uploadDir = this.configService.get<string>('UPLOAD_DIR') || './uploads';
+    this.maxFileSize =
+      this.configService.get<number>('resourceLimits.fileStorage.maxFileSize') || 524288000; // 500MB
+    this.minDiskSpace =
+      this.configService.get<number>('resourceLimits.fileStorage.minDiskSpace') || 1073741824; // 1GB
+    this.allowedMimeTypes =
+      this.configService.get<string[]>('resourceLimits.fileStorage.allowedMimeTypes') || [];
+
     this.ensureUploadDirectory();
+
+    this.logger.log(
+      `File storage limits: maxFileSize=${this.formatBytes(this.maxFileSize)}, minDiskSpace=${this.formatBytes(this.minDiskSpace)}`,
+    );
   }
 
   private async ensureUploadDirectory(): Promise<void> {
@@ -26,6 +47,11 @@ export class FileStorageService {
 
   /**
    * Store a file with organized path structure: /uploads/{caseId}/{documentId}/{version}/filename
+   *
+   * Resource protections:
+   * - Validates file size against configured max (default 500MB)
+   * - Verifies sufficient disk space before write (default 1GB minimum)
+   * - Validates MIME type against allowlist (if configured)
    */
   async storeFile(
     file: Express.Multer.File,
@@ -34,13 +60,25 @@ export class FileStorageService {
     version: number,
   ): Promise<FileUploadResult> {
     try {
+      // Validate file size
+      if (file.size > this.maxFileSize) {
+        throw new BadRequestException(
+          `File size ${this.formatBytes(file.size)} exceeds maximum allowed size of ${this.formatBytes(this.maxFileSize)}`,
+        );
+      }
+
+      // Validate MIME type if allowlist is configured
+      if (this.allowedMimeTypes.length > 0 && !this.allowedMimeTypes.includes(file.mimetype)) {
+        throw new BadRequestException(
+          `File type ${file.mimetype} is not allowed. Allowed types: ${this.allowedMimeTypes.join(', ')}`,
+        );
+      }
+
+      // Check available disk space
+      await this.ensureDiskSpace(file.size);
+
       // Create directory structure
-      const dirPath = path.join(
-        this.uploadDir,
-        caseId,
-        documentId,
-        version.toString(),
-      );
+      const dirPath = path.join(this.uploadDir, caseId, documentId, version.toString());
       await mkdir(dirPath, { recursive: true });
 
       // Generate safe filename
@@ -59,7 +97,7 @@ export class FileStorageService {
       // Get file stats
       const stats = await stat(filePath);
 
-      this.logger.log(`File stored: ${filePath}`);
+      this.logger.log(`File stored: ${filePath} (${this.formatBytes(stats.size)})`);
 
       return {
         filename,
@@ -235,5 +273,70 @@ export class FileStorageService {
   async cleanupOrphans(validDocIds: string[]): Promise<{ removed: number }> {
     // Stub implementation
     return { removed: 0 };
+  }
+
+  /**
+   * Ensure sufficient disk space is available
+   */
+  private async ensureDiskSpace(requiredBytes: number): Promise<void> {
+    try {
+      // Get disk space statistics
+      const stats = await this.getDiskSpace();
+      const availableSpace = stats.available;
+
+      // Check if we have minimum required space after this write
+      const spaceAfterWrite = availableSpace - requiredBytes;
+
+      if (spaceAfterWrite < this.minDiskSpace) {
+        throw new InternalServerErrorException(
+          `Insufficient disk space. Available: ${this.formatBytes(availableSpace)}, ` +
+            `Required: ${this.formatBytes(requiredBytes + this.minDiskSpace)}`,
+        );
+      }
+
+      this.logger.debug(
+        `Disk space check passed: ${this.formatBytes(availableSpace)} available, ` +
+          `${this.formatBytes(spaceAfterWrite)} after write`,
+      );
+    } catch (error) {
+      if (error instanceof InternalServerErrorException) {
+        throw error;
+      }
+      this.logger.warn('Could not check disk space, proceeding with write', error);
+    }
+  }
+
+  /**
+   * Get disk space statistics for the upload directory
+   */
+  private async getDiskSpace(): Promise<{ available: number; total: number }> {
+    try {
+      // For Linux/Unix systems, use statfs
+      const stats = await statfs(this.uploadDir);
+      return {
+        available: stats.bavail * stats.bsize,
+        total: stats.blocks * stats.bsize,
+      };
+    } catch (error) {
+      // Fallback: use os.freemem() for approximate available space
+      this.logger.warn('statfs not available, using os.freemem() approximation');
+      return {
+        available: os.freemem(),
+        total: os.totalmem(),
+      };
+    }
+  }
+
+  /**
+   * Format bytes to human-readable string
+   */
+  private formatBytes(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   }
 }

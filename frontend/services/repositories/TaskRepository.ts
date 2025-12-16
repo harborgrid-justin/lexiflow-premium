@@ -8,11 +8,9 @@ export class TaskRepository extends Repository<WorkflowTask> {
     constructor() {
         super(STORES.TASKS);
     }
-    
-    async getByCaseId(caseId: string) {
-        return this.getByIndex('caseId', caseId);
-    }
-    
+
+    // getByCaseId is inherited from base Repository class
+
     async countByCaseId(caseId: string): Promise<number> {
       const tasks = await this.getByCaseId(caseId);
       return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;

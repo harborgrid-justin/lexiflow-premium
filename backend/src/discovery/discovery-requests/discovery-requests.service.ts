@@ -9,6 +9,7 @@ import { DiscoveryRequest } from './entities/discovery-request.entity';
 import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
 import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';
 import { QueryDiscoveryRequestDto } from './dto/query-discovery-request.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class DiscoveryRequestsService {
@@ -66,7 +67,10 @@ export class DiscoveryRequestsService {
       );
     }
 
-    queryBuilder.orderBy(`discoveryRequest.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('discoveryRequest', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`discoveryRequest.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

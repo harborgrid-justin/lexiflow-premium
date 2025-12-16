@@ -5,6 +5,7 @@ import { Production } from './entities/production.entity';
 import { CreateProductionDto } from './dto/create-production.dto';
 import { UpdateProductionDto } from './dto/update-production.dto';
 import { QueryProductionDto } from './dto/query-production.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class ProductionsService {
@@ -60,7 +61,10 @@ export class ProductionsService {
       );
     }
 
-    queryBuilder.orderBy(`production.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('production', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`production.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

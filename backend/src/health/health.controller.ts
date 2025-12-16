@@ -8,6 +8,8 @@ import {
   DiskHealthIndicator,
 } from '@nestjs/terminus';
 import { RedisHealthIndicator } from './redis-health.indicator';
+// TODO: Install OpenTelemetry dependencies to enable telemetry health checks
+// import { TelemetryHealthIndicator } from '../telemetry/telemetry-health.indicator';
 
 /**
  * Health Check Controller
@@ -23,6 +25,7 @@ export class HealthController {
     private memory: MemoryHealthIndicator,
     private disk: DiskHealthIndicator,
     private redis: RedisHealthIndicator,
+    // private telemetry: TelemetryHealthIndicator,
   ) {}
 
   @Get()
@@ -37,6 +40,9 @@ export class HealthController {
 
       // Redis health (if enabled)
       () => this.redis.isHealthy('redis'),
+
+      // Telemetry health - disabled until OpenTelemetry dependencies are installed
+      // () => this.telemetry.isHealthy('telemetry'),
 
       // Memory health (max 300MB heap)
       () => this.memory.checkHeap('memory_heap', 300 * 1024 * 1024),
@@ -71,6 +77,18 @@ export class HealthController {
     return this.health.check([
       () => this.db.pingCheck('database', { timeout: 3000 }),
       () => this.redis.isHealthy('redis'),
+      // () => this.telemetry.getBasicStatus('telemetry'),
     ]);
   }
+
+  // Telemetry endpoint disabled until OpenTelemetry dependencies are installed
+  // @Get('telemetry')
+  // @HealthCheck()
+  // @ApiOperation({ summary: 'Telemetry and observability status' })
+  // @ApiResponse({ status: 200, description: 'Telemetry details' })
+  // checkTelemetry() {
+  //   return this.health.check([
+  //     () => this.telemetry.isHealthy('telemetry'),
+  //   ]);
+  // }
 }

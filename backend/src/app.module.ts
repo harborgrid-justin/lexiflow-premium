@@ -7,6 +7,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import configuration from './config/configuration';
+import resourceLimitsConfig from './config/resource-limits.config';
 import { getDatabaseConfig } from './config/database.config';
 
 // Core Modules
@@ -14,10 +15,14 @@ import { CommonModule } from './common/common.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 
 // Health & Monitoring
 import { HealthModule } from './health/health.module';
+
+// Telemetry & Observability
+// TODO: Install OpenTelemetry dependencies to enable telemetry
+// import { TelemetryModule } from './telemetry/telemetry.module';
 
 // Real-time Communication
 import { RealtimeModule } from './realtime/realtime.module';
@@ -120,7 +125,7 @@ if (isRedisEnabled) {
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [configuration],
+      load: [configuration, resourceLimitsConfig],
     }),
 
     // Database
@@ -152,6 +157,10 @@ if (isRedisEnabled) {
     // Core Infrastructure Modules
     CommonModule,
     DatabaseModule,
+
+    // Telemetry & Observability
+    // TODO: Install OpenTelemetry dependencies to enable telemetry
+    // TelemetryModule,
 
     // Health Monitoring
     HealthModule,

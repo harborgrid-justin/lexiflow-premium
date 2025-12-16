@@ -41,6 +41,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [toasts, setToasts] = useState<Toast[]>([]);
   const queueRef = useRef<Toast[]>([]);
   const MAX_VISIBLE_TOASTS = 3;
+  const MAX_QUEUE_SIZE = 50; // Maximum queued toasts to prevent memory leaks
 
   const processQueue = useCallback(() => {
     setToasts(prev => {
@@ -81,18 +82,31 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return;
     }
 
+    // Safety check: if queue is at max capacity, remove lowest priority oldest items
+    if (queueRef.current.length >= MAX_QUEUE_SIZE) {
+        // Sort by priority (ascending) then timestamp (ascending) to find least important
+        queueRef.current.sort((a, b) => {
+            if (a.priority !== b.priority) return a.priority - b.priority;
+            return a.timestamp - b.timestamp;
+        });
+
+        // Remove oldest, lowest priority item
+        const removed = queueRef.current.shift();
+        console.warn(`[ToastContext] Queue at capacity (${MAX_QUEUE_SIZE}), dropped toast: ${removed?.message}`);
+    }
+
     const id = Math.random().toString(36).substring(2, 9);
-    const newToast: Toast = { 
-        id, 
-        message, 
-        type, 
+    const newToast: Toast = {
+        id,
+        message,
+        type,
         priority: PRIORITY_MAP[type],
-        timestamp: Date.now() 
+        timestamp: Date.now()
     };
-    
+
     queueRef.current.push(newToast);
     processQueue();
-  }, [toasts, processQueue]);
+  }, [toasts, processQueue, MAX_QUEUE_SIZE]);
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));

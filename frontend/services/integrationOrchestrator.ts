@@ -1,5 +1,5 @@
 
-import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../types/integrationTypes';
+import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../types/integration-types';
 import { STORES, db } from './db';
 import { 
     CalendarEventItem, WorkflowTask, DocketEntry, DocketId, 

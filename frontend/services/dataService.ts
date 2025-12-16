@@ -11,7 +11,7 @@ import { DocketRepository } from './domains/DocketDomain';
 import { ProfileDomain } from './domains/ProfileDomain'; 
 import { MarketingService } from './domains/MarketingDomain';
 import { IntegrationOrchestrator } from './integrationOrchestrator';
-import { SystemEventType } from '../types/integrationTypes';
+import { SystemEventType } from "../types/integration-types";
 import { JurisdictionService } from './domains/JurisdictionDomain';
 import { KnowledgeRepository } from './domains/KnowledgeDomain';
 import { apiServices, isBackendApiEnabled } from './apiServices';

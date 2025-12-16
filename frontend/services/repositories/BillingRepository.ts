@@ -4,7 +4,7 @@ import { Repository } from '../core/Repository';
 import { STORES, db } from '../db';
 import { ChainService } from '../chainService';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from "../../types/integration-types";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

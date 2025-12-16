@@ -5,7 +5,7 @@ import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
-import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleadingTypes';
+import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleading-types';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { VirtualGrid } from '../common/VirtualGrid';

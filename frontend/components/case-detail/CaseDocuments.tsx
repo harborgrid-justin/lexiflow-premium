@@ -32,7 +32,7 @@ import { cn } from '../../utils/cn';
 
 // Types & Interfaces
 import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../types';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from '../../types/integration-types';
 
 const DocumentAssembly = lazy(() => import('../documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 

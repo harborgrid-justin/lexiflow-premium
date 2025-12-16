@@ -3,13 +3,13 @@
  * Tests for the CaseRepository domain service
  */
 
-import { CaseRepository, PhaseRepository } from '../../../services/domains/CaseDomain';
+import { CaseRepository, PhaseRepository } from '@services/domains/CaseDomain';
 
 // Mock dependencies
-jest.mock('../../../services/db', () => ({
+jest.mock('@services/db', () => ({
   STORES: {
     CASES: 'cases',
-    PHASES: 'case_phases',
+    CASE_PHASES: 'casePhases',
   },
   db: {
     get: jest.fn(),
@@ -21,7 +21,7 @@ jest.mock('../../../services/db', () => ({
   },
 }));
 
-jest.mock('../../../services/core/microORM', () => ({
+jest.mock('@services/core/microORM', () => ({
   MicroORM: jest.fn().mockImplementation(() => ({
     findById: jest.fn(),
     findAll: jest.fn(),

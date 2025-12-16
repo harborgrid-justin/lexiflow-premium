@@ -3,7 +3,7 @@ import { TEMPLATE_LIBRARY } from '../../data/models/workflowTemplates';
 import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from '../../types/integration-types';
 import { StorageUtils } from '../../utils/storage';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

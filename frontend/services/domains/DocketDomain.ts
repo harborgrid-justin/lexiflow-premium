@@ -2,7 +2,7 @@ import { DocketEntry, DocketId, CaseId } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from "../../types/integration-types";
 import { IdGenerator } from '../../utils/idGenerator';
 import { retryWithBackoff, RetryError } from '../../utils/retryWithBackoff';
 

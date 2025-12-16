@@ -1,8 +1,8 @@
 
 export * from './enums';
 export * from './models';
-export * from './integrationTypes';
+export * from './integration-types';
 export * from './ai';
-export * from './pleadingTypes';
+export * from './pleading-types';
 export * from './pacer';
 

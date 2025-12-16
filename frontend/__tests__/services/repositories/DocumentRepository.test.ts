@@ -3,10 +3,10 @@
  * Tests for the DocumentRepository
  */
 
-import { DocumentRepository } from '../../../services/repositories/DocumentRepository';
+import { DocumentRepository } from '@services/repositories/DocumentRepository';
 
 // Mock dependencies
-jest.mock('../../../services/db', () => ({
+jest.mock('@services/db', () => ({
   STORES: {
     DOCUMENTS: 'documents',
   },
@@ -20,7 +20,7 @@ jest.mock('../../../services/db', () => ({
   },
 }));
 
-jest.mock('../../../services/core/microORM', () => ({
+jest.mock('@services/core/microORM', () => ({
   MicroORM: jest.fn().mockImplementation(() => ({
     findById: jest.fn(),
     findAll: jest.fn().mockResolvedValue([]),

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Variable, Database, RefreshCw } from 'lucide-react';
-import { PleadingVariable } from '../../../../types/pleadingTypes';
+import { PleadingVariable } from '../../../../types/pleading-types';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 

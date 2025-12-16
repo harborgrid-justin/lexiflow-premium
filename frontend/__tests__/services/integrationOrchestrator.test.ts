@@ -3,9 +3,9 @@
  * Tests for the IntegrationOrchestrator event-driven integration bus
  */
 
-import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
-import { db } from '../../services/db';
+import { IntegrationOrchestrator } from '@services/integrationOrchestrator';
+import { SystemEventType } from '@/types/integration-types';
+import { db } from '@services/db';
 
 // Mock dependencies
 jest.mock('../../services/db', () => ({

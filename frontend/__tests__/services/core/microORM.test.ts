@@ -3,9 +3,9 @@
  * Tests for the MicroORM IndexedDB abstraction layer
  */
 
-import { MicroORM } from '../../../services/core/microORM';
-import { db } from '../../../services/db';
-import { BaseEntity } from '../../../types';
+import { MicroORM } from '@services/core/microORM';
+import { db } from '@services/db';
+import { BaseEntity } from '@/types';
 
 // Mock the db module
 jest.mock('../../../services/db', () => ({

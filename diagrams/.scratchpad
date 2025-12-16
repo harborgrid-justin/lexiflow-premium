@@ -1,0 +1,756 @@
+# LexiFlow Architecture Analysis - Coordination Scratchpad
+
+## Analysis Status
+Started: 2025-12-16
+Status: COORDINATOR ANALYSIS IN PROGRESS
+Note: Individual agents not responding - Coordinator conducting comprehensive analysis
+
+## Agent Assignments
+| Agent | Domain | Status | Findings |
+|-------|--------|--------|----------|
+| EA-1 | Frontend Data Layer | ✅ COMPLETE | 6 duplicative patterns, 13 open-ended segments, 7-layer architecture analyzed |
+| EA-2 | Frontend State Management | ✅ COMPLETE | Custom QueryClient (LRU cache), SyncEngine (offline queue), 5 Context providers, 10+ hooks. CRITICAL: SyncEngine.processedCache unbounded growth, 6 unbounded listener maps. See EA2-frontend-state-management.md |
+| EA-3 | Frontend Integration & Events | ✅ COMPLETE | 16 event types, 11 handlers, 4 orphaned events, 7/11 integration opps complete |
+| EA-4 | Frontend Components & Modules | ✅ COMPLETE | 638 components, 30 modules, 10 duplications, 1071 useState in 260 files |
+| EA-5 | Backend Core Services | ✅ COMPLETE | 15+ SQL injection risks, 20+ unbounded queries, 5 duplicative patterns, in-memory storage issues |
+| EA-6 | Backend Data Processing | COMPLETED | 7 duplicative patterns, 16 open-ended segments, 4 processing pipelines analyzed |
+| EA-7 | Backend Integration Services | ✅ COMPLETE | 7 external integrations, 3 WebSocket gateways, 4 duplications, 12 open-ended segments |
+| EA-8 | Cross-cutting Concerns | ✅ COMPLETE | 12 type mismatches, 9 duplications, 12 validation gaps identified |
+
+## Duplicative Code Identified
+
+### EA-1: Frontend Data Layer
+1. **Inline Repository Class Definitions** - 30+ anonymous Repository extensions
+   - dataService.ts:108-109 (trustAccounts)
+   - dataService.ts:109-110 (billingAnalytics)
+   - dataService.ts:110-111 (reports)
+   - dataService.ts:111-132 (20+ more inline repositories)
+   - dataService.ts:194-268 (tasks, projects, risks, motions, expenses, etc.)
+
+2. **Delay/Sleep Utility Functions** - 5 duplicate implementations
+   - dataService.ts:54
+   - EvidenceRepository.ts:6
+   - BillingRepository.ts:9
+   - CaseDomain.ts:5
+   - DocumentRepository.ts:6 (yieldToMain variant)
+
+3. **getByCaseId Method Pattern** - 10+ duplicate implementations
+   - DocumentRepository.ts:13-15
+   - EvidenceRepository.ts:11
+   - CaseDomain.ts:50-64
+   - dataService.ts:196, 217, 221, 233 (inline implementations)
+
+4. **Method Binding in Constructors** - Repeated across repositories
+   - Repository.ts:54-63 (9 method bindings)
+   - BillingRepository.ts:14-23 (9 method bindings)
+
+5. **Duplicate LRU Cache Implementation** - 2 separate implementations
+   - Repository.ts:7-41 (LRUCache class)
+   - queryClient.ts:93-109 (touch/enforceLimits logic)
+
+6. **Error Handling Wrappers** - Similar try-catch patterns
+   - Repository.safeExecute() (Repository.ts:69-76)
+   - StorageUtils.get() (storage.ts:10-26)
+   - QueryClient.fetch() (queryClient.ts:191-220)
+
+### EA-6: Backend Data Processing
+1. **Error Handling Pattern** - 20+ occurrences across all services
+   - ocr.service.ts:92-94
+   - processing-jobs.service.ts:51-54
+   - document-versions.service.ts:66-69
+   - clauses.service.ts:38-41
+   - documents.service.ts:60-63
+
+2. **Logger Initialization** - Every service repeats pattern
+   - ocr.service.ts:8
+   - processing-jobs.service.ts:11
+   - document-versions.service.ts:15
+   - clauses.service.ts:14
+   - documents.service.ts:17
+   - file-storage.service.ts:10
+
+3. **FindOne with NotFoundException** - 15+ occurrences
+   - processing-jobs.service.ts:80-88
+   - document-versions.service.ts:85-97
+   - clauses.service.ts:83-91
+   - documents.service.ts:154-162
+
+4. **File Path Resolution** - 4 times in same service
+   - file-storage.service.ts:83-85, 104-106, 135-137, 181-183
+
+5. **Query Builder Filtering Pattern** - Complex filtering repeated
+   - clauses.service.ts:47-77
+   - documents.service.ts:69-149
+   - processing-jobs.service.ts:130-152
+
+6. **Job Status Update Logic** - Repeated pattern
+   - document-processor.ts:27-31, 50-54, 63-72, 94-98
+
+7. **Metadata/JSONB Column Handling** - Untyped metadata in 4+ entities
+   - clause.entity.ts:68
+   - document-version.entity.ts:40-41
+   - ocr-job.entity.ts:35-36
+   - processing-job.entity.ts:38-42
+
+## Open-ended Data Segments
+
+### EA-6: Backend Data Processing - CRITICAL ISSUES
+1. **OCR Service - Unbounded File Buffer** (ocr.service.ts:64)
+   - No file size check before loading entire file into memory
+   - Risk: Out-of-memory errors for multi-GB PDFs
+
+2. **FileStorageService - No File Size Validation** (file-storage.service.ts:30-76)
+   - No maximum file size enforcement
+   - Risk: Disk space exhaustion, multi-GB uploads
+
+3. **Unbounded Text Fields in Entities**
+   - ocr-job.entity.ts:32-33 (extractedText)
+   - document-version.entity.ts:43-44 (fullTextContent)
+   - processing-job.entity.ts:41-42 (result JSONB)
+   - clause.entity.ts:29-30 (content)
+   - Risk: Multi-GB text fields, query performance degradation
+
+4. **No Pagination Enforcement** (clauses.service.ts:47-78)
+   - Could return thousands of records without pagination
+   - Risk: Memory exhaustion, slow API responses
+
+5. **Unlimited Document Versions** (document-versions.service.ts:26-70)
+   - No limit on number of versions per document
+   - Risk: Unbounded storage growth
+
+6. **No Rate Limiting on Job Creation** (processing-jobs.service.ts:23-55)
+   - No limit on jobs created per user/document
+   - Risk: Queue flooding, resource exhaustion
+
+7. **No File Type Validation** (file-storage.service.ts:30-76)
+   - No MIME type whitelist validation
+   - Risk: Malicious file uploads (executables, scripts)
+
+8. **Missing Disk Space Checks** (file-storage.service.ts:30-76)
+   - No disk space verification before file writes
+   - Risk: Failed writes, partial files, system crashes
+
+9. **No Timeout on OCR Processing** (ocr.service.ts:67-69)
+   - No timeout on Tesseract processing
+   - Risk: Hung workers on corrupted/complex images
+
+10. **Unhandled Bull Queue Failures** (document-processor.ts)
+    - No retry strategy defined for failed jobs
+    - Risk: Jobs lost on transient failures
+
+11. **OCR Worker Lifecycle** (ocr.service.ts:131-141)
+    - Worker termination only on module destroy
+    - Risk: Memory leak if worker hangs
+
+12. **No Cleanup for Old Processing Jobs** (processing-jobs.service.ts:299-317)
+    - cleanupOldJobs exists but not called automatically
+    - Risk: Database bloat with millions of old job records
+
+13. **Orphaned Files on Transaction Failures** (file-storage.service.ts:30-76)
+    - Files written to disk before database transaction commits
+    - Risk: Orphaned files if database save fails
+
+14. **No Input Sanitization on Filenames** (file-storage.service.ts:47-50)
+    - Path traversal possible if malicious filename bypasses regex
+    - Risk: Files written outside upload directory
+
+15. **No Checksum Verification on File Read** (file-storage.service.ts:81-97)
+    - Files read without verifying checksum integrity
+    - Risk: Processing corrupted data
+
+16. **Metadata Injection Risk** (create-clause.dto.ts:40-43, create-version.dto.ts:10-13)
+    - Unvalidated JSONB metadata accepts any structure
+    - Risk: Injection attacks, unexpected data shapes
+
+## Data Flow Issues
+
+### EA-6: Backend Data Processing
+1. **File Upload to OCR Complete Flow** - 10 steps from upload to completion
+   - Synchronous file storage before async OCR processing
+   - No transaction coordination between file system and database
+   - Polling required for job status (no webhooks/SSE)
+
+2. **Version Creation Flow** - 4 steps
+   - Sequential version numbering could have race conditions under high concurrency
+   - File stored before database commit (inconsistency risk)
+
+3. **Processing Pipeline Dependencies**
+   - ProcessingJobsModule has circular dependency with DocumentsModule (uses forwardRef)
+   - OcrService depends on FileStorageService but doesn't verify file integrity
+   - DocumentProcessor tightly coupled to specific job types (not extensible)
+
+4. **Queue Processing**
+   - Bull queue configured but Redis optional (demo mode fallback unclear)
+   - No dead letter queue for failed jobs
+   - Job progress updates require separate API calls (no real-time updates)
+
+## Recommendations
+(To be populated after analysis)
+
+### EA-2: Frontend State Management
+1. **LRU Cache Implementation** - 2 implementations
+   - frontend/services/queryClient.ts:93-109 (touch + enforceLimits methods)
+   - frontend/services/core/Repository.ts:7-41 (full LRUCache class)
+
+2. **Listener Pattern** - 4+ implementations
+   - frontend/services/queryClient.ts:68,71 (Map<string, Set> + Set)
+   - frontend/services/core/Repository.ts:47 (Set<Listener>)
+   - frontend/context/WindowContext.tsx:43 (implicit via state)
+   - frontend/context/ToastContext.tsx:41-43 (array + queueRef)
+
+3. **localStorage Access Patterns** - Inconsistent direct access vs utility
+   - frontend/utils/storage.ts:9-36 (centralized StorageUtils - PREFERRED)
+   - frontend/context/ThemeContext.tsx:39,54 (direct access)
+   - frontend/context/WindowContext.tsx:50,58 (direct access)
+   - frontend/context/DataSourceContext.tsx:21,35 (direct access)
+
+4. **Deep Equality/Stable Stringify** - Should be extracted to shared utility
+   - frontend/services/queryClient.ts:27-64 (40 lines, circular-safe stringify)
+
+5. **Queue Processing Logic** - 2 implementations with different strategies
+   - frontend/context/SyncContext.tsx:56-123 (mutation queue with exponential backoff)
+   - frontend/context/ToastContext.tsx:45-72 (priority queue with max visible)
+
+
+### EA-2: Frontend State Management - CRITICAL ISSUES
+
+#### CRITICAL - Unbounded Growth:
+1. **SyncEngine.processedCache** (frontend/services/syncEngine.ts:17)
+   - Type: LinearHash<string, boolean>
+   - Growth: Accumulates every mutation ID processed, never cleared
+   - Risk: HIGH - No eviction policy, grows indefinitely
+   - Recommendation: Add TTL-based cleanup (24h) or max size limit (10K entries)
+
+2. **QueryClient.listeners** (frontend/services/queryClient.ts:68)
+   - Type: Map<string, Set<function>>
+   - Growth: One Set per unique query key across app lifetime
+   - Risk: HIGH - Stale listeners accumulate in long-running sessions
+   - Recommendation: Periodic GC for empty Sets, add listener monitoring
+
+3. **QueryClient.globalListeners** (frontend/services/queryClient.ts:71)
+   - Type: Set<function>
+   - Growth: One per useGlobalQueryStatus hook instance
+   - Risk: MEDIUM - Limited by component count using global status
+   - Cleanup: Unsubscribe function exists but relies on proper component unmount
+
+4. **Repository.listeners** (frontend/services/core/Repository.ts:47)
+   - Type: Set<Listener<T>> (one Set per repository instance)
+   - Growth: Per domain repository (cases, documents, etc.)
+   - Risk: MEDIUM - Accumulates if components don't unsubscribe properly
+   - Recommendation: Add clearStaleListeners() method for manual cleanup
+
+5. **WindowContext.windows** (frontend/context/WindowContext.tsx:43)
+   - Type: WindowInstance[]
+   - Growth: Grows with each window opened by user
+   - Risk: MEDIUM - Relies on user explicitly closing windows
+   - Recommendation: Add max window limit (20), auto-close least-used windows
+
+6. **ToastContext.queueRef** (frontend/context/ToastContext.tsx:42)
+   - Type: Toast[]
+   - Growth: Queue grows during toast burst events
+   - Risk: LOW-MEDIUM - Auto-removed after display but can queue up
+   - Recommendation: Add max queue size (100) with FIFO eviction
+
+#### BOUNDED - Safe:
+- QueryClient.cache: MAX_CACHE_SIZE=100 with LRU eviction (SAFE)
+- Repository.cache: LRU capacity=100 (SAFE)
+- useHistory.historyRef: maxHistory=50 with shift on overflow (SAFE)
+
+
+### EA-7: Backend Integration Services
+1. **Duplicate WebSocket Implementations** (CRITICAL)
+   - realtime/realtime.gateway.ts:1-197 - JWT auth gateway
+   - realtime/realtime.service.ts:1-162 - Generic service (DUPLICATE)
+   - Impact: Memory overhead, confusion, race conditions
+
+2. **Duplicate Billing Analytics Services**
+   - billing/analytics/billing-analytics.service.ts:1-380
+   - analytics/billing-analytics/billing-analytics.service.ts (similar)
+
+3. **Repeated Query/Filter Patterns** (50+ files)
+   - invoices.service.ts:71-112, time-entries.service.ts:45-89, expenses.service.ts:38-76
+
+4. **Email Sending Logic Split**
+   - communications/email/email.service.ts:32-91
+   - queues/processors/email-processor.service.ts:21-33
+
+### EA-7: Backend Integration Services - CRITICAL ISSUES
+1. **Unlimited WebSocket Connections** (realtime.gateway.ts:79, messaging.gateway.ts:50)
+   - No max connections per user/globally - DoS risk
+
+2. **Unbounded WebSocket Room Subscriptions** (realtime.gateway.ts:118)
+   - Users can join unlimited rooms - Memory bloat
+
+3. **No Rate Limiting on WebSocket Events** (messaging.gateway.ts:79-99)
+   - Unlimited message sending - Spam risk
+
+4. **Bulk Email Without Limits** (email.service.ts:221-252)
+   - Accepts unlimited recipients - Provider violations
+
+5. **Calendar API No Retry** (calendar-integration.service.ts:113)
+   - No exponential backoff on failures
+
+6. **Unbounded PACER Search** (pacer.service.ts:20-71)
+   - No pagination limits
+
+7. **Memory-based Rate Limiting** (rate-limiter.interceptor.ts:20)
+   - Not suitable for multi-instance
+
+8. **In-memory Webhook Storage** (webhooks.service.ts:24-25)
+   - Data loss on restart
+
+9. **Unbounded Analytics Queries** (analytics.service.ts:75, billing-analytics.service.ts:51)
+
+10. **Security: Weak WebSocket Auth** (messaging.gateway.ts:229)
+    - Query param userId instead of JWT
+
+
+### EA-3 Findings (Frontend Integration & Events)
+
+1. **Dual Repository Wrappers** (26 lines duplicated)
+   - TaskRepository: repositories/TaskRepository.ts:26-35 vs dataService.ts:206-212
+   - RiskRepository: repositories/RiskRepository.ts:16-22 vs dataService.ts:223-230
+   - EntityRepository: repositories/EntityRepository.ts:17-21 vs dataService.ts:258-263
+   - Issue: Identical event publishing logic in standalone and wrapped versions
+
+2. **Anonymous Repository Classes** (20+ occurrences)
+   - dataService.ts:108-109, 117-123, 126-131, 235-243
+   - Pattern: `new class extends Repository<any> { constructor() { super(STORE); } }()`
+   - Issue: Type safety lost, no event integration possible
+
+3. **Multiple API Service Barrel Files** (6 files)
+   - apiServices.ts, apiServicesExtended.ts, apiServicesDiscovery.ts
+   - apiServicesCompliance.ts, apiServicesAdditional.ts, apiServicesFinal.ts
+   - Issue: Similar export patterns repeated across files
+
+4. **Conditional Backend Logic** (30+ repetitions)
+   - dataService.ts: `useBackendApi ? apiServices.X : new XRepository()`
+   - Pattern repeated for cases, docket, evidence, documents, etc.
+   - Issue: Testing and refactoring complexity
+
+### EA-5: Backend Core Services
+1. **Guard Duplication** - Guards duplicated in auth/ and common/
+   - auth/guards/jwt-auth.guard.ts (25 lines)
+   - common/guards/jwt-auth.guard.ts (similar)
+   - Same for roles.guard.ts and permissions.guard.ts
+
+2. **Pagination Logic** - Repeated in 15+ services
+   - cases/cases.service.ts:95-109
+   - documents/documents.service.ts:133-148
+   - projects/projects.service.ts:66-70
+   - billing/time-entries/time-entries.service.ts:113-115
+   - billing/invoices/invoices.service.ts:108-110
+   - Plus 10+ more services
+
+3. **Dynamic OrderBy Pattern** - ⚠️ SQL INJECTION RISK (15+ occurrences)
+   - cases/cases.service.ts:95
+   - documents/documents.service.ts:133
+   - projects/projects.service.ts:66
+   - billing/time-entries/time-entries.service.ts:113
+   - billing/invoices/invoices.service.ts:108
+   - billing/expenses/expenses.service.ts:89
+   - discovery/custodians/custodians.service.ts:72
+   - discovery/depositions/depositions.service.ts:67
+   - discovery/examinations/examinations.service.ts:63
+   - discovery/productions/productions.service.ts:63
+   - discovery/privilege-log/privilege-log.service.ts:72
+   - discovery/legal-holds/legal-holds.service.ts:62
+   - discovery/esi-sources/esi-sources.service.ts:72
+   - discovery/custodian-interviews/custodian-interviews.service.ts:70
+   - discovery/discovery-requests/discovery-requests.service.ts:69
+
+4. **Filter DTO Duplication** - Each module defines own pagination fields
+   - cases/dto/case-filter.dto.ts (page, limit, sortBy, sortOrder)
+   - documents/dto/document-filter.dto.ts (same fields)
+   - 20+ other filter DTOs
+   - Note: common/dto/pagination.dto.ts exists with @Max(100) but not used
+
+5. **In-Memory Storage Pattern** - Not production-ready (15+ instances)
+   - auth/auth.service.ts:19,21,24 (refreshTokens, resetTokens, mfaTokens)
+   - users/users.service.ts:17 (users Map)
+   - compliance/conflict-checks/conflict-checks.service.ts:15
+   - compliance/audit-logs/audit-logs.service.ts:13
+   - Plus 11+ other services
+
+### EA-5: Backend Core Services - CRITICAL SECURITY ISSUES
+1. **SQL Injection via Dynamic OrderBy** (15+ instances) - SEVERITY: HIGH
+   - cases/cases.service.ts:95
+   - documents/documents.service.ts:133
+   - All discovery modules, billing modules
+   - Pattern: queryBuilder.orderBy(`table.${sortBy}`, sortOrder)
+   - Risk: User can inject SQL via sortBy parameter
+
+2. **Unbounded Pagination Limits** (20+ DTOs) - SEVERITY: MEDIUM
+   - cases/dto/case-filter.dto.ts:49 - No @Max validation
+   - documents/dto/document-filter.dto.ts:67 - No @Max validation
+   - 20+ other filter DTOs
+   - Risk: User can pass limit=999999999 and retrieve entire database
+
+3. **No Pagination on Users.findAll()** - SEVERITY: MEDIUM
+   - users/users.service.ts:71-75
+   - Returns ALL users without pagination
+   - Risk: Could return thousands of records, memory exhaustion
+
+4. **Missing Validation on Redaction Parameters** - SEVERITY: MEDIUM
+   - documents/documents.controller.ts:156
+   - Parameter typed as 'any', no DTO validation
+   - Risk: Malicious data injection
+
+5. **Incomplete MFA Implementation** - SEVERITY: HIGH
+   - auth/auth.service.ts:360-376
+   - verifyTotpCode() always returns false
+   - Risk: MFA feature is non-functional, creates false sense of security
+
+6. **In-Memory Token Storage** - SEVERITY: HIGH
+   - auth/auth.service.ts:19-24
+   - Tokens stored in Map, lost on restart
+   - Risk: Not production-ready, not horizontally scalable
+
+7. **In-Memory User Storage** - SEVERITY: HIGH
+   - users/users.service.ts:17
+   - Users stored in Map instead of database
+   - Risk: All user data lost on restart, User entity not used
+
+8. **No Rate Limiting on Authentication** - SEVERITY: MEDIUM
+   - auth/auth.controller.ts:48-55
+   - No rate limiting on login endpoint
+   - Risk: Brute force attacks possible
+
+9. **Inefficient Full-Text Search** - SEVERITY: LOW
+   - documents/documents.service.ts:251-258
+   - Uses LIKE for full-text search
+   - Risk: Slow on large datasets
+
+10. **Insufficient Audit Logging** - SEVERITY: LOW
+    - auth/auth.service.ts:76-78, 130, 163
+    - Only console.log, not persisted
+    - Risk: Security events not auditable
+
+
+### EA-3 Findings (Frontend Integration & Events)
+
+1. **Orphaned Event Definitions** (5 events defined but not published)
+   - EVIDENCE_STATUS_UPDATED: Handler at integrationOrchestrator.ts:172-186, no publisher
+   - CITATION_SAVED: Handler at integrationOrchestrator.ts:190-194 (placeholder), no publisher
+   - WALL_ERECTED: Handler at integrationOrchestrator.ts:197-211, no publisher at ComplianceDomain.ts:81-84
+   - CLOUD_SYNC_STARTED: Defined at integration-types.ts:46, no handler or publisher
+   - CLOUD_SYNC_FAILED: Defined at integration-types.ts:47, no handler or publisher
+
+2. **Events Published But Not Handled** (4 events)
+   - TIME_LOGGED: Published by BillingRepository, no orchestrator handler
+   - RISK_ESCALATED: Published by RiskRepository (2 locations), no handler
+   - ENTITY_CREATED: Published by EntityRepository/CRMDomain (3 locations), no handler
+   - CASE_CREATED: Published by CaseRepository/CRMDomain (2 locations), no handler
+
+3. **SyncEngine Disconnection**
+   - SyncEngine.enqueue() never called from IntegrationOrchestrator
+   - Offline mutations not synced via event system
+   - Location: syncEngine.ts vs integrationOrchestrator.ts (no connection)
+
+4. **Direct DB Access Bypasses Events**
+   - integrationOrchestrator.ts:68 - Direct calendarEvents write
+   - integrationOrchestrator.ts:82 - Inconsistent store name (calendar_events vs calendarEvents)
+   - integrationOrchestrator.ts:257-263 - Direct auditLogs write
+   - Issue: Bypasses cache invalidation and event consistency
+
+5. **Component-Level Event Publishing**
+   - CaseDocuments.tsx:100 - Component directly publishes DOCUMENT_UPLOADED
+   - Also published by DocumentRepository (potential double-publish)
+   - Issue: Breaks separation of concerns
+
+6. **Placeholder Handler**
+   - CITATION_SAVED handler (line 190-194) logs but does nothing
+   - Integration opportunity #7 not fully implemented
+
+### EA-3 Findings (Frontend Integration & Events)
+
+1. **Incomplete Integration Opportunities**
+   - 4 of 11 integration opportunities incomplete due to missing publishers:
+     - Opp #6: Evidence → Audit (no publisher for EVIDENCE_STATUS_UPDATED)
+     - Opp #7: Research → Pleadings (no publisher for CITATION_SAVED)
+     - Opp #8: Compliance → Security (no publisher for WALL_ERECTED)
+     - Opp #11: Data Platform → Infra (no publisher for DATA_SOURCE_CONNECTED)
+
+2. **Event-Backend Sync Gap**
+   - IntegrationOrchestrator publishes events but doesn't enqueue to SyncEngine
+   - Backend API integration conditional but not connected to event system
+   - Offline mutations may not sync when connection restored
+
+3. **Store Name Inconsistency**
+   - 'calendarEvents' (line 68) vs 'calendar_events' (line 82)
+   - Same logical store, different names in IntegrationOrchestrator
+
+4. **ChainService Underutilization**
+   - Only 2 event types trigger immutable ledger logging:
+     - INVOICE_STATUS_CHANGED (when Paid)
+     - EVIDENCE_STATUS_UPDATED (handler exists, no publisher)
+   - Should include all compliance/security events for audit trail
+
+5. **Event Publishing Inconsistency**
+   - Some events published by Repository (e.g., TASK_COMPLETED)
+   - Some by Domain services (e.g., LEAD_STAGE_CHANGED)
+   - One by UI component (DOCUMENT_UPLOADED from CaseDocuments.tsx)
+   - No clear pattern for where events should originate
+
+### EA-4: Frontend Components & Modules
+1. **PolicyEditorModal DUPLICATION** (CRITICAL)
+   - /admin/data/security/PolicyEditorModal.tsx
+   - /admin/data/governance/PolicyEditorModal.tsx
+   - Action: Remove duplicate immediately
+
+2. **Dashboard Pattern** (20+ files)
+   - Dashboard.tsx, AnalyticsDashboard.tsx, BillingDashboard.tsx, ComplianceDashboard.tsx, etc.
+   - Each reimplements TabbedPageLayout wrapper, tab state with useSessionStorage, Suspense
+   - Recommendation: Create DashboardTemplate base component
+
+3. **Table Header Pattern** (15+ files)
+   - ActiveCaseTable:86-93, DocketTable:145-152, DocumentTable, ExhibitTable
+   - Each reimplements sortable column headers with SortIcon
+   - Recommendation: Extract SortableTableHeader component
+
+4. **Sidebar Pattern** (19 files)
+   - DashboardSidebar, WarRoomSidebar, AdvisorySidebar, OppositionSidebar, etc.
+   - Recommendation: Create DomainSidebar base component with slots
+
+5. **Dashboard Metrics Grid** (10+ files)
+   - Repeated 4-column grid with Card+StatValue pattern
+   - Recommendation: Create MetricsGrid component
+
+### EA-4: Frontend Components - OPEN-ENDED DATA SEGMENTS
+
+1. **Heavy Local State Usage** (1,071 useState/useEffect in 260 files)
+   - /docket/DocketEntryBuilder.tsx: 16 useState hooks (EXCESSIVE)
+   - /documents/pdf/FormsSigningView.tsx: 17 useState hooks (EXCESSIVE)
+   - Recommendation: Extract to custom hooks, lift state, use React Query
+
+2. **Data Fetching in Components** (342 DataService calls in 197 files)
+   - ✅ Good: Using DataService facade
+   - ⚠️ Consider: Move to custom hooks (useCase, useDocument)
+
+3. **Complex Effect Management**
+   - /documents/pdf/FormsSigningView.tsx: 17 useEffect hooks
+   - /docket/DocketEntryBuilder.tsx: 16 useEffect hooks
+   - Recommendation: Extract to custom hooks, effect reducer pattern
+
+
+### EA-1: Frontend Data Layer - CRITICAL ISSUES
+1. **Unbounded Query Results** (frontend/services/core/Repository.ts:91-97)
+   - getAll() loads ALL records into memory before filtering
+   - No database-level LIMIT clause, post-query slicing only
+   - Risk: Loading 10,000+ records crashes browser
+
+2. **Unvalidated Index Queries** (frontend/services/db.ts:404-428)
+   - getByIndex() accepts any indexName without validation
+   - Falls back to loading entire store if index missing
+   - No limit on index.getAll()
+   - Risk: Unbounded result sets, memory exhaustion
+
+3. **Unbounded Cache Memory Growth** (frontend/services/core/Repository.ts:51, frontend/services/queryClient.ts:25)
+   - LRU caches limit item count (100) but not memory size
+   - Single 100MB PDF = 1 item → 100 items × 100MB = 10GB
+   - Risk: Browser crash from excessive memory usage
+
+4. **Write Buffer Unbounded Growth** (frontend/services/db.ts:172-174)
+   - writeBuffer has no size limit, 16ms flush delay
+   - Rapid writes can grow buffer indefinitely
+   - Risk: Memory exhaustion on bulk operations
+
+5. **Direct Database Access Bypasses Repository** (frontend/services/dataService.ts:150-490)
+   - ~50+ direct db.* calls across 15+ domain objects
+   - strategy (lines 150-179), transactions (182-192), messenger (277-296), calendar (297-312), etc.
+   - Bypasses cache, integration events, version tracking, soft delete filtering
+   - Risk: Data inconsistency, missed integrations, architectural violation
+
+6. **No Query Timeout Mechanism** (frontend/services/queryClient.ts:141-224)
+   - fetch() can hang indefinitely, no automatic timeout
+   - AbortController requires manual cancellation
+   - Risk: Hung queries on network/DB issues
+
+7. **No Rate Limiting on Mutations** (frontend/services/syncEngine.ts:35-64)
+   - Mutation queue has no size limit
+   - Risk: localStorage overflow (5-10MB browser limit), quota exceeded errors
+
+8. **Potential Memory Leak in Listeners** (frontend/services/queryClient.ts:68-82, frontend/services/core/Repository.ts:47)
+   - No cleanup for zero-subscriber listeners
+   - Listeners Map grows indefinitely
+   - Risk: Memory leak in long-running sessions
+
+9. **File Upload Size Limit Missing** (frontend/services/repositories/DocumentRepository.ts:99-125)
+   - uploadDocument() has no file size validation
+   - db.putFile() accepts any size
+   - Risk: Multi-GB uploads exceed IndexedDB quota (~50-100MB), browser crash
+
+10. **Unvalidated Store Names** (frontend/services/core/microORM.ts:7)
+    - MicroORM constructor accepts any storeName string
+    - Risk: Typos create unexpected stores (e.g., 'casess' instead of 'cases')
+
+11. **No Pagination Implementation** (frontend/services/core/Repository.ts:91-97)
+    - cursor parameter accepted but never used
+    - Only post-query slicing with limit
+    - Risk: Memory exhaustion on large datasets
+
+12. **QueryClient Listener Cleanup** (frontend/services/queryClient.ts:120-139)
+    - Listeners Map grows indefinitely, no TTL
+    - No cleanup for inactive queries
+    - Risk: Memory leak over time
+
+13. **Unsafe JSON.parse in Storage** (frontend/utils/storage.ts:17)
+    - No schema validation after parse
+    - LocalStorage can be manually edited by users
+    - Risk: Type mismatches, corrupted data, runtime errors
+
+### EA-8: Cross-cutting Concerns
+
+#### High-Priority Duplications (120+ LOC)
+1. **Pagination Logic** - 5 implementations across frontend/backend
+   - `/frontend/types.ts:15-21` - PaginatedResponse interface
+   - `/frontend/services/apiClient.ts:16-22` - PaginatedResponse interface (duplicate)
+   - `/backend/src/common/dto/api-response.dto.ts:41-72` - PaginatedResponseDto (field: items)
+   - `/backend/src/common/dto/paginated-response.dto.ts:3-27` - PaginatedResponseDto (field: data)
+   - `/backend/src/common/utils/pagination.util.ts:4-38` - Pagination utility functions
+
+2. **Error Response Structures** - 3 different formats
+   - `/frontend/services/apiClient.ts:10-14` - ApiError interface
+   - `/backend/src/common/dto/api-response.dto.ts:3-39` - ApiResponseDto class
+   - `/backend/src/common/filters/all-exceptions.filter.ts:30-48` - inline errorResponse object
+
+3. **Date Utility Functions** - Backend only (115 LOC)
+   - `/backend/src/common/utils/date.util.ts:1-116` - DateUtil class
+   - Frontend: No equivalent (dates handled ad-hoc)
+
+4. **Validation Patterns** - No shared schemas
+   - `/frontend/utils/validation.ts:1-160` - Pleading-specific validation
+   - `/backend/src/config/validation.ts:1-16` - Backend validation config
+   - `/backend/src/common/pipes/validation.pipe.ts` - NestJS validation pipe
+
+5. **Authentication Token Management** - 80 LOC frontend, 150 LOC backend
+   - `/frontend/services/apiClient.ts:46-85` - Token storage/retrieval
+   - Backend JWT strategy - Token generation/validation (no shared constants)
+
+6. **Component-Specific Utilities** - 6 files with likely overlapping functions
+   - `/frontend/components/docket/docketAnalytics.utils.ts`
+   - `/frontend/components/docket/docketCalendar.utils.ts`
+   - `/frontend/components/research/research.utils.ts`
+   - `/frontend/components/clauses/clauseList.utils.ts`
+   - `/frontend/components/clauses/clauseAnalytics.utils.ts`
+   - `/frontend/components/rules/localRulesMap.utils.ts`
+
+### EA-8: Cross-cutting Concerns - CRITICAL TYPE MISMATCHES
+
+1. **BaseEntity Definition Mismatch** ⚠️ HIGH RISK
+   - Frontend: `/frontend/types/primitives.ts:36-45` - dates as strings, branded UserId
+   - Backend: `/backend/src/common/base/base.entity.ts:10-34` - dates as Date objects, plain string IDs
+   - Impact: Serialization issues, type safety lost at API boundary
+
+2. **Pagination Response Field Name Conflict** 🔴 CRITICAL
+   - Frontend: Uses "data" field
+   - Backend api-response.dto: Uses "items" field
+   - Backend paginated-response.dto: Uses "data" field (inconsistent!)
+   - Impact: Runtime property access errors
+
+3. **CaseStatus Enum Duplication**
+   - Frontend: `/frontend/types/enums.ts:4-17` - 11 values (includes PreFiling, Appeal, Transferred)
+   - Backend: `/backend/src/cases/entities/case.entity.ts:22-31` - 8 values
+   - Impact: Frontend can create cases with statuses backend rejects
+
+4. **DocumentStatus Enum Casing Mismatch**
+   - Backend: `/backend/src/documents/interfaces/document.interface.ts:17-23` - lowercase values (draft, under_review)
+   - Frontend: Expects title-case values (Draft, Under Review)
+   - Impact: Display errors, search/filter failures
+
+5. **Case Type vs Matter Type Taxonomy Mismatch** 🔴 CRITICAL
+   - Frontend MatterType: 'Litigation', 'M&A', 'IP', 'Real Estate', 'General', 'Appeal'
+   - Backend CaseType: 'Civil', 'Criminal', 'Family', 'Bankruptcy', etc. (11 values)
+   - Impact: No mapping between taxonomies, complete incompatibility
+
+6. **Date Field Type Inconsistencies**
+   - Frontend: All dates as ISO 8601 strings
+   - Backend entities: All dates as Date objects
+   - Backend DTOs: Mix of Date and string with @Type() decorator
+   - Impact: Comparison failures, timezone handling inconsistent
+
+7. **Optional Field Alignment Issues**
+   - Example: Document creatorId optional in frontend, may be required in backend
+   - Frontend has fields not in backend (orphaned data)
+   - Impact: Form validation passes but backend rejects
+
+8. **Array Field Default Value Mismatch**
+   - Frontend: Initializes arrays as []
+   - Backend: Uses undefined for optional arrays
+   - Impact: JSON serialization differs, length checks fail
+
+9. **Branded Type Erosion at API Boundary**
+   - Frontend: 14 branded types (CaseId, UserId, DocumentId, etc.)
+   - Backend: All plain strings
+   - Impact: Type safety only in frontend, brands erased in transmission
+
+10. **Enum Value Pattern Inconsistencies**
+    - Frontend: Direct enums + const-object enums (13 const, 11 direct)
+    - Backend: TypeScript enums with SCREAMING_SNAKE_CASE keys
+    - Impact: Enum validation differs, reverse lookups break
+
+11. **Soft Delete Handling Mismatch**
+    - Frontend: Truthy check on deletedAt string
+    - Backend: TypeORM DeleteDateColumn with null
+    - Impact: Inconsistent filtering, client-side vs query-based
+
+12. **Validation Error Message Format Inconsistencies**
+    - Frontend: Structured ValidationResult with field/message/severity
+    - Backend class-validator: Array of string messages
+    - Backend custom: Nested error object
+    - Impact: No unified error parsing on frontend
+
+### EA-8: Validation Gaps
+
+1. **No Shared Validation Schemas**
+   - Frontend and backend define validation rules separately
+   - Risk: Frontend allows data backend rejects
+
+2. **Unvalidated API Boundaries**
+   - Frontend types are interfaces (no runtime validation)
+   - Backend uses class-validator (runtime validation)
+   - No schema sharing mechanism
+
+3. **Type-Unsafe Dynamic Fields**
+   - metadata and customFields use Record<string, any>
+   - No schema validation for JSONB columns
+   - Locations: `/frontend/types/case.ts:84`, `/backend/src/cases/entities/case.entity.ts:85-86`
+
+4. **No Cross-Field Validation**
+   - Example: trialDate should be after filingDate
+   - No multi-field validators in DTOs
+
+5. **No Time Zone Handling**
+   - User timezone preference exists but unused
+   - No shared date formatting utility
+   - Affects: scheduling, time entries, audit logs
+
+### EA-1: Data Flow Analysis
+
+**Read Operation Flow (9 steps):**
+1. Component → useQuery(key, fn)
+2. QueryClient cache check (LRU, 100 items)
+3. QueryClient inflight deduplication
+4. DataService routing (Backend API vs IndexedDB)
+5. Repository LRU cache check (100 items)
+6. MicroORM abstraction
+7. DatabaseManager (IndexedDB/LocalStorage)
+8. Data return through layers
+9. Cache updates + listener notifications
+
+**Write Operation Flow (11 steps):**
+1. Component → useMutation(fn).mutate()
+2. DataService method call
+3. Integrated Repository wrapper (event publishing)
+4. Repository CRUD (timestamps, version, cache update)
+5. MicroORM.save()
+6. DatabaseManager.put() → write buffer (16ms coalesce)
+7. IndexedDB transaction (batch writes)
+8. IntegrationOrchestrator.publish() (11 event types)
+9. Repository listener notifications
+10. SyncEngine.enqueue() (if offline)
+11. QueryClient invalidation (if configured)
+
+**Direct DB Access Pattern (Anti-pattern):**
+- 50+ occurrences in dataService.ts bypass all intermediate layers
+- Affects: strategy, transactions, messenger, calendar, notifications, collaboration, warRoom, dashboard, assets, sources domains

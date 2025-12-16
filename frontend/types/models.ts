@@ -48,12 +48,12 @@ export interface JurisdictionObject {
 
 export interface BaseEntity {
   id: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: string; // ISO 8601 date string from backend Date
+  updatedAt?: string; // ISO 8601 date string from backend Date
+  deletedAt?: string; // ISO 8601 date string from backend Date (soft delete)
   createdBy?: UserId;
   updatedBy?: UserId;
   version?: number;
-  deletedAt?: string;
   isEncrypted?: boolean;
 }
 
@@ -233,7 +233,50 @@ export interface MarketingMetric {
 
 
 // --- CLUSTER 1: CORE & SYSTEM ---
-export interface User extends BaseEntity { id: UserId; name: string; email: string; role: UserRole; orgId?: OrgId; groupIds?: GroupId[]; userType?: 'Internal' | 'External'; office?: string; status?: 'online' | 'offline' | 'away' | 'busy'; }
+export interface User extends BaseEntity { 
+  id: UserId; 
+  // Core fields (aligned with backend)
+  email: string; // Backend: unique, indexed
+  password?: string; // Backend field (not exposed in frontend typically)
+  firstName?: string; // Backend field
+  lastName?: string; // Backend field
+  name: string; // Computed from firstName + lastName
+  role: UserRole; // Backend: enum (indexed)
+  department?: string; // Backend: varchar(200), indexed
+  title?: string; // Backend: varchar(100)
+  
+  // Contact info
+  phone?: string; // Backend: varchar(50)
+  extension?: string; // Backend: varchar(50)
+  mobilePhone?: string; // Backend: varchar(50)
+  avatarUrl?: string; // Backend: varchar(500)
+  office?: string;
+  
+  // Organization
+  orgId?: OrgId;
+  groupIds?: GroupId[];
+  userType?: 'Internal' | 'External';
+  
+  // Status & security
+  status?: 'online' | 'offline' | 'away' | 'busy'; // Frontend real-time status
+  isActive?: boolean; // Backend: boolean (default: true, indexed)
+  isVerified?: boolean; // Backend: boolean (default: false)
+  verificationToken?: string; // Backend field
+  verificationTokenExpiry?: string; // Backend: timestamp
+  
+  // Password reset
+  resetPasswordToken?: string; // Backend field
+  resetPasswordExpiry?: string; // Backend: timestamp
+  
+  // Login tracking
+  lastLoginAt?: string; // Backend: timestamp
+  lastLoginIp?: string; // Backend: varchar(100)
+  loginAttempts?: number; // Backend: int (default: 0)
+  lockedUntil?: string; // Backend: timestamp
+  
+  // Two-factor auth
+  twoFactorEnabled?: boolean; // Backend: boolean (default: false)
+}
 export interface Organization extends BaseEntity { id: OrgId; name: string; type: OrganizationType; domain: string; status: string; }
 export interface Group extends BaseEntity { id: GroupId; orgId: OrgId; name: string; description: string; permissions: string[]; }
 export interface FeatureFlag extends BaseEntity { key: string; enabled: boolean; rules?: any; description: string; }
@@ -304,15 +347,71 @@ export interface ExtendedUserProfile extends User {
 // --- CLUSTER 2: CASE & LITIGATION ---
 export interface Case extends BaseEntity { 
   id: CaseId;
-  title: string; client: string; clientId?: UserId | EntityId; matterType: MatterType; matterSubType?: string; 
-  status: CaseStatus; filingDate: string; description?: string; value?: number; valuation?: Money; 
-  jurisdiction?: string; jurisdictionConfig?: JurisdictionObject; court?: string; judge?: string; magistrateJudge?: string; 
-  opposingCounsel?: string; origCaseNumber?: string; origCourt?: string; origJudgmentDate?: string; noticeOfAppealDate?: string; 
-  ownerId?: UserId; ownerOrgId?: OrgId; team?: CaseTeamMember[]; linkedCaseIds?: CaseId[]; leadCaseId?: CaseId; 
-  isConsolidated?: boolean; associatedCases?: any[]; parties: Party[]; citations: Citation[]; arguments: LegalArgument[]; 
-  defenses: Defense[]; dateTerminated?: string; natureOfSuit?: string; pacerData?: any; 
-  billingModel?: BillingModel; feeAgreement?: FeeAgreement; projects?: Project[]; 
-  solDate?: string; solTriggerDate?: string; budget?: Money; budgetAlertThreshold?: number;
+  // Core fields (aligned with backend)
+  title: string;
+  caseNumber?: string; // Backend has this as unique field
+  description?: string;
+  type?: MatterType; // Maps to backend 'type' enum
+  status: CaseStatus;
+  practiceArea?: string; // Backend field
+  jurisdiction?: string;
+  jurisdictionConfig?: JurisdictionObject;
+  court?: string;
+  judge?: string;
+  filingDate: string; // Backend: Date
+  trialDate?: string; // Backend field
+  closeDate?: string; // Backend field
+  
+  // Team & ownership
+  assignedTeamId?: string; // Backend field
+  leadAttorneyId?: string; // Backend field (maps to ownerId)
+  ownerId?: UserId; // Frontend legacy
+  ownerOrgId?: OrgId;
+  team?: CaseTeamMember[];
+  
+  // Client relationship
+  client: string; // Display name
+  clientId?: UserId | EntityId; // Backend: uuid (required)
+  
+  // Relationships
+  parties: Party[];
+  citations: Citation[];
+  linkedCaseIds?: CaseId[];
+  leadCaseId?: CaseId;
+  isConsolidated?: boolean;
+  associatedCases?: any[];
+  
+  // Litigation details
+  arguments: LegalArgument[];
+  defenses: Defense[];
+  magistrateJudge?: string;
+  opposingCounsel?: string;
+  origCaseNumber?: string;
+  origCourt?: string;
+  origJudgmentDate?: string;
+  noticeOfAppealDate?: string;
+  dateTerminated?: string;
+  natureOfSuit?: string;
+  
+  // Financial
+  value?: number;
+  valuation?: Money;
+  billingModel?: BillingModel;
+  feeAgreement?: FeeAgreement;
+  budget?: Money;
+  budgetAlertThreshold?: number;
+  
+  // Metadata
+  matterType: MatterType;
+  matterSubType?: string;
+  pacerData?: any;
+  metadata?: Record<string, any>; // Backend: jsonb field
+  isArchived: boolean; // Backend field (default: false)
+  projects?: Project[];
+  
+  // Statute of limitations
+  solDate?: string;
+  solTriggerDate?: string;
 }
 
 export interface Party extends BaseEntity { id: PartyId; name: string; role: string; type: 'Individual' | 'Corporation' | 'Government'; contact?: string; counsel?: string; partyGroup?: string; linkedOrgId?: OrgId; address?: string; phone?: string; email?: string; representationType?: string; attorneys?: Attorney[]; pacerData?: any; aliases?: string[]; taxId?: string; }
@@ -334,12 +433,65 @@ export interface Client extends BaseEntity { id: EntityId; name: string; industr
 // --- CLUSTER 4: DOCUMENTS & DISCOVERY ---
 export interface LegalDocument extends BaseEntity { 
   id: DocumentId;
-  caseId: CaseId; title: string; type: string; content: string; searchableText?: string; ocrStatus?: OcrStatus; 
-  embedding?: number[]; uploadDate: string; lastModified: string; tags: string[]; versions: DocumentVersion[]; 
-  fileSize?: string; sourceModule?: string; status?: string; folderId?: string; summary?: string; riskScore?: number; 
-  linkedRules?: string[]; sharedWith?: string[]; isRedacted?: boolean; authorId?: UserId; formFields?: any[]; 
-  signingStatus?: { recipient: string; status: 'Sent' | 'Viewed' | 'Signed'; signedAt?: string }[]; 
-  acls?: AccessControlList[]; retentionPolicyId?: string;
+  // Core fields (aligned with backend)
+  title: string;
+  description?: string; // Backend: text, nullable
+  type: string; // Backend: DocumentType enum
+  caseId: CaseId; // Backend: uuid, indexed
+  creatorId?: UserId; // Backend: uuid (maps to authorId)
+  authorId?: UserId; // Frontend legacy
+  status?: string; // Backend: DocumentStatus enum (default: DRAFT)
+  
+  // File metadata
+  filename?: string; // Backend field
+  filePath?: string; // Backend field
+  mimeType?: string; // Backend field
+  fileSize?: string | number; // Backend: bigint
+  checksum?: string; // Backend field
+  
+  // Versioning
+  currentVersion?: number; // Backend: int (default: 1)
+  versions: DocumentVersion[];
+  
+  // Content
+  content: string; // Frontend-specific rich content
+  fullTextContent?: string; // Backend: text field for search
+  searchableText?: string; // Frontend legacy
+  author?: string; // Backend: varchar field
+  pageCount?: number; // Backend: int
+  wordCount?: number; // Backend: int
+  language?: string; // Backend field
+  
+  // OCR
+  ocrStatus?: OcrStatus;
+  ocrProcessed?: boolean; // Backend: boolean (default: false)
+  ocrProcessedAt?: string; // Backend: timestamp
+  
+  // Organization
+  tags: string[]; // Backend: simple-array
+  customFields?: Record<string, any>; // Backend: jsonb
+  folderId?: string;
+  sourceModule?: string;
+  
+  // Security & access
+  acls?: AccessControlList[];
+  sharedWith?: string[];
+  isRedacted?: boolean;
+  retentionPolicyId?: string;
+  
+  // AI/ML features
+  embedding?: number[];
+  summary?: string;
+  riskScore?: number;
+  linkedRules?: string[];
+  
+  // E-signature
+  signingStatus?: { recipient: string; status: 'Sent' | 'Viewed' | 'Signed'; signedAt?: string }[];
+  formFields?: any[];
+  
+  // Dates (backend compatibility)
+  uploadDate: string; // Maps to createdAt
+  lastModified: string; // Maps to updatedAt
 }
 export interface DocumentVersion extends BaseEntity { documentId?: DocumentId; versionNumber: number; uploadedBy: string; uploadDate: string; contentSnapshot?: string; storageKey?: string; author?: string; authorId?: UserId; checksum?: string; }
 export interface AccessControlList { roleId?: GroupId; userId?: UserId; permission: 'Read' | 'Write' | 'None'; }

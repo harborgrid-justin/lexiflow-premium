@@ -129,4 +129,10 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
   );
 };
 
+const BillingDashboard: React.FC<BillingDashboardProps> = (props) => (
+  <BillingErrorBoundary>
+    <BillingDashboardInternal {...props} />
+  </BillingErrorBoundary>
+);
+
 export default BillingDashboard;

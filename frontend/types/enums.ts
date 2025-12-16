@@ -2,11 +2,16 @@
 // types/enums.ts
 
 export enum CaseStatus {
-  PreFiling = 'Pre-Filing',
+  Open = 'Open',
+  Active = 'Active',
   Discovery = 'Discovery',
   Trial = 'Trial',
   Settled = 'Settled',
   Closed = 'Closed',
+  Archived = 'Archived',
+  OnHold = 'On Hold',
+  // Legacy values for backwards compatibility
+  PreFiling = 'Pre-Filing',
   Appeal = 'Appeal',
   Transferred = 'Transferred'
 }

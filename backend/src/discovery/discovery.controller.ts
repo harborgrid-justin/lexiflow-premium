@@ -4,7 +4,7 @@ import { DiscoveryService } from './discovery.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../auth/enums/user-role.enum';
+import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('Discovery')
 @ApiBearerAuth('JWT-auth')

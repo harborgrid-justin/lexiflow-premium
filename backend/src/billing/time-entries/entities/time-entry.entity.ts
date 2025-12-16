@@ -26,11 +26,11 @@ export class TimeEntry {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'case_id' })
+  @Column({ name: 'case_id', nullable: true })
   @Index()
   caseId: string;
 
-  @Column({ name: 'user_id' })
+  @Column({ name: 'user_id', nullable: true })
   @Index()
   userId: string;
 
@@ -41,7 +41,7 @@ export class TimeEntry {
   @Column({ type: 'date' })
   date: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   duration: number; // in hours
 
   @Column({ type: 'text' })
@@ -53,10 +53,10 @@ export class TimeEntry {
   @Column({ type: 'varchar', length: 20, nullable: true })
   ledesCode: string; // LEDES billing code
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   rate: number; // hourly rate
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   total: number; // duration * rate
 
   @Column({

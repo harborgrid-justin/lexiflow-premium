@@ -25,16 +25,16 @@ export class DocketEntry extends BaseEntity {
   @JoinColumn({ name: 'caseId' })
   case: Case;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   sequenceNumber: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   docketNumber: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   dateFiled: Date;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   entryDate: Date;
 
   @Column({ type: 'varchar', length: 255 })

@@ -88,15 +88,23 @@ export class TokenStorageService implements OnModuleDestroy {
     }
 
     try {
+      const redisUrl = this.configService.get('redis.url');
       const redisHost = this.configService.get('redis.host', 'localhost');
       const redisPort = this.configService.get('redis.port', 6379);
+      const redisPassword = this.configService.get('redis.password');
+      const redisUsername = this.configService.get('redis.username', 'default');
 
-      this.redisClient = createClient({
-        socket: {
-          host: redisHost,
-          port: redisPort,
-        },
-      }) as RedisClientType;
+      // Use URL if provided (for cloud Redis), otherwise use host/port
+      this.redisClient = redisUrl
+        ? createClient({ url: redisUrl })
+        : createClient({
+            socket: {
+              host: redisHost,
+              port: redisPort,
+            },
+            username: redisUsername,
+            password: redisPassword,
+          }) as RedisClientType;
 
       this.redisClient.on('error', (err) => {
         this.logger.error('Redis connection error:', err);

@@ -2,87 +2,149 @@ import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
 
 export const STORES = {
-  CASES: 'cases',
-  TASKS: 'tasks',
-  EVIDENCE: 'evidence',
-  DOCUMENTS: 'documents',
-  DOCKET: 'docket',
-  MOTIONS: 'motions',
-  CLIENTS: 'clients',
-  STAFF: 'staff',
-  EXPENSES: 'expenses',
-  ORGS: 'orgs',
-  GROUPS: 'groups',
-  LEGAL_HOLDS: 'legal_holds',
-  PRIVILEGE_LOG: 'privilege_log',
-  PROCESSES: 'firm_processes',
-  CLAUSES: 'clauses',
-  TEMPLATES: 'workflow_templates',
-  JUDGES: 'judge_profiles',
-  COUNSEL: 'opposing_counsel',
-  USERS: 'users',
+  // Core entities (aligned with backend tables)
+  CASES: 'cases', // ✓ Backend: cases
+  TASKS: 'tasks', // ✓ Backend: tasks
+  EVIDENCE: 'evidence_items', // ✓ Backend: evidence_items (renamed for consistency)
+  DOCUMENTS: 'documents', // ✓ Backend: documents
+  DOCKET: 'docket_entries', // ✓ Backend: docket_entries (renamed for consistency)
+  MOTIONS: 'motions', // ✓ Backend: motions
+  CLIENTS: 'clients', // ✓ Backend: clients
+  USERS: 'users', // ✓ Backend: users
+  PARTIES: 'parties', // ✓ Backend: parties (added)
+  
+  // HR & Staff
+  STAFF: 'employees', // ✓ Backend: employees (renamed for consistency)
+  TIME_OFF: 'time_off_requests', // ✓ Backend: time_off_requests (added)
+  
+  // Billing & Financial
+  EXPENSES: 'expenses', // ✓ Backend: expenses (firm_expenses)
+  INVOICES: 'invoices', // ✓ Backend: invoices
+  INVOICE_ITEMS: 'invoice_items', // ✓ Backend: invoice_items (added)
+  TIME_ENTRIES: 'time_entries', // ✓ Backend: time_entries (added)
+  RATES: 'rate_tables', // ✓ Backend: rate_tables
+  TRUST: 'trust_accounts', // ✓ Backend: trust_accounts
+  TRUST_TX: 'trust_transactions', // ✓ Backend: trust_transactions
+  FEE_AGREEMENTS: 'fee_agreements', // ✓ Backend: fee_agreements (added)
+  BILLING: 'billing', // Frontend aggregated view
+  
+  // Discovery
+  LEGAL_HOLDS: 'legal_holds', // ✓ Backend: legal_holds
+  PRIVILEGE_LOG: 'privilege_log_entries', // ✓ Backend: privilege_log_entries (renamed)
+  DISCOVERY_EXT_DEPO: 'depositions', // ✓ Backend: depositions (renamed)
+  DISCOVERY_EXT_ESI: 'esi_sources', // ✓ Backend: esi_sources (renamed)
+  DISCOVERY_EXT_PROD: 'productions', // ✓ Backend: productions (renamed)
+  DISCOVERY_EXT_INT: 'custodian_interviews', // ✓ Backend: custodian_interviews (renamed)
+  REQUESTS: 'discovery_requests', // ✓ Backend: discovery_requests
+  WITNESSES: 'witnesses', // ✓ Backend: witnesses
+  CHAIN_OF_CUSTODY: 'chain_of_custody_events', // ✓ Backend: chain_of_custody_events (added)
+  
+  // Legacy discovery stores (to be migrated)
   CONFERRALS: 'conferral_sessions',
   JOINT_PLANS: 'joint_plans',
   STIPULATIONS: 'stipulation_requests',
-  DISCOVERY_EXT_DEPO: 'discovery_depositions',
-  DISCOVERY_EXT_ESI: 'discovery_esi',
-  DISCOVERY_EXT_PROD: 'discovery_productions',
-  DISCOVERY_EXT_INT: 'discovery_interviews',
-  REQUESTS: 'discovery_requests',
   EXAMINATIONS: 'discovery_examinations',
   VENDORS: 'discovery_vendors',
   TRANSCRIPTS: 'discovery_transcripts',
   SANCTIONS: 'discovery_sanctions',
-  CONFLICTS: 'conflicts',
-  WALLS: 'ethical_walls',
-  LOGS: 'audit_logs',
-  PROJECTS: 'projects',
-  RISKS: 'risks',
-  ADVISORS: 'advisors',
+  
+  // Litigation
+  PLEADINGS: 'pleadings', // ✓ Backend: pleadings (renamed from pleading_documents)
+  EXHIBITS: 'exhibits', // ✓ Backend: exhibits
+  TRIAL_EXHIBITS: 'trial_exhibits', // ✓ Backend: trial_exhibits (added)
+  TRIAL_EVENTS: 'trial_events', // ✓ Backend: trial_events (added)
+  WITNESS_PREP: 'witness_prep_sessions', // ✓ Backend: witness_prep_sessions (added)
+  CITATIONS: 'citations', // ✓ Backend: citations
+  CLAUSES: 'clauses', // ✓ Backend: clauses
+  JURORS: 'jurors', // Frontend-only (not in backend yet)
+  
+  // Compliance & Security
+  CONFLICTS: 'conflict_checks', // ✓ Backend: conflict_checks (renamed)
+  WALLS: 'ethical_walls', // ✓ Backend: ethical_walls
+  LOGS: 'audit_logs', // ✓ Backend: audit_logs
+  COMPLIANCE_RULES: 'compliance_rules', // ✓ Backend: compliance_rules (added)
+  COMPLIANCE_CHECKS: 'compliance_checks', // ✓ Backend: compliance_checks (added)
+  
+  // Organization
+  ORGS: 'organizations', // ✓ Backend: organizations (renamed)
+  GROUPS: 'groups', // Frontend-only
+  PROJECTS: 'projects', // ✓ Backend: projects
+  RISKS: 'risks', // ✓ Backend: risks
+  PHASES: 'case_phases', // ✓ Backend: case_phases
+  CASE_TEAMS: 'case_team_members', // ✓ Backend: case_team_members (added)
+  
+  // Document Management
+  DOCUMENT_VERSIONS: 'document_versions', // ✓ Backend: document_versions (added)
+  REVIEW_BATCHES: 'review_batches', // Frontend-only
+  PRODUCTION_VOLS: 'production_volumes', // Frontend-only
+  PROCESSING_JOBS: 'processing_jobs', // ✓ Backend: processing_jobs
+  OCR_JOBS: 'ocr_jobs', // ✓ Backend: ocr_jobs (added)
+  
+  // Knowledge & Templates
+  WIKI: 'knowledge_articles', // ✓ Backend: knowledge_articles (renamed)
+  TEMPLATES: 'workflow_templates', // ✓ Backend: workflow_templates
+  PLEADING_TEMPLATES: 'pleading_templates', // Frontend-only
+  COMM_TEMPLATES: 'templates', // ✓ Backend: templates (communications) (added)
+  PRECEDENTS: 'precedents', // Frontend-only
+  
+  // Communications
+  COMMUNICATIONS: 'communications', // ✓ Backend: communications
+  CONVERSATIONS: 'conversations', // ✓ Backend: conversations
+  MESSAGES: 'messages', // ✓ Backend: messages (added)
+  NOTIFICATIONS: 'notifications', // ✓ Backend: notifications
+  SERVICE_JOBS: 'service_jobs', // Frontend-only
+  
+  // Authentication & Security
+  SESSIONS: 'sessions', // ✓ Backend: sessions (added)
+  REFRESH_TOKENS: 'refresh_tokens', // ✓ Backend: refresh_tokens (added)
+  LOGIN_ATTEMPTS: 'login_attempts', // ✓ Backend: login_attempts (added)
+  USER_PROFILES: 'user_profiles', // ✓ Backend: user_profiles (added)
+  API_KEYS: 'api_keys', // ✓ Backend: api_keys (added)
+  
+  // Integrations & APIs
+  INTEGRATIONS: 'integrations', // ✓ Backend: integrations (added)
+  
+  // Analytics & Reporting
+  REPORTS: 'reports', // ✓ Backend: reports (added)
+  REPORT_TEMPLATES: 'report_templates', // ✓ Backend: report_templates (added)
+  DASHBOARDS: 'dashboards', // ✓ Backend: dashboards (added)
+  DASHBOARD_SNAPSHOTS: 'dashboard_snapshots', // ✓ Backend: dashboard_snapshots (added)
+  ANALYTICS_EVENTS: 'analytics_events', // ✓ Backend: analytics_events (added)
+  
+  // Search
+  SEARCH_INDEX: 'search_index', // ✓ Backend: search_index (added)
+  SEARCH_QUERIES: 'search_queries', // ✓ Backend: search_queries (added)
+  
+  // Calendar
+  CALENDAR_EVENTS: 'calendar_events', // ✓ Backend: calendar_events (added)
+  
+  // War Room / Strategy (backend entities: advisors, experts, case_strategies)
+  ADVISORS: 'advisors', // ✓ Backend: advisors
+  EXPERTS: 'experts', // ✓ Backend: experts (added)
+  CASE_STRATEGIES: 'case_strategies', // ✓ Backend: case_strategies (added)
+  
+  // Legacy/Frontend-only stores (no backend equivalent yet)
+  PROCESSES: 'firm_processes',
+  JUDGES: 'judge_profiles',
+  COUNSEL: 'opposing_counsel',
   OPPOSITION: 'opposition',
   POLICIES: 'policies',
-  TRUST: 'trust_accounts',
-  CITATIONS: 'citations',
   MAP_NODES: 'map_nodes',
-  WIKI: 'wiki_articles',
-  PRECEDENTS: 'precedents',
   QA: 'qa_items',
-  EXHIBITS: 'exhibits',
-  NOTIFICATIONS: 'notifications',
-  COMMUNICATIONS: 'communications',
-  SERVICE_JOBS: 'service_jobs',
-  CONVERSATIONS: 'conversations',
   RULES: 'rules',
-  BILLING: 'billing',
-  INVOICES: 'invoices',
   ANALYSIS: 'brief_analysis',
   ENTITIES: 'legal_entities',
   RELATIONSHIPS: 'entity_relationships',
-  // Phase 3 Stores
-  RATES: 'rate_tables',
-  TRUST_TX: 'trust_transactions',
-  REVIEW_BATCHES: 'review_batches',
-  PRODUCTION_VOLS: 'production_volumes',
-  JURORS: 'jurors',
-  WITNESSES: 'witnesses',
-  SLAS: 'sla_configs',
-  PROCESSING_JOBS: 'processing_jobs',
-  RETENTION_POLICIES: 'retention_policies',
-  // Phase 4 Stores
-  PLEADINGS: 'pleading_documents',
-  // New Stores for Data-Driven Refactor
   COUNSEL_PROFILES: 'counsel_profiles',
   JUDGE_MOTION_STATS: 'judge_motion_stats',
   OUTCOME_PREDICTIONS: 'outcome_predictions',
   OKRS: 'okrs',
   MALWARE_SIGNATURES: 'malware_signatures',
-  PLEADING_TEMPLATES: 'pleading_templates',
   CLE_TRACKING: 'cle_tracking',
   VENDOR_CONTRACTS: 'vendor_contracts',
   RFPS: 'rfps',
   MAINTENANCE_TICKETS: 'maintenance_tickets',
   FACILITIES: 'facilities',
-  // Added for complete SaaS configurability
   VENDOR_DIRECTORY: 'vendor_directory',
   REPORTERS: 'reporters',
   JURISDICTIONS: 'jurisdictions',
@@ -92,12 +154,13 @@ export const STORES = {
   OPERATING_SUMMARY: 'operating_summary',
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
   DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
-  PHASES: 'case_phases',
+  SLAS: 'sla_configs',
+  RETENTION_POLICIES: 'retention_policies',
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 26; // Incremented for new stores
+  private dbVersion = 27; // Incremented for backend sync: added 20+ new stores aligned with backend entities
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 

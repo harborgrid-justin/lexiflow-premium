@@ -29,7 +29,7 @@ export class EmailService implements OnModuleInit {
     const emailEnabled = this.configService.get('EMAIL_ENABLED', 'false');
 
     if (emailEnabled === 'true') {
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: this.configService.get('SMTP_HOST'),
         port: this.configService.get('SMTP_PORT', 587),
         secure: this.configService.get('SMTP_SECURE', false),

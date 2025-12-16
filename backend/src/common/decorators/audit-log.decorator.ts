@@ -1,9 +1,10 @@
 import { SetMetadata } from '@nestjs/common';
+import { AuditAction } from '../services/audit-log.service';
 
 export const AUDIT_LOG_KEY = 'AUDIT_LOG';
 
 export interface AuditLogOptions {
-  action: string;
+  action: AuditAction | string;
   resource: string;
   description?: string;
 }

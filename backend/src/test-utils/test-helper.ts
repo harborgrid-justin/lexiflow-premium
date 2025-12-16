@@ -24,8 +24,9 @@ export class TestHelper {
         }),
         TypeOrmModule.forRootAsync({
           useFactory: () => ({
-            ...getDatabaseConfig(),
+            type: 'sqlite',
             database: ':memory:',
+            entities: [__dirname + '/../**/*.entity{.ts,.js}'],
             synchronize: true,
             dropSchema: true,
           }),

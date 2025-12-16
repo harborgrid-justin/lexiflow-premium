@@ -19,10 +19,14 @@ import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { StandardResponseDto } from '../dto/standard-response.dto';
 
 export abstract class BaseController<T, S extends BaseService<T, any>> {
+  protected readonly resourceName: string;
+  
   constructor(
     protected readonly service: S,
-    protected readonly resourceName: string,
-  ) {}
+    resourceName: string,
+  ) {
+    this.resourceName = resourceName;
+  }
 
   @Get()
   @UseGuards(JwtAuthGuard)

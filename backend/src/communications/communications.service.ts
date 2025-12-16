@@ -54,8 +54,9 @@ export class CommunicationsService {
     this.logger.log(`Creating new communication for case: ${data.caseId}`);
     const communication = this.communicationRepository.create(data);
     const saved = await this.communicationRepository.save(communication);
-    this.logger.log(`Communication created successfully with ID: ${saved.id || (saved as any[])[0]?.id}`);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    this.logger.log(`Communication created successfully with ID: ${result.id}`);
+    return result;
   }
 
   async send(id: string): Promise<Communication> {

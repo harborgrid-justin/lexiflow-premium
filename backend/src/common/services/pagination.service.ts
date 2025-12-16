@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as MasterConfig from '../../config/master.config';
 import { FindManyOptions, Repository, SelectQueryBuilder } from 'typeorm';
 import { validateSortOrder } from '../utils/query-validation.util';
 
@@ -59,8 +60,8 @@ export interface PaginationMeta {
  */
 @Injectable()
 export class PaginationService {
-  private readonly DEFAULT_LIMIT = 20;
-  private readonly MAX_LIMIT = 100;
+  private readonly DEFAULT_LIMIT = MasterConfig.DEFAULT_PAGE_SIZE;
+  private readonly MAX_LIMIT = MasterConfig.MAX_PAGE_SIZE;
 
   /**
    * Offset-based pagination (traditional page/limit)

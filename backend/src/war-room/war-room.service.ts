@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Advisor, Expert, CaseStrategy } from './entities/war-room.entity';
 import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-room.dto';
+import { validatePagination, calculateOffset, calculateTotalPages } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class WarRoomService {
@@ -21,9 +22,9 @@ export class WarRoomService {
     return await this.advisorRepository.save(advisor);
   }
 
-  async findAllAdvisors(query: any): Promise<{ data: Advisor[]; total: number }> {
-    const { page = 1, limit = 50, caseId, isActive } = query;
-    const skip = (page - 1) * limit;
+  async findAllAdvisors(query: any): Promise<{ data: Advisor[]; total: number; page: number; limit: number; totalPages: number }> {
+    const { caseId, isActive } = query;
+    const { page, limit } = validatePagination(query.page, query.limit);
 
     const where: any = {};
     if (caseId) where.caseId = caseId;
@@ -31,12 +32,12 @@ export class WarRoomService {
 
     const [data, total] = await this.advisorRepository.findAndCount({
       where,
-      skip,
+      skip: calculateOffset(page, limit),
       take: limit,
       order: { name: 'ASC' }
     });
 
-    return { data, total };
+    return { data, total, page, limit, totalPages: calculateTotalPages(total, limit) };
   }
 
   async findOneAdvisor(id: string): Promise<Advisor> {
@@ -56,9 +57,9 @@ export class WarRoomService {
     return await this.expertRepository.save(expert);
   }
 
-  async findAllExperts(query: any): Promise<{ data: Expert[]; total: number }> {
-    const { page = 1, limit = 50, caseId, expertType, isActive } = query;
-    const skip = (page - 1) * limit;
+  async findAllExperts(query: any): Promise<{ data: Expert[]; total: number; page: number; limit: number; totalPages: number }> {
+    const { caseId, expertType, isActive } = query;
+    const { page, limit } = validatePagination(query.page, query.limit);
 
     const where: any = {};
     if (caseId) where.caseId = caseId;
@@ -67,12 +68,12 @@ export class WarRoomService {
 
     const [data, total] = await this.expertRepository.findAndCount({
       where,
-      skip,
+      skip: calculateOffset(page, limit),
       take: limit,
       order: { name: 'ASC' }
     });
 
-    return { data, total };
+    return { data, total, page, limit, totalPages: calculateTotalPages(total, limit) };
   }
 
   async findOneExpert(id: string): Promise<Expert> {

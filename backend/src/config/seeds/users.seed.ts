@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as PathsConfig from '../paths.config';
 
 export async function seedUsers(dataSource: DataSource): Promise<void> {
   console.log('Seeding users...');
@@ -8,7 +9,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   const userRepository = dataSource.getRepository('User');
 
   // Load users from JSON file
-  const usersPath = path.join(__dirname, 'test-data', 'users.json');
+  const usersPath = path.join(PathsConfig.TEST_DATA_DIR, 'users.json');
   const usersData = JSON.parse(fs.readFileSync(usersPath, 'utf-8'));
 
   // Check if users already exist

@@ -1,7 +1,7 @@
 import { IsString, IsDateString, IsOptional, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateCalendarEventDto {
+export class CalendarIntegrationEventDto {
   @ApiProperty({ description: 'Event title' })
   @IsString()
   title: string;

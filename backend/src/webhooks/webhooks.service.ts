@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import * as crypto from 'crypto';
 import axios from 'axios';
+import * as MasterConfig from '../config/master.config';
 import { CreateWebhookDto, UpdateWebhookDto, WebhookEvent, WebhookPayload, WebhookDelivery } from './dto';
 
 export interface Webhook {
@@ -23,8 +24,8 @@ export class WebhooksService {
   private readonly logger = new Logger(WebhooksService.name);
   private readonly webhooks = new Map<string, Webhook>();
   private readonly deliveries = new Map<string, WebhookDelivery>();
-  private readonly maxRetries = 3;
-  private readonly retryDelays = [60000, 300000, 900000]; // 1min, 5min, 15min
+  private readonly maxRetries = MasterConfig.WEBHOOK_MAX_RETRIES;
+  private readonly retryDelays = MasterConfig.WEBHOOK_RETRY_DELAYS;
 
   /**
    * Create a new webhook
@@ -166,7 +167,7 @@ export class WebhooksService {
           'X-Webhook-Delivery': payload.deliveryId,
           ...webhook.headers,
         },
-        timeout: 10000,
+        timeout: MasterConfig.WEBHOOK_TIMEOUT_MS,
       });
 
       delivery.status = 'success';

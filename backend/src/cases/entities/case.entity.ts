@@ -21,13 +21,18 @@ export enum CaseType {
 
 export enum CaseStatus {
   OPEN = 'Open',
+  OPEN_LOWER = 'open',
   ACTIVE = 'Active',
+  PENDING = 'pending',
   DISCOVERY = 'Discovery',
   TRIAL = 'Trial',
   SETTLED = 'Settled',
   CLOSED = 'Closed',
+  CLOSED_LOWER = 'closed',
   ARCHIVED = 'Archived',
+  ARCHIVED_LOWER = 'archived',
   ON_HOLD = 'On Hold',
+  ON_HOLD_LOWER = 'on_hold',
 }
 
 @Entity('cases')

@@ -33,7 +33,7 @@ export class PacerSearchDto {
   natureOfSuit?: string;
 }
 
-export class PacerSyncDto {
+export class PacerIntegrationSyncDto {
   @ApiProperty({ description: 'Case number to sync from PACER' })
   @IsString()
   caseNumber: string;

@@ -15,6 +15,7 @@ import {
   CaseSummaryReportData,
   BillingReportData,
 } from './dto/reports.dto';
+import { validatePagination, validateEnum, sanitizeFilters, validateDateRange } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class ReportsService {
@@ -211,7 +212,8 @@ export class ReportsService {
   /**
    * Get list of generated reports
    */
-  async getReports(page: number = 1, limit: number = 20): Promise<ReportListDto> {
+  async getReports(page?: number, limit?: number): Promise<ReportListDto> {
+    const { page: validPage, limit: validLimit } = validatePagination(page, limit, 50);
     try {
       // Mock implementation
       /*

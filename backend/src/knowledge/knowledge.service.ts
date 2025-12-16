@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, In } from 'typeorm';
+import * as MasterConfig from '../config/master.config';
 import { KnowledgeArticle } from './entities/knowledge-article.entity';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto, QueryKnowledgeDto } from './dto';
 import { EntityNotFoundException } from '../common/exceptions';
@@ -143,14 +144,14 @@ export class KnowledgeService {
     return result.map((r) => r.tag);
   }
 
-  async getPopular(limit: number = 10): Promise<KnowledgeArticle[]> {
+  async getPopular(limit: number = MasterConfig.SEARCH_PREVIEW_LIMIT): Promise<KnowledgeArticle[]> {
     return this.articleRepository.find({
       order: { viewCount: 'DESC', createdAt: 'DESC' },
       take: limit,
     });
   }
 
-  async getRecent(limit: number = 10): Promise<KnowledgeArticle[]> {
+  async getRecent(limit: number = MasterConfig.SEARCH_PREVIEW_LIMIT): Promise<KnowledgeArticle[]> {
     return this.articleRepository.find({
       order: { createdAt: 'DESC' },
       take: limit,

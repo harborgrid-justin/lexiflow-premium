@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Brackets } from 'typeorm';
+import * as MasterConfig from '../config/master.config';
+import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '../common/utils/math.utils';
 import {
   SearchQueryDto,
   SearchEntityType,
@@ -33,7 +35,7 @@ export class SearchService {
   async search(query: SearchQueryDto): Promise<SearchResultDto> {
     const startTime = Date.now();
     const { page = 1, limit = 20, entityType, fuzzy } = query;
-    const offset = (page - 1) * limit;
+    const offset = calculateOffset(page, limit);
 
     try {
       let results: SearchResultItem[] = [];
@@ -66,8 +68,8 @@ export class SearchService {
           break;
       }
 
-      const executionTime = Date.now() - startTime;
-      const totalPages = Math.ceil(total / limit);
+      const executionTime = calculateExecutionTime(startTime);
+      const totalPages = calculateTotalPages(total, limit);
 
       return {
         results,
@@ -90,7 +92,7 @@ export class SearchService {
    */
   async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
     const { query: searchQuery, page = 1, limit = 20, startDate, endDate, status, practiceArea, fuzzy } = query;
-    const offset = (page - 1) * limit;
+    const offset = calculateOffset(page, limit);
 
     // Mock implementation - replace with actual TypeORM query when entities are available
     // Example PostgreSQL full-text search query:
@@ -252,9 +254,9 @@ export class SearchService {
    */
   async searchAll(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
     const [caseResults, docResults, clientResults] = await Promise.all([
-      this.searchCases({ ...query, limit: 10 }),
-      this.searchDocuments({ ...query, limit: 10 }),
-      this.searchClients({ ...query, limit: 10 }),
+      this.searchCases({ ...query, limit: MasterConfig.SEARCH_PREVIEW_LIMIT }),
+      this.searchDocuments({ ...query, limit: MasterConfig.SEARCH_PREVIEW_LIMIT }),
+      this.searchClients({ ...query, limit: MasterConfig.SEARCH_PREVIEW_LIMIT }),
     ]);
 
     const allResults = [
@@ -263,7 +265,7 @@ export class SearchService {
       ...clientResults.results,
     ].sort((a, b) => b.score - a.score);
 
-    const offset = ((query.page || 1) - 1) * (query.limit || 20);
+    const offset = calculateOffset(query.page || 1, query.limit || 20);
     const results = allResults.slice(offset, offset + (query.limit || 20));
     const total = allResults.length;
 
@@ -327,7 +329,7 @@ export class SearchService {
     }
     */
 
-    const duration = Date.now() - startTime;
+    const duration = calculateExecutionTime(startTime);
 
     return {
       success: true,

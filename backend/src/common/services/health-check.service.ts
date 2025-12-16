@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { formatBytes } from '../utils/format.utils';
 
 export interface HealthCheckResult {
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -124,16 +125,16 @@ export class HealthCheckService {
   private async checkMemory(): Promise<HealthCheckResult['checks'][string]> {
     try {
       const memUsage = process.memoryUsage();
-      const heapUsedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
-      const heapTotalMB = Math.round(memUsage.heapTotal / 1024 / 1024);
-      const usagePercent = Math.round((heapUsedMB / heapTotalMB) * 100);
+      const heapUsed = memUsage.heapUsed;
+      const heapTotal = memUsage.heapTotal;
+      const usagePercent = Math.round((heapUsed / heapTotal) * 100);
 
       return {
         status: usagePercent < 90 ? 'up' : 'down',
-        message: `Memory usage: ${heapUsedMB}MB / ${heapTotalMB}MB (${usagePercent}%)`,
+        message: `Memory usage: ${formatBytes(heapUsed)} / ${formatBytes(heapTotal)} (${usagePercent}%)`,
         details: {
-          heapUsed: heapUsedMB,
-          heapTotal: heapTotalMB,
+          heapUsed: formatBytes(heapUsed),
+          heapTotal: formatBytes(heapTotal),
           usagePercent,
         },
       };

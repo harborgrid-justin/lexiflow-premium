@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conversation, Message } from './entities/messenger.entity';
-import { CreateConversationDto, CreateMessageDto, UpdateConversationDto } from './dto/messenger.dto';
+import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
 
 @Injectable()
 export class MessengerService {
@@ -13,7 +13,7 @@ export class MessengerService {
     private readonly messageRepository: Repository<Message>,
   ) {}
 
-  async createConversation(createDto: CreateConversationDto): Promise<Conversation> {
+  async createConversation(createDto: MessengerConversationDto): Promise<Conversation> {
     if (createDto.participants.length < 2) {
       throw new BadRequestException('Conversation must have at least 2 participants');
     }
@@ -54,7 +54,7 @@ export class MessengerService {
     await this.conversationRepository.remove(conversation);
   }
 
-  async sendMessage(createDto: CreateMessageDto, senderId: string): Promise<Message> {
+  async sendMessage(createDto: MessengerMessageDto, senderId: string): Promise<Message> {
     await this.findOneConversation(createDto.conversationId);
     const message = this.messageRepository.create({
       ...createDto,

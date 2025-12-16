@@ -13,12 +13,20 @@ import { Client } from '../../../entities/client.entity';
 
 export enum InvoiceStatus {
   DRAFT = 'Draft',
+  DRAFT_LOWER = 'draft',
   SENT = 'Sent',
+  SENT_LOWER = 'sent',
   VIEWED = 'Viewed',
+  VIEWED_LOWER = 'viewed',
   PARTIAL = 'Partial',
+  PARTIAL_LOWER = 'partial',
   PAID = 'Paid',
+  PAID_LOWER = 'paid',
   OVERDUE = 'Overdue',
+  OVERDUE_LOWER = 'overdue',
   WRITTEN_OFF = 'Written Off',
+  CANCELLED = 'cancelled',
+  REFUNDED = 'refunded',
 }
 
 export enum BillingModel {

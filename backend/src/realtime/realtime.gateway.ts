@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger, Injectable, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as MasterConfig from '../config/master.config';
 import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
 import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';
 
@@ -65,13 +66,13 @@ export enum WSEvent {
 @Injectable()
 @WebSocketGateway({
   cors: {
-    origin: process.env.CORS_ORIGIN || '*',
+    origin: MasterConfig.REALTIME_CORS_ORIGIN,
     credentials: true,
   },
-  namespace: '/events',
-  maxHttpBufferSize: 1e6, // 1MB max message size
-  pingTimeout: 60000, // 60s ping timeout
-  pingInterval: 25000, // 25s ping interval
+  namespace: MasterConfig.REALTIME_NAMESPACE,
+  maxHttpBufferSize: MasterConfig.REALTIME_MAX_HTTP_BUFFER_SIZE,
+  pingTimeout: MasterConfig.REALTIME_PING_TIMEOUT_MS,
+  pingInterval: MasterConfig.REALTIME_PING_INTERVAL_MS,
 })
 export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()

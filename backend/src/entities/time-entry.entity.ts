@@ -11,25 +11,25 @@ import { Invoice } from './invoice.entity';
 @Index(['status'])
 @Index(['billable'])
 export class TimeEntry extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: true })
   caseId: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: true })
   userId: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   date: Date;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2 })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   hours: number;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   rate: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   amount: number;
 
   @Column({ type: 'boolean', default: true })

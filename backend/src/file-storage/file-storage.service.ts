@@ -7,10 +7,21 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
-import * as crypto from 'crypto';
-import * as os from 'os';
-import { mkdir, writeFile, readFile, unlink, stat, readdir, statfs } from 'fs/promises';
+import * as PathsConfig from '../config/paths.config';
+import * as MasterConfig from '../config/master.config';
+import { mkdir, writeFile, readFile, unlink, readdir } from 'fs/promises';
 import { StorageFile, FileUploadResult } from './interfaces/storage-file.interface';
+import {
+  calculateChecksum,
+  verifyChecksum,
+  fileExists,
+  getFileSize,
+  getFileMetadata,
+  sanitizeFilename,
+  isAllowedMimeType,
+} from '../common/utils/file.utils';
+import { formatBytes } from '../common/utils/format.utils';
+import { getDiskSpace, validateDiskSpace } from '../common/utils/disk.utils';
 
 @Injectable()
 export class FileStorageService {
@@ -21,18 +32,18 @@ export class FileStorageService {
   private readonly allowedMimeTypes: string[];
 
   constructor(private configService: ConfigService) {
-    this.uploadDir = this.configService.get<string>('UPLOAD_DIR') || './uploads';
+    this.uploadDir = PathsConfig.UPLOAD_DIR;
     this.maxFileSize =
-      this.configService.get<number>('resourceLimits.fileStorage.maxFileSize') || 524288000; // 500MB
+      this.configService.get<number>('resourceLimits.fileStorage.maxFileSize') || MasterConfig.FILE_MAX_SIZE;
     this.minDiskSpace =
-      this.configService.get<number>('resourceLimits.fileStorage.minDiskSpace') || 1073741824; // 1GB
+      this.configService.get<number>('resourceLimits.fileStorage.minDiskSpace') || MasterConfig.FILE_MIN_DISK_SPACE;
     this.allowedMimeTypes =
       this.configService.get<string[]>('resourceLimits.fileStorage.allowedMimeTypes') || [];
 
     this.ensureUploadDirectory();
 
     this.logger.log(
-      `File storage limits: maxFileSize=${this.formatBytes(this.maxFileSize)}, minDiskSpace=${this.formatBytes(this.minDiskSpace)}`,
+      `File storage limits: maxFileSize=${formatBytes(this.maxFileSize)}, minDiskSpace=${formatBytes(this.minDiskSpace)}`,
     );
   }
 
@@ -63,46 +74,43 @@ export class FileStorageService {
       // Validate file size
       if (file.size > this.maxFileSize) {
         throw new BadRequestException(
-          `File size ${this.formatBytes(file.size)} exceeds maximum allowed size of ${this.formatBytes(this.maxFileSize)}`,
+          `File size ${formatBytes(file.size)} exceeds maximum allowed size of ${formatBytes(this.maxFileSize)}`,
         );
       }
 
       // Validate MIME type if allowlist is configured
-      if (this.allowedMimeTypes.length > 0 && !this.allowedMimeTypes.includes(file.mimetype)) {
+      if (!isAllowedMimeType(file.mimetype, this.allowedMimeTypes)) {
         throw new BadRequestException(
           `File type ${file.mimetype} is not allowed. Allowed types: ${this.allowedMimeTypes.join(', ')}`,
         );
       }
 
       // Check available disk space
-      await this.ensureDiskSpace(file.size);
+      await validateDiskSpace(this.uploadDir, file.size, this.minDiskSpace);
 
       // Create directory structure
       const dirPath = path.join(this.uploadDir, caseId, documentId, version.toString());
       await mkdir(dirPath, { recursive: true });
 
       // Generate safe filename
-      const ext = path.extname(file.originalname);
-      const baseName = path.basename(file.originalname, ext);
-      const safeBaseName = baseName.replace(/[^a-zA-Z0-9-_]/g, '_');
-      const filename = `${safeBaseName}${ext}`;
+      const filename = sanitizeFilename(file.originalname);
       const filePath = path.join(dirPath, filename);
 
       // Write file
       await writeFile(filePath, file.buffer);
 
       // Calculate checksum
-      const checksum = await this.calculateChecksum(file.buffer);
+      const checksum = calculateChecksum(file.buffer);
 
       // Get file stats
-      const stats = await stat(filePath);
+      const fileSize = await getFileSize(filePath);
 
-      this.logger.log(`File stored: ${filePath} (${this.formatBytes(stats.size)})`);
+      this.logger.log(`File stored: ${filePath} (${formatBytes(fileSize)})`);
 
       return {
         filename,
         path: filePath,
-        size: stats.size,
+        size: fileSize,
         mimetype: file.mimetype,
         checksum,
         uploadedAt: new Date(),
@@ -122,8 +130,8 @@ export class FileStorageService {
         ? filePath
         : path.join(this.uploadDir, filePath);
 
-      const fileExists = await this.fileExists(absolutePath);
-      if (!fileExists) {
+      const exists = await fileExists(absolutePath);
+      if (!exists) {
         throw new NotFoundException(`File not found: ${filePath}`);
       }
 
@@ -143,8 +151,8 @@ export class FileStorageService {
         ? filePath
         : path.join(this.uploadDir, filePath);
 
-      const fileExists = await this.fileExists(absolutePath);
-      if (fileExists) {
+      const exists = await fileExists(absolutePath);
+      if (exists) {
         await unlink(absolutePath);
         this.logger.log(`File deleted: ${absolutePath}`);
       }
@@ -159,13 +167,6 @@ export class FileStorageService {
   }
 
   /**
-   * Calculate file checksum (SHA-256)
-   */
-  async calculateChecksum(buffer: Buffer): Promise<string> {
-    return crypto.createHash('sha256').update(buffer).digest('hex');
-  }
-
-  /**
    * Verify file checksum
    */
   async verifyChecksum(filePath: string, expectedChecksum: string): Promise<boolean> {
@@ -173,23 +174,9 @@ export class FileStorageService {
       const absolutePath = path.isAbsolute(filePath)
         ? filePath
         : path.join(this.uploadDir, filePath);
-      const buffer = await readFile(absolutePath);
-      const actualChecksum = await this.calculateChecksum(buffer);
-      return actualChecksum === expectedChecksum;
+      return await verifyChecksum(absolutePath, expectedChecksum);
     } catch (error) {
       this.logger.error('Failed to verify checksum', error);
-      return false;
-    }
-  }
-
-  /**
-   * Check if file exists
-   */
-  private async fileExists(filePath: string): Promise<boolean> {
-    try {
-      await stat(filePath);
-      return true;
-    } catch {
       return false;
     }
   }
@@ -199,8 +186,7 @@ export class FileStorageService {
    */
   async getFileSize(filePath: string): Promise<number> {
     try {
-      const stats = await stat(filePath);
-      return stats.size;
+      return await getFileSize(filePath);
     } catch (error) {
       this.logger.error(`Failed to get file size: ${filePath}`, error);
       throw error;
@@ -220,11 +206,11 @@ export class FileStorageService {
         ? filePath
         : path.join(this.uploadDir, filePath);
 
-      const stats = await stat(absolutePath);
+      const metadata = await getFileMetadata(absolutePath);
       return {
-        size: stats.size,
-        createdAt: stats.birthtime,
-        modifiedAt: stats.mtime,
+        size: metadata.size,
+        createdAt: metadata.createdAt,
+        modifiedAt: metadata.modifiedAt,
       };
     } catch (error) {
       this.logger.error(`Failed to get file metadata: ${filePath}`, error);
@@ -275,68 +261,4 @@ export class FileStorageService {
     return { removed: 0 };
   }
 
-  /**
-   * Ensure sufficient disk space is available
-   */
-  private async ensureDiskSpace(requiredBytes: number): Promise<void> {
-    try {
-      // Get disk space statistics
-      const stats = await this.getDiskSpace();
-      const availableSpace = stats.available;
-
-      // Check if we have minimum required space after this write
-      const spaceAfterWrite = availableSpace - requiredBytes;
-
-      if (spaceAfterWrite < this.minDiskSpace) {
-        throw new InternalServerErrorException(
-          `Insufficient disk space. Available: ${this.formatBytes(availableSpace)}, ` +
-            `Required: ${this.formatBytes(requiredBytes + this.minDiskSpace)}`,
-        );
-      }
-
-      this.logger.debug(
-        `Disk space check passed: ${this.formatBytes(availableSpace)} available, ` +
-          `${this.formatBytes(spaceAfterWrite)} after write`,
-      );
-    } catch (error) {
-      if (error instanceof InternalServerErrorException) {
-        throw error;
-      }
-      this.logger.warn('Could not check disk space, proceeding with write', error);
-    }
-  }
-
-  /**
-   * Get disk space statistics for the upload directory
-   */
-  private async getDiskSpace(): Promise<{ available: number; total: number }> {
-    try {
-      // For Linux/Unix systems, use statfs
-      const stats = await statfs(this.uploadDir);
-      return {
-        available: stats.bavail * stats.bsize,
-        total: stats.blocks * stats.bsize,
-      };
-    } catch (error) {
-      // Fallback: use os.freemem() for approximate available space
-      this.logger.warn('statfs not available, using os.freemem() approximation');
-      return {
-        available: os.freemem(),
-        total: os.totalmem(),
-      };
-    }
-  }
-
-  /**
-   * Format bytes to human-readable string
-   */
-  private formatBytes(bytes: number): string {
-    if (bytes === 0) return '0 Bytes';
-
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-  }
 }

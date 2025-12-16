@@ -1,5 +1,5 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import { CreateCalendarEventDto, CalendarSyncDto, CalendarEvent } from './dto';
+import { CalendarIntegrationEventDto, CalendarSyncDto, CalendarEvent } from './dto';
 
 /**
  * Calendar Integration Service
@@ -14,7 +14,7 @@ export class CalendarService {
   /**
    * Create a calendar event
    */
-  async createEvent(createEventDto: CreateCalendarEventDto, userId: string): Promise<CalendarEvent> {
+  async createEvent(createEventDto: CalendarIntegrationEventDto, userId: string): Promise<CalendarEvent> {
     this.logger.log('Creating calendar event:', createEventDto);
 
     try {
@@ -96,7 +96,7 @@ export class CalendarService {
   /**
    * Update calendar event
    */
-  async updateEvent(eventId: string, updates: Partial<CreateCalendarEventDto>): Promise<CalendarEvent> {
+  async updateEvent(eventId: string, updates: Partial<CalendarIntegrationEventDto>): Promise<CalendarEvent> {
     this.logger.log(`Updating calendar event: ${eventId}`);
 
     const event = this.events.get(eventId);

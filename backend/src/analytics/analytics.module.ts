@@ -7,6 +7,7 @@ import { Dashboard } from './entities/dashboard.entity';
 
 // Import BillingModule to access real billing analytics
 import { BillingModule } from '../billing/billing.module';
+import { AuthModule } from '../auth/auth.module';
 
 // Main service
 import { AnalyticsService } from './analytics.service';
@@ -39,6 +40,7 @@ import { DashboardService } from './dashboard/dashboard.service';
   imports: [
     TypeOrmModule.forFeature([AnalyticsEvent, Dashboard]),
     BillingModule, // Import BillingModule to access BillingAnalyticsService
+    AuthModule,
   ],
   controllers: [
     CaseAnalyticsController,

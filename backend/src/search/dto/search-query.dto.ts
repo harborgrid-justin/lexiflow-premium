@@ -1,6 +1,7 @@
 import { IsString, IsOptional, IsEnum, IsInt, Min, Max, IsDateString, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import * as MasterConfig from '../../config/master.config';
 
 export enum SearchEntityType {
   ALL = 'all',
@@ -42,16 +43,16 @@ export class SearchQueryDto {
 
   @ApiPropertyOptional({
     description: 'Items per page',
-    default: 20,
+    default: MasterConfig.DEFAULT_PAGE_SIZE,
     minimum: 1,
-    maximum: 100,
+    maximum: MasterConfig.MAX_PAGE_SIZE,
   })
   @IsOptional()
   @IsInt()
   @Min(1)
-  @Max(100)
+  @Max(MasterConfig.MAX_PAGE_SIZE)
   @Type(() => Number)
-  limit?: number = 20;
+  limit?: number = MasterConfig.DEFAULT_PAGE_SIZE;
 
   @ApiPropertyOptional({
     description: 'Filter by practice area',

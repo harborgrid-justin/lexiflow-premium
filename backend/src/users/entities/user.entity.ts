@@ -4,9 +4,19 @@ export enum UserRole {
   SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',
   PARTNER = 'partner',
+  SENIOR_ASSOCIATE = 'senior_associate',
+  ASSOCIATE = 'associate',
+  JUNIOR_ASSOCIATE = 'junior_associate',
   ATTORNEY = 'attorney',
   PARALEGAL = 'paralegal',
+  LEGAL_ASSISTANT = 'legal_assistant',
+  CLERK = 'clerk',
+  INTERN = 'intern',
+  ACCOUNTANT = 'accountant',
+  BILLING_SPECIALIST = 'billing_specialist',
+  IT_ADMIN = 'it_admin',
   STAFF = 'staff',
+  USER = 'user',
   CLIENT = 'client'
 }
 
@@ -28,7 +38,7 @@ export class User {
   @Index()
   email: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'password', type: 'varchar', length: 255, nullable: true })
   passwordHash: string;
 
   @Column({ type: 'varchar', length: 100 })
@@ -45,13 +55,9 @@ export class User {
   @Index()
   role: UserRole;
 
-  @Column({
-    type: 'enum',
-    enum: UserStatus,
-    default: UserStatus.PENDING
-  })
+  @Column({ name: 'isActive', type: 'boolean', default: true })
   @Index()
-  status: UserStatus;
+  status: boolean;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone: string;
@@ -62,8 +68,7 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: true })
   department: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  barNumber: string;
+  // Note: barNumber not in current DB schema - would need migration to add
 
   @Column({ type: 'text', array: true, default: '{}' })
   permissions: string[];
@@ -77,13 +82,13 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   lastLoginAt: Date;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'isVerified', type: 'boolean', default: false })
   emailVerified: boolean;
 
   @Column({ type: 'boolean', default: false })
   twoFactorEnabled: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'twoFactorSecret', type: 'varchar', length: 255, nullable: true })
   totpSecret: string;
 
   @CreateDateColumn()

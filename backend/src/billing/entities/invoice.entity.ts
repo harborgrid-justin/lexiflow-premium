@@ -14,7 +14,7 @@ export class Invoice {
   @Column()
   clientId: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2, nullable: true })
   amount: number;
 
   @Column({ default: 'draft' })

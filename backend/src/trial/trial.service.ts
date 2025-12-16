@@ -6,6 +6,8 @@ import { WitnessPrepSession } from './entities/witness-prep-session.entity';
 import { CreateTrialEventDto } from './dto/create-trial-event.dto';
 import { UpdateTrialEventDto } from './dto/update-trial-event.dto';
 import { CreateWitnessPrepDto } from './dto/create-witness-prep.dto';
+import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
+import { validateDateRange, validatePagination, validateSortField, validateSortOrder, applySafeSort } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class TrialService {
@@ -30,22 +32,25 @@ export class TrialService {
     page?: number;
     limit?: number;
   }) {
-    const { caseId, type, startDate, endDate, page = 1, limit = 50 } = filters;
+    const { caseId, type, startDate, endDate } = filters;
+    const { page, limit } = validatePagination(filters.page, filters.limit);
     
     const queryBuilder = this.trialEventRepository.createQueryBuilder('event');
 
     if (caseId) queryBuilder.andWhere('event.caseId = :caseId', { caseId });
     if (type) queryBuilder.andWhere('event.type = :type', { type });
-    if (startDate && endDate) {
+    
+    const dateRange = validateDateRange(startDate, endDate);
+    if (dateRange) {
       queryBuilder.andWhere('event.date BETWEEN :startDate AND :endDate', {
-        startDate,
-        endDate,
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
       });
     }
 
     const [data, total] = await queryBuilder
       .orderBy('event.date', 'ASC')
-      .skip((page - 1) * limit)
+      .skip(calculateOffset(page, limit))
       .take(limit)
       .getManyAndCount();
 
@@ -54,7 +59,7 @@ export class TrialService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 
@@ -91,7 +96,8 @@ export class TrialService {
     page?: number;
     limit?: number;
   }) {
-    const { caseId, status, page = 1, limit = 50 } = filters;
+    const { caseId, status } = filters;
+    const { page, limit } = validatePagination(filters.page, filters.limit);
     
     const where: FindOptionsWhere<WitnessPrepSession> = {};
     if (caseId) where.caseId = caseId;
@@ -100,7 +106,7 @@ export class TrialService {
     const [data, total] = await this.witnessPrepRepository.findAndCount({
       where,
       order: { scheduledDate: 'ASC' },
-      skip: (page - 1) * limit,
+      skip: calculateOffset(page, limit),
       take: limit,
     });
 
@@ -109,7 +115,7 @@ export class TrialService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 }

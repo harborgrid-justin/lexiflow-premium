@@ -3,8 +3,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { ExternalApiService } from './external-api.service';
 import { PacerService } from '../pacer/pacer.service';
 import { CalendarService } from '../calendar/calendar.service';
-import { PacerSearchDto, PacerSyncDto } from '../pacer/dto';
-import { CreateCalendarEventDto, CalendarSyncDto } from '../calendar/dto';
+import { PacerSearchDto, PacerIntegrationSyncDto } from '../pacer/dto';
+import { CalendarIntegrationEventDto, CalendarSyncDto } from '../calendar/dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
@@ -34,7 +34,7 @@ export class ExternalApiController {
   @ApiResponse({ status: 200, description: 'Case data synced from PACER' })
   @ApiResponse({ status: 400, description: 'Invalid sync request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async syncFromPacer(@Body() syncDto: PacerSyncDto) {
+  async syncFromPacer(@Body() syncDto: PacerIntegrationSyncDto) {
     return this.pacerService.sync(syncDto);
   }
 
@@ -45,7 +45,7 @@ export class ExternalApiController {
   @ApiResponse({ status: 400, description: 'Invalid event data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createCalendarEvent(
-    @Body() createEventDto: CreateCalendarEventDto,
+    @Body() createEventDto: CalendarIntegrationEventDto,
     @CurrentUser() user: any,
   ) {
     const userId = user.id;

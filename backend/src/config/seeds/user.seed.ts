@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import { User } from '../../entities/user.entity';
 import { UserProfile } from '../../entities/user-profile.entity';
 import * as bcrypt from 'bcrypt';
+import { BCRYPT_ROUNDS } from '../master.config';
 
 export async function seedUsers(dataSource: DataSource): Promise<void> {
   const userRepository = dataSource.getRepository(User);
@@ -14,7 +15,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
     return;
   }
 
-  const hashedPassword = await bcrypt.hash('Password123!', 10);
+  const hashedPassword = await bcrypt.hash('Password123!', BCRYPT_ROUNDS);
 
   // Create Admin User
   const adminUser = userRepository.create({

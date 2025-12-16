@@ -27,7 +27,7 @@ export class Case extends BaseEntity {
   @Column({ type: 'varchar', length: 500 })
   title: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   caseType: string;
 
   @Column({

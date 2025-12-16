@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+import * as MasterConfig from '../config/master.config';
 import { CreateApiKeyDto, UpdateApiKeyDto, ApiKeyScope } from './dto';
 
 export interface ApiKey {
@@ -28,7 +29,7 @@ export interface ApiKeyWithSecret extends ApiKey {
 export class ApiKeysService {
   private readonly apiKeys = new Map<string, ApiKey>();
   private readonly requestCounts = new Map<string, { count: number; resetAt: Date }>();
-  private readonly defaultRateLimit = 1000; // requests per hour
+  private readonly defaultRateLimit = MasterConfig.API_KEY_DEFAULT_RATE_LIMIT;
 
   /**
    * Create a new API key
@@ -36,7 +37,7 @@ export class ApiKeysService {
   async create(createApiKeyDto: CreateApiKeyDto, userId: string): Promise<ApiKeyWithSecret> {
     // Generate API key
     const apiKey = 'sk_' + this.generateApiKey();
-    const keyHash = await bcrypt.hash(apiKey, 10);
+    const keyHash = await bcrypt.hash(apiKey, MasterConfig.BCRYPT_ROUNDS);
     const keyPrefix = apiKey.substring(0, 8);
 
     const apiKeyEntity: ApiKey = {

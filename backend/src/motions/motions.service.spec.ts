@@ -59,7 +59,7 @@ describe('MotionsService', () => {
 
   describe('findAll', () => {
     it('should return all motions', async () => {
-      mockRepository.find.mockResolvedValue([mockMotion]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockMotion]);
 
       const result = await service.findAll();
 
@@ -69,7 +69,7 @@ describe('MotionsService', () => {
 
   describe('findAllByCaseId', () => {
     it('should return motions for a case', async () => {
-      mockRepository.find.mockResolvedValue([mockMotion]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockMotion]);
 
       const result = await service.findAllByCaseId('case-001');
 
@@ -83,7 +83,7 @@ describe('MotionsService', () => {
 
   describe('findById', () => {
     it('should return a motion by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockMotion);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockMotion);
 
       const result = await service.findById(mockMotion.id);
 
@@ -91,7 +91,7 @@ describe('MotionsService', () => {
     });
 
     it('should throw NotFoundException if motion not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -107,7 +107,7 @@ describe('MotionsService', () => {
       };
 
       mockRepository.create.mockReturnValue({ ...mockMotion, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockMotion, ...createDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockMotion, ...createDto });
 
       const result = await service.create(createDto);
 
@@ -118,8 +118,8 @@ describe('MotionsService', () => {
   describe('update', () => {
     it('should update a motion', async () => {
       const updateDto = { title: 'Amended Motion to Dismiss' };
-      mockRepository.findOne.mockResolvedValue(mockMotion);
-      mockRepository.save.mockResolvedValue({ ...mockMotion, ...updateDto });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockMotion);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockMotion, ...updateDto });
 
       const result = await service.update(mockMotion.id, updateDto);
 
@@ -127,7 +127,7 @@ describe('MotionsService', () => {
     });
 
     it('should throw NotFoundException if motion not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
     });
@@ -135,8 +135,8 @@ describe('MotionsService', () => {
 
   describe('delete', () => {
     it('should delete a motion', async () => {
-      mockRepository.findOne.mockResolvedValue(mockMotion);
-      mockRepository.delete.mockResolvedValue({ affected: 1 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockMotion);
+      (mockRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
       await service.delete(mockMotion.id);
 
@@ -147,8 +147,8 @@ describe('MotionsService', () => {
   describe('file', () => {
     it('should mark motion as filed', async () => {
       const draftMotion = { ...mockMotion, status: 'draft', filedDate: null };
-      mockRepository.findOne.mockResolvedValue(draftMotion);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(draftMotion);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...draftMotion,
         status: 'filed',
         filedDate: expect.any(Date),
@@ -161,7 +161,7 @@ describe('MotionsService', () => {
     });
 
     it('should throw BadRequestException if already filed', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockMotion, status: 'filed' });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({ ...mockMotion, status: 'filed' });
 
       await expect(service.file(mockMotion.id)).rejects.toThrow(BadRequestException);
     });
@@ -170,8 +170,8 @@ describe('MotionsService', () => {
   describe('setHearingDate', () => {
     it('should set hearing date', async () => {
       const hearingDate = new Date('2024-03-01');
-      mockRepository.findOne.mockResolvedValue(mockMotion);
-      mockRepository.save.mockResolvedValue({ ...mockMotion, hearingDate });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockMotion);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockMotion, hearingDate });
 
       const result = await service.setHearingDate(mockMotion.id, hearingDate);
 
@@ -182,8 +182,8 @@ describe('MotionsService', () => {
   describe('recordRuling', () => {
     it('should record ruling', async () => {
       const ruling = { decision: 'granted', reasoning: 'Court finds merit in argument' };
-      mockRepository.findOne.mockResolvedValue(mockMotion);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockMotion);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockMotion,
         status: 'decided',
         ruling,
@@ -199,7 +199,7 @@ describe('MotionsService', () => {
 
   describe('findByType', () => {
     it('should return motions by type', async () => {
-      mockRepository.find.mockResolvedValue([mockMotion]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockMotion]);
 
       const result = await service.findByType('case-001', 'dispositive');
 
@@ -209,7 +209,7 @@ describe('MotionsService', () => {
 
   describe('findByStatus', () => {
     it('should return motions by status', async () => {
-      mockRepository.find.mockResolvedValue([mockMotion]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockMotion]);
 
       const result = await service.findByStatus('case-001', 'pending');
 
@@ -251,8 +251,8 @@ describe('MotionsService', () => {
 
   describe('attachDocument', () => {
     it('should attach document to motion', async () => {
-      mockRepository.findOne.mockResolvedValue(mockMotion);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockMotion);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockMotion,
         supportingDocs: [...mockMotion.supportingDocs, 'doc-004'],
       });

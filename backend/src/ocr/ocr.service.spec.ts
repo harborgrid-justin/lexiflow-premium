@@ -17,9 +17,9 @@ describe('OcrService', () => {
   };
 
   const mockDocumentsService = {
-    findOne: jest.fn(),
-    downloadFile: jest.fn(),
-    markOcrProcessed: jest.fn(),
+    findOne: jest.fn() as jest.Mock,
+    downloadFile: jest.fn() as jest.Mock,
+    markOcrProcessed: jest.fn() as jest.Mock,
   };
 
   const mockConfigService = {
@@ -27,12 +27,12 @@ describe('OcrService', () => {
       if (key === 'OCR_ENABLED') return 'false';
       return undefined;
     }),
-  };
+  } as any;
 
   const mockFileStorageService = {
     getFile: jest.fn(),
     saveFile: jest.fn(),
-  };
+  } as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -50,7 +50,7 @@ describe('OcrService', () => {
     // Mock OCR worker for tests
     (service as any).ocrEnabled = true;
     (service as any).worker = {
-      recognize: jest.fn().mockResolvedValue({ data: { text: 'Extracted text from document', confidence: 95 } }),
+      recognize: jest.fn().mockResolvedValue({ data: { text: 'Extracted text from document', confidence: 95 } } as any),
       terminate: jest.fn(),
     };
 
@@ -64,17 +64,17 @@ describe('OcrService', () => {
   describe('processDocument', () => {
     it('should process a document and extract text', async () => {
       const mockBuffer = Buffer.from('PDF content');
-      mockDocumentsService.findOne.mockResolvedValue(mockDocument);
-      mockDocumentsService.downloadFile.mockResolvedValue({
+      (mockDocumentsService.findOne as jest.Mock).mockResolvedValue(mockDocument as any);
+      (mockDocumentsService.downloadFile as jest.Mock).mockResolvedValue({
         buffer: mockBuffer,
         filename: 'test.pdf',
         mimeType: 'application/pdf',
-      });
-      mockDocumentsService.markOcrProcessed.mockResolvedValue({
+      } as any);
+      (mockDocumentsService.markOcrProcessed as jest.Mock).mockResolvedValue({
         ...mockDocument,
         ocrProcessed: true,
         fullTextContent: 'Extracted text',
-      });
+      } as any);
 
       const result = await service.processDocument('doc-001', { documentId: 'doc-001', languages: ['eng'] });
 
@@ -85,16 +85,16 @@ describe('OcrService', () => {
 
     it('should use default language if not specified', async () => {
       const mockBuffer = Buffer.from('PDF content');
-      mockDocumentsService.findOne.mockResolvedValue(mockDocument);
-      mockDocumentsService.downloadFile.mockResolvedValue({
+      (mockDocumentsService.findOne as jest.Mock).mockResolvedValue(mockDocument as any);
+      (mockDocumentsService.downloadFile as jest.Mock).mockResolvedValue({
         buffer: mockBuffer,
         filename: 'test.pdf',
         mimeType: 'application/pdf',
-      });
-      mockDocumentsService.markOcrProcessed.mockResolvedValue({
+      } as any);
+      (mockDocumentsService.markOcrProcessed as jest.Mock).mockResolvedValue({
         ...mockDocument,
         ocrProcessed: true,
-      });
+      } as any);
 
       await service.processDocument('doc-001', { documentId: 'doc-001' });
 
@@ -204,12 +204,12 @@ describe('OcrService', () => {
   describe.skip('extractStructuredData', () => {
     it('should extract structured data from document', async () => {
       const mockBuffer = Buffer.from('Document with name: John Doe, date: 2024-01-15');
-      mockDocumentsService.findOne.mockResolvedValue(mockDocument);
-      mockDocumentsService.downloadFile.mockResolvedValue({
+      (mockDocumentsService.findOne as jest.Mock).mockResolvedValue(mockDocument as any);
+      (mockDocumentsService.downloadFile as jest.Mock).mockResolvedValue({
         buffer: mockBuffer,
         filename: 'form.pdf',
         mimeType: 'application/pdf',
-      });
+      } as any);
 
       // Method not implemented yet
       // const result = await service.extractStructuredData('doc-001', {
@@ -223,16 +223,16 @@ describe('OcrService', () => {
 
   describe.skip('batchProcess', () => {
     it('should process multiple documents', async () => {
-      mockDocumentsService.findOne.mockResolvedValue(mockDocument);
-      mockDocumentsService.downloadFile.mockResolvedValue({
+      (mockDocumentsService.findOne as jest.Mock).mockResolvedValue(mockDocument as any);
+      (mockDocumentsService.downloadFile as jest.Mock).mockResolvedValue({
         buffer: Buffer.from('content'),
         filename: 'test.pdf',
         mimeType: 'application/pdf',
-      });
-      mockDocumentsService.markOcrProcessed.mockResolvedValue({
+      } as any);
+      (mockDocumentsService.markOcrProcessed as jest.Mock).mockResolvedValue({
         ...mockDocument,
         ocrProcessed: true,
-      });
+      } as any);
 
       // Method not implemented yet
       // const result = await service.batchProcess(['doc-001', 'doc-002'], { languages: ['eng'] });
@@ -243,17 +243,17 @@ describe('OcrService', () => {
 
     it('should handle errors in batch processing', async () => {
       mockDocumentsService.findOne
-        .mockResolvedValueOnce(mockDocument)
-        .mockRejectedValueOnce(new Error('Document not found'));
-      mockDocumentsService.downloadFile.mockResolvedValue({
+        .mockResolvedValueOnce(mockDocument as any)
+        .mockRejectedValueOnce(new Error('Document not found') as any);
+      (mockDocumentsService.downloadFile as jest.Mock).mockResolvedValue({
         buffer: Buffer.from('content'),
         filename: 'test.pdf',
         mimeType: 'application/pdf',
-      });
-      mockDocumentsService.markOcrProcessed.mockResolvedValue({
+      } as any);
+      (mockDocumentsService.markOcrProcessed as jest.Mock).mockResolvedValue({
         ...mockDocument,
         ocrProcessed: true,
-      });
+      } as any);
 
       // Method not implemented yet
       // const result = await service.batchProcess([{ documentId: 'doc-001', languages: ['eng'] }, { documentId: 'doc-002', languages: ['eng'] }]);

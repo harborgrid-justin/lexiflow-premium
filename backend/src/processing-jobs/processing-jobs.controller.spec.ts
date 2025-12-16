@@ -17,9 +17,9 @@ describe('ProcessingJobsController', () => {
   };
 
   const mockProcessingJobsService = {
-    findAll: jest.fn(),
-    getJob: jest.fn(),
-    getJobStatus: jest.fn(),
+    findAll: jest.fn() as jest.Mock,
+    getJob: jest.fn() as jest.Mock,
+    getJobStatus: jest.fn() as jest.Mock,
   };
 
   beforeEach(async () => {
@@ -40,7 +40,7 @@ describe('ProcessingJobsController', () => {
 
   describe('findAll', () => {
     it('should return all processing jobs', async () => {
-      (mockProcessingJobsService.findAll as jest.Mock).mockResolvedValue([mockJob]);
+      (mockProcessingJobsService.findAll as jest.Mock).mockResolvedValue([mockJob] as any);
 
       const result = await controller.findAll();
 
@@ -51,7 +51,7 @@ describe('ProcessingJobsController', () => {
 
   describe('getJob', () => {
     it('should return a job by id', async () => {
-      (mockProcessingJobsService.getJobStatus as jest.Mock).mockResolvedValue(mockJob);
+      (mockProcessingJobsService.getJobStatus as jest.Mock).mockResolvedValue(mockJob as any);
 
       const result = await controller.getJobStatus('job-001');
 
@@ -63,7 +63,7 @@ describe('ProcessingJobsController', () => {
   describe('getJobStatus', () => {
     it('should return job status', async () => {
       const status = { id: 'job-001', status: 'PROCESSING', progress: 50 };
-      (mockProcessingJobsService.getJobStatus as jest.Mock).mockResolvedValue(status);
+      (mockProcessingJobsService.getJobStatus as jest.Mock).mockResolvedValue(status as any);
 
       const result = await controller.getJobStatus('job-001');
 

@@ -23,12 +23,16 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
                 oldStatus: existing.admissibility,
                 newStatus: updates.admissibility
             });
+        }
         return result;
     }
     verifyIntegrity = async (id: string) => {
         await delay(1500);
         return { verified: true, timestamp: new Date().toISOString() };
+    }
+    
     generateReport = async (id: string) => {
         await delay(1000);
         console.log(`[API] Report generated for ${id}`);
+    }
 }

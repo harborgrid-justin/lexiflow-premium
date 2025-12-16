@@ -84,7 +84,7 @@ describe('AnalyticsService', () => {
         };
 
         mockAnalyticsEventRepository.create.mockReturnValue(mockAnalyticsEvent);
-        mockAnalyticsEventRepository.save.mockResolvedValue(mockAnalyticsEvent);
+        (mockAnalyticsEventRepository.save as jest.Mock).mockResolvedValue(mockAnalyticsEvent);
 
         const result = await service.trackEvent(eventData);
 
@@ -96,7 +96,7 @@ describe('AnalyticsService', () => {
 
     describe('getEventsByType', () => {
       it('should return events by type', async () => {
-        mockAnalyticsEventRepository.find.mockResolvedValue([mockAnalyticsEvent]);
+        (mockAnalyticsEventRepository.find as jest.Mock).mockResolvedValue([mockAnalyticsEvent]);
 
         const result = await service.getEventsByType('case_created');
 
@@ -110,7 +110,7 @@ describe('AnalyticsService', () => {
 
     describe('getEventsByEntity', () => {
       it('should return events for an entity', async () => {
-        mockAnalyticsEventRepository.find.mockResolvedValue([mockAnalyticsEvent]);
+        (mockAnalyticsEventRepository.find as jest.Mock).mockResolvedValue([mockAnalyticsEvent]);
 
         const result = await service.getEventsByEntity('Case', 'case-001');
 
@@ -120,7 +120,7 @@ describe('AnalyticsService', () => {
 
     describe('getEventsByUser', () => {
       it('should return events for a user', async () => {
-        mockAnalyticsEventRepository.find.mockResolvedValue([mockAnalyticsEvent]);
+        (mockAnalyticsEventRepository.find as jest.Mock).mockResolvedValue([mockAnalyticsEvent]);
 
         const result = await service.getEventsByUser('user-001');
 
@@ -134,7 +134,7 @@ describe('AnalyticsService', () => {
           where: jest.fn().mockReturnThis(),
           andWhere: jest.fn().mockReturnThis(),
           orderBy: jest.fn().mockReturnThis(),
-          getMany: jest.fn().mockResolvedValue([mockAnalyticsEvent]),
+          getMany: jest.fn().mockResolvedValue([mockAnalyticsEvent] as any),
         };
         mockAnalyticsEventRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
@@ -159,7 +159,7 @@ describe('AnalyticsService', () => {
           getRawMany: jest.fn().mockResolvedValue([
             { status: 'Active', count: 10 },
             { status: 'Closed', count: 5 },
-          ]),
+          ] as any),
         };
         mockAnalyticsEventRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
@@ -180,7 +180,7 @@ describe('AnalyticsService', () => {
           orderBy: jest.fn().mockReturnThis(),
           getRawMany: jest.fn().mockResolvedValue([
             { userId: 'user-001', eventCount: 50 },
-          ]),
+          ] as any),
         };
         mockAnalyticsEventRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
@@ -202,7 +202,7 @@ describe('AnalyticsService', () => {
           getRawMany: jest.fn().mockResolvedValue([
             { date: '2024-01-01', count: 5 },
             { date: '2024-01-02', count: 8 },
-          ]),
+          ] as any),
         };
         mockAnalyticsEventRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
@@ -238,7 +238,7 @@ describe('AnalyticsService', () => {
   describe('Dashboards', () => {
     describe('getAllDashboards', () => {
       it('should return all dashboards for a user', async () => {
-        mockDashboardRepository.find.mockResolvedValue([mockDashboard]);
+        (mockDashboardRepository.find as jest.Mock).mockResolvedValue([mockDashboard]);
 
         const result = await service.getAllDashboards('user-001');
 
@@ -248,7 +248,7 @@ describe('AnalyticsService', () => {
 
     describe('getDashboardById', () => {
       it('should return a dashboard by id', async () => {
-        mockDashboardRepository.findOne.mockResolvedValue(mockDashboard);
+        (mockDashboardRepository.findOne as jest.Mock).mockResolvedValue(mockDashboard);
 
         const result = await service.getDashboardById(mockDashboard.id);
 
@@ -266,7 +266,7 @@ describe('AnalyticsService', () => {
         };
 
         mockDashboardRepository.create.mockReturnValue(mockDashboard);
-        mockDashboardRepository.save.mockResolvedValue(mockDashboard);
+        (mockDashboardRepository.save as jest.Mock).mockResolvedValue(mockDashboard);
 
         const result = await service.createDashboard(createDto);
 
@@ -277,8 +277,8 @@ describe('AnalyticsService', () => {
     describe('updateDashboard', () => {
       it('should update a dashboard', async () => {
         const updateDto = { name: 'Updated Dashboard' };
-        mockDashboardRepository.findOne.mockResolvedValue(mockDashboard);
-        mockDashboardRepository.save.mockResolvedValue({ ...mockDashboard, ...updateDto });
+        (mockDashboardRepository.findOne as jest.Mock).mockResolvedValue(mockDashboard);
+        (mockDashboardRepository.save as jest.Mock).mockResolvedValue({ ...mockDashboard, ...updateDto });
 
         const result = await service.updateDashboard(mockDashboard.id, updateDto);
 
@@ -288,8 +288,8 @@ describe('AnalyticsService', () => {
 
     describe('deleteDashboard', () => {
       it('should delete a dashboard', async () => {
-        mockDashboardRepository.findOne.mockResolvedValue(mockDashboard);
-        mockDashboardRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockDashboardRepository.findOne as jest.Mock).mockResolvedValue(mockDashboard);
+        (mockDashboardRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteDashboard(mockDashboard.id);
 
@@ -299,7 +299,7 @@ describe('AnalyticsService', () => {
 
     describe('getPublicDashboards', () => {
       it('should return public dashboards', async () => {
-        mockDashboardRepository.find.mockResolvedValue([{ ...mockDashboard, isPublic: true }]);
+        (mockDashboardRepository.find as jest.Mock).mockResolvedValue([{ ...mockDashboard, isPublic: true }]);
 
         const result = await service.getPublicDashboards();
 
@@ -310,8 +310,8 @@ describe('AnalyticsService', () => {
     describe('addWidgetToDashboard', () => {
       it('should add a widget to dashboard', async () => {
         const widget = { type: 'metric', config: { metricType: 'count' } };
-        mockDashboardRepository.findOne.mockResolvedValue(mockDashboard);
-        mockDashboardRepository.save.mockResolvedValue({
+        (mockDashboardRepository.findOne as jest.Mock).mockResolvedValue(mockDashboard);
+        (mockDashboardRepository.save as jest.Mock).mockResolvedValue({
           ...mockDashboard,
           widgets: [...mockDashboard.widgets, widget],
         });
@@ -324,8 +324,8 @@ describe('AnalyticsService', () => {
 
     describe('removeWidgetFromDashboard', () => {
       it('should remove a widget from dashboard', async () => {
-        mockDashboardRepository.findOne.mockResolvedValue(mockDashboard);
-        mockDashboardRepository.save.mockResolvedValue({
+        (mockDashboardRepository.findOne as jest.Mock).mockResolvedValue(mockDashboard);
+        (mockDashboardRepository.save as jest.Mock).mockResolvedValue({
           ...mockDashboard,
           widgets: [],
         });
@@ -340,7 +340,7 @@ describe('AnalyticsService', () => {
   describe('Reports', () => {
     describe('generateReport', () => {
       it('should generate an analytics report', async () => {
-        mockAnalyticsEventRepository.find.mockResolvedValue([mockAnalyticsEvent]);
+        (mockAnalyticsEventRepository.find as jest.Mock).mockResolvedValue([mockAnalyticsEvent]);
 
         const result = await service.generateReport({
           type: 'activity',

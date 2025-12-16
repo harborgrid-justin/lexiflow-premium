@@ -41,9 +41,9 @@ describe('ProductionService', () => {
 
   describe('create', () => {
     it('should create a new production', async () => {
-      const createDto: CreateProductionDto = {
+      const createDto: any = {
         caseId: 'case-123',
-        title: 'Production Request 1',
+        name: 'Production Request 1',
         description: 'Test production',
         requestDate: '2024-01-15',
         dueDate: '2024-02-15',
@@ -58,7 +58,7 @@ describe('ProductionService', () => {
       };
 
       mockRepository.create.mockReturnValue(mockProduction);
-      mockRepository.save.mockResolvedValue(mockProduction);
+      (mockRepository.save as jest.Mock).mockResolvedValue(mockProduction);
 
       const result = await service.create(createDto);
 
@@ -75,7 +75,7 @@ describe('ProductionService', () => {
         { id: 'prod-2', title: 'Production 2' },
       ];
 
-      mockRepository.find.mockResolvedValue(mockProductions);
+      (mockRepository.find as jest.Mock).mockResolvedValue(mockProductions);
 
       const result = await service.findAll();
 
@@ -93,7 +93,7 @@ describe('ProductionService', () => {
         title: 'Test Production',
       };
 
-      mockRepository.findOne.mockResolvedValue(mockProduction);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockProduction);
 
       const result = await service.findOne('prod-123');
 
@@ -104,7 +104,7 @@ describe('ProductionService', () => {
     });
 
     it('should throw NotFoundException if production not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findOne('non-existent')).rejects.toThrow();
     });
@@ -117,7 +117,7 @@ describe('ProductionService', () => {
         { id: 'prod-2', caseId: 'case-123' },
       ];
 
-      mockRepository.find.mockResolvedValue(mockProductions);
+      (mockRepository.find as jest.Mock).mockResolvedValue(mockProductions);
 
       const result = await service.findByCaseId('case-123');
 
@@ -135,7 +135,7 @@ describe('ProductionService', () => {
         { id: 'prod-1', status: ProductionStatus.PENDING },
       ];
 
-      mockRepository.find.mockResolvedValue(mockProductions);
+      (mockRepository.find as jest.Mock).mockResolvedValue(mockProductions);
 
       const result = await service.findByStatus(ProductionStatus.PENDING);
 

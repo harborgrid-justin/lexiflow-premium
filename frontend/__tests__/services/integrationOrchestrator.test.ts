@@ -57,7 +57,7 @@ jest.mock('../../services/dataService', () => ({
 }));
 
 describe('IntegrationOrchestrator', () => {
-  const mockDb = db as jest.Mocked<typeof db>;
+  const mockDb = db as any;
 
   beforeEach(() => {
     jest.clearAllMocks();

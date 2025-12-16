@@ -40,7 +40,7 @@ describe('PartiesController', () => {
 
   describe('findAllByCaseId', () => {
     it('should return parties for a case', async () => {
-      mockPartiesService.findAllByCaseId.mockResolvedValue([mockParty]);
+      (mockPartiesService.findAllByCaseId as jest.Mock).mockResolvedValue([mockParty]);
 
       const result = await controller.findAllByCaseId('case-001');
 
@@ -56,7 +56,7 @@ describe('PartiesController', () => {
         name: 'Jane Smith',
         type: 'DEFENDANT' as any,
       };
-      mockPartiesService.create.mockResolvedValue({ ...mockParty, ...createDto });
+      (mockPartiesService.create as jest.Mock).mockResolvedValue({ ...mockParty, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -68,7 +68,7 @@ describe('PartiesController', () => {
   describe('update', () => {
     it('should update a party', async () => {
       const updateDto = { name: 'John Doe Jr.' };
-      mockPartiesService.update.mockResolvedValue({ ...mockParty, ...updateDto });
+      (mockPartiesService.update as jest.Mock).mockResolvedValue({ ...mockParty, ...updateDto });
 
       const result = await controller.update('party-001', updateDto);
 
@@ -79,7 +79,7 @@ describe('PartiesController', () => {
 
   describe('remove', () => {
     it('should delete a party', async () => {
-      mockPartiesService.remove.mockResolvedValue(undefined);
+      (mockPartiesService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('party-001');
 

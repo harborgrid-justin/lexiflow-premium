@@ -181,7 +181,7 @@ describe('CasesService', () => {
 
   describe('findOne', () => {
     it('should return a case by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockCase);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockCase);
 
       const result = await service.findOne(mockCase.id);
 
@@ -193,7 +193,7 @@ describe('CasesService', () => {
     });
 
     it('should throw NotFoundException if case not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findOne('non-existent-id')).rejects.toThrow(
         NotFoundException,
@@ -213,9 +213,9 @@ describe('CasesService', () => {
     };
 
     it('should create a new case', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
       mockRepository.create.mockReturnValue({ ...mockCase, ...createCaseDto });
-      mockRepository.save.mockResolvedValue({ ...mockCase, ...createCaseDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockCase, ...createCaseDto });
 
       const result = await service.create(createCaseDto);
 
@@ -225,7 +225,7 @@ describe('CasesService', () => {
     });
 
     it('should throw ConflictException if case number already exists', async () => {
-      mockRepository.findOne.mockResolvedValue(mockCase);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockCase);
 
       await expect(
         service.create({ ...createCaseDto, caseNumber: mockCase.caseNumber }),
@@ -243,7 +243,7 @@ describe('CasesService', () => {
       mockRepository.findOne
         .mockResolvedValueOnce(mockCase) // First call for findOne in update
         .mockResolvedValueOnce({ ...mockCase, ...updateCaseDto }); // Second call for return
-      mockRepository.update.mockResolvedValue({ affected: 1 });
+      (mockRepository.update as jest.Mock).mockResolvedValue({ affected: 1 });
 
       const result = await service.update(mockCase.id, updateCaseDto);
 
@@ -251,7 +251,7 @@ describe('CasesService', () => {
     });
 
     it('should throw NotFoundException if case not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(
         service.update('non-existent-id', updateCaseDto),
@@ -272,8 +272,8 @@ describe('CasesService', () => {
 
   describe('remove', () => {
     it('should soft delete a case', async () => {
-      mockRepository.findOne.mockResolvedValue(mockCase);
-      mockRepository.softDelete.mockResolvedValue({ affected: 1 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockCase);
+      (mockRepository.softDelete as jest.Mock).mockResolvedValue({ affected: 1 });
 
       await service.remove(mockCase.id);
 
@@ -281,7 +281,7 @@ describe('CasesService', () => {
     });
 
     it('should throw NotFoundException if case not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.remove('non-existent-id')).rejects.toThrow(
         NotFoundException,
@@ -294,7 +294,7 @@ describe('CasesService', () => {
       mockRepository.findOne
         .mockResolvedValueOnce(mockCase)
         .mockResolvedValueOnce({ ...mockCase, isArchived: true });
-      mockRepository.update.mockResolvedValue({ affected: 1 });
+      (mockRepository.update as jest.Mock).mockResolvedValue({ affected: 1 });
 
       const result = await service.archive(mockCase.id);
 
@@ -304,7 +304,7 @@ describe('CasesService', () => {
     });
 
     it('should throw NotFoundException if case not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.archive('non-existent-id')).rejects.toThrow(
         NotFoundException,
@@ -315,7 +315,7 @@ describe('CasesService', () => {
   // Additional Tests - Edge Cases and Error Handling
   describe('findAll - edge cases', () => {
     it('should return empty array when no cases exist', async () => {
-      mockQueryBuilder.getManyAndCount.mockResolvedValue([[], 0]);
+      (mockQueryBuilder.getManyAndCount as jest.Mock).mockResolvedValue([[], 0]);
       const filterDto: CaseFilterDto = { page: 1, limit: 20 };
 
       const result = await service.findAll(filterDto);
@@ -365,7 +365,7 @@ describe('CasesService', () => {
     });
 
     it('should calculate correct total pages with partial last page', async () => {
-      mockQueryBuilder.getManyAndCount.mockResolvedValue([[mockCase], 25]);
+      (mockQueryBuilder.getManyAndCount as jest.Mock).mockResolvedValue([[mockCase], 25]);
       const filterDto: CaseFilterDto = { page: 1, limit: 10 };
 
       const result = await service.findAll(filterDto);
@@ -379,7 +379,7 @@ describe('CasesService', () => {
       mockRepository.findOne
         .mockResolvedValueOnce(mockCase)
         .mockResolvedValueOnce(mockCase);
-      mockRepository.update.mockResolvedValue({ affected: 1 });
+      (mockRepository.update as jest.Mock).mockResolvedValue({ affected: 1 });
 
       await service.update(mockCase.id, { caseNumber: mockCase.caseNumber });
 
@@ -396,7 +396,7 @@ describe('CasesService', () => {
       mockRepository.findOne
         .mockResolvedValueOnce(mockCase)
         .mockResolvedValueOnce({ ...mockCase, ...updateDto });
-      mockRepository.update.mockResolvedValue({ affected: 1 });
+      (mockRepository.update as jest.Mock).mockResolvedValue({ affected: 1 });
 
       await service.update(mockCase.id, updateDto);
 

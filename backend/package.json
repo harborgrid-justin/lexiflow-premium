@@ -2,7 +2,7 @@
   "name": "lexiflow-backend",
   "version": "1.0.0",
   "description": "LexiFlow Enterprise Backend - Document Management System",
-  "main": "dist/main.js",
+  "main": "dist/src/main.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -10,7 +10,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -34,7 +34,7 @@
   "dependencies": {
     "@apollo/server": "^4.11.0",
     "@faker-js/faker": "^10.1.0",
-    "@lexiflow/shared-types": "file:../packages/shared-types",
+
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@nestjs/apollo": "^12.2.0",
     "@nestjs/bull": "^10.2.1",

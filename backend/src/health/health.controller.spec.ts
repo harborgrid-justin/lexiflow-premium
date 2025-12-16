@@ -70,7 +70,7 @@ describe('HealthController', () => {
         details: {},
       };
 
-      mockHealthCheckService.check.mockResolvedValue(healthResult);
+      (mockHealthCheckService.check as jest.Mock).mockResolvedValue(healthResult);
 
       const result = await controller.check();
 

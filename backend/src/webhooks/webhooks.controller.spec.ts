@@ -45,7 +45,7 @@ describe('WebhooksController', () => {
 
   describe('findAll', () => {
     it('should return all webhooks for a user', async () => {
-      mockWebhooksService.findAll.mockResolvedValue([mockWebhook]);
+      (mockWebhooksService.findAll as jest.Mock).mockResolvedValue([mockWebhook]);
 
       const result = await controller.findAll(mockUser);
 
@@ -56,7 +56,7 @@ describe('WebhooksController', () => {
 
   describe('findOne', () => {
     it('should return a webhook by id', async () => {
-      mockWebhooksService.findOne.mockResolvedValue(mockWebhook);
+      (mockWebhooksService.findOne as jest.Mock).mockResolvedValue(mockWebhook);
 
       const result = await controller.findOne('webhook-001', mockUser);
 
@@ -72,7 +72,7 @@ describe('WebhooksController', () => {
         url: 'https://example.com/new',
         events: [WebhookEvent.DOCUMENT_UPLOADED],
       };
-      mockWebhooksService.create.mockResolvedValue({ ...mockWebhook, ...createDto });
+      (mockWebhooksService.create as jest.Mock).mockResolvedValue({ ...mockWebhook, ...createDto });
 
       const result = await controller.create(createDto, mockUser);
 
@@ -84,7 +84,7 @@ describe('WebhooksController', () => {
   describe('update', () => {
     it('should update a webhook', async () => {
       const updateDto = { name: 'Updated Webhook' };
-      mockWebhooksService.update.mockResolvedValue({ ...mockWebhook, ...updateDto });
+      (mockWebhooksService.update as jest.Mock).mockResolvedValue({ ...mockWebhook, ...updateDto });
 
       const result = await controller.update('webhook-001', updateDto, mockUser);
 
@@ -95,7 +95,7 @@ describe('WebhooksController', () => {
 
   describe('remove', () => {
     it('should delete a webhook', async () => {
-      mockWebhooksService.remove.mockResolvedValue(undefined);
+      (mockWebhooksService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('webhook-001', mockUser);
 

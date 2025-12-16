@@ -73,7 +73,7 @@ describe('PleadingsService', () => {
 
   describe('findByCaseId', () => {
     it('should return pleadings for a case', async () => {
-      mockRepository.find.mockResolvedValue([mockPleading]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockPleading]);
 
       const result = await service.findByCaseId('case-001');
 
@@ -87,7 +87,7 @@ describe('PleadingsService', () => {
 
   describe('findOne', () => {
     it('should return a pleading by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPleading);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPleading);
 
       const result = await service.findOne(mockPleading.id);
 
@@ -95,7 +95,7 @@ describe('PleadingsService', () => {
     });
 
     it('should throw NotFoundException if pleading not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findOne('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -111,7 +111,7 @@ describe('PleadingsService', () => {
       };
 
       mockRepository.create.mockReturnValue({ ...mockPleading, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockPleading, ...createDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockPleading, ...createDto });
 
       const result = await service.create(createDto);
 
@@ -122,8 +122,8 @@ describe('PleadingsService', () => {
   describe('update', () => {
     it('should update a pleading', async () => {
       const updateDto = { title: 'Updated Motion Title' };
-      mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.save.mockResolvedValue({ ...mockPleading, ...updateDto });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPleading);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockPleading, ...updateDto });
 
       const result = await service.update(mockPleading.id, updateDto);
 
@@ -131,7 +131,7 @@ describe('PleadingsService', () => {
     });
 
     it('should throw NotFoundException if pleading not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
     });
@@ -139,8 +139,8 @@ describe('PleadingsService', () => {
 
   describe('remove', () => {
     it('should delete a pleading', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.delete.mockResolvedValue({ affected: 1 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPleading);
+      (mockRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
       await service.remove(mockPleading.id);
 
@@ -157,8 +157,8 @@ describe('PleadingsService', () => {
         courtName: 'Superior Court',
       };
 
-      mockRepository.findOne.mockResolvedValue(mockPleading);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPleading);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockPleading,
         status: 'filed',
         filedBy: filePleadingDto.filedBy,
@@ -176,7 +176,7 @@ describe('PleadingsService', () => {
 
   describe('findByCaseId', () => {
     it('should return pleadings for a case with proper ordering', async () => {
-      mockRepository.find.mockResolvedValue([mockPleading]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockPleading]);
 
       const result = await service.findByCaseId('case-001');
 

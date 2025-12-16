@@ -80,7 +80,7 @@ describe('CommunicationsService', () => {
   describe('Communications', () => {
     describe('findAll', () => {
       it('should return all communications', async () => {
-        mockCommunicationRepository.find.mockResolvedValue([mockCommunication]);
+        (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([mockCommunication]);
 
         const result = await service.findAll();
 
@@ -90,7 +90,7 @@ describe('CommunicationsService', () => {
 
     describe('findByCaseId', () => {
       it('should return communications for a case', async () => {
-        mockCommunicationRepository.find.mockResolvedValue([mockCommunication]);
+        (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([mockCommunication]);
 
         const result = await service.findByCaseId('case-001');
 
@@ -104,7 +104,7 @@ describe('CommunicationsService', () => {
 
     describe('findById', () => {
       it('should return a communication by id', async () => {
-        mockCommunicationRepository.findOne.mockResolvedValue(mockCommunication);
+        (mockCommunicationRepository.findOne as jest.Mock).mockResolvedValue(mockCommunication);
 
         const result = await service.findById(mockCommunication.id);
 
@@ -112,7 +112,7 @@ describe('CommunicationsService', () => {
       });
 
       it('should throw NotFoundException if communication not found', async () => {
-        mockCommunicationRepository.findOne.mockResolvedValue(null);
+        (mockCommunicationRepository.findOne as jest.Mock).mockResolvedValue(null);
 
         await expect(service.findById('non-existent')).rejects.toThrow(
           NotFoundException,
@@ -132,7 +132,7 @@ describe('CommunicationsService', () => {
         };
 
         mockCommunicationRepository.create.mockReturnValue(mockCommunication);
-        mockCommunicationRepository.save.mockResolvedValue(mockCommunication);
+        (mockCommunicationRepository.save as jest.Mock).mockResolvedValue(mockCommunication);
 
         const result = await service.create(createDto);
 
@@ -142,8 +142,8 @@ describe('CommunicationsService', () => {
 
     describe('send', () => {
       it('should send a communication', async () => {
-        mockCommunicationRepository.findOne.mockResolvedValue({ ...mockCommunication, status: 'draft' });
-        mockCommunicationRepository.save.mockResolvedValue({ ...mockCommunication, status: 'sent', sentAt: expect.any(Date) });
+        (mockCommunicationRepository.findOne as jest.Mock).mockResolvedValue({ ...mockCommunication, status: 'draft' });
+        (mockCommunicationRepository.save as jest.Mock).mockResolvedValue({ ...mockCommunication, status: 'sent', sentAt: expect.any(Date) });
 
         const result = await service.send(mockCommunication.id);
 
@@ -152,7 +152,7 @@ describe('CommunicationsService', () => {
       });
 
       it('should throw error if already sent', async () => {
-        mockCommunicationRepository.findOne.mockResolvedValue(mockCommunication);
+        (mockCommunicationRepository.findOne as jest.Mock).mockResolvedValue(mockCommunication);
 
         await expect(service.send(mockCommunication.id)).rejects.toThrow();
       });
@@ -160,8 +160,8 @@ describe('CommunicationsService', () => {
 
     describe('delete', () => {
       it('should delete a communication', async () => {
-        mockCommunicationRepository.findOne.mockResolvedValue(mockCommunication);
-        mockCommunicationRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockCommunicationRepository.findOne as jest.Mock).mockResolvedValue(mockCommunication);
+        (mockCommunicationRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.delete(mockCommunication.id);
 
@@ -171,7 +171,7 @@ describe('CommunicationsService', () => {
 
     describe('getByType', () => {
       it('should return communications by type', async () => {
-        mockCommunicationRepository.find.mockResolvedValue([mockCommunication]);
+        (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([mockCommunication]);
 
         const result = await service.getByType('email');
 
@@ -185,7 +185,7 @@ describe('CommunicationsService', () => {
 
     describe('getSentCommunications', () => {
       it('should return sent communications', async () => {
-        mockCommunicationRepository.find.mockResolvedValue([mockCommunication]);
+        (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([mockCommunication]);
 
         const result = await service.getSentCommunications('case-001');
 
@@ -196,7 +196,7 @@ describe('CommunicationsService', () => {
     describe('getDraftCommunications', () => {
       it('should return draft communications', async () => {
         const draftComm = { ...mockCommunication, status: 'draft' };
-        mockCommunicationRepository.find.mockResolvedValue([draftComm]);
+        (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([draftComm]);
 
         const result = await service.getDraftCommunications('case-001');
 
@@ -208,7 +208,7 @@ describe('CommunicationsService', () => {
   describe('Templates', () => {
     describe('getAllTemplates', () => {
       it('should return all templates', async () => {
-        mockTemplateRepository.find.mockResolvedValue([mockTemplate]);
+        (mockTemplateRepository.find as jest.Mock).mockResolvedValue([mockTemplate]);
 
         const result = await service.getAllTemplates();
 
@@ -218,7 +218,7 @@ describe('CommunicationsService', () => {
 
     describe('getTemplateById', () => {
       it('should return a template by id', async () => {
-        mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
+        (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
 
         const result = await service.getTemplateById(mockTemplate.id);
 
@@ -226,7 +226,7 @@ describe('CommunicationsService', () => {
       });
 
       it('should throw NotFoundException if template not found', async () => {
-        mockTemplateRepository.findOne.mockResolvedValue(null);
+        (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(null);
 
         await expect(service.getTemplateById('non-existent')).rejects.toThrow(
           NotFoundException,
@@ -244,7 +244,7 @@ describe('CommunicationsService', () => {
         };
 
         mockTemplateRepository.create.mockReturnValue(mockTemplate);
-        mockTemplateRepository.save.mockResolvedValue(mockTemplate);
+        (mockTemplateRepository.save as jest.Mock).mockResolvedValue(mockTemplate);
 
         const result = await service.createTemplate(createDto);
 
@@ -255,8 +255,8 @@ describe('CommunicationsService', () => {
     describe('updateTemplate', () => {
       it('should update a template', async () => {
         const updateDto = { name: 'Updated Template' };
-        mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
-        mockTemplateRepository.save.mockResolvedValue({ ...mockTemplate, ...updateDto });
+        (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
+        (mockTemplateRepository.save as jest.Mock).mockResolvedValue({ ...mockTemplate, ...updateDto });
 
         const result = await service.updateTemplate(mockTemplate.id, updateDto);
 
@@ -266,8 +266,8 @@ describe('CommunicationsService', () => {
 
     describe('deleteTemplate', () => {
       it('should delete a template', async () => {
-        mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
-        mockTemplateRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
+        (mockTemplateRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteTemplate(mockTemplate.id);
 
@@ -277,7 +277,7 @@ describe('CommunicationsService', () => {
 
     describe('getActiveTemplates', () => {
       it('should return active templates', async () => {
-        mockTemplateRepository.find.mockResolvedValue([mockTemplate]);
+        (mockTemplateRepository.find as jest.Mock).mockResolvedValue([mockTemplate]);
 
         const result = await service.getActiveTemplates();
 
@@ -291,7 +291,7 @@ describe('CommunicationsService', () => {
 
     describe('getTemplatesByType', () => {
       it('should return templates by type', async () => {
-        mockTemplateRepository.find.mockResolvedValue([mockTemplate]);
+        (mockTemplateRepository.find as jest.Mock).mockResolvedValue([mockTemplate]);
 
         const result = await service.getTemplatesByType('email');
 
@@ -301,7 +301,7 @@ describe('CommunicationsService', () => {
 
     describe('renderTemplate', () => {
       it('should render a template with variables', async () => {
-        mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
+        (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
 
         const variables = {
           caseNumber: 'CASE-001',
@@ -320,9 +320,9 @@ describe('CommunicationsService', () => {
 
   describe('createFromTemplate', () => {
     it('should create communication from template', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
       mockCommunicationRepository.create.mockReturnValue(mockCommunication);
-      mockCommunicationRepository.save.mockResolvedValue(mockCommunication);
+      (mockCommunicationRepository.save as jest.Mock).mockResolvedValue(mockCommunication);
 
       const result = await service.createFromTemplate({
         templateId: mockTemplate.id,
@@ -338,7 +338,7 @@ describe('CommunicationsService', () => {
   describe('Statistics', () => {
     describe('getCommunicationStats', () => {
       it('should return communication statistics', async () => {
-        mockCommunicationRepository.find.mockResolvedValue([
+        (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([
           mockCommunication,
           { ...mockCommunication, status: 'draft' },
           { ...mockCommunication, type: 'letter' },
@@ -356,7 +356,7 @@ describe('CommunicationsService', () => {
   // Additional Tests - Edge Cases
   describe('Communications - edge cases', () => {
     it('should return empty array when no communications exist', async () => {
-      mockCommunicationRepository.find.mockResolvedValue([]);
+      (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findAll();
 
@@ -364,7 +364,7 @@ describe('CommunicationsService', () => {
     });
 
     it('should return empty array when no communications for case', async () => {
-      mockCommunicationRepository.find.mockResolvedValue([]);
+      (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findByCaseId('non-existent-case');
 
@@ -372,13 +372,13 @@ describe('CommunicationsService', () => {
     });
 
     it('should throw NotFoundException when deleting non-existent communication', async () => {
-      mockCommunicationRepository.findOne.mockResolvedValue(null);
+      (mockCommunicationRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.delete('non-existent')).rejects.toThrow(NotFoundException);
     });
 
     it('should return empty array for sent communications when none exist', async () => {
-      mockCommunicationRepository.find.mockResolvedValue([]);
+      (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.getSentCommunications('case-001');
 
@@ -386,7 +386,7 @@ describe('CommunicationsService', () => {
     });
 
     it('should return empty array for draft communications when none exist', async () => {
-      mockCommunicationRepository.find.mockResolvedValue([]);
+      (mockCommunicationRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.getDraftCommunications('case-001');
 
@@ -396,7 +396,7 @@ describe('CommunicationsService', () => {
 
   describe('Templates - edge cases', () => {
     it('should return empty array when no templates exist', async () => {
-      mockTemplateRepository.find.mockResolvedValue([]);
+      (mockTemplateRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.getAllTemplates();
 
@@ -404,7 +404,7 @@ describe('CommunicationsService', () => {
     });
 
     it('should throw NotFoundException when updating non-existent template', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(null);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.updateTemplate('non-existent', { name: 'Updated' })).rejects.toThrow(
         NotFoundException,
@@ -412,13 +412,13 @@ describe('CommunicationsService', () => {
     });
 
     it('should throw NotFoundException when deleting non-existent template', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(null);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.deleteTemplate('non-existent')).rejects.toThrow(NotFoundException);
     });
 
     it('should throw NotFoundException when rendering non-existent template', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(null);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.renderTemplate('non-existent', {})).rejects.toThrow(NotFoundException);
     });

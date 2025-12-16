@@ -42,7 +42,7 @@ describe('ClausesController', () => {
 
   describe('findAll', () => {
     it('should return all clauses', async () => {
-      mockClausesService.findAll.mockResolvedValue([mockClause]);
+      (mockClausesService.findAll as jest.Mock).mockResolvedValue([mockClause]);
 
       const result = await controller.findAll();
 
@@ -53,7 +53,7 @@ describe('ClausesController', () => {
 
   describe('findOne', () => {
     it('should return a clause by id', async () => {
-      mockClausesService.findOne.mockResolvedValue(mockClause);
+      (mockClausesService.findOne as jest.Mock).mockResolvedValue(mockClause);
 
       const result = await controller.findOne('clause-001');
 
@@ -69,7 +69,7 @@ describe('ClausesController', () => {
         content: 'New clause content',
         category: 'Contract',
       };
-      mockClausesService.create.mockResolvedValue({ ...mockClause, ...createDto });
+      (mockClausesService.create as jest.Mock).mockResolvedValue({ ...mockClause, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -81,7 +81,7 @@ describe('ClausesController', () => {
   describe('update', () => {
     it('should update a clause', async () => {
       const updateDto = { title: 'Updated Clause' };
-      mockClausesService.update.mockResolvedValue({ ...mockClause, ...updateDto });
+      (mockClausesService.update as jest.Mock).mockResolvedValue({ ...mockClause, ...updateDto });
 
       const result = await controller.update('clause-001', updateDto);
 
@@ -92,7 +92,7 @@ describe('ClausesController', () => {
 
   describe('remove', () => {
     it('should delete a clause', async () => {
-      mockClausesService.remove.mockResolvedValue(undefined);
+      (mockClausesService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('clause-001');
 

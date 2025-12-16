@@ -85,7 +85,7 @@ describe('AuthService', () => {
 
     it('should register a new user and return tokens', async () => {
       const newUser = { ...mockUser, ...registerDto, id: 'new-user-id' };
-      mockUsersService.create.mockResolvedValue(newUser);
+      (mockUsersService.create as jest.Mock).mockResolvedValue(newUser);
       mockJwtService.signAsync
         .mockResolvedValueOnce('access-token')
         .mockResolvedValueOnce('refresh-token');
@@ -109,7 +109,7 @@ describe('AuthService', () => {
     it('should use provided role if specified', async () => {
       const registerWithRole = { ...registerDto, role: Role.ASSOCIATE };
       const newUser = { ...mockUser, ...registerWithRole, id: 'new-user-id' };
-      mockUsersService.create.mockResolvedValue(newUser);
+      (mockUsersService.create as jest.Mock).mockResolvedValue(newUser);
       mockJwtService.signAsync
         .mockResolvedValueOnce('access-token')
         .mockResolvedValueOnce('refresh-token');
@@ -129,8 +129,8 @@ describe('AuthService', () => {
     };
 
     it('should login user and return tokens', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      mockUsersService.findById.mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
       mockJwtService.signAsync
@@ -145,7 +145,7 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException for invalid credentials', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(false);
 
@@ -153,18 +153,18 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user not found', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(null);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(null);
 
       await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
     });
 
     it('should return MFA token if MFA is enabled', async () => {
       const mfaUser = { ...mockUser, mfaEnabled: true };
-      mockUsersService.findByEmail.mockResolvedValue(mfaUser);
-      mockUsersService.findById.mockResolvedValue(mfaUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mfaUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mfaUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValue('mfa-token');
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('mfa-token');
 
       const result = await service.login(loginDto);
 
@@ -176,7 +176,7 @@ describe('AuthService', () => {
   describe('refresh', () => {
     it('should refresh tokens with valid refresh token', async () => {
       // First login to store refresh token
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
       mockJwtService.signAsync
@@ -187,8 +187,8 @@ describe('AuthService', () => {
       // Now set up mocks for refresh - clear previous mocks first
       jest.clearAllMocks();
       const payload = { sub: mockUser.id, email: mockUser.email, role: mockUser.role, type: 'refresh' };
-      mockJwtService.verifyAsync.mockResolvedValue(payload);
-      mockUsersService.findById.mockResolvedValue(mockUser);
+      (mockJwtService.verifyAsync as jest.Mock).mockResolvedValue(payload);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mockUser);
       mockJwtService.signAsync
         .mockResolvedValueOnce('new-access-token')
         .mockResolvedValueOnce('new-refresh-token');
@@ -201,7 +201,7 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException for invalid refresh token', async () => {
-      mockJwtService.verifyAsync.mockRejectedValue(new Error('Invalid token'));
+      (mockJwtService.verifyAsync as jest.Mock).mockRejectedValue(new Error('Invalid token'));
 
       await expect(service.refresh('invalid-token')).rejects.toThrow(
         UnauthorizedException,
@@ -210,7 +210,7 @@ describe('AuthService', () => {
 
     it('should throw UnauthorizedException for wrong token type', async () => {
       const payload = { sub: mockUser.id, type: 'access' };
-      mockJwtService.verifyAsync.mockResolvedValue(payload);
+      (mockJwtService.verifyAsync as jest.Mock).mockResolvedValue(payload);
 
       await expect(service.refresh('access-token')).rejects.toThrow(
         UnauthorizedException,
@@ -228,11 +228,11 @@ describe('AuthService', () => {
 
   describe('changePassword', () => {
     it('should change password successfully', async () => {
-      mockUsersService.findById.mockResolvedValue(mockUser);
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
-      mockUsersService.updatePassword.mockResolvedValue(undefined);
+      (mockUsersService.updatePassword as jest.Mock).mockResolvedValue(undefined);
 
       const result = await service.changePassword(
         mockUser.id,
@@ -248,8 +248,8 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException for incorrect current password', async () => {
-      mockUsersService.findById.mockResolvedValue(mockUser);
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(false);
 
@@ -261,8 +261,8 @@ describe('AuthService', () => {
 
   describe('forgotPassword', () => {
     it('should generate reset token for existing user', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      mockJwtService.signAsync.mockResolvedValue('reset-token');
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('reset-token');
 
       const result = await service.forgotPassword(mockUser.email);
 
@@ -271,7 +271,7 @@ describe('AuthService', () => {
     });
 
     it('should return generic message for non-existing user', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(null);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(null);
 
       const result = await service.forgotPassword('nonexistent@example.com');
 
@@ -283,11 +283,11 @@ describe('AuthService', () => {
   describe('resetPassword', () => {
     it('should reset password with valid token', async () => {
       // First generate a reset token
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      mockJwtService.signAsync.mockResolvedValue('valid-reset-token');
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('valid-reset-token');
       const forgotResult = await service.forgotPassword(mockUser.email);
 
-      mockUsersService.updatePassword.mockResolvedValue(undefined);
+      (mockUsersService.updatePassword as jest.Mock).mockResolvedValue(undefined);
 
       const result = await service.resetPassword(forgotResult.resetToken, 'newPassword');
 
@@ -305,11 +305,11 @@ describe('AuthService', () => {
     it('should verify MFA with valid code', async () => {
       // First trigger MFA login
       const mfaUser = { ...mockUser, mfaEnabled: true };
-      mockUsersService.findByEmail.mockResolvedValue(mfaUser);
-      mockUsersService.findById.mockResolvedValue(mfaUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mfaUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mfaUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValue('mfa-token');
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('mfa-token');
       const loginResult = await service.login({ email: mfaUser.email, password: 'password' });
 
       // Now verify MFA
@@ -327,11 +327,11 @@ describe('AuthService', () => {
     it('should throw UnauthorizedException for invalid MFA code format', async () => {
       // First trigger MFA login
       const mfaUser = { ...mockUser, mfaEnabled: true };
-      mockUsersService.findByEmail.mockResolvedValue(mfaUser);
-      mockUsersService.findById.mockResolvedValue(mfaUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mfaUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mfaUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValue('mfa-token');
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('mfa-token');
       await service.login({ email: mfaUser.email, password: 'password' });
 
       await expect(service.verifyMfa('mfa-token', 'invalid')).rejects.toThrow(
@@ -348,8 +348,8 @@ describe('AuthService', () => {
 
   describe('validateUser', () => {
     it('should return user for valid credentials', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      mockUsersService.findById.mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
 
@@ -359,7 +359,7 @@ describe('AuthService', () => {
     });
 
     it('should return null for invalid password', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(false);
 
@@ -369,7 +369,7 @@ describe('AuthService', () => {
     });
 
     it('should return null for non-existing user', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(null);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(null);
 
       const result = await service.validateUser('nonexistent@example.com', 'password');
 
@@ -380,7 +380,7 @@ describe('AuthService', () => {
   // Additional Tests - Edge Cases and Security Scenarios
   describe('register - edge cases', () => {
     it('should propagate error when user creation fails', async () => {
-      mockUsersService.create.mockRejectedValue(new Error('Database error'));
+      (mockUsersService.create as jest.Mock).mockRejectedValue(new Error('Database error'));
 
       const registerDto = {
         email: 'test@example.com',
@@ -394,7 +394,7 @@ describe('AuthService', () => {
 
     it('should generate both access and refresh tokens on registration', async () => {
       const newUser = { ...mockUser, id: 'new-user-id' };
-      mockUsersService.create.mockResolvedValue(newUser);
+      (mockUsersService.create as jest.Mock).mockResolvedValue(newUser);
       mockJwtService.signAsync
         .mockResolvedValueOnce('access-token')
         .mockResolvedValueOnce('refresh-token');
@@ -415,8 +415,8 @@ describe('AuthService', () => {
   describe('refresh - edge cases', () => {
     it('should throw UnauthorizedException when user not found after token verification', async () => {
       const payload = { sub: 'non-existent-user', email: mockUser.email, role: mockUser.role, type: 'refresh' };
-      mockJwtService.verifyAsync.mockResolvedValue(payload);
-      mockUsersService.findById.mockResolvedValue(null);
+      (mockJwtService.verifyAsync as jest.Mock).mockResolvedValue(payload);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(null);
 
       await expect(service.refresh('valid-refresh-token')).rejects.toThrow(UnauthorizedException);
     });
@@ -424,8 +424,8 @@ describe('AuthService', () => {
 
   describe('changePassword - edge cases', () => {
     it('should throw UnauthorizedException when user not found by email', async () => {
-      mockUsersService.findById.mockResolvedValue({ ...mockUser, email: 'test@example.com' });
-      mockUsersService.findByEmail.mockResolvedValue(null);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue({ ...mockUser, email: 'test@example.com' });
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(null);
 
       await expect(
         service.changePassword(mockUser.id, 'currentPassword', 'newPassword'),
@@ -442,11 +442,11 @@ describe('AuthService', () => {
 
     it('should throw UnauthorizedException for non-6-digit MFA code', async () => {
       const mfaUser = { ...mockUser, mfaEnabled: true };
-      mockUsersService.findByEmail.mockResolvedValue(mfaUser);
-      mockUsersService.findById.mockResolvedValue(mfaUser);
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mfaUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mfaUser);
       // @ts-expect-error -- Testing invalid input
       (bcrypt.compare as any).mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValue('mfa-token');
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('mfa-token');
       await service.login({ email: mfaUser.email, password: 'password' });
 
       await expect(service.verifyMfa('mfa-token', '12345')).rejects.toThrow(UnauthorizedException);
@@ -457,11 +457,11 @@ describe('AuthService', () => {
 
   describe('resetPassword - edge cases', () => {
     it('should invalidate all refresh tokens after password reset', async () => {
-      mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      mockJwtService.signAsync.mockResolvedValue('valid-reset-token');
+      (mockUsersService.findByEmail as jest.Mock).mockResolvedValue(mockUser);
+      (mockJwtService.signAsync as jest.Mock).mockResolvedValue('valid-reset-token');
       const forgotResult = await service.forgotPassword(mockUser.email);
 
-      mockUsersService.updatePassword.mockResolvedValue(undefined);
+      (mockUsersService.updatePassword as jest.Mock).mockResolvedValue(undefined);
       await service.resetPassword(forgotResult.resetToken, 'newPassword');
 
       expect(mockUsersService.updatePassword).toHaveBeenCalledWith(mockUser.id, 'newPassword');

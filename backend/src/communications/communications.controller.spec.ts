@@ -65,7 +65,7 @@ describe('CommunicationsController', () => {
 
   describe('findAll', () => {
     it('should return all communications', async () => {
-      mockCommunicationsService.findAll.mockResolvedValue([mockCommunication]);
+      (mockCommunicationsService.findAll as jest.Mock).mockResolvedValue([mockCommunication]);
 
       const result = await controller.findAll();
 
@@ -103,7 +103,7 @@ describe('CommunicationsController', () => {
         content: 'New content',
         recipients: ['test@example.com'],
       };
-      mockCommunicationsService.create.mockResolvedValue({ ...mockCommunication, ...createDto });
+      (mockCommunicationsService.create as jest.Mock).mockResolvedValue({ ...mockCommunication, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -195,7 +195,7 @@ describe('CommunicationsController', () => {
         subject: 'Update on Your Case: 12345',
         content: 'Dear John Doe...',
       };
-      mockCommunicationsService.renderTemplate.mockResolvedValue(result);
+      (mockCommunicationsService.renderTemplate as jest.Mock).mockResolvedValue(result);
 
       const rendered = await controller.renderTemplate(templateId, variables);
 
@@ -215,7 +215,7 @@ describe('CommunicationsController', () => {
         scheduleId: 'schedule-001',
         scheduledAt: scheduleDto.scheduledAt,
       };
-      mockCommunicationsService.scheduleMessage.mockResolvedValue(result);
+      (mockCommunicationsService.scheduleMessage as jest.Mock).mockResolvedValue(result);
 
       const scheduled = await controller.scheduleMessage(scheduleDto);
 
@@ -229,7 +229,7 @@ describe('CommunicationsController', () => {
       const result = [
         { id: 'schedule-001', scheduledAt: new Date() },
       ];
-      mockCommunicationsService.getScheduledMessages.mockResolvedValue(result);
+      (mockCommunicationsService.getScheduledMessages as jest.Mock).mockResolvedValue(result);
 
       const scheduled = await controller.getScheduledMessages();
 
@@ -247,7 +247,7 @@ describe('CommunicationsController', () => {
         opens: 2,
         clicks: 1,
       };
-      mockCommunicationsService.getDeliveryStatus.mockResolvedValue(result);
+      (mockCommunicationsService.getDeliveryStatus as jest.Mock).mockResolvedValue(result);
 
       const status = await controller.getDeliveryStatus(commId);
 

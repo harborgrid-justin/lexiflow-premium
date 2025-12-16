@@ -100,9 +100,9 @@ describe('ComplianceService', () => {
   describe('Compliance Checks', () => {
     describe('runComplianceCheck', () => {
       it('should run compliance check for a case', async () => {
-        mockComplianceRuleRepository.find.mockResolvedValue([mockComplianceRule]);
+        (mockComplianceRuleRepository.find as jest.Mock).mockResolvedValue([mockComplianceRule]);
         mockComplianceCheckRepository.create.mockReturnValue(mockComplianceCheck);
-        mockComplianceCheckRepository.save.mockResolvedValue(mockComplianceCheck);
+        (mockComplianceCheckRepository.save as jest.Mock).mockResolvedValue(mockComplianceCheck);
 
         const result = await service.runComplianceCheck('case-001');
 
@@ -115,7 +115,7 @@ describe('ComplianceService', () => {
 
     describe('getChecksByCaseId', () => {
       it('should return compliance checks for a case', async () => {
-        mockComplianceCheckRepository.find.mockResolvedValue([mockComplianceCheck]);
+        (mockComplianceCheckRepository.find as jest.Mock).mockResolvedValue([mockComplianceCheck]);
 
         const result = await service.getChecksByCaseId('case-001');
 
@@ -126,7 +126,7 @@ describe('ComplianceService', () => {
     describe('getFailedChecks', () => {
       it('should return failed compliance checks', async () => {
         const failedCheck = { ...mockComplianceCheck, status: 'failed' };
-        mockComplianceCheckRepository.find.mockResolvedValue([failedCheck]);
+        (mockComplianceCheckRepository.find as jest.Mock).mockResolvedValue([failedCheck]);
 
         const result = await service.getFailedChecks();
 
@@ -140,7 +140,7 @@ describe('ComplianceService', () => {
 
     describe('getComplianceScore', () => {
       it('should calculate compliance score for a case', async () => {
-        mockComplianceCheckRepository.find.mockResolvedValue([
+        (mockComplianceCheckRepository.find as jest.Mock).mockResolvedValue([
           { ...mockComplianceCheck, status: 'passed' },
           { ...mockComplianceCheck, status: 'passed' },
           { ...mockComplianceCheck, status: 'failed' },
@@ -169,7 +169,7 @@ describe('ComplianceService', () => {
         };
 
         mockAuditLogRepository.create.mockReturnValue(mockAuditLog);
-        mockAuditLogRepository.save.mockResolvedValue(mockAuditLog);
+        (mockAuditLogRepository.save as jest.Mock).mockResolvedValue(mockAuditLog);
 
         const result = await service.createAuditLog(auditData);
 
@@ -179,7 +179,7 @@ describe('ComplianceService', () => {
 
     describe('getAuditLogsByEntityId', () => {
       it('should return audit logs for an entity', async () => {
-        mockAuditLogRepository.find.mockResolvedValue([mockAuditLog]);
+        (mockAuditLogRepository.find as jest.Mock).mockResolvedValue([mockAuditLog]);
 
         const result = await service.getAuditLogsByEntityId('Case', 'case-001');
 
@@ -193,7 +193,7 @@ describe('ComplianceService', () => {
 
     describe('getAuditLogsByUserId', () => {
       it('should return audit logs for a user', async () => {
-        mockAuditLogRepository.find.mockResolvedValue([mockAuditLog]);
+        (mockAuditLogRepository.find as jest.Mock).mockResolvedValue([mockAuditLog]);
 
         const result = await service.getAuditLogsByUserId('user-001');
 
@@ -248,7 +248,7 @@ describe('ComplianceService', () => {
   describe('Compliance Rules', () => {
     describe('getAllRules', () => {
       it('should return all compliance rules', async () => {
-        mockComplianceRuleRepository.find.mockResolvedValue([mockComplianceRule]);
+        (mockComplianceRuleRepository.find as jest.Mock).mockResolvedValue([mockComplianceRule]);
 
         const result = await service.getAllRules();
 
@@ -258,7 +258,7 @@ describe('ComplianceService', () => {
 
     describe('getRuleById', () => {
       it('should return a rule by id', async () => {
-        mockComplianceRuleRepository.findOne.mockResolvedValue(mockComplianceRule);
+        (mockComplianceRuleRepository.findOne as jest.Mock).mockResolvedValue(mockComplianceRule);
 
         const result = await service.getRuleById(mockComplianceRule.id);
 
@@ -266,7 +266,7 @@ describe('ComplianceService', () => {
       });
 
       it('should throw NotFoundException if rule not found', async () => {
-        mockComplianceRuleRepository.findOne.mockResolvedValue(null);
+        (mockComplianceRuleRepository.findOne as jest.Mock).mockResolvedValue(null);
 
         await expect(service.getRuleById('non-existent')).rejects.toThrow(
           NotFoundException,
@@ -284,7 +284,7 @@ describe('ComplianceService', () => {
         };
 
         mockComplianceRuleRepository.create.mockReturnValue(mockComplianceRule);
-        mockComplianceRuleRepository.save.mockResolvedValue(mockComplianceRule);
+        (mockComplianceRuleRepository.save as jest.Mock).mockResolvedValue(mockComplianceRule);
 
         const result = await service.createRule(createDto);
 
@@ -295,8 +295,8 @@ describe('ComplianceService', () => {
     describe('updateRule', () => {
       it('should update a compliance rule', async () => {
         const updateDto = { isActive: false };
-        mockComplianceRuleRepository.findOne.mockResolvedValue(mockComplianceRule);
-        mockComplianceRuleRepository.save.mockResolvedValue({ ...mockComplianceRule, ...updateDto });
+        (mockComplianceRuleRepository.findOne as jest.Mock).mockResolvedValue(mockComplianceRule);
+        (mockComplianceRuleRepository.save as jest.Mock).mockResolvedValue({ ...mockComplianceRule, ...updateDto });
 
         const result = await service.updateRule(mockComplianceRule.id, updateDto);
 
@@ -306,8 +306,8 @@ describe('ComplianceService', () => {
 
     describe('deleteRule', () => {
       it('should delete a compliance rule', async () => {
-        mockComplianceRuleRepository.findOne.mockResolvedValue(mockComplianceRule);
-        mockComplianceRuleRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockComplianceRuleRepository.findOne as jest.Mock).mockResolvedValue(mockComplianceRule);
+        (mockComplianceRuleRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteRule(mockComplianceRule.id);
 
@@ -317,7 +317,7 @@ describe('ComplianceService', () => {
 
     describe('getActiveRules', () => {
       it('should return active compliance rules', async () => {
-        mockComplianceRuleRepository.find.mockResolvedValue([mockComplianceRule]);
+        (mockComplianceRuleRepository.find as jest.Mock).mockResolvedValue([mockComplianceRule]);
 
         const result = await service.getActiveRules();
 
@@ -331,7 +331,7 @@ describe('ComplianceService', () => {
 
     describe('getRulesByCategory', () => {
       it('should return rules by category', async () => {
-        mockComplianceRuleRepository.find.mockResolvedValue([mockComplianceRule]);
+        (mockComplianceRuleRepository.find as jest.Mock).mockResolvedValue([mockComplianceRule]);
 
         const result = await service.getRulesByCategory('Data Retention');
 
@@ -343,8 +343,8 @@ describe('ComplianceService', () => {
   describe('Reports', () => {
     describe('generateComplianceReport', () => {
       it('should generate a compliance report', async () => {
-        mockComplianceCheckRepository.find.mockResolvedValue([mockComplianceCheck]);
-        mockComplianceRuleRepository.find.mockResolvedValue([mockComplianceRule]);
+        (mockComplianceCheckRepository.find as jest.Mock).mockResolvedValue([mockComplianceCheck]);
+        (mockComplianceRuleRepository.find as jest.Mock).mockResolvedValue([mockComplianceRule]);
 
         const result = await service.generateComplianceReport('case-001');
 

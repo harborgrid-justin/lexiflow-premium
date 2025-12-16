@@ -40,7 +40,7 @@ describe('IntegrationsService', () => {
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
-  } as unknown as Repository<Integration>;
+  } as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -80,7 +80,7 @@ describe('IntegrationsService', () => {
     });
 
     it('should throw NotFoundException if integration not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -95,8 +95,8 @@ describe('IntegrationsService', () => {
         config: { appKey: 'key123' },
       };
 
-      mockRepository.create.mockReturnValue({ ...mockIntegration, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockIntegration, ...createDto });
+      mockRepository.create.mockReturnValue({ ...mockIntegration, ...createDto } as any);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockIntegration, ...createDto } as any);
 
       const result = await service.create(createDto, 'user-001');
 
@@ -115,7 +115,7 @@ describe('IntegrationsService', () => {
     });
 
     it('should throw NotFoundException if integration not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null as any);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
     });
@@ -134,8 +134,8 @@ describe('IntegrationsService', () => {
   describe('connect', () => {
     it('should connect an integration', async () => {
       const pendingIntegration = { ...mockIntegration, status: 'pending' };
-      mockRepository.findOne.mockResolvedValue(pendingIntegration);
-      mockRepository.save.mockResolvedValue({ ...pendingIntegration, status: 'active' });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(pendingIntegration as any);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...pendingIntegration, status: 'active' } as any);
 
       const result = await service.connect(mockIntegration.id, {
         accessToken: 'newToken',
@@ -235,7 +235,7 @@ describe('IntegrationsService', () => {
 
   describe('testConnection', () => {
     it('should test integration connection', async () => {
-      mockRepository.findOne.mockResolvedValue(mockIntegration);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockIntegration as any);
 
       const result = await service.testConnection(mockIntegration.id);
 

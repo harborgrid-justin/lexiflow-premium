@@ -41,7 +41,7 @@ describe('CaseTeamsController', () => {
 
   describe('findAllByCaseId', () => {
     it('should return team members for a case', async () => {
-      mockCaseTeamsService.findAllByCaseId.mockResolvedValue([mockTeamMember]);
+      (mockCaseTeamsService.findAllByCaseId as jest.Mock).mockResolvedValue([mockTeamMember]);
 
       const result = await controller.findAllByCaseId('case-001');
 
@@ -58,7 +58,7 @@ describe('CaseTeamsController', () => {
         role: 'ASSOCIATE',
         name: 'Test Team',
       };
-      mockCaseTeamsService.create.mockResolvedValue({ ...mockTeamMember, ...createDto });
+      (mockCaseTeamsService.create as jest.Mock).mockResolvedValue({ ...mockTeamMember, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -70,7 +70,7 @@ describe('CaseTeamsController', () => {
   describe('update', () => {
     it('should update a team member', async () => {
       const updateDto: any = { role: 'SENIOR_ASSOCIATE' };
-      mockCaseTeamsService.update.mockResolvedValue({ ...mockTeamMember, ...updateDto });
+      (mockCaseTeamsService.update as jest.Mock).mockResolvedValue({ ...mockTeamMember, ...updateDto });
 
       const result = await controller.update('team-001', updateDto);
 
@@ -81,7 +81,7 @@ describe('CaseTeamsController', () => {
 
   describe('remove', () => {
     it('should remove a team member', async () => {
-      mockCaseTeamsService.remove.mockResolvedValue(undefined);
+      (mockCaseTeamsService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('team-001');
 

@@ -44,21 +44,21 @@ describe('DocumentsController', () => {
   };
 
   const mockDocumentsService = {
-    create: jest.fn().mockResolvedValue(mockDocument),
-    findAll: jest.fn().mockResolvedValue(mockPaginatedResponse),
-    findOne: jest.fn().mockResolvedValue(mockDocument),
-    update: jest.fn().mockResolvedValue(mockDocument),
-    remove: jest.fn().mockResolvedValue(undefined),
+    create: jest.fn().mockResolvedValue(mockDocument as any),
+    findAll: jest.fn().mockResolvedValue(mockPaginatedResponse as any),
+    findOne: jest.fn().mockResolvedValue(mockDocument as any),
+    update: jest.fn().mockResolvedValue(mockDocument as any),
+    remove: jest.fn().mockResolvedValue(undefined as any),
     downloadFile: jest.fn().mockResolvedValue({
       buffer: Buffer.from('file content'),
       filename: 'test.pdf',
       mimeType: 'application/pdf',
-    }),
-  };
+    } as any),
+  } as any;
 
   const mockProcessingJobsService = {
-    createJob: jest.fn().mockResolvedValue(mockJob),
-  };
+    createJob: jest.fn().mockResolvedValue(mockJob as any),
+  } as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -101,7 +101,7 @@ describe('DocumentsController', () => {
         caseId: 'case-001',
       };
 
-      const mockFile: File = {
+      const mockFile = {
         fieldname: 'file',
         originalname: 'test.pdf',
         encoding: '7bit',
@@ -112,9 +112,9 @@ describe('DocumentsController', () => {
         filename: 'test.pdf',
         path: '',
         stream: undefined as any,
-      } as File;
+      } as any;
 
-      const result = await controller.create(createDto, mockFile);
+      const result = await controller.create(createDto, mockFile as any);
 
       expect(result).toEqual(mockDocument);
       expect(documentsService.create).toHaveBeenCalledWith(createDto, mockFile);

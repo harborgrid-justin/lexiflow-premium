@@ -15,7 +15,7 @@ describe('OcrController', () => {
     extractStructuredData: jest.fn(),
     batchProcess: jest.fn(),
     getOcrStats: jest.fn(),
-  };
+  } as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,7 +36,7 @@ describe('OcrController', () => {
   describe('getSupportedLanguages', () => {
     it('should return supported languages', async () => {
       const languages = ['eng', 'spa', 'fra'];
-      mockOcrService.getSupportedLanguages.mockResolvedValue(languages);
+      (mockOcrService.getSupportedLanguages as jest.Mock).mockResolvedValue(languages as any);
 
       const result = await controller.getSupportedLanguages();
 
@@ -47,7 +47,7 @@ describe('OcrController', () => {
 
   describe('checkLanguageSupport', () => {
     it('should check if a language is supported', async () => {
-      mockOcrService.isLanguageSupported.mockResolvedValue({ supported: true, language: 'eng' });
+      (mockOcrService.isLanguageSupported as jest.Mock).mockResolvedValue({ supported: true, language: 'eng' } as any);
 
       const result = await controller.checkLanguageSupport('eng');
 
@@ -59,7 +59,7 @@ describe('OcrController', () => {
   describe('getProgress', () => {
     it('should return OCR progress for a job', async () => {
       const progress = { jobId: 'job-001', progress: 50, status: 'processing' };
-      mockOcrService.getOcrProgress.mockResolvedValue(progress);
+      (mockOcrService.getOcrProgress as jest.Mock).mockResolvedValue(progress);
 
       const result = await controller.getProgress('job-001');
 

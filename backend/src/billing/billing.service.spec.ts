@@ -108,7 +108,7 @@ describe('BillingService', () => {
   describe('Invoice Operations', () => {
     describe('findAllInvoices', () => {
       it('should return all invoices', async () => {
-        mockInvoiceRepository.find.mockResolvedValue([mockInvoice]);
+        (mockInvoiceRepository.find as jest.Mock).mockResolvedValue([mockInvoice]);
 
         const result = await service.findAllInvoices();
 
@@ -119,7 +119,7 @@ describe('BillingService', () => {
 
     describe('findInvoiceById', () => {
       it('should return an invoice by id', async () => {
-        mockInvoiceRepository.findOne.mockResolvedValue(mockInvoice);
+        (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(mockInvoice);
 
         const result = await service.findInvoiceById(mockInvoice.id);
 
@@ -127,7 +127,7 @@ describe('BillingService', () => {
       });
 
       it('should throw NotFoundException if invoice not found', async () => {
-        mockInvoiceRepository.findOne.mockResolvedValue(null);
+        (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(null);
 
         await expect(service.findInvoiceById('non-existent')).rejects.toThrow(
           NotFoundException,
@@ -144,8 +144,8 @@ describe('BillingService', () => {
           dueDate: new Date('2024-02-15'),
         };
 
-        mockInvoiceRepository.create.mockReturnValue(mockInvoice);
-        mockInvoiceRepository.save.mockResolvedValue(mockInvoice);
+        mockInvoiceRepository.create.mockReturnValue(mockInvoice as any);
+        (mockInvoiceRepository.save as jest.Mock).mockResolvedValue(mockInvoice);
 
         const result = await service.createInvoice(createDto);
 
@@ -158,8 +158,8 @@ describe('BillingService', () => {
     describe('updateInvoice', () => {
       it('should update an invoice', async () => {
         const updateDto = { status: 'sent' };
-        mockInvoiceRepository.findOne.mockResolvedValue(mockInvoice);
-        mockInvoiceRepository.save.mockResolvedValue({ ...mockInvoice, ...updateDto });
+        (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(mockInvoice);
+        (mockInvoiceRepository.save as jest.Mock).mockResolvedValue({ ...mockInvoice, ...updateDto });
 
         const result = await service.updateInvoice(mockInvoice.id, updateDto);
 
@@ -169,8 +169,8 @@ describe('BillingService', () => {
 
     describe('deleteInvoice', () => {
       it('should delete an invoice', async () => {
-        mockInvoiceRepository.findOne.mockResolvedValue(mockInvoice);
-        mockInvoiceRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(mockInvoice);
+        (mockInvoiceRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteInvoice(mockInvoice.id);
 
@@ -180,8 +180,8 @@ describe('BillingService', () => {
 
     describe('sendInvoice', () => {
       it('should mark invoice as sent', async () => {
-        mockInvoiceRepository.findOne.mockResolvedValue(mockInvoice);
-        mockInvoiceRepository.save.mockResolvedValue({ ...mockInvoice, status: 'sent', sentAt: expect.any(Date) });
+        (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(mockInvoice);
+        (mockInvoiceRepository.save as jest.Mock).mockResolvedValue({ ...mockInvoice, status: 'sent', sentAt: expect.any(Date) });
 
         const result = await service.sendInvoice(mockInvoice.id);
 
@@ -191,8 +191,8 @@ describe('BillingService', () => {
 
     describe('markInvoicePaid', () => {
       it('should mark invoice as paid', async () => {
-        mockInvoiceRepository.findOne.mockResolvedValue({ ...mockInvoice, status: 'sent' });
-        mockInvoiceRepository.save.mockResolvedValue({ ...mockInvoice, status: 'paid', paidAt: expect.any(Date) });
+        (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue({ ...mockInvoice, status: 'sent' });
+        (mockInvoiceRepository.save as jest.Mock).mockResolvedValue({ ...mockInvoice, status: 'paid', paidAt: expect.any(Date) });
 
         const result = await service.markInvoicePaid(mockInvoice.id);
 
@@ -204,7 +204,7 @@ describe('BillingService', () => {
   describe('Time Entry Operations', () => {
     describe('findAllTimeEntries', () => {
       it('should return all time entries', async () => {
-        mockTimeEntryRepository.find.mockResolvedValue([mockTimeEntry]);
+        (mockTimeEntryRepository.find as jest.Mock).mockResolvedValue([mockTimeEntry]);
 
         const result = await service.findAllTimeEntries();
 
@@ -214,7 +214,7 @@ describe('BillingService', () => {
 
     describe('findTimeEntriesByCaseId', () => {
       it('should return time entries for a case', async () => {
-        mockTimeEntryRepository.find.mockResolvedValue([mockTimeEntry]);
+        (mockTimeEntryRepository.find as jest.Mock).mockResolvedValue([mockTimeEntry]);
 
         const result = await service.findTimeEntriesByCaseId('case-001');
 
@@ -237,7 +237,7 @@ describe('BillingService', () => {
         };
 
         mockTimeEntryRepository.create.mockReturnValue(mockTimeEntry);
-        mockTimeEntryRepository.save.mockResolvedValue(mockTimeEntry);
+        (mockTimeEntryRepository.save as jest.Mock).mockResolvedValue(mockTimeEntry);
 
         const result = await service.createTimeEntry(createDto);
 
@@ -249,8 +249,8 @@ describe('BillingService', () => {
     describe('updateTimeEntry', () => {
       it('should update a time entry', async () => {
         const updateDto = { hours: 3, rate: 200 };
-        mockTimeEntryRepository.findOne.mockResolvedValue(mockTimeEntry);
-        mockTimeEntryRepository.save.mockResolvedValue({ ...mockTimeEntry, hours: 3, amount: 600 });
+        (mockTimeEntryRepository.findOne as jest.Mock).mockResolvedValue(mockTimeEntry);
+        (mockTimeEntryRepository.save as jest.Mock).mockResolvedValue({ ...mockTimeEntry, hours: 3, amount: 600 });
 
         const result = await service.updateTimeEntry(mockTimeEntry.id, updateDto);
 
@@ -261,8 +261,8 @@ describe('BillingService', () => {
 
     describe('deleteTimeEntry', () => {
       it('should delete a time entry', async () => {
-        mockTimeEntryRepository.findOne.mockResolvedValue(mockTimeEntry);
-        mockTimeEntryRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockTimeEntryRepository.findOne as jest.Mock).mockResolvedValue(mockTimeEntry);
+        (mockTimeEntryRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteTimeEntry(mockTimeEntry.id);
 
@@ -272,7 +272,7 @@ describe('BillingService', () => {
 
     describe('getUnbilledTimeEntries', () => {
       it('should return unbilled time entries for a case', async () => {
-        mockTimeEntryRepository.find.mockResolvedValue([mockTimeEntry]);
+        (mockTimeEntryRepository.find as jest.Mock).mockResolvedValue([mockTimeEntry]);
 
         const result = await service.getUnbilledTimeEntries('case-001');
 
@@ -287,7 +287,7 @@ describe('BillingService', () => {
   describe('Expense Operations', () => {
     describe('findAllExpenses', () => {
       it('should return all expenses', async () => {
-        mockExpenseRepository.find.mockResolvedValue([mockExpense]);
+        (mockExpenseRepository.find as jest.Mock).mockResolvedValue([mockExpense]);
 
         const result = await service.findAllExpenses();
 
@@ -306,7 +306,7 @@ describe('BillingService', () => {
         };
 
         mockExpenseRepository.create.mockReturnValue(mockExpense);
-        mockExpenseRepository.save.mockResolvedValue(mockExpense);
+        (mockExpenseRepository.save as jest.Mock).mockResolvedValue(mockExpense);
 
         const result = await service.createExpense(createDto);
 
@@ -316,7 +316,7 @@ describe('BillingService', () => {
 
     describe('getUnbilledExpenses', () => {
       it('should return unbilled expenses for a case', async () => {
-        mockExpenseRepository.find.mockResolvedValue([mockExpense]);
+        (mockExpenseRepository.find as jest.Mock).mockResolvedValue([mockExpense]);
 
         const result = await service.getUnbilledExpenses('case-001');
 
@@ -330,18 +330,18 @@ describe('BillingService', () => {
 
   describe('generateInvoice', () => {
     it('should generate invoice from unbilled time and expenses', async () => {
-      mockTimeEntryRepository.find.mockResolvedValue([mockTimeEntry]);
-      mockExpenseRepository.find.mockResolvedValue([mockExpense]);
+      (mockTimeEntryRepository.find as jest.Mock).mockResolvedValue([mockTimeEntry]);
+      (mockExpenseRepository.find as jest.Mock).mockResolvedValue([mockExpense]);
       mockInvoiceRepository.create.mockReturnValue({
         ...mockInvoice,
         amount: mockTimeEntry.amount + mockExpense.amount,
       });
-      mockInvoiceRepository.save.mockResolvedValue({
+      (mockInvoiceRepository.save as jest.Mock).mockResolvedValue({
         ...mockInvoice,
         amount: 650,
       });
-      mockTimeEntryRepository.save.mockResolvedValue({ ...mockTimeEntry, billed: true });
-      mockExpenseRepository.save.mockResolvedValue({ ...mockExpense, billed: true });
+      (mockTimeEntryRepository.save as jest.Mock).mockResolvedValue({ ...mockTimeEntry, billed: true });
+      (mockExpenseRepository.save as jest.Mock).mockResolvedValue({ ...mockExpense, billed: true });
 
       const result = await service.generateInvoice('case-001', 'client-001');
 
@@ -360,7 +360,7 @@ describe('BillingService', () => {
 
     it('should return billing summary for a case', async () => {
       mockTimeEntryRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-      mockQueryBuilder.getRawOne.mockResolvedValue({
+      (mockQueryBuilder.getRawOne as jest.Mock).mockResolvedValue({
         totalHours: 10,
         totalBilled: 2000,
         totalUnbilled: 500,
@@ -377,7 +377,7 @@ describe('BillingService', () => {
   // Additional Tests - Edge Cases and Business Logic
   describe('Invoice Operations - edge cases', () => {
     it('should return empty array when no invoices exist', async () => {
-      mockInvoiceRepository.find.mockResolvedValue([]);
+      (mockInvoiceRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findAllInvoices();
 
@@ -385,7 +385,7 @@ describe('BillingService', () => {
     });
 
     it('should throw NotFoundException when updating non-existent invoice', async () => {
-      mockInvoiceRepository.findOne.mockResolvedValue(null);
+      (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.updateInvoice('non-existent', { status: 'sent' })).rejects.toThrow(
         NotFoundException,
@@ -393,19 +393,19 @@ describe('BillingService', () => {
     });
 
     it('should throw NotFoundException when deleting non-existent invoice', async () => {
-      mockInvoiceRepository.findOne.mockResolvedValue(null);
+      (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.deleteInvoice('non-existent')).rejects.toThrow(NotFoundException);
     });
 
     it('should throw NotFoundException when sending non-existent invoice', async () => {
-      mockInvoiceRepository.findOne.mockResolvedValue(null);
+      (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.sendInvoice('non-existent')).rejects.toThrow(NotFoundException);
     });
 
     it('should throw NotFoundException when marking non-existent invoice as paid', async () => {
-      mockInvoiceRepository.findOne.mockResolvedValue(null);
+      (mockInvoiceRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.markInvoicePaid('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -413,7 +413,7 @@ describe('BillingService', () => {
 
   describe('Time Entry Operations - edge cases', () => {
     it('should throw NotFoundException when updating non-existent time entry', async () => {
-      mockTimeEntryRepository.findOne.mockResolvedValue(null);
+      (mockTimeEntryRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.updateTimeEntry('non-existent', { hours: 5 })).rejects.toThrow(
         NotFoundException,
@@ -421,7 +421,7 @@ describe('BillingService', () => {
     });
 
     it('should throw NotFoundException when deleting non-existent time entry', async () => {
-      mockTimeEntryRepository.findOne.mockResolvedValue(null);
+      (mockTimeEntryRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.deleteTimeEntry('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -438,7 +438,7 @@ describe('BillingService', () => {
 
       const expectedEntry = { ...mockTimeEntry, hours: 5, rate: 150, amount: 750 };
       mockTimeEntryRepository.create.mockReturnValue(expectedEntry);
-      mockTimeEntryRepository.save.mockResolvedValue(expectedEntry);
+      (mockTimeEntryRepository.save as jest.Mock).mockResolvedValue(expectedEntry);
 
       const result = await service.createTimeEntry(createDto);
 
@@ -448,10 +448,10 @@ describe('BillingService', () => {
 
   describe('generateInvoice - edge cases', () => {
     it('should generate invoice with zero amount when no billable items', async () => {
-      mockTimeEntryRepository.find.mockResolvedValue([]);
-      mockExpenseRepository.find.mockResolvedValue([]);
+      (mockTimeEntryRepository.find as jest.Mock).mockResolvedValue([]);
+      (mockExpenseRepository.find as jest.Mock).mockResolvedValue([]);
       mockInvoiceRepository.create.mockReturnValue({ ...mockInvoice, amount: 0 });
-      mockInvoiceRepository.save.mockResolvedValue({ ...mockInvoice, amount: 0 });
+      (mockInvoiceRepository.save as jest.Mock).mockResolvedValue({ ...mockInvoice, amount: 0 });
 
       const result = await service.generateInvoice('case-001', 'client-001');
 

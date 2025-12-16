@@ -10,7 +10,7 @@ export class CasePhase extends BaseEntity {
   @Column({ type: 'uuid' })
   caseId: string;
 
-  @Column({ type: 'varchar', length: 200 })
+  @Column({ type: 'varchar', length: 200, nullable: true })
   phaseName: string;
 
   @Column({ type: 'date' })

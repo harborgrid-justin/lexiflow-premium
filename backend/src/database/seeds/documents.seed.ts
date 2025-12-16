@@ -39,18 +39,23 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
       const caseId = caseMap.get(documentData.caseNumber);
       const uploadedBy = users[Math.floor(Math.random() * users.length)];
 
-      if (!caseId) {
-        console.warn(`Case ${documentData.caseNumber} not found for document ${documentData.title}`);
-        continue;
-      }
+      // Convert uppercase enum string from JSON to title-case to match the entity enum
+      const toTitleCase = (str: string) =>
+        str.replace(
+          /\w\S*/g,
+          (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+        );
+      const documentType = toTitleCase(documentData.documentType) as any;
 
       const document = documentRepository.create({
         ...documentData,
+        type: documentType,
         caseId,
-        uploadedById: uploadedBy.id,
+        creatorId: uploadedBy.id,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+
       await documentRepository.save(document);
     } catch (error) {
       console.error(`Error seeding document ${documentData.title}:`, error.message);

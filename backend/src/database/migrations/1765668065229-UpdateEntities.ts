@@ -40,13 +40,13 @@ export class UpdateEntities1765668065229 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_13222b1c10303a190d5112c1fb"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_d97ebd075d322f1596ebdf07e1"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_05d4416c8118cf287db96bbf75"`);
-        await queryRunner.query(`CREATE TYPE "public"."parties_type_enum_old" AS ENUM('Plaintiff', 'Defendant', 'Petitioner', 'Respondent', 'Appellant', 'Appellee', 'Third Party', 'Witness', 'Expert Witness', 'Other')`);
+        await queryRunner.query(`CREATE TYPE "public"."parties_type_enum_old" AS ENUM('individual', 'corporation', 'government', 'organization', 'other')`);
         await queryRunner.query(`ALTER TABLE "parties" ALTER COLUMN "type" TYPE "public"."parties_type_enum_old" USING "type"::"text"::"public"."parties_type_enum_old"`);
         await queryRunner.query(`DROP TYPE "public"."parties_type_enum"`);
         await queryRunner.query(`ALTER TYPE "public"."parties_type_enum_old" RENAME TO "parties_type_enum"`);
-        await queryRunner.query(`CREATE TYPE "public"."parties_role_enum_old" AS ENUM('Primary', 'Co-Party', 'Interested Party', 'Guardian', 'Representative')`);
+        await queryRunner.query(`CREATE TYPE "public"."parties_role_enum_old" AS ENUM('plaintiff', 'defendant', 'petitioner', 'respondent', 'appellant', 'appellee', 'third_party', 'intervenor', 'witness', 'expert')`);
         await queryRunner.query(`ALTER TABLE "parties" ALTER COLUMN "role" TYPE "public"."parties_role_enum_old" USING "role"::"text"::"public"."parties_role_enum_old"`);
-        await queryRunner.query(`ALTER TABLE "parties" ALTER COLUMN "role" SET DEFAULT 'Primary'`);
+        await queryRunner.query(`ALTER TABLE "parties" ALTER COLUMN "role" SET DEFAULT 'plaintiff'`);
         await queryRunner.query(`DROP TYPE "public"."parties_role_enum"`);
         await queryRunner.query(`ALTER TYPE "public"."parties_role_enum_old" RENAME TO "parties_role_enum"`);
         await queryRunner.query(`ALTER TABLE "docket_entries" DROP COLUMN "documentUrl"`);

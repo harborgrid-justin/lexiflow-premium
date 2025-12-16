@@ -19,10 +19,19 @@ export const seedInvoices = async (dataSource: DataSource) => {
 
   const invoices: Partial<Invoice>[] = [];
   for (let i = 0; i < 20; i++) {
-    const client = faker.helpers.arrayElement(clients);
-    const aCase = faker.helpers.arrayElement(cases.filter(c => c.clientId === client.id));
+    // First, pick a random case that has a client ID.
+    const aCase = faker.helpers.arrayElement(cases.filter(c => c.clientId));
+    if (!aCase) {
+      // This should not happen if all cases are seeded with a client, but as a safeguard:
+      continue;
+    }
 
-    if (!aCase) continue;
+    // Then, find the corresponding client.
+    const client = clients.find(c => c.id === aCase.clientId);
+    if (!client) {
+      // This indicates data inconsistency, but we'll safeguard against it.
+      continue;
+    }
 
     const invoice = new Invoice();
     invoice.invoiceNumber = faker.string.alphanumeric(10);

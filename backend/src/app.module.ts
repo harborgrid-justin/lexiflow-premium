@@ -1,6 +1,7 @@
 import { Module, DynamicModule, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
@@ -107,12 +108,20 @@ if (isRedisEnabled) {
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        redis: {
-          host: configService.get('redis.host'),
-          port: configService.get('redis.port'),
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        const redisUrl = configService.get('redis.url');
+        if (redisUrl) {
+          return { url: redisUrl };
+        }
+        return {
+          redis: {
+            host: configService.get('redis.host'),
+            port: configService.get('redis.port'),
+            password: configService.get('redis.password'),
+            username: configService.get('redis.username'),
+          },
+        };
+      },
     }),
   );
 } else {
@@ -134,6 +143,9 @@ if (isRedisEnabled) {
       inject: [ConfigService],
       useFactory: getDatabaseConfig,
     }),
+
+    // JWT for global JwtAuthGuard
+    JwtModule.register({}),
 
     // Conditionally load Bull/Redis
     ...conditionalImports,

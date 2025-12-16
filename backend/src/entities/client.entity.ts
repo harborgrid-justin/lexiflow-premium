@@ -9,15 +9,16 @@ import { Invoice } from '../billing/invoices/entities/invoice.entity';
 @Index(['status'])
 @Index(['email'])
 export class Client extends BaseEntity {
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
   clientNumber: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
 
   @Column({
     type: 'enum',
     enum: ['individual', 'corporation', 'partnership', 'llc', 'nonprofit', 'government', 'other'],
+    nullable: true,
   })
   clientType: string;
 

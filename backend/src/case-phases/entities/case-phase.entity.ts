@@ -35,12 +35,13 @@ export class CasePhase extends BaseEntity {
   @JoinColumn({ name: 'caseId' })
   case: Case;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
 
   @Column({
     type: 'enum',
     enum: PhaseType,
+    nullable: true,
   })
   type: PhaseType;
 

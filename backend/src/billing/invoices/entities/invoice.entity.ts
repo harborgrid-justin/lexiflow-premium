@@ -37,15 +37,15 @@ export class Invoice {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'invoice_number', unique: true })
+  @Column({ name: 'invoice_number', unique: true, nullable: true })
   @Index()
   invoiceNumber: string;
 
-  @Column({ name: 'case_id' })
+  @Column({ name: 'case_id', nullable: true })
   @Index()
   caseId: string;
 
-  @Column({ name: 'client_id' })
+  @Column({ name: 'client_id', nullable: true })
   @Index()
   clientId: string;
 
@@ -53,17 +53,17 @@ export class Invoice {
   @JoinColumn({ name: 'client_id' })
   client: Client;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   clientName: string;
 
-  @Column({ type: 'varchar', length: 500 })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   matterDescription: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   @Index()
   invoiceDate: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   @Index()
   dueDate: string;
 

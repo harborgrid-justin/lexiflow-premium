@@ -12,7 +12,7 @@ export class Client {
   @Column({ unique: true })
   email: string;
 
-  @Column({ type: 'enum', enum: ClientType })
+  @Column({ type: 'enum', enum: ClientType, nullable: true })
   type: ClientType;
 
   @Column({ type: 'enum', enum: ClientStatus, default: ClientStatus.ACTIVE })

@@ -12,6 +12,22 @@ import { QUEUE_NAMES } from './constants';
 // Re-export for use in other modules
 export { QUEUE_NAMES };
 
+// Helper to get Redis config from ConfigService
+const getRedisConfig = (configService: ConfigService) => {
+  const redisUrl = configService.get('redis.url');
+  if (redisUrl) {
+    return { url: redisUrl };
+  }
+  return {
+    redis: {
+      host: configService.get('redis.host', 'localhost'),
+      port: configService.get('redis.port', 6379),
+      password: configService.get('redis.password'),
+      username: configService.get('redis.username'),
+    },
+  };
+};
+
 @Module({
   imports: [
     BullModule.registerQueueAsync(
@@ -20,10 +36,7 @@ export { QUEUE_NAMES };
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          redis: {
-            host: configService.get('redis.host', 'localhost'),
-            port: configService.get('redis.port', 6379),
-          },
+          ...getRedisConfig(configService),
           defaultJobOptions: {
             attempts: 3,
             backoff: {
@@ -40,10 +53,7 @@ export { QUEUE_NAMES };
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          redis: {
-            host: configService.get('redis.host', 'localhost'),
-            port: configService.get('redis.port', 6379),
-          },
+          ...getRedisConfig(configService),
           defaultJobOptions: {
             attempts: 5,
             backoff: {
@@ -58,10 +68,7 @@ export { QUEUE_NAMES };
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          redis: {
-            host: configService.get('redis.host', 'localhost'),
-            port: configService.get('redis.port', 6379),
-          },
+          ...getRedisConfig(configService),
         }),
       },
       {
@@ -69,10 +76,7 @@ export { QUEUE_NAMES };
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          redis: {
-            host: configService.get('redis.host', 'localhost'),
-            port: configService.get('redis.port', 6379),
-          },
+          ...getRedisConfig(configService),
           defaultJobOptions: {
             attempts: 3,
           },
@@ -83,10 +87,7 @@ export { QUEUE_NAMES };
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          redis: {
-            host: configService.get('redis.host', 'localhost'),
-            port: configService.get('redis.port', 6379),
-          },
+          ...getRedisConfig(configService),
           defaultJobOptions: {
             attempts: 2,
           },

@@ -12,10 +12,10 @@ export class EvidenceItem extends BaseEntity {
   @JoinColumn({ name: 'caseId' })
   case: Case;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
   evidenceNumber: string;
 
-  @Column({ type: 'varchar', length: 500 })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   title: string;
 
   @Column({
@@ -31,10 +31,11 @@ export class EvidenceItem extends BaseEntity {
       'trace',
       'other',
     ],
+    nullable: true,
   })
   evidenceType: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({
@@ -52,7 +53,7 @@ export class EvidenceItem extends BaseEntity {
   })
   status: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   collectionDate: Date;
 
   @Column({ type: 'varchar', length: 500, nullable: true })

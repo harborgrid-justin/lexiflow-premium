@@ -112,7 +112,7 @@ describe('DiscoveryService', () => {
   describe.skip('Discovery Requests', () => {
     describe('findAllRequests', () => {
       it('should return all discovery requests', async () => {
-        mockDiscoveryRequestRepository.find.mockResolvedValue([mockDiscoveryRequest]);
+        (mockDiscoveryRequestRepository.find as jest.Mock).mockResolvedValue([mockDiscoveryRequest]);
 
         const result = await service.findAllRequests();
 
@@ -122,7 +122,7 @@ describe('DiscoveryService', () => {
 
     describe('findRequestsByCaseId', () => {
       it('should return discovery requests for a case', async () => {
-        mockDiscoveryRequestRepository.find.mockResolvedValue([mockDiscoveryRequest]);
+        (mockDiscoveryRequestRepository.find as jest.Mock).mockResolvedValue([mockDiscoveryRequest]);
 
         const result = await service.findRequestsByCaseId('case-001');
 
@@ -135,7 +135,7 @@ describe('DiscoveryService', () => {
 
     describe('findRequestById', () => {
       it('should return a discovery request by id', async () => {
-        mockDiscoveryRequestRepository.findOne.mockResolvedValue(mockDiscoveryRequest);
+        (mockDiscoveryRequestRepository.findOne as jest.Mock).mockResolvedValue(mockDiscoveryRequest);
 
         const result = await service.findRequestById(mockDiscoveryRequest.id);
 
@@ -143,7 +143,7 @@ describe('DiscoveryService', () => {
       });
 
       it('should throw NotFoundException if request not found', async () => {
-        mockDiscoveryRequestRepository.findOne.mockResolvedValue(null);
+        (mockDiscoveryRequestRepository.findOne as jest.Mock).mockResolvedValue(null);
 
         await expect(service.findRequestById('non-existent')).rejects.toThrow(
           NotFoundException,
@@ -161,7 +161,7 @@ describe('DiscoveryService', () => {
         };
 
         mockDiscoveryRequestRepository.create.mockReturnValue(mockDiscoveryRequest);
-        mockDiscoveryRequestRepository.save.mockResolvedValue(mockDiscoveryRequest);
+        (mockDiscoveryRequestRepository.save as jest.Mock).mockResolvedValue(mockDiscoveryRequest);
 
         const result = await service.createRequest(createDto);
 
@@ -172,8 +172,8 @@ describe('DiscoveryService', () => {
     describe('updateRequest', () => {
       it('should update a discovery request', async () => {
         const updateDto = { status: 'completed' };
-        mockDiscoveryRequestRepository.findOne.mockResolvedValue(mockDiscoveryRequest);
-        mockDiscoveryRequestRepository.save.mockResolvedValue({ ...mockDiscoveryRequest, ...updateDto });
+        (mockDiscoveryRequestRepository.findOne as jest.Mock).mockResolvedValue(mockDiscoveryRequest);
+        (mockDiscoveryRequestRepository.save as jest.Mock).mockResolvedValue({ ...mockDiscoveryRequest, ...updateDto });
 
         const result = await service.updateRequest(mockDiscoveryRequest.id, updateDto);
 
@@ -183,8 +183,8 @@ describe('DiscoveryService', () => {
 
     describe('deleteRequest', () => {
       it('should delete a discovery request', async () => {
-        mockDiscoveryRequestRepository.findOne.mockResolvedValue(mockDiscoveryRequest);
-        mockDiscoveryRequestRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockDiscoveryRequestRepository.findOne as jest.Mock).mockResolvedValue(mockDiscoveryRequest);
+        (mockDiscoveryRequestRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteRequest(mockDiscoveryRequest.id);
 
@@ -211,7 +211,7 @@ describe('DiscoveryService', () => {
   describe('Legal Holds', () => {
     describe('findAllHolds', () => {
       it('should return all legal holds', async () => {
-        mockLegalHoldRepository.find.mockResolvedValue([mockLegalHold]);
+        (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([mockLegalHold]);
 
         const result = await service.findAllHolds();
 
@@ -221,7 +221,7 @@ describe('DiscoveryService', () => {
 
     describe('findHoldsByCaseId', () => {
       it('should return legal holds for a case', async () => {
-        mockLegalHoldRepository.find.mockResolvedValue([mockLegalHold]);
+        (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([mockLegalHold]);
 
         const result = await service.findHoldsByCaseId('case-001');
 
@@ -231,7 +231,7 @@ describe('DiscoveryService', () => {
 
     describe('findHoldById', () => {
       it('should return a legal hold by id', async () => {
-        mockLegalHoldRepository.findOne.mockResolvedValue(mockLegalHold);
+        (mockLegalHoldRepository.findOne as jest.Mock).mockResolvedValue(mockLegalHold);
 
         const result = await service.findHoldById(mockLegalHold.id);
 
@@ -239,7 +239,7 @@ describe('DiscoveryService', () => {
       });
 
       it('should throw NotFoundException if hold not found', async () => {
-        mockLegalHoldRepository.findOne.mockResolvedValue(null);
+        (mockLegalHoldRepository.findOne as jest.Mock).mockResolvedValue(null);
 
         await expect(service.findHoldById('non-existent')).rejects.toThrow(
           NotFoundException,
@@ -256,7 +256,7 @@ describe('DiscoveryService', () => {
         };
 
         mockLegalHoldRepository.create.mockReturnValue(mockLegalHold);
-        mockLegalHoldRepository.save.mockResolvedValue(mockLegalHold);
+        (mockLegalHoldRepository.save as jest.Mock).mockResolvedValue(mockLegalHold);
 
         const result = await service.createHold(createDto);
 
@@ -266,8 +266,8 @@ describe('DiscoveryService', () => {
 
     describe('releaseHold', () => {
       it('should release a legal hold', async () => {
-        mockLegalHoldRepository.findOne.mockResolvedValue(mockLegalHold);
-        mockLegalHoldRepository.save.mockResolvedValue({
+        (mockLegalHoldRepository.findOne as jest.Mock).mockResolvedValue(mockLegalHold);
+        (mockLegalHoldRepository.save as jest.Mock).mockResolvedValue({
           ...mockLegalHold,
           status: 'released',
           endDate: expect.any(Date),
@@ -281,7 +281,7 @@ describe('DiscoveryService', () => {
 
     describe('getActiveHolds', () => {
       it('should return active legal holds', async () => {
-        mockLegalHoldRepository.find.mockResolvedValue([mockLegalHold]);
+        (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([mockLegalHold]);
 
         const result = await service.getActiveHolds();
 
@@ -294,7 +294,7 @@ describe('DiscoveryService', () => {
   describe('Custodians', () => {
     describe('findCustodiansByHoldId', () => {
       it('should return custodians for a legal hold', async () => {
-        mockCustodianRepository.find.mockResolvedValue([mockCustodian]);
+        (mockCustodianRepository.find as jest.Mock).mockResolvedValue([mockCustodian]);
 
         const result = await service.findCustodiansByHoldId('hold-001');
 
@@ -311,7 +311,7 @@ describe('DiscoveryService', () => {
         };
 
         mockCustodianRepository.create.mockReturnValue(mockCustodian);
-        mockCustodianRepository.save.mockResolvedValue(mockCustodian);
+        (mockCustodianRepository.save as jest.Mock).mockResolvedValue(mockCustodian);
 
         const result = await service.createCustodian(createDto);
 
@@ -321,8 +321,8 @@ describe('DiscoveryService', () => {
 
     describe('acknowledgeCustodian', () => {
       it('should mark custodian as acknowledged', async () => {
-        mockCustodianRepository.findOne.mockResolvedValue(mockCustodian);
-        mockCustodianRepository.save.mockResolvedValue({
+        (mockCustodianRepository.findOne as jest.Mock).mockResolvedValue(mockCustodian);
+        (mockCustodianRepository.save as jest.Mock).mockResolvedValue({
           ...mockCustodian,
           acknowledgedAt: expect.any(Date),
         });
@@ -336,7 +336,7 @@ describe('DiscoveryService', () => {
     describe('getUnacknowledgedCustodians', () => {
       it('should return custodians who have not acknowledged', async () => {
         const unacknowledgedCustodian = { ...mockCustodian, acknowledgedAt: null };
-        mockCustodianRepository.find.mockResolvedValue([unacknowledgedCustodian]);
+        (mockCustodianRepository.find as jest.Mock).mockResolvedValue([unacknowledgedCustodian]);
 
         const result = await service.getUnacknowledgedCustodians('hold-001');
 
@@ -346,8 +346,8 @@ describe('DiscoveryService', () => {
 
     describe('deleteCustodian', () => {
       it('should delete a custodian', async () => {
-        mockCustodianRepository.findOne.mockResolvedValue(mockCustodian);
-        mockCustodianRepository.delete.mockResolvedValue({ affected: 1 });
+        (mockCustodianRepository.findOne as jest.Mock).mockResolvedValue(mockCustodian);
+        (mockCustodianRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
         await service.deleteCustodian(mockCustodian.id);
 
@@ -359,12 +359,12 @@ describe('DiscoveryService', () => {
   describe('Statistics', () => {
     describe('getDiscoveryStats', () => {
       it('should return discovery statistics for a case', async () => {
-        mockDiscoveryRequestRepository.find.mockResolvedValue([
+        (mockDiscoveryRequestRepository.find as jest.Mock).mockResolvedValue([
           mockDiscoveryRequest,
           { ...mockDiscoveryRequest, status: 'completed' },
         ]);
-        mockLegalHoldRepository.find.mockResolvedValue([mockLegalHold]);
-        mockCustodianRepository.find.mockResolvedValue([mockCustodian]);
+        (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([mockLegalHold]);
+        (mockCustodianRepository.find as jest.Mock).mockResolvedValue([mockCustodian]);
 
         const result = await service.getDiscoveryStats('case-001');
 
@@ -380,7 +380,7 @@ describe('DiscoveryService', () => {
   // Additional Tests - Edge Cases
   describe('Discovery Requests - edge cases', () => {
     it('should return empty array when no discovery requests exist', async () => {
-      mockDiscoveryRequestRepository.find.mockResolvedValue([]);
+      (mockDiscoveryRequestRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findAllRequests();
 
@@ -388,7 +388,7 @@ describe('DiscoveryService', () => {
     });
 
     it('should return empty array when no requests for case', async () => {
-      mockDiscoveryRequestRepository.find.mockResolvedValue([]);
+      (mockDiscoveryRequestRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findRequestsByCaseId('non-existent-case');
 
@@ -398,7 +398,7 @@ describe('DiscoveryService', () => {
 
   describe('Legal Holds - edge cases', () => {
     it('should return empty array when no legal holds exist', async () => {
-      mockLegalHoldRepository.find.mockResolvedValue([]);
+      (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findAllHolds();
 
@@ -406,7 +406,7 @@ describe('DiscoveryService', () => {
     });
 
     it('should return empty array when no holds for case', async () => {
-      mockLegalHoldRepository.find.mockResolvedValue([]);
+      (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findHoldsByCaseId('non-existent-case');
 
@@ -414,7 +414,7 @@ describe('DiscoveryService', () => {
     });
 
     it('should return empty array when no active holds exist', async () => {
-      mockLegalHoldRepository.find.mockResolvedValue([]);
+      (mockLegalHoldRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.getActiveHolds();
 
@@ -424,7 +424,7 @@ describe('DiscoveryService', () => {
 
   describe('Custodians - edge cases', () => {
     it('should return empty array when no custodians for hold', async () => {
-      mockCustodianRepository.find.mockResolvedValue([]);
+      (mockCustodianRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findCustodiansByHoldId('non-existent-hold');
 
@@ -432,7 +432,7 @@ describe('DiscoveryService', () => {
     });
 
     it('should throw NotFoundException when acknowledging non-existent custodian', async () => {
-      mockCustodianRepository.findOne.mockResolvedValue(null);
+      (mockCustodianRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.acknowledgeCustodian('non-existent')).rejects.toThrow(
         NotFoundException,

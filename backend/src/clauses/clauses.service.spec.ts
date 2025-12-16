@@ -70,7 +70,7 @@ describe('ClausesService', () => {
 
   describe('findAll', () => {
     it('should return all clauses', async () => {
-      mockQueryBuilder.getMany.mockResolvedValue([mockClause]);
+      (mockQueryBuilder.getMany as jest.Mock).mockResolvedValue([mockClause]);
 
       const result = await service.findAll();
 
@@ -100,7 +100,7 @@ describe('ClausesService', () => {
       };
 
       mockRepository.create.mockReturnValue({ ...mockClause, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockClause, ...createDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockClause, ...createDto });
 
       const result = await service.create(createDto, 'user-001');
 
@@ -112,8 +112,8 @@ describe('ClausesService', () => {
   describe('update', () => {
     it('should update a clause', async () => {
       const updateDto = { title: 'Updated Clause Title' };
-      mockRepository.findOne.mockResolvedValue(mockClause);
-      mockRepository.save.mockResolvedValue({ ...mockClause, ...updateDto });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockClause);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockClause, ...updateDto });
 
       const result = await service.update(mockClause.id, updateDto);
 
@@ -121,7 +121,7 @@ describe('ClausesService', () => {
     });
 
     it('should throw NotFoundException if clause not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
     });
@@ -138,7 +138,7 @@ describe('ClausesService', () => {
 
   describe('findByCategory', () => {
     it('should return clauses by category', async () => {
-      mockRepository.find.mockResolvedValue([mockClause]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockClause]);
 
       const result = await service.findByCategory('Contract' as any);
 
@@ -191,7 +191,7 @@ describe('ClausesService', () => {
 
   describe('getMostUsed', () => {
     it('should return most used clauses', async () => {
-      mockRepository.find.mockResolvedValue([mockClause]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockClause]);
 
       const result = await service.getMostUsed(5);
 
@@ -206,8 +206,8 @@ describe('ClausesService', () => {
 
   describe('incrementUsage', () => {
     it('should increment usage count', async () => {
-      mockRepository.findOne.mockResolvedValue(mockClause);
-      mockRepository.save.mockResolvedValue({ ...mockClause, usageCount: 11 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockClause);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockClause, usageCount: 11 });
 
       const result = await service.incrementUsage(mockClause.id);
 
@@ -224,8 +224,8 @@ describe('ClausesService', () => {
     });
 
     it('should deactivate a clause', async () => {
-      mockRepository.findOne.mockResolvedValue(mockClause);
-      mockRepository.save.mockResolvedValue({ ...mockClause, isActive: false });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockClause);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockClause, isActive: false });
 
       const result = await service.setActive(mockClause.id, false);
 
@@ -253,14 +253,14 @@ describe('ClausesService', () => {
 
   describe('duplicate', () => {
     it('should duplicate a clause', async () => {
-      mockRepository.findOne.mockResolvedValue(mockClause);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockClause);
       mockRepository.create.mockReturnValue({
         ...mockClause,
         id: 'clause-002',
         title: 'Indemnification Clause (Copy)',
         usageCount: 0,
       });
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockClause,
         id: 'clause-002',
         title: 'Indemnification Clause (Copy)',
@@ -276,7 +276,7 @@ describe('ClausesService', () => {
   // Additional Tests - Edge Cases
   describe('findAll - edge cases', () => {
     it('should return empty array when no clauses exist', async () => {
-      mockQueryBuilder.getMany.mockResolvedValue([]);
+      (mockQueryBuilder.getMany as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findAll();
 
@@ -286,7 +286,7 @@ describe('ClausesService', () => {
 
   describe('findByCategory - edge cases', () => {
     it('should return empty array when no clauses in category', async () => {
-      mockRepository.find.mockResolvedValue([]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findByCategory('NonExistent' as any);
 
@@ -296,7 +296,7 @@ describe('ClausesService', () => {
 
   describe('incrementUsage - edge cases', () => {
     it('should throw NotFoundException when incrementing non-existent clause', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.incrementUsage('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -304,7 +304,7 @@ describe('ClausesService', () => {
 
   describe('duplicate - edge cases', () => {
     it('should throw NotFoundException when duplicating non-existent clause', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.duplicate('non-existent', 'user-001')).rejects.toThrow(NotFoundException);
     });
@@ -312,7 +312,7 @@ describe('ClausesService', () => {
 
   describe('getMostUsed - edge cases', () => {
     it('should return empty array when no clauses exist', async () => {
-      mockRepository.find.mockResolvedValue([]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.getMostUsed(10);
 
@@ -320,7 +320,7 @@ describe('ClausesService', () => {
     });
 
     it('should respect the limit parameter', async () => {
-      mockRepository.find.mockResolvedValue([mockClause]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockClause]);
 
       await service.getMostUsed(3);
 

@@ -14,8 +14,8 @@ describe('UsersService', () => {
   let service: UsersService;
 
   beforeEach(async () => {
-    (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
-    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+    ((bcrypt.hash as unknown) as jest.Mock).mockResolvedValue('hashedPassword' as any);
+    ((bcrypt.compare as unknown) as jest.Mock).mockResolvedValue(true as any);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [UsersService],
@@ -32,7 +32,7 @@ describe('UsersService', () => {
 
   describe('findAll', () => {
     it('should return array of users', async () => {
-      await service.create({ email: 'test@example.com', name: 'Test', password: 'pass', role: 'admin' as any });
+      await service.create({ email: 'test@example.com', firstName: 'Test', lastName: 'User', password: 'pass', role: 'admin' as any });
       const result = await service.findAll();
 
       expect(result).toBeInstanceOf(Array);

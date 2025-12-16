@@ -121,7 +121,7 @@ export const BillingLedger: React.FC = () => {
                   <Button 
                       variant="primary" 
                       className="w-full" 
-                      onClick={() => {
+                      onClick={async () => {
                           try {
                               const accountSelect = document.querySelector<HTMLSelectElement>('#transaction-account');
                               const typeSelect = document.querySelector<HTMLSelectElement>('#transaction-type');

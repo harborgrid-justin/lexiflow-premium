@@ -56,7 +56,7 @@ describe('DocketService', () => {
 
   describe('findAll', () => {
     it('should return all docket entries', async () => {
-      mockRepository.find.mockResolvedValue([mockDocketEntry]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockDocketEntry]);
 
       const result = await service.findAll();
 
@@ -66,7 +66,7 @@ describe('DocketService', () => {
 
   describe('findAllByCaseId', () => {
     it('should return docket entries for a case', async () => {
-      mockRepository.find.mockResolvedValue([mockDocketEntry]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockDocketEntry]);
 
       const result = await service.findAllByCaseId('case-001');
 
@@ -80,7 +80,7 @@ describe('DocketService', () => {
 
   describe('findOne', () => {
     it('should return a docket entry by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocketEntry);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocketEntry);
 
       const result = await service.findOne(mockDocketEntry.id);
 
@@ -88,7 +88,7 @@ describe('DocketService', () => {
     });
 
     it('should throw NotFoundException if entry not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findOne('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -104,8 +104,8 @@ describe('DocketService', () => {
         entryDate: new Date('2024-01-20'),
       };
 
-      mockRepository.create.mockReturnValue({ ...mockDocketEntry, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockDocketEntry, ...createDto });
+      mockRepository.create.mockReturnValue({ ...mockDocketEntry, ...createDto } as any);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockDocketEntry, ...createDto } as any);
 
       const result = await service.create(createDto);
 
@@ -117,8 +117,8 @@ describe('DocketService', () => {
     it('should update a docket entry', async () => {
       const updateDto = { description: 'Updated description' };
       const updatedEntry = { ...mockDocketEntry, ...updateDto };
-      mockRepository.findOne.mockResolvedValue(updatedEntry);
-      mockRepository.update.mockResolvedValue({ affected: 1 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(updatedEntry as any);
+      (mockRepository.update as jest.Mock).mockResolvedValue({ affected: 1 } as any);
 
       const result = await service.update(mockDocketEntry.id, updateDto);
 
@@ -126,7 +126,7 @@ describe('DocketService', () => {
     });
 
     it('should throw NotFoundException if entry not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null as any);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
     });
@@ -134,8 +134,8 @@ describe('DocketService', () => {
 
   describe('remove', () => {
     it('should remove a docket entry', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocketEntry);
-      mockRepository.delete.mockResolvedValue({ affected: 1 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocketEntry as any);
+      (mockRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 } as any);
 
       await service.remove(mockDocketEntry.id);
 

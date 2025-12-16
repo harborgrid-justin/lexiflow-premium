@@ -47,7 +47,7 @@ describe('CasePhasesController', () => {
 
   describe('findAllByCaseId', () => {
     it('should return phases for a case', async () => {
-      mockCasePhasesService.findAllByCaseId.mockResolvedValue([mockPhase]);
+      (mockCasePhasesService.findAllByCaseId as jest.Mock).mockResolvedValue([mockPhase]);
 
       const result = await controller.findAllByCaseId('case-001');
 
@@ -58,7 +58,7 @@ describe('CasePhasesController', () => {
 
   describe('findOne', () => {
     it('should return a phase by id', async () => {
-      mockCasePhasesService.findOne.mockResolvedValue(mockPhase);
+      (mockCasePhasesService.findOne as jest.Mock).mockResolvedValue(mockPhase);
 
       const result = await controller.findOne('phase-001');
 
@@ -76,7 +76,7 @@ describe('CasePhasesController', () => {
         description: 'Trial phase',
         expectedDuration: 30,
       };
-      mockCasePhasesService.create.mockResolvedValue({ ...mockPhase, ...createDto });
+      (mockCasePhasesService.create as jest.Mock).mockResolvedValue({ ...mockPhase, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -88,7 +88,7 @@ describe('CasePhasesController', () => {
   describe('update', () => {
     it('should update a phase', async () => {
       const updateDto = { name: 'Pre-Trial Discovery' };
-      mockCasePhasesService.update.mockResolvedValue({ ...mockPhase, ...updateDto });
+      (mockCasePhasesService.update as jest.Mock).mockResolvedValue({ ...mockPhase, ...updateDto });
 
       const result = await controller.update('phase-001', updateDto);
 
@@ -99,7 +99,7 @@ describe('CasePhasesController', () => {
 
   describe('remove', () => {
     it('should delete a phase', async () => {
-      mockCasePhasesService.remove.mockResolvedValue(undefined);
+      (mockCasePhasesService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('phase-001');
 

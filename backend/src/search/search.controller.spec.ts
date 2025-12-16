@@ -15,8 +15,8 @@ describe('SearchController', () => {
   };
 
   const mockSearchService = {
-    search: jest.fn(),
-    getSuggestions: jest.fn(),
+    search: jest.fn() as jest.Mock,
+    getSuggestions: jest.fn() as jest.Mock,
   };
 
   beforeEach(async () => {
@@ -37,7 +37,7 @@ describe('SearchController', () => {
 
   describe('search', () => {
     it('should perform a search', async () => {
-      mockSearchService.search.mockResolvedValue(mockSearchResult);
+      (mockSearchService.search as jest.Mock).mockResolvedValue(mockSearchResult);
 
       const result = await controller.search({ query: 'test', page: 1, limit: 10 });
 
@@ -48,7 +48,7 @@ describe('SearchController', () => {
 
   describe('searchCases', () => {
     it('should search cases', async () => {
-      mockSearchService.search.mockResolvedValue(mockSearchResult);
+      (mockSearchService.search as jest.Mock).mockResolvedValue(mockSearchResult);
 
       const result = await controller.searchCases({ query: 'test', page: 1, limit: 10 });
 
@@ -60,7 +60,7 @@ describe('SearchController', () => {
   describe('getSuggestions', () => {
     it('should return search suggestions', async () => {
       const suggestions = { suggestions: ['test1', 'test2'] };
-      mockSearchService.getSuggestions.mockResolvedValue(suggestions);
+      (mockSearchService.getSuggestions as jest.Mock).mockResolvedValue(suggestions);
 
       const result = await controller.getSuggestions({ query: 'tes', limit: 10 });
 

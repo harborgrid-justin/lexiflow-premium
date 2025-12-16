@@ -1,13 +1,13 @@
 /**
  * Migration helper file for backend
- * Re-exports types from @lexiflow/shared-types
+ * Re-exports shared types that are now local to the backend
  *
- * This file allows the backend to start using shared types alongside TypeORM decorators.
+ * This file allows the backend to use shared types alongside TypeORM decorators.
  * The shared types provide the interface contract, while TypeORM entities extend them.
  */
 
-// Re-export all shared types
-export * from '@lexiflow/shared-types';
+// Re-export all shared types from local copy
+export * from '../../shared-types';
 
 /**
  * Helper type for converting shared entity interfaces to TypeORM entities

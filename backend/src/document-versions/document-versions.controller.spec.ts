@@ -42,7 +42,7 @@ describe('DocumentVersionsController', () => {
 
   describe('getVersionHistory', () => {
     it('should return version history for a document', async () => {
-      mockDocumentVersionsService.getVersionHistory.mockResolvedValue([mockVersion]);
+      (mockDocumentVersionsService.getVersionHistory as jest.Mock).mockResolvedValue([mockVersion]);
 
       const result = await controller.getVersionHistory('doc-001');
 
@@ -53,7 +53,7 @@ describe('DocumentVersionsController', () => {
 
   describe('getVersion', () => {
     it('should return a specific version', async () => {
-      mockDocumentVersionsService.getVersion.mockResolvedValue(mockVersion);
+      (mockDocumentVersionsService.getVersion as jest.Mock).mockResolvedValue(mockVersion);
 
       const result = await controller.getVersion('doc-001', 1);
 
@@ -65,7 +65,7 @@ describe('DocumentVersionsController', () => {
   describe('compareVersions', () => {
     it('should compare two versions', async () => {
       const comparison = { changes: [], v1: 1, v2: 2 };
-      mockDocumentVersionsService.compareVersions.mockResolvedValue(comparison);
+      (mockDocumentVersionsService.compareVersions as jest.Mock).mockResolvedValue(comparison);
 
       const result = await controller.compareVersions('doc-001', 1, 2);
 
@@ -76,12 +76,12 @@ describe('DocumentVersionsController', () => {
 
   describe('restoreVersion', () => {
     it('should restore a version', async () => {
-      mockDocumentVersionsService.restoreVersion.mockResolvedValue(mockVersion);
+      (mockDocumentVersionsService.restoreVersion as jest.Mock).mockResolvedValue(mockVersion);
 
-      const result = await controller.restoreVersion('doc-001', 1, 'case-001');
+      const result = await controller.restoreVersion('doc-001', 1);
 
       expect(result).toEqual(mockVersion);
-      expect(service.restoreVersion).toHaveBeenCalledWith('doc-001', 1, 'case-001');
+      expect(service.restoreVersion).toHaveBeenCalledWith('doc-001', 1);
     });
   });
 });

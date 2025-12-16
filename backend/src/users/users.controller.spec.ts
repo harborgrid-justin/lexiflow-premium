@@ -20,11 +20,11 @@ describe('UsersController', () => {
   };
 
   const mockUsersService = {
-    create: jest.fn(),
-    findAll: jest.fn(),
-    findById: jest.fn(),
-    update: jest.fn(),
-    remove: jest.fn(),
+    create: jest.fn() as jest.Mock,
+    findAll: jest.fn() as jest.Mock,
+    findById: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    remove: jest.fn() as jest.Mock,
   };
 
   beforeEach(async () => {
@@ -45,7 +45,7 @@ describe('UsersController', () => {
 
   describe('findAll', () => {
     it('should return all users', async () => {
-      mockUsersService.findAll.mockResolvedValue([mockUser]);
+      (mockUsersService.findAll as jest.Mock).mockResolvedValue([mockUser]);
 
       const result = await controller.findAll();
 
@@ -56,7 +56,7 @@ describe('UsersController', () => {
 
   describe('findOne', () => {
     it('should return a user by id', async () => {
-      mockUsersService.findById.mockResolvedValue(mockUser);
+      (mockUsersService.findById as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await controller.findOne('user-001');
 
@@ -74,7 +74,7 @@ describe('UsersController', () => {
         password: 'password123',
         role: Role.ASSOCIATE,
       };
-      mockUsersService.create.mockResolvedValue({ ...mockUser, ...createDto });
+      (mockUsersService.create as jest.Mock).mockResolvedValue({ ...mockUser, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -86,7 +86,7 @@ describe('UsersController', () => {
   describe('update', () => {
     it('should update a user', async () => {
       const updateDto = { firstName: 'Johnny' };
-      mockUsersService.update.mockResolvedValue({ ...mockUser, ...updateDto });
+      (mockUsersService.update as jest.Mock).mockResolvedValue({ ...mockUser, ...updateDto });
 
       const result = await controller.update('user-001', updateDto);
 
@@ -97,7 +97,7 @@ describe('UsersController', () => {
 
   describe('remove', () => {
     it('should delete a user', async () => {
-      mockUsersService.remove.mockResolvedValue(undefined);
+      (mockUsersService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('user-001');
 

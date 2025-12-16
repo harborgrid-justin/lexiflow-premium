@@ -59,7 +59,7 @@ describe('KnowledgeService', () => {
       };
 
       mockRepository.create.mockReturnValue(mockArticle);
-      mockRepository.save.mockResolvedValue(mockArticle);
+      (mockRepository.save as jest.Mock).mockResolvedValue(mockArticle);
 
       const result = await service.create(createDto);
 
@@ -77,8 +77,8 @@ describe('KnowledgeService', () => {
         viewCount: 5,
       };
 
-      mockRepository.findOne.mockResolvedValue(mockArticle);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockArticle);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockArticle,
         viewCount: 6,
       });
@@ -92,7 +92,7 @@ describe('KnowledgeService', () => {
     });
 
     it('should throw EntityNotFoundException if article not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findOne('non-existent')).rejects.toThrow(
         EntityNotFoundException,
@@ -117,7 +117,7 @@ describe('KnowledgeService', () => {
         ...updateDto,
       };
 
-      mockRepository.findOne.mockResolvedValue(existingArticle);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(existingArticle);
       mockRepository.save
         .mockResolvedValueOnce(existingArticle) // for findOne increment
         .mockResolvedValueOnce(updatedArticle); // for update
@@ -135,9 +135,9 @@ describe('KnowledgeService', () => {
         title: 'Test Article',
       };
 
-      mockRepository.findOne.mockResolvedValue(mockArticle);
-      mockRepository.save.mockResolvedValue(mockArticle);
-      mockRepository.remove.mockResolvedValue(mockArticle);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockArticle);
+      (mockRepository.save as jest.Mock).mockResolvedValue(mockArticle);
+      (mockRepository.remove as jest.Mock).mockResolvedValue(mockArticle);
 
       await service.remove('article-123');
 

@@ -12,8 +12,12 @@ export class KnowledgeRepository {
     
     getPrecedents = async (): Promise<Precedent[]> => {
         return db.getAll<Precedent>(STORES.PRECEDENTS);
+    }
+    
     getQA = async (): Promise<QAItem[]> => {
         return db.getAll<QAItem>(STORES.QA);
+    }
+    
     getAnalytics = async (): Promise<any> => {
         await delay(200);
         return { 
@@ -28,4 +32,5 @@ export class KnowledgeRepository {
                 { name: 'HR', value: 15, color: '#10b981' },
             ]
         };
+    }
 }

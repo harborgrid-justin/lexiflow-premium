@@ -82,7 +82,7 @@ describe('ReportsService', () => {
 
   describe('findAll', () => {
     it('should return all reports', async () => {
-      mockReportRepository.find.mockResolvedValue([mockReport]);
+      (mockReportRepository.find as jest.Mock).mockResolvedValue([mockReport]);
 
       const result = await service.findAll();
 
@@ -92,7 +92,7 @@ describe('ReportsService', () => {
 
   describe('findById', () => {
     it('should return a report by id', async () => {
-      mockReportRepository.findOne.mockResolvedValue(mockReport);
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
 
       const result = await service.findById(mockReport.id);
 
@@ -100,7 +100,7 @@ describe('ReportsService', () => {
     });
 
     it('should throw NotFoundException if report not found', async () => {
-      mockReportRepository.findOne.mockResolvedValue(null);
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -115,9 +115,9 @@ describe('ReportsService', () => {
         format: 'pdf',
       };
 
-      mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
       mockReportRepository.create.mockReturnValue({ ...mockReport, ...generateDto });
-      mockReportRepository.save.mockResolvedValue({ ...mockReport, ...generateDto });
+      (mockReportRepository.save as jest.Mock).mockResolvedValue({ ...mockReport, ...generateDto });
 
       const result = await service.generate(generateDto, 'user-001');
 
@@ -126,7 +126,7 @@ describe('ReportsService', () => {
     });
 
     it('should throw NotFoundException if template not found', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(null);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(
         service.generate({ templateId: 'non-existent', name: 'Test', parameters: {} }, 'user-001'),
@@ -136,8 +136,8 @@ describe('ReportsService', () => {
 
   describe('delete', () => {
     it('should delete a report', async () => {
-      mockReportRepository.findOne.mockResolvedValue(mockReport);
-      mockReportRepository.delete.mockResolvedValue({ affected: 1 });
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
+      (mockReportRepository.delete as jest.Mock).mockResolvedValue({ affected: 1 });
 
       await service.delete(mockReport.id);
 
@@ -147,7 +147,7 @@ describe('ReportsService', () => {
 
   describe('download', () => {
     it('should return report file info for download', async () => {
-      mockReportRepository.findOne.mockResolvedValue(mockReport);
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
 
       const result = await service.download(mockReport.id);
 
@@ -157,7 +157,7 @@ describe('ReportsService', () => {
     });
 
     it('should throw NotFoundException if report not completed', async () => {
-      mockReportRepository.findOne.mockResolvedValue({ ...mockReport, status: 'pending' });
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue({ ...mockReport, status: 'pending' });
 
       await expect(service.download(mockReport.id)).rejects.toThrow();
     });
@@ -165,7 +165,7 @@ describe('ReportsService', () => {
 
   describe('findByType', () => {
     it('should return reports by type', async () => {
-      mockReportRepository.find.mockResolvedValue([mockReport]);
+      (mockReportRepository.find as jest.Mock).mockResolvedValue([mockReport]);
 
       const result = await service.findByType('case_summary');
 
@@ -175,7 +175,7 @@ describe('ReportsService', () => {
 
   describe('findByUser', () => {
     it('should return reports by user', async () => {
-      mockReportRepository.find.mockResolvedValue([mockReport]);
+      (mockReportRepository.find as jest.Mock).mockResolvedValue([mockReport]);
 
       const result = await service.findByUser('user-001');
 
@@ -185,7 +185,7 @@ describe('ReportsService', () => {
 
   describe('getTemplates', () => {
     it('should return all report templates', async () => {
-      mockTemplateRepository.find.mockResolvedValue([mockTemplate]);
+      (mockTemplateRepository.find as jest.Mock).mockResolvedValue([mockTemplate]);
 
       const result = await service.getTemplates();
 
@@ -195,7 +195,7 @@ describe('ReportsService', () => {
 
   describe('getTemplateById', () => {
     it('should return a template by id', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
 
       const result = await service.getTemplateById('template-001');
 
@@ -203,7 +203,7 @@ describe('ReportsService', () => {
     });
 
     it('should throw NotFoundException if template not found', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(null);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.getTemplateById('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -219,7 +219,7 @@ describe('ReportsService', () => {
       };
 
       mockTemplateRepository.create.mockReturnValue({ ...mockTemplate, ...createDto });
-      mockTemplateRepository.save.mockResolvedValue({ ...mockTemplate, ...createDto });
+      (mockTemplateRepository.save as jest.Mock).mockResolvedValue({ ...mockTemplate, ...createDto });
 
       const result = await service.createTemplate(createDto, 'admin-001');
 
@@ -229,7 +229,7 @@ describe('ReportsService', () => {
 
   describe('scheduleReport', () => {
     it('should schedule a recurring report', async () => {
-      mockTemplateRepository.findOne.mockResolvedValue(mockTemplate);
+      (mockTemplateRepository.findOne as jest.Mock).mockResolvedValue(mockTemplate);
 
       const result = await service.scheduleReport({
         templateId: 'template-001',
@@ -262,7 +262,7 @@ describe('ReportsService', () => {
 
   describe('getReportStatus', () => {
     it('should return report generation status', async () => {
-      mockReportRepository.findOne.mockResolvedValue(mockReport);
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
 
       const result = await service.getReportStatus(mockReport.id);
 
@@ -273,7 +273,7 @@ describe('ReportsService', () => {
 
   describe('exportReport', () => {
     it('should export report in different format', async () => {
-      mockReportRepository.findOne.mockResolvedValue(mockReport);
+      (mockReportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
 
       const result = await service.exportReport(mockReport.id, 'xlsx');
 

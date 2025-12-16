@@ -96,7 +96,7 @@ describe('DocumentsService', () => {
 
     it('should create a document without file', async () => {
       mockRepository.create.mockReturnValue({ ...mockDocument, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockDocument, ...createDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockDocument, ...createDto });
 
       const result = await service.create(createDto);
 
@@ -127,9 +127,9 @@ describe('DocumentsService', () => {
         checksum: 'abc123',
       };
 
-      mockFileStorageService.storeFile.mockResolvedValue(fileResult);
+      (mockFileStorageService.storeFile as jest.Mock).mockResolvedValue(fileResult);
       mockRepository.create.mockReturnValue({ ...mockDocument, ...createDto });
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockDocument,
         ...createDto,
         ...fileResult,
@@ -148,7 +148,7 @@ describe('DocumentsService', () => {
 
     it('should set createdBy when userId is provided', async () => {
       mockRepository.create.mockReturnValue({ ...mockDocument, createdBy: 'user-001' });
-      mockRepository.save.mockResolvedValue({ ...mockDocument, createdBy: 'user-001' });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockDocument, createdBy: 'user-001' });
 
       await service.create(createDto, undefined, 'user-001');
 
@@ -269,7 +269,7 @@ describe('DocumentsService', () => {
 
   describe('findOne', () => {
     it('should return a document by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocument);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
 
       const result = await service.findOne(mockDocument.id);
 
@@ -280,7 +280,7 @@ describe('DocumentsService', () => {
     });
 
     it('should throw NotFoundException if document not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findOne('non-existent-id')).rejects.toThrow(
         NotFoundException,
@@ -295,8 +295,8 @@ describe('DocumentsService', () => {
     };
 
     it('should update a document', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocument);
-      mockRepository.save.mockResolvedValue({ ...mockDocument, ...updateDto });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockDocument, ...updateDto });
 
       const result = await service.update(mockDocument.id, updateDto, 'user-001');
 
@@ -305,8 +305,8 @@ describe('DocumentsService', () => {
     });
 
     it('should set updatedBy when userId is provided', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocument);
-      mockRepository.save.mockResolvedValue({ ...mockDocument, updatedBy: 'user-001' });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockDocument, updatedBy: 'user-001' });
 
       const result = await service.update(mockDocument.id, updateDto, 'user-001');
 
@@ -316,7 +316,7 @@ describe('DocumentsService', () => {
     });
 
     it('should throw NotFoundException if document not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(
         service.update('non-existent-id', updateDto),
@@ -326,9 +326,9 @@ describe('DocumentsService', () => {
 
   describe('remove', () => {
     it('should delete a document and its file', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocument);
-      mockFileStorageService.deleteFile.mockResolvedValue(undefined);
-      mockRepository.remove.mockResolvedValue(mockDocument);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
+      (mockFileStorageService.deleteFile as jest.Mock).mockResolvedValue(undefined);
+      (mockRepository.remove as jest.Mock).mockResolvedValue(mockDocument);
 
       await service.remove(mockDocument.id);
 
@@ -339,9 +339,9 @@ describe('DocumentsService', () => {
     });
 
     it('should handle file deletion failure gracefully', async () => {
-      mockRepository.findOne.mockResolvedValue(mockDocument);
-      mockFileStorageService.deleteFile.mockRejectedValue(new Error('File not found'));
-      mockRepository.remove.mockResolvedValue(mockDocument);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
+      (mockFileStorageService.deleteFile as jest.Mock).mockRejectedValue(new Error('File not found'));
+      (mockRepository.remove as jest.Mock).mockResolvedValue(mockDocument);
 
       await service.remove(mockDocument.id);
 
@@ -349,7 +349,7 @@ describe('DocumentsService', () => {
     });
 
     it('should throw NotFoundException if document not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.remove('non-existent-id')).rejects.toThrow(
         NotFoundException,
@@ -360,8 +360,8 @@ describe('DocumentsService', () => {
   describe('downloadFile', () => {
     it('should return file buffer and metadata', async () => {
       const fileBuffer = Buffer.from('file content');
-      mockRepository.findOne.mockResolvedValue(mockDocument);
-      mockFileStorageService.getFile.mockResolvedValue(fileBuffer);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
+      (mockFileStorageService.getFile as jest.Mock).mockResolvedValue(fileBuffer);
 
       const result = await service.downloadFile(mockDocument.id);
 
@@ -371,7 +371,7 @@ describe('DocumentsService', () => {
     });
 
     it('should throw BadRequestException if document has no file', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockDocument, filePath: null });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({ ...mockDocument, filePath: null });
 
       await expect(service.downloadFile(mockDocument.id)).rejects.toThrow(
         BadRequestException,
@@ -379,7 +379,7 @@ describe('DocumentsService', () => {
     });
 
     it('should throw NotFoundException if document not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.downloadFile('non-existent-id')).rejects.toThrow(
         NotFoundException,
@@ -390,8 +390,8 @@ describe('DocumentsService', () => {
   describe('markOcrProcessed', () => {
     it('should mark document as OCR processed', async () => {
       const ocrContent = 'Extracted text content';
-      mockRepository.findOne.mockResolvedValue(mockDocument);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockDocument);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockDocument,
         ocrProcessed: true,
         fullTextContent: ocrContent,
@@ -404,7 +404,7 @@ describe('DocumentsService', () => {
     });
 
     it('should throw NotFoundException if document not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(
         service.markOcrProcessed('non-existent-id', 'content'),
@@ -414,7 +414,7 @@ describe('DocumentsService', () => {
 
   describe('findByCaseId', () => {
     it('should return documents for a case', async () => {
-      mockRepository.find.mockResolvedValue([mockDocument]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockDocument]);
 
       const result = await service.findByCaseId('case-001');
 
@@ -428,7 +428,7 @@ describe('DocumentsService', () => {
 
   describe('searchFullText', () => {
     it('should search documents by full text', async () => {
-      mockRepository.find.mockResolvedValue([mockDocument]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockDocument]);
 
       const result = await service.searchFullText('search term');
 

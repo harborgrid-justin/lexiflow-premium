@@ -36,7 +36,7 @@ describe('DocumentVersionsService', () => {
     delete: jest.fn(),
     createQueryBuilder: jest.fn(),
     count: jest.fn(),
-  };
+  } as any;
 
   const mockFileStorageService = {
     storeFile: jest.fn(),
@@ -77,16 +77,16 @@ describe('DocumentVersionsService', () => {
         buffer: Buffer.from('test'),
       } as any;
 
-      mockRepository.findOne.mockResolvedValue(null);
-      mockRepository.create.mockReturnValue(mockVersion);
-      mockRepository.save.mockResolvedValue(mockVersion);
-      mockFileStorageService.storeFile.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null as any);
+      mockRepository.create.mockReturnValue(mockVersion as any);
+      (mockRepository.save as jest.Mock).mockResolvedValue(mockVersion as any);
+      (mockFileStorageService.storeFile as jest.Mock).mockResolvedValue({
         filename: 'test.pdf',
         path: '/uploads/test.pdf',
         mimetype: 'application/pdf',
         size: 1024,
         checksum: 'abc123',
-      });
+      } as any);
 
       const result = await service.createVersion('doc-001', 'case-001', mockFile, createDto, 'user-001');
 
@@ -97,7 +97,7 @@ describe('DocumentVersionsService', () => {
 
   describe('getVersionHistory', () => {
     it('should return all versions for a document', async () => {
-      mockRepository.find.mockResolvedValue([mockVersion]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockVersion] as any);
 
       const result = await service.getVersionHistory('doc-001');
 
@@ -111,7 +111,7 @@ describe('DocumentVersionsService', () => {
 
   describe('getVersion', () => {
     it('should return a specific version', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockVersion as any);
 
       const result = await service.getVersion('doc-001', 1);
 
@@ -122,7 +122,7 @@ describe('DocumentVersionsService', () => {
     });
 
     it('should throw NotFoundException if version not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null as any);
 
       await expect(service.getVersion('doc-001', 99)).rejects.toThrow(NotFoundException);
     });
@@ -130,7 +130,7 @@ describe('DocumentVersionsService', () => {
 
   describe('getLatestVersionNumber', () => {
     it('should return latest version number', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockVersion as any);
 
       const result = await service.getLatestVersionNumber('doc-001');
 
@@ -138,7 +138,7 @@ describe('DocumentVersionsService', () => {
     });
 
     it('should return 0 if no versions exist', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null as any);
 
       const result = await service.getLatestVersionNumber('doc-001');
 
@@ -148,8 +148,8 @@ describe('DocumentVersionsService', () => {
 
   describe('downloadVersion', () => {
     it('should download a specific version', async () => {
-      mockRepository.findOne.mockResolvedValue(mockVersion);
-      mockFileStorageService.getFile.mockResolvedValue(Buffer.from('test'));
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockVersion as any);
+      (mockFileStorageService.getFile as jest.Mock).mockResolvedValue(Buffer.from('test') as any);
 
       const result = await service.downloadVersion('doc-001', 1);
 
@@ -183,11 +183,11 @@ describe('DocumentVersionsService', () => {
         ...restoredVersion,
         changeDescription: 'Restored from version 1',
       };
-      mockRepository.create.mockReturnValue(restoredVersionWithDescription);
-      mockRepository.save.mockResolvedValue(restoredVersionWithDescription);
-      mockFileStorageService.getFile.mockResolvedValue(Buffer.from('test'));
+      mockRepository.create.mockReturnValue(restoredVersionWithDescription as any);
+      (mockRepository.save as jest.Mock).mockResolvedValue(restoredVersionWithDescription as any);
+      (mockFileStorageService.getFile as jest.Mock).mockResolvedValue(Buffer.from('test') as any);
 
-      const result = await service.restoreVersion('doc-001', 1, 'case-001', 'user-001');
+      const result = await service.restoreVersion('doc-001', 1);
 
       expect(result.version).toBe(2);
       expect(result.changeDescription).toContain('Restored from version 1');

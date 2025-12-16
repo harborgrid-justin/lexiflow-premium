@@ -41,7 +41,7 @@ describe('ApiKeysController', () => {
 
   describe('findAll', () => {
     it('should return all API keys', async () => {
-      mockApiKeysService.findAll.mockResolvedValue([mockApiKey]);
+      (mockApiKeysService.findAll as jest.Mock).mockResolvedValue([mockApiKey]);
 
       const result = await controller.findAll();
 
@@ -52,7 +52,7 @@ describe('ApiKeysController', () => {
 
   describe('findOne', () => {
     it('should return an API key by id', async () => {
-      mockApiKeysService.findOne.mockResolvedValue(mockApiKey);
+      (mockApiKeysService.findOne as jest.Mock).mockResolvedValue(mockApiKey);
 
       const result = await controller.findOne('apikey-001');
 
@@ -67,7 +67,7 @@ describe('ApiKeysController', () => {
         name: 'New API Key',
         scopes: [ApiKeyScope.READ, ApiKeyScope.WRITE],
       };
-      mockApiKeysService.create.mockResolvedValue({ ...mockApiKey, ...createDto });
+      (mockApiKeysService.create as jest.Mock).mockResolvedValue({ ...mockApiKey, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -78,7 +78,7 @@ describe('ApiKeysController', () => {
 
   describe('revoke', () => {
     it('should revoke an API key', async () => {
-      mockApiKeysService.revoke.mockResolvedValue(undefined);
+      (mockApiKeysService.revoke as jest.Mock).mockResolvedValue(undefined);
 
       await controller.revoke('apikey-001');
 

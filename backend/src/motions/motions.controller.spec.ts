@@ -42,7 +42,7 @@ describe('MotionsController', () => {
 
   describe('findAllByCaseId', () => {
     it('should return motions for a case', async () => {
-      mockMotionsService.findAllByCaseId.mockResolvedValue([mockMotion]);
+      (mockMotionsService.findAllByCaseId as jest.Mock).mockResolvedValue([mockMotion]);
 
       const result = await controller.findAllByCaseId('case-001');
 
@@ -58,7 +58,7 @@ describe('MotionsController', () => {
         title: 'Motion for Summary Judgment',
         type: MotionType.MOTION_FOR_SUMMARY_JUDGMENT,
       };
-      mockMotionsService.create.mockResolvedValue({ ...mockMotion, ...createDto });
+      (mockMotionsService.create as jest.Mock).mockResolvedValue({ ...mockMotion, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -70,7 +70,7 @@ describe('MotionsController', () => {
   describe('update', () => {
     it('should update a motion', async () => {
       const updateDto = { title: 'Amended Motion to Dismiss' };
-      mockMotionsService.update.mockResolvedValue({ ...mockMotion, ...updateDto });
+      (mockMotionsService.update as jest.Mock).mockResolvedValue({ ...mockMotion, ...updateDto });
 
       const result = await controller.update('motion-001', updateDto);
 
@@ -81,7 +81,7 @@ describe('MotionsController', () => {
 
   describe('remove', () => {
     it('should delete a motion', async () => {
-      mockMotionsService.remove.mockResolvedValue(undefined);
+      (mockMotionsService.remove as jest.Mock).mockResolvedValue(undefined);
 
       await controller.remove('motion-001');
 

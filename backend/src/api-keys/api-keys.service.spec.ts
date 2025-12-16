@@ -69,7 +69,7 @@ describe('ApiKeysService', () => {
 
   describe('findOne', () => {
     it('should return an API key by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockApiKey);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockApiKey);
       const created = mockApiKey;
 
       const result = await service.findOne(created.id, 'user-001');
@@ -91,7 +91,7 @@ describe('ApiKeysService', () => {
       };
 
       mockRepository.create.mockReturnValue({ ...mockApiKey, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockApiKey, ...createDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockApiKey, ...createDto });
 
       const result = await service.create(createDto, 'user-001');
 
@@ -106,7 +106,7 @@ describe('ApiKeysService', () => {
       };
 
       mockRepository.create.mockReturnValue({ ...mockApiKey, ...createDto });
-      mockRepository.save.mockResolvedValue({ ...mockApiKey, ...createDto });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockApiKey, ...createDto });
 
       const result = await service.create(createDto, 'user-001');
 
@@ -126,7 +126,7 @@ describe('ApiKeysService', () => {
     });
 
     it('should throw NotFoundException if API key not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.update('non-existent', {}, 'user-001')).rejects.toThrow(NotFoundException);
     });
@@ -134,7 +134,7 @@ describe('ApiKeysService', () => {
 
   describe('revoke', () => {
     it('should delete an API key', async () => {
-      mockRepository.findOne.mockResolvedValue(mockApiKey);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockApiKey);
 
       await service.revoke(mockApiKey.id, 'user-001');
 
@@ -144,8 +144,8 @@ describe('ApiKeysService', () => {
 
   describe('validate', () => {
     it('should validate a valid API key', async () => {
-      mockRepository.findOne.mockResolvedValue(mockApiKey);
-      mockRepository.save.mockResolvedValue({ ...mockApiKey, usageCount: 151 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockApiKey);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockApiKey, usageCount: 151 });
 
       const result = await service.validate('sk_live_abc123xyz789');
 
@@ -155,13 +155,13 @@ describe('ApiKeysService', () => {
     });
 
     it('should reject invalid API key', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.validate('invalid_key')).rejects.toThrow(UnauthorizedException);
     });
 
     it('should reject expired API key', async () => {
-      mockRepository.findOne.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({
         ...mockApiKey,
         expiresAt: new Date('2020-01-01'),
       });
@@ -170,7 +170,7 @@ describe('ApiKeysService', () => {
     });
 
     it('should reject inactive API key', async () => {
-      mockRepository.findOne.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({
         ...mockApiKey,
         isActive: false,
       });
@@ -181,8 +181,8 @@ describe('ApiKeysService', () => {
 
   describe('update', () => {
     it('should update an API key', async () => {
-      mockRepository.findOne.mockResolvedValue(mockApiKey);
-      mockRepository.save.mockResolvedValue({ ...mockApiKey, name: 'Updated' });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockApiKey);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockApiKey, name: 'Updated' });
 
       const result = await service.update(mockApiKey.id, { name: 'Updated' }, 'user-001');
 
@@ -246,7 +246,7 @@ describe('ApiKeysService', () => {
   // Additional Tests - Edge Cases
   describe('findAll - edge cases', () => {
     it('should return empty array when user has no API keys', async () => {
-      mockRepository.find.mockResolvedValue([]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([]);
 
       const result = await service.findAll('user-without-keys');
 
@@ -256,7 +256,7 @@ describe('ApiKeysService', () => {
 
   describe('revoke - edge cases', () => {
     it('should throw NotFoundException when revoking non-existent key', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.revoke('non-existent', 'user-001')).rejects.toThrow(NotFoundException);
     });
@@ -264,7 +264,7 @@ describe('ApiKeysService', () => {
 
   describe('getUsageStats - edge cases', () => {
     it('should throw NotFoundException for non-existent key', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.getUsageStats('non-existent', 'user-001')).rejects.toThrow(NotFoundException);
     });

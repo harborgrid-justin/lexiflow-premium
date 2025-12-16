@@ -77,7 +77,7 @@ describe('DiscoveryController', () => {
 
   describe('findAll', () => {
     it('should return all discovery requests', async () => {
-      mockDiscoveryService.findAll.mockResolvedValue([mockDiscoveryRequest]);
+      (mockDiscoveryService.findAll as jest.Mock).mockResolvedValue([mockDiscoveryRequest]);
 
       const result = await controller.findAll();
 
@@ -88,7 +88,7 @@ describe('DiscoveryController', () => {
 
   describe('findOne', () => {
     it('should return a discovery request by id', async () => {
-      mockDiscoveryService.findOne.mockResolvedValue(mockDiscoveryRequest);
+      (mockDiscoveryService.findOne as jest.Mock).mockResolvedValue(mockDiscoveryRequest);
 
       const result = await controller.findOne('discovery-001');
 
@@ -104,7 +104,7 @@ describe('DiscoveryController', () => {
         type: 'document_request',
         title: 'Document Request',
       };
-      mockDiscoveryService.create.mockResolvedValue({ ...mockDiscoveryRequest, ...createDto });
+      (mockDiscoveryService.create as jest.Mock).mockResolvedValue({ ...mockDiscoveryRequest, ...createDto });
 
       const result = await controller.create(createDto);
 

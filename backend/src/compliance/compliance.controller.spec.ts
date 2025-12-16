@@ -66,7 +66,7 @@ describe('ComplianceController', () => {
   describe('runCheck', () => {
     it('should run a compliance check', async () => {
       const checkDto = { caseId: 'case-001', type: 'document_retention' };
-      mockComplianceService.runComplianceCheck.mockResolvedValue([mockComplianceCheck]);
+      (mockComplianceService.runComplianceCheck as jest.Mock).mockResolvedValue([mockComplianceCheck]);
 
       const result = await controller.runCheck(checkDto);
 
@@ -77,7 +77,7 @@ describe('ComplianceController', () => {
 
   describe('getChecks', () => {
     it('should return compliance checks', async () => {
-      mockComplianceService.getChecksByCaseId.mockResolvedValue([mockComplianceCheck]);
+      (mockComplianceService.getChecksByCaseId as jest.Mock).mockResolvedValue([mockComplianceCheck]);
 
       const result = await controller.getChecks('case-001');
 
@@ -88,7 +88,7 @@ describe('ComplianceController', () => {
 
   describe('getCheckById', () => {
     it('should return a compliance check by id', async () => {
-      mockComplianceService.getChecksByCaseId.mockResolvedValue([mockComplianceCheck]);
+      (mockComplianceService.getChecksByCaseId as jest.Mock).mockResolvedValue([mockComplianceCheck]);
 
       const result = await controller.getCheckById('check-001');
 
@@ -109,7 +109,7 @@ describe('ComplianceController', () => {
 
   describe('getAuditLogById', () => {
     it('should return an audit log by id', async () => {
-      mockComplianceService.getAuditLogsByEntityId.mockResolvedValue([mockAuditLog]);
+      (mockComplianceService.getAuditLogsByEntityId as jest.Mock).mockResolvedValue([mockAuditLog]);
 
       const result = await controller.getAuditLogById('audit-001');
 
@@ -204,7 +204,7 @@ describe('ComplianceController', () => {
         reportId: 'report-001',
         status: 'generated',
       };
-      mockComplianceService.generateComplianceReport.mockResolvedValue(result);
+      (mockComplianceService.generateComplianceReport as jest.Mock).mockResolvedValue(result);
 
       const generatedReport = await controller.generateComplianceReport(reportDto);
 

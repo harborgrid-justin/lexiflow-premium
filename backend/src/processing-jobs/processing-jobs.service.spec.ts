@@ -28,14 +28,14 @@ describe('ProcessingJobsService', () => {
   };
 
   const mockRepository = {
-    find: jest.fn(),
-    findOne: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
-    count: jest.fn(),
-    createQueryBuilder: jest.fn(),
+    find: jest.fn() as jest.Mock,
+    findOne: jest.fn() as jest.Mock,
+    create: jest.fn() as jest.Mock,
+    save: jest.fn() as jest.Mock,
+    update: jest.fn() as jest.Mock,
+    delete: jest.fn() as jest.Mock,
+    count: jest.fn() as jest.Mock,
+    createQueryBuilder: jest.fn() as jest.Mock,
   };
 
   const mockQueue = {
@@ -67,7 +67,7 @@ describe('ProcessingJobsService', () => {
   describe('createJob', () => {
     it('should create a new processing job', async () => {
       mockRepository.create.mockReturnValue(mockJob);
-      mockRepository.save.mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue(mockJob as any);
 
       const result = await service.createJob(JobType.OCR, 'doc-001', { languages: ['eng'] });
 
@@ -78,7 +78,7 @@ describe('ProcessingJobsService', () => {
 
     it('should create job with default params if not provided', async () => {
       mockRepository.create.mockReturnValue({ ...mockJob, params: {} });
-      mockRepository.save.mockResolvedValue({ ...mockJob, params: {} });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockJob, params: {} } as any);
 
       const result = await service.createJob(JobType.OCR, 'doc-001');
 
@@ -88,7 +88,7 @@ describe('ProcessingJobsService', () => {
 
   describe('findAll', () => {
     it('should return all jobs', async () => {
-      mockRepository.find.mockResolvedValue([mockJob]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockJob]);
 
       const result = await service.findAll();
 
@@ -98,7 +98,7 @@ describe('ProcessingJobsService', () => {
 
   describe('findById', () => {
     it('should return a job by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
 
       const result = await service.findById(mockJob.id);
 
@@ -106,7 +106,7 @@ describe('ProcessingJobsService', () => {
     });
 
     it('should throw NotFoundException if job not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -114,7 +114,7 @@ describe('ProcessingJobsService', () => {
 
   describe('findByDocumentId', () => {
     it('should return jobs for a document', async () => {
-      mockRepository.find.mockResolvedValue([mockJob]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockJob]);
 
       const result = await service.findByDocumentId('doc-001');
 
@@ -128,7 +128,7 @@ describe('ProcessingJobsService', () => {
 
   describe('findByStatus', () => {
     it('should return jobs by status', async () => {
-      mockRepository.find.mockResolvedValue([mockJob]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockJob]);
 
       const result = await service.findByStatus(JobStatus.PENDING);
 
@@ -138,7 +138,7 @@ describe('ProcessingJobsService', () => {
 
   describe('findByType', () => {
     it('should return jobs by type', async () => {
-      mockRepository.find.mockResolvedValue([mockJob]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockJob]);
 
       const result = await service.findByType(JobType.OCR);
 
@@ -148,8 +148,8 @@ describe('ProcessingJobsService', () => {
 
   describe('updateStatus', () => {
     it('should update job status', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({ ...mockJob, status: JobStatus.PROCESSING });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockJob, status: JobStatus.PROCESSING });
 
       const result = await service.updateStatus(mockJob.id, JobStatus.PROCESSING);
 
@@ -157,8 +157,8 @@ describe('ProcessingJobsService', () => {
     });
 
     it('should set startedAt when status changes to PROCESSING', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockJob,
         status: JobStatus.PROCESSING,
         startedAt: expect.any(Date),
@@ -170,8 +170,8 @@ describe('ProcessingJobsService', () => {
     });
 
     it('should set completedAt when status changes to COMPLETED', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockJob, status: JobStatus.PROCESSING });
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({ ...mockJob, status: JobStatus.PROCESSING });
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockJob,
         status: JobStatus.COMPLETED,
         completedAt: expect.any(Date),
@@ -185,8 +185,8 @@ describe('ProcessingJobsService', () => {
 
   describe('updateProgress', () => {
     it('should update job progress', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({ ...mockJob, progress: 50 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockJob, progress: 50 });
 
       const result = await service.updateProgress(mockJob.id, 50);
 
@@ -194,8 +194,8 @@ describe('ProcessingJobsService', () => {
     });
 
     it('should clamp progress between 0 and 100', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({ ...mockJob, progress: 100 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockJob, progress: 100 });
 
       const result = await service.updateProgress(mockJob.id, 150);
 
@@ -206,8 +206,8 @@ describe('ProcessingJobsService', () => {
   describe('setResult', () => {
     it('should set job result', async () => {
       const resultData = { extractedText: 'Sample text' };
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockJob,
         result: resultData,
         status: JobStatus.COMPLETED,
@@ -223,8 +223,8 @@ describe('ProcessingJobsService', () => {
   describe('setError', () => {
     it('should set job error', async () => {
       const errorMessage = 'OCR processing failed';
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockJob,
         error: errorMessage,
         status: JobStatus.FAILED,
@@ -239,8 +239,8 @@ describe('ProcessingJobsService', () => {
 
   describe('cancelJob', () => {
     it('should cancel a pending job', async () => {
-      mockRepository.findOne.mockResolvedValue(mockJob);
-      mockRepository.save.mockResolvedValue({ ...mockJob, status: JobStatus.CANCELLED });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockJob);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockJob, status: JobStatus.CANCELLED });
 
       const result = await service.cancelJob(mockJob.id);
 
@@ -248,7 +248,7 @@ describe('ProcessingJobsService', () => {
     });
 
     it('should not cancel a completed job', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockJob, status: JobStatus.COMPLETED });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({ ...mockJob, status: JobStatus.COMPLETED });
 
       await expect(service.cancelJob(mockJob.id)).rejects.toThrow();
     });
@@ -256,8 +256,8 @@ describe('ProcessingJobsService', () => {
 
   describe('retryJob', () => {
     it('should retry a failed job', async () => {
-      mockRepository.findOne.mockResolvedValue({ ...mockJob, status: JobStatus.FAILED });
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue({ ...mockJob, status: JobStatus.FAILED });
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockJob,
         status: JobStatus.PENDING,
         error: null,
@@ -272,7 +272,7 @@ describe('ProcessingJobsService', () => {
 
     it('should not retry a non-failed job', async () => {
       const completedJob = { ...mockJob, status: JobStatus.COMPLETED };
-      mockRepository.findOne.mockResolvedValue(completedJob);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(completedJob);
 
       await expect(service.retryJob(mockJob.id)).rejects.toThrow();
     });
@@ -301,7 +301,7 @@ describe('ProcessingJobsService', () => {
 
   describe('getPendingJobs', () => {
     it('should return pending jobs ordered by creation', async () => {
-      mockRepository.find.mockResolvedValue([mockJob]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockJob]);
 
       const result = await service.getPendingJobs();
 
@@ -315,7 +315,7 @@ describe('ProcessingJobsService', () => {
 
   describe('cleanupOldJobs', () => {
     it('should delete old completed jobs', async () => {
-      mockRepository.delete.mockResolvedValue({ affected: 5 });
+      (mockRepository.delete as jest.Mock).mockResolvedValue({ affected: 5 });
 
       const result = await service.cleanupOldJobs(30);
 

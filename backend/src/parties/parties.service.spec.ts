@@ -36,7 +36,7 @@ describe('PartiesService', () => {
   describe('findAllByCaseId', () => {
     it('should return parties for a case', async () => {
       const mockParties = [{ id: 'party-001', caseId: 'case-001', name: 'John Doe' }];
-      mockRepository.find.mockResolvedValue(mockParties);
+      (mockRepository.find as jest.Mock).mockResolvedValue(mockParties);
 
       const result = await service.findAllByCaseId('case-001');
 

@@ -41,7 +41,7 @@ describe('DocketController', () => {
 
   describe('findAllByCaseId', () => {
     it('should return docket entries for a case', async () => {
-      mockDocketService.findAllByCaseId.mockResolvedValue([mockDocketEntry]);
+      (mockDocketService.findAllByCaseId as jest.Mock).mockResolvedValue([mockDocketEntry]);
 
       const result = await controller.findAllByCaseId('case-001');
 
@@ -52,7 +52,7 @@ describe('DocketController', () => {
 
   describe('findOne', () => {
     it('should return a docket entry by id', async () => {
-      mockDocketService.findOne.mockResolvedValue(mockDocketEntry);
+      (mockDocketService.findOne as jest.Mock).mockResolvedValue(mockDocketEntry);
 
       const result = await controller.findOne('docket-001');
 
@@ -69,7 +69,7 @@ describe('DocketController', () => {
         description: 'Answer filed',
         entryDate: new Date(),
       };
-      mockDocketService.create.mockResolvedValue({ ...mockDocketEntry, ...createDto });
+      (mockDocketService.create as jest.Mock).mockResolvedValue({ ...mockDocketEntry, ...createDto });
 
       const result = await controller.create(createDto);
 
@@ -81,7 +81,7 @@ describe('DocketController', () => {
   describe('update', () => {
     it('should update a docket entry', async () => {
       const updateDto = { description: 'Updated description' };
-      mockDocketService.update.mockResolvedValue({ ...mockDocketEntry, ...updateDto });
+      (mockDocketService.update as jest.Mock).mockResolvedValue({ ...mockDocketEntry, ...updateDto });
 
       const result = await controller.update('docket-001', updateDto);
 

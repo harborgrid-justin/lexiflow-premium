@@ -59,7 +59,7 @@ describe('CasePhasesService', () => {
 
   describe('findAllByCaseId', () => {
     it('should return phases for a case in order', async () => {
-      mockRepository.find.mockResolvedValue([mockPhase]);
+      (mockRepository.find as jest.Mock).mockResolvedValue([mockPhase]);
 
       const result = await service.findAllByCaseId('case-001');
 
@@ -73,7 +73,7 @@ describe('CasePhasesService', () => {
 
   describe.skip('findById', () => {
     it('should return a phase by id', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPhase);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPhase);
 
       const result = mockPhase;
 
@@ -81,7 +81,7 @@ describe('CasePhasesService', () => {
     });
 
     it('should throw NotFoundException if phase not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       // Method not implemented
     });
@@ -97,9 +97,9 @@ describe('CasePhasesService', () => {
         expectedDuration: 30,
       };
 
-      mockRepository.count.mockResolvedValue(3);
+      (mockRepository.count as jest.Mock).mockResolvedValue(3);
       mockRepository.create.mockReturnValue({ ...mockPhase, ...createDto, order: 4 });
-      mockRepository.save.mockResolvedValue({ ...mockPhase, ...createDto, order: 4 });
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockPhase, ...createDto, order: 4 });
 
       const result = await service.create(createDto);
 
@@ -111,8 +111,8 @@ describe('CasePhasesService', () => {
   describe('update', () => {
     it('should update a phase', async () => {
       const updateDto = { name: 'Pre-Trial Discovery' };
-      mockRepository.findOne.mockResolvedValueOnce(mockPhase).mockResolvedValueOnce({ ...mockPhase, ...updateDto });
-      mockRepository.update.mockResolvedValue({ affected: 1 } as any);
+      (mockRepository.findOne as jest.Mock).mockResolvedValueOnce(mockPhase).mockResolvedValueOnce({ ...mockPhase, ...updateDto });
+      (mockRepository.update as jest.Mock).mockResolvedValue({ affected: 1 } as any);
 
       const result = await service.update(mockPhase.id, updateDto);
 
@@ -120,7 +120,7 @@ describe('CasePhasesService', () => {
     });
 
     it('should throw NotFoundException if phase not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.update('non-existent', {})).rejects.toThrow(NotFoundException);
     });
@@ -128,8 +128,8 @@ describe('CasePhasesService', () => {
 
   describe('remove', () => {
     it('should soft delete a phase', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPhase);
-      mockRepository.softDelete.mockResolvedValue({ affected: 1 } as any);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPhase);
+      (mockRepository.softDelete as jest.Mock).mockResolvedValue({ affected: 1 } as any);
 
       await service.remove(mockPhase.id);
 
@@ -137,7 +137,7 @@ describe('CasePhasesService', () => {
     });
 
     it('should throw NotFoundException if phase not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(null);
 
       await expect(service.remove('non-existent')).rejects.toThrow(NotFoundException);
     });
@@ -147,8 +147,8 @@ describe('CasePhasesService', () => {
     it('should start a phase', async () => {
       // Method not implemented in service
       const pendingPhase = { ...mockPhase, status: 'pending', startDate: null };
-      mockRepository.findOne.mockResolvedValue(pendingPhase);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(pendingPhase);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...pendingPhase,
         status: 'active',
         startDate: new Date(),
@@ -165,8 +165,8 @@ describe('CasePhasesService', () => {
   describe.skip('completePhase', () => {
     it('should complete a phase', async () => {
       // Method not implemented in service
-      mockRepository.findOne.mockResolvedValue(mockPhase);
-      mockRepository.save.mockResolvedValue({
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPhase);
+      (mockRepository.save as jest.Mock).mockResolvedValue({
         ...mockPhase,
         status: 'completed',
         endDate: new Date(),
@@ -182,8 +182,8 @@ describe('CasePhasesService', () => {
 
   describe.skip('updateProgress', () => {
     it('should update phase progress', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPhase);
-      mockRepository.save.mockResolvedValue({ ...mockPhase, completedTasks: 10, totalTasks: 20 });
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPhase);
+      (mockRepository.save as jest.Mock).mockResolvedValue({ ...mockPhase, completedTasks: 10, totalTasks: 20 });
 
       const result = mockPhase;
 
@@ -198,8 +198,8 @@ describe('CasePhasesService', () => {
         { ...mockPhase, id: 'phase-001', order: 1 },
         { ...mockPhase, id: 'phase-002', order: 2 },
       ];
-      mockRepository.findOne.mockResolvedValueOnce(phases[0]).mockResolvedValueOnce(phases[1]);
-      mockRepository.save.mockResolvedValue({});
+      (mockRepository.findOne as jest.Mock).mockResolvedValueOnce(phases[0]).mockResolvedValueOnce(phases[1]);
+      (mockRepository.save as jest.Mock).mockResolvedValue({});
 
       // await service.reorderPhases('case-001', ['phase-002', 'phase-001']);
 
@@ -210,7 +210,7 @@ describe('CasePhasesService', () => {
   describe.skip('getCurrentPhase', () => {
     it('should return the current active phase', async () => {
       // Method not implemented in service
-      mockRepository.findOne.mockResolvedValue(mockPhase);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPhase);
 
       // const result = await service.getCurrentPhase('case-001');
       const result = mockPhase;
@@ -221,7 +221,7 @@ describe('CasePhasesService', () => {
 
   describe.skip('getPhaseProgress', () => {
     it('should return phase progress', async () => {
-      mockRepository.findOne.mockResolvedValue(mockPhase);
+      (mockRepository.findOne as jest.Mock).mockResolvedValue(mockPhase);
 
       const result = {} as any;
 

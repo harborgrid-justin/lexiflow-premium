@@ -6,7 +6,7 @@ import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';
 import { QueryLegalHoldDto } from './dto/query-legal-hold.dto';
 import { ReleaseLegalHoldDto } from './dto/release-legal-hold.dto';
-import { validateSortField, validateSortOrder } from '../../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class LegalHoldsService {

@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
 
+// Import BillingModule to access real billing analytics
+import { BillingModule } from '../billing/billing.module';
+
 // Main service
 import { AnalyticsService } from './analytics.service';
 
@@ -35,6 +38,7 @@ import { DashboardService } from './dashboard/dashboard.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([AnalyticsEvent, Dashboard]),
+    BillingModule, // Import BillingModule to access BillingAnalyticsService
   ],
   controllers: [
     CaseAnalyticsController,

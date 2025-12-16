@@ -1,6 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   BillingAnalyticsQueryDto,
   BillingMetricsDto,
@@ -14,89 +12,61 @@ import {
   PracticeAreaRealization,
   AttorneyRealization,
 } from './dto/billing-analytics.dto';
+import { BillingAnalyticsService as RealBillingAnalyticsService } from '../../billing/analytics/billing-analytics.service';
+import { AnalyticsFilterDto } from '../../billing/analytics/dto/analytics-filter.dto';
 
 @Injectable()
 export class BillingAnalyticsService {
   private readonly logger = new Logger(BillingAnalyticsService.name);
 
   constructor(
-    // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<any>,
-    // @InjectRepository(Invoice) private invoiceRepository: Repository<any>,
-    // Inject repositories when entities are available
+    private readonly realBillingAnalyticsService: RealBillingAnalyticsService,
   ) {}
 
   /**
    * Get overall billing metrics
+   * Delegates to real billing analytics service and transforms the response
    */
   async getBillingMetrics(query: BillingAnalyticsQueryDto): Promise<BillingMetricsDto> {
     try {
-      // Mock implementation
-      /*
-      const qb = this.timeEntryRepository.createQueryBuilder('entry');
+      const filter = this.transformQueryToFilter(query);
 
-      if (query.startDate) {
-        qb.andWhere('entry.date >= :startDate', { startDate: query.startDate });
-      }
-      if (query.endDate) {
-        qb.andWhere('entry.date <= :endDate', { endDate: query.endDate });
-      }
-      if (query.caseId) {
-        qb.andWhere('entry.caseId = :caseId', { caseId: query.caseId });
-      }
+      // Get real data from billing service
+      const [wipStats, realization, operatingSummary, arAging] = await Promise.all([
+        this.realBillingAnalyticsService.getWipStats(filter),
+        this.realBillingAnalyticsService.getRealizationRates(filter),
+        this.realBillingAnalyticsService.getOperatingSummary(filter),
+        this.realBillingAnalyticsService.getArAging(filter),
+      ]);
 
-      const entries = await qb.getMany();
-      const totalBillableHours = entries
-        .filter(e => e.billable)
-        .reduce((sum, e) => sum + e.hours, 0);
-      */
+      // Calculate total hours (would need enhancement in real service for non-billable)
+      const totalBillableHours = wipStats.wipByAttorney.reduce(
+        (sum, attorney) => sum + attorney.hours,
+        0,
+      );
 
+      // Transform to analytics format
       const metrics: BillingMetricsDto = {
-        totalBillableHours: 12450,
-        totalNonBillableHours: 2340,
-        totalBilled: 4980000,
-        totalCollected: 4380000,
-        wipValue: 856000,
-        arValue: 1245000,
-        realizationRate: 87.9,
-        collectionRate: 87.9,
-        utilizationRate: 84.2,
-        avgBillingRate: 400,
-        revenueByPracticeArea: {
-          'Corporate Law': 1875000,
-          'Civil Litigation': 1494000,
-          'Intellectual Property': 996000,
-          'Employment Law': 415800,
-          'Real Estate': 199200,
-        },
-        revenueByAttorney: [
-          {
-            attorneyId: '1',
-            attorneyName: 'Sarah Johnson',
-            billableHours: 1850,
-            totalBilled: 925000,
-            totalCollected: 832500,
-            realizationRate: 90,
-            utilizationRate: 88,
-          },
-          {
-            attorneyId: '2',
-            attorneyName: 'Michael Chen',
-            billableHours: 1680,
-            totalBilled: 756000,
-            totalCollected: 680400,
-            realizationRate: 90,
-            utilizationRate: 85,
-          },
-          {
-            attorneyId: '3',
-            attorneyName: 'Patricia Williams',
-            billableHours: 1920,
-            totalBilled: 672000,
-            totalCollected: 604800,
-            realizationRate: 90,
-            utilizationRate: 92,
-          },
-        ],
+        totalBillableHours,
+        totalNonBillableHours: 0, // Would need additional tracking
+        totalBilled: realization.standardAmount,
+        totalCollected: realization.collectedAmount,
+        wipValue: wipStats.totalWip,
+        arValue: arAging.totalAR,
+        realizationRate: realization.realizationRate,
+        collectionRate: realization.realizationRate, // Simplified
+        utilizationRate: 84.2, // Would need capacity data
+        avgBillingRate: operatingSummary.averageHourlyRate,
+        revenueByPracticeArea: {}, // Would need practice area tracking
+        revenueByAttorney: wipStats.wipByAttorney.map((attorney) => ({
+          attorneyId: attorney.userId,
+          attorneyName: attorney.userName,
+          billableHours: attorney.hours,
+          totalBilled: attorney.wipAmount,
+          totalCollected: attorney.wipAmount * (realization.realizationRate / 100),
+          realizationRate: realization.realizationRate,
+          utilizationRate: 85, // Would need capacity data
+        })),
         trends: await this.getBillingTrends(query),
       };
 
@@ -108,94 +78,95 @@ export class BillingAnalyticsService {
   }
 
   /**
+   * Transform analytics query to billing filter format
+   */
+  private transformQueryToFilter(query: BillingAnalyticsQueryDto): AnalyticsFilterDto {
+    return {
+      startDate: query.startDate,
+      endDate: query.endDate,
+      caseId: query.caseId,
+      userId: query.attorneyId, // Map attorneyId to userId
+      clientId: query.clientId,
+    };
+  }
+
+  /**
    * Get billing trends over time
+   * Uses real data to calculate trends
    */
   async getBillingTrends(query: BillingAnalyticsQueryDto): Promise<BillingTrendDataPoint[]> {
-    const trends: BillingTrendDataPoint[] = [
-      {
-        period: '2024-12',
-        billableHours: 1245,
-        billed: 498000,
-        collected: 438000,
-        realizationRate: 87.9,
-        newWip: 85600,
-        newAr: 124500,
-      },
-      {
-        period: '2024-11',
-        billableHours: 1180,
-        billed: 472000,
-        collected: 424800,
-        realizationRate: 90,
-        newWip: 78000,
-        newAr: 118000,
-      },
-      {
-        period: '2024-10',
-        billableHours: 1320,
-        billed: 528000,
-        collected: 475200,
-        realizationRate: 90,
-        newWip: 92000,
-        newAr: 132000,
-      },
-    ];
+    try {
+      const filter = this.transformQueryToFilter(query);
 
-    return trends;
+      // Get current period data
+      const [wipStats, realization] = await Promise.all([
+        this.realBillingAnalyticsService.getWipStats(filter),
+        this.realBillingAnalyticsService.getRealizationRates(filter),
+      ]);
+
+      // Calculate billable hours from WIP data
+      const billableHours = wipStats.wipByAttorney.reduce(
+        (sum, attorney) => sum + attorney.hours,
+        0,
+      );
+
+      // Create trend point for current period
+      const currentPeriod = new Date().toISOString().substring(0, 7); // YYYY-MM format
+
+      const trends: BillingTrendDataPoint[] = [
+        {
+          period: currentPeriod,
+          billableHours,
+          billed: realization.standardAmount,
+          collected: realization.collectedAmount,
+          realizationRate: realization.realizationRate,
+          newWip: wipStats.totalWip,
+          newAr: 0, // Would need AR tracking by period
+        },
+      ];
+
+      return trends;
+    } catch (error) {
+      this.logger.error(`Error getting billing trends: ${error.message}`, error.stack);
+      throw error;
+    }
   }
 
   /**
    * Get work in progress (WIP) aging
+   * Delegates to real billing analytics service
    */
   async getWipAging(query: BillingAnalyticsQueryDto): Promise<WipAgingDto> {
     try {
-      // Mock implementation
-      /*
-      const wipEntries = await this.timeEntryRepository
-        .createQueryBuilder('entry')
-        .where('entry.invoiceId IS NULL')
-        .andWhere('entry.billable = true')
-        .getMany();
+      const filter = this.transformQueryToFilter(query);
+      const wipStats = await this.realBillingAnalyticsService.getWipStats(filter);
 
-      const totalWip = wipEntries.reduce((sum, e) => sum + e.amount, 0);
+      // Transform WIP aging data to analytics format
+      const wipByCases: CaseWip[] = wipStats.wipByCase.map((caseWip) => ({
+        caseId: caseWip.caseId,
+        caseNumber: caseWip.caseId, // Would need case entity join for case number
+        clientName: caseWip.caseName,
+        wipValue: caseWip.wipAmount,
+        ageInDays: caseWip.ageInDays,
+        lastBilledDate: undefined, // Would need invoice tracking
+        agingCategory: this.determineAgingCategory(caseWip.ageInDays),
+      }));
 
-      const calculateAge = (entry) => {
-        const now = new Date();
-        return Math.floor((now.getTime() - entry.date.getTime()) / (1000 * 60 * 60 * 24));
-      };
-
-      const current = wipEntries.filter(e => calculateAge(e) <= 30);
-      const days31to60 = wipEntries.filter(e => calculateAge(e) > 30 && calculateAge(e) <= 60);
-      */
+      // Calculate average WIP age
+      const avgWipAge =
+        wipByCases.length > 0
+          ? wipByCases.reduce((sum, c) => sum + c.ageInDays, 0) / wipByCases.length
+          : 0;
 
       const aging: WipAgingDto = {
-        totalWip: 856000,
-        current: 485000,
-        days31to60: 198000,
-        days61to90: 98000,
-        days91to120: 45000,
-        over120: 30000,
-        wipByCases: [
-          {
-            caseId: '1',
-            caseNumber: 'CV-2024-001',
-            clientName: 'Acme Corporation',
-            wipValue: 125000,
-            ageInDays: 45,
-            lastBilledDate: new Date('2024-10-28'),
-            agingCategory: '31-60',
-          },
-          {
-            caseId: '2',
-            caseNumber: 'CV-2024-002',
-            clientName: 'Tech Innovations Inc',
-            wipValue: 98000,
-            ageInDays: 22,
-            lastBilledDate: new Date('2024-11-20'),
-            agingCategory: 'current',
-          },
-        ],
-        avgWipAge: 42,
+        totalWip: wipStats.totalWip,
+        current: wipStats.wipAging.current,
+        days31to60: wipStats.wipAging.days30,
+        days61to90: wipStats.wipAging.days60,
+        days91to120: wipStats.wipAging.days90,
+        over120: wipStats.wipAging.over120,
+        wipByCases,
+        avgWipAge: Math.round(avgWipAge),
       };
 
       return aging;
@@ -206,58 +177,60 @@ export class BillingAnalyticsService {
   }
 
   /**
+   * Determine aging category based on age in days
+   */
+  private determineAgingCategory(
+    ageInDays: number,
+  ): 'current' | '31-60' | '61-90' | '91-120' | 'over-120' {
+    if (ageInDays <= 30) return 'current';
+    if (ageInDays <= 60) return '31-60';
+    if (ageInDays <= 90) return '61-90';
+    if (ageInDays <= 120) return '91-120';
+    return 'over-120';
+  }
+
+  /**
    * Get accounts receivable (AR) aging
+   * Delegates to real billing analytics service
    */
   async getArAging(query: BillingAnalyticsQueryDto): Promise<ArAgingDto> {
     try {
-      // Mock implementation
-      /*
-      const unpaidInvoices = await this.invoiceRepository
-        .createQueryBuilder('invoice')
-        .where('invoice.status = :status', { status: 'outstanding' })
-        .getMany();
+      const filter = this.transformQueryToFilter(query);
+      const arData = await this.realBillingAnalyticsService.getArAging(filter);
 
-      const totalAr = unpaidInvoices.reduce((sum, i) => sum + i.amount - i.paidAmount, 0);
-      */
+      // Transform AR aging data to analytics format
+      const arByClient: ClientAr[] = arData.byClient.map((clientData) => {
+        const totalOverdue =
+          clientData.days30 + clientData.days60 + clientData.days90 + clientData.over90;
+        const ageInDays = this.estimateAgeFromDistribution(clientData);
+
+        return {
+          clientId: clientData.clientId,
+          clientName: clientData.clientName,
+          arValue: clientData.totalDue,
+          ageInDays,
+          lastPaymentDate: undefined, // Would need payment tracking
+          agingCategory: this.determineArAgingCategory(clientData),
+          riskLevel: this.determineRiskLevel(totalOverdue, clientData.totalDue),
+        };
+      });
+
+      // Calculate average AR age
+      const avgArAge =
+        arByClient.length > 0
+          ? arByClient.reduce((sum, c) => sum + c.ageInDays, 0) / arByClient.length
+          : 0;
 
       const aging: ArAgingDto = {
-        totalAr: 1245000,
-        current: 685000,
-        days31to60: 298000,
-        days61to90: 145000,
-        days91to120: 78000,
-        over120: 39000,
-        arByClient: [
-          {
-            clientId: '1',
-            clientName: 'Acme Corporation',
-            arValue: 185000,
-            ageInDays: 55,
-            lastPaymentDate: new Date('2024-10-18'),
-            agingCategory: '31-60',
-            riskLevel: 'medium',
-          },
-          {
-            clientId: '2',
-            clientName: 'Tech Innovations Inc',
-            arValue: 142000,
-            ageInDays: 28,
-            lastPaymentDate: new Date('2024-11-14'),
-            agingCategory: 'current',
-            riskLevel: 'low',
-          },
-          {
-            clientId: '3',
-            clientName: 'Global Services LLC',
-            arValue: 98000,
-            ageInDays: 125,
-            lastPaymentDate: new Date('2024-08-08'),
-            agingCategory: 'over-120',
-            riskLevel: 'high',
-          },
-        ],
-        avgArAge: 48,
-        dso: 52, // Days Sales Outstanding
+        totalAr: arData.totalAR,
+        current: arData.current,
+        days31to60: arData.days30,
+        days61to90: arData.days60,
+        days91to120: arData.days90,
+        over120: arData.over90,
+        arByClient,
+        avgArAge: Math.round(avgArAge),
+        dso: Math.round(avgArAge * 1.15), // Rough DSO estimate
       };
 
       return aging;
@@ -268,67 +241,110 @@ export class BillingAnalyticsService {
   }
 
   /**
+   * Estimate age from AR distribution
+   */
+  private estimateAgeFromDistribution(clientData: any): number {
+    const total = clientData.totalDue;
+    if (total === 0) return 0;
+
+    // Weighted average using midpoint of each bucket
+    const weightedAge =
+      (clientData.current * 15 +
+        clientData.days30 * 45 +
+        clientData.days60 * 75 +
+        clientData.days90 * 105 +
+        clientData.over90 * 150) /
+      total;
+
+    return Math.round(weightedAge);
+  }
+
+  /**
+   * Determine AR aging category for client
+   */
+  private determineArAgingCategory(clientData: any): 'current' | '31-60' | '61-90' | '91-120' | 'over-120' {
+    // Use largest bucket
+    const max = Math.max(
+      clientData.current,
+      clientData.days30,
+      clientData.days60,
+      clientData.days90,
+      clientData.over90,
+    );
+
+    if (max === clientData.current) return 'current';
+    if (max === clientData.days30) return '31-60';
+    if (max === clientData.days60) return '61-90';
+    if (max === clientData.days90) return '91-120';
+    return 'over-120';
+  }
+
+  /**
+   * Determine collection risk level
+   */
+  private determineRiskLevel(overdueAmount: number, totalAmount: number): 'low' | 'medium' | 'high' {
+    const overduePercentage = totalAmount > 0 ? (overdueAmount / totalAmount) * 100 : 0;
+
+    if (overduePercentage < 20) return 'low';
+    if (overduePercentage < 50) return 'medium';
+    return 'high';
+  }
+
+  /**
    * Get realization rate analysis
+   * Delegates to real billing analytics service
    */
   async getRealizationAnalysis(query: BillingAnalyticsQueryDto): Promise<RealizationAnalysisDto> {
     try {
+      const filter = this.transformQueryToFilter(query);
+      const realization = await this.realBillingAnalyticsService.getRealizationRates(filter);
+
+      // Transform realization data to analytics format
+      const byPracticeArea: PracticeAreaRealization[] = realization.byPracticeArea.map((area) => ({
+        practiceArea: area.area,
+        standardFees: area.standardAmount,
+        billedFees: area.standardAmount, // Assuming no billing discounts tracked separately
+        collectedFees: area.collectedAmount,
+        realizationRate: area.realizationRate,
+      }));
+
+      const byAttorney: AttorneyRealization[] = realization.byAttorney.map((attorney) => {
+        const writeOffs = attorney.standardAmount - attorney.collectedAmount;
+        return {
+          attorneyId: attorney.userId,
+          attorneyName: attorney.userName,
+          standardRate: 0, // Would need rate table data
+          avgBilledRate: 0, // Would need rate table data
+          realizationRate: attorney.realizationRate,
+          totalWriteOffs: writeOffs,
+        };
+      });
+
       const analysis: RealizationAnalysisDto = {
-        overallRate: 87.9,
-        byPracticeArea: [
-          {
-            practiceArea: 'Corporate Law',
-            standardFees: 2100000,
-            billedFees: 1875000,
-            collectedFees: 1687500,
-            realizationRate: 89.3,
-          },
-          {
-            practiceArea: 'Civil Litigation',
-            standardFees: 1680000,
-            billedFees: 1494000,
-            collectedFees: 1344600,
-            realizationRate: 88.9,
-          },
-          {
-            practiceArea: 'Intellectual Property',
-            standardFees: 1140000,
-            billedFees: 996000,
-            collectedFees: 896400,
-            realizationRate: 87.4,
-          },
-        ],
-        byAttorney: [
-          {
-            attorneyId: '1',
-            attorneyName: 'Sarah Johnson',
-            standardRate: 500,
-            avgBilledRate: 500,
-            realizationRate: 90,
-            totalWriteOffs: 92500,
-          },
-          {
-            attorneyId: '2',
-            attorneyName: 'Michael Chen',
-            standardRate: 450,
-            avgBilledRate: 450,
-            realizationRate: 90,
-            totalWriteOffs: 75600,
-          },
-        ],
+        overallRate: realization.realizationRate,
+        byPracticeArea,
+        byAttorney,
         writeOffAnalysis: {
-          totalWriteOffs: 345000,
-          writeOffPercentage: 6.5,
+          totalWriteOffs: realization.writeOffs,
+          writeOffPercentage:
+            realization.standardAmount > 0
+              ? (realization.writeOffs / realization.standardAmount) * 100
+              : 0,
           topReasons: {
-            'Client discount': 178000,
-            'Duplicate work': 89000,
-            'Efficiency adjustment': 45000,
-            'Collection issue': 33000,
+            // Would need detailed write-off reason tracking
+            'Not specified': realization.writeOffs,
           },
         },
         discountAnalysis: {
-          totalDiscounts: 256000,
-          discountPercentage: 4.8,
-          avgDiscountRate: 5.2,
+          totalDiscounts: realization.discounts,
+          discountPercentage:
+            realization.standardAmount > 0
+              ? (realization.discounts / realization.standardAmount) * 100
+              : 0,
+          avgDiscountRate:
+            realization.standardAmount > 0
+              ? (realization.discounts / realization.standardAmount) * 100
+              : 0,
         },
       };
 

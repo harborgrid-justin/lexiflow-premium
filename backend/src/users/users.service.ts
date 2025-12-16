@@ -241,13 +241,13 @@ export class UsersService implements OnModuleInit {
   private mapFromUserRole(userRole: UserRole): Role {
     const roleMapping: Record<UserRole, Role> = {
       [UserRole.SUPER_ADMIN]: Role.SUPER_ADMIN,
-      [UserRole.ADMIN]: Role.ADMIN,
+      [UserRole.ADMIN]: Role.ADMINISTRATOR,
       [UserRole.PARTNER]: Role.PARTNER,
-      [UserRole.ATTORNEY]: Role.ATTORNEY,
+      [UserRole.ATTORNEY]: Role.ASSOCIATE,
       [UserRole.PARALEGAL]: Role.PARALEGAL,
-      [UserRole.STAFF]: Role.STAFF,
+      [UserRole.STAFF]: Role.LEGAL_SECRETARY,
       [UserRole.CLIENT]: Role.CLIENT_USER,
     };
-    return roleMapping[userRole] || Role.STAFF;
+    return roleMapping[userRole] || Role.LEGAL_SECRETARY;
   }
 }

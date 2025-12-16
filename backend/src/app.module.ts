@@ -20,6 +20,10 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 // Health & Monitoring
 import { HealthModule } from './health/health.module';
 
+// Telemetry & Observability
+// TODO: Install OpenTelemetry dependencies to enable telemetry
+// import { TelemetryModule } from './telemetry/telemetry.module';
+
 // Real-time Communication
 import { RealtimeModule } from './realtime/realtime.module';
 
@@ -153,6 +157,10 @@ if (isRedisEnabled) {
     // Core Infrastructure Modules
     CommonModule,
     DatabaseModule,
+
+    // Telemetry & Observability
+    // TODO: Install OpenTelemetry dependencies to enable telemetry
+    // TelemetryModule,
 
     // Health Monitoring
     HealthModule,

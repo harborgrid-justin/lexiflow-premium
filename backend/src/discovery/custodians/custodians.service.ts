@@ -5,7 +5,7 @@ import { Custodian } from './entities/custodian.entity';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';
 import { QueryCustodianDto } from './dto/query-custodian.dto';
-import { validateSortField, validateSortOrder } from '../../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class CustodiansService {

@@ -11,10 +11,10 @@ export class DocketEntry extends BaseEntity {
   @Column({ type: 'uuid' })
   caseId: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', nullable: true })
   entryNumber: number;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   date: Date;
 
   @Column({ type: 'text' })

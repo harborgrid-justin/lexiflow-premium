@@ -3,9 +3,9 @@
  * Handles HTTP requests to the NestJS backend with authentication
  */
 
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
-const API_PREFIX = (import.meta as any).env?.VITE_API_PREFIX || '/api/v1';
-const BASE_URL = `${API_URL}${API_PREFIX}`;
+import { API_BASE_URL, API_PREFIX } from '../config/master.config';
+
+const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
 
 export interface ApiError {
   message: string;

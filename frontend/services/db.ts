@@ -1,5 +1,6 @@
 import { StorageUtils } from '../utils/storage';
 import { BTree } from '../utils/datastructures/bTree';
+import { DB_NAME, DB_VERSION, DB_MAX_BUFFER_SIZE, DB_FORCE_FLUSH_THRESHOLD, DB_BTREE_ORDER } from '../config/master.config';
 
 export const STORES = {
   // Core entities (aligned with backend tables)
@@ -124,6 +125,7 @@ export const STORES = {
   CASE_STRATEGIES: 'case_strategies', // ✓ Backend: case_strategies (added)
   
   // Legacy/Frontend-only stores (no backend equivalent yet)
+  WORKFLOWS: 'workflows', // Frontend-only workflow instances (templates are in TEMPLATES)
   PROCESSES: 'firm_processes',
   JUDGES: 'judge_profiles',
   COUNSEL: 'opposing_counsel',
@@ -160,20 +162,20 @@ export const STORES = {
 };
 
 export class DatabaseManager {
-  private dbName = 'LexiFlowDB';
-  private dbVersion = 27; // Incremented for backend sync: added 20+ new stores aligned with backend entities
+  private dbName = DB_NAME;
+  private dbVersion = DB_VERSION;
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
 
   // Data Structure Integration: B-Tree for sorted indexes
-  private titleIndex: BTree<string, string> = new BTree(5);
+  private titleIndex: BTree<string, string> = new BTree(DB_BTREE_ORDER);
 
   // Transaction Coalescing Buffer with size limits
   private writeBuffer: { store: string, item: any, type: 'put' | 'delete', resolve: Function, reject: Function }[] = [];
   private flushTimer: number | null = null;
-  private readonly MAX_BUFFER_SIZE = 1000; // Maximum pending operations
-  private readonly FORCE_FLUSH_THRESHOLD = 500; // Force flush at this size
+  private readonly MAX_BUFFER_SIZE = DB_MAX_BUFFER_SIZE;
+  private readonly FORCE_FLUSH_THRESHOLD = DB_FORCE_FLUSH_THRESHOLD;
 
   constructor() {
       try {

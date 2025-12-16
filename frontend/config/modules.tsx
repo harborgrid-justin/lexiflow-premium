@@ -1,7 +1,7 @@
 import React from 'react';
 import { ModuleRegistry } from '../services/moduleRegistry';
-import { NAVIGATION_ITEMS } from '../constants/navConfig';
-import { PATHS } from '../constants/paths';
+import { NAVIGATION_ITEMS } from './nav.config';
+import { PATHS } from './paths.config';
 
 // Advanced Factory Type that includes a preload method
 type PreloadableComponent<T extends React.ComponentType<any>> = React.LazyExoticComponent<T> & {

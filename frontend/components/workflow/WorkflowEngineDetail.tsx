@@ -15,6 +15,7 @@ import { cn } from '../../utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { EmptyState } from '../common/EmptyState';
 
 interface WorkflowEngineDetailProps {
@@ -29,7 +30,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   const [activeTab, setActiveTab] = useState<'visualizer' | 'tasks' | 'audit' | 'settings'>('visualizer');
   
   const { data: engineData, isLoading, isError, refetch } = useQuery(
-    ['workflow-engine', id],
+    queryKeys.workflows.engineDetail(id, type),
     () => DataService.workflow.getEngineDetails(id, type)
   );
 

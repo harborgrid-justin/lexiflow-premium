@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { errorHandler } from '../utils/errorHandler';
+import { QUERY_CACHE_MAX_SIZE } from '../config/master.config';
 
 type QueryKey = string | readonly unknown[];
 type QueryFunction<T> = (signal: AbortSignal) => Promise<T>;
@@ -20,9 +21,10 @@ export interface UseQueryOptions<T> {
   onError?: (err: Error) => void;
   refetchOnWindowFocus?: boolean;
   initialData?: T;
+  cacheBypass?: boolean; // Always fetch fresh data, ignore cache
 }
 
-const MAX_CACHE_SIZE = 100;
+const MAX_CACHE_SIZE = QUERY_CACHE_MAX_SIZE;
 
 function fastDeepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
@@ -190,12 +192,13 @@ class QueryClient {
     };
   }
 
-  async fetch<T>(key: QueryKey, fn: QueryFunction<T>, staleTime = 30000, force = false): Promise<T> {
+  async fetch<T>(key: QueryKey, fn: QueryFunction<T>, staleTime = 30000, force = false, cacheBypass = false): Promise<T> {
     const hashedKey = this.hashKey(key);
     const cached = this.cache.get(hashedKey);
     const now = Date.now();
 
-    if (!force && cached && cached.status === 'success' && (now - cached.dataUpdatedAt < staleTime)) {
+    // Skip cache if bypass is enabled or force refetch
+    if (!cacheBypass && !force && cached && cached.status === 'success' && (now - cached.dataUpdatedAt < staleTime)) {
       this.touch(hashedKey);
       return cached.data;
     }
@@ -278,18 +281,45 @@ class QueryClient {
   invalidate(keyPattern: string | QueryKey) {
     const searchStr = typeof keyPattern === 'string' ? keyPattern : this.hashKey(keyPattern).replace(/"/g, '');
     
+    const keysToInvalidate: string[] = [];
+    
     for (const key of this.cache.keys()) {
       if (key.includes(searchStr)) {
-        const current = this.cache.get(key);
-        if (current) {
-           const invalidState: QueryState<any> = { ...current, dataUpdatedAt: 0 };
-           this.cache.set(key, invalidState);
-           if (this.listeners.has(key) && this.listeners.get(key)!.size > 0) {
-               this.notify(key, invalidState);
-           }
-        }
+        keysToInvalidate.push(key);
       }
     }
+    
+    // Invalidate all matching keys
+    keysToInvalidate.forEach(key => {
+      const current = this.cache.get(key);
+      if (current) {
+        // Set dataUpdatedAt to 0 to force refetch
+        const invalidState: QueryState<any> = { ...current, dataUpdatedAt: 0, status: 'idle' };
+        this.cache.set(key, invalidState);
+        
+        // Notify all listeners to trigger refetch
+        if (this.listeners.has(key) && this.listeners.get(key)!.size > 0) {
+          this.notify(key, invalidState);
+        }
+      }
+    });
+    
+    console.log(`[QueryClient] Invalidated ${keysToInvalidate.length} cache entries matching: ${searchStr}`);
+  }
+
+  invalidateAll() {
+    const allKeys = Array.from(this.cache.keys());
+    allKeys.forEach(key => {
+      const current = this.cache.get(key);
+      if (current) {
+        const invalidState: QueryState<any> = { ...current, dataUpdatedAt: 0, status: 'idle' };
+        this.cache.set(key, invalidState);
+        if (this.listeners.has(key) && this.listeners.get(key)!.size > 0) {
+          this.notify(key, invalidState);
+        }
+      }
+    });
+    console.log(`[QueryClient] Invalidated all ${allKeys.length} cache entries`);
   }
 
   setQueryData<T>(key: QueryKey, updater: T | ((oldData: T | undefined) => T | undefined)) {
@@ -321,7 +351,7 @@ class QueryClient {
 export const queryClient = new QueryClient();
 
 export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQueryOptions<T> = {}) {
-  const { staleTime = 60000, enabled = true, onSuccess, onError, refetchOnWindowFocus = true, initialData } = options;
+  const { staleTime = 60000, enabled = true, onSuccess, onError, refetchOnWindowFocus = true, initialData, cacheBypass = false } = options;
   const hashedKey = queryClient.hashKey(key);
 
   const [state, setState] = useState<QueryState<T>>(() => {
@@ -344,17 +374,17 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
      const wrappedFn = () => fnRef.current(); 
-     return queryClient.fetch(key, wrappedFn, staleTime, true);
-  }, [hashedKey, staleTime, enabled, key]); 
+     return queryClient.fetch(key, wrappedFn, staleTime, true, cacheBypass);
+  }, [hashedKey, staleTime, enabled, key, cacheBypass]); 
 
   useEffect(() => {
     if (!enabled) return;
     
     const unsubscribe = queryClient.subscribe(key, (newState) => setState(newState as QueryState<T>));
     
-    if (state.dataUpdatedAt === 0) { // Fetch on mount or if invalidated
+    if (state.dataUpdatedAt === 0 || state.status === 'idle') { // Fetch on mount or if invalidated
       const wrappedFn = () => fnRef.current();
-      queryClient.fetch<T>(key, wrappedFn, staleTime);
+      queryClient.fetch<T>(key, wrappedFn, staleTime, false, cacheBypass);
     }
 
     let focusHandler: () => void;

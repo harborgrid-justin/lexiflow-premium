@@ -20,6 +20,7 @@ import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSprea
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 import { queryClient } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Components
 import { Button } from '../common/Button';
@@ -74,7 +75,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   const handleSync = async () => {
     try {
       setIsSyncing(true);
-      await queryClient.invalidate(['cases']);
+      await queryClient.invalidate(queryKeys.cases.all());
       success('Cases synced successfully');
     } catch (err) {
       notifyError('Failed to sync cases');

@@ -25,7 +25,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
-import { NAVIGATION_ITEMS } from '../../constants/navConfig';
+import { NAVIGATION_ITEMS } from '../../config/nav.config';
 
 // Types
 import { AppView } from '../../types';

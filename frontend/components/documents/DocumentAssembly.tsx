@@ -8,6 +8,7 @@ import { useWindow } from '../../context/WindowContext';
 import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -53,7 +54,7 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
           onSuccess: (newDoc) => {
               notify.success(`Draft saved to case file: ${newDoc.title}`);
               if (onSave) onSave(newDoc);
-              queryClient.invalidate([STORES.DOCUMENTS, 'all']);
+              queryClient.invalidate(queryKeys.documents.all());
               onClose();
           },
           onError: () => notify.error("Failed to save document.")

@@ -45,9 +45,9 @@ interface CaseListDocketProps {
 export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) => {
   const { theme } = useTheme();
 
-  const { data: docket, isLoading: loadingDocket } = useQuery([STORES.DOCKET, 'all'], DataService.docket.getAll);
-  const { data: motions, isLoading: loadingMotions } = useQuery([STORES.MOTIONS, 'all'], DataService.motions.getAll);
-  const { data: cases, isLoading: loadingCases } = useQuery([STORES.CASES, 'all'], DataService.cases.getAll);
+  const { data: docket, isLoading: loadingDocket } = useQuery(queryKeys.docket.all(), DataService.docket.getAll);
+  const { data: motions, isLoading: loadingMotions } = useQuery(queryKeys.motions.all(), DataService.motions.getAll);
+  const { data: cases, isLoading: loadingCases } = useQuery(queryKeys.cases.all(), DataService.cases.getAll);
   
   const isLoading = loadingDocket || loadingMotions || loadingCases;
 

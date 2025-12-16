@@ -21,6 +21,7 @@ import { UserPlus, Filter, Layout, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/db';
 
 // Hooks & Context
@@ -71,7 +72,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // DATA FETCHING
   // ============================================================================
   const { data: advisors = [], isLoading } = useQuery<Advisor[]>(
-      [STORES.ADVISORS, caseId || 'all'],
+      queryKeys.warRoom.advisors(caseId),
       () => DataService.warRoom.getAdvisors(caseId)
   );
 

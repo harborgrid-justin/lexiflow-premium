@@ -21,6 +21,8 @@ import {
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
@@ -50,19 +52,21 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   const [activeView, setActiveView] = useSessionStorage<string>(storageKey, initialTab || 'search_home');
 
   const [selectedClause, setSelectedClause] = useState<Clause | null>(null);
-  const [judges, setJudges] = useState<JudgeProfile[]>([]);
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
+  // Load judges from IndexedDB via useQuery for accurate, cached data
+  const { data: judges = [], isLoading: isLoadingJudges } = useQuery(
+    queryKeys.admin.judgeProfiles(),
+    DataService.analysis.getJudgeProfiles,
+    { enabled: activeView.startsWith('analytics_') }
+  );
+
+  // Set initial judge selection when data loads
   useEffect(() => {
-    if (activeView.startsWith('analytics_')) {
-        const loadJudges = async () => {
-            const data = await DataService.analysis.getJudgeProfiles();
-            setJudges(data);
-            if (data.length > 0 && !selectedJudgeId) setSelectedJudgeId(data[0].id);
-        };
-        loadJudges();
+    if (judges.length > 0 && !selectedJudgeId) {
+      setSelectedJudgeId(judges[0].id);
     }
-  }, [activeView, selectedJudgeId]);
+  }, [judges, selectedJudgeId]);
 
   const renderContent = () => {
     // Delegation to ResearchToolContent

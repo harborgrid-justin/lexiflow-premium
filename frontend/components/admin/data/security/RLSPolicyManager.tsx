@@ -6,6 +6,7 @@ import { Button } from '../../../common/Button';
 import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';
 import { RLSPolicy } from '../../../../types';
 import { useQuery, useMutation, queryClient } from '../../../../services/queryClient';
+import { queryKeys } from '../../../../utils/queryKeys';
 import { DataService } from '../../../../services/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 import { PolicyEditorModal } from './PolicyEditorModal';
@@ -26,7 +27,7 @@ export const RLSPolicyManager: React.FC = () => {
       DataService.admin.saveRLSPolicy,
       {
           onSuccess: () => {
-              queryClient.invalidate(['admin', 'rls_policies']);
+              queryClient.invalidate(queryKeys.admin.rlsPolicies());
               setIsModalOpen(false);
               notify.success("Policy saved successfully.");
           }
@@ -37,7 +38,7 @@ export const RLSPolicyManager: React.FC = () => {
       DataService.admin.deleteRLSPolicy,
       {
           onSuccess: () => {
-              queryClient.invalidate(['admin', 'rls_policies']);
+              queryClient.invalidate(queryKeys.admin.rlsPolicies());
               notify.info("Policy deleted.");
           }
       }
@@ -50,7 +51,7 @@ export const RLSPolicyManager: React.FC = () => {
       },
       {
           onSuccess: (data) => {
-              queryClient.invalidate(['admin', 'rls_policies']);
+              queryClient.invalidate(queryKeys.admin.rlsPolicies());
               notify.success(`Policy ${data.name} is now ${data.status}`);
           }
       }

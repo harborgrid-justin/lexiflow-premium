@@ -77,7 +77,7 @@ class VerificationQueue {
   private async executeJob(job: VerificationJob): Promise<void> {
     try {
       // Simulate blockchain verification (in real app, calls Ethereum/Hyperledger)
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, DEBUG_API_SIMULATION_DELAY_MS + 500));
       const result = {
         verified: true,
         timestamp: new Date().toISOString(),

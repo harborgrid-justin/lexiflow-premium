@@ -19,6 +19,7 @@ import { Plus, Download } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/db';
 
 // Hooks & Context
@@ -41,8 +42,8 @@ export const FinancialCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');
 
   // Enterprise Data Hooks
-  const { data: expenses } = useQuery([STORES.EXPENSES, 'all'], DataService.expenses.getAll);
-  const { data: trustAccounts } = useQuery([STORES.TRUST, 'all'], DataService.billing.getTrustAccounts);
+  const { data: expenses } = useQuery(queryKeys.expenses.all(), DataService.expenses.getAll);
+  const { data: trustAccounts } = useQuery(queryKeys.trust.all(), DataService.billing.getTrustAccounts);
 
   return (
     <div className="space-y-6 animate-fade-in">

@@ -1,5 +1,16 @@
 // config/index.ts
+/**
+ * Config Module Barrel Export
+ * 
+ * Central export point for all configuration modules.
+ */
 
+// Core configuration
+export * from './master.config';
+export * from './paths.config';
+export * from './nav.config';
+
+// Module-specific configurations
 export * from './adminPanelConfig';
 export * from './analyticsDashboardConfig';
 export * from './billingDashboardConfig';

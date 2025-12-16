@@ -12,6 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { useRef, useCallback, useEffect } from 'react';
+import { TOOLTIP_DELAY_MS } from '../config/master.config';
 
 // ========================================
 // TYPES & INTERFACES
@@ -24,7 +25,7 @@ interface HoverIntentOptions<T> {
 // ========================================
 // HOOK
 // ========================================
-export const useHoverIntent = <T>({ onHover, timeout = 300 }: HoverIntentOptions<T>) => {
+export const useHoverIntent = <T>({ onHover, timeout = TOOLTIP_DELAY_MS }: HoverIntentOptions<T>) => {
   const timer = useRef<number | null>(null);
   const onHoverRef = useRef(onHover);
   

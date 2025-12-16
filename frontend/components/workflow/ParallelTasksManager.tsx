@@ -7,6 +7,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { WorkflowTask } from '../../types';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/db';
 
 export const ParallelTasksManager: React.FC = () => {
@@ -14,7 +15,7 @@ export const ParallelTasksManager: React.FC = () => {
   
   // Performance Engine: useQuery
   const { data: allTasks = [], isLoading } = useQuery<WorkflowTask[]>(
-      [STORES.TASKS, 'all'],
+      queryKeys.tasks.all(),
       DataService.tasks.getAll
   );
 

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { GeminiService } from '../../services/geminiService';
 import { ResearchSession, UserId } from '../../types';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
+import { DataService } from '../../services/dataService';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
@@ -14,8 +17,13 @@ export const ActiveResearch: React.FC = () => {
   const { openWindow, closeWindow } = useWindow();
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [history, setHistory] = useState<ResearchSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  
+  // Load research history from IndexedDB via useQuery for accurate, cached data
+  const { data: history = [] } = useQuery(
+    queryKeys.research.history(),
+    DataService.research.getHistory
+  );
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();

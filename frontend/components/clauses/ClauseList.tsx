@@ -12,6 +12,7 @@ import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { VirtualList } from '../common/VirtualList';
 import { EmptyState } from '../common/EmptyState';
+import { NOTIFICATION_AUTO_DISMISS_MS } from '../../config/master.config';
 
 interface ClauseListProps {
   onSelectClause: (clause: Clause) => void;
@@ -33,7 +34,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
         e.stopPropagation();
         navigator.clipboard.writeText(content);
         setCopiedId(id);
-        setTimeout(() => setCopiedId(null), 2000);
+        setTimeout(() => setCopiedId(null), NOTIFICATION_AUTO_DISMISS_MS);
     };
 
     const renderRow = (clause: Clause) => (

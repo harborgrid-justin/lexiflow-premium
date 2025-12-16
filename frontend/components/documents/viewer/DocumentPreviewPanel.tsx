@@ -21,6 +21,7 @@ import { DocumentService } from '../../../services/documentService';
 import { DataService } from '../../../services/dataService';
 import { useMutation, queryClient } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
@@ -69,7 +70,7 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
           onSuccess: (newDoc) => {
               notify.success("Document redacted and saved as new version.");
               setIsRedactionMode(false);
-              queryClient.invalidate([STORES.DOCUMENTS, 'all']);
+              queryClient.invalidate(queryKeys.documents.all());
           }
       }
   );

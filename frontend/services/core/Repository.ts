@@ -3,6 +3,8 @@ import { BaseEntity, UserId } from '../../types';
 import { MicroORM } from './microORM';
 import { errorHandler } from '../../utils/errorHandler';
 import { LRUCache } from '../../utils/LRUCache';
+import { queryClient } from '../queryClient';
+import { REPOSITORY_CACHE_MAX_SIZE } from '../../config/master.config';
 
 type Listener<T> = (item: T) => void;
 
@@ -15,7 +17,7 @@ export abstract class Repository<T extends BaseEntity> {
     private listenerWarningLogged = false;
 
     constructor(protected storeName: string) {
-        this.cache = new LRUCache<T>(100);
+        this.cache = new LRUCache<T>(REPOSITORY_CACHE_MAX_SIZE);
         this.orm = new MicroORM<T>(storeName);
 
         // Bind all methods to ensure correct 'this' context when passed as callbacks
@@ -169,6 +171,11 @@ export abstract class Repository<T extends BaseEntity> {
             this.cache.put(entity.id, entity as T);
             this.notify(entity as T);
             await this.logAction(`CREATE_${this.storeName.toUpperCase().slice(0, -1)}`, entity.id, 'Record Created', null, entity);
+            
+            // Automatically invalidate React Query cache
+            queryClient.invalidate([this.storeName, 'all']);
+            queryClient.invalidate([this.storeName]);
+            
             return entity as T;
         }, 'add');
     }
@@ -203,6 +210,12 @@ export abstract class Repository<T extends BaseEntity> {
             this.cache.put(id, updated);
             this.notify(updated);
             await this.logAction(`UPDATE_${this.storeName.toUpperCase().slice(0, -1)}`, id, `Fields: ${Object.keys(updates).join(', ')}`, current, updated);
+            
+            // Automatically invalidate React Query cache
+            queryClient.invalidate([this.storeName, 'all']);
+            queryClient.invalidate([this.storeName, 'detail', id]);
+            queryClient.invalidate([this.storeName]);
+            
             return updated;
         }, 'update');
     }
@@ -226,6 +239,11 @@ export abstract class Repository<T extends BaseEntity> {
                 this.cache.delete(id);
                 this.notify(deleted);
                 await this.logAction(`DELETE_${this.storeName.toUpperCase().slice(0, -1)}`, id, 'Soft Delete', current, deleted);
+                
+                // Automatically invalidate React Query cache
+                queryClient.invalidate([this.storeName, 'all']);
+                queryClient.invalidate([this.storeName, 'detail', id]);
+                queryClient.invalidate([this.storeName]);
             }
         }, 'delete');
     }

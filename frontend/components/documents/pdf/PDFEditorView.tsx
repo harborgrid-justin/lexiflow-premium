@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/documentService';
 import { PDFViewer } from '../../common/PDFViewer';
 import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
@@ -16,13 +18,23 @@ import { useBlobRegistry } from '../../../hooks/useBlobRegistry';
 
 export const PDFEditorView: React.FC = () => {
     const { theme } = useTheme();
-    const [documents, setDocuments] = useState<LegalDocument[]>([]);
     const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
 
     // Registry hook for managing blob lifecycle
     const { register } = useBlobRegistry();
+    
+    // Load documents from IndexedDB via useQuery for accurate, cached data
+    const { data: allDocs = [], isLoading } = useQuery(
+        queryKeys.documents.all(),
+        DataService.documents.getAll
+    );
+    
+    // Filter PDF documents
+    const documents = React.useMemo(() => 
+        allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')),
+        [allDocs]
+    );
 
     // PDF viewer state
     const [activeTool, setActiveTool] = useState<PDFTool>('select');

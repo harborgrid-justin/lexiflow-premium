@@ -33,7 +33,7 @@ import { useToast } from '../context/ToastContext';
 import { useUsers } from './useDomainData';
 
 // Utils & Constants
-import { PATHS } from '../constants/paths';
+import { PATHS } from '../config/paths.config';
 
 // Types
 import { Case, AppView } from '../types';

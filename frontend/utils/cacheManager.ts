@@ -70,8 +70,8 @@ export class CacheManager<K, V> {
   private evictions = 0;
 
   constructor(options: CacheOptions = {}) {
-    this.maxSize = options.maxSize ?? 100;
-    this.ttlMs = options.ttlMs ?? 5 * 60 * 1000; // 5 minutes
+    this.maxSize = options.maxSize ?? QUERY_CACHE_MAX_SIZE;
+    this.ttlMs = options.ttlMs ?? QUERY_CACHE_STALE_TIME_MS;
     this.cleanupIntervalMs = options.cleanupIntervalMs ?? 60 * 1000; // 1 minute
     
     // Start automatic cleanup

@@ -65,7 +65,7 @@ class NotificationServiceClass {
   private listeners: Set<NotificationListener> = new Set();
   private soundEnabled: boolean = true;
   private desktopEnabled: boolean = false;
-  private maxNotifications: number = 100;
+  private maxNotifications: number = NOTIFICATION_MAX_DISPLAY * 20;
 
   /**
    * Initialize service
@@ -331,6 +331,8 @@ export const NotificationService = new NotificationServiceClass();
 // CONVENIENCE FUNCTIONS
 // ============================================================================
 
+import { NOTIFICATION_SUCCESS_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '../config/master.config';
+
 export const notify = {
   info: (title: string, message?: string, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
     return NotificationService.add({
@@ -348,7 +350,7 @@ export const notify = {
       message,
       type: 'success',
       priority: 'normal',
-      duration: 3000,
+      duration: NOTIFICATION_SUCCESS_DISMISS_MS,
       ...options,
     });
   },
@@ -359,7 +361,7 @@ export const notify = {
       message,
       type: 'warning',
       priority: 'high',
-      duration: 5000,
+      duration: NOTIFICATION_AUTO_DISMISS_MS,
       ...options,
     });
   },

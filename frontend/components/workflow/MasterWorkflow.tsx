@@ -25,6 +25,7 @@ import { cn } from '../../utils/cn';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { Case } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { STORES } from '../../services/db';
 import { WorkflowView } from './types';

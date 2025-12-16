@@ -4,6 +4,7 @@ import { CheckSquare, Lock, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
 
@@ -12,7 +13,7 @@ export const TaskDependencyManager: React.FC = () => {
   
   // Performance Engine: useQuery
   const { data: tasks = [], isLoading } = useQuery(
-      [STORES.TASKS, 'all'],
+      queryKeys.tasks.all(),
       DataService.tasks.getAll
   );
 

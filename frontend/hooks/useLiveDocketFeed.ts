@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER } from '../config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -36,9 +37,9 @@ export interface LiveDocketFeedResult {
 // CONSTANTS
 // ============================================================================
 
-const DEFAULT_RECONNECT_ATTEMPTS = 5;
-const DEFAULT_RECONNECT_DELAY = 3000; // 3 seconds
-const MAX_RECONNECT_DELAY = 30000; // 30 seconds
+const DEFAULT_RECONNECT_ATTEMPTS = WS_RECONNECT_ATTEMPTS;
+const DEFAULT_RECONNECT_DELAY = WS_RECONNECT_DELAY_MS;
+const MAX_RECONNECT_DELAY = WS_RECONNECT_DELAY_MS * Math.pow(WS_RECONNECT_BACKOFF_MULTIPLIER, WS_RECONNECT_ATTEMPTS);
 
 // ============================================================================
 // HOOK

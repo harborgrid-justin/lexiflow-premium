@@ -10,7 +10,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { PATHS } from '../constants/paths';
+import { PATHS } from '../config/paths.config';
 
 // ============================================================================
 // CONSTANTS

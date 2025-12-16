@@ -4,10 +4,12 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { useQuery } from '../../../services/queryClient';
+import { queryKeys } from '../../../utils/queryKeys';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
 import { useDebounce } from '../../../hooks/useDebounce';
 import { DocketEntry } from '../../../types';
+import { SEARCH_DEBOUNCE_MS } from '../../../config/master.config';
 
 interface ContextPanelProps {
   caseId: string;
@@ -27,7 +29,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   const [expandedCategory, setExpandedCategory] = useState<string | null>('facts');
 
   // Debounce search term for performance
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
 
   // Fetch case data
   const { data: caseData, isLoading: caseLoading } = useQuery(

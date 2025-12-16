@@ -7,6 +7,7 @@ import { DataService } from '../../services/dataService';
 import { AuditLogEntry } from '../../types';
 import { useQuery, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { VirtualList } from '../common/VirtualList';
 import { AuditEvent } from './types';
 
@@ -29,7 +30,7 @@ export const AuditTrailViewer: React.FC = () => {
       type: l.action.includes('DELETE') ? 'warning' : 'info'
   })), [logs]);
 
-  const refresh = () => queryClient.invalidate([STORES.LOGS, 'all']);
+  const refresh = () => queryClient.invalidate(queryKeys.logs.all());
 
   const renderRow = (evt: AuditEvent) => (
     <div key={evt.id} className={cn("relative pl-6 pb-2 border-l-2 last:border-0 last:pb-0 h-16 pr-4", theme.border.default)}>

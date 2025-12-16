@@ -15,6 +15,7 @@ import { DataService } from '../../services/dataService';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { useDocumentDragDrop } from '@/hooks/useDocumentDragDrop';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { DocumentGridCard } from './DocumentGridCard';
@@ -50,7 +51,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
           onSuccess: (count) => {
               notify.success(`AI Summary generated for ${count} documents.`);
               clearSelection();
-              queryClient.invalidate([STORES.DOCUMENTS, 'all']);
+              queryClient.invalidate(queryKeys.documents.all());
           }
       }
   );

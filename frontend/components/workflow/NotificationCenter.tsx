@@ -6,6 +6,7 @@ import { SystemNotification } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/db';
 
 export const NotificationCenter: React.FC = () => {
@@ -13,7 +14,7 @@ export const NotificationCenter: React.FC = () => {
 
   // Performance Engine: useQuery with Polling
   const { data: notifications = [] } = useQuery<SystemNotification[]>(
-      [STORES.NOTIFICATIONS, 'all'],
+      queryKeys.notifications.all(),
       DataService.notifications.getAll,
       { staleTime: 5000 } // Poll/Refresh often
   );
@@ -25,9 +26,9 @@ export const NotificationCenter: React.FC = () => {
       },
       {
           onSuccess: (id) => {
-              const current = queryClient.getQueryState<SystemNotification[]>([STORES.NOTIFICATIONS, 'all'])?.data || [];
+              const current = queryClient.getQueryState<SystemNotification[]>(queryKeys.notifications.all())?.data || [];
               const updated = current.map(n => n.id === id ? { ...n, read: true } : n);
-              queryClient.setQueryData([STORES.NOTIFICATIONS, 'all'], updated);
+              queryClient.setQueryData(queryKeys.notifications.all(), updated);
           }
       }
   );

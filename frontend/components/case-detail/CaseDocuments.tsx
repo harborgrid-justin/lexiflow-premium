@@ -27,6 +27,7 @@ import { DocumentService } from '../../services/documentService';
 import { DataService } from '../../services/dataService';
 import { queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
 import { cn } from '../../utils/cn';
 
@@ -79,8 +80,8 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
 
   const handleTaskSaved = (task: WorkflowTask) => {
     DataService.tasks.add(task);
-    queryClient.invalidate([STORES.TASKS, 'all']);
-    queryClient.invalidate(['dashboard', 'stats']);
+    queryClient.invalidate(queryKeys.tasks.all());
+    queryClient.invalidate(queryKeys.dashboard.stats());
     notify.success(`Task "${task.title}" created.`);
   };
 
@@ -125,7 +126,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
           };
           await DataService.evidence.add(evidence);
           // INVALIDATE EVIDENCE CACHE
-          queryClient.invalidate([STORES.EVIDENCE, 'all']);
+          queryClient.invalidate(queryKeys.evidence.all());
           notify.success("Document uploaded and logged to Evidence Vault.");
         } else {
           notify.success(`Uploaded ${file.name} successfully.`);

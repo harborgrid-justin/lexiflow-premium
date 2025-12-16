@@ -5,6 +5,7 @@ import { cn } from '../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
+import { queryKeys } from '../../../utils/queryKeys';
 import { STORES } from '../../../services/db';
 import { CaseId } from '../../../types';
 
@@ -18,7 +19,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
     const [activeTab, setActiveTab] = useState('facts');
     const [search, setSearch] = useState('');
 
-    const { data: caseData, isLoading } = useQuery([STORES.CASES, caseId], () => DataService.cases.getById(caseId));
+    const { data: caseData, isLoading } = useQuery(queryKeys.cases.detail(caseId), () => DataService.cases.getById(caseId));
 
     const facts = (caseData?.arguments || []).map(arg => ({ id: arg.id, type: 'Argument', text: arg.title, source: 'Case Strategy' }));
     const evidence = (caseData as any)?.evidence?.map((ev: any) => ({ id: ev.id, type: 'Evidence', text: ev.title, source: 'Evidence Vault' })) || [];

@@ -67,7 +67,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
   const handleGenerateStrategy = async () => {
     if (!newMotion.title) return;
     setIsGenerating(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, DEBUG_API_SIMULATION_DELAY_MS + 500));
     alert(`AI Strategy Generated for ${newMotion.title}`);
     setIsGenerating(false);
   };

@@ -5,6 +5,7 @@
  */
 
 import { EventEmitter } from 'events';
+import { WS_URL, WS_RECONNECT_DELAY_MS, WS_RECONNECT_ATTEMPTS } from '../config/master.config';
 
 // Import types from separate file
 export * from './collaboration/types';
@@ -46,9 +47,9 @@ export class CollaborationService extends EventEmitter {
     this.currentUserId = userId;
     this.currentUserName = userName;
     this.config = {
-      wsUrl: config.wsUrl ?? 'ws://localhost:3001/collaboration',
-      reconnectInterval: config.reconnectInterval ?? 3000,
-      maxReconnectAttempts: config.maxReconnectAttempts ?? 10,
+      wsUrl: config.wsUrl ?? WS_URL,
+      reconnectInterval: config.reconnectInterval ?? WS_RECONNECT_DELAY_MS,
+      maxReconnectAttempts: config.maxReconnectAttempts ?? WS_RECONNECT_ATTEMPTS,
       idleTimeout: config.idleTimeout ?? 60000, // 1 minute
       awayTimeout: config.awayTimeout ?? 300000, // 5 minutes
       lockTimeout: config.lockTimeout ?? 600000 // 10 minutes

@@ -12,6 +12,7 @@
  */
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -137,7 +138,7 @@ function calculateCompletionPercentage<T extends Record<string, any>>(
 export function useFormValidation<T extends Record<string, any>>({
   schema,
   initialValues,
-  debounceDelay = 300,
+  debounceDelay = SEARCH_DEBOUNCE_MS,
   validateOnMount = false,
   interdependencyValidator,
 }: UseFormValidationOptions<T>): UseFormValidationReturn<T> {

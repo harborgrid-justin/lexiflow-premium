@@ -26,6 +26,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { SEARCH_DEBOUNCE_MS } from '../../config/master.config';
 
 // Types
 import { LegalRule } from '../../types';
@@ -43,7 +44,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const debouncedSearch = useDebounce(searchTerm, 300);
+  const debouncedSearch = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
 
   // Use Query for caching search results
   const { data: availableRules = [], isLoading } = useQuery<LegalRule[]>(

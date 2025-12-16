@@ -5,6 +5,7 @@ import { Case } from '../types';
 import { useQuery } from '../services/queryClient';
 import { STORES } from '../services/db';
 import { useDebounce } from './useDebounce';
+import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
 
 export type UseCaseListReturn = ReturnType<typeof useCaseList>;
 
@@ -16,7 +17,7 @@ export const useCaseList = () => {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
 
   const { 
     data: cases = [], 

@@ -10,6 +10,8 @@ import { MOCK_USERS } from '../../data/models/user';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useBlobRegistry } from '../../hooks/useBlobRegistry';
@@ -34,8 +36,13 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
     isPrivileged: false,
     status: CommunicationStatus.DRAFT
   });
-  const [cases, setCases] = useState<any[]>([]);
   const [isDrafting, setIsDrafting] = useState(false);
+  
+  // Load cases from IndexedDB via useQuery for accurate, cached data
+  const { data: cases = [] } = useQuery(
+    queryKeys.cases.all(),
+    DataService.cases.getAll
+  );
   const [body, setBody] = useState('');
   const [attachments, setAttachments] = useState<Array<{id: string; name: string; size: number}>>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});

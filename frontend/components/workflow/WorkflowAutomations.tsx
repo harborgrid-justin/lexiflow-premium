@@ -18,6 +18,8 @@ import { Zap, Clock, Plus, Loader2, AlertTriangle } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -33,22 +35,12 @@ import { cn } from '../../utils/cn';
 // ============================================================================
 export const WorkflowAutomations: React.FC = () => {
   const { theme } = useTheme();
-  const [automations, setAutomations] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-      const load = async () => {
-          try {
-            const data = await DataService.workflow.getAutomations();
-            setAutomations(data);
-          } catch (e) {
-            console.error("Failed to load automations", e);
-          } finally {
-            setIsLoading(false);
-          }
-      };
-      load();
-  }, []);
+  
+  // Load automations from IndexedDB via useQuery for accurate, cached data
+  const { data: automations = [], isLoading } = useQuery(
+    queryKeys.workflows.automations(),
+    DataService.workflow.getAutomations
+  );
 
   if (isLoading) {
       return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>;

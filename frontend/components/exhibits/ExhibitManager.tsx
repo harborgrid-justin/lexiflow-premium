@@ -35,6 +35,7 @@ import { CaseId, TrialExhibit } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';

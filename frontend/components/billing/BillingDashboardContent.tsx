@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { BillingView } from '../../config/billingDashboardConfig';
+import { BillingView } from '../../config/tabs.config';
 
 const BillingOverview = lazy(() => import('./BillingOverview').then(m => ({ default: m.BillingOverview })));
 const BillingInvoices = lazy(() => import('./BillingInvoices').then(m => ({ default: m.BillingInvoices })));

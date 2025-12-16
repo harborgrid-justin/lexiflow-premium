@@ -12,6 +12,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { filterRules } from './utils';
 
 export const JurisdictionLocalRules: React.FC = () => {

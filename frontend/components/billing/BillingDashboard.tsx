@@ -36,7 +36,7 @@ import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { BILLING_TAB_CONFIG, BillingView } from '../../config/billingDashboardConfig';
+import { BILLING_TAB_CONFIG, BillingView } from '../../config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

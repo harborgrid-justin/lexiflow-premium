@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { CRMView } from '../../config/crmConfig';
+import { CRMView } from '../../config/tabs.config';
 import { Client } from '../../types';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';

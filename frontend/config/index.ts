@@ -3,27 +3,19 @@
  * Config Module Barrel Export
  * 
  * Central export point for all configuration modules.
+ * Consolidated structure:
+ * - master.config.ts - All operational settings
+ * - paths.config.ts - Route path definitions
+ * - nav.config.ts - Navigation sidebar configuration
+ * - tabs.config.ts - Tab configurations for all modules
  */
 
 // Core configuration
 export * from './master.config';
 export * from './paths.config';
 export * from './nav.config';
+export * from './tabs.config';
 
-// Module-specific configurations
-export * from './adminPanelConfig';
-export * from './analyticsDashboardConfig';
-export * from './billingDashboardConfig';
-export * from './caseListConfig';
-export * from './complianceDashboardConfig';
-export * from './crmConfig';
-export * from './dashboardConfig';
-export * from './dataPlatformMenu';
-export * from './documentManagerConfig';
-export * from './evidenceVaultConfig';
-export * from './knowledgeBaseConfig';
+// Module registration & prefetch
 export * from './modules';
-export * from './pleadingBuilderConfig';
 export * from './prefetchConfig';
-export * from './researchToolConfig';
-export * from './rulesPlatformConfig';

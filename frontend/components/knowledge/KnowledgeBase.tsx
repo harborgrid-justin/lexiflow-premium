@@ -27,7 +27,7 @@ import { Button } from '../common/Button';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../config/knowledgeBaseConfig';
+import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -35,7 +35,7 @@ import { ResearchToolContent } from './ResearchToolContent';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { RESEARCH_TAB_CONFIG } from '../../config/researchToolConfig';
+import { RESEARCH_TAB_CONFIG } from '../../config/tabs.config';
 
 // Types
 import { JudgeProfile, Clause } from '../../types';

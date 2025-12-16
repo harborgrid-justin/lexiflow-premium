@@ -20,6 +20,7 @@ import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter, Loa
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

@@ -20,6 +20,7 @@ import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 import { EvidenceItem } from '../../../types';
 
 export const HearsayAnalyzer: React.FC = () => {

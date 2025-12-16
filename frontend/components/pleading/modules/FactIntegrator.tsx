@@ -4,6 +4,7 @@ import { TimelineEvent } from '../../../types';
 import { useQuery } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 import { Flag, Calendar, Plus, Loader2, Link } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -18,7 +19,7 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
 
   // Cross-Module Integration: Fetching from Case Domain
   const { data: caseData, isLoading } = useQuery(
-    [STORES.CASES, caseId],
+    queryKeys.cases.detail(caseId),
     () => DataService.cases.getById(caseId)
   );
 

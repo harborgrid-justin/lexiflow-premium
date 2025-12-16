@@ -25,7 +25,7 @@ import { AdminPanelContent } from './AdminPanelContent';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { ADMIN_TAB_CONFIG } from '../../config/adminPanelConfig';
+import { ADMIN_TAB_CONFIG } from '../../config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

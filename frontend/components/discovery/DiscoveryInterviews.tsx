@@ -9,6 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 export const DiscoveryInterviews: React.FC = () => {
   const { theme } = useTheme();

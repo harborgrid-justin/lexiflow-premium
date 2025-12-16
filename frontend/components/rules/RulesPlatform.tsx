@@ -27,7 +27,7 @@ import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config
 import { cn } from '../../utils/cn';
-import { RULES_PLATFORM_TABS, RulesView } from '../../config/rulesPlatformConfig';
+import { RULES_PLATFORM_TABS, RulesView } from '../../config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

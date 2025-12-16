@@ -3,25 +3,37 @@
  * Helps validate and sanitize query parameters for safe database operations
  */
 
+// Define allowed sort fields for each entity type
+const ENTITY_SORT_FIELDS: Record<string, string[]> = {
+  case: ['id', 'caseNumber', 'title', 'status', 'createdAt', 'updatedAt'],
+  document: ['id', 'fileName', 'fileSize', 'createdAt', 'updatedAt'],
+  expense: ['id', 'amount', 'expenseDate', 'category', 'createdAt', 'updatedAt'],
+  invoice: ['id', 'invoiceNumber', 'amount', 'dueDate', 'status', 'createdAt', 'updatedAt'],
+  timeEntry: ['id', 'hours', 'date', 'createdAt', 'updatedAt'],
+  project: ['id', 'name', 'status', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
+};
+
 /**
- * Validates that a sort field is in the allowed list
+ * Validates that a sort field is in the allowed list for an entity
+ * @param entityType - The entity type (e.g., 'case', 'document')
  * @param sortBy - The field to sort by
- * @param allowedFields - Array of allowed field names
  * @param defaultField - Default field to use if validation fails
  * @returns Validated sort field
  */
 export function validateSortField(
-  sortBy: string | undefined,
-  allowedFields: string[],
+  entityType: string,
+  sortBy?: string,
   defaultField: string = 'createdAt',
 ): string {
+  const allowedFields = ENTITY_SORT_FIELDS[entityType] || ['id', 'createdAt', 'updatedAt'];
+
   if (!sortBy) {
     return defaultField;
   }
 
   const isAllowed = allowedFields.includes(sortBy);
   if (!isAllowed) {
-    console.warn(`Invalid sort field "${sortBy}". Using default "${defaultField}"`);
+    console.warn(`Invalid sort field "${sortBy}" for entity "${entityType}". Using default "${defaultField}"`);
     return defaultField;
   }
 

@@ -161,6 +161,466 @@ graph TB
 
 ---
 
+## Database Layer Architecture
+
+### Overview
+
+LexiFlow Premium implements a sophisticated dual-storage architecture:
+- **Frontend**: IndexedDB with 96 object stores (offline-first)
+- **Backend**: PostgreSQL with 70+ tables (source of truth)
+- **Synchronization**: Bidirectional sync via SyncEngine + WebSockets
+
+---
+
+### Frontend IndexedDB Schema
+
+```mermaid
+erDiagram
+    CASES ||--o{ TASKS : contains
+    CASES ||--o{ DOCUMENTS : includes
+    CASES ||--o{ PARTIES : involves
+    CASES ||--o{ TIME_ENTRIES : tracks
+    CASES ||--o{ LEGAL_HOLDS : issues
+
+    CLIENTS ||--o{ CASES : has
+    CLIENTS ||--o{ INVOICES : receives
+
+    USERS ||--o{ TASKS : "assigned to"
+    USERS ||--o{ TIME_ENTRIES : records
+
+    INVOICES ||--o{ INVOICE_ITEMS : contains
+    TIME_ENTRIES }o--|| INVOICES : "billed on"
+
+    DOCUMENTS ||--o{ DOCUMENT_VERSIONS : versions
+
+    CASES {
+        string id PK
+        string caseNumber UK
+        string title
+        string status
+        string type
+        string clientId FK
+        string userId FK
+    }
+
+    TASKS {
+        string id PK
+        string title
+        string status
+        string caseId FK
+        string assignedTo FK
+        number estimatedHours
+    }
+
+    DOCUMENTS {
+        string id PK
+        string title
+        string caseId FK
+        string status
+        number fileSize
+    }
+
+    USERS {
+        string id PK
+        string email UK
+        string firstName
+        string lastName
+        string role
+    }
+
+    CLIENTS {
+        string id PK
+        string name
+        string email UK
+        string type
+    }
+
+    INVOICES {
+        string id PK
+        string invoiceNumber UK
+        string caseId FK
+        string clientId FK
+        number totalAmount
+        string status
+    }
+
+    TIME_ENTRIES {
+        string id PK
+        string caseId FK
+        string userId FK
+        number duration
+        number rate
+        string status
+    }
+
+    PARTIES {
+        string id PK
+        string caseId FK
+        string name
+        string type
+    }
+
+    LEGAL_HOLDS {
+        string id PK
+        string caseId FK
+        string holdName
+        string status
+        array custodians
+    }
+
+    DOCUMENT_VERSIONS {
+        string id PK
+        string documentId FK
+        number version
+        string checksum
+    }
+
+    INVOICE_ITEMS {
+        string id PK
+        string invoiceId FK
+        string description
+        number amount
+    }
+```
+
+**Key Features:**
+- **96 Object Stores**: Core entities + frontend-only stores
+- **Database Version**: 27 (incremental migrations)
+- **Key Path**: `id` (UUID) on all stores
+- **Indexes**: `caseId`, `status`, compound indexes for performance
+- **Fallback**: LocalStorage mode when IndexedDB unavailable
+- **B-Tree Index**: Custom implementation for case title lookups
+
+**Performance Optimizations:**
+- LRU caching at Repository layer (100 items)
+- Write buffer coalescing (flushes every 16ms or 500 ops)
+- Compound indexes for common query patterns
+- Transaction batching for bulk operations
+
+---
+
+### Backend PostgreSQL Schema
+
+```mermaid
+erDiagram
+    USER ||--o{ CASE : "lead attorney"
+    USER ||--o{ DOCUMENT : creates
+    USER ||--o{ TIME_ENTRY : tracks
+    USER ||--o{ REFRESH_TOKEN : generates
+
+    CLIENT ||--o{ CASE : owns
+    CLIENT ||--o{ INVOICE : receives
+    CLIENT ||--o{ TRUST_ACCOUNT : has
+
+    CASE ||--o{ TASK : contains
+    CASE ||--o{ DOCUMENT : includes
+    CASE ||--o{ DOCKET_ENTRY : tracks
+    CASE ||--o{ PARTY : involves
+    CASE ||--o{ CUSTODIAN : identifies
+    CASE ||--o{ LEGAL_HOLD : issues
+    CASE ||--o{ PLEADING : files
+    CASE ||--o{ MOTION : files
+    CASE ||--o{ TIME_ENTRY : billable
+    CASE ||--o{ EXPENSE : incurs
+
+    DOCUMENT ||--o{ DOCUMENT_VERSION : versions
+    DOCUMENT ||--o{ PROCESSING_JOB : processes
+
+    INVOICE ||--o{ INVOICE_ITEM : contains
+    INVOICE ||--o{ TIME_ENTRY : bills
+
+    LEGAL_HOLD ||--o{ CUSTODIAN : notifies
+
+    TRUST_ACCOUNT ||--o{ TRUST_TRANSACTION : tracks
+
+    EVIDENCE_ITEM ||--o{ CHAIN_OF_CUSTODY_EVENT : tracks
+
+    USER {
+        uuid id PK
+        varchar_255 email UK
+        varchar_255 passwordHash
+        varchar_100 firstName
+        varchar_100 lastName
+        enum role
+        enum status
+        boolean twoFactorEnabled
+        timestamp createdAt
+        timestamp updatedAt
+    }
+
+    CLIENT {
+        uuid id PK
+        varchar name
+        varchar email UK
+        enum type
+        enum status
+        timestamp createdAt
+    }
+
+    CASE {
+        uuid id PK
+        varchar_100 caseNumber UK
+        varchar_255 title
+        enum type
+        enum status
+        uuid clientId FK
+        uuid leadAttorneyId FK
+        date filingDate
+        jsonb metadata
+        timestamp createdAt
+        timestamp deletedAt
+    }
+
+    DOCUMENT {
+        uuid id PK
+        varchar title
+        enum type
+        uuid caseId FK
+        uuid creatorId FK
+        enum status
+        bigint fileSize
+        text fullTextContent
+        boolean ocrProcessed
+        timestamp createdAt
+    }
+
+    TIME_ENTRY {
+        uuid id PK
+        uuid caseId FK
+        uuid userId FK
+        date date
+        decimal_10_2 duration
+        decimal_10_2 rate
+        decimal_10_2 total
+        enum status
+        boolean billable
+        uuid invoiceId FK
+        timestamp createdAt
+    }
+
+    INVOICE {
+        uuid id PK
+        varchar invoiceNumber UK
+        uuid caseId FK
+        uuid clientId FK
+        date invoiceDate
+        date dueDate
+        enum status
+        decimal_10_2 totalAmount
+        decimal_10_2 balanceDue
+        timestamp createdAt
+    }
+```
+
+**Entity Counts:**
+- **Core Tables**: 70+ TypeORM entities
+- **Total Indexes**: 100+ (including FKs, composites)
+- **Relationships**: 150+ one-to-many, 5 one-to-one
+- **Cascade Behaviors**: Mixed CASCADE and SET NULL
+- **Soft Deletes**: Implemented on key entities via `deletedAt`
+
+**Schema Features:**
+- UUID primary keys (all tables)
+- Automatic timestamps (createdAt, updatedAt)
+- Audit columns (createdBy, updatedBy)
+- JSONB metadata for flexibility
+- Text arrays for tags/permissions
+- Enum types for status fields
+- Foreign key constraints with appropriate cascades
+
+---
+
+### Database Size Estimates
+
+| Layer | Component | Estimated Size (per year) |
+|-------|-----------|---------------------------|
+| **Frontend** | IndexedDB | 100 MB - 1 GB |
+| | File Store | 1 GB - 10 GB |
+| **Backend** | PostgreSQL Data | 5 GB - 50 GB |
+| | File System (/uploads/) | 50 GB - 500 GB |
+| | Redis Cache | 1 GB - 5 GB |
+| **Total** | All layers | ~60 GB - 570 GB/year |
+
+---
+
+### Entity Relationships Summary
+
+**Complete relationship mapping documented in:** `/diagrams/ENTITY-relationships.md`
+
+| Cardinality | Count | Examples |
+|-------------|-------|----------|
+| One-to-Many | ~150 | Case→Task, Client→Case, User→TimeEntry |
+| Many-to-One | ~150 | Task→Case, Case→Client, TimeEntry→User |
+| One-to-One | ~5 | Document→Pleading, Document→Exhibit |
+| Many-to-Many | ~3 | Case↔User (via CaseTeam), Custodian↔ESI |
+
+**Key Relationships:**
+1. **Case-Centric**: 25+ entities reference Case as parent
+2. **User Associations**: TimeEntry, Document, Task all track users
+3. **Billing Chain**: TimeEntry → Invoice → InvoiceItem
+4. **Document Hierarchy**: Document → DocumentVersion (1:M)
+5. **Discovery Flow**: Case → LegalHold → Custodian → ESISource
+
+---
+
+### Data Synchronization Architecture
+
+```mermaid
+sequenceDiagram
+    participant UI as React UI
+    participant IDB as IndexedDB
+    participant SE as SyncEngine
+    participant API as Backend API
+    participant PG as PostgreSQL
+    participant WS as WebSocket
+
+    Note over UI,PG: Write Operation (Offline-First)
+
+    UI->>IDB: Write optimistically
+    IDB-->>UI: Confirm write
+    UI->>SE: Queue for sync
+    SE->>SE: Store in localStorage
+
+    alt Online
+        SE->>API: POST /api/resource
+        API->>PG: INSERT
+        PG-->>API: Success
+        API-->>SE: 201 Created
+        SE->>SE: Mark synced
+        SE->>IDB: Update with server data
+    else Offline
+        SE->>SE: Retry with backoff
+    end
+
+    Note over UI,PG: Real-time Update
+
+    PG->>API: Data changed
+    API->>WS: Broadcast to room
+    WS-->>IDB: Update cache
+    WS-->>UI: Refresh view
+```
+
+**Sync Strategy:**
+- **Direction**: Bidirectional (IndexedDB ↔ PostgreSQL)
+- **Conflict Resolution**: Last-write-wins (timestamp-based)
+- **Queue Storage**: localStorage (persistent across sessions)
+- **Retry Logic**: Exponential backoff (max 60s delay)
+- **Real-time**: WebSocket broadcasts for instant updates
+
+---
+
+### Data Flow Layers
+
+**Complete data flow documented in:** `/diagrams/DATA-FLOW-architecture.md`
+
+```mermaid
+flowchart LR
+    subgraph Frontend
+        UI[React UI]
+        QC[QueryClient<br/>LRU: 100]
+        Repo[Repository<br/>LRU: 100]
+        IDB[(IndexedDB<br/>96 stores)]
+    end
+
+    subgraph Backend
+        API[REST API<br/>180+ endpoints]
+        SVC[Services<br/>120 classes]
+        TORM[TypeORM]
+        PG[(PostgreSQL<br/>70+ tables)]
+    end
+
+    UI --> QC
+    QC --> Repo
+    Repo --> IDB
+    Repo --> API
+    API --> SVC
+    SVC --> TORM
+    TORM --> PG
+```
+
+**Cache Hierarchy:**
+1. **L1: QueryClient** - TTL: 5min, Size: 100 LRU
+2. **L2: Repository** - TTL: 10min, Size: 100 LRU
+3. **L3: IndexedDB** - Persistent, 100s of MB
+4. **Backend Redis** - TTL: 1hr, distributed cache
+
+---
+
+### Performance Characteristics
+
+| Operation | Frontend (IndexedDB) | Backend (PostgreSQL) |
+|-----------|---------------------|----------------------|
+| Read (indexed) | 1-5 ms | 10-50 ms |
+| Read (full scan) | 50-200 ms | 500-2000 ms |
+| Write (single) | 5-10 ms | 20-100 ms |
+| Write (bulk 100) | 50-100 ms | 200-500 ms |
+| Transaction commit | 10-20 ms | 50-200 ms |
+
+**Optimization Notes:**
+- IndexedDB limited by main thread blocking
+- PostgreSQL limited by network latency + disk I/O
+- Write buffer coalescing reduces IndexedDB transaction overhead
+- Compound indexes essential for multi-column queries
+
+---
+
+### Database Schema Documentation
+
+**Comprehensive schemas documented in:**
+- Frontend: `/diagrams/INDEXEDDB-schema.md` (96 stores, 15,000+ words)
+- Backend: `/diagrams/DATABASE-schema.md` (70+ entities, 12,000+ words)
+- Relationships: `/diagrams/ENTITY-relationships.md` (150+ relationships)
+
+---
+
+### Database Issues & Recommendations
+
+#### Critical Issues
+
+1. **Unbounded JSONB Metadata** (37 entities)
+   - Issue: No schema validation on metadata columns
+   - Impact: Type safety lost, potential injection
+   - Fix: Define typed metadata interfaces
+
+2. **No Pagination Enforcement** (15+ services)
+   - Issue: Queries can return millions of records
+   - Impact: Memory exhaustion
+   - Fix: Default limit of 100 records
+
+3. **Unbounded Text Fields** (4+ entities)
+   - Issue: fullTextContent, extractedText have no size limit
+   - Impact: Multi-GB text fields
+   - Fix: Implement VARCHAR limits or chunking
+
+4. **Missing Indexes** (various)
+   - Issue: Some FK columns not indexed
+   - Impact: Slow join queries
+   - Fix: Index all foreign keys
+
+#### Recommendations
+
+1. **Add Composite Indexes** for common query patterns:
+   ```sql
+   CREATE INDEX idx_time_entries_case_status ON time_entries(case_id, status);
+   CREATE INDEX idx_documents_case_type ON documents(case_id, type);
+   ```
+
+2. **Implement Partitioning** for large tables:
+   - Partition `audit_logs` by month
+   - Partition `analytics_events` by week
+   - Archive old data to separate storage
+
+3. **Add Database Constraints**:
+   - CHECK constraints for business rules
+   - UNIQUE constraints where needed
+   - NOT NULL on required fields
+
+4. **Optimize Soft Deletes**:
+   - Add `WHERE deletedAt IS NULL` to all indexes
+   - Consider separate archive tables
+
+---
+
 ## Consolidated Duplicative Code Patterns
 
 ### Frontend Duplications (9 patterns)

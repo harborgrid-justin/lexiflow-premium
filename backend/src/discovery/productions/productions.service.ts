@@ -5,7 +5,7 @@ import { Production } from './entities/production.entity';
 import { CreateProductionDto } from './dto/create-production.dto';
 import { UpdateProductionDto } from './dto/update-production.dto';
 import { QueryProductionDto } from './dto/query-production.dto';
-import { validateSortField, validateSortOrder } from '../../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class ProductionsService {

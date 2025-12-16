@@ -4,3 +4,4 @@ export { PermissionsGuard } from '../../common/guards/permissions.guard';
 // Auth-specific guards
 export * from './roles.guard';
 export * from './gql-auth.guard';
+export * from './token-blacklist.guard';

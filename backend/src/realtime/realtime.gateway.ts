@@ -6,10 +6,9 @@ import {
   OnGatewayDisconnect,
   ConnectedSocket,
   MessageBody,
-  UseGuards,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, Injectable } from '@nestjs/common';
+import { Logger, Injectable, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
 import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';

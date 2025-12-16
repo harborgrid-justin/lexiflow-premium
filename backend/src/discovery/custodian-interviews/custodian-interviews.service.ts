@@ -5,7 +5,7 @@ import { CustodianInterview } from './entities/custodian-interview.entity';
 import { CreateCustodianInterviewDto } from './dto/create-custodian-interview.dto';
 import { UpdateCustodianInterviewDto } from './dto/update-custodian-interview.dto';
 import { QueryCustodianInterviewDto } from './dto/query-custodian-interview.dto';
-import { validateSortField, validateSortOrder } from '../../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class CustodianInterviewsService {

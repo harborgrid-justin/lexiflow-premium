@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
+import { validatePagination } from '../../common/utils/query-validation.util';
 
 /**
  * Messaging Service
@@ -26,7 +27,8 @@ export class MessagingService {
   /**
    * Get all conversations for a user
    */
-  async findAllConversations(userId: string, page: number = 1, limit: number = 20) {
+  async findAllConversations(userId: string, pageParam?: number, limitParam?: number) {
+    const { page, limit } = validatePagination(pageParam, limitParam, 50);
     // Implementation will use actual entity repositories
     return {
       data: [],

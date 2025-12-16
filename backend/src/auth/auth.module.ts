@@ -34,6 +34,13 @@ import { TokenBlacklistGuard } from './guards/token-blacklist.guard';
     TokenBlacklistCleanupService,
     TokenBlacklistGuard,
   ],
-  exports: [AuthService, TokenStorageService, TokenBlacklistService, TokenBlacklistGuard],
+  exports: [
+    JwtModule,
+    PassportModule,
+    AuthService,
+    TokenStorageService,
+    TokenBlacklistService,
+    TokenBlacklistGuard,
+  ],
 })
 export class AuthModule {}

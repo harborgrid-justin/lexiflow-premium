@@ -4,16 +4,27 @@ import { Case } from '../../cases/entities/case.entity';
 
 export enum DocketEntryType {
   FILING = 'Filing',
+  FILING_LOWER = 'filing',
   ORDER = 'Order',
+  ORDER_LOWER = 'order',
   NOTICE = 'Notice',
+  NOTICE_LOWER = 'notice',
   MOTION = 'Motion',
+  MOTION_LOWER = 'motion',
   HEARING = 'Hearing',
+  HEARING_LOWER = 'hearing',
   JUDGMENT = 'Judgment',
+  JUDGMENT_LOWER = 'judgment',
   MINUTE_ENTRY = 'Minute Entry',
+  MINUTE_ENTRY_LOWER = 'minute_entry',
   TRANSCRIPT = 'Transcript',
   EXHIBIT = 'Exhibit',
   CORRESPONDENCE = 'Correspondence',
+  CORRESPONDENCE_LOWER = 'correspondence',
+  PLEADING = 'pleading',
+  DISCOVERY = 'discovery',
   OTHER = 'Other',
+  OTHER_LOWER = 'other',
 }
 
 @Entity('docket_entries')

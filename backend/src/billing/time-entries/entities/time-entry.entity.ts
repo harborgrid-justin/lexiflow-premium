@@ -12,10 +12,15 @@ import { User } from '../../../entities/user.entity';
 
 export enum TimeEntryStatus {
   DRAFT = 'Draft',
+  DRAFT_LOWER = 'draft',
   SUBMITTED = 'Submitted',
+  SUBMITTED_LOWER = 'submitted',
   APPROVED = 'Approved',
+  APPROVED_LOWER = 'approved',
   BILLED = 'Billed',
+  INVOICED = 'invoiced',
   WRITTEN_OFF = 'Written Off',
+  REJECTED = 'rejected',
 }
 
 @Entity('time_entries')

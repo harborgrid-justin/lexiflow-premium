@@ -12,16 +12,16 @@ import { TimeEntry } from './time-entry.entity';
 @Index(['invoiceDate'])
 @Index(['dueDate'])
 export class Invoice extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: true })
   caseId: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: true })
   clientId: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
   invoiceNumber: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   invoiceDate: Date;
 
   @Column({ type: 'date' })

@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as PathsConfig from '../paths.config';
 
 export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
   console.log('Seeding time entries...');
@@ -10,7 +11,7 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
   const userRepository = dataSource.getRepository('User');
 
   // Load time entries from JSON file
-  const timeEntriesPath = path.join(__dirname, 'test-data', 'time-entries.json');
+  const timeEntriesPath = path.join(PathsConfig.TEST_DATA_DIR, 'time-entries.json');
   const timeEntriesData = JSON.parse(fs.readFileSync(timeEntriesPath, 'utf-8'));
 
   // Check if time entries already exist

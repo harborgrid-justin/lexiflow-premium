@@ -12,7 +12,12 @@ export enum PartyType {
   THIRD_PARTY = 'Third Party',
   WITNESS = 'Witness',
   EXPERT_WITNESS = 'Expert Witness',
+  INDIVIDUAL = 'individual',
+  CORPORATION = 'corporation',
+  GOVERNMENT = 'government',
+  ORGANIZATION = 'organization',
   OTHER = 'Other',
+  OTHER_LOWER = 'other',
 }
 
 export enum PartyRole {
@@ -21,6 +26,16 @@ export enum PartyRole {
   INTERESTED_PARTY = 'Interested Party',
   GUARDIAN = 'Guardian',
   REPRESENTATIVE = 'Representative',
+  PLAINTIFF = 'plaintiff',
+  DEFENDANT = 'defendant',
+  PETITIONER = 'petitioner',
+  RESPONDENT = 'respondent',
+  APPELLANT = 'appellant',
+  APPELLEE = 'appellee',
+  THIRD_PARTY_LOWER = 'third_party',
+  INTERVENOR = 'intervenor',
+  WITNESS = 'witness',
+  EXPERT = 'expert',
 }
 
 @Entity('parties')

@@ -10,6 +10,7 @@ import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { validationPipeConfig } from './config/validation';
 import { setupSwagger } from './config/swagger.config';
 import { initTelemetry, shutdownTelemetry } from './telemetry';
+import * as MasterConfig from './config/master.config';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -62,7 +63,7 @@ async function bootstrap() {
   // Global Interceptors
   app.useGlobalInterceptors(
     new LoggingInterceptor(),
-    new TimeoutInterceptor(30000), // 30 second timeout
+    new TimeoutInterceptor(MasterConfig.REQUEST_TIMEOUT_MS),
   );
 
   // Global Validation Pipe

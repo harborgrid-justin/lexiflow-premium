@@ -4,6 +4,8 @@ import { Repository, FindOptionsWhere } from 'typeorm';
 import { WorkflowTemplate } from './entities/workflow-template.entity';
 import { CreateWorkflowTemplateDto, WorkflowCategory } from './dto/create-workflow-template.dto';
 import { UpdateWorkflowTemplateDto } from './dto/update-workflow-template.dto';
+import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class WorkflowService {
@@ -24,26 +26,32 @@ export class WorkflowService {
     category?: WorkflowCategory;
     isActive?: boolean;
     search?: string;
+    sortBy?: string;
+    sortOrder?: string;
     page?: number;
     limit?: number;
   }) {
-    const { category, isActive, search, page = 1, limit = 50 } = filters;
+    const { category, isActive, search, sortBy, sortOrder, page = 1, limit = 50 } = filters;
     
     const queryBuilder = this.workflowRepository.createQueryBuilder('workflow');
 
     if (category) queryBuilder.andWhere('workflow.category = :category', { category });
     if (isActive !== undefined) queryBuilder.andWhere('workflow.isActive = :isActive', { isActive });
-    if (search) {
+    
+    const sanitizedSearch = sanitizeSearchQuery(search);
+    if (sanitizedSearch) {
       queryBuilder.andWhere(
         '(workflow.name LIKE :search OR workflow.description LIKE :search)',
-        { search: `%${search}%` }
+        { search: `%${sanitizedSearch}%` }
       );
     }
 
+    const safeSortField = validateSortField('workflow', sortBy, 'usageCount');
+    const safeSortOrder = validateSortOrder(sortOrder, 'DESC');
+
     const [data, total] = await queryBuilder
-      .orderBy('workflow.usageCount', 'DESC')
-      .addOrderBy('workflow.name', 'ASC')
-      .skip((page - 1) * limit)
+      .orderBy(`workflow.${safeSortField}`, safeSortOrder)
+      .skip(calculateOffset(page, limit))
       .take(limit)
       .getManyAndCount();
 
@@ -52,7 +60,7 @@ export class WorkflowService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 

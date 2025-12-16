@@ -1,6 +1,6 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import axios from 'axios';
-import { PacerSearchDto, PacerSyncDto, PacerCase } from './dto';
+import { PacerSearchDto, PacerIntegrationSyncDto, PacerCase } from './dto';
 
 /**
  * PACER Integration Service
@@ -73,7 +73,7 @@ export class PacerService {
   /**
    * Sync case data from PACER
    */
-  async sync(syncDto: PacerSyncDto): Promise<PacerCase> {
+  async sync(syncDto: PacerIntegrationSyncDto): Promise<PacerCase> {
     this.logger.log(`Syncing case ${syncDto.caseNumber} from PACER`);
 
     try {

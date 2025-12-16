@@ -4,6 +4,8 @@ import { Repository, FindOptionsWhere, Like, In } from 'typeorm';
 import { Task } from './entities/task.entity';
 import { CreateTaskDto, TaskStatus } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class TasksService {
@@ -41,9 +43,10 @@ export class TasksService {
 
     const queryBuilder = this.taskRepository.createQueryBuilder('task');
 
-    if (search) {
+    const sanitizedSearch = sanitizeSearchQuery(search);
+    if (sanitizedSearch) {
       queryBuilder.where('task.title LIKE :search OR task.description LIKE :search', {
-        search: `%${search}%`,
+        search: `%${sanitizedSearch}%`,
       });
     }
 
@@ -54,7 +57,7 @@ export class TasksService {
     const [data, total] = await queryBuilder
       .orderBy('task.dueDate', 'ASC', 'NULLS LAST')
       .addOrderBy('task.priority', 'DESC')
-      .skip((page - 1) * limit)
+      .skip(calculateOffset(page, limit))
       .take(limit)
       .getManyAndCount();
 
@@ -63,7 +66,7 @@ export class TasksService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 

@@ -2,6 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as MasterConfig from '../../config/master.config';
+import * as PathsConfig from '../../config/paths.config';
+import { calculateChecksum, sanitizeFilename, generateUniqueFilename, isAllowedMimeType } from '../utils/file.utils';
 
 /**
  * File Upload Configuration
@@ -45,9 +48,9 @@ export interface UploadResult {
 @Injectable()
 export class FileUploadService {
   private readonly logger = new Logger(FileUploadService.name);
-  private readonly UPLOAD_DIR = process.env.UPLOAD_DIR || './uploads';
-  private readonly MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
-  private readonly CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+  private readonly UPLOAD_DIR = PathsConfig.UPLOAD_DIR;
+  private readonly MAX_FILE_SIZE = MasterConfig.FILE_MAX_SIZE;
+  private readonly CHUNK_SIZE = MasterConfig.FILE_CHUNK_SIZE;
 
   constructor() {
     this.ensureUploadDir();
@@ -71,12 +74,12 @@ export class FileUploadService {
     const mimeType = this.detectMimeType(buffer, originalName);
 
     // Validate MIME type
-    if (config.allowedMimeTypes && !config.allowedMimeTypes.includes(mimeType)) {
+    if (config.allowedMimeTypes && !isAllowedMimeType(mimeType, config.allowedMimeTypes)) {
       throw new Error(`File type ${mimeType} is not allowed`);
     }
 
     // Calculate hash for deduplication
-    const hash = this.calculateHash(buffer);
+    const hash = calculateChecksum(buffer);
 
     // Check if file already exists
     const existingFile = await this.findByHash(hash);
@@ -87,8 +90,7 @@ export class FileUploadService {
 
     // Generate unique file ID
     const fileId = crypto.randomUUID();
-    const extension = path.extname(originalName);
-    const filename = `${fileId}${extension}`;
+    const filename = generateUniqueFilename(originalName);
     const filePath = path.join(this.UPLOAD_DIR, filename);
 
     // Write file to disk
@@ -132,7 +134,7 @@ export class FileUploadService {
     totalChunks: number,
     uploadId: string,
   ): Promise<{ complete: boolean; uploadId: string }> {
-    const chunkDir = path.join(this.UPLOAD_DIR, 'chunks', uploadId);
+    const chunkDir = PathsConfig.getChunkDir(uploadId);
     await fs.mkdir(chunkDir, { recursive: true });
 
     const chunkPath = path.join(chunkDir, `chunk_${chunkIndex}`);
@@ -184,8 +186,8 @@ export class FileUploadService {
   private async ensureUploadDir(): Promise<void> {
     try {
       await fs.mkdir(this.UPLOAD_DIR, { recursive: true });
-      await fs.mkdir(path.join(this.UPLOAD_DIR, 'chunks'), { recursive: true });
-      await fs.mkdir(path.join(this.UPLOAD_DIR, 'thumbnails'), { recursive: true });
+      await fs.mkdir(PathsConfig.CHUNKS_DIR, { recursive: true });
+      await fs.mkdir(PathsConfig.THUMBNAILS_DIR, { recursive: true });
     } catch (error) {
       this.logger.error('Failed to create upload directories', error);
     }
@@ -220,10 +222,6 @@ export class FileUploadService {
     return mimeMap[ext] || 'application/octet-stream';
   }
 
-  private calculateHash(buffer: Buffer): string {
-    return crypto.createHash('sha256').update(buffer).digest('hex');
-  }
-
   private async findByHash(hash: string): Promise<UploadResult | null> {
     // In production, query database by hash
     return null;
@@ -249,7 +247,7 @@ export class FileUploadService {
   }
 
   private async assembleChunks(uploadId: string, totalChunks: number): Promise<void> {
-    const chunkDir = path.join(this.UPLOAD_DIR, 'chunks', uploadId);
+    const chunkDir = PathsConfig.getChunkDir(uploadId);
     const outputPath = path.join(this.UPLOAD_DIR, uploadId);
 
     const writeStream = await fs.open(outputPath, 'w');

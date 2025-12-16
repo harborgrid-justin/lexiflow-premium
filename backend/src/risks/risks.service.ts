@@ -4,6 +4,7 @@ import { Repository, FindOptionsWhere } from 'typeorm';
 import { Risk } from './entities/risk.entity';
 import { CreateRiskDto, RiskImpact, RiskProbability } from './dto/create-risk.dto';
 import { UpdateRiskDto } from './dto/update-risk.dto';
+import { validatePagination, validateSortField, validateSortOrder, validateEnum, applySafeSort, calculateOffset, calculateTotalPages } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class RisksService {
@@ -27,30 +28,36 @@ export class RisksService {
     impact?: RiskImpact;
     probability?: RiskProbability;
     caseId?: string;
+    sortBy?: string;
+    sortOrder?: string;
     page?: number;
     limit?: number;
   }) {
-    const { status, impact, probability, caseId, page = 1, limit = 50 } = filters;
+    const { status, impact, probability, caseId, sortBy, sortOrder } = filters;
+    const { page, limit } = validatePagination(filters.page, filters.limit);
     
-    const where: FindOptionsWhere<Risk> = {};
-    if (status) where.status = status as any;
-    if (impact) where.impact = impact;
-    if (probability) where.probability = probability;
-    if (caseId) where.caseId = caseId;
+    const queryBuilder = this.riskRepository.createQueryBuilder('risk');
+    
+    if (status) queryBuilder.andWhere('risk.status = :status', { status });
+    if (impact) queryBuilder.andWhere('risk.impact = :impact', { impact });
+    if (probability) queryBuilder.andWhere('risk.probability = :probability', { probability });
+    if (caseId) queryBuilder.andWhere('risk.caseId = :caseId', { caseId });
 
-    const [data, total] = await this.riskRepository.findAndCount({
-      where,
-      order: { riskScore: 'DESC', createdAt: 'DESC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const safeSortField = validateSortField('risk', sortBy, 'riskScore');
+    const safeSortOrder = validateSortOrder(sortOrder, 'DESC');
+
+    const [data, total] = await queryBuilder
+      .orderBy(`risk.${safeSortField}`, safeSortOrder)
+      .skip(calculateOffset(page, limit))
+      .take(limit)
+      .getManyAndCount();
 
     return {
       data,
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 

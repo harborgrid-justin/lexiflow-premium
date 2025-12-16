@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import * as MasterConfig from './config/master.config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import configuration from './config/configuration';
@@ -13,7 +14,7 @@ import { getDatabaseConfig } from './config/database.config';
 
 // Core Modules
 import { CommonModule } from './common/common.module';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from './config/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
@@ -162,8 +163,8 @@ if (isRedisEnabled) {
 
     // Rate Limiting
     ThrottlerModule.forRoot([{
-      ttl: 60000, // 1 minute
-      limit: 100, // 100 requests per minute
+      ttl: MasterConfig.RATE_LIMIT_TTL,
+      limit: MasterConfig.RATE_LIMIT_LIMIT,
     }]),
 
     // Core Infrastructure Modules

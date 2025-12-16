@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MessengerService } from './messenger.service';
-import { CreateConversationDto, CreateMessageDto, UpdateConversationDto } from './dto/messenger.dto';
+import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Messenger')
@@ -43,7 +43,7 @@ export class MessengerController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create conversation' })
   @ApiResponse({ status: 201, description: 'Conversation created' })
-  async createConversation(@Body() createDto: CreateConversationDto) {
+  async createConversation(@Body() createDto: MessengerConversationDto) {
     return await this.messengerService.createConversation(createDto);
   }
 
@@ -51,7 +51,7 @@ export class MessengerController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Send message' })
   @ApiResponse({ status: 201, description: 'Message sent' })
-  async sendMessage(@Request() req, @Body() messageDto: CreateMessageDto) {
+  async sendMessage(@Request() req, @Body() messageDto: MessengerMessageDto) {
     return await this.messengerService.sendMessage(messageDto, req.user.id);
   }
 

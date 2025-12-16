@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import * as MasterConfig from '../config/master.config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
@@ -35,14 +36,14 @@ export class UsersService implements OnModuleInit {
     });
 
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash('Admin123!', 12);
+      const hashedPassword = await bcrypt.hash('Admin123!', MasterConfig.BCRYPT_ROUNDS);
       const admin = this.userRepository.create({
         email: 'admin@lexiflow.com',
         passwordHash: hashedPassword,
         firstName: 'Super',
         lastName: 'Admin',
         role: UserRole.SUPER_ADMIN,
-        status: UserStatus.ACTIVE,
+        status: true,
         twoFactorEnabled: false,
         emailVerified: true,
       });
@@ -60,7 +61,7 @@ export class UsersService implements OnModuleInit {
       throw new ConflictException('User with this email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, MasterConfig.BCRYPT_ROUNDS);
 
     const user = this.userRepository.create({
       email: createUserDto.email,
@@ -68,7 +69,7 @@ export class UsersService implements OnModuleInit {
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       role: this.mapToUserRole(createUserDto.role) || UserRole.STAFF,
-      status: createUserDto.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE,
+      status: createUserDto.isActive ?? true,
       twoFactorEnabled: createUserDto.mfaEnabled ?? false,
       emailVerified: false,
     });
@@ -125,9 +126,7 @@ export class UsersService implements OnModuleInit {
     if (updateUserDto.lastName) user.lastName = updateUserDto.lastName;
     if (updateUserDto.role) user.role = this.mapToUserRole(updateUserDto.role);
     if (updateUserDto.isActive !== undefined) {
-      user.status = updateUserDto.isActive
-        ? UserStatus.ACTIVE
-        : UserStatus.INACTIVE;
+      user.status = updateUserDto.isActive;
     }
     if (updateUserDto.mfaEnabled !== undefined) {
       user.twoFactorEnabled = updateUserDto.mfaEnabled;
@@ -152,7 +151,7 @@ export class UsersService implements OnModuleInit {
       throw new NotFoundException('User not found');
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, MasterConfig.BCRYPT_ROUNDS);
     user.passwordHash = hashedPassword;
 
     await this.userRepository.save(user);
@@ -195,7 +194,7 @@ export class UsersService implements OnModuleInit {
       throw new NotFoundException('User not found');
     }
 
-    user.status = isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
+    user.status = isActive;
     const updatedUser = await this.userRepository.save(user);
 
     return this.toAuthenticatedUser(updatedUser);
@@ -217,7 +216,7 @@ export class UsersService implements OnModuleInit {
       lastName: user.lastName,
       role: role,
       permissions: ROLE_PERMISSIONS[role] || [],
-      isActive: user.status === UserStatus.ACTIVE,
+      isActive: user.status,
       mfaEnabled: user.twoFactorEnabled,
       totpSecret: user.totpSecret,
     };
@@ -243,9 +242,19 @@ export class UsersService implements OnModuleInit {
       [UserRole.SUPER_ADMIN]: Role.SUPER_ADMIN,
       [UserRole.ADMIN]: Role.ADMINISTRATOR,
       [UserRole.PARTNER]: Role.PARTNER,
+      [UserRole.SENIOR_ASSOCIATE]: Role.ASSOCIATE,
+      [UserRole.ASSOCIATE]: Role.ASSOCIATE,
+      [UserRole.JUNIOR_ASSOCIATE]: Role.ASSOCIATE,
       [UserRole.ATTORNEY]: Role.ASSOCIATE,
       [UserRole.PARALEGAL]: Role.PARALEGAL,
+      [UserRole.LEGAL_ASSISTANT]: Role.PARALEGAL,
+      [UserRole.CLERK]: Role.LEGAL_SECRETARY,
+      [UserRole.INTERN]: Role.LEGAL_SECRETARY,
+      [UserRole.ACCOUNTANT]: Role.LEGAL_SECRETARY,
+      [UserRole.BILLING_SPECIALIST]: Role.LEGAL_SECRETARY,
+      [UserRole.IT_ADMIN]: Role.ADMINISTRATOR,
       [UserRole.STAFF]: Role.LEGAL_SECRETARY,
+      [UserRole.USER]: Role.LEGAL_SECRETARY,
       [UserRole.CLIENT]: Role.CLIENT_USER,
     };
     return roleMapping[userRole] || Role.LEGAL_SECRETARY;

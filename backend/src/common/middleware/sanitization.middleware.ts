@@ -14,14 +14,22 @@ export class SanitizationMiddleware implements NestMiddleware {
       req.body = this.sanitizeObject(req.body);
     }
 
-    // Sanitize query parameters
+    // Sanitize query parameters (Express 5: query is read-only, modify in place)
     if (req.query && typeof req.query === 'object') {
-      req.query = this.sanitizeObject(req.query);
+      const sanitized = this.sanitizeObject(req.query);
+      for (const key in req.query) {
+        delete req.query[key];
+      }
+      Object.assign(req.query, sanitized);
     }
 
-    // Sanitize URL parameters
+    // Sanitize URL parameters (Express 5: params is read-only, modify in place)
     if (req.params && typeof req.params === 'object') {
-      req.params = this.sanitizeObject(req.params);
+      const sanitized = this.sanitizeObject(req.params);
+      for (const key in req.params) {
+        delete req.params[key];
+      }
+      Object.assign(req.params, sanitized);
     }
 
     next();

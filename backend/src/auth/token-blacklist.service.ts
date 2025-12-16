@@ -196,7 +196,7 @@ export class TokenBlacklistService implements OnModuleInit {
         const key = `${this.USER_PREFIX}${userId}`;
         const blacklistTimestamp = await this.redisClient.get(key);
 
-        if (!blacklistTimestamp) {
+        if (!blacklistTimestamp || typeof blacklistTimestamp !== 'string') {
           return false;
         }
 

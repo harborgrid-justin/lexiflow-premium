@@ -13,21 +13,8 @@ export interface DocumentProcessingJob {
 export class DocumentProcessorService {
   private readonly logger = new Logger(DocumentProcessorService.name);
 
-  @Process('ocr')
-  async handleOCR(job: Job<DocumentProcessingJob>) {
-    this.logger.log(`Processing OCR for document: ${job.data.documentId}`);
-
-    try {
-      // Simulate OCR processing
-      await this.delay(5000);
-
-      this.logger.log(`OCR completed for document: ${job.data.documentId}`);
-      return { success: true, documentId: job.data.documentId };
-    } catch (error) {
-      this.logger.error(`OCR failed: ${error.message}`, error.stack);
-      throw error;
-    }
-  }
+  // Note: OCR processing is handled by ProcessingJobsModule's DocumentProcessor
+  // to avoid duplicate handler registration
 
   @Process('extract')
   async handleExtraction(job: Job<DocumentProcessingJob>) {

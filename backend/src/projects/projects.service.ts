@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
 import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectFilterDto, PaginatedProjectResponseDto } from './dto/project-filter.dto';
-import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery, validatePagination } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class ProjectsService {
@@ -22,19 +23,20 @@ export class ProjectsService {
       caseId,
       projectManagerId,
       assignedTeamId,
-      page = 1,
-      limit = 20,
       sortBy = 'createdAt',
       sortOrder = 'DESC',
     } = filterDto;
 
+    const { page, limit } = validatePagination(filterDto.page, filterDto.limit, 100);
+
     const queryBuilder = this.projectRepository.createQueryBuilder('project');
 
     // Search by name or description
-    if (search) {
+    const sanitizedSearch = sanitizeSearchQuery(search);
+    if (sanitizedSearch) {
       queryBuilder.andWhere(
         '(project.name ILIKE :search OR project.description ILIKE :search)',
-        { search: `%${search}%` },
+        { search: `%${sanitizedSearch}%` },
       );
     }
 

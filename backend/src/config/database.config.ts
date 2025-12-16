@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import * as MasterConfig from './master.config';
 
 export const getDatabaseConfig = (
   configService: ConfigService,
@@ -15,8 +16,8 @@ export const getDatabaseConfig = (
       type: 'sqlite',
       database: './lexiflow-demo.sqlite',
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true, // Auto-create tables in demo mode
-      logging: configService.get('database.logging') || configService.get('nodeEnv') === 'development',
+      synchronize: true,
+      logging: configService.get('database.logging') || MasterConfig.DB_LOGGING,
     };
   }
 
@@ -26,30 +27,26 @@ export const getDatabaseConfig = (
       type: 'postgres',
       url: databaseUrl,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: configService.get('nodeEnv') !== 'production',
-      logging: configService.get('database.logging') || configService.get('nodeEnv') === 'development',
+      synchronize: MasterConfig.DB_SYNCHRONIZE,
+      logging: configService.get('database.logging') || MasterConfig.DB_LOGGING,
       migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
-      migrationsRun: false,
-      ssl: configService.get('database.ssl')
-        ? { rejectUnauthorized: configService.get('database.sslRejectUnauthorized') }
+      migrationsRun: MasterConfig.DB_MIGRATIONS_RUN,
+      ssl: MasterConfig.DB_SSL
+        ? { rejectUnauthorized: MasterConfig.DB_SSL_REJECT_UNAUTHORIZED }
         : false,
-      // Enhanced connection pooling for production stability
       extra: {
-        max: 20, // Maximum pool size (increased from 10)
-        min: 5,  // Minimum pool size (new)
-        idleTimeoutMillis: 30000, // Close idle connections after 30s
-        connectionTimeoutMillis: 10000, // Connection timeout
-        maxUses: 7500, // Rotate connections after 7500 uses (prevents memory leaks)
-        // Statement timeout for long-running queries
-        statement_timeout: 60000, // 60 seconds
-        // Query timeout
-        query_timeout: 60000,
+        max: MasterConfig.DB_POOL_MAX,
+        min: MasterConfig.DB_POOL_MIN,
+        idleTimeoutMillis: MasterConfig.DB_IDLE_TIMEOUT,
+        connectionTimeoutMillis: MasterConfig.DB_CONNECTION_TIMEOUT,
+        maxUses: MasterConfig.DB_MAX_USES,
+        statement_timeout: MasterConfig.DB_STATEMENT_TIMEOUT,
+        query_timeout: MasterConfig.DB_QUERY_TIMEOUT,
       },
-      // Additional performance optimizations
-      poolSize: 20,
+      poolSize: MasterConfig.DB_POOL_MAX,
       cache: {
-        duration: 30000, // Cache query results for 30 seconds
-        type: 'database', // Use database-level caching
+        duration: MasterConfig.DB_CACHE_DURATION,
+        type: MasterConfig.DB_CACHE_TYPE as any,
       },
     };
   }
@@ -63,30 +60,26 @@ export const getDatabaseConfig = (
     password: configService.get('database.password'),
     database: configService.get('database.name'),
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    synchronize: configService.get('nodeEnv') !== 'production',
-    logging: configService.get('nodeEnv') === 'development',
+    synchronize: MasterConfig.DB_SYNCHRONIZE,
+    logging: MasterConfig.DB_LOGGING,
     migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
-    migrationsRun: false,
-    ssl: configService.get('database.ssl')
-      ? { rejectUnauthorized: configService.get('database.sslRejectUnauthorized') }
+    migrationsRun: MasterConfig.DB_MIGRATIONS_RUN,
+    ssl: MasterConfig.DB_SSL
+      ? { rejectUnauthorized: MasterConfig.DB_SSL_REJECT_UNAUTHORIZED }
       : false,
-    // Enhanced connection pooling for production stability
     extra: {
-      max: 20, // Maximum pool size
-      min: 5,  // Minimum pool size
-      idleTimeoutMillis: 30000, // Close idle connections after 30s
-      connectionTimeoutMillis: 10000, // Connection timeout (10s)
-      maxUses: 7500, // Rotate connections after 7500 uses (prevents memory leaks)
-      // Statement timeout for long-running queries
-      statement_timeout: 60000, // 60 seconds
-      // Query timeout
-      query_timeout: 60000,
+      max: MasterConfig.DB_POOL_MAX,
+      min: MasterConfig.DB_POOL_MIN,
+      idleTimeoutMillis: MasterConfig.DB_IDLE_TIMEOUT,
+      connectionTimeoutMillis: MasterConfig.DB_CONNECTION_TIMEOUT,
+      maxUses: MasterConfig.DB_MAX_USES,
+      statement_timeout: MasterConfig.DB_STATEMENT_TIMEOUT,
+      query_timeout: MasterConfig.DB_QUERY_TIMEOUT,
     },
-    // Additional performance optimizations
-    poolSize: 20,
+    poolSize: MasterConfig.DB_POOL_MAX,
     cache: {
-      duration: 30000, // Cache query results for 30 seconds
-      type: 'database', // Use database-level caching
+      duration: MasterConfig.DB_CACHE_DURATION,
+      type: MasterConfig.DB_CACHE_TYPE as any,
     },
   };
 };

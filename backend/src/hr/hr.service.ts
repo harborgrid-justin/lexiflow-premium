@@ -6,6 +6,8 @@ import { TimeOffRequest } from './entities/time-off-request.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { CreateTimeOffDto, TimeOffStatus } from './dto/create-time-off.dto';
+import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class HRService {
@@ -35,26 +37,33 @@ export class HRService {
     department?: string;
     role?: string;
     search?: string;
+    sortBy?: string;
+    sortOrder?: string;
     page?: number;
     limit?: number;
   }) {
-    const { status, department, role, search, page = 1, limit = 50 } = filters;
+    const { status, department, role, search, sortBy, sortOrder, page = 1, limit = 50 } = filters;
     
     const queryBuilder = this.employeeRepository.createQueryBuilder('employee');
 
     if (status) queryBuilder.andWhere('employee.status = :status', { status });
     if (department) queryBuilder.andWhere('employee.department = :department', { department });
     if (role) queryBuilder.andWhere('employee.role = :role', { role });
-    if (search) {
+    
+    const sanitizedSearch = sanitizeSearchQuery(search);
+    if (sanitizedSearch) {
       queryBuilder.andWhere(
         '(employee.firstName LIKE :search OR employee.lastName LIKE :search OR employee.email LIKE :search)',
-        { search: `%${search}%` }
+        { search: `%${sanitizedSearch}%` }
       );
     }
 
+    const safeSortField = validateSortField('employee', sortBy, 'lastName');
+    const safeSortOrder = validateSortOrder(sortOrder, 'ASC');
+
     const [data, total] = await queryBuilder
-      .orderBy('employee.lastName', 'ASC')
-      .skip((page - 1) * limit)
+      .orderBy(`employee.${safeSortField}`, safeSortOrder)
+      .skip(calculateOffset(page, limit))
       .take(limit)
       .getManyAndCount();
 
@@ -63,7 +72,7 @@ export class HRService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 
@@ -142,7 +151,7 @@ export class HRService {
       where,
       relations: ['employee'],
       order: { startDate: 'DESC' },
-      skip: (page - 1) * limit,
+      skip: calculateOffset(page, limit),
       take: limit,
     });
 
@@ -151,7 +160,7 @@ export class HRService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: calculateTotalPages(total, limit),
     };
   }
 

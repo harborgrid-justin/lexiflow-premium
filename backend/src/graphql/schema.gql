@@ -1,0 +1,766 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddPartyInput {
+  address: String
+  caseId: ID!
+  email: String
+  name: String!
+  phone: String
+  role: String!
+}
+
+input AddTeamMemberInput {
+  billable: Boolean
+  caseId: ID!
+  role: String!
+  userId: ID!
+}
+
+type AuthPayload {
+  accessToken: String!
+  expiresIn: Float!
+  refreshToken: String!
+  user: UserType!
+}
+
+enum CaseCategory {
+  CIVIL
+  CORPORATE
+  CRIMINAL
+  EMPLOYMENT
+  FAMILY
+  IMMIGRATION
+  INTELLECTUAL_PROPERTY
+  REAL_ESTATE
+}
+
+type CaseConnection {
+  edges: [CaseEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Float!
+}
+
+type CaseEdge {
+  cursor: String!
+  node: CaseType!
+}
+
+input CaseFilterInput {
+  assignedTo: [ID!]
+  court: String
+  filingDate: DateRangeInput
+  jurisdiction: String
+  search: String
+  status: [String!]
+  tags: [String!]
+  type: [String!]
+}
+
+type CaseMetrics {
+  activeCases: Float!
+  byStatus: [CaseStatusMetric!]!
+  byType: [CaseTypeMetric!]!
+  closedCases: Float!
+  pendingCases: Float!
+  totalCases: Float!
+}
+
+type CasePhaseType {
+  createdAt: DateTime!
+  description: String
+  endDate: DateTime
+  id: ID!
+  name: String!
+  startDate: DateTime!
+  status: String!
+}
+
+enum CaseStatus {
+  ACTIVE
+  ARCHIVED
+  CLOSED
+  PENDING
+}
+
+type CaseStatusMetric {
+  count: Float!
+  status: String!
+}
+
+type CaseTeamMemberType {
+  billable: Boolean
+  id: ID!
+  joinedAt: DateTime!
+  role: String!
+  user: UserType!
+}
+
+type CaseType {
+  caseNumber: String!
+  category: CaseCategory!
+  closedDate: DateTime
+  court: String
+  createdAt: DateTime!
+  createdBy: UserType!
+  description: String
+  docketEntries: [DocketEntryType!]
+  documents: [DocumentType!]
+  filingDate: DateTime
+  id: ID!
+  jurisdiction: String
+  motions: [MotionType!]
+  parties: [PartyType!]
+  phases: [CasePhaseType!]
+  status: CaseStatus!
+  teamMembers: [CaseTeamMemberType!]
+  title: String!
+  updatedAt: DateTime!
+}
+
+type CaseTypeMetric {
+  count: Float!
+  type: String!
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+type ClauseType {
+  category: String
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  title: String!
+}
+
+input CreateCaseInput {
+  caseNumber: String!
+  court: String
+  description: String
+  filingDate: DateTime
+  jurisdiction: String
+  tags: [String!]
+  title: String!
+  type: String!
+}
+
+input CreateDepositionInput {
+  attendingAttorneys: [ID!]
+  caseId: ID!
+  courtReporter: String
+  deponentName: String!
+  deponentRole: String!
+  duration: Float
+  location: String
+  scheduledDate: DateTime!
+  videoConferenceLink: String
+  videographer: String
+}
+
+input CreateDiscoveryRequestInput {
+  assignedTo: ID!
+  caseId: ID!
+  description: String
+  dueDate: DateTime!
+  requestDate: DateTime!
+  requestNumber: String!
+  requestingParty: String!
+  respondingParty: String!
+  title: String!
+  type: String!
+}
+
+input CreateDocketEntryInput {
+  caseId: ID!
+  description: String!
+  entryNumber: String!
+  filedBy: String
+  filedDate: DateTime!
+}
+
+input CreateDocumentVersionInput {
+  changeDescription: String
+  documentId: ID!
+  fileName: String!
+  fileSize: Float!
+  mimeType: String!
+  storageKey: String!
+}
+
+input CreateInvoiceInput {
+  caseId: ID
+  clientId: ID
+  discount: String
+  dueDate: DateTime!
+  invoiceDate: DateTime!
+  invoiceNumber: String!
+  lineItems: [InvoiceLineItemInput!]!
+  notes: String
+  tax: String
+}
+
+input CreateLegalHoldInput {
+  caseId: ID!
+  custodians: [String!]!
+  dataSources: [String!]!
+  description: String
+  issuedDate: DateTime!
+  name: String!
+}
+
+input CreateMotionInput {
+  caseId: ID!
+  description: String
+  filedDate: DateTime!
+  hearingDate: DateTime
+  title: String!
+  type: String!
+}
+
+input CreatePrivilegeLogEntryInput {
+  author: String!
+  batesNumber: String
+  caseId: ID!
+  description: String!
+  documentDate: DateTime!
+  documentId: String!
+  privilegeType: String!
+  recipient: String!
+}
+
+input CreateTimeEntryInput {
+  activityCode: String
+  billable: Boolean! = true
+  caseId: ID
+  description: String!
+  entryDate: DateTime!
+  hours: Float!
+  rate: String!
+  taskCode: String
+}
+
+input DateRangeInput {
+  end: DateTime
+  start: DateTime
+}
+
+"""DateTime custom scalar type"""
+scalar DateTime
+
+enum DepositionStatus {
+  CANCELLED
+  COMPLETED
+  IN_PROGRESS
+  POSTPONED
+  SCHEDULED
+}
+
+type DepositionType {
+  attorneys: [UserType!]
+  courtReporter: String
+  createdAt: DateTime!
+  deponentName: String!
+  deponentRole: String!
+  duration: Float
+  exhibits: [DocumentType!]
+  id: ID!
+  location: String
+  notes: String
+  scheduledDate: DateTime!
+  status: DepositionStatus!
+  transcript: DocumentType
+  updatedAt: DateTime!
+  videoConferenceLink: String
+  videographer: String
+}
+
+enum DiscoveryRequestStatus {
+  COMPLETED
+  DRAFT
+  IN_PROGRESS
+  OVERDUE
+  RECEIVED
+  SENT
+}
+
+type DiscoveryRequestType {
+  assignedTo: UserType!
+  createdAt: DateTime!
+  description: String
+  documents: [DocumentType!]
+  dueDate: DateTime!
+  id: ID!
+  requestDate: DateTime!
+  requestNumber: String!
+  requestingParty: String!
+  respondingParty: String!
+  responseDate: DateTime
+  status: DiscoveryRequestStatus!
+  title: String!
+  type: DiscoveryRequestType!
+  updatedAt: DateTime!
+}
+
+type DocketEntryType {
+  createdAt: DateTime!
+  description: String!
+  entryNumber: String!
+  filedBy: String
+  filedDate: DateTime!
+  id: ID!
+}
+
+enum DocumentAccessLevel {
+  ATTORNEY_WORK_PRODUCT
+  CONFIDENTIAL
+  INTERNAL
+  PRIVILEGED
+  PUBLIC
+}
+
+type DocumentConnection {
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Float!
+}
+
+type DocumentEdge {
+  cursor: String!
+  node: DocumentType!
+}
+
+input DocumentFilterInput {
+  accessLevel: [String!]
+  caseId: ID
+  createdAt: DateRangeInput
+  createdBy: [ID!]
+  documentType: [String!]
+  search: String
+  status: [String!]
+  tags: [String!]
+}
+
+enum DocumentStatus {
+  APPROVED
+  ARCHIVED
+  DRAFT
+  FILED
+  UNDER_REVIEW
+}
+
+type DocumentType {
+  accessLevel: DocumentAccessLevel!
+  clauses: [ClauseType!]
+  createdAt: DateTime!
+  createdBy: UserType!
+  description: String
+  documentType: String!
+  extractedText: String
+  fileName: String
+  fileSize: Float
+  id: ID!
+  mimeType: String
+  ocrProcessed: Boolean
+  s3Url: String
+  status: DocumentStatus!
+  storageKey: String
+  tags: [String!]
+  title: String!
+  updatedAt: DateTime!
+  versions: [DocumentVersionType!]
+}
+
+type DocumentVersionType {
+  changeDescription: String
+  createdAt: DateTime!
+  createdBy: UserType!
+  fileName: String!
+  fileSize: Float!
+  id: ID!
+  mimeType: String!
+  storageKey: String
+  versionNumber: Float!
+}
+
+type FeeAgreementType {
+  createdAt: DateTime!
+  effectiveDate: DateTime!
+  expirationDate: DateTime
+  flatFee: String
+  id: ID!
+  percentage: Float
+  rate: String
+  retainer: String
+  terms: String
+  type: String!
+}
+
+input InvoiceFilterInput {
+  caseId: ID
+  clientId: ID
+  dueDate: DateRangeInput
+  invoiceDate: DateRangeInput
+  status: [String!]
+}
+
+input InvoiceLineItemInput {
+  description: String!
+  quantity: Float!
+  rate: String!
+  timeEntryId: ID
+}
+
+type InvoiceLineItemType {
+  amount: String!
+  description: String!
+  id: ID!
+  quantity: Float!
+  rate: String!
+  timeEntryId: String
+}
+
+enum InvoiceStatus {
+  CANCELLED
+  DRAFT
+  OVERDUE
+  PAID
+  PENDING
+  SENT
+}
+
+type InvoiceType {
+  caseId: String
+  clientId: String
+  createdAt: DateTime!
+  createdBy: UserType!
+  discount: String
+  dueDate: DateTime!
+  id: ID!
+  invoiceDate: DateTime!
+  invoiceNumber: String!
+  lineItems: [InvoiceLineItemType!]!
+  notes: String
+  paidDate: DateTime
+  status: InvoiceStatus!
+  subtotal: String!
+  tax: String!
+  total: String!
+  updatedAt: DateTime!
+}
+
+"""JSON custom scalar type"""
+scalar JSON
+
+type LegalHoldType {
+  createdAt: DateTime!
+  custodians: [String!]!
+  dataSources: [String!]!
+  description: String
+  id: ID!
+  issuedBy: UserType!
+  issuedDate: DateTime!
+  name: String!
+  releasedDate: DateTime
+  status: String!
+  updatedAt: DateTime!
+}
+
+input LoginInput {
+  email: String!
+  mfaCode: String
+  password: String!
+}
+
+"""
+Money custom scalar type (cents as integer, displayed as decimal string)
+"""
+scalar Money
+
+type MotionType {
+  createdAt: DateTime!
+  description: String
+  filedDate: DateTime!
+  hearingDate: DateTime
+  id: ID!
+  status: String!
+  title: String!
+  type: String!
+}
+
+type Mutation {
+  addParty(input: AddPartyInput!): CaseType!
+  addTeamMember(input: AddTeamMemberInput!): CaseType!
+  changePassword(input: ChangePasswordInput!): Boolean!
+  createCase(input: CreateCaseInput!): CaseType!
+  createDeposition(input: CreateDepositionInput!): DepositionType!
+  createDiscoveryRequest(input: CreateDiscoveryRequestInput!): DiscoveryRequestType!
+  createDocketEntry(input: CreateDocketEntryInput!): CaseType!
+  createDocumentVersion(input: CreateDocumentVersionInput!): DocumentType!
+  createInvoice(input: CreateInvoiceInput!): InvoiceType!
+  createLegalHold(input: CreateLegalHoldInput!): LegalHoldType!
+  createMotion(input: CreateMotionInput!): CaseType!
+  createPrivilegeLogEntry(input: CreatePrivilegeLogEntryInput!): PrivilegeLogEntryType!
+  createTimeEntry(input: CreateTimeEntryInput!): TimeEntryType!
+  deleteCase(id: ID!): Boolean!
+  deleteDocument(id: ID!): Boolean!
+  deleteTimeEntry(id: ID!): Boolean!
+  disableMfa: Boolean!
+  enableMfa: Boolean!
+  generateDocumentDownloadUrl(id: ID!): String!
+  login(input: LoginInput!): AuthPayload!
+  logout: Boolean!
+  markInvoicePaid(id: ID!, paidDate: DateTime!): InvoiceType!
+  refreshToken(refreshToken: String!): String!
+  register(input: RegisterInput!): AuthPayload!
+  releaseLegalHold(id: ID!): LegalHoldType!
+  sendInvoice(id: ID!): InvoiceType!
+  updateCase(id: ID!, input: UpdateCaseInput!): CaseType!
+  updateDeposition(id: ID!, input: UpdateDepositionInput!): DepositionType!
+  updateDiscoveryRequest(id: ID!, input: UpdateDiscoveryRequestInput!): DiscoveryRequestType!
+  updateDocument(id: ID!, input: UpdateDocumentInput!): DocumentType!
+  updateTimeEntry(id: ID!, input: UpdateTimeEntryInput!): TimeEntryType!
+  updateUser(id: ID!, input: UpdateUserInput!): UserType!
+  uploadDocument(input: UploadDocumentInput!): DocumentType!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+input PaginationInput {
+  after: String
+  before: String
+  first: Int = 20
+  last: Int
+}
+
+type PartyType {
+  createdAt: DateTime!
+  email: String
+  id: ID!
+  name: String!
+  phone: String
+  role: String!
+  updatedAt: DateTime!
+}
+
+type PrivilegeLogEntryType {
+  author: String!
+  batesNumber: String
+  createdAt: DateTime!
+  description: String!
+  documentDate: DateTime!
+  documentId: String!
+  id: ID!
+  privilegeType: String!
+  recipient: String!
+}
+
+type Query {
+  case(id: ID!): CaseType
+  caseMetrics: CaseMetrics!
+  cases(filter: CaseFilterInput, pagination: PaginationInput): CaseConnection!
+  deposition(id: ID!): DepositionType
+  depositions(caseId: ID!): [DepositionType!]!
+  discoveryRequest(id: ID!): DiscoveryRequestType
+  discoveryRequests(caseId: ID!): [DiscoveryRequestType!]!
+  document(id: ID!): DocumentType
+  documents(filter: DocumentFilterInput, pagination: PaginationInput): DocumentConnection!
+  feeAgreements(caseId: ID): [FeeAgreementType!]!
+  invoice(id: ID!): InvoiceType
+  invoices(filter: InvoiceFilterInput): [InvoiceType!]!
+  legalHolds(caseId: ID!): [LegalHoldType!]!
+  me: UserType!
+  privilegeLog(caseId: ID!): [PrivilegeLogEntryType!]!
+  rateTables: [RateTableType!]!
+  timeEntries(filter: TimeEntryFilterInput): [TimeEntryType!]!
+  timeEntry(id: ID!): TimeEntryType
+  user(id: ID!): UserType
+  users(filter: UserFilterInput): [UserType!]!
+}
+
+type RateTableType {
+  createdAt: DateTime!
+  effectiveDate: DateTime
+  expirationDate: DateTime
+  id: ID!
+  name: String!
+  rate: String!
+  role: String!
+}
+
+input RegisterInput {
+  barNumber: String
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  phone: String
+}
+
+type Subscription {
+  caseUpdated(id: ID!): CaseType!
+}
+
+input TimeEntryFilterInput {
+  billable: Boolean
+  caseId: ID
+  entryDate: DateRangeInput
+  status: [String!]
+  userId: [ID!]
+}
+
+enum TimeEntryStatus {
+  APPROVED
+  BILLED
+  DRAFT
+  REJECTED
+  SUBMITTED
+}
+
+type TimeEntryType {
+  activityCode: String
+  amount: String!
+  billable: Boolean!
+  caseId: String
+  createdAt: DateTime!
+  description: String!
+  entryDate: DateTime!
+  hours: Float!
+  id: ID!
+  rate: String!
+  status: TimeEntryStatus!
+  taskCode: String
+  updatedAt: DateTime!
+  user: UserType!
+}
+
+input UpdateCaseInput {
+  caseNumber: String
+  closedDate: DateTime
+  court: String
+  description: String
+  filingDate: DateTime
+  jurisdiction: String
+  status: String
+  tags: [String!]
+  title: String
+  type: String
+}
+
+input UpdateDepositionInput {
+  courtReporter: String
+  deponentName: String
+  deponentRole: String
+  duration: Float
+  location: String
+  notes: String
+  scheduledDate: DateTime
+  status: String
+  videoConferenceLink: String
+  videographer: String
+}
+
+input UpdateDiscoveryRequestInput {
+  assignedTo: ID
+  description: String
+  dueDate: DateTime
+  responseDate: DateTime
+  status: String
+  title: String
+}
+
+input UpdateDocumentInput {
+  accessLevel: String
+  description: String
+  documentType: String
+  status: String
+  tags: [String!]
+  title: String
+}
+
+input UpdateTimeEntryInput {
+  activityCode: String
+  billable: Boolean
+  description: String
+  entryDate: DateTime
+  hours: Float
+  rate: String
+  status: String
+  taskCode: String
+}
+
+input UpdateUserInput {
+  avatar: String
+  barNumber: String
+  bio: String
+  department: String
+  firstName: String
+  lastName: String
+  phone: String
+  title: String
+}
+
+input UploadDocumentInput {
+  accessLevel: String
+  caseId: ID
+  description: String
+  documentType: String!
+  fileName: String!
+  fileSize: Float!
+  mimeType: String!
+  storageKey: String
+  tags: [String!]
+  title: String!
+}
+
+input UserFilterInput {
+  department: String
+  role: [String!]
+  search: String
+  status: [String!]
+}
+
+enum UserRole {
+  ADMIN
+  ATTORNEY
+  CLIENT
+  COURT_REPORTER
+  EXPERT_WITNESS
+  LEGAL_ASSISTANT
+  PARALEGAL
+  PARTNER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+type UserType {
+  avatar: String
+  barNumber: String
+  bio: String
+  createdAt: DateTime!
+  department: String
+  email: String!
+  firstName: String!
+  fullName: String!
+  id: ID!
+  lastLoginAt: DateTime
+  lastName: String!
+  mfaEnabled: Boolean!
+  phone: String
+  role: UserRole!
+  status: UserStatus!
+  title: String
+  updatedAt: DateTime!
+}

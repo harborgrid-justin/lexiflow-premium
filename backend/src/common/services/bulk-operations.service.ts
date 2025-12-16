@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import * as MasterConfig from '../../config/master.config';
 import { EntityManager, Repository } from 'typeorm';
 
 /**
@@ -33,7 +34,7 @@ export interface BulkOperationError {
 @Injectable()
 export class BulkOperationsService {
   private readonly logger = new Logger(BulkOperationsService.name);
-  private readonly DEFAULT_BATCH_SIZE = 1000;
+  private readonly DEFAULT_BATCH_SIZE = MasterConfig.BULK_OPERATION_BATCH_SIZE;
 
   /**
    * Bulk insert with batching and transaction support

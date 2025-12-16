@@ -224,7 +224,7 @@ export class TokenStorageService implements OnModuleDestroy {
     if (this.useRedis()) {
       try {
         const data = await this.redisClient!.get(key);
-        return data ? JSON.parse(data) : null;
+        return data && typeof data === 'string' ? JSON.parse(data) : null;
       } catch (error) {
         this.logger.error('Failed to get refresh token from Redis:', error);
         return this.fallbackGetRefreshToken(tokenId);
@@ -359,7 +359,7 @@ export class TokenStorageService implements OnModuleDestroy {
     if (this.useRedis()) {
       try {
         const data = await this.redisClient!.get(key);
-        return data ? JSON.parse(data) : null;
+        return data && typeof data === 'string' ? JSON.parse(data) : null;
       } catch (error) {
         this.logger.error('Failed to get reset token from Redis:', error);
         return this.fallbackGetResetToken(token);
@@ -444,7 +444,7 @@ export class TokenStorageService implements OnModuleDestroy {
     if (this.useRedis()) {
       try {
         const data = await this.redisClient!.get(key);
-        return data ? JSON.parse(data) : null;
+        return data && typeof data === 'string' ? JSON.parse(data) : null;
       } catch (error) {
         this.logger.error('Failed to get MFA token from Redis:', error);
         return this.fallbackGetMfaToken(token);

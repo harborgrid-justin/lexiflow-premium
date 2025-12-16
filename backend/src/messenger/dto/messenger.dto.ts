@@ -1,7 +1,7 @@
 import { IsString, IsOptional, IsArray, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CreateConversationDto {
+export class MessengerConversationDto {
   @ApiProperty()
   @IsString()
   title: string;
@@ -21,7 +21,7 @@ export class CreateConversationDto {
   isGroup?: boolean;
 }
 
-export class CreateMessageDto {
+export class MessengerMessageDto {
   @ApiProperty()
   @IsString()
   conversationId: string;

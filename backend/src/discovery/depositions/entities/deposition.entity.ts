@@ -15,10 +15,16 @@ export enum DepositionType {
 
 export enum DepositionStatus {
   SCHEDULED = 'SCHEDULED',
+  SCHEDULED_LOWER = 'scheduled',
+  CONFIRMED = 'confirmed',
   IN_PROGRESS = 'IN_PROGRESS',
+  IN_PROGRESS_LOWER = 'in_progress',
   COMPLETED = 'COMPLETED',
+  COMPLETED_LOWER = 'completed',
   CANCELLED = 'CANCELLED',
+  CANCELLED_LOWER = 'cancelled',
   POSTPONED = 'POSTPONED',
+  POSTPONED_LOWER = 'postponed',
   TRANSCRIPTION_PENDING = 'TRANSCRIPTION_PENDING',
   TRANSCRIPTION_COMPLETE = 'TRANSCRIPTION_COMPLETE',
 }

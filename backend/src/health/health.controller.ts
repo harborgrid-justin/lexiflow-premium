@@ -8,6 +8,7 @@ import {
   DiskHealthIndicator,
 } from '@nestjs/terminus';
 import { RedisHealthIndicator } from './redis-health.indicator';
+import * as MasterConfig from '../config/master.config';
 // TODO: Install OpenTelemetry dependencies to enable telemetry health checks
 // import { TelemetryHealthIndicator } from '../telemetry/telemetry-health.indicator';
 
@@ -36,7 +37,7 @@ export class HealthController {
   check() {
     return this.health.check([
       // Database health
-      () => this.db.pingCheck('database', { timeout: 3000 }),
+      () => this.db.pingCheck('database', { timeout: MasterConfig.HEALTH_CHECK_TIMEOUT_MS }),
 
       // Redis health (if enabled)
       () => this.redis.isHealthy('redis'),
@@ -75,7 +76,7 @@ export class HealthController {
   @ApiResponse({ status: 200, description: 'Service is ready' })
   checkReadiness() {
     return this.health.check([
-      () => this.db.pingCheck('database', { timeout: 3000 }),
+      () => this.db.pingCheck('database', { timeout: MasterConfig.HEALTH_CHECK_TIMEOUT_MS }),
       () => this.redis.isHealthy('redis'),
       // () => this.telemetry.getBasicStatus('telemetry'),
     ]);

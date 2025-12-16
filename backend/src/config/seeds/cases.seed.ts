@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as PathsConfig from '../paths.config';
 
 export async function seedCases(dataSource: DataSource): Promise<void> {
   console.log('Seeding cases...');
@@ -10,7 +11,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
   const clientRepository = dataSource.getRepository('Client');
 
   // Load cases from JSON file
-  const casesPath = path.join(__dirname, 'test-data', 'cases.json');
+  const casesPath = path.join(PathsConfig.TEST_DATA_DIR, 'cases.json');
   const casesData = JSON.parse(fs.readFileSync(casesPath, 'utf-8'));
 
   // Check if cases already exist

@@ -3,9 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CitationsController } from './citations.controller';
 import { CitationsService } from './citations.service';
 import { Citation } from './entities/citation.entity';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Citation])],
+  imports: [
+    TypeOrmModule.forFeature([Citation]),
+    AuthModule
+  ],
   controllers: [CitationsController],
   providers: [CitationsService],
   exports: [CitationsService]

@@ -11,6 +11,6 @@ export class EvidenceItem extends BaseEntity {
   @JoinColumn({ name: 'productionId' })
   production: Production;
 
-  @Column()
+  @Column({ nullable: true })
   productionId: string;
 }

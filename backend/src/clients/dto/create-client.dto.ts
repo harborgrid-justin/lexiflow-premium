@@ -3,17 +3,29 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum ClientType {
   CORPORATION = 'Corporation',
+  CORPORATION_LOWER = 'corporation',
   INDIVIDUAL = 'Individual',
+  INDIVIDUAL_LOWER = 'individual',
   GOVERNMENT = 'Government',
+  GOVERNMENT_LOWER = 'government',
   NON_PROFIT = 'Non-Profit',
-  PARTNERSHIP = 'Partnership'
+  NONPROFIT = 'nonprofit',
+  PARTNERSHIP = 'Partnership',
+  PARTNERSHIP_LOWER = 'partnership',
+  LLC = 'llc',
+  OTHER = 'other',
 }
 
 export enum ClientStatus {
   ACTIVE = 'Active',
+  ACTIVE_LOWER = 'active',
   INACTIVE = 'Inactive',
+  INACTIVE_LOWER = 'inactive',
   PROSPECT = 'Prospect',
-  FORMER = 'Former'
+  PROSPECTIVE = 'prospective',
+  FORMER = 'Former',
+  FORMER_LOWER = 'former',
+  BLOCKED = 'blocked',
 }
 
 export class CreateClientDto {

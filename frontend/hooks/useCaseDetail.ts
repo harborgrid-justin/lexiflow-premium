@@ -126,7 +126,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   const handleGenerateWorkflow = async () => {
     setGeneratingWorkflow(true);
     // In real app, this would call a mutation to add tasks to DB
-    setTimeout(() => setGeneratingWorkflow(false), 1500);
+    setTimeout(() => setGeneratingWorkflow(false), DEBUG_API_SIMULATION_DELAY_MS + 500);
   };
 
   const setDocumentsWrapper = (updater: LegalDocument[] | ((prev: LegalDocument[] | undefined) => LegalDocument[])) => {

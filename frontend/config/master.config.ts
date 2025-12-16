@@ -1,0 +1,575 @@
+// =============================================================================
+// LEXIFLOW FRONTEND MASTER CONFIGURATION
+// =============================================================================
+// Non-sensitive operational settings safe to commit to repository
+// Sensitive values (API keys, secrets) should remain in environment variables
+// or localStorage for demo purposes
+
+// =============================================================================
+// APPLICATION METADATA
+// =============================================================================
+export const APP_NAME = 'LexiFlow';
+export const APP_VERSION = '1.0.0';
+export const APP_ENV = import.meta.env.MODE || 'development';
+export const APP_DESCRIPTION = 'Enterprise Legal OS - Case Management, Discovery & Operations';
+
+// =============================================================================
+// INDEXEDDB CONFIGURATION
+// =============================================================================
+export const DB_NAME = 'LexiFlowDB';
+export const DB_VERSION = 27;
+export const DB_MODE: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
+
+// Transaction Coalescing
+export const DB_MAX_BUFFER_SIZE = 1000; // Maximum pending operations
+export const DB_FORCE_FLUSH_THRESHOLD = 500; // Force flush at this size
+export const DB_FLUSH_DELAY_MS = 50; // Debounce delay for batch writes
+
+// B-Tree Index Configuration
+export const DB_BTREE_ORDER = 5; // B-Tree order for sorted indexes
+
+// =============================================================================
+// CACHE CONFIGURATION
+// =============================================================================
+
+// Query Cache Settings
+export const QUERY_CACHE_MAX_SIZE = 100; // Maximum number of cached queries
+export const QUERY_CACHE_STALE_TIME_MS = 60000; // 1 minute
+export const QUERY_CACHE_GC_TIME_MS = 300000; // 5 minutes
+
+// Sync Engine Cache
+export const SYNC_CACHE_MAX_SIZE = 10000; // Maximum cached sync operations
+export const SYNC_CACHE_FLUSH_INTERVAL_MS = 5000; // 5 seconds
+
+// Repository Cache (LRU)
+export const REPOSITORY_CACHE_MAX_SIZE = 1000; // LRU cache size per repository
+export const REPOSITORY_CACHE_TTL_MS = 300000; // 5 minutes
+
+// =============================================================================
+// SYNC ENGINE CONFIGURATION
+// =============================================================================
+export const SYNC_ENABLED = true;
+export const SYNC_BATCH_SIZE = 50; // Operations per batch
+export const SYNC_RETRY_ATTEMPTS = 3;
+export const SYNC_RETRY_DELAY_MS = 1000; // Initial delay
+export const SYNC_RETRY_BACKOFF_MULTIPLIER = 2; // Exponential backoff
+export const SYNC_MAX_RETRY_DELAY_MS = 30000; // Max 30 seconds
+export const SYNC_CONFLICT_RESOLUTION: 'client-wins' | 'server-wins' | 'manual' = 'server-wins';
+export const SYNC_ENABLE_COMPRESSION = true;
+export const SYNC_COMPRESSION_THRESHOLD_BYTES = 1024; // Compress if > 1KB
+
+// JSON Patch Optimization
+export const SYNC_USE_JSON_PATCH = true;
+export const SYNC_PATCH_MAX_DEPTH = 10;
+
+// =============================================================================
+// API CONFIGURATION
+// =============================================================================
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+export const API_PREFIX = '/api/v1';
+export const API_TIMEOUT_MS = 30000; // 30 seconds
+export const API_RETRY_ATTEMPTS = 3;
+export const API_RETRY_DELAY_MS = 1000;
+
+// API Request Settings
+export const API_MAX_CONCURRENT_REQUESTS = 6;
+export const API_REQUEST_QUEUE_ENABLED = true;
+export const API_ENABLE_REQUEST_CANCELLATION = true;
+
+// =============================================================================
+// WEBSOCKET CONFIGURATION
+// =============================================================================
+export const WS_ENABLED = false; // Set to true when backend WebSocket is ready
+export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3000';
+export const WS_RECONNECT_ATTEMPTS = 5;
+export const WS_RECONNECT_DELAY_MS = 1000;
+export const WS_RECONNECT_BACKOFF_MULTIPLIER = 1.5;
+export const WS_PING_INTERVAL_MS = 25000;
+export const WS_PING_TIMEOUT_MS = 5000;
+export const WS_MAX_MESSAGE_SIZE = 1048576; // 1MB
+
+// =============================================================================
+// FILE UPLOAD CONFIGURATION
+// =============================================================================
+export const FILE_UPLOAD_MAX_SIZE = 52428800; // 50MB
+export const FILE_UPLOAD_CHUNK_SIZE = 1048576; // 1MB chunks
+export const FILE_UPLOAD_CONCURRENT_CHUNKS = 3;
+export const FILE_UPLOAD_RETRY_ATTEMPTS = 3;
+export const FILE_UPLOAD_TIMEOUT_MS = 300000; // 5 minutes
+
+export const FILE_ALLOWED_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'text/plain',
+  'text/csv',
+  'application/json',
+  'application/zip',
+];
+
+export const FILE_PROHIBITED_EXTENSIONS = [
+  '.exe',
+  '.bat',
+  '.cmd',
+  '.com',
+  '.scr',
+  '.vbs',
+  '.jar',
+  '.dll',
+  '.msi',
+];
+
+// =============================================================================
+// SEARCH CONFIGURATION
+// =============================================================================
+export const SEARCH_MIN_QUERY_LENGTH = 2;
+export const SEARCH_MAX_RESULTS = 100;
+export const SEARCH_PREVIEW_RESULTS = 10; // Per entity type
+export const SEARCH_DEBOUNCE_MS = 300;
+export const SEARCH_ENABLE_FUZZY = true;
+export const SEARCH_FUZZY_THRESHOLD = 0.7;
+export const SEARCH_HIGHLIGHT_ENABLED = true;
+
+// Web Worker Search
+export const SEARCH_USE_WORKER = true;
+export const SEARCH_WORKER_TIMEOUT_MS = 5000;
+export const SEARCH_INDEX_BATCH_SIZE = 500;
+
+// =============================================================================
+// PAGINATION DEFAULTS
+// =============================================================================
+export const DEFAULT_PAGE_SIZE = 20;
+export const MAX_PAGE_SIZE = 1000;
+export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100, 500];
+export const PAGINATION_SHOW_TOTAL = true;
+export const PAGINATION_SHOW_SIZE_CHANGER = true;
+
+// =============================================================================
+// NOTIFICATION CONFIGURATION
+// =============================================================================
+export const NOTIFICATION_MAX_DISPLAY = 5;
+export const NOTIFICATION_AUTO_DISMISS_MS = 5000;
+export const NOTIFICATION_SUCCESS_DISMISS_MS = 3000;
+export const NOTIFICATION_ERROR_DISMISS_MS = 10000;
+export const NOTIFICATION_POSITION: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' = 'top-right';
+export const NOTIFICATION_ENABLE_SOUND = false;
+export const NOTIFICATION_MAX_STACK = 3;
+
+// =============================================================================
+// UI/UX CONFIGURATION
+// =============================================================================
+
+// Theme Settings
+export const DEFAULT_THEME: 'light' | 'dark' | 'auto' = 'auto';
+export const THEME_STORAGE_KEY = 'lexiflow-theme';
+
+// Animation & Transitions
+export const ANIMATION_DURATION_MS = 200;
+export const ANIMATION_EASING = 'ease-in-out';
+export const ENABLE_ANIMATIONS = true;
+export const ENABLE_PAGE_TRANSITIONS = true;
+
+// Layout
+export const SIDEBAR_WIDTH = 240;
+export const SIDEBAR_COLLAPSED_WIDTH = 64;
+export const SIDEBAR_DEFAULT_COLLAPSED = false;
+export const TOPBAR_HEIGHT = 64;
+export const FOOTER_HEIGHT = 48;
+
+// Modal/Dialog
+export const MODAL_MAX_WIDTH = 1200;
+export const MODAL_BACKDROP_BLUR = true;
+export const MODAL_CLOSE_ON_ESCAPE = true;
+export const MODAL_CLOSE_ON_BACKDROP = true;
+
+// Tooltips
+export const TOOLTIP_DELAY_MS = 500;
+export const TOOLTIP_MAX_WIDTH = 300;
+
+// Tables
+export const TABLE_ROW_HEIGHT = 48;
+export const TABLE_HEADER_HEIGHT = 56;
+export const TABLE_ENABLE_VIRTUALIZATION = true;
+export const TABLE_VIRTUAL_THRESHOLD = 100; // Use virtual scrolling if > 100 rows
+
+// =============================================================================
+// FORM CONFIGURATION
+// =============================================================================
+export const FORM_AUTO_SAVE_ENABLED = true;
+export const FORM_AUTO_SAVE_DELAY_MS = 2000;
+export const FORM_VALIDATE_ON_CHANGE = false;
+export const FORM_VALIDATE_ON_BLUR = true;
+export const FORM_VALIDATE_ON_SUBMIT = true;
+export const FORM_SHOW_ERROR_SUMMARY = true;
+
+// =============================================================================
+// VALIDATION CONFIGURATION
+// =============================================================================
+
+// Password Requirements
+export const PASSWORD_MIN_LENGTH = 8;
+export const PASSWORD_MAX_LENGTH = 128;
+export const PASSWORD_REQUIRE_UPPERCASE = true;
+export const PASSWORD_REQUIRE_LOWERCASE = true;
+export const PASSWORD_REQUIRE_NUMBER = true;
+export const PASSWORD_REQUIRE_SPECIAL = true;
+
+// Email Validation
+export const EMAIL_MAX_LENGTH = 254;
+
+// Phone Validation
+export const PHONE_FORMATS = ['US', 'INTERNATIONAL'];
+
+// Text Limits
+export const TEXT_SHORT_MAX_LENGTH = 255;
+export const TEXT_MEDIUM_MAX_LENGTH = 1000;
+export const TEXT_LONG_MAX_LENGTH = 10000;
+
+// =============================================================================
+// DATE/TIME CONFIGURATION
+// =============================================================================
+export const DEFAULT_DATE_FORMAT = 'MM/dd/yyyy';
+export const DEFAULT_TIME_FORMAT = 'hh:mm a';
+export const DEFAULT_DATETIME_FORMAT = 'MM/dd/yyyy hh:mm a';
+export const DEFAULT_TIMEZONE = 'America/New_York';
+export const ENABLE_RELATIVE_TIME = true;
+export const RELATIVE_TIME_THRESHOLD_HOURS = 24; // Show relative time if < 24 hours
+
+// Calendar
+export const CALENDAR_FIRST_DAY_OF_WEEK = 0; // Sunday
+export const CALENDAR_DEFAULT_VIEW = 'month';
+export const CALENDAR_ENABLE_WEEKEND = true;
+
+// =============================================================================
+// DOCUMENT VIEWER CONFIGURATION
+// =============================================================================
+export const DOCUMENT_VIEWER_ENABLE_ANNOTATIONS = true;
+export const DOCUMENT_VIEWER_ENABLE_REDACTIONS = true;
+export const DOCUMENT_VIEWER_ENABLE_SEARCH = true;
+export const DOCUMENT_VIEWER_DEFAULT_ZOOM = 1.0;
+export const DOCUMENT_VIEWER_MIN_ZOOM = 0.5;
+export const DOCUMENT_VIEWER_MAX_ZOOM = 3.0;
+export const DOCUMENT_VIEWER_ZOOM_STEP = 0.25;
+
+// PDF.js Settings
+export const PDFJS_WORKER_SRC = '/pdf.worker.min.js';
+export const PDFJS_CMAP_URL = '/cmaps/';
+export const PDFJS_CMAP_PACKED = true;
+export const PDFJS_MAX_IMAGE_SIZE = 1048576; // 1MB
+
+// =============================================================================
+// GRAPH/VISUALIZATION CONFIGURATION
+// =============================================================================
+export const GRAPH_MAX_NODES = 1000;
+export const GRAPH_MAX_EDGES = 5000;
+export const GRAPH_PHYSICS_ENABLED = true;
+export const GRAPH_PHYSICS_WORKER = true;
+export const GRAPH_LAYOUT_ALGORITHM = 'force-directed';
+export const GRAPH_NODE_COLLISION_RADIUS = 50;
+export const GRAPH_EDGE_BUNDLING = false;
+
+// Nexus Graph
+export const NEXUS_GRAPH_ENABLED = true;
+export const NEXUS_GRAPH_MAX_DEPTH = 3;
+export const NEXUS_GRAPH_MIN_RELEVANCE = 0.3;
+
+// =============================================================================
+// ANALYTICS CONFIGURATION
+// =============================================================================
+export const ANALYTICS_ENABLED = false; // Set to true when backend analytics ready
+export const ANALYTICS_TRACK_PAGEVIEWS = true;
+export const ANALYTICS_TRACK_EVENTS = true;
+export const ANALYTICS_BATCH_SIZE = 10;
+export const ANALYTICS_FLUSH_INTERVAL_MS = 30000; // 30 seconds
+export const ANALYTICS_ANONYMIZE_IP = true;
+
+// =============================================================================
+// LEGAL-SPECIFIC CONFIGURATION
+// =============================================================================
+
+// Case Management
+export const CASE_NUMBER_FORMAT = 'auto'; // 'auto' | 'manual'
+export const CASE_ENABLE_CONFLICT_CHECK = true;
+export const CASE_AUTO_CREATE_FOLDERS = true;
+
+// Docket Management
+export const DOCKET_AUTO_REFRESH_ENABLED = false;
+export const DOCKET_AUTO_REFRESH_INTERVAL_MINUTES = 60;
+export const DOCKET_PACER_INTEGRATION_ENABLED = false;
+
+// Discovery
+export const DISCOVERY_ENABLE_PRIVILEGE_LOG = true;
+export const DISCOVERY_ENABLE_CHAIN_OF_CUSTODY = true;
+export const DISCOVERY_AUTO_NUMBER_EXHIBITS = true;
+export const DISCOVERY_EXHIBIT_PREFIX = 'EX-';
+
+// Billing
+export const BILLING_DEFAULT_CURRENCY = 'USD';
+export const BILLING_TIME_INCREMENT_MINUTES = 6; // 0.1 hour increments
+export const BILLING_ROUND_TO_INCREMENT = true;
+export const BILLING_ENABLE_TIMER = true;
+export const BILLING_AUTO_STOP_TIMER_HOURS = 8;
+
+// Pleadings
+export const PLEADING_DEFAULT_FONT = 'Times New Roman';
+export const PLEADING_DEFAULT_FONT_SIZE = 12;
+export const PLEADING_DEFAULT_LINE_SPACING = 2.0;
+export const PLEADING_DEFAULT_MARGIN_INCHES = 1.0;
+
+// Citations
+export const CITATION_FORMAT = 'bluebook'; // 'bluebook' | 'alwd'
+export const CITATION_AUTO_COMPLETE = true;
+export const CITATION_VALIDATE_ON_PASTE = true;
+
+// =============================================================================
+// AI/ML CONFIGURATION
+// =============================================================================
+export const AI_ENABLED = true;
+export const AI_PROVIDER = 'gemini'; // 'gemini' | 'openai' | 'custom'
+export const AI_MAX_TOKENS = 2048;
+export const AI_TEMPERATURE = 0.7;
+export const AI_TIMEOUT_MS = 60000; // 1 minute
+export const AI_RETRY_ATTEMPTS = 2;
+
+// Legal Research
+export const AI_LEGAL_RESEARCH_ENABLED = true;
+export const AI_CITATION_ANALYSIS_ENABLED = true;
+export const AI_DOCUMENT_SUMMARY_ENABLED = true;
+export const AI_BRIEF_GENERATION_ENABLED = true;
+
+// =============================================================================
+// SECURITY CONFIGURATION
+// =============================================================================
+
+// Session Management
+export const SESSION_TIMEOUT_MS = 3600000; // 1 hour
+export const SESSION_WARNING_MS = 300000; // 5 minutes before timeout
+export const SESSION_STORAGE_KEY = 'lexiflow-session';
+
+// Authentication
+export const AUTH_TOKEN_STORAGE_KEY = 'lexiflow-auth-token';
+export const AUTH_REFRESH_TOKEN_STORAGE_KEY = 'lexiflow-refresh-token';
+export const AUTH_TOKEN_REFRESH_THRESHOLD_MS = 300000; // Refresh 5 min before expiry
+export const AUTH_ENABLE_BIOMETRIC = false;
+export const AUTH_ENABLE_MFA = true;
+
+// Encryption (Client-side)
+export const CRYPTO_ALGORITHM = 'AES-GCM';
+export const CRYPTO_KEY_LENGTH = 256;
+export const CRYPTO_USE_WORKER = true;
+
+// =============================================================================
+// AUDIT LOGGING
+// =============================================================================
+export const AUDIT_ENABLED = true;
+export const AUDIT_LOG_NAVIGATION = true;
+export const AUDIT_LOG_INTERACTIONS = true;
+export const AUDIT_LOG_DATA_CHANGES = true;
+export const AUDIT_BATCH_SIZE = 50;
+export const AUDIT_FLUSH_INTERVAL_MS = 10000; // 10 seconds
+
+// =============================================================================
+// ERROR HANDLING
+// =============================================================================
+export const ERROR_SHOW_STACK_TRACE = APP_ENV === 'development';
+export const ERROR_ENABLE_REPORTING = false; // Set to true with error service
+export const ERROR_MAX_REPORT_SIZE = 10000; // Characters
+export const ERROR_REPORT_SAMPLING_RATE = 1.0; // 100% in dev, lower in prod
+
+// =============================================================================
+// PERFORMANCE OPTIMIZATION
+// =============================================================================
+
+// Code Splitting
+export const ENABLE_CODE_SPLITTING = true;
+export const PRELOAD_ROUTES = ['dashboard', 'cases'];
+
+// Lazy Loading
+export const LAZY_LOAD_IMAGES = true;
+export const LAZY_LOAD_THRESHOLD = '200px';
+
+// Virtual Scrolling
+export const VIRTUAL_SCROLL_ENABLED = true;
+export const VIRTUAL_SCROLL_ITEM_HEIGHT = 48;
+export const VIRTUAL_SCROLL_BUFFER_SIZE = 5;
+
+// Web Workers
+export const ENABLE_WEB_WORKERS = true;
+export const WEB_WORKER_MAX_THREADS = 4;
+
+// Service Worker
+export const ENABLE_SERVICE_WORKER = false; // Set true for PWA
+export const SERVICE_WORKER_UPDATE_INTERVAL_MS = 3600000; // 1 hour
+
+// =============================================================================
+// DEVELOPMENT & DEBUGGING
+// =============================================================================
+export const DEBUG_ENABLED = APP_ENV === 'development';
+export const DEBUG_SHOW_QUERY_CACHE = false;
+export const DEBUG_API_SIMULATION_DELAY_MS = 1000; // Simulated API delay for demos
+export const DEBUG_SHOW_RENDER_COUNT = false;
+export const DEBUG_SHOW_PERFORMANCE = false;
+export const DEBUG_LOG_API_CALLS = false;
+export const DEBUG_LOG_STATE_CHANGES = false;
+
+// React DevTools
+export const ENABLE_REACT_DEVTOOLS = APP_ENV === 'development';
+
+// =============================================================================
+// FEATURE FLAGS
+// =============================================================================
+export const FEATURE_HOLOGRAPHIC_ROUTING = true;
+export const FEATURE_OFFLINE_MODE = true;
+export const FEATURE_REALTIME_COLLABORATION = false;
+export const FEATURE_ADVANCED_SEARCH = true;
+export const FEATURE_DOCUMENT_COMPARISON = true;
+export const FEATURE_CASE_TIMELINE = true;
+export const FEATURE_CONFLICT_CHECKING = true;
+export const FEATURE_TIME_TRACKING = true;
+export const FEATURE_TRUST_ACCOUNTING = true;
+export const FEATURE_CALENDAR_INTEGRATION = false;
+export const FEATURE_EMAIL_INTEGRATION = false;
+export const FEATURE_MOBILE_APP = false;
+export const FEATURE_CLIENT_PORTAL = false;
+export const FEATURE_LEGAL_RESEARCH = true;
+export const FEATURE_AI_ASSISTANCE = true;
+export const FEATURE_WORKFLOW_AUTOMATION = true;
+export const FEATURE_CUSTOM_FIELDS = true;
+export const FEATURE_BULK_OPERATIONS = true;
+export const FEATURE_EXPORT_IMPORT = true;
+export const FEATURE_BACKUP_RESTORE = true;
+
+// =============================================================================
+// COMPLIANCE & REGULATIONS
+// =============================================================================
+export const COMPLIANCE_HIPAA_MODE = false;
+export const COMPLIANCE_GDPR_MODE = false;
+export const COMPLIANCE_CCPA_MODE = false;
+export const COMPLIANCE_SOC2_MODE = false;
+
+// Data Retention
+export const DATA_RETENTION_ENABLED = true;
+export const DATA_RETENTION_DAYS = 2555; // 7 years (legal requirement)
+export const DATA_SOFT_DELETE = true;
+export const DATA_PURGE_SCHEDULE_CRON = '0 2 * * 0'; // 2 AM every Sunday
+
+// =============================================================================
+// INTEGRATION ENDPOINTS
+// =============================================================================
+export const INTEGRATION_PACER_URL = import.meta.env.VITE_PACER_URL || '';
+export const INTEGRATION_WESTLAW_URL = import.meta.env.VITE_WESTLAW_URL || '';
+export const INTEGRATION_LEXIS_URL = import.meta.env.VITE_LEXIS_URL || '';
+export const INTEGRATION_GOOGLE_CALENDAR_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+export const INTEGRATION_OUTLOOK_CLIENT_ID = import.meta.env.VITE_OUTLOOK_CLIENT_ID || '';
+
+// =============================================================================
+// BACKUP & RECOVERY
+// =============================================================================
+export const BACKUP_AUTO_ENABLED = true;
+export const BACKUP_INTERVAL_MS = 3600000; // 1 hour
+export const BACKUP_MAX_BACKUPS = 10;
+export const BACKUP_COMPRESSION_ENABLED = true;
+export const BACKUP_INCLUDE_FILES = false; // Files are stored separately
+
+// =============================================================================
+// LOCALIZATION
+// =============================================================================
+export const DEFAULT_LOCALE = 'en-US';
+export const SUPPORTED_LOCALES = ['en-US', 'es-ES', 'fr-FR'];
+export const ENABLE_RTL = false;
+export const LOCALE_STORAGE_KEY = 'lexiflow-locale';
+
+// =============================================================================
+// ACCESSIBILITY
+// =============================================================================
+export const A11Y_ENABLE_HIGH_CONTRAST = false;
+export const A11Y_ENABLE_SCREEN_READER = true;
+export const A11Y_ENABLE_KEYBOARD_NAVIGATION = true;
+export const A11Y_FOCUS_VISIBLE = true;
+export const A11Y_SKIP_LINK_ENABLED = true;
+
+// =============================================================================
+// EXPORT CONFIGURATION OBJECT
+// =============================================================================
+export const CONFIG = {
+  app: {
+    name: APP_NAME,
+    version: APP_VERSION,
+    env: APP_ENV,
+    description: APP_DESCRIPTION,
+  },
+  db: {
+    name: DB_NAME,
+    version: DB_VERSION,
+    mode: DB_MODE,
+    maxBufferSize: DB_MAX_BUFFER_SIZE,
+    forceFlushThreshold: DB_FORCE_FLUSH_THRESHOLD,
+    flushDelayMs: DB_FLUSH_DELAY_MS,
+    bTreeOrder: DB_BTREE_ORDER,
+  },
+  cache: {
+    queryMaxSize: QUERY_CACHE_MAX_SIZE,
+    queryStaleTimeMs: QUERY_CACHE_STALE_TIME_MS,
+    queryGcTimeMs: QUERY_CACHE_GC_TIME_MS,
+    syncMaxSize: SYNC_CACHE_MAX_SIZE,
+    syncFlushIntervalMs: SYNC_CACHE_FLUSH_INTERVAL_MS,
+    repositoryMaxSize: REPOSITORY_CACHE_MAX_SIZE,
+    repositoryTtlMs: REPOSITORY_CACHE_TTL_MS,
+  },
+  sync: {
+    enabled: SYNC_ENABLED,
+    batchSize: SYNC_BATCH_SIZE,
+    retryAttempts: SYNC_RETRY_ATTEMPTS,
+    retryDelayMs: SYNC_RETRY_DELAY_MS,
+    retryBackoffMultiplier: SYNC_RETRY_BACKOFF_MULTIPLIER,
+    maxRetryDelayMs: SYNC_MAX_RETRY_DELAY_MS,
+    conflictResolution: SYNC_CONFLICT_RESOLUTION,
+    enableCompression: SYNC_ENABLE_COMPRESSION,
+    compressionThresholdBytes: SYNC_COMPRESSION_THRESHOLD_BYTES,
+    useJsonPatch: SYNC_USE_JSON_PATCH,
+    patchMaxDepth: SYNC_PATCH_MAX_DEPTH,
+  },
+  api: {
+    baseUrl: API_BASE_URL,
+    prefix: API_PREFIX,
+    timeoutMs: API_TIMEOUT_MS,
+    retryAttempts: API_RETRY_ATTEMPTS,
+    retryDelayMs: API_RETRY_DELAY_MS,
+    maxConcurrentRequests: API_MAX_CONCURRENT_REQUESTS,
+    requestQueueEnabled: API_REQUEST_QUEUE_ENABLED,
+    enableRequestCancellation: API_ENABLE_REQUEST_CANCELLATION,
+  },
+  features: {
+    holographicRouting: FEATURE_HOLOGRAPHIC_ROUTING,
+    offlineMode: FEATURE_OFFLINE_MODE,
+    realtimeCollaboration: FEATURE_REALTIME_COLLABORATION,
+    advancedSearch: FEATURE_ADVANCED_SEARCH,
+    documentComparison: FEATURE_DOCUMENT_COMPARISON,
+    caseTimeline: FEATURE_CASE_TIMELINE,
+    conflictChecking: FEATURE_CONFLICT_CHECKING,
+    timeTracking: FEATURE_TIME_TRACKING,
+    trustAccounting: FEATURE_TRUST_ACCOUNTING,
+    calendarIntegration: FEATURE_CALENDAR_INTEGRATION,
+    emailIntegration: FEATURE_EMAIL_INTEGRATION,
+    mobileApp: FEATURE_MOBILE_APP,
+    clientPortal: FEATURE_CLIENT_PORTAL,
+    legalResearch: FEATURE_LEGAL_RESEARCH,
+    aiAssistance: FEATURE_AI_ASSISTANCE,
+    workflowAutomation: FEATURE_WORKFLOW_AUTOMATION,
+    customFields: FEATURE_CUSTOM_FIELDS,
+    bulkOperations: FEATURE_BULK_OPERATIONS,
+    exportImport: FEATURE_EXPORT_IMPORT,
+    backupRestore: FEATURE_BACKUP_RESTORE,
+  },
+} as const;
+
+export default CONFIG;

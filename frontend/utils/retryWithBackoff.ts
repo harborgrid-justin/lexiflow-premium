@@ -3,6 +3,8 @@
  * @description Exponential backoff retry logic for network requests
  */
 
+import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, SYNC_MAX_RETRY_DELAY_MS } from '../config/master.config';
+
 export interface RetryOptions {
   maxRetries?: number;
   initialDelay?: number;
@@ -30,9 +32,9 @@ export async function retryWithBackoff<T>(
   options: RetryOptions = {}
 ): Promise<T> {
   const {
-    maxRetries = 3,
-    initialDelay = 1000,
-    maxDelay = 10000,
+    maxRetries = API_RETRY_ATTEMPTS,
+    initialDelay = API_RETRY_DELAY_MS,
+    maxDelay = SYNC_MAX_RETRY_DELAY_MS,
     backoffFactor = 2,
     onRetry
   } = options;

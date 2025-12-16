@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { tokens, ThemeMode } from '../theme/tokens';
+import { DEFAULT_THEME, THEME_STORAGE_KEY } from '../config/master.config';
 
 interface ThemeContextType {
   mode: ThemeMode;
@@ -28,7 +29,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   // Principle 35/38: Deterministic First Render
   // Start with a stable default (e.g. 'light') during initial render/hydration
   // to avoid mismatched markup. Sync with storage/preference in effect.
-  const [mode, setMode] = useState<ThemeMode>('light');
+  const [mode, setMode] = useState<ThemeMode>(DEFAULT_THEME === 'auto' ? 'light' : DEFAULT_THEME);
 
   const [mounted, setMounted] = useState(false);
 
@@ -36,7 +37,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     setMounted(true);
     // Sync with localStorage or system preference after mount
     if (typeof window !== 'undefined' && window.localStorage) {
-      const storedPrefs = window.localStorage.getItem('color-theme');
+      const storedPrefs = window.localStorage.getItem(THEME_STORAGE_KEY);
       if (typeof storedPrefs === 'string') {
         setMode(storedPrefs as ThemeMode);
         return;
@@ -51,14 +52,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
-      localStorage.setItem('color-theme', newMode);
+      localStorage.setItem(THEME_STORAGE_KEY, newMode);
       return newMode;
     });
   }, []);
 
   const setTheme = useCallback((newMode: ThemeMode) => {
     setMode(newMode);
-    localStorage.setItem('color-theme', newMode);
+    localStorage.setItem(THEME_STORAGE_KEY, newMode);
   }, []);
 
   useEffect(() => {

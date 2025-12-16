@@ -2,7 +2,7 @@
 // config/prefetchConfig.ts
 import { STORES } from '../services/db';
 import { DataService } from '../services/dataService';
-import { PATHS } from '../constants/paths';
+import { PATHS } from './paths.config';
 
 export const PREFETCH_MAP: Record<string, { key: any; fn: () => Promise<any> }> = {
     [PATHS.CASES]: { key: [STORES.CASES, 'all'], fn: () => DataService.cases.getAll() },

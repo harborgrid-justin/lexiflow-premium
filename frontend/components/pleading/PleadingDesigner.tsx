@@ -8,6 +8,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
 import { ViewMode, PleadingDesignerProps } from './types';
@@ -58,7 +59,7 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
     onSave: useCallback(async (doc: PleadingDocument) => {
       try {
         await DataService.pleadings.update(doc.id, doc);
-        queryClient.invalidate([STORES.PLEADINGS, doc.caseId]);
+        queryClient.invalidate(queryKeys.pleadings.byCaseId(doc.caseId));
         setSaveError(null);
       } catch (error) {
         if (error instanceof VersionConflictError) {

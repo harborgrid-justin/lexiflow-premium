@@ -90,7 +90,7 @@ class CollectionQueue {
       this.onProgress?.(id, ESICollectionStatusEnum.COLLECTING);
       
       // Simulate collection process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, DEBUG_API_SIMULATION_DELAY_MS * 2));
       
       this.onProgress?.(id, ESICollectionStatusEnum.COLLECTED);
     } catch (err) {

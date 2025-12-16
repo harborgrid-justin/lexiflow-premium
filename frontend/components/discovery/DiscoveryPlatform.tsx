@@ -84,8 +84,8 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
           retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           onSuccess: () => {
               notify.success("Synced discovery deadlines with court calendar.");
-              queryClient.invalidateQueries([STORES.REQUESTS]);
-              queryClient.invalidateQueries([STORES.CALENDAR]);
+              queryClient.invalidate(queryKeys.discovery.all());
+              queryClient.invalidate(queryKeys.calendar.events());
           },
           onError: (error) => {
               notify.error('Failed to sync deadlines after 3 attempts. Please try again later.');
@@ -133,7 +133,7 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   const handleSaveResponse = async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
       // Invalidate query to refresh lists
-      queryClient.invalidate([STORES.REQUESTS, caseId || 'all']);
+      queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
       alert(`Response saved for ${reqId}. Status updated to Responded.`);
       setActiveTab('requests');
   };

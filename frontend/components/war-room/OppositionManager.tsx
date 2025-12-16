@@ -21,6 +21,7 @@ import { Filter, Layout, Plus, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/db';
 
 // Hooks & Context
@@ -71,7 +72,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   // DATA FETCHING
   // ============================================================================
   const { data: oppositionData = [], isLoading } = useQuery<OppositionEntity[]>(
-      [STORES.OPPOSITION, caseId || 'all'],
+      queryKeys.warRoom.opposition(caseId),
       () => DataService.warRoom.getOpposition(caseId)
   );
 

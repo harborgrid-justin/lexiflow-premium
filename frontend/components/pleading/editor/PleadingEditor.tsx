@@ -12,6 +12,7 @@ import { DataService } from '../../../services/dataService';
 import { useNotify } from '../../../hooks/useNotify';
 import { useMutation, queryClient } from '../../../services/queryClient';
 import { STORES } from '../../../services/db';
+import { queryKeys } from '../../../utils/queryKeys';
 
 // Module Imports
 import { TemplateArchitect } from '../modules/TemplateArchitect';
@@ -52,7 +53,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
       {
           onSuccess: () => {
               setIsSaving(false);
-              queryClient.invalidate([STORES.PLEADINGS]);
+              queryClient.invalidate(queryKeys.pleadings.all());
               notify.success("Document saved.");
           },
           onError: () => {

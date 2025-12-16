@@ -85,7 +85,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                 setValidationErrors([]);
                 setActivePleading(newDoc);
                 setView('designer');
-                queryClient.invalidate([STORES.PLEADINGS, caseId || 'all']);
+                queryClient.invalidate(caseId ? queryKeys.pleadings.byCaseId(caseId) : queryKeys.pleadings.all());
                 notifySuccess('Pleading created successfully');
             },
             onError: (error: Error) => {

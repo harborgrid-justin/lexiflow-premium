@@ -26,6 +26,7 @@ import { useMutation, queryClient } from '../../services/queryClient';
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces
 import { Citation, LegalArgument, Defense, EvidenceItem } from '../../types';
@@ -79,7 +80,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     {
       onSuccess: (data, variables) => {
         success(`${variables.type} ${editingItem ? 'updated' : 'saved'} successfully`);
-        queryClient.invalidate(['case-strategy', caseId]);
+        queryClient.invalidate(queryKeys.caseStrategy.detail(caseId));
       },
       onError: (error: Error) => {
         notifyError(`Failed to save: ${error.message}`);
@@ -96,7 +97,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     {
       onSuccess: (data) => {
         success(`${data.type} deleted successfully`);
-        queryClient.invalidate(['case-strategy', caseId]);
+        queryClient.invalidate(queryKeys.caseStrategy.detail(caseId));
         
         // Update local state
         if (data.type === 'Citation') {

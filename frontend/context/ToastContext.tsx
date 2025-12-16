@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { NOTIFICATION_ERROR_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '../config/master.config';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -57,7 +58,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             const nextToast = queueRef.current.shift();
             if (nextToast) {
                  // Auto-dismiss logic
-                 setTimeout(() => removeToast(nextToast.id), nextToast.type === 'error' ? 8000 : 5000);
+                 setTimeout(() => removeToast(nextToast.id), nextToast.type === 'error' ? NOTIFICATION_ERROR_DISMISS_MS : NOTIFICATION_AUTO_DISMISS_MS);
                  return [...prev, nextToast];
             }
         }

@@ -8,6 +8,7 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { DataService } from '../../../../services/dataService';
 import { useQuery, useMutation, queryClient } from '../../../../services/queryClient';
+import { queryKeys } from '../../../../utils/queryKeys';
 import { DedupeCluster } from '../../../../types';
 import { useNotify } from '../../../../hooks/useNotify';
 
@@ -26,7 +27,7 @@ export const DeduplicationManager: React.FC = () => {
         },
         {
             onSuccess: () => {
-                queryClient.invalidate(['quality', 'dedupe']);
+                queryClient.invalidate(queryKeys.quality.dedupe());
                 notify.success("Records merged successfully.");
             }
         }
@@ -36,7 +37,7 @@ export const DeduplicationManager: React.FC = () => {
         DataService.quality.ignoreCluster,
         {
             onSuccess: () => {
-                queryClient.invalidate(['quality', 'dedupe']);
+                queryClient.invalidate(queryKeys.quality.dedupe());
                 notify.info("Cluster ignored.");
             }
         }

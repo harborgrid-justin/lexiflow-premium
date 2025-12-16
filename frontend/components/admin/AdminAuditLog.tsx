@@ -36,9 +36,10 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
       setLocalLogs(logs as unknown as ChainedLogEntry[]);
   }, [logs]);
 
+  import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
   const handleVerifyChain = async () => {
       setIsVerifying(true);
-      await new Promise(r => setTimeout(r, 1000));
+      await new Promise(r => setTimeout(r, DEBUG_API_SIMULATION_DELAY_MS));
       const result = await ChainService.verifyChain(localLogs);
       setVerifyResult(result);
       if (!result.isValid) addToast(`Integrity Check Failed at Block #${result.brokenIndex + 1}`, 'error');

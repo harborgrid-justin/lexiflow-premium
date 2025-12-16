@@ -5,43 +5,36 @@ import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 
 export const WorkflowConfig: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [settings, setSettings] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  
+  // Load settings from IndexedDB via useQuery for accurate, cached data
+  const { data: settings = [], isLoading: loading } = useQuery(
+    queryKeys.workflows.settings(),
+    DataService.workflow.getSettings
+  );
 
-  useEffect(() => {
-      const load = async () => {
-          try {
-            const data = await DataService.workflow.getSettings();
-            setSettings(data);
-          } catch (error) {
-            console.error("Failed to load settings", error);
-          } finally {
-            setLoading(false);
-          }
-      };
-      load();
-  }, []);
+  const { mutate: updateSettings } = useMutation(
+    async (newSettings: any[]) => DataService.workflow.updateSettings(newSettings),
+    {
+      onSuccess: (_, variables) => {
+        queryClient.invalidate(queryKeys.workflows.settings());
+        const changedSetting = variables.find((s, i) => s.enabled !== settings[i]?.enabled);
+        if (changedSetting) notify.success(`Updated ${changedSetting.label}`);
+      },
+      onError: () => notify.error("Failed to save settings")
+    }
+  );
 
-  const toggleSetting = async (index: number) => {
+  const toggleSetting = (index: number) => {
       const newSettings = [...settings];
       newSettings[index].enabled = !newSettings[index].enabled;
-      setSettings(newSettings);
-      
-      try {
-          await DataService.workflow.updateSettings(newSettings);
-          notify.success(`Updated ${newSettings[index].label}`);
-      } catch (error) {
-          notify.error("Failed to save settings");
-          // Revert on error
-          const reverted = [...settings];
-          reverted[index].enabled = !reverted[index].enabled;
-          setSettings(reverted);
-      }
+      updateSettings(newSettings);
   };
 
   if (loading) {

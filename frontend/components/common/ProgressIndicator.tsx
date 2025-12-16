@@ -157,7 +157,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   useEffect(() => {
     if (status === 'completed') {
       setShowSuccess(true);
-      const timer = setTimeout(() => setShowSuccess(false), 2000);
+      const timer = setTimeout(() => setShowSuccess(false), NOTIFICATION_AUTO_DISMISS_MS);
       return () => clearTimeout(timer);
     }
   }, [status]);

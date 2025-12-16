@@ -8,6 +8,9 @@ import { cn } from '../../utils/cn';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { useNotify } from '../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
+import { DataService } from '../../services/dataService';
 
 interface Custodian {
   id: string;
@@ -55,12 +58,59 @@ const mockCustodians: Custodian[] = [
 export const Custodians: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [custodians, setCustodians] = useState<Custodian[]>(mockCustodians);
+  
+  // Load custodians from IndexedDB via useQuery for accurate, cached data
+  const { data: custodians = [], isLoading } = useQuery(
+    queryKeys.discovery.custodians(),
+    DataService.discovery.getCustodians
+  );
+  
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCustodian, setSelectedCustodian] = useState<Custodian | null>(null);
   const [formData, setFormData] = useState<Partial<Custodian>>({});
+
+  // Mutations with automatic cache invalidation
+  const { mutate: createCustodian } = useMutation(
+    async (custodian: Custodian) => DataService.discovery.addCustodian(custodian),
+    {
+      onSuccess: () => {
+        queryClient.invalidate(queryKeys.discovery.custodians());
+        setIsCreateModalOpen(false);
+        setFormData({});
+        notify.success('Custodian created successfully');
+      },
+      onError: () => notify.error('Failed to create custodian')
+    }
+  );
+
+  const { mutate: updateCustodian } = useMutation(
+    async (custodian: Custodian) => DataService.discovery.updateCustodian(custodian),
+    {
+      onSuccess: () => {
+        queryClient.invalidate(queryKeys.discovery.custodians());
+        setIsEditModalOpen(false);
+        setSelectedCustodian(null);
+        setFormData({});
+        notify.success('Custodian updated successfully');
+      },
+      onError: () => notify.error('Failed to update custodian')
+    }
+  );
+
+  const { mutate: deleteCustodian } = useMutation(
+    async (id: string) => DataService.discovery.deleteCustodian(id),
+    {
+      onSuccess: () => {
+        queryClient.invalidate(queryKeys.discovery.custodians());
+        setIsDeleteModalOpen(false);
+        setSelectedCustodian(null);
+        notify.success('Custodian deleted successfully');
+      },
+      onError: () => notify.error('Failed to delete custodian')
+    }
+  );
 
   const handleCreate = () => {
     if (!formData.name || !formData.email) {
@@ -79,10 +129,7 @@ export const Custodians: React.FC = () => {
       createdAt: new Date().toISOString().split('T')[0],
       updatedAt: new Date().toISOString().split('T')[0]
     };
-    setCustodians([...custodians, newCustodian]);
-    setIsCreateModalOpen(false);
-    setFormData({});
-    notify.success('Custodian created successfully');
+    createCustodian(newCustodian);
   };
 
   const handleEdit = () => {
@@ -90,23 +137,17 @@ export const Custodians: React.FC = () => {
       notify.error('Name and email are required');
       return;
     }
-    setCustodians(custodians.map(c =>
-      c.id === selectedCustodian.id
-        ? { ...c, ...formData, updatedAt: new Date().toISOString().split('T')[0] }
-        : c
-    ));
-    setIsEditModalOpen(false);
-    setSelectedCustodian(null);
-    setFormData({});
-    notify.success('Custodian updated successfully');
+    const updatedCustodian = {
+      ...selectedCustodian,
+      ...formData,
+      updatedAt: new Date().toISOString().split('T')[0]
+    };
+    updateCustodian(updatedCustodian);
   };
 
   const handleDelete = () => {
     if (!selectedCustodian) return;
-    setCustodians(custodians.filter(c => c.id !== selectedCustodian.id));
-    setIsDeleteModalOpen(false);
-    setSelectedCustodian(null);
-    notify.success('Custodian deleted successfully');
+    deleteCustodian(selectedCustodian.id);
   };
 
   const openEditModal = (custodian: Custodian) => {

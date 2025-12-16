@@ -31,6 +31,7 @@ import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { cn } from '../../utils/cn';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -49,13 +50,13 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const { data: tasks = [], isLoading, refetch } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], DataService.tasks.getAll);
   
   const { mutate: addTask } = useMutation(DataService.tasks.add, {
-      onSuccess: () => queryClient.invalidate([STORES.TASKS, 'all'])
+      onSuccess: () => queryClient.invalidate(queryKeys.tasks.all())
   });
 
   const { mutate: updateTask } = useMutation(
       (payload: {id: string, updates: Partial<WorkflowTask>}) => DataService.tasks.update(payload.id, payload.updates),
       {
-          onSuccess: () => queryClient.invalidate([STORES.TASKS, 'all'])
+          onSuccess: () => queryClient.invalidate(queryKeys.tasks.all())
       }
   );
 

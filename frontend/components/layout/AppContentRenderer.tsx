@@ -26,7 +26,7 @@ import { LazyLoader } from '../common/LazyLoader';
 import { ModuleRegistry } from '../../services/moduleRegistry';
 
 // Utils & Constants
-import { PATHS } from '../../constants/paths';
+import { PATHS } from '../../config/paths.config';
 
 // Types
 import { AppView, User } from '../../types';

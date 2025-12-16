@@ -5,6 +5,8 @@ import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
 import { ServiceJob, UserId } from '../../types';
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 import { cn } from '../../utils/cn';
@@ -25,27 +27,20 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
     attempts: 0,
     method: 'Process Server'
   });
-  const [cases, setCases] = useState<any[]>([]);
-  const [docs, setDocs] = useState<any[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-      const loadData = async () => {
-          const caseList = await DataService.cases.getAll();
-          setCases(caseList);
-      };
-      loadData();
-  }, []);
-
-  useEffect(() => {
-      if (formData.caseId) {
-          const loadDocs = async () => {
-              const docList = await DataService.documents.getByCaseId(formData.caseId!);
-              setDocs(docList);
-          };
-          loadDocs();
-      }
-  }, [formData.caseId]);
+  
+  // Load cases from IndexedDB via useQuery for accurate, cached data
+  const { data: cases = [] } = useQuery(
+    queryKeys.cases.all(),
+    DataService.cases.getAll
+  );
+  
+  // Load documents for selected case
+  const { data: docs = [] } = useQuery(
+    queryKeys.documents.byCaseId(formData.caseId || ''),
+    () => DataService.documents.getByCaseId(formData.caseId!),
+    { enabled: !!formData.caseId }
+  );
 
   const handleSave = () => {
       if (!formData.targetPerson || !formData.caseId || !formData.documentTitle || !formData.dueDate) {

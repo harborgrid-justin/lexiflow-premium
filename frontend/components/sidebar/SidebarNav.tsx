@@ -25,7 +25,7 @@ import { useHoverIntent } from '../../hooks/useHoverIntent';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
-import { PATHS } from '../../constants/paths';
+import { PATHS } from '../../config/paths.config';
 import { PREFETCH_MAP } from '../../config/prefetchConfig';
 import { Scheduler } from '../../utils/scheduler';
 

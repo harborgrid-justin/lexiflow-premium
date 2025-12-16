@@ -32,6 +32,7 @@ import { HighlightedText } from '../common/HighlightedText';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '../../config/master.config';
 
 interface NeuralCommandBarProps {
   globalSearch: string;
@@ -48,7 +49,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);
-  const debouncedSearch = useDebounce(globalSearch, 150);
+  const debouncedSearch = useDebounce(globalSearch, SEARCH_DEBOUNCE_MS);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
@@ -56,7 +57,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   
   useEffect(() => {
     const performSearch = async () => {
-      if (debouncedSearch.length >= 2 && !isProcessingIntent) {
+      if (debouncedSearch.length >= SEARCH_MIN_QUERY_LENGTH && !isProcessingIntent) {
         const serviceResults = await SearchService.search(debouncedSearch);
         setResults(serviceResults.slice(0, 10));
         setShowResults(true);

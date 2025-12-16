@@ -24,6 +24,7 @@ import { Button } from './Button';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { NOTIFICATION_AUTO_DISMISS_MS } from '../../config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -42,7 +43,7 @@ export const CopyButton: React.FC<CopyButtonProps> = ({ text, label = "Copy", va
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), NOTIFICATION_AUTO_DISMISS_MS);
   };
 
   return (

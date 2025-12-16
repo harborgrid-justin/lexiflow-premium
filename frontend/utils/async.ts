@@ -60,9 +60,9 @@ export async function retryWithBackoff<T>(
   } = {}
 ): Promise<T> {
   const {
-    maxRetries = 3,
-    initialDelay = 1000,
-    maxDelay = 10000,
+    maxRetries = API_RETRY_ATTEMPTS,
+    initialDelay = API_RETRY_DELAY_MS,
+    maxDelay = SYNC_MAX_RETRY_DELAY_MS,
     backoffFactor = 2,
   } = options;
 

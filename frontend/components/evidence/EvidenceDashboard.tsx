@@ -21,6 +21,8 @@ import { cn } from '../../utils/cn';
 
 // Services & Types
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { EvidenceItem } from '../../types';
 import { ViewMode } from '../../hooks/useEvidenceVault';
 
@@ -30,27 +32,27 @@ interface EvidenceDashboardProps {
 
 export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate }) => {
   const { theme, mode } = useTheme();
-  const [stats, setStats] = useState({ total: 0, digital: 0, physical: 0, challenged: 0 });
-  const [recentEvents, setRecentEvents] = useState<any[]>([]);
-
-  useEffect(() => {
-      const loadData = async () => {
-          const evidence = await DataService.evidence.getAll();
-          setStats({
-              total: evidence.length,
-              digital: evidence.filter(e => e.type === 'Digital').length,
-              physical: evidence.filter(e => e.type === 'Physical').length,
-              challenged: evidence.filter(e => e.admissibility === 'Challenged').length
-          });
-
-          const events = evidence.flatMap(e => 
-            e.chainOfCustody.map(c => ({ ...c, itemTitle: e.title, itemId: e.id }))
-          ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
-          
-          setRecentEvents(events);
-      };
-      loadData();
-  }, []);
+  
+  // Load evidence from IndexedDB via useQuery for accurate, cached data
+  const { data: evidence = [], isLoading } = useQuery(
+    queryKeys.evidence.all(),
+    DataService.evidence.getAll
+  );
+  
+  // Calculate stats from live data
+  const stats = React.useMemo(() => ({
+    total: evidence.length,
+    digital: evidence.filter(e => e.type === 'Digital').length,
+    physical: evidence.filter(e => e.type === 'Physical').length,
+    challenged: evidence.filter(e => e.admissibility === 'Challenged').length
+  }), [evidence]);
+  
+  // Calculate recent events from live data
+  const recentEvents = React.useMemo(() => {
+    return evidence.flatMap(e => 
+      e.chainOfCustody.map(c => ({ ...c, itemTitle: e.title, itemId: e.id }))
+    ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+  }, [evidence]);
 
   const data = [
     { name: 'Physical', value: stats.physical, color: theme.chart.colors.warning },

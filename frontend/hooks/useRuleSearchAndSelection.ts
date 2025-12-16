@@ -23,6 +23,9 @@ import { useDebounce } from './useDebounce';
 // Types
 import { LegalRule } from '../types';
 
+// Config
+import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
+
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -48,7 +51,7 @@ export const useRuleSearchAndSelection = (rules: LegalRule[]): UseRuleSearchAndS
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [isPending, startTransition] = useTransition();
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
 
   // Memoize full hierarchy building (expensive operation)
   const fullHierarchy = useMemo(() => {

@@ -1,6 +1,7 @@
 
 import { StorageUtils } from '../utils/storage';
 import { LinearHash } from '../utils/datastructures/linearHash';
+import { SYNC_CACHE_MAX_SIZE } from '../config/master.config';
 
 export interface Mutation {
   id: string;
@@ -21,8 +22,7 @@ interface CacheEntry {
   timestamp: number;
 }
 
-const MAX_CACHE_SIZE = 10000;
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const MAX_CACHE_SIZE = SYNC_CACHE_MAX_SIZE;
 const processedCache = new LinearHash<string, CacheEntry>();
 
 // Simple Diff Implementation to generate JSON Patch-like structure

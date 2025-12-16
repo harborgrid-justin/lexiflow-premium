@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Advisor, Expert, CaseStrategy } from './entities/war-room.entity';
 import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-room.dto';
-import { validatePagination, calculateOffset, calculateTotalPages } from '../common/utils/query-validation.util';
+import { validatePagination } from '../common/utils/query-validation.util';
+import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
 
 @Injectable()
 export class WarRoomService {

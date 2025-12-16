@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, QUERY_CACHE_STALE_TIME_MS } from '../config/master.config';
 
 /**
  * Loading state
@@ -116,14 +117,14 @@ export function useAdaptiveLoading<T = any>(
   const {
     fetcher,
     cacheKey,
-    cacheDuration = 5 * 60 * 1000, // 5 minutes
+    cacheDuration = QUERY_CACHE_STALE_TIME_MS * 5, // 5x stale time
     revalidateOnMount = true,
     revalidateOnFocus = true,
     revalidateInterval,
     retryOnError = true,
-    maxRetries = 3,
-    retryDelay = 1000,
-    dedupingInterval = 2000,
+    maxRetries = API_RETRY_ATTEMPTS,
+    retryDelay = API_RETRY_DELAY_MS,
+    dedupingInterval = QUERY_CACHE_STALE_TIME_MS / 30,
     onSuccess,
     onError
   } = options;

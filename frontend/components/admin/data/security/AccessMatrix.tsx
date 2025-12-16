@@ -5,6 +5,7 @@ import { cn } from '../../../../utils/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, PermissionLevel } from '../../../../types';
 import { useQuery, useMutation, queryClient } from '../../../../services/queryClient';
+import { queryKeys } from '../../../../utils/queryKeys';
 import { DataService } from '../../../../services/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 
@@ -25,7 +26,7 @@ export const AccessMatrix: React.FC = () => {
       DataService.admin.updatePermission,
       {
           onSuccess: (data) => {
-              queryClient.invalidate(['admin', 'permissions']);
+              queryClient.invalidate(queryKeys.admin.permissions());
               notify.info(`Permission updated: ${data.role} -> ${data.resource}`);
           }
       }

@@ -44,10 +44,36 @@ LexiFlow uses a sophisticated client-side architecture to simulate a full enterp
 
 ## Getting Started
 
-### Frontend Development
-1. **Install Dependencies**: `npm install` (from root) or `cd frontend && npm install`
-2. **Run Dev Server**: `npm run dev` (from root) or `cd frontend && npm run dev`
-3. **Build**: `npm run build:frontend` (from root) or `cd frontend && npm run build`
+### Port Configuration
+- **Frontend**: `http://localhost:3000` (Vite dev server)
+- **Backend**: `http://localhost:5000` (NestJS API)
+- **Backend API Docs**: `http://localhost:5000/api/docs` (Swagger)
+
+### Development Commands
+
+#### Run Both Frontend & Backend
+```bash
+npm run dev:all          # Runs both frontend and backend concurrently
+```
+
+#### Frontend Development
+```bash
+npm run dev:frontend     # Or: cd frontend && npm run dev
+```
+- Runs on port **3000**
+- Hot reload enabled
+
+#### Backend Development
+```bash
+npm run dev:backend      # Or: cd backend && npm run start:dev
+```
+- Runs on port **5000**
+- Watch mode enabled
+
+### Initial Setup
+1. **Install Dependencies**: `npm install` (from root)
+2. **Configure Backend**: Copy `backend/.env.example` to `backend/.env` and configure
+3. **Run Development**: `npm run dev:all`
 
 ### Backend Development
 1. **Install Dependencies**: `cd backend && npm install`

@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/documentService';
 import { PDFViewer } from '../../common/PDFViewer';
 import { PIIPanel } from '../preview/PIIPanel';
@@ -11,24 +13,27 @@ import { cn } from '../../../utils/cn';
 
 export const RedactionStudioView: React.FC = () => {
     const { theme } = useTheme();
-    const [documents, setDocuments] = useState<LegalDocument[]>([]);
     const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
     
+    // Load documents from IndexedDB via useQuery for accurate, cached data
+    const { data: allDocs = [], isLoading } = useQuery(
+        queryKeys.documents.all(),
+        DataService.documents.getAll
+    );
+    
+    // Filter PDF documents
+    const documents = React.useMemo(() => 
+        allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')),
+        [allDocs]
+    );
+    
+    // Set initial document
     useEffect(() => {
-        const loadDocs = async () => {
-            setIsLoading(true);
-            const allDocs = await DataService.documents.getAll();
-            const pdfDocs = allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf'));
-            setDocuments(pdfDocs);
-            if (pdfDocs.length > 0) {
-                setSelectedDoc(pdfDocs[0]);
-            }
-            setIsLoading(false);
-        };
-        loadDocs();
-    }, []);
+        if (documents.length > 0 && !selectedDoc) {
+            setSelectedDoc(documents[0]);
+        }
+    }, [documents, selectedDoc]);
 
     useEffect(() => {
         if (selectedDoc) {

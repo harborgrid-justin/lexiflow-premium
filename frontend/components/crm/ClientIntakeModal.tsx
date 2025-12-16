@@ -8,6 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useDebounce } from '../../hooks/useDebounce';
+import { SEARCH_DEBOUNCE_MS } from '../../config/master.config';
 
 interface ClientIntakeModalProps {
   onClose: () => void;
@@ -23,7 +24,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
   // Conflict State
   const [isChecking, setIsChecking] = useState(false);
   const [conflicts, setConflicts] = useState<string[]>([]);
-  const debouncedName = useDebounce(name, 500);
+  const debouncedName = useDebounce(name, SEARCH_DEBOUNCE_MS);
 
   useEffect(() => {
       if (!debouncedName || debouncedName.length < 3) {

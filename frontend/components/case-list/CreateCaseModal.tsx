@@ -26,6 +26,12 @@ import { JurisdictionSelector } from './case-form/JurisdictionSelector';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Services
+import { DataService } from '../../services/dataService';
+import { queryClient } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
+import { STORES } from '../../services/db';
+
 // Utils
 import { cn } from '../../utils/cn';
 
@@ -62,7 +68,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
 
   const isValid = formData.title && formData.client && (isPreFiling || formData.id) && jurisdictionData;
 
-  const handleSave = () => {
+  const handleSave = async () => {
       if (!isValid) return;
 
       const newCase: Case = {
@@ -83,12 +89,26 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
           parties: [], citations: [], arguments: [], defenses: []
       };
 
-      onSave(newCase);
-      // Reset state for next open
-      setFormData({ title: '', client: '', matterType: 'Litigation', value: 0, description: '' });
-      setJurisdictionData(null);
-      setIsPreFiling(true);
-      onClose();
+      try {
+          // Persist to IndexedDB via DataService
+          await DataService.cases.add(newCase);
+          
+          // Invalidate cache to trigger refetch
+          queryClient.invalidate(queryKeys.cases.all());
+          queryClient.invalidate(queryKeys.dashboard.stats());
+          
+          // Notify parent component
+          onSave(newCase);
+          
+          // Reset state for next open
+          setFormData({ title: '', client: '', matterType: 'Litigation', value: 0, description: '' });
+          setJurisdictionData(null);
+          setIsPreFiling(true);
+          onClose();
+      } catch (error) {
+          console.error('Failed to create case:', error);
+          // TODO: Show error notification to user
+      }
   };
 
   return (

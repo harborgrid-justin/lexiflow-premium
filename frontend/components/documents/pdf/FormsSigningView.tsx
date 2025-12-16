@@ -3,6 +3,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/documentService';
 import { PDFViewer } from '../../common/PDFViewer';
 import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
@@ -20,12 +22,22 @@ type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Complete
 export const FormsSigningView: React.FC = () => {
     const { theme } = useTheme();
     const notify = useNotify();
-    const [documents, setDocuments] = useState<LegalDocument[]>([]);
     const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
     const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
+    
+    // Load documents from IndexedDB via useQuery for accurate, cached data
+    const { data: allDocs = [], isLoading } = useQuery(
+        queryKeys.documents.all(),
+        DataService.documents.getAll
+    );
+    
+    // Filter for form/PDF documents
+    const documents = React.useMemo(() => 
+        allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.type === 'Form' || d.title.toLowerCase().endsWith('.pdf')),
+        [allDocs]
+    );
 
     // PDF viewer state
     const [activeTool, setActiveTool] = useState<PDFTool>('select');

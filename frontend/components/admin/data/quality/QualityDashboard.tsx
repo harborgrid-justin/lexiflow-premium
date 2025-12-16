@@ -9,6 +9,7 @@ import { DataAnomaly, QualityMetricHistory } from '../../../../types';
 import { CheckCircle2, AlertOctagon, RefreshCw, Check } from 'lucide-react';
 import { Button } from '../../../common/Button';
 import { useMutation, queryClient } from '../../../../services/queryClient';
+import { queryKeys } from '../../../../utils/queryKeys';
 import { DataService } from '../../../../services/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 
@@ -25,7 +26,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
         DataService.quality.applyFix,
         {
             onMutate: async (id: number) => {
-                await queryClient.invalidate(['admin', 'anomalies']);
+                await queryClient.invalidate(queryKeys.quality.anomalies());
                 const previousAnomalies = queryClient.getQueryState<DataAnomaly[]>(['admin', 'anomalies'])?.data || [];
                 
                 queryClient.setQueryData<DataAnomaly[]>(['admin', 'anomalies'], old => 
@@ -41,7 +42,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
                 notify.error(`Failed to fix anomaly #${id}.`);
             },
             onSettled: () => {
-                queryClient.invalidate(['admin', 'anomalies']);
+                queryClient.invalidate(queryKeys.quality.anomalies());
             },
         }
     );

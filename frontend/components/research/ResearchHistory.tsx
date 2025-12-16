@@ -9,13 +9,14 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { ResearchSession } from '../../types';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 
 export const ResearchHistory: React.FC = () => {
   const { theme } = useTheme();
 
   // Enterprise Data Access
   const { data: history = [], isLoading } = useQuery<ResearchSession[]>(
-      ['research', 'history'],
+      queryKeys.research.history(),
       DataService.research.getHistory
   );
 

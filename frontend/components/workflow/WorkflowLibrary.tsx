@@ -19,7 +19,7 @@ import { Search, Shield, Plus, Loader2, AlertTriangle, RefreshCw } from 'lucide-
 // Services & Data
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -53,7 +53,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   const [templateCategory, setTemplateCategory] = useState('All');
   
   const { data: templates = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
-    [STORES.TEMPLATES, 'all'],
+    queryKeys.workflows.templates(),
     DataService.workflow.getTemplates
   );
   

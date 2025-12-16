@@ -19,6 +19,7 @@ import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/dataService';
 import { queryClient } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { MOCK_USERS } from '../../data/models/user';
 
 // Hooks & Context
@@ -86,8 +87,8 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         onSave(newTask);
     } else {
         await DataService.tasks.add(newTask);
-        queryClient.invalidate('tasks');
-        queryClient.invalidate(['dashboard', 'stats']);
+        queryClient.invalidate(queryKeys.tasks.all());
+        queryClient.invalidate(queryKeys.dashboard.stats());
         notify.success("Task created. Completion will trigger billing prompt."); // User feedback for Opp #3
     }
     onClose();

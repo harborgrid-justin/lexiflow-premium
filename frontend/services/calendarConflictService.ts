@@ -209,7 +209,7 @@ export class CalendarConflictService {
     } = {}
   ): TimeSuggestion[] {
     const suggestions: TimeSuggestion[] = [];
-    const maxSuggestions = options.maxSuggestions ?? 5;
+    const maxSuggestions = options.maxSuggestions ?? SEARCH_PREVIEW_RESULTS;
     
     // Start searching from preferred date or tomorrow
     let searchDate = options.preferredDate ?? addDays(new Date(), 1);

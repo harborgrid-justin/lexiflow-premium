@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useTransition } from 'react';
 import { LegalRule } from '../../types';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/db';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -26,7 +27,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
 
   // Fetch all rules from a centralized store
   const { data: allRules = [], isLoading: isLoadingAllRules } = useQuery<LegalRule[]>(
-      [STORES.RULES, 'all'],
+      queryKeys.rules.all(),
       DataService.rules.getAll
   );
 

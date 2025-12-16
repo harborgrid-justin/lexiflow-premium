@@ -28,7 +28,7 @@ export const AccessGovernance: React.FC = () => {
       DataService.admin.updatePermission,
       {
           onSuccess: (data) => {
-              queryClient.invalidate(['admin', 'permissions']);
+              queryClient.invalidate(queryKeys.admin.permissions());
               notify.info(`Permission updated: ${data.role} -> ${data.resource}`);
           }
       }

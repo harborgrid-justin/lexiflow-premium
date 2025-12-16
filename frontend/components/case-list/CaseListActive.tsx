@@ -109,7 +109,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       {
           onSuccess: (_, id) => {
               notify.success("Case archived successfully");
-              queryClient.invalidate([STORES.CASES, 'all']);
+              queryClient.invalidate(queryKeys.cases.all());
           }
       }
   );

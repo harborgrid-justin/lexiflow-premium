@@ -6,6 +6,8 @@ import { Card } from '../common/Card';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { ApprovalRequest } from './types';
 
 interface ApprovalWorkflowProps {
@@ -20,18 +22,15 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
   onReject 
 }) => {
   const { theme } = useTheme();
-  const [internalRequests, setInternalRequests] = useState<ApprovalRequest[]>([]);
+  
+  // Load approvals from IndexedDB via useQuery when not provided as props
+  const { data: internalRequests = [] } = useQuery(
+    queryKeys.workflows.approvals(),
+    DataService.workflow.getApprovals,
+    { enabled: !propRequests }
+  );
+  
   const requests = propRequests || internalRequests;
-
-  useEffect(() => {
-      if (!propRequests) {
-          const load = async () => {
-              const data = await DataService.workflow.getApprovals();
-              setInternalRequests(data);
-          };
-          load();
-      }
-  }, [propRequests]);
 
   return (
     <div className="space-y-4">

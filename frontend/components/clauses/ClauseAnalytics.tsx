@@ -8,19 +8,18 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { Clause } from '../../types';
 
 export const ClauseAnalytics: React.FC = () => {
   const { theme } = useTheme();
-  const [clauses, setClauses] = useState<Clause[]>([]);
-
-  useEffect(() => {
-      const load = async () => {
-          const data = await DataService.clauses.getAll();
-          setClauses(data);
-      };
-      load();
-  }, []);
+  
+  // Load clauses from IndexedDB via useQuery for accurate, cached data
+  const { data: clauses = [], isLoading } = useQuery(
+    queryKeys.clauses.all(),
+    DataService.clauses.getAll
+  );
 
   const riskData = getRiskData(clauses);
   const usageData = getUsageData(clauses);

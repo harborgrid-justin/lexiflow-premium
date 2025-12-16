@@ -12,6 +12,7 @@ import { DataService } from '../../services/dataService';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 interface DiscoveryResponseModalProps {
   request: DiscoveryRequest | null;
@@ -56,7 +57,7 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
     },
     {
       onSuccess: () => {
-        queryClient.invalidate([STORES.PLEADINGS]);
+        queryClient.invalidate(queryKeys.pleadings.all());
         notifySuccess('Response saved to drafts successfully.');
         onClose();
       },

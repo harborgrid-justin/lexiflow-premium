@@ -5,6 +5,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
+import { queryKeys } from '../../../utils/queryKeys';
 import { DataService } from '../../../services/dataService';
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
 import { useNotify } from '../../../hooks/useNotify';
@@ -36,7 +37,7 @@ export const BackupVault: React.FC = () => {
           onSuccess: (snap) => {
               notify.success(`Snapshot ${snap.name} created successfully.`);
               setIsSnapshotModalOpen(false);
-              queryClient.invalidate(['backup', 'snapshots']);
+              queryClient.invalidate(queryKeys.backup.snapshots());
           },
           onError: () => notify.error("Failed to create snapshot.")
       }
@@ -68,7 +69,7 @@ export const BackupVault: React.FC = () => {
                 <p className={cn("text-sm", theme.text.secondary)}>Point-in-time recovery for entire cluster. RPO: 15min / RTO: 30min.</p>
             </div>
             <div className="flex gap-2">
-                <Button variant="outline" icon={RefreshCw} onClick={() => queryClient.invalidate(['backup'])}>Refresh</Button>
+                <Button variant="outline" icon={RefreshCw} onClick={() => queryClient.invalidate(queryKeys.backup.all())}>Refresh</Button>
                 <Button variant="primary" icon={Play} onClick={() => setIsSnapshotModalOpen(true)}>Trigger Snapshot</Button>
             </div>
         </div>

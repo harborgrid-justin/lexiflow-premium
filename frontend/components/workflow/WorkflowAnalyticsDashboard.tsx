@@ -18,6 +18,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/dataService';
+import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -37,15 +39,12 @@ import { WorkflowAnalyticsData } from './types';
 
 export const WorkflowAnalyticsDashboard: React.FC = () => {
   const { theme, mode } = useTheme();
-  const [analytics, setAnalytics] = useState<WorkflowAnalyticsData>({ completion: [], status: [] });
-
-  useEffect(() => {
-      const load = async () => {
-          const data = await DataService.workflow.getAnalytics();
-          setAnalytics(data);
-      };
-      load();
-  }, []);
+  
+  // Load analytics from IndexedDB via useQuery for accurate, cached data
+  const { data: analytics = { completion: [], status: [] }, isLoading } = useQuery<WorkflowAnalyticsData>(
+    queryKeys.workflows.analytics(),
+    DataService.workflow.getAnalytics
+  );
   
   const chartColors = getChartColors(mode);
 

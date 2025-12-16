@@ -8,6 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/dataService';
 import { useQuery } from '../../services/queryClient';
+import { queryKeys } from '../../utils/queryKeys';
 import { Citation } from '../../types';
 
 export const SavedAuthorities: React.FC = () => {
@@ -15,7 +16,7 @@ export const SavedAuthorities: React.FC = () => {
   
   // Enterprise Data Access
   const { data: savedItems = [], isLoading } = useQuery<Citation[]>(
-      ['research', 'saved'],
+      queryKeys.research.saved(),
       DataService.research.getSavedAuthorities
   );
 

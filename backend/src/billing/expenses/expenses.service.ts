@@ -5,6 +5,7 @@ import { Expense, ExpenseStatus } from './entities/expense.entity';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseFilterDto } from './dto/expense-filter.dto';
+import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
 
 @Injectable()
 export class ExpensesService {
@@ -85,8 +86,12 @@ export class ExpensesService {
 
     const total = await query.getCount();
 
+    // SQL injection protection
+    const safeSortField = validateSortField('expense', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+
     query
-      .orderBy(`expense.${sortBy}`, sortOrder)
+      .orderBy(`expense.${safeSortField}`, safeSortOrder)
       .skip((page - 1) * limit)
       .take(limit);
 

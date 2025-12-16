@@ -31,14 +31,16 @@ export type RiskStatus = 'Identified' | 'Mitigated' | 'Accepted' | 'Closed';
 export type CommunicationType = 'Letter' | 'Email' | 'Fax' | 'Notice' | 'Memo';
 export type CommunicationDirection = 'Inbound' | 'Outbound';
 
-// Correspondence status enums with const assertion for type safety
+// Correspondence status enums with const assertion for type safety (aligned with backend)
 export const CommunicationStatus = {
-  DRAFT: 'Draft',
-  SENT: 'Sent',
-  DELIVERED: 'Delivered',
-  READ: 'Read',
-  FAILED: 'Failed',
-  ARCHIVED: 'Archived'
+  DRAFT: 'draft',
+  SENT: 'sent',
+  DELIVERED: 'delivered',
+  FAILED: 'failed',
+  PENDING: 'pending',
+  // Legacy values for backwards compatibility
+  READ: 'read',
+  ARCHIVED: 'archived'
 } as const;
 
 export type CommunicationStatusType = typeof CommunicationStatus[keyof typeof CommunicationStatus];
@@ -161,6 +163,17 @@ export type MotionStatus = 'Draft' | 'Filed' | 'Opposition Served' | 'Reply Serv
 export type MotionOutcome = 'Granted' | 'Denied' | 'Withdrawn' | 'Moot';
 
 export type DocketEntryType = 'Filing' | 'Order' | 'Notice' | 'Minute Entry' | 'Exhibit' | 'Hearing' | 'Motion';
+
+// Document status enums (aligned with backend REST API)
+export const DocumentStatus = {
+  DRAFT: 'draft',
+  UNDER_REVIEW: 'under_review',
+  APPROVED: 'approved',
+  FILED: 'filed',
+  ARCHIVED: 'archived'
+} as const;
+
+export type DocumentStatusType = typeof DocumentStatus[keyof typeof DocumentStatus];
 
 export type DiscoveryType = 'Production' | 'Interrogatory' | 'Admission' | 'Deposition';
 export type DiscoveryStatus = 'Draft' | 'Served' | 'Responded' | 'Overdue' | 'Closed' | 'Motion Filed';

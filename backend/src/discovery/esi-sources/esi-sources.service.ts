@@ -5,6 +5,7 @@ import { ESISource } from './entities/esi-source.entity';
 import { CreateESISourceDto } from './dto/create-esi-source.dto';
 import { UpdateESISourceDto } from './dto/update-esi-source.dto';
 import { QueryESISourceDto } from './dto/query-esi-source.dto';
+import { validateSortField, validateSortOrder } from '../../../common/utils/query-validation.util';
 
 @Injectable()
 export class ESISourcesService {
@@ -69,7 +70,10 @@ export class ESISourcesService {
       );
     }
 
-    queryBuilder.orderBy(`esiSource.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('esiSource', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`esiSource.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

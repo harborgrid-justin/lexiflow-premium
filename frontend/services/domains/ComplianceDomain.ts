@@ -2,7 +2,7 @@
 import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics, EntityId, CaseId } from '../../types';
 import { db, STORES } from '../db';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 export const ComplianceService = {
     getRiskStats: async () => { 

@@ -3,7 +3,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagg
 import { ExhibitsService } from './exhibits.service';
 import { CreateExhibitDto } from './dto/create-exhibit.dto';
 import { UpdateExhibitDto } from './dto/update-exhibit.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Exhibits')
 @ApiBearerAuth('JWT-auth')

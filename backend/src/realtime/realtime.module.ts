@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RealtimeService } from './realtime.service';
+import { RealtimeGateway } from './realtime.gateway';
+import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';
 
 @Module({
   imports: [
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -16,7 +19,7 @@ import { RealtimeService } from './realtime.service';
       }),
     }),
   ],
-  providers: [RealtimeService],
-  exports: [RealtimeService],
+  providers: [RealtimeGateway, WsRateLimitGuard, WsRoomLimitGuard],
+  exports: [RealtimeGateway],
 })
 export class RealtimeModule {}

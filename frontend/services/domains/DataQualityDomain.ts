@@ -3,7 +3,7 @@ import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataPr
 import { db, STORES } from '../db';
 import { yieldToMain } from '../../utils/apiUtils';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from '../../utils/async';
 
 export class DataQualityService {
     async getAnomalies(): Promise<DataAnomaly[]> { 

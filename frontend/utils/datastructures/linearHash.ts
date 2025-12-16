@@ -45,6 +45,40 @@ export class LinearHash<K, V> {
         return this.buckets[index]?.get(key);
     }
 
+    delete(key: K): boolean {
+        const index = this.getAddress(key);
+        const bucket = this.buckets[index];
+        if (bucket && bucket.has(key)) {
+            bucket.delete(key);
+            this.numItems--;
+            return true;
+        }
+        return false;
+    }
+
+    size(): number {
+        return this.numItems;
+    }
+
+    keys(): K[] {
+        const allKeys: K[] = [];
+        for (const bucket of this.buckets) {
+            if (bucket) {
+                for (const key of bucket.keys()) {
+                    allKeys.push(key);
+                }
+            }
+        }
+        return allKeys;
+    }
+
+    clear() {
+        this.buckets = [new Map()];
+        this.level = 0;
+        this.splitPointer = 0;
+        this.numItems = 0;
+    }
+
     private split() {
         this.buckets.push(new Map());
         const oldBucket = this.buckets[this.splitPointer];

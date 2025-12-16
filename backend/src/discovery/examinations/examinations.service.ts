@@ -5,6 +5,7 @@ import { Examination } from './entities/examination.entity';
 import { CreateExaminationDto } from './dto/create-examination.dto';
 import { UpdateExaminationDto } from './dto/update-examination.dto';
 import { QueryExaminationDto } from './dto/query-examination.dto';
+import { validateSortField, validateSortOrder } from '../../../common/utils/query-validation.util';
 
 @Injectable()
 export class ExaminationsService {
@@ -60,7 +61,10 @@ export class ExaminationsService {
       );
     }
 
-    queryBuilder.orderBy(`examination.${sortBy}`, sortOrder);
+    // SQL injection protection
+    const safeSortField = validateSortField('examination', sortBy);
+    const safeSortOrder = validateSortOrder(sortOrder);
+    queryBuilder.orderBy(`examination.${safeSortField}`, safeSortOrder);
 
     const [items, total] = await queryBuilder
       .skip((page - 1) * limit)

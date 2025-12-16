@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FindManyOptions, Repository, SelectQueryBuilder } from 'typeorm';
+import { validateSortOrder } from '../utils/query-validation.util';
 
 /**
  * Pagination Types
@@ -109,7 +110,11 @@ export class PaginationService {
     cursorField: string = 'id',
   ): Promise<PaginatedResult<T>> {
     const limit = this.validateLimit(dto.limit);
-    const sortOrder = dto.sortOrder || 'ASC';
+    // SQL injection protection - validate sort order
+    const sortOrder = validateSortOrder(dto.sortOrder);
+
+    // Note: cursorField should be validated by the calling service
+    // using validateSortField() before passing it to this method
 
     // Apply cursor condition if provided
     if (dto.cursor) {

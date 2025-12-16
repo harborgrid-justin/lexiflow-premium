@@ -3,7 +3,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagg
 import { WorkflowService } from './workflow.service';
 import { CreateWorkflowTemplateDto } from './dto/create-workflow-template.dto';
 import { UpdateWorkflowTemplateDto } from './dto/update-workflow-template.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Workflow Templates')
 @ApiBearerAuth('JWT-auth')

@@ -3,7 +3,7 @@ import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
 import { SystemEventType } from "../../types/integration-types";
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+import { delay } from '../../utils/async';
 
 export const CRMService = {
     getLeads: async () => {

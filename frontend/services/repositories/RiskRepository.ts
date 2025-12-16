@@ -8,11 +8,9 @@ export class RiskRepository extends Repository<Risk> {
     constructor() {
         super(STORES.RISKS);
     }
-    
-    async getByCaseId(caseId: string) {
-        return this.getByIndex('caseId', caseId);
-    }
-    
+
+    // getByCaseId is inherited from base Repository class
+
     async add(item: Risk): Promise<Risk> {
         const result = await super.add(item);
         if (result.impact === 'High' && result.probability === 'High') {

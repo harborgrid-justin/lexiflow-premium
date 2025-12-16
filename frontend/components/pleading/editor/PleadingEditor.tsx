@@ -4,7 +4,7 @@ import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadC
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../types/pleadingTypes';
+import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../types/pleading-types';
 import { DocumentCanvas } from './DocumentCanvas';
 import { PropertyPanel } from './PropertyPanel';
 import { DataService } from '../../../services/dataService';

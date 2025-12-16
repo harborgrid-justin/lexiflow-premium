@@ -3,12 +3,12 @@
  * Tests for the Repository base class with LRU caching
  */
 
-import { Repository } from '../../../services/core/Repository';
-import { MicroORM } from '../../../services/core/microORM';
-import { BaseEntity } from '../../../types';
+import { Repository } from '@services/core/Repository';
+import { MicroORM } from '@services/core/microORM';
+import { BaseEntity } from '@/types';
 
 // Mock the MicroORM
-jest.mock('../../../services/core/microORM');
+jest.mock('@services/core/microORM');
 jest.mock('../../../utils/errorHandler', () => ({
   errorHandler: {
     logError: jest.fn(),

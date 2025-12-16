@@ -4,10 +4,10 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { RefreshCw, Link as LinkIcon, Settings, Plus, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { useTheme } from '@context/ThemeContext';
+import { cn } from '@utils/cn';
+import { DataService } from '@services/dataService';
+import { useQuery } from '@services/queryClient';
 
 export const AdminIntegrations: React.FC = () => {
   const { theme } = useTheme();

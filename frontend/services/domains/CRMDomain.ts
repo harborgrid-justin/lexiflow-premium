@@ -1,7 +1,7 @@
 import { Client, Case, EntityId, CaseId, UserId } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from "../../types/integration-types";
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 

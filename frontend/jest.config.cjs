@@ -1,20 +1,16 @@
 /** @type {import('jest').Config} */
 const config = {
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: ['<rootDir>'],
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
-      useESM: false,
-      isolatedModules: true,
       tsconfig: {
         jsx: 'react-jsx',
         esModuleInterop: true,
         allowSyntheticDefaultImports: true,
         strict: false,
-        module: 'CommonJS',
-        moduleResolution: 'node',
-        target: 'ES2020',
         skipLibCheck: true,
       },
     }],

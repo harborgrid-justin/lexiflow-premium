@@ -22,11 +22,11 @@ import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '@context/ThemeContext';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
-import { DATA_PLATFORM_MENU } from '../../../config/dataPlatformMenu';
+import { cn } from '@utils/cn';
+import { DATA_PLATFORM_MENU } from '@config/dataPlatformMenu';
 
 // Types
 import { PlatformView } from '../AdminDatabaseControl';

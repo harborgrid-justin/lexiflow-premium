@@ -1,5 +1,5 @@
 
-// types/integrationTypes.ts
+// types/integration-types.ts
 
 import { 
     Case, WorkflowTask, DocketEntry, LegalDocument, 

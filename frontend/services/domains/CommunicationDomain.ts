@@ -1,7 +1,7 @@
 import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '../../types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from "../../types/integration-types";
 
 export const CorrespondenceService = {
     getCommunications: async () => db.getAll<CommunicationItem>(STORES.COMMUNICATIONS),

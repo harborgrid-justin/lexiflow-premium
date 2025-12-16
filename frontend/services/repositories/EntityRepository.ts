@@ -2,7 +2,7 @@ import { LegalEntity } from '../../types';
 import { Repository } from '../core/Repository';
 import { STORES } from '../db';
 import { IntegrationOrchestrator } from '../integrationOrchestrator';
-import { SystemEventType } from '../../types/integrationTypes';
+import { SystemEventType } from '../../types/integration-types';
 
 export class EntityRepository extends Repository<LegalEntity> {
     constructor() {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { DollarSign, Plus, Edit, Trash2, Users, Clock } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useTheme } from '@context/ThemeContext';
+import { cn } from '@utils/cn';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@hooks/useNotify';
 
 interface RateTable {
   id: string;

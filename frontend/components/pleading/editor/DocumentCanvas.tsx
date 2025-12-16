@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react';
-import { PleadingSection, PleadingSectionType } from '../../../types/pleadingTypes';
+import { PleadingSection, PleadingSectionType } from '../../../types/pleading-types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Trash2, GripVertical, MoreHorizontal } from 'lucide-react';

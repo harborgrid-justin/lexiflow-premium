@@ -506,9 +506,9 @@ Object.defineProperties(DataServiceBase, {
 
   assets: { 
     get: () => ({
-      getAll: async () => db.getAll<any>('assets'),
-      add: async (asset: any) => db.put('assets', asset),
-      delete: async (id: string) => db.delete('assets', id)
+      getAll: async () => db.getAll<any>(STORES.ASSETS),
+      add: async (asset: any) => db.put(STORES.ASSETS, asset),
+      delete: async (id: string) => db.delete(STORES.ASSETS, id)
     }), 
     enumerable: true 
   },

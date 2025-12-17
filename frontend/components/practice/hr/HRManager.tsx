@@ -19,7 +19,10 @@ export const HRManager: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Enterprise Data Access
-  const { data: staffList = [] } = useStaff();
+  const { data: rawStaffList = [], isLoading } = useStaff();
+  
+  // Ensure staffList is always an array
+  const staffList = Array.isArray(rawStaffList) ? rawStaffList : [];
 
   const { mutate: addStaff } = useMutation(
       DataService.hr.addStaff,
@@ -58,7 +61,7 @@ export const HRManager: React.FC = () => {
       }
   };
 
-  const totalBillable = staffList.reduce((acc, s) => acc + s.currentBillable, 0);
+  const totalBillable = staffList.reduce((acc, s) => acc + (s.currentBillable || 0), 0);
 
   return (
     <div className="space-y-6 animate-fade-in">

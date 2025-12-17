@@ -51,25 +51,28 @@ export const AssetManager: React.FC = () => {
   const [newAsset, setNewAsset] = useState<Partial<FirmAsset>>({});
 
   // Enterprise Data Access
-  const { data: assets = [], refetch } = useQuery<FirmAsset[]>(
+  const { data: rawAssets = [] } = useQuery<FirmAsset[]>(
       ['assets', 'all'],
       DataService.assets.getAll
   );
+  
+  // Ensure assets is always an array
+  const assets = Array.isArray(rawAssets) ? rawAssets : [];
 
   const { mutate: addAsset } = useMutation(
       DataService.assets.add,
       {
+          invalidateKeys: [['assets', 'all']],
           onSuccess: () => {
               setIsModalOpen(false);
               setNewAsset({});
-              refetch(); // Re-fetch list
           }
       }
   );
 
   const { mutate: deleteAsset } = useMutation(
       DataService.assets.delete,
-      { onSuccess: () => refetch() }
+      { invalidateKeys: [['assets', 'all']] }
   );
 
   const handleAddAsset = () => {

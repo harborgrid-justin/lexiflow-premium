@@ -4,9 +4,13 @@ import { AiOpsController } from './ai-ops.controller';
 import { AiOpsService } from './ai-ops.service';
 import { VectorEmbedding } from './entities/vector-embedding.entity';
 import { AIModel } from './entities/ai-model.entity';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([VectorEmbedding, AIModel])],
+  imports: [
+    TypeOrmModule.forFeature([VectorEmbedding, AIModel]),
+    AuthModule,
+  ],
   controllers: [AiOpsController],
   providers: [AiOpsService],
   exports: [AiOpsService],

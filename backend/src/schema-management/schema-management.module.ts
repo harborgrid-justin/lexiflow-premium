@@ -4,9 +4,13 @@ import { SchemaManagementController } from './schema-management.controller';
 import { SchemaManagementService } from './schema-management.service';
 import { Migration } from './entities/migration.entity';
 import { Snapshot } from './entities/snapshot.entity';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Migration, Snapshot])],
+  imports: [
+    TypeOrmModule.forFeature([Migration, Snapshot]),
+    AuthModule,
+  ],
   controllers: [SchemaManagementController],
   providers: [SchemaManagementService],
   exports: [SchemaManagementService],

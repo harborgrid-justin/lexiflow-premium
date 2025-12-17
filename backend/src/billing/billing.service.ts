@@ -156,4 +156,54 @@ export class BillingService {
       totalUnbilled,
     };
   }
+
+  async getWIPStats(): Promise<any[]> {
+    const unbilledTimeEntries = await this.timeEntryRepository.find({
+      where: { billed: false, billable: true },
+    });
+
+    const unbilledExpenses = await this.expenseRepository.find({
+      where: { billed: false } as any,
+    });
+
+    // Group by case
+    const wipByCase = new Map<string, number>();
+
+    unbilledTimeEntries.forEach(entry => {
+      const current = wipByCase.get(entry.caseId) || 0;
+      wipByCase.set(entry.caseId, current + (entry.amount || 0));
+    });
+
+    unbilledExpenses.forEach(expense => {
+      const caseId = (expense as any).caseId;
+      if (caseId) {
+        const current = wipByCase.get(caseId) || 0;
+        wipByCase.set(caseId, current + ((expense as any).amount || 0));
+      }
+    });
+
+    // Convert to array format expected by frontend
+    return Array.from(wipByCase.entries()).map(([caseId, wip]) => ({
+      caseId,
+      wip,
+      name: `Case ${caseId.substring(0, 8)}`, // Shortened for display
+    }));
+  }
+
+  async getRealizationStats(): Promise<any> {
+    const allTimeEntries = await this.timeEntryRepository.find();
+    
+    const billed = allTimeEntries
+      .filter(e => (e as any).billed)
+      .reduce((sum, e) => sum + (e.amount || 0), 0);
+    
+    const writeOff = allTimeEntries
+      .filter(e => (e as any).billable && !(e as any).billed)
+      .reduce((sum, e) => sum + (e.amount || 0), 0);
+
+    return [
+      { name: 'Billed', value: Math.round(billed), color: '#10b981' },
+      { name: 'Write-off', value: Math.round(writeOff), color: '#ef4444' },
+    ];
+  }
 }

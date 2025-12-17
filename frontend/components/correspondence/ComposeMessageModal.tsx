@@ -41,7 +41,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
   // Load cases from IndexedDB via useQuery for accurate, cached data
   const { data: cases = [] } = useQuery(
     queryKeys.cases.all(),
-    DataService.cases.getAll
+    () => DataService.cases.getAll()
   );
   const [body, setBody] = useState('');
   const [attachments, setAttachments] = useState<Array<{id: string; name: string; size: number}>>([]);

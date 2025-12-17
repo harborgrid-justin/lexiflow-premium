@@ -62,7 +62,12 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       [STORES.DOCKET, 'all'],
       async () => {
         const result = await DataService.docket.getAll();
-        return Array.isArray(result) ? result : [];
+        // Handle both array and paginated response formats
+        if (Array.isArray(result)) return result;
+        if (result && typeof result === 'object' && 'data' in result && Array.isArray((result as any).data)) {
+          return (result as any).data;
+        }
+        return [];
       }
   );
 

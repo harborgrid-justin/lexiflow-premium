@@ -18,7 +18,7 @@ export const ClauseAnalytics: React.FC = () => {
   // Load clauses from IndexedDB via useQuery for accurate, cached data
   const { data: clauses = [], isLoading } = useQuery(
     queryKeys.clauses.all(),
-    DataService.clauses.getAll
+    () => DataService.clauses.getAll()
   );
 
   const riskData = getRiskData(clauses);

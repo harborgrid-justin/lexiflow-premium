@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2, GitMerge } from 'lucide-react';
 
 import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery, useMutation } from '../../../services/queryClient';
 import { PipelineJob, Connector } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { Tabs } from '../../common/Tabs';
+import { dataPlatformApi } from '../../../services/api/data-platform-api';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
 import { PipelineList } from './pipeline/PipelineList';
@@ -33,33 +33,31 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
       }
   }, [initialTab]);
   
-  // Integrated Data Queries
-  const { data: pipelines = [], isLoading: isLoadingPipelines, refetch } = useQuery<PipelineJob[]>(
-      ['admin', 'pipelines'],
-      async () => {
-          const adminService = DataService.admin as { getPipelines: () => Promise<PipelineJob[]> } | undefined;
-          if (!adminService?.getPipelines) {
-              return [];
-          }
-          return adminService.getPipelines();
-      }
+  // Real Backend Integration - Fetch pipelines from backend API
+  const { data: pipelinesResponse, isLoading: isLoadingPipelines, refetch } = useQuery(
+      ['pipelines', 'all'],
+      () => dataPlatformApi.pipelines.getAll(),
   );
 
-  const { data: connectors = [], isLoading: isLoadingConnectors } = useQuery<Connector[]>(
-      ['admin', 'connectors'],
-      async () => {
-          const adminService = DataService.admin as { getConnectors: () => Promise<Connector[]> } | undefined;
-          if ((adminService?.getConnectors) == null) {
-              return [];
-          }
-          return adminService.getConnectors();
-      }
+  const pipelines = pipelinesResponse?.data || [];
+
+  // Fetch pipeline stats
+  const { data: stats } = useQuery(
+      ['pipelines', 'stats'],
+      () => dataPlatformApi.pipelines.getStats(),
+  );
+
+  // Mock connectors for now - can be implemented later
+  const connectors: Connector[] = [];
+  const isLoadingConnectors = false;
+
+  const { mutate: executePipeline } = useMutation(
+      (id: string) => dataPlatformApi.pipelines.execute(id),
+      { invalidateKeys: [['pipelines', 'all'], ['pipelines', 'stats']] },
   );
 
   const handleRun = (id: string): void => {
-      // eslint-disable-next-line no-console
-      console.log(`Triggered run for pipeline ${id}`);
-      // TODO: Implement actual pipeline trigger logic
+      executePipeline(id);
   };
   
   const getIcon = (type: string): React.ComponentType<{ className?: string }> => {

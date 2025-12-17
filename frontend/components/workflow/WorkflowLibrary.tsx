@@ -54,7 +54,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   
   const { data: templates = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
     queryKeys.workflows.templates(),
-    DataService.workflow.getTemplates
+    () => DataService.workflow.getTemplates()
   );
   
   const categories = ['All', 'Litigation', 'Corporate', 'Operations', 'HR', 'IT/Security'];

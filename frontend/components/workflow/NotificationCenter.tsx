@@ -15,7 +15,7 @@ export const NotificationCenter: React.FC = () => {
   // Performance Engine: useQuery with Polling
   const { data: notifications = [] } = useQuery<SystemNotification[]>(
       queryKeys.notifications.all(),
-      DataService.notifications.getAll,
+      () => DataService.notifications.getAll(),
       { staleTime: 5000 } // Poll/Refresh often
   );
 

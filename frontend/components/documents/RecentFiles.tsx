@@ -16,7 +16,7 @@ export const RecentFiles: React.FC = () => {
   // Performance Engine: useQuery
   const { data: recentDocs = [], isLoading } = useQuery<LegalDocument[]>(
       ['documents', 'recent'],
-      DataService.documents.getRecent
+      () => DataService.documents.getRecent()
   );
 
   if (isLoading) return <div className="flex justify-center p-8"><Loader2 className="animate-spin text-blue-600"/></div>;

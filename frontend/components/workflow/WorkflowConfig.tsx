@@ -16,7 +16,7 @@ export const WorkflowConfig: React.FC = () => {
   // Load settings from IndexedDB via useQuery for accurate, cached data
   const { data: settings = [], isLoading: loading } = useQuery(
     queryKeys.workflowsExtended.settings(),
-    DataService.workflow.getSettings
+    () => DataService.workflow.getSettings()
   );
 
   const { mutate: updateSettings } = useMutation(

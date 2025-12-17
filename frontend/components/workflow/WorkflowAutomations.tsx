@@ -39,7 +39,7 @@ export const WorkflowAutomations: React.FC = () => {
   // Load automations from IndexedDB via useQuery for accurate, cached data
   const { data: automations = [], isLoading } = useQuery(
     queryKeys.workflowsExtended.automations(),
-    DataService.workflow.getAutomations
+    () => DataService.workflow.getAutomations()
   );
 
   if (isLoading) {

@@ -32,7 +32,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
   // Load cases from IndexedDB via useQuery for accurate, cached data
   const { data: cases = [] } = useQuery(
     queryKeys.cases.all(),
-    DataService.cases.getAll
+    () => DataService.cases.getAll()
   );
   
   // Load documents for selected case

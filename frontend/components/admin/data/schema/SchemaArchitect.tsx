@@ -10,8 +10,7 @@ import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '../../../../services/queryClient';
-import { DataService } from '../../../../services/dataService';
-import { SchemaTable } from '../../../../types';
+import { dataPlatformApi } from '../../../../services/api/data-platform-api';
 import { Loader2 } from 'lucide-react';
 import { Input, TextArea } from '../../../common/Inputs';
 
@@ -37,9 +36,10 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     setActiveTab(mapInitialTabToState(initialTab));
   }, [initialTab]);
   
-  const { data: fetchedTables = [], isLoading } = useQuery<SchemaTable[]>(
+  // Use real backend API for schema tables
+  const { data: fetchedTables = [], isLoading } = useQuery(
       ['schema', 'tables'],
-      DataService.catalog.getSchemaTables
+      () => dataPlatformApi.schemaManagement.getTables()
   );
   
   const [tables, setTables] = useState<TableData[]>([]);

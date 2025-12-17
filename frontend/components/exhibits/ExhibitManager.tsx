@@ -51,10 +51,13 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
 
   // Enterprise Data Access
   // Using caseId in query key ensures React Query manages cache independently per case
-  const { data: exhibits = [] } = useQuery<TrialExhibit[]>(
+  const { data: exhibitsData = [], isLoading, error } = useQuery<TrialExhibit[]>(
       [STORES.EXHIBITS, caseId || 'all'],
       DataService.exhibits.getAll
   );
+
+  // Ensure exhibits is always an array
+  const exhibits = Array.isArray(exhibitsData) ? exhibitsData : [];
 
   const { mutate: addExhibit } = useMutation(
       DataService.exhibits.add,
@@ -87,6 +90,23 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
       const matchCase = caseId ? ex.caseId === caseId : true;
       return matchParty && matchCase;
   });
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className={cn("h-full flex items-center justify-center", theme.background)}>
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className={cn("h-8 w-8 animate-spin", theme.primary.text)} />
+          <p className={cn("text-sm", theme.text.secondary)}>Loading exhibits...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    console.error('[ExhibitManager] Error loading exhibits:', error);
+  }
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>

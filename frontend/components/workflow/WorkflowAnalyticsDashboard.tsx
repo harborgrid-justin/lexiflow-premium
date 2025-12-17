@@ -43,7 +43,7 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
   // Load analytics from IndexedDB via useQuery for accurate, cached data
   const { data: analytics = { completion: [], status: [] }, isLoading } = useQuery<WorkflowAnalyticsData>(
     queryKeys.workflowsExtended.analytics(),
-    DataService.workflow.getAnalytics
+    () => DataService.workflow.getAnalytics()
   );
   
   const chartColors = getChartColors(mode);

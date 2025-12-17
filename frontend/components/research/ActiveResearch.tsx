@@ -22,7 +22,7 @@ export const ActiveResearch: React.FC = () => {
   // Load research history from IndexedDB via useQuery for accurate, cached data
   const { data: history = [] } = useQuery(
     queryKeys.research.history(),
-    DataService.research.getHistory
+    () => DataService.research.getHistory()
   );
 
   const handleSearch = async (e: React.FormEvent) => {

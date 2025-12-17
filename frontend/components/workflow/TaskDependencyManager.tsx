@@ -14,7 +14,7 @@ export const TaskDependencyManager: React.FC = () => {
   // Performance Engine: useQuery
   const { data: tasks = [], isLoading } = useQuery(
       queryKeys.tasks.all(),
-      DataService.tasks.getAll
+      () => DataService.tasks.getAll()
   );
 
   // Real dependency derivation

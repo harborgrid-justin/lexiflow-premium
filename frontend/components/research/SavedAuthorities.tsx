@@ -17,7 +17,7 @@ export const SavedAuthorities: React.FC = () => {
   // Enterprise Data Access
   const { data: savedItems = [], isLoading } = useQuery<Citation[]>(
       queryKeys.research.saved(),
-      DataService.research.getSavedAuthorities
+      () => DataService.research.getSavedAuthorities()
   );
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;

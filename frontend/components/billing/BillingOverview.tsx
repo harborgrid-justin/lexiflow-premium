@@ -52,22 +52,27 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
   const chartTheme = useChartTheme();
   
   // Enterprise Data Access: Parallel Queries with safety check
-  const { data: wipData = [] } = useQuery<WIPStat[]>(
+  const { data: rawWipData = [] } = useQuery<WIPStat[]>(
       ['billing', 'wipStats'],
       () => DataService.billing ? DataService.billing.getWIPStats() : Promise.resolve([])
   );
   
-  const { data: realizationData = [] } = useQuery(
+  const { data: rawRealizationData = [] } = useQuery(
       ['billing', 'realization'],
       () => DataService.billing ? DataService.billing.getRealizationStats() : Promise.resolve([])
   );
   
-  const { data: topClients = [] } = useQuery(
+  const { data: rawTopClients = [] } = useQuery(
       ['billing', 'topAccounts'],
       () => DataService.billing ? DataService.billing.getTopAccounts() : Promise.resolve([])
   );
 
-  const totalWip = wipData.reduce((acc: number, curr: any) => acc + curr.wip, 0);
+  // Defensive array validation - ensure data is array before using array methods
+  const wipData = Array.isArray(rawWipData) ? rawWipData : [];
+  const realizationData = Array.isArray(rawRealizationData) ? rawRealizationData : [];
+  const topClients = Array.isArray(rawTopClients) ? rawTopClients : [];
+
+  const totalWip = wipData.reduce((acc: number, curr: any) => acc + (curr.wip || 0), 0);
 
   return (
     <div className="space-y-6 animate-fade-in">

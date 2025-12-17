@@ -91,6 +91,7 @@ import { MessengerModule } from './messenger/messenger.module';
 import { WarRoomModule } from './war-room/war-room.module';
 import { AnalyticsDashboardModule } from './analytics-dashboard/analytics-dashboard.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
+import { JurisdictionsModule } from './jurisdictions/jurisdictions.module';
 
 // Data Platform Modules - Production Infrastructure
 import { SchemaManagementModule } from './schema-management/schema-management.module';
@@ -250,6 +251,7 @@ if (isRedisEnabled) {
     MessengerModule,
     WarRoomModule,
     AnalyticsDashboardModule,
+    JurisdictionsModule,
     KnowledgeModule,
 
     // Data Platform - Production Infrastructure

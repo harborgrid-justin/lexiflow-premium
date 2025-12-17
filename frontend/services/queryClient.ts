@@ -371,6 +371,16 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
     onErrorRef.current = onError;
   }, [fn, onSuccess, onError]);
 
+  const fetchedRef = useRef(false);
+  const subscribedRef = useRef(false);
+  const staleTimeRef = useRef(staleTime);
+  const cacheBypassRef = useRef(cacheBypass);
+
+  useEffect(() => {
+    staleTimeRef.current = staleTime;
+    cacheBypassRef.current = cacheBypass;
+  }, [staleTime, cacheBypass]);
+
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
      if (typeof fnRef.current !== 'function') {
@@ -378,38 +388,56 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
        return Promise.reject(new Error("Query function is not a function"));
      }
      const wrappedFn = () => fnRef.current(); 
-     return queryClient.fetch(key, wrappedFn, staleTime, true, cacheBypass);
-  }, [hashedKey, staleTime, enabled, key, cacheBypass]); 
+     return queryClient.fetch(key, wrappedFn, staleTimeRef.current, true, cacheBypassRef.current);
+  }, [hashedKey, enabled, key]); 
 
   useEffect(() => {
     if (!enabled) return;
     
-    const unsubscribe = queryClient.subscribe(key, (newState) => setState(newState as QueryState<T>));
+    // Validate query function exists
+    if (typeof fn !== 'function') {
+      console.error('[queryClient] Query function is not a function:', fn, 'for key:', key);
+      return;
+    }
     
-    if (state.dataUpdatedAt === 0 || state.status === 'idle') { // Fetch on mount or if invalidated
-      if (typeof fnRef.current !== 'function') {
-        console.error('[queryClient] fnRef.current is not a function during fetch:', fnRef.current, 'for key:', key);
-        return;
+    // Only subscribe once per key
+    if (!subscribedRef.current) {
+      subscribedRef.current = true;
+      
+      const unsubscribe = queryClient.subscribe(key, (newState) => setState(newState as QueryState<T>));
+      
+      // Only fetch once on mount if no cached data exists
+      if (!fetchedRef.current) {
+        const cached = queryClient.getQueryState<T>(key);
+        if (!cached || cached.dataUpdatedAt === 0 || cached.status === 'idle') {
+          fetchedRef.current = true;
+          const wrappedFn = () => fnRef.current();
+          queryClient.fetch<T>(key, wrappedFn, staleTime, false, cacheBypass).catch(err => {
+            console.error('[queryClient] Initial fetch failed:', err, 'for key:', key);
+          });
+        } else {
+          fetchedRef.current = true; // Mark as fetched if cache exists
+        }
       }
-      const wrappedFn = () => fnRef.current();
-      queryClient.fetch<T>(key, wrappedFn, staleTime, false, cacheBypass);
-    }
 
-    let focusHandler: () => void;
-    if (refetchOnWindowFocus && enabled) {
-        focusHandler = () => {
-            if (document.visibilityState === 'visible') {
-                refetch();
-            }
-        };
-        window.addEventListener('visibilitychange', focusHandler);
-    }
+      let focusHandler: () => void;
+      if (refetchOnWindowFocus) {
+          focusHandler = () => {
+              if (document.visibilityState === 'visible' && typeof fnRef.current === 'function') {
+                  refetch();
+              }
+          };
+          window.addEventListener('visibilitychange', focusHandler);
+      }
 
-    return () => {
-        unsubscribe();
-        if (focusHandler) window.removeEventListener('visibilitychange', focusHandler);
-    };
-  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch, key, cacheBypass]);
+      return () => {
+          subscribedRef.current = false;
+          fetchedRef.current = false;
+          unsubscribe();
+          if (focusHandler) window.removeEventListener('visibilitychange', focusHandler);
+      };
+    }
+  }, [hashedKey, enabled, key, staleTime, cacheBypass, refetchOnWindowFocus, refetch, fn]);
 
   return { 
     ...state, 

@@ -148,6 +148,7 @@ export const STORES = {
   RFPS: 'rfps',
   MAINTENANCE_TICKETS: 'maintenance_tickets',
   FACILITIES: 'facilities',
+  ASSETS: 'firm_assets', // IT assets (hardware, software, equipment)
   VENDOR_DIRECTORY: 'vendor_directory',
   REPORTERS: 'reporters',
   JURISDICTIONS: 'jurisdictions',

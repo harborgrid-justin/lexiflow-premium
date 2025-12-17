@@ -194,5 +194,23 @@ export class BillingController {
   async getBillingSummary(@Param('caseId') caseId: string) {
     return this.billingService.getBillingSummary(caseId);
   }
+
+  @Get('wip-stats')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get WIP (Work In Progress) statistics' })
+  @ApiResponse({ status: 200, description: 'WIP statistics by case' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getWIPStats() {
+    return this.billingService.getWIPStats();
+  }
+
+  @Get('realization-stats')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get realization statistics (billed vs write-off)' })
+  @ApiResponse({ status: 200, description: 'Realization statistics' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getRealizationStats() {
+    return this.billingService.getRealizationStats();
+  }
 }
 

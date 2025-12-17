@@ -221,6 +221,8 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
               </Card>
                   );
                 })}
+              </div>
+            )}
           </div>
         )}
 

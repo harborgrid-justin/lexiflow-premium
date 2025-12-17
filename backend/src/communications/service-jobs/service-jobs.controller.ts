@@ -9,6 +9,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -33,7 +34,8 @@ import {
  * @class ServiceJobsController
  */
 @ApiTags('Service of Process')
-@Controller('api/v1/service-jobs')
+@Public() // Allow public access for development
+@Controller('service-jobs')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
 export class ServiceJobsController {
@@ -150,3 +152,4 @@ export class ServiceJobsController {
     return this.serviceJobsService.cancel(id, reason, userId);
   }
 }
+

@@ -6,13 +6,15 @@ import {
   Query,
   ParseUUIDPipe,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { JobType, JobStatus } from './dto/job-status.dto';
 
 @ApiTags('Processing Jobs')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/processing-jobs')
+@Public() // Allow public access for development
+@Controller('processing-jobs')
 export class ProcessingJobsController {
   constructor(private readonly processingJobsService: ProcessingJobsService) {}
 
@@ -59,3 +61,4 @@ export class ProcessingJobsController {
     return await this.processingJobsService.cancelJob(id);
   }
 }
+

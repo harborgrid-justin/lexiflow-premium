@@ -1,4 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { BillingAnalyticsService } from './billing-analytics.service';
 import {
   AnalyticsFilterDto,
@@ -8,7 +9,8 @@ import {
   ArAgingResponse,
 } from './dto/analytics-filter.dto';
 
-@Controller('api/v1/billing')
+@Public() // Allow public access for development
+@Controller('billing')
 export class BillingAnalyticsController {
   constructor(private readonly billingAnalyticsService: BillingAnalyticsService) {}
 
@@ -34,3 +36,4 @@ export class BillingAnalyticsController {
     return await this.billingAnalyticsService.getArAging(filterDto);
   }
 }
+

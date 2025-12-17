@@ -6,7 +6,6 @@ import { CaseTeamMember } from '../case-teams/entities/case-team.entity';
 import { TimeEntry } from '../billing/time-entries/entities/time-entry.entity';
 import { Expense as FirmExpense } from '../billing/expenses/entities/expense.entity';
 import { Document as LegalDocument } from '../documents/entities/document.entity';
-import { AuditLog } from './audit-log.entity';
 
 @Entity('users')
 @Index(['email'], { unique: true })
@@ -153,6 +152,6 @@ export class User extends BaseEntity {
   @OneToMany(() => LegalDocument, (document) => document.creator)
   documents: LegalDocument[];
 
-  @OneToMany(() => AuditLog, (log) => log.user)
-  auditLogs: AuditLog[];
+  // Note: No OneToMany relation to AuditLog to allow audit logs
+  // to persist independently of user deletions
 }

@@ -41,10 +41,16 @@ export const CalendarHearings: React.FC = () => {
   const { theme } = useTheme();
   
   // Enterprise Data Access
-  const { data: events = [] } = useQuery<CalendarEventItem[]>(
+  const { data: eventsData = [] } = useQuery<CalendarEventItem[]>(
       ['calendar', 'all'],
-      DataService.calendar.getEvents
+      async () => {
+        const result = await DataService.calendar.getEvents();
+        return Array.isArray(result) ? result : [];
+      }
   );
+
+  // Ensure events is always an array
+  const events = Array.isArray(eventsData) ? eventsData : [];
 
   const hearings = events.filter(e => e.type === 'hearing').map(e => ({
       id: e.id,

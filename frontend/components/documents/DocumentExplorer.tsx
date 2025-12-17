@@ -16,7 +16,6 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { STORES } from '../../services/db';
 import { queryKeys } from '../../utils/queryKeys';
-import { useDocumentDragDrop } from '@/hooks/useDocumentDragDrop';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { DocumentGridCard } from './DocumentGridCard';
 
@@ -28,17 +27,17 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
   const { theme } = useTheme();
   const notify = useNotify();
 
+  // Enhanced useDocumentManager with drag-drop functionality enabled
   const {
     searchTerm, setSearchTerm, selectedDocForHistory, setSelectedDocForHistory,
     isProcessingAI, handleRestore,
     addTag, removeTag, allTags, filtered, currentFolder, setCurrentFolder,
-    isDetailsOpen, setIsDetailsOpen, previewDoc, setPreviewDoc, updateDocument, isLoading
-  } = useDocumentManager();
+    isDetailsOpen, setIsDetailsOpen, previewDoc, setPreviewDoc, updateDocument, isLoading,
+    isDragging, isUploading, handleDragEnter, handleDragLeave, handleDragOver, handleDrop
+  } = useDocumentManager({ enableDragDrop: true });
 
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);
-  
-  const { isDragging, handleDragEnter, handleDragLeave, handleDrop } = useDocumentDragDrop(currentFolder);
 
   const {
     selectedIds: selectedDocs, toggleSelection, selectAll,

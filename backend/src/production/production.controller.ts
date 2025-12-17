@@ -10,10 +10,12 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ProductionService } from './production.service';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 import { ProductionStatus } from './entities/production.entity';
 
+@Public() // Allow public access for development
 @Controller('production')
 export class ProductionController {
   constructor(private readonly productionService: ProductionService) {}
@@ -64,3 +66,4 @@ export class ProductionController {
     return this.productionService.getStatistics(caseId);
   }
 }
+

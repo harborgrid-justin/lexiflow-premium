@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ExaminationsService } from './examinations.service';
 import { CreateExaminationDto } from './dto/create-examination.dto';
 import { UpdateExaminationDto } from './dto/update-examination.dto';
 import { QueryExaminationDto } from './dto/query-examination.dto';
 
-@Controller('api/v1/discovery/examinations')
+@Public() // Allow public access for development
+@Controller('discovery/examinations')
 export class ExaminationsController {
   constructor(private readonly examinationsService: ExaminationsService) {}
 
@@ -54,3 +56,4 @@ export class ExaminationsController {
     await this.examinationsService.remove(id);
   }
 }
+

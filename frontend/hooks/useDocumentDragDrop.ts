@@ -1,9 +1,20 @@
 /**
  * @module hooks/useDocumentDragDrop
  * @category Hooks - Document Management
- * @description Document drag-and-drop hook with drag state tracking, file upload handling, and
- * QueryClient cache invalidation. Provides drag event handlers for drop zones with upload
- * progress indication and notification toasts.
+ * 
+ * @deprecated Use useDocumentManager with enableDragDrop option instead.
+ * This hook will be removed in v2.0.
+ * 
+ * @example Migration:
+ * ```typescript
+ * // Before:
+ * const { isDragging, isUploading, handleDragEnter, handleDragLeave, handleDrop } = 
+ *   useDocumentDragDrop(currentFolder);
+ * 
+ * // After:
+ * const { isDragging, isUploading, handleDragEnter, handleDragLeave, handleDrop, ...rest } = 
+ *   useDocumentManager({ enableDragDrop: true });
+ * ```
  * 
  * NO THEME USAGE: Utility hook for drag-drop logic
  */

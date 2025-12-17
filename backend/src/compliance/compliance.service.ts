@@ -97,6 +97,20 @@ export class ComplianceService {
     return Array.isArray(saved) ? saved[0] : saved;
   }
 
+  async getAllConflictChecks(): Promise<any[]> {
+    // Return all compliance checks that are related to conflicts
+    return this.complianceCheckRepository.find({
+      order: { checkedAt: 'DESC' },
+    });
+  }
+
+  async getAllAuditLogs(): Promise<AuditLog[]> {
+    return this.auditLogRepository.find({
+      order: { timestamp: 'DESC' },
+      take: 1000, // Limit to recent 1000 logs
+    });
+  }
+
   async getAuditLogsByEntityId(entityType: string, entityId: string): Promise<AuditLog[]> {
     return this.auditLogRepository.find({
       where: { entityType, entityId },

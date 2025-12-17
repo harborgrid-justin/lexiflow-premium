@@ -10,6 +10,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Client } from '../../../entities/client.entity';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum InvoiceStatus {
   DRAFT = 'Draft',
@@ -52,6 +53,10 @@ export class Invoice {
   @Column({ name: 'case_id', nullable: true })
   @Index()
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'case_id' })
+  case: Case;
 
   @Column({ name: 'client_id', nullable: true })
   @Index()

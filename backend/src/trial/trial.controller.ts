@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TrialService } from './trial.service';
 import { CreateTrialEventDto } from './dto/create-trial-event.dto';
@@ -9,9 +10,18 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('Trial')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/trial')
+@Public() // Allow public access for development
+@Controller('trial')
 export class TrialController {
   constructor(private readonly trialService: TrialService) {}
+
+  // Health check endpoint
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return { status: 'ok', service: 'trial' };
+  }
+
   // Trial Events
   @Get('events')
   @ApiOperation({ summary: 'Get trial events' })
@@ -59,3 +69,4 @@ export class TrialController {
     return await this.trialService.createWitnessPrep(createDto);
   }
 }
+

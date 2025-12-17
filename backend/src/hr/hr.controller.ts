@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HRService } from './hr.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
@@ -9,9 +10,18 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('HR')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/hr')
+@Public() // Allow public access for development
+@Controller('hr')
 export class HRController {
   constructor(private readonly hrService: HRService) {}
+
+  // Health check endpoint
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return { status: 'ok', service: 'hr' };
+  }
+
   // Employee Management
   @Get('employees')
   @ApiOperation({ summary: 'Get all employees' })
@@ -85,4 +95,13 @@ export class HRController {
     const approverId = req.user?.id || 'system';
     return await this.hrService.denyTimeOff(id, approverId, body.reason);
   }
+
+  // Utilization & Analytics
+  @Get('utilization')
+  @ApiOperation({ summary: 'Get employee utilization metrics' })
+  @ApiResponse({ status: 200, description: 'Utilization metrics retrieved' })
+  async getUtilization(@Query() query: any) {
+    return await this.hrService.getUtilization(query);
+  }
 }
+

@@ -5,7 +5,13 @@ export default () => ({
   
   // CORS
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN || ((origin, callback) => {
+      if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }),
     credentials: true,
   },
 

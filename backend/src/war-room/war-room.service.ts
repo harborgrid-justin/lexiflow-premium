@@ -103,4 +103,20 @@ export class WarRoomService {
     Object.assign(strategy, updateDto);
     return await this.strategyRepository.save(strategy);
   }
+
+  async getWarRoomData(caseId: string): Promise<any> {
+    const [advisors, experts, strategy] = await Promise.all([
+      this.advisorRepository.find({ where: { caseId, isActive: true } }),
+      this.expertRepository.find({ where: { caseId, isActive: true } }),
+      this.getStrategy(caseId),
+    ]);
+
+    return {
+      caseId,
+      advisors,
+      experts,
+      strategy,
+      lastUpdated: new Date().toISOString(),
+    };
+  }
 }

@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum DiscoveryRequestType {
   RFP = 'RFP', // Request for Production
@@ -34,6 +35,10 @@ export class DiscoveryRequest {
 
   @Column({ type: 'uuid' })
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({
     type: 'enum',

@@ -70,12 +70,16 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
       chartTheme.colors.warning
   ];
 
+  // Ensure chartData and activeProjects are arrays
+  const safeChartData = Array.isArray(chartData) ? chartData : [];
+  const safeActiveProjects = Array.isArray(activeProjects) ? activeProjects : [];
+
   return (
     <div className="xl:col-span-2 space-y-6">
         <Card title="Case Phase Distribution & Volume" subtitle="Active matters by litigation stage">
             <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} dy={10} />
                     <YAxis axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
@@ -84,7 +88,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
                       contentStyle={chartTheme.tooltipStyle}
                     />
                     <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
-                    {chartData.map((entry, index) => (
+                    {safeChartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                     ))}
                     </Bar>
@@ -95,7 +99,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
 
         <Card title="Priority Workstreams" subtitle="High-impact tasks requiring attention" noPadding>
             <div className={cn("divide-y", theme.border.default)}>
-                {activeProjects.map(proj => (
+                {safeActiveProjects.map(proj => (
                     <div key={proj.id} className={cn("flex flex-col sm:flex-row sm:items-center py-4 px-5 transition-colors group cursor-pointer", `hover:${theme.surface.highlight}`)}>
                         <div className="flex items-center flex-1 min-w-0 mb-3 sm:mb-0">
                             <div className={cn("p-2.5 rounded-lg mr-4 shrink-0 transition-colors", theme.primary.light, theme.primary.text)}>

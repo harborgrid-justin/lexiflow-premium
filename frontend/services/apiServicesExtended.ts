@@ -468,6 +468,11 @@ export interface Motion {
 }
 
 export class MotionsApiService {
+  async getAll(filters?: { caseId?: string; status?: string; type?: string }): Promise<Motion[]> {
+    const response = await apiClient.get<PaginatedResponse<Motion>>('/motions', filters);
+    return response.data;
+  }
+
   async getByCaseId(caseId: string): Promise<Motion[]> {
     const response = await apiClient.get<PaginatedResponse<Motion>>(`/cases/${caseId}/motions`);
     return response.data;

@@ -60,13 +60,22 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   // --- ENTERPRISE DATA ACCESS ---
   const { data: docketEntries = [], refetch, isLoading } = useQuery<DocketEntry[]>(
       [STORES.DOCKET, 'all'],
-      DataService.docket.getAll
+      async () => {
+        const result = await DataService.docket.getAll();
+        return Array.isArray(result) ? result : [];
+      }
   );
 
-  const { data: cases = [] } = useQuery<Case[]>(
+  const { data: casesData = [] } = useQuery<Case[]>(
       [STORES.CASES, 'all'],
-      DataService.cases.getAll
+      async () => {
+        const result = await DataService.cases.getAll();
+        return Array.isArray(result) ? result : [];
+      }
   );
+
+  // Ensure cases is always an array
+  const cases = Array.isArray(casesData) ? casesData : [];
 
   // Helper to get parties for the builder
   const activeCase = cases.find(c => c.id === selectedCaseId);

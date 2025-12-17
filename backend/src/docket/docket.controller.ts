@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DocketService } from './docket.service';
 import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
@@ -19,11 +20,12 @@ import { DocketEntry } from './entities/docket-entry.entity';
 
 @ApiTags('Docket')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1')
+@Public() // Allow public access for development
+@Controller('docket')
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}
 
-  @Get('docket')
+  @Get()
   async findAll(@Query('caseId') caseId?: string): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number; totalPages: number }> {
     const entries = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
     return {
@@ -35,18 +37,18 @@ export class DocketController {
     };
   }
 
-  @Get('docket/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string): Promise<DocketEntry> {
     return this.docketService.findOne(id);
   }
 
-  @Post('docket')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   async createDocket(@Body() createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
     return this.docketService.create(createDocketEntryDto);
   }
 
-  @Delete('docket/:id')
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeDocket(@Param('id') id: string): Promise<void> {
     return this.docketService.remove(id);
@@ -63,7 +65,7 @@ export class DocketController {
     return this.docketService.create(createDocketEntryDto);
   }
 
-  @Put('docket/:id')
+  @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateDocketEntryDto: UpdateDocketEntryDto,
@@ -77,3 +79,4 @@ export class DocketController {
     return this.docketService.syncFromPacer(pacerSyncDto);
   }
 }
+

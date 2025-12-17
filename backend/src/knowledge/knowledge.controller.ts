@@ -31,10 +31,19 @@ import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Knowledge Base')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/knowledge')
+@Controller('knowledge')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class KnowledgeController {
   constructor(private readonly knowledgeService: KnowledgeService) {}
+
+  // Health check endpoint
+  @Get()
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  async health() {
+    return { status: 'ok', service: 'knowledge' };
+  }
 
   @Get('articles')
   @Public()
@@ -145,3 +154,4 @@ export class KnowledgeController {
     await this.knowledgeService.remove(id);
   }
 }
+

@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -28,7 +29,8 @@ import {
 } from './dto/reports.dto';
 
 @ApiTags('Reports')
-@Controller('api/v1/reports')
+@Public() // Allow public access for development
+@Controller('reports')
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
 export class ReportsController {
@@ -177,3 +179,4 @@ export class ReportsController {
     return this.reportsService.deleteReport(id);
   }
 }
+

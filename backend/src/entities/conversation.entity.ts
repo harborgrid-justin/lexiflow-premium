@@ -1,6 +1,7 @@
-import { Entity, Column, Index, OneToMany } from 'typeorm';
+import { Entity, Column, Index, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Message } from './message.entity';
+import { Case } from '../cases/entities/case.entity';
 
 @Entity('conversations')
 @Index(['conversationType'])
@@ -21,6 +22,10 @@ export class Conversation extends BaseEntity {
 
   @Column({ type: 'uuid', nullable: true })
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'uuid', nullable: true })
   projectId: string;

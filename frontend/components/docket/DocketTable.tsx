@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useRef } from 'react';
 import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
 
 // ============================================================================
@@ -25,7 +25,7 @@ import { Button } from '../common/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation';
+import { useListNavigation } from '../../hooks/useListNavigation';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
@@ -48,13 +48,17 @@ export const DocketTable: React.FC<DocketTableProps> = ({
     onLoadMore, hasMore = false, isLoadingMore = false
 }) => {
   const { theme } = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Keyboard navigation
-  const { focusedIndex, containerRef } = useKeyboardNavigation({
+  // Keyboard navigation (using unified useListNavigation with full mode)
+  const { focusedIndex } = useListNavigation({
     items: entries,
+    mode: 'full',
     onSelect: onSelectEntry,
     enabled: true,
-    initialIndex: 0
+    initialIndex: 0,
+    containerRef,
+    circular: false
   });
 
   const handleViewDoc = (docId: string) => {

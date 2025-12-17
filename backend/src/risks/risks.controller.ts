@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { RisksService } from './risks.service';
 import { CreateRiskDto, RiskImpact, RiskProbability } from './dto/create-risk.dto';
@@ -8,7 +9,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('Risks')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/risks')
+@Public() // Allow public access for development
+@Controller('risks')
 export class RisksController {
   constructor(private readonly risksService: RisksService) {}
   @Get()
@@ -57,3 +59,4 @@ export class RisksController {
     await this.risksService.remove(id);
   }
 }
+

@@ -10,6 +10,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -33,7 +34,8 @@ import {
  * @class CorrespondenceController
  */
 @ApiTags('Correspondence')
-@Controller('api/v1/communications')
+@Public() // Allow public access for development
+@Controller('communications')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
 export class CorrespondenceController {
@@ -123,3 +125,4 @@ export class CorrespondenceController {
     return this.correspondenceService.send(id, userId);
   }
 }
+

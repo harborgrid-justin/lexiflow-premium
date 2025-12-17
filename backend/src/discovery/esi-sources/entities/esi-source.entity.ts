@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum ESISourceType {
   EMAIL = 'EMAIL',
@@ -35,6 +38,10 @@ export class ESISource {
 
   @Column({ type: 'uuid' })
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'varchar', length: 300 })
   sourceName: string;

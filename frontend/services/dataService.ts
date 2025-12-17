@@ -518,7 +518,7 @@ Object.defineProperties(DataServiceBase, {
       getConnections: async () => {
           try {
             // Fetch from backend API endpoint
-            const response = await fetch('/api/integrations/data-sources', {
+            const response = await fetch('/api/v1/integrations/data-sources', {
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
               },

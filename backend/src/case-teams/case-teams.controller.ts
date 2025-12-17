@@ -9,12 +9,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { CaseTeamsService } from './case-teams.service';
 import { CreateCaseTeamDto } from './dto/create-case-team.dto';
 import { UpdateCaseTeamDto } from './dto/update-case-team.dto';
 import { CaseTeamMember } from './entities/case-team.entity';
 
-@Controller('api/v1')
+@Public() // Allow public access for development
+@Controller('cases')
 export class CaseTeamsController {
   constructor(private readonly caseTeamsService: CaseTeamsService) {}
 
@@ -43,3 +45,4 @@ export class CaseTeamsController {
     return this.caseTeamsService.remove(id);
   }
 }
+

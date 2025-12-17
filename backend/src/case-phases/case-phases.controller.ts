@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CasePhasesService } from './case-phases.service';
 import { CreateCasePhaseDto } from './dto/create-case-phase.dto';
@@ -17,7 +18,8 @@ import { CasePhase } from './entities/case-phase.entity';
 
 @ApiTags('Case Phases')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1')
+@Public() // Allow public access for development
+@Controller('case-phases')
 export class CasePhasesController {
   constructor(private readonly casePhasesService: CasePhasesService) {}
 
@@ -51,3 +53,4 @@ export class CasePhasesController {
     return this.casePhasesService.remove(id);
   }
 }
+

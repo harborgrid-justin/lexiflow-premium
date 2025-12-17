@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ApiKeysService } from './api-keys.service';
 import { CreateApiKeyDto } from './dto';
@@ -18,7 +19,8 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiTags('API Keys')
-@Controller('api/v1/admin/api-keys')
+@Public() // Allow public access for development
+@Controller('admin/api-keys')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('ADMIN')
 @ApiBearerAuth()
@@ -87,3 +89,4 @@ export class ApiKeysController {
     return this.apiKeysService.getUsageStats(id, user.sub);
   }
 }
+

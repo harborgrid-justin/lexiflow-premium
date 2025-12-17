@@ -12,6 +12,12 @@ export class PartiesService {
     private readonly partyRepository: Repository<Party>,
   ) {}
 
+  async findAll(): Promise<Party[]> {
+    return this.partyRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async findAllByCaseId(caseId: string): Promise<Party[]> {
     return this.partyRepository.find({
       where: { caseId },

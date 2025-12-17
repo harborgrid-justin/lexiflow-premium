@@ -282,7 +282,8 @@ class ApiClient {
    */
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     try {
-      const response = await fetch(`${this.baseURL}/health`, {
+      // Health endpoint is at root level, not under /api/v1
+      const response = await fetch(`${API_BASE_URL}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -346,11 +347,25 @@ class ApiClient {
       { name: 'motions', endpoint: '/motions' },
       { name: 'parties', endpoint: '/parties' },
       { name: 'clauses', endpoint: '/clauses' },
+      { name: 'calendar', endpoint: '/calendar' },
       { name: 'trustAccounts', endpoint: '/billing/trust-accounts' },
       { name: 'legalHolds', endpoint: '/discovery/legal-holds' },
       { name: 'depositions', endpoint: '/discovery/depositions' },
       { name: 'conflictChecks', endpoint: '/compliance/conflict-checks' },
       { name: 'auditLogs', endpoint: '/compliance/audit-logs' },
+      { name: 'discovery', endpoint: '/discovery' },
+      { name: 'discoveryEvidence', endpoint: '/discovery/evidence' },
+      { name: 'compliance', endpoint: '/compliance' },
+      { name: 'tasks', endpoint: '/tasks' },
+      { name: 'reports', endpoint: '/reports' },
+      { name: 'hr', endpoint: '/hr' },
+      { name: 'workflow', endpoint: '/workflow/templates' },
+      { name: 'trial', endpoint: '/trial' },
+      { name: 'search', endpoint: '/search' },
+      { name: 'knowledge', endpoint: '/knowledge' },
+      { name: 'messenger', endpoint: '/messenger' },
+      { name: 'notifications', endpoint: '/notifications' },
+      { name: 'communications', endpoint: '/communications' },
     ];
 
     const healthChecks = await Promise.allSettled(

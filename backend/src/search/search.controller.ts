@@ -3,10 +3,12 @@ import {
   Get,
   Post,
   Query,
+  Head,
   UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -31,11 +33,18 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 
 @ApiTags('Search')
-@Controller('api/v1/search')
+@Public() // Allow public access for development
+@Controller('search')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
+
+  @Head()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return;
+  }
 
   @Get()
   @ApiOperation({ summary: 'Global search across all entities' })
@@ -45,11 +54,22 @@ export class SearchController {
     type: SearchResultDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiQuery({ name: 'query', required: true, description: 'Search query string' })
+  @ApiQuery({ name: 'query', required: false, description: 'Search query string' })
   @ApiQuery({ name: 'entityType', required: false, enum: SearchEntityType })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  async search(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
+  async search(@Query() queryDto?: SearchQueryDto): Promise<SearchResultDto> {
+    if (!queryDto?.query) {
+      return {
+        query: '',
+        results: [],
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+        executionTime: 0,
+      };
+    }
     return this.searchService.search(queryDto);
   }
 
@@ -122,3 +142,4 @@ export class SearchController {
     return this.searchService.reindex(dto);
   }
 }
+

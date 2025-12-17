@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Server, Database, HardDrive } from 'lucide-react';
-import { useBackendDiscovery } from '../../hooks/useBackendDiscovery';
+import { useBackendHealth } from '../../hooks/useBackendHealth';
 import { useDataSource } from '../../context/DataSourceContext';
 
 interface BackendStatusIndicatorProps {
@@ -20,7 +20,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   variant = 'compact',
   showPulse = true
 }) => {
-  const { isAvailable, isHealthy, latency, lastChecked } = useBackendDiscovery();
+  const { isAvailable, isHealthy, latency, lastChecked } = useBackendHealth();
   const { currentSource } = useDataSource();
 
   const getStatusColor = () => {

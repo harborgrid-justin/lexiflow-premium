@@ -11,6 +11,7 @@ import {
   ParseBoolPipe,
   ParseIntPipe,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { ClausesService } from './clauses.service';
 import { CreateClauseDto } from './dto/create-clause.dto';
@@ -18,7 +19,8 @@ import { UpdateClauseDto } from './dto/update-clause.dto';
 import { ClauseCategory } from './entities/clause.entity';
 
 @ApiTags('clauses')
-@Controller('api/v1/clauses')
+@Public() // Allow public access for development
+@Controller('clauses')
 export class ClausesController {
   constructor(private readonly clausesService: ClausesService) {}
 
@@ -89,3 +91,4 @@ export class ClausesController {
     return { message: 'Usage count incremented' };
   }
 }
+

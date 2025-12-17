@@ -50,7 +50,7 @@ export const AdminService = {
     // Data Platform - ETL Pipelines
     getPipelines: async (): Promise<PipelineJob[]> => { 
         try {
-            const response = await fetch('/api/admin/pipelines', {
+            const response = await fetch('/api/v1/admin/pipelines', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
                 },
@@ -91,7 +91,7 @@ export const AdminService = {
     getConnectors: async (): Promise<Connector[]> => {
         try {
             // Fetch from backend data-sources API
-            const response = await fetch('/api/integrations/data-sources', {
+            const response = await fetch('/api/v1/integrations/data-sources', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
                 },

@@ -269,7 +269,7 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
   });
 
   const testMutation = useMutation(DataService.sources.testConnection, {
-    onSuccess: (result) => {
+    onSuccess: (result: any) => {
       if (result.success) {
         alert('Connection test successful!');
       } else {

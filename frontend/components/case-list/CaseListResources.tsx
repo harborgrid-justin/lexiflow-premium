@@ -34,7 +34,7 @@ export const CaseListResources: React.FC = () => {
   
   const { data: resources = [], isLoading } = useQuery<any[]>(
       ['hr', 'utilization'],
-      DataService.hr.getUtilizationMetrics
+      () => DataService.hr.getUtilizationMetrics()
   );
 
   if (isLoading) {

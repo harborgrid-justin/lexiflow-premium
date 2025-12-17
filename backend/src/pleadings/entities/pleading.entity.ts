@@ -5,7 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 export enum PleadingType {
   COMPLAINT = 'complaint',
@@ -51,6 +54,10 @@ export class Pleading {
   @Column({ type: 'uuid' })
   @Index()
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'uuid', nullable: true })
   documentId: string;

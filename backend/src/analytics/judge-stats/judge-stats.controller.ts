@@ -1,4 +1,5 @@
 import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -16,7 +17,8 @@ import {
 } from './dto/judge-stats.dto';
 
 @ApiTags('Analytics - Judge Statistics')
-@Controller('api/v1/analytics/judge-stats')
+@Public() // Allow public access for development
+@Controller('analytics/judge-stats')
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
 export class JudgeStatsController {
@@ -78,3 +80,4 @@ export class JudgeStatsController {
     return this.judgeStatsService.getJudgeCaseDuration(judgeId, query);
   }
 }
+

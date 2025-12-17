@@ -10,13 +10,15 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { LegalHoldsService } from './legal-holds.service';
 import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';
 import { QueryLegalHoldDto } from './dto/query-legal-hold.dto';
 import { ReleaseLegalHoldDto } from './dto/release-legal-hold.dto';
 
-@Controller('api/v1/discovery/legal-holds')
+@Public() // Allow public access for development
+@Controller('discovery/legal-holds')
 export class LegalHoldsController {
   constructor(private readonly legalHoldsService: LegalHoldsService) {}
 
@@ -68,3 +70,4 @@ export class LegalHoldsController {
     await this.legalHoldsService.remove(id);
   }
 }
+

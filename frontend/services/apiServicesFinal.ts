@@ -140,6 +140,15 @@ export class HRApiService {
     return apiClient.get<Employee>(`/hr/employees/${id}`);
   }
 
+  async getUtilizationMetrics(): Promise<{ name: string; role: string; utilization: number; cases: number }[]> {
+    const response = await apiClient.get<PaginatedResponse<any>>('/hr/utilization');
+    return response.data;
+  }
+
+  async getStaff(): Promise<any[]> {
+    return this.getAllEmployees();
+  }
+
   async createEmployee(employee: Omit<Employee, 'id'>): Promise<Employee> {
     return apiClient.post<Employee>('/hr/employees', employee);
   }
@@ -150,6 +159,18 @@ export class HRApiService {
 
   async deleteEmployee(id: string): Promise<void> {
     await apiClient.delete(`/hr/employees/${id}`);
+  }
+
+  async addStaff(staff: any): Promise<any> {
+    return this.createEmployee(staff);
+  }
+
+  async updateStaff(id: string, updates: any): Promise<any> {
+    return this.updateEmployee(id, updates);
+  }
+
+  async deleteStaff(id: string): Promise<void> {
+    return this.deleteEmployee(id);
   }
 
   async getTimeOffRequests(filters?: { employeeId?: string; status?: string }): Promise<TimeOffRequest[]> {
@@ -423,7 +444,7 @@ export interface CalendarEvent {
 
 export class CalendarApiService {
   async getEvents(filters?: { startDate?: string; endDate?: string; caseId?: string }): Promise<CalendarEventItem[]> {
-    const response = await apiClient.get<PaginatedResponse<CalendarEventItem>>('/calendar/events', filters);
+    const response = await apiClient.get<PaginatedResponse<CalendarEventItem>>('/calendar', filters);
     return response.data;
   }
 
@@ -453,6 +474,11 @@ export class CalendarApiService {
 
   async sync(): Promise<{ synced: number; errors: number }> {
     return apiClient.post('/calendar/sync', {});
+  }
+
+  async getActiveRuleSets(): Promise<string[]> {
+    const response = await apiClient.get<{ data: string[] }>('/calendar/rule-sets');
+    return response.data;
   }
 }
 

@@ -64,8 +64,22 @@ export const ProfileDomain = {
                 ]
             },
             accessMatrix: user.accessMatrix || [
-                { id: 'perm-1', resource: 'cases', action: '*', effect: 'Allow', scope: 'Global' },
-                { id: 'perm-2', resource: 'billing.invoices', action: 'approve', effect: 'Allow', scope: 'Region', conditions: [{ type: 'Location', operator: 'Equals', value: 'US' }] }
+                // Global Admin Permissions - Full System Access
+                { id: 'perm-1', resource: 'cases', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-2', resource: 'documents', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-3', resource: 'billing', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-4', resource: 'billing.invoices', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-5', resource: 'hr', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-6', resource: 'admin', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-7', resource: 'security', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-8', resource: 'compliance', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-9', resource: 'audit', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-10', resource: 'analytics', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-11', resource: 'integrations', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-12', resource: 'api.keys', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-13', resource: 'system', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-14', resource: 'database', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
+                { id: 'perm-15', resource: '*', action: '*', effect: 'Allow', scope: 'Global', reason: 'Super Admin - Unrestricted Access' }
             ]
         };
     },

@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TimeEntriesService } from './time-entries.service';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
@@ -19,7 +20,8 @@ import { TimeEntry } from './entities/time-entry.entity';
 
 @ApiTags('Billing - Time Entries')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/billing/time-entries')
+@Public() // Allow public access for development
+@Controller('billing/time-entries')
 export class TimeEntriesController {
   constructor(private readonly timeEntriesService: TimeEntriesService) {}
 
@@ -97,3 +99,4 @@ export class TimeEntriesController {
     await this.timeEntriesService.remove(id);
   }
 }
+

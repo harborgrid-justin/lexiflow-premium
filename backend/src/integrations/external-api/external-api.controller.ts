@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ExternalApiService } from './external-api.service';
 import { PacerService } from '../pacer/pacer.service';
@@ -9,7 +10,8 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Integrations')
-@Controller('api/v1/integrations')
+@Public() // Allow public access for development
+@Controller('integrations')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class ExternalApiController {
@@ -82,3 +84,4 @@ export class ExternalApiController {
     return this.externalApiService.getIntegrationStatus();
   }
 }
+

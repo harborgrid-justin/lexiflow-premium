@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('advisors')
 export class Advisor {
@@ -22,6 +23,10 @@ export class Advisor {
 
   @Column({ nullable: true })
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ default: true })
   isActive: boolean;
@@ -72,6 +77,10 @@ export class Expert {
   @Column({ nullable: true })
   caseId: string;
 
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
+
   @Column({ default: true })
   isActive: boolean;
 
@@ -89,6 +98,10 @@ export class CaseStrategy {
 
   @Column()
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'text', nullable: true })
   objective: string;

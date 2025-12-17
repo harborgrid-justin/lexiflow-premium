@@ -62,7 +62,13 @@ export default () => ({
 
   // CORS - restrict in production
   cors: {
-    origin: process.env.CORS_ORIGIN || (process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:5173'),
+    origin: process.env.CORS_ORIGIN || (process.env.NODE_ENV === 'production' ? undefined : (origin, callback) => {
+      if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }),
     credentials: true,
   },
 

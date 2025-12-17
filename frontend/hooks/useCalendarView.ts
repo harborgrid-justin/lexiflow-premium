@@ -34,8 +34,13 @@ export const useCalendarView = () => {
   useEffect(() => {
       const loadEvents = async () => {
           setIsLoading(true);
-          const data = await DataService.calendar.getEvents();
-          setEvents(data);
+          try {
+            const data = await DataService.calendar.getEvents();
+            setEvents(Array.isArray(data) ? data : []);
+          } catch (error) {
+            console.error('Failed to load calendar events:', error);
+            setEvents([]);
+          }
           setIsLoading(false);
       };
       loadEvents();
@@ -46,7 +51,9 @@ export const useCalendarView = () => {
 
   const getEventsForDay = useCallback((day: number) => {
     const dateStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return events.filter(e => e.date === dateStr);
+    // Ensure events is always an array before filtering
+    const eventsArray = Array.isArray(events) ? events : [];
+    return eventsArray.filter(e => e.date === dateStr);
   }, [currentMonth, events]);
 
   const changeMonth = useCallback((offset: number) => {

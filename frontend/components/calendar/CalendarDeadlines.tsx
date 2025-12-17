@@ -36,10 +36,16 @@ import { CalendarEventItem } from '../../types';
 export const CalendarDeadlines: React.FC = () => {
   
   // Enterprise Data Access
-  const { data: events = [] } = useQuery<CalendarEventItem[]>(
+  const { data: eventsData = [] } = useQuery<CalendarEventItem[]>(
       ['calendar', 'all'],
-      DataService.calendar.getEvents
+      async () => {
+        const result = await DataService.calendar.getEvents();
+        return Array.isArray(result) ? result : [];
+      }
   );
+
+  // Ensure events is always an array
+  const events = Array.isArray(eventsData) ? eventsData : [];
 
   const deadlines = events.filter(e => e.type === 'deadline' || e.type === 'compliance').map(e => ({
       id: e.id,

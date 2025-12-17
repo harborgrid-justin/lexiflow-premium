@@ -58,7 +58,11 @@ export const apiServices = {
  * @returns true if backend API should be used instead of IndexedDB
  */
 export function isBackendApiEnabled(): boolean {
-  // Check localStorage flag set by environment or user preference
+  // Check environment variable first (from .env file)
+  const envValue = import.meta.env.VITE_USE_BACKEND_API;
+  if (envValue === 'true' || envValue === true) return true;
+  
+  // Then check localStorage flag set by user preference
   if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     const storedValue = localStorage.getItem('VITE_USE_BACKEND_API');
     if (storedValue) return storedValue === 'true';

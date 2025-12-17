@@ -1,4 +1,5 @@
 import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -16,7 +17,8 @@ import {
 } from './dto/case-analytics.dto';
 
 @ApiTags('Analytics - Cases')
-@Controller('api/v1/analytics')
+@Public() // Allow public access for development
+@Controller('analytics')
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
 export class CaseAnalyticsController {
@@ -73,3 +75,4 @@ export class CaseAnalyticsController {
     return this.caseAnalyticsService.getPracticeAreaBreakdown(query);
   }
 }
+

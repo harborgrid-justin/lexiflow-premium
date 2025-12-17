@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { WorkflowService } from './workflow.service';
 import { CreateWorkflowTemplateDto } from './dto/create-workflow-template.dto';
@@ -8,14 +9,22 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('Workflow Templates')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/workflow/templates')
+@Public() // Allow public access for development
+@Controller('workflow/templates')
 export class WorkflowController {
   constructor(private readonly workflowService: WorkflowService) {}
+
+  @Head()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return;
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get all workflow templates' })
   @ApiResponse({ status: 200, description: 'Templates retrieved successfully' })
-  async findAll(@Query() query: any) {
-    return await this.workflowService.findAll(query);
+  async findAll(@Query() query?: any) {
+    return await this.workflowService.findAll(query || {});
   }
 
   @Get(':id')
@@ -56,3 +65,4 @@ export class WorkflowController {
     await this.workflowService.remove(id);
   }
 }
+

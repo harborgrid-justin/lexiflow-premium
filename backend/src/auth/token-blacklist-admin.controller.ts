@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Param,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiBearerAuth,
@@ -29,7 +30,8 @@ import { TokenBlacklistCleanupService } from './token-blacklist-cleanup.service'
  */
 @ApiTags('Admin - Token Blacklist')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/admin/blacklist')
+@Public() // Allow public access for development
+@Controller('admin/blacklist')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR)
 export class TokenBlacklistAdminController {
@@ -195,3 +197,4 @@ export class TokenBlacklistAdminController {
     };
   }
 }
+

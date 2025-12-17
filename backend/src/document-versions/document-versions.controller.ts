@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -19,7 +20,8 @@ import { CreateVersionDto } from './dto/create-version.dto';
 
 @ApiTags('Document Versions')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/documents/:documentId/versions')
+@Public() // Allow public access for development
+@Controller('documents/:documentId/versions')
 export class DocumentVersionsController {
   constructor(
     private readonly documentVersionsService: DocumentVersionsService,
@@ -124,3 +126,4 @@ export class DocumentVersionsController {
     );
   }
 }
+

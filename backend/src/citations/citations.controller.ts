@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CitationsService } from './citations.service';
 import { CreateCitationDto, UpdateCitationDto } from './dto/citation.dto';
@@ -7,7 +8,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('Citations')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/citations')
+@Public() // Allow public access for development
+@Controller('citations')
 export class CitationsController {
   constructor(private readonly citationsService: CitationsService) {}
   @Get()
@@ -61,3 +63,4 @@ export class CitationsController {
     await this.citationsService.remove(id);
   }
 }
+

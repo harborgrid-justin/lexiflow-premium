@@ -1,14 +1,28 @@
-import { IsString, IsOptional, IsArray, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsArray, IsEnum } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+enum ConversationType {
+  DIRECT = 'direct',
+  GROUP = 'group',
+  CASE_DISCUSSION = 'case_discussion',
+  TEAM_CHAT = 'team_chat',
+  CLIENT_COMMUNICATION = 'client_communication',
+}
+
 export class MessengerConversationDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
-  title: string;
+  @IsOptional()
+  title?: string;
 
   @ApiProperty()
   @IsArray()
   participants: string[];
+
+  @ApiPropertyOptional({ enum: ConversationType, default: ConversationType.DIRECT })
+  @IsEnum(ConversationType)
+  @IsOptional()
+  conversationType?: ConversationType;
 
   @ApiPropertyOptional()
   @IsString()
@@ -16,9 +30,9 @@ export class MessengerConversationDto {
   caseId?: string;
 
   @ApiPropertyOptional()
-  @IsBoolean()
+  @IsString()
   @IsOptional()
-  isGroup?: boolean;
+  projectId?: string;
 }
 
 export class MessengerMessageDto {

@@ -52,24 +52,46 @@ interface PersonalWorkspaceProps {
 export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
     const { theme } = useTheme();
 
-    const { data: allTasks = [], isLoading: tasksLoading } = useQuery<WorkflowTask[]>(
+    const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
         [STORES.TASKS, 'all'],
         DataService.tasks.getAll
     );
     
-    const { data: allEvents = [], isLoading: eventsLoading } = useQuery<CalendarEventItem[]>(
+    const { data: allEvents = [], isLoading: eventsLoading, error: eventsError } = useQuery<CalendarEventItem[]>(
         ['calendar', 'all'],
         DataService.calendar.getEvents
     );
     
-    const myTasks = allTasks.filter(t => t.assignee === currentUser.name && t.status !== 'Done');
-    const myMeetings = allEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
+    // Ensure allTasks and allEvents are arrays even if API fails
+    const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
+    const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
+    
+    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser.name && t.status !== 'Done');
+    const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
 
     const isLoading = tasksLoading || eventsLoading;
+    const hasError = tasksError || eventsError;
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
-            {isLoading ? <div className="lg:col-span-2 flex justify-center items-center p-12"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div> : (
+            {isLoading ? (
+                <div className="lg:col-span-2 flex justify-center items-center p-12">
+                    <Loader2 className="animate-spin h-8 w-8 text-blue-600"/>
+                </div>
+            ) : hasError ? (
+                <div className="lg:col-span-2">
+                    <Card title="Connection Issue">
+                        <div className="text-center py-8">
+                            <p className={cn("text-sm mb-2", theme.text.secondary)}>
+                                Unable to load data. Please ensure the backend is running.
+                            </p>
+                            <p className={cn("text-xs", theme.text.tertiary)}>
+                                Working in offline mode with cached data.
+                            </p>
+                        </div>
+                    </Card>
+                </div>
+            ) : (
                 <>
                     {activeTab === 'tasks' && (
                         <>

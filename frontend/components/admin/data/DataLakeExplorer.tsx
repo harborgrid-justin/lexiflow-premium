@@ -1,19 +1,20 @@
 
 import React, { useState } from 'react';
+
 import { Folder, File, HardDrive, Search, Download, MoreHorizontal, FileText, Image, Film, UploadCloud, ChevronRight, Home, Loader2 } from 'lucide-react';
+
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useWindow } from '../../../context/WindowContext';
-import { DocumentPreviewPanel } from '../../documents/viewer/DocumentPreviewPanel';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { DataLakeItem } from '../../../types';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../common/Button';
+import { Card } from '../../common/Card';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
+import { DocumentPreviewPanel } from '../../documents/viewer/DocumentPreviewPanel';
 
-export const DataLakeExplorer: React.FC = () => {
+export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();
     const { openWindow } = useWindow();
     const [currentPath, setCurrentPath] = useState<string[]>(['root']);
@@ -23,27 +24,30 @@ export const DataLakeExplorer: React.FC = () => {
 
     const { data: items = [], isLoading } = useQuery<DataLakeItem[]>(
         ['lake', currentFolderId],
-        () => DataService.catalog.getDataLakeItems(currentFolderId)
+        async () => {
+            const result = await DataService.catalog.getDataLakeItems(currentFolderId);
+            return result as DataLakeItem[];
+        }
     );
 
-    const handleNavigate = (folderId: string) => {
+    const handleNavigate = (folderId: string): void => {
         setCurrentPath([...currentPath, folderId]);
         setSelection([]);
     };
 
-    const handleBreadcrumb = (index: number) => {
+    const handleBreadcrumb = (index: number): void => {
         setCurrentPath(currentPath.slice(0, index + 1));
         setSelection([]);
     };
 
-    const getFileIcon = (format?: string, type?: string) => {
-        if (type === 'folder') return <Folder className="h-5 w-5 text-blue-500 fill-blue-100" />;
-        if (format === 'JSON' || format === 'CSV') return <FileText className="h-5 w-5 text-green-600" />;
-        if (format === 'Parquet') return <DatabaseIcon className="h-5 w-5 text-purple-600" />;
+    const getFileIcon = (format?: string, type?: string): React.ReactElement => {
+        if (type === 'folder') {return <Folder className="h-5 w-5 text-blue-500 fill-blue-100" />;}
+        if (format === 'JSON' || format === 'CSV') {return <FileText className="h-5 w-5 text-green-600" />;}
+        if (format === 'Parquet') {return <DatabaseIcon className="h-5 w-5 text-purple-600" />;}
         return <File className="h-5 w-5 text-slate-500" />;
     };
 
-    const handleFileClick = (file: DataLakeItem) => {
+    const handleFileClick = (file: DataLakeItem): void => {
         if (file.type === 'folder') {
             handleNavigate(file.name);
         } else {
@@ -54,25 +58,25 @@ export const DataLakeExplorer: React.FC = () => {
                 <div className={cn("h-full", theme.surface.default)}>
                     <DocumentPreviewPanel 
                         document={{
-                            id: file.id,
+                            id: file.id as unknown as import('../../../types').DocumentId,
                             title: file.name,
-                            type: file.format || 'File',
+                            type: file.format ?? 'File',
                             content: `Preview of raw data object: ${file.name}`,
                             uploadDate: file.modified,
                             lastModified: file.modified,
                             tags: [file.tier, 'Data Lake'],
                             versions: [],
-                            caseId: 'System' as any
+                            caseId: 'system-data-lake' as import('../../../types').CaseId
                         }}
                         onViewHistory={() => {}}
-                        isOrbital={true}
+                        isOrbital
                     />
                 </div>
             );
         }
     };
 
-    if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;
+    if (isLoading) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
 
     return (
         <div className="flex flex-col h-full animate-fade-in">
@@ -114,7 +118,7 @@ export const DataLakeExplorer: React.FC = () => {
                             <TableHead>Type</TableHead>
                             <TableHead>Storage Tier</TableHead>
                             <TableHead>Last Modified</TableHead>
-                            <TableHead className="text-right"></TableHead>
+                            <TableHead className="text-right" />
                         </TableHeader>
                         <TableBody>
                             {items.length === 0 && (
@@ -127,8 +131,8 @@ export const DataLakeExplorer: React.FC = () => {
                                             type="checkbox" 
                                             checked={selection.includes(item.id)}
                                             onChange={(e) => {
-                                                if(e.target.checked) setSelection([...selection, item.id]);
-                                                else setSelection(selection.filter(id => id !== item.id));
+                                                if(e.target.checked) {setSelection([...selection, item.id]);}
+                                                else {setSelection(selection.filter(id => id !== item.id));}
                                             }}
                                         />
                                     </TableCell>
@@ -138,14 +142,10 @@ export const DataLakeExplorer: React.FC = () => {
                                             <span className={cn("font-medium", theme.text.primary)}>{item.name}</span>
                                         </div>
                                     </TableCell>
-                                    <TableCell className="font-mono text-xs">{item.size || '-'}</TableCell>
-                                    <TableCell>{item.format || 'Folder'}</TableCell>
+                                    <TableCell className="font-mono text-xs">{item.size ?? '-'}</TableCell>
+                                    <TableCell>{item.format ?? 'Folder'}</TableCell>
                                     <TableCell>
-                                        <span className={cn("text-[10px] px-2 py-0.5 rounded-full border", 
-                                            item.tier === 'Hot' ? cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border) :
-                                            item.tier === 'Cool' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
-                                            cn(theme.surface.highlight, theme.text.secondary, theme.border.default)
-                                        )}>{item.tier}</span>
+                                        <span className={cn("text-[10px] px-2 py-0.5 rounded-full border", getTierClasses(item.tier, theme))}>{item.tier}</span>
                                     </TableCell>
                                     <TableCell className={cn("text-xs", theme.text.secondary)}>{item.modified}</TableCell>
                                     <TableCell className="text-right">
@@ -161,14 +161,24 @@ export const DataLakeExplorer: React.FC = () => {
             </div>
         </div>
     );
-};
+}
+
+function getTierClasses(tier: string, theme: ReturnType<typeof useTheme>['theme']): string {
+    if (tier === 'Hot') {
+        return cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border);
+    }
+    if (tier === 'Cool') {
+        return cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border);
+    }
+    return cn(theme.surface.highlight, theme.text.secondary, theme.border.default);
+}
 
 export default DataLakeExplorer;
 
-const DatabaseIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+function DatabaseIcon({ className }: { className?: string }): React.ReactElement {
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
     </svg>
-);
+}

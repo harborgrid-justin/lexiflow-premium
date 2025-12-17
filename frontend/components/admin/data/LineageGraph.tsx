@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 
 import { RefreshCw, Loader2 } from 'lucide-react';
+import { JSX } from 'react/jsx-runtime';
 
 import { useTheme } from '../../../context/ThemeContext';
 import { DataService } from '../../../services/dataService';
@@ -45,7 +45,7 @@ export function LineageGraph({ initialTab = 'graph' }: LineageGraphProps): JSX.E
 
   const { data: graphData, isLoading } = useQuery<{ nodes: LineageNode[], links: LineageLink[] }>(
       ['lineage', 'graph'],
-      () => (DataService as any).catalog.getLineageGraph() as Promise<{ nodes: LineageNode[], links: LineageLink[] }>
+      () => DataService.catalog.getLineageGraph() as Promise<{ nodes: LineageNode[], links: LineageLink[] }>
   );
 
   // Initialize Graph Data

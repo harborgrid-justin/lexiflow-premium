@@ -519,15 +519,30 @@ Object.defineProperties(DataServiceBase, {
   sources: { 
     get: () => ({
       getConnections: async () => {
-          // Note: Backend integrations API not yet implemented
-          // Using IndexedDB for persistence until backend endpoint is available
+          try {
+            // Fetch from backend API endpoint
+            const response = await fetch('/api/integrations/data-sources', {
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+              },
+            });
+            
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+              const connections = await response.json();
+              return connections;
+            }
+          } catch (error) {
+            // Silently fail - backend not available
+          }
+          
+          // Fallback to IndexedDB
           const connections = await db.getAll<any>('dataSources');
-          return connections.length > 0 ? connections : [
-              { id: '1', name: 'PostgreSQL Production Database', type: 'Database', status: 'active', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
-              { id: '2', name: 'Snowflake Warehouse', type: 'Warehouse', status: 'active', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
-              { id: '3', name: 'Salesforce CRM', type: 'SaaS', status: 'syncing', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
-              { id: '4', name: 'AWS S3 Data Lake', type: 'Storage', status: 'active', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
-              { id: '5', name: 'Redis Cache', type: 'Cache', status: 'degraded', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' }
+          if (connections.length > 0) return connections;
+          
+          // When backend is not connected, show all sources as disconnected
+          return [
+              { id: '1', name: 'Primary Warehouse', type: 'Snowflake', status: 'disconnected', lastSync: null, region: 'us-west-2' },
+              { id: '2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'disconnected', lastSync: null, region: 'us-east-1' }
           ];
       },
       testConnection: async (config: any) => {

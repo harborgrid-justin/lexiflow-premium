@@ -220,9 +220,15 @@ const CloudDatabaseView = () => {
 
 const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, setSelectedProvider, formData, setFormData }: any) => {
   
-  const { data: connections = [], isLoading } = useQuery<any[]>(
+  const { data: connections = [], isLoading, refetch } = useQuery<any[]>(
     ['admin', 'sources', 'connections'],
-    DataService.sources.getConnections
+    DataService.sources.getConnections,
+    {
+      staleTime: 0,
+      cacheTime: 0,
+      refetchOnMount: true,
+      refetchOnWindowFocus: false,
+    }
   );
 
   const addConnectionMutation = useMutation(
@@ -262,6 +268,19 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
     }
   });
 
+  const testMutation = useMutation(DataService.sources.testConnection, {
+    onSuccess: (result) => {
+      if (result.success) {
+        alert('Connection test successful!');
+      } else {
+        alert('Connection test failed: ' + result.message);
+      }
+    },
+    onError: (error: any) => {
+      alert('Connection test error: ' + error.message);
+    }
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedProvider) return;
@@ -289,18 +308,33 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
             {connections.length} Active Connections
           </span>
         </div>
-        <button 
-          onClick={() => setIsAdding(!isAdding)}
-          className={cn(
-            "px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm",
-            isAdding 
-              ? "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300"
-              : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/25"
-          )}
-        >
-          {isAdding ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-          {isAdding ? 'Cancel' : 'New Connection'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => refetch()}
+            disabled={isLoading}
+            className={cn(
+              "px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 border",
+              theme.border.default,
+              isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50 dark:hover:bg-slate-800"
+            )}
+            title="Refresh connections"
+          >
+            <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
+            Refresh
+          </button>
+          <button 
+            onClick={() => setIsAdding(!isAdding)}
+            className={cn(
+              "px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm",
+              isAdding 
+                ? "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300"
+                : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/25"
+            )}
+          >
+            {isAdding ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+            {isAdding ? 'Cancel' : 'New Connection'}
+          </button>
+        </div>
       </div>
 
       {/* Add Connection Form */}

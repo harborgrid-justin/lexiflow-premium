@@ -11,10 +11,13 @@ export const JurisdictionInternational: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: treaties = [], isLoading } = useQuery<any[]>(
+  const { data: rawTreaties = [], isLoading } = useQuery<any[]>(
       ['jurisdiction', 'treaties'],
       DataService.jurisdiction.getTreaties
   );
+
+  // Defensive array validation
+  const treaties = Array.isArray(rawTreaties) ? rawTreaties : [];
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 

@@ -8,6 +8,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
 import { DataService } from '../../../services/dataService';
+import { db } from '../../../db';
 import { useDataSource } from '../../../context/DataSourceContext';
 
 interface DataSourcesManagerProps {
@@ -673,6 +674,70 @@ const IndexedDBView = () => {
     ['admin', 'registry'],
     DataService.catalog.getRegistryInfo
   );
+  const [selectedStore, setSelectedStore] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [storeData, setStoreData] = useState<any[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingData, setEditingData] = useState<any>(null);
+
+  const loadStoreData = async (storeName: string) => {
+    setIsLoadingData(true);
+    try {
+      const data = await db.getAll(storeName);
+      console.log(`Loaded ${data?.length || 0} records from ${storeName}:`, data);
+      setStoreData(data || []);
+    } catch (error) {
+      console.error('Error loading store data:', error);
+      setStoreData([]);
+    }
+    setIsLoadingData(false);
+  };
+
+  const handleStoreClick = (storeName: string) => {
+    setSelectedStore(storeName);
+    loadStoreData(storeName);
+  };
+
+  const handleEdit = (item: any) => {
+    setEditingId(item.id);
+    setEditingData({ ...item });
+  };
+
+  const handleSave = async () => {
+    if (!selectedStore || !editingData) return;
+    try {
+      await db.put(selectedStore, editingData);
+      await loadStoreData(selectedStore);
+      setEditingId(null);
+      setEditingData(null);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!selectedStore || !confirm('Are you sure you want to delete this record?')) return;
+    try {
+      await db.delete(selectedStore, id);
+      await loadStoreData(selectedStore);
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditingData(null);
+  };
+
+  const filteredData = storeData.filter(item => {
+    if (!searchTerm) return true;
+    const searchLower = searchTerm.toLowerCase();
+    return Object.values(item).some(value => 
+      String(value).toLowerCase().includes(searchLower)
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -685,37 +750,155 @@ const IndexedDBView = () => {
       <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex justify-between items-center mb-6">
           <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
-            <Database className="h-5 w-5 text-blue-500" /> IndexedDB Stores
+            <Database className="h-5 w-5 text-blue-500" /> 
+            {selectedStore ? `${selectedStore} Data` : 'IndexedDB Stores'}
           </h3>
-          <button 
-            onClick={() => refetch()}
-            className={cn("px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors", theme.border.default, theme.text.primary)}
-          >
-            <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} /> Refresh
-          </button>
-        </div>
-        {isLoading ? (
-          <div className="p-12 text-center text-gray-500">Loading store statistics...</div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {stores.map((store) => (
-              <div key={store.name} className={cn("p-5 rounded-xl border hover:shadow-md transition-all duration-200 group", theme.border.default)}>
-                <div className="flex justify-between items-start mb-3">
-                  <h4 className={cn("font-bold text-sm", theme.text.primary)}>{store.name}</h4>
-                  <div className="p-1.5 rounded-md bg-gray-50 dark:bg-slate-800 text-gray-400 group-hover:text-blue-500 transition-colors">
-                    <Database className="h-4 w-4" />
-                  </div>
-                </div>
-                <div className="flex justify-between items-end mt-4">
-                  <div>
-                    <span className="text-xs text-gray-500 block mb-0.5">Records</span>
-                    <span className={cn("text-lg font-bold", theme.text.primary)}>{store.records.toLocaleString()}</span>
-                  </div>
-                  <span className={cn("font-mono text-xs px-2 py-1 rounded bg-gray-100 dark:bg-slate-800", theme.text.secondary)}>{store.size}</span>
-                </div>
-              </div>
-            ))}
+          <div className="flex items-center gap-2">
+            {selectedStore && (
+              <button 
+                onClick={() => {
+                  setSelectedStore(null);
+                  setStoreData([]);
+                  setSearchTerm('');
+                }}
+                className={cn("px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors", theme.border.default, theme.text.primary)}
+              >
+                Back to Stores
+              </button>
+            )}
+            <button 
+              onClick={() => refetch()}
+              className={cn("px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors", theme.border.default, theme.text.primary)}
+            >
+              <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} /> Refresh
+            </button>
           </div>
+        </div>
+
+        {selectedStore ? (
+          <>
+            {/* Search Bar */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Search records..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={cn("w-full px-4 py-2 rounded-lg border", theme.border.default, theme.surface.default, theme.text.primary)}
+              />
+            </div>
+
+            {/* Data Table */}
+            {isLoadingData ? (
+              <div className="p-12 text-center text-gray-500">Loading data...</div>
+            ) : filteredData.length === 0 ? (
+              <div className="p-12 text-center text-gray-500">No records found</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className={cn("border-b", theme.border.default)}>
+                    <tr>
+                      <th className={cn("text-left p-3 font-semibold", theme.text.secondary)}>ID</th>
+                      <th className={cn("text-left p-3 font-semibold", theme.text.secondary)}>Data</th>
+                      <th className={cn("text-right p-3 font-semibold", theme.text.secondary)}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.map((item) => (
+                      <tr key={item.id} className={cn("border-b hover:bg-gray-50 dark:hover:bg-slate-800/50", theme.border.default)}>
+                        <td className={cn("p-3", theme.text.primary)}>
+                          <code className="text-xs">{item.id}</code>
+                        </td>
+                        <td className={cn("p-3", theme.text.primary)}>
+                          {editingId === item.id ? (
+                            <textarea
+                              value={JSON.stringify(editingData, null, 2)}
+                              onChange={(e) => {
+                                try {
+                                  setEditingData(JSON.parse(e.target.value));
+                                } catch (err) {
+                                  // Keep previous value if invalid JSON
+                                }
+                              }}
+                              className={cn("w-full p-2 rounded border font-mono text-xs", theme.border.default, theme.surface.default)}
+                              rows={5}
+                            />
+                          ) : (
+                            <pre className="text-xs overflow-x-auto max-w-2xl">
+                              {JSON.stringify(item, null, 2)}
+                            </pre>
+                          )}
+                        </td>
+                        <td className="p-3 text-right">
+                          {editingId === item.id ? (
+                            <div className="flex justify-end gap-2">
+                              <button
+                                onClick={handleSave}
+                                className={cn("px-3 py-1 text-xs rounded border bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100")}
+                              >
+                                Save
+                              </button>
+                              <button
+                                onClick={handleCancel}
+                                className={cn("px-3 py-1 text-xs rounded border", theme.border.default, theme.text.secondary)}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex justify-end gap-2">
+                              <button
+                                onClick={() => handleEdit(item)}
+                                className={cn("px-3 py-1 text-xs rounded border hover:bg-gray-100 dark:hover:bg-slate-700", theme.border.default, theme.text.secondary)}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDelete(item.id)}
+                                className={cn("px-3 py-1 text-xs rounded border hover:bg-red-50 hover:text-red-600 hover:border-red-200", theme.border.default, theme.text.secondary)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {isLoading ? (
+              <div className="p-12 text-center text-gray-500">Loading store statistics...</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {stores.map((store) => (
+                  <button
+                    key={store.name}
+                    onClick={() => handleStoreClick(store.name)}
+                    className={cn("p-5 rounded-xl border hover:shadow-md transition-all duration-200 group text-left", theme.border.default, "hover:border-blue-300 dark:hover:border-blue-700")}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className={cn("font-bold text-sm", theme.text.primary)}>{store.name}</h4>
+                      <div className="p-1.5 rounded-md bg-gray-50 dark:bg-slate-800 text-gray-400 group-hover:text-blue-500 transition-colors">
+                        <Database className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-end mt-4">
+                      <div>
+                        <span className="text-xs text-gray-500 block mb-0.5">Records</span>
+                        <span className={cn("text-lg font-bold", theme.text.primary)}>{store.records.toLocaleString()}</span>
+                      </div>
+                      <span className={cn("font-mono text-xs px-2 py-1 rounded bg-gray-100 dark:bg-slate-800", theme.text.secondary)}>{store.size}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

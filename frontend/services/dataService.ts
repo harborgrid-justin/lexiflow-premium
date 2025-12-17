@@ -127,11 +127,11 @@ const getTasksRepository = () => getSingleton('TasksRepository', () =>
       return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
     }
     add = async (item: WorkflowTask): Promise<WorkflowTask> => {
-      const result = await super.add(item);
+      const result = await super.add(item as any);
       return result;
     }
     update = async (id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> => {
-      const result = await super.update(id, updates);
+      const result = await super.update(id, updates as any);
       if (updates.status === 'Done' || updates.status === 'Completed') {
         IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
       }
@@ -195,142 +195,151 @@ const getEntitiesRepository = () => getSingleton('EntitiesRepository', () =>
   }()
 );
 
-// --- BACKEND API MODE CHECK ---
-const useBackendApi = isBackendApiEnabled();
+// --- FACADE WITH LAZY GETTERS ---
+// Using getters to ensure repositories are recreated after cleanup
 
-// --- FACADE ---
+const DataServiceBase: any = {};
 
-export const DataService = {
-  // Use backend API if enabled, otherwise use IndexedDB singletons
-  cases: useBackendApi ? apiServices.cases : getIntegratedCaseRepository(),
-  docket: useBackendApi ? apiServices.docket : getIntegratedDocketRepository(),
-  evidence: useBackendApi ? apiServices.evidence : getEvidenceRepository(),
-  documents: useBackendApi ? apiServices.documents : getIntegratedDocumentRepository(),
-  pleadings: useBackendApi ? extendedApiServices.pleadings : getPleadingRepository(),
-  hr: useBackendApi ? finalApiServices.hr : HRRepository,
-  workflow: useBackendApi ? finalApiServices.workflowTemplates : WorkflowRepository,
-  billing: useBackendApi ? apiServices.billing : getIntegratedBillingRepository(),
-  discovery: getDiscoveryRepository(),
-  trial: useBackendApi ? finalApiServices.trial : getTrialRepository(),
-  compliance: ComplianceService,
+// Define getters for all properties to ensure they're recreated after cleanup
+Object.defineProperties(DataServiceBase, {
+  cases: { get: () => isBackendApiEnabled() ? apiServices.cases : getIntegratedCaseRepository(), enumerable: true },
+  docket: { get: () => isBackendApiEnabled() ? apiServices.docket : getIntegratedDocketRepository(), enumerable: true },
+  evidence: { get: () => isBackendApiEnabled() ? apiServices.evidence : getEvidenceRepository(), enumerable: true },
+  documents: { get: () => isBackendApiEnabled() ? apiServices.documents : getIntegratedDocumentRepository(), enumerable: true },
+  pleadings: { get: () => isBackendApiEnabled() ? extendedApiServices.pleadings : getPleadingRepository(), enumerable: true },
+  hr: { get: () => isBackendApiEnabled() ? finalApiServices.hr : HRRepository, enumerable: true },
+  workflow: { get: () => isBackendApiEnabled() ? finalApiServices.workflowTemplates : WorkflowRepository, enumerable: true },
+  billing: { get: () => isBackendApiEnabled() ? apiServices.billing : getIntegratedBillingRepository(), enumerable: true },
+  discovery: { get: () => getDiscoveryRepository(), enumerable: true },
+  trial: { get: () => isBackendApiEnabled() ? finalApiServices.trial : getTrialRepository(), enumerable: true },
+  compliance: { get: () => ComplianceService, enumerable: true },
   
   // Extended backend API services - Using RepositoryFactory with singleton cache
-  trustAccounts: useBackendApi ? extendedApiServices.trustAccounts : repositoryRegistry.getOrCreate<any>('trustAccounts'),
-  billingAnalytics: useBackendApi ? extendedApiServices.billingAnalytics : repositoryRegistry.getOrCreate<any>('billingAnalytics'),
-  reports: useBackendApi ? extendedApiServices.reports : repositoryRegistry.getOrCreate<any>(STORES.REPORTERS),
-  processingJobs: useBackendApi ? extendedApiServices.processingJobs : repositoryRegistry.getOrCreate<any>(STORES.PROCESSING_JOBS),
-  casePhases: useBackendApi ? extendedApiServices.casePhases : repositoryRegistry.getOrCreate<any>(STORES.PHASES),
-  caseTeams: useBackendApi ? extendedApiServices.caseTeams : repositoryRegistry.getOrCreate<any>('caseTeams'),
-  parties: useBackendApi ? extendedApiServices.parties : repositoryRegistry.getOrCreate<any>('parties'),
+  trustAccounts: { get: () => isBackendApiEnabled() ? extendedApiServices.trustAccounts : repositoryRegistry.getOrCreate<any>('trustAccounts'), enumerable: true },
+  billingAnalytics: { get: () => isBackendApiEnabled() ? extendedApiServices.billingAnalytics : repositoryRegistry.getOrCreate<any>('billingAnalytics'), enumerable: true },
+  reports: { get: () => isBackendApiEnabled() ? extendedApiServices.reports : repositoryRegistry.getOrCreate<any>(STORES.REPORTERS), enumerable: true },
+  processingJobs: { get: () => isBackendApiEnabled() ? extendedApiServices.processingJobs : repositoryRegistry.getOrCreate<any>(STORES.PROCESSING_JOBS), enumerable: true },
+  casePhases: { get: () => isBackendApiEnabled() ? extendedApiServices.casePhases : repositoryRegistry.getOrCreate<any>(STORES.PHASES), enumerable: true },
+  caseTeams: { get: () => isBackendApiEnabled() ? extendedApiServices.caseTeams : repositoryRegistry.getOrCreate<any>('caseTeams'), enumerable: true },
+  parties: { get: () => isBackendApiEnabled() ? extendedApiServices.parties : repositoryRegistry.getOrCreate<any>('parties'), enumerable: true },
 
   // Discovery backend API services - Using RepositoryFactory with singleton cache
-  legalHolds: useBackendApi ? discoveryApiServices.legalHolds : repositoryRegistry.getOrCreate<any>(STORES.LEGAL_HOLDS),
-  depositions: useBackendApi ? discoveryApiServices.depositions : repositoryRegistry.getOrCreate<any>('depositions'),
-  discoveryRequests: useBackendApi ? discoveryApiServices.discoveryRequests : repositoryRegistry.getOrCreate<any>('discoveryRequests'),
-  esiSources: useBackendApi ? discoveryApiServices.esiSources : repositoryRegistry.getOrCreate<any>('esiSources'),
-  privilegeLog: useBackendApi ? discoveryApiServices.privilegeLog : repositoryRegistry.getOrCreate<any>(STORES.PRIVILEGE_LOG),
-  productions: useBackendApi ? discoveryApiServices.productions : repositoryRegistry.getOrCreate<any>('productions'),
-  custodianInterviews: useBackendApi ? discoveryApiServices.custodianInterviews : repositoryRegistry.getOrCreate<any>('custodianInterviews'),
+  legalHolds: { get: () => isBackendApiEnabled() ? discoveryApiServices.legalHolds : repositoryRegistry.getOrCreate<any>(STORES.LEGAL_HOLDS), enumerable: true },
+  depositions: { get: () => isBackendApiEnabled() ? discoveryApiServices.depositions : repositoryRegistry.getOrCreate<any>('depositions'), enumerable: true },
+  discoveryRequests: { get: () => isBackendApiEnabled() ? discoveryApiServices.discoveryRequests : repositoryRegistry.getOrCreate<any>('discoveryRequests'), enumerable: true },
+  esiSources: { get: () => isBackendApiEnabled() ? discoveryApiServices.esiSources : repositoryRegistry.getOrCreate<any>('esiSources'), enumerable: true },
+  privilegeLog: { get: () => isBackendApiEnabled() ? discoveryApiServices.privilegeLog : repositoryRegistry.getOrCreate<any>(STORES.PRIVILEGE_LOG), enumerable: true },
+  productions: { get: () => isBackendApiEnabled() ? discoveryApiServices.productions : repositoryRegistry.getOrCreate<any>('productions'), enumerable: true },
+  custodianInterviews: { get: () => isBackendApiEnabled() ? discoveryApiServices.custodianInterviews : repositoryRegistry.getOrCreate<any>('custodianInterviews'), enumerable: true },
 
   // Compliance backend API services - Using RepositoryFactory with singleton cache
-  conflictChecks: useBackendApi ? complianceApiServices.conflictChecks : repositoryRegistry.getOrCreate<any>('conflictChecks'),
-  ethicalWalls: useBackendApi ? complianceApiServices.ethicalWalls : repositoryRegistry.getOrCreate<any>('ethicalWalls'),
-  auditLogs: useBackendApi ? complianceApiServices.auditLogs : repositoryRegistry.getOrCreate<any>('auditLogs'),
-  permissions: useBackendApi ? complianceApiServices.permissions : repositoryRegistry.getOrCreate<any>('permissions'),
-  rlsPolicies: useBackendApi ? complianceApiServices.rlsPolicies : repositoryRegistry.getOrCreate<any>(STORES.POLICIES),
-  complianceReports: useBackendApi ? complianceApiServices.complianceReports : repositoryRegistry.getOrCreate<any>('complianceReports'),
-  admin: AdminService,
-  correspondence: CorrespondenceService, 
-  quality: getDataQualityService(),
-  catalog: DataCatalogService,
-  backup: BackupService,
-  profile: ProfileDomain,
-  crm: CRMService,
-  analytics: AnalyticsService,
-  operations: OperationsService,
-  security: SecurityService,
-  marketing: MarketingService,
-  jurisdiction: JurisdictionService,
-  knowledge: useBackendApi ? finalApiServices.knowledgeBase : getKnowledgeRepository(),
+  conflictChecks: { get: () => isBackendApiEnabled() ? complianceApiServices.conflictChecks : repositoryRegistry.getOrCreate<any>('conflictChecks'), enumerable: true },
+  ethicalWalls: { get: () => isBackendApiEnabled() ? complianceApiServices.ethicalWalls : repositoryRegistry.getOrCreate<any>('ethicalWalls'), enumerable: true },
+  auditLogs: { get: () => isBackendApiEnabled() ? complianceApiServices.auditLogs : repositoryRegistry.getOrCreate<any>('auditLogs'), enumerable: true },
+  permissions: { get: () => isBackendApiEnabled() ? complianceApiServices.permissions : repositoryRegistry.getOrCreate<any>('permissions'), enumerable: true },
+  rlsPolicies: { get: () => isBackendApiEnabled() ? complianceApiServices.rlsPolicies : repositoryRegistry.getOrCreate<any>(STORES.POLICIES), enumerable: true },
+  complianceReports: { get: () => isBackendApiEnabled() ? complianceApiServices.complianceReports : repositoryRegistry.getOrCreate<any>('complianceReports'), enumerable: true },
+  admin: { get: () => AdminService, enumerable: true },
+  correspondence: { get: () => CorrespondenceService, enumerable: true },
+  quality: { get: () => getDataQualityService(), enumerable: true },
+  catalog: { get: () => DataCatalogService, enumerable: true },
+  backup: { get: () => BackupService, enumerable: true },
+  profile: { get: () => ProfileDomain, enumerable: true },
+  crm: { get: () => CRMService, enumerable: true },
+  analytics: { get: () => AnalyticsService, enumerable: true },
+  operations: { get: () => OperationsService, enumerable: true },
+  security: { get: () => SecurityService, enumerable: true },
+  marketing: { get: () => MarketingService, enumerable: true },
+  jurisdiction: { get: () => JurisdictionService, enumerable: true },
+  knowledge: { get: () => isBackendApiEnabled() ? finalApiServices.knowledgeBase : getKnowledgeRepository(), enumerable: true },
   
-  analysis: getAnalysisRepository(),
+  analysis: { get: () => getAnalysisRepository(), enumerable: true },
 
   // Strategy Management (Arguments, Defenses, Citations)
-  strategy: {
-    getAll: async (caseId: string, type?: 'Argument' | 'Defense' | 'Citation') => {
-      const [args, defs, cits] = await Promise.all([
-        db.getAll<any>(STORES.CASE_STRATEGIES),
-        db.getAll<any>(STORES.CASE_STRATEGIES),
-        db.getAll<Citation>(STORES.CITATIONS)
-      ]);
-      if (type === 'Argument') return args.filter((s: any) => s.type === 'Argument' && s.caseId === caseId);
-      if (type === 'Defense') return defs.filter((s: any) => s.type === 'Defense' && s.caseId === caseId);
-      if (type === 'Citation') return cits.filter((c: any) => c.caseId === caseId);
-      return [...args, ...defs, ...cits].filter((s: any) => s.caseId === caseId);
-    },
-    add: async (item: any) => {
-      const newItem = { ...item, id: item.id || crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-      await db.put(item.type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES, newItem);
-      return newItem;
-    },
-    update: async (id: string, updates: any) => {
-      const store = updates.type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES;
-      const item = await db.get<any>(store, id);
-      if (!item) throw new Error('Strategy item not found');
-      const updated = { ...item, ...updates, updatedAt: new Date().toISOString() };
-      await db.put(store, updated);
-      return updated;
-    },
-    delete: async (id: string, type: 'Argument' | 'Defense' | 'Citation') => {
-      const store = type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES;
-      await db.delete(store, id);
-      return { success: true, id };
-    }
+  strategy: { 
+    get: () => ({
+      getAll: async (caseId: string, type?: 'Argument' | 'Defense' | 'Citation') => {
+        const [args, defs, cits] = await Promise.all([
+          db.getAll<any>(STORES.CASE_STRATEGIES),
+          db.getAll<any>(STORES.CASE_STRATEGIES),
+          db.getAll<Citation>(STORES.CITATIONS)
+        ]);
+        if (type === 'Argument') return args.filter((s: any) => s.type === 'Argument' && s.caseId === caseId);
+        if (type === 'Defense') return defs.filter((s: any) => s.type === 'Defense' && s.caseId === caseId);
+        if (type === 'Citation') return cits.filter((c: any) => c.caseId === caseId);
+        return [...args, ...defs, ...cits].filter((s: any) => s.caseId === caseId);
+      },
+      add: async (item: any) => {
+        const newItem = { ...item, id: item.id || crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+        await db.put(item.type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES, newItem);
+        return newItem;
+      },
+      update: async (id: string, updates: any) => {
+        const store = updates.type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES;
+        const item = await db.get<any>(store, id);
+        if (!item) throw new Error('Strategy item not found');
+        const updated = { ...item, ...updates, updatedAt: new Date().toISOString() };
+        await db.put(store, updated);
+        return updated;
+      },
+      delete: async (id: string, type: 'Argument' | 'Defense' | 'Citation') => {
+        const store = type === 'Citation' ? STORES.CITATIONS : STORES.CASE_STRATEGIES;
+        await db.delete(store, id);
+        return { success: true, id };
+      }
+    }), 
+    enumerable: true 
   },
 
   // Billing Transactions
-  transactions: {
-    getAll: async (accountType?: 'Operating' | 'Trust') => {
-      const txs = await db.getAll<any>('transactions');
-      return accountType ? txs.filter((t: any) => t.account === accountType) : txs;
-    },
-    add: async (transaction: any) => {
-      const newTx = { ...transaction, id: transaction.id || crypto.randomUUID(), createdAt: new Date().toISOString() };
-      await db.put('transactions', newTx);
-      return newTx;
-    }
+  transactions: { 
+    get: () => ({
+      getAll: async (accountType?: 'Operating' | 'Trust') => {
+        const txs = await db.getAll<any>('transactions');
+        return accountType ? txs.filter((t: any) => t.account === accountType) : txs;
+      },
+      add: async (transaction: any) => {
+        const newTx = { ...transaction, id: transaction.id || crypto.randomUUID(), createdAt: new Date().toISOString() };
+        await db.put('transactions', newTx);
+        return newTx;
+      }
+    }), 
+    enumerable: true 
   },
 
-  tasks: useBackendApi ? finalApiServices.tasks : getTasksRepository(),
+  tasks: { get: () => isBackendApiEnabled() ? finalApiServices.tasks : getTasksRepository(), enumerable: true },
   
-  projects: useBackendApi ? additionalApiServices.projects : getProjectsRepository(),
-  risks: useBackendApi ? finalApiServices.risks : getRisksRepository(),
-  motions: useBackendApi ? extendedApiServices.motions : getMotionsRepository(),
-  expenses: useBackendApi ? additionalApiServices.expenses : repositoryRegistry.getOrCreate<FirmExpense>(STORES.EXPENSES),
-  timeEntries: useBackendApi ? additionalApiServices.timeEntries : repositoryRegistry.getOrCreate<TimeEntry>(STORES.BILLING),
-  invoices: useBackendApi ? additionalApiServices.invoices : repositoryRegistry.getOrCreate<any>('invoices'),
-  communications: useBackendApi ? additionalApiServices.communications : repositoryRegistry.getOrCreate<any>('communications'),
-  exhibits: useBackendApi ? finalApiServices.exhibits : repositoryRegistry.getOrCreate<TrialExhibit>(STORES.EXHIBITS),
-  users: useBackendApi ? apiServices.users : repositoryRegistry.getOrCreate<User>(STORES.USERS),
-  rateTables: useBackendApi ? apiServices.rateTables : repositoryRegistry.getOrCreate<any>('rateTables'),
-  feeAgreements: useBackendApi ? apiServices.feeAgreements : repositoryRegistry.getOrCreate<any>('feeAgreements'),
-  custodians: useBackendApi ? apiServices.custodians : repositoryRegistry.getOrCreate<any>('custodians'),
-  examinations: useBackendApi ? apiServices.examinations : repositoryRegistry.getOrCreate<any>('examinations'),
-  clients: useBackendApi ? finalApiServices.clients : getClientsRepository(),
-  citations: useBackendApi ? finalApiServices.citations : getCitationsRepository(),
-  entities: getEntitiesRepository(),
-  playbooks: repositoryRegistry.getOrCreate<WorkflowTemplateData>(STORES.TEMPLATES),
-  clauses: useBackendApi ? extendedApiServices.clauses : repositoryRegistry.getOrCreate<Clause>(STORES.CLAUSES),
-  rules: repositoryRegistry.getOrCreate<LegalRule>(STORES.RULES),
+  projects: { get: () => isBackendApiEnabled() ? additionalApiServices.projects : getProjectsRepository(), enumerable: true },
+  risks: { get: () => isBackendApiEnabled() ? finalApiServices.risks : getRisksRepository(), enumerable: true },
+  motions: { get: () => isBackendApiEnabled() ? extendedApiServices.motions : getMotionsRepository(), enumerable: true },
+  expenses: { get: () => isBackendApiEnabled() ? additionalApiServices.expenses : repositoryRegistry.getOrCreate<FirmExpense>(STORES.EXPENSES), enumerable: true },
+  timeEntries: { get: () => isBackendApiEnabled() ? additionalApiServices.timeEntries : repositoryRegistry.getOrCreate<TimeEntry>(STORES.BILLING), enumerable: true },
+  invoices: { get: () => isBackendApiEnabled() ? additionalApiServices.invoices : repositoryRegistry.getOrCreate<any>('invoices'), enumerable: true },
+  communications: { get: () => isBackendApiEnabled() ? additionalApiServices.communications : repositoryRegistry.getOrCreate<any>('communications'), enumerable: true },
+  exhibits: { get: () => isBackendApiEnabled() ? finalApiServices.exhibits : repositoryRegistry.getOrCreate<TrialExhibit>(STORES.EXHIBITS), enumerable: true },
+  users: { get: () => isBackendApiEnabled() ? apiServices.users : repositoryRegistry.getOrCreate<User>(STORES.USERS), enumerable: true },
+  rateTables: { get: () => isBackendApiEnabled() ? apiServices.rateTables : repositoryRegistry.getOrCreate<any>('rateTables'), enumerable: true },
+  feeAgreements: { get: () => isBackendApiEnabled() ? apiServices.feeAgreements : repositoryRegistry.getOrCreate<any>('feeAgreements'), enumerable: true },
+  custodians: { get: () => isBackendApiEnabled() ? apiServices.custodians : repositoryRegistry.getOrCreate<any>('custodians'), enumerable: true },
+  examinations: { get: () => isBackendApiEnabled() ? apiServices.examinations : repositoryRegistry.getOrCreate<any>('examinations'), enumerable: true },
+  clients: { get: () => isBackendApiEnabled() ? finalApiServices.clients : getClientsRepository(), enumerable: true },
+  citations: { get: () => isBackendApiEnabled() ? finalApiServices.citations : getCitationsRepository(), enumerable: true },
+  entities: { get: () => getEntitiesRepository(), enumerable: true },
+  playbooks: { get: () => repositoryRegistry.getOrCreate<WorkflowTemplateData>(STORES.TEMPLATES), enumerable: true },
+  clauses: { get: () => isBackendApiEnabled() ? extendedApiServices.clauses : repositoryRegistry.getOrCreate<Clause>(STORES.CLAUSES), enumerable: true },
+  rules: { get: () => repositoryRegistry.getOrCreate<LegalRule>(STORES.RULES), enumerable: true },
 
-  phases: getPhaseRepository(),
+  phases: { get: () => getPhaseRepository(), enumerable: true },
   
-  organization: {
-    getOrgs: async () => db.getAll<Organization>(STORES.ORGS),
-    getGroups: async () => db.getAll<Group>(STORES.GROUPS)
+  organization: { 
+    get: () => ({
+      getOrgs: async () => db.getAll<Organization>(STORES.ORGS),
+      getGroups: async () => db.getAll<Group>(STORES.GROUPS)
+    }), 
+    enumerable: true 
   },
 
-  messenger: useBackendApi ? finalApiServices.messenger : {
+  messenger: { get: () => isBackendApiEnabled() ? finalApiServices.messenger : {
     getConversations: async () => db.getAll<Conversation>(STORES.CONVERSATIONS),
     getConversationById: async (id: string): Promise<Conversation | undefined> => db.get<Conversation>(STORES.CONVERSATIONS, id),
     getContacts: async () => { 
@@ -349,8 +358,8 @@ export const DataService = {
         const targetConv = convs.find(c => c.id === `conv-case-${caseId}`);
         return targetConv?.unread || 0;
     },
-  },
-  calendar: useBackendApi ? finalApiServices.calendar : {
+  }, enumerable: true },
+  calendar: { get: () => isBackendApiEnabled() ? finalApiServices.calendar : {
     getEvents: async (): Promise<CalendarEventItem[]> => {
         const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
         return tasks.filter(t => t.dueDate).map(t => ({
@@ -365,8 +374,9 @@ export const DataService = {
     getSOL: async (): Promise<any[]> => { await delay(50); return []; },
     getActiveRuleSets: async (): Promise<string[]> => { await delay(50); return ["FRCP", "FRE", "CA Local Rules"] },
     sync: async (): Promise<void> => { await delay(500); console.log('Calendar synced'); }
-  },
-  notifications: {
+  }, enumerable: true },
+  notifications: { 
+    get: () => ({
       getAll: async (): Promise<SystemNotification[]> => db.getAll<SystemNotification>(STORES.NOTIFICATIONS),
       markRead: async (id: string) => {
           const notif = await db.get<SystemNotification>(STORES.NOTIFICATIONS, id);
@@ -374,9 +384,12 @@ export const DataService = {
               await db.put(STORES.NOTIFICATIONS, { ...notif, read: true });
           }
       }
+    }), 
+    enumerable: true 
   },
   
-  collaboration: {
+  collaboration: { 
+    get: () => ({
       getConferrals: async (caseId: string) => {
           const all = await db.getAll<any>(STORES.CONFERRALS);
           return all.filter((c: any) => c.caseId === caseId);
@@ -388,9 +401,11 @@ export const DataService = {
       },
       updatePlan: async (plan: any) => db.put(STORES.JOINT_PLANS, plan),
       getStipulations: async () => db.getAll<any>(STORES.STIPULATIONS)
+    }), 
+    enumerable: true 
   },
 
-  warRoom: useBackendApi ? finalApiServices.warRoom : {
+  warRoom: { get: () => isBackendApiEnabled() ? finalApiServices.warRoom : {
       getData: async (caseId: string): Promise<WarRoomData> => {
           const c = await db.get<Case>(STORES.CASES, caseId);
           if (!c) throw new Error('Case not found');
@@ -440,15 +455,18 @@ export const DataService = {
           }));
           return caseId ? enriched.filter((o: any) => o.caseId === caseId) : enriched;
       }
-  },
+  }, enumerable: true },
 
-  research: {
+  research: { 
+    get: () => ({
       getHistory: async () => [],
       saveSession: async (session: any) => session,
       getSavedAuthorities: async () => []
+    }), 
+    enumerable: true 
   },
 
-  dashboard: useBackendApi ? finalApiServices.analyticsDashboard : {
+  dashboard: { get: () => isBackendApiEnabled() ? finalApiServices.analyticsDashboard : {
       getStats: async () => {
           const [cases, motions, timeEntries, risks] = await Promise.all([ 
               db.getAll<Case>(STORES.CASES), 
@@ -486,15 +504,19 @@ export const DataService = {
               id: t.id, message: `High Priority Task: ${t.title}`, detail: `Due: ${t.dueDate}`, time: 'Today', caseId: t.caseId
           }));
       }
-  },
+  }, enumerable: true },
 
-  assets: {
+  assets: { 
+    get: () => ({
       getAll: async () => db.getAll<any>('assets'),
       add: async (asset: any) => db.put('assets', asset),
       delete: async (id: string) => db.delete('assets', id)
+    }), 
+    enumerable: true 
   },
 
-  sources: {
+  sources: { 
+    get: () => ({
       getConnections: async () => {
           // Note: Backend integrations API not yet implemented
           // Using IndexedDB for persistence until backend endpoint is available
@@ -551,8 +573,13 @@ export const DataService = {
           await db.delete('dataSources', id);
           return { success: true, deletedId: id, timestamp: new Date().toISOString() };
       }
+    }), 
+    enumerable: true 
   },
-};
+});
+
+// Export DataService
+export const DataService = DataServiceBase;
 
 // ========================================
 // MEMORY MANAGEMENT UTILITIES

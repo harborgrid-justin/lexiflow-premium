@@ -26,6 +26,8 @@ import { Seeder } from '../services/dbSeeder';
 import { queryClient } from '../services/queryClient';
 import { GlobalSearchResult } from '../services/searchService';
 import { IntentResult } from '../services/geminiService';
+import { apiClient } from '../services/apiClient';
+import { isBackendApiEnabled } from '../services/apiServices';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';
@@ -64,29 +66,49 @@ export const useAppController = () => {
   useEffect(() => {
     const init = async () => {
         try {
-            await db.init();
+            const backendApiEnabled = isBackendApiEnabled();
             
-            // The app is interactive once the DB connection is established.
-            // Hide the main loading screen immediately.
-            setIsAppLoading(false);
-            
-            // Check if we need to seed data in the background.
-            const count = await db.count(STORES.CASES);
-            if (count === 0) {
-                addToast('Setting up for first-time use. Data will appear shortly.', 'info');
-                // Run the seeder, but don't await it.
-                Seeder.seed(db).then(() => {
-                    addToast('Initial data loaded successfully!', 'success');
-                    // Invalidate all queries to trigger a UI refresh with the new data.
-                    queryClient.invalidate(''); 
-                }).catch((e) => {
-                    console.error("Background seeding failed", e);
-                    addToast('Failed to load initial data. Please refresh.', 'error');
-                });
+            if (backendApiEnabled) {
+                // Backend API mode - check if backend is available
+                setAppStatusMessage('Connecting to backend API...');
+                try {
+                    await apiClient.healthCheck();
+                    setAppStatusMessage('Backend API connected successfully');
+                    setIsAppLoading(false);
+                } catch (apiError) {
+                    console.error("Backend API not available:", apiError);
+                    setAppStatusMessage('Backend API not available. Please start the backend server.');
+                    setIsAppLoading(false);
+                    addToast('Backend API not available. Switching to offline mode.', 'warning');
+                    // Optionally switch back to IndexedDB mode
+                    localStorage.setItem('VITE_USE_BACKEND_API', 'false');
+                }
+            } else {
+                // IndexedDB mode - initialize local database
+                await db.init();
+                
+                // The app is interactive once the DB connection is established.
+                // Hide the main loading screen immediately.
+                setIsAppLoading(false);
+                
+                // Check if we need to seed data in the background.
+                const count = await db.count(STORES.CASES);
+                if (count === 0) {
+                    addToast('Setting up for first-time use. Data will appear shortly.', 'info');
+                    // Run the seeder, but don't await it.
+                    Seeder.seed(db).then(() => {
+                        addToast('Initial data loaded successfully!', 'success');
+                        // Invalidate all queries to trigger a UI refresh with the new data.
+                        queryClient.invalidate(''); 
+                    }).catch((e) => {
+                        console.error("Background seeding failed", e);
+                        addToast('Failed to load initial data. Please refresh.', 'error');
+                    });
+                }
             }
         } catch (e) {
-            console.error("Failed to initialize database:", e);
-            setAppStatusMessage('Error initializing database.');
+            console.error("Failed to initialize application:", e);
+            setAppStatusMessage('Error initializing application.');
             // Ensure the loading screen is hidden even on error.
             setIsAppLoading(false); 
         }

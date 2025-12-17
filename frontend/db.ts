@@ -1,6 +1,6 @@
 
-import { StorageUtils } from '../utils/storage';
-import { BTree } from '../utils/datastructures/bTree';
+import { StorageUtils } from './utils/storage';
+import { BTree } from './utils/datastructures/bTree';
 
 export const STORES = {
   CASES: 'cases',
@@ -97,7 +97,7 @@ export const STORES = {
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 25; // Incremented for new stores
+  private dbVersion = 28; // Incremented for new stores
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -112,18 +112,75 @@ export class DatabaseManager {
   constructor() {
       try {
           if (!window.indexedDB) this.mode = 'LocalStorage';
+          // Load saved version if exists
+          const savedVersion = localStorage.getItem('LexiFlow_DB_Version');
+          if (savedVersion) {
+              this.dbVersion = parseInt(savedVersion, 10);
+          }
       } catch (e) {
           this.mode = 'LocalStorage';
       }
   }
 
   getMode() { return this.mode; }
+  getVersion() { return this.dbVersion; }
+  getDbName() { return this.dbName; }
 
   async switchMode(newMode: 'IndexedDB' | 'LocalStorage') {
       this.mode = newMode;
       this.initPromise = null;
       this.db = null;
       window.location.reload();
+  }
+
+  async incrementVersion() {
+      this.dbVersion += 1;
+      localStorage.setItem('LexiFlow_DB_Version', String(this.dbVersion));
+      console.log(`[DB] Version incremented to ${this.dbVersion}`);
+      return this.dbVersion;
+  }
+
+  async resetDatabase() {
+      if (this.db) {
+          this.db.close();
+          this.db = null;
+      }
+      this.initPromise = null;
+      
+      return new Promise<void>((resolve, reject) => {
+          const deleteRequest = indexedDB.deleteDatabase(this.dbName);
+          deleteRequest.onsuccess = () => {
+              console.log('[DB] Database deleted successfully');
+              localStorage.removeItem('LexiFlow_DB_Version');
+              this.dbVersion = 28;
+              resolve();
+          };
+          deleteRequest.onerror = () => {
+              console.error('[DB] Error deleting database');
+              reject(deleteRequest.error);
+          };
+      });
+  }
+
+  async getDbInfo() {
+      await this.init();
+      if (!this.db) return null;
+      
+      const stores = Array.from(this.db.objectStoreNames);
+      const storeStats = await Promise.all(
+          stores.map(async (storeName) => {
+              const count = await this.count(storeName);
+              return { name: storeName, count };
+          })
+      );
+      
+      return {
+          name: this.dbName,
+          version: this.dbVersion,
+          mode: this.mode,
+          stores: storeStats,
+          totalStores: stores.length
+      };
   }
 
   async init(): Promise<void> {

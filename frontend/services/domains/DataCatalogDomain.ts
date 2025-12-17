@@ -46,13 +46,18 @@ export const DataCatalogService = {
         const stores = Object.values(STORES);
         const info = [];
         for (const store of stores) {
-            const count = await db.count(store);
-            info.push({
-                name: store,
-                type: 'System Table',
-                records: count,
-                size: `${(count * 1.5 + 24).toFixed(1)} KB`
-            });
+            try {
+                const count = await db.count(store);
+                info.push({
+                    name: store,
+                    type: 'System Table',
+                    records: count,
+                    size: `${(count * 1.5 + 24).toFixed(1)} KB`
+                });
+            } catch (error) {
+                // Store doesn't exist in IndexedDB yet - skip it
+                console.debug(`[DataCatalog] Store "${store}" not found in IndexedDB, skipping`);
+            }
         }
         return info;
     },

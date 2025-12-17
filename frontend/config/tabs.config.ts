@@ -315,7 +315,8 @@ export const DATA_PLATFORM_MENU: MenuItem[] = [
       { id: 'config-advanced', label: 'Advanced', icon: Code },
       { id: 'config-imports', label: 'Import/Export', icon: FileSearch }
     ]
-  }
+  },
+  { id: 'database-mgmt', label: 'Database Management', icon: Database }
 ];
 
 // =============================================================================

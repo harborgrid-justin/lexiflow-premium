@@ -21,6 +21,7 @@ import { discoveryApiServices } from './apiServicesDiscovery';
 import { complianceApiServices } from './apiServicesCompliance';
 import { additionalApiServices } from './apiServicesAdditional';
 import { finalApiServices } from './apiServicesFinal';
+import { missingApiServices } from './api/missing-api-services';
 
 // Modular Repositories
 import { DocumentRepository } from './repositories/DocumentRepository';
@@ -575,6 +576,165 @@ Object.defineProperties(DataServiceBase, {
       }
     }), 
     enumerable: true 
+  },
+
+  // ========================================
+  // MISSING API SERVICES
+  // ========================================
+
+  discoveryMain: {
+    get: () => isBackendApiEnabled() ? missingApiServices.discovery : repositoryRegistry.getOrCreate('discovery', 'discovery'),
+    enumerable: true
+  },
+
+  search: {
+    get: () => isBackendApiEnabled() ? missingApiServices.search : {
+      fullText: async (query: string) => {
+        // Fallback: search across multiple stores
+        const results: any[] = [];
+        const stores = ['cases', 'documents', 'pleadings', 'docket'];
+        for (const store of stores) {
+          const items = await db.getAll<any>(store);
+          const matches = items.filter((item: any) => 
+            JSON.stringify(item).toLowerCase().includes(query.toLowerCase())
+          );
+          results.push(...matches.map(item => ({ ...item, _store: store })));
+        }
+        return results;
+      },
+      advanced: async (params: any) => {
+        const items = await db.getAll<any>(params.entity || 'cases');
+        return items.filter((item: any) => {
+          for (const [key, value] of Object.entries(params.filters || {})) {
+            if (item[key] !== value) return false;
+          }
+          return true;
+        });
+      }
+    },
+    enumerable: true
+  },
+
+  ocr: {
+    get: () => isBackendApiEnabled() ? missingApiServices.ocr : {
+      processDocument: async (documentId: string) => ({
+        success: false,
+        message: 'OCR processing requires backend',
+        jobId: null
+      }),
+      getStatus: async (jobId: string) => ({
+        status: 'unavailable',
+        progress: 0
+      })
+    },
+    enumerable: true
+  },
+
+  serviceJobs: {
+    get: () => isBackendApiEnabled() ? missingApiServices.serviceJobs : repositoryRegistry.getOrCreate('serviceJobs', 'serviceJobs'),
+    enumerable: true
+  },
+
+  messaging: {
+    get: () => isBackendApiEnabled() ? missingApiServices.messaging : repositoryRegistry.getOrCreate('messages', 'messages'),
+    enumerable: true
+  },
+
+  complianceMain: {
+    get: () => isBackendApiEnabled() ? missingApiServices.compliance : repositoryRegistry.getOrCreate('complianceReports', 'complianceReports'),
+    enumerable: true
+  },
+
+  tokenBlacklist: {
+    get: () => isBackendApiEnabled() ? missingApiServices.tokenBlacklist : {
+      getAll: async () => [],
+      add: async () => ({ success: false, message: 'Requires backend' }),
+      remove: async () => ({ success: false })
+    },
+    enumerable: true
+  },
+
+  analytics: {
+    get: () => isBackendApiEnabled() ? missingApiServices.analytics : {
+      getCaseAnalytics: async () => ({
+        totalCases: 0,
+        openCases: 0,
+        closedCases: 0,
+        casesByStatus: []
+      }),
+      getDiscoveryAnalytics: async () => ({
+        totalDocuments: 0,
+        reviewedDocuments: 0,
+        privilegedDocuments: 0
+      })
+    },
+    enumerable: true
+  },
+
+  judgeStats: {
+    get: () => isBackendApiEnabled() ? missingApiServices.judgeStats : {
+      getAll: async () => MOCK_JUDGES,
+      getById: async (id: string) => MOCK_JUDGES.find(j => j.id === id),
+      search: async (query: string) => MOCK_JUDGES.filter(j => 
+        j.name.toLowerCase().includes(query.toLowerCase())
+      )
+    },
+    enumerable: true
+  },
+
+  outcomePredictions: {
+    get: () => isBackendApiEnabled() ? missingApiServices.outcomePredictions : {
+      predict: async (caseId: string) => ({
+        caseId,
+        prediction: 'unavailable',
+        confidence: 0,
+        factors: []
+      }),
+      getHistory: async (caseId: string) => []
+    },
+    enumerable: true
+  },
+
+  documentVersions: {
+    get: () => isBackendApiEnabled() ? missingApiServices.documentVersions : repositoryRegistry.getOrCreate('documentVersions', 'documentVersions'),
+    enumerable: true
+  },
+
+  dataSourcesIntegration: {
+    get: () => isBackendApiEnabled() ? missingApiServices.dataSources : repositoryRegistry.getOrCreate('dataSources', 'dataSources'),
+    enumerable: true
+  },
+
+  metrics: {
+    get: () => isBackendApiEnabled() ? missingApiServices.metrics : {
+      getSystem: async () => ({
+        cpu: 0,
+        memory: 0,
+        disk: 0,
+        network: 0
+      }),
+      getApplication: async () => ({
+        requests: 0,
+        errors: 0,
+        responseTime: 0
+      })
+    },
+    enumerable: true
+  },
+
+  production: {
+    get: () => isBackendApiEnabled() ? missingApiServices.production : {
+      getStatus: async () => ({
+        environment: 'development',
+        version: '1.0.0',
+        healthy: true
+      }),
+      deploy: async () => ({
+        success: false,
+        message: 'Deployment requires backend'
+      })
+    },
+    enumerable: true
   },
 });
 

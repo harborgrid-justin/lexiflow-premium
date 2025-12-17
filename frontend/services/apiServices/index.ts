@@ -245,6 +245,22 @@ export const allApiServices = {
   knowledgeBase: finalApiServices.knowledgeBase,
   workflowTemplates: finalApiServices.workflowTemplates,
   hr: finalApiServices.hr,
+
+  // Missing/Additional services
+  discoveryMain: missingApiServices.discovery,
+  search: missingApiServices.search,
+  ocr: missingApiServices.ocr,
+  serviceJobs: missingApiServices.serviceJobs,
+  messaging: missingApiServices.messaging,
+  complianceMain: missingApiServices.compliance,
+  tokenBlacklist: missingApiServices.tokenBlacklist,
+  analytics: missingApiServices.analytics,
+  judgeStats: missingApiServices.judgeStats,
+  outcomePredictions: missingApiServices.outcomePredictions,
+  documentVersions: missingApiServices.documentVersions,
+  dataSourcesIntegration: missingApiServices.dataSources,
+  metrics: missingApiServices.metrics,
+  production: missingApiServices.production,
 };
 
 /**

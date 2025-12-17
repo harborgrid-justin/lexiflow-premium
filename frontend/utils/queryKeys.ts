@@ -289,6 +289,31 @@ export const queryKeys = {
     history: () => ['research', 'history'] as const,
   },
 
+  // Expenses
+  expenses: {
+    all: () => [STORES.EXPENSES, 'all'] as const,
+    lists: () => [STORES.EXPENSES, 'list'] as const,
+    detail: (id: string) => [STORES.EXPENSES, 'detail', id] as const,
+    byCaseId: (caseId: string) => [STORES.EXPENSES, 'byCaseId', caseId] as const,
+    unbilled: (caseId: string) => [STORES.EXPENSES, 'unbilled', caseId] as const,
+  },
+
+  // Trust Accounts
+  trust: {
+    all: () => ['trust', 'all'] as const,
+    accounts: () => ['trust', 'accounts'] as const,
+    transactions: (accountId: string) => ['trust', 'transactions', accountId] as const,
+  },
+
+  // Compliance
+  compliance: {
+    all: () => ['compliance', 'all'] as const,
+    conflicts: () => ['compliance', 'conflicts'] as const,
+    ethicalWalls: () => ['compliance', 'ethicalWalls'] as const,
+    policies: () => ['compliance', 'policies'] as const,
+    auditLogs: () => ['compliance', 'auditLogs'] as const,
+  },
+
   // Judge Profiles
   adminExtended: {
     permissions: () => ['admin', 'permissions'] as const,

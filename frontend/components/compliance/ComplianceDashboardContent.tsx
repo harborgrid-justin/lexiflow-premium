@@ -3,6 +3,7 @@ import React, { lazy } from 'react';
 import { useQuery } from '../../services/queryClient';
 import { DataService } from '../../services/dataService';
 import { STORES } from '../../services/db';
+import { queryKeys } from '../../utils/queryKeys';
 
 // Sub-components
 const ComplianceOverview = lazy(() => import('./ComplianceOverview').then(m => ({ default: m.ComplianceOverview })));

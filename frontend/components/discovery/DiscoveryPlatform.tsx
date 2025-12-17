@@ -67,9 +67,18 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   const notify = useNotify();
   const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
       caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab', 
-      'dashboard'
+      initialTab || 'dashboard'
   );
   const [contextId, setContextId] = useState<string | null>(null);
+
+  // Reset to dashboard if we're on a wizard view but have no context
+  useEffect(() => {
+    const isWizard = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
+    if (isWizard && !contextId) {
+      console.warn('[DiscoveryPlatform] Wizard view without context, resetting to dashboard');
+      setActiveTab('dashboard');
+    }
+  }, [activeTab, contextId, setActiveTab]);
 
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch

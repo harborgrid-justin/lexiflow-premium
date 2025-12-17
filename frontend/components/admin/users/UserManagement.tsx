@@ -10,7 +10,7 @@ import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
 
-interface User {
+interface UserData {
   id: string;
   email: string;
   firstName: string;
@@ -21,7 +21,7 @@ interface User {
   createdAt: string;
 }
 
-const mockUsers: User[] = [
+const mockUsers: UserData[] = [
   { id: '1', email: 'admin@lexiflow.com', firstName: 'Admin', lastName: 'User', role: 'Administrator', status: 'Active', lastLogin: '2024-01-15T10:30:00Z', createdAt: '2023-01-01' },
   { id: '2', email: 'partner@lexiflow.com', firstName: 'John', lastName: 'Smith', role: 'Senior Partner', status: 'Active', lastLogin: '2024-01-14T16:45:00Z', createdAt: '2023-03-15' },
   { id: '3', email: 'associate@lexiflow.com', firstName: 'Sarah', lastName: 'Johnson', role: 'Associate', status: 'Active', lastLogin: '2024-01-15T09:15:00Z', createdAt: '2023-06-20' },
@@ -31,13 +31,13 @@ const mockUsers: User[] = [
 export const UserManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const [users, setUsers] = useState<UserData[]>(mockUsers);
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState<Partial<User>>({});
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [formData, setFormData] = useState<Partial<UserData>>({});
 
   const filteredUsers = users.filter(u =>
     u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -50,12 +50,12 @@ export const UserManagement: React.FC = () => {
       notify.error('Please fill in all required fields');
       return;
     }
-    const newUser: User = {
+    const newUser: UserData = {
       id: `user-${Date.now()}`,
       email: formData.email,
       firstName: formData.firstName,
       lastName: formData.lastName,
-      role: formData.role as User['role'],
+      role: formData.role as UserData['role'],
       status: 'Pending',
       createdAt: new Date().toISOString().split('T')[0],
     };
@@ -95,7 +95,7 @@ export const UserManagement: React.FC = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const getRoleVariant = (role: User['role']) => {
+  const getRoleVariant = (role: UserData['role']) => {
     switch (role) {
       case 'Administrator': return 'error';
       case 'Senior Partner': return 'warning';
@@ -193,7 +193,7 @@ export const UserManagement: React.FC = () => {
             <select
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.role || ''}
-              onChange={e => setFormData({...formData, role: e.target.value as User['role']})}
+              onChange={e => setFormData({...formData, role: e.target.value as UserData['role']})}
               aria-label="Role"}
             >
               <option value="">Select role...</option>
@@ -225,7 +225,7 @@ export const UserManagement: React.FC = () => {
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.role || ''}
-                onChange={e => setFormData({...formData, role: e.target.value as User['role']})}
+                onChange={e => setFormData({...formData, role: e.target.value as UserData['role']})}
                 aria-label="Role"}
               >
                 <option value="Administrator">Administrator</option>
@@ -240,7 +240,7 @@ export const UserManagement: React.FC = () => {
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={e => setFormData({...formData, status: e.target.value as User['status']})}
+                onChange={e => setFormData({...formData, status: e.target.value as UserData['status']})}
                 aria-label="Status"
               >
                 <option value="Active">Active</option>

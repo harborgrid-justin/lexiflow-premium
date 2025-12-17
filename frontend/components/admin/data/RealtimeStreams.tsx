@@ -101,11 +101,11 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
   const getStatusColor = (status: DataStream['status']) => {
     switch (status) {
       case 'active':
-        return 'green';
+        return 'success';
       case 'paused':
-        return 'yellow';
+        return 'warning';
       case 'error':
-        return 'red';
+        return 'error';
     }
   };
 
@@ -179,7 +179,8 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
               </Card>
             ) : (
               <div className="space-y-4">
-                {liveStreams.map(stream => (
+                {liveStreams.map(stream => {
+                  return (
               <Card key={stream.id}>
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4 flex-1">
@@ -187,7 +188,7 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className={cn("font-semibold", theme.text.primary)}>{stream.name}</h3>
-                        <Badge variant={getStatusColor(stream.status) as any}>{stream.status}</Badge>
+                        <Badge variant={getStatusColor(stream.status)}>{stream.status}</Badge>
                       </div>
                       <p className={cn("text-sm mb-3", theme.text.secondary)}>
                         {stream.source} → {stream.target}
@@ -218,7 +219,8 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
                   </div>
                 </div>
               </Card>
-            ))}
+                  );
+                })}
           </div>
         )}
 

@@ -68,7 +68,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
-  const handleAddExhibit = () => {
+  const handleAddExhibit = async () => {
       const newExhibit: TrialExhibit = {
           id: `ex-${Date.now()}`,
           caseId: (caseId || 'General') as CaseId, 
@@ -78,9 +78,10 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
           party: 'Plaintiff',
           status: 'Marked',
           fileType: 'PDF',
-          description: 'Added via Exhibit Pro manager'
+          description: 'Added via Exhibit Pro manager',
+          type: 'Physical' // Default exhibit type
       };
-      addExhibit(newExhibit);
+      await addExhibit(newExhibit);
   };
 
   // Filter exhibits locally if the service returns all (fallback) 

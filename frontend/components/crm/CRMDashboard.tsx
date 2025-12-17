@@ -43,9 +43,9 @@ export const CRMDashboard: React.FC = () => {
       DataService.crm.getAnalytics
   );
 
-  const { data: clients = [] } = useQuery(['clients', 'all'], DataService.clients.getAll);
-  const { data: cases = [] } = useQuery(['cases', 'all'], DataService.cases.getAll);
-  const { data: leads = [] } = useQuery(['crm', 'leads'], DataService.crm.getLeads);
+  const { data: clients = [] } = useQuery(['clients', 'all'], () => DataService.clients.getAll());
+  const { data: cases = [] } = useQuery(['cases', 'all'], () => DataService.cases.getAll());
+  const { data: leads = [] } = useQuery(['crm', 'leads'], () => DataService.crm.getLeads());
 
   // Calculate dynamic metrics
   const activeClients = clients.filter((c: any) => c.status === 'Active').length;

@@ -36,6 +36,7 @@ export const STORES = {
   DISCOVERY_EXT_ESI: 'esi_sources', // ✓ Backend: esi_sources (renamed)
   DISCOVERY_EXT_PROD: 'productions', // ✓ Backend: productions (renamed)
   DISCOVERY_EXT_INT: 'custodian_interviews', // ✓ Backend: custodian_interviews (renamed)
+  CUSTODIANS: 'custodians', // Custodians for discovery
   REQUESTS: 'discovery_requests', // ✓ Backend: discovery_requests
   WITNESSES: 'witnesses', // ✓ Backend: witnesses
   CHAIN_OF_CUSTODY: 'chain_of_custody_events', // ✓ Backend: chain_of_custody_events (added)

@@ -1,42 +1,42 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ExhibitType, ExhibitStatus } from '../dto/create-exhibit.dto';
 
-@Entity('exhibits')
+@Entity('trial_exhibits')
 export class Exhibit {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', length: 100 })
   exhibitNumber: string;
 
-  @Column()
-  description: string;
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  title: string;
 
-  @Column({ type: 'enum', enum: ExhibitType })
+  @Column({ type: 'enum', enum: ExhibitType, name: 'exhibitType' })
   type: ExhibitType;
+
+  @Column({ type: 'text' })
+  description: string;
 
   @Column({ type: 'enum', enum: ExhibitStatus, default: ExhibitStatus.DRAFT })
   status: ExhibitStatus;
 
-  @Column()
+  @Column({ type: 'uuid' })
   caseId: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   documentId: string;
 
-  @Column({ nullable: true })
-  source: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  offeredBy: string;
 
-  @Column({ type: 'simple-array', nullable: true })
-  tags: string[];
+  @Column({ type: 'date', nullable: true })
+  dateOffered: Date;
 
-  @Column({ nullable: true })
-  custodian: string;
+  @Column({ type: 'date', nullable: true })
+  dateAdmitted: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
-  admissionDate: Date;
-
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   admittedBy: string;
 
   @CreateDateColumn()

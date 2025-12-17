@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { WitnessPrepStatus } from '../dto/create-witness-prep.dto';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('witness_prep_sessions')
 export class WitnessPrepSession {
@@ -11,6 +12,10 @@ export class WitnessPrepSession {
 
   @Column()
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'timestamp' })
   scheduledDate: Date;

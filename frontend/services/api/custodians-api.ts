@@ -13,6 +13,20 @@ import type {
   User,
 } from '../../types';
 
+export interface Custodian {
+  id: string;
+  caseId: string;
+  name: string;
+  email: string;
+  department: string;
+  role: string;
+  status: 'Active' | 'On Hold' | 'Released' | 'Pending';
+  legalHoldId?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export class CustodiansApiService {
   async getAll(filters?: { caseId?: string; status?: string }): Promise<Custodian[]> {
     const response = await apiClient.get<PaginatedResponse<Custodian>>('/discovery/custodians', filters);

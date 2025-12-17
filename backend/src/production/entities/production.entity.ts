@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 export enum ProductionStatus {
   PENDING = 'pending',
@@ -33,6 +34,10 @@ export class Production {
 
   @Column({ type: 'uuid' })
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'enum', enum: ProductionStatus, default: ProductionStatus.PENDING })
   status: ProductionStatus;

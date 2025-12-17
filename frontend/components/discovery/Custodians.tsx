@@ -59,10 +59,10 @@ export const Custodians: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   
-  // Load custodians from IndexedDB via useQuery for accurate, cached data
+  // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
   const { data: custodians = [], isLoading } = useQuery(
     queryKeys.discoveryExtended.custodians(),
-    DataService.discovery.getCustodians
+    () => DataService.custodians.getAll()
   );
   
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -73,10 +73,10 @@ export const Custodians: React.FC = () => {
 
   // Mutations with automatic cache invalidation
   const { mutate: createCustodian } = useMutation(
-    async (custodian: Custodian) => DataService.discovery.addCustodian(custodian),
+    async (custodian: Custodian) => DataService.custodians.create(custodian),
     {
       onSuccess: () => {
-        queryClient.invalidate(queryKeys.discovery.custodians());
+        queryClient.invalidate(queryKeys.discoveryExtended.custodians());
         setIsCreateModalOpen(false);
         setFormData({});
         notify.success('Custodian created successfully');
@@ -86,10 +86,10 @@ export const Custodians: React.FC = () => {
   );
 
   const { mutate: updateCustodian } = useMutation(
-    async (custodian: Custodian) => DataService.discovery.updateCustodian(custodian),
+    async (custodian: Custodian) => DataService.custodians.update(custodian.id, custodian),
     {
       onSuccess: () => {
-        queryClient.invalidate(queryKeys.discovery.custodians());
+        queryClient.invalidate(queryKeys.discoveryExtended.custodians());
         setIsEditModalOpen(false);
         setSelectedCustodian(null);
         setFormData({});
@@ -100,10 +100,10 @@ export const Custodians: React.FC = () => {
   );
 
   const { mutate: deleteCustodian } = useMutation(
-    async (id: string) => DataService.discovery.deleteCustodian(id),
+    async (id: string) => DataService.custodians.delete(id),
     {
       onSuccess: () => {
-        queryClient.invalidate(queryKeys.discovery.custodians());
+        queryClient.invalidate(queryKeys.discoveryExtended.custodians());
         setIsDeleteModalOpen(false);
         setSelectedCustodian(null);
         notify.success('Custodian deleted successfully');

@@ -41,6 +41,9 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
   const builderProps = useLitigationBuilder({ navigateToCaseTab });
   const { cases, selectedCaseId, setSelectedCaseId, deployToCase, isDeploying } = builderProps;
 
+  // Ensure cases is always an array
+  const safeCases = Array.isArray(cases) ? cases : [];
+
   return (
     <TabbedPageLayout
       pageTitle="Litigation Strategy Builder"
@@ -53,7 +56,7 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
                 className={cn("p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
             >
                 <option value="">Select a Case to Deploy To...</option>
-                {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                {safeCases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
             </select>
             <Button variant="primary" icon={isDeploying ? Loader2 : Rocket} onClick={deployToCase} disabled={!selectedCaseId || isDeploying}>
                 {isDeploying ? 'Deploying...' : 'Deploy'}

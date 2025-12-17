@@ -46,10 +46,10 @@ interface DashboardOverviewProps {
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCase }) => {
   // Enterprise Data Access: Parallel Queries with Caching
-  const { data: stats, isLoading: statsLoading } = useQuery(['dashboard', 'stats'], DataService.dashboard.getStats);
-  const { data: tasks = [] } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], DataService.tasks.getAll);
-  const { data: chartData = [] } = useQuery(['dashboard', 'charts'], DataService.dashboard.getChartData);
-  const { data: rawAlerts = [] } = useQuery(['dashboard', 'alerts'], DataService.dashboard.getRecentAlerts);
+  const { data: stats, isLoading: statsLoading } = useQuery(['dashboard', 'stats'], () => DataService.dashboard.getStats());
+  const { data: tasks = [] } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], () => DataService.tasks.getAll());
+  const { data: chartData = [] } = useQuery(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
+  const { data: rawAlerts = [] } = useQuery(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
 
   // Transform alerts to match DashboardAlert type
   const alerts = rawAlerts.map((alert: any, index: number) => ({

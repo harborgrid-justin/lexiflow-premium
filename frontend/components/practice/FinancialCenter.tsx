@@ -42,8 +42,8 @@ export const FinancialCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');
 
   // Enterprise Data Hooks
-  const { data: expenses } = useQuery(queryKeys.expenses.all(), DataService.expenses.getAll);
-  const { data: trustAccounts } = useQuery(queryKeys.trust.all(), DataService.billing.getTrustAccounts);
+  const { data: expenses } = useQuery(queryKeys.expenses.all(), () => DataService.expenses.getAll());
+  const { data: trustAccounts } = useQuery(queryKeys.trust.all(), () => DataService.billing.getTrustAccounts());
 
   return (
     <div className="space-y-6 animate-fade-in">

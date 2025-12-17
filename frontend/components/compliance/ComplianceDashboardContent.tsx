@@ -18,8 +18,8 @@ interface ComplianceDashboardContentProps {
 }
 
 export const ComplianceDashboardContent: React.FC<ComplianceDashboardContentProps> = ({ activeTab }) => {
-  const { data: conflicts = [] } = useQuery(queryKeys.compliance.conflicts(), DataService.compliance.getConflicts);
-  const { data: walls = [] } = useQuery(queryKeys.compliance.ethicalWalls(), DataService.compliance.getEthicalWalls);
+  const { data: conflicts = [] } = useQuery(queryKeys.compliance.conflicts(), () => DataService.compliance.getConflicts());
+  const { data: walls = [] } = useQuery(queryKeys.compliance.ethicalWalls(), () => DataService.compliance.getEthicalWalls());
 
   switch (activeTab) {
     case 'overview': return <ComplianceOverview />;

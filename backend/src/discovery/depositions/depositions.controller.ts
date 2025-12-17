@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   Query,
+  Head,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -20,6 +21,12 @@ import { QueryDepositionDto } from './dto/query-deposition.dto';
 @Controller('discovery/depositions')
 export class DepositionsController {
   constructor(private readonly depositionsService: DepositionsService) {}
+
+  @Head('health')
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return { status: 'ok' };
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

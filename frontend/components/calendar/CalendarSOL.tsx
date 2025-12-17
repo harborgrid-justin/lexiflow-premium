@@ -34,6 +34,9 @@ export const CalendarSOL: React.FC = () => {
       DataService.calendar.getSOL
   );
 
+  // Ensure solData is always an array
+  const safeData = Array.isArray(solData) ? solData : [];
+
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-red-600"/></div>;
 
   return (
@@ -55,7 +58,7 @@ export const CalendarSOL: React.FC = () => {
             <TableHead>Days Left</TableHead>
             </TableHeader>
             <TableBody>
-            {solData.map((row, i) => (
+            {safeData.map((row, i) => (
                 <TableRow key={i} className={row.critical ? 'bg-red-50/50' : ''}>
                     <TableCell className={`font-bold ${row.critical ? 'text-red-700' : 'text-slate-700'}`}>{row.date}</TableCell>
                     <TableCell className="font-medium text-slate-900">{row.matter}</TableCell>
@@ -69,7 +72,7 @@ export const CalendarSOL: React.FC = () => {
                     </TableCell>
                 </TableRow>
             ))}
-            {solData.length === 0 && (
+            {safeData.length === 0 && (
                 <TableRow><TableCell colSpan={5} className="text-center py-8 text-slate-400">No SOL alerts active.</TableCell></TableRow>
             )}
             </TableBody>
@@ -78,7 +81,7 @@ export const CalendarSOL: React.FC = () => {
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
-        {solData.map((row, i) => (
+        {safeData.map((row, i) => (
             <div key={i} className={`p-4 rounded-lg border shadow-sm ${row.critical ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
                 <div className="flex justify-between items-start mb-2">
                     <span className={`text-lg font-bold ${row.critical ? 'text-red-700' : 'text-slate-700'}`}>{row.date}</span>

@@ -43,4 +43,24 @@ export class CasesApiService {
     const response = await apiClient.get<PaginatedResponse<Case>>('/cases', { search: query, ...filters });
     return response.data;
   }
+
+  async getArchived(filters?: { page?: number; limit?: number }): Promise<any[]> {
+    // Try backend first, fallback to local filtering
+    try {
+      const response = await apiClient.get<PaginatedResponse<any>>('/cases/archived', filters);
+      return response.data;
+    } catch (error) {
+      // Fallback: filter locally by status
+      const allCases = await this.getAll({ status: 'Closed' });
+      // getAll returns an array of cases
+      const casesArray = Array.isArray(allCases) ? allCases : [];
+      return casesArray.map(c => ({
+        id: c.id,
+        date: c.dateTerminated || c.filingDate,
+        title: c.title,
+        client: c.client,
+        outcome: c.status
+      }));
+    }
+  }
 }

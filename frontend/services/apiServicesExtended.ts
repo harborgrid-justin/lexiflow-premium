@@ -588,6 +588,24 @@ export class PleadingsApiService {
   async delete(id: string): Promise<void> {
     await apiClient.delete(`/pleadings/${id}`);
   }
+
+  async getTemplates(): Promise<any[]> {
+    const response = await apiClient.get<PaginatedResponse<any>>('/pleadings/templates');
+    return response.data;
+  }
+
+  async getByCaseId(caseId: string): Promise<Pleading[]> {
+    return this.getAll({ caseId });
+  }
+
+  async createFromTemplate(templateId: string, caseId: string, title: string, userId: string): Promise<Pleading> {
+    return apiClient.post<Pleading>('/pleadings/from-template', {
+      templateId,
+      caseId,
+      title,
+      userId
+    });
+  }
 }
 
 // Clauses

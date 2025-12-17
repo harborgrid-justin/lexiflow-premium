@@ -46,7 +46,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
   const [groupBy, setGroupBy] = useState<GroupByOption>('group');
   const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
 
-  const { data: orgs = [] } = useQuery<Organization[]>([STORES.ORGS, 'all'], DataService.organization.getOrgs);
+  const { data: orgs = [] } = useQuery<Organization[]>([STORES.ORGS, 'all'], () => DataService.organization.getOrgs());
 
   useEffect(() => {
     Scheduler.defer(() => {

@@ -1,5 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+
+// Main Discovery Controller & Service
+import { DiscoveryController } from './discovery.controller';
+import { DiscoveryService } from './discovery.service';
 
 // Evidence
 import { Evidence } from './evidence/entities/evidence.entity';
@@ -53,6 +58,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
 
 @Module({
   imports: [
+    JwtModule.register({}),
     TypeOrmModule.forFeature([
       Evidence,
       DiscoveryRequest,
@@ -67,6 +73,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     ]),
   ],
   controllers: [
+    DiscoveryController,
     EvidenceController,
     DiscoveryRequestsController,
     DepositionsController,
@@ -79,6 +86,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     CustodianInterviewsController,
   ],
   providers: [
+    DiscoveryService,
     EvidenceService,
     DiscoveryRequestsService,
     DepositionsService,
@@ -91,6 +99,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     CustodianInterviewsService,
   ],
   exports: [
+    DiscoveryService,
     EvidenceService,
     DiscoveryRequestsService,
     DepositionsService,

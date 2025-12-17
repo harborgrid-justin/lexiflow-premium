@@ -82,7 +82,7 @@ export class ExhibitsService {
     const exhibit = await this.findOne(id);
     
     exhibit.status = ExhibitStatus.ADMITTED;
-    exhibit.admissionDate = new Date(date);
+    exhibit.dateAdmitted = new Date(date);
     exhibit.admittedBy = admittedBy;
 
     return await this.exhibitRepository.save(exhibit);

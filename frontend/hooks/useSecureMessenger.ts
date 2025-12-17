@@ -59,7 +59,8 @@ export const useSecureMessenger = () => {
   useEffect(() => {
     Scheduler.defer(() => {
         const files: Attachment[] = [];
-        conversations.forEach(c => {
+        const safeConversations = Array.isArray(conversations) ? conversations : [];
+        safeConversations.forEach(c => {
             c.messages.forEach(m => {
                 if (m.attachments) {
                     m.attachments.forEach(a => {
@@ -78,7 +79,9 @@ export const useSecureMessenger = () => {
   }, [conversations, searchTerm]);
 
   const sortedConversations = useMemo(() => {
-    return [...conversations].sort((a, b) => {
+    // Ensure conversations is an array before spreading
+    const safeConversations = Array.isArray(conversations) ? conversations : [];
+    return [...safeConversations].sort((a, b) => {
       const lastMsgA = a.messages[a.messages.length - 1];
       const lastMsgB = b.messages[b.messages.length - 1];
       // Handle potential empty messages array although robust data usually has one
@@ -98,13 +101,15 @@ export const useSecureMessenger = () => {
   }, [sortedConversations, searchTerm]);
 
   const contacts = useMemo(() => {
-      return contactsList.filter(c => 
+      // Ensure contactsList is an array before filtering
+      const safeContactsList = Array.isArray(contactsList) ? contactsList : [];
+      return safeContactsList.filter(c => 
           c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
           c.role.toLowerCase().includes(searchTerm.toLowerCase())
       );
   }, [contactsList, searchTerm]);
 
-  const activeConversation = conversations.find(c => c.id === activeConvId);
+  const activeConversation = Array.isArray(conversations) ? conversations.find(c => c.id === activeConvId) : undefined;
 
   const handleSelectConversation = (id: string) => {
     if (activeConvId === id) return;

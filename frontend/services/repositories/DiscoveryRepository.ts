@@ -38,6 +38,17 @@ export class DiscoveryRepository {
         return stats?.data || [];
     }
     
+    getCustodians = async (caseId?: string) => {
+        const custodians = await db.getAll<any>(STORES.CUSTODIANS);
+        return caseId ? custodians.filter(c => c.caseId === caseId) : custodians;
+    };
+    
+    addCustodian = async (custodian: any) => db.put(STORES.CUSTODIANS, custodian);
+    
+    updateCustodian = async (custodian: any) => db.put(STORES.CUSTODIANS, custodian);
+    
+    deleteCustodian = async (id: string) => db.delete(STORES.CUSTODIANS, id);
+    
     // --- Review & Production ---
     getReviewBatches = async (caseId: string): Promise<ReviewBatch[]> => {
         return db.getByIndex(STORES.REVIEW_BATCHES, 'caseId', caseId);

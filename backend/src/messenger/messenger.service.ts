@@ -26,9 +26,10 @@ export class MessengerService {
     const { page = 1, limit = 50 } = query;
     const skip = (page - 1) * limit;
 
+    // Use jsonb_array_elements_text for JSONB array matching
     const [data, total] = await this.conversationRepository
       .createQueryBuilder('conversation')
-      .where(':userId = ANY(conversation.participants)', { userId })
+      .where("conversation.participants::jsonb @> :userId::jsonb", { userId: JSON.stringify([userId]) })
       .skip(skip)
       .take(limit)
       .orderBy('conversation.lastMessageAt', 'DESC')

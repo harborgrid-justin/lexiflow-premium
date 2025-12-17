@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, Index } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, Index, ManyToOne, JoinColumn } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('search_index')
 @Index(['entityType', 'entityId'])
@@ -30,6 +31,10 @@ export class SearchIndex {
   @Column({ type: 'uuid', nullable: true })
   @Index()
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'uuid', nullable: true })
   @Index()

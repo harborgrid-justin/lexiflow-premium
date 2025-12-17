@@ -31,10 +31,6 @@ export class Party extends BaseEntity {
   @Column({ type: 'uuid' })
   caseId: string;
 
-  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
-  case: Case;
-
   @Column({ type: 'varchar', length: 255 })
   name: string;
 

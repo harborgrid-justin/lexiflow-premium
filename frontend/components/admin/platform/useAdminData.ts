@@ -6,11 +6,11 @@ import { Category } from './EntitySidebar';
 
 export const useAdminData = (activeCategory: Category) => {
   // Independent Queries
-  const usersQuery = useQuery([STORES.USERS, 'all'], DataService.users.getAll);
-  const casesQuery = useQuery([STORES.CASES, 'all'], DataService.cases.getAll);
-  const clientsQuery = useQuery([STORES.CLIENTS, 'all'], DataService.clients.getAll);
-  const clausesQuery = useQuery([STORES.CLAUSES, 'all'], DataService.clauses.getAll);
-  const docsQuery = useQuery([STORES.DOCUMENTS, 'all'], DataService.documents.getAll);
+  const usersQuery = useQuery([STORES.USERS, 'all'], () => DataService.users.getAll());
+  const casesQuery = useQuery([STORES.CASES, 'all'], () => DataService.cases.getAll());
+  const clientsQuery = useQuery([STORES.CLIENTS, 'all'], () => DataService.clients.getAll());
+  const clausesQuery = useQuery([STORES.CLAUSES, 'all'], () => DataService.clauses.getAll());
+  const docsQuery = useQuery([STORES.DOCUMENTS, 'all'], () => DataService.documents.getAll());
 
   const dataMap = {
       users: usersQuery.data || [],

@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, Not, IsNull } from 'typeorm';
-import { DiscoveryRequest } from './entities/discovery-request.entity';
-import { LegalHold } from './entities/legal-hold.entity';
+import { DiscoveryRequest, DiscoveryRequestStatus } from './discovery-requests/entities/discovery-request.entity';
+import { LegalHold, LegalHoldStatus } from './legal-holds/entities/legal-hold.entity';
 import { Custodian } from './entities/custodian.entity';
+import { Evidence } from './evidence/entities/evidence.entity';
 
 @Injectable()
 export class DiscoveryService {
@@ -25,6 +26,8 @@ export class DiscoveryService {
     private legalHoldRepository: Repository<LegalHold>,
     @InjectRepository(Custodian)
     private custodianRepository: Repository<Custodian>,
+    @InjectRepository(Evidence)
+    private evidenceRepository: Repository<Evidence>,
   ) {}
 
   async findAllRequests(): Promise<any[]> {
@@ -59,10 +62,13 @@ export class DiscoveryService {
   }
 
   async getOverdueRequests(): Promise<any[]> {
-    // Note: dueDate field doesn't exist on DiscoveryRequest entity
-    // This query needs entity fields to be properly defined
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     return this.discoveryRequestRepository.find({
-      where: { caseId: Not(IsNull()) },
+      where: {
+        dueDate: LessThan(today),
+        status: Not(DiscoveryRequestStatus.COMPLETED),
+      },
     });
   }
 
@@ -89,15 +95,15 @@ export class DiscoveryService {
 
   async releaseHold(id: string): Promise<any> {
     const hold = await this.findHoldById(id);
-    hold.status = 'released';
+    hold.status = LegalHoldStatus.RELEASED;
+    hold.releaseDate = new Date();
     await this.legalHoldRepository.save(hold);
     return hold;
   }
 
   async getActiveHolds(): Promise<any[]> {
-    // Note: status field doesn't exist on LegalHold entity
     return this.legalHoldRepository.find({
-      where: { caseId: Not(IsNull()) },
+      where: { status: LegalHoldStatus.ACTIVE },
     });
   }
 
@@ -132,18 +138,69 @@ export class DiscoveryService {
   }
 
   async getDiscoveryStats(caseId: string): Promise<any> {
+    const requests = await this.findRequestsByCaseId(caseId);
+    const holds = await this.findHoldsByCaseId(caseId);
+    
+    const totalRequests = requests.length;
+    const completedRequests = requests.filter(r => r.status === DiscoveryRequestStatus.COMPLETED).length;
+    const pendingRequests = requests.filter(r => 
+      r.status !== DiscoveryRequestStatus.COMPLETED && 
+      r.status !== DiscoveryRequestStatus.OBJECTED
+    ).length;
+    const activeHolds = holds.filter(h => h.status === LegalHoldStatus.ACTIVE).length;
+    const totalCustodians = holds.reduce((sum, hold) => sum + (hold.totalCustodians || 0), 0);
+
     return {
-      totalRequests: 0,
-      pendingRequests: 0,
-      completedRequests: 0,
-      activeHolds: 0,
-      totalCustodians: 0,
+      totalRequests,
+      pendingRequests,
+      completedRequests,
+      overdueRequests: requests.filter(r => 
+        r.dueDate && new Date(r.dueDate) < new Date() && 
+        r.status !== DiscoveryRequestStatus.COMPLETED
+      ).length,
+      activeHolds,
+      totalHolds: holds.length,
+      totalCustodians,
     };
   }
 
-  async getAllEvidence(query?: any): Promise<any[]> {
-    // Return empty array for now - evidence is handled by the evidence controller
-    // This is just for the discovery/evidence health check endpoint
-    return [];
+  async getAllEvidence(query?: any): Promise<Evidence[]> {
+    const whereClause: any = {};
+    
+    if (query?.caseId) {
+      whereClause.caseId = query.caseId;
+    }
+    
+    if (query?.type) {
+      whereClause.type = query.type;
+    }
+    
+    if (query?.admissibilityStatus) {
+      whereClause.admissibilityStatus = query.admissibilityStatus;
+    }
+    
+    return this.evidenceRepository.find({
+      where: whereClause,
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getEvidenceByCaseId(caseId: string): Promise<Evidence[]> {
+    return this.evidenceRepository.find({
+      where: { caseId },
+      order: { title: 'ASC' },
+    });
+  }
+
+  async getEvidenceById(id: string): Promise<Evidence> {
+    const evidence = await this.evidenceRepository.findOne({
+      where: { id },
+    });
+    
+    if (!evidence) {
+      throw new NotFoundException(`Evidence with ID ${id} not found`);
+    }
+    
+    return evidence;
   }
 }

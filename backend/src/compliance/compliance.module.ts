@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
 
 // Entities
 import { ComplianceCheck } from './entities/compliance-check.entity';
 import { AuditLog } from './entities/audit-log.entity';
 import { ComplianceRule } from './entities/compliance-rule.entity';
 
-// Main service
+// Main controller & service
+import { ComplianceController } from './compliance.controller';
 import { ComplianceService } from './compliance.service';
 
 // Audit Logs
@@ -37,9 +39,11 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
 
 @Module({
   imports: [
+    JwtModule.register({}),
     TypeOrmModule.forFeature([ComplianceCheck, AuditLog, ComplianceRule]),
   ],
   controllers: [
+    ComplianceController,
     AuditLogsController,
     ConflictChecksController,
     EthicalWallsController,

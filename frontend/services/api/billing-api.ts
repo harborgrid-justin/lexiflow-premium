@@ -55,4 +55,67 @@ export class BillingApiService {
   async deleteTimeEntry(id: string): Promise<void> {
     await apiClient.delete(`/billing/time-entries/${id}`);
   }
+
+  async getTrustAccounts(filters?: { page?: number; limit?: number }): Promise<any[]> {
+    try {
+      const response = await apiClient.get<PaginatedResponse<any>>('/billing/trust-accounts', filters);
+      return response.data;
+    } catch (error) {
+      // Fallback to empty array if endpoint doesn't exist yet
+      console.warn('Trust accounts endpoint not available, returning empty array');
+      return [];
+    }
+  }
+
+  async getWIPStats(): Promise<any[]> {
+    try {
+      return await apiClient.get<any[]>('/billing/wip-stats');
+    } catch (error) {
+      console.warn('WIP stats endpoint not available, returning empty array');
+      return [];
+    }
+  }
+
+  async getRealizationStats(): Promise<any> {
+    try {
+      return await apiClient.get<any>('/billing/realization-stats');
+    } catch (error) {
+      console.warn('Realization stats endpoint not available, returning default');
+      return [
+        { name: 'Billed', value: 0, color: '#10b981' },
+        { name: 'Write-off', value: 100, color: '#ef4444' },
+      ];
+    }
+  }
+
+  async getRates(timekeeperId: string): Promise<any[]> {
+    try {
+      return await apiClient.get<any[]>(`/billing/rates/${timekeeperId}`);
+    } catch (error) {
+      console.warn('Rates endpoint not available, returning empty array');
+      return [];
+    }
+  }
+
+  async getInvoices(filters?: { caseId?: string; clientId?: string; status?: string }): Promise<any[]> {
+    try {
+      const response = await apiClient.get<PaginatedResponse<any>>('/billing/invoices', filters);
+      return response.data;
+    } catch (error) {
+      console.warn('Invoices endpoint not available, returning empty array');
+      return [];
+    }
+  }
+
+  async createInvoice(data: any): Promise<any> {
+    return apiClient.post<any>('/billing/invoices', data);
+  }
+
+  async updateInvoice(id: string, data: any): Promise<any> {
+    return apiClient.put<any>(`/billing/invoices/${id}`, data);
+  }
+
+  async sendInvoice(id: string): Promise<any> {
+    return apiClient.post<any>(`/billing/invoices/${id}/send`, {});
+  }
 }

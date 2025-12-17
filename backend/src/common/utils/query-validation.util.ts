@@ -5,7 +5,7 @@
 
 // Define allowed sort fields for each entity type
 const ENTITY_SORT_FIELDS: Record<string, string[]> = {
-  case: ['id', 'caseNumber', 'title', 'status', 'createdAt', 'updatedAt'],
+  case: ['id', 'caseNumber', 'title', 'status', 'filingDate', 'closeDate', 'trialDate', 'createdAt', 'updatedAt'],
   document: ['id', 'fileName', 'fileSize', 'createdAt', 'updatedAt'],
   expense: ['id', 'amount', 'expenseDate', 'category', 'createdAt', 'updatedAt'],
   invoice: ['id', 'invoiceNumber', 'amount', 'dueDate', 'status', 'createdAt', 'updatedAt'],

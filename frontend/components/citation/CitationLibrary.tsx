@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ExternalLink, Loader2, BookOpen } from 'lucide-react';
 
 // ============================================================================
@@ -48,13 +48,16 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
     const { openWindow, closeWindow } = useWindow();
     const [searchTerm, setSearchTerm] = useState('');
 
-    const { data: citations, isLoading } = useQuery<Citation[]>(
+    const { data: citations = [], isLoading } = useQuery<Citation[]>(
         [STORES.CITATIONS, 'all'],
         DataService.citations.getAll
     );
 
+    // Memoize the citations array to prevent re-creating on every render
+    const memoizedCitations = useMemo(() => citations, [citations]);
+
     const { filteredItems: filteredCitations, isSearching } = useWorkerSearch({
-        items: citations || [],
+        items: memoizedCitations,
         query: searchTerm,
         fields: ['citation', 'title', 'description', 'type']
     });

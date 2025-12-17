@@ -13,7 +13,11 @@ export interface SyncContextType {
   syncStatus: 'idle' | 'syncing' | 'offline' | 'error';
 }
 
-export const SyncContext = createContext<SyncContextType | undefined>(undefined);
+// Create context in a separate variable to avoid Fast Refresh issues
+const SyncContext = createContext<SyncContextType | undefined>(undefined);
+
+// Export context (non-component export should be before component exports)
+export { SyncContext };
 
 const MAX_RETRIES = 3;
 const BASE_DELAY = 1000;

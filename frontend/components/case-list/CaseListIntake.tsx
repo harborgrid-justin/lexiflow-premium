@@ -154,12 +154,17 @@ export const CaseListIntake: React.FC = () => {
               </button>
             ) : undefined}
           >
-            {leads.filter((l: any) => l.stage === stage).map((lead: any) => (
-              <KanbanCard
-                key={lead.id}
-                onDragStart={(e) => handleDragStart(e, lead.id)}
-                isDragging={draggedLeadId === lead.id}
-              >
+            {leads.filter((l: any) => l.stage === stage).length === 0 ? (
+              <div className={cn("text-center py-8 text-xs", theme.text.tertiary)}>
+                No leads in this stage
+              </div>
+            ) : (
+              leads.filter((l: any) => l.stage === stage).map((lead: any) => (
+                <KanbanCard
+                  key={lead.id}
+                  onDragStart={(e) => handleDragStart(e, lead.id)}
+                  isDragging={draggedLeadId === lead.id}
+                >
                 <div className="flex justify-between items-start mb-1">
                   <h4 className={cn("font-bold text-sm line-clamp-1 transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{lead.client}</h4>
                 </div>
@@ -174,7 +179,8 @@ export const CaseListIntake: React.FC = () => {
                   </span>
                 </div>
               </KanbanCard>
-            ))}
+            ))
+          )}
           </KanbanColumn>
         ))}
       </KanbanBoard>

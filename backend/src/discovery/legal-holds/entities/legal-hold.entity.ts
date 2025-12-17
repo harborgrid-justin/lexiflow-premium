@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum LegalHoldStatus {
   DRAFT = 'DRAFT',
@@ -21,6 +24,10 @@ export class LegalHold {
 
   @Column({ type: 'uuid' })
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'varchar', length: 300 })
   holdName: string;

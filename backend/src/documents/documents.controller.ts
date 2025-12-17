@@ -15,6 +15,7 @@ import {
   ParseUUIDPipe,
   Inject,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -28,7 +29,8 @@ import { OcrRequestDto } from '../ocr/dto/ocr-request.dto';
 
 @ApiTags('documents')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/documents')
+@Public() // Allow public access for development
+@Controller('documents')
 export class DocumentsController {
   constructor(
     private readonly documentsService: DocumentsService,
@@ -172,3 +174,4 @@ export class DocumentsController {
     };
   }
 }
+

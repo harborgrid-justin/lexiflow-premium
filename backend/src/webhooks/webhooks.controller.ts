@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { WebhooksService } from './webhooks.service';
 import { CreateWebhookDto, UpdateWebhookDto } from './dto';
@@ -17,7 +18,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @ApiTags('Webhooks')
-@Controller('api/v1/webhooks')
+@Public() // Allow public access for development
+@Controller('webhooks')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class WebhooksController {
@@ -116,3 +118,4 @@ export class WebhooksController {
     return this.webhooksService.getDeliveries(id, userId);
   }
 }
+

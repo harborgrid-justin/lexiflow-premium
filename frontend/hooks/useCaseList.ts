@@ -20,17 +20,23 @@ export const useCaseList = () => {
   const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
 
   const { 
-    data: cases = [], 
+    data: casesResponse, 
     isLoading, 
     isError 
-  } = useQuery<Case[]>(
+  } = useQuery<Case[] | { data: Case[] }>(
     [STORES.CASES, 'all'], 
     () => DataService.cases.getAll(),
     { staleTime: 30000 } 
   );
 
+  // Handle both array and paginated response formats
+  const cases = useMemo(() => {
+    if (!casesResponse) return [];
+    return Array.isArray(casesResponse) ? casesResponse : casesResponse.data || [];
+  }, [casesResponse]);
+
   const filteredCases = useMemo(() => {
-    if (!cases) return [];
+    if (!cases || cases.length === 0) return [];
     const lowerSearch = debouncedSearchTerm.toLowerCase();
     return cases.filter(c => {
       const matchesStatus = statusFilter === 'All' || c.status === statusFilter;

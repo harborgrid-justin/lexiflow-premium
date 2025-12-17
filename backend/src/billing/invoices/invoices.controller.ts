@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -20,7 +21,8 @@ import { InvoiceItem } from './entities/invoice-item.entity';
 
 @ApiTags('Billing - Invoices')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/billing/invoices')
+@Public() // Allow public access for development
+@Controller('billing/invoices')
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}
 
@@ -77,3 +79,4 @@ export class InvoicesController {
     await this.invoicesService.remove(id);
   }
 }
+

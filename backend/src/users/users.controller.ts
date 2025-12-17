@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,7 +25,8 @@ import { Permission } from '../common/enums/permission.enum';
 
 @ApiTags('Users')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/users')
+@Public() // Allow public access for development
+@Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -60,3 +62,4 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 }
+

@@ -7,7 +7,6 @@ import { Motion } from './motion.entity';
 import { DocketEntry } from './docket-entry.entity';
 import { Project } from './project.entity';
 import { TimeEntry } from './time-entry.entity';
-import { Invoice } from './invoice.entity';
 import { LegalDocument } from './legal-document.entity';
 import { DiscoveryRequest } from './discovery-request.entity';
 import { Deposition } from './deposition.entity';
@@ -96,8 +95,7 @@ export class Case extends BaseEntity {
   @OneToMany(() => TimeEntry, (entry) => entry.case, { cascade: true })
   timeEntries: TimeEntry[];
 
-  @OneToMany(() => Invoice, (invoice) => invoice.case, { cascade: true })
-  invoices: Invoice[];
+  // Note: No relation to Invoice - invoice.caseId is a string reference, not a foreign key
 
   @OneToMany(() => LegalDocument, (document) => document.case, { cascade: true })
   documents: LegalDocument[];

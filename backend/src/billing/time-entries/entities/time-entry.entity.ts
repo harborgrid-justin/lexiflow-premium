@@ -9,6 +9,7 @@ import {
   Index,
 } from 'typeorm';
 import { User } from '../../../entities/user.entity';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum TimeEntryStatus {
   DRAFT = 'Draft',
@@ -34,6 +35,10 @@ export class TimeEntry {
   @Column({ name: 'case_id', nullable: true })
   @Index()
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'case_id' })
+  case: Case;
 
   @Column({ name: 'user_id', nullable: true })
   @Index()

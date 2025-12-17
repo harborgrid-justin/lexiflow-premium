@@ -111,11 +111,17 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // ============================================================================
   // DATA FETCHING
   // ============================================================================
-  const { data: allCases = [] } = useQuery<Case[]>(
+  const { data: allCasesRaw } = useQuery<Case[]>(
       [STORES.CASES, 'all'],
       DataService.cases.getAll,
       { enabled: !caseId }
   );
+  
+  // Ensure allCases is always an array (defensive programming for backend data)
+  const allCases = useMemo(() => {
+    if (!allCasesRaw) return [];
+    return Array.isArray(allCasesRaw) ? allCasesRaw : [];
+  }, [allCasesRaw]);
 
   const { data: trialData, isLoading } = useQuery(
       [STORES.CASES, currentCaseId, 'warRoom'],

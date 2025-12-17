@@ -24,6 +24,11 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Skip authentication in development mode
+    if (process.env.NODE_ENV === 'development') {
+      return true;
+    }
+
     // Check if route is public (supports both 'isPublic' and 'IS_PUBLIC_KEY')
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),

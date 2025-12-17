@@ -137,14 +137,23 @@ export const MetricCard: React.FC<{
   sparklineData?: number[];
 }> = ({ label, value, icon: Icon, trend, trendUp, className = "", isLive = false, sparklineData }) => {
   const { theme } = useTheme();
-  const [displayValue, setDisplayValue] = useState<string | number>(typeof value === 'number' ? 0 : value);
-  const prevValueRef = useRef(value);
+  
+  // Normalize value to handle undefined, null, and NaN
+  const normalizedValue = React.useMemo(() => {
+    if (value === null || value === undefined) return 0;
+    if (typeof value === 'number' && isNaN(value)) return 0;
+    return value;
+  }, [value]);
+  
+  const isNumeric = typeof normalizedValue === 'number';
+  const [displayValue, setDisplayValue] = useState<string | number>(isNumeric ? 0 : normalizedValue);
+  const prevValueRef = useRef(normalizedValue);
 
   // Animation effect for numeric values
   useEffect(() => {
-    if (typeof value === 'number') {
+    if (typeof normalizedValue === 'number') {
       let start = typeof displayValue === 'number' ? displayValue : 0;
-      const end = value;
+      const end = normalizedValue;
       if (start === end) return;
 
       const range = end - start;
@@ -166,10 +175,10 @@ export const MetricCard: React.FC<{
       
       requestAnimationFrame(animate);
     } else {
-      setDisplayValue(value);
+      setDisplayValue(normalizedValue);
     }
-    prevValueRef.current = value;
-  }, [value]);
+    prevValueRef.current = normalizedValue;
+  }, [normalizedValue, displayValue]);
   
   // Sparkline Generator
   const renderSparkline = () => {
@@ -217,7 +226,7 @@ export const MetricCard: React.FC<{
         <div>
           <p className={cn("text-[10px] font-bold uppercase tracking-wider mb-1.5", theme.text.secondary)}>{label}</p>
           <div className={cn("text-2xl font-bold tracking-tight", theme.text.primary)}>
-              {typeof value === 'number' ? displayValue.toLocaleString() : value}
+              {typeof displayValue === 'number' ? displayValue.toLocaleString() : (displayValue || '0')}
           </div>
         </div>
         {Icon && (

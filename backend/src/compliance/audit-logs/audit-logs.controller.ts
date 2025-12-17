@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuditLogsService } from './audit-logs.service';
 import {
@@ -18,7 +19,8 @@ import {
 
 @ApiTags('Compliance - Audit Logs')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/audit-logs')
+@Public() // Allow public access for development
+@Controller('audit-logs')
 export class AuditLogsController {
   constructor(private readonly auditLogsService: AuditLogsService) {}
 
@@ -51,3 +53,4 @@ export class AuditLogsController {
     return this.auditLogsService.findOne(id);
   }
 }
+

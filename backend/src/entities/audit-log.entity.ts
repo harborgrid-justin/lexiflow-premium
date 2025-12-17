@@ -142,8 +142,6 @@ export class AuditLog extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
 
-  // Relations
-  @ManyToOne(() => User, (user) => user.auditLogs, { nullable: true })
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  // Note: No foreign key relation to User table to allow audit logs
+  // to persist even after users are deleted (audit trail integrity)
 }

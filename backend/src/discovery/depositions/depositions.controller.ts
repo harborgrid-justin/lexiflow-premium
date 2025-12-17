@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { DepositionsService } from './depositions.service';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';
 import { QueryDepositionDto } from './dto/query-deposition.dto';
 
-@Controller('api/v1/discovery/depositions')
+@Public() // Allow public access for development
+@Controller('discovery/depositions')
 export class DepositionsController {
   constructor(private readonly depositionsService: DepositionsService) {}
 
@@ -62,3 +64,4 @@ export class DepositionsController {
     await this.depositionsService.remove(id);
   }
 }
+

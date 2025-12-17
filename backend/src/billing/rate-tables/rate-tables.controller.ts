@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { RateTablesService } from './rate-tables.service';
 import { CreateRateTableDto } from './dto/create-rate-table.dto';
 import { UpdateRateTableDto } from './dto/update-rate-table.dto';
 import { RateTable } from './entities/rate-table.entity';
 
-@Controller('api/v1/billing/rates')
+@Public() // Allow public access for development
+@Controller('billing/rates')
 export class RateTablesController {
   constructor(private readonly rateTablesService: RateTablesService) {}
 
@@ -68,3 +70,4 @@ export class RateTablesController {
     await this.rateTablesService.remove(id);
   }
 }
+

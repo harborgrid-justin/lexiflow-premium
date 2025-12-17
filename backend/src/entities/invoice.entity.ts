@@ -1,6 +1,5 @@
 import { Entity, Column, Index, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Case } from './case.entity';
 import { Client } from './client.entity';
 import { TimeEntry } from './time-entry.entity';
 
@@ -98,11 +97,7 @@ export class Invoice extends BaseEntity {
   billingAddress: string;
 
   // Relations
-  @ManyToOne(() => Case, (caseEntity) => caseEntity.invoices, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'caseId' })
-  case: Case;
+  // Note: No ManyToOne to Case - caseId is a string reference only, not a foreign key
 
   @ManyToOne(() => Client, (client) => client.invoices)
   @JoinColumn({ name: 'clientId' })

@@ -10,19 +10,32 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Head,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { EvidenceService } from './evidence.service';
 import { CreateEvidenceDto } from './dto/create-evidence.dto';
 import { UpdateEvidenceDto } from './dto/update-evidence.dto';
 import { QueryEvidenceDto } from './dto/query-evidence.dto';
 import { Evidence } from './entities/evidence.entity';
 
-@Controller('api/v1/discovery/evidence')
+@ApiTags('Evidence')
+@ApiBearerAuth('JWT-auth')
+@Public() // Allow public access for development
+@Controller('evidence')
 export class EvidenceController {
   constructor(private readonly evidenceService: EvidenceService) {}
 
+  // Health check endpoint
+  @Head()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return;
+  }
+
   @Get()
-  async findAll(@Query() query: QueryEvidenceDto): Promise<{
+  async findAll(@Query() query?: QueryEvidenceDto): Promise<{
     data: Evidence[];
     total: number;
     page: number;
@@ -81,3 +94,4 @@ export class EvidenceController {
     return this.evidenceService.addChainOfCustodyEvent(id, event);
   }
 }
+

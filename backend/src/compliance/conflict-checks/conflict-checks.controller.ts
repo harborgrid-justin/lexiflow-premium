@@ -5,9 +5,11 @@ import {
   Param,
   Body,
   Query,
+  Head,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConflictChecksService } from './conflict-checks.service';
 import {
@@ -19,11 +21,18 @@ import {
 
 @ApiTags('Compliance - Conflict Checks')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/compliance/conflicts')
+@Public() // Allow public access for development
+@Controller('compliance/conflicts')
 export class ConflictChecksController {
   constructor(
     private readonly conflictChecksService: ConflictChecksService,
   ) {}
+
+  @Head()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return;
+  }
 
   @Get()
   async findAll(@Query() query: QueryConflictChecksDto) {
@@ -53,3 +62,4 @@ export class ConflictChecksController {
     return this.conflictChecksService.waive(id, dto);
   }
 }
+

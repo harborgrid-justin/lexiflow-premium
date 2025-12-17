@@ -11,6 +11,10 @@ export class ConflictCheck extends BaseEntity {
   @Column({ type: 'uuid', nullable: true })
   caseId: string;
 
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
+
   @Column({ type: 'uuid', nullable: true })
   potentialClientId: string;
 

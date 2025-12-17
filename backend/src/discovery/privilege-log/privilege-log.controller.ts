@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { PrivilegeLogService } from './privilege-log.service';
 import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
 import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';
 import { QueryPrivilegeLogEntryDto } from './dto/query-privilege-log-entry.dto';
 
-@Controller('api/v1/discovery/privilege-log')
+@Public() // Allow public access for development
+@Controller('discovery/privilege-log')
 export class PrivilegeLogController {
   constructor(private readonly privilegeLogService: PrivilegeLogService) {}
 
@@ -59,3 +61,4 @@ export class PrivilegeLogController {
     await this.privilegeLogService.remove(id);
   }
 }
+

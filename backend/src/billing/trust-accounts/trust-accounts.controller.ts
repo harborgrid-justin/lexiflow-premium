@@ -9,7 +9,9 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Head,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TrustAccountsService } from './trust-accounts.service';
 import { CreateTrustAccountDto } from './dto/create-trust-account.dto';
@@ -20,9 +22,17 @@ import { TrustTransaction } from './entities/trust-transaction.entity';
 
 @ApiTags('Billing - Trust Accounts')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/billing/trust-accounts')
+@Public() // Allow public access for development
+@Controller('billing/trust-accounts')
 export class TrustAccountsController {
   constructor(private readonly trustAccountsService: TrustAccountsService) {}
+
+  // Health check endpoint
+  @Head()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return;
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -103,3 +113,4 @@ export class TrustAccountsController {
     await this.trustAccountsService.remove(id);
   }
 }
+

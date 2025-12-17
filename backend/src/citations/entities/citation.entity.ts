@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('citations')
 export class Citation {
@@ -19,6 +20,10 @@ export class Citation {
 
   @Column({ nullable: true })
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ nullable: true })
   documentId: string;

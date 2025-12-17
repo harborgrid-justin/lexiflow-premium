@@ -24,7 +24,7 @@ import { HolographicRouting } from '../../services/holographicRouting';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useDebounce } from '../../hooks/useDebounce';
-import { useKeyboardNav } from '../../hooks/useKeyboardNav';
+import { useListNavigation } from '../../hooks/useListNavigation';
 import { useClickOutside } from '../../hooks/useClickOutside';
 
 // Components
@@ -94,12 +94,14 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
     }
   };
 
-  // Keyboard Navigation Hook
-  const { activeIndex, setActiveIndex, handleKeyDown } = useKeyboardNav({
+  // Keyboard Navigation Hook (using unified useListNavigation with simple mode)
+  const { focusedIndex: activeIndex, setFocusedIndex: setActiveIndex, handleKeyDown } = useListNavigation({
       items: results,
+      mode: 'simple',
       isOpen: showResults,
       onSelect: handleResultSelect,
-      onClose: () => setShowResults(false)
+      onClose: () => setShowResults(false),
+      circular: true
   });
 
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

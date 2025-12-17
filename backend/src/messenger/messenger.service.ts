@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Conversation, Message } from './entities/messenger.entity';
+import { Conversation } from '../entities/conversation.entity';
+import { Message } from '../entities/message.entity';
 import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
 
 @Injectable()
@@ -57,13 +58,25 @@ export class MessengerService {
   async sendMessage(createDto: MessengerMessageDto, senderId: string): Promise<Message> {
     await this.findOneConversation(createDto.conversationId);
     const message = this.messageRepository.create({
-      ...createDto,
+      conversationId: createDto.conversationId,
+      content: createDto.content,
       senderId,
+      sentAt: new Date(),
+      messageType: 'text',
+      readBy: [],
+      readCount: 0,
+      replyToId: createDto.replyTo,
+      attachments: createDto.attachments?.map(url => ({ url })) || [],
     });
     const savedMessage = await this.messageRepository.save(message);
 
+    // Update conversation with last message info
     await this.conversationRepository.update(createDto.conversationId, {
       lastMessageAt: new Date(),
+      lastMessageText: createDto.content,
+      lastMessageBy: senderId,
+      lastMessageId: savedMessage.id,
+      messageCount: () => 'messageCount + 1',
     });
 
     return savedMessage;
@@ -74,22 +87,31 @@ export class MessengerService {
     const skip = (page - 1) * limit;
 
     const [data, total] = await this.messageRepository.findAndCount({
-      where: { conversationId },
+      where: { conversationId, isDeleted: false },
       skip,
       take: limit,
-      order: { createdAt: 'DESC' }
+      order: { sentAt: 'DESC' }
     });
 
     return { data, total };
   }
 
-  async markAsRead(messageId: string): Promise<Message> {
+  async markAsRead(messageId: string, userId: string): Promise<Message> {
     const message = await this.messageRepository.findOne({ where: { id: messageId } });
     if (!message) throw new NotFoundException(`Message ${messageId} not found`);
 
-    message.isRead = true;
-    message.readAt = new Date();
-    return await this.messageRepository.save(message);
+    // Add user to readBy array if not already present
+    const readBy = message.readBy || [];
+    const alreadyRead = readBy.some((r: any) => r.userId === userId);
+    
+    if (!alreadyRead) {
+      readBy.push({ userId, readAt: new Date() });
+      message.readBy = readBy;
+      message.readCount = readBy.length;
+      await this.messageRepository.save(message);
+    }
+
+    return message;
   }
 
   async getUnreadCount(userId: string): Promise<number> {
@@ -101,11 +123,17 @@ export class MessengerService {
     const conversationIds = conversations.map(c => c.id);
     if (conversationIds.length === 0) return 0;
 
-    return await this.messageRepository
+    // Count messages where the user is not in the readBy array
+    const messages = await this.messageRepository
       .createQueryBuilder('message')
       .where('message.conversationId IN (:...ids)', { ids: conversationIds })
       .andWhere('message.senderId != :userId', { userId })
-      .andWhere('message.isRead = :isRead', { isRead: false })
-      .getCount();
+      .andWhere('message.isDeleted = :isDeleted', { isDeleted: false })
+      .getMany();
+
+    return messages.filter(msg => {
+      const readBy = msg.readBy || [];
+      return !readBy.some((r: any) => r.userId === userId);
+    }).length;
   }
 }

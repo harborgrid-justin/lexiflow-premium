@@ -140,4 +140,10 @@ export class DiscoveryService {
       totalCustodians: 0,
     };
   }
+
+  async getAllEvidence(query?: any): Promise<any[]> {
+    // Return empty array for now - evidence is handled by the evidence controller
+    // This is just for the discovery/evidence health check endpoint
+    return [];
+  }
 }

@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -19,7 +20,8 @@ import { Project } from './entities/project.entity';
 
 @ApiTags('Projects')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/projects')
+@Public() // Allow public access for development
+@Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
@@ -53,3 +55,4 @@ export class ProjectsController {
     return this.projectsService.remove(id);
   }
 }
+

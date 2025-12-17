@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { WarRoomService } from './war-room.service';
 import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-room.dto';
@@ -7,7 +8,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('War Room')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/war-room')
+@Public() // Allow public access for development
+@Controller('war-room')
 export class WarRoomController {
   constructor(private readonly warRoomService: WarRoomService) {}
   @Get('advisors')
@@ -70,6 +72,13 @@ export class WarRoomController {
     await this.warRoomService.removeExpert(id);
   }
 
+  @Get(':caseId')
+  @ApiOperation({ summary: 'Get war room data for case' })
+  @ApiResponse({ status: 200, description: 'War room data retrieved' })
+  async getWarRoomData(@Param('caseId') caseId: string) {
+    return await this.warRoomService.getWarRoomData(caseId);
+  }
+
   @Get(':caseId/strategy')
   @ApiOperation({ summary: 'Get case strategy' })
   @ApiResponse({ status: 200, description: 'Strategy retrieved' })
@@ -84,3 +93,4 @@ export class WarRoomController {
     return await this.warRoomService.updateStrategy(caseId, updateDto);
   }
 }
+

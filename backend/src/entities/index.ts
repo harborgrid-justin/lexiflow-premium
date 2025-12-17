@@ -42,6 +42,12 @@ import { Notification } from './notification.entity';
 import { Client } from './client.entity';
 import { Organization } from './organization.entity';
 import { LegalEntity } from './legal-entity.entity';
+import { Task } from '../tasks/entities/task.entity';
+import { CalendarEvent } from '../calendar/entities/calendar-event.entity';
+import { Employee } from '../hr/entities/employee.entity';
+import { TimeOffRequest } from '../hr/entities/time-off-request.entity';
+import { Citation } from '../citations/entities/citation.entity';
+import { Advisor, Expert, CaseStrategy } from '../war-room/entities/war-room.entity';
 
 // Array of all entities for TypeORM configuration
 export const entities = [
@@ -100,4 +106,22 @@ export const entities = [
   Client,
   Organization,
   LegalEntity,
+
+  // Task Management
+  Task,
+
+  // Calendar
+  CalendarEvent,
+
+  // HR
+  Employee,
+  TimeOffRequest,
+
+  // Legal Research
+  Citation,
+
+  // War Room
+  Advisor,
+  Expert,
+  CaseStrategy,
 ];

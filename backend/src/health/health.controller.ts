@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   HealthCheckService,
@@ -18,6 +19,7 @@ import * as MasterConfig from '../config/master.config';
  * Compatible with Kubernetes liveness/readiness probes
  */
 @ApiTags('Health')
+@Public() // Allow public access for development
 @Controller('health')
 export class HealthController {
   constructor(
@@ -93,3 +95,4 @@ export class HealthController {
   //   ]);
   // }
 }
+

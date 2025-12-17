@@ -9,7 +9,7 @@
 // =============================================================================
 
 // Core Database Settings
-export const DB_SYNCHRONIZE = false; // CRITICAL: Keep false to prevent data loss
+export const DB_SYNCHRONIZE = true; // CRITICAL: Keep false to prevent data loss
 export const DB_MIGRATIONS_RUN = false;
 export const DB_LOGGING = process.env.NODE_ENV !== 'production';
 export const DB_SSL = true;
@@ -112,7 +112,14 @@ export const MFA_BACKUP_CODES_COUNT = 10;
 // =============================================================================
 // CORS CONFIGURATION
 // =============================================================================
-export const CORS_ORIGIN = 'http://localhost:5173';
+// Allow localhost ports 3000-3999 for development flexibility
+export const CORS_ORIGIN = (origin: string, callback: (err: Error | null, allow?: boolean) => void) => {
+  if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
+    callback(null, true);
+  } else {
+    callback(new Error('Not allowed by CORS'));
+  }
+};
 export const CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
 export const CORS_ALLOWED_HEADERS = [
   'Content-Type',

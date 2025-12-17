@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
 import { User } from '../../entities/user.entity';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('documents')
 @Index(['caseId', 'type'])
@@ -34,6 +35,10 @@ export class Document {
   @Column({ type: 'uuid' })
   @Index()
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'uuid' })
   @Index()

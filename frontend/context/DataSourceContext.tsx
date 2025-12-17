@@ -17,10 +17,16 @@ interface DataSourceProviderProps {
 
 export const DataSourceProvider: React.FC<DataSourceProviderProps> = ({ children }) => {
   const [currentSource, setCurrentSource] = useState<DataSourceType>(() => {
+    // Check environment variable first
+    const envValue = import.meta.env.VITE_USE_BACKEND_API;
+    if (envValue === 'true' || envValue === true) return 'postgresql';
+    
+    // Then check localStorage
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       const storedValue = localStorage.getItem('VITE_USE_BACKEND_API');
       if (storedValue === 'true') return 'postgresql';
     }
+    
     return 'indexeddb';
   });
 

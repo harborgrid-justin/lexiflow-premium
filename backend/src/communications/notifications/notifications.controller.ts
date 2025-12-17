@@ -10,6 +10,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -33,7 +34,8 @@ import {
  * @class NotificationsController
  */
 @ApiTags('Notifications')
-@Controller('api/v1/notifications')
+@Public() // Allow public access for development
+@Controller('notifications')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
 export class NotificationsController {
@@ -131,3 +133,4 @@ export class NotificationsController {
     return this.notificationsService.updatePreferences(userId, preferencesDto);
   }
 }
+

@@ -13,6 +13,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Public } from '../common/decorators/public.decorator';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
@@ -21,7 +22,8 @@ import { CaseResponseDto, PaginatedCaseResponseDto } from './dto/case-response.d
 
 @ApiTags('Cases')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/cases')
+@Public() // Allow public access for development
+@Controller('cases')
 export class CasesController {
   constructor(private readonly casesService: CasesService) {}
 

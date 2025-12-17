@@ -1,6 +1,22 @@
 // hooks/index.ts
+// ============================================================================
+// Hooks Barrel Export with Deprecation Management
+// ============================================================================
 
-// Core Logic & Utilities
+// ============================================================================
+// NEW & RECOMMENDED HOOKS
+// ============================================================================
+
+// Unified List Navigation (replaces useKeyboardNav + useKeyboardNavigation)
+export { useListNavigation } from './useListNavigation';
+export type { UseListNavigationConfig, UseListNavigationResult, NavigationMode } from './useListNavigation';
+
+// Backend Health Monitoring (replaces useBackendDiscovery)
+export { useBackendHealth } from './useBackendHealth';
+
+// ============================================================================
+// CORE LOGIC & UTILITIES
+// ============================================================================
 export * from './useAppController';
 export * from './useAutoSave';
 export * from './useAutoTimeCapture';
@@ -8,11 +24,10 @@ export * from './useBlobRegistry';
 export * from './useClickOutside';
 export * from './useDebounce';
 export * from './useGlobalQueryStatus';
-export * from './useHistory';
+export * from './useHistory'; // State-based undo/redo - see JSDoc for when to use
 export * from './useHoverIntent';
 export * from './useIntersectionObserver';
 export * from './useInterval';
-export * from './useKeyboardNav';
 export * from './useModal';
 export * from './useNotify';
 export * from './useReadAnalytics';
@@ -24,15 +39,44 @@ export * from './useToggle';
 export * from './useWizard';
 export * from './useWorkerSearch';
 
-// Domain Specific Hooks
+// ============================================================================
+// DEPRECATED HOOKS (for backward compatibility - remove in v2.0)
+// ============================================================================
+
+/**
+ * @deprecated Use useListNavigation with mode='simple' instead
+ * Will be removed in v2.0
+ */
+export { useKeyboardNav } from './useListNavigation';
+
+/**
+ * @deprecated Use useListNavigation with mode='full' instead
+ * Will be removed in v2.0
+ */
+export { useKeyboardNavigation } from './useListNavigation';
+
+/**
+ * @deprecated Use useBackendHealth instead
+ * Will be removed in v2.0
+ */
+export { useBackendDiscovery } from './useBackendDiscovery';
+
+/**
+ * @deprecated Use useDocumentManager with enableDragDrop option instead
+ * Will be removed in v2.0
+ */
+export { useDocumentDragDrop } from './useDocumentDragDrop';
+
+// ============================================================================
+// DOMAIN SPECIFIC HOOKS
+// ============================================================================
 export * from './useCalendarView';
 export * from './useCanvasDrag';
 export * from './useCaseDetail';
 export * from './useCaseList';
 export * from './useCaseOverview';
 export * from './useDiscoveryPlatform';
-export * from './useDocumentDragDrop';
-export * from './useDocumentManager';
+export * from './useDocumentManager'; // Now includes optional drag-drop
 export * from './useDomainData'; // Aggregated Domain Data
 export * from './useEvidenceVault';
 export * from './useGanttDrag';
@@ -42,9 +86,11 @@ export * from './useRuleSearchAndSelection';
 export * from './useSecureMessenger';
 export * from './useWorkflowBuilder';
 
-// Strategy Canvas & Command Management
+// ============================================================================
+// STRATEGY CANVAS & COMMAND MANAGEMENT
+// ============================================================================
 export * from './useStrategyCanvas';
-export * from './useCommandHistory';
+export * from './useCommandHistory'; // Imperative command pattern - see JSDoc for when to use
 export * from './useKeyboardShortcuts';
 
 // Form Validation
@@ -75,7 +121,8 @@ export type { ElasticScrollConfig, ScrollState, UseElasticScrollReturn } from '.
 export { useAdaptiveLoading } from './useAdaptiveLoading';
 export type { LoadingState, UseAdaptiveLoadingOptions, UseAdaptiveLoadingReturn } from './useAdaptiveLoading';
 
-// Docket-Specific Hooks
+// ============================================================================
+// DOCKET-SPECIFIC HOOKS
+// ============================================================================
 export * from './useVirtualizedDocket';
-export * from './useKeyboardNavigation';
 export * from './useLiveDocketFeed';

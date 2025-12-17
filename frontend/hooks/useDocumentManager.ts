@@ -2,9 +2,12 @@
  * @module hooks/useDocumentManager
  * @category Hooks - Document Management
  * @description Enterprise document management hook with worker-based full-text search, folder/module filtering,
- * bulk operations (AI summarize), tag management, version history, and optimistic UI updates. Manages
- * selected documents, preview pane, and DMS navigation with folder context. Uses useWorkerSearch for
+ * bulk operations (AI summarize), tag management, version history, drag-drop upload, and optimistic UI updates.
+ * Manages selected documents, preview pane, and DMS navigation with folder context. Uses useWorkerSearch for
  * non-blocking search across title/content/tags.
+ * 
+ * @param options Configuration options including enableDragDrop flag
+ * @param options.enableDragDrop Enable drag-and-drop file upload functionality
  * 
  * NO THEME USAGE: Business logic hook for document management
  */
@@ -12,26 +15,37 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { DataService } from '../services/dataService';
+import { DocumentService } from '../services/documentService';
 import { useQuery, useMutation, queryClient } from '../services/queryClient';
 import { STORES } from '../services/db';
 
 // Hooks & Context
 import { useWorkerSearch } from './useWorkerSearch';
+import { useNotify } from './useNotify';
 
 // Types
-import { LegalDocument, DocumentVersion } from '../types';
+import { LegalDocument, DocumentVersion, CaseId } from '../types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+export interface UseDocumentManagerOptions {
+  enableDragDrop?: boolean;
+}
 
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useDocumentManager = () => {
+export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
+  const { enableDragDrop = false } = options;
+  const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');
   // useDeferredValue is removed in favor of Worker-based search
   
@@ -145,6 +159,61 @@ export const useDocumentManager = () => {
       signed: documents.filter(d => d.status === 'Signed').length
   };
 
+  // ============================================================================
+  // DRAG & DROP FUNCTIONALITY (Optional)
+  // ============================================================================
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const dragCounter = useRef(0);
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    if (!enableDragDrop) return;
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    if (!enableDragDrop) return;
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current === 0) setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    if (!enableDragDrop) return;
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    if (!enableDragDrop) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    dragCounter.current = 0;
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setIsUploading(true);
+      try {
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+          await DocumentService.uploadDocument(e.dataTransfer.files[i], {
+            sourceModule: currentFolder === 'root' ? 'General' : (currentFolder as any),
+            caseId: 'General' as CaseId
+          });
+        }
+        queryClient.invalidate([STORES.DOCUMENTS, 'all']);
+        notify.success(`Uploaded ${e.dataTransfer.files.length} document${e.dataTransfer.files.length > 1 ? 's' : ''}.`);
+      } catch (error) {
+        notify.error("Failed to upload dropped files.");
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+
   return {
     searchTerm,
     setSearchTerm,
@@ -172,6 +241,15 @@ export const useDocumentManager = () => {
     setIsDetailsOpen,
     previewDoc,
     setPreviewDoc,
-    updateDocument
+    updateDocument,
+    // Drag & Drop (only if enabled)
+    ...(enableDragDrop && {
+      isDragging,
+      isUploading,
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop
+    })
   };
 };

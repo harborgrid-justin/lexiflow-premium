@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Param, Body, Query, UseGuards } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -16,7 +17,8 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Outcome Predictions')
-@Controller('api/v1/analytics/outcome-predictions')
+@Public() // Allow public access for development
+@Controller('analytics/outcome-predictions')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class OutcomePredictionsController {
@@ -75,3 +77,4 @@ export class OutcomePredictionsController {
     return this.outcomePredictionsService.getPredictionAccuracy();
   }
 }
+

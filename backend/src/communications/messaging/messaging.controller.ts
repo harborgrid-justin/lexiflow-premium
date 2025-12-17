@@ -10,6 +10,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -30,7 +31,8 @@ import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto'
  * @class MessagingController
  */
 @ApiTags('Messaging')
-@Controller('api/v1')
+@Public() // Allow public access for development
+@Controller('messaging')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
 export class MessagingController {
@@ -159,3 +161,4 @@ export class MessagingController {
     return this.messagingService.deleteMessage(messageId, userId);
   }
 }
+

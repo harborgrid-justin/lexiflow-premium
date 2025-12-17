@@ -200,4 +200,47 @@ export class HRService {
 
     return await this.timeOffRepository.save(request);
   }
+
+  async getUtilization(filters: {
+    employeeId?: string;
+    department?: string;
+    startDate?: string;
+    endDate?: string;
+  }) {
+    const { employeeId, department, startDate, endDate } = filters;
+    
+    const queryBuilder = this.employeeRepository.createQueryBuilder('employee');
+
+    if (employeeId) {
+      queryBuilder.andWhere('employee.id = :employeeId', { employeeId });
+    }
+    if (department) {
+      queryBuilder.andWhere('employee.department = :department', { department });
+    }
+    queryBuilder.andWhere('employee.status = :status', { status: 'active' });
+
+    const employees = await queryBuilder.getMany();
+
+    // Calculate utilization metrics
+    const utilization = employees.map(employee => ({
+      employeeId: employee.id,
+      employeeName: `${employee.firstName} ${employee.lastName}`,
+      department: employee.department,
+      role: employee.role,
+      billableHours: 0, // To be calculated from time tracking
+      totalHours: 0,
+      utilizationRate: 0,
+      capacity: 40, // Standard 40 hours per week
+    }));
+
+    return {
+      data: utilization,
+      total: utilization.length,
+      averageUtilization: 0,
+      period: {
+        startDate: startDate || new Date().toISOString(),
+        endDate: endDate || new Date().toISOString(),
+      },
+    };
+  }
 }

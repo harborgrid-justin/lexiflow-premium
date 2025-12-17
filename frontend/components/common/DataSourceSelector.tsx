@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import { useDataSource } from '../../context/DataSourceContext';
-import { useBackendDiscovery } from '../../hooks/useBackendDiscovery';
+import { useBackendHealth } from '../../hooks/useBackendHealth';
 import type { DataSourceType } from '../../context/DataSourceContext';
 
 interface DataSourceOption {
@@ -44,7 +44,7 @@ const DATA_SOURCE_OPTIONS: DataSourceOption[] = [
 
 export const DataSourceSelector: React.FC = () => {
   const { currentSource, switchDataSource } = useDataSource();
-  const { status, isAvailable, isHealthy, latency, version, error, refresh } = useBackendDiscovery();
+  const { status, isAvailable, isHealthy, latency, version, error, refresh } = useBackendHealth();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [timeSinceCheck, setTimeSinceCheck] = useState(0);
   

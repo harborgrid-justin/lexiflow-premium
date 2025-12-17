@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum PrivilegeType {
   ATTORNEY_CLIENT = 'ATTORNEY_CLIENT',
@@ -32,6 +35,10 @@ export class PrivilegeLogEntry {
 
   @Column({ type: 'uuid' })
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'varchar', length: 100 })
   privilegeLogNumber: string;

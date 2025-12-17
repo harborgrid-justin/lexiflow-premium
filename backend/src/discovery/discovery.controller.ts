@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Head, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { DiscoveryService } from './discovery.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -8,16 +9,37 @@ import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('Discovery')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/discovery')
+@Public() // Allow public access for development
+@Controller('discovery')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class DiscoveryController {
   constructor(private readonly discoveryService: DiscoveryService) {}
+
+  @Head()
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return;
+  }
+
+  @Head('evidence')
+  @HttpCode(HttpStatus.OK)
+  async evidenceHealth() {
+    return;
+  }
+
+  @Get('evidence')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get all discovery evidence items' })
+  @ApiResponse({ status: 200, description: 'List of evidence items' })
+  async getAllEvidence(@Query() query?: any) {
+    return this.discoveryService.getAllEvidence(query);
+  }
 
   @Get()
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get all discovery requests' })
   @ApiResponse({ status: 200, description: 'List of discovery requests' })
-  findAll() {
+  findAll(@Query() query?: any) {
     return this.discoveryService.findAllRequests();
   }
 
@@ -39,3 +61,4 @@ export class DiscoveryController {
     return this.discoveryService.createRequest(createDto);
   }
 }
+

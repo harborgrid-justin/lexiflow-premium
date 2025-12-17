@@ -10,6 +10,7 @@ import {
   ParseUUIDPipe,
   ParseIntPipe,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
@@ -19,7 +20,8 @@ import { PleadingStatus } from './entities/pleading.entity';
 
 @ApiTags('Pleadings')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/pleadings')
+@Public() // Allow public access for development
+@Controller('pleadings')
 export class PleadingsController {
   constructor(private readonly pleadingsService: PleadingsService) {}
 
@@ -89,3 +91,4 @@ export class PleadingsController {
     return await this.pleadingsService.file(id, filePleadingDto);
   }
 }
+

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 export enum CalendarEventType {
   HEARING = 'Hearing',
@@ -41,6 +42,10 @@ export class CalendarEvent {
 
   @Column({ nullable: true })
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ nullable: true })
   reminder: string;

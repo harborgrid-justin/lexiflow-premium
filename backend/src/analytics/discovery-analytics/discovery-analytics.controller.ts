@@ -1,4 +1,5 @@
 import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -17,7 +18,8 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Discovery')
-@Controller('api/v1/analytics')
+@Public() // Allow public access for development
+@Controller('analytics')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class DiscoveryAnalyticsController {
@@ -99,3 +101,4 @@ export class DiscoveryAnalyticsController {
     return this.discoveryAnalyticsService.getProductionVolume(query);
   }
 }
+

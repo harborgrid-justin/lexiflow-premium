@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { CustodiansService } from './custodians.service';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';
 import { QueryCustodianDto } from './dto/query-custodian.dto';
 
-@Controller('api/v1/discovery/custodians')
+@Public() // Allow public access for development
+@Controller('discovery/custodians')
 export class CustodiansController {
   constructor(private readonly custodiansService: CustodiansService) {}
 
@@ -54,3 +56,4 @@ export class CustodiansController {
     await this.custodiansService.remove(id);
   }
 }
+

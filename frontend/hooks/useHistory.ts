@@ -1,6 +1,35 @@
 /**
  * @module hooks/useHistory
- * @description Undo/redo functionality with command pattern
+ * @description State-based undo/redo functionality with command pattern
+ * 
+ * **WHEN TO USE THIS HOOK:**
+ * - You need undo/redo for state transformations (immutable state updates)
+ * - Your commands operate on React state objects
+ * - You want functional, side-effect-free undo operations
+ * - Example: Document editor, form history, configuration changes
+ * 
+ * **WHEN NOT TO USE (use useCommandHistory instead):**
+ * - You need undo/redo for imperative operations (DOM manipulation, canvas drawing)
+ * - Your commands have side effects on external systems
+ * - You're working with workflow/strategy canvas nodes and connections
+ * 
+ * **PATTERN:**
+ * Commands receive and return state: `execute: (state: T) => T`
+ * The hook manages state internally and provides current state
+ * 
+ * @example
+ * ```typescript
+ * const { state, execute, undo, redo, canUndo, canRedo } = useHistory({
+ *   initialState: { text: '' },
+ *   maxHistory: 50
+ * });
+ * 
+ * // Execute a state transformation
+ * execute({
+ *   execute: (state) => ({ ...state, text: 'new value' }),
+ *   undo: (state) => ({ ...state, text: 'old value' })
+ * });
+ * ```
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';

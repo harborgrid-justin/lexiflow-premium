@@ -10,7 +10,7 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       url: process.env.DATABASE_URL,
       entities: entities,
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: false,
+      synchronize: true, // Must be false when using migrations to avoid conflicts
       logging: process.env.DB_LOGGING === 'true',
       ssl: {
         rejectUnauthorized: false,
@@ -25,7 +25,7 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       database: process.env.DB_DATABASE || 'lexiflow_db',
       entities: entities,
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: false,
+      synchronize: true, // Must be false when using migrations to avoid conflicts
       logging: process.env.DB_LOGGING === 'true',
       ssl: process.env.DB_SSL === 'true'
         ? {

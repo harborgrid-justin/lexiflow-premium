@@ -18,6 +18,7 @@ import { TEMPLATE_LIBRARY } from '../data/models/workflowTemplates';
 import { MOCK_JUDGES } from '../data/models/judgeProfile';
 import { MOCK_COUNSEL } from '../data/models/opposingCounselProfile';
 import { MOCK_USERS } from '../data/models/user';
+import { ExtendedUserProfile, GranularPermission } from '../types';
 import { MOCK_CONFERRALS } from '../data/models/conferralSession';
 import { MOCK_JOINT_PLANS } from '../data/models/jointPlan';
 import { MOCK_STIPULATIONS } from '../data/models/stipulationRequest';
@@ -57,6 +58,38 @@ const MOCK_PHASES: CasePhase[] = [
     { id: 'p3', caseId: 'C-2025-001' as CaseId, name: 'Discovery', startDate: '2025-01-20', duration: 120, status: 'Active', color: 'bg-indigo-500' }
 ];
 
+// Create comprehensive admin permissions
+const createAdminPermissions = (): GranularPermission[] => {
+  const globalResources = [
+    'cases', 'documents', 'pleadings', 'evidence', 'docket', 'correspondence',
+    'billing', 'billing.invoices', 'billing.timesheets', 'billing.expenses', 'financials',
+    'hr', 'hr.employees', 'hr.payroll', 'personnel',
+    'workflow', 'operations', 'tasks', 'calendar',
+    'discovery', 'trial', 'depositions', 'interrogatories',
+    'compliance', 'audit', 'audit.logs', 'security', 'security.settings', 'security.access',
+    'admin', 'admin.settings', 'admin.users', 'admin.roles', 'admin.permissions',
+    'integrations', 'api.keys', 'webhooks', 'data.sources',
+    'knowledge', 'knowledge.base', 'legal.research', 'citation.analysis',
+    'crm', 'clients', 'contacts',
+    'analytics', 'reports', 'dashboards', 'metrics',
+    'quality', 'quality.control', 'quality.audits',
+    'catalog', 'backup', 'backup.restore',
+    'marketing', 'marketing.campaigns',
+    'jurisdiction', 'jurisdiction.data',
+    'system', 'system.admin', 'system.config', 'database', 'database.management'
+  ];
+
+  return globalResources.map((resource, index) => ({
+    id: `perm-global-${index + 1}`,
+    resource,
+    action: '*' as const,
+    effect: 'Allow' as const,
+    scope: 'Global' as const,
+    conditions: [],
+    reason: 'Super Admin - Complete System Access'
+  }));
+};
+
 export const Seeder = {
   async seed(db: DatabaseManager) {
       console.log("Seeding Initial Data...");
@@ -81,6 +114,42 @@ export const Seeder = {
       MOCK_JUDGES.forEach(j => addEntity({ id: `ent-jdg-${j.id}` as EntityId, name: j.name, type: 'Individual', roles: ['Judge'], status: 'Active', riskScore: 5, tags: [j.court] }));
       MOCK_COUNSEL.forEach(c => addEntity({ id: `ent-cnsl-${c.id}` as EntityId, name: c.name, type: 'Law Firm', roles: ['Opposing Counsel'], status: 'Active', riskScore: 60, tags: [] }));
 
+      // Create extended user profiles with permissions
+      const adminPermissions = createAdminPermissions();
+      const extendedUsers: ExtendedUserProfile[] = MOCK_USERS.map(user => ({
+        ...user,
+        entityId: user.id as any,
+        title: user.id === 'usr-admin-justin' ? 'System Administrator' : user.role === 'Senior Partner' ? 'Senior Partner' : user.role,
+        department: user.id === 'usr-admin-justin' ? 'Administration' : 'Litigation',
+        accessMatrix: user.id === 'usr-admin-justin' ? adminPermissions : [
+          { id: 'perm-basic-1', resource: 'cases', action: 'read', effect: 'Allow', scope: 'Personal' },
+          { id: 'perm-basic-2', resource: 'documents', action: 'read', effect: 'Allow', scope: 'Personal' }
+        ],
+        preferences: {
+          theme: 'system',
+          notifications: { email: true, push: true, slack: false, digestFrequency: 'Daily' },
+          dashboardLayout: ['metrics', 'tasks', 'calendar'],
+          density: 'comfortable',
+          locale: 'en-US',
+          timezone: 'America/New_York'
+        },
+        security: {
+          mfaEnabled: user.id === 'usr-admin-justin',
+          mfaMethod: 'App',
+          lastPasswordChange: new Date().toISOString().split('T')[0],
+          passwordExpiry: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          activeSessions: [
+            { id: 'sess-1', device: 'Current Device', ip: '127.0.0.1', lastActive: 'Just now', current: true }
+          ]
+        },
+        skills: user.id === 'usr-admin-justin' 
+          ? ['System Administration', 'Legal Operations', 'Security Management']
+          : ['Legal Research', 'Case Management'],
+        barAdmissions: user.id === 'usr-admin-justin' 
+          ? [{ state: 'VA', number: '99823', status: 'Active' }, { state: 'DC', number: '445210', status: 'Active' }]
+          : []
+      }));
+
       await Promise.all([
           batchPut(STORES.CASES, MOCK_CASES),
           batchPut(STORES.TASKS, MOCK_TASKS),
@@ -100,7 +169,7 @@ export const Seeder = {
           batchPut(STORES.TEMPLATES, TEMPLATE_LIBRARY),
           batchPut(STORES.JUDGES, MOCK_JUDGES),
           batchPut(STORES.COUNSEL, MOCK_COUNSEL),
-          batchPut(STORES.USERS, MOCK_USERS),
+          batchPut(STORES.USERS, extendedUsers),
           batchPut(STORES.CONFERRALS, MOCK_CONFERRALS),
           batchPut(STORES.JOINT_PLANS, MOCK_JOINT_PLANS),
           batchPut(STORES.STIPULATIONS, MOCK_STIPULATIONS),

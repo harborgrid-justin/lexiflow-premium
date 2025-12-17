@@ -47,7 +47,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const [filter, setFilter] = useState('All');
   const { theme } = useTheme();
 
-  const { data: tasks = [], isLoading, refetch } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], DataService.tasks.getAll);
+  const { data: tasks = [], isLoading, refetch, error } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], DataService.tasks.getAll);
   
   const { mutate: addTask } = useMutation(DataService.tasks.add, {
       onSuccess: () => queryClient.invalidate(queryKeys.tasks.all())
@@ -70,7 +70,10 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
       }
   };
 
-  const filteredTasks = tasks.filter(t => {
+  // Ensure tasks is always an array
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+  
+  const filteredTasks = safeTasks.filter(t => {
       if (filter === 'All') return true;
       if (filter === 'Pending') return t.status === 'Pending' || t.status === 'In Progress';
       if (filter === 'High Priority') return t.priority === 'High';
@@ -82,7 +85,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   };
 
   const handleToggle = async (id: string) => {
-      const task = tasks.find(t => t.id === id);
+      const task = safeTasks.find(t => t.id === id);
       if (task) {
           const newStatus = task.status === 'Done' ? 'Pending' : 'Done';
           updateTask({ id, updates: { status: newStatus as any }});
@@ -167,7 +170,20 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
       </div>
 
       <div className={cn("rounded-lg border shadow-sm flex-1 overflow-hidden", theme.surface.default, theme.border.default)}>
-        {isLoading ? <LazyLoader /> : (
+        {isLoading ? (
+          <LazyLoader />
+        ) : error ? (
+          <div className="flex items-center justify-center h-full p-8">
+            <div className="text-center">
+              <p className={cn("text-sm mb-2", theme.text.secondary)}>
+                Unable to load tasks. Please ensure the backend is running.
+              </p>
+              <p className={cn("text-xs", theme.text.tertiary)}>
+                Working in offline mode with cached data.
+              </p>
+            </div>
+          </div>
+        ) : (
           <VirtualList 
             items={filteredTasks}
             height="100%"

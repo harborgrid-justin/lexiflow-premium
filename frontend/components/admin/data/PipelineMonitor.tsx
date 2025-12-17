@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2, GitMerge } from 'lucide-react';
@@ -230,7 +229,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
                                             <Icon className={cn("h-6 w-6", conn.color)}/>
                                         </div>
                                         <div className="flex gap-1">
-                                            <button className={cn("p-1.5 rounded transition-colors hover:bg-slate-100 dark:hover:bg-slate-700", theme.text.tertiary)}><Settings className="h-4 w-4"/></button>
+                                            <button aria-label="Connector settings" className={cn("p-1.5 rounded transition-colors hover:bg-slate-100 dark:hover:bg-slate-700", theme.text.tertiary)}><Settings className="h-4 w-4"/></button>
                                         </div>
                                     </div>
                                     <h4 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{conn.name}</h4>

@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EthicalWallsService } from './ethical-walls.service';
 import {
@@ -20,7 +21,8 @@ import {
 
 @ApiTags('Compliance - Ethical Walls')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/compliance/ethical-walls')
+@Public() // Allow public access for development
+@Controller('compliance/ethical-walls')
 export class EthicalWallsController {
   constructor(private readonly ethicalWallsService: EthicalWallsService) {}
 
@@ -56,3 +58,4 @@ export class EthicalWallsController {
     return this.ethicalWallsService.remove(id);
   }
 }
+

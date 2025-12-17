@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { TaskStatus, TaskPriority } from '../dto/create-task.dto';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('tasks')
 export class Task {
@@ -23,6 +24,10 @@ export class Task {
 
   @Column({ nullable: true })
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ nullable: true })
   assignedTo: string;

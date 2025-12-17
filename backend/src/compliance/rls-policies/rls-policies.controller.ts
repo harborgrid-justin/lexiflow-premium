@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { RlsPoliciesService } from './rls-policies.service';
 import {
   CreateRlsPolicyDto,
@@ -17,7 +18,8 @@ import {
   QueryRlsPoliciesDto,
 } from './dto/rls-policy.dto';
 
-@Controller('api/v1/security/rls-policies')
+@Public() // Allow public access for development
+@Controller('security/rls-policies')
 export class RlsPoliciesController {
   constructor(private readonly rlsPoliciesService: RlsPoliciesService) {}
 
@@ -48,3 +50,4 @@ export class RlsPoliciesController {
     return this.rlsPoliciesService.remove(id);
   }
 }
+

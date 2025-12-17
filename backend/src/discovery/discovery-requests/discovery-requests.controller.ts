@@ -11,12 +11,14 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { DiscoveryRequestsService } from './discovery-requests.service';
 import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
 import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';
 import { QueryDiscoveryRequestDto } from './dto/query-discovery-request.dto';
 
-@Controller('api/v1/discovery/requests')
+@Public() // Allow public access for development
+@Controller('discovery/requests')
 export class DiscoveryRequestsController {
   constructor(
     private readonly discoveryRequestsService: DiscoveryRequestsService,
@@ -57,3 +59,4 @@ export class DiscoveryRequestsController {
     await this.discoveryRequestsService.remove(id);
   }
 }
+

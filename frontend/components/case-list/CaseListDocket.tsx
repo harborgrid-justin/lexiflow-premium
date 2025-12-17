@@ -46,20 +46,33 @@ interface CaseListDocketProps {
 export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) => {
   const { theme } = useTheme();
 
-  const { data: docket, isLoading: loadingDocket } = useQuery(queryKeys.docket.all(), DataService.docket.getAll);
-  const { data: motions, isLoading: loadingMotions } = useQuery(queryKeys.motions.all(), DataService.motions.getAll);
-  const { data: cases, isLoading: loadingCases } = useQuery(queryKeys.cases.all(), DataService.cases.getAll);
+  const { data: docket = [], isLoading: loadingDocket } = useQuery(queryKeys.docket.all(), async () => {
+    const svc = DataService.docket;
+    return await svc.getAll();
+  });
+  const { data: motions = [], isLoading: loadingMotions } = useQuery(queryKeys.motions.all(), async () => {
+    const svc = DataService.motions;
+    return await svc.getAll();
+  });
+  const { data: cases = [], isLoading: loadingCases } = useQuery(queryKeys.cases.all(), async () => {
+    const svc = DataService.cases;
+    return await svc.getAll();
+  });
   
   const isLoading = loadingDocket || loadingMotions || loadingCases;
 
   const allDocketItems = useMemo(() => {
-      if (isLoading || !motions || !cases) return [];
+      if (isLoading) return [];
+      
+      // Ensure arrays
+      const safeMotions = Array.isArray(motions) ? motions : [];
+      const safeCases = Array.isArray(cases) ? cases : [];
       
       const items: any[] = [];
 
-      motions.forEach(m => {
+      safeMotions.forEach(m => {
         if (m.hearingDate) {
-          const relatedCase = cases.find(c => c.id === m.caseId);
+          const relatedCase = safeCases.find(c => c.id === m.caseId);
           items.push({
             id: `h-${m.id}`, date: m.hearingDate, time: '09:00 AM', matter: relatedCase?.title || m.caseId,
             caseId: m.caseId, event: `Hearing: ${m.title}`, type: 'Hearing', location: relatedCase?.court || 'TBD', priority: 'High'

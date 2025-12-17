@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ProductionsService } from './productions.service';
 import { CreateProductionDto } from './dto/create-production.dto';
 import { UpdateProductionDto } from './dto/update-production.dto';
 import { QueryProductionDto } from './dto/query-production.dto';
 
-@Controller('api/v1/discovery/productions')
+@Public() // Allow public access for development
+@Controller('discovery/productions')
 export class ProductionsController {
   constructor(private readonly productionsService: ProductionsService) {}
 
@@ -59,3 +61,4 @@ export class ProductionsController {
     await this.productionsService.remove(id);
   }
 }
+

@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarEventDto, UpdateCalendarEventDto } from './dto/calendar.dto';
@@ -7,7 +8,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('Calendar')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/calendar')
+@Public() // Allow public access for development
+@Controller('calendar')
 export class CalendarController {
   constructor(private readonly calendarService: CalendarService) {}
   @Get()
@@ -23,6 +25,13 @@ export class CalendarController {
   async getUpcoming(@Query('days') days: number = 7) {
     const events = await this.calendarService.findUpcoming(days);
     return { events };
+  }
+
+  @Get('statute-of-limitations')
+  @ApiOperation({ summary: 'Get statute of limitations events' })
+  @ApiResponse({ status: 200, description: 'Statute events retrieved' })
+  async getStatuteOfLimitations(@Query() query: any) {
+    return await this.calendarService.findAll({ ...query, eventType: 'statute-of-limitations' });
   }
 
   @Get(':id')
@@ -63,3 +72,4 @@ export class CalendarController {
     return;
   }
 }
+

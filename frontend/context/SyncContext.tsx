@@ -3,21 +3,14 @@ import React, { createContext, useState, useEffect, useCallback, useRef } from '
 import { SyncEngine, Mutation } from '../services/syncEngine';
 import { DataService } from '../services/dataService';
 import { useToast } from './ToastContext';
-
-export interface SyncContextType {
-  isOnline: boolean;
-  pendingCount: number;
-  failedCount: number;
-  performMutation: (type: string, payload: any, apiCall: () => Promise<any>) => Promise<void>;
-  retryFailed: () => void;
-  syncStatus: 'idle' | 'syncing' | 'offline' | 'error';
-}
+import type { SyncContextType } from './SyncContext.types';
 
 // Create context in a separate variable to avoid Fast Refresh issues
 const SyncContext = createContext<SyncContextType | undefined>(undefined);
 
 // Export context (non-component export should be before component exports)
 export { SyncContext };
+export type { SyncContextType };
 
 const MAX_RETRIES = 3;
 const BASE_DELAY = 1000;

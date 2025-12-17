@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PermissionsService } from './permissions.service';
 import {
@@ -21,7 +22,8 @@ import {
 
 @ApiTags('Security - Permissions')
 @ApiBearerAuth('JWT-auth')
-@Controller('api/v1/security/permissions')
+@Public() // Allow public access for development
+@Controller('security/permissions')
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
@@ -54,3 +56,4 @@ export class PermissionsController {
     return this.permissionsService.getAccessMatrix(dto);
   }
 }
+

@@ -1,11 +1,25 @@
 /**
  * useBackendDiscovery Hook
- * Provides reactive access to backend availability status
+ * 
+ * @deprecated Use useBackendHealth instead to avoid naming confusion with legal discovery domain.
+ * This hook will be removed in v2.0. The functionality is identical.
+ * 
+ * @example Migration:
+ * ```typescript
+ * // Before:
+ * import { useBackendDiscovery } from '@/hooks/useBackendDiscovery';
+ * 
+ * // After:
+ * import { useBackendHealth } from '@/hooks/useBackendHealth';
+ * ```
  */
 
 import { useState, useEffect } from 'react';
 import { backendDiscovery, type BackendStatus } from '../services/backendDiscovery';
 
+/**
+ * @deprecated Use useBackendHealth instead
+ */
 export function useBackendDiscovery() {
   const [status, setStatus] = useState<BackendStatus>(() => backendDiscovery.getStatus());
 

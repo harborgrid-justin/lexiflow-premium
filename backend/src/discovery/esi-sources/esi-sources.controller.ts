@@ -10,12 +10,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Public } from '../../common/decorators/public.decorator';
 import { ESISourcesService } from './esi-sources.service';
 import { CreateESISourceDto } from './dto/create-esi-source.dto';
 import { UpdateESISourceDto } from './dto/update-esi-source.dto';
 import { QueryESISourceDto } from './dto/query-esi-source.dto';
 
-@Controller('api/v1/discovery/esi-sources')
+@Public() // Allow public access for development
+@Controller('discovery/esi-sources')
 export class ESISourcesController {
   constructor(private readonly esiSourcesService: ESISourcesService) {}
 
@@ -54,3 +56,4 @@ export class ESISourcesController {
     await this.esiSourcesService.remove(id);
   }
 }
+

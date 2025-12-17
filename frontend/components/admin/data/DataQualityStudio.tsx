@@ -1,25 +1,28 @@
-
 import React, { useState, useEffect, useRef } from 'react';
+
 import { Sparkles, RefreshCw, FileSearch, Plus, Settings, Edit2, Loader2, GitMerge, Wand2, Activity, CheckCircle } from 'lucide-react';
-import { Tabs } from '../../common/Tabs';
+import { JSX } from 'react/jsx-runtime';
+
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Modal } from '../../common/Modal';
-import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
-import { DataProfiler } from './quality/DataProfiler';
-import { StandardizationConsole } from './quality/StandardizationConsole';
-import { DeduplicationManager } from './quality/DeduplicationManager';
-import { Button } from '../../common/Button';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { DataAnomaly, QualityMetricHistory } from '../../../types';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../common/Button';
+import { Modal } from '../../common/Modal';
+import { Tabs } from '../../common/Tabs';
+
+import { DataProfiler } from './quality/DataProfiler';
+import { DeduplicationManager } from './quality/DeduplicationManager';
 import { QualityDashboard } from './quality/QualityDashboard';
+import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
+import { StandardizationConsole } from './quality/StandardizationConsole';
 
 interface DataQualityStudioProps {
     initialTab?: string;
 }
 
-export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab = 'dashboard' }) => {
+export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudioProps): JSX.Element {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isScanning, setIsScanning] = useState(false);
@@ -33,31 +36,31 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
   const [editingRule, setEditingRule] = useState<QualityRule | undefined>(undefined);
 
   useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
+      if (initialTab !== '') {setActiveTab(initialTab);}
   }, [initialTab]);
 
   // Clean up interval on unmount
   useEffect(() => {
       return () => {
-          if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+          if (scanIntervalRef.current !== null) {clearInterval(scanIntervalRef.current);}
       };
   }, []);
 
   // Integrated Data Query
   const { data: fetchedAnomalies = [], isLoading } = useQuery<DataAnomaly[]>(
       ['admin', 'anomalies'],
-      DataService.admin.getAnomalies
+      async () => await DataService.admin.getAnomalies() as DataAnomaly[]
   );
 
   const { data: history = [] } = useQuery<QualityMetricHistory[]>(
       ['quality', 'history'],
-      DataService.quality.getHistory
+      async () => await DataService.quality.getHistory() as QualityMetricHistory[]
   );
   
   const [anomalies, setAnomalies] = useState<DataAnomaly[]>([]);
 
   useEffect(() => {
-      if (fetchedAnomalies.length > 0) setAnomalies(fetchedAnomalies);
+      if (fetchedAnomalies.length > 0) {setAnomalies(fetchedAnomalies);}
   }, [fetchedAnomalies]);
 
   const [rules, setRules] = useState<QualityRule[]>([
@@ -81,8 +84,8 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
       }
   ]);
 
-  const handleScan = () => {
-      if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+  const handleScan = (): void => {
+      if (scanIntervalRef.current !== null) {clearInterval(scanIntervalRef.current);}
       
       setIsScanning(true);
       setScanProgress(0);
@@ -90,7 +93,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
       scanIntervalRef.current = setInterval(() => {
           setScanProgress(p => {
               if (p >= 100) {
-                  if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+                  if (scanIntervalRef.current !== null) {clearInterval(scanIntervalRef.current);}
                   setIsScanning(false);
                   return 100;
               }
@@ -99,7 +102,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
       }, 100);
   };
 
-  const handleFix = (id: number) => {
+  const _handleFix = (id: number): void => {
       setAnomalies(prev => prev.map(a => a.id === id ? { ...a, status: 'Fixing' } : a));
       // Simulate API call
       setTimeout(() => {
@@ -107,7 +110,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
       }, 1500);
   };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;
+  if (isLoading) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -135,13 +138,13 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                     { id: 'rules', label: 'Validation Rules', icon: Settings }
                 ]}
                 activeTab={activeTab}
-                onChange={(t) => setActiveTab(t as any)}
+                onChange={(t: string) => setActiveTab(t)}
             />
         </div>
 
         <div className={cn("flex-1 overflow-y-auto p-6", theme.surface.highlight)}>
             {activeTab === 'dashboard' && (
-                <QualityDashboard anomalies={anomalies} history={history} onFix={handleFix} />
+                <QualityDashboard anomalies={anomalies} history={history} />
             )}
 
             {activeTab === 'standardization' && <StandardizationConsole />}
@@ -160,11 +163,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <h5 className={cn("font-bold text-sm", theme.text.primary)}>{rule.name}</h5>
-                                        <span className={cn("text-[10px] px-1.5 rounded uppercase font-bold", 
-                                            rule.severity === 'Critical' ? cn(theme.status.error.bg, theme.status.error.text) :
-                                            rule.severity === 'High' ? cn(theme.status.warning.bg, theme.status.warning.text) :
-                                            cn(theme.status.info.bg, theme.status.info.text)
-                                        )}>{rule.severity}</span>
+                                        <span className={cn("text-[10px] px-1.5 rounded uppercase font-bold", getSeverityClassName(rule.severity, theme))}>{rule.severity}</span>
                                     </div>
                                     <div className="flex gap-2 items-center flex-wrap">
                                         <code className={cn("text-xs px-2 py-1 rounded font-mono", theme.surface.highlight, theme.text.secondary)}>
@@ -175,7 +174,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                                 </div>
                                 <div className="flex items-center gap-2 self-end sm:self-auto">
                                     <div className={cn("w-10 h-5 rounded-full p-1 cursor-pointer transition-colors", rule.enabled ? theme.status.success.text.replace('text-', 'bg-') : cn(theme.status.neutral.bg, "dark:bg-slate-700"))}>
-                                        <div className={cn("w-3 h-3 rounded-full shadow-sm transition-transform", theme.surface.default, rule.enabled ? "translate-x-5" : "")}></div>
+                                        <div className={cn("w-3 h-3 rounded-full shadow-sm transition-transform", theme.surface.default, rule.enabled ? "translate-x-5" : "")} />
                                     </div>
                                     <Button size="sm" variant="ghost" icon={Edit2} onClick={() => { setEditingRule(rule); setIsRuleBuilderOpen(true); }} />
                                 </div>
@@ -196,7 +195,7 @@ export const DataQualityStudio: React.FC<DataQualityStudioProps> = ({ initialTab
                 <RuleBuilder 
                     initialRule={editingRule} 
                     onSave={(r) => {
-                        if (editingRule) {
+                        if (editingRule !== undefined) {
                             setRules(prev => prev.map(rl => rl.id === r.id ? r : rl));
                         } else {
                             setRules(prev => [...prev, r]);

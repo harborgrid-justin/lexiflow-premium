@@ -47,14 +47,24 @@ export const AdminService = {
     getPermissions: async (): Promise<RolePermission[]> => { await delay(200); return [ {id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'} ]; },
     updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<any> => { await delay(100); return payload; },
     
-    // Data Platform Simulations
+    // Data Platform - ETL Pipelines
     getPipelines: async (): Promise<PipelineJob[]> => { 
-        await delay(400); 
-        return [
-            { id: 'pipe1', name: 'Nightly ECF Sync', status: 'Success', lastRun: '2 hours ago', duration: '15m 30s', volume: '1.2 GB', schedule: '02:00 UTC', logs: ['[INFO] Job Started', '[INFO] Fetched 12 new dockets', '[SUCCESS] Job Completed'] },
-            { id: 'pipe2', name: 'CRM Contact Ingestion', status: 'Running', lastRun: '1 day ago', duration: '5m 10s', volume: '2.1 MB', schedule: 'Daily', logs: ['[INFO] Job Started', '[INFO] Connecting to Salesforce API...', '[WARN] Rate limit approaching'] },
-            { id: 'pipe3', name: 'Billing Data Warehouse Load', status: 'Failed', lastRun: '3 hours ago', duration: '2m 05s', volume: '250 MB', schedule: 'Hourly', logs: ['[INFO] Job Started', '[ERROR] Connection to Snowflake timed out.'] },
-        ];
+        try {
+            const response = await fetch('/api/admin/pipelines', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                },
+            });
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+                return await response.json();
+            }
+        } catch (error) {
+            // Silently fail - backend not available
+        }
+        
+        // Backend not available - return empty or disconnected state
+        await delay(200);
+        return [];
     },
     getApiKeys: async (): Promise<ApiKey[]> => { await delay(100); return [{id: 'key_1', name: 'Default Key', prefix: 'pk_live_ab12...', created: '2024-01-01', status: 'Active'}]; },
     
@@ -79,13 +89,34 @@ export const AdminService = {
     },
     
     getConnectors: async (): Promise<Connector[]> => {
+        try {
+            // Fetch from backend data-sources API
+            const response = await fetch('/api/integrations/data-sources', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                },
+            });
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+                const connections = await response.json();
+                // Transform backend response to connector format
+                return connections.map((conn: any) => ({
+                    id: conn.id,
+                    name: conn.name,
+                    type: conn.type,
+                    status: conn.status === 'active' ? 'Healthy' : conn.status === 'syncing' ? 'Syncing' : 'Disconnected',
+                    color: conn.type === 'PostgreSQL' ? 'text-blue-600' : 
+                           conn.type === 'Snowflake' ? 'text-sky-500' : 'text-gray-600'
+                }));
+            }
+        } catch (error) {
+            // Silently fail - backend not available
+        }
+        
+        // Backend not available - return disconnected connectors based on backend support
         await delay(200);
         return [
-          { id: 'c1', name: 'PostgreSQL Production', type: 'Database', status: 'Healthy', color: 'text-blue-600' },
-          { id: 'c2', name: 'Snowflake Warehouse', type: 'Warehouse', status: 'Healthy', color: 'text-sky-500' },
-          { id: 'c3', name: 'Salesforce CRM', type: 'SaaS', status: 'Syncing', color: 'text-indigo-600' },
-          { id: 'c4', name: 'AWS S3 Data Lake', type: 'Storage', status: 'Healthy', color: 'text-amber-600' },
-          { id: 'c5', name: 'Redis Cache', type: 'Cache', status: 'Degraded', color: 'text-red-600' },
+          { id: 'c1', name: 'Primary Warehouse', type: 'Snowflake', status: 'Disconnected', color: 'text-sky-500' },
+          { id: 'c2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'Disconnected', color: 'text-blue-600' },
         ];
     },
     

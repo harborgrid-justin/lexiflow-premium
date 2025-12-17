@@ -79,11 +79,24 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
 
         {activeTab === 'monitor' && (
             <div className="flex flex-1 overflow-hidden relative">
-                <PipelineList 
-                    pipelines={pipelines} 
-                    selectedJob={selectedJob} 
-                    onSelectJob={setSelectedJob} 
-                />
+                {pipelines.length === 0 && !isLoadingPipelines ? (
+                    <div className="flex-1 flex flex-col items-center justify-center p-8">
+                        <div className="p-6 rounded-full bg-gray-50 dark:bg-slate-800 mb-4">
+                            <Activity className="h-12 w-12 text-gray-400" />
+                        </div>
+                        <h3 className={cn("text-xl font-semibold mb-2", theme.text.primary)}>No ETL Pipelines</h3>
+                        <p className={cn("text-sm text-center max-w-md mb-4", theme.text.secondary)}>
+                            Connect to the backend to view and manage your data pipelines
+                        </p>
+                        <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
+                    </div>
+                ) : (
+                    <>
+                        <PipelineList 
+                            pipelines={pipelines} 
+                            selectedJob={selectedJob} 
+                            onSelectJob={setSelectedJob} 
+                        />
 
                 {/* Details Panel - Full width on mobile when active */}
                 <div className={cn(
@@ -149,6 +162,8 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                         </div>
                     )}
                 </div>
+                    </>
+                )}
             </div>
         )}
         
@@ -158,39 +173,53 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
 
         {activeTab === 'connectors' && (
             <div className="p-6 overflow-y-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {connectors.map(conn => {
-                        const Icon = getIcon(conn.type);
-                        return (
-                        <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>
-                            <div className="flex justify-between items-start mb-4">
-                                <div className={cn("p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
-                                    <Icon className={cn("h-6 w-6", conn.color)}/>
-                                </div>
-                                <div className="flex gap-1">
-                                    <button className={cn("p-1.5 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)}><Settings className="h-4 w-4"/></button>
-                                </div>
-                            </div>
-                            <h4 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{conn.name}</h4>
-                            <p className={cn("text-sm mb-4", theme.text.secondary)}>{conn.type}</p>
-                            
-                            <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
-                                <span className={cn(
-                                    "text-xs font-bold px-2 py-0.5 rounded-full border",
-                                    conn.status === 'Healthy' ? cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border) : 
-                                    conn.status === 'Syncing' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
-                                    cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border)
-                                )}>{conn.status}</span>
-                                <span className={cn("text-xs", theme.text.tertiary)}>Last sync: 5m ago</span>
-                            </div>
+                {connectors.length === 0 && !isLoadingConnectors ? (
+                    <div className="flex flex-col items-center justify-center py-16">
+                        <div className="p-6 rounded-full bg-gray-50 dark:bg-slate-800 mb-4">
+                            <Database className="h-12 w-12 text-gray-400" />
                         </div>
-                    )})}
-                    
-                    <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
-                        <Plus className="h-10 w-10 mb-2"/>
-                        <span className="font-medium">Add New Source</span>
-                    </button>
-                </div>
+                        <h3 className={cn("text-xl font-semibold mb-2", theme.text.primary)}>No Connectors Available</h3>
+                        <p className={cn("text-sm text-center max-w-md mb-4", theme.text.secondary)}>
+                            Connect to the backend to view your data source connectors
+                        </p>
+                        <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {connectors.map(conn => {
+                            const Icon = getIcon(conn.type);
+                            return (
+                                <div key={conn.id} className={cn("p-5 rounded-lg border shadow-sm hover:shadow-md transition-all cursor-pointer group", theme.surface.default, theme.border.default)}>
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className={cn("p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
+                                            <Icon className={cn("h-6 w-6", conn.color)}/>
+                                        </div>
+                                        <div className="flex gap-1">
+                                            <button className={cn("p-1.5 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)}><Settings className="h-4 w-4"/></button>
+                                        </div>
+                                    </div>
+                                    <h4 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{conn.name}</h4>
+                                    <p className={cn("text-sm mb-4", theme.text.secondary)}>{conn.type}</p>
+                                    
+                                    <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
+                                        <span className={cn(
+                                            "text-xs font-bold px-2 py-0.5 rounded-full border",
+                                            conn.status === 'Healthy' ? cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border) : 
+                                            conn.status === 'Syncing' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
+                                            cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border)
+                                        )}>{conn.status}</span>
+                                        <span className={cn("text-xs", theme.text.tertiary)}>Last sync: 5m ago</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        
+                        <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
+                            <Plus className="h-10 w-10 mb-2"/>
+                            <span className="font-medium">Add New Source</span>
+                        </button>
+                    </div>
+                )}
             </div>
         )}
     </div>

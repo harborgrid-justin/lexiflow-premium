@@ -523,9 +523,11 @@ Object.defineProperties(DataServiceBase, {
           // Using IndexedDB for persistence until backend endpoint is available
           const connections = await db.getAll<any>('dataSources');
           return connections.length > 0 ? connections : [
-              { id: '1', name: 'Primary Warehouse', type: 'Snowflake', status: 'active', lastSync: new Date(Date.now() - 120000).toISOString(), region: 'us-east-1' },
-              { id: '2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'syncing', lastSync: new Date().toISOString(), region: 'eu-west-1' },
-              { id: '3', name: 'Document Store', type: 'MongoDB', status: 'error', lastSync: new Date(Date.now() - 3600000).toISOString(), region: 'us-east-1' }
+              { id: '1', name: 'PostgreSQL Production Database', type: 'Database', status: 'active', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
+              { id: '2', name: 'Snowflake Warehouse', type: 'Warehouse', status: 'active', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
+              { id: '3', name: 'Salesforce CRM', type: 'SaaS', status: 'syncing', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
+              { id: '4', name: 'AWS S3 Data Lake', type: 'Storage', status: 'active', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' },
+              { id: '5', name: 'Redis Cache', type: 'Cache', status: 'degraded', lastSync: new Date(Date.now() - 300000).toISOString(), region: 'us-east-1' }
           ];
       },
       testConnection: async (config: any) => {
@@ -650,23 +652,6 @@ Object.defineProperties(DataServiceBase, {
       getAll: async () => [],
       add: async () => ({ success: false, message: 'Requires backend' }),
       remove: async () => ({ success: false })
-    },
-    enumerable: true
-  },
-
-  analytics: {
-    get: () => isBackendApiEnabled() ? missingApiServices.analytics : {
-      getCaseAnalytics: async () => ({
-        totalCases: 0,
-        openCases: 0,
-        closedCases: 0,
-        casesByStatus: []
-      }),
-      getDiscoveryAnalytics: async () => ({
-        totalDocuments: 0,
-        reviewedDocuments: 0,
-        privilegedDocuments: 0
-      })
     },
     enumerable: true
   },

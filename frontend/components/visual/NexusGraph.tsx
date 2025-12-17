@@ -97,7 +97,9 @@ export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evide
             const idxS = link.sourceIndex * NODE_STRIDE;
             const idxT = link.targetIndex * NODE_STRIDE;
             const line = linkRefs.current[i];
-            if (line) {
+            // Safety check: ensure buffer indices are valid
+            if (line && state.buffer[idxS] !== undefined && state.buffer[idxS + 1] !== undefined && 
+                state.buffer[idxT] !== undefined && state.buffer[idxT + 1] !== undefined) {
                 line.setAttribute('x1', state.buffer[idxS].toString());
                 line.setAttribute('y1', state.buffer[idxS + 1].toString());
                 line.setAttribute('x2', state.buffer[idxT].toString());

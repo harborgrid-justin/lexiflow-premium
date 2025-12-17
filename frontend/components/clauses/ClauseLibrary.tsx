@@ -10,13 +10,22 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useState } from 'react';
+import { Search, FileText, Plus, Tag, Filter, BookOpen } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
 import { Clause } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
+import { Input } from '../common/Inputs';
+import { Badge } from '../common/Badge';
+import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -31,7 +40,149 @@ interface ClauseLibraryProps {
 // ============================================================================
 
 const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
-    return <div className="p-8 text-center text-slate-500">Clause Library Module Loading...</div>;
+    const { theme } = useTheme();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+    // Fetch real clauses from DataService
+    const { data: clauses = [], isLoading } = useQuery(['clauses'], async () => {
+        return await DataService.clauses.getAll();
+    });
+
+    const categories = ['Confidentiality', 'Liability', 'Payment Terms', 'Termination', 'Indemnification', 'Dispute Resolution'];
+
+    const filteredClauses = clauses.filter((clause: Clause) => {
+        const matchesSearch = !searchTerm || 
+            clause.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            clause.content?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = !selectedCategory || clause.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
+
+    if (isLoading) {
+        return (
+            <div className={cn("p-8 text-center", theme.text.secondary)}>
+                <BookOpen className={cn("h-12 w-12 mx-auto mb-3 animate-pulse", theme.text.tertiary)} />
+                Loading clause library...
+            </div>
+        );
+    }
+
+    return (
+        <div className={cn("h-full flex flex-col", theme.background)}>
+            {/* Header */}
+            <div className="p-4 border-b shrink-0" style={{ borderColor: theme.border.default }}>
+                <div className="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 className={cn("text-xl font-bold", theme.text.primary)}>Clause Library</h2>
+                        <p className={cn("text-sm", theme.text.secondary)}>
+                            {clauses.length} clauses available
+                        </p>
+                    </div>
+                    <Button variant="primary" icon={Plus}>
+                        Create Clause
+                    </Button>
+                </div>
+
+                {/* Search */}
+                <div className="relative">
+                    <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
+                    <Input
+                        placeholder="Search clauses by title or content..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                    />
+                </div>
+
+                {/* Category Filters */}
+                <div className="flex flex-wrap gap-2 mt-3">
+                    <Button
+                        size="sm"
+                        variant={selectedCategory === null ? 'primary' : 'outline'}
+                        onClick={() => setSelectedCategory(null)}
+                    >
+                        All Categories
+                    </Button>
+                    {categories.map(category => (
+                        <Button
+                            key={category}
+                            size="sm"
+                            variant={selectedCategory === category ? 'primary' : 'outline'}
+                            onClick={() => setSelectedCategory(category)}
+                        >
+                            {category}
+                        </Button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Clauses List */}
+            <div className="flex-1 overflow-y-auto p-4">
+                {filteredClauses.length === 0 ? (
+                    <Card>
+                        <div className="text-center py-12">
+                            <FileText className={cn("h-16 w-16 mx-auto mb-4", theme.text.tertiary)} />
+                            <h3 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>
+                                {searchTerm || selectedCategory ? 'No Matching Clauses' : 'No Clauses Available'}
+                            </h3>
+                            <p className={cn("text-sm mb-6", theme.text.secondary)}>
+                                {searchTerm || selectedCategory 
+                                    ? 'Try adjusting your search or filters' 
+                                    : 'Create your first clause template to get started'}
+                            </p>
+                            {!searchTerm && !selectedCategory && (
+                                <Button variant="primary" icon={Plus}>
+                                    Create Your First Clause
+                                </Button>
+                            )}
+                        </div>
+                    </Card>
+                ) : (
+                    <div className="grid gap-3">
+                        {filteredClauses.map((clause: Clause) => (
+                            <Card key={clause.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                                <div 
+                                    className="p-4"
+                                    onClick={() => onSelectClause(clause)}
+                                >
+                                    <div className="flex items-start justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <FileText className={cn("h-5 w-5", theme.text.secondary)} />
+                                            <h3 className={cn("font-semibold", theme.text.primary)}>
+                                                {clause.title || 'Untitled Clause'}
+                                            </h3>
+                                        </div>
+                                        {clause.category && (
+                                            <Badge variant="blue">{clause.category}</Badge>
+                                        )}
+                                    </div>
+                                    <p className={cn("text-sm line-clamp-2 mb-3", theme.text.secondary)}>
+                                        {clause.content || 'No content available'}
+                                    </p>
+                                    <div className="flex items-center gap-4 text-xs" style={{ color: theme.text.tertiary }}>
+                                        {clause.tags && clause.tags.length > 0 && (
+                                            <div className="flex items-center gap-1">
+                                                <Tag className="h-3 w-3" />
+                                                {clause.tags.slice(0, 3).join(', ')}
+                                                {clause.tags.length > 3 && ` +${clause.tags.length - 3}`}
+                                            </div>
+                                        )}
+                                        {clause.version && (
+                                            <span>Version {clause.version}</span>
+                                        )}
+                                        {clause.updatedAt && (
+                                            <span>Updated {new Date(clause.updatedAt).toLocaleDateString()}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default ClauseLibrary;

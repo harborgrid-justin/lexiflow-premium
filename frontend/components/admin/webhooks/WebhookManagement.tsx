@@ -8,6 +8,8 @@ import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
+import { useQuery } from '../../../services/queryClient';
+import { WebhooksApiService } from '../../../services/api/webhooks-api';
 
 interface WebhookConfig {
   id: string;
@@ -21,12 +23,6 @@ interface WebhookConfig {
   createdAt: string;
 }
 
-const mockWebhooks: WebhookConfig[] = [
-  { id: '1', name: 'Case Update Notification', url: 'https://api.example.com/webhooks/cases', events: ['case.created', 'case.updated'], status: 'Active', lastTriggered: '2024-01-15T10:30:00Z', failureCount: 0, createdAt: '2023-06-15' },
-  { id: '2', name: 'Document Upload Alert', url: 'https://slack.example.com/incoming/docs', events: ['document.created'], status: 'Active', lastTriggered: '2024-01-14T16:45:00Z', failureCount: 0, createdAt: '2023-08-20' },
-  { id: '3', name: 'Billing Sync', url: 'https://billing.example.com/api/sync', events: ['invoice.created', 'payment.received'], status: 'Error', lastTriggered: '2024-01-10T09:00:00Z', failureCount: 5, createdAt: '2023-10-01' },
-];
-
 const availableEvents = [
   'case.created', 'case.updated', 'case.closed',
   'document.created', 'document.updated', 'document.deleted',
@@ -38,7 +34,23 @@ const availableEvents = [
 export const WebhookManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [webhooks, setWebhooks] = useState<WebhookConfig[]>(mockWebhooks);
+  
+  // Fetch real webhooks from backend
+  const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
+    const response = await WebhooksApiService.getAll();
+    return response.items.map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      url: item.url,
+      events: item.events || [],
+      status: item.status || 'Active',
+      secret: item.secret,
+      lastTriggered: item.lastTriggered,
+      failureCount: item.failureCount || 0,
+      createdAt: item.createdAt,
+    })) as WebhookConfig[];
+  });
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -47,55 +59,71 @@ export const WebhookManagement: React.FC = () => {
   const [formData, setFormData] = useState<Partial<WebhookConfig>>({ events: [] });
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!formData.name || !formData.url || !formData.events?.length) {
       notify.error('Name, URL, and at least one event are required');
       return;
     }
-    const newWebhook: WebhookConfig = {
-      id: `webhook-${Date.now()}`,
-      name: formData.name,
-      url: formData.url,
-      events: formData.events,
-      status: 'Inactive',
-      secret: formData.secret,
-      failureCount: 0,
-      createdAt: new Date().toISOString().split('T')[0],
-    };
-    setWebhooks([...webhooks, newWebhook]);
-    setIsCreateModalOpen(false);
-    setFormData({ events: [] });
-    notify.success('Webhook created successfully');
-  };
-
-  const handleEdit = () => {
-    if (!selectedWebhook) return;
-    setWebhooks(webhooks.map(w =>
-      w.id === selectedWebhook.id ? { ...w, ...formData } : w
-    ));
-    setIsEditModalOpen(false);
-    setSelectedWebhook(null);
-    setFormData({ events: [] });
-    notify.success('Webhook updated successfully');
-  };
-
-  const handleDelete = () => {
-    if (!selectedWebhook) return;
-    setWebhooks(webhooks.filter(w => w.id !== selectedWebhook.id));
-    setIsDeleteModalOpen(false);
-    setSelectedWebhook(null);
-    notify.success('Webhook deleted successfully');
-  };
-
-  const handleTest = () => {
-    // Simulate webhook test
-    setTimeout(() => {
-      const success = Math.random() > 0.3;
-      setTestResult({
-        success,
-        message: success ? 'Webhook responded successfully (200 OK)' : 'Webhook failed to respond (Connection timeout)',
+    try {
+      await WebhooksApiService.create({
+        name: formData.name,
+        url: formData.url,
+        events: formData.events,
+        secret: formData.secret,
       });
-    }, 1000);
+      await refetch();
+      setIsCreateModalOpen(false);
+      setFormData({ events: [] });
+      notify.success('Webhook created successfully');
+    } catch (error) {
+      notify.error('Failed to create webhook');
+      console.error(error);
+    }
+  };
+
+  const handleEdit = async () => {
+    if (!selectedWebhook) return;
+    try {
+      await WebhooksApiService.update(selectedWebhook.id, formData);
+      await refetch();
+      setIsEditModalOpen(false);
+      setSelectedWebhook(null);
+      setFormData({ events: [] });
+      notify.success('Webhook updated successfully');
+    } catch (error) {
+      notify.error('Failed to update webhook');
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedWebhook) return;
+    try {
+      await WebhooksApiService.delete(selectedWebhook.id);
+      await refetch();
+      setIsDeleteModalOpen(false);
+      setSelectedWebhook(null);
+      notify.success('Webhook deleted successfully');
+    } catch (error) {
+      notify.error('Failed to delete webhook');
+      console.error(error);
+    }
+  };
+
+  const handleTest = async () => {
+    if (!selectedWebhook) return;
+    try {
+      const result = await WebhooksApiService.test(selectedWebhook.id);
+      setTestResult({
+        success: result.success,
+        message: result.message || (result.success ? 'Webhook responded successfully' : 'Webhook failed'),
+      });
+    } catch (error) {
+      setTestResult({
+        success: false,
+        message: 'Failed to test webhook',
+      });
+    }
   };
 
   const openEditModal = (webhook: WebhookConfig) => {
@@ -133,47 +161,64 @@ export const WebhookManagement: React.FC = () => {
         </Button>
       </div>
 
-      <TableContainer>
-        <TableHeader>
-          <TableHead>Name</TableHead>
-          <TableHead>URL</TableHead>
-          <TableHead>Events</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Last Triggered</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableHeader>
-        <TableBody>
-          {webhooks.map(webhook => (
-            <TableRow key={webhook.id}>
-              <TableCell>
-                <span className={cn("font-medium", theme.text.primary)}>{webhook.name}</span>
-              </TableCell>
-              <TableCell>
-                <code className={cn("text-xs px-2 py-1 rounded", theme.surface.highlight)}>{webhook.url}</code>
-              </TableCell>
-              <TableCell>
-                <Badge variant="info">{webhook.events.length} events</Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant={webhook.status === 'Active' ? 'success' : webhook.status === 'Error' ? 'error' : 'default'}>
-                  {webhook.status === 'Error' && <AlertCircle className="h-3 w-3 mr-1" />}
-                  {webhook.status}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-sm">
-                {webhook.lastTriggered ? new Date(webhook.lastTriggered).toLocaleString() : 'Never'}
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-1">
-                  <Button size="sm" variant="ghost" icon={Play} onClick={() => openTestModal(webhook)}>Test</Button>
-                  <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(webhook)}>Edit</Button>
-                  <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedWebhook(webhook); setIsDeleteModalOpen(true); }}>Delete</Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </TableContainer>
+      {isLoading ? (
+        <div className={cn("p-8 text-center rounded-lg border", theme.surface.default, theme.border.default)}>
+          <p className={cn(theme.text.secondary)}>Loading webhooks...</p>
+        </div>
+      ) : webhooks.length === 0 ? (
+        <div className={cn("p-12 text-center rounded-lg border", theme.surface.default, theme.border.default)}>
+          <Webhook className={cn("h-16 w-16 mx-auto mb-4", theme.text.tertiary)} />
+          <h4 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>No Webhooks Configured</h4>
+          <p className={cn("text-sm mb-6", theme.text.secondary)}>
+            Create your first webhook to receive real-time notifications for system events
+          </p>
+          <Button variant="primary" icon={Plus} onClick={() => { setFormData({ events: [] }); setIsCreateModalOpen(true); }}>
+            Create Your First Webhook
+          </Button>
+        </div>
+      ) : (
+        <TableContainer>
+          <TableHeader>
+            <TableHead>Name</TableHead>
+            <TableHead>URL</TableHead>
+            <TableHead>Events</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Last Triggered</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableHeader>
+          <TableBody>
+            {webhooks.map(webhook => (
+              <TableRow key={webhook.id}>
+                <TableCell>
+                  <span className={cn("font-medium", theme.text.primary)}>{webhook.name}</span>
+                </TableCell>
+                <TableCell>
+                  <code className={cn("text-xs px-2 py-1 rounded", theme.surface.highlight)}>{webhook.url}</code>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="info">{webhook.events.length} events</Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={webhook.status === 'Active' ? 'success' : webhook.status === 'Error' ? 'error' : 'default'}>
+                    {webhook.status === 'Error' && <AlertCircle className="h-3 w-3 mr-1" />}
+                    {webhook.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-sm">
+                  {webhook.lastTriggered ? new Date(webhook.lastTriggered).toLocaleString() : 'Never'}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" icon={Play} onClick={() => openTestModal(webhook)}>Test</Button>
+                    <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(webhook)}>Edit</Button>
+                    <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedWebhook(webhook); setIsDeleteModalOpen(true); }}>Delete</Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableContainer>
+      )}
 
       {/* Create/Edit Modal */}
       <Modal

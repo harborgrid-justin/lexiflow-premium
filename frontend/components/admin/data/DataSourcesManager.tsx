@@ -78,8 +78,21 @@ const ConnectionCard = ({ connection, onSync, onDelete, onTest }: any) => {
     switch (status) {
       case 'active': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400';
       case 'syncing': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'degraded': return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400';
       case 'error': return 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400';
+      case 'disconnected': return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
       default: return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'active': return 'Healthy';
+      case 'syncing': return 'Syncing';
+      case 'degraded': return 'Degraded';
+      case 'error': return 'Error';
+      case 'disconnected': return 'Not Connected';
+      default: return status;
     }
   };
 
@@ -120,7 +133,10 @@ const ConnectionCard = ({ connection, onSync, onDelete, onTest }: any) => {
         <div className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5", getStatusColor(connection.status))}>
           {connection.status === 'syncing' && <RefreshCw className="h-3 w-3 animate-spin" />}
           {connection.status === 'active' && <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />}
-          {connection.status}
+          {connection.status === 'degraded' && <AlertTriangle className="h-3 w-3" />}
+          {connection.status === 'error' && <X className="h-3 w-3" />}
+          {connection.status === 'disconnected' && <div className="h-1.5 w-1.5 rounded-full bg-gray-400" />}
+          {getStatusLabel(connection.status)}
         </div>
       </div>
 
@@ -134,8 +150,8 @@ const ConnectionCard = ({ connection, onSync, onDelete, onTest }: any) => {
         </div>
         <div>
           <span className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Last Sync</span>
-          <div className={cn("font-mono text-sm font-medium", theme.text.primary)}>
-            {connection.lastSync}
+          <div className={cn("text-xs font-medium", theme.text.primary)}>
+            {connection.lastSync ? new Date(connection.lastSync).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ago' : 'Never'}
           </div>
         </div>
       </div>

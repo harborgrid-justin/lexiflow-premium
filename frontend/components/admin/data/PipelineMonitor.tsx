@@ -4,11 +4,11 @@ import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings,
 
 import { useTheme } from '../../../context/ThemeContext';
 import { useQuery, useMutation } from '../../../services/queryClient';
-import { PipelineJob, Connector } from '../../../types';
+import { Connector } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { Tabs } from '../../common/Tabs';
-import { dataPlatformApi } from '../../../services/api/data-platform-api';
+import { dataPlatformApi, Pipeline } from '../../../services/api/data-platform-api';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
 import { PipelineList } from './pipeline/PipelineList';
@@ -21,7 +21,7 @@ interface PipelineMonitorProps {
 export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps): React.ReactElement {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'monitor' | 'visual' | 'connectors'>('monitor');
-  const [selectedJob, setSelectedJob] = useState<PipelineJob | null>(null);
+  const [selectedJob, setSelectedJob] = useState<Pipeline | null>(null);
   
   useEffect(() => {
       if (initialTab === 'connectors') {

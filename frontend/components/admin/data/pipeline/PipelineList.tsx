@@ -3,12 +3,12 @@ import React from 'react';
 import { Activity, XCircle, GitMerge, Clock, ChevronRight } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { PipelineJob } from '../../../../types';
+import { Pipeline } from '../../../../services/api/data-platform-api';
 
 interface PipelineListProps {
-  pipelines: PipelineJob[];
-  selectedJob: PipelineJob | null;
-  onSelectJob: (job: PipelineJob) => void;
+  pipelines: Pipeline[];
+  selectedJob: Pipeline | null;
+  onSelectJob: (job: Pipeline) => void;
 }
 
 export const PipelineList: React.FC<PipelineListProps> = ({ pipelines, selectedJob, onSelectJob }) => {

@@ -156,12 +156,13 @@ export class QueryWorkbenchApiService {
       return await apiClient.post<QueryResult>('/query-workbench/execute', { query });
     } catch (error) {
       console.error('[QueryWorkbenchApi] Error executing query:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return {
         success: false,
         data: [],
         executionTimeMs: 0,
         rowsAffected: 0,
-        error: error.message,
+        error: errorMessage,
         historyId: '',
       };
     }
@@ -172,7 +173,8 @@ export class QueryWorkbenchApiService {
       return await apiClient.post('/query-workbench/explain', { query });
     } catch (error) {
       console.error('[QueryWorkbenchApi] Error explaining query:', error);
-      return { success: false, error: error.message };
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return { success: false, error: errorMessage };
     }
   }
 
@@ -218,12 +220,16 @@ export interface Pipeline {
   sourceConnector: string;
   targetConnector: string;
   configuration: Record<string, any>;
-  status: 'Active' | 'Paused' | 'Failed' | 'Draft';
+  status: 'Running' | 'Active' | 'Paused' | 'Failed' | 'Draft' | 'Success';
   schedule?: string;
   recordsProcessed: number;
   lastRun?: string;
   lastRunStatus?: string;
   createdAt: string;
+  // Additional fields for compatibility with PipelineJob
+  duration?: number;
+  volume?: number;
+  logs?: Array<{ timestamp: string; level: string; message: string }>;
 }
 
 export class PipelinesApiService {

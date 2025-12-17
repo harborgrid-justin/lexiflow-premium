@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react';
 import { DataService } from '../services/dataService';
 
 // Hooks & Context
-import { useSync } from '../context/SyncContext';
+import { useSync } from './useSync';
 
 // Types
 import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId } from '../types';

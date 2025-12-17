@@ -51,7 +51,7 @@ export class DocumentsApiService {
     }
     // Don't set Content-Type for FormData - browser will set it with boundary
     
-    const response = await fetch(`${apiClient['baseURL']}/documents/bulk-upload`, {
+    const response = await fetch(`${apiClient.getBaseUrl()}/documents/bulk-upload`, {
       method: 'POST',
       headers,
       body: formData,
@@ -60,7 +60,7 @@ export class DocumentsApiService {
   }
 
   async download(id: string): Promise<Blob> {
-    const response = await fetch(`${apiClient['baseURL']}/documents/${id}/download`, {
+    const response = await fetch(`${apiClient.getBaseUrl()}/documents/${id}/download`, {
       headers: apiClient['getHeaders'](),
     });
     return response.blob();

@@ -140,7 +140,7 @@ export class AuditLogsApiService {
   }
 
   async export(filters: { startDate: string; endDate: string; format: 'CSV' | 'JSON' | 'PDF' }): Promise<Blob> {
-    const response = await fetch(`${apiClient['baseURL']}/audit-logs/export`, {
+    const response = await fetch(`${apiClient.getBaseUrl()}/audit-logs/export`, {
       method: 'POST',
       headers: apiClient['getHeaders'](),
       body: JSON.stringify(filters),
@@ -273,7 +273,7 @@ export class ComplianceReportsApiService {
   }
 
   async download(id: string): Promise<Blob> {
-    const response = await fetch(`${apiClient['baseURL']}/compliance/reports/${id}/download`, {
+    const response = await fetch(`${apiClient.getBaseUrl()}/compliance/reports/${id}/download`, {
       headers: apiClient['getHeaders'](),
     });
     return response.blob();

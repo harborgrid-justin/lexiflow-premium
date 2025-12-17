@@ -20,7 +20,7 @@ import { DataLoaderModule } from './dataloaders/dataloader.module';
       autoSchemaFile: PathsConfig.GRAPHQL_SCHEMA_FILE,
       sortSchema: true,
       playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      plugins: [ApolloServerPluginLandingPageLocalDefault() as any],
 
       // Enable introspection and playground in development
       introspection: process.env.NODE_ENV !== 'production',

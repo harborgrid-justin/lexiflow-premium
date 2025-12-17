@@ -85,6 +85,13 @@ class ApiClient {
   }
 
   /**
+   * Get the base URL for API requests
+   */
+  public getBaseUrl(): string {
+    return this.baseURL;
+  }
+
+  /**
    * Build headers for requests
    */
   private getHeaders(customHeaders: HeadersInit = {}): HeadersInit {
@@ -153,7 +160,7 @@ class ApiClient {
    */
   private async refreshAccessToken(refreshToken: string): Promise<boolean> {
     try {
-      const response = await fetch(`${API_URL}/api/v1/auth/refresh`, {
+      const response = await fetch(`${this.baseURL}/auth/refresh`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken }),
@@ -275,7 +282,7 @@ class ApiClient {
    */
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     try {
-      const response = await fetch(`${API_URL}/health`, {
+      const response = await fetch(`${this.baseURL}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

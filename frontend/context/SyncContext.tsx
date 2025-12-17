@@ -1,10 +1,10 @@
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import { SyncEngine, Mutation } from '../services/syncEngine';
 import { DataService } from '../services/dataService';
 import { useToast } from './ToastContext';
 
-interface SyncContextType {
+export interface SyncContextType {
   isOnline: boolean;
   pendingCount: number;
   failedCount: number;
@@ -13,13 +13,7 @@ interface SyncContextType {
   syncStatus: 'idle' | 'syncing' | 'offline' | 'error';
 }
 
-const SyncContext = createContext<SyncContextType | undefined>(undefined);
-
-export const useSync = () => {
-  const context = useContext(SyncContext);
-  if (!context) throw new Error('useSync must be used within a SyncProvider');
-  return context;
-};
+export const SyncContext = createContext<SyncContextType | undefined>(undefined);
 
 const MAX_RETRIES = 3;
 const BASE_DELAY = 1000;

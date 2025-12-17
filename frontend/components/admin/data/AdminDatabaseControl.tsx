@@ -26,6 +26,11 @@ const CostFinOps = lazy(() => import('./CostFinOps').then(m => ({ default: m.Cos
 const DataLakeExplorer = lazy(() => import('./DataLakeExplorer').then(m => ({ default: m.DataLakeExplorer })));
 const ShardingVisualizer = lazy(() => import('./ShardingVisualizer').then(m => ({ default: m.ShardingVisualizer })));
 const DataSourcesManager = lazy(() => import('./DataSourcesManager').then(m => ({ default: m.DataSourcesManager })));
+const RealtimeStreams = lazy(() => import('./RealtimeStreams').then(m => ({ default: m.RealtimeStreams })));
+const EventBusManager = lazy(() => import('./EventBusManager').then(m => ({ default: m.EventBusManager })));
+const VersionControl = lazy(() => import('./VersionControl').then(m => ({ default: m.VersionControl })));
+const Configuration = lazy(() => import('./Configuration').then(m => ({ default: m.Configuration })));
+const DatabaseManagement = lazy(() => import('./DatabaseManagement').then(m => ({ default: m.DatabaseManagement })));
 
 interface AdminDatabaseControlProps {
   initialTab?: string;
@@ -58,6 +63,9 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
     if (activeView.startsWith('pipeline')) return <PipelineMonitor initialTab={getSubTab('pipeline')} />;
     if (activeView.startsWith('query')) return <QueryConsole initialTab={getSubTab('query')} />;
     if (activeView.startsWith('security')) return <SecurityMatrix initialTab={getSubTab('security')} />;
+    if (activeView.startsWith('realtime')) return <RealtimeStreams initialTab={getSubTab('realtime')} />;
+    if (activeView.startsWith('versions')) return <VersionControl initialTab={getSubTab('versions')} />;
+    if (activeView.startsWith('config')) return <Configuration initialTab={getSubTab('config')} />;
 
     // Direct Matches
     switch (activeView) {
@@ -68,6 +76,8 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
       case 'cost': return <CostFinOps />;
       case 'lake': return <DataLakeExplorer />;
       case 'sharding': return <ShardingVisualizer />;
+      case 'database-mgmt': return <DatabaseManagement />;
+      case 'realtime-events': return <EventBusManager />;
       default: return <PlatformOverview />;
     }
   };

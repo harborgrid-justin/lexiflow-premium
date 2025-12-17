@@ -30,7 +30,8 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
   });
 
   const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
+    // Note: preventDefault() cannot be called in passive listeners
+    // The zoom behavior works without preventing default scroll
     const newZoom = Math.max(0.2, Math.min(2, zoom - e.deltaY * 0.001));
     setZoom(newZoom);
   };

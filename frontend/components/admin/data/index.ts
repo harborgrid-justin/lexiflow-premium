@@ -16,3 +16,7 @@ export { LineageGraph } from './LineageGraph';
 export { CostFinOps } from './CostFinOps';
 export { DataLakeExplorer } from './DataLakeExplorer';
 export { ShardingVisualizer } from './ShardingVisualizer';
+export { RealtimeStreams } from './RealtimeStreams';
+export { EventBusManager } from './EventBusManager';
+export { VersionControl } from './VersionControl';
+export { Configuration } from './Configuration';

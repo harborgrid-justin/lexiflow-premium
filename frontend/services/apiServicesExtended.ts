@@ -237,14 +237,14 @@ export class ReportsApiService {
   }
 
   async exportReport(id: string, format: string): Promise<Blob> {
-    const response = await fetch(`${apiClient['baseURL']}/reports/${id}/export?format=${format}`, {
+    const response = await fetch(`${apiClient.getBaseUrl()}/reports/${id}/export?format=${format}`, {
       headers: apiClient['getHeaders'](),
     });
     return response.blob();
   }
 
   async downloadReport(id: string): Promise<Blob> {
-    const response = await fetch(`${apiClient['baseURL']}/reports/${id}/download`, {
+    const response = await fetch(`${apiClient.getBaseUrl()}/reports/${id}/download`, {
       headers: apiClient['getHeaders'](),
     });
     return response.blob();

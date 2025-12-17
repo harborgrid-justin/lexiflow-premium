@@ -93,11 +93,66 @@ export const STORES = {
   OPERATING_SUMMARY: 'operating_summary',
   DISCOVERY_FUNNEL_STATS: 'discovery_funnel_stats',
   DISCOVERY_CUSTODIAN_STATS: 'custodian_main',
+  // Additional stores referenced in dataService.ts
+  TRANSACTIONS: 'transactions',
+  ASSETS: 'assets',
+  DATA_SOURCES: 'dataSources',
+  SESSIONS: 'sessions',
+  REFRESH_TOKENS: 'refresh_tokens',
+  PARTIES_EXT: 'parties',
+  CASE_TEAMS: 'caseTeams',
+  CONFLICT_CHECKS: 'conflictChecks',
+  ETHICAL_WALLS_EXT: 'ethicalWalls',
+  AUDIT_LOGS_EXT: 'auditLogs',
+  PERMISSIONS: 'permissions',
+  COMPLIANCE_REPORTS: 'complianceReports',
+  DEPOSITIONS: 'depositions',
+  ESI_SOURCES: 'esiSources',
+  PRODUCTIONS: 'productions',
+  CUSTODIAN_INTERVIEWS: 'custodianInterviews',
+  ORGANIZATIONS: 'organizations',
+  PLEADINGS_EXT: 'pleadings',
+  INVOICES_EXT: 'invoices',
+  TIME_ENTRIES: 'time_entries',
+  TIME_OFF_REQUESTS: 'time_off_requests',
+  INVOICE_ITEMS: 'invoice_items',
+  TRUST_ACCOUNTS: 'trust_accounts',
+  TRUST_TRANSACTIONS: 'trust_transactions',
+  BILLING_ANALYTICS: 'billingAnalytics',
+  CASE_PHASES: 'case_phases',
+  EMPLOYEES: 'employees',
+  EVIDENCE_ITEMS: 'evidence_items',
+  DOCKET_ENTRIES: 'docket_entries',
+  USER_PROFILES: 'user_profiles',
+  DOCUMENT_VERSIONS: 'document_versions',
+  PRIVILEGE_LOG_ENTRIES: 'privilege_log_entries',
+  LOGIN_ATTEMPTS: 'login_attempts',
+  ANALYTICS_EVENTS: 'analytics_events',
+  INTEGRATIONS: 'integrations',
+  EXPERTS: 'experts',
+  TRIAL_EVENTS: 'trial_events',
+  TRIAL_EXHIBITS: 'trial_exhibits',
+  WITNESS_PREP_SESSIONS: 'witness_prep_sessions',
+  CALENDAR_EVENTS: 'calendar_events',
+  MESSAGES: 'messages',
+  SEARCH_INDEX: 'search_index',
+  SEARCH_QUERIES: 'search_queries',
+  DASHBOARDS: 'dashboards',
+  DASHBOARD_SNAPSHOTS: 'dashboard_snapshots',
+  REPORT_TEMPLATES: 'report_templates',
+  OCR_JOBS: 'ocr_jobs',
+  KNOWLEDGE_ARTICLES: 'knowledge_articles',
+  API_KEYS: 'api_keys',
+  FEE_AGREEMENTS: 'fee_agreements',
+  CUSTODIANS: 'custodians',
+  COMPLIANCE_RULES: 'compliance_rules',
+  COMPLIANCE_CHECKS: 'compliance_checks',
+  SLA_CONFIGS: 'sla_configs',
 };
 
 export class DatabaseManager {
   private dbName = 'LexiFlowDB';
-  private dbVersion = 28; // Incremented for new stores
+  private dbVersion = 29; // Incremented to clean up legacy stores and add missing definitions
   private db: IDBDatabase | null = null;
   private mode: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
   private initPromise: Promise<void> | null = null; 
@@ -192,6 +247,20 @@ export class DatabaseManager {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
+        
+        // Get list of defined stores
+        const definedStores = new Set([...Object.values(STORES), 'files']);
+        
+        // Clean up legacy stores not in STORES definition
+        const existingStores = Array.from(db.objectStoreNames);
+        existingStores.forEach(storeName => {
+          if (!definedStores.has(storeName)) {
+            console.log(`[DB] Removing legacy store: ${storeName}`);
+            db.deleteObjectStore(storeName);
+          }
+        });
+        
+        // Create or update defined stores
         Object.values(STORES).forEach(storeName => {
           if (!db.objectStoreNames.contains(storeName)) {
             const store = db.createObjectStore(storeName, { keyPath: 'id' });
@@ -206,6 +275,8 @@ export class DatabaseManager {
              if (storeName === STORES.CASES && !store.indexNames.contains('client')) store.createIndex('client', 'client', { unique: false });
           }
         });
+        
+        // Ensure 'files' store exists (special case for file storage)
         if (!db.objectStoreNames.contains('files')) {
             db.createObjectStore('files');
         }

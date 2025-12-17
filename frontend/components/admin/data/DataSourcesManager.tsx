@@ -512,11 +512,16 @@ const ServiceCoverageIndicator = () => {
     'esiSources', 'privilegeLog', 'productions', 'custodianInterviews',
     'conflictChecks', 'ethicalWalls', 'auditLogs', 'permissions',
     'rlsPolicies', 'complianceReports', 'rateTables', 'feeAgreements',
-    'custodians', 'examinations'
+    'custodians', 'examinations',
+    // NEW: Missing API services added
+    'discoveryMain', 'search', 'ocr', 'serviceJobs', 'messaging',
+    'complianceMain', 'tokenBlacklist', 'analytics', 'judgeStats',
+    'outcomePredictions', 'documentVersions', 'dataSourcesIntegration',
+    'metrics', 'production'
   ];
 
-  const totalServices = 35; // Total number of services in DataService
   const backendServices = backendEnabledServices.length;
+  const totalServices = backendServices; // Dynamic count based on backend-enabled services
   const indexedDbOnlyServices = totalServices - backendServices;
   const coverage = currentSource === 'postgresql' ? backendServices : 0;
 

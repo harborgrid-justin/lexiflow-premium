@@ -60,7 +60,7 @@ export const STORES = {
   JURORS: 'jurors', // Frontend-only (not in backend yet)
   
   // Compliance & Security
-  CONFLICTS: 'conflict_checks', // ✓ Backend: conflict_checks (renamed)
+  CONFLICTS: 'conflicts', // Must match frontend/db.ts store name
   WALLS: 'ethical_walls', // ✓ Backend: ethical_walls
   LOGS: 'audit_logs', // ✓ Backend: audit_logs
   COMPLIANCE_RULES: 'compliance_rules', // ✓ Backend: compliance_rules (added)

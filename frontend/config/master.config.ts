@@ -65,7 +65,7 @@ export const SYNC_PATCH_MAX_DEPTH = 10;
 // =============================================================================
 // API CONFIGURATION
 // =============================================================================
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 export const API_PREFIX = '/api/v1';
 export const API_TIMEOUT_MS = 30000; // 30 seconds
 export const API_RETRY_ATTEMPTS = 3;
@@ -80,7 +80,7 @@ export const API_ENABLE_REQUEST_CANCELLATION = true;
 // WEBSOCKET CONFIGURATION
 // =============================================================================
 export const WS_ENABLED = false; // Set to true when backend WebSocket is ready
-export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3000';
+export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
 export const WS_RECONNECT_ATTEMPTS = 5;
 export const WS_RECONNECT_DELAY_MS = 1000;
 export const WS_RECONNECT_BACKOFF_MULTIPLIER = 1.5;

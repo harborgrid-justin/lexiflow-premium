@@ -148,7 +148,7 @@ const allServices = getAllApiServices();
 Set in `.env`:
 ```
 VITE_USE_BACKEND_API=true
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:5000
 VITE_API_PREFIX=/api/v1
 ```
 
@@ -200,7 +200,7 @@ Tokens are automatically managed by the `apiClient`:
 
 ### Testing:
 1. Start backend: `cd backend && npm run start:dev`
-2. Verify Swagger: http://localhost:3000/api/docs
+2. Verify Swagger: http://localhost:5000/api/docs
 3. Test frontend API calls
 4. Monitor network tab for correct endpoints
 
@@ -208,7 +208,7 @@ Tokens are automatically managed by the `apiClient`:
 
 - Gap Analysis: `/docs/BACKEND_FRONTEND_GAP_ANALYSIS.md`
 - This Summary: `/docs/BACKEND_FRONTEND_INTEGRATION_COMPLETE.md`
-- Backend Swagger: http://localhost:3000/api/docs
+- Backend Swagger: http://localhost:5000/api/docs
 - Backend README: `/backend/README.md`
 
 ## ✨ Key Improvements

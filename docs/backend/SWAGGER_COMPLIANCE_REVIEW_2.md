@@ -229,7 +229,7 @@ All 6 compliance controllers now have full Swagger documentation:
    - ✅ OAuth2 Authorization Code Flow
 
 2. **Server Environments (3)**
-   - ✅ Development (localhost:3000)
+   - ✅ Development (localhost:5000)
    - ✅ Staging (staging.lexiflow.com)
    - ✅ Production (api.lexiflow.com)
 
@@ -290,8 +290,8 @@ All 6 compliance controllers now have full Swagger documentation:
    - ✅ All references resolved
 
 3. **Swagger UI Access**
-   - ✅ Available at `http://localhost:3000/api/docs`
-   - ✅ JSON spec at `http://localhost:3000/api/docs-json`
+   - ✅ Available at `http://localhost:5000/api/docs`
+   - ✅ JSON spec at `http://localhost:5000/api/docs-json`
    - ✅ All endpoints visible and documented
 
 4. **Authentication Flow Testing**

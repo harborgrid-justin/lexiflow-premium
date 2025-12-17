@@ -1110,7 +1110,7 @@ async findAll() { ... }
 
 **Structure:**
 ```env
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:5000
 VITE_API_PREFIX=/api/v1
 VITE_USE_BACKEND_API=false
 VITE_AUTH_TOKEN_KEY=lexiflow_auth_token
@@ -1120,7 +1120,7 @@ VITE_GEMINI_API_KEY=
 
 **Access Pattern:**
 ```typescript
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
+const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
 ```
 
 **Issues:**

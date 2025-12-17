@@ -184,9 +184,9 @@ npm run start:dev
 ```
 
 ## Access Points
-- **API Server**: http://localhost:3000
-- **Swagger Docs**: http://localhost:3000/api/docs
-- **GraphQL Playground**: http://localhost:3000/graphql
+- **API Server**: http://localhost:5000
+- **Swagger Docs**: http://localhost:5000/api/docs
+- **GraphQL Playground**: http://localhost:5000/graphql
 - **pgAdmin**: http://localhost:5050
 
 ---

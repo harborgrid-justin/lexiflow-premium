@@ -77,7 +77,7 @@ Key backend modules: `cases`, `documents`, `document-versions`, `clauses`, `plea
 
 ### Integration Points
 - Frontend can use backend API via `apiServices` when `VITE_USE_BACKEND_API=true`
-- Backend Swagger docs at `http://localhost:3000/api/docs`
+- Backend Swagger docs at `http://localhost:5000/api/docs`
 - WebSocket support via `RealtimeModule`
 
 ## Key Conventions

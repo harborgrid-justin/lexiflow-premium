@@ -2,14 +2,14 @@
 
 ## Base URL
 ```
-http://localhost:3000/api/v1
+http://localhost:5000/api/v1
 ```
 
 ## Test Sequence
 
 ### 1. Register a New User
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/register \
+curl -X POST http://localhost:5000/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@lexiflow.com",
@@ -40,7 +40,7 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
 
 ### 2. Login with Default Admin
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/login \
+curl -X POST http://localhost:5000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@lexiflow.com",
@@ -69,7 +69,7 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 ### 3. Get User Profile
 ```bash
 # Replace YOUR_ACCESS_TOKEN with the token from login response
-curl -X GET http://localhost:3000/api/v1/auth/profile \
+curl -X GET http://localhost:5000/api/v1/auth/profile \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -89,7 +89,7 @@ curl -X GET http://localhost:3000/api/v1/auth/profile \
 
 ### 4. Update Profile
 ```bash
-curl -X PUT http://localhost:3000/api/v1/auth/profile \
+curl -X PUT http://localhost:5000/api/v1/auth/profile \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -100,7 +100,7 @@ curl -X PUT http://localhost:3000/api/v1/auth/profile \
 
 ### 5. Refresh Access Token
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/refresh \
+curl -X POST http://localhost:5000/api/v1/auth/refresh \
   -H "Content-Type: application/json" \
   -d '{
     "refreshToken": "YOUR_REFRESH_TOKEN"
@@ -117,7 +117,7 @@ curl -X POST http://localhost:3000/api/v1/auth/refresh \
 
 ### 6. Change Password
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/change-password \
+curl -X POST http://localhost:5000/api/v1/auth/change-password \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -128,7 +128,7 @@ curl -X POST http://localhost:3000/api/v1/auth/change-password \
 
 ### 7. Forgot Password
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/forgot-password \
+curl -X POST http://localhost:5000/api/v1/auth/forgot-password \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@lexiflow.com"
@@ -145,7 +145,7 @@ curl -X POST http://localhost:3000/api/v1/auth/forgot-password \
 
 ### 8. Reset Password
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/reset-password \
+curl -X POST http://localhost:5000/api/v1/auth/reset-password \
   -H "Content-Type: application/json" \
   -d '{
     "token": "RESET_TOKEN_FROM_FORGOT_PASSWORD",
@@ -155,7 +155,7 @@ curl -X POST http://localhost:3000/api/v1/auth/reset-password \
 
 ### 9. Logout
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/logout \
+curl -X POST http://localhost:5000/api/v1/auth/logout \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -163,19 +163,19 @@ curl -X POST http://localhost:3000/api/v1/auth/logout \
 
 ### 10. List All Users
 ```bash
-curl -X GET http://localhost:3000/api/v1/users \
+curl -X GET http://localhost:5000/api/v1/users \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ### 11. Get User by ID
 ```bash
-curl -X GET http://localhost:3000/api/v1/users/USER_ID \
+curl -X GET http://localhost:5000/api/v1/users/USER_ID \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ### 12. Create User
 ```bash
-curl -X POST http://localhost:3000/api/v1/users \
+curl -X POST http://localhost:5000/api/v1/users \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -191,7 +191,7 @@ curl -X POST http://localhost:3000/api/v1/users \
 
 ### 13. Update User
 ```bash
-curl -X PUT http://localhost:3000/api/v1/users/USER_ID \
+curl -X PUT http://localhost:5000/api/v1/users/USER_ID \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -202,7 +202,7 @@ curl -X PUT http://localhost:3000/api/v1/users/USER_ID \
 
 ### 14. Delete User
 ```bash
-curl -X DELETE http://localhost:3000/api/v1/users/USER_ID \
+curl -X DELETE http://localhost:5000/api/v1/users/USER_ID \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -210,7 +210,7 @@ curl -X DELETE http://localhost:3000/api/v1/users/USER_ID \
 
 ### 15. Verify MFA (When MFA is enabled)
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/verify-mfa \
+curl -X POST http://localhost:5000/api/v1/auth/verify-mfa \
   -H "Content-Type: application/json" \
   -d '{
     "token": "MFA_TOKEN_FROM_LOGIN",
@@ -222,13 +222,13 @@ curl -X POST http://localhost:3000/api/v1/auth/verify-mfa \
 
 ### Unauthorized Access (No Token)
 ```bash
-curl -X GET http://localhost:3000/api/v1/auth/profile
+curl -X GET http://localhost:5000/api/v1/auth/profile
 ```
 **Expected:** 401 Unauthorized
 
 ### Invalid Credentials
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/login \
+curl -X POST http://localhost:5000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@lexiflow.com",
@@ -240,7 +240,7 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 ### Insufficient Permissions
 ```bash
 # Login as CLIENT_USER and try to access user management
-curl -X GET http://localhost:3000/api/v1/users \
+curl -X GET http://localhost:5000/api/v1/users \
   -H "Authorization: Bearer CLIENT_USER_TOKEN"
 ```
 **Expected:** 403 Forbidden

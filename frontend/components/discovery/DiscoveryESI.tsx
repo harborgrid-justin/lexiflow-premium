@@ -29,6 +29,9 @@ import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 
+// Config
+import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
+
 // Services & Utils
 import { DataService } from '../../services/dataService';
 import { cn } from '../../utils/cn';
@@ -61,11 +64,17 @@ class CollectionQueue {
       this.queue.push({ id, source });
       this.processQueue();
       
-      // Wait for completion
+      // Memory Management: Wait for completion with timeout to prevent indefinite intervals
+      let checkCount = 0;
+      const MAX_CHECKS = 120; // 60 seconds max (120 * 500ms)
       const checkInterval = setInterval(() => {
+        checkCount++;
         if (!this.queue.find(item => item.id === id) && this.running < this.maxConcurrent) {
           clearInterval(checkInterval);
           resolve();
+        } else if (checkCount >= MAX_CHECKS) {
+          clearInterval(checkInterval);
+          reject(new Error(`Collection timeout for source: ${id}`));
         }
       }, 500);
     });

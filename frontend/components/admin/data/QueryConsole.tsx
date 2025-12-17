@@ -84,14 +84,20 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const exportCsv = () => {
       if (!results || results.length === 0) return;
       const headers = Object.keys(results[0]);
-      let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
-      csvContent += results.map(row => headers.map(h => JSON.stringify(row[h])).join(",")).join("\n");
+      const csvRows = [headers.join(",")];
+      csvRows.push(...results.map(row => headers.map(h => JSON.stringify(row[h])).join(",")));
+      const csvContent = csvRows.join("\n");
+      
+      // Memory Management: Use blob URL pattern with cleanup
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("href", url);
       link.setAttribute("download", "query_results.csv");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Clean up blob URL immediately
   };
   
   const visualizableData = useMemo(() => {

@@ -7,6 +7,9 @@
 import { EventEmitter } from 'events';
 import { WS_URL, WS_RECONNECT_DELAY_MS, WS_RECONNECT_ATTEMPTS } from '../config/master.config';
 
+// Memory Management: Max pending edits before eviction
+const MAX_PENDING_EDITS = 1000;
+
 // Import types from separate file
 export * from './collaboration/types';
 import type {
@@ -107,7 +110,12 @@ export class CollaborationService extends EventEmitter {
    * Disconnect from collaboration server
    */
   disconnect(): void {
+    // Memory Management: Clean up WebSocket event listeners
     if (this.ws) {
+      this.ws.onopen = null;
+      this.ws.onmessage = null;
+      this.ws.onerror = null;
+      this.ws.onclose = null;
       this.ws.close();
       this.ws = null;
     }
@@ -121,6 +129,12 @@ export class CollaborationService extends EventEmitter {
       clearInterval(this.activityTimer);
       this.activityTimer = null;
     }
+    
+    // Clear data structures to release memory
+    this.presenceMap.clear();
+    this.cursorMap.clear();
+    this.locks.clear();
+    this.pendingEdits = [];
     
     this.isConnected = false;
   }
@@ -243,6 +257,14 @@ export class CollaborationService extends EventEmitter {
     };
 
     this.pendingEdits.push(fullEdit);
+    
+    // Memory Management: Enforce size limit with LRU eviction
+    if (this.pendingEdits.length > MAX_PENDING_EDITS) {
+      const toRemove = Math.floor(MAX_PENDING_EDITS * 0.2); // Remove oldest 20%
+      this.pendingEdits.splice(0, toRemove);
+      console.warn(`[CollaborationService] Evicted ${toRemove} oldest pending edits`);
+    }
+    
     this.send('edit-operation', fullEdit);
     this.recordActivity();
   }

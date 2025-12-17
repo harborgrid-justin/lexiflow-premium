@@ -58,6 +58,7 @@ export const ADMIN_TAB_CONFIG: TabConfigItem[] = [
   {
     id: 'system', label: 'System', icon: Server,
     subTabs: [
+      { id: 'system', label: 'Settings', icon: Settings },
       { id: 'security', label: 'Security', icon: Lock },
       { id: 'api', label: 'API Keys', icon: Key },
     ]

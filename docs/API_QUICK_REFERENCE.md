@@ -6,7 +6,7 @@
 Add to your `.env`:
 ```env
 VITE_USE_BACKEND_API=true
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:5000
 VITE_API_PREFIX=/api/v1
 ```
 
@@ -171,7 +171,7 @@ try {
 
 - **Gap Analysis:** `/docs/BACKEND_FRONTEND_GAP_ANALYSIS.md`
 - **Integration Summary:** `/docs/BACKEND_FRONTEND_INTEGRATION_COMPLETE.md`
-- **Backend Swagger:** http://localhost:3000/api/docs
+- **Backend Swagger:** http://localhost:5000/api/docs
 - **Backend README:** `/backend/README.md`
 
 ## 🎯 Next Steps

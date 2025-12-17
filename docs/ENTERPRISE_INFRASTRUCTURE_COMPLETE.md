@@ -426,7 +426,7 @@ JWT_SECRET=your-secret-key-change-in-production
 JWT_EXPIRES_IN=1d
 
 # CORS
-CORS_ORIGIN=http://localhost:5173
+CORS_ORIGIN=http://localhost:3000
 
 # File Upload
 UPLOAD_DIR=./uploads
@@ -463,32 +463,32 @@ npm install @nestjs/terminus --save
 ### Health Checks
 ```bash
 # Comprehensive health
-curl http://localhost:3000/health
+curl http://localhost:5000/health
 
 # Liveness probe (Kubernetes)
-curl http://localhost:3000/health/liveness
+curl http://localhost:5000/health/liveness
 
 # Readiness probe (Kubernetes)
-curl http://localhost:3000/health/readiness
+curl http://localhost:5000/health/readiness
 ```
 
 ### Metrics
 ```bash
 # Prometheus format
-curl http://localhost:3000/metrics
+curl http://localhost:5000/metrics
 
 # JSON format
-curl http://localhost:3000/metrics/json
+curl http://localhost:5000/metrics/json
 
 # System metrics
-curl http://localhost:3000/metrics/system
+curl http://localhost:5000/metrics/system
 ```
 
 ### WebSocket Connection
 ```typescript
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000/events', {
+const socket = io('http://localhost:5000/events', {
   auth: { token: 'your-jwt-token' }
 });
 

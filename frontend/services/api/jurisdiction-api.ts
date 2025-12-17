@@ -3,7 +3,7 @@
  * @description Production backend API integration for Jurisdiction Explorer
  */
 
-import { apiClient } from './apiClient';
+import { apiClient } from '../apiClient';
 
 export interface Jurisdiction {
   id: string;

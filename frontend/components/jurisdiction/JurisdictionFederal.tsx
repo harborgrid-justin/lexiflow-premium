@@ -36,10 +36,13 @@ export const JurisdictionFederal: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: courts = [], isLoading } = useQuery<any[]>(
+  const { data: rawCourts = [], isLoading } = useQuery<any[]>(
       [STORES.JURISDICTIONS, 'federal'],
       DataService.jurisdiction.getFederal
   );
+
+  // Defensive array validation
+  const courts = Array.isArray(rawCourts) ? rawCourts : [];
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 

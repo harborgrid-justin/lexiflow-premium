@@ -11,10 +11,13 @@ export const JurisdictionRegulatory: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: bodies = [], isLoading } = useQuery<any[]>(
+  const { data: rawBodies = [], isLoading } = useQuery<any[]>(
       ['jurisdiction', 'regulatory'],
       DataService.jurisdiction.getRegulatoryBodies
   );
+
+  // Defensive array validation
+  const bodies = Array.isArray(rawBodies) ? rawBodies : [];
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 

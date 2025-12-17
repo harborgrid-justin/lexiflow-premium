@@ -28,7 +28,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
   // Fetch all rules from a centralized store
   const { data: allRules = [], isLoading: isLoadingAllRules } = useQuery<LegalRule[]>(
       queryKeys.rules.all(),
-      () => DataService.rules.getAll()
+      () => DataService.rules ? DataService.rules.getAll() : Promise.resolve([])
   );
 
   // Filter rules based on the viewer's 'type' prop

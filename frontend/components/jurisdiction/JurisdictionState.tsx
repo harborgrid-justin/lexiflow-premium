@@ -39,11 +39,13 @@ export const JurisdictionState: React.FC = () => {
   const [filter, setFilter] = useState('');
 
   // Performance Engine: useQuery
-  const { data: states = [], isLoading } = useQuery<any[]>(
+  const { data: rawStates = [], isLoading } = useQuery<any[]>(
       [STORES.JURISDICTIONS, 'state'],
       DataService.jurisdiction.getState
   );
 
+  // Defensive array validation
+  const states = Array.isArray(rawStates) ? rawStates : [];
   const filteredStates = filterStates(states, filter);
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;

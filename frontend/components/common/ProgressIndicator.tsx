@@ -241,6 +241,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
           aria-valuenow={clampedProgress}
           aria-valuemin={0}
           aria-valuemax={100}
+          aria-label={label || `Progress: ${clampedProgress}%`}
         />
       </div>
 

@@ -12,6 +12,8 @@
 // ============================================================================
 // Services & Data
 import { db, STORES } from './db';
+import { BlobManager } from './blobManager';
+import { CryptoService } from './cryptoService';
 
 // Utils & Constants
 import { Formatters } from '../utils/formatters';
@@ -60,11 +62,13 @@ export const DocumentService = {
   },
 
   // Retrieve a blob URL for a given document ID
+  // Note: Caller is responsible for revoking the URL when done via BlobManager.revoke(url)
+  // or BlobManager.revokeByContext(`document-${id}`)
   async getDocumentUrl(id: string): Promise<string | null> {
       try {
           const blob = await db.getFile(id);
           if (blob) {
-              return URL.createObjectURL(blob);
+              return BlobManager.create(blob, `document-${id}`);
           }
           return null;
       } catch (e) {
@@ -73,7 +77,7 @@ export const DocumentService = {
       }
   },
 
-  // Simulate reading a file and generating a SHA-256 hash in a non-blocking way
+  // Process file and generate a SHA-256 hash using worker pool
   async processFile(file: File): Promise<{ 
     hash: string; 
     uuid: string; 
@@ -85,11 +89,9 @@ export const DocumentService = {
       
       await yieldToMain();
       
-      // Generate SHA-256 hash using Web Crypto API
-      const fileContent = await file.arrayBuffer();
-      const hashBuffer = await crypto.subtle.digest('SHA-256', fileContent);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const documentHash = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      // Generate SHA-256 hash using CryptoService (worker pool)
+      const result = await CryptoService.hashFile(file);
+      const documentHash = '0x' + result.hash;
       await yieldToMain();
       
       const chunkCount = Math.floor(Math.random() * 5) + 2; 

@@ -121,7 +121,7 @@ export const AdminHierarchy: React.FC = () => {
         <div className={cn("flex-1 flex flex-col min-w-[300px] h-full overflow-hidden", theme.surface.default)}>
             <div className={cn("p-3 border-b flex justify-between items-center shrink-0", theme.surface.highlight, theme.border.default)}>
                 <span className={cn("font-bold text-xs uppercase tracking-wide truncate max-w-[200px]", theme.text.tertiary)}>{selectedGroupId ? `${orgGroups.find(g => g.id === selectedGroupId)?.name}` : 'All Users'}</span>
-                <div className="flex gap-2"><span className={cn("text-xs border px-2 py-0.5 rounded", theme.surface.default, theme.border.default, theme.text.secondary)}>{displayedUsers.length}</span><button className={cn("hover:bg-blue-50 p-1 rounded", theme.text.primary)}><Plus className="h-4 w-4"/></button></div>
+                <div className="flex gap-2"><span className={cn("text-xs border px-2 py-0.5 rounded", theme.surface.default, theme.border.default, theme.text.secondary)}>{displayedUsers.length}</span><button className={cn("hover:bg-blue-50 p-1 rounded", theme.text.primary)} aria-label="Add user"><Plus className="h-4 w-4"/></button></div>
             </div>
             <div className="flex-1 overflow-y-auto">
                 <table className={cn("hidden md:table min-w-full divide-y", theme.border.subtle)}>

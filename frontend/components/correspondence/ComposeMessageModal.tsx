@@ -82,14 +82,6 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
     }
   ], isOpen);
 
-  useEffect(() => {
-      const loadCases = async () => {
-          const data = await DataService.cases.getAll();
-          setCases(data);
-      };
-      loadCases();
-  }, []);
-
   // Effect to load initial data when modal opens
   useEffect(() => {
       if (isOpen && initialData) {

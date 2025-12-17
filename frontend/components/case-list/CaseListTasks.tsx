@@ -104,6 +104,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
                 className="h-5 w-5 text-blue-600 rounded border-slate-300 cursor-pointer" 
                 checked={t.status === 'Done'}
                 onChange={() => handleToggle(t.id)}
+                aria-label={`Mark ${t.title} as ${t.status === 'Done' ? 'incomplete' : 'complete'}`}
             />
         </div>
         <div className="flex-1 min-w-0">
@@ -150,6 +151,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
               className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
               value={filter} 
               onChange={e => setFilter(e.target.value)}
+              aria-label="Filter Tasks"
             >
                 <option value="All">All Tasks</option>
                 <option value="Pending">Pending</option>

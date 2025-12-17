@@ -20,6 +20,9 @@ import React, { lazy } from 'react';
 // ========================================
 // Sub-components (lazy-loaded)
 const AdminHierarchy = lazy(() => import('./hierarchy/AdminHierarchy').then(m => ({ default: m.AdminHierarchy })));
+const FirmProfile = lazy(() => import('./FirmProfile').then(m => ({ default: m.FirmProfile })));
+const UserManagement = lazy(() => import('./users/UserManagement').then(m => ({ default: m.UserManagement })));
+const SecurityCompliance = lazy(() => import('./SecurityCompliance').then(m => ({ default: m.SecurityCompliance })));
 const AdminSecurity = lazy(() => import('./AdminSecurity').then(m => ({ default: m.AdminSecurity })));
 const AdminDatabaseControl = lazy(() => import('./data/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
 const AdminIntegrations = lazy(() => import('./integrations/AdminIntegrations').then(m => ({ default: m.AdminIntegrations })));
@@ -29,7 +32,9 @@ const AdminPlatformManager = lazy(() => import('./platform/AdminPlatformManager'
 // ========================================
 // TYPES & INTERFACES
 // ========================================
-type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';
+type AdminView = 
+  | 'hierarchy' | 'profile' | 'users' | 'security' | 'compliance'
+  | 'db' | 'data' | 'logs' | 'integrations' | 'api';
 
 interface AdminPanelContentProps {
   activeTab: AdminView;
@@ -40,12 +45,21 @@ interface AdminPanelContentProps {
 // ========================================
 export const AdminPanelContent: React.FC<AdminPanelContentProps> = ({ activeTab }) => {
   switch (activeTab) {
+    // Organization Section
     case 'hierarchy': return <AdminHierarchy />;
-    case 'security': return <AdminSecurity />;
-    case 'db': return <AdminDatabaseControl />;
+    case 'profile': return <FirmProfile />;
+    case 'users': return <UserManagement />;
+    case 'compliance': return <SecurityCompliance />;
+    
+    // Data Management Section
     case 'data': return <AdminPlatformManager />;
-    case 'logs': return <AdminAuditLog />;
     case 'integrations': return <AdminIntegrations />;
-    default: return <AdminHierarchy />;
+    case 'logs': return <AdminAuditLog />;
+    
+    // System Section
+    case 'security': return <AdminSecurity />;
+    case 'api': return <AdminSecurity />; // Placeholder - will be replaced with API Keys component
+    
+    default: return <FirmProfile />;
   }
 };

@@ -106,8 +106,8 @@ export const RLSPolicyManager: React.FC = () => {
                                     <button onClick={() => toggleStatus(p)} className={cn("p-1.5 rounded hover:bg-slate-100 text-slate-500")} title={p.status === 'Active' ? "Disable" : "Enable"}>
                                         {p.status === 'Active' ? <Pause className="h-4 w-4"/> : <Play className="h-4 w-4"/>}
                                     </button>
-                                    <button onClick={() => handleEdit(p)} className={cn("p-1.5 rounded hover:bg-slate-100 text-blue-600")}><Edit2 className="h-4 w-4"/></button>
-                                    <button onClick={() => handleDelete(p.id)} className={cn("p-1.5 rounded hover:bg-red-50 text-red-600")}><Trash2 className="h-4 w-4"/></button>
+                                    <button onClick={() => handleEdit(p)} className={cn("p-1.5 rounded hover:bg-slate-100 text-blue-600")} aria-label="Edit policy"><Edit2 className="h-4 w-4"/></button>
+                                    <button onClick={() => handleDelete(p.id)} className={cn("p-1.5 rounded hover:bg-red-50 text-red-600")} aria-label="Delete policy"><Trash2 className="h-4 w-4"/></button>
                                 </div>
                             </div>
                         </div>

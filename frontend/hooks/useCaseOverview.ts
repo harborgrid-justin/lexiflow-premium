@@ -54,6 +54,7 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
             ...rawEntry,
             id: `t-${Date.now()}` as UUID, 
             userId: 'current-user' as UserId,
+            billable: true,
             caseId: caseData.id,
         };
         

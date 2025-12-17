@@ -26,7 +26,6 @@ export default defineConfig(({ mode }) => {
           '@data': path.resolve(__dirname, 'data'),
           '@theme': path.resolve(__dirname, 'theme'),
           '@services': path.resolve(__dirname, 'services'),
-          '@constants': path.resolve(__dirname, 'constants'),
         }
       },
       build: {

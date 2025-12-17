@@ -61,7 +61,7 @@ export const Custodians: React.FC = () => {
   
   // Load custodians from IndexedDB via useQuery for accurate, cached data
   const { data: custodians = [], isLoading } = useQuery(
-    queryKeys.discovery.custodians(),
+    queryKeys.discoveryExtended.custodians(),
     DataService.discovery.getCustodians
   );
   

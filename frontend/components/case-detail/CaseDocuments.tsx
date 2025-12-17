@@ -158,7 +158,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         />
       )}
 
-      <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} />
+      <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} aria-label="Upload document" />
 
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div className="flex gap-2">

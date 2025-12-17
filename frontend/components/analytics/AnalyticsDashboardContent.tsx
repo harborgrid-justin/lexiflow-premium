@@ -51,19 +51,19 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
   // HOOKS - Data Fetching
   // ==========================================================================
   
-  const { data: judges = [] } = useQuery<JudgeProfile[]>(
+  const { data: judges } = useQuery<JudgeProfile[]>(
     ['analytics', 'judges'], 
     DataService.analysis.getJudgeProfiles,
     { staleTime: 5 * 60 * 1000 } // Cache for 5 minutes
   );
   
-  const { data: counsels = [] } = useQuery<OpposingCounselProfile[]>(
+  const { data: counsels } = useQuery<OpposingCounselProfile[]>(
     ['analytics', 'counsel'], 
     () => DataService.analysis.getCounselProfiles(),
     { staleTime: 5 * 60 * 1000 }
   );
   
-  const { data: predictionData = [] } = useQuery<OutcomePredictionData[]>(
+  const { data: predictionData } = useQuery<OutcomePredictionData[]>(
     ['analytics', 'prediction'], 
     () => DataService.analysis.getPredictionData(),
     { staleTime: 5 * 60 * 1000 }
@@ -72,8 +72,8 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
   // ==========================================================================
   // DERIVED DATA
   // ==========================================================================
-  const sampleJudge = judges[0];
-  const sampleCounsel = counsels[0];
+  const sampleJudge = (judges || [])[0];
+  const sampleCounsel = (counsels || [])[0];
   const sampleStats = sampleJudge?.motionStats || [];
 
   // ==========================================================================

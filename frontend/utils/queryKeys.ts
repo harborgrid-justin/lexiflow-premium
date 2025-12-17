@@ -122,6 +122,7 @@ export const queryKeys = {
     detail: (id: string) => [STORES.WORKFLOWS, 'detail', id] as const,
     processes: () => [STORES.WORKFLOWS, 'processes'] as const,
     tasks: () => [STORES.TASKS, 'tasks'] as const,
+    templates: () => [STORES.WORKFLOWS, 'templates'] as const,
   },
 
   // Dashboard
@@ -289,7 +290,7 @@ export const queryKeys = {
   },
 
   // Judge Profiles
-  admin: {
+  adminExtended: {
     permissions: () => ['admin', 'permissions'] as const,
     rlsPolicies: () => ['admin', 'rls_policies'] as const,
     anomalies: () => ['admin', 'anomalies'] as const,
@@ -297,7 +298,7 @@ export const queryKeys = {
   },
 
   // Discovery custodians
-  discovery: {
+  discoveryExtended: {
     all: () => [STORES.REQUESTS, 'all'] as const,
     detail: (id: string) => [STORES.REQUESTS, 'detail', id] as const,
     byCaseId: (caseId: string) => [STORES.REQUESTS, 'byCaseId', caseId] as const,
@@ -305,7 +306,7 @@ export const queryKeys = {
   },
 
   // Workflows extended
-  workflows: {
+  workflowsExtended: {
     all: () => [STORES.WORKFLOWS, 'all'] as const,
     lists: () => [STORES.WORKFLOWS, 'list'] as const,
     detail: (id: string) => [STORES.WORKFLOWS, 'detail', id] as const,

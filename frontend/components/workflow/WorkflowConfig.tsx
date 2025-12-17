@@ -23,7 +23,7 @@ export const WorkflowConfig: React.FC = () => {
     async (newSettings: any[]) => DataService.workflow.updateSettings(newSettings),
     {
       onSuccess: (_, variables) => {
-        queryClient.invalidate(queryKeys.workflows.settings());
+        queryClient.invalidate(queryKeys.workflowsExtended.settings());
         const changedSetting = variables.find((s, i) => s.enabled !== settings[i]?.enabled);
         if (changedSetting) notify.success(`Updated ${changedSetting.label}`);
       },

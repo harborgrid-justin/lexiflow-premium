@@ -5,6 +5,7 @@ import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/documentService';
+import { BlobManager } from '../../../services/blobManager';
 import { PDFViewer } from '../../common/PDFViewer';
 import { PIIPanel } from '../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
@@ -43,7 +44,11 @@ export const RedactionStudioView: React.FC = () => {
             };
             loadUrl();
         }
-        return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
+        return () => {
+            if (previewUrl) {
+                BlobManager.revoke(previewUrl);
+            }
+        };
     }, [selectedDoc]);
 
     return (

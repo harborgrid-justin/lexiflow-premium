@@ -79,8 +79,15 @@ class RepositoryRegistry {
 
   /**
    * Clear all cached repository instances.
+   * Also clears listeners and caches in each repository.
    */
   clear(): void {
+    // Clean up each repository before clearing
+    for (const repository of this.instances.values()) {
+      if (typeof repository.clearAllListeners === 'function') {
+        repository.clearAllListeners();
+      }
+    }
     this.instances.clear();
   }
 
@@ -89,6 +96,33 @@ class RepositoryRegistry {
    */
   getStoreNames(): string[] {
     return Array.from(this.instances.keys());
+  }
+
+  /**
+   * Get memory usage statistics for all registered repositories.
+   * @returns Object with repository counts and listener stats
+   */
+  getMemoryStats(): {
+    repositoryCount: number;
+    totalListeners: number;
+    repositories: Array<{ name: string; listeners: number }>;
+  } {
+    const repositories: Array<{ name: string; listeners: number }> = [];
+    let totalListeners = 0;
+
+    for (const [name, repo] of this.instances.entries()) {
+      const listenerCount = typeof repo.getListenerCount === 'function' 
+        ? repo.getListenerCount() 
+        : 0;
+      repositories.push({ name, listeners: listenerCount });
+      totalListeners += listenerCount;
+    }
+
+    return {
+      repositoryCount: this.instances.size,
+      totalListeners,
+      repositories: repositories.sort((a, b) => b.listeners - a.listeners),
+    };
   }
 }
 

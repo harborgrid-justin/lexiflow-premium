@@ -14,6 +14,7 @@ import { initializeModules } from './config/modules';
 import { AppContentRenderer } from './components/layout/AppContentRenderer';
 import { GlobalHotkeys } from './components/common/GlobalHotkeys';
 import { useAppController } from './hooks/useAppController';
+import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
 
 // Initialize Module Registry
 initializeModules();
@@ -101,6 +102,11 @@ const InnerApp: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  // Enable memory cleanup and optional logging in development
+  useDataServiceCleanup({ 
+    enableLogging: process.env.NODE_ENV === 'development'
+  });
+
   return (
     <ThemeProvider>
       <ErrorBoundary scope="AppRoot">

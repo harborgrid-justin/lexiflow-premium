@@ -1,16 +1,18 @@
 // components/admin/data/ApiGateway.tsx
 import React, { useState } from 'react';
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
-import { ApiServiceSpec, ApiMethod } from '../../../types';
+
+import { Loader2, Server, ChevronRight } from 'lucide-react';
+
 import { useTheme } from '../../../context/ThemeContext';
+import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/queryClient';
+import { ApiServiceSpec, ApiMethod } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { encodeHtmlEntities } from '../../../utils/sanitize';
-import { Loader2, Server, ChevronRight } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 
 // Internal CodeBlock component for syntax highlighting
-const CodeBlock: React.FC<{ code: string }> = ({ code }) => {
+function CodeBlock({ code }: { code: string }): JSX.Element {
     const { theme, mode } = useTheme();
 
     // First encode HTML entities to prevent XSS, then apply syntax highlighting
@@ -28,10 +30,10 @@ const CodeBlock: React.FC<{ code: string }> = ({ code }) => {
             <code dangerouslySetInnerHTML={{ __html: highlighted }} />
         </pre>
     );
-};
+}
 
 // Internal MethodCard component
-const MethodCard: React.FC<{ method: ApiMethod }> = ({ method }) => {
+function MethodCard({ method }: { method: ApiMethod }) {
     const { theme } = useTheme();
     const httpColors: Record<string, string> = {
         GET: 'bg-blue-100 text-blue-700',
@@ -71,9 +73,9 @@ const MethodCard: React.FC<{ method: ApiMethod }> = ({ method }) => {
              </div>
         </div>
     );
-};
+}
 
-export const ApiGateway: React.FC = () => {
+export function ApiGateway(): JSX.Element {
     const { theme } = useTheme();
     const [selectedService, setSelectedService] = useState<ApiServiceSpec | null>(null);
 
@@ -83,7 +85,7 @@ export const ApiGateway: React.FC = () => {
     );
 
     if (isLoading) {
-        return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+        return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;
     }
 
     return (
@@ -139,6 +141,6 @@ export const ApiGateway: React.FC = () => {
             </div>
         </div>
     );
-};
+}
 
 export default ApiGateway;

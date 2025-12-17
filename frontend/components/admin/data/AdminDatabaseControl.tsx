@@ -131,7 +131,7 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
             </button>
         </div>
         
-        <Suspense fallback={<div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>}>
+        <Suspense fallback={<div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>}>
             {renderContent()}
         </Suspense>
       </div>

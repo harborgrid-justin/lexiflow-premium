@@ -67,8 +67,8 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
         [STORES.PLEADINGS, caseId || 'all'],
         () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
     );
-    const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);
-    const { data: templates = [] } = useQuery<PleadingTemplate[]>([STORES.PLEADING_TEMPLATES, 'all'], DataService.pleadings.getTemplates);
+    const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
+    const { data: templates = [] } = useQuery<PleadingTemplate[]>([STORES.PLEADING_TEMPLATES, 'all'], () => DataService.pleadings.getTemplates());
 
     const { mutate: createPleading, isLoading: isCreating } = useMutation(
         async (data: { templateId: string; caseId: string; title: string; userId: string }) => {
@@ -223,7 +223,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                         onChange={e => setNewDocData({...newDocData, caseId: e.target.value})}
                     >
                         <option value="">Select Case...</option>
-                        {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                        {Array.isArray(cases) && cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
                     </select>
                 </div>
                 )}

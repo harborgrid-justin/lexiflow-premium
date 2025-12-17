@@ -6,9 +6,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pleading, PleadingStatus } from './entities/pleading.entity';
+import { PleadingTemplate } from './entities/pleading-template.entity';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
 import { UpdatePleadingDto } from './dto/update-pleading.dto';
 import { FilePleadingDto } from './dto/file-pleading.dto';
+import { CreateFromTemplateDto } from './dto/create-from-template.dto';
 
 @Injectable()
 export class PleadingsService {
@@ -17,6 +19,8 @@ export class PleadingsService {
   constructor(
     @InjectRepository(Pleading)
     private pleadingRepository: Repository<Pleading>,
+    @InjectRepository(PleadingTemplate)
+    private templateRepository: Repository<PleadingTemplate>,
   ) {}
 
   /**
@@ -258,5 +262,53 @@ export class PleadingsService {
     }
 
     return await qb.orderBy('pleading.createdAt', 'DESC').getMany();
+  }
+
+  /**
+   * Get all pleading templates
+   */
+  async getTemplates(): Promise<PleadingTemplate[]> {
+    return await this.templateRepository.find({
+      where: { isActive: true },
+      order: { name: 'ASC' },
+    });
+  }
+
+  /**
+   * Create pleading from template
+   */
+  async createFromTemplate(
+    createFromTemplateDto: CreateFromTemplateDto,
+  ): Promise<Pleading> {
+    const template = await this.templateRepository.findOne({
+      where: { id: createFromTemplateDto.templateId },
+    });
+
+    if (!template) {
+      throw new NotFoundException(
+        `Template with ID ${createFromTemplateDto.templateId} not found`,
+      );
+    }
+
+    // Increment usage count
+    template.usageCount += 1;
+    await this.templateRepository.save(template);
+
+    // Create pleading from template
+    const pleading = this.pleadingRepository.create({
+      caseId: createFromTemplateDto.caseId,
+      title: createFromTemplateDto.title,
+      status: PleadingStatus.DRAFT,
+      content: JSON.stringify(template.defaultSections),
+      type: template.category as any,
+      createdBy: createFromTemplateDto.userId,
+    });
+
+    const savedPleading = await this.pleadingRepository.save(pleading);
+    this.logger.log(
+      `Pleading created from template ${template.id}: ${savedPleading.id}`,
+    );
+
+    return savedPleading;
   }
 }

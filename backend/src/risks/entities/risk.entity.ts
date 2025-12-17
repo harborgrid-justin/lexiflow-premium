@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { RiskImpact, RiskProbability, RiskStatus } from '../dto/create-risk.dto';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('risks')
 export class Risk {
@@ -23,6 +24,10 @@ export class Risk {
 
   @Column({ nullable: true })
   caseId: string;
+
+  @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'text', nullable: true })
   mitigationStrategy: string;

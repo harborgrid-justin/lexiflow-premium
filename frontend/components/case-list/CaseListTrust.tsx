@@ -35,10 +35,10 @@ export const CaseListTrust: React.FC = () => {
   // Performance Engine: Caching
   const { data: trustLedger = [], isLoading } = useQuery<any[]>(
       [STORES.TRUST, 'all'],
-      DataService.billing.getTrustAccounts
+      () => DataService.billing.getTrustAccounts()
   );
 
-  const totalBalance = trustLedger.reduce((acc, curr) => acc + curr.balance, 0);
+  const totalBalance = Array.isArray(trustLedger) ? trustLedger.reduce((acc, curr) => acc + (curr.balance || 0), 0) : 0;
 
   if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600"/></div>;
 

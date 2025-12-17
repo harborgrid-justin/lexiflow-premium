@@ -173,6 +173,48 @@ export class CasesService {
     return this.findOne(id);
   }
 
+  async findArchived(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
+    // Force isArchived filter and add status filters for closed cases
+    const archivedFilter = {
+      ...filterDto,
+      isArchived: true,
+    };
+    
+    // If no status specified, default to closed/settled cases
+    if (!archivedFilter.status) {
+      const queryBuilder = this.caseRepository.createQueryBuilder('case');
+      
+      queryBuilder.where('case.isArchived = :isArchived', { isArchived: true });
+      queryBuilder.orWhere('case.status IN (:...statuses)', { 
+        statuses: ['Closed', 'closed', 'Settled', 'Archived', 'archived'] 
+      });
+
+      const { page = 1, limit = 20, sortBy = 'closeDate', sortOrder = 'DESC' } = filterDto;
+      const skip = (page - 1) * limit;
+
+      const safeSortField = validateSortField('case', sortBy);
+      const safeSortOrder = validateSortOrder(sortOrder);
+      queryBuilder.orderBy(`case.${safeSortField}`, safeSortOrder);
+      queryBuilder.skip(skip).take(limit);
+
+      const [data, total] = await queryBuilder.getManyAndCount();
+
+      return {
+        data: data.map((c) => ({
+          ...this.toCaseResponse(c),
+          date: c.closeDate || c.filingDate,
+          outcome: c.status,
+        })),
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      };
+    }
+
+    return this.findAll(archivedFilter);
+  }
+
   private toCaseResponse(caseEntity: Case): CaseResponseDto {
     return {
       id: caseEntity.id,

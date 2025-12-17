@@ -17,7 +17,7 @@ export const APP_DESCRIPTION = 'Enterprise Legal OS - Case Management, Discovery
 // INDEXEDDB CONFIGURATION
 // =============================================================================
 export const DB_NAME = 'LexiFlowDB';
-export const DB_VERSION = 29;
+export const DB_VERSION = 30; // Incremented for CUSTODIANS store
 export const DB_MODE: 'IndexedDB' | 'LocalStorage' = 'IndexedDB';
 
 // Transaction Coalescing

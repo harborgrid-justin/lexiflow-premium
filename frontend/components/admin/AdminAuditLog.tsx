@@ -26,7 +26,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
   const { addToast } = useToast();
   const { openWindow, closeWindow } = useWindow();
 
-  const { data: logs = [], isLoading } = useQuery<AuditLogEntry[]>([STORES.LOGS, 'all'], DataService.admin.getLogs);
+  const { data: logs = [], isLoading } = useQuery<AuditLogEntry[]>([STORES.LOGS, 'all'], () => DataService.admin.getLogs());
   
   const [localLogs, setLocalLogs] = useState<ChainedLogEntry[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);

@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   Query,
+  Head,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -21,6 +22,12 @@ import { ReleaseLegalHoldDto } from './dto/release-legal-hold.dto';
 @Controller('discovery/legal-holds')
 export class LegalHoldsController {
   constructor(private readonly legalHoldsService: LegalHoldsService) {}
+
+  @Head('health')
+  @HttpCode(HttpStatus.OK)
+  async health() {
+    return { status: 'ok' };
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

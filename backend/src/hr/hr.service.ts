@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere } from 'typeorm';
 import { Employee } from './entities/employee.entity';
 import { TimeOffRequest } from './entities/time-off-request.entity';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
+import { CreateEmployeeDto, EmployeeStatus } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { CreateTimeOffDto, TimeOffStatus } from './dto/create-time-off.dto';
 import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
@@ -217,7 +217,7 @@ export class HRService {
     if (department) {
       queryBuilder.andWhere('employee.department = :department', { department });
     }
-    queryBuilder.andWhere('employee.status = :status', { status: 'active' });
+    queryBuilder.andWhere('employee.status = :status', { status: EmployeeStatus.ACTIVE });
 
     const employees = await queryBuilder.getMany();
 

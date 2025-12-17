@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { TrialEventType } from '../dto/create-trial-event.dto';
+import { Case } from '../../cases/entities/case.entity';
 
 @Entity('trial_events')
 export class TrialEvent {
@@ -20,6 +21,10 @@ export class TrialEvent {
 
   @Column()
   caseId: string;
+
+  @ManyToOne(() => Case, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'caseId' })
+  case: Case;
 
   @Column({ type: 'text', nullable: true })
   notes: string;

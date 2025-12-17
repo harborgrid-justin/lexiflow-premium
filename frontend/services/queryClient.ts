@@ -373,6 +373,10 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
 
   const refetch = useCallback(() => {
      if (!enabled) return Promise.reject(new Error("Query is not enabled."));
+     if (typeof fnRef.current !== 'function') {
+       console.error('[queryClient] fnRef.current is not a function:', fnRef.current, 'for key:', key);
+       return Promise.reject(new Error("Query function is not a function"));
+     }
      const wrappedFn = () => fnRef.current(); 
      return queryClient.fetch(key, wrappedFn, staleTime, true, cacheBypass);
   }, [hashedKey, staleTime, enabled, key, cacheBypass]); 
@@ -383,6 +387,10 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
     const unsubscribe = queryClient.subscribe(key, (newState) => setState(newState as QueryState<T>));
     
     if (state.dataUpdatedAt === 0 || state.status === 'idle') { // Fetch on mount or if invalidated
+      if (typeof fnRef.current !== 'function') {
+        console.error('[queryClient] fnRef.current is not a function during fetch:', fnRef.current, 'for key:', key);
+        return;
+      }
       const wrappedFn = () => fnRef.current();
       queryClient.fetch<T>(key, wrappedFn, staleTime, false, cacheBypass);
     }
@@ -401,7 +409,7 @@ export function useQuery<T>(key: QueryKey, fn: () => Promise<T>, options: UseQue
         unsubscribe();
         if (focusHandler) window.removeEventListener('visibilitychange', focusHandler);
     };
-  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch, key, state.dataUpdatedAt]);
+  }, [hashedKey, enabled, staleTime, refetchOnWindowFocus, refetch, key, cacheBypass]);
 
   return { 
     ...state, 

@@ -12,7 +12,7 @@ export const StandingOrders: React.FC = () => {
   const { theme } = useTheme();
   
   // Using Mock Judges for now
-  const { data: judges = [] } = useQuery(['analysis', 'judges'], DataService.analysis.getJudgeProfiles);
+  const { data: judges = [] } = useQuery(['analysis', 'judges'], () => DataService.analysis.getJudgeProfiles());
 
   return (
     <div className="space-y-6 animate-fade-in">

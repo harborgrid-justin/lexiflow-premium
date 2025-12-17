@@ -62,12 +62,15 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
   // Enterprise Data Access
   const { data: documents = [], isLoading } = useQuery<LegalDocument[]>(
     [STORES.DOCUMENTS, 'all'],
-    DataService.documents.getAll
+    () => DataService.documents.getAll()
   );
+
+  // Ensure documents is always an array
+  const documentsArray = Array.isArray(documents) ? documents : [];
 
   // 1. Initial Filter (Cheap: Folder & Module)
   const contextFilteredDocs = useMemo(() => {
-      return documents.filter(d => {
+      return documentsArray.filter(d => {
           const inFolder = currentFolder === 'root' ? true : d.folderId === currentFolder;
           const matchesModule = activeModuleFilter === 'All' || d.sourceModule === activeModuleFilter;
           // If searching, ignore folder constraint
@@ -128,14 +131,14 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
           if (previewDoc?.id === id) setPreviewDoc(null);
       } else {
           setSelectedDocs([...selectedDocs, id]);
-          const doc = documents.find(d => d.id === id);
+          const doc = documentsArray.find(d => d.id === id);
           if (doc) setPreviewDoc(doc);
       }
   };
 
   const addTag = (docId: string, tag: string) => {
     if (!tag.trim()) return;
-    const doc = documents.find(d => d.id === docId);
+    const doc = documentsArray.find(d => d.id === docId);
     if (doc && !doc.tags.includes(tag.trim())) {
         const newTags = [...doc.tags, tag.trim()];
         updateDocument(docId, { tags: newTags });
@@ -143,20 +146,20 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
   };
 
   const removeTag = (docId: string, tag: string) => {
-    const doc = documents.find(d => d.id === docId);
+    const doc = documentsArray.find(d => d.id === docId);
     if (doc) {
         const newTags = doc.tags.filter(t => t !== tag);
         updateDocument(docId, { tags: newTags });
     }
   };
 
-  const allTags = useMemo(() => Array.from(new Set(documents.flatMap(d => d.tags))), [documents]);
+  const allTags = useMemo(() => Array.from(new Set(documentsArray.flatMap(d => d.tags))), [documentsArray]);
 
   const stats = {
-      total: documents.length,
-      evidence: documents.filter(d => d.sourceModule === 'Evidence').length,
-      discovery: documents.filter(d => d.sourceModule === 'Discovery').length,
-      signed: documents.filter(d => d.status === 'Signed').length
+      total: documentsArray.length,
+      evidence: documentsArray.filter(d => d.sourceModule === 'Evidence').length,
+      discovery: documentsArray.filter(d => d.sourceModule === 'Discovery').length,
+      signed: documentsArray.filter(d => d.status === 'Signed').length
   };
 
   // ============================================================================

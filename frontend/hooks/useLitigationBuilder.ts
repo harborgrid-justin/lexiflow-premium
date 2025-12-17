@@ -60,7 +60,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const notify = useNotify();
 
-  const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);
+  const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
 
   // Auto-save draft to localStorage
   useAutoSave({

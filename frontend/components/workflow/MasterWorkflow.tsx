@@ -59,18 +59,27 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
 
   const { data: firmProcesses = [], isLoading: procsLoading, isError: procsError } = useQuery<any[]>(
       [STORES.PROCESSES, 'all'],
-      DataService.workflow.getProcesses
+      async () => {
+        // Use WorkflowRepository directly since API service doesn't have getProcesses
+        const { WorkflowRepository } = await import('../../services/repositories/WorkflowRepository');
+        return WorkflowRepository.getProcesses();
+      }
   );
 
   const { data: tasks = [] } = useQuery<WorkflowTask[]>(
       [STORES.TASKS, 'all'],
-      DataService.workflow.getTasks
+      () => DataService.tasks.getAll()
   );
+
+  // Ensure all data is always an array
+  const casesArray = Array.isArray(cases) ? cases : [];
+  const tasksArray = Array.isArray(tasks) ? tasks : [];
+  const firmProcessesArray = Array.isArray(firmProcesses) ? firmProcesses : [];
 
   const tasksDueToday = useMemo(() => {
       const today = new Date().toISOString().split('T')[0];
-      return tasks.filter(t => t.dueDate === today && t.status !== 'Done' && t.status !== 'Completed').length;
-  }, [tasks]);
+      return tasksArray.filter(t => t.dueDate === today && t.status !== 'Done' && t.status !== 'Completed').length;
+  }, [tasksArray]);
 
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
@@ -171,7 +180,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Active Workflows</p>
-                <p className={cn("text-2xl font-bold", theme.primary.text)}>{cases.length + firmProcesses.filter(p => p.status === 'Active').length}</p>
+                <p className={cn("text-2xl font-bold", theme.primary.text)}>{casesArray.length + firmProcessesArray.filter(p => p.status === 'Active').length}</p>
               </div>
               <div className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Tasks Due Today</p>
@@ -211,8 +220,8 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
             {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>}
             {!isLoading && activeTab === 'templates' && <WorkflowLibrary onCreate={handleCreateTemplate} />}
-            {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={cases} tasks={tasks} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} />}
-            {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcesses} onSelectProcess={handleSelectProcess} />}
+            {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={casesArray} tasks={tasksArray} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} />}
+            {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcessesArray} onSelectProcess={handleSelectProcess} />}
             {activeTab === 'ops_center' && <EnhancedWorkflowPanel />}
             {activeTab === 'analytics' && <WorkflowAnalyticsDashboard />}
             {activeTab === 'settings' && <WorkflowConfig />}

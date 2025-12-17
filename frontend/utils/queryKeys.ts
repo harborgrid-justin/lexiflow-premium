@@ -287,6 +287,7 @@ export const queryKeys = {
   // Research
   research: {
     history: () => ['research', 'history'] as const,
+    saved: () => ['research', 'saved'] as const,
   },
 
   // Expenses

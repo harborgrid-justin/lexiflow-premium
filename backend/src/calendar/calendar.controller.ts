@@ -31,7 +31,8 @@ export class CalendarController {
   @ApiOperation({ summary: 'Get statute of limitations events' })
   @ApiResponse({ status: 200, description: 'Statute events retrieved' })
   async getStatuteOfLimitations(@Query() query: any) {
-    return await this.calendarService.findAll({ ...query, eventType: 'statute-of-limitations' });
+    // Statute of limitations are typically deadlines, search in title instead
+    return await this.calendarService.findAll({ ...query, eventType: 'Deadline' });
   }
 
   @Get(':id')

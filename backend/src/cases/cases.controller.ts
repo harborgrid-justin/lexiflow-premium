@@ -34,6 +34,13 @@ export class CasesController {
     return this.casesService.findAll(filterDto);
   }
 
+  @Get('archived')
+  @ApiOperation({ summary: 'Get archived/closed cases' })
+  @ApiResponse({ status: 200, description: 'List of archived cases', type: PaginatedCaseResponseDto })
+  async findArchived(@Query() filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
+    return this.casesService.findArchived(filterDto);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get case by ID' })
   @ApiResponse({ status: 200, description: 'Case details', type: CaseResponseDto })

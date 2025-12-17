@@ -26,6 +26,8 @@ import { Deposition } from '../discovery/depositions/entities/deposition.entity'
 import { ESISource } from '../discovery/esi-sources/entities/esi-source.entity';
 import { LegalHold } from '../discovery/legal-holds/entities/legal-hold.entity';
 import { PrivilegeLogEntry } from '../discovery/privilege-log/entities/privilege-log-entry.entity';
+import { Custodian } from '../discovery/custodians/entities/custodian.entity';
+import { Evidence } from '../discovery/evidence/entities/evidence.entity';
 import { EvidenceItem } from './evidence-item.entity';
 import { ChainOfCustodyEvent } from './chain-of-custody-event.entity';
 import { TrialExhibit } from './trial-exhibit.entity';
@@ -80,6 +82,8 @@ export const entities = [
   ESISource,
   LegalHold,
   PrivilegeLogEntry,
+  Custodian,
+  Evidence,
 
   // Evidence
   EvidenceItem,

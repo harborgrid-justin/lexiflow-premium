@@ -59,8 +59,8 @@ export const BriefAnalyzer: React.FC = () => {
   const [conflicts, setConflicts] = useState<any[]>([]);
 
   // Load Data Dependencies
-  const { data: authorityDb = [] } = useQuery<Citation[]>([STORES.CITATIONS, 'all'], DataService.citations.getAll);
-  const { data: allCases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], DataService.cases.getAll);
+  const { data: authorityDb = [] } = useQuery<Citation[]>([STORES.CITATIONS, 'all'], () => DataService.citations.getAll());
+  const { data: allCases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
 
   // Mutations
   const { mutate: addToLibrary } = useMutation(

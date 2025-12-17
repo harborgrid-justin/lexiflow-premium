@@ -16,6 +16,7 @@ import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
 import { UpdatePleadingDto } from './dto/update-pleading.dto';
 import { FilePleadingDto } from './dto/file-pleading.dto';
+import { CreateFromTemplateDto } from './dto/create-from-template.dto';
 import { PleadingStatus } from './entities/pleading.entity';
 
 @ApiTags('Pleadings')
@@ -44,12 +45,27 @@ export class PleadingsController {
     return await this.pleadingsService.findAll(caseId, status);
   }
 
+  @Get('templates')
+  @ApiOperation({ summary: 'Get all pleading templates' })
+  @ApiResponse({ status: 200, description: 'Templates retrieved successfully' })
+  async getTemplates() {
+    return await this.pleadingsService.getTemplates();
+  }
+
   @Get('upcoming-hearings')
   @ApiOperation({ summary: 'Get upcoming hearings' })
   @ApiQuery({ name: 'daysAhead', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Upcoming hearings retrieved' })
   async getUpcomingHearings(@Query('daysAhead', ParseIntPipe) daysAhead?: number) {
     return await this.pleadingsService.getUpcomingHearings(daysAhead || 30);
+  }
+
+  @Post('from-template')
+  @ApiOperation({ summary: 'Create pleading from template' })
+  @ApiResponse({ status: 201, description: 'Pleading created from template' })
+  @ApiResponse({ status: 404, description: 'Template not found' })
+  async createFromTemplate(@Body() createFromTemplateDto: CreateFromTemplateDto) {
+    return await this.pleadingsService.createFromTemplate(createFromTemplateDto);
   }
 
   @Get(':id')

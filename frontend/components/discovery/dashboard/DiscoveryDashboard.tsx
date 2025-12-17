@@ -22,9 +22,9 @@ const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) =
   const { theme } = useTheme();
 
   // Parallel Queries for Dashboard Stats
-  const { data: requests = [] } = useQuery<DiscoveryRequest[]>([STORES.REQUESTS, 'all'], DataService.discovery.getRequests);
-  const { data: holds = [] } = useQuery<LegalHold[]>([STORES.LEGAL_HOLDS, 'all'], DataService.discovery.getLegalHolds);
-  const { data: privilegeLog = [] } = useQuery<PrivilegeLogEntry[]>([STORES.PRIVILEGE_LOG, 'all'], DataService.discovery.getPrivilegeLog);
+  const { data: requests = [] } = useQuery<DiscoveryRequest[]>([STORES.REQUESTS, 'all'], () => DataService.discovery.getRequests());
+  const { data: holds = [] } = useQuery<LegalHold[]>([STORES.LEGAL_HOLDS, 'all'], () => DataService.discovery.getLegalHolds());
+  const { data: privilegeLog = [] } = useQuery<PrivilegeLogEntry[]>([STORES.PRIVILEGE_LOG, 'all'], () => DataService.discovery.getPrivilegeLog());
 
   const stats = {
       pendingRequests: requests.filter(r => r.status === 'Served').length,

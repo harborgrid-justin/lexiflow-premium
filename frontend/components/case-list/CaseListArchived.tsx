@@ -45,8 +45,11 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
   // Enterprise Data Access
   const { data: archivedCases = [], isLoading } = useQuery<any[]>(
       ['cases', 'archived'],
-      DataService.cases.getArchived
+      () => DataService.cases.getArchived()
   );
+
+  // Ensure archivedCases is always an array
+  const safeArchivedCases = Array.isArray(archivedCases) ? archivedCases : [];
 
   const handleRetrieve = async (id: string) => {
       const found = await DataService.cases.getById(id);
@@ -73,7 +76,7 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
           <TableHead className="text-right">Action</TableHead>
         </TableHeader>
         <TableBody>
-          {archivedCases.map(c => (
+          {safeArchivedCases.map(c => (
             <TableRow key={c.id}>
                 <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{c.date}</TableCell>
                 <TableCell className={cn("font-medium", theme.text.primary)}>{c.title}</TableCell>

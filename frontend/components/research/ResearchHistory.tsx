@@ -17,7 +17,7 @@ export const ResearchHistory: React.FC = () => {
   // Enterprise Data Access
   const { data: history = [], isLoading } = useQuery<ResearchSession[]>(
       queryKeys.research.history(),
-      DataService.research.getHistory
+      () => DataService.research.getHistory()
   );
 
   return (

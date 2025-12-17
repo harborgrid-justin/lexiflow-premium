@@ -92,6 +92,16 @@ import { WarRoomModule } from './war-room/war-room.module';
 import { AnalyticsDashboardModule } from './analytics-dashboard/analytics-dashboard.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 
+// Data Platform Modules - Production Infrastructure
+import { SchemaManagementModule } from './schema-management/schema-management.module';
+import { QueryWorkbenchModule } from './query-workbench/query-workbench.module';
+import { PipelinesModule } from './pipelines/pipelines.module';
+import { SyncModule } from './sync/sync.module';
+import { BackupsModule } from './backups/backups.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
+import { AiOpsModule } from './ai-ops/ai-ops.module';
+import { VersioningModule } from './versioning/versioning.module';
+
 // Queue Processing System
 import { QueuesModule } from './queues/queues.module';
 
@@ -241,6 +251,16 @@ if (isRedisEnabled) {
     WarRoomModule,
     AnalyticsDashboardModule,
     KnowledgeModule,
+
+    // Data Platform - Production Infrastructure
+    SchemaManagementModule,
+    QueryWorkbenchModule,
+    PipelinesModule,
+    SyncModule,
+    BackupsModule,
+    MonitoringModule,
+    AiOpsModule,
+    VersioningModule,
 
     // Queue Processing System
     QueuesModule,

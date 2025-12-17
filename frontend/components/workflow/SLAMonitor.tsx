@@ -17,7 +17,7 @@ export const SLAMonitor: React.FC = () => {
   // Performance Engine: useQuery with consistent query keys
   const { data: tasks = [], isLoading } = useQuery(
       queryKeys.tasks.all(),
-      DataService.tasks.getAll
+      () => DataService.tasks.getAll()
   );
 
   const [slas, setSLAs] = useState<SLAItem[]>([]);

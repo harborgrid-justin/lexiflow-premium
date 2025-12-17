@@ -67,12 +67,12 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
   // Enterprise Data Access with query key factory
   const { data: communications = [], isLoading: isLoadingComms } = useQuery<CommunicationItem[]>(
       correspondenceQueryKeys.correspondence.lists(),
-      DataService.correspondence.getCommunications
+      () => DataService.correspondence.getCommunications()
   );
 
   const { data: serviceJobs = [], isLoading: isLoadingJobs } = useQuery<ServiceJob[]>(
       correspondenceQueryKeys.serviceJobs.lists(),
-      DataService.correspondence.getServiceJobs
+      () => DataService.correspondence.getServiceJobs()
   );
 
   const { mutate: sendCommunication } = useMutation(

@@ -5,13 +5,12 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
-import { queryKeys } from '../../../utils/queryKeys';
-import { DataService } from '../../../services/dataService';
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
 import { useNotify } from '../../../hooks/useNotify';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { SnapshotList } from './backup/SnapshotList';
 import { CreateSnapshotModal, RestoreSnapshotModal } from './backup/BackupModals';
+import { dataPlatformApi } from '../../../services/api/data-platform-api';
 
 export const BackupVault: React.FC = () => {
   const { theme } = useTheme();
@@ -19,43 +18,52 @@ export const BackupVault: React.FC = () => {
   const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState(false);
   const [restoreModalOpen, setRestoreModalOpen] = useState<BackupSnapshot | null>(null);
 
-  // Queries
-  const { data: snapshots = [], isLoading: isLoadingSnapshots } = useQuery<BackupSnapshot[]>(
-      ['backup', 'snapshots'],
-      DataService.backup.getSnapshots
+  // Real Backend Integration - Fetch snapshots from backend API
+  const { data: snapshotsResponse, isLoading: isLoadingSnapshots, refetch: refetchSnapshots } = useQuery(
+      ['backups', 'snapshots'],
+      () => dataPlatformApi.backups.getSnapshots(),
   );
 
-  const { data: stats, isLoading: isLoadingStats } = useQuery<ArchiveStats>(
-      ['backup', 'archiveStats'],
-      DataService.backup.getArchiveStats
+  const snapshots = snapshotsResponse?.data || [];
+
+  const { data: stats, isLoading: isLoadingStats } = useQuery(
+      ['backups', 'stats'],
+      () => dataPlatformApi.backups.getStats(),
   );
 
-  // Mutations
+  // Mutations with real backend
   const { mutate: createSnapshot, isLoading: isCreating } = useMutation(
-      DataService.backup.createSnapshot,
+      (data: { name: string; description?: string; type: string }) => 
+          dataPlatformApi.backups.createSnapshot(data),
       {
           onSuccess: (snap) => {
               notify.success(`Snapshot ${snap.name} created successfully.`);
               setIsSnapshotModalOpen(false);
-              queryClient.invalidate(queryKeys.backup.snapshots());
+              void refetchSnapshots();
           },
-          onError: () => notify.error("Failed to create snapshot.")
+          onError: () => notify.error("Failed to create snapshot."),
+          invalidateKeys: [['backups', 'snapshots'], ['backups', 'stats']],
       }
   );
 
   const { mutate: restoreSnapshot, isLoading: isRestoring } = useMutation(
-      DataService.backup.restoreSnapshot,
+      (data: { id: string; target: string }) => 
+          dataPlatformApi.backups.restore(data.id, data.target),
       {
           onSuccess: () => {
               notify.success("System restoration initiated. You will be notified upon completion.");
               setRestoreModalOpen(null);
           },
-          onError: () => notify.error("Restore failed. Check system logs.")
+          onError: () => notify.error("Restore failed. Check system logs."),
       }
   );
 
-  const handleSnapshot = (type: SnapshotType) => {
-      createSnapshot(type);
+  const handleSnapshot = (type: string) => {
+      createSnapshot({
+          name: `Snapshot-${Date.now()}`,
+          description: `Automated ${type} snapshot`,
+          type,
+      });
   };
 
   return (

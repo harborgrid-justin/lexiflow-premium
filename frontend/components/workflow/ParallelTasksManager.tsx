@@ -16,7 +16,7 @@ export const ParallelTasksManager: React.FC = () => {
   // Performance Engine: useQuery
   const { data: allTasks = [], isLoading } = useQuery<WorkflowTask[]>(
       queryKeys.tasks.all(),
-      DataService.tasks.getAll
+      () => DataService.tasks.getAll()
   );
 
   const tasks = allTasks.filter(t => t.status === 'In Progress' || t.status === 'Pending').slice(0, 4);

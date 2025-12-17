@@ -301,13 +301,39 @@ export interface ExhibitDto {
 
 export class ExhibitsApiService {
   async getAll(filters?: { caseId?: string; status?: string }): Promise<TrialExhibit[]> {
-    const response = await apiClient.get<PaginatedResponse<TrialExhibit>>('/exhibits', filters);
-    return response.data;
+    try {
+      const response = await apiClient.get<PaginatedResponse<TrialExhibit>>('/exhibits', filters);
+      // Handle both paginated and direct array responses
+      if (Array.isArray(response)) {
+        return response;
+      }
+      if (response && typeof response === 'object' && 'data' in response) {
+        return Array.isArray(response.data) ? response.data : [];
+      }
+      console.warn('[ExhibitsApiService] Unexpected response format:', response);
+      return [];
+    } catch (error) {
+      console.error('[ExhibitsApiService] Error fetching exhibits:', error);
+      return []; // Return empty array on error
+    }
   }
 
   async getByCaseId(caseId: string): Promise<TrialExhibit[]> {
-    const response = await apiClient.get<PaginatedResponse<TrialExhibit>>('/exhibits', { caseId });
-    return response.data;
+    try {
+      const response = await apiClient.get<PaginatedResponse<TrialExhibit>>('/exhibits', { caseId });
+      // Handle both paginated and direct array responses
+      if (Array.isArray(response)) {
+        return response;
+      }
+      if (response && typeof response === 'object' && 'data' in response) {
+        return Array.isArray(response.data) ? response.data : [];
+      }
+      console.warn('[ExhibitsApiService] Unexpected response format for case:', response);
+      return [];
+    } catch (error) {
+      console.error('[ExhibitsApiService] Error fetching exhibits by case:', error);
+      return []; // Return empty array on error
+    }
   }
 
   async getById(id: string): Promise<TrialExhibit> {
@@ -316,6 +342,11 @@ export class ExhibitsApiService {
 
   async create(exhibit: ExhibitDto): Promise<TrialExhibit> {
     return apiClient.post<TrialExhibit>('/exhibits', exhibit);
+  }
+
+  // Alias for Repository pattern compatibility
+  async add(exhibit: Partial<TrialExhibit>): Promise<TrialExhibit> {
+    return this.create(exhibit as ExhibitDto);
   }
 
   async update(id: string, exhibit: Partial<ExhibitDto>): Promise<TrialExhibit> {

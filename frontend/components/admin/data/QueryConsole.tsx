@@ -11,8 +11,7 @@ import { Button } from '../../common/Button';
 import { VirtualList } from '../../common/VirtualList';
 import { SqlHelpers } from '../../../utils/sqlHelpers';
 import { QuerySidebar } from './query/QuerySidebar';
-import { DataService } from '../../../services/dataService';
-import { SchemaTable } from '../../../types';
+import { dataPlatformApi } from '../../../services/api/data-platform-api';
 import { useQuery } from '../../../services/queryClient';
 
 interface QueryConsoleProps {
@@ -26,15 +25,16 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const [query, setQuery] = useState('SELECT id, title, status FROM cases\nWHERE status = \'Active\'\nLIMIT 10;');
   const [results, setResults] = useState<Record<string, any>[] | null>(null);
   const [executionTime, setExecutionTime] = useState<string | null>(null);
+  const [isExecuting, setIsExecuting] = useState(false);
   
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [explainPlan, setExplainPlan] = useState<any>(null);
   const [isFormatting, setIsFormatting] = useState(false);
 
-  // Dynamic Schema Fetching
-  const { data: schemaTables = [] } = useQuery<SchemaTable[]>(
+  // Dynamic Schema Fetching from real backend
+  const { data: schemaTables = [] } = useQuery(
       ['schema', 'tables'],
-      DataService.catalog.getSchemaTables
+      () => dataPlatformApi.schemaManagement.getTables()
   );
 
   const formattedSchema = useMemo(() => {
@@ -54,19 +54,28 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
       else setActiveSidebarTab('schema');
   }, [initialTab]);
 
-  const handleRun = () => {
-      const start = performance.now();
-      setTimeout(() => {
-          let data: any[] = [];
-          if (query.toLowerCase().includes('cases')) {
-               data = Array.from({length: 1000}, (_, i) => ({ id: `C-${i}`, title: `Martinez v. Tech ${i}`, status: i % 2 === 0 ? 'Active' : 'Closed' }));
+  const handleRun = async () => {
+      setIsExecuting(true);
+      try {
+          const result = await dataPlatformApi.queryWorkbench.executeQuery(query);
+          
+          if (result.success) {
+              setResults(result.data);
+              setExecutionTime(`${result.executionTimeMs}ms`);
+              setActiveResultsTab('results');
+          } else {
+              setResults(null);
+              setExecutionTime(null);
+              // Show error to user
+              console.error('Query execution failed:', result.error);
           }
-          else if (query.toLowerCase().includes('users')) data = [{ id: 'U-101', name: 'Admin User', role: 'Administrator' }];
-          else data = [{ result: 'Query executed', rows_affected: 0 }];
-          setResults(data);
-          setExecutionTime(`${(performance.now() - start).toFixed(2)}ms`);
-          setActiveResultsTab('results');
-      }, 300);
+      } catch (error) {
+          console.error('Query execution error:', error);
+          setResults(null);
+          setExecutionTime(null);
+      } finally {
+          setIsExecuting(false);
+      }
   };
 
   const handleFormat = () => {
@@ -76,9 +85,19 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
       setTimeout(() => setIsFormatting(false), 200);
   };
   
-  const handleExplain = () => {
-      setExplainPlan({ name: 'Sequential Scan', cost: '0.00..25.88', rows: 10, children: [{ name: 'Filter: status = Active' }] });
-      setActiveResultsTab('explain');
+  const handleExplain = async () => {
+      try {
+          const result = await dataPlatformApi.queryWorkbench.explainQuery(query);
+          
+          if (result.success) {
+              setExplainPlan(result.plan);
+              setActiveResultsTab('explain');
+          } else {
+              console.error('Query explain failed:', result.error);
+          }
+      } catch (error) {
+          console.error('Query explain error:', error);
+      }
   };
   
   const exportCsv = () => {

@@ -27,12 +27,12 @@ export const PDFEditorView: React.FC = () => {
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading } = useQuery(
         queryKeys.documents.all(),
-        DataService.documents.getAll
+        () => DataService.documents.getAll()
     );
     
     // Filter PDF documents
     const documents = React.useMemo(() => 
-        allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')),
+        Array.isArray(allDocs) ? allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')) : [],
         [allDocs]
     );
 
@@ -45,19 +45,12 @@ export const PDFEditorView: React.FC = () => {
     const [signModalOpen, setSignModalOpen] = useState(false);
     const [activeField, setActiveField] = useState<any>(null);
 
+    // Select first PDF document when documents load
     useEffect(() => {
-        const loadDocs = async () => {
-            setIsLoading(true);
-            const allDocs = await DataService.documents.getAll();
-            const pdfDocs = allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf'));
-            setDocuments(pdfDocs);
-            if (pdfDocs.length > 0) {
-                setSelectedDoc(pdfDocs[0]);
-            }
-            setIsLoading(false);
-        };
-        loadDocs();
-    }, []);
+        if (documents.length > 0 && !selectedDoc) {
+            setSelectedDoc(documents[0]);
+        }
+    }, [documents, selectedDoc]);
 
     useEffect(() => {
         let isMounted = true;

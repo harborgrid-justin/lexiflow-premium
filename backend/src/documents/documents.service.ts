@@ -259,4 +259,43 @@ export class DocumentsService {
       order: { createdAt: 'DESC' },
     });
   }
+
+  /**
+   * Get document folder structure
+   */
+  async getFolders(): Promise<Array<{ id: string; label: string; count?: number }>> {
+    // Get document counts by type/category
+    const typeCounts = await this.documentRepository
+      .createQueryBuilder('document')
+      .select('document.type', 'type')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('document.type')
+      .getRawMany();
+
+    const folders = [
+      { id: 'root', label: 'All Documents', count: await this.documentRepository.count() },
+      { id: 'case_docs', label: 'Case Files', count: typeCounts.find(t => t.type === 'case_file')?.count || 0 },
+      { id: 'discovery', label: 'Discovery Productions', count: typeCounts.find(t => t.type === 'discovery')?.count || 0 },
+      { id: 'pleadings', label: 'Pleadings', count: typeCounts.find(t => t.type === 'pleading')?.count || 0 },
+      { id: 'correspondence', label: 'Correspondence', count: typeCounts.find(t => t.type === 'correspondence')?.count || 0 },
+      { id: 'templates_folder', label: 'Templates', count: typeCounts.find(t => t.type === 'template')?.count || 0 },
+    ];
+
+    return folders;
+  }
+
+  /**
+   * Get document text content
+   */
+  async getContent(id: string): Promise<{ content: string }> {
+    const document = await this.findOne(id);
+
+    // Return OCR processed content if available
+    if (document.fullTextContent) {
+      return { content: document.fullTextContent };
+    }
+
+    // Otherwise return empty string (file-based documents need to be downloaded)
+    return { content: '' };
+  }
 }

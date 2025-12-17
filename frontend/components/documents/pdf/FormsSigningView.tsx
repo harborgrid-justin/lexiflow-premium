@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery, queryClient } from '../../../services/queryClient';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/documentService';
 import { PDFViewer } from '../../common/PDFViewer';
@@ -30,12 +30,12 @@ export const FormsSigningView: React.FC = () => {
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading } = useQuery(
         queryKeys.documents.all(),
-        DataService.documents.getAll
+        () => DataService.documents.getAll()
     );
     
     // Filter for form/PDF documents
-    const documents = React.useMemo(() => 
-        allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.type === 'Form' || d.title.toLowerCase().endsWith('.pdf')),
+    const documents = useMemo(() => 
+        Array.isArray(allDocs) ? allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.type === 'Form' || d.title.toLowerCase().endsWith('.pdf')) : [],
         [allDocs]
     );
 
@@ -49,21 +49,13 @@ export const FormsSigningView: React.FC = () => {
     const [activeField, setActiveField] = useState<Field | null>(null);
     const [isSendModalOpen, setIsSendModalOpen] = useState(false);
 
+    // Select first template when documents load
     useEffect(() => {
-        const loadDocs = async () => {
-            setIsLoading(true);
-            const allDocs = await DataService.documents.getAll();
-            const formDocs = allDocs.filter(d => d.tags.includes('Form') || d.tags.includes('Template'));
-            setDocuments(formDocs);
-            if (formDocs.length > 0) {
-                // Default to first template if available
-                const firstTemplate = formDocs.find(d => d.tags.includes('Template'));
-                setSelectedDoc(firstTemplate || formDocs[0]);
-            }
-            setIsLoading(false);
-        };
-        loadDocs();
-    }, []);
+        if (documents.length > 0 && !selectedDoc) {
+            const firstTemplate = documents.find(d => d.tags.includes('Template'));
+            setSelectedDoc(firstTemplate || documents[0]);
+        }
+    }, [documents, selectedDoc]);
 
     useEffect(() => {
         if (selectedDoc) {
@@ -100,32 +92,35 @@ export const FormsSigningView: React.FC = () => {
         }
     };
 
-    const handleSignatureSave = (signed: boolean) => {
+    const handleSignatureSave = async (signed: boolean) => {
         if (signed && activeField && selectedDoc) {
             const updatedDoc = {
                 ...selectedDoc,
                 formFields: (selectedDoc.formFields || []).map((f: Field) => f.id === activeField.id ? {...f, value: "Signed by User"} : f)
             };
+            await DataService.documents.update(selectedDoc.id, updatedDoc);
+            queryClient.invalidate(queryKeys.documents.all());
             setSelectedDoc(updatedDoc);
-            setDocuments(docs => docs.map(d => d.id === selectedDoc.id ? updatedDoc : d));
             setSignModalOpen(false);
             setActiveField(null);
             notify.success("Document Signed");
         }
     };
     
-    const handleFieldsUpdate = (updatedFields: Field[]) => {
+    const handleFieldsUpdate = async (updatedFields: Field[]) => {
         if (selectedDoc) {
             const updatedDoc = { ...selectedDoc, formFields: updatedFields };
+            await DataService.documents.update(selectedDoc.id, updatedDoc);
+            queryClient.invalidate(queryKeys.documents.all());
             setSelectedDoc(updatedDoc);
-            setDocuments(docs => docs.map(d => d.id === selectedDoc.id ? updatedDoc : d));
         }
     };
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (selectedDoc) {
             const updatedDoc = { ...selectedDoc, status: 'Sent' as any };
-            setDocuments(docs => docs.map(d => d.id === selectedDoc.id ? updatedDoc : d));
+            await DataService.documents.update(selectedDoc.id, updatedDoc);
+            queryClient.invalidate(queryKeys.documents.all());
             setSelectedDoc(updatedDoc);
             setIsSendModalOpen(false);
             notify.success(`'${selectedDoc.title}' sent for signature.`);

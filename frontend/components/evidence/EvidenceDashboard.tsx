@@ -36,7 +36,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   // Load evidence from IndexedDB via useQuery for accurate, cached data
   const { data: evidence = [], isLoading } = useQuery(
     queryKeys.evidence.all(),
-    DataService.evidence.getAll
+    () => DataService.evidence.getAll()
   );
   
   // Calculate stats from live data

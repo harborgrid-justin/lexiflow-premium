@@ -173,5 +173,20 @@ export class DocumentsController {
       documentId: id,
     };
   }
+
+  @Get('folders/list')
+  @ApiOperation({ summary: 'Get document folder structure' })
+  @ApiResponse({ status: 200, description: 'Folders retrieved successfully' })
+  async getFolders() {
+    return await this.documentsService.getFolders();
+  }
+
+  @Get(':id/content')
+  @ApiOperation({ summary: 'Get document text content' })
+  @ApiResponse({ status: 200, description: 'Content retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Document not found' })
+  async getContent(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.documentsService.getContent(id);
+  }
 }
 

@@ -91,4 +91,13 @@ export class DocumentsApiService {
   async getByCaseId(caseId: string): Promise<LegalDocument[]> {
     return this.getAll({ caseId });
   }
+
+  async getFolders(): Promise<any[]> {
+    return apiClient.get<any[]>('/documents/folders/list');
+  }
+
+  async getContent(id: string): Promise<string> {
+    const response = await apiClient.get<{ content: string }>(`/documents/${id}/content`);
+    return response.content;
+  }
 }

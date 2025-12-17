@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pleading, PleadingStatus } from './entities/pleading.entity';
+import { Pleading, PleadingStatus, PleadingType } from './entities/pleading.entity';
 import { PleadingTemplate } from './entities/pleading-template.entity';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
 import { UpdatePleadingDto } from './dto/update-pleading.dto';
@@ -299,8 +299,14 @@ export class PleadingsService {
       caseId: createFromTemplateDto.caseId,
       title: createFromTemplateDto.title,
       status: PleadingStatus.DRAFT,
-      content: JSON.stringify(template.defaultSections),
-      type: template.category as any,
+      description: template.description || `Created from ${template.name}`,
+      type: (template.category.toLowerCase() as PleadingType) || PleadingType.MOTION,
+      customFields: {
+        templateId: template.id,
+        sections: template.defaultSections,
+        variables: template.variables,
+        formattingRules: template.formattingRules,
+      },
       createdBy: createFromTemplateDto.userId,
     });
 

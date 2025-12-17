@@ -20,12 +20,12 @@ export const RedactionStudioView: React.FC = () => {
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading } = useQuery(
         queryKeys.documents.all(),
-        DataService.documents.getAll
+        () => DataService.documents.getAll()
     );
     
     // Filter PDF documents
     const documents = React.useMemo(() => 
-        allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')),
+        Array.isArray(allDocs) ? allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')) : [],
         [allDocs]
     );
     

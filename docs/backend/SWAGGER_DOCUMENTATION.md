@@ -6,7 +6,7 @@ Once the backend server is running, access the interactive Swagger UI at:
 
 **Local Development:**
 ```
-http://localhost:3000/api/docs
+http://localhost:5000/api/docs
 ```
 
 ## 🚀 Quick Start
@@ -23,7 +23,7 @@ The server will start on port 3000 by default.
 
 ### 2. Open Swagger UI
 
-Navigate to `http://localhost:3000/api/docs` in your browser.
+Navigate to `http://localhost:5000/api/docs` in your browser.
 
 ### 3. Authenticate
 
@@ -228,7 +228,7 @@ export class CreateCaseDto {
 
 Switch between environments in the server dropdown:
 
-- **Development** - `http://localhost:3000`
+- **Development** - `http://localhost:5000`
 - **Local Production** - `http://localhost:8080`
 - **Staging** - `https://api-staging.lexiflow.com`
 - **Production** - `https://api.lexiflow.com`
@@ -289,7 +289,7 @@ GET /api/v1/cases?sortBy=status,createdAt&order=ASC,DESC
 
 ```bash
 # Upload document with metadata
-curl -X POST http://localhost:3000/api/v1/documents \
+curl -X POST http://localhost:5000/api/v1/documents \
   -H "Authorization: Bearer <token>" \
   -F "file=@./document.pdf" \
   -F "title=Case Brief" \

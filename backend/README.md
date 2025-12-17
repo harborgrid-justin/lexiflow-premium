@@ -166,7 +166,7 @@ npm run start:dev
 ## API Documentation
 
 Once the server is running, visit:
-- Swagger UI: `http://localhost:3000/api/docs`
+- Swagger UI: `http://localhost:5000/api/docs`
 
 ## File Storage
 

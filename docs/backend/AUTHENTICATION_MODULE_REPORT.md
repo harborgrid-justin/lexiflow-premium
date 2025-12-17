@@ -300,7 +300,7 @@ See `TEST_ENDPOINTS.md` for comprehensive testing guide with curl commands.
 
 ### Default Login
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/login \
+curl -X POST http://localhost:5000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@lexiflow.com",

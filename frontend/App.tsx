@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { AppHeader } from './components/layout/AppHeader';
@@ -15,6 +15,7 @@ import { AppContentRenderer } from './components/layout/AppContentRenderer';
 import { GlobalHotkeys } from './components/common/GlobalHotkeys';
 import { useAppController } from './hooks/useAppController';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
+import { backendDiscovery } from './services/backendDiscovery';
 
 // Initialize Module Registry
 initializeModules();
@@ -106,6 +107,15 @@ const App: React.FC = () => {
   useDataServiceCleanup({ 
     enableLogging: process.env.NODE_ENV === 'development'
   });
+
+  // Initialize backend discovery service on app mount
+  useEffect(() => {
+    backendDiscovery.start();
+
+    return () => {
+      backendDiscovery.stop();
+    };
+  }, []);
 
   return (
     <ThemeProvider>

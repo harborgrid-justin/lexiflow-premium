@@ -395,7 +395,7 @@ All modules include:
    ```
 
 5. **View API docs**:
-   Navigate to `http://localhost:3000/api/docs`
+   Navigate to `http://localhost:5000/api/docs`
 
 ### Creating a New Module
 

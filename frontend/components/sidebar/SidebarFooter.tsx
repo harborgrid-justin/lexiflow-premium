@@ -22,6 +22,7 @@ import { useWindow } from '../../context/WindowContext';
 
 // Components
 import { UserAvatar } from '../common/UserAvatar';
+import { BackendStatusIndicator } from '../common/BackendStatusIndicator';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -54,6 +55,11 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ currentUser, onSwi
 
   return (
     <div className={cn("p-4 border-t shrink-0 bg-slate-50/50", theme.border.default)}>
+      {/* Backend Status Indicator - Always shows real-time status */}
+      <div className="mb-3" title="Real-time backend monitoring (updates every 30s)">
+        <BackendStatusIndicator variant="compact" showLabel={true} showPulse={true} />
+      </div>
+
       <div className="mb-4 flex items-center justify-between px-1">
           <span className={cn("text-xs font-bold text-slate-400 uppercase tracking-wide")}>Holographic Mode</span>
           <button 

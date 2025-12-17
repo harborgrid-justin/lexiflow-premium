@@ -15,12 +15,9 @@ import { IntegrationOrchestrator } from './integrationOrchestrator';
 import { SystemEventType } from "../types/integration-types";
 import { JurisdictionService } from './domains/JurisdictionDomain';
 import { KnowledgeRepository } from './domains/KnowledgeDomain';
-import { apiServices, isBackendApiEnabled } from './apiServices';
-import { extendedApiServices } from './apiServicesExtended';
-import { discoveryApiServices } from './apiServicesDiscovery';
-import { complianceApiServices } from './apiServicesCompliance';
-import { additionalApiServices } from './apiServicesAdditional';
-import { finalApiServices } from './apiServicesFinal';
+// Consolidated API services - single source of truth
+import { api, legacyApi } from './api/_legacy-bridge';
+import { isBackendApiEnabled } from './apiServices';
 import { missingApiServices } from './api/missing-api-services';
 
 // Modular Repositories
@@ -203,43 +200,43 @@ const DataServiceBase: any = {};
 
 // Define getters for all properties to ensure they're recreated after cleanup
 Object.defineProperties(DataServiceBase, {
-  cases: { get: () => isBackendApiEnabled() ? apiServices.cases : getIntegratedCaseRepository(), enumerable: true },
-  docket: { get: () => isBackendApiEnabled() ? apiServices.docket : getIntegratedDocketRepository(), enumerable: true },
-  evidence: { get: () => isBackendApiEnabled() ? apiServices.evidence : getEvidenceRepository(), enumerable: true },
-  documents: { get: () => isBackendApiEnabled() ? apiServices.documents : getIntegratedDocumentRepository(), enumerable: true },
-  pleadings: { get: () => isBackendApiEnabled() ? extendedApiServices.pleadings : getPleadingRepository(), enumerable: true },
-  hr: { get: () => isBackendApiEnabled() ? finalApiServices.hr : HRRepository, enumerable: true },
-  workflow: { get: () => isBackendApiEnabled() ? finalApiServices.workflowTemplates : WorkflowRepository, enumerable: true },
-  billing: { get: () => isBackendApiEnabled() ? apiServices.billing : getIntegratedBillingRepository(), enumerable: true },
+  cases: { get: () => isBackendApiEnabled() ? api.cases : getIntegratedCaseRepository(), enumerable: true },
+  docket: { get: () => isBackendApiEnabled() ? api.docket : getIntegratedDocketRepository(), enumerable: true },
+  evidence: { get: () => isBackendApiEnabled() ? api.evidence : getEvidenceRepository(), enumerable: true },
+  documents: { get: () => isBackendApiEnabled() ? api.documents : getIntegratedDocumentRepository(), enumerable: true },
+  pleadings: { get: () => isBackendApiEnabled() ? legacyApi.pleadings : getPleadingRepository(), enumerable: true },
+  hr: { get: () => isBackendApiEnabled() ? legacyApi.hr : HRRepository, enumerable: true },
+  workflow: { get: () => isBackendApiEnabled() ? legacyApi.workflowTemplates : WorkflowRepository, enumerable: true },
+  billing: { get: () => isBackendApiEnabled() ? api.billing : getIntegratedBillingRepository(), enumerable: true },
   discovery: { get: () => getDiscoveryRepository(), enumerable: true },
-  trial: { get: () => isBackendApiEnabled() ? finalApiServices.trial : getTrialRepository(), enumerable: true },
+  trial: { get: () => isBackendApiEnabled() ? legacyApi.trial : getTrialRepository(), enumerable: true },
   compliance: { get: () => ComplianceService, enumerable: true },
   
   // Extended backend API services - Using RepositoryFactory with singleton cache
-  trustAccounts: { get: () => isBackendApiEnabled() ? extendedApiServices.trustAccounts : repositoryRegistry.getOrCreate<any>('trustAccounts'), enumerable: true },
-  billingAnalytics: { get: () => isBackendApiEnabled() ? extendedApiServices.billingAnalytics : repositoryRegistry.getOrCreate<any>('billingAnalytics'), enumerable: true },
-  reports: { get: () => isBackendApiEnabled() ? extendedApiServices.reports : repositoryRegistry.getOrCreate<any>(STORES.REPORTERS), enumerable: true },
-  processingJobs: { get: () => isBackendApiEnabled() ? extendedApiServices.processingJobs : repositoryRegistry.getOrCreate<any>(STORES.PROCESSING_JOBS), enumerable: true },
-  casePhases: { get: () => isBackendApiEnabled() ? extendedApiServices.casePhases : repositoryRegistry.getOrCreate<any>(STORES.PHASES), enumerable: true },
-  caseTeams: { get: () => isBackendApiEnabled() ? extendedApiServices.caseTeams : repositoryRegistry.getOrCreate<any>('caseTeams'), enumerable: true },
-  parties: { get: () => isBackendApiEnabled() ? extendedApiServices.parties : repositoryRegistry.getOrCreate<any>('parties'), enumerable: true },
+  trustAccounts: { get: () => isBackendApiEnabled() ? legacyApi.trustAccounts : repositoryRegistry.getOrCreate<any>('trustAccounts'), enumerable: true },
+  billingAnalytics: { get: () => isBackendApiEnabled() ? legacyApi.billingAnalytics : repositoryRegistry.getOrCreate<any>('billingAnalytics'), enumerable: true },
+  reports: { get: () => isBackendApiEnabled() ? legacyApi.reports : repositoryRegistry.getOrCreate<any>(STORES.REPORTERS), enumerable: true },
+  processingJobs: { get: () => isBackendApiEnabled() ? api.processingJobs : repositoryRegistry.getOrCreate<any>(STORES.PROCESSING_JOBS), enumerable: true },
+  casePhases: { get: () => isBackendApiEnabled() ? legacyApi.casePhases : repositoryRegistry.getOrCreate<any>(STORES.PHASES), enumerable: true },
+  caseTeams: { get: () => isBackendApiEnabled() ? legacyApi.caseTeams : repositoryRegistry.getOrCreate<any>('caseTeams'), enumerable: true },
+  parties: { get: () => isBackendApiEnabled() ? legacyApi.parties : repositoryRegistry.getOrCreate<any>('parties'), enumerable: true },
 
   // Discovery backend API services - Using RepositoryFactory with singleton cache
-  legalHolds: { get: () => isBackendApiEnabled() ? discoveryApiServices.legalHolds : repositoryRegistry.getOrCreate<any>(STORES.LEGAL_HOLDS), enumerable: true },
-  depositions: { get: () => isBackendApiEnabled() ? discoveryApiServices.depositions : repositoryRegistry.getOrCreate<any>('depositions'), enumerable: true },
-  discoveryRequests: { get: () => isBackendApiEnabled() ? discoveryApiServices.discoveryRequests : repositoryRegistry.getOrCreate<any>('discoveryRequests'), enumerable: true },
-  esiSources: { get: () => isBackendApiEnabled() ? discoveryApiServices.esiSources : repositoryRegistry.getOrCreate<any>('esiSources'), enumerable: true },
-  privilegeLog: { get: () => isBackendApiEnabled() ? discoveryApiServices.privilegeLog : repositoryRegistry.getOrCreate<any>(STORES.PRIVILEGE_LOG), enumerable: true },
-  productions: { get: () => isBackendApiEnabled() ? discoveryApiServices.productions : repositoryRegistry.getOrCreate<any>('productions'), enumerable: true },
-  custodianInterviews: { get: () => isBackendApiEnabled() ? discoveryApiServices.custodianInterviews : repositoryRegistry.getOrCreate<any>('custodianInterviews'), enumerable: true },
+  legalHolds: { get: () => isBackendApiEnabled() ? legacyApi.legalHolds : repositoryRegistry.getOrCreate<any>(STORES.LEGAL_HOLDS), enumerable: true },
+  depositions: { get: () => isBackendApiEnabled() ? legacyApi.depositions : repositoryRegistry.getOrCreate<any>('depositions'), enumerable: true },
+  discoveryRequests: { get: () => isBackendApiEnabled() ? legacyApi.discoveryRequests : repositoryRegistry.getOrCreate<any>('discoveryRequests'), enumerable: true },
+  esiSources: { get: () => isBackendApiEnabled() ? legacyApi.esiSources : repositoryRegistry.getOrCreate<any>('esiSources'), enumerable: true },
+  privilegeLog: { get: () => isBackendApiEnabled() ? legacyApi.privilegeLog : repositoryRegistry.getOrCreate<any>(STORES.PRIVILEGE_LOG), enumerable: true },
+  productions: { get: () => isBackendApiEnabled() ? legacyApi.productions : repositoryRegistry.getOrCreate<any>('productions'), enumerable: true },
+  custodianInterviews: { get: () => isBackendApiEnabled() ? legacyApi.custodianInterviews : repositoryRegistry.getOrCreate<any>('custodianInterviews'), enumerable: true },
 
   // Compliance backend API services - Using RepositoryFactory with singleton cache
-  conflictChecks: { get: () => isBackendApiEnabled() ? complianceApiServices.conflictChecks : repositoryRegistry.getOrCreate<any>('conflictChecks'), enumerable: true },
-  ethicalWalls: { get: () => isBackendApiEnabled() ? complianceApiServices.ethicalWalls : repositoryRegistry.getOrCreate<any>('ethicalWalls'), enumerable: true },
-  auditLogs: { get: () => isBackendApiEnabled() ? complianceApiServices.auditLogs : repositoryRegistry.getOrCreate<any>('auditLogs'), enumerable: true },
-  permissions: { get: () => isBackendApiEnabled() ? complianceApiServices.permissions : repositoryRegistry.getOrCreate<any>('permissions'), enumerable: true },
-  rlsPolicies: { get: () => isBackendApiEnabled() ? complianceApiServices.rlsPolicies : repositoryRegistry.getOrCreate<any>(STORES.POLICIES), enumerable: true },
-  complianceReports: { get: () => isBackendApiEnabled() ? complianceApiServices.complianceReports : repositoryRegistry.getOrCreate<any>('complianceReports'), enumerable: true },
+  conflictChecks: { get: () => isBackendApiEnabled() ? legacyApi.conflictChecks : repositoryRegistry.getOrCreate<any>('conflictChecks'), enumerable: true },
+  ethicalWalls: { get: () => isBackendApiEnabled() ? legacyApi.ethicalWalls : repositoryRegistry.getOrCreate<any>('ethicalWalls'), enumerable: true },
+  auditLogs: { get: () => isBackendApiEnabled() ? legacyApi.auditLogs : repositoryRegistry.getOrCreate<any>('auditLogs'), enumerable: true },
+  permissions: { get: () => isBackendApiEnabled() ? legacyApi.permissions : repositoryRegistry.getOrCreate<any>('permissions'), enumerable: true },
+  rlsPolicies: { get: () => isBackendApiEnabled() ? legacyApi.rlsPolicies : repositoryRegistry.getOrCreate<any>(STORES.POLICIES), enumerable: true },
+  complianceReports: { get: () => isBackendApiEnabled() ? legacyApi.complianceReports : repositoryRegistry.getOrCreate<any>('complianceReports'), enumerable: true },
   admin: { get: () => AdminService, enumerable: true },
   correspondence: { get: () => CorrespondenceService, enumerable: true },
   quality: { get: () => getDataQualityService(), enumerable: true },
@@ -252,7 +249,7 @@ Object.defineProperties(DataServiceBase, {
   security: { get: () => SecurityService, enumerable: true },
   marketing: { get: () => MarketingService, enumerable: true },
   jurisdiction: { get: () => JurisdictionService, enumerable: true },
-  knowledge: { get: () => isBackendApiEnabled() ? finalApiServices.knowledgeBase : getKnowledgeRepository(), enumerable: true },
+  knowledge: { get: () => isBackendApiEnabled() ? legacyApi.knowledgeBase : getKnowledgeRepository(), enumerable: true },
   
   analysis: { get: () => getAnalysisRepository(), enumerable: true },
 
@@ -308,26 +305,26 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
 
-  tasks: { get: () => isBackendApiEnabled() ? finalApiServices.tasks : getTasksRepository(), enumerable: true },
+  tasks: { get: () => isBackendApiEnabled() ? legacyApi.tasks : getTasksRepository(), enumerable: true },
   
-  projects: { get: () => isBackendApiEnabled() ? additionalApiServices.projects : getProjectsRepository(), enumerable: true },
-  risks: { get: () => isBackendApiEnabled() ? finalApiServices.risks : getRisksRepository(), enumerable: true },
-  motions: { get: () => isBackendApiEnabled() ? extendedApiServices.motions : getMotionsRepository(), enumerable: true },
-  expenses: { get: () => isBackendApiEnabled() ? additionalApiServices.expenses : repositoryRegistry.getOrCreate<FirmExpense>(STORES.EXPENSES), enumerable: true },
-  timeEntries: { get: () => isBackendApiEnabled() ? additionalApiServices.timeEntries : repositoryRegistry.getOrCreate<TimeEntry>(STORES.BILLING), enumerable: true },
-  invoices: { get: () => isBackendApiEnabled() ? additionalApiServices.invoices : repositoryRegistry.getOrCreate<any>('invoices'), enumerable: true },
-  communications: { get: () => isBackendApiEnabled() ? additionalApiServices.communications : repositoryRegistry.getOrCreate<any>('communications'), enumerable: true },
-  exhibits: { get: () => isBackendApiEnabled() ? finalApiServices.exhibits : repositoryRegistry.getOrCreate<TrialExhibit>(STORES.EXHIBITS), enumerable: true },
-  users: { get: () => isBackendApiEnabled() ? apiServices.users : repositoryRegistry.getOrCreate<User>(STORES.USERS), enumerable: true },
-  rateTables: { get: () => isBackendApiEnabled() ? apiServices.rateTables : repositoryRegistry.getOrCreate<any>('rateTables'), enumerable: true },
-  feeAgreements: { get: () => isBackendApiEnabled() ? apiServices.feeAgreements : repositoryRegistry.getOrCreate<any>('feeAgreements'), enumerable: true },
-  custodians: { get: () => isBackendApiEnabled() ? apiServices.custodians : repositoryRegistry.getOrCreate<any>('custodians'), enumerable: true },
-  examinations: { get: () => isBackendApiEnabled() ? apiServices.examinations : repositoryRegistry.getOrCreate<any>('examinations'), enumerable: true },
-  clients: { get: () => isBackendApiEnabled() ? finalApiServices.clients : getClientsRepository(), enumerable: true },
-  citations: { get: () => isBackendApiEnabled() ? finalApiServices.citations : getCitationsRepository(), enumerable: true },
+  projects: { get: () => isBackendApiEnabled() ? legacyApi.projects : getProjectsRepository(), enumerable: true },
+  risks: { get: () => isBackendApiEnabled() ? legacyApi.risks : getRisksRepository(), enumerable: true },
+  motions: { get: () => isBackendApiEnabled() ? legacyApi.motions : getMotionsRepository(), enumerable: true },
+  expenses: { get: () => isBackendApiEnabled() ? api.expenses : repositoryRegistry.getOrCreate<FirmExpense>(STORES.EXPENSES), enumerable: true },
+  timeEntries: { get: () => isBackendApiEnabled() ? api.timeEntries : repositoryRegistry.getOrCreate<TimeEntry>(STORES.BILLING), enumerable: true },
+  invoices: { get: () => isBackendApiEnabled() ? api.invoices : repositoryRegistry.getOrCreate<any>('invoices'), enumerable: true },
+  communications: { get: () => isBackendApiEnabled() ? legacyApi.communications : repositoryRegistry.getOrCreate<any>('communications'), enumerable: true },
+  exhibits: { get: () => isBackendApiEnabled() ? legacyApi.exhibits : repositoryRegistry.getOrCreate<TrialExhibit>(STORES.EXHIBITS), enumerable: true },
+  users: { get: () => isBackendApiEnabled() ? api.users : repositoryRegistry.getOrCreate<User>(STORES.USERS), enumerable: true },
+  rateTables: { get: () => isBackendApiEnabled() ? api.rateTables : repositoryRegistry.getOrCreate<any>('rateTables'), enumerable: true },
+  feeAgreements: { get: () => isBackendApiEnabled() ? api.feeAgreements : repositoryRegistry.getOrCreate<any>('feeAgreements'), enumerable: true },
+  custodians: { get: () => isBackendApiEnabled() ? api.custodians : repositoryRegistry.getOrCreate<any>('custodians'), enumerable: true },
+  examinations: { get: () => isBackendApiEnabled() ? api.examinations : repositoryRegistry.getOrCreate<any>('examinations'), enumerable: true },
+  clients: { get: () => isBackendApiEnabled() ? legacyApi.clients : getClientsRepository(), enumerable: true },
+  citations: { get: () => isBackendApiEnabled() ? legacyApi.citations : getCitationsRepository(), enumerable: true },
   entities: { get: () => getEntitiesRepository(), enumerable: true },
   playbooks: { get: () => repositoryRegistry.getOrCreate<WorkflowTemplateData>(STORES.TEMPLATES), enumerable: true },
-  clauses: { get: () => isBackendApiEnabled() ? extendedApiServices.clauses : repositoryRegistry.getOrCreate<Clause>(STORES.CLAUSES), enumerable: true },
+  clauses: { get: () => isBackendApiEnabled() ? legacyApi.clauses : repositoryRegistry.getOrCreate<Clause>(STORES.CLAUSES), enumerable: true },
   rules: { get: () => repositoryRegistry.getOrCreate<LegalRule>(STORES.RULES), enumerable: true },
 
   phases: { get: () => getPhaseRepository(), enumerable: true },
@@ -340,7 +337,7 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
 
-  messenger: { get: () => isBackendApiEnabled() ? finalApiServices.messenger : {
+  messenger: { get: () => isBackendApiEnabled() ? legacyApi.messenger : {
     getConversations: async () => db.getAll<Conversation>(STORES.CONVERSATIONS),
     getConversationById: async (id: string): Promise<Conversation | undefined> => db.get<Conversation>(STORES.CONVERSATIONS, id),
     getContacts: async () => { 
@@ -360,7 +357,7 @@ Object.defineProperties(DataServiceBase, {
         return targetConv?.unread || 0;
     },
   }, enumerable: true },
-  calendar: { get: () => isBackendApiEnabled() ? finalApiServices.calendar : {
+  calendar: { get: () => isBackendApiEnabled() ? legacyApi.calendar : {
     getEvents: async (): Promise<CalendarEventItem[]> => {
         const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
         return tasks.filter(t => t.dueDate).map(t => ({
@@ -406,7 +403,7 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
 
-  warRoom: { get: () => isBackendApiEnabled() ? finalApiServices.warRoom : {
+  warRoom: { get: () => isBackendApiEnabled() ? legacyApi.warRoom : {
       getData: async (caseId: string): Promise<WarRoomData> => {
           const c = await db.get<Case>(STORES.CASES, caseId);
           if (!c) throw new Error('Case not found');
@@ -467,7 +464,7 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
 
-  dashboard: { get: () => isBackendApiEnabled() ? finalApiServices.analyticsDashboard : {
+  dashboard: { get: () => isBackendApiEnabled() ? legacyApi.analyticsDashboard : {
       getStats: async () => {
           const [cases, motions, timeEntries, risks] = await Promise.all([ 
               db.getAll<Case>(STORES.CASES), 
@@ -600,12 +597,12 @@ Object.defineProperties(DataServiceBase, {
   // ========================================
 
   discoveryMain: {
-    get: () => isBackendApiEnabled() ? missingApiServices.discovery : repositoryRegistry.getOrCreate('discovery', 'discovery'),
+    get: () => isBackendApiEnabled() ? missingApiServices.discovery : repositoryRegistry.getOrCreate('discovery'), // TODO: Migrate to api.discovery
     enumerable: true
   },
 
   search: {
-    get: () => isBackendApiEnabled() ? missingApiServices.search : {
+    get: () => isBackendApiEnabled() ? api.search : {
       fullText: async (query: string) => {
         // Fallback: search across multiple stores
         const results: any[] = [];
@@ -633,7 +630,7 @@ Object.defineProperties(DataServiceBase, {
   },
 
   ocr: {
-    get: () => isBackendApiEnabled() ? missingApiServices.ocr : {
+    get: () => isBackendApiEnabled() ? missingApiServices.ocr : { // TODO: Migrate to api.ocr
       processDocument: async (documentId: string) => ({
         success: false,
         message: 'OCR processing requires backend',
@@ -648,22 +645,22 @@ Object.defineProperties(DataServiceBase, {
   },
 
   serviceJobs: {
-    get: () => isBackendApiEnabled() ? missingApiServices.serviceJobs : repositoryRegistry.getOrCreate('serviceJobs', 'serviceJobs'),
+    get: () => isBackendApiEnabled() ? missingApiServices.serviceJobs : repositoryRegistry.getOrCreate('serviceJobs'), // TODO: Migrate to api.serviceJobs
     enumerable: true
   },
 
   messaging: {
-    get: () => isBackendApiEnabled() ? missingApiServices.messaging : repositoryRegistry.getOrCreate('messages', 'messages'),
+    get: () => isBackendApiEnabled() ? missingApiServices.messaging : repositoryRegistry.getOrCreate('messages'), // TODO: Migrate to api.messaging
     enumerable: true
   },
 
   complianceMain: {
-    get: () => isBackendApiEnabled() ? missingApiServices.compliance : repositoryRegistry.getOrCreate('complianceReports', 'complianceReports'),
+    get: () => isBackendApiEnabled() ? missingApiServices.compliance : repositoryRegistry.getOrCreate('complianceReports'), // TODO: Migrate to api.compliance
     enumerable: true
   },
 
   tokenBlacklist: {
-    get: () => isBackendApiEnabled() ? missingApiServices.tokenBlacklist : {
+    get: () => isBackendApiEnabled() ? missingApiServices.tokenBlacklist : { // TODO: Migrate to api.tokenBlacklist
       getAll: async () => [],
       add: async () => ({ success: false, message: 'Requires backend' }),
       remove: async () => ({ success: false })
@@ -672,7 +669,7 @@ Object.defineProperties(DataServiceBase, {
   },
 
   judgeStats: {
-    get: () => isBackendApiEnabled() ? missingApiServices.judgeStats : {
+    get: () => isBackendApiEnabled() ? missingApiServices.judgeStats : { // TODO: Migrate to api.judgeStats
       getAll: async () => MOCK_JUDGES,
       getById: async (id: string) => MOCK_JUDGES.find(j => j.id === id),
       search: async (query: string) => MOCK_JUDGES.filter(j => 
@@ -683,7 +680,7 @@ Object.defineProperties(DataServiceBase, {
   },
 
   outcomePredictions: {
-    get: () => isBackendApiEnabled() ? missingApiServices.outcomePredictions : {
+    get: () => isBackendApiEnabled() ? missingApiServices.outcomePredictions : { // TODO: Migrate to api.outcomePredictions
       predict: async (caseId: string) => ({
         caseId,
         prediction: 'unavailable',
@@ -696,17 +693,17 @@ Object.defineProperties(DataServiceBase, {
   },
 
   documentVersions: {
-    get: () => isBackendApiEnabled() ? missingApiServices.documentVersions : repositoryRegistry.getOrCreate('documentVersions', 'documentVersions'),
+    get: () => isBackendApiEnabled() ? missingApiServices.documentVersions : repositoryRegistry.getOrCreate('documentVersions'), // TODO: Migrate to api.documentVersions
     enumerable: true
   },
 
   dataSourcesIntegration: {
-    get: () => isBackendApiEnabled() ? missingApiServices.dataSources : repositoryRegistry.getOrCreate('dataSources', 'dataSources'),
+    get: () => isBackendApiEnabled() ? missingApiServices.dataSources : repositoryRegistry.getOrCreate('dataSources'), // TODO: Migrate to api.dataSources
     enumerable: true
   },
 
   metrics: {
-    get: () => isBackendApiEnabled() ? missingApiServices.metrics : {
+    get: () => isBackendApiEnabled() ? missingApiServices.metrics : { // TODO: Migrate to api.metrics
       getSystem: async () => ({
         cpu: 0,
         memory: 0,
@@ -723,7 +720,7 @@ Object.defineProperties(DataServiceBase, {
   },
 
   production: {
-    get: () => isBackendApiEnabled() ? missingApiServices.production : {
+    get: () => isBackendApiEnabled() ? missingApiServices.production : { // TODO: Migrate to api.production
       getStatus: async () => ({
         environment: 'development',
         version: '1.0.0',

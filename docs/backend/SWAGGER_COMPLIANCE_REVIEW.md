@@ -45,7 +45,7 @@ async function bootstrap() {
 }
 ```
 
-**Access URL:** `http://localhost:3000/api/docs`
+**Access URL:** `http://localhost:5000/api/docs`
 
 ---
 
@@ -453,7 +453,7 @@ npm run test:e2e       # E2E tests
 **Status:** ✅ Tests passing
 
 #### 3. Swagger JSON Generation
-**Access:** `http://localhost:3000/api/docs-json`
+**Access:** `http://localhost:5000/api/docs-json`
 **Status:** ✅ Valid OpenAPI 3.0 JSON
 
 ---

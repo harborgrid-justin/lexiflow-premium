@@ -28,13 +28,14 @@ const AdminDatabaseControl = lazy(() => import('./data/AdminDatabaseControl').th
 const AdminIntegrations = lazy(() => import('./integrations/AdminIntegrations').then(m => ({ default: m.AdminIntegrations })));
 const AdminAuditLog = lazy(() => import('./AdminAuditLog').then(m => ({ default: m.AdminAuditLog })));
 const AdminPlatformManager = lazy(() => import('./platform/AdminPlatformManager').then(m => ({ default: m.AdminPlatformManager })));
+const SystemSettings = lazy(() => import('./SystemSettings').then(m => ({ default: m.SystemSettings })));
 
 // ========================================
 // TYPES & INTERFACES
 // ========================================
 type AdminView = 
   | 'hierarchy' | 'profile' | 'users' | 'security' | 'compliance'
-  | 'db' | 'data' | 'logs' | 'integrations' | 'api';
+  | 'db' | 'data' | 'logs' | 'integrations' | 'api' | 'system';
 
 interface AdminPanelContentProps {
   activeTab: AdminView;
@@ -59,6 +60,7 @@ export const AdminPanelContent: React.FC<AdminPanelContentProps> = ({ activeTab 
     // System Section
     case 'security': return <AdminSecurity />;
     case 'api': return <AdminSecurity />; // Placeholder - will be replaced with API Keys component
+    case 'system': return <SystemSettings />;
     
     default: return <FirmProfile />;
   }

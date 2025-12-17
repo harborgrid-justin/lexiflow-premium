@@ -1,33 +1,35 @@
 
 import React from 'react';
+
 import { DollarSign, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
-import { Card } from '../../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
+
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useChartTheme } from '../../common/ChartHelpers';
-import { MetricTile } from '../../common/RefactoredCommon';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { CostMetric, CostForecast } from '../../../types';
+import { cn } from '../../../utils/cn';
+import { Card } from '../../common/Card';
+import { useChartTheme } from '../../common/ChartHelpers';
+import { MetricTile } from '../../common/RefactoredCommon';
 
-export const CostFinOps: React.FC = () => {
+export function CostFinOps() {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
   const { data: costData = [], isLoading: costLoading } = useQuery<CostMetric[]>(
       ['finops', 'costs'],
-      DataService.operations.getCostMetrics
+      () => (DataService as any).operations.getCostMetrics() as Promise<CostMetric[]>
   );
 
   const { data: forecastData = [], isLoading: forecastLoading } = useQuery<CostForecast[]>(
       ['finops', 'forecast'],
-      DataService.operations.getCostForecast
+      () => (DataService as any).operations.getCostForecast() as Promise<CostForecast[]>
   );
 
   const isLoading = costLoading || forecastLoading;
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
 
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full">
@@ -54,11 +56,11 @@ export const CostFinOps: React.FC = () => {
                             <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} stroke={chartTheme.text} />
                             <YAxis axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} fontSize={12} stroke={chartTheme.text} />
                             <Tooltip 
-                                formatter={(v) => `$${v}`} 
+                                formatter={(v) => `$${String(v)}`} 
                                 cursor={{fill: chartTheme.grid}} 
                                 contentStyle={chartTheme.tooltipStyle}
                             />
-                            <Bar dataKey="cost" fill={chartTheme.colors.purple} radius={[4, 4, 0, 0]} barSize={50} />
+                            <Bar dataKey="cost" fill={chartTheme.colors.secondary} radius={[4, 4, 0, 0]} barSize={50} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -70,16 +72,16 @@ export const CostFinOps: React.FC = () => {
                         <AreaChart data={forecastData}>
                             <defs>
                                 <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor={chartTheme.colors.blue} stopOpacity={0.8}/>
-                                    <stop offset="95%" stopColor={chartTheme.colors.blue} stopOpacity={0}/>
+                                    <stop offset="5%" stopColor={chartTheme.colors.primary} stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor={chartTheme.colors.primary} stopOpacity={0}/>
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid}/>
                             <XAxis dataKey="day" axisLine={false} tickLine={false} fontSize={12} stroke={chartTheme.text} />
                             <YAxis axisLine={false} tickLine={false} fontSize={12} stroke={chartTheme.text} />
                             <Tooltip contentStyle={chartTheme.tooltipStyle} />
-                            <Area type="monotone" dataKey="actual" stroke={chartTheme.colors.blue} fillOpacity={1} fill="url(#colorActual)" />
-                            <Area type="monotone" dataKey="forecast" stroke={chartTheme.colors.slate} strokeDasharray="5 5" fill="none" />
+                            <Area type="monotone" dataKey="actual" stroke={chartTheme.colors.primary} fillOpacity={1} fill="url(#colorActual)" />
+                            <Area type="monotone" dataKey="forecast" stroke={chartTheme.colors.neutral} strokeDasharray="5 5" fill="none" />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
@@ -101,7 +103,7 @@ export const CostFinOps: React.FC = () => {
                          <p className={cn("text-xs", theme.text.secondary)}>Used: $45 / $100</p>
                      </div>
                      <div className={cn("w-32 rounded-full h-2", theme.border.default, "bg-slate-200 dark:bg-slate-700")}>
-                         <div className="bg-green-500 h-2 rounded-full" style={{width: '45%'}}></div>
+                         <div className="bg-green-500 h-2 rounded-full" style={{width: '45%'}} />
                      </div>
                  </div>
              </div>

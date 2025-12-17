@@ -49,7 +49,7 @@ export const AdminDataRegistry: React.FC = () => {
   if (isLoading) {
       return (
           <div className="flex h-full items-center justify-center">
-              <Loader2 className="animate-spin h-6 w-6 text-blue-600"/>
+              <Loader2 className={cn("animate-spin h-6 w-6", theme.primary.text)}/>
           </div>
       );
   }

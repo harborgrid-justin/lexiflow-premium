@@ -1,47 +1,69 @@
 
 import React, { useState, useEffect } from 'react';
+
 import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2, GitMerge } from 'lucide-react';
+
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Tabs } from '../../common/Tabs';
-import { Button } from '../../common/Button';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { PipelineJob, Connector } from '../../../types';
-import { PipelineList } from './pipeline/PipelineList';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../common/Button';
+import { Tabs } from '../../common/Tabs';
+
 import { PipelineDAG } from './pipeline/PipelineDAG';
+import { PipelineList } from './pipeline/PipelineList';
+
 
 interface PipelineMonitorProps {
     initialTab?: string;
 }
 
-export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = 'monitor' }) => {
+export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps): React.ReactElement {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'monitor' | 'visual' | 'connectors'>('monitor');
   const [selectedJob, setSelectedJob] = useState<PipelineJob | null>(null);
   
   useEffect(() => {
-      if (initialTab === 'connectors') setActiveTab('connectors');
-      else if (initialTab === 'visual') setActiveTab('visual');
-      else setActiveTab('monitor');
+      if (initialTab === 'connectors') {
+          setActiveTab('connectors');
+      } else if (initialTab === 'visual') {
+          setActiveTab('visual');
+      } else {
+          setActiveTab('monitor');
+      }
   }, [initialTab]);
   
   // Integrated Data Queries
   const { data: pipelines = [], isLoading: isLoadingPipelines, refetch } = useQuery<PipelineJob[]>(
       ['admin', 'pipelines'],
-      DataService.admin.getPipelines
+      async () => {
+          const adminService = DataService.admin as { getPipelines: () => Promise<PipelineJob[]> } | undefined;
+          if (!adminService?.getPipelines) {
+              return [];
+          }
+          return adminService.getPipelines();
+      }
   );
 
   const { data: connectors = [], isLoading: isLoadingConnectors } = useQuery<Connector[]>(
       ['admin', 'connectors'],
-      DataService.admin.getConnectors
+      async () => {
+          const adminService = DataService.admin as { getConnectors: () => Promise<Connector[]> } | undefined;
+          if ((adminService?.getConnectors) == null) {
+              return [];
+          }
+          return adminService.getConnectors();
+      }
   );
 
-  const handleRun = (id: string) => {
-      alert(`Triggered run for pipeline ${id}`);
+  const handleRun = (id: string): void => {
+      // eslint-disable-next-line no-console
+      console.log(`Triggered run for pipeline ${id}`);
+      // TODO: Implement actual pipeline trigger logic
   };
   
-  const getIcon = (type: string) => {
+  const getIcon = (type: string): React.ComponentType<{ className?: string }> => {
       switch(type) {
           case 'Database': return Database;
           case 'Warehouse': return Cloud;
@@ -51,7 +73,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
       }
   };
 
-  if (isLoadingPipelines || isLoadingConnectors) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoadingPipelines || isLoadingConnectors) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
 
   return (
     <div className={cn("flex flex-col h-full", theme.background)}>
@@ -62,7 +84,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                     <p className={cn("text-sm", theme.text.secondary)}>Data Orchestration & Connectivity</p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
+                    <Button variant="outline" icon={RefreshCw} onClick={() => { void refetch(); }}>Refresh</Button>
                     {activeTab === 'connectors' && <Button variant="primary" icon={Plus}>Add Connection</Button>}
                 </div>
             </div>
@@ -73,7 +95,11 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                     { id: 'connectors', label: 'Connectors', icon: Database }
                 ]}
                 activeTab={activeTab}
-                onChange={(t) => setActiveTab(t as any)}
+                onChange={(t) => {
+                    if (t === 'monitor' || t === 'visual' || t === 'connectors') {
+                        setActiveTab(t);
+                    }
+                }}
             />
         </div>
 
@@ -81,14 +107,14 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
             <div className="flex flex-1 overflow-hidden relative">
                 {pipelines.length === 0 && !isLoadingPipelines ? (
                     <div className="flex-1 flex flex-col items-center justify-center p-8">
-                        <div className="p-6 rounded-full bg-gray-50 dark:bg-slate-800 mb-4">
-                            <Activity className="h-12 w-12 text-gray-400" />
+                        <div className={cn("p-6 rounded-full mb-4", theme.surface.highlight)}>
+                            <Activity className={cn("h-12 w-12", theme.text.tertiary)} />
                         </div>
                         <h3 className={cn("text-xl font-semibold mb-2", theme.text.primary)}>No ETL Pipelines</h3>
                         <p className={cn("text-sm text-center max-w-md mb-4", theme.text.secondary)}>
                             Connect to the backend to view and manage your data pipelines
                         </p>
-                        <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
+                        <Button variant="outline" icon={RefreshCw} onClick={() => { void refetch(); }}>Refresh</Button>
                     </div>
                 ) : (
                     <>
@@ -102,9 +128,9 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                 <div className={cn(
                     "flex-1 flex flex-col h-full lg:w-1/2 absolute lg:static inset-0 z-10 transition-transform duration-300",
                     theme.surface.default,
-                    selectedJob ? "translate-x-0" : "translate-x-full lg:translate-x-0 lg:hidden"
+                    selectedJob !== null ? "translate-x-0" : "translate-x-full lg:translate-x-0 lg:hidden"
                 )}>
-                    {selectedJob ? (
+                    {selectedJob !== null ? (
                         <>
                             <div className={cn("p-6 border-b flex justify-between items-start", theme.border.default, theme.surface.highlight)}>
                                 <div>
@@ -112,7 +138,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                         {/* Mobile Back Button */}
                                         <button 
                                             onClick={() => setSelectedJob(null)} 
-                                            className={cn("lg:hidden p-1 rounded hover:bg-slate-200 mr-2", theme.text.secondary)}
+                                            className={cn("lg:hidden p-1 rounded mr-2 transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}
                                         >
                                             <ArrowLeft className="h-5 w-5"/>
                                         </button>
@@ -135,7 +161,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                 </div>
                                 <div>
                                     <p className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>Success Rate</p>
-                                    <p className="font-mono font-medium text-green-600">98.5%</p>
+                                    <p className={cn("font-mono font-medium", theme.status.success.text)}>98.5%</p>
                                 </div>
                             </div>
 
@@ -144,14 +170,23 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                     <FileText className="h-3 w-3 mr-2"/> Live Logs
                                 </div>
                                 <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface.default, theme.text.primary)}>
-                                    {selectedJob.logs.map((log, i) => (
-                                        <div key={i} className={cn("mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2")}>
-                                            <span className={cn("mr-2", theme.text.tertiary)}>{new Date().toLocaleTimeString()}</span>
-                                            <span className={log.includes('[ERROR]') ? theme.status.error.text : log.includes('[WARN]') ? theme.status.warning.text : theme.status.success.text}>
-                                                {log}
-                                            </span>
-                                        </div>
-                                    ))}
+                                    {selectedJob.logs.map((log) => {
+                                            let logClass = theme.status.success.text;
+                                            if (log.includes('[ERROR]')) {
+                                                logClass = theme.status.error.text;
+                                            } else if (log.includes('[WARN]')) {
+                                                logClass = theme.status.warning.text;
+                                            }
+                                            
+                                            return (
+                                            <div key={`${log}-${Math.random()}`} className="mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2">
+                                                <span className={cn("mr-2", theme.text.tertiary)}>{new Date().toLocaleTimeString()}</span>
+                                                <span className={cn(logClass)}>
+                                                    {log}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
                                     <div className="animate-pulse">_</div>
                                 </div>
                             </div>
@@ -175,14 +210,14 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
             <div className="p-6 overflow-y-auto">
                 {connectors.length === 0 && !isLoadingConnectors ? (
                     <div className="flex flex-col items-center justify-center py-16">
-                        <div className="p-6 rounded-full bg-gray-50 dark:bg-slate-800 mb-4">
-                            <Database className="h-12 w-12 text-gray-400" />
+                        <div className={cn("p-6 rounded-full mb-4", theme.surface.highlight)}>
+                            <Database className={cn("h-12 w-12", theme.text.tertiary)} />
                         </div>
                         <h3 className={cn("text-xl font-semibold mb-2", theme.text.primary)}>No Connectors Available</h3>
                         <p className={cn("text-sm text-center max-w-md mb-4", theme.text.secondary)}>
                             Connect to the backend to view your data source connectors
                         </p>
-                        <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
+                        <Button variant="outline" icon={RefreshCw} onClick={() => { void refetch(); }}>Refresh</Button>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -195,7 +230,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                             <Icon className={cn("h-6 w-6", conn.color)}/>
                                         </div>
                                         <div className="flex gap-1">
-                                            <button className={cn("p-1.5 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`, `hover:${theme.surface.highlight}`)}><Settings className="h-4 w-4"/></button>
+                                            <button className={cn("p-1.5 rounded transition-colors hover:bg-slate-100 dark:hover:bg-slate-700", theme.text.tertiary)}><Settings className="h-4 w-4"/></button>
                                         </div>
                                     </div>
                                     <h4 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{conn.name}</h4>
@@ -204,9 +239,15 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                                     <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
                                         <span className={cn(
                                             "text-xs font-bold px-2 py-0.5 rounded-full border",
-                                            conn.status === 'Healthy' ? cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border) : 
-                                            conn.status === 'Syncing' ? cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border) :
-                                            cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border)
+                                            (() => {
+                                                if (conn.status === 'Healthy') {
+                                                    return cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border);
+                                                }
+                                                if (conn.status === 'Syncing') {
+                                                    return cn(theme.status.info.bg, theme.status.info.text, theme.status.info.border);
+                                                }
+                                                return cn(theme.status.error.bg, theme.status.error.text, theme.status.error.border);
+                                            })()
                                         )}>{conn.status}</span>
                                         <span className={cn("text-xs", theme.text.tertiary)}>Last sync: 5m ago</span>
                                     </div>
@@ -214,7 +255,7 @@ export const PipelineMonitor: React.FC<PipelineMonitorProps> = ({ initialTab = '
                             );
                         })}
                         
-                        <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
+                        <button className={cn("border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center transition-all hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800", theme.border.default, theme.text.tertiary)}>
                             <Plus className="h-10 w-10 mb-2"/>
                             <span className="font-medium">Add New Source</span>
                         </button>

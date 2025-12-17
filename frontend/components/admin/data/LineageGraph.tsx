@@ -1,22 +1,31 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+
 import { RefreshCw, Loader2 } from 'lucide-react';
+
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { NexusPhysics } from '../../../utils/nexusPhysics';
-import { Tabs } from '../../common/Tabs';
-import { Button } from '../../common/Button';
-import { ImpactAnalysis } from './lineage/ImpactAnalysis';
-import { LineageCanvas } from './lineage/LineageCanvas';
 import { DataService } from '../../../services/dataService';
 import { useQuery } from '../../../services/queryClient';
 import { LineageNode, LineageLink } from '../../../types';
+import { cn } from '../../../utils/cn';
+import { NexusPhysics } from '../../../utils/nexusPhysics';
+import { Button } from '../../common/Button';
+import { Tabs } from '../../common/Tabs';
+
+import { ImpactAnalysis } from './lineage/ImpactAnalysis';
+import { LineageCanvas } from './lineage/LineageCanvas';
 
 interface LineageGraphProps {
     initialTab?: string;
 }
 
-export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph' }) => {
+interface NodeLabel {
+    id: string;
+    label: string;
+    type: string;
+}
+
+export function LineageGraph({ initialTab = 'graph' }: LineageGraphProps): JSX.Element {
   const { theme, mode } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isAnimating, setIsAnimating] = useState(true);
@@ -28,20 +37,20 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       count: 0,
       alpha: 1
   });
-  const [nodeLabels, setNodeLabels] = useState<any[]>([]);
+  const [nodeLabels, setNodeLabels] = useState<NodeLabel[]>([]);
 
   useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
+      if (initialTab !== '') {setActiveTab(initialTab);}
   }, [initialTab]);
 
   const { data: graphData, isLoading } = useQuery<{ nodes: LineageNode[], links: LineageLink[] }>(
       ['lineage', 'graph'],
-      DataService.catalog.getLineageGraph
+      () => (DataService as any).catalog.getLineageGraph() as Promise<{ nodes: LineageNode[], links: LineageLink[] }>
   );
 
   // Initialize Graph Data
   useEffect(() => {
-      if (activeTab !== 'graph' || !graphData) return;
+      if (activeTab !== 'graph' || graphData === null || graphData === undefined) {return;}
       
       // We assume reasonable default dimensions until canvas mounts and resizes
       const width = 800;
@@ -64,14 +73,14 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
       physicsState.current.alpha = 0.1; // Trigger a few frames to repaint colors
   }, [mode]);
 
-  const handleReheat = () => {
+  const handleReheat = (): void => {
       physicsState.current.alpha = 1;
       if (!isAnimating) {
           setIsAnimating(true);
       }
   };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
 
   return (
     <div className="flex flex-col h-full">
@@ -85,7 +94,7 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
             <Tabs 
                 tabs={['graph', 'impact', 'history']}
                 activeTab={activeTab}
-                onChange={(t) => setActiveTab(t as any)}
+                onChange={(t) => setActiveTab(t)}
             />
         </div>
 
@@ -94,7 +103,7 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
                 <LineageCanvas 
                     isAnimating={isAnimating} 
                     setIsAnimating={setIsAnimating} 
-                    physicsState={physicsState} 
+                    physicsStateRef={physicsState} 
                     nodeLabels={nodeLabels} 
                 />
             )}
@@ -111,6 +120,6 @@ export const LineageGraph: React.FC<LineageGraphProps> = ({ initialTab = 'graph'
         </div>
     </div>
   );
-};
+}
 
 export default LineageGraph;

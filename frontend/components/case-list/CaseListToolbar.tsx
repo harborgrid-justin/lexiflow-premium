@@ -123,6 +123,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Clean up blob URL
       
       success(`Exported ${filteredCases.length} case(s) to CSV`);
     } catch (err) {
@@ -212,6 +213,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
+              aria-label="Status Filter"
             >
               <option value="All">All Statuses</option>
               {Object.values(CaseStatus).map(s => <option key={s} value={s}>{s}</option>)}
@@ -224,6 +226,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
+              aria-label="Type Filter"
             >
               <option value="All">All Types</option>
               <option value="Litigation">Litigation</option>

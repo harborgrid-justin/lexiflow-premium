@@ -138,8 +138,8 @@ Currently **disconnected by design** - frontend uses IndexedDB, backend is docum
 ## Navigation & Routing
 
 ### Route Configuration
-- **Path constants**: Defined in `constants/paths.ts` as `PATHS.DASHBOARD`, `PATHS.CASES`, etc.
-- **Navigation config**: `constants/navConfig.ts` defines `NAVIGATION_ITEMS` array
+- **Path constants**: Defined in `config/paths.config.ts` as `PATHS.DASHBOARD`, `PATHS.CASES`, etc.
+- **Navigation config**: `config/nav.config.ts` defines `NAVIGATION_ITEMS` array
 - **Module registry**: `services/moduleRegistry.ts` maps paths to lazy-loaded components
 - **Initialization**: Call `initializeModules()` from `config/modules.tsx` on app bootstrap
 

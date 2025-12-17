@@ -130,6 +130,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.dueDate}
                         onChange={e => setTask({...task, dueDate: e.target.value})}
+                        aria-label="Due Date"
                     />
                 </div>
             </div>
@@ -142,6 +143,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                     className="w-full px-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                     value={task.priority}
                     onChange={e => setTask({...task, priority: e.target.value as any})}
+                    aria-label="Priority"
                 >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
@@ -156,6 +158,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.projectId}
                         onChange={e => setTask({...task, projectId: e.target.value as any})}
+                        aria-label="Link to Project"
                     >
                         <option value="">-- No Project --</option>
                         {projects.map(p => (

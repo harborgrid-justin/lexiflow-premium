@@ -74,6 +74,29 @@ export abstract class Repository<T extends BaseEntity> {
         return this.listeners.size;
     }
 
+    /**
+     * Clear the LRU cache for this repository.
+     * Useful for freeing memory when cache gets too large.
+     */
+    clearCache(): void {
+        const size = this.cache.size();
+        this.cache.clear();
+        if (size > 0) {
+            console.log(`[Repository:${this.storeName}] Cleared cache (${size} items)`);
+        }
+    }
+
+    /**
+     * Get cache statistics for monitoring memory usage.
+     */
+    getCacheStats(): { size: number; maxSize: number; hitRate: string } {
+        return {
+            size: this.cache.size(),
+            maxSize: REPOSITORY_CACHE_MAX_SIZE,
+            hitRate: '0%', // LRUCache doesn't track hits yet
+        };
+    }
+
     protected notify(item: T) {
         this.listeners.forEach(l => {
             try {

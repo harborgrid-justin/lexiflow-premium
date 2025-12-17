@@ -89,6 +89,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.type}
             onChange={(e) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
+            aria-label="Motion Type"
           >
             <option value="Dismiss">Motion to Dismiss</option>
             <option value="Summary Judgment">Summary Judgment</option>
@@ -112,6 +113,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.hearingDate || ''}
             onChange={(e) => setNewMotion({...newMotion, hearingDate: e.target.value})}
+            aria-label="Hearing Date"
           />
           {newMotion.hearingDate && (
             <div className={cn("mt-2 text-xs flex items-center gap-4 p-2 rounded border", theme.text.link, theme.surface.highlight, theme.border.default)}>

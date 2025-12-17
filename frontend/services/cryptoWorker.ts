@@ -16,7 +16,10 @@ const createCryptoWorker = () => {
       };
     `;
     const blob = new Blob([code], { type: 'application/javascript' });
-    return new Worker(URL.createObjectURL(blob));
+    const url = URL.createObjectURL(blob);
+    const worker = new Worker(url);
+    URL.revokeObjectURL(url); // Clean up blob URL immediately
+    return worker;
 };
   
 export const CryptoWorker = {

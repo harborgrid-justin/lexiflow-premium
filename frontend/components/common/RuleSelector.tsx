@@ -73,7 +73,11 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
               <Book className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
               <span className="font-medium mr-1">{code}</span>
               {!readOnly && (
-                <button onClick={() => removeRule(code)} className={cn("ml-1 hover:text-red-500", theme.text.tertiary)}>
+                <button 
+                  onClick={() => removeRule(code)} 
+                  className={cn("ml-1 hover:text-red-500", theme.text.tertiary)}
+                  aria-label={`Remove rule ${code}`}
+                >
                   <X className="h-3 w-3"/>
                 </button>
               )}

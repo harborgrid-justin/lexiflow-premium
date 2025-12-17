@@ -1,5 +1,5 @@
 import { Repository } from './core/Repository';
-import { createRepository } from './core/RepositoryFactory';
+import { createRepository, repositoryRegistry } from './core/RepositoryFactory';
 import { STORES, db } from './db';
 import { CaseRepository, PhaseRepository } from './domains/CaseDomain';
 import { ComplianceService } from './domains/ComplianceDomain';
@@ -37,6 +37,21 @@ import { AnalyticsService } from './domains/AnalyticsDomain';
 import { OperationsService } from './domains/OperationsDomain';
 import { SecurityService } from './domains/SecurityDomain';
 
+// ========================================
+// SINGLETON REPOSITORY CACHE
+// ========================================
+// This prevents creating multiple repository instances
+// across hot module reloads or multiple imports
+
+const repositorySingletons = new Map<string, any>();
+
+function getSingleton<T>(key: string, factory: () => T): T {
+  if (!repositorySingletons.has(key)) {
+    repositorySingletons.set(key, factory());
+  }
+  return repositorySingletons.get(key) as T;
+}
+
 // Types
 import { 
   WorkflowTask, Motion, Project, Risk, Organization, Group,
@@ -61,6 +76,9 @@ class IntegratedCaseRepository extends CaseRepository {
     }
 }
 
+// Singleton instances
+const getIntegratedCaseRepository = () => getSingleton('IntegratedCaseRepository', () => new IntegratedCaseRepository());
+
 class IntegratedDocketRepository extends DocketRepository {
     add = async (item: DocketEntry): Promise<DocketEntry> => {
         const result = await super.add(item);
@@ -68,6 +86,8 @@ class IntegratedDocketRepository extends DocketRepository {
         return result;
     }
 }
+
+const getIntegratedDocketRepository = () => getSingleton('IntegratedDocketRepository', () => new IntegratedDocketRepository());
 
 class IntegratedDocumentRepository extends DocumentRepository {
     add = async (item: LegalDocument): Promise<LegalDocument> => {
@@ -77,6 +97,8 @@ class IntegratedDocumentRepository extends DocumentRepository {
     }
 }
 
+const getIntegratedDocumentRepository = () => getSingleton('IntegratedDocumentRepository', () => new IntegratedDocumentRepository());
+
 class IntegratedBillingRepository extends BillingRepository {
     addTimeEntry = async (entry: TimeEntry): Promise<TimeEntry> => {
         const result = await super.addTimeEntry(entry);
@@ -85,53 +107,141 @@ class IntegratedBillingRepository extends BillingRepository {
     }
 }
 
+const getIntegratedBillingRepository = () => getSingleton('IntegratedBillingRepository', () => new IntegratedBillingRepository());
+const getEvidenceRepository = () => getSingleton('EvidenceRepository', () => new EvidenceRepository());
+const getDiscoveryRepository = () => getSingleton('DiscoveryRepository', () => new DiscoveryRepository());
+const getTrialRepository = () => getSingleton('TrialRepository', () => new TrialRepository());
+const getPleadingRepository = () => getSingleton('PleadingRepository', () => new PleadingRepository());
+const getKnowledgeRepository = () => getSingleton('KnowledgeRepository', () => new KnowledgeRepository());
+const getAnalysisRepository = () => getSingleton('AnalysisRepository', () => new AnalysisRepository());
+const getPhaseRepository = () => getSingleton('PhaseRepository', () => new PhaseRepository());
+const getDataQualityService = () => getSingleton('DataQualityService', () => new DataQualityService());
+
+// Extended repositories with custom logic
+const getTasksRepository = () => getSingleton('TasksRepository', () => 
+  new class extends Repository<WorkflowTask> { 
+    constructor() { super(STORES.TASKS); }
+    getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
+    countByCaseId = async (caseId: string): Promise<number> => {
+      const tasks = await this.getByCaseId(caseId);
+      return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
+    }
+    add = async (item: WorkflowTask): Promise<WorkflowTask> => {
+      const result = await super.add(item);
+      return result;
+    }
+    update = async (id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> => {
+      const result = await super.update(id, updates);
+      if (updates.status === 'Done' || updates.status === 'Completed') {
+        IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
+      }
+      return result;
+    }
+  }()
+);
+
+const getProjectsRepository = () => getSingleton('ProjectsRepository', () =>
+  new class extends Repository<Project> { 
+    constructor() { super(STORES.PROJECTS); } 
+    getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
+  }()
+);
+
+const getRisksRepository = () => getSingleton('RisksRepository', () =>
+  new class extends Repository<Risk> { 
+    constructor() { super(STORES.RISKS); } 
+    getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
+    add = async (item: Risk): Promise<Risk> => {
+      const result = await super.add(item);
+      if (result.impact === 'High' && result.probability === 'High') {
+        IntegrationOrchestrator.publish(SystemEventType.RISK_ESCALATED, { risk: result });
+      }
+      return result;
+    }
+  }()
+);
+
+const getMotionsRepository = () => getSingleton('MotionsRepository', () =>
+  new class extends Repository<Motion> { 
+    constructor() { super(STORES.MOTIONS); }
+    getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
+  }()
+);
+
+const getClientsRepository = () => getSingleton('ClientsRepository', () =>
+  new class extends Repository<Client> { 
+    constructor() { super(STORES.CLIENTS); }
+    generatePortalToken = async (clientId: string) => { return `token-${clientId}-${Date.now()}`; }
+  }()
+);
+
+const getCitationsRepository = () => getSingleton('CitationsRepository', () =>
+  new class extends Repository<Citation> { 
+    constructor() { super(STORES.CITATIONS); }
+    verifyAll = async () => { return { checked: 150, flagged: 3 }; }
+    quickAdd = async (citation: any) => { return this.add(citation); }
+  }()
+);
+
+const getEntitiesRepository = () => getSingleton('EntitiesRepository', () =>
+  new class extends Repository<LegalEntity> { 
+    constructor() { super(STORES.ENTITIES); }
+    getRelationships = async (id: string) => { return []; } 
+    add = async (item: LegalEntity): Promise<LegalEntity> => {
+      const result = await super.add(item);
+      IntegrationOrchestrator.publish(SystemEventType.ENTITY_CREATED, { entity: result });
+      return result;
+    }
+  }()
+);
+
 // --- BACKEND API MODE CHECK ---
 const useBackendApi = isBackendApiEnabled();
 
 // --- FACADE ---
 
 export const DataService = {
-  // Use backend API if enabled, otherwise use IndexedDB
-  cases: useBackendApi ? apiServices.cases : new IntegratedCaseRepository(),
-  docket: useBackendApi ? apiServices.docket : new IntegratedDocketRepository(),
-  evidence: useBackendApi ? apiServices.evidence : new EvidenceRepository(),
-  documents: useBackendApi ? apiServices.documents : new IntegratedDocumentRepository(),
-  pleadings: useBackendApi ? extendedApiServices.pleadings : new PleadingRepository(),
+  // Use backend API if enabled, otherwise use IndexedDB singletons
+  cases: useBackendApi ? apiServices.cases : getIntegratedCaseRepository(),
+  docket: useBackendApi ? apiServices.docket : getIntegratedDocketRepository(),
+  evidence: useBackendApi ? apiServices.evidence : getEvidenceRepository(),
+  documents: useBackendApi ? apiServices.documents : getIntegratedDocumentRepository(),
+  pleadings: useBackendApi ? extendedApiServices.pleadings : getPleadingRepository(),
   hr: useBackendApi ? finalApiServices.hr : HRRepository,
   workflow: useBackendApi ? finalApiServices.workflowTemplates : WorkflowRepository,
-  billing: useBackendApi ? apiServices.billing : new IntegratedBillingRepository(),
-  discovery: new DiscoveryRepository(),
-  trial: useBackendApi ? finalApiServices.trial : new TrialRepository(),
+  billing: useBackendApi ? apiServices.billing : getIntegratedBillingRepository(),
+  discovery: getDiscoveryRepository(),
+  trial: useBackendApi ? finalApiServices.trial : getTrialRepository(),
   compliance: ComplianceService,
   
-  // Extended backend API services - Using RepositoryFactory instead of anonymous classes
-  trustAccounts: useBackendApi ? extendedApiServices.trustAccounts : createRepository<any>('trustAccounts'),
-  billingAnalytics: useBackendApi ? extendedApiServices.billingAnalytics : createRepository<any>('billingAnalytics'),
-  reports: useBackendApi ? extendedApiServices.reports : createRepository<any>(STORES.REPORTERS),
-  processingJobs: useBackendApi ? extendedApiServices.processingJobs : createRepository<any>(STORES.PROCESSING_JOBS),
-  casePhases: useBackendApi ? extendedApiServices.casePhases : createRepository<any>(STORES.PHASES),
-  caseTeams: useBackendApi ? extendedApiServices.caseTeams : createRepository<any>('caseTeams'),
-  parties: useBackendApi ? extendedApiServices.parties : createRepository<any>('parties'),
+  // Extended backend API services - Using RepositoryFactory with singleton cache
+  trustAccounts: useBackendApi ? extendedApiServices.trustAccounts : repositoryRegistry.getOrCreate<any>('trustAccounts'),
+  billingAnalytics: useBackendApi ? extendedApiServices.billingAnalytics : repositoryRegistry.getOrCreate<any>('billingAnalytics'),
+  reports: useBackendApi ? extendedApiServices.reports : repositoryRegistry.getOrCreate<any>(STORES.REPORTERS),
+  processingJobs: useBackendApi ? extendedApiServices.processingJobs : repositoryRegistry.getOrCreate<any>(STORES.PROCESSING_JOBS),
+  casePhases: useBackendApi ? extendedApiServices.casePhases : repositoryRegistry.getOrCreate<any>(STORES.PHASES),
+  caseTeams: useBackendApi ? extendedApiServices.caseTeams : repositoryRegistry.getOrCreate<any>('caseTeams'),
+  parties: useBackendApi ? extendedApiServices.parties : repositoryRegistry.getOrCreate<any>('parties'),
 
-  // Discovery backend API services - Using RepositoryFactory instead of anonymous classes
-  legalHolds: useBackendApi ? discoveryApiServices.legalHolds : createRepository<any>(STORES.LEGAL_HOLDS),
-  depositions: useBackendApi ? discoveryApiServices.depositions : createRepository<any>('depositions'),
-  discoveryRequests: useBackendApi ? discoveryApiServices.discoveryRequests : createRepository<any>('discoveryRequests'),
-  esiSources: useBackendApi ? discoveryApiServices.esiSources : createRepository<any>('esiSources'),
-  privilegeLog: useBackendApi ? discoveryApiServices.privilegeLog : createRepository<any>(STORES.PRIVILEGE_LOG),
-  productions: useBackendApi ? discoveryApiServices.productions : createRepository<any>('productions'),
-  custodianInterviews: useBackendApi ? discoveryApiServices.custodianInterviews : createRepository<any>('custodianInterviews'),
+  // Discovery backend API services - Using RepositoryFactory with singleton cache
+  legalHolds: useBackendApi ? discoveryApiServices.legalHolds : repositoryRegistry.getOrCreate<any>(STORES.LEGAL_HOLDS),
+  depositions: useBackendApi ? discoveryApiServices.depositions : repositoryRegistry.getOrCreate<any>('depositions'),
+  discoveryRequests: useBackendApi ? discoveryApiServices.discoveryRequests : repositoryRegistry.getOrCreate<any>('discoveryRequests'),
+  esiSources: useBackendApi ? discoveryApiServices.esiSources : repositoryRegistry.getOrCreate<any>('esiSources'),
+  privilegeLog: useBackendApi ? discoveryApiServices.privilegeLog : repositoryRegistry.getOrCreate<any>(STORES.PRIVILEGE_LOG),
+  productions: useBackendApi ? discoveryApiServices.productions : repositoryRegistry.getOrCreate<any>('productions'),
+  custodianInterviews: useBackendApi ? discoveryApiServices.custodianInterviews : repositoryRegistry.getOrCreate<any>('custodianInterviews'),
 
-  // Compliance backend API services - Using RepositoryFactory instead of anonymous classes
-  conflictChecks: useBackendApi ? complianceApiServices.conflictChecks : createRepository<any>('conflictChecks'),
-  ethicalWalls: useBackendApi ? complianceApiServices.ethicalWalls : createRepository<any>('ethicalWalls'),
-  auditLogs: useBackendApi ? complianceApiServices.auditLogs : createRepository<any>('auditLogs'),
-  permissions: useBackendApi ? complianceApiServices.permissions : createRepository<any>('permissions'),
-  rlsPolicies: useBackendApi ? complianceApiServices.rlsPolicies : createRepository<any>(STORES.POLICIES),
-  complianceReports: useBackendApi ? complianceApiServices.complianceReports : createRepository<any>('complianceReports'),
+  // Compliance backend API services - Using RepositoryFactory with singleton cache
+  conflictChecks: useBackendApi ? complianceApiServices.conflictChecks : repositoryRegistry.getOrCreate<any>('conflictChecks'),
+  ethicalWalls: useBackendApi ? complianceApiServices.ethicalWalls : repositoryRegistry.getOrCreate<any>('ethicalWalls'),
+  auditLogs: useBackendApi ? complianceApiServices.auditLogs : repositoryRegistry.getOrCreate<any>('auditLogs'),
+  permissions: useBackendApi ? complianceApiServices.permissions : repositoryRegistry.getOrCreate<any>('permissions'),
+  rlsPolicies: useBackendApi ? complianceApiServices.rlsPolicies : repositoryRegistry.getOrCreate<any>(STORES.POLICIES),
+  complianceReports: useBackendApi ? complianceApiServices.complianceReports : repositoryRegistry.getOrCreate<any>('complianceReports'),
   admin: AdminService,
   correspondence: CorrespondenceService, 
-  quality: new DataQualityService(),
+  quality: getDataQualityService(),
   catalog: DataCatalogService,
   backup: BackupService,
   profile: ProfileDomain,
@@ -141,9 +251,9 @@ export const DataService = {
   security: SecurityService,
   marketing: MarketingService,
   jurisdiction: JurisdictionService,
-  knowledge: useBackendApi ? finalApiServices.knowledgeBase : new KnowledgeRepository(),
+  knowledge: useBackendApi ? finalApiServices.knowledgeBase : getKnowledgeRepository(),
   
-  analysis: new AnalysisRepository(),
+  analysis: getAnalysisRepository(),
 
   // Strategy Management (Arguments, Defenses, Citations)
   strategy: {
@@ -191,83 +301,29 @@ export const DataService = {
     }
   },
 
-  tasks: useBackendApi ? finalApiServices.tasks : new class extends Repository<WorkflowTask> { 
-      constructor() { super(STORES.TASKS); }
-      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
-      countByCaseId = async (caseId: string): Promise<number> => {
-        const tasks = await this.getByCaseId(caseId);
-        return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
-      }
-      add = async (item: WorkflowTask): Promise<WorkflowTask> => {
-          const result = await super.add(item);
-          return result;
-      }
-      
-      update = async (id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> => {
-          const result = await super.update(id, updates);
-          if (updates.status === 'Done' || updates.status === 'Completed') {
-               IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
-          }
-          return result;
-      }
-  }(),
+  tasks: useBackendApi ? finalApiServices.tasks : getTasksRepository(),
   
-  projects: useBackendApi ? additionalApiServices.projects : new class extends Repository<Project> { 
-      constructor() { super(STORES.PROJECTS); } 
-      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
-  }(),
-  risks: useBackendApi ? finalApiServices.risks : new class extends Repository<Risk> { 
-      constructor() { super(STORES.RISKS); } 
-      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
-      
-      add = async (item: Risk): Promise<Risk> => {
-          const result = await super.add(item);
-          if (result.impact === 'High' && result.probability === 'High') {
-               IntegrationOrchestrator.publish(SystemEventType.RISK_ESCALATED, { risk: result });
-          }
-          return result;
-      }
-  }(),
-  motions: useBackendApi ? extendedApiServices.motions : new class extends Repository<Motion> { 
-      constructor() { super(STORES.MOTIONS); }
-      getByCaseId = async (caseId: string) => { return this.getByIndex('caseId', caseId); }
-  }(),
-  expenses: useBackendApi ? additionalApiServices.expenses : new class extends Repository<FirmExpense> { constructor() { super(STORES.EXPENSES); } }(),
-  timeEntries: useBackendApi ? additionalApiServices.timeEntries : new class extends Repository<TimeEntry> { constructor() { super(STORES.BILLING); } }(),
-  invoices: useBackendApi ? additionalApiServices.invoices : new class extends Repository<any> { constructor() { super('invoices'); } }(),
-  communications: useBackendApi ? additionalApiServices.communications : new class extends Repository<any> { constructor() { super('communications'); } }(),
-  exhibits: useBackendApi ? finalApiServices.exhibits : new class extends Repository<TrialExhibit> { constructor() { super(STORES.EXHIBITS); } }(),
-  users: useBackendApi ? apiServices.users : new class extends Repository<User> { constructor() { super(STORES.USERS); } }(),
-  rateTables: useBackendApi ? apiServices.rateTables : new class extends Repository<any> { constructor() { super('rateTables'); } }(),
-  feeAgreements: useBackendApi ? apiServices.feeAgreements : new class extends Repository<any> { constructor() { super('feeAgreements'); } }(),
-  custodians: useBackendApi ? apiServices.custodians : new class extends Repository<any> { constructor() { super('custodians'); } }(),
-  examinations: useBackendApi ? apiServices.examinations : new class extends Repository<any> { constructor() { super('examinations'); } }(),
-  clients: useBackendApi ? finalApiServices.clients : new class extends Repository<Client> { 
-      constructor() { super(STORES.CLIENTS); }
-      generatePortalToken = async (clientId: string) => { return `token-${clientId}-${Date.now()}`; }
-  }(),
-  citations: useBackendApi ? finalApiServices.citations : new class extends Repository<Citation> { 
-      constructor() { super(STORES.CITATIONS); }
-      verifyAll = async () => { return { checked: 150, flagged: 3 }; }
-      quickAdd = async (citation: any) => { return this.add(citation); }
-  }(),
-  entities: new class extends Repository<LegalEntity> { 
-      constructor() { super(STORES.ENTITIES); }
-      getRelationships = async (id: string) => { return []; } 
-      
-      add = async (item: LegalEntity): Promise<LegalEntity> => {
-          const result = await super.add(item);
-          IntegrationOrchestrator.publish(SystemEventType.ENTITY_CREATED, { entity: result });
-          return result;
-      }
-  }(),
-  playbooks: new class extends Repository<WorkflowTemplateData> { constructor() { super(STORES.TEMPLATES); } }(),
-  clauses: useBackendApi ? extendedApiServices.clauses : new class extends Repository<Clause> { constructor() { super(STORES.CLAUSES); } }(),
-  rules: new class extends Repository<LegalRule> { 
-      constructor() { super(STORES.RULES); } 
-  }(),
+  projects: useBackendApi ? additionalApiServices.projects : getProjectsRepository(),
+  risks: useBackendApi ? finalApiServices.risks : getRisksRepository(),
+  motions: useBackendApi ? extendedApiServices.motions : getMotionsRepository(),
+  expenses: useBackendApi ? additionalApiServices.expenses : repositoryRegistry.getOrCreate<FirmExpense>(STORES.EXPENSES),
+  timeEntries: useBackendApi ? additionalApiServices.timeEntries : repositoryRegistry.getOrCreate<TimeEntry>(STORES.BILLING),
+  invoices: useBackendApi ? additionalApiServices.invoices : repositoryRegistry.getOrCreate<any>('invoices'),
+  communications: useBackendApi ? additionalApiServices.communications : repositoryRegistry.getOrCreate<any>('communications'),
+  exhibits: useBackendApi ? finalApiServices.exhibits : repositoryRegistry.getOrCreate<TrialExhibit>(STORES.EXHIBITS),
+  users: useBackendApi ? apiServices.users : repositoryRegistry.getOrCreate<User>(STORES.USERS),
+  rateTables: useBackendApi ? apiServices.rateTables : repositoryRegistry.getOrCreate<any>('rateTables'),
+  feeAgreements: useBackendApi ? apiServices.feeAgreements : repositoryRegistry.getOrCreate<any>('feeAgreements'),
+  custodians: useBackendApi ? apiServices.custodians : repositoryRegistry.getOrCreate<any>('custodians'),
+  examinations: useBackendApi ? apiServices.examinations : repositoryRegistry.getOrCreate<any>('examinations'),
+  clients: useBackendApi ? finalApiServices.clients : getClientsRepository(),
+  citations: useBackendApi ? finalApiServices.citations : getCitationsRepository(),
+  entities: getEntitiesRepository(),
+  playbooks: repositoryRegistry.getOrCreate<WorkflowTemplateData>(STORES.TEMPLATES),
+  clauses: useBackendApi ? extendedApiServices.clauses : repositoryRegistry.getOrCreate<Clause>(STORES.CLAUSES),
+  rules: repositoryRegistry.getOrCreate<LegalRule>(STORES.RULES),
 
-  phases: new PhaseRepository(),
+  phases: getPhaseRepository(),
   
   organization: {
     getOrgs: async () => db.getAll<Organization>(STORES.ORGS),
@@ -497,3 +553,48 @@ export const DataService = {
       }
   },
 };
+
+// ========================================
+// MEMORY MANAGEMENT UTILITIES
+// ========================================
+
+/**
+ * Clear all repository caches and listeners.
+ * Call this on app unmount or when switching users.
+ */
+export function cleanupDataService(): void {
+  repositoryRegistry.clear();
+  repositorySingletons.clear();
+  console.log('[DataService] All repositories and listeners cleared');
+}
+
+/**
+ * Get memory usage statistics for debugging.
+ * @returns Object with repository and listener counts
+ */
+export function getDataServiceMemoryStats() {
+  const registryStats = repositoryRegistry.getMemoryStats();
+  const singletonCount = repositorySingletons.size;
+  
+  return {
+    ...registryStats,
+    singletonCount,
+    singletonKeys: Array.from(repositorySingletons.keys()),
+  };
+}
+
+/**
+ * Log memory usage to console (useful for debugging).
+ */
+export function logDataServiceMemory(): void {
+  const stats = getDataServiceMemoryStats();
+  console.group('[DataService] Memory Usage');
+  console.log(`Total Repositories: ${stats.repositoryCount + stats.singletonCount}`);
+  console.log(`Registry Repositories: ${stats.repositoryCount}`);
+  console.log(`Singleton Repositories: ${stats.singletonCount}`);
+  console.log(`Total Listeners: ${stats.totalListeners}`);
+  if (stats.repositories.length > 0) {
+    console.table(stats.repositories);
+  }
+  console.groupEnd();
+}

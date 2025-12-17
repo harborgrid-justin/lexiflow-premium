@@ -12,4 +12,16 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         await delay(100);
         return db.getAll<JudgeProfile>(STORES.JUDGES);
     }
+    
+    async getCounselProfiles(): Promise<any[]> {
+        await delay(100);
+        // Return empty array - this would typically fetch from a COUNSEL_PROFILES store
+        return [];
+    }
+    
+    async getPredictionData(): Promise<any[]> {
+        await delay(100);
+        // Return empty array - this would typically fetch from a PREDICTIONS store
+        return [];
+    }
 }

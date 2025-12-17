@@ -12,7 +12,7 @@ import {
   LayoutTemplate, FileSignature, Eraser, Cpu, Box, Plus, BookOpen, 
   GraduationCap, Library, Send, Search, Scale, Gavel, Map, Settings, 
   GitCompare, Briefcase, UserPlus, BrainCircuit, TrendingUp, Wallet, 
-  ShieldCheck, Link, Server, Bookmark
+  ShieldCheck, Link, Server, Bookmark, Building2
 } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 import { PlatformView } from '../components/admin/data/AdminDatabaseControl';
@@ -40,11 +40,11 @@ type MenuItem = {
 
 export const ADMIN_TAB_CONFIG: TabConfigItem[] = [
   {
-    id: 'org', label: 'Organization', icon: Network,
+    id: 'org', label: 'Organization', icon: Building2,
     subTabs: [
-      { id: 'profile', label: 'Firm Profile', icon: Network },
+      { id: 'profile', label: 'Firm Profile', icon: Building2 },
       { id: 'users', label: 'User Management', icon: Users },
-      { id: 'security', label: 'Security & Compliance', icon: ShieldAlert },
+      { id: 'compliance', label: 'Security & Compliance', icon: ShieldCheck },
     ]
   },
   {
@@ -52,7 +52,7 @@ export const ADMIN_TAB_CONFIG: TabConfigItem[] = [
     subTabs: [
       { id: 'data', label: 'Data Platform', icon: Database },
       { id: 'integrations', label: 'Integrations', icon: Link },
-      { id: 'audit', label: 'Audit Log', icon: Activity },
+      { id: 'logs', label: 'Audit Log', icon: Activity },
     ]
   },
   {

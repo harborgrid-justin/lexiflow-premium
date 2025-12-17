@@ -2,10 +2,13 @@
 
 // Core Services
 export * from './analysisEngine';
+export * from './blobManager';
 export * from './chainService';
+export * from './cryptoService';
 export * from './cryptoWorker';
 export * from './dataService';
 export * from './db';
+export * from './workerPool';
 export * from './dbSeeder';
 export * from './discoveryService';
 export * from './documentService';

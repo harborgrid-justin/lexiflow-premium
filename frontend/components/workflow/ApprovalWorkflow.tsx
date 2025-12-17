@@ -25,7 +25,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
   
   // Load approvals from IndexedDB via useQuery when not provided as props
   const { data: internalRequests = [] } = useQuery(
-    queryKeys.workflows.approvals(),
+    queryKeys.workflowsExtended.approvals(),
     DataService.workflow.getApprovals,
     { enabled: !propRequests }
   );

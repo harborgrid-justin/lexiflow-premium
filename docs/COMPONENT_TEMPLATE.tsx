@@ -58,7 +58,7 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 
 // Utils & Constants
-import { PATHS } from '../../constants/paths';
+import { PATHS } from '../../config/paths.config';
 import { formatDate, formatCurrency } from '../../utils/formatters';
 import { errorHandler } from '../../utils/errorHandler';
 
@@ -727,7 +727,7 @@ export const ComponentName: React.FC<ComponentNameProps> = ({
                       placeholder="Enter title"
                       required
                       aria-required="true"
-                      aria-invalid={!formData.title.trim()}
+                      aria-invalid={!formData.title.trim() ? "true" : "false"}
                     />
                   </div>
 

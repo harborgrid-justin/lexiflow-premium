@@ -2,6 +2,7 @@
 import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId, DocumentVersion } from '../../types';
 import { db, STORES } from '../db';
 import { Repository } from '../core/Repository';
+import { BlobManager } from '../blobManager';
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -123,11 +124,13 @@ export class DocumentRepository extends Repository<LegalDocument> {
   }
 
   // Retrieve a blob URL for a given document ID
+  // Note: Caller is responsible for revoking the URL when done via BlobManager.revoke(url)
+  // or BlobManager.revokeByContext(`document-${id}`)
   async getDocumentUrl(id: string): Promise<string | null> {
       try {
           const blob = await this.getFile(id);
           if (blob) {
-              return URL.createObjectURL(blob);
+              return BlobManager.create(blob, `document-${id}`);
           }
           return null;
       } catch (e) {

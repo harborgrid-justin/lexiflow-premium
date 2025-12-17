@@ -194,7 +194,7 @@ export const UserManagement: React.FC = () => {
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.role || ''}
               onChange={e => setFormData({...formData, role: e.target.value as UserData['role']})}
-              aria-label="Role"}
+              aria-label="Role"
             >
               <option value="">Select role...</option>
               <option value="Administrator">Administrator</option>
@@ -226,7 +226,7 @@ export const UserManagement: React.FC = () => {
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.role || ''}
                 onChange={e => setFormData({...formData, role: e.target.value as UserData['role']})}
-                aria-label="Role"}
+                aria-label="Role"
               >
                 <option value="Administrator">Administrator</option>
                 <option value="Senior Partner">Senior Partner</option>

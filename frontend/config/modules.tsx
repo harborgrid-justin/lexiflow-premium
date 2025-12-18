@@ -20,6 +20,7 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard'));
 const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
+const MatterModule = lazyWithPreload(() => import('../components/matters/MatterModule').then(m => ({ default: m.MatterModule })));
 const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager'));
 const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager'));
 const MasterWorkflow = lazyWithPreload(() => import('../components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
@@ -51,6 +52,7 @@ const CitationManager = lazyWithPreload(() => import('../components/citation/Cit
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
   [PATHS.DASHBOARD]: Dashboard,
   [PATHS.CASES]: CaseList,
+  [PATHS.MATTERS]: MatterModule,
   [PATHS.DOCKET]: DocketManager,
   [PATHS.CORRESPONDENCE]: CorrespondenceManager,
   [PATHS.WORKFLOWS]: MasterWorkflow,

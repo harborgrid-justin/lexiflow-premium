@@ -34,6 +34,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
 
   // CASE WORK
   { id: PATHS.CASES, label: 'Case Management', icon: Briefcase, category: 'Case Work' },
+  { id: PATHS.MATTERS, label: 'Matter Management', icon: Scale, category: 'Case Work' },
   { id: PATHS.LITIGATION_BUILDER, label: 'Litigation Strategy', icon: Milestone, category: 'Case Work' },
   { id: PATHS.PLEADING_BUILDER, label: 'Pleading Builder', icon: PenTool, category: 'Case Work' },
   { id: PATHS.DOCKET, label: 'Master Docket', icon: BookOpen, category: 'Case Work' },

@@ -18,6 +18,7 @@ export type MotionId = Brand<string, 'MotionId'>;
 export type DocketId = Brand<string, 'DocketId'>;
 export type ProjectId = Brand<string, 'ProjectId'>;
 export type WorkflowTemplateId = Brand<string, 'WorkflowTemplateId'>;
+export type MatterId = Brand<string, 'MatterId'>;
 
 export interface Money {
   amount: number;

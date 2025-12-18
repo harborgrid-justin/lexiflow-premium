@@ -15,7 +15,7 @@ interface OperatingLedgerProps {
     expenses: FirmExpense[];
 }
 
-export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) => {
+export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses: propExpenses }) => {
   const { theme, mode } = useTheme();
 
   const { data: summary } = useQuery<OperatingSummary>(
@@ -23,6 +23,9 @@ export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses }) =>
       DataService.billing.getOperatingSummary,
       { initialData: { balance: 0, expensesMtd: 0, cashFlowMtd: 0 } }
   );
+
+  // Ensure expenses is always an array
+  const expenses = Array.isArray(propExpenses) ? propExpenses : [];
 
   return (
     <div className="space-y-6">

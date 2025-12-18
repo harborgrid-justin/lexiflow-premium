@@ -234,6 +234,11 @@ export class WorkflowTemplatesApiService {
   async instantiate(id: string, caseId: string): Promise<{ tasks: WorkflowTask[] }> {
     return apiClient.post(`/workflow/templates/${id}/instantiate`, { caseId });
   }
+
+  // Alias for compatibility
+  async getTemplates(filters?: { category?: string }): Promise<WorkflowTemplateData[]> {
+    return this.getAll(filters);
+  }
 }
 
 // ==================== TRIAL MANAGEMENT ====================

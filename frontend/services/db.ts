@@ -5,6 +5,7 @@ import { DB_NAME, DB_VERSION, DB_MAX_BUFFER_SIZE, DB_FORCE_FLUSH_THRESHOLD, DB_B
 export const STORES = {
   // Core entities (aligned with backend tables)
   CASES: 'cases', // ✓ Backend: cases
+  MATTERS: 'matters', // ✓ Backend: matters (Matter Management)
   TASKS: 'tasks', // ✓ Backend: tasks
   EVIDENCE: 'evidence_items', // ✓ Backend: evidence_items (renamed for consistency)
   DOCUMENTS: 'documents', // ✓ Backend: documents

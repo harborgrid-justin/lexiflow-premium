@@ -43,6 +43,7 @@ import { CasePhasesModule } from './case-phases/case-phases.module';
 import { MotionsModule } from './motions/motions.module';
 import { DocketModule } from './docket/docket.module';
 import { ProjectsModule } from './projects/projects.module';
+import { MattersModule } from './matters/matters.module';
 
 // Document Management Modules
 import { FileStorageModule } from './file-storage/file-storage.module';
@@ -205,6 +206,7 @@ if (isRedisEnabled) {
     MotionsModule,
     DocketModule,
     ProjectsModule,
+    MattersModule,
 
     // Document Management System
     FileStorageModule,

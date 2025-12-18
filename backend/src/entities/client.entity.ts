@@ -159,6 +159,12 @@ export class Client extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  portalToken: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  portalTokenExpiry: Date;
+
   // Relations
   @OneToMany(() => Case, (caseEntity) => caseEntity.client)
   cases: Case[];

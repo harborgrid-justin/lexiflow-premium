@@ -157,9 +157,12 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   };
 
   const contextFiltered = useMemo(() => {
+    // Ensure docketEntries is always an array
+    const entries = Array.isArray(docketEntries) ? docketEntries : [];
+    
     let data = selectedCaseId 
-      ? docketEntries.filter(e => e.caseId === selectedCaseId)
-      : docketEntries;
+      ? entries.filter(e => e.caseId === selectedCaseId)
+      : entries;
 
     return data.filter(entry => {
       const matchesTab = 

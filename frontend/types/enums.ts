@@ -24,6 +24,63 @@ export type MatterType = 'Litigation' | 'M&A' | 'IP' | 'Real Estate' | 'General'
 export type BillingModel = 'Hourly' | 'Fixed' | 'Contingency' | 'Hybrid';
 export type OrganizationType = 'LawFirm' | 'Corporate' | 'Government' | 'Court' | 'Vendor';
 
+// Matter Management Enums (aligned with backend)
+export enum MatterStatus {
+  INTAKE = 'intake',
+  ACTIVE = 'active',
+  PENDING = 'pending',
+  ON_HOLD = 'on_hold',
+  CLOSED = 'closed',
+  ARCHIVED = 'archived',
+}
+
+export enum MatterType {
+  LITIGATION = 'litigation',
+  TRANSACTIONAL = 'transactional',
+  ADVISORY = 'advisory',
+  COMPLIANCE = 'compliance',
+  INTELLECTUAL_PROPERTY = 'intellectual_property',
+  EMPLOYMENT = 'employment',
+  REAL_ESTATE = 'real_estate',
+  CORPORATE = 'corporate',
+  OTHER = 'other',
+}
+
+export enum MatterPriority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+  URGENT = 'urgent',
+}
+
+// Practice Area Enum
+export enum PracticeArea {
+  CIVIL_LITIGATION = 'civil_litigation',
+  CRIMINAL_DEFENSE = 'criminal_defense',
+  CORPORATE_LAW = 'corporate_law',
+  INTELLECTUAL_PROPERTY = 'intellectual_property',
+  EMPLOYMENT_LAW = 'employment_law',
+  REAL_ESTATE = 'real_estate',
+  FAMILY_LAW = 'family_law',
+  TAX_LAW = 'tax_law',
+  BANKRUPTCY = 'bankruptcy',
+  IMMIGRATION = 'immigration',
+  ENVIRONMENTAL_LAW = 'environmental_law',
+  HEALTHCARE_LAW = 'healthcare_law',
+  OTHER = 'other',
+}
+
+// Billing Arrangement Enum
+export enum BillingArrangement {
+  HOURLY = 'hourly',
+  FLAT_FEE = 'flat_fee',
+  CONTINGENCY = 'contingency',
+  RETAINER = 'retainer',
+  BLENDED = 'blended',
+  VALUE_BASED = 'value_based',
+  PRO_BONO = 'pro_bono',
+}
+
 export type RiskCategory = 'Legal' | 'Financial' | 'Reputational' | 'Operational' | 'Strategic';
 export type RiskLevel = 'Low' | 'Medium' | 'High';
 export type RiskStatus = 'Identified' | 'Mitigated' | 'Accepted' | 'Closed';

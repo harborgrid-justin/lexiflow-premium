@@ -127,4 +127,14 @@ export class BillingApiService {
       return { realization: 92.4, totalBilled: 482000, month: 'March 2024' };
     }
   }
+
+  async getTopAccounts(): Promise<any[]> {
+    try {
+      const response = await apiClient.get<PaginatedResponse<any>>('/clients', { sortBy: 'totalBilled', sortOrder: 'desc', limit: 4 });
+      return response.data;
+    } catch (error) {
+      console.warn('Top accounts endpoint not available, returning empty array');
+      return [];
+    }
+  }
 }

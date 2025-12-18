@@ -4,7 +4,7 @@
 import {
   BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
   TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  WorkflowTemplateId, CaseId, MatterId, Money, JurisdictionObject
 } from './primitives';
 import {
   CaseStatus, UserRole, MatterType, BillingModel,
@@ -15,7 +15,7 @@ import {
   EvidenceType, AdmissibilityStatus, ConferralResult,
   ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
   ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
+  OcrStatus, TaskDependencyType, MatterStatus, MatterPriority, PracticeArea, BillingArrangement
 } from './enums';
 import { LucideIcon } from 'lucide-react';
 import type { FC, LazyExoticComponent } from 'react';
@@ -129,4 +129,71 @@ export interface Party extends BaseEntity {
 }
 export interface Attorney { name: string; firm?: string; email?: string; phone?: string; address?: string; type?: string; }
 export interface CaseTeamMember { userId: UserId; role: 'Lead' | 'Support' | 'Paralegal'; rateOverride?: Money; }
+
+// Matter Management (aligned with backend Matter entity)
+export interface Matter extends BaseEntity {
+  id: MatterId;
+  matterNumber: string; // Auto-generated: MAT-YYYY-NNNN
+  title: string;
+  description?: string;
+  type: MatterType;
+  status: MatterStatus;
+  priority: MatterPriority;
+  practiceArea: PracticeArea;
+  
+  // Client Information
+  clientId: UserId;
+  clientName: string;
+  clientContact?: string;
+  clientEmail?: string;
+  clientPhone?: string;
+  
+  // Attorney Assignment
+  responsibleAttorneyId: UserId;
+  responsibleAttorneyName: string;
+  originatingAttorneyId?: UserId;
+  originatingAttorneyName?: string;
+  teamMembers?: UserId[];
+  
+  // Conflict Check
+  conflictCheckStatus?: 'pending' | 'cleared' | 'conflict' | 'waived';
+  conflictCheckDate?: string;
+  conflictCheckNotes?: string;
+  
+  // Important Dates
+  intakeDate: string;
+  openedDate?: string;
+  closedDate?: string;
+  statute_of_limitations?: string;
+  
+  // Billing & Financial
+  billingArrangement: BillingArrangement;
+  estimatedValue?: number;
+  budgetAmount?: number;
+  retainerAmount?: number;
+  hourlyRate?: number;
+  contingencyPercentage?: number;
+  
+  // Court Information
+  courtName?: string;
+  caseNumber?: string;
+  judgeAssigned?: string;
+  jurisdiction?: string;
+  jurisdictions?: string[];
+  
+  // Opposing Parties
+  opposingCounsel?: Array<{
+    name: string;
+    firm?: string;
+    email?: string;
+    phone?: string;
+  }>;
+  
+  // Tags & Custom
+  tags?: string[];
+  customFields?: Record<string, any>;
+  
+  // Metadata
+  userId: UserId;
+}
 

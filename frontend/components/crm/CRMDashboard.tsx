@@ -144,7 +144,7 @@ export const CRMDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Recent Client Interactions">
           <div className="space-y-4">
-            {cases.slice(0, 3).map((caseItem: any, idx: number) => (
+            {casesArray.slice(0, 3).map((caseItem: any, idx: number) => (
               <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
                 <div className="flex items-center gap-3">
                   <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
@@ -168,7 +168,7 @@ export const CRMDashboard: React.FC = () => {
 
         <Card title="Key Accounts (Top Revenue)">
           <div className="space-y-4">
-            {clients
+            {clientsArray
               .sort((a: any, b: any) => (b.totalBilled || 0) - (a.totalBilled || 0))
               .slice(0, 3)
               .map((client: any, idx: number) => (

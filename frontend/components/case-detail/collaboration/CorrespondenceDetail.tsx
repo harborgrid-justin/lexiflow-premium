@@ -19,10 +19,10 @@ import { TaskCreationModal } from '../../common/TaskCreationModal';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useNotify } from '../../../hooks/useNotify';
-import { useMutation } from '../../../services/queryClient';
+import { useMutation } from '../../../services/infrastructure/queryClient';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../services/dataService';
+import { DataService } from '../../../services/data/dataService';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces

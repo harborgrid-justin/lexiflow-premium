@@ -1,6 +1,6 @@
 import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '../../types';
 import { db, STORES } from '../data/db';
-import { ChainService } from '../chainService';
+import { ChainService } from '../infrastructure/chainService';
 import { MOCK_API_SPEC } from '../../data/mockApiSpec';
 import { delay } from '../../utils/async';
 

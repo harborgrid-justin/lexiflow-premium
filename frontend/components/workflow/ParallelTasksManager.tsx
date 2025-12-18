@@ -4,11 +4,11 @@ import { GitMerge, MoreHorizontal, User, Loader2 } from 'lucide-react';
 import { TaskWorkflowBadges } from './TaskWorkflowBadges';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { WorkflowTask } from '../../types';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 
 export const ParallelTasksManager: React.FC = () => {
   const { theme } = useTheme();

@@ -32,9 +32,9 @@ import { cn } from '../../utils/cn';
 
 // Data & Types
 import { CaseId, TrialExhibit } from '../../types';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 interface ExhibitManagerProps {

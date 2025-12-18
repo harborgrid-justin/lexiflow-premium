@@ -4,8 +4,8 @@
  * Provides consistent cache key generation and prevents typos
  */
 
-import { STORES } from './db';
-import type { CaseId, DocumentId, UserId } from '../types';
+import { STORES } from '../data/db';
+import type { CaseId, DocumentId, UserId } from '../../types';
 
 /**
  * Correspondence query keys factory

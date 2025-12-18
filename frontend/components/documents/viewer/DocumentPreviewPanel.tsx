@@ -17,10 +17,10 @@ import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X 
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DocumentService } from '../../../services/documentService';
-import { DataService } from '../../../services/dataService';
-import { useMutation, queryClient } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
+import { DocumentService } from '../../../services/features/documents/documentService';
+import { DataService } from '../../../services/data/dataService';
+import { useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 
 // Hooks & Context

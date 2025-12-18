@@ -14,12 +14,12 @@ import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from '
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 import { 

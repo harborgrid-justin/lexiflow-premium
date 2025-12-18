@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { Bell, Check, X } from 'lucide-react';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { SystemNotification } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 
 export const NotificationCenter: React.FC = () => {
   const { theme } = useTheme();

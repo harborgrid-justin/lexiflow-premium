@@ -1,5 +1,5 @@
 import { Citation } from '../../../types';
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 
 export class CitationRepository extends Repository<Citation> {
@@ -20,8 +20,8 @@ export class CitationRepository extends Repository<Citation> {
         const result = await super.add(item);
 
         // Publish integration event
-        const { IntegrationOrchestrator } = await import('../integrationOrchestrator');
-        const { SystemEventType } = await import('../../types/integration-types');
+        const { IntegrationOrchestrator } = await import('../../integration/integrationOrchestrator');
+        const { SystemEventType } = await import('../../../types/integration-types');
 
         await IntegrationOrchestrator.publish(SystemEventType.CITATION_SAVED, {
             citation: result,

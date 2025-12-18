@@ -4,8 +4,8 @@ import { Card } from '../common/Card';
 import { Scale, AlertTriangle, FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 export const JurisdictionRegulatory: React.FC = () => {
   const { theme } = useTheme();

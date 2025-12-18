@@ -25,12 +25,12 @@ import { LazyLoader } from '../common/LazyLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 
 // Services & Utils
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================

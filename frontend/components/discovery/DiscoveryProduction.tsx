@@ -23,17 +23,17 @@ import { Card } from '../common/Card';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, queryClient } from '../../services/infrastructure/queryClient'';
+import { useQuery, queryClient } from '../../services/data/dataService';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils
 import { cn } from '../../utils/cn';
-import { discoveryQueryKeys } from '../../services/queryKeys';
+import { discoveryQueryKeys } from '../../services/infrastructure/queryKeys';
 import { validateProductionConfigSafe } from '../../services/validation/discoverySchemas';
 
 // Lazy load DocumentService for bundle optimization
 const loadDocumentService = async () => {
-  const { DocumentService } = await import('../../services/documentService');
+  const { DocumentService } = await import('../../services/features/documents/documentService');
   return DocumentService;
 };
 

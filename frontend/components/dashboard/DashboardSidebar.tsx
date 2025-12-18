@@ -17,8 +17,8 @@ import { AlertCircle, TrendingUp, FileText, ArrowRight } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

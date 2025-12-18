@@ -11,14 +11,14 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from './dataService';
+import { DataService } from '../data/dataService';
 import { SearchWorker } from './searchWorker';
 
 // Utils & Constants
-import { StorageUtils } from '../utils/storage';
+import { StorageUtils } from '../../utils/storage';
 
 // Types
-import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../types';
+import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES

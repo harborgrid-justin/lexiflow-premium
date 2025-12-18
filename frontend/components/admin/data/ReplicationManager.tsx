@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Power, ShieldAlert, CheckCircle, Loader2 } from 'lucide-react';
 
 import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';

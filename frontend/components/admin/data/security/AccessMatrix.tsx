@@ -4,9 +4,9 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, PermissionLevel } from '../../../../types';
-import { useQuery, useMutation, queryClient } from '../../../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../../../services/infrastructure/queryClient';
 import { queryKeys } from '../../../../utils/queryKeys';
-import { DataService } from '../../../../services/dataService';
+import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 
 export const AccessMatrix: React.FC = () => {

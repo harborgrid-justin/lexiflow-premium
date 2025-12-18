@@ -6,12 +6,12 @@ import { Button } from '../../common/Button';
 import { MetricCard } from '../../common/Primitives';
 import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2 } from 'lucide-react';
 import { StaffMember, UserId } from '../../../types';
-import { DataService } from '../../../services/dataService';
+import { DataService } from '../../../services/data/dataService';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { AddStaffModal } from './AddStaffModal';
-import { useMutation, queryClient } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
+import { useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { STORES } from '../../../services/data/db';
 import { useStaff } from '../../../hooks/useDomainData';
 
 export const HRManager: React.FC = () => {

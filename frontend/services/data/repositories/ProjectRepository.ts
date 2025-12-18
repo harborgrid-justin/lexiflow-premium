@@ -1,5 +1,5 @@
 import { Project } from '../../../types';
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 
 export class ProjectRepository extends Repository<Project> {

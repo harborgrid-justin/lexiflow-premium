@@ -196,7 +196,7 @@ const getWitnessesRepository = () =>
 import { legacyApi } from '../api';
 
 // Import repositoryRegistry from RepositoryFactory for backward compatibility
-import { repositoryRegistry as legacyRepositoryRegistry } from './core/RepositoryFactory';
+import { repositoryRegistry as legacyRepositoryRegistry } from '../core/RepositoryFactory';
 
 // ========================================
 // DATA SERVICE FACADE
@@ -300,56 +300,56 @@ Object.defineProperties(DataServiceBase, {
   // TODO: Extract these into proper domain services in future refactoring
   
   strategy: { 
-    get: () => import('./domains/StrategyDomain').then(m => m.StrategyService),
+    get: () => import('../domain/StrategyDomain').then(m => m.StrategyService),
     enumerable: true 
   },
   
   transactions: { 
-    get: () => import('./domains/TransactionDomain').then(m => m.TransactionService),
+    get: () => import('../domain/TransactionDomain').then(m => m.TransactionService),
     enumerable: true 
   },
   
   organization: { 
-    get: () => import('./domains/OrganizationDomain').then(m => m.OrganizationManagementService),
+    get: () => import('../domain/OrganizationDomain').then(m => m.OrganizationManagementService),
     enumerable: true 
   },
   
-  messenger: DataSourceRouter.createPropertyDescriptor(null, () => import('./domains/MessengerDomain').then(m => m.MessengerService)),
+  messenger: DataSourceRouter.createPropertyDescriptor(null, () => import('../domain/MessengerDomain').then(m => m.MessengerService)),
   
-  calendar: DataSourceRouter.createPropertyDescriptor('calendar', () => import('./domains/CalendarDomain').then(m => m.CalendarService)),
+  calendar: DataSourceRouter.createPropertyDescriptor('calendar', () => import('../domain/CalendarDomain').then(m => m.CalendarService)),
   
   notifications: { 
-    get: () => import('./domains/NotificationDomain').then(m => m.NotificationService),
+    get: () => import('../domain/NotificationDomain').then(m => m.NotificationService),
     enumerable: true 
   },
   
   collaboration: { 
-    get: () => import('./domains/CollaborationDomain').then(m => m.CollaborationService),
+    get: () => import('../domain/CollaborationDomain').then(m => m.CollaborationService),
     enumerable: true 
   },
   
-  warRoom: DataSourceRouter.createPropertyDescriptor(null, () => import('./domains/WarRoomDomain').then(m => m.WarRoomService)),
+  warRoom: DataSourceRouter.createPropertyDescriptor(null, () => import('../domain/WarRoomDomain').then(m => m.WarRoomService)),
   
   research: { 
-    get: () => import('./domains/ResearchDomain').then(m => m.ResearchService),
+    get: () => import('../domain/ResearchDomain').then(m => m.ResearchService),
     enumerable: true 
   },
   
-  dashboard: DataSourceRouter.createPropertyDescriptor(null, () => import('./domains/DashboardDomain').then(m => m.DashboardService)),
+  dashboard: DataSourceRouter.createPropertyDescriptor(null, () => import('../domain/DashboardDomain').then(m => m.DashboardService)),
   
   assets: { 
-    get: () => import('./domains/AssetDomain').then(m => m.AssetService),
+    get: () => import('../domain/AssetDomain').then(m => m.AssetService),
     enumerable: true 
   },
   
   sources: { 
-    get: () => import('./domains/DataSourceDomain').then(m => m.DataSourceManagementService),
+    get: () => import('../domain/DataSourceDomain').then(m => m.DataSourceManagementService),
     enumerable: true 
   },
   
   // Backend-only services with graceful fallbacks
   discoveryMain: DataSourceRouter.createPropertyDescriptor('discovery', () => legacyRepositoryRegistry.getOrCreate('discovery')),
-  search: DataSourceRouter.createPropertyDescriptor('search', () => import('./domains/SearchDomain').then(m => m.SearchService)),
+  search: DataSourceRouter.createPropertyDescriptor('search', () => import('../domain/SearchDomain').then(m => m.SearchService)),
   ocr: DataSourceRouter.createPropertyDescriptor('ocr', () => ({ processDocument: async () => ({ success: false, message: 'Backend required' }), getStatus: async () => ({ status: 'unavailable' }) })),
   serviceJobs: DataSourceRouter.createPropertyDescriptor('serviceJobs', () => legacyRepositoryRegistry.getOrCreate('serviceJobs')),
   messaging: DataSourceRouter.createPropertyDescriptor('messaging', () => legacyRepositoryRegistry.getOrCreate('messages')),

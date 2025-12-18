@@ -1,12 +1,12 @@
 
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { ParsedDocket, SearchResult } from "../types";
-import { Prompts } from "./ai/prompts";
-import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "./ai/schemas";
-import { safeParseJSON, withRetry } from "../utils/apiUtils";
-import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '../types/ai';
+import { Prompts } from "../../ai/prompts";
+import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "../../ai/schemas";
+import { safeParseJSON, withRetry } from "../../../utils/apiUtils";
+import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '../../../types/ai';
 
-export * from '../types/ai';
+export * from '../../../types/ai';
 
 // Singleton-like accessor to ensure consistent config and prevent unnecessary instantiation overhead
 const getClient = () => new GoogleGenAI({ apiKey: process.env.API_KEY });

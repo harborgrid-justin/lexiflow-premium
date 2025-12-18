@@ -5,13 +5,13 @@ import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { SearchToolbar } from '../common/SearchToolbar';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { LegalRule } from '../../types';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 import { filterRules } from './utils';
 

@@ -5,9 +5,9 @@ import { Button } from '../common/Button';
 import { Clock, AlertTriangle, FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { useQuery } from '../../services/infrastructure/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 
 export const PerpetuateTestimony: React.FC = () => {
   const { theme } = useTheme();

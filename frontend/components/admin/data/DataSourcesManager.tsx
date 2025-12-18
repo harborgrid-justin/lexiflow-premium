@@ -6,8 +6,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { DataService } from '../../../services/data/dataService';
 import { db } from '../../../db';
 import { useDataSource } from '../../../context/DataSourceContext';
 

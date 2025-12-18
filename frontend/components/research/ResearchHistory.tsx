@@ -6,9 +6,9 @@ import { ExternalLink, Clock, Loader2 } from 'lucide-react';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { ResearchSession } from '../../types';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 
 export const ResearchHistory: React.FC = () => {

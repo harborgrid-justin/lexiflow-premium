@@ -27,10 +27,10 @@ import { JurisdictionSelector } from './case-form/JurisdictionSelector';
 import { useTheme } from '../../context/ThemeContext';
 
 // Services
-import { DataService } from '../../services/data/dataService'';
-import { queryClient } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 
 // Utils
 import { cn } from '../../utils/cn';

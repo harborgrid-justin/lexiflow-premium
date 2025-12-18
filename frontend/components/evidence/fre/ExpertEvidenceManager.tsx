@@ -18,9 +18,9 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
 // Services & Types
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
+import { useQuery } from '../../../services/infrastructure/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 
 export const ExpertEvidenceManager: React.FC = () => {

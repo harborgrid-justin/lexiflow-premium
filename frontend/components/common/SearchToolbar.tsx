@@ -17,7 +17,7 @@ import { Search, Clock } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { SearchService } from '../../services/search/searchService'';
+import { SearchService } from '../../services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

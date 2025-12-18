@@ -10,8 +10,8 @@ import { Button } from '../../common/Button';
 import { AccessGovernance } from './governance/AccessGovernance';
 import { ModalFooter } from '../../common/RefactoredCommon';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { GovernanceRule, GovernancePolicy } from '../../../types';
 
 interface GovernanceConsoleProps {

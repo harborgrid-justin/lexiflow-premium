@@ -20,12 +20,12 @@ import { GanttTimeline } from './planning/GanttTimeline';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 import { Pathfinding } from '../../utils/pathfinding';
 import { cn } from '../../utils/cn';
 

@@ -2,12 +2,12 @@
 // components/DocumentAssembly.tsx
 import React, { useState, useEffect } from 'react';
 import { X, Wand2, Activity, Minus } from 'lucide-react';
-import { GeminiService } from '../../services/geminiService';
+import { GeminiService } from '../../services/features/research/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '../../types';
 import { useWindow } from '../../context/WindowContext';
-import { DataService } from '../../services/data/dataService'';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { useTheme } from '../../context/ThemeContext';

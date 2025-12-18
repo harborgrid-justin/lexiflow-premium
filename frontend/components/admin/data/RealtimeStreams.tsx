@@ -6,8 +6,8 @@ import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
+import { DataService } from '../../../services/data/dataService';
 
 interface DataStream {
   id: string;

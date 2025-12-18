@@ -9,8 +9,8 @@ import { CommunicationItem, CommunicationType, UserId } from '../../types';
 import { MOCK_USERS } from '../../data/models/user';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
@@ -112,7 +112,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       setIsDrafting(true);
       try {
           // Lazy load GeminiService only when needed
-          const { GeminiService } = await import('../../services/geminiService');
+          const { GeminiService } = await import('../../services/features/research/geminiService');
           const draft = await GeminiService.generateDraft(
               `Draft a formal ${formData.type} to ${formData.recipient} regarding ${formData.subject}. Tone: Professional Legal.`,
               'Communication'

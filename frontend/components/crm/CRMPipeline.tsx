@@ -3,8 +3,8 @@ import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 
 interface CRMPipelineProps {

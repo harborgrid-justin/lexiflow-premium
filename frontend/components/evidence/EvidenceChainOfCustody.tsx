@@ -25,12 +25,12 @@ import { cn } from '../../utils/cn';
 import { useNotify } from '../../hooks/useNotify';
 
 // Services & Types
-import { ChainService } from '../../services/chainService';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
-import { DataService } from '../../services/data/dataService'';
+import { ChainService } from '../../services/infrastructure/chainService';
+import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
+import { DataService } from '../../services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
-import { evidenceQueryKeys } from '../../services/queryKeys';
+import { evidenceQueryKeys } from '../../services/infrastructure/queryKeys';
 import { validateCustodyEventSafe, CustodyActionType } from '../../services/validation/evidenceSchemas';
 
 interface EvidenceChainOfCustodyProps {

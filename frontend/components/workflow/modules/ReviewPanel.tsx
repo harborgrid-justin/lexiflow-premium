@@ -4,7 +4,7 @@ import { MessageSquare, CheckCircle, User, Clock, Send } from 'lucide-react';
 import { PleadingComment } from '../../../types/pleading-types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/dataService';
+import { DataService } from '../../../services/data/dataService';
 import { WorkflowTask, TaskId, CaseId, UserId } from '../../../types';
 
 interface ReviewPanelProps {

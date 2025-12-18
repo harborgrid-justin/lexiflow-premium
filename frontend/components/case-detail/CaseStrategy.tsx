@@ -21,11 +21,11 @@ import { StrategySection } from './strategy/StrategySection';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
-import { useMutation, queryClient } from '../../services/queryClient';
+import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces

@@ -7,8 +7,8 @@ import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { RolePermission, PermissionLevel } from '../../../../types';
-import { useQuery, useMutation, queryClient } from '../../../../services/queryClient';
-import { DataService } from '../../../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../../../../services/infrastructure/queryClient';
+import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 
 export const AccessGovernance: React.FC = () => {

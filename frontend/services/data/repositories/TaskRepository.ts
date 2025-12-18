@@ -1,7 +1,7 @@
 import { WorkflowTask } from '../../../types';
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { IntegrationOrchestrator } from '../../../integration/integrationOrchestrator';
+import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
 import { SystemEventType } from '../../../types/integration-types';
 
 export class TaskRepository extends Repository<WorkflowTask> {

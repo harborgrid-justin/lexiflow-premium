@@ -5,10 +5,10 @@ import { Badge } from '../common/Badge';
 import { CheckSquare, Plus, AlertTriangle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { DiscoveryRequest } from '../../types';
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { useQuery } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 export const RequestForAdmission: React.FC = () => {

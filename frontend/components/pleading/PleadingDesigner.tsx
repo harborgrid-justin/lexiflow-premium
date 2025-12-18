@@ -5,16 +5,16 @@ import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from '
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
 import { ViewMode, PleadingDesignerProps } from './types';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useHistory } from '../../hooks/useHistory';
-import { VersionConflictError } from '../../services/repositories/PleadingRepository';
+import { VersionConflictError } from '../../services/data/repositories/PleadingRepository';
 
 // Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));

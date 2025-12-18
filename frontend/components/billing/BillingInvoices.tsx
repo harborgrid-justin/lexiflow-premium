@@ -17,9 +17,9 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/data/dataService'';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -36,7 +36,7 @@ import { SearchToolbar } from '../common/SearchToolbar';
 // Utils & Constants
 import { cn } from '../../utils/cn';
 import { Formatters } from '../../utils/formatters';
-import { billingQueryKeys } from '../../services/queryKeys';
+import { billingQueryKeys } from '../../services/infrastructure/queryKeys';
 import { InvoiceStatusEnum } from '../../types/enums';
 
 // Types

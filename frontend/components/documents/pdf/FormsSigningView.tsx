@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../types';
-import { DataService } from '../../../services/dataService';
-import { useQuery, queryClient } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery, queryClient } from '../../../services/infrastructure/queryClient';
 import { queryKeys } from '../../../utils/queryKeys';
-import { DocumentService } from '../../../services/documentService';
+import { DocumentService } from '../../../services/features/documents/documentService';
 import { PDFViewer } from '../../common/PDFViewer';
 import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
 import { InteractiveOverlay, Field } from '../preview/InteractiveOverlay';

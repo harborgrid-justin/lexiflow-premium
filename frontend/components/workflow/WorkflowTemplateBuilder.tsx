@@ -13,7 +13,7 @@ import { cn } from '../../utils/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
 import { ErrorBoundary } from '../common/ErrorBoundary';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { useNotify } from '../../hooks/useNotify';
 
 interface WorkflowTemplateBuilderProps {

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { CustodianInterview, CaseId } from '../../types';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { Button } from '../common/Button';
 import { MessageSquare, Plus } from 'lucide-react';
 import { InterviewList } from './interviews/InterviewList';
 import { InterviewModal } from './interviews/InterviewModal';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 export const DiscoveryInterviews: React.FC = () => {

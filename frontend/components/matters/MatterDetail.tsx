@@ -97,8 +97,6 @@ export const MatterDetail: React.FC = () => {
 
   const getStatusIcon = (status: MatterStatus) => {
     switch (status) {
-      case MatterStatus.INTAKE:
-        return <Clock className="w-5 h-5" />;
       case MatterStatus.ACTIVE:
         return <CheckCircle className="w-5 h-5" />;
       case MatterStatus.CLOSED:
@@ -112,8 +110,6 @@ export const MatterDetail: React.FC = () => {
 
   const getStatusColor = (status: MatterStatus) => {
     switch (status) {
-      case MatterStatus.INTAKE:
-        return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200';
       case MatterStatus.ACTIVE:
         return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200';
       case MatterStatus.CLOSED:
@@ -220,11 +216,11 @@ export const MatterDetail: React.FC = () => {
             <div className="flex items-center gap-6 text-sm">
               <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <FileText className="w-4 h-4" />
-                <span>{matter.type.replace(/_/g, ' ')}</span>
+                <span>{(matter.type || matter.matterType)?.replace(/_/g, ' ') || '-'}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <Scale className="w-4 h-4" />
-                <span>{matter.practiceArea.replace(/_/g, ' ')}</span>
+                <span>{matter.practiceArea?.replace(/_/g, ' ') || '-'}</span>
               </div>
               <div className={`flex items-center gap-2 font-medium ${
                 matter.priority === MatterPriority.URGENT ? 'text-rose-600 dark:text-rose-400' :

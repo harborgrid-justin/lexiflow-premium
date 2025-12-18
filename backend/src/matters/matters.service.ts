@@ -41,9 +41,15 @@ export class MattersService {
     // Generate unique matter number
     const matterNumber = await this.generateMatterNumber();
 
+    // Map userId to createdBy (entity expects createdBy, DTO uses userId)
+    // Use system UUID (00000000-0000-0000-0000-000000000000) as default
+    const { userId, ...dtoWithoutUserId } = createMatterDto;
+    const SYSTEM_USER_UUID = '00000000-0000-0000-0000-000000000000';
+    
     const matter = this.mattersRepository.create({
-      ...createMatterDto,
+      ...dtoWithoutUserId,
       matterNumber,
+      createdBy: userId || SYSTEM_USER_UUID,
     });
 
     const savedMatter = await this.mattersRepository.save(matter);

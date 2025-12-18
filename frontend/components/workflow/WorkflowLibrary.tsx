@@ -52,14 +52,18 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   const [templateSearch, setTemplateSearch] = useState('');
   const [templateCategory, setTemplateCategory] = useState('All');
   
-  const { data: templates = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
+  const { data: templatesData = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
     queryKeys.workflows.templates(),
     () => DataService.workflow.getTemplates()
   );
   
+  // Ensure templates is always an array (defensive check)
+  const templates = Array.isArray(templatesData) ? templatesData : [];
+  
   const categories = ['All', 'Litigation', 'Corporate', 'Operations', 'HR', 'IT/Security'];
 
   const filteredTemplates = useMemo(() => {
+    if (!Array.isArray(templates)) return [];
     return templates.filter(t => {
       const matchesSearch = t.title.toLowerCase().includes(templateSearch.toLowerCase()) || 
                             t.tags.some(tag => tag.toLowerCase().includes(templateSearch.toLowerCase()));

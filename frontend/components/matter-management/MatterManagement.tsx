@@ -93,7 +93,6 @@ const MatterManagement: React.FC = () => {
 
   const getStatusColor = (status: MatterStatus): string => {
     const colors: Record<MatterStatus, string> = {
-      [MatterStatus.INTAKE]: 'bg-blue-100 text-blue-800',
       [MatterStatus.ACTIVE]: 'bg-green-100 text-green-800',
       [MatterStatus.PENDING]: 'bg-yellow-100 text-yellow-800',
       [MatterStatus.ON_HOLD]: 'bg-orange-100 text-orange-800',
@@ -183,17 +182,6 @@ const MatterManagement: React.FC = () => {
                 <CheckCircle className="h-8 w-8 text-green-600 opacity-20" />
               </div>
             </div>
-            <div className="bg-yellow-50 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-yellow-600 font-medium">Intake</p>
-                  <p className="text-2xl font-bold text-yellow-900">
-                    {statistics.byStatus[MatterStatus.INTAKE] || 0}
-                  </p>
-                </div>
-                <Clock className="h-8 w-8 text-yellow-600 opacity-20" />
-              </div>
-            </div>
             <div className="bg-orange-50 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -234,7 +222,6 @@ const MatterManagement: React.FC = () => {
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">All Status</option>
-                <option value={MatterStatus.INTAKE}>Intake</option>
                 <option value={MatterStatus.ACTIVE}>Active</option>
                 <option value={MatterStatus.PENDING}>Pending</option>
                 <option value={MatterStatus.ON_HOLD}>On Hold</option>

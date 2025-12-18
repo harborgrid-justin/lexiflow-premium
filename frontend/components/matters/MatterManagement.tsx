@@ -91,8 +91,6 @@ export const MatterManagement: React.FC = () => {
 
   const getStatusIcon = (status: MatterStatus) => {
     switch (status) {
-      case MatterStatus.INTAKE:
-        return <Clock className="w-4 h-4" />;
       case MatterStatus.ACTIVE:
         return <CheckCircle className="w-4 h-4" />;
       case MatterStatus.CLOSED:
@@ -106,8 +104,6 @@ export const MatterManagement: React.FC = () => {
 
   const getStatusColor = (status: MatterStatus) => {
     switch (status) {
-      case MatterStatus.INTAKE:
-        return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200';
       case MatterStatus.ACTIVE:
         return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200';
       case MatterStatus.CLOSED:
@@ -157,7 +153,6 @@ export const MatterManagement: React.FC = () => {
     return {
       total: matters.length,
       active: matters.filter(m => m.status === MatterStatus.ACTIVE).length,
-      intake: matters.filter(m => m.status === MatterStatus.INTAKE).length,
       urgent: matters.filter(m => m.priority === MatterPriority.URGENT).length,
       totalValue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0)
     };
@@ -452,10 +447,10 @@ export const MatterManagement: React.FC = () => {
 
                   <div className="text-right ml-4">
                     <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                      {matter.practiceArea.replace(/_/g, ' ')}
+                      {matter.practiceArea?.replace(/_/g, ' ') || '-'}
                     </div>
                     <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      {matter.type.replace(/_/g, ' ')}
+                      {(matter.type || matter.matterType)?.replace(/_/g, ' ') || '-'}
                     </div>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Version } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { BillingService } from './billing.service';
@@ -10,7 +10,7 @@ import { UserRole } from '../users/entities/user.entity';
 @ApiTags('Billing')
 @ApiBearerAuth('JWT-auth')
 @Public() // Allow public access for development
-@Controller('billing')
+@Controller({ path: 'billing', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}

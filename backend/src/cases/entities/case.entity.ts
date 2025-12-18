@@ -93,12 +93,12 @@ export class Case extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   isArchived: boolean;
 
-  @Column({ type: 'uuid' })
-  clientId: string;
+  @Column({ type: 'uuid', nullable: true })
+  clientId?: string;
 
-  @ManyToOne(() => Client, (client) => client.cases)
+  @ManyToOne(() => Client, (client) => client.cases, { nullable: true })
   @JoinColumn({ name: 'clientId' })
-  client: Client;
+  client?: Client;
 
   @OneToMany(() => EvidenceItem, (evidenceItem) => evidenceItem.case)
   evidenceItems: EvidenceItem[];

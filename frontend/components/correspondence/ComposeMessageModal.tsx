@@ -223,7 +223,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                         onChange={(e) => setFormData({...formData, caseId: e.target.value})}
                     >
                         <option value="">Select Case...</option>
-                        {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                        {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
                     </select>
                 </div>
             </div>

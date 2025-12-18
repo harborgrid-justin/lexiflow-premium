@@ -8,6 +8,7 @@
 export const PATHS = {
   DASHBOARD: 'dashboard',
   CASES: 'cases',
+  MATTERS: 'matters',
   DOCKET: 'docket',
   WORKFLOWS: 'workflows',
   MESSAGES: 'messages',

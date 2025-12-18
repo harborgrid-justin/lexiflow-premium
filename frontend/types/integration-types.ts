@@ -2,7 +2,7 @@
 // types/integration-types.ts
 
 import { 
-    Case, WorkflowTask, DocketEntry, LegalDocument, 
+    Case, Matter, WorkflowTask, DocketEntry, LegalDocument, 
     TimeEntry, EvidenceItem, LegalEntity, ServiceJob,
     Risk, Invoice, Citation, StaffMember, EthicalWall
 } from './models';
@@ -10,6 +10,7 @@ import {
 export enum SystemEventType {
     // Core Lifecycle
     CASE_CREATED = 'CASE_CREATED',
+    MATTER_CREATED = 'MATTER_CREATED',
     
     // Opp #1: CRM -> Compliance
     LEAD_STAGE_CHANGED = 'LEAD_STAGE_CHANGED',
@@ -54,6 +55,7 @@ export enum SystemEventType {
 
 export interface SystemEventPayloads {
     [SystemEventType.CASE_CREATED]: { caseData: Case };
+    [SystemEventType.MATTER_CREATED]: { matter: Matter };
     
     // Opp #1
     [SystemEventType.LEAD_STAGE_CHANGED]: { leadId: string; stage: string; clientName: string; value: string };

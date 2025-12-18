@@ -41,7 +41,12 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
       }
   );
 
-  const clientsToRender = propClients || fetchedClients;
+  // Ensure clientsToRender is always an array
+  const clientsToRender = Array.isArray(propClients) 
+    ? propClients 
+    : Array.isArray(fetchedClients) 
+      ? fetchedClients 
+      : [];
 
   const filteredClients = useMemo(() => {
     return clientsToRender.filter(c => 

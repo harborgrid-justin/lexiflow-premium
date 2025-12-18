@@ -30,6 +30,7 @@ import { DiscoveryRepository } from './repositories/DiscoveryRepository';
 import { TrialRepository } from './repositories/TrialRepository';
 import { PleadingRepository } from './repositories/PleadingRepository';
 import { AnalysisRepository } from './repositories/AnalysisRepository';
+import { MatterRepository } from './repositories/MatterRepository';
 import { CRMService } from './domains/CRMDomain';
 import { AnalyticsService } from './domains/AnalyticsDomain';
 import { OperationsService } from './domains/OperationsDomain';
@@ -117,6 +118,17 @@ const getDataQualityService = () => getSingleton('DataQualityService', () => new
 const getHRRepository = () => getSingleton('HRRepository', () => HRRepository);
 const getWorkflowRepository = () => getSingleton('WorkflowRepository', () => WorkflowRepository);
 
+// Matter Management
+class IntegratedMatterRepository extends MatterRepository {
+    add = async (item: any): Promise<any> => {
+        const result = await super.add(item);
+        IntegrationOrchestrator.publish(SystemEventType.MATTER_CREATED, { matter: result });
+        return result;
+    }
+}
+
+const getIntegratedMatterRepository = () => getSingleton('IntegratedMatterRepository', () => new IntegratedMatterRepository());
+
 // Extended repositories with custom logic
 const getTasksRepository = () => getSingleton('TasksRepository', () => 
   new class extends Repository<WorkflowTask> { 
@@ -202,8 +214,7 @@ const DataServiceBase: any = {};
 
 // Define getters for all properties to ensure they're recreated after cleanup
 Object.defineProperties(DataServiceBase, {
-  cases: { get: () => isBackendApiEnabled() ? api.cases : getIntegratedCaseRepository(), enumerable: true },
-  docket: { get: () => isBackendApiEnabled() ? api.docket : getIntegratedDocketRepository(), enumerable: true },
+  cases: { get: () => isBackendApiEnabled() ? api.cases : getIntegratedCaseRepository(), enumerable: true },  matters: { get: () => getIntegratedMatterRepository(), enumerable: true },  docket: { get: () => isBackendApiEnabled() ? api.docket : getIntegratedDocketRepository(), enumerable: true },
   evidence: { get: () => isBackendApiEnabled() ? api.evidence : getEvidenceRepository(), enumerable: true },
   documents: { get: () => isBackendApiEnabled() ? api.documents : getIntegratedDocumentRepository(), enumerable: true },
   pleadings: { get: () => isBackendApiEnabled() ? legacyApi.pleadings : getPleadingRepository(), enumerable: true },

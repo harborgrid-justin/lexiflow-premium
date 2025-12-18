@@ -24,7 +24,56 @@ export class CasesApiService {
   }
 
   async add(caseData: Omit<Case, 'id' | 'createdAt' | 'updatedAt'>): Promise<Case> {
-    return apiClient.post<Case>('/cases', caseData);
+    // Map frontend MatterType to backend CaseType enum
+    const matterTypeMap: Record<string, string> = {
+      'Litigation': 'Civil',
+      'M&A': 'Corporate',
+      'IP': 'Intellectual Property',
+      'Real Estate': 'Real Estate',
+      'General': 'Civil',
+      'Appeal': 'Civil',
+    };
+
+    // Map frontend CaseStatus to backend status strings
+    const statusMap: Record<string, string> = {
+      'Open': 'Open',
+      'Active': 'Active',
+      'Discovery': 'Discovery',
+      'Trial': 'Trial',
+      'Settled': 'Settled',
+      'Closed': 'Closed',
+      'Archived': 'Archived',
+      'On Hold': 'On Hold',
+      'Pre-Filing': 'pending',
+      'Appeal': 'Active',
+      'Transferred': 'Active',
+    };
+
+    // Transform frontend Case to backend CreateCaseDto
+    const createDto: any = {
+      title: caseData.title,
+      caseNumber: caseData.caseNumber || `CASE-${Date.now()}`,
+      description: caseData.description,
+      type: matterTypeMap[caseData.matterType as string] || 'Civil',
+      status: statusMap[caseData.status as string] || 'Active',
+      practiceArea: caseData.matterType,
+      jurisdiction: caseData.jurisdiction,
+      court: caseData.court,
+      judge: caseData.judge,
+      // Convert ISO string to Date object if present
+      filingDate: caseData.filingDate ? new Date(caseData.filingDate) : undefined,
+      // Optional: only include clientId if available
+      ...(caseData.clientId && { clientId: caseData.clientId }),
+    };
+
+    // Remove undefined values
+    Object.keys(createDto).forEach(key => {
+      if (createDto[key] === undefined) {
+        delete createDto[key];
+      }
+    });
+
+    return apiClient.post<Case>('/cases', createDto);
   }
 
   async update(id: string, caseData: Partial<Case>): Promise<Case> {

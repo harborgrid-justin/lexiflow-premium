@@ -71,7 +71,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ currentFolder,
             <div className="space-y-0.5 mb-6">
                 {isLoading ? (
                      <div className="p-4 flex justify-center"><Loader2 className="animate-spin h-4 w-4 text-slate-400"/></div>
-                ) : folders.map(folder => {
+                ) : (Array.isArray(folders) ? folders : []).map(folder => {
                     const isActive = currentFolder === folder.id;
                     const Icon = isActive ? FolderOpen : Folder;
                     return (

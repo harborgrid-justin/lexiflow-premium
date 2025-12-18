@@ -13,7 +13,9 @@ export const MattersAPI = {
    * Get all matters
    */
   async getAll(): Promise<Matter[]> {
-    return apiClient.get<Matter[]>(BASE_PATH);
+    const response = await apiClient.get<{ matters: Matter[]; total: number }>(BASE_PATH);
+    // Backend returns paginated response, extract the matters array
+    return Array.isArray(response) ? response : response.matters || [];
   },
 
   /**

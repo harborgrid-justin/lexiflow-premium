@@ -19,7 +19,7 @@ import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownL
 // Services & Data
 import { GlobalSearchResult, SearchService } from '../../services/search/searchService';
 import { GeminiService, IntentResult } from '../../services/features/research/geminiService';
-import { HolographicRouting } from '../../services/data/dataService';
+import { HolographicRouting } from '../../services/infrastructure/holographicRouting';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

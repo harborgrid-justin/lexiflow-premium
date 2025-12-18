@@ -1,12 +1,12 @@
 
-import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../types/integration-types';
-import { STORES, db } from './db';
+import { SystemEventType, SystemEventPayloads, IntegrationResult } from '../../types/integration-types';
+import { STORES, db } from '../data/db';
 import { 
     CalendarEventItem, WorkflowTask, DocketEntry, DocketId, 
     TaskId, UserId, CaseId, TimeEntry, UUID, EvidenceId, 
     EvidenceItem, ConflictCheck, Citation, Invoice
-} from '../types';
-import { ChainService } from './chainService';
+} from '../../types';
+import { ChainService } from '../infrastructure/chainService';
 
 /**
  * Enterprise Integration Bus
@@ -24,7 +24,7 @@ export const IntegrationOrchestrator = {
         const errors: string[] = [];
 
         // Dynamic Import to avoid Circular Dependency
-        const { DataService } = await import('./dataService');
+        const { DataService } = await import('../data/dataService');
 
         try {
             switch (type) {

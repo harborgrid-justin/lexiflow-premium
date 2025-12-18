@@ -28,7 +28,7 @@ import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../services/infrastructure/queryClient';
 import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
-import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
+import { IntegrationOrchestrator } from '../services/integration/integrationOrchestrator';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces

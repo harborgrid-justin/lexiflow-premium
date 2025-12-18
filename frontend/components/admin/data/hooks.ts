@@ -6,8 +6,8 @@
  */
 
 import { useState } from 'react';
-import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
+import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { DataService } from '../services/data/dataService';
 import type { 
   DataSourceConnection, 
   ConnectionFormData, 

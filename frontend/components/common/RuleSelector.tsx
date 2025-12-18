@@ -17,7 +17,7 @@ import { Book, X, Search, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { RuleService } from '../../services/ruleService';
+import { RuleService } from '../../services/features/rules/ruleService';
 import { useQuery } from '../../services/data/dataService';
 
 // Hooks & Context

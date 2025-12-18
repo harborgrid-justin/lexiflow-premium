@@ -212,5 +212,25 @@ export class BillingController {
   async getRealizationStats() {
     return this.billingService.getRealizationStats();
   }
+
+  @Get('overview-stats')
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Get billing overview statistics' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Overview statistics including realization rate and total billed',
+    schema: {
+      type: 'object',
+      properties: {
+        realization: { type: 'number', example: 92.4 },
+        totalBilled: { type: 'number', example: 482000 },
+        month: { type: 'string', example: 'December 2025' }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getOverviewStats() {
+    return this.billingService.getOverviewStats();
+  }
 }
 

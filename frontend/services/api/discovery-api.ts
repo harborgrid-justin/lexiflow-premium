@@ -3,7 +3,7 @@
  * Main discovery process management (aggregates sub-services)
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface DiscoveryProcess {
   id: string;

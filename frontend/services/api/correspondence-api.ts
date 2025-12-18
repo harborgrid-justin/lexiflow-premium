@@ -3,7 +3,7 @@
  * Legal correspondence tracking
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Correspondence {
   id: string;

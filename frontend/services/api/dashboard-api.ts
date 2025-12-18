@@ -3,7 +3,7 @@
  * Dashboard configuration and widgets
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface DashboardConfig {
   id: string;

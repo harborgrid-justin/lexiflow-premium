@@ -3,7 +3,7 @@
  * Manages client entities
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Client {
   id: string;

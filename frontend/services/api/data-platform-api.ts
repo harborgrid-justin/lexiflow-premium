@@ -3,7 +3,7 @@
  * Real backend integration for all Data Platform features
  */
 
-import { apiClient, type PaginatedResponse } from '../apiClient';
+import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
 
 // ==================== SCHEMA MANAGEMENT ====================
 

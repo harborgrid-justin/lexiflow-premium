@@ -3,7 +3,7 @@
  * Manages parties (plaintiffs, defendants, third-parties) in cases
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Party {
   id: string;

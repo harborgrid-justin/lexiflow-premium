@@ -3,7 +3,7 @@
  * Legal clause library and templates
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Clause {
   id: string;

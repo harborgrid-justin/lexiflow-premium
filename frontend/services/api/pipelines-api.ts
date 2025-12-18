@@ -3,7 +3,7 @@
  * Data processing pipelines
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Pipeline {
   id: string;

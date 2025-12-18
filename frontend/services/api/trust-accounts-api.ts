@@ -3,7 +3,7 @@
  * IOLTA and trust account management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface TrustAccount {
   id: string;

@@ -3,7 +3,7 @@
  * External API integration management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface ExternalAPIConfig {
   id: string;

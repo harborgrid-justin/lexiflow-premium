@@ -3,7 +3,7 @@
  * Manages organization entities including corporations, LLCs, partnerships, etc.
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Organization {
   id: string;

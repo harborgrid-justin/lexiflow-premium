@@ -3,7 +3,7 @@
  * Manages workflow tasks
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Task {
   id: string;

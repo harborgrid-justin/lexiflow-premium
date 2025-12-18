@@ -3,7 +3,7 @@
  * Internal messaging system
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Message {
   id: string;

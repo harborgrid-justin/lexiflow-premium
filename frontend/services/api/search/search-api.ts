@@ -4,7 +4,7 @@
  * Coverage: 6/6 search endpoints (now 100%)
  */
 
-import { apiClient, type PaginatedResponse } from '../../apiClient';
+import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
 
 export interface SearchQuery {
   q: string;

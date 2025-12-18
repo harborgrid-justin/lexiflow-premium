@@ -3,7 +3,7 @@
  * Electronically Stored Information sources management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface ESISource {
   id: string;

@@ -3,7 +3,7 @@
  * Database schema management and migrations
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface SchemaInfo {
   tables: {

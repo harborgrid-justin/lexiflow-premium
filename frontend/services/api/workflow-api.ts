@@ -3,7 +3,7 @@
  * Manages workflow templates and automation
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface WorkflowTemplate {
   id: string;

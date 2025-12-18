@@ -3,7 +3,7 @@
  * Legal citation management and validation
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Citation {
   id: string;

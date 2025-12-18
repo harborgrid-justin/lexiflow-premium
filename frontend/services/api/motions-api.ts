@@ -3,7 +3,7 @@
  * Manages legal motions in cases
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Motion {
   id: string;

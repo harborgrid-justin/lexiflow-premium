@@ -3,7 +3,7 @@
  * Provides analytics tracking, metrics, and dashboard management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface AnalyticsEvent {
   id: string;

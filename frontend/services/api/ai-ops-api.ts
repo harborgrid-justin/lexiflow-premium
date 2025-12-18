@@ -3,7 +3,7 @@
  * AI operations and model management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface AIOperation {
   id: string;

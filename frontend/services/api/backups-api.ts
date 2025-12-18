@@ -3,7 +3,7 @@
  * System backup management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Backup {
   id: string;

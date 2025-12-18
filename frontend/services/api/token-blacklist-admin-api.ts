@@ -3,7 +3,7 @@
  * JWT token blacklist management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface BlacklistedToken {
   id: string;

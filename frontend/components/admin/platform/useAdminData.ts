@@ -1,7 +1,7 @@
 
-import { useQuery, useMutation, queryClient } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
+import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { DataService } from '../services/data/dataService';
+import { STORES } from '../services/data/db';
 import { Category } from './EntitySidebar';
 
 export const useAdminData = (activeCategory: Category) => {

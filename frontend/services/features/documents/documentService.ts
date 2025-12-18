@@ -11,15 +11,15 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { db, STORES } from './db';
-import { BlobManager } from './blobManager';
-import { CryptoService } from './cryptoService';
+import { db, STORES } from '../../data/db';
+import { BlobManager } from '../../infrastructure/blobManager';
+import { CryptoService } from '../../infrastructure/cryptoService';
 
 // Utils & Constants
-import { Formatters } from '../utils/formatters';
+import { Formatters } from '../../../utils/formatters';
 
 // Types
-import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../types';
+import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../../../types';
 
 // ============================================================================
 // HELPER FUNCTIONS

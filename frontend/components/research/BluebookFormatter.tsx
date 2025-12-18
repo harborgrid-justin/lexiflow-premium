@@ -28,7 +28,7 @@ import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
 import { BluebookParser } from '../../services/features/bluebook/bluebookParser';
-import { BluebookFormatter as Formatter } from '../../services/bluebook/bluebookFormatter';
+import { BluebookFormatter as Formatter } from '../../services/features/bluebook/bluebookFormatter';
 import {
   BluebookCitation,
   BluebookCitationType,

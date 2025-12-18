@@ -4,7 +4,7 @@
  * Coverage: 3/3 PACER endpoints
  */
 
-import { apiClient } from '../../apiClient';
+import { apiClient } from '../../infrastructure/apiClient';
 
 export interface PACERConfig {
   username: string;

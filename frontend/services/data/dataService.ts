@@ -30,22 +30,22 @@ import { STORES, db } from './db';
 // ========================================
 // DOMAIN REPOSITORIES
 // ========================================
-import { CaseRepository, PhaseRepository } from './domains/CaseDomain';
-import { DocketRepository } from './domains/DocketDomain';
-import { KnowledgeRepository } from './domains/KnowledgeDomain';
-import { ComplianceService } from './domains/ComplianceDomain';
-import { AdminService } from './domains/AdminDomain';
-import { CorrespondenceService } from './domains/CommunicationDomain';
-import { DataQualityService } from './domains/DataQualityDomain';
-import { DataCatalogService } from './domains/DataCatalogDomain';
-import { BackupService } from './domains/BackupDomain';
-import { ProfileDomain } from './domains/ProfileDomain';
-import { MarketingService } from './domains/MarketingDomain';
-import { JurisdictionService } from './domains/JurisdictionDomain';
-import { CRMService } from './domains/CRMDomain';
-import { AnalyticsService } from './domains/AnalyticsDomain';
-import { OperationsService } from './domains/OperationsDomain';
-import { SecurityService } from './domains/SecurityDomain';
+import { CaseRepository, PhaseRepository } from '../domain/CaseDomain';
+import { DocketRepository } from '../domain/DocketDomain';
+import { KnowledgeRepository } from '../domain/KnowledgeDomain';
+import { ComplianceService } from '../domain/ComplianceDomain';
+import { AdminService } from '../domain/AdminDomain';
+import { CorrespondenceService } from '../domain/CommunicationDomain';
+import { DataQualityService } from '../domain/DataQualityDomain';
+import { DataCatalogService } from '../domain/DataCatalogDomain';
+import { BackupService } from '../domain/BackupDomain';
+import { ProfileDomain } from '../domain/ProfileDomain';
+import { MarketingService } from '../domain/MarketingDomain';
+import { JurisdictionService } from '../domain/JurisdictionDomain';
+import { CRMService } from '../domain/CRMDomain';
+import { AnalyticsService } from '../domain/AnalyticsDomain';
+import { OperationsService } from '../domain/OperationsDomain';
+import { SecurityService } from '../domain/SecurityDomain';
 
 // ========================================
 // MODULAR REPOSITORIES

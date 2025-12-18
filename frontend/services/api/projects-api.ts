@@ -3,7 +3,7 @@
  * Manages legal projects and matters
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Project {
   id: string;

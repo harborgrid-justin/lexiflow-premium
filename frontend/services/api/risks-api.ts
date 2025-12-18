@@ -3,7 +3,7 @@
  * Manages risk assessment and tracking
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Risk {
   id: string;

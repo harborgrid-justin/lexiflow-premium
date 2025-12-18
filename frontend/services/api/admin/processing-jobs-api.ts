@@ -4,7 +4,7 @@
  * Coverage: 5/5 endpoints
  */
 
-import { apiClient, type PaginatedResponse } from '../../apiClient';
+import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
 
 export interface ProcessingJob {
   id: string;

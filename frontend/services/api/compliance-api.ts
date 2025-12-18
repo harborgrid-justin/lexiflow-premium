@@ -3,7 +3,7 @@
  * Manages compliance checks, ethical walls, and conflict checks
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface ComplianceCheck {
   id: string;

@@ -4,7 +4,7 @@
  * 100% backend endpoint coverage (13/13 endpoints)
  */
 
-import { apiClient, type PaginatedResponse } from '../../apiClient';
+import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
 import type { TimeEntry } from '../../../types';
 
 export interface TimeEntryFilters {

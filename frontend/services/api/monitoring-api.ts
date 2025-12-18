@@ -3,7 +3,7 @@
  * System health monitoring and metrics
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface SystemHealth {
   status: 'healthy' | 'degraded' | 'down';

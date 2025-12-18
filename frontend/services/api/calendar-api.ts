@@ -3,7 +3,7 @@
  * Manages calendar events and deadlines
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface CalendarEvent {
   id: string;

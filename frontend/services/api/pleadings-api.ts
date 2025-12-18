@@ -3,7 +3,7 @@
  * Manages legal pleadings (complaints, answers, replies, etc.)
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Pleading {
   id: string;

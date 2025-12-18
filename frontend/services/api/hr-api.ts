@@ -3,7 +3,7 @@
  * Manages human resources, staff, and personnel
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface StaffMember {
   id: string;

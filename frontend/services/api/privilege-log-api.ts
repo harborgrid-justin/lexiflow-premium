@@ -3,7 +3,7 @@
  * Manages privilege logs for discovery
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface PrivilegeLogEntry {
   id: string;

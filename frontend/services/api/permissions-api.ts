@@ -3,7 +3,7 @@
  * Granular permission management
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Permission {
   id: string;

@@ -3,7 +3,7 @@
  * Manages witness entities in discovery
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface Witness {
   id: string;

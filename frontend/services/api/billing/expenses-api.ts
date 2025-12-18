@@ -4,7 +4,7 @@
  * 100% backend endpoint coverage (10/10 endpoints)
  */
 
-import { apiClient, type PaginatedResponse } from '../../apiClient';
+import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
 import type { FirmExpense } from '../../../types';
 
 export interface ExpenseFilters {

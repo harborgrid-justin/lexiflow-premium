@@ -3,7 +3,7 @@
  * Trial war room collaboration
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface WarRoom {
   id: string;

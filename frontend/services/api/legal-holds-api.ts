@@ -3,7 +3,7 @@
  * Manages legal hold notices and preservation obligations
  */
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../infrastructure/apiClient';
 
 export interface LegalHold {
   id: string;

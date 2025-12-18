@@ -51,5 +51,5 @@ export const analyticsApi = {
   knowledge: new KnowledgeApiService(),
   citations: new CitationsApiService(),
   clauses: new ClausesApiService(),
-  jurisdiction: new JurisdictionApiService(),
+  jurisdiction: JurisdictionApiService, // Object export, not a class
 } as const;

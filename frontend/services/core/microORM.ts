@@ -1,5 +1,5 @@
 
-import { db } from '../db';
+import { db } from '../../db';
 import { BaseEntity } from '../../types';
 
 // A very simple MicroORM for abstracting direct DB calls

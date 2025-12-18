@@ -190,10 +190,10 @@ const getWitnessesRepository = () =>
   RepositoryRegistry.getOrCreate('WitnessesRepository', () => new WitnessRepository());
 
 // ========================================
-// LEGACY API COMPATIBILITY (deprecated services)
+// API INTEGRATION
 // ========================================
-// Import from legacy API file which re-exports deprecated services
-import { legacyApi } from '../api';
+// Import domain APIs for backend-first data access
+import { analyticsApi } from '../api/domains/analytics.api';
 
 // Import repositoryRegistry from RepositoryFactory for backward compatibility
 import { repositoryRegistry as legacyRepositoryRegistry } from '../core/RepositoryFactory';
@@ -233,7 +233,7 @@ Object.defineProperties(DataServiceBase, {
   
   // Knowledge management
   knowledge: { 
-    get: () => isBackendApiEnabled() ? legacyApi.knowledgeBase : getKnowledgeRepository(), 
+    get: () => isBackendApiEnabled() ? analyticsApi.knowledge : getKnowledgeRepository(), 
     enumerable: true 
   },
   

@@ -21,7 +21,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { backendDiscovery, type BackendStatus } from '../services/backendDiscovery';
+import { backendDiscovery, type BackendStatus } from '../services/integration/backendDiscovery';
 
 export function useBackendHealth() {
   const [status, setStatus] = useState<BackendStatus>(() => backendDiscovery.getStatus());

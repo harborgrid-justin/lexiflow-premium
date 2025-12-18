@@ -17,10 +17,10 @@ import React, { Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 
 // Hooks
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Components
 import { LazyLoader } from '../common/LazyLoader';

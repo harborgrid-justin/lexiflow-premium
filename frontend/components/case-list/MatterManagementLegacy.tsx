@@ -6,7 +6,7 @@ import {
   FileText, Clock, AlertCircle, CheckCircle, Users, DollarSign,
   Building2, Gavel, Calendar, Tag, TrendingUp, Settings
 } from 'lucide-react';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { Matter, MatterStatus, MatterTypeEnum, MatterPriority } from '../../types';
 import { PATHS } from '../../config/paths.config';
 

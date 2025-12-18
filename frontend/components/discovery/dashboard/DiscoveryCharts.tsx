@@ -4,9 +4,9 @@ import { Card } from '../../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from '../../../context/ThemeContext';
 import { useChartTheme } from '../../common/ChartHelpers';
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
+import { useQuery } from '../../../services/infrastructure/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 import { Loader2 } from 'lucide-react';
 

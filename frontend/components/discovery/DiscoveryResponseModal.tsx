@@ -5,13 +5,13 @@ import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Wand2 } from 'lucide-react';
 import { DiscoveryRequest } from '../../types';
-import { GeminiService } from '../../services/geminiService';
+import { GeminiService } from '../../services/features/research/geminiService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useMutation, queryClient } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 interface DiscoveryResponseModalProps {

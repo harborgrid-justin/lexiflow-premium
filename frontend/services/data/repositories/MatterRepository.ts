@@ -1,5 +1,5 @@
 // services/repositories/MatterRepository.ts
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { Matter, MatterId } from '../../../types';
 import { mattersApi } from '../../../api';

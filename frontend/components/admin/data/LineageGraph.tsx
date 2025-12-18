@@ -4,8 +4,8 @@ import { RefreshCw, Loader2 } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
 import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { LineageNode, LineageLink } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { NexusPhysics } from '../../../utils/nexusPhysics';

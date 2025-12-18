@@ -1,8 +1,8 @@
 
 import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId, DocumentVersion } from '../../../types';
 import { db, STORES } from '../db';
-import { Repository } from '../../../core/Repository';
-import { BlobManager } from '../blobManager';
+import { Repository } from '../../core/Repository';
+import { BlobManager } from '../../infrastructure/blobManager';
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 

@@ -17,8 +17,8 @@ import { Search, Shield, Plus, Loader2, AlertTriangle, RefreshCw } from 'lucide-
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context

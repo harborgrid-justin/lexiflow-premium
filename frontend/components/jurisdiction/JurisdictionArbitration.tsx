@@ -5,8 +5,8 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 export const JurisdictionArbitration: React.FC = () => {
   const { theme } = useTheme();

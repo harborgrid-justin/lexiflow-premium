@@ -4,8 +4,8 @@ import { Card } from '../common/Card';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { FinancialPerformanceData } from '../../types';
 
 export const FinancialPerformance: React.FC = () => {

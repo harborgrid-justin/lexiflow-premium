@@ -9,8 +9,8 @@ import { useWindow } from '../../../context/WindowContext';
 import { Button } from '../../common/Button';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 
 interface DataDomain {
     name: string;

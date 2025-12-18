@@ -19,7 +19,7 @@ import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSprea
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
-import { queryClient } from '../../services/infrastructure/queryClient'';
+import { queryClient } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Components

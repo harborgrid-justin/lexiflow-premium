@@ -23,12 +23,12 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { useCaseOverview } from '../../../hooks/useCaseOverview';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
+import { DataService } from '../../../services/data/dataService';
+import { STORES } from '../../../services/data/db';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces

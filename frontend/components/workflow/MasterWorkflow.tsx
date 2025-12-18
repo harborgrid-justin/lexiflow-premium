@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect, useTransition } from 
 import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 import { EmptyState } from '../common/EmptyState';
 
@@ -24,10 +24,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { Case } from '../../types';
-import { useQuery, useMutation } from '../../services/queryClient';
+import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 import { WorkflowView } from './types';
 
 interface MasterWorkflowProps {
@@ -61,7 +61,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
       [STORES.PROCESSES, 'all'],
       async () => {
         // Use WorkflowRepository directly since API service doesn't have getProcesses
-        const { WorkflowRepository } = await import('../../services/repositories/WorkflowRepository');
+        const { WorkflowRepository } = await import('../../services/data/repositories/WorkflowRepository');
         return WorkflowRepository.getProcesses();
       }
   );

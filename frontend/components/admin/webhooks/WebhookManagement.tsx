@@ -8,7 +8,7 @@ import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { WebhooksApiService } from '../../../services/api/webhooks-api';
 
 interface WebhookConfig {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { Matter, MatterStatus, MatterPriority } from '../../types';
 import { 
   ArrowLeft, 

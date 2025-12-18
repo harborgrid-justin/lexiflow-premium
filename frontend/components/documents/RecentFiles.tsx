@@ -4,11 +4,11 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { FileIcon } from '../common/Primitives';
 import { Button } from '../common/Button';
 import { Clock, Eye, Loader2 } from 'lucide-react';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { LegalDocument } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 export const RecentFiles: React.FC = () => {
   const { theme } = useTheme();

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { DataDictionaryItem } from '../../../../types';
-import { DataService } from '../../../../services/dataService';
-import { useMutation } from '../../../../services/queryClient';
+import { DataService } from '../../../../services/data/dataService';
+import { useMutation } from '../../../../services/infrastructure/queryClient';
 import { Button } from '../../../common/Button';
 import { Card } from '../../../common/Card';
 import { Input, TextArea } from '../../../common/Inputs';
@@ -11,7 +11,7 @@ import { ArrowLeft, Save, Shield, Tag, Database, User, Clock, Wand2, Activity } 
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { useNotify } from '../../../../hooks/useNotify';
-import { GeminiService } from '../../../../services/geminiService';
+import { GeminiService } from '../../../../services/features/research/geminiService';
 
 interface DictionaryItemDetailProps {
     item: DataDictionaryItem;

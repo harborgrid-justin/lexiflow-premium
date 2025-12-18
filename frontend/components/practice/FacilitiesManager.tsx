@@ -17,9 +17,9 @@ import { MapPin, Key, Wrench, Grid, Users, Plus, CheckCircle, AlertTriangle, Loa
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context

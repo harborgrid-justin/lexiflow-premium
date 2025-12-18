@@ -26,11 +26,11 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 
 // Services & Data
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';

@@ -27,7 +27,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
-import { BluebookParser } from '../../services/bluebook/bluebookParser';
+import { BluebookParser } from '../../services/features/bluebook/bluebookParser';
 import { BluebookFormatter as Formatter } from '../../services/bluebook/bluebookFormatter';
 import {
   BluebookCitation,

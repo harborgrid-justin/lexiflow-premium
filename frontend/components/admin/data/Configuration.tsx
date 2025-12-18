@@ -6,7 +6,7 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Inputs';
 import { Tabs } from '../../common/Tabs';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 
 interface ConfigurationProps {
   initialTab?: string;

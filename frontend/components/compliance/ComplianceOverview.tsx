@@ -6,9 +6,9 @@ import { Card } from '../common/Card';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { useChartTheme } from '../common/ChartHelpers';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { Loader2 } from 'lucide-react';
 import { ComplianceMetrics } from '../../types';
 

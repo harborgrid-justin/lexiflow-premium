@@ -18,12 +18,12 @@ import { UserAvatar } from '../common/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces

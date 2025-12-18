@@ -3,10 +3,10 @@ import { Search, Fingerprint, Scale, FileText, ArrowRight, Link, Loader2 } from 
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Tabs } from '../../common/Tabs';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { queryKeys } from '../../../utils/queryKeys';
-import { STORES } from '../../../services/db';
+import { STORES } from '../../../services/data/db';
 import { CaseId } from '../../../types';
 
 interface ContextPanelProps {

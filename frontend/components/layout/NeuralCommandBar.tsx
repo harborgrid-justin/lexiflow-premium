@@ -17,9 +17,9 @@ import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownL
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GlobalSearchResult, SearchService } from '../../services/searchService';
-import { GeminiService, IntentResult } from '../../services/geminiService';
-import { HolographicRouting } from '../../services/infrastructure/holographicRouting'';
+import { GlobalSearchResult, SearchService } from '../../services/search/searchService';
+import { GeminiService, IntentResult } from '../../services/features/research/geminiService';
+import { HolographicRouting } from '../../services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

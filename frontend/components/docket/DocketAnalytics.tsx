@@ -17,7 +17,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -27,9 +27,9 @@ import { Card } from '../common/Card';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces

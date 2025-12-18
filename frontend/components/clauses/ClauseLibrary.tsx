@@ -24,8 +24,8 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/data/dataService'';
+import { useQuery } from '../../services/infrastructure/queryClient';
+import { DataService } from '../../services/data/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES

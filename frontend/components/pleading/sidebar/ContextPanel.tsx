@@ -3,10 +3,10 @@ import { FileText, Plus, Search, BookOpen, Users, Scale, ChevronRight, Loader2 }
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { queryKeys } from '../../../utils/queryKeys';
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
+import { DataService } from '../../../services/data/dataService';
+import { STORES } from '../../../services/data/db';
 import { useDebounce } from '../../../hooks/useDebounce';
 import { DocketEntry } from '../../../types';
 import { SEARCH_DEBOUNCE_MS } from '../../../config/master.config';

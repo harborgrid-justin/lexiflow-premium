@@ -5,8 +5,8 @@ import { Button } from '../common/Button';
 import { Download, ExternalLink, Gavel } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 export const StandingOrders: React.FC = () => {
   const { theme } = useTheme();

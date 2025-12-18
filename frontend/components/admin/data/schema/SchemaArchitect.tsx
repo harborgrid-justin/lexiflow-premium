@@ -9,7 +9,7 @@ import { SchemaVisualizer } from './SchemaVisualizer';
 import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
-import { useQuery } from '../../../../services/queryClient';
+import { useQuery } from '../../../../services/infrastructure/queryClient';
 import { dataPlatformApi } from '../../../../services/api/data-platform-api';
 import { Loader2 } from 'lucide-react';
 import { Input, TextArea } from '../../../common/Inputs';

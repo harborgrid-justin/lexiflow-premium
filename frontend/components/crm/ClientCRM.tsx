@@ -8,12 +8,12 @@ import {
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
 import { Button } from '../common/Button';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
-import { STORES } from '../../services/data/db'';
+import { STORES } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '../../config/tabs.config';
 import { ClientCRMContent } from './ClientCRMContent';

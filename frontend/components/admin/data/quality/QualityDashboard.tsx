@@ -8,9 +8,9 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { DataAnomaly, QualityMetricHistory } from '../../../../types';
 import { CheckCircle2, AlertOctagon, RefreshCw, Check } from 'lucide-react';
 import { Button } from '../../../common/Button';
-import { useMutation, queryClient } from '../../../../services/queryClient';
+import { useMutation, queryClient } from '../../../../services/infrastructure/queryClient';
 import { queryKeys } from '../../../../utils/queryKeys';
-import { DataService } from '../../../../services/dataService';
+import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 
 interface QualityDashboardProps {

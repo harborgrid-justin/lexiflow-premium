@@ -1,7 +1,7 @@
 
 import { EvidenceItem } from '../../../types';
 import { delay } from '../../../utils/async';
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 export class EvidenceRepository extends Repository<EvidenceItem> {
     constructor() { super(STORES.EVIDENCE); }
@@ -16,8 +16,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
         const result = await super.update(id, updates);
         // If admissibility status changed, publish event
         if (updates.admissibility && updates.admissibility !== existing.admissibility) {
-            const { IntegrationOrchestrator } = await import('../integrationOrchestrator');
-            const { SystemEventType } = await import('../../types/integration-types');
+            const { IntegrationOrchestrator } = await import('../../integration/integrationOrchestrator');
+            const { SystemEventType } = await import('../../../types/integration-types');
             await IntegrationOrchestrator.publish(SystemEventType.EVIDENCE_STATUS_UPDATED, {
                 item: result,
                 oldStatus: existing.admissibility,

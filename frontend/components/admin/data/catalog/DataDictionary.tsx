@@ -1,8 +1,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { DataDictionaryItem } from '../../../../types';
-import { DataService } from '../../../../services/dataService';
-import { useQuery } from '../../../../services/queryClient';
+import { DataService } from '../../../../services/data/dataService';
+import { useQuery } from '../../../../services/infrastructure/queryClient';
 import { VirtualList } from '../../../common/VirtualList';
 import { SearchToolbar } from '../../../common/SearchToolbar';
 import { Badge } from '../../../common/Badge';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { Matter } from '../../types';
 import { ArrowLeft } from 'lucide-react';
 import { MatterForm } from './MatterForm';

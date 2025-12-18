@@ -5,7 +5,7 @@ import { Button } from '../../common/Button';
 import { TextArea } from '../../common/Inputs';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { GeminiService } from '../../../services/geminiService';
+import { GeminiService } from '../../../services/features/research/geminiService';
 import { AIDraftingAssistantProps } from '../types';
 import { retryWithBackoff, RetryError } from '../../../utils/retryWithBackoff';
 

@@ -25,11 +25,11 @@ import { Button } from '../common/Button';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
 
 export const CaseListIntake: React.FC = () => {

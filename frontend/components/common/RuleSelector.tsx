@@ -18,7 +18,7 @@ import { Book, X, Search, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { RuleService } from '../../services/ruleService';
-import { useQuery } from '../../services/infrastructure/queryClient'';
+import { useQuery } from '../../services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

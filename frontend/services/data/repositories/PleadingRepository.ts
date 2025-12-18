@@ -1,6 +1,6 @@
 
 import { PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection, Case, CaseId, UserId } from '../../../types';
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES, db } from '../db';
 import { IdGenerator } from '../../../utils/idGenerator';
 import { createTemplateContext, hydrateTemplateSections } from '../../../utils/templateEngine';

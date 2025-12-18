@@ -1,5 +1,5 @@
 import { Organization } from '../../../types';
-import { Repository } from '../../../core/Repository';
+import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 
 export class OrganizationRepository extends Repository<Organization> {

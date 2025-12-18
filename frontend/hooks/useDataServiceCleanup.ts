@@ -87,7 +87,7 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
 
   React.useEffect(() => {
     // Dynamically import to avoid circular dependency
-    import('../services/dataService').then(({ getDataServiceMemoryStats }) => {
+    import('../services/data/dataService').then(({ getDataServiceMemoryStats }) => {
       const updateStats = () => setStats(getDataServiceMemoryStats());
       updateStats(); // Initial load
       

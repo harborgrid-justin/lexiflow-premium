@@ -6,10 +6,10 @@ import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { TaskCreationModal } from '../common/TaskCreationModal';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { useNotify } from '../../hooks/useNotify';
-import { useMutation } from '../../services/queryClient';
-import { correspondenceQueryKeys } from '../../services/queryKeys';
+import { useMutation } from '../../services/infrastructure/queryClient';
+import { correspondenceQueryKeys } from '../../services/infrastructure/queryKeys';
 import { ServiceStatus, CommunicationStatus } from '../../types/enums';
 import { useBlobRegistry } from '../../hooks/useBlobRegistry';
 

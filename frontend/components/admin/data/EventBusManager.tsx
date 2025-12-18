@@ -5,7 +5,7 @@ import { cn } from '../../../utils/cn';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 
 interface EventBusEvent {
   id: string;

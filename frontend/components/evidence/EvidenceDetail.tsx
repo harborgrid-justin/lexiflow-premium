@@ -29,9 +29,9 @@ import { useNotify } from '../../hooks/useNotify';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Types
-import { DataService } from '../../services/data/dataService'';
-import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { STORES } from '../../services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 
 interface EvidenceDetailProps {

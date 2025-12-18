@@ -6,9 +6,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';
-import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { useQuery } from '../../services/infrastructure/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 
 export const LocalRulesMap: React.FC = () => {
   const { theme } = useTheme();

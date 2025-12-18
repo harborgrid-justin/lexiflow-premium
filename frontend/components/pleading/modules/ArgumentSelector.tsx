@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { Target, GripVertical, CheckCircle, ArrowRight } from 'lucide-react';
-import { useQuery } from '../../../services/queryClient';
-import { DataService } from '../../../services/dataService';
-import { STORES } from '../../../services/db';
+import { useQuery } from '../../../services/infrastructure/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 import { Case, LegalArgument } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';

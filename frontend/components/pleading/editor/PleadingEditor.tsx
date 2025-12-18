@@ -8,10 +8,10 @@ import { cn } from '../../../utils/cn';
 import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../types/pleading-types';
 import { DocumentCanvas } from './DocumentCanvas';
 import { PropertyPanel } from './PropertyPanel';
-import { DataService } from '../../../services/dataService';
+import { DataService } from '../../../services/data/dataService';
 import { useNotify } from '../../../hooks/useNotify';
-import { useMutation, queryClient } from '../../../services/queryClient';
-import { STORES } from '../../../services/db';
+import { useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 
 // Module Imports

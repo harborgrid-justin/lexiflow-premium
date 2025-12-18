@@ -3,7 +3,7 @@ import { Database, RefreshCw, Trash2, Plus, Info, AlertTriangle, CheckCircle } f
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { db } from '../../../db';
-import { useQuery } from '../../../services/queryClient';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();

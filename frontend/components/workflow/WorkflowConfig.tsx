@@ -4,8 +4,8 @@ import { Card } from '../common/Card';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
+import { DataService } from '../../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 

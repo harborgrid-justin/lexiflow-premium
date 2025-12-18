@@ -19,7 +19,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
 // Services
-import { GeminiService } from '../../../services/geminiService';
+import { GeminiService } from '../../../services/features/research/geminiService';
 
 // Types
 import { EvidenceItem } from '../../../types';

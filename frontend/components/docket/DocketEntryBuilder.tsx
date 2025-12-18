@@ -24,7 +24,7 @@ import { useNotify } from '../../hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService'';
+import { DataService } from '../../services/data/dataService';
 import { validateDocketEntry, validateStructuredData, sanitizeDocketEntry } from '../../utils/docketValidation';
 import { DeadlineEngine } from '../../services/deadlineEngine';
 import { IdGenerator } from '../../utils/idGenerator';

@@ -5,8 +5,8 @@ import { DollarSign, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 
 import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/dataService';
-import { useQuery } from '../../../services/queryClient';
+import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '../../../services/infrastructure/queryClient';
 import { CostMetric, CostForecast } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { Card } from '../../common/Card';

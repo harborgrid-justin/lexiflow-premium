@@ -75,7 +75,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
   const { mutate: deploy, isLoading: isDeploying } = useMutation(
     async (payload: { caseId: string; phases: CasePhase[]; tasks: WorkflowTask[] }) => {
         // Use WorkflowRepository directly as this method isn't in the API service yet
-        const WorkflowRepository = await import('../services/repositories/WorkflowRepository').then(m => m.WorkflowRepository);
+        const WorkflowRepository = await import('../services/data/repositories/WorkflowRepository').then(m => m.WorkflowRepository);
         return WorkflowRepository.deployStrategyToCase(payload.caseId, { phases: payload.phases, tasks: payload.tasks });
     },
     {

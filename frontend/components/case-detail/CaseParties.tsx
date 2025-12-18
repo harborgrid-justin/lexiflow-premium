@@ -21,11 +21,11 @@ import { Badge } from '../common/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 import { Scheduler } from '../../utils/scheduler';
 import { cn } from '../../utils/cn';
 

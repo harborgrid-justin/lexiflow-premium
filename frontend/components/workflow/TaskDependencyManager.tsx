@@ -3,10 +3,10 @@ import React from 'react';
 import { CheckSquare, Lock, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { DataService } from '../../services/data/dataService'';
-import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService';
+import { STORES } from '../../services/data/dataService';
 
 export const TaskDependencyManager: React.FC = () => {
   const { theme } = useTheme();

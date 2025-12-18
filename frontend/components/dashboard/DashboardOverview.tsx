@@ -16,9 +16,9 @@ import React, { useState, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // Components
 import { DashboardMetrics } from './DashboardMetrics';
@@ -95,3 +95,4 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
     </div>
   );
 };
+

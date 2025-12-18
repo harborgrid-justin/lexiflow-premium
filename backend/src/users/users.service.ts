@@ -43,7 +43,7 @@ export class UsersService implements OnModuleInit {
         firstName: 'Super',
         lastName: 'Admin',
         role: UserRole.SUPER_ADMIN,
-        status: true,
+        status: UserStatus.ACTIVE,
         twoFactorEnabled: false,
         emailVerified: true,
       });
@@ -69,7 +69,7 @@ export class UsersService implements OnModuleInit {
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       role: this.mapToUserRole(createUserDto.role) || UserRole.STAFF,
-      status: createUserDto.isActive ?? true,
+      status: (createUserDto.isActive ?? true) ? UserStatus.ACTIVE : UserStatus.INACTIVE,
       twoFactorEnabled: createUserDto.mfaEnabled ?? false,
       emailVerified: false,
     });
@@ -126,7 +126,7 @@ export class UsersService implements OnModuleInit {
     if (updateUserDto.lastName) user.lastName = updateUserDto.lastName;
     if (updateUserDto.role) user.role = this.mapToUserRole(updateUserDto.role);
     if (updateUserDto.isActive !== undefined) {
-      user.status = updateUserDto.isActive;
+      user.status = updateUserDto.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
     }
     if (updateUserDto.mfaEnabled !== undefined) {
       user.twoFactorEnabled = updateUserDto.mfaEnabled;
@@ -194,7 +194,7 @@ export class UsersService implements OnModuleInit {
       throw new NotFoundException('User not found');
     }
 
-    user.status = isActive;
+    user.status = isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
     const updatedUser = await this.userRepository.save(user);
 
     return this.toAuthenticatedUser(updatedUser);
@@ -216,7 +216,7 @@ export class UsersService implements OnModuleInit {
       lastName: user.lastName,
       role: role,
       permissions: ROLE_PERMISSIONS[role] || [],
-      isActive: user.status,
+      isActive: user.status === UserStatus.ACTIVE,
       mfaEnabled: user.twoFactorEnabled,
       totpSecret: user.totpSecret,
     };

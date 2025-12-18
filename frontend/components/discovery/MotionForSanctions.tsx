@@ -6,10 +6,10 @@ import { Badge } from '../common/Badge';
 import { Gavel, AlertTriangle, Plus, FileWarning } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { SanctionMotion } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
@@ -102,3 +102,4 @@ export const MotionForSanctions: React.FC = () => {
 };
 
 export default MotionForSanctions;
+

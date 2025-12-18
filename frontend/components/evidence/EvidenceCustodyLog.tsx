@@ -18,9 +18,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
 // Services & Types
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { EvidenceItem } from '../../types';
 
 export const EvidenceCustodyLog: React.FC = () => {
@@ -107,3 +107,4 @@ export const EvidenceCustodyLog: React.FC = () => {
     </div>
   );
 };
+

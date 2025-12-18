@@ -35,7 +35,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { CommandHistory, Command } from '../services/commandHistory';
+import { CommandHistory, Command } from '../services/infrastructure/commandHistory';
 
 export interface UseCommandHistoryReturn {
   execute: (command: Command) => void;
@@ -95,3 +95,4 @@ export function useCommandHistory(maxSize?: number): UseCommandHistoryReturn {
     lastCommand: historyRef.current.getLastCommandDescription(),
   };
 }
+

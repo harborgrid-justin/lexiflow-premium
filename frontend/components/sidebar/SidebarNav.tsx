@@ -16,8 +16,8 @@ import React, { useMemo, useEffect, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { ModuleRegistry } from '../../services/moduleRegistry';
-import { queryClient } from '../../services/queryClient';
+import { ModuleRegistry } from '../../services/infrastructure/moduleRegistry'';
+import { queryClient } from '../../services/infrastructure/queryClient'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -137,3 +137,4 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
     </nav>
   );
 };
+

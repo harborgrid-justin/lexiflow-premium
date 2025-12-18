@@ -19,7 +19,7 @@ import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSprea
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
-import { queryClient } from '../../services/queryClient';
+import { queryClient } from '../../services/infrastructure/queryClient'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Components
@@ -311,3 +311,4 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
       </div>
   );
 };
+

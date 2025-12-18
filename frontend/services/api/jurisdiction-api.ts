@@ -56,6 +56,20 @@ export interface CreateJurisdictionDto {
   metadata?: Jurisdiction['metadata'];
 }
 
+export interface JurisdictionFilters {
+  system?: Jurisdiction['system'];
+  type?: string;
+  region?: string;
+  search?: string;
+}
+
+export interface RuleFilters {
+  jurisdictionId?: string;
+  type?: JurisdictionRule['type'];
+  search?: string;
+  isActive?: boolean;
+}
+
 export interface CreateJurisdictionRuleDto {
   jurisdictionId: string;
   code: string;
@@ -256,3 +270,6 @@ export const JurisdictionAPI = {
     }
   },
 };
+
+// Export alias for consistency with other API services
+export const JurisdictionApiService = JurisdictionAPI;

@@ -121,7 +121,7 @@ export const BILLING_TAB_CONFIG: TabConfigItem[] = [
 
 export const CASE_LIST_TAB_CONFIG: TabConfigItem[] = [
   {
-    id: 'matters', label: 'Matters', icon: Briefcase,
+    id: 'cases', label: 'Cases', icon: Briefcase, // Consolidated: matters -> cases
     subTabs: [
       { id: 'active', label: 'Active Cases', icon: Briefcase },
       { id: 'intake', label: 'Intake Pipeline', icon: UserPlus },

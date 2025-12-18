@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Client } from '../entities/client.entity';
+import { Client } from './entities/client.entity';
 import { CreateClientDto, ClientStatus } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import * as crypto from 'crypto';

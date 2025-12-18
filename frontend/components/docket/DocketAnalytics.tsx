@@ -27,9 +27,9 @@ import { Card } from '../common/Card';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces
@@ -135,3 +135,4 @@ export const DocketAnalytics: React.FC = () => {
     </div>
   );
 };
+

@@ -5,9 +5,9 @@ import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from '
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
@@ -187,3 +187,4 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   );
 };
 export default PleadingDesigner;
+

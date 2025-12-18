@@ -1,56 +1,63 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
+import { BaseEntity } from '../../../common/base/base.entity';
 import { Case } from '../../../cases/entities/case.entity';
 
 export enum ESISourceType {
-  EMAIL = 'EMAIL',
-  FILE_SHARE = 'FILE_SHARE',
-  DATABASE = 'DATABASE',
-  CLOUD_STORAGE = 'CLOUD_STORAGE',
-  MOBILE_DEVICE = 'MOBILE_DEVICE',
-  SOCIAL_MEDIA = 'SOCIAL_MEDIA',
-  BACKUP_TAPE = 'BACKUP_TAPE',
-  COLLABORATION_TOOL = 'COLLABORATION_TOOL',
-  OTHER = 'OTHER',
+  EMAIL = 'email',
+  FILE_SHARE = 'file_share',
+  DATABASE = 'database',
+  CLOUD_STORAGE = 'cloud_storage',
+  MOBILE_DEVICE = 'mobile_device',
+  SOCIAL_MEDIA = 'social_media',
+  BACKUP_TAPE = 'backup_tape',
+  COLLABORATION_TOOL = 'collaboration_tool',
+  LEGACY_SYSTEM = 'legacy_system',
+  OTHER = 'other',
 }
 
 export enum ESISourceStatus {
-  IDENTIFIED = 'IDENTIFIED',
-  PRESERVED = 'PRESERVED',
-  COLLECTED = 'COLLECTED',
-  PROCESSING = 'PROCESSING',
-  PROCESSED = 'PROCESSED',
-  PRODUCED = 'PRODUCED',
-  ARCHIVED = 'ARCHIVED',
+  IDENTIFIED = 'identified',
+  PRESERVATION_HOLD = 'preservation_hold',
+  COLLECTION_PENDING = 'collection_pending',
+  COLLECTING = 'collecting',
+  COLLECTED = 'collected',
+  PROCESSING = 'processing',
+  PROCESSED = 'processed',
+  PRODUCED = 'produced',
+  ARCHIVED = 'archived',
 }
 
 @Entity('esi_sources')
-export class ESISource {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'uuid' })
+@Index(['caseId'])
+@Index(['custodianId'])
+@Index(['sourceType'])
+@Index(['status'])
+export class ESISource extends BaseEntity {
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ name: 'custodian_id', type: 'uuid', nullable: true })
+  custodianId: string;
+
+  @Column({ name: 'custodian_name', type: 'varchar', length: 255, nullable: true })
+  custodianName: string;
+
+  @Column({ name: 'source_name', type: 'varchar', length: 300 })
   sourceName: string;
 
   @Column({
+    name: 'source_type',
     type: 'enum',
     enum: ESISourceType,
   })
   sourceType: ESISourceType;
+
+  @Column({ name: 'source_description', type: 'text', nullable: true })
+  sourceDescription: string;
 
   @Column({
     type: 'enum',
@@ -59,93 +66,57 @@ export class ESISource {
   })
   status: ESISourceStatus;
 
-  @Column({ type: 'text', nullable: true })
-  description: string;
-
   @Column({ type: 'varchar', length: 500, nullable: true })
   location: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  custodian: string;
+  @Column({ name: 'data_volume', type: 'varchar', length: 100, nullable: true })
+  dataVolume: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  custodianId: string;
+  @Column({ name: 'item_count', type: 'integer', nullable: true })
+  itemCount: number;
 
-  @Column({ type: 'date', nullable: true })
-  dateIdentified: Date;
-
-  @Column({ type: 'date', nullable: true })
-  datePreserved: Date;
-
-  @Column({ type: 'date', nullable: true })
-  dateCollected: Date;
-
-  @Column({ type: 'date', nullable: true })
-  dateProcessed: Date;
-
-  @Column({ type: 'bigint', nullable: true })
-  estimatedVolume: number;
-
-  @Column({ type: 'bigint', nullable: true })
-  actualVolume: number;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  volumeUnit: string; // GB, MB, Items, etc.
-
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_range_start', type: 'date', nullable: true })
   dateRangeStart: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_range_end', type: 'date', nullable: true })
   dateRangeEnd: Date;
 
-  @Column({ type: 'jsonb', nullable: true })
-  fileTypes: string[];
-
-  @Column({ type: 'text', nullable: true })
-  searchTerms: string;
-
-  @Column({ type: 'boolean', default: false })
-  isEncrypted: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  requiresSpecialProcessing: boolean;
-
-  @Column({ type: 'text', nullable: true })
-  processingNotes: string;
-
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'collection_method', type: 'varchar', length: 255, nullable: true })
   collectionMethod: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  collectionVendor: string;
+  @Column({ name: 'collection_date', type: 'timestamp', nullable: true })
+  collectionDate: Date;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'collected_by', type: 'varchar', length: 255, nullable: true })
+  collectedBy: string;
+
+  @Column({ name: 'processing_method', type: 'varchar', length: 255, nullable: true })
+  processingMethod: string;
+
+  @Column({ name: 'processing_date', type: 'timestamp', nullable: true })
+  processingDate: Date;
+
+  @Column({ name: 'processed_by', type: 'varchar', length: 255, nullable: true })
+  processedBy: string;
+
+  @Column({ name: 'actual_volume', type: 'bigint', nullable: true })
+  actualVolume: number;
+
+  @Column({ name: 'collection_cost', type: 'decimal', precision: 15, scale: 2, nullable: true })
   collectionCost: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'processing_cost', type: 'decimal', precision: 15, scale: 2, nullable: true })
   processingCost: number;
+
+  @Column({ name: 'is_encrypted', type: 'boolean', default: false })
+  isEncrypted: boolean;
+
+  @Column({ name: 'requires_special_processing', type: 'boolean', default: false })
+  requiresSpecialProcessing: boolean;
 
   @Column({ type: 'text', nullable: true })
   notes: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
-
-  @Column({ type: 'uuid', nullable: true })
-  assignedTo: string;
-
-  @Column({ type: 'uuid' })
-  createdBy: string;
-
-  @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
 }

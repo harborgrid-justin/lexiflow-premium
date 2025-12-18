@@ -8,7 +8,7 @@
 export const PATHS = {
   DASHBOARD: 'dashboard',
   CASES: 'cases',
-  MATTERS: 'matters',
+  MATTERS: 'cases', // Consolidated: matters and cases are the same
   DOCKET: 'docket',
   WORKFLOWS: 'workflows',
   MESSAGES: 'messages',

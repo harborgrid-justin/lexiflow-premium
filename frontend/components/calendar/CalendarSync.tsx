@@ -17,7 +17,7 @@ import { RefreshCw, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 // Hooks & Context
@@ -87,3 +87,4 @@ export const CalendarSync: React.FC = () => {
     </div>
   );
 };
+

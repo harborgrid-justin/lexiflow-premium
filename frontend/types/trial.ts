@@ -22,7 +22,28 @@ import type { FC, LazyExoticComponent } from 'react';
 
 // --- CLUSTER 5: TRIAL & STRATEGY ---
 export interface Juror extends BaseEntity { caseId: CaseId; name: string; status: 'Panel' | 'Seated' | 'Struck' | 'Alternate'; strikeParty?: 'Plaintiff' | 'Defense'; notes?: string; demographics?: any; }
-export interface Witness extends BaseEntity { caseId: CaseId; name: string; type: 'Fact' | 'Expert'; credibilityScore: number; impeachmentRisks?: string[]; prepStatus: number; linkedExhibits?: string[]; }
+export interface Witness extends BaseEntity { 
+  caseId: CaseId; 
+  name: string; 
+  witnessType: 'fact_witness' | 'expert_witness' | 'character_witness' | 'rebuttal_witness' | 'impeachment_witness';
+  status: 'identified' | 'contacted' | 'interviewed' | 'subpoenaed' | 'deposed' | 'testifying' | 'testified' | 'unavailable' | 'withdrawn';
+  email?: string;
+  phone?: string;
+  address?: string;
+  organization?: string;
+  title?: string;
+  expertise?: string;
+  credibilityScore?: number; 
+  impeachmentRisks?: string[]; 
+  prepStatus?: number; 
+  linkedExhibits?: string[];
+  notes?: string;
+  contactedAt?: string;
+  interviewedAt?: string;
+  subpoenaedAt?: string;
+  deposedAt?: string;
+  metadata?: Record<string, any>;
+}
 export interface DepositionDesignation { id: string; depositionId: string; pageStart: number; lineStart: number; pageEnd: number; lineEnd: number; party: string; objection?: string; ruling?: string; }
 export interface OpeningStatement extends BaseEntity { caseId: CaseId; sections: { title: string; durationMinutes: number; linkedExhibitIds: string[] }[]; }
 export interface Fact extends BaseEntity { caseId: CaseId; date: string; description: string; type: 'Undisputed' | 'Disputed' | 'Stipulated'; supportingEvidenceIds: EvidenceId[]; }

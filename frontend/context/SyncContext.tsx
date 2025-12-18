@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
-import { SyncEngine, Mutation } from '../services/syncEngine';
-import { DataService } from '../services/dataService';
+import { SyncEngine, Mutation } from '../services/data/syncEngine';
+import { DataService } from '../services/data/dataService';
 import { useToast } from './ToastContext';
 import type { SyncContextType } from './SyncContext.types';
 
@@ -177,3 +177,4 @@ export const SyncProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </SyncContext.Provider>
   );
 };
+

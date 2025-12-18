@@ -17,9 +17,9 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -230,3 +230,4 @@ const BillingInvoicesComponent: React.FC = () => {
 
 // Export memoized component
 export const BillingInvoices = React.memo(BillingInvoicesComponent);
+

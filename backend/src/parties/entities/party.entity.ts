@@ -1,5 +1,5 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 export enum PartyType {
@@ -39,12 +39,15 @@ export enum PartyRole {
 }
 
 @Entity('parties')
+@Index(['caseId'])
+@Index(['type'])
+@Index(['role'])
 export class Party extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
   @Column({ type: 'varchar', length: 255 })
@@ -81,7 +84,7 @@ export class Party extends BaseEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   state?: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
+  @Column({ name: 'zip_code', type: 'varchar', length: 20, nullable: true })
   zipCode?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
@@ -89,6 +92,21 @@ export class Party extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   counsel?: string;
+
+  @Column({ name: 'primary_contact_name', type: 'varchar', length: 255, nullable: true })
+  primaryContactName?: string;
+
+  @Column({ name: 'primary_contact_email', type: 'varchar', length: 255, nullable: true })
+  primaryContactEmail?: string;
+
+  @Column({ name: 'primary_contact_phone', type: 'varchar', length: 50, nullable: true })
+  primaryContactPhone?: string;
+
+  @Column({ name: 'attorney_name', type: 'varchar', length: 255, nullable: true })
+  attorneyName?: string;
+
+  @Column({ name: 'attorney_bar_number', type: 'varchar', length: 50, nullable: true })
+  attorneyBarNumber?: string;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

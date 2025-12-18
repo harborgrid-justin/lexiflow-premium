@@ -89,9 +89,29 @@ export interface User extends BaseEntity {
 export interface Organization extends BaseEntity { 
   id: OrgId; 
   name: string; 
-  type: OrganizationType; 
-  domain: string; 
-  status: string; 
+  legalName?: string;
+  organizationType: 'corporation' | 'llc' | 'partnership' | 'sole_proprietorship' | 'nonprofit' | 'government_agency' | 'trust' | 'estate' | 'other';
+  taxId?: string;
+  registrationNumber?: string;
+  jurisdiction?: string;
+  status?: 'active' | 'inactive' | 'dissolved' | 'merged' | 'acquired' | 'bankrupt';
+  foundedDate?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    country?: string;
+  };
+  contact?: {
+    phone?: string;
+    email?: string;
+    website?: string;
+  };
+  metadata?: Record<string, any>;
+  // Legacy fields for backward compatibility
+  type?: OrganizationType; 
+  domain?: string;
 }
 
 export interface Group extends BaseEntity { 

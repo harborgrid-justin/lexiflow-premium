@@ -17,7 +17,7 @@ import { AlertTriangle, FileText, ShieldAlert } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 // Components
 import { MetricCard } from '../common/Primitives';
@@ -59,3 +59,4 @@ export const ComplianceRisk: React.FC = () => {
     </div>
   );
 };
+

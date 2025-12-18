@@ -56,6 +56,8 @@ import { ProcessingJobsModule } from './processing-jobs/processing-jobs.module';
 
 // Discovery Module
 import { DiscoveryModule } from './discovery/discovery.module';
+import { ProductionModule } from './production/production.module';
+import { EvidenceModule } from './evidence/evidence.module';
 
 // Billing Modules
 import { BillingModule } from './billing/billing.module';
@@ -86,6 +88,7 @@ import { WorkflowModule } from './workflow/workflow.module';
 import { TrialModule } from './trial/trial.module';
 import { ExhibitsModule } from './exhibits/exhibits.module';
 import { ClientsModule } from './clients/clients.module';
+import { OrganizationsModule } from './organizations/organizations.module';
 import { CitationsModule } from './citations/citations.module';
 import { BluebookModule } from './bluebook/bluebook.module';
 import { CalendarModule } from './calendar/calendar.module';
@@ -219,6 +222,8 @@ if (isRedisEnabled) {
 
     // Discovery & E-Discovery
     DiscoveryModule,
+    ProductionModule,
+    EvidenceModule,
 
     // Billing & Finance
     BillingModule,
@@ -249,6 +254,7 @@ if (isRedisEnabled) {
     TrialModule,
     ExhibitsModule,
     ClientsModule,
+    OrganizationsModule,
     CitationsModule,
     BluebookModule,
     CalendarModule,

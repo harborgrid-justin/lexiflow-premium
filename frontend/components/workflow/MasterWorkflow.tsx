@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect, useTransition } from 
 import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '../common/PageHeader';
 import { Button } from '../common/Button';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 import { EmptyState } from '../common/EmptyState';
 
@@ -27,7 +27,7 @@ import { Case } from '../../types';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { WorkflowView } from './types';
 
 interface MasterWorkflowProps {
@@ -231,3 +231,4 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
     </ErrorBoundary>
   );
 };
+

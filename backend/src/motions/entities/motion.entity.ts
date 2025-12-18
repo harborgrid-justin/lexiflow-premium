@@ -1,5 +1,5 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 export enum MotionType {
@@ -46,12 +46,15 @@ export enum MotionStatus {
 }
 
 @Entity('motions')
+@Index(['caseId'])
+@Index(['status'])
+@Index(['filingDate'])
 export class Motion extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
   @Column({ type: 'varchar', length: 255 })
@@ -73,37 +76,37 @@ export class Motion extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'filed_by', type: 'varchar', length: 255, nullable: true })
   filedBy?: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'filed_date', type: 'date', nullable: true })
   filedDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'filing_date', type: 'date', nullable: true })
   filingDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'hearing_date', type: 'date', nullable: true })
   hearingDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'response_deadline', type: 'date', nullable: true })
   responseDeadline?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'ruling_date', type: 'date', nullable: true })
   rulingDate?: Date;
 
   @Column({ type: 'jsonb', nullable: true })
   ruling?: any;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'supporting_docs', type: 'jsonb', nullable: true })
   supportingDocs?: string[];
 
   @Column({ type: 'jsonb', nullable: true })
   attachments?: string[];
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'opposing_party_response', type: 'jsonb', nullable: true })
   opposingPartyResponse?: any;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'decision_date', type: 'date', nullable: true })
   decisionDate: Date;
 
   @Column({ type: 'text', nullable: true })
@@ -112,16 +115,16 @@ export class Motion extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   decision?: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'document_id', type: 'uuid', nullable: true })
   documentId?: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'assigned_attorney_id', type: 'uuid', nullable: true })
   assignedAttorneyId?: string;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'related_documents', type: 'jsonb', nullable: true })
   relatedDocuments?: Array<{
     id: string;
     name: string;

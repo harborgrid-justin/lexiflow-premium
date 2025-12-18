@@ -6,26 +6,50 @@
 import { apiClient } from '../apiClient';
 import { Matter, MatterId } from '../../types';
 
-const BASE_PATH = '/matters';
+export interface MatterFilters {
+  status?: string;
+  clientId?: string;
+  leadAttorneyId?: string;
+  practiceArea?: string;
+  search?: string;
+}
 
-export const MattersAPI = {
+export interface MatterStatistics {
+  total: number;
+  byStatus: Record<string, number>;
+  byType: Record<string, number>;
+  byPracticeArea: Record<string, number>;
+}
+
+export class MattersApiService {
+  private readonly baseUrl = '/matters';
+
   /**
    * Get all matters
    */
-  async getAll(): Promise<Matter[]> {
-    const response = await apiClient.get<any>(BASE_PATH);
+  async getAll(filters?: MatterFilters): Promise<Matter[]> {
+    const params = new URLSearchParams();
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.clientId) params.append('clientId', filters.clientId);
+    if (filters?.leadAttorneyId) params.append('leadAttorneyId', filters.leadAttorneyId);
+    if (filters?.practiceArea) params.append('practiceArea', filters.practiceArea);
+    if (filters?.search) params.append('search', filters.search);
+    const queryString = params.toString();
+    const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
+    
+    const response = await apiClient.get<any>(url);
     // Backend returns { success, data: { matters, total }, meta }
     const data = response.data || response;
     return Array.isArray(data) ? data : data.matters || [];
-  },
+  }
 
   /**
    * Get matter by ID
    */
   async getById(id: MatterId): Promise<Matter> {
-    const response = await apiClient.get<any>(`${BASE_PATH}/${id}`);
+    const response = await apiClient.get<any>(`${this.baseUrl}/${id}`);
     return response.data || response;
-  },
+  }
 
   /**
    * Create new matter
@@ -72,10 +96,10 @@ export const MattersAPI = {
       userId: matter.userId || '00000000-0000-0000-0000-000000000000',
     };
 
-    const response = await apiClient.post<any>(BASE_PATH, createDto);
+    const response = await apiClient.post<any>(this.baseUrl, createDto);
     // Backend returns { success, data, meta } - extract the matter from data
     return response.data || response;
-  },
+  }
 
   /**
    * Update existing matter
@@ -119,42 +143,28 @@ export const MattersAPI = {
       customFields: matter.customFields,
     };
 
-    const response = await apiClient.patch<any>(`${BASE_PATH}/${id}`, updateDto);
+    const response = await apiClient.patch<any>(`${this.baseUrl}/${id}`, updateDto);
     return response.data || response;
-  },
+  }
 
   /**
    * Delete matter
    */
   async delete(id: MatterId): Promise<void> {
-    return apiClient.delete(`${BASE_PATH}/${id}`);
-  },
+    return apiClient.delete(`${this.baseUrl}/${id}`);
+  }
 
   /**
-   * Get matters by status
+   * Get matters statistics
    */
-  async getByStatus(status: string): Promise<Matter[]> {
-    return apiClient.get<Matter[]>(BASE_PATH, { status });
-  },
-
-  /**
-   * Get matters by client
-   */
-  async getByClient(clientId: string): Promise<Matter[]> {
-    return apiClient.get<Matter[]>(BASE_PATH, { clientId });
-  },
-
-  /**
-   * Get matters by attorney
-   */
-  async getByAttorney(attorneyId: string): Promise<Matter[]> {
-    return apiClient.get<Matter[]>(BASE_PATH, { leadAttorneyId: attorneyId });
-  },
+  async getStatistics(): Promise<MatterStatistics> {
+    return apiClient.get<MatterStatistics>(`${this.baseUrl}/statistics`);
+  }
 
   /**
    * Search matters
    */
   async search(query: string): Promise<Matter[]> {
-    return apiClient.get<Matter[]>(`${BASE_PATH}/search`, { q: query });
-  },
-};
+    return apiClient.get<Matter[]>(`${this.baseUrl}/search`, { q: query });
+  }
+}

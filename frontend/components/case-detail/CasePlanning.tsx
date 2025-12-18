@@ -24,8 +24,8 @@ import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 import { Pathfinding } from '../../utils/pathfinding';
 import { cn } from '../../utils/cn';
 
@@ -166,3 +166,4 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
     </div>
   );
 };
+

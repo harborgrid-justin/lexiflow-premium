@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { entities } from '../entities';
 
 @Module({
   imports: [
@@ -14,7 +13,7 @@ import { entities } from '../entities';
         username: configService.get('DB_USERNAME', 'lexiflow_user'),
         password: configService.get('DB_PASSWORD', 'lexiflow_password'),
         database: configService.get('DB_DATABASE', 'lexiflow_db'),
-        entities: entities,
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: configService.get('DB_SYNCHRONIZE', false),
         logging: configService.get('DB_LOGGING', false),
         migrations: [__dirname + '/migrations/**/*{.ts,.js}'],

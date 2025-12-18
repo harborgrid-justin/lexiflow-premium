@@ -1,15 +1,14 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
+import { BaseEntity } from '../../../common/base/base.entity';
 import { Case } from '../../../cases/entities/case.entity';
 
-export enum DepositionType {
+export enum DepositionMethod {
   ORAL = 'ORAL',
   WRITTEN = 'WRITTEN',
   VIDEO = 'VIDEO',
@@ -18,47 +17,62 @@ export enum DepositionType {
 
 export enum DepositionStatus {
   SCHEDULED = 'SCHEDULED',
-  SCHEDULED_LOWER = 'scheduled',
-  CONFIRMED = 'confirmed',
+  CONFIRMED = 'CONFIRMED',
   IN_PROGRESS = 'IN_PROGRESS',
-  IN_PROGRESS_LOWER = 'in_progress',
   COMPLETED = 'COMPLETED',
-  COMPLETED_LOWER = 'completed',
   CANCELLED = 'CANCELLED',
-  CANCELLED_LOWER = 'cancelled',
   POSTPONED = 'POSTPONED',
-  POSTPONED_LOWER = 'postponed',
   TRANSCRIPTION_PENDING = 'TRANSCRIPTION_PENDING',
   TRANSCRIPTION_COMPLETE = 'TRANSCRIPTION_COMPLETE',
 }
 
-@Entity('depositions')
-export class Deposition {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+export enum DeponentType {
+  FACT_WITNESS = 'fact_witness',
+  EXPERT_WITNESS = 'expert_witness',
+  PARTY = 'party',
+  CORPORATE_REPRESENTATIVE = 'corporate_representative',
+}
 
-  @Column({ type: 'uuid' })
+@Entity('depositions')
+@Index(['caseId'])
+@Index(['witnessId'])
+@Index(['scheduledDate'])
+@Index(['status'])
+export class Deposition extends BaseEntity {
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ name: 'witness_id', type: 'uuid', nullable: true })
+  witnessId: string;
+
+  @Column({ name: 'deponent_name', type: 'varchar', length: 300 })
   deponentName: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ name: 'deponent_title', type: 'varchar', length: 100, nullable: true })
   deponentTitle: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
+  @Column({ name: 'deponent_organization', type: 'varchar', length: 200, nullable: true })
   deponentOrganization: string;
 
   @Column({
+    name: 'method',
     type: 'enum',
-    enum: DepositionType,
-    default: DepositionType.ORAL,
+    enum: DepositionMethod,
+    default: DepositionMethod.ORAL,
   })
-  type: DepositionType;
+  method: DepositionMethod;
+
+  @Column({
+    name: 'deponent_type',
+    type: 'enum',
+    enum: DeponentType,
+    nullable: true
+  })
+  deponentType: DeponentType;
 
   @Column({
     type: 'enum',
@@ -67,22 +81,22 @@ export class Deposition {
   })
   status: DepositionStatus;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'scheduled_date', type: 'timestamp', nullable: true })
   scheduledDate: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'actual_start_time', type: 'timestamp', nullable: true })
   actualStartTime: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'actual_end_time', type: 'timestamp', nullable: true })
   actualEndTime: Date;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'duration_minutes', type: 'int', nullable: true })
   durationMinutes: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   location: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ name: 'court_reporter', type: 'varchar', length: 300, nullable: true })
   courtReporter: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
@@ -98,58 +112,42 @@ export class Deposition {
   @Column({ type: 'text', nullable: true })
   summary: string;
 
-  @Column({ type: 'text', nullable: true })
-  keyTestimony: string;
+  @Column({ name: 'conducted_by', type: 'varchar', length: 255, nullable: true })
+  conductedBy: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  exhibits: Array<{
-    exhibitNumber: string;
-    description: string;
-    documentId?: string;
-  }>;
+  @Column({ name: 'defended_by', type: 'varchar', length: 255, nullable: true })
+  defendedBy: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'is_video_recorded', type: 'boolean', default: false })
+  isVideoRecorded: boolean;
+
+  @Column({ name: 'is_remote', type: 'boolean', default: false })
+  isRemote: boolean;
+
+  @Column({ name: 'remote_link', type: 'varchar', length: 500, nullable: true })
+  remoteLink: string;
+
+  @Column({ name: 'deposition_notice', type: 'text', nullable: true })
+  depositionNotice: string;
+
+  @Column({ name: 'subject_matter', type: 'text', nullable: true })
+  subjectMatter: string;
+
+  @Column({ name: 'topics_discussed', type: 'jsonb', nullable: true })
+  topicsDiscussed: string[];
+
+  @Column({ name: 'exhibits_used', type: 'jsonb', nullable: true })
+  exhibitsUsed: Record<string, any>[];
+
+  @Column({ name: 'transcript_path', type: 'varchar', length: 500, nullable: true })
   transcriptPath: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  videoPath: string;
-
-  @Column({ type: 'boolean', default: false })
-  isTranscriptOrdered: boolean;
-
-  @Column({ type: 'date', nullable: true })
-  transcriptOrderedDate: Date;
-
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'transcript_received_date', type: 'date', nullable: true })
   transcriptReceivedDate: Date;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'video_path', type: 'varchar', length: 500, nullable: true })
+  videoPath: string;
+
+  @Column({ name: 'estimated_cost', type: 'decimal', precision: 10, scale: 2, nullable: true })
   estimatedCost: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  actualCost: number;
-
-  @Column({ type: 'text', nullable: true })
-  notes: string;
-
-  @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
-
-  @Column({ type: 'uuid', nullable: true })
-  assignedAttorney: string;
-
-  @Column({ type: 'uuid' })
-  createdBy: string;
-
-  @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
 }

@@ -26,7 +26,7 @@ import {
   MoveNodeCommand,
   AddConnectionCommand,
   DeleteConnectionCommand,
-} from '../services/commandHistory';
+} from '../services/infrastructure/commandHistory';
 
 export interface UseStrategyCanvasProps {
   initialNodes?: TypedWorkflowNode[];
@@ -427,3 +427,4 @@ export function useStrategyCanvas({
     canvasRef,
   };
 }
+

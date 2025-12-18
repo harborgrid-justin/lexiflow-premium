@@ -25,7 +25,7 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
 import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -186,3 +186,4 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
 };
 
 export default ClauseLibrary;
+

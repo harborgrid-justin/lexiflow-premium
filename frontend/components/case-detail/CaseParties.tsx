@@ -24,8 +24,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 import { Scheduler } from '../../utils/scheduler';
 import { cn } from '../../utils/cn';
 
@@ -296,3 +296,4 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
     </div>
   );
 };
+

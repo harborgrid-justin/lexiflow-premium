@@ -1,24 +1,20 @@
 /**
  * Utility functions for Workflow components
  * Extracted from individual component files for better organization and reusability
+ * 
+ * NOTE: Pure utility functions only. React components moved to separate files.
+ * For ProcessIcon component, import from './ProcessIcon' instead.
  */
 
-import React from 'react';
-import { UserPlus, FileCheck, RefreshCw, Database, ShieldAlert, Scale, Archive, Lock } from 'lucide-react';
 import { WorkflowTask } from '../../types';
 
 /**
- * Get the appropriate icon component for a firm process based on its name
+ * @deprecated Use ProcessIcon component instead
+ * @see ProcessIcon in './ProcessIcon.tsx'
  */
-export const getProcessIcon = (name: string): React.ReactNode => {
-  if (name.includes('Client') || name.includes('Onboarding')) return <UserPlus className="h-5 w-5 text-blue-600"/>;
-  if (name.includes('Billing') || name.includes('Bill')) return <FileCheck className="h-5 w-5 text-green-600"/>;
-  if (name.includes('Discovery') || name.includes('Data') || name.includes('Log')) return <Database className="h-5 w-5 text-purple-600"/>;
-  if (name.includes('Audit') || name.includes('Compliance') || name.includes('Risk') || name.includes('Conflict')) return <ShieldAlert className="h-5 w-5 text-red-600"/>;
-  if (name.includes('Admission') || name.includes('Pro Hac')) return <Scale className="h-5 w-5 text-indigo-600"/>;
-  if (name.includes('Closing') || name.includes('Archive')) return <Archive className="h-5 w-5 text-slate-600"/>;
-  if (name.includes('Hold') || name.includes('Enforcement')) return <Lock className="h-5 w-5 text-amber-600"/>;
-  return <RefreshCw className="h-5 w-5 text-gray-600"/>;
+export const getProcessIcon = (name: string): any => {
+  console.warn('getProcessIcon is deprecated. Use <ProcessIcon processName={name} /> instead.');
+  return null;
 };
 
 /**

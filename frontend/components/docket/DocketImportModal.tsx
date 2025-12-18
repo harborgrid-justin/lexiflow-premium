@@ -24,10 +24,10 @@ import { useNotify } from '../../hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { GeminiService } from '../../services/geminiService';
-import { XmlDocketParser } from '../../services/xmlDocketParser';
-import { FallbackDocketParser } from '../../services/fallbackDocketParser';
-import type { FallbackParseResult } from '../../services/fallbackDocketParser';
+import { GeminiService } from '../../services/features/research/geminiService';
+import { XmlDocketParser } from '../../services/features/documents/xmlDocketParser';
+import { FallbackDocketParser } from '../../services/features/discovery/fallbackDocketParser';
+import type { FallbackParseResult } from '../../services/features/discovery/fallbackDocketParser';
 
 interface DocketImportModalProps {
   isOpen: boolean;
@@ -215,3 +215,4 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
     </Modal>
   );
 };
+

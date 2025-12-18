@@ -17,9 +17,9 @@ import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } 
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery, useMutation } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -213,3 +213,4 @@ export const AssetManager: React.FC = () => {
     </div>
   );
 };
+

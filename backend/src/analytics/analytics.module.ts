@@ -11,6 +11,7 @@ import { AuthModule } from '../auth/auth.module';
 
 // Main service
 import { AnalyticsService } from './analytics.service';
+import { AnalyticsController } from './analytics.controller';
 
 // Case Analytics
 import { CaseAnalyticsController } from './case-analytics/case-analytics.controller';
@@ -43,6 +44,7 @@ import { DashboardService } from './dashboard/dashboard.service';
     AuthModule,
   ],
   controllers: [
+    AnalyticsController,
     CaseAnalyticsController,
     JudgeStatsController,
     OutcomePredictionsController,

@@ -27,8 +27,8 @@ import { useNotify } from '../../hooks/useNotify';
 // Services & Types
 import { ChainService } from '../../services/chainService';
 import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
-import { DataService } from '../../services/dataService';
+import { STORES } from '../../services/data/db'';
+import { DataService } from '../../services/data/dataService'';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
 import { evidenceQueryKeys } from '../../services/queryKeys';
 import { validateCustodyEventSafe, CustodyActionType } from '../../services/validation/evidenceSchemas';
@@ -255,3 +255,4 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
     </div>
   );
 };
+

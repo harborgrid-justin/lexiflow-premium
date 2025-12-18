@@ -17,7 +17,7 @@ import { AlertTriangle, ShieldAlert, MapPin, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 // Components
@@ -100,3 +100,4 @@ export const CalendarSOL: React.FC = () => {
     </div>
   );
 };
+

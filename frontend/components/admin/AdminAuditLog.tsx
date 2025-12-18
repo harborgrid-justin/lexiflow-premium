@@ -11,8 +11,8 @@ import { useToast } from '../../context/ToastContext';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
 import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { AuditLogControls } from './audit/AuditLogControls';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
@@ -224,3 +224,4 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
     </div>
   );
 };
+

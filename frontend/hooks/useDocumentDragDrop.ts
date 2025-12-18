@@ -28,9 +28,9 @@ import React, { useState, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { DocumentService } from '../services/documentService';
-import { queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { DocumentService } from '../services/features/documents/documentService';
+import { queryClient } from '../services/infrastructure/queryClient';
+import { STORES } from '../services/data/db';
 
 // Hooks & Context
 import { useNotify } from './useNotify';
@@ -88,3 +88,4 @@ export const useDocumentDragDrop = (currentFolder: string) => {
 
     return { isDragging, isUploading, setIsUploading, handleDragEnter, handleDragLeave, handleDrop };
 };
+

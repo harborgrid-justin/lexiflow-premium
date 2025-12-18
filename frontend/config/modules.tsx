@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModuleRegistry } from '../services/moduleRegistry';
+import { ModuleRegistry } from '../services/infrastructure/moduleRegistry';
 import { NAVIGATION_ITEMS } from './nav.config';
 import { PATHS } from './paths.config';
 
@@ -20,7 +20,8 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard'));
 const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
-const MatterModule = lazyWithPreload(() => import('../components/matters/MatterModule').then(m => ({ default: m.MatterModule })));
+// MatterModule consolidated into CaseList - matters and cases are the same entity
+const MatterModule = CaseList;
 const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager'));
 const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager'));
 const MasterWorkflow = lazyWithPreload(() => import('../components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
@@ -90,3 +91,4 @@ export const initializeModules = () => {
 
     ModuleRegistry.registerBatch(modules);
 };
+

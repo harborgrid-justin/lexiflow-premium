@@ -1,9 +1,9 @@
 
 import { useState, useMemo } from 'react';
-import { DataService } from '../services/dataService';
+import { DataService } from '../services/data/dataService';
 import { Case } from '../types';
-import { useQuery } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { useQuery } from '../services/infrastructure/queryClient';
+import { STORES } from '../services/data/db';
 import { useDebounce } from './useDebounce';
 import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
 
@@ -77,3 +77,4 @@ export const useCaseList = () => {
     isError
   };
 };
+

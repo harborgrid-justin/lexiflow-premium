@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Party, PartyType, PartyRole } from '../../entities/party.entity';
+import { Party, PartyType, PartyRole } from '../../parties/entities/party.entity';
 import { Case } from '../../cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 

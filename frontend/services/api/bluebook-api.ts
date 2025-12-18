@@ -1,6 +1,6 @@
 /**
- * BluebookApiService
- * Frontend API client for Bluebook citation formatting
+ * Bluebook API Service
+ * Enterprise-grade Bluebook citation management and formatting
  */
 
 import { apiClient } from '../apiClient';
@@ -12,12 +12,29 @@ import {
   CitationFormat
 } from '../../types/bluebook';
 
+export interface CitationValidation {
+  citation: string;
+  isValid: boolean;
+  type: string;
+  errors: Array<{ field: string; message: string }>;
+  parsed: any;
+}
+
+export interface CitationParseResult {
+  success: boolean;
+  data: any;
+  type?: string;
+  confidence?: number;
+}
+
 export class BluebookApiService {
+  private readonly baseUrl = '/bluebook';
+
   /**
    * Parse a raw citation
    */
-  async parseCitation(citation: string): Promise<{ success: boolean; data: any }> {
-    return apiClient.post('/bluebook/parse', { citation });
+  async parseCitation(citation: string): Promise<CitationParseResult> {
+    return apiClient.post<CitationParseResult>(`${this.baseUrl}/parse`, { citation });
   }
 
   /**
@@ -54,6 +71,22 @@ export class BluebookApiService {
       citation,
       expectedType
     });
+  }
+
+  /**
+   * Get citation history
+   */
+  async getCitationHistory(documentId?: string): Promise<FormattedCitation[]> {
+    const params = documentId ? { documentId } : {};
+    return apiClient.get<FormattedCitation[]>(`${this.baseUrl}/history`, params);
+  }
+
+  /**
+   * Get citation templates
+   */
+  async getTemplates(type?: string): Promise<any[]> {
+    const params = type ? { type } : {};
+    return apiClient.get<any[]>(`${this.baseUrl}/templates`, params);
   }
 
   /**

@@ -1,9 +1,9 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
-import { Client } from '../../entities/client.entity';
-import { EvidenceItem } from '../../entities/evidence-item.entity';
-import { ConflictCheck } from '../../entities/conflict-check.entity';
-import { Party } from '../../entities/party.entity';
+import { BaseEntity } from '../../common/base/base.entity';
+import { Client } from '../../clients/entities/client.entity';
+import { EvidenceItem } from '../../evidence/entities/evidence-item.entity';
+import { ConflictCheck } from '../../compliance/conflict-checks/entities/conflict-check.entity';
+import { Party } from '../../parties/entities/party.entity';
 
 export enum CaseType {
   CIVIL = 'Civil',
@@ -40,7 +40,7 @@ export class Case extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   title: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ name: 'case_number', type: 'varchar', length: 100, unique: true })
   caseNumber: string;
 
   @Column({ type: 'text', nullable: true })
@@ -60,7 +60,7 @@ export class Case extends BaseEntity {
   })
   status: CaseStatus;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'practice_area', type: 'varchar', length: 255, nullable: true })
   practiceArea?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -72,32 +72,32 @@ export class Case extends BaseEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   judge?: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'filing_date', type: 'date', nullable: true })
   filingDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'trial_date', type: 'date', nullable: true })
   trialDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'close_date', type: 'date', nullable: true })
   closeDate?: Date;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'assigned_team_id', type: 'uuid', nullable: true })
   assignedTeamId?: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'lead_attorney_id', type: 'uuid', nullable: true })
   leadAttorneyId?: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'is_archived', type: 'boolean', default: false })
   isArchived: boolean;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'client_id', type: 'uuid', nullable: true })
   clientId?: string;
 
   @ManyToOne(() => Client, (client) => client.cases, { nullable: true })
-  @JoinColumn({ name: 'clientId' })
+  @JoinColumn({ name: 'client_id' })
   client?: Client;
 
   @OneToMany(() => EvidenceItem, (evidenceItem) => evidenceItem.case)

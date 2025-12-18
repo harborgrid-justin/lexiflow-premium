@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { User } from '../../entities/user.entity';
-import { UserProfile } from '../../entities/user-profile.entity';
+import { User, UserRole, UserStatus } from '../../users/entities/user.entity';
+import { UserProfile } from '../../users/entities/user-profile.entity';
 import * as bcrypt from 'bcrypt';
 import { BCRYPT_ROUNDS } from '../master.config';
 
@@ -20,15 +20,15 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Create Admin User
   const adminUser = userRepository.create({
     email: 'admin@lexiflow.com',
-    password: hashedPassword,
+    passwordHash: hashedPassword,
     firstName: 'Admin',
     lastName: 'User',
-    role: 'super_admin',
+    role: UserRole.SUPER_ADMIN,
     department: 'Administration',
     title: 'System Administrator',
     phone: '555-0100',
-    isActive: true,
-    isVerified: true,
+    status: UserStatus.ACTIVE,
+    emailVerified: true,
   });
   await userRepository.save(adminUser);
 
@@ -43,15 +43,15 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Create Partner
   const partnerUser = userRepository.create({
     email: 'john.partner@lexiflow.com',
-    password: hashedPassword,
+    passwordHash: hashedPassword,
     firstName: 'John',
     lastName: 'Partner',
-    role: 'partner',
+    role: UserRole.PARTNER,
     department: 'Litigation',
     title: 'Senior Partner',
     phone: '555-0101',
-    isActive: true,
-    isVerified: true,
+    status: UserStatus.ACTIVE,
+    emailVerified: true,
   });
   await userRepository.save(partnerUser);
 
@@ -75,15 +75,15 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Create Senior Associate
   const seniorAssociateUser = userRepository.create({
     email: 'sarah.smith@lexiflow.com',
-    password: hashedPassword,
+    passwordHash: hashedPassword,
     firstName: 'Sarah',
     lastName: 'Smith',
-    role: 'senior_associate',
+    role: UserRole.SENIOR_ASSOCIATE,
     department: 'Corporate',
     title: 'Senior Associate',
     phone: '555-0102',
-    isActive: true,
-    isVerified: true,
+    status: UserStatus.ACTIVE,
+    emailVerified: true,
   });
   await userRepository.save(seniorAssociateUser);
 
@@ -107,15 +107,15 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Create Associate
   const associateUser = userRepository.create({
     email: 'michael.jones@lexiflow.com',
-    password: hashedPassword,
+    passwordHash: hashedPassword,
     firstName: 'Michael',
     lastName: 'Jones',
-    role: 'associate',
+    role: UserRole.ASSOCIATE,
     department: 'Litigation',
     title: 'Associate Attorney',
     phone: '555-0103',
-    isActive: true,
-    isVerified: true,
+    status: UserStatus.ACTIVE,
+    emailVerified: true,
   });
   await userRepository.save(associateUser);
 
@@ -139,15 +139,15 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Create Paralegal
   const paralegalUser = userRepository.create({
     email: 'emily.davis@lexiflow.com',
-    password: hashedPassword,
+    passwordHash: hashedPassword,
     firstName: 'Emily',
     lastName: 'Davis',
-    role: 'paralegal',
+    role: UserRole.PARALEGAL,
     department: 'Litigation',
     title: 'Senior Paralegal',
     phone: '555-0104',
-    isActive: true,
-    isVerified: true,
+    status: UserStatus.ACTIVE,
+    emailVerified: true,
   });
   await userRepository.save(paralegalUser);
 

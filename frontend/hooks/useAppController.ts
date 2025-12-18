@@ -18,16 +18,16 @@ import { useState, useCallback, useEffect, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
-import { ModuleRegistry } from '../services/moduleRegistry';
-import { HolographicRouting } from '../services/holographicRouting';
-import { db, STORES } from '../services/db';
-import { Seeder } from '../services/dbSeeder';
-import { queryClient } from '../services/queryClient';
-import { GlobalSearchResult } from '../services/searchService';
-import { IntentResult } from '../services/geminiService';
-import { apiClient } from '../services/apiClient';
-import { isBackendApiEnabled } from '../services/apiServices';
+import { DataService } from '../services/data/dataService';
+import { ModuleRegistry } from '../services/infrastructure/moduleRegistry';
+import { HolographicRouting } from '../services/infrastructure/holographicRouting';
+import { db, STORES } from '../services/data/db';
+import { Seeder } from '../services/data/dbSeeder';
+import { queryClient } from '../services/infrastructure/queryClient';
+import { GlobalSearchResult } from '../services/search/searchService';
+import { IntentResult } from '../services/features/research/geminiService';
+import { apiClient } from '../services/infrastructure/apiClient';
+import { isBackendApiEnabled } from '../services/api';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';
@@ -276,3 +276,4 @@ export const useAppController = () => {
     appStatusMessage,
   };
 };
+

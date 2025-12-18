@@ -6,9 +6,9 @@ import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { useWindow } from '../../context/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
@@ -112,3 +112,4 @@ export const CompliancePolicies: React.FC = () => {
     </div>
   );
 };
+

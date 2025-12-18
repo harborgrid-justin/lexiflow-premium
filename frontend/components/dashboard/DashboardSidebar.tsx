@@ -17,7 +17,7 @@ import { AlertCircle, TrendingUp, FileText, ArrowRight } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 // Hooks & Context
@@ -130,3 +130,4 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase
     </div>
   );
 };
+

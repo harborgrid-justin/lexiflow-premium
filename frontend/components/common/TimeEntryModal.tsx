@@ -17,7 +17,7 @@ import { Clock, Wand2, DollarSign } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { GeminiService } from '../../services/geminiService';
+import { GeminiService } from '../../services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -137,3 +137,4 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
     </Modal>
   );
 };
+

@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
+import { DataService } from '../services/data/dataService';
 
 // Hooks & Context
 import { useSync } from './useSync';

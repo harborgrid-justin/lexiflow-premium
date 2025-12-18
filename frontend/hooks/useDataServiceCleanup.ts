@@ -11,7 +11,7 @@
  */
 
 import { useEffect } from 'react';
-import { cleanupDataService, logDataServiceMemory } from '../services/dataService';
+import { cleanupDataService, logDataServiceMemory } from '../services/data/dataService';
 
 interface UseDataServiceCleanupOptions {
   /**
@@ -101,3 +101,4 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
 
 // Need React import for useDataServiceMemoryStats
 import * as React from 'react';
+

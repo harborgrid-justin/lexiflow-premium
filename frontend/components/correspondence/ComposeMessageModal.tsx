@@ -9,7 +9,7 @@ import { CommunicationItem, CommunicationType, UserId } from '../../types';
 import { MOCK_USERS } from '../../data/models/user';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useAutoSave } from '../../hooks/useAutoSave';

@@ -8,10 +8,10 @@ import { DiscoveryRequest } from '../../types';
 import { GeminiService } from '../../services/geminiService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useMutation, queryClient } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 
 interface DiscoveryResponseModalProps {

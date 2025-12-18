@@ -1,5 +1,5 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 export enum DocketEntryType {
@@ -28,27 +28,31 @@ export enum DocketEntryType {
 }
 
 @Entity('docket_entries')
+@Index(['caseId'])
+@Index(['sequenceNumber'])
+@Index(['dateFiled'])
+@Index(['type'])
 export class DocketEntry extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'sequence_number', type: 'int', nullable: true })
   sequenceNumber: number;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ name: 'docket_number', type: 'varchar', length: 100, nullable: true })
   docketNumber: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_filed', type: 'date', nullable: true })
   dateFiled: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'entry_date', type: 'date', nullable: true })
   entryDate: Date;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'text' })
   description: string;
 
   @Column({
@@ -58,46 +62,18 @@ export class DocketEntry extends BaseEntity {
   })
   type: DocketEntryType;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  filedBy?: string;
-
   @Column({ type: 'text', nullable: true })
-  text?: string;
+  text: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'filed_by', type: 'varchar', length: 255, nullable: true })
+  filedBy: string;
+
+  @Column({ name: 'document_title', type: 'varchar', length: 255, nullable: true })
   documentTitle: string;
 
-  @Column({ type: 'varchar', length: 2048, nullable: true })
+  @Column({ name: 'document_url', type: 'varchar', length: 2048, nullable: true })
   documentUrl: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  documentId?: string;
-
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  pacerDocketNumber?: string;
-
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  pacerDocumentNumber?: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  pacerLastSyncAt?: Date;
-
-  @Column({ type: 'boolean', default: false })
-  isSealed: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  isRestricted: boolean;
-
-  @Column({ type: 'text', nullable: true })
-  notes?: string;
-
-  @Column({ type: 'jsonb', nullable: true })
-  attachments?: Array<{
-    id: string;
-    name: string;
-    documentNumber?: string;
-  }>;
-
-  @Column({ type: 'jsonb', nullable: true })
-  metadata?: Record<string, any>;
+  @Column({ name: 'document_id', type: 'uuid', nullable: true })
+  documentId: string;
 }

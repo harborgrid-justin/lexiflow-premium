@@ -6,7 +6,7 @@ import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { Citation } from '../../types';
@@ -65,3 +65,4 @@ export const SavedAuthorities: React.FC = () => {
     </div>
   );
 };
+

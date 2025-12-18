@@ -28,8 +28,8 @@ import { UserAvatar } from '../common/UserAvatar';
 import { ConnectionStatus } from '../common/ConnectionStatus';
 
 // Services & Data
-import { GlobalSearchResult } from '../../services/searchService';
-import { IntentResult } from '../../services/geminiService';
+import { GlobalSearchResult } from '../../services/search/searchService';
+import { IntentResult } from '../../services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -148,3 +148,4 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
     </div>
   );
 };
+

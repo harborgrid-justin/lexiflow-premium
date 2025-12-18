@@ -23,7 +23,7 @@ import { useWindow } from '../../context/WindowContext';
 import { useQuery } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
@@ -122,3 +122,4 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
   );
 });
 CaseDetailHeader.displayName = 'CaseDetailHeader';
+

@@ -25,7 +25,7 @@ import { useMutation, queryClient } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces
@@ -271,3 +271,4 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     </div>
   );
 };
+

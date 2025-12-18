@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Invoice, InvoiceStatus, BillingModel } from '../../billing/invoices/entities/invoice.entity';
-import { Client } from '../../entities/client.entity';
+import { Client } from '../../clients/entities/client.entity';
 import { Case } from '../../cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
@@ -39,8 +39,8 @@ export const seedInvoices = async (dataSource: DataSource) => {
     invoice.client = client;
     invoice.clientName = client.name;
     invoice.matterDescription = aCase.description;
-    invoice.invoiceDate = faker.date.past().toISOString().split('T')[0];
-    invoice.dueDate = faker.date.future().toISOString().split('T')[0];
+    invoice.invoiceDate = faker.date.past();
+    invoice.dueDate = faker.date.future();
     invoice.billingModel = faker.helpers.arrayElement(Object.values(BillingModel));
     invoice.status = faker.helpers.arrayElement(Object.values(InvoiceStatus));
     invoice.subtotal = faker.number.float({ min: 100, max: 10000 });

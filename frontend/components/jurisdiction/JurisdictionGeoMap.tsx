@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Map, RefreshCw, Layers, Navigation } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useWindow } from '../../context/WindowContext';
 import { 
   MapNode, 
@@ -129,3 +129,4 @@ export const JurisdictionGeoMap: React.FC = () => {
     </div>
   );
 };
+

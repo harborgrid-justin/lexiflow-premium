@@ -1,0 +1,147 @@
+/**
+ * Backend API Configuration & Feature Flags
+ * 
+ * DEPRECATION NOTICE (2025-12-18):
+ * IndexedDB mode is deprecated for production use. The application now defaults
+ * to backend API mode in all environments. Local storage fallback is only available
+ * for development debugging purposes.
+ * 
+ * To enable legacy IndexedDB mode (not recommended):
+ * - Set VITE_USE_INDEXEDDB=true in .env
+ * - Or localStorage.setItem('VITE_USE_INDEXEDDB', 'true')
+ */
+
+const DEPRECATION_WARNING = `
+╔═══════════════════════════════════════════════════════════════════╗
+║                    ⚠️  DEPRECATION NOTICE                         ║
+║                                                                   ║
+║  IndexedDB mode is deprecated and will be removed in v2.0.0     ║
+║  Please migrate to backend API mode for production use.          ║
+║                                                                   ║
+║  Backend API provides:                                           ║
+║  • PostgreSQL data persistence                                   ║
+║  • Multi-user synchronization                                    ║
+║  • Enterprise-grade security                                     ║
+║  • Automatic backups & audit trails                              ║
+║                                                                   ║
+║  To disable this warning, remove VITE_USE_INDEXEDDB flag         ║
+╚═══════════════════════════════════════════════════════════════════╝
+`;
+
+/**
+ * Check if backend API mode is enabled (default: TRUE for production)
+ * 
+ * Precedence order:
+ * 1. Environment variable: VITE_USE_BACKEND_API (if explicitly set to false)
+ * 2. Development override: localStorage.VITE_USE_INDEXEDDB (dev only)
+ * 3. Default: TRUE (backend mode)
+ * 
+ * @returns true if backend API should be used (DEFAULT)
+ */
+export function isBackendApiEnabled(): boolean {
+  // Check if explicitly disabled via environment variable
+  const envDisabled = import.meta.env.VITE_USE_BACKEND_API === 'false' || 
+                      import.meta.env.VITE_USE_BACKEND_API === false;
+  if (envDisabled) {
+    console.warn('[API Config] Backend API explicitly disabled via VITE_USE_BACKEND_API=false');
+  }
+  
+  // Check for development override (IndexedDB mode)
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    const useIndexedDB = localStorage.getItem('VITE_USE_INDEXEDDB') === 'true';
+    if (useIndexedDB) {
+      console.warn(DEPRECATION_WARNING);
+      console.warn('[API Config] Using deprecated IndexedDB mode. This will be removed in v2.0.0');
+      return false;
+    }
+  }
+  
+  // Default to backend API (production mode)
+  return !envDisabled;
+}
+
+/**
+ * Check if IndexedDB fallback mode is enabled (DEPRECATED)
+ * @deprecated Use isBackendApiEnabled() instead. Will be removed in v2.0.0
+ */
+export function isIndexedDBMode(): boolean {
+  const enabled = !isBackendApiEnabled();
+  if (enabled) {
+    console.warn('[API Config] isIndexedDBMode() is deprecated. Use isBackendApiEnabled() instead.');
+  }
+  return enabled;
+}
+
+/**
+ * Get current data persistence mode
+ */
+export function getDataMode(): 'backend' | 'indexeddb-deprecated' {
+  return isBackendApiEnabled() ? 'backend' : 'indexeddb-deprecated';
+}
+
+/**
+ * Force backend API mode (disable IndexedDB fallback)
+ * Useful for testing or forcing production behavior
+ */
+export function forceBackendMode(): void {
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    localStorage.removeItem('VITE_USE_INDEXEDDB');
+    localStorage.setItem('VITE_FORCE_BACKEND', 'true');
+  }
+  console.log('[API Config] Forced backend API mode. Reload page to apply changes.');
+}
+
+/**
+ * Enable legacy IndexedDB mode for development only
+ * Shows deprecation warning
+ */
+export function enableLegacyIndexedDB(): void {
+  if (import.meta.env.PROD) {
+    console.error('[API Config] Cannot enable IndexedDB mode in production build');
+    return;
+  }
+  
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    localStorage.setItem('VITE_USE_INDEXEDDB', 'true');
+    localStorage.removeItem('VITE_FORCE_BACKEND');
+  }
+  
+  console.warn(DEPRECATION_WARNING);
+  console.log('[API Config] Enabled legacy IndexedDB mode. Reload page to apply changes.');
+}
+
+/**
+ * Check if running in production build
+ */
+export function isProduction(): boolean {
+  return import.meta.env.PROD;
+}
+
+/**
+ * Get backend API base URL
+ */
+export function getBackendUrl(): string {
+  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+}
+
+/**
+ * Display current configuration in console
+ */
+export function logApiConfig(): void {
+  console.group('[LexiFlow API Configuration]');
+  console.log('Environment:', import.meta.env.MODE);
+  console.log('Production Build:', isProduction());
+  console.log('Data Mode:', getDataMode());
+  console.log('Backend API:', isBackendApiEnabled() ? '✅ Enabled' : '❌ Disabled');
+  console.log('Backend URL:', getBackendUrl());
+  if (!isBackendApiEnabled()) {
+    console.warn('⚠️  IndexedDB mode is DEPRECATED');
+  }
+  console.groupEnd();
+}
+
+// Log configuration on module load (development only)
+if (import.meta.env.DEV) {
+  logApiConfig();
+}
+

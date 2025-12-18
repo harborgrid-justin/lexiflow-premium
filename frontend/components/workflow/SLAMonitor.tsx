@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { useInterval } from '@/hooks/useInterval';
 import { SLAItem } from './types';
 import { formatDeadline } from './utils';
@@ -108,3 +108,4 @@ export const SLAMonitor: React.FC = () => {
     </div>
   );
 };
+

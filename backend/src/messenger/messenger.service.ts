@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Conversation } from '../entities/conversation.entity';
-import { Message } from '../entities/message.entity';
+import { Conversation } from './entities/conversation.entity';
+import { Message } from './entities/message.entity';
 import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
 
 @Injectable()

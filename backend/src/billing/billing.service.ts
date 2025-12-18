@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Invoice } from './entities/invoice.entity';
-import { TimeEntry } from './entities/time-entry.entity';
-import { Expense } from './entities/expense.entity';
+import { Repository, Not } from 'typeorm';
+import { Invoice, InvoiceStatus } from './invoices/entities/invoice.entity';
+import { TimeEntry, TimeEntryStatus } from './time-entries/entities/time-entry.entity';
+import { Expense, ExpenseStatus } from './expenses/entities/expense.entity';
 
 @Injectable()
 export class BillingService {
@@ -46,13 +46,13 @@ export class BillingService {
 
   async sendInvoice(id: string): Promise<Invoice> {
     const invoice = await this.findInvoiceById(id);
-    invoice.status = 'sent';
+    invoice.status = InvoiceStatus.SENT;
     return this.invoiceRepository.save(invoice);
   }
 
   async markInvoicePaid(id: string): Promise<Invoice> {
     const invoice = await this.findInvoiceById(id);
-    invoice.status = 'paid';
+    invoice.status = InvoiceStatus.PAID;
     return this.invoiceRepository.save(invoice);
   }
 
@@ -66,8 +66,8 @@ export class BillingService {
 
   async createTimeEntry(data: any): Promise<TimeEntry> {
     const timeEntry = this.timeEntryRepository.create(data) as unknown as TimeEntry;
-    if (data.hours && data.rate) {
-      (timeEntry as any).amount = data.hours * data.rate;
+    if (data.duration && data.rate) {
+      timeEntry.total = data.duration * data.rate;
     }
     return this.timeEntryRepository.save(timeEntry);
   }
@@ -78,8 +78,8 @@ export class BillingService {
       throw new NotFoundException(`Time entry with ID ${id} not found`);
     }
     Object.assign(timeEntry, data);
-    if (timeEntry.hours && timeEntry.rate) {
-      timeEntry.amount = timeEntry.hours * timeEntry.rate;
+    if (timeEntry.duration && timeEntry.rate) {
+      timeEntry.total = timeEntry.duration * timeEntry.rate;
     }
     return this.timeEntryRepository.save(timeEntry);
   }
@@ -94,7 +94,7 @@ export class BillingService {
 
   async getUnbilledTimeEntries(caseId: string): Promise<TimeEntry[]> {
     return this.timeEntryRepository.find({
-      where: { caseId, billed: false, billable: true },
+      where: { caseId, status: Not(TimeEntryStatus.BILLED), billable: true },
     });
   }
 
@@ -109,7 +109,7 @@ export class BillingService {
 
   async getUnbilledExpenses(caseId: string): Promise<Expense[]> {
     return this.expenseRepository.find({
-      where: { caseId } as any,
+      where: { caseId, status: Not(ExpenseStatus.BILLED) } as any,
     });
   }
 
@@ -117,15 +117,15 @@ export class BillingService {
     const timeEntries = await this.getUnbilledTimeEntries(caseId);
     const expenses = await this.getUnbilledExpenses(caseId);
 
-    const totalTime = timeEntries.reduce((sum, entry) => sum + (entry.amount || 0), 0);
-    const totalExpenses = expenses.reduce((sum, expense) => sum + ((expense as any).amount || 0), 0);
-    const amount = totalTime + totalExpenses;
+    const totalTime = timeEntries.reduce((sum, entry) => sum + (entry.total || 0), 0);
+    const totalExpenses = expenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
+    const totalAmount = totalTime + totalExpenses;
 
     const invoice = this.invoiceRepository.create({
       caseId,
       clientId,
-      amount,
-      status: 'draft',
+      totalAmount,
+      status: InvoiceStatus.DRAFT,
     });
 
     return this.invoiceRepository.save(invoice);
@@ -135,20 +135,20 @@ export class BillingService {
     const timeEntries = await this.findTimeEntriesByCaseId(caseId);
     const expenses = await this.expenseRepository.find({ where: { caseId } });
 
-    const totalHours = timeEntries.reduce((sum, entry) => sum + (entry.hours || 0), 0);
+    const totalHours = timeEntries.reduce((sum, entry) => sum + (entry.duration || 0), 0);
     const totalBilled = timeEntries
-      .filter(e => (e as any).billed)
-      .reduce((sum, entry) => sum + (entry.amount || 0), 0) +
+      .filter(e => e.status === TimeEntryStatus.BILLED)
+      .reduce((sum, entry) => sum + (entry.total || 0), 0) +
       expenses
-        .filter(e => (e as any).billed)
-        .reduce((sum, expense) => sum + ((expense as any).amount || 0), 0);
+        .filter(e => e.status === ExpenseStatus.BILLED)
+        .reduce((sum, expense) => sum + (expense.amount || 0), 0);
     
     const totalUnbilled = timeEntries
-      .filter(e => !(e as any).billed && (e as any).billable)
-      .reduce((sum, entry) => sum + (entry.amount || 0), 0) +
+      .filter(e => e.status !== TimeEntryStatus.BILLED && e.billable)
+      .reduce((sum, entry) => sum + (entry.total || 0), 0) +
       expenses
-        .filter(e => !(e as any).billed && (e as any).billable)
-        .reduce((sum, expense) => sum + ((expense as any).amount || 0), 0);
+        .filter(e => e.status !== ExpenseStatus.BILLED && e.billable)
+        .reduce((sum, expense) => sum + (expense.amount || 0), 0);
 
     return {
       totalHours,
@@ -159,11 +159,11 @@ export class BillingService {
 
   async getWIPStats(): Promise<any[]> {
     const unbilledTimeEntries = await this.timeEntryRepository.find({
-      where: { billed: false, billable: true },
+      where: { status: Not(TimeEntryStatus.BILLED), billable: true },
     });
 
     const unbilledExpenses = await this.expenseRepository.find({
-      where: { billed: false } as any,
+      where: { status: Not(ExpenseStatus.BILLED) } as any,
     });
 
     // Group by case
@@ -171,14 +171,14 @@ export class BillingService {
 
     unbilledTimeEntries.forEach(entry => {
       const current = wipByCase.get(entry.caseId) || 0;
-      wipByCase.set(entry.caseId, current + (entry.amount || 0));
+      wipByCase.set(entry.caseId, current + (entry.total || 0));
     });
 
     unbilledExpenses.forEach(expense => {
-      const caseId = (expense as any).caseId;
+      const caseId = expense.caseId;
       if (caseId) {
         const current = wipByCase.get(caseId) || 0;
-        wipByCase.set(caseId, current + ((expense as any).amount || 0));
+        wipByCase.set(caseId, current + (expense.amount || 0));
       }
     });
 
@@ -194,12 +194,12 @@ export class BillingService {
     const allTimeEntries = await this.timeEntryRepository.find();
     
     const billed = allTimeEntries
-      .filter(e => (e as any).billed)
-      .reduce((sum, e) => sum + (e.amount || 0), 0);
+      .filter(e => e.status === TimeEntryStatus.BILLED)
+      .reduce((sum, e) => sum + (e.total || 0), 0);
     
     const writeOff = allTimeEntries
-      .filter(e => (e as any).billable && !(e as any).billed)
-      .reduce((sum, e) => sum + (e.amount || 0), 0);
+      .filter(e => e.billable && e.status !== TimeEntryStatus.BILLED)
+      .reduce((sum, e) => sum + (e.total || 0), 0);
 
     return [
       { name: 'Billed', value: Math.round(billed), color: '#10b981' },
@@ -213,14 +213,14 @@ export class BillingService {
     
     // Calculate total billed amount from invoices
     const totalBilled = allInvoices
-      .filter(inv => inv.status === 'sent' || inv.status === 'paid')
-      .reduce((sum, inv) => sum + (inv.amount || 0), 0);
+      .filter(inv => inv.status === InvoiceStatus.SENT || inv.status === InvoiceStatus.PAID)
+      .reduce((sum, inv) => sum + (inv.totalAmount || 0), 0);
     
     // Calculate realization rate (billed vs total time)
-    const totalTime = allTimeEntries.reduce((sum, e) => sum + (e.amount || 0), 0);
+    const totalTime = allTimeEntries.reduce((sum, e) => sum + (e.total || 0), 0);
     const billedTime = allTimeEntries
-      .filter(e => (e as any).billed)
-      .reduce((sum, e) => sum + (e.amount || 0), 0);
+      .filter(e => e.status === TimeEntryStatus.BILLED)
+      .reduce((sum, e) => sum + (e.total || 0), 0);
     
     const realization = totalTime > 0 ? (billedTime / totalTime) * 100 : 0;
     

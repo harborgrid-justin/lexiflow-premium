@@ -26,7 +26,7 @@ export class DepositionsService {
   async findAll(queryDto: QueryDepositionDto) {
     const {
       caseId,
-      type,
+      method,
       status,
       assignedAttorney,
       search,
@@ -44,8 +44,8 @@ export class DepositionsService {
       queryBuilder.andWhere('deposition.caseId = :caseId', { caseId });
     }
 
-    if (type) {
-      queryBuilder.andWhere('deposition.type = :type', { type });
+    if (method) {
+      queryBuilder.andWhere('deposition.method = :method', { method });
     }
 
     if (status) {
@@ -147,17 +147,17 @@ export class DepositionsService {
     const now = new Date();
 
     depositions.forEach((deposition) => {
-      stats.byType[deposition.type] = (stats.byType[deposition.type] || 0) + 1;
+      stats.byType[deposition.method] = (stats.byType[deposition.method] || 0) + 1;
       stats.byStatus[deposition.status] =
         (stats.byStatus[deposition.status] || 0) + 1;
 
-      if (deposition.actualCost) {
-        stats.totalCost += Number(deposition.actualCost);
+      if (deposition.estimatedCost) {
+        stats.totalCost += Number(deposition.estimatedCost);
       }
 
-      if (deposition.isTranscriptOrdered && !deposition.transcriptReceivedDate) {
-        stats.transcriptsPending++;
-      }
+      // if (deposition.isTranscriptOrdered && !deposition.transcriptReceivedDate) {
+      //   stats.transcriptsPending++;
+      // }
 
       if (deposition.scheduledDate && new Date(deposition.scheduledDate) > now) {
         stats.upcoming++;

@@ -1,5 +1,5 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 export enum PhaseType {
@@ -27,12 +27,15 @@ export enum PhaseStatus {
 }
 
 @Entity('case_phases')
+@Index(['caseId'])
+@Index(['status'])
+@Index(['startDate'])
 export class CasePhase extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -55,20 +58,38 @@ export class CasePhase extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'start_date', type: 'date', nullable: true })
   startDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'end_date', type: 'date', nullable: true })
   endDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'expected_end_date', type: 'date', nullable: true })
   expectedEndDate?: Date;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'order_index', type: 'int', default: 0 })
   orderIndex: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  @Column({ name: 'completion_percentage', type: 'decimal', precision: 5, scale: 2, default: 0 })
   completionPercentage: number;
+
+  @Column({ type: 'text', nullable: true })
+  objectives: string;
+
+  @Column({ type: 'text', nullable: true })
+  deliverables: string;
+
+  @Column({ name: 'estimated_cost', type: 'decimal', precision: 15, scale: 2, default: 0 })
+  estimatedCost: number;
+
+  @Column({ name: 'actual_cost', type: 'decimal', precision: 15, scale: 2, default: 0 })
+  actualCost: number;
+
+  @Column({ name: 'estimated_hours', type: 'integer', default: 0 })
+  estimatedHours: number;
+
+  @Column({ name: 'actual_hours', type: 'integer', default: 0 })
+  actualHours: number;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

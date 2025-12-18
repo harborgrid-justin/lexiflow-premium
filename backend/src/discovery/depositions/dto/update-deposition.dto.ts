@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { DepositionType, DepositionStatus } from '../entities/deposition.entity';
+import { DepositionMethod, DepositionStatus } from '../entities/deposition.entity';
 
 export class UpdateDepositionDto {
   @IsOptional()
@@ -28,8 +28,8 @@ export class UpdateDepositionDto {
   deponentOrganization?: string;
 
   @IsOptional()
-  @IsEnum(DepositionType)
-  type?: DepositionType;
+  @IsEnum(DepositionMethod)
+  method?: DepositionMethod;
 
   @IsOptional()
   @IsEnum(DepositionStatus)

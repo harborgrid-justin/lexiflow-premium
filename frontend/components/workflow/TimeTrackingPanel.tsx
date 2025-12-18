@@ -3,7 +3,7 @@ import { Play, Pause, StopCircle, Clock } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { TimeEntry, UUID, CaseId, UserId } from '../../types';
 import { useNotify } from '@/hooks/useNotify';
 

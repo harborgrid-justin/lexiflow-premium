@@ -20,3 +20,47 @@ export { RealtimeStreams } from './RealtimeStreams';
 export { EventBusManager } from './EventBusManager';
 export { VersionControl } from './VersionControl';
 export { Configuration } from './Configuration';
+
+// ============================================================================
+// DataSourcesManager Module - Refactored Components & Utilities
+// ============================================================================
+
+// Components
+export { DataSourcesManager } from './DataSourcesManager';
+export { ConnectionCard } from './ConnectionCard';
+export { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+
+// Hooks
+export { 
+  useDataSourceConnections,
+  useConnectionForm,
+  useLocalStorageFiles
+} from './hooks';
+
+// Types
+export type {
+  ConnectionStatus,
+  DataProviderType,
+  DataSourceConnection,
+  DataProvider,
+  ConnectionFormData,
+  ConnectionTestResult,
+  SyncResult,
+  DeleteResult
+} from './types';
+
+// Constants
+export {
+  DATA_PROVIDERS,
+  BACKEND_ENABLED_SERVICES,
+  DEFAULT_REGIONS,
+  DEFAULT_CONNECTION_FORM
+} from './constants';
+
+// Utilities
+export {
+  getStatusColor,
+  getStatusLabel,
+  formatLastSync,
+  calculateCoverage
+} from './utils';

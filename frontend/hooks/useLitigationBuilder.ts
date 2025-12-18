@@ -18,11 +18,11 @@ import { useState, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation } from '../services/queryClient';
-import { STORES } from '../services/db';
-import { GraphValidationService } from '../services/graphValidationService';
-import { DateCalculationService } from '../services/dateCalculationService';
+import { DataService } from '../services/data/dataService';
+import { useQuery, useMutation } from '../services/infrastructure/queryClient';
+import { STORES } from '../services/data/db';
+import { GraphValidationService } from '../services/search/graphValidationService';
+import { DateCalculationService } from '../services/infrastructure/dateCalculationService';
 
 // Hooks & Context
 import { useNotify } from './useNotify';

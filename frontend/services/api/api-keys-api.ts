@@ -13,6 +13,18 @@ import type {
   User,
 } from '../../types';
 
+export interface ApiKey {
+  id: string;
+  name: string;
+  key: string;
+  scopes: string[];
+  status: 'active' | 'revoked';
+  expiresAt?: string;
+  lastUsedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export class ApiKeysApiService {
   async getAll(): Promise<ApiKey[]> {
     const response = await apiClient.get<PaginatedResponse<ApiKey>>('/admin/api-keys');

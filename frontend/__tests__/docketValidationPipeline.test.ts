@@ -15,7 +15,7 @@ import {
   isValidDocketEntryType,
   isValidStructuredData 
 } from '../utils/docketValidation';
-import { DeadlineEngine } from '../services/deadlineEngine';
+import { DeadlineEngine } from '../services/features/legal/deadlineEngine';
 import { IdGenerator } from '../utils/idGenerator';
 import { DocketEntry, DocketEntryType } from '../types';
 
@@ -308,3 +308,4 @@ describe('Docket Validation Pipeline', () => {
     });
   });
 });
+

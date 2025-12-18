@@ -5,11 +5,11 @@ import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Landmark, ArrowUpRight, ArrowDownLeft, Plus, FileText } from 'lucide-react';
 import { FirmExpense } from '../../types';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { useWindow } from '../../context/WindowContext';
 import { Formatters } from '../../utils/formatters';
@@ -216,3 +216,4 @@ export const BillingLedger: React.FC = () => {
     </div>
   );
 };
+

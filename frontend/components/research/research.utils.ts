@@ -1,5 +1,5 @@
 import { ResearchSession, UserId } from '../../types';
-import { GeminiService } from '../../services/geminiService';
+import { GeminiService } from '../../services/features/research/geminiService';
 
 export const performSearch = async (query: string, history: ResearchSession[]): Promise<{ newSession: ResearchSession, updatedHistory: ResearchSession[] }> => {
     if (!query.trim()) {
@@ -20,3 +20,4 @@ export const performSearch = async (query: string, history: ResearchSession[]): 
     const updatedHistory = [newSession, ...history];
     return { newSession, updatedHistory };
 };
+

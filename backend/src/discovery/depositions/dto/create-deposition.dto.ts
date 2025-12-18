@@ -11,7 +11,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { DepositionType } from '../entities/deposition.entity';
+import { DepositionMethod } from '../entities/deposition.entity';
 
 export class CreateDepositionDto {
   @IsUUID()
@@ -31,8 +31,8 @@ export class CreateDepositionDto {
   @MaxLength(200)
   deponentOrganization?: string;
 
-  @IsEnum(DepositionType)
-  type: DepositionType;
+  @IsEnum(DepositionMethod)
+  method: DepositionMethod;
 
   @IsOptional()
   @IsDateString()

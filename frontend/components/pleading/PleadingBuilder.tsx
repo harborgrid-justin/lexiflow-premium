@@ -18,8 +18,8 @@ import { Plus, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
@@ -256,3 +256,4 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     );
 };
 export default PleadingBuilder;
+

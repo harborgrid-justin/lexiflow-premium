@@ -1,7 +1,7 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
-import { User } from '../../entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 
 export enum TeamMemberRole {
   LEAD_ATTORNEY = 'Lead Attorney',
@@ -16,19 +16,23 @@ export enum TeamMemberRole {
 }
 
 @Entity('case_team_members')
+@Index(['caseId'])
+@Index(['userId'])
+@Index(['role'])
+@Index(['caseId', 'userId'], { unique: true })
 export class CaseTeamMember extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'user_id', type: 'uuid' })
   userId: string;
 
   @ManyToOne(() => User, (user) => user.caseTeamMemberships)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @Column({ type: 'varchar', length: 255 })
@@ -46,17 +50,23 @@ export class CaseTeamMember extends BaseEntity {
   @Column({ type: 'varchar', length: 50, nullable: true })
   phone?: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'hourly_rate', type: 'decimal', precision: 10, scale: 2, nullable: true })
   hourlyRate?: number;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'assigned_date', type: 'date', nullable: true })
   assignedDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'removed_date', type: 'date', nullable: true })
   removedDate?: Date;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
+
+  @Column({ name: 'allocation_percentage', type: 'integer', default: 0 })
+  allocationPercentage: number;
+
+  @Column({ type: 'text', nullable: true })
+  responsibilities: string;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

@@ -22,8 +22,8 @@ import { useQuery } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '../../services/geminiService';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
@@ -167,3 +167,4 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     </div>
   );
 };
+

@@ -1,63 +1,67 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   Index,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '../../../entities/user.entity';
+import { BaseEntity } from '../../../common/base/base.entity';
+import { User } from '../../../users/entities/user.entity';
+import { Case } from '../../../cases/entities/case.entity';
 
 export enum ExpenseStatus {
-  DRAFT = 'Draft',
-  SUBMITTED = 'Submitted',
-  APPROVED = 'Approved',
-  BILLED = 'Billed',
-  REIMBURSED = 'Reimbursed',
-  REJECTED = 'Rejected',
+  DRAFT = 'draft',
+  SUBMITTED = 'submitted',
+  APPROVED = 'approved',
+  BILLED = 'billed',
+  REIMBURSED = 'reimbursed',
+  REJECTED = 'rejected',
 }
 
 export enum ExpenseCategory {
-  COURT_FEES = 'Court Fees',
-  FILING_FEES = 'Filing Fees',
-  EXPERT_WITNESS = 'Expert Witness',
-  DEPOSITION = 'Deposition',
-  TRAVEL = 'Travel',
-  MEALS = 'Meals',
-  LODGING = 'Lodging',
-  COPIES = 'Copies',
-  POSTAGE = 'Postage',
-  RESEARCH = 'Research',
-  TRANSCRIPTS = 'Transcripts',
-  PROCESS_SERVICE = 'Process Service',
-  TECHNOLOGY = 'Technology',
-  OTHER = 'Other',
+  COURT_FEES = 'court_fees',
+  FILING_FEES = 'filing_fees',
+  EXPERT_WITNESS = 'expert_witness',
+  DEPOSITION = 'deposition',
+  TRAVEL = 'travel',
+  MEALS = 'meals',
+  LODGING = 'lodging',
+  COPIES = 'copies',
+  POSTAGE = 'postage',
+  RESEARCH = 'research',
+  TRANSCRIPTS = 'transcripts',
+  PROCESS_SERVICE = 'process_service',
+  TECHNOLOGY = 'technology',
+  OFFICE_SUPPLIES = 'office_supplies',
+  PROFESSIONAL_SERVICES = 'professional_services',
+  OTHER = 'other',
 }
 
 @Entity('expenses')
 @Index(['caseId', 'status'])
 @Index(['userId', 'expenseDate'])
-export class Expense {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ name: 'case_id', type: 'uuid' })
+@Index(['category'])
+@Index(['billable'])
+export class Expense extends BaseEntity {
+  @Column({ name: 'case_id', type: 'uuid', nullable: true })
   @Index()
   caseId: string;
 
-  @Column({ name: 'user_id', type: 'uuid' })
+  @ManyToOne(() => Case)
+  @JoinColumn({ name: 'case_id' })
+  case: Case;
+
+  @Column({ name: 'user_id', type: 'uuid', nullable: true })
   @Index()
   userId: string;
 
-  @ManyToOne(() => User, (user) => user.expenses)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ type: 'date' })
+  @Column({ name: 'expense_date', type: 'date' })
   @Index()
-  expenseDate: string;
+  expenseDate: Date;
 
   @Column({
     type: 'enum',
@@ -68,16 +72,16 @@ export class Expense {
   @Column({ type: 'varchar', length: 500 })
   description: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 15, scale: 2 })
   amount: number;
 
-  @Column({ type: 'varchar', length: 3, default: 'USD' })
+  @Column({ type: 'varchar', length: 10, default: 'USD' })
   currency: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   quantity: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'unit_price', type: 'decimal', precision: 10, scale: 2, nullable: true })
   unitPrice: number;
 
   @Column({
@@ -97,60 +101,54 @@ export class Expense {
   @Column({ type: 'varchar', length: 255, nullable: true })
   vendor: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ name: 'receipt_number', type: 'varchar', length: 100, nullable: true })
   receiptNumber: string;
 
-  @Column({ type: 'simple-array', nullable: true })
-  receiptUrls: string[];
+  @Column({ name: 'payment_method', type: 'varchar', length: 100, nullable: true })
+  paymentMethod: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'approved_by', type: 'uuid', nullable: true })
+  approvedBy: string;
+
+  @Column({ name: 'approved_at', type: 'timestamp', nullable: true })
+  approvedAt: Date;
+
+  @Column({ name: 'rejection_reason', type: 'text', nullable: true })
+  rejectionReason: string;
+
+  @Column({ name: 'invoice_id', type: 'uuid', nullable: true })
   invoiceId: string;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  markup: number; // percentage
+  @Column({ name: 'receipt_path', type: 'varchar', length: 500, nullable: true })
+  receiptPath: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'tax_amount', type: 'decimal', precision: 15, scale: 2, default: 0 })
+  taxAmount: number;
+
+  @Column({ name: 'exchange_rate', type: 'decimal', precision: 10, scale: 6, default: 1 })
+  exchangeRate: number;
+
+  @Column({ name: 'amount_in_base_currency', type: 'decimal', precision: 15, scale: 2, nullable: true })
+  amountInBaseCurrency: number;
+
+  @Column({ name: 'markup', type: 'decimal', precision: 10, scale: 2, default: 0 })
+  markup: number;
+
+  @Column({ name: 'marked_up_amount', type: 'decimal', precision: 15, scale: 2, nullable: true })
   markedUpAmount: number;
+
+  @Column({ name: 'billed_by', type: 'uuid', nullable: true })
+  billedBy: string;
+
+  @Column({ name: 'billed_at', type: 'timestamp', nullable: true })
+  billedAt: Date;
+
+  @Column({ name: 'reimbursed_by', type: 'uuid', nullable: true })
+  reimbursedBy: string;
+
+  @Column({ name: 'reimbursed_at', type: 'timestamp', nullable: true })
+  reimbursedAt: Date;
 
   @Column({ type: 'text', nullable: true })
   notes: string;
-
-  @Column({ type: 'uuid', nullable: true })
-  approvedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  approvedAt: Date;
-
-  @Column({ type: 'uuid', nullable: true })
-  billedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  billedAt: Date;
-
-  @Column({ type: 'uuid', nullable: true })
-  reimbursedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  reimbursedAt: Date;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  glCode: string; // General Ledger code
-
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  paymentMethod: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
-
-  @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
-
-  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
 }

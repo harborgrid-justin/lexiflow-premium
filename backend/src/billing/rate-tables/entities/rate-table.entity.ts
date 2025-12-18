@@ -1,62 +1,9 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   Index,
 } from 'typeorm';
-
-@Entity('rate_tables')
-@Index(['firmId', 'isActive'])
-export class RateTable {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  name: string;
-
-  @Column({ type: 'text', nullable: true })
-  description: string;
-
-  @Column({ name: 'firm_id', type: 'uuid' })
-  @Index()
-  firmId: string;
-
-  @Column({ type: 'date' })
-  effectiveDate: string;
-
-  @Column({ type: 'date', nullable: true })
-  expirationDate: string;
-
-  @Column({ type: 'boolean', default: true })
-  @Index()
-  isActive: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  isDefault: boolean;
-
-  @Column({ type: 'jsonb' })
-  rates: RateTableEntry[];
-
-  @Column({ type: 'varchar', length: 3, default: 'USD' })
-  currency: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
-
-  @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
-
-  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
-}
+import { BaseEntity } from '../../../common/base/base.entity';
 
 export interface RateTableEntry {
   userId?: string;
@@ -66,4 +13,63 @@ export interface RateTableEntry {
   rate: number;
   effectiveDate?: string;
   description?: string;
+}
+
+@Entity('rate_tables')
+@Index(['firmId', 'isActive'])
+@Index(['name'])
+@Index(['effectiveDate'])
+export class RateTable extends BaseEntity {
+  @Column({ type: 'varchar', length: 255 })
+  name: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
+  @Column({ name: 'firm_id', type: 'uuid', nullable: true })
+  @Index()
+  firmId: string;
+
+  @Column({ name: 'effective_date', type: 'date' })
+  effectiveDate: Date;
+
+  @Column({ name: 'expiration_date', type: 'date', nullable: true })
+  expirationDate: Date;
+
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  @Index()
+  isActive: boolean;
+
+  @Column({ name: 'is_default', type: 'boolean', default: false })
+  isDefault: boolean;
+
+  @Column({ type: 'jsonb' })
+  rates: RateTableEntry[];
+
+  @Column({ type: 'varchar', length: 3, default: 'USD' })
+  currency: string;
+
+  @Column({ name: 'client_id', type: 'uuid', nullable: true })
+  clientId: string;
+
+  @Column({ name: 'client_type', type: 'varchar', length: 200, nullable: true })
+  clientType: string;
+
+  @Column({ name: 'overtime_multiplier', type: 'decimal', precision: 5, scale: 2, nullable: true })
+  overtimeMultiplier: number;
+
+  @Column({ name: 'weekend_multiplier', type: 'decimal', precision: 5, scale: 2, nullable: true })
+  weekendMultiplier: number;
+
+  @Column({ name: 'holiday_multiplier', type: 'decimal', precision: 5, scale: 2, nullable: true })
+  holidayMultiplier: number;
+
+  @Column({ name: 'minimum_charge', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  minimumCharge: number;
+
+  @Column({ type: 'text', nullable: true })
+  notes: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata: Record<string, any>;
 }

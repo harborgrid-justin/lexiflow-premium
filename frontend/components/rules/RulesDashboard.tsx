@@ -6,7 +6,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 interface RulesDashboardProps {
     onNavigate: (view: any) => void;
@@ -112,3 +112,4 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
     </div>
   );
 };
+

@@ -3,7 +3,7 @@ import { GeminiService } from '../../services/geminiService';
 import { ResearchSession, UserId } from '../../types';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
@@ -78,3 +78,4 @@ export const ActiveResearch: React.FC = () => {
     </div>
   );
 };
+

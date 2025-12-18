@@ -43,10 +43,10 @@ import { Input } from '../common/Inputs';
 import { useTheme } from '../../context/ThemeContext';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================

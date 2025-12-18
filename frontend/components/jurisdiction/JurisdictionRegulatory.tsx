@@ -4,7 +4,7 @@ import { Card } from '../common/Card';
 import { Scale, AlertTriangle, FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 export const JurisdictionRegulatory: React.FC = () => {
@@ -55,3 +55,4 @@ export const JurisdictionRegulatory: React.FC = () => {
     </div>
   );
 };
+

@@ -1,5 +1,5 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 export enum ProjectStatus {
@@ -18,12 +18,15 @@ export enum ProjectPriority {
 }
 
 @Entity('projects')
+@Index(['caseId'])
+@Index(['status'])
+@Index(['dueDate'])
 export class Project extends BaseEntity {
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'case_id', type: 'uuid', nullable: true })
   caseId?: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE', nullable: true })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case?: Case;
 
   @Column({ type: 'varchar', length: 255 })
@@ -46,28 +49,28 @@ export class Project extends BaseEntity {
   })
   priority: ProjectPriority;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'start_date', type: 'date', nullable: true })
   startDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'due_date', type: 'date', nullable: true })
   dueDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'completed_date', type: 'date', nullable: true })
   completedDate?: Date;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'project_manager_id', type: 'uuid', nullable: true })
   projectManagerId?: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'assigned_team_id', type: 'uuid', nullable: true })
   assignedTeamId?: string;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  @Column({ name: 'completion_percentage', type: 'decimal', precision: 5, scale: 2, default: 0 })
   completionPercentage: number;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true })
+  @Column({ name: 'estimated_hours', type: 'decimal', precision: 12, scale: 2, nullable: true })
   estimatedHours?: number;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true })
+  @Column({ name: 'actual_hours', type: 'decimal', precision: 12, scale: 2, nullable: true })
   actualHours?: number;
 
   @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true })

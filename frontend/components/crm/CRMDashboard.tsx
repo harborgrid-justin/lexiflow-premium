@@ -18,7 +18,7 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tool
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 // Hooks & Context
@@ -194,3 +194,4 @@ export const CRMDashboard: React.FC = () => {
     </div>
   );
 };
+

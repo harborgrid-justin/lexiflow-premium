@@ -7,7 +7,7 @@ import { ShieldAlert, FileText, CheckCircle, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { Clause } from '../../types';
@@ -96,3 +96,4 @@ export const ClauseAnalytics: React.FC = () => {
     </div>
   );
 };
+

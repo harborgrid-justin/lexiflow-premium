@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { EvidenceItem } from '../../entities/evidence-item.entity';
+import { EvidenceItem, EvidenceType } from '../../evidence/entities/evidence-item.entity';
 import { Case } from '../../cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
@@ -20,7 +20,7 @@ export const seedEvidenceItems = async (dataSource: DataSource) => {
     evidenceItem.evidenceNumber = faker.string.alphanumeric(10);
     evidenceItem.title = faker.lorem.sentence();
     evidenceItem.description = faker.lorem.paragraph();
-    evidenceItem.evidenceType = 'digital';
+    evidenceItem.evidenceType = EvidenceType.DIGITAL;
     evidenceItem.collectionDate = faker.date.past();
     evidenceItems.push(evidenceItem);
   }

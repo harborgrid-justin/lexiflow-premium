@@ -18,7 +18,7 @@ import { DollarSign, AlertCircle, Users, Calculator } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 // Hooks & Context

@@ -33,11 +33,11 @@ import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { GeminiService, BriefCritique } from '../../services/geminiService';
 import { AnalysisEngine } from '../../services/analysisEngine';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -234,3 +234,4 @@ export const BriefAnalyzer: React.FC = () => {
 };
 
 export default BriefAnalyzer;
+

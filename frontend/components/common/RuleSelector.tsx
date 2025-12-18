@@ -18,7 +18,7 @@ import { Book, X, Search, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { RuleService } from '../../services/ruleService';
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '../../services/infrastructure/queryClient'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -135,3 +135,4 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
     </div>
   );
 };
+

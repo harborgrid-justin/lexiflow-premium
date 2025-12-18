@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, Not, IsNull } from 'typeorm';
 import { DiscoveryRequest, DiscoveryRequestStatus } from './discovery-requests/entities/discovery-request.entity';
 import { LegalHold, LegalHoldStatus } from './legal-holds/entities/legal-hold.entity';
-import { Custodian } from './entities/custodian.entity';
+import { Custodian } from './custodians/entities/custodian.entity';
 import { Evidence } from './evidence/entities/evidence.entity';
 
 @Injectable()

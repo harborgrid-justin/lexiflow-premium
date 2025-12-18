@@ -1,0 +1,82 @@
+// services/index.ts
+
+// Core Services
+export * from './analysisEngine';
+export * from './blobManager';
+export * from './chainService';
+export * from './cryptoService';
+export * from './cryptoWorker';
+export * from './dataService';
+export * from './db';
+export * from './workerPool';
+export * from './dbSeeder';
+export * from './discoveryService';
+export * from './documentService';
+export * from './geminiService';
+export * from './holographicRouting';
+export * from './integrationOrchestrator';
+export * from './moduleRegistry';
+export * from './queryClient';
+export * from './ruleService';
+export * from './schemaGenerator';
+export * from './searchService';
+export * from './searchWorker';
+export * from './syncEngine';
+export * from './xmlDocketParser';
+
+// AI Services
+export * from './ai/prompts';
+export * from './ai/schemas';
+
+// Core ORM
+export * from './core/Repository';
+export * from './core/microORM';
+
+// Domain Services
+export * from './domains/AdminDomain';
+export * from './domains/AnalyticsDomain';
+export * from './domains/BackupDomain';
+export * from './domains/BillingDomain';
+export * from './domains/CRMDomain';
+export * from './domains/CaseDomain';
+export * from './domains/CommunicationDomain';
+export * from './domains/ComplianceDomain';
+export * from './domains/DataCatalogDomain';
+export * from './domains/DataQualityDomain';
+export * from './domains/DocketDomain';
+export * from './domains/JurisdictionDomain';
+export * from './domains/KnowledgeDomain';
+export * from './domains/MarketingDomain';
+export * from './domains/OperationsDomain';
+export * from './domains/ProfileDomain';
+export * from './domains/SecurityDomain';
+
+// Repositories
+export * from './repositories/AnalysisRepository';
+// export * from './repositories/BillingRepository';
+export * from './repositories/CitationRepository';
+export * from './repositories/ClauseRepository';
+export * from './repositories/ClientRepository';
+export * from './repositories/DiscoveryRepository';
+export * from './repositories/DocumentRepository';
+export * from './repositories/EntityRepository';
+export * from './repositories/EvidenceRepository';
+export * from './repositories/ExhibitRepository';
+export * from './repositories/ExpenseRepository';
+export * from './repositories/HRRepository';
+export * from './repositories/MotionRepository';
+export * from './repositories/PleadingRepository';
+export * from './repositories/ProjectRepository';
+export * from './repositories/RiskRepository';
+export * from './repositories/RuleRepository';
+export * from './repositories/TaskRepository';
+export * from './repositories/TemplateRepository';
+export * from './repositories/TrialRepository';
+export * from './repositories/UserRepository';
+export * from './repositories/WorkflowRepository';
+
+// ==================== BACKEND API SERVICES ====================
+// Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
+export * from './apiClient';
+export * from './api';
+export * from './apiConfig';

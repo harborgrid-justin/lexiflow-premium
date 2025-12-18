@@ -5,9 +5,9 @@ import { X, Wand2, Activity, Minus } from 'lucide-react';
 import { GeminiService } from '../../services/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '../../types';
 import { useWindow } from '../../context/WindowContext';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { useTheme } from '../../context/ThemeContext';
@@ -122,3 +122,4 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
     </div>
   );
 };
+

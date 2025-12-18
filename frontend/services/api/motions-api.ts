@@ -1,0 +1,63 @@
+/**
+ * Motions API Service
+ * Manages legal motions in cases
+ */
+
+import { apiClient } from '../apiClient';
+
+export interface Motion {
+  id: string;
+  caseId: string;
+  type: string;
+  title: string;
+  status: 'draft' | 'filed' | 'pending' | 'granted' | 'denied' | 'withdrawn';
+  filedDate?: string;
+  hearingDate?: string;
+  decidedDate?: string;
+  outcome?: string;
+  documentId?: string;
+  notes?: string;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface MotionFilters {
+  caseId?: string;
+  type?: string;
+  status?: Motion['status'];
+}
+
+export class MotionsApiService {
+  private readonly baseUrl = '/motions';
+
+  async getAll(filters?: MotionFilters): Promise<Motion[]> {
+    const params = new URLSearchParams();
+    if (filters?.caseId) params.append('caseId', filters.caseId);
+    if (filters?.type) params.append('type', filters.type);
+    if (filters?.status) params.append('status', filters.status);
+    const queryString = params.toString();
+    const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
+    return apiClient.get<Motion[]>(url);
+  }
+
+  async getById(id: string): Promise<Motion> {
+    return apiClient.get<Motion>(`${this.baseUrl}/${id}`);
+  }
+
+  async getByCaseId(caseId: string): Promise<Motion[]> {
+    return this.getAll({ caseId });
+  }
+
+  async create(data: Partial<Motion>): Promise<Motion> {
+    return apiClient.post<Motion>(this.baseUrl, data);
+  }
+
+  async update(id: string, data: Partial<Motion>): Promise<Motion> {
+    return apiClient.put<Motion>(`${this.baseUrl}/${id}`, data);
+  }
+
+  async delete(id: string): Promise<void> {
+    return apiClient.delete(`${this.baseUrl}/${id}`);
+  }
+}

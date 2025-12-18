@@ -4,7 +4,7 @@ import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
 import { ServiceJob, UserId } from '../../types';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useTheme } from '../../context/ThemeContext';

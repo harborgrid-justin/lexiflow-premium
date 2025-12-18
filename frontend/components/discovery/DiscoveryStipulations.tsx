@@ -44,10 +44,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -292,3 +292,4 @@ export const DiscoveryStipulations: React.FC = () => {
 // ============================================================================
 // EXPORTS
 export default DiscoveryStipulations;
+

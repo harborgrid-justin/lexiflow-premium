@@ -20,7 +20,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
 // Services & Types
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { EvidenceItem } from '../../types';
@@ -162,3 +162,4 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
     </div>
   );
 };
+

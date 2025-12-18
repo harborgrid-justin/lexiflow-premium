@@ -29,7 +29,7 @@ import { PreferencePane } from './PreferencePane';
 import { LazyLoader } from '../common/LazyLoader';
 
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -103,3 +103,4 @@ export const UserProfileManager: React.FC = () => {
   );
 };
 export default UserProfileManager;
+

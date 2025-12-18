@@ -4,7 +4,7 @@ import { Card } from '../common/Card';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
@@ -71,3 +71,4 @@ export const WorkflowConfig: React.FC = () => {
     </Card>
   );
 };
+

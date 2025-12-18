@@ -1,84 +1,128 @@
-// services/index.ts
+// services/index.ts - Main barrel export (simplified and organized)
 
-// Core Services
-export * from './analysisEngine';
-export * from './blobManager';
-export * from './chainService';
-export * from './cryptoService';
-export * from './cryptoWorker';
-export * from './dataService';
-export * from './db';
-export * from './workerPool';
-export * from './dbSeeder';
-export * from './discoveryService';
-export * from './documentService';
-export * from './geminiService';
-export * from './holographicRouting';
-export * from './integrationOrchestrator';
-export * from './moduleRegistry';
-export * from './queryClient';
-export * from './ruleService';
-export * from './schemaGenerator';
-export * from './searchService';
-export * from './searchWorker';
-export * from './syncEngine';
-export * from './xmlDocketParser';
+// ==================== CORE INFRASTRUCTURE ====================
+export * from './core/Repository';
+export * from './core/microORM';
+export * from './core/RepositoryFactory';
 
-// AI Services
+// ==================== DATA LAYER ====================
+export * from './data/dataService';
+export * from './data/db';
+export * from './data/dbSeeder';
+export * from './data/syncEngine';
+
+// Export individual repositories
+export * from './data/repositories/AnalysisRepository';
+export * from './data/repositories/BillingRepository';
+export * from './data/repositories/CitationRepository';
+export * from './data/repositories/ClauseRepository';
+export * from './data/repositories/ClientRepository';
+export * from './data/repositories/DiscoveryRepository';
+export * from './data/repositories/DocumentRepository';
+export * from './data/repositories/EntityRepository';
+export * from './data/repositories/EvidenceRepository';
+export * from './data/repositories/ExhibitRepository';
+export * from './data/repositories/ExpenseRepository';
+export * from './data/repositories/HRRepository';
+export * from './data/repositories/MatterRepository';
+export * from './data/repositories/MotionRepository';
+export * from './data/repositories/OrganizationRepository';
+export * from './data/repositories/PleadingRepository';
+export * from './data/repositories/ProjectRepository';
+export * from './data/repositories/RiskRepository';
+export * from './data/repositories/RuleRepository';
+export * from './data/repositories/TaskRepository';
+export * from './data/repositories/TemplateRepository';
+export * from './data/repositories/TrialRepository';
+export * from './data/repositories/UserRepository';
+export * from './data/repositories/WitnessRepository';
+export * from './data/repositories/WorkflowRepository';
+
+// ==================== DOMAIN SERVICES ====================
+export * from './domain/AdminDomain';
+export * from './domain/AnalyticsDomain';
+export * from './domain/BackupDomain';
+export * from './domain/BillingDomain';
+export * from './domain/CaseDomain';
+export * from './domain/CommunicationDomain';
+export * from './domain/ComplianceDomain';
+export * from './domain/CRMDomain';
+export * from './domain/DataCatalogDomain';
+export * from './domain/DataQualityDomain';
+export * from './domain/DocketDomain';
+export * from './domain/JurisdictionDomain';
+export * from './domain/KnowledgeDomain';
+export * from './domain/MarketingDomain';
+export * from './domain/OperationsDomain';
+export * from './domain/ProfileDomain';
+export * from './domain/SecurityDomain';
+
+// ==================== BACKEND API SERVICES ====================
+// Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
+export * from './infrastructure/apiClient';
+export * from './api';
+export * from './integration/apiConfig';
+
+// ==================== INTEGRATION & ORCHESTRATION ====================
+export * from './integration/integrationOrchestrator';
+export * from './integration/backendDiscovery';
+
+// ==================== INFRASTRUCTURE SERVICES ====================
+export * from './infrastructure/blobManager';
+export * from './infrastructure/chainService';
+export * from './infrastructure/commandHistory';
+export * from './infrastructure/cryptoService';
+export * from './infrastructure/dateCalculationService';
+export * from './infrastructure/holographicRouting';
+export * from './infrastructure/moduleRegistry';
+export * from './infrastructure/notificationService';
+export * from './infrastructure/queryClient';
+export * from './infrastructure/queryKeys';
+export * from './infrastructure/schemaGenerator';
+export * from './infrastructure/aiValidationService';
+export * from './infrastructure/collaborationService';
+
+// ==================== SEARCH SERVICES ====================
+export * from './search/searchService';
+export * from './search/searchWorker';
+export * from './search/graphValidationService';
+
+// ==================== WORKERS ====================
+export * from './workers/cryptoWorker';
+export * from './workers/workerPool';
+
+// ==================== FEATURE SERVICES ====================
+// Analysis
+export * from './features/analysis/analysisEngine';
+
+// Calendar
+export * from './features/calendar/calendarConflictService';
+
+// Discovery
+export * from './features/discovery/discoveryService';
+export * from './features/discovery/fallbackDocketParser';
+
+// Documents
+export * from './features/documents/documentService';
+export * from './features/documents/xmlDocketParser';
+
+// Legal
+export * from './features/legal/ruleService';
+export * from './features/legal/deadlineEngine';
+
+// Research
+export * from './features/research/geminiService';
+
+// Bluebook (keep organized exports)
+export * from './features/bluebook';
+
+// Collaboration (keep organized exports)
+export * from './features/collaboration';
+
+// ==================== AI SERVICES ====================
 export * from './ai/prompts';
 export * from './ai/schemas';
 
-// Core ORM
-export * from './core/Repository';
-export * from './core/microORM';
-
-// Domain Services
-export * from './domains/AdminDomain';
-export * from './domains/AnalyticsDomain';
-export * from './domains/BackupDomain';
-export * from './domains/BillingDomain';
-export * from './domains/CRMDomain';
-export * from './domains/CaseDomain';
-export * from './domains/CommunicationDomain';
-export * from './domains/ComplianceDomain';
-export * from './domains/DataCatalogDomain';
-export * from './domains/DataQualityDomain';
-export * from './domains/DocketDomain';
-export * from './domains/JurisdictionDomain';
-export * from './domains/KnowledgeDomain';
-export * from './domains/MarketingDomain';
-export * from './domains/OperationsDomain';
-export * from './domains/ProfileDomain';
-export * from './domains/SecurityDomain';
-
-// Repositories
-export * from './repositories/AnalysisRepository';
-// export * from './repositories/BillingRepository';
-export * from './repositories/CitationRepository';
-export * from './repositories/ClauseRepository';
-export * from './repositories/ClientRepository';
-export * from './repositories/DiscoveryRepository';
-export * from './repositories/DocumentRepository';
-export * from './repositories/EntityRepository';
-export * from './repositories/EvidenceRepository';
-export * from './repositories/ExhibitRepository';
-export * from './repositories/ExpenseRepository';
-export * from './repositories/HRRepository';
-export * from './repositories/MotionRepository';
-export * from './repositories/PleadingRepository';
-export * from './repositories/ProjectRepository';
-export * from './repositories/RiskRepository';
-export * from './repositories/RuleRepository';
-export * from './repositories/TaskRepository';
-export * from './repositories/TemplateRepository';
-export * from './repositories/TrialRepository';
-export * from './repositories/UserRepository';
-export * from './repositories/WorkflowRepository';
-
-// ==================== BACKEND API SERVICES ====================
-// Export all backend API integrations (added 2025-12-15)
-export * from './apiClient';
-export * from './apiServices';
-export * from './apiServicesExtended';
-export * from './apiServicesDiscovery';
-export * from './apiServicesCompliance';
+// ==================== VALIDATION ====================
+// Validation schemas are not re-exported here to avoid barrel file bloat
+// Import directly from './validation/*Schemas' when needed

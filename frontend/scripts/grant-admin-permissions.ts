@@ -11,7 +11,7 @@
  * Or import this module and call grantAdminPermissions() from your code
  */
 
-import { db, STORES } from '../services/db';
+import { db, STORES } from '../services/data/db';
 import { ExtendedUserProfile, GranularPermission } from '../types';
 
 /**
@@ -213,3 +213,4 @@ if (typeof window !== 'undefined') {
   console.log('🎯 Admin Permission Script Loaded');
   console.log('Run grantAdminPermissions() to grant complete global access');
 }
+

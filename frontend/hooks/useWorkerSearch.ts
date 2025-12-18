@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { SearchWorker } from '../services/searchWorker';
+import { SearchWorker } from '../services/search/searchWorker';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -126,3 +126,4 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
 
   return { filteredItems, isSearching };
 };
+

@@ -18,9 +18,9 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { DataService } from '../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { STORES } from '../services/data/db';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';
@@ -114,3 +114,4 @@ export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string
     setActiveTab // Exposing this for direct tab changes from nav
   };
 };
+

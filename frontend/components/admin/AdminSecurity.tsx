@@ -26,7 +26,7 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -147,3 +147,4 @@ export const AdminSecurity: React.FC = () => {
     </div>
   );
 };
+

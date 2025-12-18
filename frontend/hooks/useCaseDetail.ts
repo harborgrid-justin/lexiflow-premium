@@ -1,10 +1,10 @@
 
 import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '../types';
-import { GeminiService } from '../services/geminiService';
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { GeminiService } from '../services/features/research/geminiService';
+import { DataService } from '../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { STORES } from '../services/data/db';
 import { useNotify } from './useNotify';
 
 export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') => {
@@ -183,3 +183,4 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
     handleGenerateWorkflow
   };
 };
+

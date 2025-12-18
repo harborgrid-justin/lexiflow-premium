@@ -1,5 +1,5 @@
-import { Entity, Column } from 'typeorm';
-import { BaseEntity } from '../../../entities/base.entity';
+import { Entity, Column, Index } from 'typeorm';
+import { BaseEntity } from '../../../common/base/base.entity';
 
 export enum EvidenceType {
   DOCUMENT = 'Document',
@@ -33,8 +33,11 @@ export enum HearsayStatus {
 }
 
 @Entity('evidence')
+@Index(['caseId'])
+@Index(['type'])
+@Index(['admissibility'])
 export class Evidence extends BaseEntity {
-  @Column()
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @Column()
@@ -49,10 +52,10 @@ export class Evidence extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'collection_date', type: 'date', nullable: true })
   collectionDate: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'collected_by', nullable: true })
   collectedBy: string;
 
   @Column({ nullable: true })
@@ -70,13 +73,13 @@ export class Evidence extends BaseEntity {
   @Column({ type: 'simple-array', nullable: true })
   tags: string[];
 
-  @Column({ nullable: true })
+  @Column({ name: 'blockchain_hash', nullable: true })
   blockchainHash: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'tracking_uuid', type: 'uuid', nullable: true })
   trackingUuid: string;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ name: 'chain_of_custody', type: 'json', nullable: true })
   chainOfCustody: {
     id: string;
     date: string;
@@ -86,19 +89,20 @@ export class Evidence extends BaseEntity {
     hash?: string;
   }[];
 
-  @Column({ nullable: true })
+  @Column({ name: 'file_size', nullable: true })
   fileSize: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'file_type', nullable: true })
   fileType: string;
 
-  @Column({ type: 'simple-array', nullable: true })
+  @Column({ name: 'linked_rules', type: 'simple-array', nullable: true })
   linkedRules: string[];
 
   @Column({ nullable: true, default: 'Active' })
   status: string;
 
   @Column({
+    name: 'authentication_method',
     type: 'varchar',
     nullable: true,
     default: AuthenticationMethod.PENDING,
@@ -106,18 +110,19 @@ export class Evidence extends BaseEntity {
   authenticationMethod: AuthenticationMethod;
 
   @Column({
+    name: 'hearsay_status',
     type: 'varchar',
     nullable: true,
     default: HearsayStatus.UNANALYZED,
   })
   hearsayStatus: HearsayStatus;
 
-  @Column({ default: true })
+  @Column({ name: 'is_original', default: true })
   isOriginal: boolean;
 
-  @Column({ type: 'float', nullable: true })
+  @Column({ name: 'relevance_score', type: 'float', nullable: true })
   relevanceScore: number;
 
-  @Column({ nullable: true })
+  @Column({ name: 'expert_id', nullable: true })
   expertId: string;
 }

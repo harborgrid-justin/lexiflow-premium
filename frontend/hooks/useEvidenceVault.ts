@@ -18,9 +18,9 @@ import { useState, useMemo, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
-import { useQuery, useMutation, queryClient } from '../services/queryClient';
-import { STORES } from '../services/db';
+import { DataService } from '../services/data/dataService';
+import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { STORES } from '../services/data/db';
 
 // Types
 import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '../types';
@@ -169,3 +169,4 @@ export const useEvidenceVault = (caseId?: string) => {
     isLoading
   };
 };
+

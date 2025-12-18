@@ -1,4 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Index, Unique } from 'typeorm';
+import { Entity, Column, Index, Unique, OneToOne, OneToMany } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
+import { UserProfile } from './user-profile.entity';
+import { Session } from '../../auth/entities/session.entity';
+import { TimeEntry } from '../../billing/time-entries/entities/time-entry.entity';
+import { CaseTeamMember } from '../../case-teams/entities/case-team.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -30,21 +35,18 @@ export enum UserStatus {
 @Entity('users')
 @Unique(['email'])
 @Index(['role', 'status'])
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   @Index()
   email: string;
 
-  @Column({ name: 'password', type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'password_hash', type: 'varchar', length: 255, nullable: true })
   passwordHash: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ name: 'first_name', type: 'varchar', length: 100 })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ name: 'last_name', type: 'varchar', length: 100 })
   lastName: string;
 
   @Column({
@@ -55,9 +57,13 @@ export class User {
   @Index()
   role: UserRole;
 
-  @Column({ name: 'isActive', type: 'boolean', default: true })
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE
+  })
   @Index()
-  status: boolean;
+  status: UserStatus;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone: string;
@@ -68,32 +74,36 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: true })
   department: string;
 
-  // Note: barNumber not in current DB schema - would need migration to add
-
   @Column({ type: 'text', array: true, default: '{}' })
   permissions: string[];
 
   @Column({ type: 'jsonb', nullable: true })
   preferences: Record<string, any>;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'avatar_url', type: 'varchar', length: 500, nullable: true })
   avatarUrl: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'last_login_at', type: 'timestamp', nullable: true })
   lastLoginAt: Date;
 
-  @Column({ name: 'isVerified', type: 'boolean', default: false })
+  @Column({ name: 'is_verified', type: 'boolean', default: false })
   emailVerified: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'two_factor_enabled', type: 'boolean', default: false })
   twoFactorEnabled: boolean;
 
-  @Column({ name: 'twoFactorSecret', type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'totp_secret', type: 'varchar', length: 255, nullable: true })
   totpSecret: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @OneToOne(() => UserProfile, (profile) => profile.user)
+  profile: UserProfile;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Session[];
+
+  @OneToMany(() => TimeEntry, (timeEntry) => timeEntry.user)
+  timeEntries: TimeEntry[];
+
+  @OneToMany(() => CaseTeamMember, (caseTeamMember) => caseTeamMember.user)
+  caseTeamMemberships: CaseTeamMember[];
 }

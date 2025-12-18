@@ -1,14 +1,14 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
   Index,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../../entities/user.entity';
+import { BaseEntity } from '../../../common/base/base.entity';
+import { User } from '../../../users/entities/user.entity';
 import { Case } from '../../../cases/entities/case.entity';
 
 export enum TimeEntryStatus {
@@ -28,10 +28,7 @@ export enum TimeEntryStatus {
 @Index(['caseId', 'date'])
 @Index(['userId', 'status'])
 @Index(['status', 'billable'])
-export class TimeEntry {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class TimeEntry extends BaseEntity {
   @Column({ name: 'case_id', nullable: true })
   @Index()
   caseId: string;
@@ -49,7 +46,7 @@ export class TimeEntry {
   user: User;
 
   @Column({ type: 'date' })
-  date: string;
+  date: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   duration: number; // in hours

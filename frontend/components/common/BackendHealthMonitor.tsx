@@ -6,7 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { apiClient, type SystemHealth, type ServiceHealthStatus } from '../../services/apiClient';
+import { apiClient, type SystemHealth, type ServiceHealthStatus } from '../../services/infrastructure/apiClient'';
 
 interface BackendHealthMonitorProps {
   isOpen: boolean;
@@ -235,3 +235,4 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
     </AnimatePresence>
   );
 };
+

@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 
 interface DocumentFiltersProps {
@@ -127,3 +127,4 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ currentFolder,
     </div>
   );
 };
+

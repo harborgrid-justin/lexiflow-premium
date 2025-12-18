@@ -10,7 +10,7 @@ import { Input, TextArea } from '../common/Inputs';
 import { useNotify } from '../../hooks/useNotify';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 interface Custodian {
   id: string;
@@ -354,3 +354,4 @@ export const Custodians: React.FC = () => {
 };
 
 export default Custodians;
+

@@ -17,7 +17,7 @@ import { Mail, MapPin, Plus, Filter, Send, Inbox, ShieldCheck } from 'lucide-rea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery, useMutation } from '../../services/queryClient';
 import { correspondenceQueryKeys } from '../../services/queryKeys';
 
@@ -266,3 +266,4 @@ const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = (props) => (
 
 export default CorrespondenceManager;
 export { CorrespondenceManager };
+

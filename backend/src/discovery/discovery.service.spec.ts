@@ -3,9 +3,9 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { DiscoveryService } from './discovery.service';
-import { DiscoveryRequest } from './entities/discovery-request.entity';
-import { LegalHold } from './entities/legal-hold.entity';
-import { Custodian } from './entities/custodian.entity';
+import { DiscoveryRequest } from './discovery-requests/entities/discovery-request.entity';
+import { LegalHold } from './legal-holds/entities/legal-hold.entity';
+import { Custodian } from './custodians/entities/custodian.entity';
 import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 
 describe('DiscoveryService', () => {

@@ -1,25 +1,19 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   Index,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
-import { User } from '../../entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 @Entity('documents')
 @Index(['caseId', 'type'])
 @Index(['status'])
-@Index(['createdAt'])
-export class Document {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Document extends BaseEntity {
   @Column()
   title: string;
 
@@ -32,20 +26,20 @@ export class Document {
   })
   type: DocumentType;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   @Index()
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'creator_id', type: 'uuid' })
   @Index()
   creatorId: string;
 
-  @ManyToOne(() => User, (user) => user.documents)
-  @JoinColumn({ name: 'creatorId' })
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'creator_id' })
   creator: User;
 
   @Column({
@@ -58,28 +52,28 @@ export class Document {
   @Column({ nullable: true })
   filename: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'file_path', nullable: true })
   filePath: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'mime_type', nullable: true })
   mimeType: string;
 
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ name: 'file_size', type: 'bigint', nullable: true })
   fileSize: number;
 
   @Column({ nullable: true })
   checksum: string;
 
-  @Column({ type: 'int', default: 1 })
+  @Column({ name: 'current_version', type: 'int', default: 1 })
   currentVersion: number;
 
   @Column({ nullable: true })
   author: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'page_count', type: 'int', nullable: true })
   pageCount: number;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'word_count', type: 'int', nullable: true })
   wordCount: number;
 
   @Column({ nullable: true })
@@ -88,27 +82,21 @@ export class Document {
   @Column({ type: 'simple-array', nullable: true })
   tags: string[];
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'custom_fields', type: 'jsonb', nullable: true })
   customFields: Record<string, any>;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'full_text_content', type: 'text', nullable: true })
   fullTextContent: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'ocr_processed', type: 'boolean', default: false })
   ocrProcessed: boolean;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'ocr_processed_at', type: 'timestamp', nullable: true })
   ocrProcessedAt: Date;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy: string;
 }

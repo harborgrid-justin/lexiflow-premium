@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { Case } from '../../cases/entities/case.entity';
 
 export enum CalendarEventType {
@@ -11,24 +12,25 @@ export enum CalendarEventType {
 }
 
 @Entity('calendar_events')
-export class CalendarEvent {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+@Index(['caseId'])
+@Index(['startDate'])
+@Index(['eventType'])
+export class CalendarEvent extends BaseEntity {
   @Column()
   title: string;
 
   @Column({
+    name: 'event_type',
     type: 'enum',
     enum: CalendarEventType,
     default: CalendarEventType.REMINDER
   })
   eventType: CalendarEventType;
 
-  @Column({ type: 'timestamp' })
+  @Column({ name: 'start_date', type: 'timestamp' })
   startDate: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ name: 'end_date', type: 'timestamp' })
   endDate: Date;
 
   @Column({ nullable: true })
@@ -40,11 +42,11 @@ export class CalendarEvent {
   @Column({ type: 'json', nullable: true })
   attendees: string[];
 
-  @Column({ nullable: true })
+  @Column({ name: 'case_id', nullable: true })
   caseId: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
   @Column({ nullable: true })
@@ -52,10 +54,4 @@ export class CalendarEvent {
 
   @Column({ default: false })
   completed: boolean;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

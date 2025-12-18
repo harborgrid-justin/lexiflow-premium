@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Clause } from '../../types';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
@@ -9,7 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { filterClauses } from './clauseList.utils';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { VirtualList } from '../common/VirtualList';
 import { EmptyState } from '../common/EmptyState';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '../../config/master.config';
@@ -86,3 +86,4 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
     );
 };
 export default ClauseList;
+

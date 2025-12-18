@@ -25,9 +25,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -113,3 +113,4 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
     </div>
   );
 };
+

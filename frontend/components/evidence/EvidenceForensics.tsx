@@ -18,7 +18,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
 // Services & Types
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { EvidenceItem } from '../../types';
 import { evidenceQueryKeys } from '../../services/queryKeys';
 import { queryClient } from '../../services/queryClient';
@@ -261,3 +261,4 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
     </div>
   );
 };
+

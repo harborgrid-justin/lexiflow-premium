@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { queryClient } from '../services/queryClient';
+import { queryClient } from '../services/infrastructure/queryClient';
 
 // ========================================
 // HOOK
@@ -34,3 +34,4 @@ export const useGlobalQueryStatus = () => {
 
     return { isFetching };
 };
+

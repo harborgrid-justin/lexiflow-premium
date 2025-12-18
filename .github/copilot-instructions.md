@@ -1,16 +1,16 @@
 # LexiFlow AI Legal Suite - Copilot Instructions
 
 ## Project Overview
-LexiFlow is an enterprise legal OS combining Case Management, Discovery, Legal Research, and Firm Operations. The system uses a **client-side-first architecture** with IndexedDB persistence and offline-sync capabilities, simulating a full backend without a server for the frontend, while a separate NestJS backend handles document processing.
+LexiFlow is an enterprise legal OS combining Case Management, Discovery, Legal Research, and Firm Operations. The system uses a **backend-first architecture** (as of 2025-12-18) with PostgreSQL + NestJS backend as the primary data layer. Legacy IndexedDB mode is deprecated and only available for development debugging.
 
 ## Architecture: Dual Stack System
 
-### Frontend Stack (React + IndexedDB)
+### Frontend Stack (React + Backend API)
 - **Framework**: React 18 with Vite, TypeScript strict mode
-- **Data Layer**: Custom IndexedDB wrapper (`services/db.ts`) with 40+ object stores (see `STORES` constant)
+- **Data Layer**: Backend-first via consolidated API services (`services/api/index.ts`) - 90+ domain services
 - **State Management**: Custom React Query implementation (`services/queryClient.ts`) - NOT using external react-query library
-- **Offline-First**: `SyncEngine` (`services/syncEngine.ts`) queues mutations with JSON patch optimization and exponential backoff
-- **Architecture Pattern**: Repository pattern via `DataService` facade (`services/dataService.ts`)
+- **Fallback**: Legacy IndexedDB wrapper (`services/db.ts`) - DEPRECATED for production as of 2025-12-18
+- **Architecture Pattern**: Repository pattern via `DataService` facade (`services/dataService.ts`) with backend/local routing
 
 ### Backend Stack (NestJS + PostgreSQL)
 - **Framework**: NestJS 11.x with TypeORM for document management only
@@ -57,18 +57,27 @@ const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboar
 ```
 
 ### Data Access Patterns
-**ALWAYS use the `DataService` facade** - never call `db.*` directly in components:
+**ALWAYS use the `DataService` facade** - automatically routes to backend API in production:
 ```typescript
 import { DataService } from '../services/dataService';
 
-// ✅ Correct
+// ✅ Correct (routes to backend API by default)
 const cases = await DataService.cases.getAll();
 const case = await DataService.cases.add(newCase);
 
-// ❌ Wrong - bypasses Repository layer & integration events
+// ✅ Also correct (direct API access)
+import { api } from '../services/api';
+const cases = await api.cases.getAll();
+
+// ❌ Wrong - bypasses API layer & integration events
 import { db } from '../services/db';
-await db.getAll('cases');
+await db.getAll('cases');  // DEPRECATED - IndexedDB direct access
 ```
+
+**Backend API Configuration**:
+- Default: Backend API enabled (production mode)
+- Override: Set `localStorage.VITE_USE_INDEXEDDB='true'` for legacy mode (shows deprecation warning)
+- Check mode: `import { isBackendApiEnabled } from '../services/api';`
 
 **Available DataService domains**: `cases`, `docket`, `evidence`, `documents`, `pleadings`, `hr`, `workflow`, `billing`, `discovery`, `trial`, `compliance`, `admin`, `correspondence`, `quality`, `catalog`, `backup`, `profile`, `marketing`, `jurisdiction`, `knowledge`, `crm`, `analytics`, `operations`, `security`
 
@@ -119,11 +128,13 @@ Key modules: `documents`, `document-versions`, `clauses`, `pleadings`, `ocr`, `p
 
 ## Integration Points
 
-### Frontend ↔ Backend
-Currently **disconnected by design** - frontend uses IndexedDB, backend is document-centric. Future integration will use:
-- REST API endpoints (Swagger at `/api/docs` when backend running)
-- SyncEngine mutations will POST to backend endpoints
-- Backend webhook events (`webhooks/`) can trigger frontend sync
+### Frontend ↔ Backend (FULLY INTEGRATED as of 2025-12-18)
+**Backend-first architecture** - frontend defaults to PostgreSQL/NestJS backend:
+- **API Layer**: `services/api/index.ts` - 90+ consolidated domain services
+- **REST API**: All CRUD operations via backend (Swagger at `/api/docs`)
+- **Fallback**: Legacy IndexedDB mode available via `localStorage.VITE_USE_INDEXEDDB='true'` (DEPRECATED)
+- **Configuration**: `services/apiConfig.ts` - backend mode detection and warnings
+- **Routing**: `DataService` automatically routes requests based on `isBackendApiEnabled()`
 
 ### External APIs
 - **Google Gemini API**: Legal research and citation analysis (`services/geminiService.ts`)
@@ -175,9 +186,11 @@ Custom routing system (`services/holographicRouting.ts`) supports minimizable wi
 - `backend/README.md` - Backend-specific documentation
 
 **Architecture deep dives:**
-- `services/syncEngine.ts` - Offline-first sync with JSON patch
+- `services/api/index.ts` - Consolidated backend API services (90+ domains)
+- `services/apiConfig.ts` - Backend-first configuration with deprecation warnings
+- `services/dataService.ts` - Facade pattern with automatic backend/local routing
 - `services/queryClient.ts` - Custom React Query implementation
-- `services/core/Repository.ts` - Base repository with caching
+- `services/core/Repository.ts` - Base repository with caching (legacy IndexedDB)
 - `services/integrationOrchestrator.ts` - Event-driven integration
 - `backend/src/database/data-source.ts` - TypeORM configuration
 

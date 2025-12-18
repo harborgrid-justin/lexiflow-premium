@@ -15,7 +15,7 @@ import { AppContentRenderer } from './components/layout/AppContentRenderer';
 import { GlobalHotkeys } from './components/common/GlobalHotkeys';
 import { useAppController } from './hooks/useAppController';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
-import { backendDiscovery } from './services/backendDiscovery';
+import { backendDiscovery } from './services/integration/backendDiscovery';
 
 // Initialize Module Registry
 initializeModules();

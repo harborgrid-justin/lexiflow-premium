@@ -24,8 +24,8 @@ import { useWindow } from '../../context/WindowContext';
 import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
@@ -140,3 +140,4 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
     </div>
   );
 };
+

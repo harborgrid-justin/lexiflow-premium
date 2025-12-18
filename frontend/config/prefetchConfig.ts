@@ -1,7 +1,7 @@
 
 // config/prefetchConfig.ts
-import { STORES } from '../services/db';
-import { DataService } from '../services/dataService';
+import { STORES } from '../services/data/db';
+import { DataService } from '../services/data/dataService';
 import { PATHS } from './paths.config';
 
 export const PREFETCH_MAP: Record<string, { key: any; fn: () => Promise<any> }> = {
@@ -13,3 +13,4 @@ export const PREFETCH_MAP: Record<string, { key: any; fn: () => Promise<any> }> 
     [PATHS.EVIDENCE]: { key: [STORES.EVIDENCE, 'all'], fn: () => DataService.evidence.getAll() },
     [PATHS.CRM]: { key: [STORES.CLIENTS, 'all'], fn: () => DataService.clients.getAll() },
 };
+

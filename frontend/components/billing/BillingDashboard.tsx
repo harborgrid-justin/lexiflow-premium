@@ -18,7 +18,7 @@ import { RefreshCw } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useMutation } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 // Hooks
 import { useNotify } from '../../hooks/useNotify';
@@ -136,3 +136,4 @@ const BillingDashboard: React.FC<BillingDashboardProps> = (props) => (
 );
 
 export default BillingDashboard;
+

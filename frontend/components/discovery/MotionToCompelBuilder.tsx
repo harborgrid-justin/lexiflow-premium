@@ -8,7 +8,7 @@ import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } fr
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { sanitizeHtml } from '../../utils/sanitize';
-import { GeminiService } from '../../services/geminiService';
+import { GeminiService } from '../../services/features/research/geminiService';
 import { useNotify } from '../../hooks/useNotify';
 
 interface MotionToCompelBuilderProps {
@@ -158,3 +158,4 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
 };
 
 export default MotionToCompelBuilder;
+

@@ -56,6 +56,11 @@ import { CustodianInterview } from './custodian-interviews/entities/custodian-in
 import { CustodianInterviewsController } from './custodian-interviews/custodian-interviews.controller';
 import { CustodianInterviewsService } from './custodian-interviews/custodian-interviews.service';
 
+// Witnesses
+import { Witness } from './witnesses/entities/witness.entity';
+import { WitnessesController } from './witnesses/witnesses.controller';
+import { WitnessesService } from './witnesses/witnesses.service';
+
 @Module({
   imports: [
     JwtModule.register({}),
@@ -70,6 +75,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
       LegalHold,
       Examination,
       CustodianInterview,
+      Witness,
     ]),
   ],
   controllers: [
@@ -84,6 +90,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     LegalHoldsController,
     ExaminationsController,
     CustodianInterviewsController,
+    WitnessesController,
   ],
   providers: [
     DiscoveryService,
@@ -97,6 +104,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     LegalHoldsService,
     ExaminationsService,
     CustodianInterviewsService,
+    WitnessesService,
   ],
   exports: [
     DiscoveryService,
@@ -110,6 +118,7 @@ import { CustodianInterviewsService } from './custodian-interviews/custodian-int
     LegalHoldsService,
     ExaminationsService,
     CustodianInterviewsService,
+    WitnessesService,
   ],
 })
 export class DiscoveryModule {}

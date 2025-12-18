@@ -1,15 +1,13 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   OneToMany,
   Index,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Client } from '../../../entities/client.entity';
+import { BaseEntity } from '../../../common/base/base.entity';
+import { Client } from '../../../clients/entities/client.entity';
 import { Case } from '../../../cases/entities/case.entity';
 
 export enum InvoiceStatus {
@@ -42,10 +40,7 @@ export enum BillingModel {
 @Index(['caseId', 'status'])
 @Index(['clientId', 'status'])
 @Index(['status', 'dueDate'])
-export class Invoice {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Invoice extends BaseEntity {
   @Column({ name: 'invoice_number', unique: true, nullable: true })
   @Index()
   invoiceNumber: string;
@@ -66,27 +61,28 @@ export class Invoice {
   @JoinColumn({ name: 'client_id' })
   client: Client;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'client_name', type: 'varchar', length: 255, nullable: true })
   clientName: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'matter_description', type: 'varchar', length: 500, nullable: true })
   matterDescription: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'invoice_date', type: 'date', nullable: true })
   @Index()
-  invoiceDate: string;
+  invoiceDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'due_date', type: 'date', nullable: true })
   @Index()
-  dueDate: string;
+  dueDate: Date;
 
-  @Column({ type: 'date', nullable: true })
-  periodStart: string;
+  @Column({ name: 'period_start', type: 'date', nullable: true })
+  periodStart: Date;
 
-  @Column({ type: 'date', nullable: true })
-  periodEnd: string;
+  @Column({ name: 'period_end', type: 'date', nullable: true })
+  periodEnd: Date;
 
   @Column({
+    name: 'billing_model',
     type: 'enum',
     enum: BillingModel,
     default: BillingModel.HOURLY,
@@ -104,28 +100,28 @@ export class Invoice {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   subtotal: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'tax_amount', type: 'decimal', precision: 10, scale: 2, default: 0 })
   taxAmount: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  @Column({ name: 'tax_rate', type: 'decimal', precision: 5, scale: 2, default: 0 })
   taxRate: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'discount_amount', type: 'decimal', precision: 10, scale: 2, default: 0 })
   discountAmount: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'total_amount', type: 'decimal', precision: 10, scale: 2, default: 0 })
   totalAmount: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'paid_amount', type: 'decimal', precision: 10, scale: 2, default: 0 })
   paidAmount: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'balance_due', type: 'decimal', precision: 10, scale: 2, default: 0 })
   balanceDue: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'time_charges', type: 'decimal', precision: 10, scale: 2, default: 0 })
   timeCharges: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'expense_charges', type: 'decimal', precision: 10, scale: 2, default: 0 })
   expenseCharges: number;
 
   @Column({ type: 'text', nullable: true })
@@ -134,7 +130,7 @@ export class Invoice {
   @Column({ type: 'text', nullable: true })
   terms: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'billing_address', type: 'varchar', length: 500, nullable: true })
   billingAddress: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
@@ -143,51 +139,42 @@ export class Invoice {
   @Column({ type: 'varchar', length: 3, default: 'USD' })
   currency: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'sent_at', type: 'timestamp', nullable: true })
   sentAt: Date;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'sent_by', type: 'uuid', nullable: true })
   sentBy: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'viewed_at', type: 'timestamp', nullable: true })
   viewedAt: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'paid_at', type: 'timestamp', nullable: true })
   paidAt: Date;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ name: 'payment_method', type: 'varchar', length: 100, nullable: true })
   paymentMethod: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'payment_reference', type: 'varchar', length: 255, nullable: true })
   paymentReference: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'fee_agreement_id', type: 'uuid', nullable: true })
   feeAgreementId: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'internal_notes', type: 'text', nullable: true })
   internalNotes: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'is_recurring', type: 'boolean', default: false })
   isRecurring: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'pdf_url', type: 'varchar', length: 255, nullable: true })
   pdfUrl: string;
 
   @Column({ type: 'simple-array', nullable: true })
   attachments: string[];
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
 }

@@ -22,7 +22,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { useAutoSave } from '../../hooks/useAutoSave';
 
 // Services & Types
-import { DocumentService } from '../../services/documentService';
+import { DocumentService } from '../../services/features/documents/documentService';
 import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../types';
 import { validateEvidenceItemSafe } from '../../services/validation/evidenceSchemas';
 import { AdmissibilityStatusEnum } from '../../types/enums';
@@ -295,3 +295,4 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
       </div>
   );
 };
+

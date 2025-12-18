@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { Bell, X, Check, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { NotificationService, Notification, NotificationGroup } from '../../services/notificationService';
+import { NotificationService, Notification, NotificationGroup } from '../../services/infrastructure/notificationService'';
 import { formatDistanceToNow } from 'date-fns';
 
 export const NotificationPanel: React.FC = () => {
@@ -329,3 +329,4 @@ export const NotificationPanel: React.FC = () => {
 };
 
 export default NotificationPanel;
+

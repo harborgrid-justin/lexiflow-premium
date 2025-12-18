@@ -86,7 +86,7 @@ export class BillingAnalyticsService {
     const totalWip = unbilledTime + unbilledExpensesTotal;
 
     // WIP by case
-    const wipByCaseMap = new Map<string, { caseName: string; amount: number; oldestDate: string }>();
+    const wipByCaseMap = new Map<string, { caseName: string; amount: number; oldestDate: Date | string }>();
     unbilledTimeEntries.forEach((entry) => {
       const existing = wipByCaseMap.get(entry.caseId) || {
         caseName: entry.caseId,
@@ -314,7 +314,7 @@ export class BillingAnalyticsService {
         days60: number;
         days90: number;
         over90: number;
-        oldestInvoiceDate: string;
+        oldestInvoiceDate: Date | string;
       }
     >();
 
@@ -369,6 +369,7 @@ export class BillingAnalyticsService {
     const byClient = Array.from(clientAgingMap.entries()).map(([clientId, data]) => ({
       clientId,
       ...data,
+      oldestInvoiceDate: data.oldestInvoiceDate instanceof Date ? data.oldestInvoiceDate.toISOString() : String(data.oldestInvoiceDate),
     }));
 
     return {

@@ -1,20 +1,23 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
+import { Document } from '../../documents/entities/document.entity';
 
 @Entity('document_versions')
 @Index(['documentId', 'version'])
-export class DocumentVersion {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'uuid' })
+export class DocumentVersion extends BaseEntity {
+  @Column({ name: 'document_id', type: 'uuid' })
   @Index()
   documentId: string;
+
+  @ManyToOne(() => Document, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'document_id' })
+  document: Document;
 
   @Column({ type: 'int' })
   version: number;
@@ -22,36 +25,48 @@ export class DocumentVersion {
   @Column()
   filename: string;
 
-  @Column()
+  @Column({ name: 'file_path' })
   filePath: string;
 
-  @Column()
+  @Column({ name: 'mime_type' })
   mimeType: string;
 
-  @Column({ type: 'bigint' })
+  @Column({ name: 'file_size', type: 'bigint' })
   fileSize: number;
 
   @Column()
   checksum: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'change_description', type: 'text', nullable: true })
   changeDescription: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'full_text_content', type: 'text', nullable: true })
   fullTextContent: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'page_count', type: 'int', nullable: true })
   pageCount: number;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'word_count', type: 'int', nullable: true })
   wordCount: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy: string;
+
+  @Column({ name: 'is_major_version', type: 'boolean', default: false })
+  isMajorVersion: boolean;
+
+  @Column({ name: 'is_current_version', type: 'boolean', default: false })
+  isCurrentVersion: boolean;
+
+  @Column({ name: 'comparison_data', type: 'jsonb', nullable: true })
+  comparisonData: Record<string, any>;
+
+  @Column({ name: 'previous_version_id', type: 'uuid', nullable: true })
+  previousVersionId: string;
+
+  @Column({ name: 'next_version_id', type: 'uuid', nullable: true })
+  nextVersionId: string;
 }

@@ -1,12 +1,11 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
+import { BaseEntity } from '../../../common/base/base.entity';
 import { Case } from '../../../cases/entities/case.entity';
 
 export enum DiscoveryRequestType {
@@ -15,6 +14,8 @@ export enum DiscoveryRequestType {
   RFA = 'RFA', // Request for Admission
   SUBPOENA = 'SUBPOENA',
   DEPOSITION_NOTICE = 'DEPOSITION_NOTICE',
+  INSPECTION_REQUEST = 'INSPECTION_REQUEST',
+  OTHER = 'OTHER',
 }
 
 export enum DiscoveryRequestStatus {
@@ -29,15 +30,16 @@ export enum DiscoveryRequestStatus {
 }
 
 @Entity('discovery_requests')
-export class DiscoveryRequest {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'uuid' })
+@Index(['caseId'])
+@Index(['type'])
+@Index(['status'])
+@Index(['dueDate'])
+export class DiscoveryRequest extends BaseEntity {
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
   @Column({
@@ -59,37 +61,37 @@ export class DiscoveryRequest {
   })
   status: DiscoveryRequestStatus;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'request_number', type: 'varchar', length: 50, nullable: true })
   requestNumber: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_sent', type: 'date', nullable: true })
   dateSent: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_received', type: 'date', nullable: true })
   dateReceived: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'due_date', type: 'date', nullable: true })
   dueDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_responded', type: 'date', nullable: true })
   dateResponded: Date;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
+  @Column({ name: 'requesting_party', type: 'varchar', length: 200, nullable: true })
   requestingParty: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
+  @Column({ name: 'responding_party', type: 'varchar', length: 200, nullable: true })
   respondingParty: string;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'number_of_requests', type: 'int', default: 0 })
   numberOfRequests: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'number_of_responses', type: 'int', default: 0 })
   numberOfResponses: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'number_of_objections', type: 'int', default: 0 })
   numberOfObjections: number;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'request_items', type: 'jsonb', nullable: true })
   requestItems: any[];
 
   @Column({ type: 'jsonb', nullable: true })
@@ -98,27 +100,25 @@ export class DiscoveryRequest {
   @Column({ type: 'jsonb', nullable: true })
   objections: any[];
 
-  @Column({ type: 'text', nullable: true })
-  notes: string;
+  // Fields from generic
+  @Column({ name: 'objection_deadline', type: 'date', nullable: true })
+  objectionDeadline: Date;
 
-  @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  @Column({ name: 'is_extension_granted', type: 'boolean', default: false })
+  isExtensionGranted: boolean;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'extended_due_date', type: 'date', nullable: true })
+  extendedDueDate: Date;
+
+  @Column({ name: 'document_path', type: 'varchar', length: 500, nullable: true })
+  documentPath: string;
+
+  @Column({ name: 'response_path', type: 'varchar', length: 500, nullable: true })
+  responsePath: string;
+
+  @Column({ name: 'related_documents', type: 'jsonb', nullable: true })
+  relatedDocuments: string[];
+
+  @Column({ name: 'assigned_to', type: 'uuid', nullable: true })
   assignedTo: string;
-
-  @Column({ type: 'uuid' })
-  createdBy: string;
-
-  @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
 }

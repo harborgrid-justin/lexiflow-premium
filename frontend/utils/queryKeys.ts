@@ -16,7 +16,7 @@
  * ```
  */
 
-import { STORES } from '../services/db';
+import { STORES } from '../services/data/db';
 
 export const queryKeys = {
   // Cases
@@ -349,3 +349,4 @@ export const queryKeys = {
  * Type-safe helper to create custom query keys
  */
 export const createQueryKey = <T extends readonly unknown[]>(...parts: T): readonly [...T] => parts;
+

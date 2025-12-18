@@ -28,7 +28,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
-import { GeminiService } from '../../services/geminiService';
+import { GeminiService } from '../../services/features/research/geminiService';
 import { cn } from '../../utils/cn';
 import { validateDiscoveryRequestSafe } from '../../services/validation/discoverySchemas';
 

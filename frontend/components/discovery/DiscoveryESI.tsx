@@ -33,9 +33,9 @@ import { useWindow } from '../../context/WindowContext';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -276,3 +276,4 @@ export const DiscoveryESI: React.FC = () => {
 };
 
 export default DiscoveryESI;
+

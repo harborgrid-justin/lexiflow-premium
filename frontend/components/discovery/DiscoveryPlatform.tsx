@@ -33,9 +33,9 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -243,3 +243,4 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = (props) => (
 );
 
 export default DiscoveryPlatform;
+

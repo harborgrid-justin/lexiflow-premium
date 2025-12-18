@@ -17,7 +17,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
+import { DataService } from '../services/data/dataService';
 
 // Utils & Constants
 import { Scheduler } from '../utils/scheduler';
@@ -213,3 +213,4 @@ export const useSecureMessenger = () => {
     allFiles
   };
 };
+

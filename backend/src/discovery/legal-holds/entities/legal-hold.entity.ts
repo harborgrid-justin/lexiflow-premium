@@ -1,12 +1,11 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
+import { BaseEntity } from '../../../common/base/base.entity';
 import { Case } from '../../../cases/entities/case.entity';
 
 export enum LegalHoldStatus {
@@ -18,21 +17,20 @@ export enum LegalHoldStatus {
 }
 
 @Entity('legal_holds')
-export class LegalHold {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'uuid' })
+@Index(['caseId'])
+@Index(['status'])
+export class LegalHold extends BaseEntity {
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ name: 'hold_name', type: 'varchar', length: 300 })
   holdName: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ name: 'hold_number', type: 'varchar', length: 100, nullable: true })
   holdNumber: string;
 
   @Column({
@@ -45,19 +43,19 @@ export class LegalHold {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'text' })
+  @Column({ name: 'hold_instructions', type: 'text' })
   holdInstructions: string;
 
-  @Column({ type: 'date' })
+  @Column({ name: 'issue_date', type: 'date' })
   issueDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'effective_date', type: 'date', nullable: true })
   effectiveDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'release_date', type: 'date', nullable: true })
   releaseDate: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'expiration_date', type: 'date', nullable: true })
   expirationDate: Date;
 
   @Column({ type: 'jsonb' })
@@ -70,16 +68,16 @@ export class LegalHold {
     status: string;
   }>;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'total_custodians', type: 'int', default: 0 })
   totalCustodians: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'acknowledged_count', type: 'int', default: 0 })
   acknowledgedCount: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'pending_count', type: 'int', default: 0 })
   pendingCount: number;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'data_sources_to_preserve', type: 'jsonb', nullable: true })
   dataSourcesToPreserve: Array<{
     sourceType: string;
     description: string;
@@ -95,48 +93,36 @@ export class LegalHold {
     status: string;
   }>;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'reminder_interval_days', type: 'int', default: 0 })
   reminderIntervalDays: number;
 
-  @Column({ type: 'date', nullable: true })
-  lastReminderDate: Date;
+  @Column({ name: 'scope_description', type: 'text', nullable: true })
+  scopeDescription: string;
 
-  @Column({ type: 'date', nullable: true })
-  nextReminderDate: Date;
+  @Column({ name: 'data_sources', type: 'jsonb', nullable: true })
+  dataSources: string[];
 
-  @Column({ type: 'boolean', default: true })
-  isAutoReminder: boolean;
+  @Column({ name: 'document_types', type: 'jsonb', nullable: true })
+  documentTypes: string[];
 
-  @Column({ type: 'text', nullable: true })
-  releaseReason: string;
+  @Column({ name: 'date_range_start', type: 'date', nullable: true })
+  dateRangeStart: Date;
 
-  @Column({ type: 'text', nullable: true })
-  releaseNotes: string;
+  @Column({ name: 'date_range_end', type: 'date', nullable: true })
+  dateRangeEnd: Date;
 
-  @Column({ type: 'text', nullable: true })
-  notes: string;
+  @Column({ name: 'search_terms', type: 'jsonb', nullable: true })
+  searchTerms: string[];
 
-  @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
-
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'issued_by', type: 'uuid', nullable: true })
   issuedBy: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'released_by', type: 'uuid', nullable: true })
   releasedBy: string;
 
-  @Column({ type: 'uuid' })
-  createdBy: string;
+  @Column({ name: 'release_reason', type: 'text', nullable: true })
+  releaseReason: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  @Column({ name: 'release_notes', type: 'text', nullable: true })
+  releaseNotes: string;
 }

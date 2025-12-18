@@ -7,8 +7,8 @@ import { cn } from '../../utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';
 import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 
 export const LocalRulesMap: React.FC = () => {
   const { theme } = useTheme();
@@ -80,3 +80,4 @@ export const LocalRulesMap: React.FC = () => {
     </div>
   );
 };
+

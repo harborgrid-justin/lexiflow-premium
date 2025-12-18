@@ -29,7 +29,7 @@ import { useQuery, useMutation, queryClient } from '../../services/queryClient';
 import { useNotify } from '../../hooks/useNotify';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
 
 export const CaseListIntake: React.FC = () => {
@@ -239,3 +239,4 @@ export const CaseListIntake: React.FC = () => {
     </div>
   );
 };
+

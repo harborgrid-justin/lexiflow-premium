@@ -17,7 +17,7 @@ import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-rea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DocumentService } from '../../services/documentService';
+import { DocumentService } from '../../services/features/documents/documentService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

@@ -19,7 +19,7 @@ import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownL
 // Services & Data
 import { GlobalSearchResult, SearchService } from '../../services/searchService';
 import { GeminiService, IntentResult } from '../../services/geminiService';
-import { HolographicRouting } from '../../services/holographicRouting';
+import { HolographicRouting } from '../../services/infrastructure/holographicRouting'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -209,3 +209,4 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
     </div>
   );
 };
+

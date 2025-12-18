@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { queryClient } from '../services/queryClient';
+import { queryClient } from '../services/infrastructure/queryClient';
 
 export type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';
 
@@ -72,3 +72,4 @@ export const useDataSource = (): DataSourceContextValue => {
   }
   return context;
 };
+

@@ -15,7 +15,7 @@ import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { GeminiService } from '../../services/geminiService';
 import { useNotify } from '../../hooks/useNotify';
-import { AIValidationService } from '../../services/aiValidationService';
+import { AIValidationService } from '../../services/infrastructure/aiValidationService'';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
@@ -98,3 +98,4 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
         </div>
     );
 };
+

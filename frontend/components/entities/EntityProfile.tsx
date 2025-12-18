@@ -17,9 +17,9 @@ import { X, MapPin, Mail, Phone, Globe, ShieldAlert, Link, Briefcase } from 'luc
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -161,3 +161,4 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
     </div>
   );
 };
+

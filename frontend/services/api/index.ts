@@ -1,177 +1,157 @@
 /**
- * Consolidated API Services - Barrel Export
+ * Consolidated API Services - Domain-Organized Barrel Export
  * 
  * This file provides a clean, domain-organized export of all API services.
- * Replaces the fragmented apiServices*.ts files with a single source of truth.
+ * Services are now organized into focused domain modules for better maintainability.
  * 
  * Architecture:
- * - Domain folders: auth/, cases/, billing/, discovery/, admin/, integrations/, search/
+ * - Domain modules: domains/litigation.api.ts, domains/discovery.api.ts, etc.
  * - Zero duplicates: All duplicate implementations consolidated
  * - 95%+ backend coverage: All critical endpoints mapped
  * - Type-safe: Full TypeScript definitions with DTOs
+ * - Backend-first: Defaults to PostgreSQL + NestJS backend (IndexedDB deprecated)
  * 
- * Usage:
- *   import { authApi, casesApi, billingApi } from '@/services/api';
- *   const cases = await casesApi.getAll();
- */
-
-// ==================== AUTHENTICATION & USERS ====================
-import { AuthApiService } from './auth-api';
-import { UsersApiService } from './users-api';
-import { ApiKeysApiService } from './api-keys-api';
-
-// ==================== CASE MANAGEMENT ====================
-import { CasesApiService } from './cases-api';
-import { DocketApiService } from './docket-api';
-import { DocumentsApiService } from './documents-api';
-
-// ==================== DISCOVERY & EVIDENCE ====================
-import { EvidenceApiService } from './evidence-api';
-import { CustodiansApiService } from './custodians-api';
-import { ExaminationsApiService } from './examinations-api';
-
-// ==================== BILLING & FINANCE ====================
-import { BillingApiService } from './billing-api';
-import { TimeEntriesApiService } from './billing/time-entries-api';
-import { InvoicesApiService } from './billing/invoices-api';
-import { ExpensesApiService } from './billing/expenses-api';
-import { FeeAgreementsApiService } from './fee-agreements-api';
-import { RateTablesApiService } from './rate-tables-api';
-
-// ==================== INTEGRATIONS ====================
-import { PACERApiService } from './integrations/pacer-api';
-import { WebhooksApiService } from './webhooks-api';
-
-// ==================== SEARCH & DISCOVERY ====================
-import { SearchApiService } from './search/search-api';
-
-// ==================== ADMIN & MONITORING ====================
-import { ProcessingJobsApiService } from './admin/processing-jobs-api';
-import { NotificationsApiService } from './notifications-api';
-
-// Export classes for direct instantiation if needed
-export { 
-  AuthApiService, UsersApiService, ApiKeysApiService,
-  CasesApiService, DocketApiService, DocumentsApiService,
-  EvidenceApiService, CustodiansApiService, ExaminationsApiService,
-  BillingApiService, TimeEntriesApiService, InvoicesApiService, ExpensesApiService,
-  FeeAgreementsApiService, RateTablesApiService,
-  PACERApiService, WebhooksApiService,
-  SearchApiService,
-  ProcessingJobsApiService, NotificationsApiService
-};
-
-// ==================== SINGLETON INSTANCES ====================
-// Pre-instantiated service singletons for convenience
-export const authApi = new AuthApiService();
-export const usersApi = new UsersApiService();
-export const apiKeysApi = new ApiKeysApiService();
-
-export const casesApi = new CasesApiService();
-export const docketApi = new DocketApiService();
-export const documentsApi = new DocumentsApiService();
-
-export const evidenceApi = new EvidenceApiService();
-export const custodiansApi = new CustodiansApiService();
-export const examinationsApi = new ExaminationsApiService();
-
-export const billingApi = new BillingApiService();
-export const timeEntriesApi = new TimeEntriesApiService();
-export const invoicesApi = new InvoicesApiService();
-export const expensesApi = new ExpensesApiService();
-export const feeAgreementsApi = new FeeAgreementsApiService();
-export const rateTablesApi = new RateTablesApiService();
-
-export const pacerApi = new PACERApiService();
-export const webhooksApi = new WebhooksApiService();
-
-export const searchApi = new SearchApiService();
-
-export const processingJobsApi = new ProcessingJobsApiService();
-export const notificationsApi = new NotificationsApiService();
-
-// ==================== AGGREGATED API OBJECT ====================
-/**
- * Aggregated API services object for backward compatibility
- * and easy access to all services from a single import.
+ * Usage - Domain-based imports (RECOMMENDED):
+ *   import { litigationApi } from '@/services/api/domains/litigation.api';
+ *   const cases = await litigationApi.cases.getAll();
  * 
- * Usage:
+ * Usage - Legacy flat imports (BACKWARD COMPATIBLE):
  *   import { api } from '@/services/api';
  *   const cases = await api.cases.getAll();
  */
+
+// Export API configuration utilities
+export { 
+  isBackendApiEnabled, 
+  isIndexedDBMode, 
+  getDataMode, 
+  forceBackendMode, 
+  enableLegacyIndexedDB,
+  isProduction,
+  getBackendUrl,
+  logApiConfig 
+} from '../apiConfig';
+
+// ==================== DOMAIN EXPORTS ====================
+// Re-export domain API services for direct access
+export * from './domains/auth.api';
+export * from './domains/litigation.api';
+export * from './domains/discovery.api';
+export * from './domains/billing.api';
+export * from './domains/trial.api';
+export * from './domains/workflow.api';
+export * from './domains/communications.api';
+export * from './domains/compliance.api';
+export * from './domains/integrations.api';
+export * from './domains/analytics.api';
+export * from './domains/admin.api';
+export * from './domains/data-platform.api';
+export * from './domains/hr.api';
+
+// Import domain APIs for consolidated export
+import { authApi as authDomain } from './domains/auth.api';
+import { litigationApi as litigationDomain } from './domains/litigation.api';
+import { discoveryApi as discoveryDomain } from './domains/discovery.api';
+import { billingApi as billingDomain } from './domains/billing.api';
+import { trialApi as trialDomain } from './domains/trial.api';
+import { workflowApi as workflowDomain } from './domains/workflow.api';
+import { communicationsApi as communicationsDomain } from './domains/communications.api';
+import { complianceApi as complianceDomain } from './domains/compliance.api';
+import { integrationsApi as integrationsDomain } from './domains/integrations.api';
+import { analyticsApi as analyticsDomain } from './domains/analytics.api';
+import { adminApi as adminDomain } from './domains/admin.api';
+import { dataPlatformApi as dataPlatformDomain } from './domains/data-platform.api';
+import { hrApi as hrDomain } from './domains/hr.api';
+
 export const api = {
-  // Auth & Users
-  auth: authApi,
-  users: usersApi,
-  apiKeys: apiKeysApi,
+  auth: authDomain.auth,
+  users: authDomain.users,
+  apiKeys: authDomain.apiKeys,
+  permissions: authDomain.permissions,
+  ethicalWalls: authDomain.ethicalWalls,
+  tokenBlacklist: authDomain.tokenBlacklist,
+  cases: litigationDomain.cases,
+  docket: litigationDomain.docket,
+  motions: litigationDomain.motions,
+  pleadings: litigationDomain.pleadings,
+  parties: litigationDomain.parties,
+  caseTeams: litigationDomain.caseTeams,
+  casePhases: litigationDomain.casePhases,
+  matters: litigationDomain.matters,
+  evidence: discoveryDomain.evidence,
+  custodians: discoveryDomain.custodians,
+  examinations: discoveryDomain.examinations,
+  witnesses: discoveryDomain.witnesses,
+  depositions: discoveryDomain.depositions,
+  legalHolds: discoveryDomain.legalHolds,
+  productions: discoveryDomain.productions,
+  discoveryRequests: discoveryDomain.discoveryRequests,
+  esiSources: discoveryDomain.esiSources,
+  privilegeLog: discoveryDomain.privilegeLog,
+  custodianInterviews: discoveryDomain.custodianInterviews,
+  discovery: discoveryDomain.discovery,
+  billing: billingDomain.billing,
+  timeEntries: billingDomain.timeEntries,
+  invoices: billingDomain.invoices,
+  expenses: billingDomain.expenses,
+  feeAgreements: billingDomain.feeAgreements,
+  rateTables: billingDomain.rateTables,
+  trustAccounts: billingDomain.trustAccounts,
+  trial: trialDomain.trial,
+  exhibits: trialDomain.exhibits,
+  tasks: workflowDomain.tasks,
+  calendar: workflowDomain.calendar,
+  workflow: workflowDomain.workflow,
+  projects: workflowDomain.projects,
+  risks: workflowDomain.risks,
+  warRoom: workflowDomain.warRoom,
+  clients: communicationsDomain.clients,
+  communications: communicationsDomain.communications,
+  correspondence: communicationsDomain.correspondence,
+  messaging: communicationsDomain.messaging,
+  notifications: communicationsDomain.notifications,
+  compliance: complianceDomain.compliance,
+  conflictChecks: complianceDomain.conflictChecks,
+  reports: complianceDomain.reports,
+  complianceReporting: complianceDomain.complianceReporting,
+  pacer: integrationsDomain.pacer,
+  webhooks: integrationsDomain.webhooks,
+  integrations: integrationsDomain.integrations,
+  organizations: integrationsDomain.organizations,
+  externalApi: integrationsDomain.externalApi,
+  pipelines: integrationsDomain.pipelines,
+  search: analyticsDomain.search,
+  dashboard: analyticsDomain.dashboard,
+  aiOps: analyticsDomain.aiOps,
+  analyticsDashboard: analyticsDomain.analyticsDashboard,
+  billingAnalytics: analyticsDomain.billingAnalytics,
+  caseAnalytics: analyticsDomain.caseAnalytics,
+  discoveryAnalytics: analyticsDomain.discoveryAnalytics,
+  outcomePredictions: analyticsDomain.outcomePredictions,
+  judgeStats: analyticsDomain.judgeStats,
+  bluebook: analyticsDomain.bluebook,
+  knowledge: analyticsDomain.knowledge,
+  citations: analyticsDomain.citations,
+  clauses: analyticsDomain.clauses,
+  jurisdiction: analyticsDomain.jurisdiction,
+  documents: adminDomain.documents,
+  documentVersions: adminDomain.documentVersions,
+  processingJobs: adminDomain.processingJobs,
+  ocr: adminDomain.ocr,
+  monitoring: adminDomain.monitoring,
+  health: adminDomain.health,
+  analytics: adminDomain.analytics,
+  auditLogs: adminDomain.auditLogs,
+  versioning: adminDomain.versioning,
+  sync: adminDomain.sync,
+  backups: adminDomain.backups,
+  serviceJobs: adminDomain.serviceJobs,
+  metrics: adminDomain.metrics,
+  dataSources: dataPlatformDomain.dataSources,
+  rlsPolicies: dataPlatformDomain.rlsPolicies,
+  schemaManagement: dataPlatformDomain.schemaManagement,
+  queryWorkbench: dataPlatformDomain.queryWorkbench,
+  hr: hrDomain.hr,
+} as const;
 
-  // Case Management
-  cases: casesApi,
-  docket: docketApi,
-  documents: documentsApi,
-
-  // Discovery & Evidence
-  evidence: evidenceApi,
-  custodians: custodiansApi,
-  examinations: examinationsApi,
-
-  // Billing & Finance
-  billing: billingApi,
-  timeEntries: timeEntriesApi,
-  invoices: invoicesApi,
-  expenses: expensesApi,
-  feeAgreements: feeAgreementsApi,
-  rateTables: rateTablesApi,
-
-  // Integrations
-  pacer: pacerApi,
-  webhooks: webhooksApi,
-
-  // Search & Discovery
-  search: searchApi,
-
-  // Admin & Monitoring
-  processingJobs: processingJobsApi,
-  notifications: notificationsApi,
-};
-
-// ==================== TYPE EXPORTS ====================
-// Re-export common types for convenience
-export type {
-  TimeEntryFilters,
-  CreateTimeEntryDto,
-  UpdateTimeEntryDto,
-  BulkTimeEntryDto,
-  BulkOperationResult,
-  TimeEntryTotals,
-} from './billing/time-entries-api';
-
-export type {
-  InvoiceFilters,
-  CreateInvoiceDto,
-  InvoiceItem,
-  InvoicePayment,
-} from './billing/invoices-api';
-
-export type {
-  ExpenseFilters,
-  CreateExpenseDto,
-  UpdateExpenseDto,
-  ExpenseTotals,
-} from './billing/expenses-api';
-
-export type {
-  SearchResult,
-  SearchSuggestion,
-  SearchStats,
-} from './search/search-api';
-
-export type {
-  ProcessingJob,
-  JobFilters,
-} from './admin/processing-jobs-api';
-
-export type {
-  PACERConfig,
-  PACERSyncResult,
-} from './integrations/pacer-api';
+export default api;

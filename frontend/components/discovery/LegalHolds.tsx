@@ -29,9 +29,9 @@ import { useNotify } from '../../hooks/useNotify';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { discoveryQueryKeys } from '../../services/queryKeys';
 import { LegalHoldStatusEnum } from '../../types/enums';
 

@@ -92,6 +92,9 @@ export class Custodian {
   @Column({ type: 'date', nullable: true })
   legalHoldReleasedDate: Date;
 
+  @Column({ type: 'timestamp', nullable: true })
+  acknowledgedAt: Date;
+
   @Column({ type: 'jsonb', nullable: true })
   interviews: Array<{
     date: Date;

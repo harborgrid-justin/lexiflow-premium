@@ -17,7 +17,7 @@ import React, { Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 
 // Hooks
 import { useQuery } from '../../services/queryClient';
@@ -94,3 +94,4 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
     </Suspense>
   );
 };
+

@@ -18,7 +18,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/dataService';
+import { DataService } from '../services/data/dataService';
 
 // Types
 import { CalendarEventItem } from '../types';

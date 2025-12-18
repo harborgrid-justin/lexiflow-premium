@@ -1,12 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { BaseEntity } from '../../common/base/base.entity';
 import { TaskStatus, TaskPriority } from '../dto/create-task.dto';
 import { Case } from '../../cases/entities/case.entity';
 
 @Entity('tasks')
-export class Task {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+@Index(['caseId'])
+@Index(['assignedTo'])
+@Index(['status'])
+export class Task extends BaseEntity {
   @Column()
   title: string;
 
@@ -19,40 +20,34 @@ export class Task {
   @Column({ type: 'enum', enum: TaskPriority, default: TaskPriority.MEDIUM })
   priority: TaskPriority;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'due_date', type: 'timestamp', nullable: true })
   dueDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'case_id', type: 'uuid', nullable: true })
   caseId: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ nullable: true })
+  @Column({ name: 'assigned_to', type: 'uuid', nullable: true })
   assignedTo: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'parent_task_id', type: 'uuid', nullable: true })
   parentTaskId: string;
 
   @Column({ type: 'simple-array', nullable: true })
   tags: string[];
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'estimated_hours', type: 'decimal', precision: 10, scale: 2, nullable: true })
   estimatedHours: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({ name: 'actual_hours', type: 'decimal', precision: 10, scale: 2, default: 0 })
   actualHours: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'completion_percentage', type: 'int', default: 0 })
   completionPercentage: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @Column({ nullable: true })
+  @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy: string;
 }

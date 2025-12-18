@@ -1,8 +1,8 @@
 
 import React, { lazy } from 'react';
 import { useQuery } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { DataService } from '../../services/data/dataService'';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Sub-components
@@ -29,3 +29,4 @@ export const ComplianceDashboardContent: React.FC<ComplianceDashboardContentProp
     default: return <ComplianceOverview />;
   }
 };
+

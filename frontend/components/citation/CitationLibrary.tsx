@@ -32,9 +32,9 @@ import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -158,3 +158,4 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
     );
 };
 export default CitationLibrary;
+

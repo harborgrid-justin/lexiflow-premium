@@ -25,11 +25,11 @@ import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/queryClient';
 
 // Services & Utils
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { GeminiService } from '../../services/geminiService';
 import { cn } from '../../utils/cn';
 import { sanitizeHtml } from '../../utils/sanitize';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -136,3 +136,4 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
     </div>
   );
 };
+

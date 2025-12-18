@@ -24,9 +24,9 @@ import { useNotify } from '../../hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
 import { DocumentService } from '../../services/documentService';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { queryClient } from '../../services/queryClient';
-import { STORES } from '../../services/db';
+import { STORES } from '../../services/data/db'';
 import { queryKeys } from '../../utils/queryKeys';
 import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
 import { cn } from '../../utils/cn';
@@ -207,3 +207,4 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     </div>
   );
 };
+

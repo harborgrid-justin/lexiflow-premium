@@ -8,7 +8,7 @@ import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { DataService } from '../../services/dataService';
+import { DataService } from '../../services/data/dataService'';
 import { useQuery } from '../../services/queryClient';
 import { EmptyState } from '../common/EmptyState';
 
@@ -162,3 +162,4 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
     </div>
   );
 };
+

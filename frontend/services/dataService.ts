@@ -114,6 +114,8 @@ const getKnowledgeRepository = () => getSingleton('KnowledgeRepository', () => n
 const getAnalysisRepository = () => getSingleton('AnalysisRepository', () => new AnalysisRepository());
 const getPhaseRepository = () => getSingleton('PhaseRepository', () => new PhaseRepository());
 const getDataQualityService = () => getSingleton('DataQualityService', () => new DataQualityService());
+const getHRRepository = () => getSingleton('HRRepository', () => HRRepository);
+const getWorkflowRepository = () => getSingleton('WorkflowRepository', () => WorkflowRepository);
 
 // Extended repositories with custom logic
 const getTasksRepository = () => getSingleton('TasksRepository', () => 
@@ -205,8 +207,8 @@ Object.defineProperties(DataServiceBase, {
   evidence: { get: () => isBackendApiEnabled() ? api.evidence : getEvidenceRepository(), enumerable: true },
   documents: { get: () => isBackendApiEnabled() ? api.documents : getIntegratedDocumentRepository(), enumerable: true },
   pleadings: { get: () => isBackendApiEnabled() ? legacyApi.pleadings : getPleadingRepository(), enumerable: true },
-  hr: { get: () => isBackendApiEnabled() ? legacyApi.hr : HRRepository, enumerable: true },
-  workflow: { get: () => isBackendApiEnabled() ? legacyApi.workflowTemplates : WorkflowRepository, enumerable: true },
+  hr: { get: () => isBackendApiEnabled() ? legacyApi.hr : getHRRepository(), enumerable: true },
+  workflow: { get: () => isBackendApiEnabled() ? legacyApi.workflowTemplates : getWorkflowRepository(), enumerable: true },
   billing: { get: () => isBackendApiEnabled() ? api.billing : getIntegratedBillingRepository(), enumerable: true },
   discovery: { get: () => getDiscoveryRepository(), enumerable: true },
   trial: { get: () => isBackendApiEnabled() ? legacyApi.trial : getTrialRepository(), enumerable: true },

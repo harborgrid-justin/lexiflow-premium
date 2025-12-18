@@ -20,7 +20,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ currentFolder,
   // Enterprise Data Access
   const { data: folders = [], isLoading } = useQuery<any[]>(
       ['documents', 'folders'],
-      DataService.documents.getFolders
+      () => DataService.documents.getFolders()
   );
 
   const smartViews = [

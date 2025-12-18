@@ -206,4 +206,34 @@ export class BillingService {
       { name: 'Write-off', value: Math.round(writeOff), color: '#ef4444' },
     ];
   }
+
+  async getOverviewStats(): Promise<{ realization: number; totalBilled: number; month: string }> {
+    const allTimeEntries = await this.timeEntryRepository.find();
+    const allInvoices = await this.invoiceRepository.find();
+    
+    // Calculate total billed amount from invoices
+    const totalBilled = allInvoices
+      .filter(inv => inv.status === 'sent' || inv.status === 'paid')
+      .reduce((sum, inv) => sum + (inv.amount || 0), 0);
+    
+    // Calculate realization rate (billed vs total time)
+    const totalTime = allTimeEntries.reduce((sum, e) => sum + (e.amount || 0), 0);
+    const billedTime = allTimeEntries
+      .filter(e => (e as any).billed)
+      .reduce((sum, e) => sum + (e.amount || 0), 0);
+    
+    const realization = totalTime > 0 ? (billedTime / totalTime) * 100 : 0;
+    
+    // Get current month name
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    const currentMonth = monthNames[new Date().getMonth()];
+    const currentYear = new Date().getFullYear();
+    
+    return {
+      realization: Math.round(realization * 10) / 10,
+      totalBilled: Math.round(totalBilled),
+      month: `${currentMonth} ${currentYear}`
+    };
+  }
 }

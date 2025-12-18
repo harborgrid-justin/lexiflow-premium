@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Client } from './entities/client.entity';
+import { Client } from '../entities/client.entity';
 import { CreateClientDto, ClientStatus } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import * as crypto from 'crypto';
@@ -22,7 +22,13 @@ export class ClientsService {
       throw new ConflictException(`Client with email ${createDto.email} already exists`);
     }
 
-    const client = this.clientRepository.create(createDto);
+    // Map DTO type to entity clientType
+    const { type, ...rest } = createDto;
+    const client = this.clientRepository.create({
+      ...rest,
+      clientType: type?.toLowerCase() || 'individual',
+      status: createDto.status?.toLowerCase() || 'active'
+    });
     return await this.clientRepository.save(client);
   }
 
@@ -37,8 +43,8 @@ export class ClientsService {
     
     const queryBuilder = this.clientRepository.createQueryBuilder('client');
 
-    if (status) queryBuilder.andWhere('client.status = :status', { status });
-    if (type) queryBuilder.andWhere('client.type = :type', { type });
+    if (status) queryBuilder.andWhere('client.status = :status', { status: status.toLowerCase() });
+    if (type) queryBuilder.andWhere('client.clientType = :type', { type: type.toLowerCase() });
     if (search) {
       queryBuilder.andWhere(
         '(client.name LIKE :search OR client.email LIKE :search OR client.primaryContact LIKE :search)',

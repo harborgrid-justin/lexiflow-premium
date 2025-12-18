@@ -86,6 +86,7 @@ import { TrialModule } from './trial/trial.module';
 import { ExhibitsModule } from './exhibits/exhibits.module';
 import { ClientsModule } from './clients/clients.module';
 import { CitationsModule } from './citations/citations.module';
+import { BluebookModule } from './bluebook/bluebook.module';
 import { CalendarModule } from './calendar/calendar.module';
 import { MessengerModule } from './messenger/messenger.module';
 import { WarRoomModule } from './war-room/war-room.module';
@@ -247,6 +248,7 @@ if (isRedisEnabled) {
     ExhibitsModule,
     ClientsModule,
     CitationsModule,
+    BluebookModule,
     CalendarModule,
     MessengerModule,
     WarRoomModule,

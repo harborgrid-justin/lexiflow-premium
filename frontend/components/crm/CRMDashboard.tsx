@@ -47,11 +47,16 @@ export const CRMDashboard: React.FC = () => {
   const { data: cases = [] } = useQuery(['cases', 'all'], () => DataService.cases.getAll());
   const { data: leads = [] } = useQuery(['crm', 'leads'], () => DataService.crm.getLeads());
 
+  // Ensure data is array before using array methods
+  const clientsArray = Array.isArray(clients) ? clients : [];
+  const casesArray = Array.isArray(cases) ? cases : [];
+  const leadsArray = Array.isArray(leads) ? leads : [];
+
   // Calculate dynamic metrics
-  const activeClients = clients.filter((c: any) => c.status === 'Active').length;
-  const lifetimeRevenue = clients.reduce((acc: number, c: any) => acc + (c.totalBilled || 0), 0);
-  const activeMatters = cases.filter((c: any) => c.status !== 'Closed').length;
-  const pipelineValue = leads.reduce((acc: number, l: any) => {
+  const activeClients = clientsArray.filter((c: any) => c.status === 'Active' || c.status === 'active').length;
+  const lifetimeRevenue = clientsArray.reduce((acc: number, c: any) => acc + (c.totalBilled || 0), 0);
+  const activeMatters = casesArray.filter((c: any) => c.status !== 'Closed' && c.status !== 'closed').length;
+  const pipelineValue = leadsArray.reduce((acc: number, l: any) => {
     const value = parseFloat(l.value?.replace(/[^0-9.]/g, '') || '0');
     return acc + value;
   }, 0);
@@ -86,7 +91,7 @@ export const CRMDashboard: React.FC = () => {
           label="Pipeline Value" 
           value={`$${(pipelineValue / 1000).toFixed(0)}k`} 
           icon={TrendingUp} 
-          trend={`${leads.length} Deals`}
+          trend={`${leadsArray.length} Deals`}
           className="border-l-4 border-l-amber-500"
         />
       </div>
@@ -155,7 +160,7 @@ export const CRMDashboard: React.FC = () => {
                 </span>
               </div>
             ))}
-            {cases.length === 0 && (
+            {casesArray.length === 0 && (
               <p className={cn("text-sm text-center py-8", theme.text.secondary)}>No recent interactions</p>
             )}
           </div>
@@ -180,7 +185,7 @@ export const CRMDashboard: React.FC = () => {
                 </div>
               </div>
             ))}
-            {clients.length === 0 && (
+            {clientsArray.length === 0 && (
               <p className={cn("text-sm text-center py-8", theme.text.secondary)}>No clients yet</p>
             )}
           </div>

@@ -22,7 +22,14 @@ export const NewMatter: React.FC = () => {
       }
 
       const newMatter = await DataService.matters.add(matterData as Matter);
-      navigate(`${PATHS.MATTERS}/${newMatter.id}`);
+      
+      // Ensure we have a valid ID before navigating
+      if (newMatter && newMatter.id) {
+        navigate(`${PATHS.MATTERS}/${newMatter.id}`);
+      } else {
+        console.error('Matter created but no ID returned:', newMatter);
+        navigate(PATHS.MATTERS); // Navigate to list instead
+      }
     } catch (error) {
       console.error('Failed to create matter:', error);
       throw error;

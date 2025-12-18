@@ -22,7 +22,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     title: matter?.title || '',
     description: matter?.description || '',
     type: matter?.type || MatterType.LITIGATION,
-    status: matter?.status || MatterStatus.INTAKE,
+    status: matter?.status || MatterStatus.ACTIVE,
     priority: matter?.priority || MatterPriority.MEDIUM,
     practiceArea: matter?.practiceArea || PracticeArea.CIVIL_LITIGATION,
     clientId: matter?.clientId || ('' as UserId),

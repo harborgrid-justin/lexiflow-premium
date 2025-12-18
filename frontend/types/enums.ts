@@ -26,8 +26,7 @@ export type OrganizationType = 'LawFirm' | 'Corporate' | 'Government' | 'Court' 
 
 // Matter Management Enums (aligned with backend)
 export enum MatterStatus {
-  INTAKE = 'intake',
-  ACTIVE = 'active',
+  ACTIVE = 'active',  // Backend uses 'ACTIVE' - INTAKE maps to ACTIVE in DB
   PENDING = 'pending',
   ON_HOLD = 'on_hold',
   CLOSED = 'closed',

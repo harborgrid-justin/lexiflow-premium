@@ -40,10 +40,12 @@ export class CreateMatterDto {
 
   // Client Information
   @IsString()
-  clientId: string;
+  @IsOptional()
+  clientId?: string;
 
   @IsString()
-  clientName: string;
+  @IsOptional()
+  clientName?: string;
 
   @IsEmail()
   @IsOptional()
@@ -55,10 +57,12 @@ export class CreateMatterDto {
 
   // Assignment
   @IsString()
-  leadAttorneyId: string;
+  @IsOptional()
+  leadAttorneyId?: string;
 
   @IsString()
-  leadAttorneyName: string;
+  @IsOptional()
+  leadAttorneyName?: string;
 
   @IsOptional()
   @IsString()
@@ -203,7 +207,8 @@ export class CreateMatterDto {
 
   // Metadata
   @IsString()
-  userId: string;
+  @IsOptional()
+  userId?: string;
 
   @IsBoolean()
   @IsOptional()

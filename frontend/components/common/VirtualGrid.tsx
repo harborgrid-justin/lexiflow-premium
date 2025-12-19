@@ -80,7 +80,9 @@ export function VirtualGrid<T>({
   // Virtualization Math
   const overscan = 2; // Render 2 rows above/below viewport
   const startRow = Math.max(0, Math.floor(scrollTop / (itemHeight + gap)) - overscan);
-  const visibleRows = Math.ceil(containerSize.height / (itemHeight + gap)) + 2 * overscan;
+  const visibleRows = containerSize.height > 0 
+    ? Math.ceil(containerSize.height / (itemHeight + gap)) + 2 * overscan 
+    : 5; // Default to 5 rows if container not yet measured
   const endRow = Math.min(totalRows, startRow + visibleRows);
 
   const visibleItems = useMemo(() => {

@@ -19,6 +19,11 @@ export const getDaysArray = (date: Date): number[] => {
 };
 
 export const getAllDeadlines = (entries: DocketEntry[]) => {
+    // Ensure entries is an array before calling flatMap
+    if (!Array.isArray(entries)) {
+        console.warn('[getAllDeadlines] Expected array but got:', typeof entries, entries);
+        return [];
+    }
     return entries.flatMap(entry => 
         entry.triggersDeadlines?.map(dl => ({
           ...dl,

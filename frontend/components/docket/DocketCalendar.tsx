@@ -39,10 +39,13 @@ export const DocketCalendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   // Enterprise Data Access: Shared cache with DocketSheet
-  const { data: entries = [] } = useQuery<DocketEntry[]>(
+  const { data: entriesData } = useQuery<DocketEntry[]>(
       [STORES.DOCKET, 'all'],
       DataService.docket.getAll
   );
+
+  // Ensure entries is always an array with stable reference
+  const entries = useMemo(() => Array.isArray(entriesData) ? entriesData : [], [entriesData]);
 
   // Memoize date calculations
   const daysInMonth = useMemo(() => getDaysInMonth(currentDate), [currentDate]);

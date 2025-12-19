@@ -10,4 +10,10 @@ export const StrategyService = {
   add: async (item: any) => item,
   update: async (id: string, updates: any) => updates,
   delete: async (id: string) => true,
+  
+  // Strategy specific methods
+  getStrategies: async (caseId?: string) => [],
+  createStrategy: async (strategy: any) => strategy,
+  analyzeRisks: async (strategyId: string) => [],
+  getRecommendations: async (caseId: string) => [],
 };

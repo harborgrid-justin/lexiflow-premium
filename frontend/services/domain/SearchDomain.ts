@@ -10,4 +10,11 @@ export const SearchService = {
   add: async (item: any) => item,
   update: async (id: string, updates: any) => updates,
   delete: async (id: string) => true,
+  
+  // Search specific methods
+  search: async (query: string, filters?: any) => [],
+  searchGlobal: async (query: string) => [],
+  getRecentSearches: async () => [],
+  saveSearch: async (query: string) => true,
+  indexDocument: async (documentId: string) => true,
 };

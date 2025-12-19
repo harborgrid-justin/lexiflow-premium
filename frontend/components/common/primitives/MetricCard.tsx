@@ -46,7 +46,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   // Animation effect for numeric values
   useEffect(() => {
     if (typeof normalizedValue === 'number') {
-      let start = typeof displayValue === 'number' ? displayValue : 0;
+      const start = typeof displayValue === 'number' ? displayValue : 0;
       const end = normalizedValue;
       if (start === end) return;
 

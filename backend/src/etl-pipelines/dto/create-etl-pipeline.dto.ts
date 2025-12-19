@@ -38,7 +38,6 @@ export class CreateETLPipelineDto {
 
   @ApiProperty({ 
     description: 'Pipeline configuration',
-    type: 'object',
     example: {
       source: { type: 'database', config: {} },
       transformations: [],

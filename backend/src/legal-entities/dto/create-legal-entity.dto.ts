@@ -154,8 +154,7 @@ export class CreateLegalEntityDto {
   parentEntityId?: string;
 
   @ApiPropertyOptional({ 
-    description: 'Additional metadata',
-    type: 'object'
+    description: 'Additional metadata'
   })
   @IsOptional()
   metadata?: Record<string, any>;

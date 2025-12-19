@@ -38,8 +38,7 @@ export class CreateSearchQueryDto {
   resultsCount?: number;
 
   @ApiPropertyOptional({ 
-    description: 'Search filters applied',
-    type: 'object'
+    description: 'Search filters applied'
   })
   @IsObject()
   @IsOptional()

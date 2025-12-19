@@ -44,8 +44,7 @@ export class CreateSyncQueueDto {
   entityId: string;
 
   @ApiProperty({ 
-    description: 'Sync payload data',
-    type: 'object'
+    description: 'Sync payload data'
   })
   @IsObject()
   @IsNotEmpty()

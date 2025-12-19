@@ -34,7 +34,6 @@ export class CreatePerformanceMetricDto {
 
   @ApiPropertyOptional({ 
     description: 'Additional tags or metadata',
-    type: 'object',
     example: { host: 'server-01', region: 'us-east' }
   })
   @IsObject()

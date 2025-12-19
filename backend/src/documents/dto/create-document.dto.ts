@@ -93,7 +93,7 @@ export class CreateDocumentDto {
   @IsOptional()
   tags?: string[];
 
-  @ApiPropertyOptional({ description: 'Custom metadata fields', type: 'object' })
+  @ApiPropertyOptional({ description: 'Custom metadata fields' })
   @IsObject()
   @IsOptional()
   customFields?: Record<string, any>;

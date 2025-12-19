@@ -1,6 +1,6 @@
 // types/pleadingTypes.ts
 
-import { BaseEntity, CaseId, UserId, EvidenceId, MotionId } from './models';
+import { BaseEntity, CaseId, UserId, EvidenceId, MotionId } from './primitives';
 
 export type PleadingSectionType = 
   | 'Caption' 

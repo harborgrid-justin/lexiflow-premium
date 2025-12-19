@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DataService } from '../../services/data/dataService';
 import { Matter, MatterStatus, MatterPriority } from '../../types';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { useModalState } from '../../hooks/useModalState';
 import { 
   ArrowLeft, 
   Edit, 
@@ -28,6 +30,7 @@ export const MatterDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const deleteModal = useModalState();
 
   useEffect(() => {
     if (matterId) {
@@ -64,10 +67,6 @@ export const MatterDetail: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this matter? This action cannot be undone.')) {
-      return;
-    }
-
     try {
       setDeleting(true);
       await DataService.matters.delete(matterId!);
@@ -184,7 +183,7 @@ export const MatterDetail: React.FC = () => {
               Edit
             </button>
             <button
-              onClick={handleDelete}
+              onClick={deleteModal.open}
               disabled={deleting}
               className="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 disabled:opacity-50"
             >
@@ -403,6 +402,16 @@ export const MatterDetail: React.FC = () => {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={handleDelete}
+        title="Delete Matter"
+        message="Are you sure you want to delete this matter? This action cannot be undone."
+        confirmText="Delete Matter"
+        variant="danger"
+      />
     </div>
   );
 };

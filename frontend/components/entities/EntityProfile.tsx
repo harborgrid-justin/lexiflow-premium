@@ -141,8 +141,18 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
                             <Button size="sm" variant="ghost">View</Button>
                         </div>
                     ))}
-                    {relationships.length === 0 && <div className={cn("text-center py-8 text-sm", theme.text.tertiary)}>No mapped relationships.</div>}
-                    <Button variant="outline" className="w-full border-dashed" icon={Link}>Add Connection</Button>
+                    {relationships.length === 0 && (
+                        <EmptyState
+                            icon={GitBranch}
+                            title="No relationships"
+                            description="Map connections between entities to visualize relationships."
+                            className="py-6"
+                            action={<Button variant="outline" icon={Link}>Add Connection</Button>}
+                        />
+                    )}
+                    {relationships.length > 0 && (
+                        <Button variant="outline" className="w-full border-dashed" icon={Link}>Add Connection</Button>
+                    )}
                 </div>
             )}
 

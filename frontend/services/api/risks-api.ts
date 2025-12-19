@@ -3,71 +3,77 @@
  * Manages risk assessment and tracking
  */
 
+/**
+ * ALIGNED WITH BACKEND: backend/src/risks/risks.controller.ts
+ */
 import { apiClient } from '../infrastructure/apiClient';
+import type { Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '../../types';
 
-export interface Risk {
-  id: string;
-  caseId?: string;
-  matterId?: string;
-  clientId?: string;
+// DTOs matching backend risks/dto/create-risk.dto.ts
+export interface CreateRiskDto {
   title: string;
   description?: string;
-  category: 'legal' | 'financial' | 'reputational' | 'operational' | 'compliance' | 'security';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  likelihood: 'rare' | 'unlikely' | 'possible' | 'likely' | 'certain';
-  status: 'identified' | 'assessed' | 'mitigating' | 'monitored' | 'closed';
-  impact?: string;
-  mitigationPlan?: string;
-  mitigationSteps?: {
-    description: string;
-    responsible?: string;
-    dueDate?: string;
-    status: 'pending' | 'in_progress' | 'completed';
-  }[];
+  impact: RiskImpact;
+  probability: RiskProbability;
+  status: RiskStatusEnum;
+  caseId?: string;
+  mitigationStrategy?: string;
+  riskScore?: number;
   identifiedBy?: string;
-  identifiedAt: string;
-  reviewDate?: string;
-  notes?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
+}
+
+export interface UpdateRiskDto {
+  title?: string;
+  description?: string;
+  impact?: RiskImpact;
+  probability?: RiskProbability;
+  status?: RiskStatusEnum;
+  caseId?: string;
+  mitigationStrategy?: string;
+  riskScore?: number;
+  identifiedBy?: string;
 }
 
 export interface RiskFilters {
   caseId?: string;
-  matterId?: string;
-  clientId?: string;
-  category?: Risk['category'];
-  severity?: Risk['severity'];
-  status?: Risk['status'];
+  status?: RiskStatusEnum;
+  impact?: RiskImpact;
+  probability?: RiskProbability;
 }
 
 export class RisksApiService {
   private readonly baseUrl = '/risks';
 
+  // Backend: GET /risks with query params
   async getAll(filters?: RiskFilters): Promise<Risk[]> {
     const params = new URLSearchParams();
     if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.matterId) params.append('matterId', filters.matterId);
-    if (filters?.clientId) params.append('clientId', filters.clientId);
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.severity) params.append('severity', filters.severity);
     if (filters?.status) params.append('status', filters.status);
+    if (filters?.impact) params.append('impact', filters.impact);
+    if (filters?.probability) params.append('probability', filters.probability);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     return apiClient.get<Risk[]>(url);
   }
 
+  // Backend: GET /risks/:id
   async getById(id: string): Promise<Risk> {
     return apiClient.get<Risk>(`${this.baseUrl}/${id}`);
   }
 
-  async create(data: Partial<Risk>): Promise<Risk> {
+  // Backend: POST /risks
+  async create(data: CreateRiskDto): Promise<Risk> {
     return apiClient.post<Risk>(this.baseUrl, data);
   }
 
-  async update(id: string, data: Partial<Risk>): Promise<Risk> {
+  // Backend: PUT /risks/:id
+  async update(id: string, data: UpdateRiskDto): Promise<Risk> {
     return apiClient.put<Risk>(`${this.baseUrl}/${id}`, data);
+  }
+
+  // Backend: PATCH /risks/:id (partial update)
+  async patch(id: string, data: Partial<UpdateRiskDto>): Promise<Risk> {
+    return apiClient.patch<Risk>(`${this.baseUrl}/${id}`, data);
   }
 
   async updateStatus(id: string, status: Risk['status']): Promise<Risk> {

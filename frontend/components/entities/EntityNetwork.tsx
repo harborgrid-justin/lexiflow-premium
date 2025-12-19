@@ -86,7 +86,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
     return { nodes: graphNodes, links: graphLinks, components: comps };
   }, [entities, relationships, isLoading]);
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="dashboard" shimmer />;
 
   const handleNodeClick = (node: any) => {
     // Entity node interaction - can be extended for detailed entity profile viewing

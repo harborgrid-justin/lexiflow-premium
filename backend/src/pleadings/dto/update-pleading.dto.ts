@@ -61,6 +61,26 @@ export class UpdatePleadingDto {
   @IsOptional()
   judge?: string;
 
+  @ApiPropertyOptional({ description: 'Filed by' })
+  @IsString()
+  @IsOptional()
+  filedBy?: string;
+
+  @ApiPropertyOptional({ description: 'Date filed' })
+  @IsDateString()
+  @IsOptional()
+  filedDate?: string;
+
+  @ApiPropertyOptional({ description: 'Date served' })
+  @IsDateString()
+  @IsOptional()
+  servedDate?: string;
+
+  @ApiPropertyOptional({ description: 'Service method' })
+  @IsString()
+  @IsOptional()
+  serviceMethod?: string;
+
   @ApiPropertyOptional({ description: 'Parties involved', type: [String] })
   @IsArray()
   @IsString({ each: true })

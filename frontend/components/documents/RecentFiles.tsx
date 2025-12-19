@@ -3,7 +3,8 @@ import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { FileIcon } from '../common/Primitives';
 import { Button } from '../common/Button';
-import { Clock, Eye, Loader2 } from 'lucide-react';
+import { Clock, Eye, Loader2, FolderOpen } from 'lucide-react';
+import { EmptyState } from '../common/EmptyState';
 import { DataService } from '../../services/data/dataService';
 import { LegalDocument } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
@@ -56,13 +57,15 @@ export const RecentFiles: React.FC = () => {
                         </TableCell>
                     </TableRow>
                 ))}
-                {recentDocs.length === 0 && (
-                    <TableRow>
-                        <TableCell colSpan={5} className={cn("text-center py-8 text-slate-400")}>No recent files found.</TableCell>
-                    </TableRow>
-                )}
             </TableBody>
         </TableContainer>
+        {recentDocs.length === 0 && (
+            <EmptyState
+                icon={FolderOpen}
+                title="No recent files"
+                description="Files you view or edit will appear here for quick access."
+            />
+        )}
     </div>
   );
 };

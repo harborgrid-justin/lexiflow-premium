@@ -2,6 +2,9 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { Modal } from '../../../common/Modal';
+import { ConfirmDialog } from '../../../common/ConfirmDialog';
+import { AdaptiveLoader } from '../../../common/AdaptiveLoader';
+import { useModalState } from '../../../../hooks/useModalState';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
@@ -52,6 +55,10 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
   const [editingColumn, setEditingColumn] = useState<{tableName: string, columnName?: string, data: any} | null>(null);
+  const deleteColumnModal = useModalState();
+  const deleteTableModal = useModalState();
+  const [deleteColumnData, setDeleteColumnData] = useState<{tableName: string, columnName: string} | null>(null);
+  const [deleteTableName, setDeleteTableName] = useState<string | null>(null);
 
   const dataTypes = ['UUID', 'VARCHAR(255)', 'TEXT', 'INTEGER', 'BIGINT', 'NUMERIC', 'BOOLEAN', 'TIMESTAMP WITH TIME ZONE', 'DATE'];
 
@@ -96,10 +103,16 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   };
 
   const handleDeleteColumn = (tableName: string, columnName: string) => {
-    if (confirm(`Delete column "${columnName}" from table "${tableName}"?`)) {
+    setDeleteColumnData({ tableName, columnName });
+    deleteColumnModal.open();
+  };
+
+  const confirmDeleteColumn = () => {
+    if (deleteColumnData) {
       setTables(prev => prev.map(t => 
-        t.name === tableName ? { ...t, columns: t.columns.filter(c => c.name !== columnName) } : t
+        t.name === deleteColumnData.tableName ? { ...t, columns: t.columns.filter(c => c.name !== deleteColumnData.columnName) } : t
       ));
+      setDeleteColumnData(null);
     }
   };
 
@@ -114,8 +127,14 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   };
   
   const handleDeleteTable = (tableName: string) => {
-      if (confirm(`Are you sure you want to delete the table "${tableName}"? This cannot be undone.`)) {
-          setTables(prev => prev.filter(t => t.name !== tableName));
+      setDeleteTableName(tableName);
+      deleteTableModal.open();
+  };
+
+  const confirmDeleteTable = () => {
+      if (deleteTableName) {
+          setTables(prev => prev.filter(t => t.name !== deleteTableName));
+          setDeleteTableName(null);
       }
   };
 
@@ -144,7 +163,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
     }));
   };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="dashboard" shimmer />;
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -179,6 +198,26 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
                 </div>
             </div>
         </Modal>
+
+        <ConfirmDialog
+          isOpen={deleteColumnModal.isOpen}
+          onClose={deleteColumnModal.close}
+          onConfirm={confirmDeleteColumn}
+          title="Delete Column"
+          message={`Delete column "${deleteColumnData?.columnName}" from table "${deleteColumnData?.tableName}"? This action cannot be undone.`}
+          confirmText="Delete Column"
+          variant="danger"
+        />
+
+        <ConfirmDialog
+          isOpen={deleteTableModal.isOpen}
+          onClose={deleteTableModal.close}
+          onConfirm={confirmDeleteTable}
+          title="Delete Table"
+          message={`Are you sure you want to delete the table "${deleteTableName}"? This cannot be undone and will affect any related data.`}
+          confirmText="Delete Table"
+          variant="danger"
+        />
     </div>
   );
 };

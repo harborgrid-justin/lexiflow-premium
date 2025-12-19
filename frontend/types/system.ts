@@ -86,32 +86,110 @@ export interface User extends BaseEntity {
   twoFactorEnabled?: boolean; // Backend: boolean (default: false)
 }
 
+// Backend Organization entity enums (from organizations/entities/organization.entity.ts)
+export enum OrganizationTypeEnum {
+  CORPORATION = 'corporation',
+  LLC = 'llc',
+  PARTNERSHIP = 'partnership',
+  SOLE_PROPRIETORSHIP = 'sole_proprietorship',
+  NONPROFIT = 'nonprofit',
+  GOVERNMENT_AGENCY = 'government_agency',
+  TRUST = 'trust',
+  ESTATE = 'estate',
+  OTHER = 'other'
+}
+
+export enum OrganizationStatusEnum {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  DISSOLVED = 'dissolved',
+  MERGED = 'merged',
+  ACQUIRED = 'acquired',
+  BANKRUPT = 'bankrupt'
+}
+
 export interface Organization extends BaseEntity { 
   id: OrgId; 
-  name: string; 
-  legalName?: string;
-  organizationType: 'corporation' | 'llc' | 'partnership' | 'sole_proprietorship' | 'nonprofit' | 'government_agency' | 'trust' | 'estate' | 'other';
-  taxId?: string;
-  registrationNumber?: string;
-  jurisdiction?: string;
-  status?: 'active' | 'inactive' | 'dissolved' | 'merged' | 'acquired' | 'bankrupt';
-  foundedDate?: string;
-  address?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
-    country?: string;
+  // Core fields (EXACTLY aligned with backend Organization entity)
+  name: string; // Backend: varchar(255) (required)
+  legalName?: string; // Backend: legal_name varchar(255)
+  organizationType: OrganizationTypeEnum; // Backend: organization_type enum (required)
+  taxId?: string; // Backend: tax_id varchar(100)
+  registrationNumber?: string; // Backend: registration_number varchar(100)
+  jurisdiction?: string; // Backend: varchar(100)
+  incorporationDate?: string; // Backend: incorporation_date date
+  dissolutionDate?: string; // Backend: dissolution_date date
+  status: OrganizationStatusEnum; // Backend: enum (default: ACTIVE)
+  
+  // Address fields (backend stores flat, not nested)
+  address?: string; // Backend: text
+  city?: string; // Backend: varchar(100)
+  state?: string; // Backend: varchar(100)
+  zipCode?: string; // Backend: zip_code varchar(20)
+  country?: string; // Backend: varchar(100)
+  
+  // Contact fields (backend stores flat, not nested)
+  phone?: string; // Backend: varchar(50)
+  email?: string; // Backend: varchar(255)
+  website?: string; // Backend: varchar(500)
+  fax?: string; // Backend: varchar(50)
+  
+  // Additional backend fields
+  primaryContactName?: string; // Backend: primary_contact_name varchar(255)
+  primaryContactTitle?: string; // Backend: primary_contact_title varchar(100)
+  industryCode?: string; // Backend: industry_code varchar(100)
+  numberOfEmployees?: number; // Backend: number_of_employees int
+  annualRevenue?: number; // Backend: annual_revenue decimal(15,2)
+  stockSymbol?: string; // Backend: stock_symbol varchar(20)
+  parentOrganizationId?: string; // Backend: parent_organization_id uuid
+  notes?: string; // Backend: text
+  metadata?: Record<string, any>; // Backend: jsonb
+  
+  // Legacy aliases for backward compatibility
+  type?: OrganizationType; // Deprecated - use organizationType
+  domain?: string; // Frontend extension
+  foundedDate?: string; // Alias for incorporationDate
+}
+
+// Backend: jurisdictions table
+export enum JurisdictionSystem {
+  FEDERAL = 'Federal',
+  STATE = 'State',
+  REGULATORY = 'Regulatory',
+  INTERNATIONAL = 'International',
+  ARBITRATION = 'Arbitration',
+  LOCAL = 'Local'
+}
+
+export enum JurisdictionType {
+  SUPREME_COURT = 'Supreme Court',
+  CIRCUIT_COURT = 'Circuit Court',
+  DISTRICT_COURT = 'District Court',
+  APPELLATE_COURT = 'Appellate Court',
+  TRIAL_COURT = 'Trial Court',
+  SPECIALIZED_COURT = 'Specialized Court',
+  REGULATORY_BODY = 'Regulatory Body',
+  ARBITRATION_PROVIDER = 'Arbitration Provider',
+  TREATY = 'Treaty'
+}
+
+export interface Jurisdiction extends BaseEntity {
+  name: string; // Backend: varchar(255) (required)
+  system: JurisdictionSystem; // Backend: enum (required)
+  type: JurisdictionType; // Backend: enum (required)
+  region?: string; // Backend: varchar(255) - Circuit, State, Country, etc.
+  description?: string; // Backend: text
+  website?: string; // Backend: varchar(500)
+  rulesUrl?: string; // Backend: varchar(500)
+  code?: string; // Backend: varchar(100) - e.g., "9th Cir.", "N.D. Cal"
+  metadata?: {
+    iconColor?: string;
+    parties?: number; // For treaties
+    status?: string; // For treaties/regulatory
+    fullName?: string; // For arbitration providers
+    jurisdiction?: string; // For local courts
   };
-  contact?: {
-    phone?: string;
-    email?: string;
-    website?: string;
-  };
-  metadata?: Record<string, any>;
-  // Legacy fields for backward compatibility
-  type?: OrganizationType; 
-  domain?: string;
+  rules?: any[]; // Backend: OneToMany JurisdictionRule relation
 }
 
 export interface Group extends BaseEntity { 

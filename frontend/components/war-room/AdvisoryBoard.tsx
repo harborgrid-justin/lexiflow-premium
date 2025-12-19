@@ -27,6 +27,8 @@ import { STORES } from '../../services/data/db';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
+import { useSelection } from '../../hooks/useSelectionState';
+import { useToggle } from '../../hooks/useToggle';
 
 // Components
 import { Button } from '../common/Button';
@@ -36,6 +38,7 @@ import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 import { AdvisorList, Advisor } from './advisory/AdvisorList';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Modal } from '../common/Modal';
+import { ErrorState } from '../common/ErrorState';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -61,9 +64,9 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  const [selectedAdvisor, setSelectedAdvisor] = useState<Advisor | null>(null);
-  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const advisorSelection = useSelection<Advisor>();
+  const inspectorToggle = useToggle();
+  const filterToggle = useToggle();
   const [filterRole, setFilterRole] = useState<string>('all');
   const [filterSpecialty, setFilterSpecialty] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -71,7 +74,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // ============================================================================
   // DATA FETCHING
   // ============================================================================
-  const { data: advisors = [], isLoading } = useQuery<Advisor[]>(
+  const { data: advisors = [], isLoading, error, refetch } = useQuery<Advisor[]>(
       queryKeys.warRoom.advisors(caseId),
       () => DataService.warRoom.getAdvisors(caseId)
   );
@@ -117,8 +120,8 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   }, [baseFiltered, category, filterRole, filterSpecialty, filterStatus]);
 
   const handleSelectAdvisor = (advisor: Advisor) => {
-    setSelectedAdvisor(advisor);
-    setIsInspectorOpen(true);
+    advisorSelection.select(advisor);
+    inspectorToggle.open();
   };
 
   if (isLoading) return <AdaptiveLoader contentType="list" itemCount={6} shimmer />;
@@ -139,17 +142,17 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
         </div>
         <div className="flex gap-2">
             <Button 
-                variant={isFilterOpen ? "primary" : "secondary"} 
+                variant={filterToggle.isOpen ? "primary" : "secondary"} 
                 icon={Filter} 
-                onClick={() => setIsFilterOpen(!isFilterOpen)} 
+                onClick={filterToggle.toggle} 
                 className="hidden sm:flex"
             >
                 Filter
             </Button>
             <Button 
-                variant={isInspectorOpen ? "primary" : "secondary"} 
+                variant={inspectorToggle.isOpen ? "primary" : "secondary"} 
                 icon={Layout} 
-                onClick={() => setIsInspectorOpen(!isInspectorOpen)}
+                onClick={inspectorToggle.toggle}
                 className="hidden sm:flex"
             >
                 Inspector
@@ -175,21 +178,21 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
             <AdvisorList 
                 advisors={filteredAdvisors} 
                 onSelect={handleSelectAdvisor}
-                selectedId={selectedAdvisor?.id}
+                selectedId={advisorSelection.selected?.id}
             />
         </div>
 
         {/* Right Inspector Panel */}
-        {isInspectorOpen && selectedAdvisor && (
+        {inspectorToggle.isOpen && advisorSelection.selected && (
             <AdvisorDetail 
-                advisor={selectedAdvisor} 
-                onClose={() => setIsInspectorOpen(false)}
+                advisor={advisorSelection.selected} 
+                onClose={inspectorToggle.close}
             />
         )}
       </div>
 
       {/* Filter Modal */}
-      <Modal isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} title="Filter Advisors">
+      <Modal isOpen={filterToggle.isOpen} onClose={filterToggle.close} title="Filter Advisors">
         <div className="p-6 space-y-4">
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>

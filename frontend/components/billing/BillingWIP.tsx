@@ -26,6 +26,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useMultiSelection } from '../../hooks/useSelectionState';
 import { useCallback } from 'react';
 
 // Components

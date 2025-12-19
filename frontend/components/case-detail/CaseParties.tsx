@@ -18,6 +18,7 @@ import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -43,9 +44,11 @@ type GroupByOption = 'none' | 'role' | 'group';
 export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate }) => {
   const { theme } = useTheme();
   const partyModal = useModalState();
+  const deleteModal = useModalState();
   const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
   const [groupBy, setGroupBy] = useState<GroupByOption>('group');
   const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
+  const [deletePartyId, setDeletePartyId] = useState<string | null>(null);
 
   const { data: orgs = [] } = useQuery<Organization[]>([STORES.ORGS, 'all'], () => DataService.organization.getOrgs());
 
@@ -92,24 +95,30 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
         newParties.push(newParty);
     }
     onUpdate(newParties);
-    setIsModalOpen(false);
+    partyModal.close();
     setCurrentParty({});
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to remove this party from the case?')) {
-        onUpdate(parties.filter(p => p.id !== id));
+    setDeletePartyId(id);
+    deleteModal.open();
+  };
+
+  const confirmDelete = () => {
+    if (deletePartyId) {
+      onUpdate(parties.filter(p => p.id !== deletePartyId));
+      setDeletePartyId(null);
     }
   };
 
   const openEdit = (party: Party) => {
       setCurrentParty(party);
-      setIsModalOpen(true);
+      partyModal.open();
   };
 
   const openNew = () => {
       setCurrentParty({ type: 'Individual' });
-      setIsModalOpen(true);
+      partyModal.open();
   };
 
   const getIcon = (type: string) => {
@@ -228,7 +237,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
          <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No parties recorded.</div>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={currentParty.id ? 'Edit Party' : 'Add New Party'}>
+      <Modal isOpen={partyModal.isOpen} onClose={partyModal.close} title={currentParty.id ? 'Edit Party' : 'Add New Party'}>
           <div className="p-6 space-y-4">
               <Input label="Name" value={currentParty.name || ''} onChange={e => setCurrentParty({...currentParty, name: e.target.value})} placeholder="e.g. John Doe or Acme Corp"/>
               <div className="grid grid-cols-2 gap-4">
@@ -289,11 +298,21 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
               )}
 
               <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.default)}>
-                  <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                  <Button variant="secondary" onClick={partyModal.close}>Cancel</Button>
                   <Button variant="primary" onClick={handleSave}>Save Party</Button>
               </div>
           </div>
       </Modal>
+
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={confirmDelete}
+        title="Remove Party"
+        message="Are you sure you want to remove this party from the case? This action cannot be undone."
+        confirmText="Remove Party"
+        variant="danger"
+      />
     </div>
   );
 };

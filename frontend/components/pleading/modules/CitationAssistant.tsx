@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BookOpen, Search, Plus, ExternalLink } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { useFilterAndSearch } from '../../../hooks/useFilterAndSearch';
 import { SignalChecker } from './research/SignalChecker';
 import { DataService } from '../../../services/data/dataService';
 import { useQuery } from '../../../services/infrastructure/queryClient';
@@ -16,7 +17,6 @@ interface CitationAssistantProps {
 
 export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCitation }) => {
   const { theme } = useTheme();
-  const [search, setSearch] = useState('');
 
   // Cross-Module Integration: Fetching from Research/Citation Domain
   const { data: citations = [] } = useQuery<Citation[]>(
@@ -24,7 +24,12 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
     DataService.citations.getAll
   );
 
-  const filtered = citations.filter(c => c.citation.toLowerCase().includes(search.toLowerCase()) || c.title.toLowerCase().includes(search.toLowerCase()));
+  const { filteredItems: filtered, searchQuery, setSearchQuery } = useFilterAndSearch({
+    items: citations,
+    config: {
+      searchFields: ['citation', 'title', 'description']
+    }
+  });
 
   return (
     <div className="flex flex-col h-full">
@@ -37,8 +42,8 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
             <input 
                 className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 placeholder="Search saved authorities..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
             />
         </div>
       </div>

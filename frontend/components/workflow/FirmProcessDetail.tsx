@@ -10,7 +10,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { EmptyState } from '../common/EmptyState';
+import { ErrorState } from '../common/ErrorState';
 
 interface FirmProcessDetailProps {
   processId: string;
@@ -33,11 +33,10 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
   if (isError || !process) {
     return (
       <div className="h-full flex flex-col items-center justify-center">
-        <EmptyState 
+        <ErrorState 
           title="Process Not Found" 
-          description="Could not load process details."
-          icon={AlertTriangle}
-          action={<Button onClick={() => refetch()} icon={RefreshCw}>Retry</Button>}
+          message="Could not load process details."
+          onRetry={refetch}
         />
         <Button variant="ghost" onClick={onBack} className="mt-4">Go Back</Button>
       </div>

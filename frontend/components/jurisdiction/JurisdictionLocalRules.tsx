@@ -6,6 +6,7 @@ import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { DataService } from '../../services/data/dataService';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import { LegalRule } from '../../types';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
@@ -20,7 +21,9 @@ export const JurisdictionLocalRules: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
   const ruleModal = useModalState();
+  const deleteModal = useModalState();
   const [editingRule, setEditingRule] = useState<Partial<LegalRule>>({});
+  const [deleteRuleId, setDeleteRuleId] = useState<string | null>(null);
 
   // Enterprise Data Access
   const { data: rules = [] } = useQuery<LegalRule[]>(
@@ -62,19 +65,25 @@ export const JurisdictionLocalRules: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this rule definition?')) {
-      deleteRule(id);
+    setDeleteRuleId(id);
+    deleteModal.open();
+  };
+
+  const confirmDelete = () => {
+    if (deleteRuleId) {
+      deleteRule(deleteRuleId);
+      setDeleteRuleId(null);
     }
   };
 
   const openNew = () => {
     setEditingRule({ type: 'Local' });
-    setIsModalOpen(true);
+    ruleModal.open();
   };
 
   const openEdit = (rule: LegalRule) => {
     setEditingRule(rule);
-    setIsModalOpen(true);
+    ruleModal.open();
   };
 
   const filteredRules = filterRules(rules, filter);
@@ -128,7 +137,7 @@ export const JurisdictionLocalRules: React.FC = () => {
         </TableBody>
       </TableContainer>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingRule.id ? "Edit Rule" : "Add New Rule"}>
+      <Modal isOpen={ruleModal.isOpen} onClose={ruleModal.close} title={editingRule.id ? "Edit Rule" : "Add New Rule"}>
           <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                   <Input 
@@ -166,11 +175,21 @@ export const JurisdictionLocalRules: React.FC = () => {
                 onChange={e => setEditingRule({...editingRule, summary: e.target.value})}
               />
               <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.default)}>
-                  <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                  <Button variant="secondary" onClick={ruleModal.close}>Cancel</Button>
                   <Button variant="primary" onClick={handleSave}>Save Rule</Button>
               </div>
           </div>
       </Modal>
+
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={confirmDelete}
+        title="Delete Rule"
+        message="Are you sure you want to delete this rule definition? This action cannot be undone."
+        confirmText="Delete Rule"
+        variant="danger"
+      />
     </div>
   );
 };

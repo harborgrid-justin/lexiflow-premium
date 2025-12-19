@@ -2,6 +2,7 @@
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { ExternalLink, Clock, Loader2 } from 'lucide-react';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { useTheme } from '../../context/ThemeContext';
@@ -37,7 +38,7 @@ export const ResearchHistory: React.FC = () => {
         </TableHeader>
         <TableBody>
           {isLoading ? (
-              <TableRow><TableCell colSpan={4} className="text-center py-12"><Loader2 className="animate-spin h-6 w-6 mx-auto text-blue-600"/></TableCell></TableRow>
+              <TableRow><TableCell colSpan={4} className="p-0"><AdaptiveLoader contentType="table" shimmer itemCount={5} /></TableCell></TableRow>
           ) : history.map(item => (
             <TableRow key={item.id}>
               <TableCell className={cn("font-medium", theme.text.primary)}>{item.query}</TableCell>

@@ -58,7 +58,7 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
       return { root: r, children: c };
   }, [entities]);
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="dashboard" shimmer />;
   if (!root) return <div>No entities to map.</div>;
 
   return (

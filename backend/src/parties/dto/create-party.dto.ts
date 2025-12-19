@@ -64,6 +64,21 @@ export class CreatePartyDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(255)
+  primaryContactName?: string;
+
+  @IsEmail()
+  @IsOptional()
+  @MaxLength(255)
+  primaryContactEmail?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  primaryContactPhone?: string;
+
+  @IsString()
+  @IsOptional()
   notes?: string;
 
   @IsOptional()

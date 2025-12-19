@@ -9,6 +9,7 @@ import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '@hooks/useNotify';
 import { useModalState } from '@hooks';
+import { useSelection } from '@hooks/useSelectionState';
 import { getTodayString } from '@utils/dateUtils';
 
 interface RateTable {
@@ -63,10 +64,10 @@ export const RateTableManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [rateTables, setRateTables] = useState<RateTable[]>(mockRateTables);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedTable, setSelectedTable] = useState<RateTable | null>(null);
+  const createModal = useModalState();
+  const editModal = useModalState();
+  const deleteModal = useModalState();
+  const tableSelection = useSelection<RateTable>();
   const [formData, setFormData] = useState<Partial<RateTable>>({ rates: [] });
 
   const handleCreate = () => {
@@ -86,39 +87,39 @@ export const RateTableManagement: React.FC = () => {
       createdAt: new Date().toISOString().split('T')[0],
     };
     setRateTables([...rateTables, newTable]);
-    setIsCreateModalOpen(false);
+    createModal.close();
     setFormData({ rates: [] });
     notify.success('Rate table created successfully');
   };
 
   const handleEdit = () => {
-    if (!selectedTable) return;
+    if (!tableSelection.selected) return;
     setRateTables(rateTables.map(t =>
-      t.id === selectedTable.id ? { ...t, ...formData } : t
+      t.id === tableSelection.selected!.id ? { ...t, ...formData } : t
     ));
-    setIsEditModalOpen(false);
-    setSelectedTable(null);
+    editModal.close();
+    tableSelection.deselect();
     setFormData({ rates: [] });
     notify.success('Rate table updated successfully');
   };
 
   const handleDelete = () => {
-    if (!selectedTable) return;
-    setRateTables(rateTables.filter(t => t.id !== selectedTable.id));
-    setIsDeleteModalOpen(false);
-    setSelectedTable(null);
+    if (!tableSelection.selected) return;
+    setRateTables(rateTables.filter(t => t.id !== tableSelection.selected!.id));
+    deleteModal.close();
+    tableSelection.deselect();
     notify.success('Rate table deleted successfully');
   };
 
   const openEditModal = (table: RateTable) => {
-    setSelectedTable(table);
+    tableSelection.select(table);
     setFormData(table);
-    setIsEditModalOpen(true);
+    editModal.open();
   };
 
   const openDeleteModal = (table: RateTable) => {
-    setSelectedTable(table);
-    setIsDeleteModalOpen(true);
+    tableSelection.select(table);
+    deleteModal.open();
   };
 
   const addRate = () => {
@@ -148,7 +149,7 @@ export const RateTableManagement: React.FC = () => {
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Configure billing rates for different roles and clients.</p>
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => { setFormData({ rates: [] }); setIsCreateModalOpen(true); }}>
+        <Button variant="primary" icon={Plus} onClick={() => { setFormData({ rates: [] }); createModal.open(); }}>
           Create Rate Table
         </Button>
       </div>
@@ -198,9 +199,9 @@ export const RateTableManagement: React.FC = () => {
 
       {/* Create/Edit Modal */}
       <Modal
-        isOpen={isCreateModalOpen || isEditModalOpen}
-        onClose={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}
-        title={isCreateModalOpen ? 'Create Rate Table' : 'Edit Rate Table'}
+        isOpen={createModal.isOpen || editModal.isOpen}
+        onClose={() => { createModal.close(); editModal.close(); }}
+        title={createModal.isOpen ? 'Create Rate Table' : 'Edit Rate Table'}
       >
         <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
           <Input
@@ -264,22 +265,22 @@ export const RateTableManagement: React.FC = () => {
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="secondary" onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}>Cancel</Button>
-            <Button variant="primary" onClick={isCreateModalOpen ? handleCreate : handleEdit}>
-              {isCreateModalOpen ? 'Create Table' : 'Save Changes'}
+            <Button variant="secondary" onClick={() => { createModal.close(); editModal.close(); }}>Cancel</Button>
+            <Button variant="primary" onClick={createModal.isOpen ? handleCreate : handleEdit}>
+              {createModal.isOpen ? 'Create Table' : 'Save Changes'}
             </Button>
           </div>
         </div>
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete Rate Table">
+      <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title="Delete Rate Table">
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
-            Are you sure you want to delete <strong>{selectedTable?.name}</strong>? This action cannot be undone.
+            Are you sure you want to delete <strong>{tableSelection.selected?.name}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleDelete}>Delete Table</Button>
           </div>
         </div>

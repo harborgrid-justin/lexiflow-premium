@@ -130,70 +130,89 @@ export interface Party extends BaseEntity {
 export interface Attorney { name: string; firm?: string; email?: string; phone?: string; address?: string; type?: string; }
 export interface CaseTeamMember { userId: UserId; role: 'Lead' | 'Support' | 'Paralegal'; rateOverride?: Money; }
 
-// Matter Management (aligned with backend Matter entity)
+// Matter Management (EXACTLY aligned with backend Matter entity)
+// Backend: matters table - matters.entity.ts
 export interface Matter extends BaseEntity {
   id: MatterId;
-  matterNumber: string; // Auto-generated: MAT-YYYY-NNNN
-  title: string;
-  description?: string;
-  type: MatterType;
-  status: MatterStatus;
-  priority: MatterPriority;
-  practiceArea: PracticeArea;
   
-  // Client Information
-  clientId: UserId;
-  clientName: string;
+  // Core Identification (backend field names)
+  matterNumber: string; // Backend: matternumber varchar unique (required)
+  title: string; // Backend: varchar (required)
+  description?: string; // Backend: text
+  
+  // Status & Classification (backend enums)
+  status: MatterStatus; // Backend: enum (default: INTAKE -> ACTIVE in DB)
+  matterType: MatterType; // Backend: type enum (default: OTHER)
+  priority: MatterPriority; // Backend: enum (default: MEDIUM)
+  practiceArea?: string; // Backend: practicearea varchar
+  
+  // Client Information (backend exact fields)
+  clientId?: string; // Backend: clientid uuid
+  clientName?: string; // Backend: clientname varchar
+  
+  // Attorney Assignment (backend exact field names)
+  leadAttorneyId?: string; // Backend: responsibleattorneyid uuid
+  leadAttorneyName?: string; // Backend: responsibleattorneyname varchar
+  originatingAttorneyId?: string; // Backend: originatingattorneyid uuid
+  originatingAttorneyName?: string; // Backend: originatingattorneyname varchar
+  
+  // Jurisdictional Information
+  jurisdiction?: string; // Backend: varchar
+  venue?: string; // Backend: varchar
+  
+  // Financial (backend exact fields)
+  billingType?: string; // Backend: billingarrangement varchar
+  hourlyRate?: number; // Backend: hourlyrate decimal(10,2)
+  flatFee?: number; // Backend: flatfee decimal(10,2)
+  contingencyPercentage?: number; // Backend: contingencypercentage decimal(5,2)
+  retainerAmount?: number; // Backend: retaineramount decimal(10,2)
+  estimatedValue?: number; // Backend: estimatedvalue decimal(12,2)
+  budgetAmount?: number; // Backend: budgetamount decimal(12,2)
+  
+  // Important Dates (backend exact field names)
+  openedDate: string; // Backend: openeddate date (required)
+  targetCloseDate?: string; // Backend: targetclosedate date
+  closedDate?: string; // Backend: actualclosedate date
+  statute_of_limitations?: string; // Backend: statuteoflimitationsdate date
+  
+  // Tags & Opposing Party
+  tags?: string[]; // Backend: jsonb
+  opposingCounsel?: any; // Backend: opposingcounsel jsonb
+  
+  // Conflict Check (backend exact fields)
+  conflictCheckCompleted: boolean; // Backend: conflictcheckcompleted boolean (default: false)
+  conflictCheckDate?: string; // Backend: conflictcheckdate date
+  conflictCheckNotes?: string; // Backend: conflictchecknotes text
+  
+  // Resources & Location
+  officeLocation?: string; // Backend: officelocation varchar
+  relatedMatterIds?: any; // Backend: relatedmatterids jsonb
+  
+  // Notes & Custom Fields
+  internalNotes?: string; // Backend: internalnotes text
+  customFields?: Record<string, any>; // Backend: customfields jsonb
+  
+  // Metadata (backend exact fields)
+  createdBy: string; // Backend: createdby varchar (required)
+  updatedBy?: string; // Backend: updatedby varchar
+  
+  // Legacy aliases for backward compatibility
+  type?: MatterType; // Alias for matterType
+  responsibleAttorneyId?: string; // Alias for leadAttorneyId
+  responsibleAttorneyName?: string; // Alias for leadAttorneyName
+  billingArrangement?: BillingArrangement; // Alias for billingType
+  intakeDate?: string; // Alias for openedDate
+  userId?: UserId; // Deprecated - use createdBy
+  
+  // Frontend-only fields (not in backend)
   clientContact?: string;
   clientEmail?: string;
   clientPhone?: string;
-  
-  // Attorney Assignment
-  responsibleAttorneyId: UserId;
-  responsibleAttorneyName: string;
-  originatingAttorneyId?: UserId;
-  originatingAttorneyName?: string;
   teamMembers?: UserId[];
-  
-  // Conflict Check
-  conflictCheckStatus?: 'pending' | 'cleared' | 'conflict' | 'waived';
-  conflictCheckDate?: string;
-  conflictCheckNotes?: string;
-  
-  // Important Dates
-  intakeDate: string;
-  openedDate?: string;
-  closedDate?: string;
-  statute_of_limitations?: string;
-  
-  // Billing & Financial
-  billingArrangement: BillingArrangement;
-  estimatedValue?: number;
-  budgetAmount?: number;
-  retainerAmount?: number;
-  hourlyRate?: number;
-  contingencyPercentage?: number;
-  
-  // Court Information
   courtName?: string;
   caseNumber?: string;
   judgeAssigned?: string;
-  jurisdiction?: string;
   jurisdictions?: string[];
-  
-  // Opposing Parties
-  opposingCounsel?: Array<{
-    name: string;
-    firm?: string;
-    email?: string;
-    phone?: string;
-  }>;
-  
-  // Tags & Custom
-  tags?: string[];
-  customFields?: Record<string, any>;
-  
-  // Metadata
-  userId: UserId;
+  conflictCheckStatus?: 'pending' | 'cleared' | 'conflict' | 'waived';
 }
 

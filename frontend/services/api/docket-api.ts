@@ -25,7 +25,36 @@ export class DocketApiService {
   }
 
   async add(entry: Omit<DocketEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<DocketEntry> {
-    return apiClient.post<DocketEntry>('/docket', entry);
+    // Transform frontend DocketEntry to backend CreateDocketEntryDto
+    const createDto = {
+      caseId: entry.caseId,
+      sequenceNumber: entry.sequenceNumber,
+      docketNumber: entry.docketNumber,
+      dateFiled: entry.dateFiled ? new Date(entry.dateFiled) : undefined,
+      entryDate: entry.entryDate ? new Date(entry.entryDate) : new Date(),
+      description: entry.description || entry.title,
+      type: entry.type,
+      filedBy: entry.filedBy || entry.party,
+      text: entry.text || entry.summary,
+      documentTitle: entry.documentTitle || entry.title,
+      documentUrl: entry.documentUrl || entry.url,
+      documentId: entry.documentId,
+      pacerDocketNumber: entry.pacerDocketNumber,
+      pacerDocumentNumber: entry.pacerDocumentNumber,
+      isSealed: entry.isSealed,
+      isRestricted: entry.isRestricted,
+      notes: entry.notes,
+      attachments: entry.attachments,
+    };
+    
+    // Remove undefined values
+    Object.keys(createDto).forEach(key => {
+      if (createDto[key] === undefined) {
+        delete createDto[key];
+      }
+    });
+    
+    return apiClient.post<DocketEntry>('/docket', createDto);
   }
 
   async update(id: string, entry: Partial<DocketEntry>): Promise<DocketEntry> {

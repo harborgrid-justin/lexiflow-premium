@@ -23,6 +23,7 @@ import { LazyLoader } from '../common/LazyLoader';
 
 // Hooks
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useSelection } from '../../hooks/useSelectionState';
 
 // Utils
 import { cn } from '../../utils/cn';
@@ -51,7 +52,7 @@ const TAB_CONFIG: TabConfigItem[] = [
 export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
   const [isPending, startTransition] = useTransition();
   const [activeView, _setActiveView] = useSessionStorage<string>('citation_active_tab', 'library');
-  const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
+  const citationSelection = useSelection<Citation>();
 
   const setActiveView = (tab: string) => {
     startTransition(() => {
@@ -62,11 +63,11 @@ export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
   const renderContent = () => {
     switch (activeView) {
       case 'library':
-        return <CitationLibrary onSelect={setSelectedCitation} />;
+        return <CitationLibrary onSelect={citationSelection.select} />;
       case 'analyzer':
         return <BriefAnalyzer />;
       default:
-        return <CitationLibrary onSelect={setSelectedCitation} />;
+        return <CitationLibrary onSelect={citationSelection.select} />;
     }
   };
 

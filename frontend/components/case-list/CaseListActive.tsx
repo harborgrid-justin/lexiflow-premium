@@ -26,6 +26,7 @@ import { SearchInput, Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
 import { Currency } from '../common/Primitives';
 import { ActiveCaseTable } from './ActiveCaseTable';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 
 // Hooks & Context
 import { useSort } from '../../hooks/useSort';
@@ -34,6 +35,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { useToggle } from '../../hooks/useToggle';
 import { UseCaseListReturn } from '../../hooks/useCaseList';
 import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useModalState } from '../../hooks/useModalState';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
@@ -98,6 +100,8 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   const { theme } = useTheme();
   const notify = useNotify();
   const { isOpen: showFilters, toggle: toggleFilters } = useToggle(false);
+  const archiveModal = useModalState();
+  const [archiveCaseData, setArchiveCaseData] = React.useState<Case | null>(null);
   
   const { items: sortedCases, requestSort, sortConfig } = useSort<Case>(filteredCases, 'filingDate', 'desc');
 
@@ -130,8 +134,14 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   }, []);
 
   const handleArchiveCase = (c: Case) => {
-     if(confirm(`Archive ${c.title}?`)) {
-         archiveCase(c.id);
+     setArchiveCaseData(c);
+     archiveModal.open();
+  };
+
+  const confirmArchive = () => {
+     if (archiveCaseData) {
+         archiveCase(archiveCaseData.id);
+         setArchiveCaseData(null);
      }
   };
 
@@ -229,6 +239,16 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
             emptyMessage="No cases found."
          />
       </div>
+
+      <ConfirmDialog
+        isOpen={archiveModal.isOpen}
+        onClose={archiveModal.close}
+        onConfirm={confirmArchive}
+        title="Archive Case"
+        message={`Archive ${archiveCaseData?.title || 'this case'}? This will move it to the archived cases list.`}
+        confirmText="Archive"
+        variant="warning"
+      />
     </div>
   );
 };

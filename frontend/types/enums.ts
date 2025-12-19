@@ -25,31 +25,33 @@ export type BillingModel = 'Hourly' | 'Fixed' | 'Contingency' | 'Hybrid';
 export type OrganizationType = 'LawFirm' | 'Corporate' | 'Government' | 'Court' | 'Vendor';
 
 // Matter Management Enums (aligned with backend)
+// Backend Matter entity enums (from matters/entities/matter.entity.ts)
 export enum MatterStatus {
-  ACTIVE = 'active',  // Backend uses 'ACTIVE' - INTAKE maps to ACTIVE in DB
-  PENDING = 'pending',
-  ON_HOLD = 'on_hold',
-  CLOSED = 'closed',
-  ARCHIVED = 'archived',
+  INTAKE = 'ACTIVE',  // Backend: INTAKE maps to ACTIVE in DB (no INTAKE in DB enum)
+  ACTIVE = 'ACTIVE',
+  PENDING = 'PENDING',
+  ON_HOLD = 'ON_HOLD',
+  CLOSED = 'CLOSED',
+  ARCHIVED = 'ARCHIVED',
 }
 
 export enum MatterType {
-  LITIGATION = 'litigation',
-  TRANSACTIONAL = 'transactional',
-  ADVISORY = 'advisory',
-  COMPLIANCE = 'compliance',
-  INTELLECTUAL_PROPERTY = 'intellectual_property',
-  EMPLOYMENT = 'employment',
-  REAL_ESTATE = 'real_estate',
-  CORPORATE = 'corporate',
-  OTHER = 'other',
+  LITIGATION = 'LITIGATION',
+  TRANSACTIONAL = 'TRANSACTIONAL',
+  ADVISORY = 'ADVISORY',
+  COMPLIANCE = 'CORPORATE', // Backend: No COMPLIANCE in DB, maps to CORPORATE
+  INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
+  EMPLOYMENT = 'EMPLOYMENT',
+  REAL_ESTATE = 'REAL_ESTATE',
+  CORPORATE = 'CORPORATE',
+  OTHER = 'OTHER',
 }
 
 export enum MatterPriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  URGENT = 'urgent',
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  URGENT = 'URGENT',
 }
 
 // Practice Area Enum
@@ -263,6 +265,7 @@ export type CustodyActionTypeValue = typeof CustodyActionType[keyof typeof Custo
 export type ConferralResult = 'Agreed' | 'Impasse' | 'Partial Agreement' | 'Pending';
 export type ConferralMethod = 'Email' | 'Phone' | 'In-Person' | 'Video Conference';
 
+// Legacy TaskStatus (deprecated - use TaskStatusBackend from workflow.ts)
 export type TaskStatus = 'Pending' | 'In Progress' | 'Review' | 'Done' | 'Completed';
 export type StageStatus = 'Pending' | 'Active' | 'Completed';
 

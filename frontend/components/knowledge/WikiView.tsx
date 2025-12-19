@@ -24,6 +24,7 @@ import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
 
 // Components
 import { Badge } from '../common/Badge';
@@ -48,7 +49,6 @@ const sanitizeHtml = (html: string) => {
 export const WikiView: React.FC = () => {
   const { theme, mode } = useTheme();
   const [activeArticleId, setActiveArticleId] = useState('ca-employment');
-  const [search, setSearch] = useState('');
   const [isPending, startTransition] = useTransition();
 
   const { data: articles = [], isLoading } = useQuery<WikiArticle[]>(
@@ -56,8 +56,14 @@ export const WikiView: React.FC = () => {
     DataService.knowledge.getWikiArticles
   );
 
+  const { filteredItems: filteredArticles, searchQuery, setSearchQuery } = useFilterAndSearch({
+    items: articles,
+    config: {
+      searchFields: ['title', 'category']
+    }
+  });
+
   const activeArticle = articles.find(a => a.id === activeArticleId);
-  const filteredArticles = articles.filter(a => a.title.toLowerCase().includes(search.toLowerCase()));
 
   const handleSelectArticle = (id: string) => {
     startTransition(() => {
@@ -79,8 +85,8 @@ export const WikiView: React.FC = () => {
             <input 
                 className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface.default, theme.border.default)}
                 placeholder="Search articles..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>

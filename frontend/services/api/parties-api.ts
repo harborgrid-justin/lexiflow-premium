@@ -1,32 +1,79 @@
 /**
  * Parties API Service
  * Manages parties (plaintiffs, defendants, third-parties) in cases
+ * 
+ * ALIGNED WITH BACKEND:
+ * - Entity: backend/src/parties/entities/party.entity.ts
+ * - DTOs: backend/src/parties/dto/create-party.dto.ts, update-party.dto.ts
  */
 
 import { apiClient } from '../infrastructure/apiClient';
+import type { Party } from '../../types'; // Use centralized type definition
 
-export interface Party {
-  id: string;
-  caseId: string;
-  name: string;
-  partyType: 'plaintiff' | 'defendant' | 'third_party' | 'intervener' | 'amicus';
-  entityType?: 'individual' | 'corporation' | 'government' | 'organization';
+// Backend PartyType enum values
+export type PartyTypeBackend = 
+  | 'Plaintiff' 
+  | 'Defendant' 
+  | 'Petitioner' 
+  | 'Respondent' 
+  | 'Appellant' 
+  | 'Appellee' 
+  | 'Third Party' 
+  | 'Witness' 
+  | 'Expert Witness' 
+  | 'Other'
+  | 'individual'
+  | 'corporation'
+  | 'government'
+  | 'organization';
+
+// Backend PartyRole enum values
+export type PartyRoleBackend = 
+  | 'Primary' 
+  | 'Co-Party' 
+  | 'Interested Party' 
+  | 'Guardian' 
+  | 'Representative'
+  | 'plaintiff'
+  | 'defendant'
+  | 'petitioner'
+  | 'respondent'
+  | 'appellant'
+  | 'appellee'
+  | 'third_party'
+  | 'intervenor'
+  | 'witness'
+  | 'expert';
+
+// DTO for creating a party (matches backend CreatePartyDto)
+export interface CreatePartyDto {
+  caseId: string; // Required
+  name: string; // Required
+  type: PartyTypeBackend; // Required
+  role?: PartyRoleBackend; // Optional (default: 'Primary')
+  organization?: string;
   email?: string;
   phone?: string;
   address?: string;
-  counselId?: string;
-  counselName?: string;
-  proSe?: boolean;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  counsel?: string;
+  primaryContactName?: string;
+  primaryContactEmail?: string;
+  primaryContactPhone?: string;
   notes?: string;
   metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
 }
+
+// DTO for updating a party
+export interface UpdatePartyDto extends Partial<CreatePartyDto> {}
 
 export interface PartyFilters {
   caseId?: string;
-  partyType?: Party['partyType'];
-  entityType?: Party['entityType'];
+  type?: PartyTypeBackend;
+  role?: PartyRoleBackend;
 }
 
 export class PartiesApiService {
@@ -35,8 +82,8 @@ export class PartiesApiService {
   async getAll(filters?: PartyFilters): Promise<Party[]> {
     const params = new URLSearchParams();
     if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.partyType) params.append('partyType', filters.partyType);
-    if (filters?.entityType) params.append('entityType', filters.entityType);
+    if (filters?.type) params.append('type', filters.type);
+    if (filters?.role) params.append('role', filters.role);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     return apiClient.get<Party[]>(url);
@@ -50,11 +97,15 @@ export class PartiesApiService {
     return this.getAll({ caseId });
   }
 
-  async create(data: Partial<Party>): Promise<Party> {
+  async create(data: CreatePartyDto): Promise<Party> {
+    // Ensure required fields are present
+    if (!data.caseId || !data.name || !data.type) {
+      throw new Error('caseId, name, and type are required fields');
+    }
     return apiClient.post<Party>(this.baseUrl, data);
   }
 
-  async update(id: string, data: Partial<Party>): Promise<Party> {
+  async update(id: string, data: UpdatePartyDto): Promise<Party> {
     return apiClient.put<Party>(`${this.baseUrl}/${id}`, data);
   }
 

@@ -10,10 +10,12 @@
 
 // External Dependencies
 import React from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, FolderOpen, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { EvidenceInventory } from '../evidence/EvidenceInventory';
+import { EmptyState } from '../common/EmptyState';
+import { Button } from '../common/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useEvidenceVault } from '../../hooks/useEvidenceVault';
@@ -44,7 +46,11 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
   return (
     <div className="space-y-4 h-full flex flex-col">
       {evidenceItems.length === 0 ? (
-        <p className="text-slate-500 italic text-center py-10">No evidence logged for this case.</p>
+        <EmptyState
+          icon={FolderOpen}
+          title="No evidence logged"
+          description="No evidence items have been logged for this case yet."
+        />
       ) : (
         <EvidenceInventory
           items={evidenceItems} 

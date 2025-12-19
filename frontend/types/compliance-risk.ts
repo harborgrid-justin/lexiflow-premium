@@ -18,31 +18,53 @@ import {
   OcrStatus, TaskDependencyType
 } from './enums';
 
+// Backend Risk entity enums (from risks/dto/create-risk.dto.ts)
+export enum RiskImpact {
+  LOW = 'Low',
+  MEDIUM = 'Medium',
+  HIGH = 'High',
+  CRITICAL = 'Critical'
+}
+
+export enum RiskProbability {
+  LOW = 'Low',
+  MEDIUM = 'Medium',
+  HIGH = 'High'
+}
+
+// Backend Risk Status enum - MUST match backend/src/risks/dto/create-risk.dto.ts
+export enum RiskStatusEnum {
+  OPEN = 'Open',
+  MONITORING = 'Monitoring',
+  MITIGATED = 'Mitigated',
+  CLOSED = 'Closed'
+}
+
 export interface Risk extends BaseEntity { 
-  // Core fields (aligned with backend Risk entity)
+  // Core fields (EXACTLY aligned with backend Risk entity)
   title: string; // Backend: varchar (required)
-  description: string; // Backend: text, nullable
-  impact: 'Low' | 'Medium' | 'High' | 'Critical'; // Backend: enum RiskImpact
-  probability: 'Low' | 'Medium' | 'High'; // Backend: enum RiskProbability
-  status: 'Open' | 'Mitigated' | 'Accepted' | 'Closed'; // Backend: enum RiskStatus
+  description?: string; // Backend: text, nullable
+  impact: RiskImpact; // Backend: enum RiskImpact
+  probability: RiskProbability; // Backend: enum RiskProbability
+  status: RiskStatusEnum; // Backend: enum RiskStatus (default: OPEN)
   
   // Relationships
   caseId?: CaseId; // Backend: string/uuid, nullable
   
   // Mitigation
   mitigationStrategy?: string; // Backend: text
-  mitigationPlan?: string; // Frontend alias
   
   // Scoring
-  riskScore?: number; // Backend: decimal(3,1)
+  riskScore?: number; // Backend: decimal(3,1), nullable
   
   // Tracking
-  identifiedBy?: string; // Backend: string/uuid
+  identifiedBy?: string; // Backend: string/uuid, nullable
   
-  // Frontend-specific fields
-  category?: RiskCategory; // Frontend categorization
-  dateIdentified?: string;
-  lastUpdated?: string;
+  // Legacy aliases for backward compatibility
+  mitigationPlan?: string; // Alias for mitigationStrategy
+  category?: RiskCategory; // Frontend categorization (deprecated)
+  dateIdentified?: string; // Use createdAt instead
+  lastUpdated?: string; // Use updatedAt instead
 }
 
 export interface ConflictCheck extends BaseEntity { entityName: string; date: string; status: string; foundIn: string[]; checkedById: UserId; checkedBy: string; snapshot?: string; }

@@ -13,7 +13,9 @@
  */
 
 import { Result } from './result';
-import { Case, Party, DocketEntry } from './models';
+import type { Case } from './case';
+import type { Party } from './case';
+import type { DocketEntry } from './motion-docket';
 
 // ============================================================================
 // CONFIDENCE & METADATA

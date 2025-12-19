@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { MessageSquare, CheckCircle, User, Clock, Send } from 'lucide-react';
+import { MessageSquare, CheckCircle, User, Clock, Send, MessagesSquare } from 'lucide-react';
 import { PleadingComment } from '../../../types/pleading-types';
+import { EmptyState } from '../../common/EmptyState';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/data/dataService';
@@ -62,9 +63,15 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-            {comments.length === 0 && <div className="text-center text-xs text-slate-400 py-8">No comments yet.</div>}
-            
-            {comments.map(c => (
+            {comments.length === 0 ? (
+                <EmptyState
+                    icon={MessagesSquare}
+                    title="No comments"
+                    description="Be the first to leave a comment on this workflow."
+                    className="py-8"
+                />
+            ) : (
+                comments.map(c => (
                 <div key={c.id} className={cn("p-3 rounded-lg border text-sm group", c.resolved ? "opacity-60 bg-slate-50 dark:bg-slate-900" : "bg-white dark:bg-slate-800 shadow-sm", theme.border.default)}>
                     <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
@@ -82,7 +89,8 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
                         </button>
                     )}
                 </div>
-            ))}
+            ))
+            )}
         </div>
 
         <div className={cn("p-3 border-t", theme.border.default)}>

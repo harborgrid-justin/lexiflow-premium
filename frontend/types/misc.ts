@@ -30,14 +30,39 @@ export interface Attachment {
   url?: string; 
 }
 
+// Backend: calendar_events table
+// Backend CalendarEventType enum (from calendar/dto/calendar.dto.ts)
+export enum CalendarEventType {
+  HEARING = 'Hearing',
+  DEADLINE = 'Deadline',
+  MEETING = 'Meeting',
+  REMINDER = 'Reminder',
+  COURT_DATE = 'CourtDate',
+  FILING = 'Filing'
+}
+
 export interface CalendarEventItem {
   id: string;
   title: string;
-  date: string;
-  type: 'case' | 'deadline' | 'hearing' | 'task' | 'compliance';
+  date: string; // Alias for startDate
+  type: CalendarEventType | 'case' | 'deadline' | 'hearing' | 'task' | 'compliance'; // Backend: enum (default: REMINDER)
   description?: string;
   priority?: string;
   location?: string;
+  
+  // Backend additional fields
+  eventType?: CalendarEventType; // Alias for type
+  startDate?: string; // Backend: timestamp (required)
+  endDate?: string; // Backend: timestamp (required)
+  attendees?: string[]; // Backend: json
+  reminder?: string; // Backend: varchar
+  completed?: boolean; // Backend: boolean (default: false)
+  caseId?: string; // Backend: uuid
+  
+  // Legacy frontend values (map to backend enum)
+  // Old: 'deposition' | 'court_appearance' | 'trial' | 'conference' | 'filing_deadline'
+  // Map: deposition -> MEETING, court_appearance -> COURT_DATE, trial -> HEARING
+  //      conference -> MEETING, filing_deadline -> DEADLINE
 }
 
 export interface CasePhase {

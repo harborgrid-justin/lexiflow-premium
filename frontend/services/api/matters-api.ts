@@ -60,17 +60,18 @@ export class MattersApiService {
       title: matter.title,
       description: matter.description,
       status: matter.status?.toUpperCase(), // Convert to uppercase for backend enum
-      matterType: matter.type?.toUpperCase(), // Frontend uses 'type', backend uses 'matterType'
+      matterType: (matter.matterType || matter.type)?.toUpperCase(), // Support both field names
       priority: matter.priority?.toUpperCase(), // Convert to uppercase for backend enum
       clientId: matter.clientId || null,
       clientName: matter.clientName || null,
-      leadAttorneyId: matter.responsibleAttorneyId || null,
-      leadAttorneyName: matter.responsibleAttorneyName || null,
+      // Use exact backend field names
+      leadAttorneyId: matter.leadAttorneyId || matter.responsibleAttorneyId || null,
+      leadAttorneyName: matter.leadAttorneyName || matter.responsibleAttorneyName || null,
       originatingAttorneyId: matter.originatingAttorneyId,
       originatingAttorneyName: matter.originatingAttorneyName,
       jurisdiction: matter.jurisdiction,
-      venue: matter.courtName,
-      billingType: matter.billingArrangement,
+      venue: matter.venue || matter.courtName, // Backend uses 'venue'
+      billingType: matter.billingType || matter.billingArrangement, // Backend uses 'billingType'
       hourlyRate: matter.hourlyRate,
       flatFee: matter.flatFee,
       contingencyPercentage: matter.contingencyPercentage,
@@ -78,7 +79,7 @@ export class MattersApiService {
       estimatedValue: matter.estimatedValue,
       budgetAmount: matter.budgetAmount,
       openedDate: matter.openedDate || new Date().toISOString(),
-      targetCloseDate: matter.closedDate,
+      targetCloseDate: matter.targetCloseDate || matter.closedDate,
       closedDate: matter.closedDate,
       statute_of_limitations: matter.statute_of_limitations,
       practiceArea: matter.practiceArea,
@@ -87,13 +88,15 @@ export class MattersApiService {
       opposingCounsel: Array.isArray(matter.opposingCounsel) 
         ? matter.opposingCounsel.join(', ') 
         : matter.opposingCounsel,
-      // DTO expects conflictCheckStatus string, not conflictCheckCompleted boolean
-      conflictCheckStatus: matter.conflictCheckStatus || 'pending',
+      // Backend uses boolean conflictCheckCompleted, but DTO also accepts conflictCheckStatus string
+      conflictCheckStatus: matter.conflictCheckCompleted 
+        ? 'completed' 
+        : matter.conflictCheckStatus || 'pending',
       conflictCheckNotes: matter.conflictCheckNotes,
       internalNotes: matter.internalNotes,
       customFields: matter.customFields,
       // Use system UUID for userId
-      userId: matter.userId || '00000000-0000-0000-0000-000000000000',
+      userId: matter.userId || matter.createdBy || '00000000-0000-0000-0000-000000000000',
     };
 
     const response = await apiClient.post<any>(this.baseUrl, createDto);
@@ -111,17 +114,18 @@ export class MattersApiService {
       title: matter.title,
       description: matter.description,
       status: matter.status?.toUpperCase(),
-      matterType: matter.type?.toUpperCase(),
+      matterType: (matter.matterType || matter.type)?.toUpperCase(),
       priority: matter.priority?.toUpperCase(),
       clientId: matter.clientId,
       clientName: matter.clientName,
-      leadAttorneyId: matter.responsibleAttorneyId,
-      leadAttorneyName: matter.responsibleAttorneyName,
+      // Use exact backend field names
+      leadAttorneyId: matter.leadAttorneyId || matter.responsibleAttorneyId,
+      leadAttorneyName: matter.leadAttorneyName || matter.responsibleAttorneyName,
       originatingAttorneyId: matter.originatingAttorneyId,
       originatingAttorneyName: matter.originatingAttorneyName,
       jurisdiction: matter.jurisdiction,
-      venue: matter.courtName,
-      billingType: matter.billingArrangement,
+      venue: matter.venue || matter.courtName,
+      billingType: matter.billingType || matter.billingArrangement,
       hourlyRate: matter.hourlyRate,
       flatFee: matter.flatFee,
       contingencyPercentage: matter.contingencyPercentage,
@@ -129,7 +133,7 @@ export class MattersApiService {
       estimatedValue: matter.estimatedValue,
       budgetAmount: matter.budgetAmount,
       openedDate: matter.openedDate,
-      targetCloseDate: matter.closedDate,
+      targetCloseDate: matter.targetCloseDate || matter.closedDate,
       closedDate: matter.closedDate,
       statute_of_limitations: matter.statute_of_limitations,
       practiceArea: matter.practiceArea,
@@ -137,7 +141,9 @@ export class MattersApiService {
       opposingCounsel: Array.isArray(matter.opposingCounsel) 
         ? matter.opposingCounsel.join(', ') 
         : matter.opposingCounsel,
-      conflictCheckStatus: matter.conflictCheckStatus,
+      conflictCheckStatus: matter.conflictCheckCompleted 
+        ? 'completed' 
+        : matter.conflictCheckStatus,
       conflictCheckNotes: matter.conflictCheckNotes,
       internalNotes: matter.internalNotes,
       customFields: matter.customFields,

@@ -21,29 +21,30 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     matterNumber: matter?.matterNumber || '',
     title: matter?.title || '',
     description: matter?.description || '',
-    type: matter?.type || MatterType.LITIGATION,
+    matterType: matter?.matterType || matter?.type || MatterType.LITIGATION,
     status: matter?.status || MatterStatus.ACTIVE,
     priority: matter?.priority || MatterPriority.MEDIUM,
     practiceArea: matter?.practiceArea || PracticeArea.CIVIL_LITIGATION,
     clientId: matter?.clientId || ('' as UserId),
     clientName: matter?.clientName || '',
     clientContact: matter?.clientContact || '',
-    responsibleAttorneyId: matter?.responsibleAttorneyId || ('' as UserId),
-    responsibleAttorneyName: matter?.responsibleAttorneyName || '',
+    leadAttorneyId: matter?.leadAttorneyId || matter?.responsibleAttorneyId || ('' as UserId),
+    leadAttorneyName: matter?.leadAttorneyName || matter?.responsibleAttorneyName || '',
     originatingAttorneyId: matter?.originatingAttorneyId,
     originatingAttorneyName: matter?.originatingAttorneyName,
-    conflictCheckStatus: matter?.conflictCheckStatus || 'pending',
+    conflictCheckCompleted: matter?.conflictCheckCompleted || false,
     conflictCheckDate: matter?.conflictCheckDate,
     conflictCheckNotes: matter?.conflictCheckNotes || '',
-    intakeDate: matter?.intakeDate || new Date().toISOString(),
-    openedDate: matter?.openedDate,
+    openedDate: matter?.openedDate || new Date().toISOString(),
+    targetCloseDate: matter?.targetCloseDate,
     closedDate: matter?.closedDate,
     statute_of_limitations: matter?.statute_of_limitations,
-    billingArrangement: matter?.billingArrangement || BillingArrangement.HOURLY,
+    billingType: matter?.billingType || matter?.billingArrangement || 'Hourly',
     estimatedValue: matter?.estimatedValue,
     budgetAmount: matter?.budgetAmount,
     retainerAmount: matter?.retainerAmount,
     hourlyRate: matter?.hourlyRate,
+    flatFee: matter?.flatFee,
     contingencyPercentage: matter?.contingencyPercentage,
     tags: matter?.tags || [],
     jurisdictions: matter?.jurisdictions || [],
@@ -68,11 +69,17 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     if (!formData.clientName?.trim()) {
       newErrors.clientName = 'Client name is required';
     }
-    if (!formData.responsibleAttorneyName?.trim()) {
-      newErrors.responsibleAttorneyName = 'Responsible attorney is required';
+    // Check both new and legacy field names for backward compatibility
+    const attorneyName = formData.leadAttorneyName || formData.responsibleAttorneyName;
+    if (!attorneyName?.trim()) {
+      newErrors.leadAttorneyName = 'Lead attorney is required';
     }
     if (!formData.practiceArea) {
       newErrors.practiceArea = 'Practice area is required';
+    }
+    // openedDate is required by backend DTO
+    if (!formData.openedDate) {
+      newErrors.openedDate = 'Opened date is required';
     }
 
     setErrors(newErrors);
@@ -174,8 +181,8 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <select
               id="matterType"
-              value={formData.type}
-              onChange={(e) => handleChange('type', e.target.value)}
+              value={formData.matterType || formData.type || ''}
+              onChange={(e) => handleChange('matterType', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               {Object.values(MatterType).map(type => (
@@ -311,18 +318,18 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              Responsible Attorney *
+              Lead Attorney *
             </label>
             <input
               type="text"
-              value={formData.responsibleAttorneyName}
-              onChange={(e) => handleChange('responsibleAttorneyName', e.target.value)}
+              value={formData.leadAttorneyName || formData.responsibleAttorneyName || ''}
+              onChange={(e) => handleChange('leadAttorneyName', e.target.value)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
-                errors.responsibleAttorneyName ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
+                errors.leadAttorneyName ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
               placeholder="Lead attorney name"
             />
-            {errors.responsibleAttorneyName && <p className="mt-1 text-sm text-rose-600">{errors.responsibleAttorneyName}</p>}
+            {errors.leadAttorneyName && <p className="mt-1 text-sm text-rose-600">{errors.leadAttorneyName}</p>}
           </div>
 
           <div>
@@ -414,15 +421,18 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
 
           <div>
             <label htmlFor="openedDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              Opened Date
+              Opened Date *
             </label>
             <input
               id="openedDate"
               type="date"
               value={formData.openedDate ? formData.openedDate.split('T')[0] : ''}
               onChange={(e) => handleChange('openedDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
-              className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
+              className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
+                errors.openedDate ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
+              }`}
             />
+            {errors.openedDate && <p className="mt-1 text-sm text-rose-600">{errors.openedDate}</p>}
           </div>
 
           <div>
@@ -448,22 +458,24 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label htmlFor="billingArrangement" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              Billing Arrangement
+            <label htmlFor="billingType" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              Billing Type
             </label>
             <select
-              id="billingArrangement"
-              value={formData.billingArrangement}
-              onChange={(e) => handleChange('billingArrangement', e.target.value)}
+              id="billingType"
+              value={formData.billingType || formData.billingArrangement || ''}
+              onChange={(e) => handleChange('billingType', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
-              {Object.values(BillingArrangement).map(arrangement => (
-                <option key={arrangement} value={arrangement}>{arrangement.replace(/_/g, ' ')}</option>
-              ))}
+              <option value="Hourly">Hourly</option>
+              <option value="Flat Fee">Flat Fee</option>
+              <option value="Contingency">Contingency</option>
+              <option value="Retainer">Retainer</option>
+              <option value="Hybrid">Hybrid</option>
             </select>
           </div>
 
-          {formData.billingArrangement === BillingArrangement.HOURLY && (
+          {(formData.billingType === 'Hourly' || formData.billingArrangement === BillingArrangement.HOURLY) && (
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Hourly Rate ($)
@@ -479,7 +491,23 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </div>
           )}
 
-          {formData.billingArrangement === BillingArrangement.CONTINGENCY && (
+          {(formData.billingType === 'Flat Fee') && (
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                Flat Fee ($)
+              </label>
+              <input
+                type="number"
+                value={formData.flatFee || ''}
+                onChange={(e) => handleChange('flatFee', e.target.value ? parseFloat(e.target.value) : undefined)}
+                className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
+                placeholder="0.00"
+                step="0.01"
+              />
+            </div>
+          )}
+
+          {(formData.billingType === 'Contingency' || formData.billingArrangement === BillingArrangement.CONTINGENCY) && (
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Contingency Percentage (%)

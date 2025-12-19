@@ -162,8 +162,8 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
 
     newNodes.push({ id: 'start', type: 'Start', label: 'Start', x: 50, y: 400, config: {} });
     
-    let lastNodeId = 'start';
-    let yOffset = 400;
+    const lastNodeId = 'start';
+    const yOffset = 400;
 
     playbook.stages.forEach((stage, idx) => {
       const stageNodeId = `phase-${idx}`;

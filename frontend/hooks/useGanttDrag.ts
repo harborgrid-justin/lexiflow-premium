@@ -95,8 +95,8 @@ export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
                     ? new Date(task.startDate) 
                     : new Date(currentDue.getTime() - (5 * 24 * 60 * 60 * 1000));
                 
-                let newStart = new Date(currentStart);
-                let newDue = new Date(currentDue);
+                const newStart = new Date(currentStart);
+                const newDue = new Date(currentDue);
 
                 if (mode === 'move') {
                     newStart.setDate(newStart.getDate() + daysDelta);

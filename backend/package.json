@@ -30,7 +30,10 @@
     "db:schema": "npm run db:clean && npm run db:sync",
     "db:reset": "npm run migration:revert && npm run migration:run && npm run seed",
     "db:fresh": "npm run db:clean && npm run seed",
-    "db:test": "ts-node src/scripts/test-db-connection.ts"
+    "db:test": "ts-node src/scripts/test-db-connection.ts",
+    "db:drop-all": "node scripts/drop-all-tables.js",
+    "db:init-snake-case": "ts-node scripts/init-db-snake-case.ts",
+    "db:reset-snake-case": "node scripts/reset-db-snake-case.js"
   },
   "keywords": [],
   "author": "",
@@ -99,6 +102,7 @@
     "sqlite3": "^5.1.7",
     "tesseract.js": "^7.0.0",
     "typeorm": "^0.3.28",
+    "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^13.0.0",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"

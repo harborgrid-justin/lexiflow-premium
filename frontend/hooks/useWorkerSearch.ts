@@ -122,7 +122,7 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
         }
     });
 
-  }, [query, items]); 
+  }, [query]); // Removed 'items' dependency - items updates are handled by the first useEffect
 
   return { filteredItems, isSearching };
 };

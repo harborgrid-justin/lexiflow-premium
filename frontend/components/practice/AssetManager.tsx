@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } from 'lucide-react';
 
 // ============================================================================
@@ -61,8 +61,10 @@ export const AssetManager: React.FC = () => {
       DataService.assets.getAll
   );
   
-  // Ensure assets is always an array
-  const assets = Array.isArray(rawAssets) ? rawAssets : [];
+  // Memoize assets to prevent re-creating array on every render
+  const assets = useMemo(() => {
+      return Array.isArray(rawAssets) ? rawAssets : [];
+  }, [rawAssets]);
 
   const { mutate: addAsset } = useMutation(
       DataService.assets.add,

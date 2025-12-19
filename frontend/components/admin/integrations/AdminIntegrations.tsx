@@ -7,7 +7,7 @@ import { RefreshCw, Link as LinkIcon, Settings, Plus, Loader2 } from 'lucide-rea
 import { useTheme } from '@context/ThemeContext';
 import { cn } from '@utils/cn';
 import { DataService } from '@services/data/dataService';
-import { useQuery } from '@services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 
 export const AdminIntegrations: React.FC = () => {
   const { theme } = useTheme();

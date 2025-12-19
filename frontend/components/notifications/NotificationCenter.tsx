@@ -17,7 +17,7 @@ import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
 
 // Hooks & Context
-import { useQuery, useMutation } from '../../hooks/useQueryHooks';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -29,7 +29,6 @@ import { Modal } from '../common/Modal';
 
 // Utils
 import { cn } from '../../utils/cn';
-import { queryClient } from '@/services/infrastructure/queryClient';
 
 // ============================================================================
 // TYPES & INTERFACES

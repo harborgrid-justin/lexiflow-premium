@@ -9,7 +9,7 @@
 // =============================================================================
 
 // Core Database Settings
-export const DB_SYNCHRONIZE = false; // CRITICAL: Keep false to prevent data loss
+export const DB_SYNCHRONIZE = true; // CRITICAL: Keep false to prevent data loss
 export const DB_MIGRATIONS_RUN = false;
 export const DB_LOGGING = process.env.NODE_ENV !== 'production';
 export const DB_SSL = true;
@@ -27,7 +27,7 @@ export const DB_ACQUIRE_TIMEOUT = 60000; // 60 seconds
 export const DB_EVICTION_RUN_INTERVAL = 10000; // 10 seconds
 
 // Cache Settings
-export const DB_CACHE_ENABLED = true;
+export const DB_CACHE_ENABLED = false;
 export const DB_CACHE_DURATION = 30000; // 30 seconds
 export const DB_CACHE_TYPE = 'database';
 

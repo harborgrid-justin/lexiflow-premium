@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { isBackendApiEnabled as checkBackendEnabled } from '../services/integration/apiConfig';
 
 /**
  * Data Source Context
@@ -15,17 +16,11 @@ export interface DataSourceContextValue {
 
 // --- Internal Helpers (Kept outside to avoid closures/circularity) ---
 
-const STORAGE_KEY = 'VITE_USE_BACKEND_API';
+const STORAGE_KEY = 'VITE_USE_INDEXEDDB';
 
 function getInitialDataSource(): DataSourceType {
-  // 1. Check localStorage first (user preference)
-  if (typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY)) {
-    return localStorage.getItem(STORAGE_KEY) === 'true' ? 'postgresql' : 'indexeddb';
-  }
-  
-  // 2. Fallback to Environment Variable
-  const envValue = import.meta.env.VITE_USE_BACKEND_API;
-  return (envValue === 'true' || envValue === true) ? 'postgresql' : 'indexeddb';
+  // Use the centralized apiConfig detection logic
+  return checkBackendEnabled() ? 'postgresql' : 'indexeddb';
 }
 
 const DataSourceContext = createContext<DataSourceContextValue | undefined>(undefined);
@@ -51,8 +46,12 @@ export const DataSourceProvider: React.FC<DataSourceProviderProps> = ({ children
     
     // Update storage so the next load picks up the right source
     if (typeof window !== 'undefined') {
-      const useBackend = source !== 'indexeddb';
-      localStorage.setItem(STORAGE_KEY, String(useBackend));
+      // Use VITE_USE_INDEXEDDB for consistency with apiConfig.ts
+      if (source === 'indexeddb') {
+        localStorage.setItem('VITE_USE_INDEXEDDB', 'true');
+      } else {
+        localStorage.removeItem('VITE_USE_INDEXEDDB');
+      }
       
       // We do NOT call queryClient here. 
       // The reload ensures a clean slate for all singleton services.

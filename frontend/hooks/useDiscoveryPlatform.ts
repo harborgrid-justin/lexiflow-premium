@@ -19,7 +19,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { STORES } from '../services/data/db';
 
 // Hooks & Context

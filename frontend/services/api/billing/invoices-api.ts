@@ -52,7 +52,7 @@ export interface InvoicePayment {
 export class InvoicesApiService {
   /**
    * Get all invoices with optional filters
-   * GET /api/v1/billing/invoices
+   * GET ${API_PREFIX}/billing/invoices
    */
   async getAll(filters?: InvoiceFilters): Promise<Invoice[]> {
     const response = await apiClient.get<PaginatedResponse<Invoice>>('/billing/invoices', filters);
@@ -61,7 +61,7 @@ export class InvoicesApiService {
 
   /**
    * Get overdue invoices
-   * GET /api/v1/billing/invoices/overdue
+   * GET ${API_PREFIX}/billing/invoices/overdue
    */
   async getOverdue(): Promise<Invoice[]> {
     const response = await apiClient.get<PaginatedResponse<Invoice>>('/billing/invoices/overdue');
@@ -70,7 +70,7 @@ export class InvoicesApiService {
 
   /**
    * Get invoice by ID
-   * GET /api/v1/billing/invoices/:id
+   * GET ${API_PREFIX}/billing/invoices/:id
    */
   async getById(id: string): Promise<Invoice> {
     return apiClient.get<Invoice>(`/billing/invoices/${id}`);
@@ -78,7 +78,7 @@ export class InvoicesApiService {
 
   /**
    * Get invoice as PDF
-   * GET /api/v1/billing/invoices/:id/pdf
+   * GET ${API_PREFIX}/billing/invoices/:id/pdf
    */
   async getPdf(id: string): Promise<Blob> {
     return apiClient.get<Blob>(`/billing/invoices/${id}/pdf`);
@@ -86,7 +86,7 @@ export class InvoicesApiService {
 
   /**
    * Create a new invoice
-   * POST /api/v1/billing/invoices
+   * POST ${API_PREFIX}/billing/invoices
    */
   async create(invoice: CreateInvoiceDto): Promise<Invoice> {
     return apiClient.post<Invoice>('/billing/invoices', invoice);
@@ -94,7 +94,7 @@ export class InvoicesApiService {
 
   /**
    * Update an invoice
-   * PUT /api/v1/billing/invoices/:id
+   * PUT ${API_PREFIX}/billing/invoices/:id
    */
   async update(id: string, invoice: Partial<CreateInvoiceDto>): Promise<Invoice> {
     return apiClient.put<Invoice>(`/billing/invoices/${id}`, invoice);
@@ -102,7 +102,7 @@ export class InvoicesApiService {
 
   /**
    * Send invoice to client
-   * POST /api/v1/billing/invoices/:id/send
+   * POST ${API_PREFIX}/billing/invoices/:id/send
    */
   async send(id: string, recipients?: string[]): Promise<Invoice> {
     return apiClient.post<Invoice>(`/billing/invoices/${id}/send`, { recipients });
@@ -110,7 +110,7 @@ export class InvoicesApiService {
 
   /**
    * Record a payment for an invoice
-   * POST /api/v1/billing/invoices/:id/record-payment
+   * POST ${API_PREFIX}/billing/invoices/:id/record-payment
    */
   async recordPayment(id: string, payment: Omit<InvoicePayment, 'id'>): Promise<Invoice> {
     return apiClient.post<Invoice>(`/billing/invoices/${id}/record-payment`, payment);
@@ -118,7 +118,7 @@ export class InvoicesApiService {
 
   /**
    * Delete an invoice
-   * DELETE /api/v1/billing/invoices/:id
+   * DELETE ${API_PREFIX}/billing/invoices/:id
    */
   async delete(id: string): Promise<void> {
     await apiClient.delete(`/billing/invoices/${id}`);
@@ -126,7 +126,7 @@ export class InvoicesApiService {
 
   /**
    * Get invoice statistics
-   * GET /api/v1/billing/invoices/stats
+   * GET ${API_PREFIX}/billing/invoices/stats
    */
   async getStats(): Promise<{
     total: number;
@@ -140,3 +140,4 @@ export class InvoicesApiService {
     return apiClient.get('/billing/invoices/stats');
   }
 }
+

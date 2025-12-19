@@ -53,7 +53,7 @@ export interface ReindexResult {
 export class SearchApiService {
   /**
    * Perform global search across all content
-   * GET /api/v1/search
+   * GET ${API_PREFIX}/search
    */
   async search(query: SearchQuery): Promise<SearchResult[]> {
     const response = await apiClient.get<PaginatedResponse<SearchResult>>('/search', query);
@@ -62,7 +62,7 @@ export class SearchApiService {
 
   /**
    * Get search suggestions/autocomplete
-   * GET /api/v1/search/suggestions
+   * GET ${API_PREFIX}/search/suggestions
    * NEW - Previously missing
    */
   async getSuggestions(query: string, limit: number = 10): Promise<SearchSuggestion[]> {
@@ -71,7 +71,7 @@ export class SearchApiService {
 
   /**
    * Search within specific case
-   * GET /api/v1/search/case/:caseId
+   * GET ${API_PREFIX}/search/case/:caseId
    */
   async searchInCase(caseId: string, query: string): Promise<SearchResult[]> {
     const response = await apiClient.get<PaginatedResponse<SearchResult>>(`/search/case/${caseId}`, { q: query });
@@ -80,7 +80,7 @@ export class SearchApiService {
 
   /**
    * Search documents by content
-   * GET /api/v1/search/documents
+   * GET ${API_PREFIX}/search/documents
    */
   async searchDocuments(query: string, filters?: { caseId?: string; type?: string }): Promise<SearchResult[]> {
     const response = await apiClient.get<PaginatedResponse<SearchResult>>('/search/documents', { q: query, ...filters });
@@ -89,7 +89,7 @@ export class SearchApiService {
 
   /**
    * Get search statistics
-   * GET /api/v1/search/stats
+   * GET ${API_PREFIX}/search/stats
    */
   async getStats(): Promise<SearchStats> {
     return apiClient.get<SearchStats>('/search/stats');
@@ -97,7 +97,7 @@ export class SearchApiService {
 
   /**
    * Trigger full search index rebuild (admin only)
-   * POST /api/v1/search/reindex
+   * POST ${API_PREFIX}/search/reindex
    * NEW - Previously missing
    */
   async reindex(options?: { type?: string; force?: boolean }): Promise<ReindexResult> {
@@ -106,7 +106,7 @@ export class SearchApiService {
 
   /**
    * Get reindex job status
-   * GET /api/v1/search/reindex/:jobId
+   * GET ${API_PREFIX}/search/reindex/:jobId
    * NEW - Related to reindex functionality
    */
   async getReindexStatus(jobId: string): Promise<ReindexResult> {
@@ -115,7 +115,7 @@ export class SearchApiService {
 
   /**
    * Index a specific document
-   * POST /api/v1/search/index/document/:documentId
+   * POST ${API_PREFIX}/search/index/document/:documentId
    */
   async indexDocument(documentId: string): Promise<{ success: boolean; indexed: boolean }> {
     return apiClient.post<{ success: boolean; indexed: boolean }>(`/search/index/document/${documentId}`, {});
@@ -123,9 +123,10 @@ export class SearchApiService {
 
   /**
    * Remove document from search index
-   * DELETE /api/v1/search/index/document/:documentId
+   * DELETE ${API_PREFIX}/search/index/document/:documentId
    */
   async removeFromIndex(documentId: string): Promise<{ success: boolean }> {
     return apiClient.delete<{ success: boolean }>(`/search/index/document/${documentId}`);
   }
 }
+

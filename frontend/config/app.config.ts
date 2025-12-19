@@ -5,7 +5,7 @@
 
 export const APP_NAME = 'LexiFlow';
 export const APP_VERSION = '1.0.0';
-export const APP_ENV = import.meta.env.MODE || 'development';
+export const APP_ENV = import.meta.env.VITE_ENV || import.meta.env.MODE || 'development';
 export const APP_DESCRIPTION = 'Enterprise Legal OS - Case Management, Discovery & Operations';
 
 // Theme Settings

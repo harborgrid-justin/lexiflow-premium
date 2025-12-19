@@ -55,7 +55,7 @@ export interface BulkOperationResult {
 export class TimeEntriesApiService {
   /**
    * Get all time entries with optional filters
-   * GET /api/v1/billing/time-entries
+   * GET ${API_PREFIX}/billing/time-entries
    */
   async getAll(filters?: TimeEntryFilters): Promise<TimeEntry[]> {
     const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries', filters);
@@ -64,7 +64,7 @@ export class TimeEntriesApiService {
 
   /**
    * Get time entry by ID
-   * GET /api/v1/billing/time-entries/:id
+   * GET ${API_PREFIX}/billing/time-entries/:id
    */
   async getById(id: string): Promise<TimeEntry> {
     return apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
@@ -72,7 +72,7 @@ export class TimeEntriesApiService {
 
   /**
    * Get unbilled time entries for a case
-   * GET /api/v1/billing/time-entries/case/:caseId/unbilled
+   * GET ${API_PREFIX}/billing/time-entries/case/:caseId/unbilled
    */
   async getUnbilledByCase(caseId: string): Promise<TimeEntry[]> {
     const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/case/${caseId}/unbilled`);
@@ -81,7 +81,7 @@ export class TimeEntriesApiService {
 
   /**
    * Get time entry totals for a case
-   * GET /api/v1/billing/time-entries/case/:caseId/totals
+   * GET ${API_PREFIX}/billing/time-entries/case/:caseId/totals
    */
   async getTotalsByCase(caseId: string): Promise<TimeEntryTotals> {
     return apiClient.get<TimeEntryTotals>(`/billing/time-entries/case/${caseId}/totals`);
@@ -89,7 +89,7 @@ export class TimeEntriesApiService {
 
   /**
    * Get time entries for a specific user
-   * GET /api/v1/billing/time-entries/user/:userId
+   * GET ${API_PREFIX}/billing/time-entries/user/:userId
    */
   async getByUser(userId: string): Promise<TimeEntry[]> {
     const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/user/${userId}`);
@@ -98,7 +98,7 @@ export class TimeEntriesApiService {
 
   /**
    * Create a new time entry
-   * POST /api/v1/billing/time-entries
+   * POST ${API_PREFIX}/billing/time-entries
    */
   async create(entry: CreateTimeEntryDto): Promise<TimeEntry> {
     return apiClient.post<TimeEntry>('/billing/time-entries', entry);
@@ -106,7 +106,7 @@ export class TimeEntriesApiService {
 
   /**
    * Create multiple time entries at once
-   * POST /api/v1/billing/time-entries/bulk
+   * POST ${API_PREFIX}/billing/time-entries/bulk
    */
   async createBulk(dto: BulkTimeEntryDto): Promise<BulkOperationResult> {
     return apiClient.post<BulkOperationResult>('/billing/time-entries/bulk', dto);
@@ -114,7 +114,7 @@ export class TimeEntriesApiService {
 
   /**
    * Update a time entry
-   * PUT /api/v1/billing/time-entries/:id
+   * PUT ${API_PREFIX}/billing/time-entries/:id
    */
   async update(id: string, entry: UpdateTimeEntryDto): Promise<TimeEntry> {
     return apiClient.put<TimeEntry>(`/billing/time-entries/${id}`, entry);
@@ -122,7 +122,7 @@ export class TimeEntriesApiService {
 
   /**
    * Approve a time entry (change status to 'Approved')
-   * PUT /api/v1/billing/time-entries/:id/approve
+   * PUT ${API_PREFIX}/billing/time-entries/:id/approve
    */
   async approve(id: string): Promise<TimeEntry> {
     return apiClient.put<TimeEntry>(`/billing/time-entries/${id}/approve`, {});
@@ -130,7 +130,7 @@ export class TimeEntriesApiService {
 
   /**
    * Mark a time entry as billed
-   * PUT /api/v1/billing/time-entries/:id/bill
+   * PUT ${API_PREFIX}/billing/time-entries/:id/bill
    */
   async bill(id: string, invoiceId: string): Promise<TimeEntry> {
     return apiClient.put<TimeEntry>(`/billing/time-entries/${id}/bill`, { invoiceId });
@@ -138,7 +138,7 @@ export class TimeEntriesApiService {
 
   /**
    * Bulk approve time entries
-   * POST /api/v1/billing/time-entries/bulk-approve
+   * POST ${API_PREFIX}/billing/time-entries/bulk-approve
    */
   async approveBulk(ids: string[]): Promise<BulkOperationResult> {
     return apiClient.post<BulkOperationResult>('/billing/time-entries/bulk-approve', { ids });
@@ -146,7 +146,7 @@ export class TimeEntriesApiService {
 
   /**
    * Bulk bill time entries
-   * POST /api/v1/billing/time-entries/bulk-bill
+   * POST ${API_PREFIX}/billing/time-entries/bulk-bill
    */
   async billBulk(ids: string[], invoiceId: string): Promise<BulkOperationResult> {
     return apiClient.post<BulkOperationResult>('/billing/time-entries/bulk-bill', { ids, invoiceId });
@@ -154,7 +154,7 @@ export class TimeEntriesApiService {
 
   /**
    * Delete a time entry
-   * DELETE /api/v1/billing/time-entries/:id
+   * DELETE ${API_PREFIX}/billing/time-entries/:id
    */
   async delete(id: string): Promise<void> {
     await apiClient.delete(`/billing/time-entries/${id}`);
@@ -162,9 +162,10 @@ export class TimeEntriesApiService {
 
   /**
    * Bulk delete time entries
-   * POST /api/v1/billing/time-entries/bulk-delete
+   * POST ${API_PREFIX}/billing/time-entries/bulk-delete
    */
   async deleteBulk(ids: string[]): Promise<BulkOperationResult> {
     return apiClient.post<BulkOperationResult>('/billing/time-entries/bulk-delete', { ids });
   }
 }
+

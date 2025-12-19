@@ -51,7 +51,7 @@ export interface ExpenseTotals {
 export class ExpensesApiService {
   /**
    * Get all expenses with optional filters
-   * GET /api/v1/billing/expenses
+   * GET ${API_PREFIX}/billing/expenses
    */
   async getAll(filters?: ExpenseFilters): Promise<FirmExpense[]> {
     const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', filters);
@@ -60,7 +60,7 @@ export class ExpensesApiService {
 
   /**
    * Get expenses by case ID
-   * GET /api/v1/billing/expenses?caseId=:caseId
+   * GET ${API_PREFIX}/billing/expenses?caseId=:caseId
    */
   async getByCaseId(caseId: string): Promise<FirmExpense[]> {
     const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', { caseId });
@@ -69,7 +69,7 @@ export class ExpensesApiService {
 
   /**
    * Get unbilled expenses for a case
-   * GET /api/v1/billing/expenses/unbilled/:caseId
+   * GET ${API_PREFIX}/billing/expenses/unbilled/:caseId
    */
   async getUnbilled(caseId: string): Promise<FirmExpense[]> {
     const response = await apiClient.get<PaginatedResponse<FirmExpense>>(`/billing/expenses/unbilled/${caseId}`);
@@ -78,7 +78,7 @@ export class ExpensesApiService {
 
   /**
    * Get expense by ID
-   * GET /api/v1/billing/expenses/:id
+   * GET ${API_PREFIX}/billing/expenses/:id
    */
   async getById(id: string): Promise<FirmExpense> {
     return apiClient.get<FirmExpense>(`/billing/expenses/${id}`);
@@ -86,7 +86,7 @@ export class ExpensesApiService {
 
   /**
    * Create a new expense
-   * POST /api/v1/billing/expenses
+   * POST ${API_PREFIX}/billing/expenses
    */
   async create(expense: CreateExpenseDto): Promise<FirmExpense> {
     return apiClient.post<FirmExpense>('/billing/expenses', expense);
@@ -94,7 +94,7 @@ export class ExpensesApiService {
 
   /**
    * Update an expense
-   * PUT /api/v1/billing/expenses/:id
+   * PUT ${API_PREFIX}/billing/expenses/:id
    */
   async update(id: string, expense: UpdateExpenseDto): Promise<FirmExpense> {
     return apiClient.put<FirmExpense>(`/billing/expenses/${id}`, expense);
@@ -102,7 +102,7 @@ export class ExpensesApiService {
 
   /**
    * Approve an expense
-   * PUT /api/v1/billing/expenses/:id/approve
+   * PUT ${API_PREFIX}/billing/expenses/:id/approve
    */
   async approve(id: string): Promise<FirmExpense> {
     return apiClient.put<FirmExpense>(`/billing/expenses/${id}/approve`, {});
@@ -110,7 +110,7 @@ export class ExpensesApiService {
 
   /**
    * Mark an expense as billed
-   * PUT /api/v1/billing/expenses/:id/bill
+   * PUT ${API_PREFIX}/billing/expenses/:id/bill
    */
   async bill(id: string, invoiceId: string): Promise<FirmExpense> {
     return apiClient.put<FirmExpense>(`/billing/expenses/${id}/bill`, { invoiceId });
@@ -118,7 +118,7 @@ export class ExpensesApiService {
 
   /**
    * Delete an expense
-   * DELETE /api/v1/billing/expenses/:id
+   * DELETE ${API_PREFIX}/billing/expenses/:id
    */
   async delete(id: string): Promise<void> {
     await apiClient.delete(`/billing/expenses/${id}`);
@@ -126,7 +126,7 @@ export class ExpensesApiService {
 
   /**
    * Upload receipt for expense
-   * POST /api/v1/billing/expenses/:id/receipt
+   * POST ${API_PREFIX}/billing/expenses/:id/receipt
    */
   async uploadReceipt(id: string, file: File): Promise<{ url: string; filename: string; size: number }> {
     const formData = new FormData();
@@ -139,9 +139,10 @@ export class ExpensesApiService {
 
   /**
    * Get expense totals for a case
-   * GET /api/v1/billing/expenses/case/:caseId/totals
+   * GET ${API_PREFIX}/billing/expenses/case/:caseId/totals
    */
   async getTotalsByCase(caseId: string): Promise<ExpenseTotals> {
     return apiClient.get<ExpenseTotals>(`/billing/expenses/case/${caseId}/totals`);
   }
 }
+

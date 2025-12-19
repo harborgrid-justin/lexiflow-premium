@@ -33,7 +33,7 @@ export interface JobFilters {
 export class ProcessingJobsApiService {
   /**
    * Get all processing jobs with filters
-   * GET /api/v1/processing-jobs
+   * GET ${API_PREFIX}/processing-jobs
    */
   async getAll(filters?: JobFilters): Promise<ProcessingJob[]> {
     const response = await apiClient.get<PaginatedResponse<ProcessingJob>>('/processing-jobs', filters);
@@ -42,7 +42,7 @@ export class ProcessingJobsApiService {
 
   /**
    * Get job by ID
-   * GET /api/v1/processing-jobs/:id
+   * GET ${API_PREFIX}/processing-jobs/:id
    */
   async getById(id: string): Promise<ProcessingJob> {
     return apiClient.get<ProcessingJob>(`/processing-jobs/${id}`);
@@ -50,7 +50,7 @@ export class ProcessingJobsApiService {
 
   /**
    * Get jobs by entity (e.g., all jobs for a specific document)
-   * GET /api/v1/processing-jobs/entity/:entityType/:entityId
+   * GET ${API_PREFIX}/processing-jobs/entity/:entityType/:entityId
    */
   async getByEntity(entityType: string, entityId: string): Promise<ProcessingJob[]> {
     const response = await apiClient.get<PaginatedResponse<ProcessingJob>>(
@@ -61,7 +61,7 @@ export class ProcessingJobsApiService {
 
   /**
    * Cancel a running job
-   * POST /api/v1/processing-jobs/:id/cancel
+   * POST ${API_PREFIX}/processing-jobs/:id/cancel
    */
   async cancel(id: string): Promise<ProcessingJob> {
     return apiClient.post<ProcessingJob>(`/processing-jobs/${id}/cancel`, {});
@@ -69,7 +69,7 @@ export class ProcessingJobsApiService {
 
   /**
    * Retry a failed job
-   * POST /api/v1/processing-jobs/:id/retry
+   * POST ${API_PREFIX}/processing-jobs/:id/retry
    */
   async retry(id: string): Promise<ProcessingJob> {
     return apiClient.post<ProcessingJob>(`/processing-jobs/${id}/retry`, {});
@@ -77,7 +77,7 @@ export class ProcessingJobsApiService {
 
   /**
    * Get job statistics
-   * GET /api/v1/processing-jobs/stats
+   * GET ${API_PREFIX}/processing-jobs/stats
    */
   async getStats(): Promise<{
     total: number;
@@ -90,3 +90,4 @@ export class ProcessingJobsApiService {
     return apiClient.get('/processing-jobs/stats');
   }
 }
+

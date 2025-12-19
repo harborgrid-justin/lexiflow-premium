@@ -11,21 +11,24 @@
  * - Or localStorage.setItem('VITE_USE_INDEXEDDB', 'true')
  */
 
+
+import { API_BASE_URL, API_PREFIX } from '../../config/network/api.config';
+
 const DEPRECATION_WARNING = `
-╔═══════════════════════════════════════════════════════════════════╗
-║                    ⚠️  DEPRECATION NOTICE                         ║
-║                                                                   ║
-║  IndexedDB mode is deprecated and will be removed in v2.0.0     ║
-║  Please migrate to backend API mode for production use.          ║
-║                                                                   ║
-║  Backend API provides:                                           ║
-║  • PostgreSQL data persistence                                   ║
-║  • Multi-user synchronization                                    ║
-║  • Enterprise-grade security                                     ║
-║  • Automatic backups & audit trails                              ║
-║                                                                   ║
-║  To disable this warning, remove VITE_USE_INDEXEDDB flag         ║
-╚═══════════════════════════════════════════════════════════════════╝
+ЩЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЛ
+К                    ??  DEPRECATION NOTICE                         К
+К                                                                   К
+К  IndexedDB mode is deprecated and will be removed in v2.0.0     К
+К  Please migrate to backend API mode for production use.          К
+К                                                                   К
+К  Backend API provides:                                           К
+К   PostgreSQL data persistence                                   К
+К   Multi-user synchronization                                    К
+К   Enterprise-grade security                                     К
+К   Automatic backups & audit trails                              К
+К                                                                   К
+К  To disable this warning, remove VITE_USE_INDEXEDDB flag         К
+ШЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭM
 `;
 
 /**
@@ -121,7 +124,7 @@ export function isProduction(): boolean {
  * Get backend API base URL
  */
 export function getBackendUrl(): string {
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+  return `${API_BASE_URL}${API_PREFIX}`;
 }
 
 /**
@@ -144,4 +147,9 @@ export function logApiConfig(): void {
 if (import.meta.env.DEV) {
   logApiConfig();
 }
+
+
+
+
+
 

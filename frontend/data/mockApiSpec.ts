@@ -1,4 +1,5 @@
 // data/mockApiSpec.ts
+import { API_PREFIX } from '../config/network/api.config';
 import { ApiServiceSpec } from '../types';
 
 export const MOCK_API_SPEC: ApiServiceSpec[] = [
@@ -9,7 +10,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getAll',
         http: 'GET',
-        path: '/api/v1/cases',
+        path: `${API_PREFIX}/cases`,
         description: 'Retrieves a list of all case records.',
         params: [],
         response: JSON.stringify([
@@ -19,7 +20,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getById',
         http: 'GET',
-        path: '/api/v1/cases/{id}',
+        path: `${API_PREFIX}/cases/{id}`,
         description: 'Retrieves a single case by its unique ID.',
         params: [{ name: 'id', type: 'string', desc: 'The unique case identifier (CaseId).' }],
         response: JSON.stringify({ id: "C-2024-001", title: "Martinez v. TechCorp", client: "TechCorp Industries", status: "Discovery" }, null, 2)
@@ -27,7 +28,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'add',
         http: 'POST',
-        path: '/api/v1/cases',
+        path: `${API_PREFIX}/cases`,
         description: 'Creates a new case record.',
         params: [{ name: 'caseData', type: 'Case', desc: 'The full case object.' }],
         response: JSON.stringify({ id: "C-2024-002", title: "New Case", client: "New Client", status: "Pre-Filing" }, null, 2)
@@ -41,7 +42,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getAll',
         http: 'GET',
-        path: '/api/v1/documents',
+        path: `${API_PREFIX}/documents`,
         description: 'Retrieves metadata for all documents.',
         params: [],
         response: JSON.stringify([
@@ -51,7 +52,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getFile',
         http: 'GET',
-        path: '/api/v1/documents/{id}/file',
+        path: `${API_PREFIX}/documents/{id}/file`,
         description: 'Retrieves the binary file content for a document.',
         params: [{ name: 'id', type: 'string', desc: 'The unique document identifier.' }],
         response: `(binary data)`
@@ -65,7 +66,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getTimeEntries',
         http: 'GET',
-        path: '/api/v1/billing/time',
+        path: `${API_PREFIX}/billing/time`,
         description: 'Retrieves all time entries, optionally filtered by case.',
         params: [{ name: 'caseId', type: 'string (optional)', desc: 'Filter entries by a specific case.' }],
         response: JSON.stringify([
@@ -75,7 +76,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'createInvoice',
         http: 'POST',
-        path: '/api/v1/billing/invoices',
+        path: `${API_PREFIX}/billing/invoices`,
         description: 'Generates a new invoice from a set of unbilled time entries.',
         params: [{ name: 'timeEntryIds', type: 'string[]', desc: 'Array of time entry IDs to include.' }],
         response: JSON.stringify({ id: "INV-2024-001", client: "TechCorp", amount: 15450.00, status: "Draft" }, null, 2)
@@ -89,7 +90,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getRequests',
         http: 'GET',
-        path: '/api/v1/discovery/requests',
+        path: `${API_PREFIX}/discovery/requests`,
         description: 'Retrieves all discovery requests (RFPs, ROGs, RFAs).',
         params: [{ name: 'caseId', type: 'string (optional)', desc: 'Filter by case.' }],
         response: JSON.stringify([
@@ -99,7 +100,7 @@ export const MOCK_API_SPEC: ApiServiceSpec[] = [
       {
         name: 'getPrivilegeLog',
         http: 'GET',
-        path: '/api/v1/discovery/privilege-log',
+        path: `${API_PREFIX}/discovery/privilege-log`,
         description: 'Retrieves the privilege log for a given case.',
         params: [{ name: 'caseId', type: 'string', desc: 'The case identifier.' }],
         response: JSON.stringify([

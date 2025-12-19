@@ -11,7 +11,7 @@ import { DataService } from '../../../services/data/dataService';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { AddStaffModal } from './AddStaffModal';
-import { useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
 import { STORES } from '../../../services/data/db';
 import { useStaff } from '../../../hooks/useDomainData';
 import { useModalState } from '../../../hooks';

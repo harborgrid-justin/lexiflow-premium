@@ -12,7 +12,7 @@ import { VirtualList } from '../../common/VirtualList';
 import { SqlHelpers } from '../../../utils/sqlHelpers';
 import { QuerySidebar } from './query/QuerySidebar';
 import { dataPlatformApi } from '../../../services/api/data-platform-api';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 
 interface QueryConsoleProps {
     initialTab?: string;

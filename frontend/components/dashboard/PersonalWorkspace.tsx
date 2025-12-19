@@ -11,13 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { CheckSquare, Calendar, ArrowRight, Loader2 } from 'lucide-react';
+import { CheckSquare, ArrowRight, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 import { STORES } from '../../services/data/db';
 
@@ -66,7 +66,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
     const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
     
-    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && t.status !== 'Done');
+    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && t.status !== 'completed');
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
 
     const isLoading = tasksLoading || eventsLoading;

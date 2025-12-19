@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
 
@@ -61,6 +61,13 @@ interface DashboardAnalyticsProps {
 export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProjects, chartData }) => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Delay chart rendering to ensure container has dimensions
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
   
   const CHART_COLORS = [
       chartTheme.colors.primary,
@@ -78,7 +85,8 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
     <div className="xl:col-span-2 space-y-6">
         <Card title="Case Phase Distribution & Volume" subtitle="Active matters by litigation stage">
             <div className="h-80 w-full">
-                <ResponsiveContainer width="100%" height="100%">
+                {isMounted && safeChartData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <BarChart data={safeChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} dy={10} />
@@ -94,6 +102,11 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
                     </Bar>
                 </BarChart>
                 </ResponsiveContainer>
+                ) : (
+                    <div className={cn("flex items-center justify-center h-full", theme.text.secondary)}>
+                        {isMounted ? 'No data available' : 'Loading chart...'}
+                    </div>
+                )}
             </div>
         </Card>
 

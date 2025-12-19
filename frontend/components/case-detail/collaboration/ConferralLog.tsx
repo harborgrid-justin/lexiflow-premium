@@ -21,7 +21,7 @@ import { Modal } from '../../common/Modal';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useToast } from '../../../context/ToastContext';
-import { useQuery, useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
 import { useModalState } from '../../../hooks';
 import { getTodayString } from '../../../utils/dateUtils';
 

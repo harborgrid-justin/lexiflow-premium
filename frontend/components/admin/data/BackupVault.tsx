@@ -4,7 +4,7 @@ import { RefreshCw, Play, ShieldCheck, Server, AlertCircle } from 'lucide-react'
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
-import { useQuery, useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
 import { useNotify } from '../../../hooks/useNotify';
 import { BackupMetrics } from './backup/BackupMetrics';

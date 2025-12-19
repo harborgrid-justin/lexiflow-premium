@@ -3,7 +3,7 @@ import { Database, RefreshCw, Trash2, Plus, Info, AlertTriangle, CheckCircle } f
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { db } from '../../../services/data/db';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
 import { useModalState } from '../../../hooks/useModalState';
 

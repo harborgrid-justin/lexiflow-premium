@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect } from 'react';
-import { Wand2, Plus, Shield, Mail, Loader2 } from 'lucide-react';
+import { Wand2, Plus, Shield, Mail } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -25,7 +25,7 @@ import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useNotify } from '../../hooks/useNotify';
 

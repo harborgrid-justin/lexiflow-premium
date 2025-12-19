@@ -5,7 +5,7 @@ import { PlatformView } from '../AdminDatabaseControl';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DATA_PLATFORM_MENU } from '../../../config/tabs.config';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
 import { TenantConfig } from '../../../types';
 

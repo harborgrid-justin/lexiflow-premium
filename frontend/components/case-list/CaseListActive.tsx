@@ -34,7 +34,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 import { useToggle } from '../../hooks/useToggle';
 import { UseCaseListReturn } from '../../hooks/useCaseList';
-import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useModalState } from '../../hooks/useModalState';
 
 // Services & Utils

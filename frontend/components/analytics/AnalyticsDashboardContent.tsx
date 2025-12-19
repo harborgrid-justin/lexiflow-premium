@@ -20,7 +20,7 @@ import React, { Suspense, lazy } from 'react';
 import { DataService } from '../../services/data/dataService';
 
 // Hooks
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Components
 import { LazyLoader } from '../common/LazyLoader';

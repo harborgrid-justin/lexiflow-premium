@@ -32,7 +32,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 import { useLiveDocketFeed } from '../../hooks/useLiveDocketFeed';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { useModalState } from '../../hooks';
 import { useToggle } from '../../hooks/useToggle';
 

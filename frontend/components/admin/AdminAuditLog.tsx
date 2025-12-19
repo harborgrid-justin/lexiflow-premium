@@ -10,10 +10,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 import { STORES } from '../../services/data/db';
-import { queryKeys } from '../../utils/queryKeys';
 import { AuditLogControls } from './audit/AuditLogControls';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
 
@@ -34,8 +33,13 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
   const [viewMode, setViewMode] = useState<'table' | 'visual'>('table');
 
   useEffect(() => {
-      // Assuming logs are already chained for this demo. In a real app, this might involve a transformation.
-      setLocalLogs(logs as unknown as ChainedLogEntry[]);
+      // Convert AuditLogEntry[] to ChainedLogEntry[] by ensuring hash and prevHash are strings
+      const chainedLogs: ChainedLogEntry[] = logs.map(log => ({
+          ...log,
+          hash: log.hash || '',
+          prevHash: log.prevHash || ''
+      }));
+      setLocalLogs(chainedLogs);
   }, [logs]);
 
   const handleVerifyChain = async () => {
@@ -64,9 +68,11 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
       if (localLogs.length < 2) return;
       const randomIndex = Math.floor(Math.random() * (localLogs.length - 1));
       const newLogs = [...localLogs];
-      const targetLog = { ...newLogs[randomIndex] };
-      targetLog.action = "UNAUTHORIZED_ACCESS";
-      targetLog.resource = "/restricted/payroll_db";
+      const targetLog: ChainedLogEntry = { 
+          ...newLogs[randomIndex],
+          action: "UNAUTHORIZED_ACCESS",
+          resource: "/restricted/payroll_db"
+      };
       newLogs[randomIndex] = targetLog;
       setLocalLogs(newLogs);
       addToast(`Simulated Attack: Modified Block #${randomIndex + 1}.`, 'warning');
@@ -74,7 +80,12 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
   };
 
   const handleReset = () => {
-      setLocalLogs(logs as unknown as ChainedLogEntry[]);
+      const chainedLogs: ChainedLogEntry[] = logs.map(log => ({
+          ...log,
+          hash: log.hash || '',
+          prevHash: log.prevHash || ''
+      }));
+      setLocalLogs(chainedLogs);
       setVerifyResult(null);
       addToast('Ledger state reset', 'info');
   };

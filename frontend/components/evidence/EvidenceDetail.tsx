@@ -30,7 +30,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Types
 import { DataService } from '../../services/data/dataService';
-import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 

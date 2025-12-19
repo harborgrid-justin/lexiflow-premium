@@ -35,7 +35,7 @@ import { useToggle } from '../../hooks/useToggle';
 // Data & Types
 import { CaseId, TrialExhibit } from '../../types';
 import { DataService } from '../../services/data/dataService';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { getTodayString } from '../../utils/dateUtils';

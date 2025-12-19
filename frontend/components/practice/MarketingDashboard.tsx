@@ -19,7 +19,7 @@ import { Users, Megaphone, Target, ArrowRight } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -101,7 +101,7 @@ export const MarketingDashboard: React.FC = () => {
                 <YAxis dataKey="source" type="category" width={100} tick={{fontSize: 11, fill: '#94a3b8'}} />
                 <Tooltip 
                     cursor={{fill: 'transparent'}} 
-                    formatter={(value: number) => `$${value.toLocaleString()}`}
+                    formatter={(value: number | undefined) => value !== undefined ? `$${value.toLocaleString()}` : '$0'}
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
                 <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>

@@ -6,7 +6,7 @@ import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin, Loade
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 
 interface RulesDashboardProps {

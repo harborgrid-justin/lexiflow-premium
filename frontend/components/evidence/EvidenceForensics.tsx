@@ -21,7 +21,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { EvidenceItem } from '../../types';
 import { evidenceQueryKeys } from '../../services/infrastructure/queryKeys';
-import { queryClient } from '../../services/infrastructure/queryClient';
+import { queryClient } from '../../hooks/useQueryHooks';
 
 // Lazy-loaded ChainService for blockchain operations (reduces bundle size ~80KB)
 let ChainServiceModule: any = null;

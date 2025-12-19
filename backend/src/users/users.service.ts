@@ -108,7 +108,10 @@ export class UsersService implements OnModuleInit {
    * WARNING: Should only be used internally by AuthService
    */
   async findByEmailWithPassword(email: string): Promise<(AuthenticatedUser & { passwordHash: string }) | null> {
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({ 
+      where: { email },
+      select: ['id', 'email', 'firstName', 'lastName', 'role', 'status', 'passwordHash', 'emailVerified']
+    });
     if (!user) {
       return null;
     }

@@ -11,7 +11,7 @@ import { AccessGovernance } from './governance/AccessGovernance';
 import { ModalFooter } from '../../common/RefactoredCommon';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { GovernanceRule, GovernancePolicy } from '../../../types';
 
 interface GovernanceConsoleProps {

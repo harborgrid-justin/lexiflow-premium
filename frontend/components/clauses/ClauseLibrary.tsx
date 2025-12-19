@@ -27,7 +27,7 @@ import { Badge } from '../common/Badge';
 import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { ErrorState } from '../common/ErrorState';
 import { EmptyState } from '../common/EmptyState';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 
 // ============================================================================

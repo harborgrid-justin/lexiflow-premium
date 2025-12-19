@@ -18,7 +18,7 @@ import { UserAvatar } from '../common/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Internal Dependencies - Services & Utils

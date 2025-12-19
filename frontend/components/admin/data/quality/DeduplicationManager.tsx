@@ -7,7 +7,7 @@ import { Badge } from '../../../common/Badge';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { DataService } from '../../../../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../../../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../../utils/queryKeys';
 import { DedupeCluster } from '../../../../types';
 import { useNotify } from '../../../../hooks/useNotify';

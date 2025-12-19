@@ -27,7 +27,7 @@ import { cn } from '../../utils/cn';
 import { getTodayString } from '../../utils/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { Case } from '../../types';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { STORES } from '../../services/data/db';

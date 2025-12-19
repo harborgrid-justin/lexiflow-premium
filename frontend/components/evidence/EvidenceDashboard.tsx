@@ -21,7 +21,7 @@ import { cn } from '../../utils/cn';
 
 // Services & Types
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { EvidenceItem } from '../../types';
 import { ViewMode } from '../../hooks/useEvidenceVault';

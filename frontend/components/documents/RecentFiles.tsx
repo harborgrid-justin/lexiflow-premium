@@ -9,7 +9,7 @@ import { DataService } from '../../services/data/dataService';
 import { LegalDocument } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 export const RecentFiles: React.FC = () => {
   const { theme } = useTheme();

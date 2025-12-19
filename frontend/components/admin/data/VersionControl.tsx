@@ -6,7 +6,7 @@ import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 
 interface HistoryEntry {
   id: string;

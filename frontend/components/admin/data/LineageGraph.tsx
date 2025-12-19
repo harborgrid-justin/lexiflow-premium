@@ -5,7 +5,7 @@ import { JSX } from 'react/jsx-runtime';
 
 import { useTheme } from '../../../context/ThemeContext';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { LineageNode, LineageLink } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { NexusPhysics } from '../../../utils/nexusPhysics';

@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { DataDictionaryItem } from '../../../../types';
 import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../../hooks/useQueryHooks';
 import { useSelection } from '../../../../hooks/useSelectionState';
 import { ErrorState } from '../../../common/ErrorState';
 import { VirtualList } from '../../../common/VirtualList';

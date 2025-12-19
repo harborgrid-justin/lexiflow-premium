@@ -3,7 +3,7 @@ import { FileText, Plus, Search, BookOpen, Users, Scale, ChevronRight, Loader2 }
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DataService } from '../../../services/data/dataService';
 import { STORES } from '../../../services/data/db';

@@ -10,7 +10,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { useNotify } from '../../../hooks/useNotify';
 import { useModalState } from '../../../hooks';
 import { useSelection } from '../../../hooks/useSelectionState';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { ErrorState } from '../../common/ErrorState';
 import { WebhooksApiService } from '../../../services/api/webhooks-api';
 

@@ -114,18 +114,5 @@ export class TimeEntry extends BaseEntity {
   @Column({ type: 'varchar', length: 50, nullable: true })
   expenseCategory: string;
 
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
-
-  @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
-
-  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  // Note: createdAt, updatedAt, createdBy, updatedBy, and deletedAt are inherited from BaseEntity
 }

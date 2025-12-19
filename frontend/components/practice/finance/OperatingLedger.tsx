@@ -7,7 +7,7 @@ import { Card } from '../../common/Card';
 import { Landmark, ArrowUpRight, ArrowDownLeft, PieChart, CreditCard } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
 import { Formatters } from '../../../utils/formatters';
 

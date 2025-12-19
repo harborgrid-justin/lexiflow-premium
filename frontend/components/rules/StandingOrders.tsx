@@ -6,7 +6,7 @@ import { Download, ExternalLink, Gavel } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 export const StandingOrders: React.FC = () => {
   const { theme } = useTheme();

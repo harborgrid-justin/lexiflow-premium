@@ -17,7 +17,7 @@ import React, { useMemo, useEffect, useState } from 'react';
 // ============================================================================
 // Services & Data
 import { ModuleRegistry } from '../../services/infrastructure/moduleRegistry';
-import { queryClient } from '../../services/infrastructure/queryClient';
+import { queryClient } from '../../hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

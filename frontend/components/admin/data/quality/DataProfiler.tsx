@@ -7,7 +7,7 @@ import { cn } from '../../../../utils/cn';
 import { useChartTheme } from '../../../common/ChartHelpers';
 import { Hash, AlignLeft, Calendar, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
 import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../../hooks/useQueryHooks';
 import { DataProfile } from '../../../../types';
 
 export const DataProfiler: React.FC = () => {

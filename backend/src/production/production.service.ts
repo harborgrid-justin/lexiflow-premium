@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere } from 'typeorm';
-import { Production, ProductionStatus } from './entities/production.entity';
+import { Production, ProductionStatus } from '../discovery/productions/entities/production.entity';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class ProductionService {
   async remove(id: string): Promise<void> {
     const production = await this.findOne(id);
     await this.productionRepository.delete(id);
-    this.logger.log(`Production ${production.name} deleted`);
+    this.logger.log(`Production ${production.productionName} deleted`);
   }
 
   async updateStatus(id: string, status: ProductionStatus): Promise<Production> {

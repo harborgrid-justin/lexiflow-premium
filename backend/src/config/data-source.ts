@@ -1,4 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { config } from 'dotenv';
 
 config();
@@ -8,11 +9,12 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       type: 'postgres',
       url: process.env.DATABASE_URL,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: false, // CRITICAL: Use migrations instead to prevent data loss
+      migrations: [],
+      synchronize: true, // TEMPORARY: Auto-create tables with snake_case - DISABLE AFTER SETUP
       migrationsRun: false,
       logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
       maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
+      namingStrategy: new SnakeNamingStrategy(), // CRITICAL: Enforce snake_case for all columns/tables
       ssl: {
         rejectUnauthorized: false,
       },
@@ -32,11 +34,12 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       password: process.env.DB_PASSWORD || 'lexiflow_password',
       database: process.env.DB_DATABASE || 'lexiflow_db',
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: false, // CRITICAL: Use migrations instead to prevent data loss
+      migrations: [],
+      synchronize: true, // TEMPORARY: Auto-create tables with snake_case - DISABLE AFTER SETUP
       migrationsRun: false,
       logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
       maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
+      namingStrategy: new SnakeNamingStrategy(), // CRITICAL: Enforce snake_case for all columns/tables
       ssl: process.env.DB_SSL === 'true'
         ? {
             rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',

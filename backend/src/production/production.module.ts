@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductionController } from './production.controller';
 import { ProductionService } from './production.service';
-import { Production } from './entities/production.entity';
+import { Production } from '../discovery/productions/entities/production.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Production])],

@@ -82,7 +82,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
         },
         {
             onSuccess: (newDoc) => {
-                setIsCreateModalOpen(false);
+                createModal.close();
                 setValidationErrors([]);
                 setActivePleading(newDoc);
                 setView('designer');
@@ -103,7 +103,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
 
     const handleCreateNew = (template?: PleadingTemplate) => {
         setNewDocData({ title: template ? template.name : '', caseId: caseId || '', templateId: template?.id || '' });
-        setIsCreateModalOpen(true);
+        createModal.open();
     };
     
     const handleCreateSubmit = () => {
@@ -202,7 +202,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
             </Suspense>
         </TabbedPageLayout>
 
-        <Modal isOpen={isCreateModalOpen} onClose={() => { setIsCreateModalOpen(false); setValidationErrors([]); }} title="Create New Pleading">
+        <Modal isOpen={createModal.isOpen} onClose={() => { createModal.close(); setValidationErrors([]); }} title="Create New Pleading">
             <div className="p-6 space-y-4">
                 {validationErrors.length > 0 && (
                     <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 dark:bg-rose-900/20 dark:border-rose-800">
@@ -241,7 +241,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                 </div>
 
                 <div className="flex justify-end pt-4 gap-2">
-                    <Button variant="secondary" onClick={() => { setIsCreateModalOpen(false); setValidationErrors([]); }} disabled={isCreating}>Cancel</Button>
+                    <Button variant="secondary" onClick={() => { createModal.close(); setValidationErrors([]); }} disabled={isCreating}>Cancel</Button>
                     <Button 
                         variant="primary" 
                         onClick={handleCreateSubmit} 

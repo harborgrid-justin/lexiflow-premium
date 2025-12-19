@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '../types';
 import { GeminiService } from '../services/features/research/geminiService';
 import { DataService } from '../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { STORES } from '../services/data/db';
 import { useNotify } from './useNotify';
 

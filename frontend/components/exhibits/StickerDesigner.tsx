@@ -165,7 +165,7 @@ export const StickerDesigner: React.FC = () => {
                 </div>
 
                 <div className="mt-8 flex gap-4">
-                    <Button variant="secondary" icon={RefreshCw} onClick={() => setConfig({...config, startNumber: config.startNumber + 1})}>Test Increment</Button>
+                    <Button variant="secondary" icon={RefreshCw} onClick={() => setConfig(prev => ({...prev, startNumber: prev.startNumber + 1}))}>Test Increment</Button>
                     <Button variant="outline" icon={ExternalLink} onClick={handlePopOutPreview}>Detach Preview</Button>
                     <Button variant="primary">Apply to Selection</Button>
                 </div>

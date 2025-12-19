@@ -25,3 +25,6 @@ export { TagList, type TagListProps } from './primitives/TagList';
 export { SectionHeader, type SectionHeaderProps } from './primitives/SectionHeader';
 export { TruncatedText, type TruncatedTextProps } from './primitives/TruncatedText';
 export { MetricCard, type MetricCardProps } from './primitives/MetricCard';
+export { Box, type BoxProps } from './primitives/Box';
+export { Text, type TextProps } from './primitives/Text';
+export { Stack, type StackProps } from './primitives/Stack';

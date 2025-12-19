@@ -14,7 +14,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagg
 import { Public } from '../common/decorators/public.decorator';
 import { ProductionService } from './production.service';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
-import { ProductionStatus } from './entities/production.entity';
+import { ProductionStatus } from '../discovery/productions/entities/production.entity';
 
 
 @Controller('production')

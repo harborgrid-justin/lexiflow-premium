@@ -23,7 +23,7 @@ import React, { useState, useMemo, useRef } from 'react';
 // Services & Data
 import { DataService } from '../services/data/dataService';
 import { DocumentService } from '../services/features/documents/documentService';
-import { useQuery, useMutation, queryClient } from '../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { STORES } from '../services/data/db';
 
 // Hooks & Context

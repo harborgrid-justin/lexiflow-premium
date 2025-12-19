@@ -19,7 +19,7 @@ import { useState, useCallback } from 'react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../services/data/dataService';
-import { useQuery, useMutation } from '../services/infrastructure/queryClient';
+import { useQuery, useMutation } from './useQueryHooks';
 import { STORES } from '../services/data/db';
 import { GraphValidationService } from '../services/search/graphValidationService';
 import { DateCalculationService } from '../services/infrastructure/dateCalculationService';
@@ -29,7 +29,7 @@ import { useNotify } from './useNotify';
 import { useAutoSave } from './useAutoSave';
 
 // Utils & Constants
-import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS, TypedWorkflowNode, createTypedNode } from '@/types/workflow-types';
+import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS, TypedWorkflowNode } from '@/types/workflow-types';
 import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants';
 import { Playbook } from '../data/mockLitigationPlaybooks';
 
@@ -154,7 +154,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
       
       deploy({ caseId: selectedCaseId, phases: ganttPhases, tasks: ganttTasks });
 
-  }, [selectedCaseId, nodes, connections, deploy, notify, navigateToCaseTab]);
+  }, [selectedCaseId, nodes, connections, deploy, notify]);
 
   const loadFromPlaybook = useCallback((playbook: Playbook) => {
     const newNodes: WorkflowNode[] = [];

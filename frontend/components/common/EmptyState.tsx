@@ -22,6 +22,10 @@ import { useTheme } from '../../context/ThemeContext';
 // Utils & Constants
 import { cn } from '../../utils/cn';
 
+// Primitives
+import { Box } from './primitives/Box';
+import { Text } from './primitives/Text';
+
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -37,19 +41,30 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, descr
   const { theme } = useTheme();
   
   return (
-    <div className={cn(
-      "flex flex-col items-center justify-center py-12 text-center h-full w-full",
-      "border-2 border-dashed rounded-xl",
-      theme.border.default,
-      theme.text.tertiary,
-      className
-    )}>
-      <div className={cn("p-4 rounded-full mb-4", theme.surface.highlight)}>
+    <Box
+      flex
+      direction="vertical"
+      align="center"
+      justify="center"
+      spacing="lg"
+      rounded="lg"
+      className={cn(
+        "py-12 text-center h-full w-full border-2 border-dashed",
+        theme.border.default,
+        theme.text.tertiary,
+        className
+      )}
+    >
+      <Box
+        rounded="full"
+        spacing="md"
+        className={cn(theme.surface.highlight)}
+      >
         <Icon className={cn("h-12 w-12 opacity-40", theme.text.tertiary)} />
-      </div>
-      <h3 className={cn("text-lg font-semibold mb-1", theme.text.primary)}>{title}</h3>
-      <p className={cn("text-sm max-w-sm mb-6", theme.text.secondary)}>{description}</p>
+      </Box>
+      <Text variant="heading" size="lg" className="mb-1">{title}</Text>
+      <Text size="sm" color="secondary" className="max-w-sm mb-6">{description}</Text>
       {action}
-    </div>
+    </Box>
   );
 };

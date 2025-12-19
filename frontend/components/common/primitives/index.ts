@@ -33,3 +33,12 @@ export type { TruncatedTextProps } from './TruncatedText';
 
 export { MetricCard } from './MetricCard';
 export type { MetricCardProps } from './MetricCard';
+
+export { Box } from './Box';
+export type { BoxProps } from './Box';
+
+export { Text } from './Text';
+export type { TextProps } from './Text';
+
+export { Stack } from './Stack';
+export type { StackProps } from './Stack';

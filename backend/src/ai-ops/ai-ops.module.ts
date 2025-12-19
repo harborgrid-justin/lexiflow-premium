@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AiOpsController } from './ai-ops.controller';
 import { AiOpsService } from './ai-ops.service';
-import { VectorEmbedding } from './entities/vector-embedding.entity';
+import { VectorEmbedding } from '../ai-dataops/entities/ai.entity';
 import { AIModel } from './entities/ai-model.entity';
 import { AuthModule } from '../auth/auth.module';
 

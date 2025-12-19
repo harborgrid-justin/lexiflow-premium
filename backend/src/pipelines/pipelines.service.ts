@@ -1,19 +1,27 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pipeline } from './entities/pipeline.entity';
+import { ETLPipeline, PipelineStatus as EntityPipelineStatus } from '../etl-pipelines/entities/pipeline.entity';
 import { CreatePipelineDto, UpdatePipelineDto, PipelineStatus } from './dto/create-pipeline.dto';
 
 @Injectable()
 export class PipelinesService {
   constructor(
-    @InjectRepository(Pipeline)
-    private readonly pipelineRepository: Repository<Pipeline>,
+    @InjectRepository(ETLPipeline)
+    private readonly pipelineRepository: Repository<ETLPipeline>,
   ) {}
 
-  async create(createDto: CreatePipelineDto, userId?: string): Promise<Pipeline> {
+  async create(createDto: CreatePipelineDto, userId?: string): Promise<ETLPipeline> {
     const pipeline = this.pipelineRepository.create({
-      ...createDto,
+      name: createDto.name,
+      description: createDto.description,
+      status: createDto.status as any, // Map from DTO enum to entity enum
+      config: {
+        source: { type: createDto.sourceConnector, config: {} },
+        transformations: [],
+        destination: { type: createDto.targetConnector, config: {} },
+        schedule: createDto.schedule,
+      },
       createdBy: userId || 'system',
     });
     return await this.pipelineRepository.save(pipeline);
@@ -47,7 +55,7 @@ export class PipelinesService {
     };
   }
 
-  async findOne(id: string): Promise<Pipeline> {
+  async findOne(id: string): Promise<ETLPipeline> {
     const pipeline = await this.pipelineRepository.findOne({ where: { id } });
     
     if (!pipeline) {
@@ -57,7 +65,7 @@ export class PipelinesService {
     return pipeline;
   }
 
-  async update(id: string, updateDto: UpdatePipelineDto): Promise<Pipeline> {
+  async update(id: string, updateDto: UpdatePipelineDto): Promise<ETLPipeline> {
     const pipeline = await this.findOne(id);
     Object.assign(pipeline, updateDto);
     return await this.pipelineRepository.save(pipeline);
@@ -72,8 +80,8 @@ export class PipelinesService {
     const pipeline = await this.findOne(id);
     
     // Update last run time
-    pipeline.lastRun = new Date();
-    pipeline.lastRunStatus = 'running';
+    pipeline.lastRunAt = new Date();
+    pipeline.runsTotal += 1;
     await this.pipelineRepository.save(pipeline);
 
     // In production, this would trigger actual pipeline execution
@@ -87,20 +95,15 @@ export class PipelinesService {
 
   async getStats() {
     const total = await this.pipelineRepository.count();
-    const active = await this.pipelineRepository.count({ where: { status: PipelineStatus.ACTIVE } });
-    const failed = await this.pipelineRepository.count({ where: { status: PipelineStatus.FAILED } });
-    
-    const result = await this.pipelineRepository
-      .createQueryBuilder('pipeline')
-      .select('SUM(pipeline.recordsProcessed)', 'totalRecords')
-      .getRawOne();
+    const active = await this.pipelineRepository.count({ where: { status: EntityPipelineStatus.ACTIVE } });
+    const failed = await this.pipelineRepository.count({ where: { status: EntityPipelineStatus.ERROR } });
+    const paused = await this.pipelineRepository.count({ where: { status: EntityPipelineStatus.PAUSED } });
 
     return {
       total,
       active,
       failed,
-      paused: total - active - failed,
-      totalRecordsProcessed: parseInt(result?.totalRecords || '0'),
+      paused,
     };
   }
 }

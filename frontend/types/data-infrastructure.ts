@@ -106,12 +106,31 @@ export interface ArchiveStats {
   glacierTier: string;
 }
 
-export interface ApiKey {
-  id: string;
-  name: string;
-  prefix: string;
-  created: string;
-  status: 'Active' | 'Revoked';
+// Backend: api_keys table (api-keys module)
+export enum ApiKeyScope {
+  READ = 'read',
+  WRITE = 'write',
+  ADMIN = 'admin'
+}
+
+export interface ApiKey extends BaseEntity {
+  // Backend: api_keys table
+  name: string; // Backend: varchar (required)
+  description?: string; // Backend: varchar
+  keyPrefix: string; // Backend: varchar (required)
+  keyHash: string; // Backend: varchar (required) - hashed key, never expose raw key
+  scopes: ApiKeyScope[]; // Backend: simple-array (required)
+  expiresAt?: string; // Backend: timestamp
+  rateLimit: number; // Backend: int (default: 1000)
+  lastUsedAt?: string; // Backend: timestamp
+  requestCount: number; // Backend: int (default: 0)
+  isActive: boolean; // Backend: boolean (default: true)
+  userId: string; // Backend: uuid (required)
+  
+  // Legacy aliases
+  prefix?: string; // Alias for keyPrefix
+  created?: string; // Alias for createdAt
+  status?: 'Active' | 'Revoked'; // Computed from isActive
 }
 
 export interface DataDictionaryItem {

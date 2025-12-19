@@ -1,59 +1,93 @@
 /**
  * War Room API Service
- * Trial war room collaboration
+ * ALIGNED WITH BACKEND: backend/src/war-room/war-room.controller.ts
+ * Trial war room collaboration - advisors, experts, and case strategy
  */
 
 import { apiClient } from '../infrastructure/apiClient';
+import type { Advisor, Expert, CaseStrategy, ExpertType } from '../../types';
 
-export interface WarRoom {
-  id: string;
-  caseId: string;
-  trialId?: string;
+// DTOs matching backend war-room.dto.ts
+export interface CreateAdvisorDto {
   name: string;
-  status: 'active' | 'inactive' | 'archived';
-  members?: string[];
-  notes?: {
-    id: string;
-    author: string;
-    content: string;
-    createdAt: string;
-  }[];
-  documents?: string[];
-  tasks?: string[];
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
+  email: string;
+  phone?: string;
+  firm?: string;
+  specialty?: string;
+  caseId?: string;
+}
+
+export interface CreateExpertDto {
+  name: string;
+  expertType: ExpertType;
+  email: string;
+  phone?: string;
+  hourlyRate?: number;
+  credentials?: string;
+  caseId?: string;
+}
+
+export interface UpdateStrategyDto {
+  caseId?: string;
+  objective?: string;
+  approach?: string;
+  keyArguments?: string;
 }
 
 export class WarRoomApiService {
   private readonly baseUrl = '/war-room';
 
-  async getAll(filters?: { caseId?: string; status?: WarRoom['status'] }): Promise<WarRoom[]> {
-    const params = new URLSearchParams();
-    if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.status) params.append('status', filters.status);
+  // === ADVISORS === (backend: GET/POST/DELETE /war-room/advisors)
+  async getAdvisors(query?: any): Promise<Advisor[]> {
+    const params = new URLSearchParams(query);
     const queryString = params.toString();
-    const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<WarRoom[]>(url);
+    const url = queryString ? `${this.baseUrl}/advisors?${queryString}` : `${this.baseUrl}/advisors`;
+    return apiClient.get<Advisor[]>(url);
   }
 
-  async getById(id: string): Promise<WarRoom> {
-    return apiClient.get<WarRoom>(`${this.baseUrl}/${id}`);
+  async getAdvisor(id: string): Promise<Advisor> {
+    return apiClient.get<Advisor>(`${this.baseUrl}/advisors/${id}`);
   }
 
-  async create(data: Partial<WarRoom>): Promise<WarRoom> {
-    return apiClient.post<WarRoom>(this.baseUrl, data);
+  async createAdvisor(data: CreateAdvisorDto): Promise<Advisor> {
+    return apiClient.post<Advisor>(`${this.baseUrl}/advisors`, data);
   }
 
-  async update(id: string, data: Partial<WarRoom>): Promise<WarRoom> {
-    return apiClient.put<WarRoom>(`${this.baseUrl}/${id}`, data);
+  async deleteAdvisor(id: string): Promise<void> {
+    return apiClient.delete(`${this.baseUrl}/advisors/${id}`);
   }
 
-  async addNote(id: string, note: { content: string }): Promise<WarRoom> {
-    return apiClient.post<WarRoom>(`${this.baseUrl}/${id}/notes`, note);
+  // === EXPERTS === (backend: GET/POST/DELETE /war-room/experts)
+  async getExperts(query?: any): Promise<Expert[]> {
+    const params = new URLSearchParams(query);
+    const queryString = params.toString();
+    const url = queryString ? `${this.baseUrl}/experts?${queryString}` : `${this.baseUrl}/experts`;
+    return apiClient.get<Expert[]>(url);
   }
 
-  async delete(id: string): Promise<void> {
-    return apiClient.delete(`${this.baseUrl}/${id}`);
+  async getExpert(id: string): Promise<Expert> {
+    return apiClient.get<Expert>(`${this.baseUrl}/experts/${id}`);
+  }
+
+  async createExpert(data: CreateExpertDto): Promise<Expert> {
+    return apiClient.post<Expert>(`${this.baseUrl}/experts`, data);
+  }
+
+  async deleteExpert(id: string): Promise<void> {
+    return apiClient.delete(`${this.baseUrl}/experts/${id}`);
+  }
+
+  // === WAR ROOM DATA === (backend: GET /war-room/:caseId)
+  async getWarRoomData(caseId: string): Promise<any> {
+    return apiClient.get(`${this.baseUrl}/${caseId}`);
+  }
+
+  // === STRATEGY === (backend: GET/PUT /war-room/:caseId/strategy)
+  async getStrategy(caseId: string): Promise<CaseStrategy> {
+    return apiClient.get<CaseStrategy>(`${this.baseUrl}/${caseId}/strategy`);
+  }
+
+  async updateStrategy(caseId: string, data: UpdateStrategyDto): Promise<CaseStrategy> {
+    return apiClient.put<CaseStrategy>(`${this.baseUrl}/${caseId}/strategy`, data);
   }
 }

@@ -10,6 +10,7 @@ import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
 import { useModalState } from '../../../hooks';
+import { useSelection } from '../../../hooks/useSelectionState';
 import { getTodayString } from '../../../utils/dateUtils';
 
 interface UserData {
@@ -38,7 +39,7 @@ export const UserManagement: React.FC = () => {
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const userSelection = useSelection<UserData>();
   const [formData, setFormData] = useState<Partial<UserData>>({});
 
   const filteredUsers = users.filter(u =>
@@ -68,33 +69,33 @@ export const UserManagement: React.FC = () => {
   };
 
   const handleEdit = () => {
-    if (!selectedUser) return;
+    if (!userSelection.selected) return;
     setUsers(users.map(u =>
-      u.id === selectedUser.id ? { ...u, ...formData } : u
+      u.id === userSelection.selected!.id ? { ...u, ...formData } : u
     ));
     editModal.close();
-    setSelectedUser(null);
+    userSelection.deselect();
     setFormData({});
     notify.success('User updated successfully');
   };
 
   const handleDelete = () => {
-    if (!selectedUser) return;
-    setUsers(users.filter(u => u.id !== selectedUser.id));
-    setIsDeleteModalOpen(false);
-    setSelectedUser(null);
+    if (!userSelection.selected) return;
+    setUsers(users.filter(u => u.id !== userSelection.selected!.id));
+    deleteModal.close();
+    userSelection.deselect();
     notify.success('User deleted successfully');
   };
 
-  const openEditModal = (user: User) => {
-    setSelectedUser(user);
+  const openEditModal = (user: UserData) => {
+    userSelection.select(user);
     setFormData(user);
-    setIsEditModalOpen(true);
+    editModal.open();
   };
 
-  const openDeleteModal = (user: User) => {
-    setSelectedUser(user);
-    setIsDeleteModalOpen(true);
+  const openDeleteModal = (user: UserData) => {
+    userSelection.select(user);
+    deleteModal.open();
   };
 
   const getRoleVariant = (role: UserData['role']) => {
@@ -259,13 +260,13 @@ export const UserManagement: React.FC = () => {
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete User">
+      <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title="Delete User">
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
-            Are you sure you want to delete <strong>{selectedUser?.firstName} {selectedUser?.lastName}</strong>? This action cannot be undone.
+            Are you sure you want to delete user <strong>{userSelection.selected?.email}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleDelete}>Delete User</Button>
           </div>
         </div>

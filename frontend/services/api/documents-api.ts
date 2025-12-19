@@ -24,7 +24,32 @@ export class DocumentsApiService {
   }
 
   async add(doc: Omit<LegalDocument, 'id' | 'createdAt' | 'updatedAt'>): Promise<LegalDocument> {
-    return apiClient.post<LegalDocument>('/documents', doc);
+    // Transform frontend LegalDocument to backend CreateDocumentDto
+    const createDto = {
+      title: doc.title,
+      description: doc.description,
+      type: doc.type, // Ensure this matches DocumentType enum
+      caseId: doc.caseId,
+      creatorId: doc.creatorId || doc.authorId || '00000000-0000-0000-0000-000000000000',
+      status: doc.status,
+      filename: doc.filename,
+      filePath: doc.filePath,
+      mimeType: doc.mimeType,
+      fileSize: doc.fileSize,
+      checksum: doc.checksum,
+      author: doc.author,
+      tags: doc.tags || [],
+      customFields: doc.customFields,
+    };
+    
+    // Remove undefined values
+    Object.keys(createDto).forEach(key => {
+      if (createDto[key] === undefined) {
+        delete createDto[key];
+      }
+    });
+    
+    return apiClient.post<LegalDocument>('/documents', createDto);
   }
 
   async update(id: string, doc: Partial<LegalDocument>): Promise<LegalDocument> {

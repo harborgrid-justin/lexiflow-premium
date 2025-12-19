@@ -1,6 +1,7 @@
 import React from 'react';
 import { MetricCard } from '../common/Primitives';
 import { Card } from '../common/Card';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -21,7 +22,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
       DataService.analysis.getJudgeProfiles
   );
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="dashboard" shimmer />;
 
   return (
     <div className="space-y-6 animate-fade-in">

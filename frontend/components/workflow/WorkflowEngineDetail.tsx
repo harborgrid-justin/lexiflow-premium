@@ -16,7 +16,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { EmptyState } from '../common/EmptyState';
+import { ErrorState } from '../common/ErrorState';
 
 interface WorkflowEngineDetailProps {
   id: string;
@@ -55,11 +55,10 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   if (isError || !engineData) {
     return (
       <div className="h-full flex flex-col items-center justify-center">
-        <EmptyState 
+        <ErrorState 
           title="Workflow Engine Error" 
-          description="Could not load workflow engine details."
-          icon={AlertTriangle}
-          action={<Button onClick={() => refetch()} icon={RefreshCw}>Retry</Button>}
+          message="Could not load workflow engine details."
+          onRetry={refetch}
         />
         <Button variant="ghost" onClick={onBack} className="mt-4">Go Back</Button>
       </div>

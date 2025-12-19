@@ -1,71 +1,97 @@
 /**
  * Tasks API Service
+ * ALIGNED WITH BACKEND: backend/src/tasks/tasks.controller.ts
  * Manages workflow tasks
  */
 
 import { apiClient } from '../infrastructure/apiClient';
+import type { WorkflowTask, TaskStatusBackend, TaskPriorityBackend } from '../../types';
 
-export interface Task {
-  id: string;
-  caseId?: string;
-  matterId?: string;
+// DTOs matching backend tasks/dto/create-task.dto.ts
+export interface CreateTaskDto {
   title: string;
   description?: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'blocked';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  assignedTo?: string;
-  assignedBy?: string;
+  status: TaskStatusBackend;
+  priority: TaskPriorityBackend;
   dueDate?: string;
-  completedAt?: string;
+  caseId?: string;
+  assignedTo?: string;
+  parentTaskId?: string;
+  tags?: string[];
   estimatedHours?: number;
   actualHours?: number;
-  dependencies?: string[];
+  completionPercentage?: number;
+  createdBy?: string;
+}
+
+export interface UpdateTaskDto {
+  title?: string;
+  description?: string;
+  status?: TaskStatusBackend;
+  priority?: TaskPriorityBackend;
+  dueDate?: string;
+  caseId?: string;
+  assignedTo?: string;
+  parentTaskId?: string;
   tags?: string[];
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
+  estimatedHours?: number;
+  actualHours?: number;
+  completionPercentage?: number;
 }
 
 export interface TaskFilters {
   caseId?: string;
-  matterId?: string;
-  status?: Task['status'];
-  priority?: Task['priority'];
+  status?: TaskStatusBackend;
+  priority?: TaskPriorityBackend;
   assignedTo?: string;
 }
 
 export class TasksApiService {
   private readonly baseUrl = '/tasks';
 
-  async getAll(filters?: TaskFilters): Promise<Task[]> {
+  // Backend: GET /tasks with query params
+  async getAll(filters?: TaskFilters): Promise<WorkflowTask[]> {
     const params = new URLSearchParams();
     if (filters?.caseId) params.append('caseId', filters.caseId);
-    if (filters?.matterId) params.append('matterId', filters.matterId);
     if (filters?.status) params.append('status', filters.status);
     if (filters?.priority) params.append('priority', filters.priority);
     if (filters?.assignedTo) params.append('assignedTo', filters.assignedTo);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Task[]>(url);
+    return apiClient.get<WorkflowTask[]>(url);
   }
 
-  async getById(id: string): Promise<Task> {
-    return apiClient.get<Task>(`${this.baseUrl}/${id}`);
+  // Backend: GET /tasks/:id
+  async getById(id: string): Promise<WorkflowTask> {
+    return apiClient.get<WorkflowTask>(`${this.baseUrl}/${id}`);
   }
 
-  async create(data: Partial<Task>): Promise<Task> {
-    return apiClient.post<Task>(this.baseUrl, data);
+  // Backend: POST /tasks
+  async create(data: CreateTaskDto): Promise<WorkflowTask> {
+    return apiClient.post<WorkflowTask>(this.baseUrl, data);
   }
 
-  async update(id: string, data: Partial<Task>): Promise<Task> {
-    return apiClient.put<Task>(`${this.baseUrl}/${id}`, data);
+  // Backend: PUT /tasks/:id
+  async update(id: string, data: UpdateTaskDto): Promise<WorkflowTask> {
+    return apiClient.put<WorkflowTask>(`${this.baseUrl}/${id}`, data);
   }
 
-  async updateStatus(id: string, status: Task['status']): Promise<Task> {
-    return apiClient.patch<Task>(`${this.baseUrl}/${id}/status`, { status });
+  // Backend: PATCH /tasks/:id (partial update)
+  async patch(id: string, data: Partial<UpdateTaskDto>): Promise<WorkflowTask> {
+    return apiClient.patch<WorkflowTask>(`${this.baseUrl}/${id}`, data);
   }
 
+  // Backend: DELETE /tasks/:id
   async delete(id: string): Promise<void> {
     return apiClient.delete(`${this.baseUrl}/${id}`);
+  }
+
+  // Convenience methods
+  async updateStatus(id: string, status: TaskStatusBackend): Promise<WorkflowTask> {
+    return this.patch(id, { status });
+  }
+
+  async updateProgress(id: string, completionPercentage: number, actualHours?: number): Promise<WorkflowTask> {
+    return this.patch(id, { completionPercentage, actualHours });
   }
 }

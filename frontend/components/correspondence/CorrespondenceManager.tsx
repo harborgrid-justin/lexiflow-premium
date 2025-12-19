@@ -26,6 +26,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useToggle } from '../../hooks/useToggle';
 import { useModalState } from '../../hooks/useModalState';
+import { useSelection } from '../../hooks/useSelectionState';
 
 // Components
 import { PageHeader } from '../common/PageHeader';
@@ -59,7 +60,7 @@ interface CorrespondenceManagerProps {
 const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ initialTab }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'communications' | 'process'>('communications');
-  const [selectedItem, setSelectedItem] = useState<CommunicationItem | ServiceJob | null>(null);
+  const itemSelection = useSelection<CommunicationItem | ServiceJob>();
   const inspectorToggle = useToggle();
   
   const composeModal = useModalState();
@@ -119,8 +120,8 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
       key: 'r',
       cmd: true,
       callback: () => {
-        if (selectedItem && activeTab === 'communications') {
-          handleReply(selectedItem as CommunicationItem);
+        if (itemSelection.selected && activeTab === 'communications') {
+          handleReply(itemSelection.selected as CommunicationItem);
         }
       },
       description: 'Reply to selected'
@@ -128,8 +129,8 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
     {
       key: 'Escape',
       callback: () => {
-        setIsInspectorOpen(false);
-        setSelectedItem(null);
+        inspectorToggle.close();
+        itemSelection.deselect();
       },
       description: 'Close inspector'
     }
@@ -140,8 +141,8 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
   }, [initialTab]);
 
   const handleSelectItem = (item: CommunicationItem | ServiceJob) => {
-    setSelectedItem(item);
-    setIsInspectorOpen(true);
+    itemSelection.select(item);
+    inspectorToggle.open();
   };
 
   const handleReply = (originalItem: CommunicationItem) => {
@@ -152,7 +153,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
           type: originalItem.type,
           preview: originalItem.preview // Pass preview to quote it
       });
-      setIsComposeOpen(true);
+      composeModal.open();
   };
 
   return (
@@ -209,7 +210,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                     <CommunicationLog 
                         items={communications} 
                         onSelect={handleSelectItem}
-                        selectedId={selectedItem?.id}
+                        selectedId={itemSelection.selected?.id}
                     />
                 )
             ) : (
@@ -219,24 +220,24 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                     <ServiceTracker 
                         jobs={serviceJobs}
                         onSelect={handleSelectItem}
-                        selectedId={selectedItem?.id}
+                        selectedId={itemSelection.selected?.id}
                     />
                 )
             )}
         </div>
 
         {/* Inspector Panel */}
-        {isInspectorOpen && selectedItem && (
+        {inspectorToggle.isOpen && itemSelection.selected && (
             <div className="w-96 shrink-0">
-                {(isLoadingComms || isLoadingJobs) && !selectedItem ? (
+                {(isLoadingComms || isLoadingJobs) && !itemSelection.selected ? (
                     <CorrespondenceDetailSkeleton />
                 ) : (
                     <CorrespondenceDetail 
                         correspondenceItem={{
                             type: activeTab === 'communications' ? 'communication' : 'service',
-                            item: selectedItem as any
+                            item: itemSelection.selected as any
                         }}
-                        onClose={() => setIsInspectorOpen(false)}
+                        onClose={() => inspectorToggle.close()}
                         onReply={(item) => handleReply(item)}
                     />
                 )}
@@ -245,15 +246,15 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
       </div>
 
       <ComposeMessageModal 
-        isOpen={isComposeOpen}
-        onClose={() => setIsComposeOpen(false)}
+        isOpen={composeModal.isOpen}
+        onClose={composeModal.close}
         onSend={sendCommunication}
         initialData={composeInitialData}
       />
 
       <CreateServiceJobModal
-        isOpen={isServiceJobOpen}
-        onClose={() => setIsServiceJobOpen(false)}
+        isOpen={serviceJobModal.isOpen}
+        onClose={serviceJobModal.close}
         onSave={createServiceJob}
       />
     </div>

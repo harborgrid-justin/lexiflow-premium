@@ -61,7 +61,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
       );
   };
   
-  if (isLoadingAllRules) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoadingAllRules) return <AdaptiveLoader contentType="document" shimmer />;
   
   return (
     <div className={cn("flex h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>

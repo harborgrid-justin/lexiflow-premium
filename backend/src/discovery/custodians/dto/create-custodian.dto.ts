@@ -57,6 +57,18 @@ export class CreateCustodianDto {
   dateIdentified?: string;
 
   @IsOptional()
+  @IsDateString()
+  dateNotified?: string;
+
+  @IsOptional()
+  @IsDateString()
+  dateInterviewed?: string;
+
+  @IsOptional()
+  @IsDateString()
+  dataCollectionDate?: string;
+
+  @IsOptional()
   @IsBoolean()
   isKeyPlayer?: boolean;
 
@@ -71,6 +83,35 @@ export class CreateCustodianDto {
     sourceName: string;
     sourceType: string;
     status: string;
+  }>;
+
+  @IsOptional()
+  @IsBoolean()
+  isOnLegalHold?: boolean;
+
+  @IsOptional()
+  @IsUUID()
+  legalHoldId?: string;
+
+  @IsOptional()
+  @IsDateString()
+  legalHoldDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  legalHoldReleasedDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  acknowledgedAt?: string;
+
+  @IsOptional()
+  @IsArray()
+  interviews?: Array<{
+    date: Date;
+    interviewer: string;
+    notes: string;
+    duration?: number;
   }>;
 
   @IsOptional()

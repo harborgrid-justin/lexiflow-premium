@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum, IsOptional, IsNumber, IsDate, IsObject } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsNumber, IsDate, IsObject, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { EvidenceType, EvidenceStatus } from '../entities/evidence-item.entity';
@@ -14,6 +14,11 @@ export class CreateEvidenceDto {
   @IsNotEmpty()
   evidenceNumber: string;
 
+  @ApiPropertyOptional({ description: 'Evidence title' })
+  @IsString()
+  @IsOptional()
+  title?: string;
+
   @ApiProperty({ description: 'Evidence description' })
   @IsString()
   @IsNotEmpty()
@@ -21,44 +26,89 @@ export class CreateEvidenceDto {
 
   @ApiProperty({ enum: EvidenceType, description: 'Type of evidence' })
   @IsEnum(EvidenceType)
-  type: EvidenceType;
-
-  @ApiPropertyOptional({ description: 'Source of the evidence' })
-  @IsOptional()
-  @IsString()
-  source?: string;
-
-  @ApiPropertyOptional({ description: 'Current location of evidence' })
-  @IsOptional()
-  @IsString()
-  location?: string;
-
-  @ApiPropertyOptional({ description: 'Person currently responsible for evidence' })
-  @IsOptional()
-  @IsString()
-  custodian?: string;
-
-  @ApiPropertyOptional({ description: 'Custodian user ID' })
-  @IsOptional()
-  @IsString()
-  custodianId?: string;
-
-  @ApiPropertyOptional({ description: 'Date evidence was collected', type: Date })
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)
-  dateCollected?: Date;
-
-  @ApiPropertyOptional({ description: 'Date evidence was received', type: Date })
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)
-  dateReceived?: Date;
+  evidenceType: EvidenceType;
 
   @ApiPropertyOptional({ enum: EvidenceStatus, description: 'Current status', default: EvidenceStatus.COLLECTED })
   @IsOptional()
   @IsEnum(EvidenceStatus)
   status?: EvidenceStatus;
+
+  @ApiPropertyOptional({ description: 'Date evidence was collected', type: Date })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  collectionDate?: Date;
+
+  @ApiPropertyOptional({ description: 'Location where evidence was collected' })
+  @IsOptional()
+  @IsString()
+  collectionLocation?: string;
+
+  @ApiPropertyOptional({ description: 'Person who collected the evidence' })
+  @IsOptional()
+  @IsString()
+  collectedBy?: string;
+
+  @ApiPropertyOptional({ description: 'Current custodian of evidence' })
+  @IsOptional()
+  @IsString()
+  currentCustodian?: string;
+
+  @ApiPropertyOptional({ description: 'Storage location' })
+  @IsOptional()
+  @IsString()
+  storageLocation?: string;
+
+  @ApiPropertyOptional({ description: 'Chain of custody description' })
+  @IsOptional()
+  @IsString()
+  chainOfCustody?: string;
+
+  @ApiPropertyOptional({ description: 'Chain of custody intact', default: true })
+  @IsOptional()
+  @IsBoolean()
+  chainOfCustodyIntact?: boolean;
+
+  @ApiPropertyOptional({ description: 'File path for digital evidence' })
+  @IsOptional()
+  @IsString()
+  filePath?: string;
+
+  @ApiPropertyOptional({ description: 'File hash for integrity verification' })
+  @IsOptional()
+  @IsString()
+  fileHash?: string;
+
+  @ApiPropertyOptional({ description: 'File size in bytes' })
+  @IsOptional()
+  @IsNumber()
+  fileSize?: number;
+
+  @ApiPropertyOptional({ description: 'Bates number' })
+  @IsOptional()
+  @IsString()
+  batesNumber?: string;
+
+  @ApiPropertyOptional({ description: 'Exhibit number' })
+  @IsOptional()
+  @IsString()
+  exhibitNumber?: string;
+
+  @ApiPropertyOptional({ description: 'Is admitted as evidence', default: false })
+  @IsOptional()
+  @IsBoolean()
+  isAdmitted?: boolean;
+
+  @ApiPropertyOptional({ description: 'Date admitted', type: Date })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  admittedDate?: Date;
+
+  @ApiPropertyOptional({ description: 'Person who admitted the evidence' })
+  @IsOptional()
+  @IsString()
+  admittedBy?: string;
 
   @ApiPropertyOptional({ description: 'Additional notes' })
   @IsOptional()

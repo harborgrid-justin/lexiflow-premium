@@ -3,6 +3,8 @@ import React, { useState, useMemo } from 'react';
 import { DataDictionaryItem } from '../../../../types';
 import { DataService } from '../../../../services/data/dataService';
 import { useQuery } from '../../../../services/infrastructure/queryClient';
+import { useSelection } from '../../../../hooks/useSelectionState';
+import { ErrorState } from '../../../common/ErrorState';
 import { VirtualList } from '../../../common/VirtualList';
 import { SearchToolbar } from '../../../common/SearchToolbar';
 import { Badge } from '../../../common/Badge';
@@ -19,9 +21,9 @@ export const DataDictionary: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showFilters, setShowFilters] = useState(false);
     const [activeDomain, setActiveDomain] = useState('All');
-    const [selectedItem, setSelectedItem] = useState<DataDictionaryItem | null>(null);
+    const itemSelection = useSelection<DataDictionaryItem>();
 
-    const { data: items = [], isLoading, refetch } = useQuery<DataDictionaryItem[]>(
+    const { data: items = [], isLoading, error, refetch } = useQuery<DataDictionaryItem[]>(
         ['catalog', 'dictionary'],
         DataService.catalog.getDictionary
     );
@@ -46,11 +48,11 @@ export const DataDictionary: React.FC = () => {
     };
 
     const handleSelect = (item: DataDictionaryItem) => {
-        setSelectedItem(item);
+        itemSelection.select(item);
     };
 
     const handleCloseDetail = () => {
-        setSelectedItem(null);
+        itemSelection.deselect();
         refetch(); // Refresh list on close to catch edits
     };
 
@@ -73,8 +75,9 @@ export const DataDictionary: React.FC = () => {
         </div>
     );
 
-    if (selectedItem) {
-        return <DictionaryItemDetail item={selectedItem} onClose={handleCloseDetail} />;
+    if (error) return <ErrorState message="Failed to load data dictionary" onRetry={refetch} />;
+    if (itemSelection.selected) {
+        return <DictionaryItemDetail item={itemSelection.selected} onClose={handleCloseDetail} />;
     }
 
     return (

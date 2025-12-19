@@ -21,44 +21,61 @@ import { LucideIcon } from 'lucide-react';
 import type { FC, LazyExoticComponent } from 'react';
 
 // --- CLUSTER 6: WORKFLOW & AUTOMATION ---
+// Backend Task entity enums (from tasks/dto/create-task.dto.ts)
+export enum TaskStatusBackend {
+  TODO = 'To Do',
+  IN_PROGRESS = 'In Progress',
+  BLOCKED = 'Blocked',
+  COMPLETED = 'Completed',
+  CANCELLED = 'Cancelled'
+}
+
+export enum TaskPriorityBackend {
+  LOW = 'Low',
+  MEDIUM = 'Medium',
+  HIGH = 'High',
+  CRITICAL = 'Critical' // Backend uses CRITICAL not URGENT
+}
+
 export interface WorkflowTask extends BaseEntity { 
   id: TaskId;
-  // Core fields (aligned with backend Task entity)
+  // Core fields (EXACTLY aligned with backend Task entity)
   title: string;
   description?: string; // Backend: text, nullable
-  status: TaskStatus; // Backend: enum TaskStatus (TODO, IN_PROGRESS, DONE, CANCELLED)
-  priority: 'Low' | 'Medium' | 'High' | 'Critical'; // Backend: enum TaskPriority (LOW, MEDIUM, HIGH, URGENT)
-  dueDate: string; // Backend: timestamp
+  status: TaskStatusBackend; // Backend: enum TaskStatus
+  priority: TaskPriorityBackend; // Backend: enum TaskPriority
+  dueDate?: string; // Backend: timestamp, nullable
   
-  // Assignment
-  assignee: string; // Display name
-  assigneeId?: UserId; // Backend: assignedTo (string/uuid)
-  createdBy?: string; // Backend: uuid
+  // Assignment (backend field names)
+  assignedTo?: string; // Backend: assigned_to (uuid)
+  createdBy?: string; // Backend: created_by (uuid)
   
   // Relationships
-  caseId?: CaseId; // Backend: string/uuid, nullable
-  projectId?: ProjectId;
-  parentTaskId?: string; // Backend: uuid, nullable
+  caseId?: CaseId; // Backend: case_id (uuid, nullable)
+  parentTaskId?: string; // Backend: parent_task_id (uuid, nullable)
   
-  // Tracking
+  // Tracking (exact backend fields)
   tags?: string[]; // Backend: simple-array
-  estimatedHours?: number; // Backend: decimal(10,2)
-  actualHours?: number; // Backend: decimal(10,2), default 0
-  completionPercentage?: number; // Backend: int, default 0
+  estimatedHours?: number; // Backend: estimated_hours decimal(10,2)
+  actualHours?: number; // Backend: actual_hours decimal(10,2), default 0
+  completionPercentage?: number; // Backend: completion_percentage int, default 0
   
-  // Frontend-specific fields
-  startDate?: string;
-  relatedModule?: string;
-  relatedItemId?: string;
-  relatedItemTitle?: string;
-  actionLabel?: string;
-  automatedTrigger?: string;
-  linkedRules?: string[];
-  dependencies?: TaskId[];
-  dependencyType?: TaskDependencyType;
-  rrule?: string; // Recurring rule
+  // Legacy aliases for backward compatibility
+  assignee?: string; // Alias - use assignedTo
+  assigneeId?: UserId; // Alias - use assignedTo
+  projectId?: ProjectId; // Frontend extension
+  startDate?: string; // Frontend extension
+  relatedModule?: string; // Frontend extension
+  relatedItemId?: string; // Frontend extension
+  relatedItemTitle?: string; // Frontend extension
+  actionLabel?: string; // Frontend extension
+  automatedTrigger?: string; // Frontend extension
+  linkedRules?: string[]; // Frontend extension
+  dependencies?: TaskId[]; // Frontend extension
+  dependencyType?: TaskDependencyType; // Frontend extension
+  rrule?: string; // Frontend extension - recurring rule
   completion?: number; // Alias for completionPercentage
-  slaId?: string;
+  slaId?: string; // Frontend extension
 }
 export interface SLAConfig extends BaseEntity { name: string; targetHours: number; warningThresholdHours: number; businessHoursOnly: boolean; }
 export interface ApprovalChain extends BaseEntity { name: string; steps: { role: UserRole; userId?: UserId; order: number }[]; }

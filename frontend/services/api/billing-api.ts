@@ -24,7 +24,31 @@ export class BillingApiService {
   }
 
   async addTimeEntry(entry: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<TimeEntry> {
-    return apiClient.post<TimeEntry>('/billing/time-entries', entry);
+    // Transform frontend TimeEntry to backend CreateTimeEntryDto
+    const createDto = {
+      caseId: entry.caseId,
+      userId: entry.userId || entry.createdBy,
+      date: entry.date, // Should be ISO date string YYYY-MM-DD
+      duration: entry.duration || entry.hours, // In hours
+      description: entry.description || entry.notes,
+      activity: entry.activity || entry.taskDescription,
+      ledesCode: entry.ledesCode,
+      rate: entry.rate || entry.hourlyRate || 0,
+      status: entry.status,
+      billable: entry.billable !== false, // Default to true if not specified
+      rateTableId: entry.rateTableId,
+      internalNotes: entry.internalNotes,
+      taskCode: entry.taskCode,
+    };
+    
+    // Remove undefined values
+    Object.keys(createDto).forEach(key => {
+      if (createDto[key] === undefined) {
+        delete createDto[key];
+      }
+    });
+    
+    return apiClient.post<TimeEntry>('/billing/time-entries', createDto);
   }
 
   async addBulkTimeEntries(entries: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<TimeEntry[]> {

@@ -10,6 +10,8 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useAdminData } from './useAdminData';
 import { EMPTY_TEMPLATES } from './AdminConfig';
+import { ConfirmDialog } from '../../common/ConfirmDialog';
+import { useModalState } from '../../../hooks/useModalState';
 
 export const AdminPlatformManager: React.FC = () => {
   const { theme } = useTheme();
@@ -18,6 +20,8 @@ export const AdminPlatformManager: React.FC = () => {
   const [editingItem, setEditingItem] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewItem, setIsNewItem] = useState(false);
+  const deleteModal = useModalState();
+  const [deleteItemId, setDeleteItemId] = useState<string | null>(null);
 
   const { items, counts, saveItem, deleteItem } = useAdminData(activeCategory);
 
@@ -40,8 +44,14 @@ export const AdminPlatformManager: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this record?')) {
-        deleteItem({ category: activeCategory, id });
+    setDeleteItemId(id);
+    deleteModal.open();
+  };
+
+  const confirmDelete = () => {
+    if (deleteItemId) {
+        deleteItem({ category: activeCategory, id: deleteItemId });
+        setDeleteItemId(null);
     }
   };
 
@@ -92,6 +102,16 @@ export const AdminPlatformManager: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={confirmDelete}
+        title="Delete Record"
+        message="Are you sure you want to delete this record? This action cannot be undone."
+        confirmText="Delete Record"
+        variant="danger"
+      />
     </div>
   );
 };

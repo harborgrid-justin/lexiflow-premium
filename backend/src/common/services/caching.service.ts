@@ -1,16 +1,13 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { Jurisdiction } from '../entities/jurisdiction.entity';
-import { PracticeArea } from '../../practice-areas/entities/practice-area.entity';
+import { Jurisdiction } from '../../jurisdictions/entities/jurisdiction.entity';
 
 @Injectable()
 export class CachingService {
-  constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  private cache = new Map<string, { value: any; expiry: number }>();
+
+  constructor() {}
 
   /**
    * Get value from cache or fetch from database
@@ -21,18 +18,20 @@ export class CachingService {
     ttl: number = 3600, // 1 hour default
   ): Promise<T> {
     // Check cache first
-    let value = await this.cacheManager.get<T>(key);
-
-    if (value !== undefined && value !== null) {
-      return value;
+    const cached = this.cache.get(key);
+    if (cached && cached.expiry > Date.now()) {
+      return cached.value as T;
     }
 
     // Fetch from database
-    value = await fetcher();
+    const value = await fetcher();
 
     // Store in cache
     if (value !== undefined && value !== null) {
-      await this.cacheManager.set(key, value, ttl);
+      this.cache.set(key, {
+        value,
+        expiry: Date.now() + ttl * 1000,
+      });
     }
 
     return value;
@@ -42,22 +41,22 @@ export class CachingService {
    * Invalidate cache by key pattern
    */
   async invalidate(keyPattern: string): Promise<void> {
-    // For simple implementation with cache-manager
-    await this.cacheManager.del(keyPattern);
+    // Simple exact key deletion (pattern matching can be added if needed)
+    this.cache.delete(keyPattern);
   }
 
   /**
    * Invalidate multiple keys
    */
   async invalidateMultiple(keys: string[]): Promise<void> {
-    await Promise.all(keys.map(key => this.cacheManager.del(key)));
+    keys.forEach(key => this.cache.delete(key));
   }
 
   /**
    * Clear all cache
    */
   async clearAll(): Promise<void> {
-    await this.cacheManager.reset();
+    this.cache.clear();
   }
 }
 

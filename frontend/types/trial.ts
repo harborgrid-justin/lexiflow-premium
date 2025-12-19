@@ -49,3 +49,44 @@ export interface OpeningStatement extends BaseEntity { caseId: CaseId; sections:
 export interface Fact extends BaseEntity { caseId: CaseId; date: string; description: string; type: 'Undisputed' | 'Disputed' | 'Stipulated'; supportingEvidenceIds: EvidenceId[]; }
 export interface StandingOrder extends BaseEntity { judgeId: string; judgeName: string; title: string; updated: string; url: string; }
 
+// War Room - Strategic Planning (backend: war-room module)
+export enum ExpertType {
+  TECHNICAL = 'Technical',
+  MEDICAL = 'Medical',
+  FINANCIAL = 'Financial',
+  FORENSIC = 'Forensic',
+  INDUSTRY = 'Industry',
+  OTHER = 'Other'
+}
+
+export interface Advisor extends BaseEntity {
+  // Backend: advisors table
+  name: string;
+  email: string;
+  phone?: string;
+  firm?: string;
+  specialty?: string;
+  caseId?: string;
+  isActive: boolean;
+}
+
+export interface Expert extends BaseEntity {
+  // Backend: experts table
+  name: string;
+  expertType: ExpertType;
+  email: string;
+  phone?: string;
+  hourlyRate?: number;
+  credentials?: string;
+  caseId?: string;
+  isActive: boolean;
+}
+
+export interface CaseStrategy extends BaseEntity {
+  // Backend: case_strategies table
+  caseId: string;
+  objective?: string;
+  approach?: string;
+  keyArguments?: string;
+}
+

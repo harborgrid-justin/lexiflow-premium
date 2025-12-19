@@ -27,6 +27,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { DateText } from '../common/Primitives';
+import { EmptyState } from '../common/EmptyState';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -72,33 +73,41 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase
     <div className="space-y-6">
         <Card title="Firm Alerts" subtitle="Notifications & critical updates" className="h-full">
             <div className="space-y-3">
-                {alerts.length === 0 && <div className={cn("text-xs text-center py-4", theme.text.tertiary)}>No recent alerts.</div>}
-                {alerts.map((alert) => (
-                <div 
-                    key={alert.id} 
-                    className={cn(
-                        "relative flex items-start p-3 rounded-lg border transition-all cursor-pointer group",
-                        alert.caseId ? cn(theme.surface.default, theme.border.default, "hover:border-blue-400 hover:shadow-sm") : cn(theme.surface.highlight, theme.border.default)
-                    )}
-                    onClick={() => alert.caseId && onSelectCase(alert.caseId)}
-                >
-                    <div className={cn("mt-0.5 mr-3 shrink-0", alert.caseId ? "text-blue-500" : "text-slate-400")}>
-                        {alert.caseId ? <AlertCircle className="h-5 w-5"/> : <TrendingUp className="h-5 w-5"/>}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <p className={cn("text-sm font-semibold leading-tight mb-1", theme.text.primary)}>{alert.message}</p>
-                        <p className={cn("text-xs line-clamp-2", theme.text.secondary)}>{alert.detail}</p>
-                        <div className="mt-2 flex items-center justify-between">
-                            <DateText date={alert.time} className="text-[10px] font-medium opacity-70" />
-                            {alert.caseId && (
-                                <span className={cn("text-[10px] font-bold flex items-center opacity-0 group-hover:opacity-100 transition-opacity", theme.primary.text)}>
-                                    View Matter <ArrowRight className="h-2 w-2 ml-1"/>
-                                </span>
+                {alerts.length === 0 ? (
+                    <EmptyState
+                        icon={AlertCircle}
+                        title="No alerts"
+                        description="All clear! No critical updates at this time."
+                        className="py-6"
+                    />
+                ) : (
+                    alerts.map((alert) => (
+                        <div 
+                            key={alert.id} 
+                            className={cn(
+                                "relative flex items-start p-3 rounded-lg border transition-all cursor-pointer group",
+                                alert.caseId ? cn(theme.surface.default, theme.border.default, "hover:border-blue-400 hover:shadow-sm") : cn(theme.surface.highlight, theme.border.default)
                             )}
+                            onClick={() => alert.caseId && onSelectCase(alert.caseId)}
+                        >
+                            <div className={cn("mt-0.5 mr-3 shrink-0", alert.caseId ? "text-blue-500" : "text-slate-400")}>
+                                {alert.caseId ? <AlertCircle className="h-5 w-5"/> : <TrendingUp className="h-5 w-5"/>}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className={cn("text-sm font-semibold leading-tight mb-1", theme.text.primary)}>{alert.message}</p>
+                                <p className={cn("text-xs line-clamp-2", theme.text.secondary)}>{alert.detail}</p>
+                                <div className="mt-2 flex items-center justify-between">
+                                    <DateText date={alert.time} className="text-[10px] font-medium opacity-70" />
+                                    {alert.caseId && (
+                                        <span className={cn("text-[10px] font-bold flex items-center opacity-0 group-hover:opacity-100 transition-opacity", theme.primary.text)}>
+                                            View Matter <ArrowRight className="h-2 w-2 ml-1"/>
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                ))}
+                    ))
+                )}
             </div>
             <div className={cn("mt-6 pt-4 border-t text-center", theme.border.default)}>
                 <Button variant="ghost" size="sm" className={cn("text-xs uppercase tracking-wide", theme.text.secondary)}>View Notification Center</Button>

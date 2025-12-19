@@ -4,17 +4,19 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { db } from '../../../services/data/db';
 import { useQuery } from '../../../services/infrastructure/queryClient';
+import { ConfirmDialog } from '../../common/ConfirmDialog';
+import { useModalState } from '../../../hooks/useModalState';
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const incrementModal = useModalState();
+  const resetModal = useModalState();
 
   const { data: dbInfo, refetch } = useQuery(['db', 'info'], () => db.getDbInfo());
 
   const handleIncrementVersion = async () => {
-    if (!confirm('Increment database version? This will force a schema upgrade on next reload.')) return;
-    
     setIsProcessing(true);
     try {
       const newVersion = await db.incrementVersion();
@@ -28,9 +30,6 @@ export const DatabaseManagement: React.FC = () => {
   };
 
   const handleResetDatabase = async () => {
-    if (!confirm('⚠️ WARNING: This will DELETE ALL DATA in IndexedDB! Are you sure?')) return;
-    if (!confirm('This action cannot be undone. Type YES in your mind and click OK to proceed.')) return;
-    
     setIsProcessing(true);
     try {
       await db.resetDatabase();
@@ -130,7 +129,7 @@ export const DatabaseManagement: React.FC = () => {
         <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>Database Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
-            onClick={handleIncrementVersion}
+            onClick={incrementModal.open}
             disabled={isProcessing}
             className={cn("p-4 rounded-lg border text-left hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-900/20 dark:hover:border-blue-700 transition-all disabled:opacity-50", theme.border.default)}
           >
@@ -150,7 +149,7 @@ export const DatabaseManagement: React.FC = () => {
           </button>
 
           <button
-            onClick={handleResetDatabase}
+            onClick={resetModal.open}
             disabled={isProcessing}
             className={cn("p-4 rounded-lg border text-left hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-900/20 dark:hover:border-red-700 transition-all disabled:opacity-50", theme.border.default)}
           >
@@ -176,6 +175,26 @@ export const DatabaseManagement: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={incrementModal.isOpen}
+        onClose={incrementModal.close}
+        onConfirm={handleIncrementVersion}
+        title="Increment Database Version"
+        message="Increment database version? This will force a schema upgrade on next reload."
+        confirmText="Increment Version"
+        variant="warning"
+      />
+
+      <ConfirmDialog
+        isOpen={resetModal.isOpen}
+        onClose={resetModal.close}
+        onConfirm={handleResetDatabase}
+        title="Reset Database"
+        message="⚠️ WARNING: This will DELETE ALL DATA in IndexedDB! This action cannot be undone. Are you absolutely sure?"
+        confirmText="Yes, Delete All Data"
+        variant="danger"
+      />
     </div>
   );
 };

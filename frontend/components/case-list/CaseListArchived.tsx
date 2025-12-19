@@ -21,10 +21,13 @@ import { Loader2 } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+import { ConfirmDialog } from '../common/ConfirmDialog';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/infrastructure/queryClient';
+import { useModalState } from '../../hooks/useModalState';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
@@ -41,6 +44,8 @@ interface CaseListArchivedProps {
 
 export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase }) => {
   const { theme } = useTheme();
+  const retrieveModal = useModalState();
+  const [retrieveCaseId, setRetrieveCaseId] = React.useState<string | null>(null);
 
   // Enterprise Data Access
   const { data: archivedCases = [], isLoading } = useQuery<any[]>(
@@ -52,11 +57,17 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
   const safeArchivedCases = Array.isArray(archivedCases) ? archivedCases : [];
 
   const handleRetrieve = async (id: string) => {
-      const found = await DataService.cases.getById(id);
-      if (found && onSelectCase) {
-          if (confirm("Retrieve case from Cold Storage? This may incur a fee.")) {
+      setRetrieveCaseId(id);
+      retrieveModal.open();
+  };
+
+  const confirmRetrieve = async () => {
+      if (retrieveCaseId) {
+          const found = await DataService.cases.getById(retrieveCaseId);
+          if (found && onSelectCase) {
               onSelectCase(found);
           }
+          setRetrieveCaseId(null);
       }
   };
 
@@ -89,6 +100,16 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
           ))}
         </TableBody>
       </TableContainer>
+
+      <ConfirmDialog
+        isOpen={retrieveModal.isOpen}
+        onClose={retrieveModal.close}
+        onConfirm={confirmRetrieve}
+        title="Retrieve Case"
+        message="Retrieve case from Cold Storage? This may incur a fee."
+        confirmText="Retrieve"
+        variant="warning"
+      />
     </div>
   );
 };

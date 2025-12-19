@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Bell, Check, X } from 'lucide-react';
+import { Bell, Check, X, BellOff } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
+import { EmptyState } from '../common/EmptyState';
 import { SystemNotification } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -56,10 +57,17 @@ export const NotificationCenter: React.FC = () => {
         <span className={cn("text-xs font-bold px-1.5 rounded", theme.primary.light, theme.primary.text)}>{notifications.filter(n => !n.read).length}</span>
       </div>
       <div className="divide-y max-h-64 overflow-y-auto custom-scrollbar">
-        {notifications.length === 0 && (
-            <div className={cn("p-4 text-center text-xs italic", theme.text.tertiary)}>No new notifications.</div>
-        )}
-        {notifications.map(n => (
+        {notifications.length === 0 ? (
+            <div className="p-4">
+              <EmptyState
+                icon={BellOff}
+                title="No notifications"
+                description="You're all caught up! No new notifications."
+                className="py-8"
+              />
+            </div>
+        ) : (
+          notifications.map(n => (
           <div key={n.id} className={cn("p-3 transition-colors group flex justify-between items-start", n.read ? "opacity-60" : "", `hover:${theme.surface.highlight}`)}>
             <div className="flex-1">
                 <p className={cn("text-xs mb-1", theme.text.primary)}>{n.text}</p>
@@ -72,7 +80,8 @@ export const NotificationCenter: React.FC = () => {
                 <button onClick={() => dismiss(n.id)} className="p-1 hover:bg-red-100 text-red-600 rounded" title="Dismiss"><X className="h-3 w-3"/></button>
             </div>
           </div>
-        ))}
+        ))
+        )}
       </div>
     </div>
   );

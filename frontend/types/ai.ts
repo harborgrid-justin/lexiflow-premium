@@ -1,6 +1,6 @@
 // types/ai.ts
 
-import { SearchResult } from './models';
+import type { SearchResult } from './legal-research';
 
 export interface GroundingChunk {
     web?: {

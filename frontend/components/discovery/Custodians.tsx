@@ -9,6 +9,7 @@ import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { useNotify } from '../../hooks/useNotify';
 import { useModalState } from '../../hooks';
+import { useSelection } from '../../hooks/useSelectionState';
 import { getTodayString } from '../../utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
@@ -70,7 +71,7 @@ export const Custodians: React.FC = () => {
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
-  const [selectedCustodian, setSelectedCustodian] = useState<Custodian | null>(null);
+  const custodianSelection = useSelection<Custodian>();
   const [formData, setFormData] = useState<Partial<Custodian>>({});
 
   // Mutations with automatic cache invalidation
@@ -79,7 +80,7 @@ export const Custodians: React.FC = () => {
     {
       onSuccess: () => {
         queryClient.invalidate(queryKeys.discoveryExtended.custodians());
-        setIsCreateModalOpen(false);
+        createModal.close();
         setFormData({});
         notify.success('Custodian created successfully');
       },
@@ -92,8 +93,8 @@ export const Custodians: React.FC = () => {
     {
       onSuccess: () => {
         queryClient.invalidate(queryKeys.discoveryExtended.custodians());
-        setIsEditModalOpen(false);
-        setSelectedCustodian(null);
+        editModal.close();
+        custodianSelection.deselect();
         setFormData({});
         notify.success('Custodian updated successfully');
       },
@@ -106,8 +107,8 @@ export const Custodians: React.FC = () => {
     {
       onSuccess: () => {
         queryClient.invalidate(queryKeys.discoveryExtended.custodians());
-        setIsDeleteModalOpen(false);
-        setSelectedCustodian(null);
+        deleteModal.close();
+        custodianSelection.deselect();
         notify.success('Custodian deleted successfully');
       },
       onError: () => notify.error('Failed to delete custodian')
@@ -135,12 +136,12 @@ export const Custodians: React.FC = () => {
   };
 
   const handleEdit = () => {
-    if (!selectedCustodian || !formData.name || !formData.email) {
+    if (!custodianSelection.selected || !formData.name || !formData.email) {
       notify.error('Name and email are required');
       return;
     }
     const updatedCustodian = {
-      ...selectedCustodian,
+      ...custodianSelection.selected,
       ...formData,
       updatedAt: new Date().toISOString().split('T')[0]
     };
@@ -148,19 +149,19 @@ export const Custodians: React.FC = () => {
   };
 
   const handleDelete = () => {
-    if (!selectedCustodian) return;
-    deleteCustodian(selectedCustodian.id);
+    if (!custodianSelection.selected) return;
+    deleteCustodian(custodianSelection.selected.id);
   };
 
   const openEditModal = (custodian: Custodian) => {
-    setSelectedCustodian(custodian);
+    custodianSelection.select(custodian);
     setFormData(custodian);
-    setIsEditModalOpen(true);
+    editModal.open();
   };
 
   const openDeleteModal = (custodian: Custodian) => {
-    setSelectedCustodian(custodian);
-    setIsDeleteModalOpen(true);
+    custodianSelection.select(custodian);
+    deleteModal.open();
   };
 
   const getStatusVariant = (status: Custodian['status']) => {
@@ -182,7 +183,7 @@ export const Custodians: React.FC = () => {
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage data custodians and legal hold recipients.</p>
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); setIsCreateModalOpen(true); }}>
+        <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); createModal.open(); }}>
           Add Custodian
         </Button>
       </div>
@@ -244,7 +245,7 @@ export const Custodians: React.FC = () => {
       </TableContainer>
 
       {/* Create Modal */}
-      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Add New Custodian">
+      <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Add New Custodian">
         <div className="p-6 space-y-4">
           <Input
             label="Full Name"
@@ -281,14 +282,14 @@ export const Custodians: React.FC = () => {
             rows={3}
           />
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={createModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleCreate}>Create Custodian</Button>
           </div>
         </div>
       </Modal>
 
       {/* Edit Modal */}
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Custodian">
+      <Modal isOpen={editModal.isOpen} onClose={editModal.close} title="Edit Custodian">
         <div className="p-6 space-y-4">
           <Input
             label="Full Name"
@@ -333,20 +334,20 @@ export const Custodians: React.FC = () => {
             rows={3}
           />
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="secondary" onClick={() => setIsEditModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={editModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleEdit}>Save Changes</Button>
           </div>
         </div>
       </Modal>
 
       {/* Delete Confirmation Modal */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete Custodian">
+      <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title="Delete Custodian">
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
-            Are you sure you want to delete <strong>{selectedCustodian?.name}</strong>? This action cannot be undone.
+            Are you sure you want to delete <strong>{custodianSelection.selected?.name}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleDelete}>Delete</Button>
           </div>
         </div>

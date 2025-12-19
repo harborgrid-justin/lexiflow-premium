@@ -26,6 +26,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 // Components
 import { EmptyState } from '../common/EmptyState';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -43,7 +44,7 @@ export const WorkflowAutomations: React.FC = () => {
   );
 
   if (isLoading) {
-      return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>;
+      return <AdaptiveLoader contentType="list" shimmer itemCount={3} />;
   }
 
   if (automations.length === 0) {

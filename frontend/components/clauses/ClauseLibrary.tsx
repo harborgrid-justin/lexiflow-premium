@@ -25,6 +25,8 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
 import { AdaptiveLoader } from '../common/AdaptiveLoader';
+import { ErrorState } from '../common/ErrorState';
+import { EmptyState } from '../common/EmptyState';
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { DataService } from '../../services/data/dataService';
 
@@ -46,7 +48,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     // Fetch real clauses from DataService
-    const { data: clauses = [], isLoading } = useQuery(['clauses'], async () => {
+    const { data: clauses = [], isLoading, error, refetch } = useQuery(['clauses'], async () => {
         return await DataService.clauses.getAll();
     });
 
@@ -60,6 +62,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
         return matchesSearch && matchesCategory;
     });
 
+    if (error) return <ErrorState message="Failed to load clause library" onRetry={refetch} />;
     if (isLoading) {
         return <AdaptiveLoader contentType="list" itemCount={8} shimmer message="Loading clause library..." />;
     }
@@ -116,24 +119,18 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
             {/* Clauses List */}
             <div className="flex-1 overflow-y-auto p-4">
                 {filteredClauses.length === 0 ? (
-                    <Card>
-                        <div className="text-center py-12">
-                            <FileText className={cn("h-16 w-16 mx-auto mb-4", theme.text.tertiary)} />
-                            <h3 className={cn("text-lg font-semibold mb-2", theme.text.primary)}>
-                                {searchTerm || selectedCategory ? 'No Matching Clauses' : 'No Clauses Available'}
-                            </h3>
-                            <p className={cn("text-sm mb-6", theme.text.secondary)}>
-                                {searchTerm || selectedCategory 
-                                    ? 'Try adjusting your search or filters' 
-                                    : 'Create your first clause template to get started'}
-                            </p>
-                            {!searchTerm && !selectedCategory && (
-                                <Button variant="primary" icon={Plus}>
-                                    Create Your First Clause
-                                </Button>
-                            )}
-                        </div>
-                    </Card>
+                    <EmptyState
+                        icon={FileText}
+                        title={searchTerm || selectedCategory ? 'No matching clauses' : 'No clauses available'}
+                        description={searchTerm || selectedCategory 
+                            ? 'Try adjusting your search or filters to find clauses' 
+                            : 'Create your first clause template to get started'}
+                        action={!searchTerm && !selectedCategory ? (
+                            <Button variant="primary" icon={Plus}>
+                                Create Your First Clause
+                            </Button>
+                        ) : undefined}
+                    />
                 ) : (
                     <div className="grid gap-3">
                         {filteredClauses.map((clause: Clause) => (

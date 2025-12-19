@@ -50,7 +50,31 @@ export class MotionsApiService {
   }
 
   async create(data: Partial<Motion>): Promise<Motion> {
-    return apiClient.post<Motion>(this.baseUrl, data);
+    // Transform frontend Motion to backend CreateMotionDto
+    const createDto = {
+      caseId: data.caseId,
+      title: data.title,
+      type: data.type, // Should match backend MotionType enum
+      status: data.status, // Should match backend MotionStatus enum
+      description: data.notes, // Backend uses 'description', frontend may use 'notes'
+      filedBy: data.filedBy,
+      filedDate: data.filedDate ? new Date(data.filedDate) : undefined,
+      hearingDate: data.hearingDate ? new Date(data.hearingDate) : undefined,
+      decisionDate: data.decidedDate ? new Date(data.decidedDate) : undefined,
+      decision: data.outcome, // Backend uses 'decision', frontend uses 'outcome'
+      documentId: data.documentId,
+      notes: data.notes,
+      metadata: data.metadata,
+    };
+    
+    // Remove undefined values
+    Object.keys(createDto).forEach(key => {
+      if (createDto[key] === undefined) {
+        delete createDto[key];
+      }
+    });
+    
+    return apiClient.post<Motion>(this.baseUrl, createDto);
   }
 
   async update(id: string, data: Partial<Motion>): Promise<Motion> {

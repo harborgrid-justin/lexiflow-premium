@@ -160,7 +160,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
     // Ensure docketEntries is always an array
     const entries = Array.isArray(docketEntries) ? docketEntries : [];
     
-    let data = selectedCaseId 
+    const data = selectedCaseId 
       ? entries.filter(e => e.caseId === selectedCaseId)
       : entries;
 

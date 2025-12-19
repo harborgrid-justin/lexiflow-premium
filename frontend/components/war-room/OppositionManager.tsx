@@ -22,18 +22,23 @@ import { Filter, Layout, Plus, Loader2 } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useToggle } from '../../hooks/useToggle';
+import { useSingleSelection } from '../../hooks/useMultiSelection';
+import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
 
 // Components
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { OppositionSidebar } from './opposition/OppositionSidebar';
 import { OppositionList, OppositionEntity } from './opposition/OppositionList';
 import { OppositionDetail } from './opposition/OppositionDetail';
 import { Modal } from '../common/Modal';
+import { ErrorState } from '../common/ErrorState';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -59,11 +64,9 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedEntity, setSelectedEntity] = useState<OppositionEntity | null>(null);
-  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const entitySelection = useSingleSelection<OppositionEntity>(null, (a, b) => a.id === b.id);
+  const inspectorToggle = useToggle();
+  const filterToggle = useToggle();
   const [filterRole, setFilterRole] = useState<string>('all');
   const [filterFirm, setFilterFirm] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -71,26 +74,39 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   // ============================================================================
   // DATA FETCHING
   // ============================================================================
-  const { data: oppositionData = [], isLoading } = useQuery<OppositionEntity[]>(
+  const { data: oppositionData = [], isLoading, error, refetch } = useQuery<OppositionEntity[]>(
       queryKeys.warRoom.opposition(caseId),
       () => DataService.warRoom.getOpposition(caseId)
   );
 
   // ============================================================================
-  // DERIVED STATE
+  // FILTER & SEARCH
   // ============================================================================
-  const filteredEntities = React.useMemo(() => {
-    let result = oppositionData.filter(ent => {
-      const matchesCategory = activeCategory === 'All' || 
-                              (activeCategory === 'Counsel' && ent.role.includes('Counsel')) ||
-                              (activeCategory === 'Parties' && ent.role === 'Defendant') ||
-                              (activeCategory === 'Experts' && ent.role === 'Opposing Expert');
-      const matchesSearch = ent.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            ent.firm.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
+  const { filteredItems: baseFiltered, searchQuery, setSearchQuery, category, setCategory } = useFilterAndSearch({
+    items: oppositionData,
+    config: {
+      categoryField: 'role',
+      searchFields: ['name', 'firm'],
+      arrayFields: []
+    },
+    initialCategory: 'All'
+  });
 
-    // Apply filters
+  // Apply additional filters on top of search/category
+  const filteredEntities = React.useMemo(() => {
+    let result = baseFiltered;
+
+    // Map category to role logic
+    if (category !== 'All') {
+      result = result.filter(ent => {
+        if (category === 'Counsel') return ent.role.includes('Counsel');
+        if (category === 'Parties') return ent.role === 'Defendant';
+        if (category === 'Experts') return ent.role === 'Opposing Expert';
+        return true;
+      });
+    }
+
+    // Apply additional filters
     if (filterRole !== 'all') {
       result = result.filter(ent => ent.role === filterRole);
     }
@@ -102,14 +118,15 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
     }
 
     return result;
-  }, [oppositionData, activeCategory, searchTerm, filterRole, filterFirm, filterStatus]);
+  }, [baseFiltered, category, filterRole, filterFirm, filterStatus]);
 
   const handleSelectEntity = (entity: OppositionEntity) => {
-    setSelectedEntity(entity);
-    setIsInspectorOpen(true);
+    entitySelection.select(entity);
+    inspectorToggle.open();
   };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin h-8 w-8", theme.primary.text)}/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="list" itemCount={6} shimmer />;
+  if (error) return <ErrorState message="Failed to load opposition entities" onRetry={refetch} />;
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
@@ -119,25 +136,25 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
             <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Opposition Intel</h3>
             <div className={cn("h-6 w-px", theme.border.default)}></div>
             <SearchToolbar 
-                value={searchTerm} 
-                onChange={setSearchTerm} 
+                value={searchQuery} 
+                onChange={setSearchQuery} 
                 placeholder="Search counsel, parties, experts..." 
                 className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
             />
         </div>
         <div className="flex gap-2">
             <Button 
-                variant={isFilterOpen ? "primary" : "secondary"} 
+                variant={filterToggle.isOpen ? "primary" : "secondary"} 
                 icon={Filter} 
-                onClick={() => setIsFilterOpen(!isFilterOpen)} 
+                onClick={filterToggle.toggle} 
                 className="hidden sm:flex"
             >
                 Filter
             </Button>
             <Button 
-                variant={isInspectorOpen ? "primary" : "secondary"} 
+                variant={inspectorToggle.isOpen ? "primary" : "secondary"} 
                 icon={Layout} 
-                onClick={() => setIsInspectorOpen(!isInspectorOpen)}
+                onClick={inspectorToggle.toggle}
                 className="hidden sm:flex"
             >
                 Inspector
@@ -164,21 +181,21 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
             <OppositionList 
                 entities={filteredEntities} 
                 onSelect={handleSelectEntity}
-                selectedId={selectedEntity?.id}
+                selectedId={entitySelection.selected?.id}
             />
         </div>
 
         {/* Right Inspector Panel */}
-        {isInspectorOpen && selectedEntity && (
+        {inspectorToggle.isOpen && entitySelection.selected && (
             <OppositionDetail 
-                entity={selectedEntity} 
-                onClose={() => setIsInspectorOpen(false)}
+                entity={entitySelection.selected} 
+                onClose={inspectorToggle.close}
             />
         )}
       </div>
 
       {/* Filter Modal */}
-      <Modal isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} title="Filter Opposition">
+      <Modal isOpen={filterToggle.isOpen} onClose={filterToggle.close} title="Filter Opposition">
         <div className="p-6 space-y-4">
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
@@ -227,7 +244,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
             <Button variant="ghost" onClick={() => { setFilterRole('all'); setFilterFirm('all'); setFilterStatus('all'); }}>
               Clear Filters
             </Button>
-            <Button variant="primary" onClick={() => setIsFilterOpen(false)}>
+            <Button variant="primary" onClick={filterToggle.close}>
               Apply
             </Button>
           </div>

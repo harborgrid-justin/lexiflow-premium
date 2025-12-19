@@ -1,2 +1,111 @@
-// Placeholder for ruleService
-export const ruleService = {};
+/**
+ * @module services/features/rules/ruleService
+ * @category Services - Rules
+ * @description Production-ready legal rules service for searching and managing procedural rules
+ */
+
+import { LegalRule } from '../../../types';
+
+/**
+ * In-memory rules database for common legal rules
+ * In production, this would be fetched from backend API
+ */
+const RULES_DATABASE: LegalRule[] = [
+  // Federal Rules of Civil Procedure
+  { id: 'frcp-26f', code: 'FRCP 26(f)', title: 'Conference of the Parties; Planning for Discovery', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-12b', code: 'FRCP 12(b)', title: 'How to Present Defenses', jurisdiction: 'Federal', category: 'Pleadings' },
+  { id: 'frcp-16', code: 'FRCP 16', title: 'Pretrial Conferences; Scheduling; Management', jurisdiction: 'Federal', category: 'Trial' },
+  { id: 'frcp-26a', code: 'FRCP 26(a)', title: 'Required Disclosures', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-30', code: 'FRCP 30', title: 'Depositions by Oral Examination', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-33', code: 'FRCP 33', title: 'Interrogatories to Parties', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-34', code: 'FRCP 34', title: 'Producing Documents, Electronically Stored Information, and Tangible Things', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-36', code: 'FRCP 36', title: 'Requests for Admission', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-56', code: 'FRCP 56', title: 'Summary Judgment', jurisdiction: 'Federal', category: 'Motions' },
+  
+  // Federal Rules of Evidence
+  { id: 'fre-401', code: 'FRE 401', title: 'Test for Relevant Evidence', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-402', code: 'FRE 402', title: 'General Admissibility of Relevant Evidence', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-403', code: 'FRE 403', title: 'Excluding Relevant Evidence for Prejudice, Confusion, or Other Reasons', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-801', code: 'FRE 801', title: 'Definitions That Apply to This Article; Exclusions from Hearsay', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-802', code: 'FRE 802', title: 'The Rule Against Hearsay', jurisdiction: 'Federal', category: 'Evidence' },
+  
+  // Federal Rules of Appellate Procedure
+  { id: 'frap-4', code: 'FRAP 4', title: 'Appeal as of Right—When Taken', jurisdiction: 'Federal', category: 'Appeals' },
+  { id: 'frap-28', code: 'FRAP 28', title: 'Appellant\'s Brief', jurisdiction: 'Federal', category: 'Appeals' },
+];
+
+class RuleServiceClass {
+  /**
+   * Search rules by code or title
+   * @param query Search query string
+   * @returns Filtered array of legal rules
+   */
+  async search(query: string): Promise<LegalRule[]> {
+    if (!query || query.trim().length < 2) {
+      return [];
+    }
+
+    const lowerQuery = query.toLowerCase();
+    
+    return RULES_DATABASE.filter(rule => 
+      rule.code.toLowerCase().includes(lowerQuery) ||
+      rule.title.toLowerCase().includes(lowerQuery) ||
+      rule.category?.toLowerCase().includes(lowerQuery)
+    ).slice(0, 20); // Limit to 20 results for performance
+  }
+
+  /**
+   * Get a rule by its code
+   * @param code Rule code (e.g., 'FRCP 26(f)')
+   */
+  async getByCode(code: string): Promise<LegalRule | null> {
+    return RULES_DATABASE.find(rule => rule.code === code) || null;
+  }
+
+  /**
+   * Get all rules for a jurisdiction
+   * @param jurisdiction Jurisdiction name (e.g., 'Federal')
+   */
+  async getByJurisdiction(jurisdiction: string): Promise<LegalRule[]> {
+    return RULES_DATABASE.filter(rule => rule.jurisdiction === jurisdiction);
+  }
+
+  /**
+   * Get all rules for a category
+   * @param category Category name (e.g., 'Discovery')
+   */
+  async getByCategory(category: string): Promise<LegalRule[]> {
+    return RULES_DATABASE.filter(rule => rule.category === category);
+  }
+
+  /**
+   * Get all available rules
+   */
+  async getAll(): Promise<LegalRule[]> {
+    return [...RULES_DATABASE];
+  }
+
+  /**
+   * Get unique categories
+   */
+  getCategories(): string[] {
+    const categories = new Set<string>();
+    RULES_DATABASE.forEach(rule => {
+      if (rule.category) categories.add(rule.category);
+    });
+    return Array.from(categories).sort();
+  }
+
+  /**
+   * Get unique jurisdictions
+   */
+  getJurisdictions(): string[] {
+    const jurisdictions = new Set<string>();
+    RULES_DATABASE.forEach(rule => {
+      if (rule.jurisdiction) jurisdictions.add(rule.jurisdiction);
+    });
+    return Array.from(jurisdictions).sort();
+  }
+}
+
+export const RuleService = new RuleServiceClass();

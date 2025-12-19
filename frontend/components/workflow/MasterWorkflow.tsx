@@ -6,6 +6,8 @@ import { Button } from '../common/Button';
 import { DataService } from '../../services/data/dataService';
 import { ErrorBoundary } from '../common/ErrorBoundary';
 import { EmptyState } from '../common/EmptyState';
+import { useSingleSelection } from '../../hooks/useMultiSelection';
+import { ErrorState } from '../common/ErrorState';
 
 // Direct Imports to optimize Tree-Shaking and HMR
 import { CaseWorkflowList } from './CaseWorkflowList';
@@ -22,12 +24,13 @@ import { WorkflowTemplateData, WorkflowTask } from '../../types';
 
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { getTodayString } from '../../utils/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { Case } from '../../types';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { WorkflowView } from './types';
 
 interface MasterWorkflowProps {
@@ -43,7 +46,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const [viewMode, setViewMode] = useState<'list' | 'detail' | 'builder'>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<'case' | 'process'>('case');
-  const [selectedTemplate, setSelectedTemplate] = useState<WorkflowTemplateData | null>(null);
+  const templateSelection = useSingleSelection<WorkflowTemplateData>(null, (a, b) => a.id === b.id);
   
   const setActiveTab = (tab: WorkflowView) => {
     startTransition(() => {
@@ -52,12 +55,12 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   };
   
   // Enterprise Data Access
-  const { data: cases = [], isLoading: casesLoading, isError: casesError } = useQuery<Case[]>(
+  const { data: cases = [], isLoading: casesLoading, isError: casesError, refetch: refetchCases } = useQuery<Case[]>(
       [STORES.CASES, 'all'],
       DataService.cases.getAll
   );
 
-  const { data: firmProcesses = [], isLoading: procsLoading, isError: procsError } = useQuery<any[]>(
+  const { data: firmProcesses = [], isLoading: procsLoading, isError: procsError, refetch: refetchProcesses } = useQuery<any[]>(
       [STORES.PROCESSES, 'all'],
       async () => {
         // Use WorkflowRepository directly since API service doesn't have getProcesses
@@ -77,7 +80,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const firmProcessesArray = Array.isArray(firmProcesses) ? firmProcesses : [];
 
   const tasksDueToday = useMemo(() => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayString();
       return tasksArray.filter(t => t.dueDate === today && t.status !== 'Done' && t.status !== 'Completed').length;
   }, [tasksArray]);
 

@@ -7,14 +7,15 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { Transcript } from '../../types';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
+import { useModalState } from '../../hooks';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
 
 export const TranscriptManager: React.FC = () => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const transcriptModal = useModalState();
   const [newTranscript, setNewTranscript] = useState<Partial<Transcript>>({});
 
   const { data: transcripts = [] } = useQuery<Transcript[]>(
@@ -26,7 +27,7 @@ export const TranscriptManager: React.FC = () => {
       DataService.discovery.addTranscript,
       {
           invalidateKeys: [[STORES.TRANSCRIPTS, 'all']],
-          onSuccess: () => { setIsModalOpen(false); setNewTranscript({}); }
+          onSuccess: () => { transcriptModal.close(); setNewTranscript({}); }
       }
   );
 

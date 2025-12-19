@@ -88,16 +88,27 @@ export class UsersService implements OnModuleInit {
     return user ? this.toAuthenticatedUser(user) : null;
   }
 
-  async findByEmail(email: string): Promise<any | null> {
+  async findByEmail(email: string): Promise<AuthenticatedUser | null> {
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
       return null;
     }
-    // Return with password for authentication purposes
+    return this.toAuthenticatedUser(user);
+  }
+
+  /**
+   * Find user by email with password hash (for authentication only)
+   * WARNING: Should only be used internally by AuthService
+   */
+  async findByEmailWithPassword(email: string): Promise<(AuthenticatedUser & { passwordHash: string }) | null> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      return null;
+    }
     const authUser = this.toAuthenticatedUser(user);
     return {
       ...authUser,
-      password: user.passwordHash,
+      passwordHash: user.passwordHash,
     };
   }
 

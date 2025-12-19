@@ -2,11 +2,12 @@
 import React from 'react';
 import { FileText, Wand2, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '../common/Button';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { DataService } from '../../services/data/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 interface Template {
@@ -25,7 +26,7 @@ export const DocumentTemplates: React.FC = () => {
       () => DataService.documents.getTemplates()
   );
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="dashboard" itemCount={6} shimmer />;
 
   return (
     <div className="space-y-6 animate-fade-in">

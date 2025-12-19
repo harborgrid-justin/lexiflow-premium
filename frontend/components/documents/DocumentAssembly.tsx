@@ -7,11 +7,12 @@ import { LegalDocument, DocumentId, CaseId } from '../../types';
 import { useWindow } from '../../context/WindowContext';
 import { DataService } from '../../services/data/dataService';
 import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { getTodayString } from '../../utils/dateUtils';
 import { Step1TemplateSelection } from '../document-assembly/Step1TemplateSelection';
 import { Step2FormConfiguration } from '../document-assembly/Step2FormConfiguration';
 import { Step3DraftReview } from '../document-assembly/Step3DraftReview';
@@ -69,8 +70,8 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
         title: `${template} - ${new Date().toLocaleDateString()}`,
         type: 'Generated',
         content: result,
-        uploadDate: new Date().toISOString().split('T')[0],
-        lastModified: new Date().toISOString().split('T')[0],
+        uploadDate: getTodayString(),
+        lastModified: getTodayString(),
         tags: ['AI Generated', template],
         versions: [],
         sourceModule: 'Drafting'

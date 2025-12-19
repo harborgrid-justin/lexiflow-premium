@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { OcrService } from './ocr.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('OCR')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('ocr')
 @UseGuards(JwtAuthGuard)
 export class OcrController {
@@ -16,6 +16,7 @@ export class OcrController {
   @ApiOperation({ summary: 'Get supported OCR languages' })
   @ApiResponse({ status: 200, description: 'List of supported languages' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getSupportedLanguages() {
     return this.ocrService.getSupportedLanguages();
   }
@@ -25,6 +26,7 @@ export class OcrController {
   @ApiResponse({ status: 200, description: 'Language support status' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'lang', description: 'Language code (e.g., eng, spa, fra)' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async checkLanguageSupport(@Param('lang') lang: string) {
     return this.ocrService.isLanguageSupported(lang);
   }
@@ -35,6 +37,7 @@ export class OcrController {
   @ApiResponse({ status: 404, description: 'Job not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'jobId', description: 'OCR job ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getProgress(@Param('jobId') jobId: string) {
     return this.ocrService.getOcrProgress(jobId);
   }
@@ -44,6 +47,8 @@ export class OcrController {
   @ApiResponse({ status: 200, description: 'Detected language' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async detectLanguage(@Body() body: any) {
     return this.ocrService.detectLanguage(body);
   }
@@ -54,6 +59,9 @@ export class OcrController {
   @ApiResponse({ status: 404, description: 'Document not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'documentId', description: 'Document ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async extractStructuredData(@Param('documentId') documentId: string, @Body() options: any) {
     return this.ocrService.extractStructuredData(documentId, options);
   }
@@ -63,6 +71,8 @@ export class OcrController {
   @ApiResponse({ status: 201, description: 'Batch job created' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async batchProcess(@Body() batchDto: any) {
     return this.ocrService.batchProcess(batchDto);
   }
@@ -71,6 +81,7 @@ export class OcrController {
   @ApiOperation({ summary: 'Get OCR processing statistics' })
   @ApiResponse({ status: 200, description: 'OCR statistics' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getOcrStats() {
     return this.ocrService.getOcrStats();
   }

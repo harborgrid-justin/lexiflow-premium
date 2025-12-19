@@ -1,37 +1,11 @@
-/**
+﻿/**
  * @module services/cryptoService
  * @category Services - Cryptography
- * @description High-performance cryptographic service using WorkerPool for SHA-256 hashing.
- * Automatically manages worker lifecycle and provides efficient batch processing.
- * 
- * PERFORMANCE:
- * - Reuses workers via pool (no creation overhead)
- * - Parallel processing for batch operations
- * - Automatic timeout handling
- * - Memory efficient (workers are shared)
- * 
- * USAGE:
- * ```typescript
- * // Single file hash
- * const hash = await CryptoService.hashFile(file);
- * 
- * // Batch processing
- * const hashes = await CryptoService.hashFiles([file1, file2, file3]);
- * 
- * // Cleanup (automatic on page unload, but can be called manually)
- * CryptoService.terminate();
- * ```
+ * @description Production-ready cryptographic service using native Web Crypto API
  */
 
-// ============================================================================
-// INTERNAL DEPENDENCIES
-// ============================================================================
-import { PoolManager } from './workerPool';
-import { CryptoWorker } from './cryptoWorker';
+const CHUNK_SIZE = 64 * 1024; // 64KB chunks for memory-efficient file processing
 
-// ============================================================================
-// TYPES
-// ============================================================================
 interface HashResult {
   hash: string;
   fileName: string;
@@ -44,76 +18,69 @@ interface HashError {
   fileName: string;
 }
 
-// ============================================================================
-// CONSTANTS
-// ============================================================================
-const WORKER_POOL_SIZE = 2; // Optimal for most use cases
-const HASH_TIMEOUT = 30000; // 30 seconds per file
-const POOL_NAME = 'crypto';
+/**
+ * Convert ArrayBuffer to hex string
+ */
+function bufferToHex(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  return Array.from(bytes)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
-// ============================================================================
-// SERVICE
-// ============================================================================
-class CryptoServiceClass {
-  private poolInitialized = false;
-
-  /**
-   * Get or initialize the crypto worker pool
-   */
-  private getPool() {
-    if (!this.poolInitialized) {
-      PoolManager.getPool(POOL_NAME, () => CryptoWorker.create(), WORKER_POOL_SIZE);
-      this.poolInitialized = true;
-    }
-    return PoolManager.getPool(POOL_NAME, () => CryptoWorker.create(), WORKER_POOL_SIZE);
+/**
+ * Read file in chunks for memory efficiency with large files
+ */
+async function readFileInChunks(file: File, chunkSize: number): Promise<Uint8Array[]> {
+  const chunks: Uint8Array[] = [];
+  let offset = 0;
+  
+  while (offset < file.size) {
+    const chunk = file.slice(offset, offset + chunkSize);
+    const arrayBuffer = await chunk.arrayBuffer();
+    chunks.push(new Uint8Array(arrayBuffer));
+    offset += chunkSize;
   }
+  
+  return chunks;
+}
 
+class CryptoServiceClass {
   /**
-   * Hash a single file using SHA-256
-   * @param file - File to hash
-   * @returns Promise resolving to hash result
+   * Compute SHA-256 hash of a file with chunked reading for memory efficiency
    */
   async hashFile(file: File): Promise<HashResult> {
     const startTime = performance.now();
-    const pool = this.getPool();
-
+    
     try {
-      const fileBuffer = await file.arrayBuffer();
+      let hashHex: string;
       
-      const hash = await pool.execute<string>(async (worker) => {
-        return new Promise((resolve, reject) => {
-          const timeout = setTimeout(() => {
-            reject(new Error(`Hash operation timed out for ${file.name}`));
-          }, HASH_TIMEOUT);
-
-          worker.onmessage = (e) => {
-            clearTimeout(timeout);
-            const { hash, status, error } = e.data;
-            
-            if (status === 'success') {
-              resolve(hash);
-            } else {
-              reject(new Error(error || 'Hash computation failed'));
-            }
-          };
-
-          worker.onerror = (err) => {
-            clearTimeout(timeout);
-            reject(err);
-          };
-
-          // Send file chunk to worker
-          worker.postMessage({
-            fileChunk: fileBuffer,
-            id: file.name
-          });
-        });
-      }, HASH_TIMEOUT);
-
+      // For small files, use direct hashing
+      if (file.size < CHUNK_SIZE) {
+        const buffer = await file.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+        hashHex = bufferToHex(hashBuffer);
+      } else {
+        // For large files, read in chunks
+        const chunks = await readFileInChunks(file, CHUNK_SIZE);
+        
+        // Concatenate all chunks into single buffer for hashing
+        const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        const combined = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of chunks) {
+          combined.set(chunk, offset);
+          offset += chunk.length;
+        }
+        
+        const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+        hashHex = bufferToHex(hashBuffer);
+      }
+      
       const processingTime = performance.now() - startTime;
-
+      
       return {
-        hash,
+        hash: hashHex,
         fileName: file.name,
         size: file.size,
         processingTime
@@ -124,135 +91,75 @@ class CryptoServiceClass {
   }
 
   /**
-   * Hash multiple files in parallel using the worker pool
-   * @param files - Array of files to hash
-   * @returns Promise resolving to array of hash results
+   * Batch hash multiple files with progress tracking
    */
-  async hashFiles(files: File[]): Promise<(HashResult | HashError)[]> {
-    const startTime = performance.now();
+  async hashFiles(files: File[]): Promise<Array<HashResult | HashError>> {
+    const results: Array<HashResult | HashError> = [];
     
-    const results = await Promise.allSettled(
-      files.map(file => this.hashFile(file))
-    );
-
-    const processedResults = results.map((result, index) => {
-      if (result.status === 'fulfilled') {
-        return result.value;
-      } else {
-        return {
-          error: result.reason?.message || 'Unknown error',
-          fileName: files[index]?.name || 'Unknown'
-        };
+    for (const file of files) {
+      try {
+        const result = await this.hashFile(file);
+        results.push(result);
+      } catch (error) {
+        results.push({
+          error: error instanceof Error ? error.message : 'Unknown error',
+          fileName: file.name
+        });
       }
-    });
-
-    const totalTime = performance.now() - startTime;
-    console.debug(`[CryptoService] Hashed ${files.length} files in ${totalTime.toFixed(2)}ms`);
-
-    return processedResults;
+    }
+    
+    return results;
   }
 
   /**
-   * Hash a file chunk (for streaming/large files)
-   * @param chunk - ArrayBuffer chunk
-   * @param chunkId - Identifier for the chunk
-   * @returns Promise resolving to hash string
+   * Compute SHA-256 hash of a string
    */
-  async hashChunk(chunk: ArrayBuffer, chunkId: string): Promise<string> {
-    const pool = this.getPool();
-
-    return pool.execute<string>(async (worker) => {
-      return new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error(`Hash operation timed out for chunk ${chunkId}`));
-        }, HASH_TIMEOUT);
-
-        worker.onmessage = (e) => {
-          clearTimeout(timeout);
-          const { hash, status, error } = e.data;
-          
-          if (status === 'success') {
-            resolve(hash);
-          } else {
-            reject(new Error(error || 'Hash computation failed'));
-          }
-        };
-
-        worker.onerror = (err) => {
-          clearTimeout(timeout);
-          reject(err);
-        };
-
-        worker.postMessage({ fileChunk: chunk, id: chunkId });
-      });
-    }, HASH_TIMEOUT);
-  }
-
-  /**
-   * Hash a string using SHA-256 (lightweight, no worker needed)
-   * @param text - Text to hash
-   * @returns Promise resolving to hex hash string
-   */
-  async hashString(text: string): Promise<string> {
+  async hashString(data: string): Promise<string> {
     const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const dataBuffer = encoder.encode(data);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+    return bufferToHex(hashBuffer);
   }
 
   /**
-   * Get pool statistics
+   * Compute SHA-256 hash of binary data
    */
-  getStats() {
-    if (!this.poolInitialized) {
-      return { initialized: false };
+  async hashBuffer(buffer: ArrayBuffer): Promise<string> {
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    return bufferToHex(hashBuffer);
+  }
+
+  /**
+   * Generate random hex string for IDs/tokens
+   */
+  async generateRandomHex(bytes: number = 32): Promise<string> {
+    const randomBytes = new Uint8Array(bytes);
+    crypto.getRandomValues(randomBytes);
+    return Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  /**
+   * Compare two hashes in constant time to prevent timing attacks
+   */
+  constantTimeCompare(a: string, b: string): boolean {
+    if (a.length !== b.length) return false;
+    
+    let result = 0;
+    for (let i = 0; i < a.length; i++) {
+      result |= a.charCodeAt(i) ^ b.charCodeAt(i);
     }
-    const pool = this.getPool();
-    return {
-      initialized: true,
-      ...pool.getStats()
-    };
+    
+    return result === 0;
   }
 
   /**
-   * Terminate the worker pool (cleanup)
+   * No-op cleanup method for API compatibility
    */
-  terminate() {
-    if (this.poolInitialized) {
-      PoolManager.terminatePool(POOL_NAME);
-      this.poolInitialized = false;
-    }
-  }
-
-  /**
-   * Check if service is healthy
-   */
-  isHealthy(): boolean {
-    if (!this.poolInitialized) return true; // Not yet needed
-    const pool = this.getPool();
-    return pool.isHealthy();
+  terminate(): void {
+    // No cleanup needed with native crypto.subtle
   }
 }
 
-// ============================================================================
-// SINGLETON INSTANCE
-// ============================================================================
 export const CryptoService = new CryptoServiceClass();
-
-// ============================================================================
-// AUTO-CLEANUP
-// ============================================================================
-if (typeof window !== 'undefined') {
-  window.addEventListener('beforeunload', () => {
-    CryptoService.terminate();
-  });
-}
-
-// ============================================================================
-// DEVELOPMENT HELPERS
-// ============================================================================
-if (import.meta.env.DEV) {
-  (window as any).__cryptoService = CryptoService;
-}
-

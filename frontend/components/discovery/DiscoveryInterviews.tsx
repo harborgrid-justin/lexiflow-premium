@@ -8,12 +8,13 @@ import { InterviewModal } from './interviews/InterviewModal';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
+import { useModalState } from '../../hooks';
 
 export const DiscoveryInterviews: React.FC = () => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const interviewModal = useModalState();
 
   // Enterprise Data Access
   const { data: interviews = [] } = useQuery<CustodianInterview[]>(
@@ -25,7 +26,7 @@ export const DiscoveryInterviews: React.FC = () => {
       DataService.discovery.createInterview,
       {
           invalidateKeys: [[STORES.DISCOVERY_EXT_INT, 'all']],
-          onSuccess: () => setIsModalOpen(false)
+          onSuccess: () => interviewModal.close()
       }
   );
 

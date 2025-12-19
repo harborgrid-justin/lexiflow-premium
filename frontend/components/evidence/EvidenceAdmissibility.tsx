@@ -19,6 +19,7 @@ import { Modal } from '../common/Modal';
 // Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useModalState } from '../../hooks';
 
 // Types
 import { EvidenceItem } from '../../types';
@@ -29,7 +30,7 @@ interface EvidenceAdmissibilityProps {
 
 export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ selectedItem }) => {
   const { theme } = useTheme();
-  const [isRuleModalOpen, setIsRuleModalOpen] = useState(false);
+  const ruleModal = useModalState();
   // Local state for demonstration since we can't easily bubble up state in this architecture without context
   const [rules, setRules] = useState<string[]>(selectedItem.linkedRules || ['FRE 401', 'FRE 901']);
 

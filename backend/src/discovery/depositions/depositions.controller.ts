@@ -11,13 +11,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
 import { Public } from '../../common/decorators/public.decorator';
 import { DepositionsService } from './depositions.service';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';
 import { QueryDepositionDto } from './dto/query-deposition.dto';
 
-@Public() // Allow public access for development
+
 @Controller('discovery/depositions')
 export class DepositionsController {
   constructor(private readonly depositionsService: DepositionsService) {}
@@ -30,16 +31,24 @@ export class DepositionsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createDto: CreateDepositionDto) {
     return await this.depositionsService.create(createDto);
   }
 
   @Get()
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query() queryDto: QueryDepositionDto) {
     return await this.depositionsService.findAll(queryDto);
   }
 
   @Get('upcoming/:caseId')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUpcoming(
     @Param('caseId') caseId: string,
     @Query('days') days?: number,
@@ -48,16 +57,25 @@ export class DepositionsController {
   }
 
   @Get('statistics/:caseId')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getStatistics(@Param('caseId') caseId: string) {
     return await this.depositionsService.getStatistics(caseId);
   }
 
   @Get(':id')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async findOne(@Param('id') id: string) {
     return await this.depositionsService.findOne(id);
   }
 
   @Put(':id')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateDepositionDto,
@@ -67,6 +85,9 @@ export class DepositionsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async remove(@Param('id') id: string) {
     await this.depositionsService.remove(id);
   }

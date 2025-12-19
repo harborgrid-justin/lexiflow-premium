@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation  , ApiResponse }from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { VersioningService } from './versioning.service';
@@ -7,7 +7,7 @@ import { VersioningService } from './versioning.service';
 @ApiTags('Versioning')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Public()
+
 @Controller('versioning')
 export class VersioningController {
   constructor(private readonly versioningService: VersioningService) {}
@@ -15,12 +15,18 @@ export class VersioningController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create new version' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createVersion(@Body() body: any) {
     return await this.versioningService.createVersion(body);
   }
 
   @Get('history/:entityType/:entityId')
   @ApiOperation({ summary: 'Get version history' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getVersionHistory(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
@@ -31,6 +37,8 @@ export class VersioningController {
 
   @Get('branches/:entityType/:entityId')
   @ApiOperation({ summary: 'Get branches' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getBranches(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
@@ -40,6 +48,8 @@ export class VersioningController {
 
   @Get('tags/:entityType/:entityId')
   @ApiOperation({ summary: 'Get tags' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTags(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
@@ -49,18 +59,29 @@ export class VersioningController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get version by ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getVersion(@Param('id') id: string) {
     return await this.versioningService.getVersion(id);
   }
 
   @Post(':id/tag')
   @ApiOperation({ summary: 'Tag version' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async tagVersion(@Param('id') id: string, @Body() body: { tag: string }) {
     return await this.versioningService.tagVersion(id, body.tag);
   }
 
   @Get('compare/:id1/:id2')
   @ApiOperation({ summary: 'Compare two versions' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async compareVersions(@Param('id1') id1: string, @Param('id2') id2: string) {
     return await this.versioningService.compareVersions(id1, id2);
   }

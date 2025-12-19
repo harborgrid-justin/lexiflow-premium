@@ -22,10 +22,11 @@ import { Badge } from '../common/Badge';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '../../services/infrastructure/queryClient';
+import { useModalState } from '../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { Scheduler } from '../../utils/scheduler';
 import { cn } from '../../utils/cn';
 
@@ -41,7 +42,7 @@ type GroupByOption = 'none' | 'role' | 'group';
 
 export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate }) => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const partyModal = useModalState();
   const [currentParty, setCurrentParty] = useState<Partial<Party>>({});
   const [groupBy, setGroupBy] = useState<GroupByOption>('group');
   const [grouped, setGrouped] = useState<Record<string, Party[]>>({});

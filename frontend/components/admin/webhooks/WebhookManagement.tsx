@@ -8,6 +8,7 @@ import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
+import { useModalState } from '../../../hooks';
 import { useQuery } from '../../../services/infrastructure/queryClient';
 import { WebhooksApiService } from '../../../services/api/webhooks-api';
 
@@ -51,10 +52,10 @@ export const WebhookManagement: React.FC = () => {
     })) as WebhookConfig[];
   });
 
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isTestModalOpen, setIsTestModalOpen] = useState(false);
+  const createModal = useModalState();
+  const editModal = useModalState();
+  const deleteModal = useModalState();
+  const testModal = useModalState();
   const [selectedWebhook, setSelectedWebhook] = useState<WebhookConfig | null>(null);
   const [formData, setFormData] = useState<Partial<WebhookConfig>>({ events: [] });
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);

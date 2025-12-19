@@ -5,6 +5,7 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  VersionColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/base/base.entity';
 import { Client } from '../../../clients/entities/client.entity';
@@ -177,4 +178,7 @@ export class Invoice extends BaseEntity {
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy: string;
+
+  @VersionColumn()
+  version: number;
 }

@@ -8,14 +8,16 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { Examination } from '../../types';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
+import { useModalState } from '../../hooks';
+import { getTodayString } from '../../utils/dateUtils';
 
 export const Examinations: React.FC = () => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const examModal = useModalState();
   const [newExam, setNewExam] = useState<Partial<Examination>>({});
 
   const { data: exams = [] } = useQuery<Examination[]>(
@@ -28,7 +30,7 @@ export const Examinations: React.FC = () => {
       {
           invalidateKeys: [[STORES.EXAMINATIONS, 'all']],
           onSuccess: () => {
-              setIsModalOpen(false);
+              examModal.close();
               setNewExam({});
           }
       }
@@ -57,7 +59,7 @@ export const Examinations: React.FC = () => {
                 </h3>
                 <p className={cn("text-sm", theme.text.secondary)}>Manage IME appointments and reports.</p>
             </div>
-            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Order Exam</Button>
+            <Button variant="primary" icon={Plus} onClick={examModal.open}>Order Exam</Button>
         </div>
 
         <TableContainer>

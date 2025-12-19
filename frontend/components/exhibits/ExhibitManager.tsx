@@ -25,17 +25,20 @@ import { Button } from '../common/Button';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 import { ExhibitStats } from './ExhibitStats';
+import { ErrorState } from '../common/ErrorState';
 
 // Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useToggle } from '../../hooks/useToggle';
 
 // Data & Types
 import { CaseId, TrialExhibit } from '../../types';
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
+import { getTodayString } from '../../utils/dateUtils';
 
 interface ExhibitManagerProps {
     initialTab?: 'list' | 'sticker' | 'stats';
@@ -47,11 +50,11 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
   const [activeTab, setActiveTab] = useState<'list' | 'sticker' | 'stats'>('list');
   const [filterParty, setFilterParty] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-  const [showFilters, setShowFilters] = useState(false);
+  const filtersToggle = useToggle();
 
   // Enterprise Data Access
   // Using caseId in query key ensures React Query manages cache independently per case
-  const { data: exhibitsData = [], isLoading, error } = useQuery<TrialExhibit[]>(
+  const { data: exhibitsData = [], isLoading, error, refetch } = useQuery<TrialExhibit[]>(
       [STORES.EXHIBITS, caseId || 'all'],
       DataService.exhibits.getAll
   );
@@ -74,7 +77,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
           caseId: (caseId || 'General') as CaseId, 
           exhibitNumber: `PX-${exhibits.length + 1}`,
           title: 'New Evidence Document',
-          dateMarked: new Date().toISOString().split('T')[0],
+          dateMarked: getTodayString(),
           party: 'Plaintiff',
           status: 'Marked',
           fileType: 'PDF',
@@ -106,7 +109,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
 
   // Show error state
   if (error) {
-    console.error('[ExhibitManager] Error loading exhibits:', error);
+    return <ErrorState message="Failed to load exhibits" onRetry={refetch} />;
   }
 
   return (
@@ -222,7 +225,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                                 <button onClick={() => setViewMode('list')} className={cn("p-1.5 rounded transition-colors", viewMode === 'list' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><List className="h-4 w-4"/></button>
                                 <button onClick={() => setViewMode('grid')} className={cn("p-1.5 rounded transition-colors", viewMode === 'grid' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><Grid className="h-4 w-4"/></button>
                             </div>
-                            <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)}>Filter</Button>
+                            <Button variant="secondary" icon={Filter} onClick={filtersToggle.toggle}>Filter</Button>
                         </div>
                     </div>
 

@@ -6,7 +6,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { AuditLogEntry } from '../../types';
 import { useQuery, queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { VirtualList } from '../common/VirtualList';
 import { AuditEvent } from './types';

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { IntegrationsService } from './integrations.service';
 
@@ -13,6 +13,8 @@ export class IntegrationsController {
   @Get()
   @ApiOperation({ summary: 'Get all integrations' })
   @ApiResponse({ status: 200, description: 'Integrations retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll() {
     return this.integrationsService.findAll();
   }
@@ -21,6 +23,8 @@ export class IntegrationsController {
   @ApiOperation({ summary: 'Get integration by ID' })
   @ApiResponse({ status: 200, description: 'Integration retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id') id: string) {
     return this.integrationsService.findOne(id);
   }
@@ -28,6 +32,10 @@ export class IntegrationsController {
   @Post()
   @ApiOperation({ summary: 'Create a new integration' })
   @ApiResponse({ status: 201, description: 'Integration created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() integrationData: any) {
     // TODO: Extract userId from authenticated user (e.g., from request.user)
     const userId = 'temp-user-id'; // Placeholder until proper auth integration
@@ -38,6 +46,9 @@ export class IntegrationsController {
   @ApiOperation({ summary: 'Update an integration' })
   @ApiResponse({ status: 200, description: 'Integration updated successfully' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(@Param('id') id: string, @Body() updateData: any) {
     return this.integrationsService.update(id, updateData);
   }
@@ -46,6 +57,8 @@ export class IntegrationsController {
   @ApiOperation({ summary: 'Delete an integration' })
   @ApiResponse({ status: 200, description: 'Integration deleted successfully' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id') id: string) {
     return this.integrationsService.remove(id);
   }
@@ -54,6 +67,10 @@ export class IntegrationsController {
   @ApiOperation({ summary: 'Connect an integration' })
   @ApiResponse({ status: 200, description: 'Integration connected successfully' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async connect(
     @Param('id') id: string,
     @Body() credentials: { accessToken: string; refreshToken: string },
@@ -65,6 +82,10 @@ export class IntegrationsController {
   @ApiOperation({ summary: 'Disconnect an integration' })
   @ApiResponse({ status: 200, description: 'Integration disconnected successfully' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async disconnect(@Param('id') id: string) {
     return this.integrationsService.disconnect(id);
   }
@@ -74,6 +95,9 @@ export class IntegrationsController {
   @ApiResponse({ status: 200, description: 'Credentials refreshed successfully' })
   @ApiResponse({ status: 400, description: 'Integration must be active' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async refreshCredentials(@Param('id') id: string) {
     return this.integrationsService.refreshCredentials(id);
   }
@@ -83,6 +107,9 @@ export class IntegrationsController {
   @ApiResponse({ status: 200, description: 'Integration synced successfully' })
   @ApiResponse({ status: 400, description: 'Sync not enabled' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async sync(@Param('id') id: string) {
     return this.integrationsService.sync(id);
   }
@@ -91,6 +118,8 @@ export class IntegrationsController {
   @ApiOperation({ summary: 'Test integration connection' })
   @ApiResponse({ status: 200, description: 'Connection test result' })
   @ApiResponse({ status: 404, description: 'Integration not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async testConnection(@Param('id') id: string) {
     const integration = await this.integrationsService.findOne(id);
     return { status: integration.status, connected: integration.status === 'active' };

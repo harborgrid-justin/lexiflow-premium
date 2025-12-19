@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Version } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam , ApiResponse} from '@nestjs/swagger';
 import { BillingService } from './billing.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -9,7 +9,7 @@ import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('Billing')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller({ path: 'billing', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BillingController {
@@ -19,6 +19,8 @@ export class BillingController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get all invoices' })
   @ApiResponse({ status: 200, description: 'List of invoices' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getAllInvoices() {
     return this.billingService.findAllInvoices();
   }
@@ -29,6 +31,8 @@ export class BillingController {
   @ApiResponse({ status: 200, description: 'Invoice details' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
   @ApiParam({ name: 'id', description: 'Invoice ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getInvoice(@Param('id') id: string) {
     return this.billingService.findInvoiceById(id);
   }
@@ -37,6 +41,10 @@ export class BillingController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Create new invoice' })
   @ApiResponse({ status: 201, description: 'Invoice created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createInvoice(@Body() createDto: any) {
     return this.billingService.createInvoice(createDto);
   }
@@ -48,6 +56,8 @@ export class BillingController {
   @ApiResponse({ status: 404, description: 'Invoice not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Invoice ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateInvoice(@Param('id') id: string, @Body() updateDto: any) {
     return this.billingService.updateInvoice(id, updateDto);
   }
@@ -59,6 +69,7 @@ export class BillingController {
   @ApiResponse({ status: 404, description: 'Invoice not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Invoice ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async deleteInvoice(@Param('id') id: string) {
     return this.billingService.deleteInvoice(id);
   }
@@ -70,6 +81,9 @@ export class BillingController {
   @ApiResponse({ status: 404, description: 'Invoice not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Invoice ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async sendInvoice(@Param('id') id: string) {
     return this.billingService.sendInvoice(id);
   }
@@ -81,6 +95,9 @@ export class BillingController {
   @ApiResponse({ status: 404, description: 'Invoice not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Invoice ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async markPaid(@Param('id') id: string) {
     return this.billingService.markInvoicePaid(id);
   }
@@ -90,6 +107,7 @@ export class BillingController {
   @ApiOperation({ summary: 'Get all time entries' })
   @ApiResponse({ status: 200, description: 'List of time entries' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getAllTimeEntries() {
     return this.billingService.findAllTimeEntries();
   }
@@ -100,6 +118,7 @@ export class BillingController {
   @ApiResponse({ status: 200, description: 'List of time entries for case' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'caseId', description: 'Case ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTimeEntriesByCase(@Param('caseId') caseId: string) {
     return this.billingService.findTimeEntriesByCaseId(caseId);
   }
@@ -110,6 +129,8 @@ export class BillingController {
   @ApiResponse({ status: 201, description: 'Time entry created' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createTimeEntry(@Body() createDto: any) {
     return this.billingService.createTimeEntry(createDto);
   }
@@ -121,6 +142,8 @@ export class BillingController {
   @ApiResponse({ status: 404, description: 'Time entry not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Time entry ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateTimeEntry(@Param('id') id: string, @Body() updateDto: any) {
     return this.billingService.updateTimeEntry(id, updateDto);
   }
@@ -132,6 +155,7 @@ export class BillingController {
   @ApiResponse({ status: 404, description: 'Time entry not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Time entry ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async deleteTimeEntry(@Param('id') id: string) {
     return this.billingService.deleteTimeEntry(id);
   }
@@ -142,6 +166,7 @@ export class BillingController {
   @ApiResponse({ status: 200, description: 'List of unbilled time entries' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'caseId', description: 'Case ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUnbilledTimeEntries(@Param('caseId') caseId: string) {
     return this.billingService.getUnbilledTimeEntries(caseId);
   }
@@ -151,6 +176,7 @@ export class BillingController {
   @ApiOperation({ summary: 'Get all expenses' })
   @ApiResponse({ status: 200, description: 'List of expenses' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getAllExpenses() {
     return this.billingService.findAllExpenses();
   }
@@ -161,6 +187,8 @@ export class BillingController {
   @ApiResponse({ status: 201, description: 'Expense created' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createExpense(@Body() createDto: any) {
     return this.billingService.createExpense(createDto);
   }
@@ -171,6 +199,7 @@ export class BillingController {
   @ApiResponse({ status: 200, description: 'List of unbilled expenses' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'caseId', description: 'Case ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUnbilledExpenses(@Param('caseId') caseId: string) {
     return this.billingService.getUnbilledExpenses(caseId);
   }
@@ -181,6 +210,8 @@ export class BillingController {
   @ApiResponse({ status: 201, description: 'Invoice generated' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async generateInvoice(@Body() body: { caseId: string; clientId: string }) {
     return this.billingService.generateInvoice(body.caseId, body.clientId);
   }
@@ -191,6 +222,7 @@ export class BillingController {
   @ApiResponse({ status: 200, description: 'Billing summary' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'caseId', description: 'Case ID' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getBillingSummary(@Param('caseId') caseId: string) {
     return this.billingService.getBillingSummary(caseId);
   }
@@ -200,6 +232,7 @@ export class BillingController {
   @ApiOperation({ summary: 'Get WIP (Work In Progress) statistics' })
   @ApiResponse({ status: 200, description: 'WIP statistics by case' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getWIPStats() {
     return this.billingService.getWIPStats();
   }
@@ -209,6 +242,7 @@ export class BillingController {
   @ApiOperation({ summary: 'Get realization statistics (billed vs write-off)' })
   @ApiResponse({ status: 200, description: 'Realization statistics' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getRealizationStats() {
     return this.billingService.getRealizationStats();
   }
@@ -229,6 +263,7 @@ export class BillingController {
     }
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getOverviewStats() {
     return this.billingService.getOverviewStats();
   }

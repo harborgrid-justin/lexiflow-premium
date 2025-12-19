@@ -75,4 +75,58 @@ export class TrialApiService {
   async delete(id: string): Promise<void> {
     return apiClient.delete(`${this.baseUrl}/${id}`);
   }
+
+  // Trial Events Management
+  async getEvents(filters?: { caseId?: string; trialId?: string }): Promise<any[]> {
+    const params = new URLSearchParams();
+    if (filters?.caseId) params.append('caseId', filters.caseId);
+    if (filters?.trialId) params.append('trialId', filters.trialId);
+    const queryString = params.toString();
+    const url = queryString ? `${this.baseUrl}/events?${queryString}` : `${this.baseUrl}/events`;
+    return apiClient.get<any[]>(url);
+  }
+
+  async createEvent(data: {
+    trialId: string;
+    eventType: string;
+    scheduledAt: string;
+    duration?: number;
+    description?: string;
+  }): Promise<any> {
+    return apiClient.post<any>(`${this.baseUrl}/events`, data);
+  }
+
+  async updateEvent(id: string, data: Partial<{
+    eventType: string;
+    scheduledAt: string;
+    duration?: number;
+    description?: string;
+  }>): Promise<any> {
+    return apiClient.put<any>(`${this.baseUrl}/events/${id}`, data);
+  }
+
+  async deleteEvent(id: string): Promise<void> {
+    return apiClient.delete(`${this.baseUrl}/events/${id}`);
+  }
+
+  // Witness Preparation Management
+  async getWitnessPrep(filters?: { trialId?: string; witnessId?: string }): Promise<any[]> {
+    const params = new URLSearchParams();
+    if (filters?.trialId) params.append('trialId', filters.trialId);
+    if (filters?.witnessId) params.append('witnessId', filters.witnessId);
+    const queryString = params.toString();
+    const url = queryString ? `${this.baseUrl}/witness-prep?${queryString}` : `${this.baseUrl}/witness-prep`;
+    return apiClient.get<any[]>(url);
+  }
+
+  async createWitnessPrep(data: {
+    trialId: string;
+    witnessId: string;
+    prepDate: string;
+    duration?: number;
+    topics?: string[];
+    notes?: string;
+  }): Promise<any> {
+    return apiClient.post<any>(`${this.baseUrl}/witness-prep`, data);
+  }
 }

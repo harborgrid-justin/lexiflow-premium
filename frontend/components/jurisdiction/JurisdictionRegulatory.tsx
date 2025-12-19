@@ -19,7 +19,7 @@ export const JurisdictionRegulatory: React.FC = () => {
   // Defensive array validation
   const bodies = Array.isArray(rawBodies) ? rawBodies : [];
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="list" itemCount={8} shimmer />;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

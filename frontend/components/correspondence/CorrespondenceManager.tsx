@@ -24,6 +24,8 @@ import { correspondenceQueryKeys } from '../../services/infrastructure/queryKeys
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useToggle } from '../../hooks/useToggle';
+import { useModalState } from '../../hooks/useModalState';
 
 // Components
 import { PageHeader } from '../common/PageHeader';
@@ -58,11 +60,11 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'communications' | 'process'>('communications');
   const [selectedItem, setSelectedItem] = useState<CommunicationItem | ServiceJob | null>(null);
-  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
+  const inspectorToggle = useToggle();
   
-  const [isComposeOpen, setIsComposeOpen] = useState(false);
+  const composeModal = useModalState();
   const [composeInitialData, setComposeInitialData] = useState<Partial<CommunicationItem> | undefined>(undefined);
-  const [isServiceJobOpen, setIsServiceJobOpen] = useState(false);
+  const serviceJobModal = useModalState();
 
   // Enterprise Data Access with query key factory
   const { data: communications = [], isLoading: isLoadingComms } = useQuery<CommunicationItem[]>(
@@ -80,7 +82,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
       {
           invalidateKeys: [correspondenceQueryKeys.correspondence.lists()],
           onSuccess: () => {
-              setIsComposeOpen(false);
+              composeModal.close();
               setComposeInitialData(undefined);
           },
           retry: 2,
@@ -92,7 +94,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
       DataService.correspondence.addServiceJob,
       {
           invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()],
-          onSuccess: () => setIsServiceJobOpen(false),
+          onSuccess: () => serviceJobModal.close(),
           retry: 2,
           retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
       }
@@ -163,7 +165,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
           actions={
             <div className="flex gap-2">
               <Button variant="outline" icon={Filter}>Filter</Button>
-              <Button variant="primary" icon={Plus} onClick={() => { setComposeInitialData(undefined); activeTab === 'communications' ? setIsComposeOpen(true) : setIsServiceJobOpen(true); }}>
+              <Button variant="primary" icon={Plus} onClick={() => { setComposeInitialData(undefined); activeTab === 'communications' ? composeModal.open() : serviceJobModal.open(); }}>
                 {activeTab === 'communications' ? 'Compose' : 'New Service Job'}
               </Button>
             </div>
@@ -173,7 +175,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
         {/* Tab Navigation */}
         <div className={cn("flex space-x-2 border-b mb-4", theme.border.default)}>
             <button
-                onClick={() => { setActiveTab('communications'); setIsInspectorOpen(false); }}
+                onClick={() => { setActiveTab('communications'); inspectorToggle.close(); }}
                 className={cn(
                     "px-4 py-2 text-sm font-medium border-b-2 transition-colors flex items-center gap-2",
                     activeTab === 'communications' 
@@ -184,7 +186,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
                 <Mail className="h-4 w-4"/> Communications
             </button>
             <button
-                onClick={() => { setActiveTab('process'); setIsInspectorOpen(false); }}
+                onClick={() => { setActiveTab('process'); inspectorToggle.close(); }}
                 className={cn(
                     "px-4 py-2 text-sm font-medium border-b-2 transition-colors flex items-center gap-2",
                     activeTab === 'process' 

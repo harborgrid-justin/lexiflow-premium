@@ -19,7 +19,7 @@ import { useQuery } from '../../services/infrastructure/queryClient';
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 import { 

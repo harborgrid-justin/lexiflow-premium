@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { CaseAnalyticsService } from './case-analytics.service';
 import {
   CaseMetricsQueryDto,
@@ -17,7 +17,7 @@ import {
 } from './dto/case-analytics.dto';
 
 @ApiTags('Analytics - Cases')
-@Public() // Allow public access for development
+
 @Controller('analytics')
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
@@ -31,6 +31,8 @@ export class CaseAnalyticsController {
     description: 'Case metrics retrieved successfully',
     type: CaseMetricsDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCaseMetrics(@Query() query: CaseMetricsQueryDto): Promise<CaseMetricsDto> {
     return this.caseAnalyticsService.getCaseMetrics(query);
   }
@@ -43,6 +45,8 @@ export class CaseAnalyticsController {
     description: 'Case-specific metrics retrieved successfully',
     type: CaseSpecificMetricsDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCaseSpecificMetrics(
     @Param('caseId') caseId: string,
   ): Promise<CaseSpecificMetricsDto> {
@@ -56,6 +60,8 @@ export class CaseAnalyticsController {
     description: 'Case trends retrieved successfully',
     type: [CaseTrendDataPoint],
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCaseTrends(
     @Query() query: CaseMetricsQueryDto,
   ): Promise<CaseTrendDataPoint[]> {
@@ -69,6 +75,8 @@ export class CaseAnalyticsController {
     description: 'Practice area breakdown retrieved successfully',
     type: [PracticeAreaBreakdownDto],
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getPracticeAreaBreakdown(
     @Query() query: CaseMetricsQueryDto,
   ): Promise<PracticeAreaBreakdownDto[]> {

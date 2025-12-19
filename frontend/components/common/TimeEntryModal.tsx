@@ -29,6 +29,7 @@ import { Input, TextArea } from './Inputs';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
+import { getTodayString } from '../../utils/dateUtils';
 
 // Types
 import { TimeEntryPayload, CaseId } from '../../types';

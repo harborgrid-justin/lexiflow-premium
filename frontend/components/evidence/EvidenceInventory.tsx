@@ -20,6 +20,7 @@ import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TaskCreationModal } from '../common/TaskCreationModal';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { EvidenceTypeIcon } from '../common/EvidenceTypeIcon';
 import { FilterPanel } from '../common/FilterPanel';
 import { VirtualList } from '../common/VirtualList';
@@ -27,6 +28,7 @@ import { VirtualList } from '../common/VirtualList';
 // Context & Utils
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useToggle } from '../../hooks/useToggle';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { EvidenceFilters } from '../../hooks/useEvidenceVault';
@@ -48,7 +50,7 @@ const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
   items, filteredItems: propFiltered, filters, setFilters, onItemClick, onIntakeClick 
 }) => {
   const { theme } = useTheme();
-  const [showFilters, setShowFilters] = useState(false);
+  const filtersToggle = useToggle();
   const [taskModalEvidence, setTaskModalEvidence] = useState<EvidenceItem | null>(null);
   
   // Use worker search for text based filtering, combining with other filters locally
@@ -141,7 +143,7 @@ const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
     {
       key: 'f',
       ctrlOrCmd: true,
-      action: () => setShowFilters(prev => !prev),
+      action: () => filtersToggle.toggle(),
       description: 'Toggle filters'
     }
   ]);
@@ -165,14 +167,14 @@ const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
           <p className={cn("mt-1 text-sm", theme.text.secondary)}>Master Chain of Custody & Asset Tracking</p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-            <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)} className="w-full md:w-auto justify-center">
-                {showFilters ? 'Hide Filters' : 'Filters'}
+            <Button variant="secondary" icon={Filter} onClick={filtersToggle.toggle} className="w-full md:w-auto justify-center">
+                {filtersToggle.isOpen ? 'Hide Filters' : 'Filters'}
             </Button>
             <Button variant="primary" icon={Plus} onClick={onIntakeClick} className="w-full md:w-auto justify-center">Log New Item</Button>
         </div>
       </div>
 
-      <FilterPanel isOpen={showFilters} onClose={() => setShowFilters(false)} onClear={clearFilters}>
+      <FilterPanel isOpen={filtersToggle.isOpen} onClose={filtersToggle.close} onClear={clearFilters}>
           <div className="relative">
              <input className={cn("p-2 border rounded text-sm w-full outline-none", theme.border.default, theme.surface.default)} placeholder="Search..." value={filters.search} onChange={e => handleFilterChange('search', e.target.value)} />
              {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}

@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../common/base/base.entity';
 import { Client } from '../../clients/entities/client.entity';
 import { EvidenceItem } from '../../evidence/entities/evidence-item.entity';
@@ -36,6 +36,13 @@ export enum CaseStatus {
 }
 
 @Entity('cases')
+@Index(['status'])
+@Index(['practiceArea'])
+@Index(['jurisdiction'])
+@Index(['assignedTeamId'])
+@Index(['leadAttorneyId'])
+@Index(['clientId'])
+@Index(['isArchived'])
 export class Case extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   title: string;

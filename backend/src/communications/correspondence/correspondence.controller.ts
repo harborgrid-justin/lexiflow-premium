@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { CorrespondenceService } from './correspondence.service';
 import {
   CreateCorrespondenceDto,
@@ -34,7 +34,7 @@ import {
  * @class CorrespondenceController
  */
 @ApiTags('Correspondence')
-@Public() // Allow public access for development
+
 @Controller('communications')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
@@ -48,6 +48,8 @@ export class CorrespondenceController {
   @Get()
   @ApiOperation({ summary: 'List all correspondence' })
   @ApiResponse({ status: 200, description: 'Returns paginated correspondence' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCorrespondence(@Query() query: CorrespondenceQueryDto, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.findAll(query, userId);
@@ -62,6 +64,8 @@ export class CorrespondenceController {
   @ApiResponse({ status: 200, description: 'Returns correspondence details' })
   @ApiResponse({ status: 404, description: 'Correspondence not found' })
   @ApiParam({ name: 'id', description: 'Correspondence ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCorrespondenceById(@Param('id') id: string, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.findById(id, userId);
@@ -75,6 +79,9 @@ export class CorrespondenceController {
   @ApiOperation({ summary: 'Create new correspondence' })
   @ApiResponse({ status: 201, description: 'Correspondence created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createCorrespondence(@Body() createDto: CreateCorrespondenceDto) {
     return this.correspondenceService.create(createDto);
   }
@@ -88,6 +95,9 @@ export class CorrespondenceController {
   @ApiResponse({ status: 200, description: 'Correspondence updated successfully' })
   @ApiResponse({ status: 404, description: 'Correspondence not found' })
   @ApiParam({ name: 'id', description: 'Correspondence ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateCorrespondence(
     @Param('id') id: string,
     @Body() updateDto: UpdateCorrespondenceDto,
@@ -106,6 +116,8 @@ export class CorrespondenceController {
   @ApiResponse({ status: 200, description: 'Correspondence deleted' })
   @ApiResponse({ status: 404, description: 'Correspondence not found' })
   @ApiParam({ name: 'id', description: 'Correspondence ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async deleteCorrespondence(@Param('id') id: string, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.delete(id, userId);
@@ -120,6 +132,10 @@ export class CorrespondenceController {
   @ApiResponse({ status: 200, description: 'Correspondence sent successfully' })
   @ApiResponse({ status: 404, description: 'Correspondence not found' })
   @ApiParam({ name: 'id', description: 'Correspondence ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async sendCorrespondence(@Param('id') id: string, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.send(id, userId);

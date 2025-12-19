@@ -7,7 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
 import { LazyLoader } from '../common/LazyLoader';
@@ -15,6 +15,8 @@ import { ViewMode, PleadingDesignerProps } from './types';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useHistory } from '../../hooks/useHistory';
 import { VersionConflictError } from '../../services/data/repositories/PleadingRepository';
+import { useSingleSelection } from '../../hooks/useMultiSelection';
+import { ErrorState } from '../common/ErrorState';
 
 // Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));
@@ -29,17 +31,17 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   const notify = useNotify();
 
   const [document, setDocument] = useState<PleadingDocument>(initialDoc);
-  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
+  const sectionSelection = useSingleSelection<PleadingSection>(null, (a, b) => a.id === b.id);
   const [viewMode, setViewMode] = useState<ViewMode>('write');
   const [saveError, setSaveError] = useState<string | null>(null);
   
   // Data Fetching
-  const { data: formattingRules, isLoading: rulesLoading } = useQuery<FormattingRule>(
+  const { data: formattingRules, isLoading: rulesLoading, error: rulesError, refetch: refetchRules } = useQuery<FormattingRule>(
     ['format_rules', document.jurisdictionRulesId],
     () => DataService.pleadings.getFormattingRules()
   );
   
-  const { data: caseData, isLoading: caseLoading } = useQuery<Case | undefined>(
+  const { data: caseData, isLoading: caseLoading, error: caseError, refetch: refetchCase } = useQuery<Case | undefined>(
       [STORES.CASES, document.caseId],
       () => DataService.cases.getById(document.caseId)
   );
@@ -93,13 +95,15 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   }, [history, document.sections]);
 
   const handleInsertText = (text: string) => {
-      if (selectedSectionId) {
-          const section = document.sections.find(s => s.id === selectedSectionId);
-          if (section) handleUpdateSection(selectedSectionId, { content: section.content + '\n\n' + text });
+      if (sectionSelection.selected) {
+          const section = document.sections.find(s => s.id === sectionSelection.selected?.id);
+          if (section) handleUpdateSection(sectionSelection.selected.id, { content: section.content + '\n\n' + text });
       }
   };
 
   if (rulesLoading || caseLoading) return <LazyLoader message="Loading Designer Environment..."/>;
+  if (rulesError) return <ErrorState message="Failed to load formatting rules" onRetry={refetchRules} />;
+  if (caseError) return <ErrorState message="Failed to load case data" onRetry={refetchCase} />;
   if (!formattingRules) return <LazyLoader message="Loading formatting rules..."/>;
 
   return (

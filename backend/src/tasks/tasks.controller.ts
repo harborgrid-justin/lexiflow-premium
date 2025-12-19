@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto, TaskStatus, TaskPriority } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -9,7 +9,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('Tasks')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Public() // Allow public access for development
+
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
@@ -23,6 +23,8 @@ export class TasksController {
   @ApiQuery({ name: 'search', required: false })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query() query: any) {
     return await this.tasksService.findAll(query);
   }
@@ -30,6 +32,8 @@ export class TasksController {
   @Get('stats')
   @ApiOperation({ summary: 'Get task statistics' })
   @ApiQuery({ name: 'caseId', required: false })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getStats(@Query('caseId') caseId?: string) {
     return await this.tasksService.getTaskStats(caseId);
   }
@@ -38,6 +42,8 @@ export class TasksController {
   @ApiOperation({ summary: 'Get task by ID' })
   @ApiResponse({ status: 200, description: 'Task found' })
   @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id') id: string) {
     return await this.tasksService.findOne(id);
   }
@@ -47,6 +53,9 @@ export class TasksController {
   @ApiOperation({ summary: 'Create a new task' })
   @ApiResponse({ status: 201, description: 'Task created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createDto: CreateTaskDto, @Req() req: any) {
     const userId = req.user?.id || 'system';
     return await this.tasksService.create(createDto, userId);
@@ -55,6 +64,10 @@ export class TasksController {
   @Post('bulk-update')
   @ApiOperation({ summary: 'Bulk update tasks' })
   @ApiResponse({ status: 200, description: 'Tasks updated successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async bulkUpdate(@Body() body: { updates: Array<{ id: string; updates: UpdateTaskDto }> }) {
     return await this.tasksService.bulkUpdate(body.updates);
   }
@@ -63,6 +76,9 @@ export class TasksController {
   @ApiOperation({ summary: 'Update task' })
   @ApiResponse({ status: 200, description: 'Task updated successfully' })
   @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(@Param('id') id: string, @Body() updateDto: UpdateTaskDto) {
     return await this.tasksService.update(id, updateDto);
   }
@@ -72,6 +88,8 @@ export class TasksController {
   @ApiOperation({ summary: 'Delete task' })
   @ApiResponse({ status: 204, description: 'Task deleted successfully' })
   @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id') id: string) {
     await this.tasksService.remove(id);
   }

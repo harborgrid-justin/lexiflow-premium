@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -20,6 +21,8 @@ import { TokenStorageService } from './token-storage.service';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -92,7 +95,7 @@ export class AuthService {
     );
 
     // Log authentication event (in production, use proper audit logging)
-    console.log(
+    this.logger.log(
       `[AUTH] User ${user.email} logged in at ${new Date().toISOString()}`,
     );
 
@@ -159,11 +162,11 @@ export class AuthService {
     if (jti && exp) {
       const expiresAt = new Date(exp * 1000); // Convert seconds to milliseconds
       await this.tokenBlacklistService.blacklistToken(jti, expiresAt);
-      console.log(`[AUTH] Blacklisted token ${jti} for user ${userId}`);
+      this.logger.log(`[AUTH] Blacklisted token ${jti} for user ${userId}`);
     }
 
     // Log logout event
-    console.log(`[AUTH] User ${userId} logged out at ${new Date().toISOString()}`);
+    this.logger.log(`[AUTH] User ${userId} logged out at ${new Date().toISOString()}`);
 
     return { message: 'Logged out successfully' };
   }
@@ -199,7 +202,7 @@ export class AuthService {
     await this.tokenBlacklistService.blacklistUserTokens(userId);
 
     // Log password change event
-    console.log(
+    this.logger.log(
       `[AUTH] User ${userId} changed password at ${new Date().toISOString()}`,
     );
 
@@ -242,7 +245,7 @@ export class AuthService {
     );
 
     // In production, send email with reset link
-    console.log(
+    this.logger.log(
       `[AUTH] Password reset requested for ${email}. Token: ${resetToken}`,
     );
 
@@ -270,7 +273,7 @@ export class AuthService {
     await this.tokenBlacklistService.blacklistUserTokens(resetData.userId);
 
     // Log password reset event
-    console.log(
+    this.logger.log(
       `[AUTH] User ${resetData.userId} reset password at ${new Date().toISOString()}`,
     );
 
@@ -417,7 +420,7 @@ export class AuthService {
     await this.tokenStorage.deleteMfaToken(mfaToken);
 
     // Log MFA verification event
-    console.log(
+    this.logger.log(
       `[AUTH] User ${user.id} verified MFA at ${new Date().toISOString()}`,
     );
 
@@ -431,13 +434,13 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<AuthenticatedUser | null> {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmailWithPassword(email);
 
     if (!user) {
       return null;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
     if (!isPasswordValid) {
       return null;
@@ -546,7 +549,7 @@ export class AuthService {
 
       return isValid;
     } catch (error) {
-      console.error('[AUTH] TOTP verification error:', error);
+      this.logger.error('[AUTH] TOTP verification error:', error);
       return false;
     }
   }

@@ -6,6 +6,7 @@ import {
   Index,
   CreateDateColumn,
   UpdateDateColumn,
+  VersionColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/base/base.entity';
 import { User } from '../../../users/entities/user.entity';

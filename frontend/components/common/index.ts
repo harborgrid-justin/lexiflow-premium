@@ -61,3 +61,10 @@ export * from './UserAvatar';
 export * from './UserSelect';
 export * from './VirtualGrid';
 export * from './VirtualList';
+
+// New UI Primitives (2025)
+export * from './StatusIndicator';
+export * from './ProgressBarWithLabel';
+export * from './IconButton';
+export * from './LoadingState';
+export * from './ErrorState';

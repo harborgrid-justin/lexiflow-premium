@@ -16,6 +16,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Search, Clock, X, Command, TrendingUp, Hash, Calendar, Tag } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import { cn } from '../../utils/cn';
 import { sanitizeHtml } from '../../utils/sanitize';
 import { SEARCH_DEBOUNCE_MS } from '../../config/master.config';
@@ -196,6 +197,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load recent searches
@@ -347,24 +349,10 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   }, []);
 
   // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current && 
-        !dropdownRef.current.contains(e.target as Node) &&
-        inputRef.current && 
-        !inputRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(containerRef, () => setIsOpen(false));
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div ref={containerRef} className={cn("relative w-full", className)}>
       {/* Search Input */}
       <div className={cn(
         "relative flex items-center gap-2 px-3 py-2 rounded-lg border transition-all",

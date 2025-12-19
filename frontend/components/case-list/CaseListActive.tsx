@@ -38,7 +38,7 @@ import { useMutation, queryClient } from '../../services/infrastructure/queryCli
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // ============================================================================
 // TYPES & INTERFACES

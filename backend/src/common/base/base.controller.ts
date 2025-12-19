@@ -11,7 +11,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { BaseService } from './base.service';
 import { BaseRepository } from './base.repository';
@@ -32,6 +32,8 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all resources' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query() query: QueryPaginationDto) {
     const result = await this.service.findWithPagination(
       query.page,
@@ -49,6 +51,9 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get resource by ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async findOne(@Param('id') id: string) {
     const data = await this.service.findById(id);
 
@@ -64,6 +69,10 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new resource' })
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createDto: any) {
     const data = await this.service.create(createDto);
 
@@ -78,6 +87,10 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update resource' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(@Param('id') id: string, @Body() updateDto: any) {
     const data = await this.service.update(id, updateDto);
 
@@ -93,6 +106,9 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete resource' })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async delete(@Param('id') id: string) {
     await this.service.delete(id);
 

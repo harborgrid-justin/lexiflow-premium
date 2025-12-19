@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { WarRoomService } from './war-room.service';
 import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-room.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -8,13 +8,15 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @ApiTags('War Room')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Public() // Allow public access for development
+
 @Controller('war-room')
 export class WarRoomController {
   constructor(private readonly warRoomService: WarRoomService) {}
   @Get('advisors')
   @ApiOperation({ summary: 'Get advisors' })
   @ApiResponse({ status: 200, description: 'Advisors retrieved' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getAdvisors(@Query() query: any) {
     return await this.warRoomService.findAllAdvisors(query);
   }
@@ -22,6 +24,9 @@ export class WarRoomController {
   @Get('advisors/:id')
   @ApiOperation({ summary: 'Get advisor by ID' })
   @ApiResponse({ status: 200, description: 'Advisor found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getAdvisor(@Param('id') id: string) {
     return await this.warRoomService.findOneAdvisor(id);
   }
@@ -30,6 +35,10 @@ export class WarRoomController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create advisor' })
   @ApiResponse({ status: 201, description: 'Advisor created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createAdvisor(@Body() createDto: CreateAdvisorDto) {
     return await this.warRoomService.createAdvisor(createDto);
   }
@@ -38,6 +47,9 @@ export class WarRoomController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete advisor' })
   @ApiResponse({ status: 204, description: 'Advisor deleted' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async deleteAdvisor(@Param('id') id: string) {
     await this.warRoomService.removeAdvisor(id);
   }
@@ -45,6 +57,8 @@ export class WarRoomController {
   @Get('experts')
   @ApiOperation({ summary: 'Get expert witnesses' })
   @ApiResponse({ status: 200, description: 'Experts retrieved' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getExperts(@Query() query: any) {
     return await this.warRoomService.findAllExperts(query);
   }
@@ -52,6 +66,9 @@ export class WarRoomController {
   @Get('experts/:id')
   @ApiOperation({ summary: 'Get expert by ID' })
   @ApiResponse({ status: 200, description: 'Expert found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getExpert(@Param('id') id: string) {
     return await this.warRoomService.findOneExpert(id);
   }
@@ -60,6 +77,10 @@ export class WarRoomController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create expert' })
   @ApiResponse({ status: 201, description: 'Expert created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createExpert(@Body() createDto: CreateExpertDto) {
     return await this.warRoomService.createExpert(createDto);
   }
@@ -68,6 +89,9 @@ export class WarRoomController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete expert' })
   @ApiResponse({ status: 204, description: 'Expert deleted' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async deleteExpert(@Param('id') id: string) {
     await this.warRoomService.removeExpert(id);
   }
@@ -75,6 +99,8 @@ export class WarRoomController {
   @Get(':caseId')
   @ApiOperation({ summary: 'Get war room data for case' })
   @ApiResponse({ status: 200, description: 'War room data retrieved' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getWarRoomData(@Param('caseId') caseId: string) {
     return await this.warRoomService.getWarRoomData(caseId);
   }
@@ -82,6 +108,8 @@ export class WarRoomController {
   @Get(':caseId/strategy')
   @ApiOperation({ summary: 'Get case strategy' })
   @ApiResponse({ status: 200, description: 'Strategy retrieved' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getStrategy(@Param('caseId') caseId: string) {
     return await this.warRoomService.getStrategy(caseId);
   }
@@ -89,6 +117,9 @@ export class WarRoomController {
   @Put(':caseId/strategy')
   @ApiOperation({ summary: 'Update case strategy' })
   @ApiResponse({ status: 200, description: 'Strategy updated' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateStrategy(@Param('caseId') caseId: string, @Body() updateDto: UpdateStrategyDto) {
     return await this.warRoomService.updateStrategy(caseId, updateDto);
   }

@@ -5,12 +5,13 @@ import { Case } from '../types';
 import { useQuery } from '../services/infrastructure/queryClient';
 import { STORES } from '../services/data/db';
 import { useDebounce } from './useDebounce';
+import { useModalState } from './useModalState';
 import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
 
 export type UseCaseListReturn = ReturnType<typeof useCaseList>;
 
 export const useCaseList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modal = useModalState();
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [typeFilter, setTypeFilter] = useState<string>('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -59,8 +60,9 @@ export const useCaseList = () => {
   };
 
   return {
-    isModalOpen,
-    setIsModalOpen,
+    isModalOpen: modal.isOpen,
+    openModal: modal.open,
+    closeModal: modal.close,
     statusFilter,
     setStatusFilter,
     typeFilter,

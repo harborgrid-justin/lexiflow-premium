@@ -20,7 +20,7 @@ import {
   ApiResponse, 
   ApiParam,
   ApiQuery,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { KnowledgeService } from './knowledge.service';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto, QueryKnowledgeDto } from './dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -38,15 +38,17 @@ export class KnowledgeController {
 
   // Health check endpoint
   @Get()
-  @Public()
+  
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async health() {
     return { status: 'ok', service: 'knowledge' };
   }
 
   @Get('articles')
-  @Public()
+  
   @ApiOperation({ summary: 'Get all knowledge articles' })
   @ApiResponse({ status: 200, description: 'Returns list of articles' })
   @ApiQuery({ name: 'category', required: false })
@@ -54,59 +56,73 @@ export class KnowledgeController {
   @ApiQuery({ name: 'search', required: false })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getArticles(@Query() query: QueryKnowledgeDto) {
     return this.knowledgeService.findAll(query);
   }
 
   @Get('articles/popular')
-  @Public()
+  
   @ApiOperation({ summary: 'Get popular articles' })
   @ApiResponse({ status: 200, description: 'Returns popular articles' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getPopular(@Query('limit') limit?: number) {
     return this.knowledgeService.getPopular(limit);
   }
 
   @Get('articles/recent')
-  @Public()
+  
   @ApiOperation({ summary: 'Get recent articles' })
   @ApiResponse({ status: 200, description: 'Returns recent articles' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getRecent(@Query('limit') limit?: number) {
     return this.knowledgeService.getRecent(limit);
   }
 
   @Get('articles/:id')
-  @Public()
+  
   @ApiOperation({ summary: 'Get article by ID' })
   @ApiResponse({ status: 200, description: 'Returns the article' })
   @ApiResponse({ status: 404, description: 'Article not found' })
   @ApiParam({ name: 'id', description: 'Article UUID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getArticle(@Param('id') id: string) {
     return this.knowledgeService.findOne(id);
   }
 
   @Get('search')
-  @Public()
+  
   @ApiOperation({ summary: 'Search knowledge base' })
   @ApiResponse({ status: 200, description: 'Returns search results' })
   @ApiQuery({ name: 'q', description: 'Search query' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async search(@Query('q') query: string) {
     return this.knowledgeService.search(query);
   }
 
   @Get('categories')
-  @Public()
+  
   @ApiOperation({ summary: 'Get all categories' })
   @ApiResponse({ status: 200, description: 'Returns list of categories' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCategories() {
     return this.knowledgeService.getCategories();
   }
 
   @Get('tags')
-  @Public()
+  
   @ApiOperation({ summary: 'Get all tags' })
   @ApiResponse({ status: 200, description: 'Returns list of tags' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTags() {
     return this.knowledgeService.getAllTags();
   }
@@ -119,6 +135,8 @@ export class KnowledgeController {
   @ApiResponse({ status: 201, description: 'Article created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createArticle(
     @Body() createDto: CreateKnowledgeArticleDto,
     @CurrentUser('id') userId: string,
@@ -135,6 +153,8 @@ export class KnowledgeController {
   @ApiResponse({ status: 404, description: 'Article not found' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiParam({ name: 'id', description: 'Article UUID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateArticle(
     @Param('id') id: string,
     @Body() updateDto: UpdateKnowledgeArticleDto,
@@ -150,6 +170,7 @@ export class KnowledgeController {
   @ApiResponse({ status: 404, description: 'Article not found' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiParam({ name: 'id', description: 'Article UUID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async deleteArticle(@Param('id') id: string) {
     await this.knowledgeService.remove(id);
   }

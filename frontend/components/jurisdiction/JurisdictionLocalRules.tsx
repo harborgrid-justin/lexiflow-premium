@@ -10,15 +10,16 @@ import { LegalRule } from '../../types';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useModalState } from '../../hooks';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { filterRules } from './utils';
 
 export const JurisdictionLocalRules: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const ruleModal = useModalState();
   const [editingRule, setEditingRule] = useState<Partial<LegalRule>>({});
 
   // Enterprise Data Access
@@ -44,7 +45,7 @@ export const JurisdictionLocalRules: React.FC = () => {
     {
         invalidateKeys: [[STORES.RULES, 'all']],
         onSuccess: () => {
-            setIsModalOpen(false);
+            ruleModal.close();
             setEditingRule({});
         }
     }

@@ -11,7 +11,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
 import { UpdatePleadingDto } from './dto/update-pleading.dto';
@@ -21,7 +21,7 @@ import { PleadingStatus } from './entities/pleading.entity';
 
 @ApiTags('Pleadings')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('pleadings')
 export class PleadingsController {
   constructor(private readonly pleadingsService: PleadingsService) {}
@@ -29,6 +29,10 @@ export class PleadingsController {
   @Post()
   @ApiOperation({ summary: 'Create a new pleading' })
   @ApiResponse({ status: 201, description: 'Pleading created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createPleadingDto: CreatePleadingDto) {
     return await this.pleadingsService.create(createPleadingDto);
   }
@@ -38,6 +42,8 @@ export class PleadingsController {
   @ApiQuery({ name: 'caseId', required: false, type: String })
   @ApiQuery({ name: 'status', required: false, enum: PleadingStatus })
   @ApiResponse({ status: 200, description: 'Pleadings retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
     @Query('caseId') caseId?: string,
     @Query('status') status?: PleadingStatus,
@@ -48,6 +54,8 @@ export class PleadingsController {
   @Get('templates')
   @ApiOperation({ summary: 'Get all pleading templates' })
   @ApiResponse({ status: 200, description: 'Templates retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTemplates() {
     return await this.pleadingsService.getTemplates();
   }
@@ -56,6 +64,8 @@ export class PleadingsController {
   @ApiOperation({ summary: 'Get upcoming hearings' })
   @ApiQuery({ name: 'daysAhead', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Upcoming hearings retrieved' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUpcomingHearings(@Query('daysAhead', ParseIntPipe) daysAhead?: number) {
     return await this.pleadingsService.getUpcomingHearings(daysAhead || 30);
   }
@@ -64,6 +74,10 @@ export class PleadingsController {
   @ApiOperation({ summary: 'Create pleading from template' })
   @ApiResponse({ status: 201, description: 'Pleading created from template' })
   @ApiResponse({ status: 404, description: 'Template not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createFromTemplate(@Body() createFromTemplateDto: CreateFromTemplateDto) {
     return await this.pleadingsService.createFromTemplate(createFromTemplateDto);
   }
@@ -72,6 +86,8 @@ export class PleadingsController {
   @ApiOperation({ summary: 'Get a pleading by ID' })
   @ApiResponse({ status: 200, description: 'Pleading found' })
   @ApiResponse({ status: 404, description: 'Pleading not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return await this.pleadingsService.findOne(id);
   }
@@ -80,6 +96,9 @@ export class PleadingsController {
   @ApiOperation({ summary: 'Update a pleading' })
   @ApiResponse({ status: 200, description: 'Pleading updated successfully' })
   @ApiResponse({ status: 404, description: 'Pleading not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePleadingDto: UpdatePleadingDto,
@@ -91,6 +110,8 @@ export class PleadingsController {
   @ApiOperation({ summary: 'Delete a pleading' })
   @ApiResponse({ status: 200, description: 'Pleading deleted successfully' })
   @ApiResponse({ status: 404, description: 'Pleading not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.pleadingsService.remove(id);
     return { message: 'Pleading deleted successfully' };
@@ -100,6 +121,10 @@ export class PleadingsController {
   @ApiOperation({ summary: 'File a pleading' })
   @ApiResponse({ status: 200, description: 'Pleading filed successfully' })
   @ApiResponse({ status: 404, description: 'Pleading not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async file(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() filePleadingDto: FilePleadingDto,

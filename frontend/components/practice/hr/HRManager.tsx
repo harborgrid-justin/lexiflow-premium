@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { UserAvatar } from '../../common/UserAvatar';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
+import { ConfirmDialog } from '../../common/ConfirmDialog';
 import { MetricCard } from '../../common/Primitives';
 import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2 } from 'lucide-react';
 import { StaffMember, UserId } from '../../../types';
@@ -13,10 +14,14 @@ import { AddStaffModal } from './AddStaffModal';
 import { useMutation, queryClient } from '../../../services/infrastructure/queryClient';
 import { STORES } from '../../../services/data/db';
 import { useStaff } from '../../../hooks/useDomainData';
+import { useModalState } from '../../../hooks';
+import { getTodayString } from '../../../utils/dateUtils';
 
 export const HRManager: React.FC = () => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const addStaffModal = useModalState();
+  const deleteModal = useModalState();
+  const [staffToDelete, setStaffToDelete] = React.useState<string | null>(null);
 
   // Enterprise Data Access
   const { data: rawStaffList = [], isLoading } = useStaff();
@@ -28,7 +33,7 @@ export const HRManager: React.FC = () => {
       DataService.hr.addStaff,
       { 
           invalidateKeys: [[STORES.STAFF, 'all'], [STORES.USERS, 'all']], // Invalidate both staff and users
-          onSuccess: () => setIsModalOpen(false)
+          onSuccess: () => addStaffModal.close()
       }
   );
 
@@ -50,14 +55,20 @@ export const HRManager: React.FC = () => {
           utilizationRate: 0,
           salary: Number(newStaff.salary) || 150000,
           status: 'Active',
-          startDate: new Date().toISOString().split('T')[0]
+          startDate: getTodayString()
       };
       addStaff(staff);
   };
 
   const handleDelete = (id: string) => {
-      if (confirm('Are you sure you want to remove this staff member?')) {
-          deleteStaff(id);
+      setStaffToDelete(id);
+      deleteModal.open();
+  };
+  
+  const confirmDeleteStaff = () => {
+      if (staffToDelete) {
+          deleteStaff(staffToDelete);
+          setStaffToDelete(null);
       }
   };
 
@@ -70,7 +81,7 @@ export const HRManager: React.FC = () => {
           <h3 className={cn("font-bold text-lg", theme.text.primary)}>Staff Directory</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage attorney profiles, utilization targets, and performance.</p>
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Staff</Button>
+        <Button variant="primary" icon={Plus} onClick={addStaffModal.open}>Add Staff</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -159,9 +170,19 @@ export const HRManager: React.FC = () => {
         </TableBody>
       </TableContainer>
 
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={confirmDeleteStaff}
+        title="Remove Staff Member"
+        message="Are you sure you want to remove this staff member? This will affect HR records and billing."
+        variant="danger"
+        confirmText="Remove Staff"
+      />
+
       <AddStaffModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        isOpen={addStaffModal.isOpen} 
+        onClose={addStaffModal.close} 
         onAdd={handleAddStaff} 
       />
     </div>

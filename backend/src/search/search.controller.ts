@@ -15,7 +15,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiQuery,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { SearchService } from './search.service';
 import {
   SearchQueryDto,
@@ -33,7 +33,7 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 
 @ApiTags('Search')
-@Public() // Allow public access for development
+
 @Controller('search')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -58,6 +58,7 @@ export class SearchController {
   @ApiQuery({ name: 'entityType', required: false, enum: SearchEntityType })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async search(@Query() queryDto?: SearchQueryDto): Promise<SearchResultDto> {
     if (!queryDto?.query) {
       return {
@@ -81,6 +82,7 @@ export class SearchController {
     type: SearchResultDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async searchCases(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
     queryDto.entityType = SearchEntityType.CASE;
     return this.searchService.search(queryDto);
@@ -94,6 +96,7 @@ export class SearchController {
     type: SearchResultDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async searchDocuments(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
     queryDto.entityType = SearchEntityType.DOCUMENT;
     return this.searchService.search(queryDto);
@@ -107,6 +110,7 @@ export class SearchController {
     type: SearchResultDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async searchClients(@Query() queryDto: SearchQueryDto): Promise<SearchResultDto> {
     queryDto.entityType = SearchEntityType.CLIENT;
     return this.searchService.search(queryDto);
@@ -120,6 +124,7 @@ export class SearchController {
     type: SearchSuggestionsResultDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getSuggestions(
     @Query() dto: SearchSuggestionsDto,
   ): Promise<SearchSuggestionsResultDto> {
@@ -138,6 +143,8 @@ export class SearchController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async reindex(@Query() dto: ReindexDto): Promise<ReindexResultDto> {
     return this.searchService.reindex(dto);
   }

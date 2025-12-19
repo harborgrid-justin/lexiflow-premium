@@ -15,17 +15,19 @@ import { FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useBlobRegistry } from '../../../hooks/useBlobRegistry';
+import { useSingleSelection } from '../../../hooks/useMultiSelection';
+import { ErrorState } from '../../common/ErrorState';
 
 export const PDFEditorView: React.FC = () => {
     const { theme } = useTheme();
-    const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
+    const documentSelection = useSingleSelection<LegalDocument>(null, (a, b) => a.id === b.id);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     // Registry hook for managing blob lifecycle
     const { register } = useBlobRegistry();
     
     // Load documents from IndexedDB via useQuery for accurate, cached data
-    const { data: allDocs = [], isLoading } = useQuery(
+    const { data: allDocs = [], isLoading, error, refetch } = useQuery(
         queryKeys.documents.all(),
         () => DataService.documents.getAll()
     );
@@ -47,16 +49,16 @@ export const PDFEditorView: React.FC = () => {
 
     // Select first PDF document when documents load
     useEffect(() => {
-        if (documents.length > 0 && !selectedDoc) {
-            setSelectedDoc(documents[0]);
+        if (documents.length > 0 && !documentSelection.selected) {
+            documentSelection.select(documents[0]);
         }
-    }, [documents, selectedDoc]);
+    }, [documents, documentSelection.selected]);
 
     useEffect(() => {
         let isMounted = true;
-        if (selectedDoc) {
+        if (documentSelection.selected) {
             const loadUrl = async () => {
-                const blob = await DataService.documents.getFile(selectedDoc.id);
+                const blob = await DataService.documents.getFile(documentSelection.selected.id);
                 if (isMounted && blob) {
                     const url = register(blob);
                     setPreviewUrl(url);
@@ -69,7 +71,7 @@ export const PDFEditorView: React.FC = () => {
              setPreviewUrl(null);
         }
         return () => { isMounted = false; };
-    }, [selectedDoc, register]);
+    }, [documentSelection.selected, register]);
     
     const handleFieldClick = (field: any) => {
         if (field.type === 'signature' || field.type === 'initials') {
@@ -86,6 +88,10 @@ export const PDFEditorView: React.FC = () => {
         }
     };
 
+    if (error) {
+        return <ErrorState message="Failed to load documents" onRetry={refetch} />;
+    }
+
     return (
         <div className="flex h-full">
             {/* Document List Sidebar */}
@@ -93,20 +99,20 @@ export const PDFEditorView: React.FC = () => {
                 <div className={cn("p-4 border-b font-bold", theme.text.primary)}>PDF Documents</div>
                 <div className="flex-1 overflow-y-auto">
                     {isLoading ? <Loader2 className="animate-spin m-4"/> : documents.map(doc => (
-                        <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
+                        <button key={doc.id} onClick={() => documentSelection.select(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.default,
-                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
+                            documentSelection.selected?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
-                            <div className={cn("text-xs opacity-70", selectedDoc?.id === doc.id ? "" : theme.text.secondary)}>{doc.fileSize}</div>
+                            <div className={cn("text-xs opacity-70", documentSelection.selected?.id === doc.id ? "" : theme.text.secondary)}>{doc.fileSize}</div>
                         </button>
                     ))}
                 </div>
             </div>
             {/* Editor View */}
             <div className={cn("flex-1 flex flex-col", theme.surface.default)}>
-                {selectedDoc ? (
+                {documentSelection.selected ? (
                     <>
                         <AcrobatToolbar 
                             activeTool={activeTool} setActiveTool={setActiveTool}

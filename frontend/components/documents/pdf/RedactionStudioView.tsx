@@ -11,14 +11,16 @@ import { PIIPanel } from '../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
+import { useSingleSelection } from '../../../hooks/useMultiSelection';
+import { ErrorState } from '../../common/ErrorState';
 
 export const RedactionStudioView: React.FC = () => {
     const { theme } = useTheme();
-    const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
+    const documentSelection = useSingleSelection<LegalDocument>(null, (a, b) => a.id === b.id);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     
     // Load documents from IndexedDB via useQuery for accurate, cached data
-    const { data: allDocs = [], isLoading } = useQuery(
+    const { data: allDocs = [], isLoading, error, refetch } = useQuery(
         queryKeys.documents.all(),
         () => DataService.documents.getAll()
     );
@@ -31,15 +33,15 @@ export const RedactionStudioView: React.FC = () => {
     
     // Set initial document
     useEffect(() => {
-        if (documents.length > 0 && !selectedDoc) {
-            setSelectedDoc(documents[0]);
+        if (documents.length > 0 && !documentSelection.selected) {
+            documentSelection.select(documents[0]);
         }
-    }, [documents, selectedDoc]);
+    }, [documents, documentSelection.selected]);
 
     useEffect(() => {
-        if (selectedDoc) {
+        if (documentSelection.selected) {
             const loadUrl = async () => {
-                const url = await DocumentService.getDocumentUrl(selectedDoc.id);
+                const url = await DocumentService.getDocumentUrl(documentSelection.selected.id);
                 setPreviewUrl(url);
             };
             loadUrl();
@@ -49,7 +51,11 @@ export const RedactionStudioView: React.FC = () => {
                 BlobManager.revoke(previewUrl);
             }
         };
-    }, [selectedDoc]);
+    }, [documentSelection.selected]);
+
+    if (error) {
+        return <ErrorState message="Failed to load documents" onRetry={refetch} />;
+    }
 
     return (
         <div className="flex h-full">
@@ -58,10 +64,10 @@ export const RedactionStudioView: React.FC = () => {
                 <div className={cn("p-4 border-b font-bold", theme.text.primary)}>Documents to Redact</div>
                 <div className="flex-1 overflow-y-auto">
                     {isLoading ? <Loader2 className="animate-spin m-4"/> : documents.map(doc => (
-                        <button key={doc.id} onClick={() => setSelectedDoc(doc)} className={cn(
+                        <button key={doc.id} onClick={() => documentSelection.select(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.default,
-                            selectedDoc?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
+                            documentSelection.selected?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
                         </button>
@@ -70,12 +76,12 @@ export const RedactionStudioView: React.FC = () => {
             </div>
             {/* Editor View */}
             <div className={cn("flex-1 flex", theme.surface.default)}>
-                {selectedDoc ? (
+                {documentSelection.selected ? (
                     <>
                         <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                             <PDFViewer url={previewUrl} />
                         </div>
-                        <PIIPanel content={selectedDoc.content} onApplyRedactions={() => alert("Redacted!")} />
+                        <PIIPanel content={documentSelection.selected.content} onApplyRedactions={() => alert("Redacted!")} />
                     </>
                 ) : (
                     <div className={cn("flex-1 flex flex-col items-center justify-center", theme.text.tertiary)}>

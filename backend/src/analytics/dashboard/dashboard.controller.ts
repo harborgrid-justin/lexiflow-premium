@@ -5,7 +5,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import {
   DashboardQueryDto,
@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Dashboard')
-@Public() // Allow public access for development
+
 @Controller('dashboard')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -33,6 +33,8 @@ export class DashboardController {
     description: 'Dashboard data retrieved successfully',
     type: DashboardDataDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getDashboard(@Query() query: DashboardQueryDto): Promise<DashboardDataDto> {
     return this.dashboardService.getDashboardData(query);
   }
@@ -44,6 +46,8 @@ export class DashboardController {
     description: 'Cases summary retrieved successfully',
     type: MyCasesSummaryDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getMyCases(@CurrentUser() user: any): Promise<MyCasesSummaryDto> {
     return this.dashboardService.getMyCasesSummary(user.sub);
   }
@@ -55,6 +59,8 @@ export class DashboardController {
     description: 'Deadlines retrieved successfully',
     type: UpcomingDeadlinesDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getDeadlines(@CurrentUser() user: any): Promise<UpcomingDeadlinesDto> {
     return this.dashboardService.getUpcomingDeadlines(user.sub);
   }
@@ -66,6 +72,8 @@ export class DashboardController {
     description: 'Tasks retrieved successfully',
     type: PendingTasksDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTasks(@CurrentUser() user: any): Promise<PendingTasksDto> {
     return this.dashboardService.getPendingTasks(user.sub);
   }
@@ -77,6 +85,8 @@ export class DashboardController {
     description: 'Billing summary retrieved successfully',
     type: BillingSummaryDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getBillingSummary(@CurrentUser() user: any): Promise<BillingSummaryDto> {
     return this.dashboardService.getBillingSummary(user.sub);
   }

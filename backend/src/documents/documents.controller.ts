@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { Response } from 'express';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
@@ -29,7 +29,7 @@ import { OcrRequestDto } from '../ocr/dto/ocr-request.dto';
 
 @ApiTags('documents')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('documents')
 export class DocumentsController {
   constructor(
@@ -63,6 +63,10 @@ export class DocumentsController {
     },
   })
   @ApiResponse({ status: 201, description: 'Document created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(
     @Body() createDocumentDto: CreateDocumentDto,
     @UploadedFile() file?: Express.Multer.File,
@@ -73,6 +77,8 @@ export class DocumentsController {
   @Get()
   @ApiOperation({ summary: 'List all documents with filtering' })
   @ApiResponse({ status: 200, description: 'Documents retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query() filterDto: DocumentFilterDto) {
     return await this.documentsService.findAll(filterDto);
   }
@@ -81,6 +87,8 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Get document metadata by ID' })
   @ApiResponse({ status: 200, description: 'Document found' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return await this.documentsService.findOne(id);
   }
@@ -89,6 +97,8 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Download document file' })
   @ApiResponse({ status: 200, description: 'File downloaded successfully' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async downloadFile(
     @Param('id', ParseUUIDPipe) id: string,
     @Res() res: Response,
@@ -108,6 +118,9 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Update document metadata' })
   @ApiResponse({ status: 200, description: 'Document updated successfully' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
@@ -120,6 +133,8 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Delete a document' })
   @ApiResponse({ status: 204, description: 'Document deleted successfully' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.documentsService.remove(id);
   }
@@ -128,6 +143,10 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Trigger OCR processing for a document' })
   @ApiResponse({ status: 201, description: 'OCR job created' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async triggerOcr(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() ocrRequestDto: OcrRequestDto,
@@ -153,6 +172,10 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Create redaction job for a document' })
   @ApiResponse({ status: 201, description: 'Redaction job created' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createRedaction(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() redactionParams: any,
@@ -177,6 +200,8 @@ export class DocumentsController {
   @Get('folders/list')
   @ApiOperation({ summary: 'Get document folder structure' })
   @ApiResponse({ status: 200, description: 'Folders retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getFolders() {
     return await this.documentsService.getFolders();
   }
@@ -185,6 +210,8 @@ export class DocumentsController {
   @ApiOperation({ summary: 'Get document text content' })
   @ApiResponse({ status: 200, description: 'Content retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Document not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getContent(@Param('id', ParseUUIDPipe) id: string) {
     return await this.documentsService.getContent(id);
   }

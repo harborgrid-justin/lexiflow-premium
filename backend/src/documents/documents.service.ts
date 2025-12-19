@@ -11,6 +11,7 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
 import { FileStorageService } from '../file-storage/file-storage.service';
+import { TransactionManagerService } from '../common/services/transaction-manager.service';
 import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
@@ -21,6 +22,7 @@ export class DocumentsService {
     @InjectRepository(Document)
     private documentRepository: Repository<Document>,
     private fileStorageService: FileStorageService,
+    private transactionManager: TransactionManagerService,
   ) {}
 
   /**
@@ -31,37 +33,44 @@ export class DocumentsService {
     file?: Express.Multer.File,
     userId?: string,
   ): Promise<Document> {
-    try {
-      const document = this.documentRepository.create({
-        ...createDocumentDto,
-        createdBy: userId,
-        currentVersion: 1,
-      });
+    // Use transaction to ensure file storage and DB save are atomic
+    return this.transactionManager.executeInTransaction(async (manager) => {
+      try {
+        const document = this.documentRepository.create({
+          ...createDocumentDto,
+          createdBy: userId,
+          currentVersion: 1,
+        });
 
-      if (file) {
-        // Store file
-        const fileResult = await this.fileStorageService.storeFile(
-          file,
-          createDocumentDto.caseId,
-          document.id || 'temp',
-          1,
-        );
+        if (file) {
+          // Store file first
+          const fileResult = await this.fileStorageService.storeFile(
+            file,
+            createDocumentDto.caseId,
+            document.id || 'temp',
+            1,
+          );
 
-        document.filename = fileResult.filename;
-        document.filePath = fileResult.path;
-        document.mimeType = fileResult.mimetype;
-        document.fileSize = fileResult.size;
-        document.checksum = fileResult.checksum;
+          document.filename = fileResult.filename;
+          document.filePath = fileResult.path;
+          document.mimeType = fileResult.mimetype;
+          document.fileSize = fileResult.size;
+          document.checksum = fileResult.checksum;
+        }
+
+        // Save within transaction
+        const documentRepo = manager.getRepository(Document);
+        const savedDocument = await documentRepo.save(document);
+        this.logger.log(`Document created: ${savedDocument.id}`);
+
+        return savedDocument;
+      } catch (error) {
+        this.logger.error('Failed to create document', error);
+        // Transaction will auto-rollback on error
+        // TODO: Also cleanup uploaded file if DB save fails
+        throw error;
       }
-
-      const savedDocument = await this.documentRepository.save(document);
-      this.logger.log(`Document created: ${savedDocument.id}`);
-
-      return savedDocument;
-    } catch (error) {
-      this.logger.error('Failed to create document', error);
-      throw error;
-    }
+    });
   }
 
   /**

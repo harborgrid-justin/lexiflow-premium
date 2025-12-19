@@ -19,7 +19,7 @@ import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-r
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context

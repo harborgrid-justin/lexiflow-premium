@@ -19,7 +19,7 @@ import { Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -48,7 +48,7 @@ export const JurisdictionState: React.FC = () => {
   const states = Array.isArray(rawStates) ? rawStates : [];
   const filteredStates = filterStates(states, filter);
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="list" itemCount={10} shimmer />;
 
   return (
     <div className="space-y-4">

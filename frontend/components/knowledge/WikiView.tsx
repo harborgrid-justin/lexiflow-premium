@@ -19,7 +19,7 @@ import { Search, ChevronRight, Book, Star, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -27,6 +27,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 // Components
 import { Badge } from '../common/Badge';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -63,6 +64,10 @@ export const WikiView: React.FC = () => {
       setActiveArticleId(id);
     });
   };
+
+  if (isLoading) {
+    return <AdaptiveLoader contentType="document" shimmer message="Loading wiki articles..." />;
+  }
 
   return (
     <div className={cn("flex h-full rounded-lg border overflow-hidden", theme.surface.default, theme.border.default)}>

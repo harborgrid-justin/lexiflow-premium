@@ -20,6 +20,7 @@ import { FileText, CheckCircle, Clock, ArrowLeft, Plus, Link as LinkIcon, AlertC
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useModalState } from '../../hooks';
 
 // Components
 import { Card } from '../common/Card';
@@ -62,7 +63,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
   // ============================================================================
   const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(initialWitnessId || null);
   const [outline, setOutline] = useState('1. Introduction\n2. Background\n3. Key Events\n   - ...');
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const linkModal = useModalState();
 
   // ============================================================================
   // MEMOIZED VALUES

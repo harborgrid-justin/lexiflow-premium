@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Wand2, RotateCcw } from 'lucide-react';
+import { useToggle } from '../../hooks/useToggle';
 import { GeminiService } from '../../services/features/research/geminiService';
 import { EditorToolbar } from '../common/EditorToolbar';
 import { useTheme } from '../../context/ThemeContext';
@@ -17,7 +18,7 @@ interface AdvancedEditorProps {
 export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, onSave, placeholder, onInsertRequest }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
-  const [showAiToolbar, setShowAiToolbar] = useState(false);
+  const aiToolbarToggle = useToggle();
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
   const [aiPrompt, setAiPrompt] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
@@ -85,17 +86,17 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
       if (container && container.contains(range.commonAncestorContainer)) {
         // Store range carefully; clone it to ensure stability if DOM changes
         setSelectionRange(range.cloneRange());
-        setShowAiToolbar(true);
+        aiToolbarToggle.open();
         return;
       }
     }
     
     // Clear selection if invalid or collapsed
-    if (showAiToolbar) {
-        setShowAiToolbar(false);
+    if (aiToolbarToggle.isOpen) {
+        aiToolbarToggle.close();
         setSelectionRange(null);
     }
-  }, [showAiToolbar]);
+  }, [aiToolbarToggle]);
 
   const handleAiEdit = async () => {
     if (!selectionRange || !aiPrompt) return;
@@ -136,7 +137,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
       console.error("AI Edit failed", e);
     } finally {
       setIsAiLoading(false);
-      setShowAiToolbar(false);
+      aiToolbarToggle.close();
       setAiPrompt('');
     }
   };
@@ -174,7 +175,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
             </div>
          )}
          
-         {showAiToolbar && (
+         {aiToolbarToggle.isOpen && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-96 bg-white rounded-lg shadow-2xl border border-slate-200 p-2 flex gap-2 animate-in fade-in slide-in-from-bottom-2 z-20">
                 <div className="flex-1 relative">
                     <Wand2 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-600"/>

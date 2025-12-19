@@ -25,6 +25,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { SimulationEngine } from '../../utils/simulationEngine';
 import { Scheduler } from '../../utils/scheduler';
+import { formatCurrency } from '../../utils/formatUtils';
 
 export const OutcomeSimulator: React.FC = () => {
   const { theme } = useTheme();

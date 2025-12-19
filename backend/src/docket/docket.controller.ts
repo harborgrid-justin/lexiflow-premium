@@ -11,7 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { DocketService } from './docket.service';
 import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
 import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';
@@ -20,12 +20,14 @@ import { DocketEntry } from './entities/docket-entry.entity';
 
 @ApiTags('Docket')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('docket')
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}
 
   @Get()
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query('caseId') caseId?: string): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number; totalPages: number }> {
     const entries = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
     return {
@@ -38,34 +40,54 @@ export class DocketController {
   }
 
   @Get(':id')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async findOne(@Param('id') id: string): Promise<DocketEntry> {
     return this.docketService.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createDocket(@Body() createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
     return this.docketService.create(createDocketEntryDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async removeDocket(@Param('id') id: string): Promise<void> {
     return this.docketService.remove(id);
   }
 
   @Get('cases/:caseId/docket')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAllByCaseId(@Param('caseId') caseId: string): Promise<DocketEntry[]> {
     return this.docketService.findAllByCaseId(caseId);
   }
 
   @Post('cases/:caseId/docket')
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
     return this.docketService.create(createDocketEntryDto);
   }
 
   @Put(':id')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(
     @Param('id') id: string,
     @Body() updateDocketEntryDto: UpdateDocketEntryDto,
@@ -75,6 +97,10 @@ export class DocketController {
 
   @Post('pacer/sync')
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async syncFromPacer(@Body() pacerSyncDto: PacerSyncDto): Promise<PacerSyncResultDto> {
     return this.docketService.syncFromPacer(pacerSyncDto);
   }

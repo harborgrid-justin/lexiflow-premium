@@ -1,5 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { MetricsService } from './metrics.service';
 import { Public } from '../common/decorators/public.decorator';
 
@@ -14,25 +14,31 @@ export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
 
   @Get()
-  @Public()
+  
   @ApiOperation({ summary: 'Get Prometheus metrics' })
   @ApiResponse({ status: 200, description: 'Metrics in Prometheus format' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   getMetrics(): string {
     return this.metricsService.getPrometheusMetrics();
   }
 
   @Get('json')
-  @Public()
+  
   @ApiOperation({ summary: 'Get metrics as JSON' })
   @ApiResponse({ status: 200, description: 'Metrics in JSON format' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   getMetricsJson() {
     return this.metricsService.getMetricsJson();
   }
 
   @Get('system')
-  @Public()
+  
   @ApiOperation({ summary: 'Get system metrics' })
   @ApiResponse({ status: 200, description: 'System resource metrics' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   getSystemMetrics() {
     return this.metricsService.getSystemMetrics();
   }

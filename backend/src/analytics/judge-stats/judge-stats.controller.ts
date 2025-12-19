@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { JudgeStatsService } from './judge-stats.service';
 import {
   JudgeStatsQueryDto,
@@ -17,7 +17,7 @@ import {
 } from './dto/judge-stats.dto';
 
 @ApiTags('Analytics - Judge Statistics')
-@Public() // Allow public access for development
+
 @Controller('analytics/judge-stats')
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
@@ -31,6 +31,8 @@ export class JudgeStatsController {
     description: 'Judge list retrieved successfully',
     type: [JudgeListItemDto],
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getJudgeList(@Query() query: JudgeStatsQueryDto): Promise<JudgeListItemDto[]> {
     return this.judgeStatsService.getJudgeList(query);
   }
@@ -43,6 +45,8 @@ export class JudgeStatsController {
     description: 'Judge statistics retrieved successfully',
     type: JudgeStatsDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getJudgeStats(
     @Param('judgeId') judgeId: string,
     @Query() query: JudgeStatsQueryDto,
@@ -58,6 +62,8 @@ export class JudgeStatsController {
     description: 'Judge motion statistics retrieved successfully',
     type: JudgeMotionStatsDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getJudgeMotionStats(
     @Param('judgeId') judgeId: string,
     @Query() query: JudgeStatsQueryDto,
@@ -73,6 +79,8 @@ export class JudgeStatsController {
     description: 'Judge case duration statistics retrieved successfully',
     type: JudgeCaseDurationDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getJudgeCaseDuration(
     @Param('judgeId') judgeId: string,
     @Query() query: JudgeStatsQueryDto,

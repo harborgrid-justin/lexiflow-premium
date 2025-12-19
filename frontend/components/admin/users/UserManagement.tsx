@@ -9,6 +9,8 @@ import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
+import { useModalState } from '../../../hooks';
+import { getTodayString } from '../../../utils/dateUtils';
 
 interface UserData {
   id: string;
@@ -33,9 +35,9 @@ export const UserManagement: React.FC = () => {
   const notify = useNotify();
   const [users, setUsers] = useState<UserData[]>(mockUsers);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const createModal = useModalState();
+  const editModal = useModalState();
+  const deleteModal = useModalState();
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [formData, setFormData] = useState<Partial<UserData>>({});
 
@@ -57,10 +59,10 @@ export const UserManagement: React.FC = () => {
       lastName: formData.lastName,
       role: formData.role as UserData['role'],
       status: 'Pending',
-      createdAt: new Date().toISOString().split('T')[0],
+      createdAt: getTodayString(),
     };
     setUsers([...users, newUser]);
-    setIsCreateModalOpen(false);
+    createModal.close();
     setFormData({});
     notify.success('User created successfully. Invitation sent.');
   };
@@ -70,7 +72,7 @@ export const UserManagement: React.FC = () => {
     setUsers(users.map(u =>
       u.id === selectedUser.id ? { ...u, ...formData } : u
     ));
-    setIsEditModalOpen(false);
+    editModal.close();
     setSelectedUser(null);
     setFormData({});
     notify.success('User updated successfully');

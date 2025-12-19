@@ -48,6 +48,11 @@ export class SchemaManagementService {
   }
 
   async getTableColumns(tableName: string) {
+    // Validate table name to prevent SQL injection
+    if (!this.isValidIdentifier(tableName)) {
+      throw new BadRequestException('Invalid table name format');
+    }
+    
     const query = `
       SELECT 
         column_name as name,
@@ -101,6 +106,16 @@ export class SchemaManagementService {
     });
   }
 
+  /**
+   * Validate SQL identifier (table/column name) to prevent injection
+   */
+  private isValidIdentifier(name: string): boolean {
+    // PostgreSQL identifier rules: starts with letter or underscore, 
+    // contains only letters, digits, underscores, max 63 chars
+    const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]{0,62}$/;
+    return validPattern.test(name);
+  }
+  
   async applyMigration(id: string, userId: string) {
     const migration = await this.migrationRepository.findOne({ where: { id } });
     
@@ -222,7 +237,13 @@ export class SchemaManagementService {
   }
 
   async dropTable(tableName: string) {
-    await this.dataSource.query(`DROP TABLE IF EXISTS ${tableName} CASCADE`);
+    // Validate table name to prevent SQL injection
+    if (!this.isValidIdentifier(tableName)) {
+      throw new BadRequestException('Invalid table name format');
+    }
+    
+    // Use double quotes for identifier to prevent injection
+    await this.dataSource.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
     return { success: true, table: tableName };
   }
 }

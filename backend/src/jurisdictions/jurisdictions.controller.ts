@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { JurisdictionsService } from './jurisdictions.service';
 import { CreateJurisdictionDto } from './dto/create-jurisdiction.dto';
 import { UpdateJurisdictionDto } from './dto/update-jurisdiction.dto';
@@ -14,7 +14,7 @@ import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Jurisdictions')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('jurisdictions')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class JurisdictionsController {
@@ -28,6 +28,10 @@ export class JurisdictionsController {
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create new jurisdiction' })
   @ApiResponse({ status: 201, description: 'Jurisdiction created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createDto: CreateJurisdictionDto) {
     return this.jurisdictionsService.create(createDto);
   }
@@ -37,6 +41,8 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'List of jurisdictions' })
   @ApiQuery({ name: 'system', enum: JurisdictionSystem, required: false })
   @ApiQuery({ name: 'search', required: false, description: 'Search query' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
     @Query('system') system?: JurisdictionSystem,
     @Query('search') search?: string
@@ -53,6 +59,8 @@ export class JurisdictionsController {
   @Get('federal')
   @ApiOperation({ summary: 'Get federal courts' })
   @ApiResponse({ status: 200, description: 'List of federal jurisdictions' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getFederal() {
     return this.jurisdictionsService.getFederalCourts();
   }
@@ -60,6 +68,8 @@ export class JurisdictionsController {
   @Get('state')
   @ApiOperation({ summary: 'Get state courts' })
   @ApiResponse({ status: 200, description: 'List of state jurisdictions' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getState() {
     return this.jurisdictionsService.getStateCourts();
   }
@@ -67,6 +77,8 @@ export class JurisdictionsController {
   @Get('regulatory')
   @ApiOperation({ summary: 'Get regulatory bodies' })
   @ApiResponse({ status: 200, description: 'List of regulatory jurisdictions' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getRegulatory() {
     return this.jurisdictionsService.getRegulatoryBodies();
   }
@@ -74,6 +86,8 @@ export class JurisdictionsController {
   @Get('international')
   @ApiOperation({ summary: 'Get international treaties' })
   @ApiResponse({ status: 200, description: 'List of international jurisdictions' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getInternational() {
     return this.jurisdictionsService.getInternationalTreaties();
   }
@@ -81,6 +95,8 @@ export class JurisdictionsController {
   @Get('arbitration')
   @ApiOperation({ summary: 'Get arbitration providers' })
   @ApiResponse({ status: 200, description: 'List of arbitration providers' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getArbitration() {
     return this.jurisdictionsService.getArbitrationProviders();
   }
@@ -88,6 +104,8 @@ export class JurisdictionsController {
   @Get('local')
   @ApiOperation({ summary: 'Get local court rules' })
   @ApiResponse({ status: 200, description: 'List of local jurisdictions' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getLocal() {
     return this.jurisdictionsService.getLocalRules();
   }
@@ -95,6 +113,8 @@ export class JurisdictionsController {
   @Get('map-nodes')
   @ApiOperation({ summary: 'Get jurisdiction map visualization data' })
   @ApiResponse({ status: 200, description: 'Map node data for visualization' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getMapNodes() {
     return this.jurisdictionsService.getMapNodes();
   }
@@ -104,6 +124,8 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'Jurisdiction details' })
   @ApiResponse({ status: 404, description: 'Jurisdiction not found' })
   @ApiParam({ name: 'id', description: 'Jurisdiction ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id') id: string) {
     return this.jurisdictionsService.findById(id);
   }
@@ -114,6 +136,9 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'Jurisdiction updated' })
   @ApiResponse({ status: 404, description: 'Jurisdiction not found' })
   @ApiParam({ name: 'id', description: 'Jurisdiction ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(@Param('id') id: string, @Body() updateDto: UpdateJurisdictionDto) {
     return this.jurisdictionsService.update(id, updateDto);
   }
@@ -124,6 +149,8 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'Jurisdiction deleted' })
   @ApiResponse({ status: 404, description: 'Jurisdiction not found' })
   @ApiParam({ name: 'id', description: 'Jurisdiction ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id') id: string) {
     await this.jurisdictionsService.remove(id);
     return { message: 'Jurisdiction deleted successfully' };
@@ -137,6 +164,10 @@ export class JurisdictionsController {
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create new jurisdiction rule' })
   @ApiResponse({ status: 201, description: 'Rule created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createRule(@Body() createDto: CreateJurisdictionRuleDto) {
     return this.jurisdictionsService.createRule(createDto);
   }
@@ -146,6 +177,8 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'List of matching rules' })
   @ApiQuery({ name: 'q', description: 'Search query for code, name, or type' })
   @ApiQuery({ name: 'jurisdictionId', required: false, description: 'Filter by jurisdiction' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async searchRules(
     @Query('q') query: string,
     @Query('jurisdictionId') jurisdictionId?: string
@@ -158,6 +191,8 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'Rule details' })
   @ApiResponse({ status: 404, description: 'Rule not found' })
   @ApiParam({ name: 'id', description: 'Rule ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findRule(@Param('id') id: string) {
     return this.jurisdictionsService.findRuleById(id);
   }
@@ -166,6 +201,8 @@ export class JurisdictionsController {
   @ApiOperation({ summary: 'Get all rules for a jurisdiction' })
   @ApiResponse({ status: 200, description: 'List of rules' })
   @ApiParam({ name: 'jurisdictionId', description: 'Jurisdiction ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findJurisdictionRules(@Param('jurisdictionId') jurisdictionId: string) {
     return this.jurisdictionsService.findAllRules(jurisdictionId);
   }
@@ -176,6 +213,9 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'Rule updated' })
   @ApiResponse({ status: 404, description: 'Rule not found' })
   @ApiParam({ name: 'id', description: 'Rule ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateRule(@Param('id') id: string, @Body() updateDto: UpdateJurisdictionRuleDto) {
     return this.jurisdictionsService.updateRule(id, updateDto);
   }
@@ -186,6 +226,8 @@ export class JurisdictionsController {
   @ApiResponse({ status: 200, description: 'Rule deleted' })
   @ApiResponse({ status: 404, description: 'Rule not found' })
   @ApiParam({ name: 'id', description: 'Rule ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async removeRule(@Param('id') id: string) {
     await this.jurisdictionsService.removeRule(id);
     return { message: 'Rule deleted successfully' };

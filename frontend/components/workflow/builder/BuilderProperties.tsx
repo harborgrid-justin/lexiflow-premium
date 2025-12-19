@@ -3,6 +3,8 @@ import React from 'react';
 import { Settings, X, Move, Trash2 } from 'lucide-react';
 import { Input, TextArea } from '../../common/Inputs';
 import { Button } from '../../common/Button';
+import { ConfirmDialog } from '../../common/ConfirmDialog';
+import { useModalState } from '../../../hooks';
 import { WorkflowNode, getNodeIcon } from './types';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
@@ -19,6 +21,23 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
   isOpen, onClose, selectedNode, onUpdateNode, onDeleteNode 
 }) => {
   const { theme } = useTheme();
+  const deleteModal = useModalState();
+  const [nodeToDelete, setNodeToDelete] = React.useState<string | null>(null);
+  
+  const handleDeleteClick = () => {
+    if (selectedNode) {
+      setNodeToDelete(selectedNode.id);
+      deleteModal.open();
+    }
+  };
+  
+  const confirmDelete = () => {
+    if (nodeToDelete) {
+      onDeleteNode(nodeToDelete);
+      setNodeToDelete(null);
+      onClose();
+    }
+  };
 
   return (
     <div className={cn(
@@ -94,7 +113,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
               />
 
               <div className={cn("pt-4 border-t", theme.border.default)}>
-                <Button variant="danger" size="sm" icon={Trash2} onClick={() => onDeleteNode(selectedNode.id)} className="w-full">
+                <Button variant="danger" size="sm" icon={Trash2} onClick={handleDeleteClick} className="w-full">
                   Delete Node
                 </Button>
               </div>
@@ -107,6 +126,16 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
           )}
         </div>
       </div>
+      
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={confirmDelete}
+        title="Delete Workflow Node"
+        message={`Are you sure you want to delete the node "${selectedNode?.label || 'Untitled'}"? This will also remove any connections to this node.`}
+        variant="danger"
+        confirmText="Delete Node"
+      />
     </div>
   );
 };

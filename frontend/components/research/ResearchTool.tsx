@@ -27,6 +27,7 @@ import { queryKeys } from '../../utils/queryKeys';
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useTheme } from '../../context/ThemeContext';
+import { useSingleSelection } from '../../hooks/useMultiSelection';
 
 // Components
 import { LazyLoader } from '../common/LazyLoader';
@@ -51,7 +52,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   const storageKey = caseId ? `research_active_view_${caseId}` : 'research_active_view';
   const [activeView, setActiveView] = useSessionStorage<string>(storageKey, initialTab || 'search_home');
 
-  const [selectedClause, setSelectedClause] = useState<Clause | null>(null);
+  const clauseSelection = useSingleSelection<Clause>(null, (a, b) => a.id === b.id);
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
   // Load judges from IndexedDB via useQuery for accurate, cached data
@@ -74,8 +75,8 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
       <ResearchToolContent
         activeView={activeView}
         caseId={caseId}
-        selectedClause={selectedClause}
-        setSelectedClause={setSelectedClause}
+        selectedClause={clauseSelection.selected}
+        setSelectedClause={clauseSelection.select}
       />
     );
   };
@@ -84,9 +85,9 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   if (caseId) {
       return (
           <>
-            {selectedClause && (
+            {clauseSelection.selected && (
                 <Suspense fallback={null}>
-                    <ClauseHistoryModal clause={selectedClause} onClose={() => setSelectedClause(null)} />
+                    <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
                 </Suspense>
             )}
             <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
@@ -122,9 +123,9 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
 
   return (
     <>
-      {selectedClause && (
+      {clauseSelection.selected && (
           <Suspense fallback={null}>
-              <ClauseHistoryModal clause={selectedClause} onClose={() => setSelectedClause(null)} />
+              <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
           </Suspense>
       )}
       <TabbedPageLayout

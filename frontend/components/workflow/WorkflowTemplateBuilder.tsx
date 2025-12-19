@@ -13,6 +13,7 @@ import { cn } from '../../utils/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
 import { ErrorBoundary } from '../common/ErrorBoundary';
+import { useToggle } from '../../hooks/useToggle';
 import { DataService } from '../../services/data/dataService';
 import { useNotify } from '../../hooks/useNotify';
 
@@ -29,8 +30,8 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isPropertiesOpen, setIsPropertiesOpen] = useState(true);
+  const sidebarToggle = useToggle(true);
+  const propertiesToggle = useToggle(true);
   const [isSaving, setIsSaving] = useState(false);
   
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
@@ -46,7 +47,7 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
     const y = (event.clientY - rect.top - pan.y) / scale - 40;
     const id = addNode(type, x, y);
     setSelectedNodeId(id);
-    setIsPropertiesOpen(true);
+    propertiesToggle.open();
   }, [pan, scale, addNode]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -68,7 +69,7 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
       setDragOffset({ x: mouseX - node.x, y: mouseY - node.y });
       setDraggingNodeId(id);
       setSelectedNodeId(id);
-      setIsPropertiesOpen(true);
+      propertiesToggle.open();
     }
   };
 
@@ -131,9 +132,9 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
       </div>
       <div className="flex-1 overflow-hidden pb-6 min-h-0">
          <div className={cn("h-full border-t flex flex-col relative", theme.border.default)}>
-            <BuilderToolbar scale={scale} setScale={setScale} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+            <BuilderToolbar scale={scale} setScale={setScale} onToggleSidebar={sidebarToggle.toggle} />
             <div className="flex-1 flex overflow-hidden relative" onDrop={onDrop} onDragOver={e => e.preventDefault()} onMouseMove={handleMouseMove} onMouseUp={() => setDraggingNodeId(null)}>
-                <BuilderPalette isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} onAddNode={(type) => {
+                <BuilderPalette isOpen={sidebarToggle.isOpen} onClose={sidebarToggle.close} onAddNode={(type) => {
                     const centerX = (canvasRef.current?.clientWidth || 800) / 2 / scale - pan.x/scale - 75;
                     const centerY = (canvasRef.current?.clientHeight || 600) / 2 / scale - pan.y/scale - 40;
                     const id = addNode(type, centerX, centerY);
@@ -147,7 +148,7 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
                     onSelectConnection={() => {}}
                     onAddConnection={() => {}}
                 />
-                <BuilderProperties isOpen={isPropertiesOpen} onClose={() => setIsPropertiesOpen(false)} selectedNode={nodes.find(n => n.id === selectedNodeId) || null} onUpdateNode={updateNode} onDeleteNode={deleteNode} />
+                <BuilderProperties isOpen={propertiesToggle.isOpen} onClose={propertiesToggle.close} selectedNode={nodes.find(n => n.id === selectedNodeId) || null} onUpdateNode={updateNode} onDeleteNode={deleteNode} />
             </div>
          </div>
       </div>

@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronRight, Home, Clock, ChevronDown, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import { cn } from '../../utils/cn';
 import { useNavigate } from 'react-router-dom';
 
@@ -197,17 +198,10 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   }, [items]);
 
   // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setActiveDropdown(null);
-        setShowRecentDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(dropdownRef, () => {
+    setActiveDropdown(null);
+    setShowRecentDropdown(false);
+  });
 
   /**
    * Render a single breadcrumb item

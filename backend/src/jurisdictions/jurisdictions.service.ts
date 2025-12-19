@@ -26,11 +26,31 @@ export class JurisdictionsService {
     return this.jurisdictionRepository.save(jurisdiction);
   }
 
-  async findAll(): Promise<Jurisdiction[]> {
-    return this.jurisdictionRepository.find({
+  async findAll(
+    page: number = 1,
+    limit: number = 100,
+  ): Promise<{
+    data: Jurisdiction[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    const skip = (page - 1) * limit;
+    const [data, total] = await this.jurisdictionRepository.findAndCount({
       relations: ['rules'],
-      order: { system: 'ASC', region: 'ASC', name: 'ASC' }
+      order: { system: 'ASC', region: 'ASC', name: 'ASC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findById(id: string): Promise<Jurisdiction> {
@@ -89,13 +109,34 @@ export class JurisdictionsService {
     return this.ruleRepository.save(rule);
   }
 
-  async findAllRules(jurisdictionId?: string): Promise<JurisdictionRule[]> {
+  async findAllRules(
+    jurisdictionId?: string,
+    page: number = 1,
+    limit: number = 100,
+  ): Promise<{
+    data: JurisdictionRule[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
     const where = jurisdictionId ? { jurisdictionId } : {};
-    return this.ruleRepository.find({
+    const skip = (page - 1) * limit;
+    const [data, total] = await this.ruleRepository.findAndCount({
       where,
       relations: ['jurisdiction'],
-      order: { code: 'ASC' }
+      order: { code: 'ASC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findRuleById(id: string): Promise<JurisdictionRule> {
@@ -168,7 +209,8 @@ export class JurisdictionsService {
   }
 
   async getMapNodes(): Promise<any[]> {
-    const jurisdictions = await this.findAll();
+    const result = await this.findAll(1, 1000); // Get all jurisdictions
+    const jurisdictions = result.data;
     
     // Convert to map visualization format
     return jurisdictions.map((j, index) => ({

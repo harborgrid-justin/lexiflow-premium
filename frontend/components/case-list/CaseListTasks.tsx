@@ -26,11 +26,12 @@ import { LazyLoader } from '../common/LazyLoader';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useModalState } from '../../hooks';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -43,7 +44,7 @@ interface CaseListTasksProps {
 }
 
 export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const taskModal = useModalState();
   const [filter, setFilter] = useState('All');
   const { theme } = useTheme();
 

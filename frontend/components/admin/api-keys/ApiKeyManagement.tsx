@@ -8,6 +8,8 @@ import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '../../../hooks/useNotify';
+import { useModalState } from '../../../hooks';
+import { getTodayString } from '../../../utils/dateUtils';
 
 interface ApiKey {
   id: string;
@@ -43,8 +45,8 @@ export const ApiKeyManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [apiKeys, setApiKeys] = useState<ApiKey[]>(mockApiKeys);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const createModal = useModalState();
+  const deleteModal = useModalState();
   const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
   const [formData, setFormData] = useState<{ name: string; scopes: string[]; expiresAt?: string }>({ name: '', scopes: [] });
   const [newKeyValue, setNewKeyValue] = useState<string | null>(null);

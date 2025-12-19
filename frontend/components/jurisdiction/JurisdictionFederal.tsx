@@ -19,7 +19,7 @@ import { ExternalLink, Landmark, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -44,7 +44,7 @@ export const JurisdictionFederal: React.FC = () => {
   // Defensive array validation
   const courts = Array.isArray(rawCourts) ? rawCourts : [];
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="list" itemCount={10} shimmer />;
 
   return (
     <div className="space-y-6">

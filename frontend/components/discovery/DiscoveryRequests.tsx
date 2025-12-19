@@ -20,6 +20,7 @@ import { Wand2, Upload, CheckSquare } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableHead } from '../common/Table';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { VirtualList } from '../common/VirtualList';
 
@@ -27,6 +28,7 @@ import { VirtualList } from '../common/VirtualList';
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useToggle } from '../../hooks/useToggle';
 import { DiscoveryView } from './types';
 
 // Utils
@@ -42,7 +44,7 @@ import { DiscoveryRequestsProps } from './types';
 const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
-  const [showFilters, setShowFilters] = useState(false);
+  const filtersToggle = useToggle();
 
   // Memoized: Calculate days remaining
   const getDaysRemaining = useCallback((dueDate: string) => {
@@ -87,7 +89,7 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
       onNavigate('requests');
     },
     'mod+f': () => {
-      setShowFilters(prev => !prev);
+      filtersToggle.toggle();
     }
   });
 

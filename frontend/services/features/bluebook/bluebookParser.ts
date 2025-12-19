@@ -18,8 +18,8 @@ import {
   ValidationSeverity,
   CourtLevel,
   CitationSignal
-} from '../../types/bluebook';
-import { IdGenerator } from '../../utils/idGenerator';
+} from '@types/bluebook';
+import { IdGenerator } from '@utils/idGenerator';
 
 /**
  * Citation parser class with regex-based pattern matching

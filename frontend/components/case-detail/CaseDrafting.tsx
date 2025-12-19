@@ -23,7 +23,7 @@ import { useQuery } from '../../services/infrastructure/queryClient';
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '../../services/features/research/geminiService';
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces

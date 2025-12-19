@@ -20,6 +20,7 @@ import { ProjectModal } from './ProjectModal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+import { useModalState } from '../../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
@@ -41,7 +42,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
   projects: initialProjects, onAddProject, onAddTask, onUpdateTaskStatus, onNavigateToModule 
 }) => {
   const { theme } = useTheme();
-  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
+  const projectModal = useModalState();
   const [newTaskModalProjectId, setNewTaskModalProjectId] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   

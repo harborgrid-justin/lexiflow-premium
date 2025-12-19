@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, CartesianGrid } from 'recharts';
 
 // ============================================================================
@@ -26,9 +26,16 @@ import { useTheme } from '../../context/ThemeContext';
 
 // Components
 import { Card } from '../common/Card';
+import { LoadingState } from '../common/LoadingState';
 
 // Utils & Constants
-import { getChartColors } from './constants';
+import { 
+  getChartTheme, 
+  DEFAULT_MARGINS, 
+  getAxisConfig, 
+  getGridConfig, 
+  getTooltipConfig 
+} from '../../utils/chartConfig';
 
 // Types
 import { WorkflowAnalyticsData } from './types';
@@ -38,7 +45,7 @@ import { WorkflowAnalyticsData } from './types';
 // ============================================================================
 
 export const WorkflowAnalyticsDashboard: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { mode } = useTheme();
   
   // Load analytics from IndexedDB via useQuery for accurate, cached data
   const { data: analytics = { completion: [], status: [] }, isLoading } = useQuery<WorkflowAnalyticsData>(
@@ -46,27 +53,26 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
     () => DataService.workflow.getAnalytics()
   );
   
-  const chartColors = getChartColors(mode);
+  const chartTheme = getChartTheme(mode === 'dark');
+  const axisConfig = getAxisConfig(chartTheme);
+  const gridConfig = getGridConfig(chartTheme);
+  const tooltipConfig = getTooltipConfig(chartTheme);
+
+  if (isLoading) {
+    return <LoadingState message="Loading analytics..." />;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card title="Task Completion Velocity">
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={analytics.completion} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartColors.grid} />
-              <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{fill: chartColors.text}} />
-              <YAxis fontSize={12} tickLine={false} axisLine={false} tick={{fill: chartColors.text}} />
-              <Tooltip 
-                cursor={{fill: mode === 'dark' ? '#334155' : '#f1f5f9'}} 
-                contentStyle={{ 
-                    backgroundColor: chartColors.tooltipBg,
-                    borderColor: chartColors.tooltipBorder,
-                    borderRadius: '8px', 
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
-                }}
-              />
-              <Bar dataKey="completed" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+            <BarChart data={analytics.completion} margin={DEFAULT_MARGINS}>
+              <CartesianGrid {...gridConfig} />
+              <XAxis dataKey="name" {...axisConfig} />
+              <YAxis {...axisConfig} />
+              <Tooltip {...tooltipConfig} />
+              <Bar dataKey="completed" fill={chartTheme.colors.primary} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -81,14 +87,7 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                    backgroundColor: chartColors.tooltipBg,
-                    borderColor: chartColors.tooltipBorder,
-                    borderRadius: '8px', 
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
-                }}
-              />
+              <Tooltip {...tooltipConfig} />
               <Legend verticalAlign="bottom" height={36} iconType="circle" />
             </PieChart>
           </ResponsiveContainer>

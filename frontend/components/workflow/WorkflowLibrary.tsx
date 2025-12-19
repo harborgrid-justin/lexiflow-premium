@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useMemo } from 'react';
-import { Search, Shield, Plus, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Search, Shield, Plus } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,11 +23,15 @@ import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from './TemplatePreview';
 import { EmptyState } from '../common/EmptyState';
 import { Button } from '../common/Button';
+import { LoadingState } from '../common/LoadingState';
+import { ErrorState } from '../common/ErrorState';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -49,8 +53,6 @@ interface WorkflowLibraryProps {
 
 export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) => {
   const { theme } = useTheme();
-  const [templateSearch, setTemplateSearch] = useState('');
-  const [templateCategory, setTemplateCategory] = useState('All');
   
   const { data: templatesData = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
     queryKeys.workflows.templates(),
@@ -60,35 +62,23 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   // Ensure templates is always an array (defensive check)
   const templates = Array.isArray(templatesData) ? templatesData : [];
   
-  const categories = ['All', 'Litigation', 'Corporate', 'Operations', 'HR', 'IT/Security'];
-
-  const filteredTemplates = useMemo(() => {
-    if (!Array.isArray(templates)) return [];
-    return templates.filter(t => {
-      const matchesSearch = t.title.toLowerCase().includes(templateSearch.toLowerCase()) || 
-                            t.tags.some(tag => tag.toLowerCase().includes(templateSearch.toLowerCase()));
-      const matchesCategory = templateCategory === 'All' || t.category === templateCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [templateSearch, templateCategory, templates]);
+  // Use useFilterAndSearch hook for unified filtering
+  const { filteredItems: filteredTemplates, searchQuery, setSearchQuery, category, setCategory, categories } = useFilterAndSearch({
+    items: templates,
+    config: {
+      categoryField: 'category',
+      searchFields: ['title'],
+      arrayFields: ['tags']
+    },
+    initialCategory: 'All'
+  });
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center p-10">
-        <Loader2 className="animate-spin text-blue-600 h-8 w-8"/>
-      </div>
-    );
+    return <AdaptiveLoader contentType="dashboard" itemCount={8} shimmer />;
   }
 
   if (isError) {
-    return (
-      <EmptyState 
-        title="Error Loading Templates" 
-        description="Could not load workflow templates."
-        icon={AlertTriangle}
-        action={<Button onClick={() => refetch()} icon={RefreshCw}>Retry</Button>}
-      />
-    );
+    return <ErrorState message="Failed to load workflow templates" onRetry={refetch} />;
   }
 
   return (
@@ -106,10 +96,10 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
           {categories.map(cat => (
             <button
               key={cat}
-              onClick={() => setTemplateCategory(cat)}
+              onClick={() => setCategory(cat)}
               className={cn(
                 "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors",
-                templateCategory === cat 
+                category === cat 
                   ? cn(theme.primary.DEFAULT, theme.text.inverse)
                   : cn(theme.surface.highlight, theme.text.secondary, `hover:${theme.border.default}`)
               )}
@@ -129,8 +119,8 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
               "focus:ring-2 focus:ring-blue-500"
             )}
             placeholder="Search templates..."
-            value={templateSearch}
-            onChange={(e) => setTemplateSearch(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>

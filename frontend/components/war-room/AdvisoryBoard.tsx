@@ -22,14 +22,16 @@ import { UserPlus, Filter, Layout, Loader2 } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
 
 // Components
 import { Button } from '../common/Button';
 import { SearchToolbar } from '../common/SearchToolbar';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 import { AdvisorList, Advisor } from './advisory/AdvisorList';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
@@ -59,8 +61,6 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdvisor, setSelectedAdvisor] = useState<Advisor | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -77,20 +77,32 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   );
 
   // ============================================================================
-  // DERIVED STATE
+  // FILTER & SEARCH
   // ============================================================================
-  const filteredAdvisors = React.useMemo(() => {
-    let result = advisors.filter(adv => {
-      const matchesCategory = activeCategory === 'All' || 
-                              (activeCategory === 'Experts' && adv.role === 'Expert Witness') ||
-                              (activeCategory === 'Consultants' && adv.role !== 'Expert Witness') ||
-                              (activeCategory === adv.specialty);
-      const matchesSearch = adv.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            adv.specialty.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
+  const { filteredItems: baseFiltered, searchQuery, setSearchQuery, category, setCategory } = useFilterAndSearch({
+    items: advisors,
+    config: {
+      categoryField: 'specialty',
+      searchFields: ['name', 'specialty'],
+      arrayFields: []
+    },
+    initialCategory: 'All'
+  });
 
-    // Apply filters
+  // Apply additional filters and category logic
+  const filteredAdvisors = React.useMemo(() => {
+    let result = baseFiltered;
+
+    // Map category to role/specialty logic
+    if (category !== 'All') {
+      result = result.filter(adv => {
+        if (category === 'Experts') return adv.role === 'Expert Witness';
+        if (category === 'Consultants') return adv.role !== 'Expert Witness';
+        return adv.specialty === category;
+      });
+    }
+
+    // Apply additional filters
     if (filterRole !== 'all') {
       result = result.filter(adv => adv.role === filterRole);
     }
@@ -102,14 +114,14 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
     }
 
     return result;
-  }, [advisors, activeCategory, searchTerm, filterRole, filterSpecialty, filterStatus]);
+  }, [baseFiltered, category, filterRole, filterSpecialty, filterStatus]);
 
   const handleSelectAdvisor = (advisor: Advisor) => {
     setSelectedAdvisor(advisor);
     setIsInspectorOpen(true);
   };
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin h-8 w-8", theme.primary.text)}/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="list" itemCount={6} shimmer />;
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
@@ -119,8 +131,8 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
             <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Advisory Board</h3>
             <div className={cn("h-6 w-px", theme.border.default)}></div>
             <SearchToolbar 
-                value={searchTerm} 
-                onChange={setSearchTerm} 
+                value={searchQuery} 
+                onChange={setSearchQuery} 
                 placeholder="Search experts & consultants..." 
                 className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
             />

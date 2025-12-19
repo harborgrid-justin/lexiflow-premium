@@ -8,7 +8,7 @@ import { DataService } from '../../services/data/dataService';
 import { WorkflowTask } from '../../types';
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 export const ParallelTasksManager: React.FC = () => {
   const { theme } = useTheme();

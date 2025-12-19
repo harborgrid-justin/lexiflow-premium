@@ -8,6 +8,8 @@ import { cn } from '../../utils/cn';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { useNotify } from '../../hooks/useNotify';
+import { useModalState } from '../../hooks';
+import { getTodayString } from '../../utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/data/dataService';
@@ -65,9 +67,9 @@ export const Custodians: React.FC = () => {
     () => DataService.custodians.getAll()
   );
   
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const createModal = useModalState();
+  const editModal = useModalState();
+  const deleteModal = useModalState();
   const [selectedCustodian, setSelectedCustodian] = useState<Custodian | null>(null);
   const [formData, setFormData] = useState<Partial<Custodian>>({});
 

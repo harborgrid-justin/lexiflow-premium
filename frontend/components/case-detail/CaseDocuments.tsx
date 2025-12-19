@@ -26,7 +26,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { DocumentService } from '../../services/features/documents/documentService';
 import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { IntegrationOrchestrator } from '../services/integration/integrationOrchestrator';
 import { cn } from '../../utils/cn';

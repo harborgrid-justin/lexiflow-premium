@@ -108,7 +108,7 @@ export function useVirtualizedDocket<T>({
     const startIndex = Math.max(0, findStartIndex(scrollTop) - overscan);
     
     let endIndex = startIndex;
-    let currentHeight = 0;
+    const currentHeight = 0;
     const targetHeight = scrollTop + containerHeightPx + (estimatedItemHeight * overscan);
     
     while (endIndex < items.length && itemOffsets[endIndex] < targetHeight) {

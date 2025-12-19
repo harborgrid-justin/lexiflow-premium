@@ -33,7 +33,7 @@ export const useSort = <T extends Record<string, any>>(items: T[], initialKey: k
   });
 
   const sortedItems = useMemo(() => {
-    let sortableItems = [...items];
+    const sortableItems = [...items];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         const aValue = a[sortConfig.key];

@@ -244,7 +244,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
  * Calculate business days (excluding weekends)
  */
 function addBusinessDays(startDate: Date, days: number): Date {
-  let current = new Date(startDate);
+  const current = new Date(startDate);
   let remaining = days;
   
   while (remaining > 0) {

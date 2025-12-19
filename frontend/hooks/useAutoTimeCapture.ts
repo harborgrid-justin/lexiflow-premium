@@ -73,9 +73,13 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
       };
   }, [handleActivity]);
 
-  // Timer Tick
+  // Timer Tick - with mounted check to prevent setState on unmounted component
   useEffect(() => {
+      let isMounted = true;
+
       timerRef.current = setInterval(() => {
+          if (!isMounted) return;
+
           const now = Date.now();
           if (now - lastActivity.current > 60000) { // 1 min idle threshold
               setIsIdle(true);
@@ -85,6 +89,7 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
       }, 1000);
 
       return () => {
+        isMounted = false;
         if (timerRef.current) clearInterval(timerRef.current);
       };
   }, []);

@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { VectorEmbedding, AIModel } from './entities/ai.entity';
-import { StoreEmbeddingDto } from './dto/store-embedding.dto';
+import { StoreDataOpsEmbeddingDto } from './dto/store-embedding.dto';
 import { SearchEmbeddingsDto } from './dto/search-embeddings.dto';
-import { RegisterModelDto } from './dto/register-model.dto';
-import { UpdateModelDto } from './dto/update-model.dto';
+import { RegisterDataOpsModelDto } from './dto/register-model.dto';
+import { UpdateDataOpsModelDto } from './dto/update-model.dto';
 
 @Injectable()
 export class AiDataopsService {
@@ -16,7 +16,7 @@ export class AiDataopsService {
     private readonly modelRepository: Repository<AIModel>,
   ) {}
 
-  async storeEmbedding(dto: StoreEmbeddingDto): Promise<VectorEmbedding> {
+  async storeEmbedding(dto: StoreDataOpsEmbeddingDto): Promise<VectorEmbedding> {
     const embedding = this.embeddingRepository.create(dto);
     return await this.embeddingRepository.save(embedding);
   }
@@ -43,12 +43,12 @@ export class AiDataopsService {
     });
   }
 
-  async registerModel(dto: RegisterModelDto): Promise<AIModel> {
+  async registerModel(dto: RegisterDataOpsModelDto): Promise<AIModel> {
     const model = this.modelRepository.create(dto);
     return await this.modelRepository.save(model);
   }
 
-  async updateModel(id: string, dto: UpdateModelDto): Promise<AIModel> {
+  async updateModel(id: string, dto: UpdateDataOpsModelDto): Promise<AIModel> {
     const model = await this.modelRepository.findOne({ where: { id } });
     if (!model) {
       throw new NotFoundException(`AI Model with ID ${id} not found`);

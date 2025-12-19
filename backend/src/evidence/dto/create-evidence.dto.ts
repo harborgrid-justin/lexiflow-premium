@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { EvidenceType, EvidenceStatus } from '../entities/evidence-item.entity';
 
-export class CreateEvidenceDto {
+export class CreateEvidenceItemDto {
   @ApiProperty({ description: 'Case ID this evidence belongs to' })
   @IsString()
   @IsNotEmpty()

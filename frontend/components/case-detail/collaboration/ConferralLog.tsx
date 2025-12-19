@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
@@ -20,6 +20,7 @@ import { Modal } from '../../common/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
+import { useToast } from '../../../context/ToastContext';
 import { useQuery, useMutation, queryClient } from '../../../services/infrastructure/queryClient';
 import { useModalState } from '../../../hooks';
 import { getTodayString } from '../../../utils/dateUtils';
@@ -38,7 +39,8 @@ interface ConferralLogProps {
 
 export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
   const { theme } = useTheme();
-  const conferralModal = useModalState();
+  const { addToast } = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSession, setNewSession] = useState<Partial<ConferralSession>>({
     method: 'Phone',
     result: 'Pending',
@@ -58,6 +60,12 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
           onSuccess: () => {
               setIsModalOpen(false);
               setNewSession({ method: 'Phone', result: 'Pending', date: new Date().toISOString().split('T')[0] });
+              addToast('Conferral session logged successfully', 'success');
+          },
+          onError: (error: Error) => {
+              const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+              addToast(`Failed to log conferral session: ${errorMsg}`, 'error');
+              console.error('Conferral save error:', error);
           }
       }
   );
@@ -109,7 +117,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
       <div className="space-y-4">
         {sessions.map(session => (
-          <div key={session.id} className={cn("p-4 rounded-lg border shadow-sm transition-all", theme.surface.default, theme.border.default, `hover:border-[${theme.action.primary.border}]`)}>
+          <div key={session.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:border-blue-500", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center gap-3">
                 <div className={cn("p-2 rounded-full", theme.surface.highlight, theme.text.secondary)}>

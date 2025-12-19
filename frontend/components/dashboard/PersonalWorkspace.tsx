@@ -66,7 +66,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
     const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
     
-    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser.name && t.status !== 'Done');
+    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && t.status !== 'Done');
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
 
     const isLoading = tasksLoading || eventsLoading;

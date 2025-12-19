@@ -2,10 +2,10 @@ import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, HttpStatus, 
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { AiDataopsService } from './ai-dataops.service';
-import { StoreEmbeddingDto } from './dto/store-embedding.dto';
+import { StoreDataOpsEmbeddingDto } from './dto/store-embedding.dto';
 import { SearchEmbeddingsDto } from './dto/search-embeddings.dto';
-import { RegisterModelDto } from './dto/register-model.dto';
-import { UpdateModelDto } from './dto/update-model.dto';
+import { RegisterDataOpsModelDto } from './dto/register-model.dto';
+import { UpdateDataOpsModelDto } from './dto/update-model.dto';
 
 @ApiTags('AI DataOps')
 @ApiBearerAuth('JWT-auth')
@@ -31,7 +31,7 @@ export class AiDataopsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async storeEmbedding(@Body() dto: StoreEmbeddingDto) {
+  async storeEmbedding(@Body() dto: StoreDataOpsEmbeddingDto) {
     return await this.aiDataopsService.storeEmbedding(dto);
   }
 
@@ -63,7 +63,7 @@ export class AiDataopsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async registerModel(@Body() dto: RegisterModelDto) {
+  async registerModel(@Body() dto: RegisterDataOpsModelDto) {
     return await this.aiDataopsService.registerModel(dto);
   }
 
@@ -74,7 +74,7 @@ export class AiDataopsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateModel(@Param('id') id: string, @Body() dto: UpdateModelDto) {
+  async updateModel(@Param('id') id: string, @Body() dto: UpdateDataOpsModelDto) {
     return await this.aiDataopsService.updateModel(id, dto);
   }
 

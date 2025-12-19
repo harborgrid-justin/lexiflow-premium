@@ -59,7 +59,7 @@ export const WorkflowAutomations: React.FC = () => {
             </div>
         </div>
 
-        <div className={cn("border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer", theme.border.default, theme.text.tertiary, `hover:border-[${theme.action.primary.border}]`, `hover:${theme.text.link}`, `hover:${theme.surface.default}`)}>
+        <div className={cn("border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer hover:border-blue-500", theme.border.default, theme.text.tertiary, theme.text.link, theme.surface.default)}>
             <Plus className="h-8 w-8 mb-2"/>
             <span className="font-bold">Create New Automation</span>
         </div>

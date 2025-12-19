@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  HardDrive, Database, Cloud, Plus, RefreshCw, Trash2, Settings, 
-  Activity, CheckCircle, AlertTriangle, X, Play, Server, ShieldCheck, Power 
+import {
+  HardDrive, Database, Cloud, Plus, RefreshCw, Trash2, Settings,
+  Activity, CheckCircle, AlertTriangle, X, Play, Server, ShieldCheck, Power
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../../context/ThemeContext';
@@ -9,7 +9,40 @@ import { cn } from '../../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../../services/infrastructure/queryClient';
 import { DataService } from '../../../services/data/dataService';
 import { db } from '../../../services/data/db';
-import { useDataSource } from '../../../context/DataSourceContext';
+import { useDataSource, DataSourceType } from '../../../context/DataSourceContext';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type ConnectionStatus = 'active' | 'syncing' | 'degraded' | 'error' | 'disconnected';
+
+interface DataConnection {
+  id: string;
+  name: string;
+  type: string;
+  region: string;
+  status: ConnectionStatus;
+  lastSync?: string;
+}
+
+interface LocalStorageItem {
+  name: string;
+  size: string;
+  modified: string;
+}
+
+interface StoreInfo {
+  name: string;
+  records: number;
+  size: string;
+}
+
+interface ConnectionFormData {
+  name: string;
+  host: string;
+  region: string;
+}
 
 interface DataSourcesManagerProps {
   initialTab?: string;
@@ -70,7 +103,14 @@ export const DataSourcesManager: React.FC<DataSourcesManagerProps> = ({ initialT
   );
 };
 
-const ConnectionCard = ({ connection, onSync, onDelete, onTest }: any) => {
+interface ConnectionCardProps {
+  connection: DataConnection;
+  onSync: (id: string) => void;
+  onDelete: (id: string) => void;
+  onTest: (connection: DataConnection) => void;
+}
+
+const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection, onSync, onDelete, onTest }) => {
   const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -218,9 +258,21 @@ const CloudDatabaseView = () => {
   );
 };
 
-const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, setSelectedProvider, formData, setFormData }: any) => {
-  
-  const { data: connections = [], isLoading, refetch } = useQuery<any[]>(
+interface CloudDatabaseContentProps {
+  theme: ReturnType<typeof useTheme>['theme'];
+  isAdding: boolean;
+  setIsAdding: (value: boolean) => void;
+  selectedProvider: string | null;
+  setSelectedProvider: (value: string | null) => void;
+  formData: ConnectionFormData;
+  setFormData: (value: ConnectionFormData) => void;
+}
+
+const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
+  theme, isAdding, setIsAdding, selectedProvider, setSelectedProvider, formData, setFormData
+}) => {
+
+  const { data: connections = [], isLoading, refetch } = useQuery<DataConnection[]>(
     ['admin', 'sources', 'connections'],
     DataService.sources.getConnections,
     {
@@ -234,8 +286,8 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
   const addConnectionMutation = useMutation(
     DataService.sources.addConnection,
     {
-      onSuccess: (newConnection) => {
-        queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => [...(old || []), newConnection]);
+      onSuccess: (newConnection: DataConnection) => {
+        queryClient.setQueryData(['admin', 'sources', 'connections'], (old: DataConnection[] | undefined) => [...(old || []), newConnection]);
         setIsAdding(false);
         setSelectedProvider(null);
         setFormData({ name: '', host: '', region: 'us-east-1' });
@@ -244,39 +296,44 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
   );
 
   const syncMutation = useMutation(DataService.sources.syncConnection, {
-    onMutate: async (id) => {
+    onMutate: async (id: string) => {
       const previous = queryClient.getQueryState(['admin', 'sources', 'connections'])?.data;
-      queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => 
-        old?.map(c => c.id === id ? { ...c, status: 'syncing' } : c)
+      queryClient.setQueryData(['admin', 'sources', 'connections'], (old: DataConnection[] | undefined) =>
+        old?.map(c => c.id === id ? { ...c, status: 'syncing' as ConnectionStatus } : c)
       );
       return { previous };
     },
-    onSuccess: (data, id) => {
+    onSuccess: (_data: unknown, id: string) => {
       setTimeout(() => { // Simulate sync time completion for UX
-        queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => 
-          old?.map(c => c.id === id ? { ...c, status: 'active', lastSync: 'Just now' } : c)
+        queryClient.setQueryData(['admin', 'sources', 'connections'], (old: DataConnection[] | undefined) =>
+          old?.map(c => c.id === id ? { ...c, status: 'active' as ConnectionStatus, lastSync: 'Just now' } : c)
         );
       }, 2000);
     }
   });
 
   const deleteMutation = useMutation(DataService.sources.deleteConnection, {
-    onSuccess: (_, id) => {
-      queryClient.setQueryData(['admin', 'sources', 'connections'], (old: any[] | undefined) => 
+    onSuccess: (_: unknown, id: string) => {
+      queryClient.setQueryData(['admin', 'sources', 'connections'], (old: DataConnection[] | undefined) =>
         old?.filter(c => c.id !== id)
       );
     }
   });
 
+  interface TestConnectionResult {
+    success: boolean;
+    message?: string;
+  }
+
   const testMutation = useMutation(DataService.sources.testConnection, {
-    onSuccess: (result: any) => {
+    onSuccess: (result: TestConnectionResult) => {
       if (result.success) {
         alert('Connection test successful!');
       } else {
         alert('Connection test failed: ' + result.message);
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       alert('Connection test error: ' + error.message);
     }
   });
@@ -464,9 +521,9 @@ const CloudDatabaseContent = ({ theme, isAdding, setIsAdding, selectedProvider, 
   );
 };
 
-const LocalStorageView = () => {
+const LocalStorageView: React.FC = () => {
   const { theme } = useTheme();
-  const [files, setFiles] = React.useState<any[]>([]);
+  const [files, setFiles] = React.useState<LocalStorageItem[]>([]);
 
   React.useEffect(() => {
     const items = [];
@@ -723,18 +780,23 @@ const DataSourceSelector = () => {
   );
 };
 
-const IndexedDBView = () => {
+interface StoreRecord {
+  id: string;
+  [key: string]: unknown;
+}
+
+const IndexedDBView: React.FC = () => {
   const { theme } = useTheme();
-  const { data: stores = [], isLoading, refetch } = useQuery<any[]>(
+  const { data: stores = [], isLoading, refetch } = useQuery<StoreInfo[]>(
     ['admin', 'registry'],
     DataService.catalog.getRegistryInfo
   );
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [storeData, setStoreData] = useState<any[]>([]);
+  const [storeData, setStoreData] = useState<StoreRecord[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingData, setEditingData] = useState<any>(null);
+  const [editingData, setEditingData] = useState<StoreRecord | null>(null);
 
   const loadStoreData = async (storeName: string) => {
     setIsLoadingData(true);

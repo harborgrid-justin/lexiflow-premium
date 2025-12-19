@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Cloud, Wifi, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
 import { apiClient } from '../../services/infrastructure/apiClient';
-import { useDataSource } from '../../context/DataSourceContext';
+import { useDataSource } from '../../context/DataSourceContext.tsx';
 import { BackendHealthMonitor } from './BackendHealthMonitor';
 import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
 

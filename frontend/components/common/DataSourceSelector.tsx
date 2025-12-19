@@ -6,9 +6,9 @@
 
 import React, { useState } from 'react';
 import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
-import { useDataSource } from '../../context/DataSourceContext';
+import { useDataSource } from '../../context/DataSourceContext.tsx';
 import { useBackendHealth } from '../../hooks/useBackendHealth';
-import type { DataSourceType } from '../../context/DataSourceContext';
+import type { DataSourceType } from '../../context/DataSourceContext.tsx';
 
 interface DataSourceOption {
   value: DataSourceType;

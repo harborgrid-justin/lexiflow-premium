@@ -1,12 +1,31 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { queryClient } from '../services/infrastructure/queryClient';
+
+/**
+ * Data Source Context
+ * Handles switching between local (IndexedDB) and remote (PostgreSQL/Cloud) sources.
+ */
 
 export type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';
 
-interface DataSourceContextValue {
+export interface DataSourceContextValue {
   currentSource: DataSourceType;
-  switchDataSource: (source: DataSourceType) => Promise<void>;
+  switchDataSource: (source: DataSourceType) => void; // Changed to sync as reload is terminal
   isBackendApiEnabled: boolean;
+}
+
+// --- Internal Helpers (Kept outside to avoid closures/circularity) ---
+
+const STORAGE_KEY = 'VITE_USE_BACKEND_API';
+
+function getInitialDataSource(): DataSourceType {
+  // 1. Check localStorage first (user preference)
+  if (typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY)) {
+    return localStorage.getItem(STORAGE_KEY) === 'true' ? 'postgresql' : 'indexeddb';
+  }
+  
+  // 2. Fallback to Environment Variable
+  const envValue = import.meta.env.VITE_USE_BACKEND_API;
+  return (envValue === 'true' || envValue === true) ? 'postgresql' : 'indexeddb';
 }
 
 const DataSourceContext = createContext<DataSourceContextValue | undefined>(undefined);
@@ -16,50 +35,45 @@ interface DataSourceProviderProps {
 }
 
 export const DataSourceProvider: React.FC<DataSourceProviderProps> = ({ children }) => {
-  const [currentSource, setCurrentSource] = useState<DataSourceType>(() => {
-    // Check environment variable first
-    const envValue = import.meta.env.VITE_USE_BACKEND_API;
-    if (envValue === 'true' || envValue === true) return 'postgresql';
-    
-    // Then check localStorage
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      const storedValue = localStorage.getItem('VITE_USE_BACKEND_API');
-      if (storedValue === 'true') return 'postgresql';
-    }
-    
-    return 'indexeddb';
-  });
+  const [currentSource, setCurrentSource] = useState<DataSourceType>(getInitialDataSource);
 
-  const [isBackendApiEnabled, setIsBackendApiEnabled] = useState(currentSource !== 'indexeddb');
+  // Derived state: boolean check for backend
+  const isBackendApiEnabled = currentSource !== 'indexeddb';
 
-  const switchDataSource = async (source: DataSourceType): Promise<void> => {
-    console.log(`[DataSource] Switching from ${currentSource} to ${source}`);
+  /**
+   * switchDataSource
+   * Updates storage and performs a hard reload to reset the service registry
+   */
+  const switchDataSource = (source: DataSourceType) => {
+    if (source === currentSource) return;
+
+    console.log(`[DataSource] Switching to ${source}...`);
     
-    // Update localStorage flag
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      const useBackend = source === 'postgresql' || source === 'cloud';
-      localStorage.setItem('VITE_USE_BACKEND_API', String(useBackend));
-      setIsBackendApiEnabled(useBackend);
+    // Update storage so the next load picks up the right source
+    if (typeof window !== 'undefined') {
+      const useBackend = source !== 'indexeddb';
+      localStorage.setItem(STORAGE_KEY, String(useBackend));
+      
+      // We do NOT call queryClient here. 
+      // The reload ensures a clean slate for all singleton services.
+      window.location.reload();
     }
 
-    // Clear ALL cached queries by invalidating all keys
-    // This forces refetch on next render
-    queryClient.invalidate('');
-    
-    // Update state
     setCurrentSource(source);
-    
-    // Force a full page reload to reinitialize all services with new data source
-    console.log('[DataSource] Reloading application...');
-    window.location.reload();
   };
 
   useEffect(() => {
-    console.log(`[DataSource] Current data source: ${currentSource}`);
+    console.log(`[DataSource] Context initialized with: ${currentSource}`);
   }, [currentSource]);
 
   return (
-    <DataSourceContext.Provider value={{ currentSource, switchDataSource, isBackendApiEnabled }}>
+    <DataSourceContext.Provider 
+      value={{ 
+        currentSource, 
+        switchDataSource, 
+        isBackendApiEnabled 
+      }}
+    >
       {children}
     </DataSourceContext.Provider>
   );
@@ -72,4 +86,3 @@ export const useDataSource = (): DataSourceContextValue => {
   }
   return context;
 };
-

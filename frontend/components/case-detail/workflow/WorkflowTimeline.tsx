@@ -72,14 +72,14 @@ return (
                         <div className={cn("p-4 pt-0 space-y-3 rounded-b-xl border-t", theme.surface.highlight, theme.border.default)}>
                             <div className="h-2"></div>
                             {stage.tasks.map((task) => (
-                                <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface.default, theme.border.default, `hover:border-[${theme.action.primary.border}]`)}>
+                                <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center hover:border-blue-500", theme.surface.default, theme.border.default)}>
                                     <button 
                                         onClick={() => onToggleTask(stage.id, task.id)}
                                         className={cn(
-                                            "shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                                            "shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors hover:border-blue-500",
                                             task.status === 'Done' 
                                             ? 'bg-green-500 border-green-500 text-white' 
-                                            : `border-slate-300 text-transparent`, `hover:border-[${theme.action.primary.border}]`
+                                            : 'border-slate-300 text-transparent'
                                         )}
                                     >
                                         <CheckCircle className="h-4 w-4 fill-current"/>

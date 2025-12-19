@@ -70,8 +70,8 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
                                 <div 
                                 key={task.id} 
                                 className={cn(
-                                    "flex items-center gap-3 pl-8 pr-3 py-2 text-sm cursor-pointer border-l-2 border-transparent group transition-colors", 
-                                    activeTaskId === task.id ? cn(theme.primary.light, theme.action.primary.border) : `hover:${theme.surface.default}`, `hover:border-[${theme.action.primary.border}]`
+                                    "flex items-center gap-3 pl-8 pr-3 py-2 text-sm cursor-pointer border-l-2 border-transparent group transition-colors hover:border-blue-500", 
+                                    activeTaskId === task.id ? cn(theme.primary.light, theme.action.primary.border) : theme.surface.default
                                 )}
                                 onMouseEnter={() => onHoverTask(task.id)}
                                 >

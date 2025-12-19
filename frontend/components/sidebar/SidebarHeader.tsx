@@ -17,7 +17,7 @@ import { Scale, X } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks'; // CORRECT
 import { DataService } from '../../services/data/dataService';
 
 // Hooks & Context
@@ -62,7 +62,8 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ onClose }) => {
         </div>
       </div>
       <button 
-        onClick={onClose} 
+        onClick={onClose}
+        aria-label="Close sidebar"
         className={cn("md:hidden p-1.5 rounded-md transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)}
       >
         <X className="h-5 w-5" />

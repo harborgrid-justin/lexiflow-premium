@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { AppHeader } from './components/layout/AppHeader';
@@ -50,7 +50,7 @@ const InnerApp: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <AppShell
       activeView={activeView}
@@ -104,8 +104,8 @@ const InnerApp: React.FC = () => {
 
 const App: React.FC = () => {
   // Enable memory cleanup and optional logging in development
-  useDataServiceCleanup({ 
-    enableLogging: process.env.NODE_ENV === 'development'
+  useDataServiceCleanup({
+    enableLogging: process.env.NODE_ENV === 'development',
   });
 
   // Initialize backend discovery service on app mount
@@ -118,19 +118,19 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <ThemeProvider>
-      <ErrorBoundary scope="AppRoot">
-        <DataSourceProvider>
-          <ToastProvider>
-            <SyncProvider>
-              <WindowProvider>
+    <ErrorBoundary scope="AppRoot">
+      <ToastProvider>
+        <SyncProvider>
+          <WindowProvider>
+            <DataSourceProvider>
+              <ThemeProvider>
                 <InnerApp />
-              </WindowProvider>
-            </SyncProvider>
-          </ToastProvider>
-        </DataSourceProvider>
-      </ErrorBoundary>
-    </ThemeProvider>
+              </ThemeProvider>
+            </DataSourceProvider>
+          </WindowProvider>
+        </SyncProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   );
 };
 

@@ -3,7 +3,8 @@ import React from 'react';
 import { Scale, Database, ClipboardList, Lock, MessageCircle, Package, Shield, Mic2, Users, FileText } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
+import type { DiscoveryView } from '../../../utils/discoveryNavigation';
+import { getParentTabForView, getFirstTabOfParent } from '../../../utils/discoveryNavigation';
 
 interface DiscoveryNavigationProps {
   activeTab: DiscoveryView;
@@ -96,13 +97,8 @@ export const DiscoveryNavigation: React.FC<DiscoveryNavigationProps> = ({
   );
 };
 
-export const getParentTabForView = (view: DiscoveryView) => {
-    return PARENT_TABS.find(p => p.subTabs.some(s => s.id === view)) || PARENT_TABS[0];
-};
-
-export const getFirstTabOfParent = (parentId: string) => {
-    const parent = PARENT_TABS.find(p => p.id === parentId);
-    return parent && parent.subTabs.length > 0 ? parent.subTabs[0].id as DiscoveryView : 'dashboard';
-};
+// Re-export utilities for backwards compatibility
+// New code should import directly from '../../../utils/discoveryNavigation'
+export { getParentTabForView, getFirstTabOfParent } from '../../../utils/discoveryNavigation';
 
 export default DiscoveryNavigation;

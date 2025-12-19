@@ -149,7 +149,7 @@ export const FILE_TEMP_CLEANUP_INTERVAL_MS = 3600000; // 1 hour
 
 // Global Rate Limits
 export const RATE_LIMIT_TTL = 60; // Time window in seconds
-export const RATE_LIMIT_LIMIT = 100; // Max requests per window
+export const RATE_LIMIT_LIMIT = 300; // Max requests per window
 export const RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS = false;
 export const RATE_LIMIT_SKIP_FAILED_REQUESTS = false;
 

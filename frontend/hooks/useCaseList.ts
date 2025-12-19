@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { DataService } from '../services/data/dataService';
 import { Case } from '../types';
-import { useQuery } from '../services/infrastructure/queryClient';
+import { useQuery } from '../hooks/useQueryHooks';
 import { STORES } from '../services/data/db';
 import { useDebounce } from './useDebounce';
 import { useModalState } from './useModalState';

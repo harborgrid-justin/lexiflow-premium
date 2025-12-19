@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsOptional, IsUrl, IsObject } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class RegisterModelDto {
+export class RegisterDataOpsModelDto {
   @ApiProperty({ description: 'Model name' })
   @IsString()
   @IsNotEmpty()

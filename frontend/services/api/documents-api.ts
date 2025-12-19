@@ -64,23 +64,29 @@ export class DocumentsApiService {
     return apiClient.upload<LegalDocument>('/documents/upload', file, metadata);
   }
 
-  async bulkUpload(files: File[], metadata: Record<string, any>): Promise<LegalDocument[]> {
+  async bulkUpload(files: File[], metadata: Record<string, string>): Promise<LegalDocument[]> {
     const formData = new FormData();
     files.forEach(file => formData.append('files', file));
     Object.keys(metadata).forEach(key => formData.append(key, metadata[key]));
-    
+
     const token = localStorage.getItem('lexiflow_auth_token');
     const headers: Record<string, string> = {};
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
     // Don't set Content-Type for FormData - browser will set it with boundary
-    
+
     const response = await fetch(`${apiClient.getBaseUrl()}/documents/bulk-upload`, {
       method: 'POST',
       headers,
       body: formData,
     });
+
+    if (!response.ok) {
+      const errorBody = await response.text().catch(() => 'Unknown error');
+      throw new Error(`Bulk upload failed: ${response.status} ${response.statusText} - ${errorBody}`);
+    }
+
     return response.json();
   }
 
@@ -88,6 +94,11 @@ export class DocumentsApiService {
     const response = await fetch(`${apiClient.getBaseUrl()}/documents/${id}/download`, {
       headers: apiClient['getHeaders'](),
     });
+
+    if (!response.ok) {
+      throw new Error(`Download failed: ${response.status} ${response.statusText}`);
+    }
+
     return response.blob();
   }
 

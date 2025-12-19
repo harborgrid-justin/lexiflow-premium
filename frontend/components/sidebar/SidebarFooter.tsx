@@ -83,10 +83,10 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ currentUser, onSwi
             `hover:${theme.surface.highlight}`
         )}
       >
-        <UserAvatar name={currentUser.name} size="sm" className="mr-3" indicatorStatus="online" />
+        <UserAvatar name={currentUser?.name || 'Guest'} size="sm" className="mr-3" indicatorStatus="online" />
         <div className="text-left flex-1 min-w-0">
-          <p className={cn("text-xs font-bold truncate", theme.text.primary)}>{currentUser.name}</p>
-          <p className={cn("text--[10px] truncate font-medium", theme.text.secondary)}>{currentUser.role}</p>
+          <p className={cn("text-xs font-bold truncate", theme.text.primary)}>{currentUser?.name || 'Guest'}</p>
+          <p className={cn("text--[10px] truncate font-medium", theme.text.secondary)}>{currentUser?.role || 'User'}</p>
         </div>
         <ChevronDown className={cn("h-4 w-4 opacity-50", theme.text.tertiary)} />
       </button>

@@ -12,7 +12,7 @@ interface SidebarProps {
   setActiveView: (view: AppView) => void;
   isOpen: boolean;
   onClose: () => void;
-  currentUser: User;
+  currentUser?: User;
   onSwitchUser: () => void;
 }
 
@@ -45,15 +45,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
             setActiveView(view);
             if (window.innerWidth < 768) onClose();
           }}
-          currentUserRole={currentUser.role}
+          currentUserRole={currentUser?.role || 'user'}
         />
 
-        <SidebarFooter 
-          currentUser={currentUser}
-          onSwitchUser={onSwitchUser}
-          onNavigate={setActiveView}
-          activeView={activeView}
-        />
+        {currentUser && (
+          <SidebarFooter 
+            currentUser={currentUser}
+            onSwitchUser={onSwitchUser}
+            onNavigate={setActiveView}
+            activeView={activeView}
+          />
+        )}
       </div>
     </>
   );

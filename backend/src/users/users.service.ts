@@ -30,24 +30,31 @@ export class UsersService implements OnModuleInit {
   }
 
   private async createDefaultAdmin() {
-    // Check if admin already exists
-    const existingAdmin = await this.userRepository.findOne({
-      where: { email: 'admin@lexiflow.com' },
-    });
-
-    if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash('Admin123!', MasterConfig.BCRYPT_ROUNDS);
-      const admin = this.userRepository.create({
-        email: 'admin@lexiflow.com',
-        passwordHash: hashedPassword,
-        firstName: 'Super',
-        lastName: 'Admin',
-        role: UserRole.SUPER_ADMIN,
-        status: UserStatus.ACTIVE,
-        twoFactorEnabled: false,
-        emailVerified: true,
+    try {
+      // Check if admin already exists
+      const existingAdmin = await this.userRepository.findOne({
+        where: { email: 'admin@lexiflow.com' },
       });
-      await this.userRepository.save(admin);
+
+      if (!existingAdmin) {
+        const hashedPassword = await bcrypt.hash('Admin123!', MasterConfig.BCRYPT_ROUNDS);
+        const admin = this.userRepository.create({
+          email: 'admin@lexiflow.com',
+          passwordHash: hashedPassword,
+          firstName: 'Super',
+          lastName: 'Admin',
+          role: UserRole.SUPER_ADMIN,
+          status: UserStatus.ACTIVE,
+          twoFactorEnabled: false,
+          emailVerified: true,
+        });
+        await this.userRepository.save(admin);
+        console.log('✅ Default admin user created successfully');
+      }
+    } catch (error) {
+      // Silently fail if table doesn't exist yet (during initial schema creation)
+      // The admin will be created on next restart or can be seeded manually
+      console.log('⏳ Skipping default admin creation - database schema not ready yet');
     }
   }
 

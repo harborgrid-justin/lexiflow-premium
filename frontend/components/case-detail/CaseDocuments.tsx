@@ -28,7 +28,7 @@ import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../services/infrastructure/queryClient';
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
-import { IntegrationOrchestrator } from '../services/integration/integrationOrchestrator';
+import { IntegrationOrchestrator } from '../../services/integration/integrationOrchestrator';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
@@ -164,14 +164,14 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         <div className="flex gap-2">
           <input
             placeholder="Search documents..."
-            className={cn("px-4 py-2 border rounded-md text-sm w-full md:w-64 outline-none focus:ring-2", theme.surface.default, theme.border.default, theme.text.primary, `focus:ring-[${theme.action.primary.border}]`)}
+            className={cn("px-4 py-2 border rounded-md text-sm w-full md:w-64 outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
           />
         </div>
         <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto items-center">
           <label className={cn("flex items-center text-sm cursor-pointer select-none", theme.text.secondary)}>
             <input
               type="checkbox"
-              className={cn("mr-2 rounded", theme.action.primary.text, `focus:ring-[${theme.action.primary.border}]`)}
+              className={cn("mr-2 rounded focus:ring-2 focus:ring-blue-500", theme.action.primary.text)}
               checked={logAsEvidence}
               onChange={(e) => setLogAsEvidence(e.target.checked)}
             />

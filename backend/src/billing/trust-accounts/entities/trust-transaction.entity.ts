@@ -38,7 +38,6 @@ export class TrustTransaction extends BaseEntity {
   trustAccountId: string;
 
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
-  @Index()
   caseId: string;
 
   @ManyToOne(() => Case)
@@ -73,7 +72,6 @@ export class TrustTransaction extends BaseEntity {
     enum: TransactionStatus,
     default: TransactionStatus.PENDING,
   })
-  @Index()
   status: TransactionStatus;
 
   @Column({ name: 'reference_number', type: 'varchar', length: 100, nullable: true })

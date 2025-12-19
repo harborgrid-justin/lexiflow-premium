@@ -179,8 +179,7 @@ export class CreateOrganizationDto {
   parentOrganizationId?: string;
 
   @ApiPropertyOptional({ 
-    description: 'Additional metadata',
-    type: 'object'
+    description: 'Additional metadata'
   })
   @IsOptional()
   metadata?: Record<string, any>;

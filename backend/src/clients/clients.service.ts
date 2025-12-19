@@ -22,11 +22,10 @@ export class ClientsService {
       throw new ConflictException(`Client with email ${createDto.email} already exists`);
     }
 
-    // Map DTO type to entity clientType
-    const { type, ...rest } = createDto;
+    // Create client directly from DTO
     const client = this.clientRepository.create({
-      ...rest,
-      clientType: type?.toLowerCase() || 'individual',
+      ...createDto,
+      clientType: createDto.clientType?.toLowerCase() || 'individual',
       status: createDto.status?.toLowerCase() || 'active'
     });
     return await this.clientRepository.save(client);

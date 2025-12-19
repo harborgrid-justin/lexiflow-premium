@@ -30,8 +30,7 @@ export class CreateReportTemplateDto {
   template?: string;
 
   @ApiPropertyOptional({ 
-    description: 'JSON schema for template parameters',
-    type: 'object'
+    description: 'JSON schema for template parameters'
   })
   @IsObject()
   @IsOptional()

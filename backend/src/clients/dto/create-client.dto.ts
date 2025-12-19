@@ -227,7 +227,7 @@ export class CreateClientDto {
   @IsOptional()
   retainerAmount?: number;
 
-  @ApiPropertyOptional({ description: 'Custom fields', type: 'object' })
+  @ApiPropertyOptional({ description: 'Custom fields' })
   @IsOptional()
   customFields?: Record<string, any>;
 
@@ -241,7 +241,7 @@ export class CreateClientDto {
   @IsOptional()
   notes?: string;
 
-  @ApiPropertyOptional({ description: 'Additional metadata', type: 'object' })
+  @ApiPropertyOptional({ description: 'Additional metadata' })
   @IsOptional()
   metadata?: Record<string, any>;
 }

@@ -59,8 +59,7 @@ export class CreateWarRoomDto {
   members?: string[];
 
   @ApiPropertyOptional({ 
-    description: 'Additional settings',
-    type: 'object'
+    description: 'Additional settings'
   })
   @IsOptional()
   settings?: Record<string, any>;

@@ -37,8 +37,7 @@ export class CreateReportDto {
   templateId?: string;
 
   @ApiPropertyOptional({ 
-    description: 'Report parameters',
-    type: 'object'
+    description: 'Report parameters'
   })
   @IsObject()
   @IsOptional()

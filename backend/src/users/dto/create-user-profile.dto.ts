@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEmail, MaxLength, IsEnum, IsPhoneNumber, IsUrl, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsEmail, MaxLength, IsEnum, IsPhoneNumber, IsUrl, IsBoolean, IsNotEmpty } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum UserPreferenceTheme {
@@ -159,8 +159,7 @@ export class CreateUserProfileDto {
   twitterHandle?: string;
 
   @ApiPropertyOptional({ 
-    description: 'Additional settings',
-    type: 'object'
+    description: 'Additional settings'
   })
   @IsOptional()
   settings?: Record<string, any>;

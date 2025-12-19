@@ -10,4 +10,10 @@ export const OrganizationService = {
   add: async (item: any) => item,
   update: async (id: string, updates: any) => updates,
   delete: async (id: string) => true,
+  
+  // Organization specific methods
+  getOrganizations: async () => [],
+  getDepartments: async (orgId: string) => [],
+  getMembers: async (orgId: string) => [],
+  updateSettings: async (orgId: string, settings: any) => settings,
 };

@@ -10,4 +10,11 @@ export const WarRoomService = {
   add: async (item: any) => item,
   update: async (id: string, updates: any) => updates,
   delete: async (id: string) => true,
+  
+  // War room specific methods
+  getSessions: async () => [],
+  createSession: async (session: any) => session,
+  joinSession: async (sessionId: string) => true,
+  leaveSession: async (sessionId: string) => true,
+  getParticipants: async (sessionId: string) => [],
 };

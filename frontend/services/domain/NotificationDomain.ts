@@ -10,4 +10,12 @@ export const NotificationService = {
   add: async (item: any) => item,
   update: async (id: string, updates: any) => updates,
   delete: async (id: string) => true,
+  
+  // Notification specific methods
+  getNotifications: async (filters?: any) => [],
+  markAsRead: async (notificationId: string) => true,
+  markAllAsRead: async () => true,
+  getUnreadCount: async () => 0,
+  subscribe: async (channel: string) => true,
+  unsubscribe: async (channel: string) => true,
 };

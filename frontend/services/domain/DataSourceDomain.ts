@@ -10,4 +10,11 @@ export const DataSourceService = {
   add: async (item: any) => item,
   update: async (id: string, updates: any) => updates,
   delete: async (id: string) => true,
+  
+  // Data source specific methods
+  getDataSources: async () => [],
+  connect: async (sourceId: string, credentials: any) => true,
+  disconnect: async (sourceId: string) => true,
+  sync: async (sourceId: string) => true,
+  testConnection: async (sourceId: string) => ({ connected: true }),
 };

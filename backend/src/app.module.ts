@@ -106,6 +106,7 @@ import { SyncModule } from './sync/sync.module';
 import { BackupsModule } from './backups/backups.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
 import { AiOpsModule } from './ai-ops/ai-ops.module';
+import { AiDataopsModule } from './ai-dataops/ai-dataops.module';
 import { VersioningModule } from './versioning/versioning.module';
 
 // Queue Processing System
@@ -272,6 +273,7 @@ if (isRedisEnabled) {
     BackupsModule,
     MonitoringModule,
     AiOpsModule,
+    AiDataopsModule,
     VersioningModule,
 
     // Queue Processing System

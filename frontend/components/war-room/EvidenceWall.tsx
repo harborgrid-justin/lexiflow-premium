@@ -21,6 +21,7 @@ import { Loader2 } from 'lucide-react';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
+import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
 
 // Components
 import { SearchToolbar } from '../common/SearchToolbar';
@@ -69,14 +70,12 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  const [filter, setFilter] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
   const [isPending, startTransition] = useTransition();
 
   // ============================================================================
   // MEMOIZED VALUES
   // ============================================================================
-  const combinedItems = useMemo<WallItem[]>(() => {
+  const allItems = useMemo<WallItem[]>(() => {
       const docs = (warRoomData.documents || []).map((d) => ({
           id: d.id,
           title: d.title,
@@ -116,10 +115,23 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
       return [...docs, ...ev, ...motions];
   }, [warRoomData]);
 
+  // ============================================================================
+  // FILTER & SEARCH
+  // ============================================================================
+  const { filteredItems: combinedItems, searchQuery, setSearchQuery, category: filter, setCategory: setFilter } = useFilterAndSearch({
+    items: allItems,
+    config: {
+      categoryField: 'type',
+      searchFields: ['title', 'desc', 'num'],
+      arrayFields: []
+    },
+    initialCategory: 'All'
+  });
+
   // Handle input with transition to keep UI responsive during filtering
   const handleSearch = (val: string) => {
       startTransition(() => {
-          setSearchTerm(val);
+          setSearchQuery(val);
       });
   };
 

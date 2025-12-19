@@ -24,6 +24,7 @@ import { useNotify } from '../../hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
+import { getTodayString } from '../../utils/dateUtils';
 import { DataService } from '../../services/data/dataService';
 import { validateDocketEntry, validateStructuredData, sanitizeDocketEntry } from '../../utils/docketValidation';
 import { DeadlineEngine } from '../../services/features/deadlines/deadlineEngine';
@@ -46,7 +47,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
   const { success: notifySuccess, error: notifyError } = useNotify();
 
   // Core Data
-  const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(initialData?.date || getTodayString());
   const [internalSeq, setInternalSeq] = useState(initialData?.sequenceNumber?.toString() || '');
   const [pacerSeq, setPacerSeq] = useState(initialData?.pacerSequenceNumber?.toString() || '');
   const [entryType, setEntryType] = useState<DocketEntryType>(initialData?.type as DocketEntryType || 'Filing');

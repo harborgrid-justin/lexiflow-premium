@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { DiscoveryAnalyticsService } from './discovery-analytics.service';
 import {
   DiscoveryAnalyticsQueryDto,
@@ -18,7 +18,7 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Discovery')
-@Public() // Allow public access for development
+
 @Controller('analytics')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -35,6 +35,7 @@ export class DiscoveryAnalyticsController {
     type: DiscoveryFunnelDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getDiscoveryFunnel(
     @Query() query: DiscoveryAnalyticsQueryDto,
   ): Promise<DiscoveryFunnelDto> {
@@ -51,6 +52,7 @@ export class DiscoveryAnalyticsController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Case not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCaseDiscoveryFunnel(
     @Param('caseId') caseId: string,
   ): Promise<DiscoveryFunnelDto> {
@@ -65,6 +67,7 @@ export class DiscoveryAnalyticsController {
     type: DiscoveryTimelineDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getDiscoveryTimeline(
     @Query() query: DiscoveryAnalyticsQueryDto,
   ): Promise<DiscoveryTimelineDto> {
@@ -81,6 +84,7 @@ export class DiscoveryAnalyticsController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Case not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCaseDiscoveryMetrics(
     @Param('caseId') caseId: string,
   ): Promise<CaseDiscoveryMetricsDto> {
@@ -95,6 +99,7 @@ export class DiscoveryAnalyticsController {
     type: DiscoveryProductionVolumeDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getProductionVolume(
     @Query() query: DiscoveryAnalyticsQueryDto,
   ): Promise<DiscoveryProductionVolumeDto> {

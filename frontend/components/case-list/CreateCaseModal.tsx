@@ -30,10 +30,11 @@ import { useTheme } from '../../context/ThemeContext';
 import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // Utils
 import { cn } from '../../utils/cn';
+import { getTodayString } from '../../utils/dateUtils';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -77,7 +78,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
           client: formData.client || '',
           matterType: formData.matterType as MatterType,
           status: isPreFiling ? CaseStatus.PreFiling : CaseStatus.Discovery,
-          filingDate: isPreFiling ? '' : new Date().toISOString().split('T')[0],
+          filingDate: isPreFiling ? '' : getTodayString(),
           description: formData.description || '',
           value: Number(formData.value),
           valuation: { amount: Number(formData.value) || 0, currency: 'USD', precision: 2 },

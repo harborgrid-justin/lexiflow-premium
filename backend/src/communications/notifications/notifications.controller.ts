@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { NotificationsService } from './notifications.service';
 import {
   CreateNotificationDto,
@@ -34,7 +34,7 @@ import {
  * @class NotificationsController
  */
 @ApiTags('Notifications')
-@Public() // Allow public access for development
+
 @Controller('notifications')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
@@ -48,6 +48,8 @@ export class NotificationsController {
   @Get()
   @ApiOperation({ summary: 'List all notifications for user' })
   @ApiResponse({ status: 200, description: 'Returns paginated notifications' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getNotifications(@Request() req, @Query() query: NotificationQueryDto) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.findAll(userId, query);
@@ -60,6 +62,8 @@ export class NotificationsController {
   @Get('unread-count')
   @ApiOperation({ summary: 'Get unread notification count' })
   @ApiResponse({ status: 200, description: 'Returns unread count' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUnreadCount(@Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     const count = await this.notificationsService.getUnreadCount(userId);
@@ -75,6 +79,9 @@ export class NotificationsController {
   @ApiResponse({ status: 200, description: 'Notification marked as read' })
   @ApiResponse({ status: 404, description: 'Notification not found' })
   @ApiParam({ name: 'id', description: 'Notification ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async markAsRead(@Param('id') id: string, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.markAsRead(id, userId);
@@ -87,6 +94,9 @@ export class NotificationsController {
   @Put('read-all')
   @ApiOperation({ summary: 'Mark all notifications as read' })
   @ApiResponse({ status: 200, description: 'All notifications marked as read' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async markAllAsRead(@Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.markAllAsRead(userId);
@@ -101,6 +111,8 @@ export class NotificationsController {
   @ApiResponse({ status: 200, description: 'Notification deleted' })
   @ApiResponse({ status: 404, description: 'Notification not found' })
   @ApiParam({ name: 'id', description: 'Notification ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async deleteNotification(@Param('id') id: string, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.delete(id, userId);
@@ -113,6 +125,8 @@ export class NotificationsController {
   @Get('preferences')
   @ApiOperation({ summary: 'Get notification preferences' })
   @ApiResponse({ status: 200, description: 'Returns user preferences' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getPreferences(@Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.getPreferences(userId);
@@ -125,6 +139,9 @@ export class NotificationsController {
   @Put('preferences')
   @ApiOperation({ summary: 'Update notification preferences' })
   @ApiResponse({ status: 200, description: 'Preferences updated successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updatePreferences(
     @Body() preferencesDto: NotificationPreferencesDto,
     @Request() req,

@@ -23,7 +23,7 @@ import { Card } from '../common/Card';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, queryClient } from '../../services/data/dataService';
+import { useQuery, queryClient } from '../../services/infrastructure/queryClient';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 
 // Services & Utils

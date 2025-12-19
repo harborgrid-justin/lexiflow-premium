@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { ExternalApiService } from './external-api.service';
 import { PacerService } from '../pacer/pacer.service';
 import { CalendarService } from '../calendar/calendar.service';
@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Integrations')
-@Public() // Allow public access for development
+
 @Controller('integrations')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -27,6 +27,8 @@ export class ExternalApiController {
   @ApiResponse({ status: 200, description: 'Search results from PACER' })
   @ApiResponse({ status: 400, description: 'Invalid search criteria' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async searchPacer(@Body() searchDto: PacerSearchDto) {
     return this.pacerService.search(searchDto);
   }
@@ -36,6 +38,8 @@ export class ExternalApiController {
   @ApiResponse({ status: 200, description: 'Case data synced from PACER' })
   @ApiResponse({ status: 400, description: 'Invalid sync request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async syncFromPacer(@Body() syncDto: PacerIntegrationSyncDto) {
     return this.pacerService.sync(syncDto);
   }
@@ -46,6 +50,8 @@ export class ExternalApiController {
   @ApiResponse({ status: 201, description: 'Calendar event created' })
   @ApiResponse({ status: 400, description: 'Invalid event data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createCalendarEvent(
     @Body() createEventDto: CalendarIntegrationEventDto,
     @CurrentUser() user: any,
@@ -59,6 +65,8 @@ export class ExternalApiController {
   @ApiResponse({ status: 200, description: 'Calendar events synced' })
   @ApiResponse({ status: 400, description: 'Invalid sync request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async syncCalendar(
     @Body() syncDto: CalendarSyncDto,
     @CurrentUser() user: any,
@@ -71,6 +79,7 @@ export class ExternalApiController {
   @ApiOperation({ summary: 'Get upcoming calendar events' })
   @ApiResponse({ status: 200, description: 'Upcoming calendar events' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUpcomingEvents() {
     return this.calendarService.getUpcomingEvents();
   }
@@ -80,6 +89,7 @@ export class ExternalApiController {
   @ApiOperation({ summary: 'Get status of all integrations' })
   @ApiResponse({ status: 200, description: 'Integration status information' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getIntegrationStatus() {
     return this.externalApiService.getIntegrationStatus();
   }

@@ -21,6 +21,7 @@ import { StrategySection } from './strategy/StrategySection';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
+import { useModalState } from '../../hooks';
 import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
 
 // Internal Dependencies - Services & Utils
@@ -52,7 +53,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [args, setArgs] = useState(initialArgs);
   const [defenses, setDefenses] = useState(initialDefenses);
   
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const strategyModal = useModalState();
   const [modalType, setModalType] = useState<'Citation' | 'Argument' | 'Defense'>('Citation');
   const [newItem, setNewItem] = useState<any>({});
   const [editingItem, setEditingItem] = useState<any>(null);

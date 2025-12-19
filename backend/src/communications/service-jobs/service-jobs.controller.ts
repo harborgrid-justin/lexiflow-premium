@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { ServiceJobsService } from './service-jobs.service';
 import {
   CreateServiceJobDto,
@@ -34,7 +34,7 @@ import {
  * @class ServiceJobsController
  */
 @ApiTags('Service of Process')
-@Public() // Allow public access for development
+
 @Controller('service-jobs')
 // @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
 @ApiBearerAuth()
@@ -48,6 +48,8 @@ export class ServiceJobsController {
   @Get()
   @ApiOperation({ summary: 'List all service jobs' })
   @ApiResponse({ status: 200, description: 'Returns paginated service jobs' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getServiceJobs(@Query() query: ServiceJobQueryDto, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.findAll(query, userId);
@@ -62,6 +64,8 @@ export class ServiceJobsController {
   @ApiResponse({ status: 200, description: 'Returns service job details' })
   @ApiResponse({ status: 404, description: 'Service job not found' })
   @ApiParam({ name: 'id', description: 'Service job ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getServiceJobById(@Param('id') id: string, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.findById(id, userId);
@@ -75,6 +79,9 @@ export class ServiceJobsController {
   @ApiOperation({ summary: 'Create new service job' })
   @ApiResponse({ status: 201, description: 'Service job created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createServiceJob(@Body() createDto: CreateServiceJobDto, @Request() req) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.create(createDto, userId);
@@ -89,6 +96,9 @@ export class ServiceJobsController {
   @ApiResponse({ status: 200, description: 'Service job updated successfully' })
   @ApiResponse({ status: 404, description: 'Service job not found' })
   @ApiParam({ name: 'id', description: 'Service job ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateServiceJob(
     @Param('id') id: string,
     @Body() updateDto: UpdateServiceJobDto,
@@ -107,6 +117,10 @@ export class ServiceJobsController {
   @ApiResponse({ status: 200, description: 'Service job completed successfully' })
   @ApiResponse({ status: 404, description: 'Service job not found' })
   @ApiParam({ name: 'id', description: 'Service job ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async completeService(
     @Param('id') id: string,
     @Body() completeDto: CompleteServiceDto,
@@ -125,6 +139,10 @@ export class ServiceJobsController {
   @ApiResponse({ status: 200, description: 'Process server assigned successfully' })
   @ApiResponse({ status: 404, description: 'Service job not found' })
   @ApiParam({ name: 'id', description: 'Service job ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async assignProcessServer(
     @Param('id') id: string,
     @Body('processServerId') processServerId: string,
@@ -143,6 +161,10 @@ export class ServiceJobsController {
   @ApiResponse({ status: 200, description: 'Service job cancelled' })
   @ApiResponse({ status: 404, description: 'Service job not found' })
   @ApiParam({ name: 'id', description: 'Service job ID' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async cancelServiceJob(
     @Param('id') id: string,
     @Body('reason') reason: string,

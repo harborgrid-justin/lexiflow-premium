@@ -18,6 +18,7 @@ import { Loader2, Radio } from 'lucide-react';
 // ============================================================================
 // Components
 import { Modal } from '../common/Modal';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';
@@ -32,11 +33,13 @@ import { useWindow } from '../../context/WindowContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 import { useLiveDocketFeed } from '../../hooks/useLiveDocketFeed';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useModalState } from '../../hooks';
+import { useToggle } from '../../hooks/useToggle';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { IdGenerator } from '../../utils/idGenerator';
 
@@ -53,9 +56,11 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'filings' | 'orders'>(filterType);
-  const [isLiveMode, setIsLiveMode] = useState(false);
+  const liveModeToggle = useToggle();
   
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const addModal = useModalState();
+  const deleteModal = useModalState();
+  const [entryToDelete, setEntryToDelete] = React.useState<string | null>(null);
 
   // --- ENTERPRISE DATA ACCESS ---
   const { data: docketEntries = [], refetch, isLoading } = useQuery<DocketEntry[]>(
@@ -91,7 +96,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       { 
           invalidateKeys: [[STORES.DOCKET, 'all']],
           onSuccess: () => {
-              setIsAddModalOpen(false);
+              addModal.close();
           }
       }
   );
@@ -99,7 +104,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   // Live Feed with WebSocket connection management
   const { status: liveFeedStatus, reconnect: reconnectLiveFeed } = useLiveDocketFeed({
       caseId: selectedCaseId || undefined,
-      enabled: isLiveMode,
+      enabled: liveModeToggle.isOpen,
       onNewEntry: (entry) => {
           // Use type-safe ID generation
           const entryWithId = {
@@ -136,8 +141,14 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   };
 
   const handleDeleteEntry = (id: string) => {
-      if(confirm("Are you sure you want to delete this docket entry? This affects the legal record.")) {
-          deleteEntry(id);
+      setEntryToDelete(id);
+      deleteModal.open();
+  };
+  
+  const confirmDelete = () => {
+      if (entryToDelete) {
+          deleteEntry(entryToDelete);
+          setEntryToDelete(null);
       }
   };
   
@@ -215,7 +226,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       {!selectedCaseId && <DocketStats />}
       
       <div className="flex justify-end px-1 gap-2">
-          {isLiveMode && liveFeedStatus === 'error' && (
+          {liveModeToggle.isOpen && liveFeedStatus === 'error' && (
             <button
               onClick={reconnectLiveFeed}
               className={cn("text-xs px-2 py-1 rounded border", theme.status.error.bg, theme.status.error.border, theme.status.error.text)}
@@ -224,18 +235,18 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
             </button>
           )}
           <button 
-            onClick={() => setIsLiveMode(!isLiveMode)}
+            onClick={liveModeToggle.toggle}
             className={cn(
                 "text-xs flex items-center px-2 py-1 rounded border transition-colors",
-                isLiveMode && liveFeedStatus === 'connected' ? "bg-red-50 border-red-200 text-red-600 animate-pulse" :
-                isLiveMode && liveFeedStatus === 'connecting' ? "bg-yellow-50 border-yellow-200 text-yellow-600" :
-                isLiveMode && liveFeedStatus === 'error' ? "bg-red-100 border-red-300 text-red-700" :
+                liveModeToggle.isOpen && liveFeedStatus === 'connected' ? "bg-red-50 border-red-200 text-red-600 animate-pulse" :
+                liveModeToggle.isOpen && liveFeedStatus === 'connecting' ? "bg-yellow-50 border-yellow-200 text-yellow-600" :
+                liveModeToggle.isOpen && liveFeedStatus === 'error' ? "bg-red-100 border-red-300 text-red-700" :
                 cn(theme.surface.default, theme.border.default, theme.text.secondary)
             )}
-            title={isLiveMode ? `Status: ${liveFeedStatus}` : 'Enable live feed'}
+            title={liveModeToggle.isOpen ? `Status: ${liveFeedStatus}` : 'Enable live feed'}
           >
               <Radio className="h-3 w-3 mr-1"/> 
-              {isLiveMode ? 
+              {liveModeToggle.isOpen ? 
                 liveFeedStatus === 'connected' ? 'Live Feed Active' :
                 liveFeedStatus === 'connecting' ? 'Connecting...' :
                 liveFeedStatus === 'error' ? 'Connection Error' :
@@ -267,7 +278,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
             <div className={cn("flex-1 overflow-auto p-0 flex flex-col", theme.surface.default)}>
                 <DocketToolbar 
                     activeCaseTitle={activeCase?.title}
-                    onAddEntry={() => setIsAddModalOpen(true)}
+                    onAddEntry={addModal.open}
                 />
                 
                 <div className="flex-1 relative">
@@ -284,12 +295,22 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
         </div>
       </div>
 
-      {isAddModalOpen && (
-          <Modal isOpen={true} onClose={() => setIsAddModalOpen(false)} title="New Docket Entry" size="lg">
+      <ConfirmDialog
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        onConfirm={confirmDelete}
+        title="Delete Docket Entry"
+        message="Are you sure you want to delete this docket entry? This affects the legal record and cannot be undone."
+        variant="danger"
+        confirmText="Delete Entry"
+      />
+
+      {addModal.isOpen && (
+          <Modal isOpen={true} onClose={addModal.close} title="New Docket Entry" size="lg">
               <div className="p-6">
                 <DocketEntryBuilder 
                     onSave={handleSaveEntry}
-                    onCancel={() => setIsAddModalOpen(false)}
+                    onCancel={addModal.close}
                     caseParties={caseParties}
                     initialData={{ caseId: (selectedCaseId || '') as CaseId }}
                 />

@@ -8,6 +8,8 @@ import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '@hooks/useNotify';
+import { useModalState } from '@hooks';
+import { getTodayString } from '@utils/dateUtils';
 
 interface FeeAgreement {
   id: string;
@@ -37,9 +39,9 @@ export const FeeAgreementManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [agreements, setAgreements] = useState<FeeAgreement[]>(mockAgreements);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const createModal = useModalState();
+  const editModal = useModalState();
+  const deleteModal = useModalState();
   const [selectedAgreement, setSelectedAgreement] = useState<FeeAgreement | null>(null);
   const [formData, setFormData] = useState<Partial<FeeAgreement>>({});
 
@@ -60,7 +62,7 @@ export const FeeAgreementManagement: React.FC = () => {
       contingencyPercent: formData.contingencyPercent,
       flatFeeAmount: formData.flatFeeAmount,
       retainerAmount: formData.retainerAmount,
-      createdAt: new Date().toISOString().split('T')[0],
+      createdAt: getTodayString(),
     };
     setAgreements([...agreements, newAgreement]);
     setIsCreateModalOpen(false);

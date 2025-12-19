@@ -18,7 +18,7 @@ import { Building2, User, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services/Data
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { useQuery } from '../../services/infrastructure/queryClient';
 
 // Hooks & Context

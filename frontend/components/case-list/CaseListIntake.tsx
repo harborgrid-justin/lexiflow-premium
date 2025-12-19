@@ -27,6 +27,7 @@ import { Button } from '../common/Button';
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
+import { useModalState } from '../../hooks';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
@@ -37,7 +38,7 @@ export const CaseListIntake: React.FC = () => {
   const { success, error: notifyError } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
-  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const leadModal = useModalState();
   const [newLead, setNewLead] = useState<any>({});
 
   // Performance Engine: useQuery for Caching & Stale-While-Revalidate
@@ -122,7 +123,7 @@ export const CaseListIntake: React.FC = () => {
 
   const stages = ['New Lead', 'Conflict Check', 'Engagement', 'Matter Created'];
 
-  if (isLoading) return <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="dashboard" itemCount={6} shimmer />;
 
   return (
     <div className="flex flex-col h-full">

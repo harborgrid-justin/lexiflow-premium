@@ -20,7 +20,7 @@ import { cn } from '../../utils/cn';
 // Services & Types
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { EvidenceItem } from '../../types';
 
 export const EvidenceCustodyLog: React.FC = () => {

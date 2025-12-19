@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery , ApiResponse} from '@nestjs/swagger';
 import { AnalyticsDashboardService } from './analytics-dashboard.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -9,7 +9,7 @@ import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('Analytics Dashboard')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('analytics/dashboard')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AnalyticsDashboardController {
@@ -20,6 +20,8 @@ export class AnalyticsDashboardController {
   @ApiOperation({ summary: 'Get key performance indicators' })
   @ApiResponse({ status: 200, description: 'KPIs retrieved successfully' })
   @ApiQuery({ name: 'period', required: false, description: 'Time period (e.g., 30d, 90d, 1y)' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getKPIs(@Query() query: any) {
     return this.analyticsDashboardService.getKPIs(query);
   }
@@ -28,6 +30,8 @@ export class AnalyticsDashboardController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
   @ApiOperation({ summary: 'Get case metrics' })
   @ApiResponse({ status: 200, description: 'Case metrics retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getCaseMetrics(@Query() query: any) {
     return this.analyticsDashboardService.getCaseMetrics(query);
   }
@@ -36,6 +40,8 @@ export class AnalyticsDashboardController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Get financial metrics' })
   @ApiResponse({ status: 200, description: 'Financial metrics retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getFinancialMetrics(@Query() query: any) {
     return this.analyticsDashboardService.getFinancialMetrics(query);
   }
@@ -44,6 +50,8 @@ export class AnalyticsDashboardController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Get team performance metrics' })
   @ApiResponse({ status: 200, description: 'Team performance retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTeamPerformance(@Query() query: any) {
     return this.analyticsDashboardService.getTeamPerformance(query);
   }
@@ -52,6 +60,8 @@ export class AnalyticsDashboardController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Get client metrics' })
   @ApiResponse({ status: 200, description: 'Client metrics retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getClientMetrics(@Query() query: any) {
     return this.analyticsDashboardService.getClientMetrics(query);
   }
@@ -60,6 +70,8 @@ export class AnalyticsDashboardController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
   @ApiOperation({ summary: 'Get chart data' })
   @ApiResponse({ status: 200, description: 'Chart data retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getChartData(@Param('type') type: string, @Query() query: any) {
     return this.analyticsDashboardService.getChartData(type, query);
   }
@@ -67,6 +79,8 @@ export class AnalyticsDashboardController {
   @Get('stats')
   @ApiOperation({ summary: 'Get dashboard statistics' })
   @ApiResponse({ status: 200, description: 'Statistics retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getStats(@Query() query: any) {
     // Return mock data for development
     return {
@@ -81,6 +95,8 @@ export class AnalyticsDashboardController {
   @ApiOperation({ summary: 'Get recent alerts' })
   @ApiResponse({ status: 200, description: 'Alerts retrieved successfully' })
   @ApiQuery({ name: 'limit', required: false, description: 'Number of alerts to return' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getRecentAlerts(@Query('limit') limit?: number) {
     // Return empty array for development
     return [];

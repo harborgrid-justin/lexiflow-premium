@@ -20,7 +20,7 @@ export const JurisdictionArbitration: React.FC = () => {
   // Defensive array validation
   const providers = Array.isArray(rawProviders) ? rawProviders : [];
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="list" itemCount={8} shimmer />;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

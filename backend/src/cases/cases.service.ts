@@ -6,6 +6,7 @@ import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
 import { PaginatedCaseResponseDto, CaseResponseDto } from './dto/case-response.dto';
+import { TransactionManagerService } from '../common/services/transaction-manager.service';
 import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class CasesService {
   constructor(
     @InjectRepository(Case)
     private readonly caseRepository: Repository<Case>,
+    private transactionManager: TransactionManagerService,
   ) {}
 
   async findAll(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
@@ -79,17 +81,17 @@ export class CasesService {
       queryBuilder.andWhere('case.isArchived = :isArchived', { isArchived });
     }
 
-    // Include related entities
+    // Include related entities - eagerly load to prevent N+1 queries
     if (includeParties) {
-      // queryBuilder.leftJoinAndSelect('case.parties', 'parties');
+      queryBuilder.leftJoinAndSelect('case.parties', 'parties');
     }
 
     if (includeTeam) {
-      // queryBuilder.leftJoinAndSelect('case.team', 'team');
+      queryBuilder.leftJoinAndSelect('case.team', 'team');
     }
 
     if (includePhases) {
-      // queryBuilder.leftJoinAndSelect('case.phases', 'phases');
+      queryBuilder.leftJoinAndSelect('case.phases', 'phases');
     }
 
     // Sorting - SQL injection protection

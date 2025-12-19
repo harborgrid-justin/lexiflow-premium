@@ -19,6 +19,7 @@ import { ContextMenu, ContextMenuItem } from '../common/ContextMenu';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useToggle } from '../../hooks/useToggle';
 
 // Types
 import { NodeType } from '../workflow/builder/types';
@@ -41,8 +42,8 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
   const [selectedConnectionId, setSelectedConnectionId] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isPropertiesOpen, setIsPropertiesOpen] = useState(true);
+  const sidebarToggle = useToggle(true);
+  const propertiesToggle = useToggle(true);
   
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -72,7 +73,7 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
 
     setSelectedNodeId(id);
     setSelectedConnectionId(null);
-    setIsPropertiesOpen(true);
+    propertiesToggle.open();
   }, [pan, scale, addNode, updateNode]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -125,7 +126,7 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
         
         const items = generateNodeContextMenuItems(
           nodeId,
-          (id) => { setSelectedNodeId(id); setIsPropertiesOpen(true); },
+          (id) => { setSelectedNodeId(id); propertiesToggle.open(); },
           (id) => {
             const n = nodes.find(n => n.id === id);
             if (n) addNode(n.type, n.x + 20, n.y + 20, n.label);
@@ -143,7 +144,7 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-        <BuilderToolbar scale={scale} setScale={setScale} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <BuilderToolbar scale={scale} setScale={setScale} onToggleSidebar={sidebarToggle.toggle} />
         <div 
           className="flex-1 flex overflow-hidden relative" 
           onDrop={onDrop} 
@@ -152,7 +153,7 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
           onMouseUp={() => setDraggingNodeId(null)}
           onContextMenu={handleContextMenu}
         >
-            <LitigationPalette isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <LitigationPalette isOpen={sidebarToggle.isOpen} onClose={sidebarToggle.close} />
             
             <BuilderCanvas 
                 nodes={nodes} 
@@ -170,8 +171,8 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
             />
             
             <LitigationProperties 
-                isOpen={isPropertiesOpen} 
-                onClose={() => setIsPropertiesOpen(false)} 
+                isOpen={propertiesToggle.isOpen} 
+                onClose={propertiesToggle.close} 
                 selectedNode={nodes.find(n => n.id === selectedNodeId) || null} 
                 selectedConnection={connections.find(c => c.id === selectedConnectionId) || null}
                 onUpdateNode={updateNode} 

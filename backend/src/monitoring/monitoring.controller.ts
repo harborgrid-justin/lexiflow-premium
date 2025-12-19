@@ -1,64 +1,86 @@
 import { Controller, Get, Post, Body, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { MonitoringService } from './monitoring.service';
-import { AlertSeverity } from './entities/system-alert.entity';
+import { GetMetricsQueryDto, RecordMetricDto, GetAlertsQueryDto, CreateAlertDto, AcknowledgeAlertDto } from './dto/monitoring.dto';
 
 @ApiTags('Monitoring')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
-@Public()
+
 @Controller('monitoring')
 export class MonitoringController {
   constructor(private readonly monitoringService: MonitoringService) {}
 
   @Get('health')
   @ApiOperation({ summary: 'Get system health' })
+  @ApiResponse({ status: 200, description: 'Health status retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getSystemHealth() {
     return await this.monitoringService.getSystemHealth();
   }
 
   @Get('metrics')
   @ApiOperation({ summary: 'Get performance metrics' })
-  async getMetrics(@Query() query: any) {
+  @ApiResponse({ status: 200, description: 'Metrics retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getMetrics(@Query() query: GetMetricsQueryDto) {
     return await this.monitoringService.getMetrics(query);
   }
 
   @Post('metrics')
   @ApiOperation({ summary: 'Record performance metric' })
-  async recordMetric(@Body() body: any) {
-    return await this.monitoringService.recordMetric(body);
+  @ApiResponse({ status: 201, description: 'Metric recorded successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  async recordMetric(@Body() dto: RecordMetricDto) {
+    return await this.monitoringService.recordMetric(dto);
   }
 
   @Get('alerts')
   @ApiOperation({ summary: 'Get system alerts' })
-  async getAlerts(
-    @Query('severity') severity?: AlertSeverity,
-    @Query('resolved') resolved?: string,
-    @Query() pagination?: any,
-  ) {
-    return await this.monitoringService.getAlerts({
-      severity,
-      resolved: resolved === 'true',
-      ...pagination,
-    });
+  @ApiResponse({ status: 200, description: 'Alerts retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getAlerts(@Query() query: GetAlertsQueryDto) {
+    return await this.monitoringService.getAlerts(query);
   }
 
   @Post('alerts')
   @ApiOperation({ summary: 'Create system alert' })
-  async createAlert(@Body() body: any) {
-    return await this.monitoringService.createAlert(body);
+  @ApiResponse({ status: 201, description: 'Alert created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  async createAlert(@Body() dto: CreateAlertDto) {
+    return await this.monitoringService.createAlert(dto);
   }
 
   @Post('alerts/:id/acknowledge')
   @ApiOperation({ summary: 'Acknowledge alert' })
-  async acknowledgeAlert(@Param('id') id: string, @Body() body: { userId: string }) {
-    return await this.monitoringService.acknowledgeAlert(id, body.userId);
+  @ApiResponse({ status: 200, description: 'Alert acknowledged successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  async acknowledgeAlert(@Param('id') id: string, @Body() dto: AcknowledgeAlertDto) {
+    return await this.monitoringService.acknowledgeAlert(id, dto.userId);
   }
 
   @Post('alerts/:id/resolve')
   @ApiOperation({ summary: 'Resolve alert' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async resolveAlert(@Param('id') id: string) {
     return await this.monitoringService.resolveAlert(id);
   }

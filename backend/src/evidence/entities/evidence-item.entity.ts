@@ -26,6 +26,7 @@ export enum EvidenceStatus {
 }
 
 @Entity('evidence_items')
+@Index(['caseId'])
 @Index(['evidenceNumber'])
 @Index(['evidenceType'])
 @Index(['status'])

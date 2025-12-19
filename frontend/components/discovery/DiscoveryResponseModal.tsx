@@ -11,7 +11,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 interface DiscoveryResponseModalProps {

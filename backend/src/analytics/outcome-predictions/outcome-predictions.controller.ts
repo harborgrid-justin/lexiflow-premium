@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { OutcomePredictionsService } from './outcome-predictions.service';
 import {
   OutcomePredictionDto,
@@ -17,7 +17,7 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Outcome Predictions')
-@Public() // Allow public access for development
+
 @Controller('analytics/outcome-predictions')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -34,6 +34,8 @@ export class OutcomePredictionsController {
     description: 'Outcome prediction retrieved successfully',
     type: OutcomePredictionDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getPrediction(
     @Param('caseId') caseId: string,
   ): Promise<OutcomePredictionDto> {
@@ -47,6 +49,10 @@ export class OutcomePredictionsController {
     description: 'Case analyzed and prediction generated',
     type: OutcomePredictionDto,
   })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async analyzeCase(@Body() dto: AnalyzeOutcomeDto): Promise<OutcomePredictionDto> {
     return this.outcomePredictionsService.analyzeCase(dto);
   }
@@ -59,6 +65,8 @@ export class OutcomePredictionsController {
     description: 'Similar cases retrieved successfully',
     type: [SimilarCaseDto],
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getSimilarCases(
     @Param('caseId') caseId: string,
     @Query('limit') limit?: number,
@@ -73,6 +81,8 @@ export class OutcomePredictionsController {
     description: 'Model accuracy metrics retrieved successfully',
     type: PredictionAccuracyDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getPredictionAccuracy(): Promise<PredictionAccuracyDto> {
     return this.outcomePredictionsService.getPredictionAccuracy();
   }

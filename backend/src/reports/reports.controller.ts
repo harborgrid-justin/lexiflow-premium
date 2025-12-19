@@ -18,7 +18,7 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiQuery,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { ReportsService } from './reports.service';
 import {
   GenerateReportDto,
@@ -29,7 +29,7 @@ import {
 } from './dto/reports.dto';
 
 @ApiTags('Reports')
-@Public() // Allow public access for development
+
 @Controller('reports')
 // @UseGuards(JwtAuthGuard) // Uncomment when auth is available
 @ApiBearerAuth()
@@ -43,60 +43,90 @@ export class ReportsController {
     description: 'Report templates retrieved successfully',
     type: [ReportTemplateDto],
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTemplates(): Promise<ReportTemplateDto[]> {
     return this.reportsService.getReportTemplates();
   }
 
   @Get()
   @ApiOperation({ summary: 'Get list of generated reports' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(): Promise<any[]> {
     return this.reportsService.findAll();
   }
 
   @Get('by-type/:type')
   @ApiOperation({ summary: 'Get reports by type' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findByType(@Param('type') type: string): Promise<any[]> {
     return this.reportsService.findByType(type);
   }
 
   @Get('templates/:id')
   @ApiOperation({ summary: 'Get template by id' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getTemplateById(@Param('id') id: string): Promise<any> {
     return this.reportsService.getTemplateById(id);
   }
 
   @Post('templates')
   @ApiOperation({ summary: 'Create a new template' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createTemplate(@Body() createDto: any, @Query('userId') userId: string): Promise<any> {
     return this.reportsService.createTemplate(createDto, userId);
   }
 
   @Post('schedule')
   @ApiOperation({ summary: 'Schedule recurring report' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async scheduleReport(@Body() scheduleDto: any, @Query('userId') userId: string): Promise<any> {
     return this.reportsService.scheduleReport(scheduleDto, userId);
   }
 
   @Get('scheduled/:userId')
   @ApiOperation({ summary: 'Get scheduled reports for user' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getScheduledReports(@Param('userId') userId: string): Promise<any[]> {
     return this.reportsService.getScheduledReports(userId);
   }
 
   @Delete('scheduled/:id')
   @ApiOperation({ summary: 'Cancel scheduled report' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async cancelScheduledReport(@Param('id') id: string, @Query('userId') userId: string): Promise<void> {
     return this.reportsService.cancelScheduledReport(id, userId);
   }
 
   @Get(':id/status')
   @ApiOperation({ summary: 'Get report generation status' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getReportStatus(@Param('id') id: string): Promise<any> {
     return this.reportsService.getReportStatus(id);
   }
 
   @Post(':id/export')
   @ApiOperation({ summary: 'Export report in different format' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async exportReport(@Param('id') id: string, @Body() exportDto: { format: string }): Promise<any> {
     return this.reportsService.exportReport(id, exportDto.format as any);
   }
@@ -110,6 +140,8 @@ export class ReportsController {
   })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getReports(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
@@ -125,6 +157,9 @@ export class ReportsController {
     description: 'Report retrieved successfully',
     type: ReportDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getReport(@Param('id') id: string): Promise<ReportDto> {
     return this.reportsService.getReportById(id);
   }
@@ -137,6 +172,10 @@ export class ReportsController {
     description: 'Report generation initiated',
     type: ReportDto,
   })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async generate(@Body() dto: GenerateReportDto, @Query('userId') userId: string): Promise<ReportDto> {
     return this.reportsService.generateReport(dto, userId || 'current-user');
   }
@@ -144,6 +183,10 @@ export class ReportsController {
   @Post('generateReport')
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Generate a new report (alias)' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async generateReport(@Body() dto: GenerateReportDto): Promise<ReportDto> {
     const userId = 'current-user';
     return this.reportsService.generateReport(dto, userId);
@@ -157,12 +200,18 @@ export class ReportsController {
     description: 'Download URL retrieved successfully',
     type: DownloadReportDto,
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async download(@Param('id') id: string): Promise<DownloadReportDto> {
     return this.reportsService.getDownloadUrl(id);
   }
 
   @Get(':id/getDownloadUrl')
   @ApiOperation({ summary: 'Get download URL (alias)' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getDownloadUrl(@Param('id') id: string): Promise<DownloadReportDto> {
     return this.reportsService.getDownloadUrl(id);
   }
@@ -175,6 +224,9 @@ export class ReportsController {
     status: 204,
     description: 'Report deleted successfully',
   })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async deleteReport(@Param('id') id: string): Promise<void> {
     return this.reportsService.deleteReport(id);
   }

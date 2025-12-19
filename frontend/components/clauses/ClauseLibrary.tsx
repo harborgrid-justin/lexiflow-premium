@@ -24,6 +24,7 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Input } from '../common/Inputs';
 import { Badge } from '../common/Badge';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { DataService } from '../../services/data/dataService';
 
@@ -60,12 +61,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
     });
 
     if (isLoading) {
-        return (
-            <div className={cn("p-8 text-center", theme.text.secondary)}>
-                <BookOpen className={cn("h-12 w-12 mx-auto mb-3 animate-pulse", theme.text.tertiary)} />
-                Loading clause library...
-            </div>
-        );
+        return <AdaptiveLoader contentType="list" itemCount={8} shimmer message="Loading clause library..." />;
     }
 
     return (

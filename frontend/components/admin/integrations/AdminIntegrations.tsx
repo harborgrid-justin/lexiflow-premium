@@ -6,8 +6,8 @@ import { Badge } from '../../common/Badge';
 import { RefreshCw, Link as LinkIcon, Settings, Plus, Loader2 } from 'lucide-react';
 import { useTheme } from '@context/ThemeContext';
 import { cn } from '@utils/cn';
-import { DataService } from '@services/dataService';
-import { useQuery } from '@services/queryClient';
+import { DataService } from '@services/data/dataService';
+import { useQuery } from '@services/infrastructure/queryClient';
 
 export const AdminIntegrations: React.FC = () => {
   const { theme } = useTheme();

@@ -14,7 +14,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { DocumentGridCard } from './DocumentGridCard';

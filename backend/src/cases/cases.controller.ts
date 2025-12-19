@@ -12,7 +12,7 @@ import {
   UseGuards,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
@@ -22,7 +22,7 @@ import { CaseResponseDto, PaginatedCaseResponseDto } from './dto/case-response.d
 
 @ApiTags('Cases')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('cases')
 export class CasesController {
   constructor(private readonly casesService: CasesService) {}
@@ -30,6 +30,8 @@ export class CasesController {
   @Get()
   @ApiOperation({ summary: 'List all cases' })
   @ApiResponse({ status: 200, description: 'List of cases', type: PaginatedCaseResponseDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query() filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
     return this.casesService.findAll(filterDto);
   }
@@ -37,6 +39,8 @@ export class CasesController {
   @Get('archived')
   @ApiOperation({ summary: 'Get archived/closed cases' })
   @ApiResponse({ status: 200, description: 'List of archived cases', type: PaginatedCaseResponseDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findArchived(@Query() filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
     return this.casesService.findArchived(filterDto);
   }
@@ -45,6 +49,8 @@ export class CasesController {
   @ApiOperation({ summary: 'Get case by ID' })
   @ApiResponse({ status: 200, description: 'Case details', type: CaseResponseDto })
   @ApiResponse({ status: 404, description: 'Case not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<CaseResponseDto> {
     return this.casesService.findOne(id);
   }
@@ -53,6 +59,10 @@ export class CasesController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new case' })
   @ApiResponse({ status: 201, description: 'Case created successfully', type: CaseResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createCaseDto: CreateCaseDto): Promise<CaseResponseDto> {
     return this.casesService.create(createCaseDto);
   }
@@ -61,6 +71,9 @@ export class CasesController {
   @ApiOperation({ summary: 'Update a case' })
   @ApiResponse({ status: 200, description: 'Case updated successfully', type: CaseResponseDto })
   @ApiResponse({ status: 404, description: 'Case not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCaseDto: UpdateCaseDto,
@@ -73,6 +86,8 @@ export class CasesController {
   @ApiOperation({ summary: 'Delete a case' })
   @ApiResponse({ status: 204, description: 'Case deleted successfully' })
   @ApiResponse({ status: 404, description: 'Case not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.casesService.remove(id);
   }
@@ -81,6 +96,10 @@ export class CasesController {
   @ApiOperation({ summary: 'Archive a case' })
   @ApiResponse({ status: 200, description: 'Case archived successfully', type: CaseResponseDto })
   @ApiResponse({ status: 404, description: 'Case not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async archive(@Param('id', ParseUUIDPipe) id: string): Promise<CaseResponseDto> {
     return this.casesService.archive(id);
   }

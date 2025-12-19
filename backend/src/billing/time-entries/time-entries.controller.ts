@@ -11,7 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { TimeEntriesService } from './time-entries.service';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
 import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
@@ -20,39 +20,55 @@ import { TimeEntry } from './entities/time-entry.entity';
 
 @ApiTags('Billing - Time Entries')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('billing/time-entries')
 export class TimeEntriesController {
   constructor(private readonly timeEntriesService: TimeEntriesService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createTimeEntryDto: CreateTimeEntryDto): Promise<TimeEntry> {
     return await this.timeEntriesService.create(createTimeEntryDto);
   }
 
   @Post('bulk')
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async bulkCreate(@Body('entries') entries: CreateTimeEntryDto[]): Promise<TimeEntry[]> {
     return await this.timeEntriesService.bulkCreate(entries);
   }
 
   @Get()
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query() filterDto: TimeEntryFilterDto): Promise<{ data: TimeEntry[]; total: number }> {
     return await this.timeEntriesService.findAll(filterDto);
   }
 
   @Get('case/:caseId')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findByCase(@Param('caseId') caseId: string): Promise<TimeEntry[]> {
     return await this.timeEntriesService.findByCase(caseId);
   }
 
   @Get('case/:caseId/unbilled')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getUnbilledByCase(@Param('caseId') caseId: string): Promise<TimeEntry[]> {
     return await this.timeEntriesService.getUnbilledByCase(caseId);
   }
 
   @Get('case/:caseId/totals')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTotalsByCase(
     @Param('caseId') caseId: string,
     @Query('startDate') startDate?: string,
@@ -62,16 +78,25 @@ export class TimeEntriesController {
   }
 
   @Get('user/:userId')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findByUser(@Param('userId') userId: string): Promise<TimeEntry[]> {
     return await this.timeEntriesService.findByUser(userId);
   }
 
   @Get(':id')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async findOne(@Param('id') id: string): Promise<TimeEntry> {
     return await this.timeEntriesService.findOne(id);
   }
 
   @Put(':id')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(
     @Param('id') id: string,
     @Body() updateTimeEntryDto: UpdateTimeEntryDto,
@@ -80,11 +105,19 @@ export class TimeEntriesController {
   }
 
   @Put(':id/approve')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async approve(@Param('id') id: string, @Body('approvedBy') approvedBy: string): Promise<TimeEntry> {
     return await this.timeEntriesService.approve(id, approvedBy);
   }
 
   @Put(':id/bill')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async bill(
     @Param('id') id: string,
     @Body('invoiceId') invoiceId: string,
@@ -95,6 +128,9 @@ export class TimeEntriesController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async remove(@Param('id') id: string): Promise<void> {
     await this.timeEntriesService.remove(id);
   }

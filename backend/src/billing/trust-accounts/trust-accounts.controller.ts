@@ -12,7 +12,7 @@ import {
   Head,
 } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { TrustAccountsService } from './trust-accounts.service';
 import { CreateTrustAccountDto } from './dto/create-trust-account.dto';
 import { UpdateTrustAccountDto } from './dto/update-trust-account.dto';
@@ -22,7 +22,7 @@ import { TrustTransaction } from './entities/trust-transaction.entity';
 
 @ApiTags('Billing - Trust Accounts')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('billing/trust-accounts')
 export class TrustAccountsController {
   constructor(private readonly trustAccountsService: TrustAccountsService) {}
@@ -36,11 +36,17 @@ export class TrustAccountsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createTrustAccountDto: CreateTrustAccountDto): Promise<TrustAccount> {
     return await this.trustAccountsService.create(createTrustAccountDto);
   }
 
   @Get()
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
     @Query('clientId') clientId?: string,
     @Query('status') status?: TrustAccountStatus,
@@ -49,21 +55,32 @@ export class TrustAccountsController {
   }
 
   @Get('low-balance')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getLowBalanceAccounts(@Query('threshold') threshold?: number): Promise<TrustAccount[]> {
     return await this.trustAccountsService.getLowBalanceAccounts(threshold);
   }
 
   @Get(':id')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async findOne(@Param('id') id: string): Promise<TrustAccount> {
     return await this.trustAccountsService.findOne(id);
   }
 
   @Get(':id/balance')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getBalance(@Param('id') id: string): Promise<{ balance: number; currency: string }> {
     return await this.trustAccountsService.getBalance(id);
   }
 
   @Get(':id/transactions')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getTransactions(
     @Param('id') id: string,
     @Query('startDate') startDate?: string,
@@ -73,6 +90,11 @@ export class TrustAccountsController {
   }
 
   @Post(':id/deposit')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async deposit(
     @Param('id') id: string,
     @Body() depositDto: DepositDto,
@@ -82,6 +104,11 @@ export class TrustAccountsController {
   }
 
   @Post(':id/withdraw')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async withdraw(
     @Param('id') id: string,
     @Body() withdrawalDto: WithdrawalDto,
@@ -91,6 +118,11 @@ export class TrustAccountsController {
   }
 
   @Post(':id/transaction')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createTransaction(
     @Param('id') id: string,
     @Body() transactionDto: CreateTransactionDto,
@@ -100,6 +132,10 @@ export class TrustAccountsController {
   }
 
   @Put(':id')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(
     @Param('id') id: string,
     @Body() updateTrustAccountDto: UpdateTrustAccountDto,
@@ -109,6 +145,9 @@ export class TrustAccountsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async remove(@Param('id') id: string): Promise<void> {
     await this.trustAccountsService.remove(id);
   }

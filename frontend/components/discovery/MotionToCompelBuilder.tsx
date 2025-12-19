@@ -10,6 +10,7 @@ import { cn } from '../../utils/cn';
 import { sanitizeHtml } from '../../utils/sanitize';
 import { GeminiService } from '../../services/features/research/geminiService';
 import { useNotify } from '../../hooks/useNotify';
+import { useMultiSelection } from '../../hooks/useMultiSelection';
 
 interface MotionToCompelBuilderProps {
   requests: DiscoveryRequest[];
@@ -19,25 +20,20 @@ interface MotionToCompelBuilderProps {
 export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ requests, onCancel }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
+  const deficientRequests = requests.filter(r => r.status === 'Overdue' || r.status === 'Responded');
+  const requestSelection = useMultiSelection<DiscoveryRequest>([], (a, b) => a.id === b.id);
   const [meetConferDate, setMeetConferDate] = useState('');
   const [draft, setDraft] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const deficientRequests = requests.filter(r => r.status === 'Overdue' || r.status === 'Responded'); // Assuming Responded might be deficient
-
-  const toggleRequest = (id: string) => {
-      setSelectedRequests(prev => prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]);
-  };
-
   const handleGenerate = async () => {
-      if (selectedRequests.length === 0 || !meetConferDate) {
+      if (requestSelection.selected.length === 0 || !meetConferDate) {
           notify.error("Select at least one deficient request and enter meet & confer date.");
           return;
       }
       
       setIsGenerating(true);
-      const selectedDetails = requests.filter(r => selectedRequests.includes(r.id)).map(r => `${r.id}: ${r.title} (${r.type})`).join('\n');
+      const selectedDetails = requestSelection.selected.map(r => `${r.id}: ${r.title} (${r.type})`).join('\n');
       
       const prompt = `Draft a Motion to Compel Discovery pursuant to FRCP Rule 37(a). 
       The moving party certifies they have conferred in good faith with opposing counsel on ${meetConferDate} but were unable to obtain the disclosure/discovery without court action.
@@ -82,14 +78,14 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                        {deficientRequests.map(req => (
                            <div 
                                key={req.id} 
-                               onClick={() => toggleRequest(req.id)}
+                               onClick={() => requestSelection.toggle(req)}
                                className={cn(
                                    "p-3 rounded border cursor-pointer transition-all",
-                                   selectedRequests.includes(req.id) ? cn(theme.status.error.bg, theme.status.error.border) : cn(theme.surface.default, theme.border.default)
+                                   requestSelection.isSelected(req) ? cn(theme.status.error.bg, theme.status.error.border) : cn(theme.surface.default, theme.border.default)
                                )}
                            >
                                <div className="flex items-start gap-3">
-                                   <div className={cn("mt-0.5", selectedRequests.includes(req.id) ? theme.status.error.text : theme.text.tertiary)}>
+                                   <div className={cn("mt-0.5", requestSelection.isSelected(req) ? theme.status.error.text : theme.text.tertiary)}>
                                        <CheckSquare className="h-4 w-4" />
                                    </div>
                                    <div>

@@ -4,11 +4,12 @@ import { Button } from '../common/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import { useModalState } from '../../hooks';
 import { DataService } from '../../services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleading-types';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
@@ -22,7 +23,7 @@ interface PleadingDashboardProps {
 
 export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, onEdit, caseId }) => {
     const { theme } = useTheme();
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const createModal = useModalState();
     const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
     
     const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
@@ -44,7 +45,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         DataService.pleadings.add,
         {
             onSuccess: (newDoc) => {
-                setIsCreateModalOpen(false);
+                createModal.close();
                 onCreate(newDoc);
             }
         }

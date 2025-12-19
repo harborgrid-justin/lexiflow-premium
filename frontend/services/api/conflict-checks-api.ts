@@ -26,7 +26,7 @@ export interface ConflictCheck {
 }
 
 export class ConflictChecksApiService {
-  private readonly baseUrl = '/conflict-checks';
+  private readonly baseUrl = '/compliance/conflicts';
 
   async run(data: { clientName: string; opposingParties?: string[]; caseType?: string }): Promise<ConflictCheck> {
     return apiClient.post<ConflictCheck>(`${this.baseUrl}/run`, data);
@@ -50,5 +50,29 @@ export class ConflictChecksApiService {
 
   async reject(id: string, reason: string): Promise<ConflictCheck> {
     return apiClient.post<ConflictCheck>(`${this.baseUrl}/${id}/reject`, { reason });
+  }
+
+  async resolve(id: string, data: {
+    resolution: string;
+    approvedBy?: string;
+    notes?: string;
+  }): Promise<ConflictCheck> {
+    return apiClient.post<ConflictCheck>(`${this.baseUrl}/${id}/resolve`, data);
+  }
+
+  async waive(id: string, data: {
+    reason: string;
+    waivedBy: string;
+    expiresAt?: string;
+  }): Promise<ConflictCheck> {
+    return apiClient.post<ConflictCheck>(`${this.baseUrl}/${id}/waive`, data);
+  }
+
+  async check(data: {
+    clientName: string;
+    opposingParties?: string[];
+    caseType?: string;
+  }): Promise<ConflictCheck> {
+    return apiClient.post<ConflictCheck>(`${this.baseUrl}/check`, data);
   }
 }

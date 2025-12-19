@@ -12,14 +12,14 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery , ApiResponse} from '@nestjs/swagger';
 import { ClausesService } from './clauses.service';
 import { CreateClauseDto } from './dto/create-clause.dto';
 import { UpdateClauseDto } from './dto/update-clause.dto';
 import { ClauseCategory } from './entities/clause.entity';
 
 @ApiTags('clauses')
-@Public() // Allow public access for development
+
 @Controller('clauses')
 export class ClausesController {
   constructor(private readonly clausesService: ClausesService) {}
@@ -27,6 +27,10 @@ export class ClausesController {
   @Post()
   @ApiOperation({ summary: 'Create a new clause' })
   @ApiResponse({ status: 201, description: 'Clause created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(@Body() createClauseDto: CreateClauseDto) {
     return await this.clausesService.create(createClauseDto);
   }
@@ -38,6 +42,8 @@ export class ClausesController {
   @ApiQuery({ name: 'tag', required: false, type: String })
   @ApiQuery({ name: 'isActive', required: false, type: Boolean })
   @ApiResponse({ status: 200, description: 'Clauses retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
     @Query('category') category?: ClauseCategory,
     @Query('search') search?: string,
@@ -51,6 +57,8 @@ export class ClausesController {
   @ApiOperation({ summary: 'Get most used clauses' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Most used clauses retrieved' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getMostUsed(@Query('limit', ParseIntPipe) limit?: number) {
     return await this.clausesService.getMostUsed(limit || 10);
   }
@@ -59,6 +67,8 @@ export class ClausesController {
   @ApiOperation({ summary: 'Get a clause by ID' })
   @ApiResponse({ status: 200, description: 'Clause found' })
   @ApiResponse({ status: 404, description: 'Clause not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return await this.clausesService.findOne(id);
   }
@@ -67,6 +77,9 @@ export class ClausesController {
   @ApiOperation({ summary: 'Update a clause' })
   @ApiResponse({ status: 200, description: 'Clause updated successfully' })
   @ApiResponse({ status: 404, description: 'Clause not found' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateClauseDto: UpdateClauseDto,
@@ -78,6 +91,8 @@ export class ClausesController {
   @ApiOperation({ summary: 'Delete a clause' })
   @ApiResponse({ status: 200, description: 'Clause deleted successfully' })
   @ApiResponse({ status: 404, description: 'Clause not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.clausesService.remove(id);
     return { message: 'Clause deleted successfully' };
@@ -86,6 +101,11 @@ export class ClausesController {
   @Post(':id/increment-usage')
   @ApiOperation({ summary: 'Increment clause usage count' })
   @ApiResponse({ status: 200, description: 'Usage count incremented' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async incrementUsage(@Param('id', ParseUUIDPipe) id: string) {
     await this.clausesService.incrementUsage(id);
     return { message: 'Usage count incremented' };

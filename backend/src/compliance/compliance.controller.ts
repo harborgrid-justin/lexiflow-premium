@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, UseGuards, Head, HttpCode, HttpStatus } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam , ApiResponse} from '@nestjs/swagger';
 import { ComplianceService } from './compliance.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -9,7 +9,7 @@ import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('Compliance')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('compliance')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ComplianceController {
@@ -19,6 +19,8 @@ export class ComplianceController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async health() {
     return { status: 'ok', service: 'compliance' };
   }
@@ -40,6 +42,8 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get all conflict checks' })
   @ApiResponse({ status: 200, description: 'List of conflict checks' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getConflictChecks() {
     return this.complianceService.getAllConflictChecks();
   }
@@ -55,6 +59,8 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Get all audit logs' })
   @ApiResponse({ status: 200, description: 'List of audit logs' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getAllAuditLogs() {
     return this.complianceService.getAllAuditLogs();
   }
@@ -63,6 +69,10 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Run compliance check on a case' })
   @ApiResponse({ status: 201, description: 'Compliance check completed' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async runCheck(@Body() checkDto: { caseId: string; type: string }) {
     return this.complianceService.runComplianceCheck(checkDto.caseId);
   }
@@ -72,6 +82,8 @@ export class ComplianceController {
   @ApiOperation({ summary: 'Get compliance checks for a case' })
   @ApiResponse({ status: 200, description: 'List of compliance checks' })
   @ApiParam({ name: 'caseId', description: 'Case ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getChecks(@Param('caseId') caseId: string) {
     return this.complianceService.getChecksByCaseId(caseId);
   }
@@ -81,6 +93,9 @@ export class ComplianceController {
   @ApiOperation({ summary: 'Get compliance check details' })
   @ApiResponse({ status: 200, description: 'Compliance check details' })
   @ApiParam({ name: 'id', description: 'Check ID or Case ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getCheckById(@Param('id') id: string) {
     const checks = await this.complianceService.getChecksByCaseId(id);
     return checks[0] || null;
@@ -91,6 +106,9 @@ export class ComplianceController {
   @ApiOperation({ summary: 'Get audit logs for an entity' })
   @ApiResponse({ status: 200, description: 'List of audit logs' })
   @ApiParam({ name: 'id', description: 'Entity ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async getAuditLogById(@Param('id') id: string) {
     return this.complianceService.getAuditLogsByEntityId('case', id);
   }
@@ -99,6 +117,10 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
   @ApiOperation({ summary: 'Generate compliance report' })
   @ApiResponse({ status: 201, description: 'Compliance report generated' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async generateComplianceReport(@Body() reportDto: { caseId: string; format: string }) {
     try {
       const score = await this.complianceService.getComplianceScore(reportDto.caseId);
@@ -114,6 +136,10 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Export audit logs' })
   @ApiResponse({ status: 201, description: 'Audit logs exported' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async exportAuditLogs(@Body() exportDto: { startDate: Date; endDate: Date; format: string }) {
     return { exported: true, format: exportDto.format, count: 0, filePath: `/exports/audit-logs.${exportDto.format}` };
   }
@@ -122,6 +148,8 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Get all compliance records' })
   @ApiResponse({ status: 200, description: 'List of all compliance records' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   findAll() {
     return this.complianceService.findAll();
   }
@@ -132,6 +160,8 @@ export class ComplianceController {
   @ApiResponse({ status: 200, description: 'Compliance record details' })
   @ApiResponse({ status: 404, description: 'Compliance record not found' })
   @ApiParam({ name: 'id', description: 'Compliance record ID' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   findOne(@Param('id') id: string) {
     return this.complianceService.findOne(id);
   }
@@ -140,6 +170,10 @@ export class ComplianceController {
   @Roles(UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Create compliance record' })
   @ApiResponse({ status: 201, description: 'Compliance record created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   create(@Body() createDto: any) {
     return this.complianceService.create(createDto);
   }

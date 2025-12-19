@@ -9,10 +9,19 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       url: process.env.DATABASE_URL,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: true, // Must be false when using migrations to avoid conflicts
-      logging: process.env.DB_LOGGING === 'true',
+      synchronize: process.env.NODE_ENV === 'development',
+      migrationsRun: process.env.NODE_ENV === 'production',
+      logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
+      maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
       ssl: {
         rejectUnauthorized: false,
+      },
+      // Connection pooling configuration
+      extra: {
+        max: parseInt(process.env.DB_POOL_MAX || '20'),
+        min: parseInt(process.env.DB_POOL_MIN || '5'),
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
       },
     }
   : {
@@ -24,13 +33,22 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       database: process.env.DB_DATABASE || 'lexiflow_db',
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: true, // Must be false when using migrations to avoid conflicts
-      logging: process.env.DB_LOGGING === 'true',
+      synchronize: process.env.NODE_ENV === 'development',
+      migrationsRun: process.env.NODE_ENV === 'production',
+      logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
+      maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
       ssl: process.env.DB_SSL === 'true'
         ? {
             rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',
           }
         : false,
+      // Connection pooling configuration
+      extra: {
+        max: parseInt(process.env.DB_POOL_MAX || '20'),
+        min: parseInt(process.env.DB_POOL_MIN || '5'),
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+      },
     };
 
 const dataSource = new DataSource(dataSourceOptions);

@@ -92,6 +92,9 @@ export class TrustAccount {
   @Column({ type: 'text', nullable: true })
   notes: string;
 
+  @VersionColumn()
+  version: number;
+
   @Column({ type: 'uuid', nullable: true })
   responsibleAttorney: string;
 

@@ -21,6 +21,7 @@ import { Wand2, Plus, Shield, Mail, Loader2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -54,7 +55,7 @@ export const PrivilegeLog: React.FC = () => {
     }
   });
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;
 
   return (
     <div className="animate-fade-in space-y-4">

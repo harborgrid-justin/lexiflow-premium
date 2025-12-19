@@ -19,16 +19,19 @@ import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } 
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWorkerSearch } from '../../hooks/useWorkerSearch';
+import { useModalState } from '../../hooks';
+import { getTodayString } from '../../utils/dateUtils';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
@@ -47,7 +50,9 @@ import { FirmAsset } from '../../types';
 export const AssetManager: React.FC = () => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const addModal = useModalState();
+  const deleteModal = useModalState();
+  const [assetToDelete, setAssetToDelete] = useState<string | null>(null);
   const [newAsset, setNewAsset] = useState<Partial<FirmAsset>>({});
 
   // Enterprise Data Access
@@ -64,7 +69,7 @@ export const AssetManager: React.FC = () => {
       {
           invalidateKeys: [['assets', 'all']],
           onSuccess: () => {
-              setIsModalOpen(false);
+              addModal.close();
               setNewAsset({});
           }
       }
@@ -83,7 +88,7 @@ export const AssetManager: React.FC = () => {
           type: (newAsset.type as any) || 'Hardware',
           assignedTo: newAsset.assignedTo || 'Unassigned',
           status: (newAsset.status as any) || 'Active',
-          purchaseDate: newAsset.purchaseDate || new Date().toISOString().split('T')[0],
+          purchaseDate: newAsset.purchaseDate || getTodayString(),
           value: Number(newAsset.value) || 0,
           serialNumber: newAsset.serialNumber
       };
@@ -91,8 +96,14 @@ export const AssetManager: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-      if (confirm('Delete this asset record?')) {
-          deleteAsset(id);
+      setAssetToDelete(id);
+      deleteModal.open();
+  };
+  
+  const confirmDeleteAsset = () => {
+      if (assetToDelete) {
+          deleteAsset(assetToDelete);
+          setAssetToDelete(null);
       }
   };
 
@@ -144,7 +155,7 @@ export const AssetManager: React.FC = () => {
         </div>
         <div className="flex gap-2">
             <Button variant="outline" icon={RefreshCw} onClick={() => refetch()}>Refresh</Button>
-            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Asset</Button>
+            <Button variant="primary" icon={Plus} onClick={addModal.open}>Add Asset</Button>
         </div>
       </div>
 
@@ -181,7 +192,7 @@ export const AssetManager: React.FC = () => {
           </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Register Asset">
+      <Modal isOpen={addModal.isOpen} onClose={addModal.close} title="Register Asset">
           <div className="p-6 space-y-4">
               <Input label="Item Name" value={newAsset.name || ''} onChange={e => setNewAsset({...newAsset, name: e.target.value})} placeholder="e.g. MacBook Pro M3"/>
               <div className="grid grid-cols-2 gap-4">
@@ -204,8 +215,18 @@ export const AssetManager: React.FC = () => {
                    <Input label="Purchase Date" type="date" value={newAsset.purchaseDate || ''} onChange={e => setNewAsset({...newAsset, purchaseDate: e.target.value})}/>
                    <Input label="Value" type="number" value={newAsset.value || ''} onChange={e => setNewAsset({...newAsset, value: Number(e.target.value)})}/>
               </div>
+              <ConfirmDialog
+                isOpen={deleteModal.isOpen}
+                onClose={deleteModal.close}
+                onConfirm={confirmDeleteAsset}
+                title="Delete Asset"
+                message="Are you sure you want to delete this asset record? This action cannot be undone."
+                variant="danger"
+                confirmText="Delete Asset"
+              />
+              
               <div className="pt-4 flex justify-end gap-2 border-t mt-4">
-                  <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                  <Button variant="secondary" onClick={addModal.close}>Cancel</Button>
                   <Button variant="primary" onClick={handleAddAsset}>Save Asset</Button>
               </div>
           </div>

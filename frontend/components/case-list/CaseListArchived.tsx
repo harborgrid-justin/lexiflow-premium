@@ -60,7 +60,7 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
       }
   };
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;
 
   return (
     <div className="space-y-4">

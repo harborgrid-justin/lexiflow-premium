@@ -12,6 +12,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
 import { MattersService } from './matters.service';
 import { CreateMatterDto } from './dto/create-matter.dto';
 import { UpdateMatterDto } from './dto/update-matter.dto';
@@ -23,6 +24,10 @@ export class MattersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(
     @Body(ValidationPipe) createMatterDto: CreateMatterDto,
   ): Promise<MatterResponseDto> {
@@ -30,6 +35,8 @@ export class MattersController {
   }
 
   @Get()
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
     @Query('page') page?: string,
     @Query('pageSize') pageSize?: string,
@@ -62,16 +69,23 @@ export class MattersController {
   }
 
   @Get('statistics')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getStatistics(@Query('userId') userId?: string): Promise<any> {
     return this.mattersService.getStatistics(userId);
   }
 
   @Get(':id')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async findOne(@Param('id') id: string): Promise<MatterResponseDto> {
     return this.mattersService.findOne(id);
   }
 
   @Get('by-number/:matterNumber')
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findByMatterNumber(
     @Param('matterNumber') matterNumber: string,
   ): Promise<MatterResponseDto> {
@@ -79,6 +93,10 @@ export class MattersController {
   }
 
   @Patch(':id')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateMatterDto: UpdateMatterDto,
@@ -88,16 +106,29 @@ export class MattersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
   async remove(@Param('id') id: string): Promise<void> {
     return this.mattersService.remove(id);
   }
 
   @Post(':id/archive')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async archive(@Param('id') id: string): Promise<MatterResponseDto> {
     return this.mattersService.archive(id);
   }
 
   @Post(':id/restore')
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async restore(@Param('id') id: string): Promise<MatterResponseDto> {
     return this.mattersService.restore(id);
   }

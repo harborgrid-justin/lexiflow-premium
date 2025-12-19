@@ -9,14 +9,15 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { SanctionMotion } from '../../types';
 import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
+import { useModalState } from '../../hooks';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 
 export const MotionForSanctions: React.FC = () => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const sanctionModal = useModalState();
   const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
 
   const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
@@ -28,7 +29,7 @@ export const MotionForSanctions: React.FC = () => {
       DataService.discovery.addSanctionMotion,
       {
           invalidateKeys: [[STORES.SANCTIONS, 'all']],
-          onSuccess: () => { setIsModalOpen(false); setNewMotion({}); }
+          onSuccess: () => { sanctionModal.close(); setNewMotion({}); }
       }
   );
 

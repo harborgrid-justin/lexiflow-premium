@@ -5,7 +5,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { BillingAnalyticsService } from './billing-analytics.service';
 import {
   BillingAnalyticsQueryDto,
@@ -18,7 +18,7 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Billing')
-@Public() // Allow public access for development
+
 @Controller('analytics/billing')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -35,6 +35,7 @@ export class BillingAnalyticsController {
     type: BillingMetricsDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getBillingMetrics(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<BillingMetricsDto> {
@@ -49,6 +50,7 @@ export class BillingAnalyticsController {
     type: [BillingTrendDataPoint],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getBillingTrends(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<BillingTrendDataPoint[]> {
@@ -63,6 +65,7 @@ export class BillingAnalyticsController {
     type: WipAgingDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getWipAging(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<WipAgingDto> {
@@ -77,6 +80,7 @@ export class BillingAnalyticsController {
     type: ArAgingDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getArAging(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<ArAgingDto> {
@@ -91,6 +95,7 @@ export class BillingAnalyticsController {
     type: RealizationAnalysisDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getRealizationAnalysis(
     @Query() query: BillingAnalyticsQueryDto,
   ): Promise<RealizationAnalysisDto> {

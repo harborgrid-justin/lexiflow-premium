@@ -26,10 +26,12 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Modal } from '../common/Modal';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Input } from '../common/Inputs';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useModalState } from '../../hooks';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -51,7 +53,9 @@ interface AccessMatrixEditorProps {
 export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile }) => {
   const { theme } = useTheme();
   const [permissions, setPermissions] = useState<GranularPermission[]>(profile.accessMatrix);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const permModal = useModalState();
+  const deleteModal = useModalState();
+  const [permToDelete, setPermToDelete] = useState<string | null>(null);
   const [newPerm, setNewPerm] = useState<Partial<GranularPermission>>({ effect: 'Allow', scope: 'Global' });
 
   const getEffectColor = (effect: AccessEffect) => {
@@ -59,7 +63,15 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
   };
 
   const handleDelete = (id: string) => {
-      setPermissions(prev => prev.filter(p => p.id !== id));
+      setPermToDelete(id);
+      deleteModal.open();
+  };
+  
+  const confirmDeletePermission = () => {
+      if (permToDelete) {
+          setPermissions(prev => prev.filter(p => p.id !== permToDelete));
+          setPermToDelete(null);
+      }
   };
 
   const handleAdd = () => {
@@ -75,7 +87,7 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
           conditions: []
       };
       setPermissions([...permissions, perm]);
-      setIsModalOpen(false);
+      permModal.close();
       setNewPerm({ effect: 'Allow', scope: 'Global' });
   };
 
@@ -90,7 +102,7 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
                     Fine-grained permissions overriding standard role-based access. Evaluation order: Deny {'>'} Allow.
                 </p>
             </div>
-            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Permission</Button>
+            <Button variant="primary" icon={Plus} onClick={permModal.open}>Add Permission</Button>
         </div>
 
         <div className="flex-1 overflow-hidden rounded-lg border shadow-sm bg-white">
@@ -148,7 +160,17 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
             </TableContainer>
         </div>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Grant Granular Permission" size="md">
+        <ConfirmDialog
+          isOpen={deleteModal.isOpen}
+          onClose={deleteModal.close}
+          onConfirm={confirmDeletePermission}
+          title="Delete Permission"
+          message="Are you sure you want to delete this permission? This will immediately affect the user's access rights."
+          variant="danger"
+          confirmText="Delete Permission"
+        />
+
+        <Modal isOpen={permModal.isOpen} onClose={permModal.close} title="Grant Granular Permission" size="md">
             <div className="p-6 space-y-4">
                 <Input label="Resource Identifier" placeholder="e.g. billing.invoices" value={newPerm.resource || ''} onChange={e => setNewPerm({...newPerm, resource: e.target.value})} />
                 

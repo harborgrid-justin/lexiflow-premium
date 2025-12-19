@@ -19,12 +19,13 @@ import { Plus, Loader2 } from 'lucide-react';
 // Services & Data
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
+import { useModalState } from '../../hooks';
 
 // Components
 import { TabbedPageLayout } from '../layout/TabbedPageLayout';
@@ -57,7 +58,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     const [view, setView] = useState<'workspace' | 'designer'>('workspace');
     const [activePleading, setActivePleading] = useState<PleadingDocument | null>(null);
     const [activeTab, setActiveTab] = useSessionStorage<string>('pleading_builder_tab', 'drafts');
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const createModal = useModalState();
     const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
     const { success: notifySuccess, error: notifyError } = useNotify();

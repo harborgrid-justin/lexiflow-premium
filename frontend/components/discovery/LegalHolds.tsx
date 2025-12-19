@@ -21,6 +21,7 @@ import { AlertCircle, Plus, User, Building2, Calendar, Loader2 } from 'lucide-re
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -31,7 +32,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { discoveryQueryKeys } from '../../services/infrastructure/queryKeys';
 import { LegalHoldStatusEnum } from '../../types/enums';
 
@@ -112,7 +113,7 @@ export const LegalHolds: React.FC = () => {
     }
   });
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;
 
   return (
     <div className="animate-fade-in space-y-4">

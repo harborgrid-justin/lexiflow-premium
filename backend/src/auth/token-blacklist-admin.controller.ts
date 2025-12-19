@@ -16,7 +16,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBody,
-} from '@nestjs/swagger';
+ }from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
@@ -30,7 +30,7 @@ import { TokenBlacklistCleanupService } from './token-blacklist-cleanup.service'
  */
 @ApiTags('Admin - Token Blacklist')
 @ApiBearerAuth('JWT-auth')
-@Public() // Allow public access for development
+
 @Controller('admin/blacklist')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR)
@@ -88,6 +88,8 @@ export class TokenBlacklistAdminController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async triggerCleanup() {
     const result = await this.cleanupService.triggerManualCleanup();
     return {
@@ -108,6 +110,8 @@ export class TokenBlacklistAdminController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async revokeUserTokens(@Param('userId') userId: string) {
     await this.tokenBlacklistService.blacklistUserTokens(userId);
     return {
@@ -149,6 +153,7 @@ export class TokenBlacklistAdminController {
   @ApiResponse({ status: 400, description: 'Bad request - Invalid JTI or expiration date' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async blacklistToken(@Body() body: { jti: string; expiresAt: string }) {
     const expiresAt = new Date(body.expiresAt);
 

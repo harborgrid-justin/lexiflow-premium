@@ -22,10 +22,11 @@ import { GanttTimeline } from './planning/GanttTimeline';
 import { useTheme } from '../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
 import { useNotify } from '../../hooks/useNotify';
+import { useModalState } from '../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { Pathfinding } from '../../utils/pathfinding';
 import { cn } from '../../utils/cn';
 
@@ -45,7 +46,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
   const [zoom, setZoom] = useState<ZoomLevel>('Month');
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const taskModal = useModalState();
   const [showCriticalPath, setShowCriticalPath] = useState(false);
   
   // Set start date to 1 month ago for context

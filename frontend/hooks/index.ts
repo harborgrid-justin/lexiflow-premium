@@ -38,6 +38,13 @@ export * from './useSort';
 export * from './useToggle';
 export * from './useWizard';
 export * from './useWorkerSearch';
+export * from './useTimeTracker';
+export * from './useSettlementSimulation';
+export * from './useSLAMonitoring';
+export * from './useFilterAndSearch';
+export * from './useModalState';
+export * from './useArrayState';
+export * from './useSelectionState';
 
 // ============================================================================
 // DEPRECATED HOOKS (for backward compatibility - remove in v2.0)
@@ -85,6 +92,16 @@ export * from './useNexusGraph';
 export * from './useRuleSearchAndSelection';
 export * from './useSecureMessenger';
 export * from './useWorkflowBuilder';
+
+// Analytics & Monitoring Hooks
+export { useTimeTracker } from './useTimeTracker';
+export { useSettlementSimulation } from './useSettlementSimulation';
+export { useSLAMonitoring } from './useSLAMonitoring';
+export type { SLAItem } from './useSLAMonitoring';
+
+// Data Management Hooks
+export { useFilterAndSearch } from './useFilterAndSearch';
+export type { FilterConfig, UseFilterAndSearchOptions, UseFilterAndSearchReturn } from './useFilterAndSearch';
 
 // ============================================================================
 // STRATEGY CANVAS & COMMAND MANAGEMENT

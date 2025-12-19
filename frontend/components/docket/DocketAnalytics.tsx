@@ -29,7 +29,7 @@ import { Card } from '../common/Card';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces

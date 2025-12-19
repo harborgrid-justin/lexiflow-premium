@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Bell, X, Check, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { useModalState } from '../../hooks/useModalState';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { NotificationService, Notification, NotificationGroup } from '../../services/data/dataService';
@@ -13,7 +14,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 export const NotificationPanel: React.FC = () => {
   const { theme } = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
+  const panel = useModalState();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [groupedNotifications, setGroupedNotifications] = useState<(Notification | NotificationGroup)[]>([]);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
@@ -209,7 +210,7 @@ export const NotificationPanel: React.FC = () => {
     <>
       {/* Bell Icon Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={panel.toggle}
         className={cn(
           "relative p-2 rounded-lg transition-colors",
           theme.surface.input,
@@ -226,12 +227,12 @@ export const NotificationPanel: React.FC = () => {
       </button>
 
       {/* Notification Panel */}
-      {isOpen && (
+      {panel.isOpen && (
         <>
           {/* Backdrop */}
           <div
             className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
+            onClick={panel.close}
           />
 
           {/* Panel */}

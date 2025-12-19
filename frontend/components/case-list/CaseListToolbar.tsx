@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSpreadsheet, FileText } from 'lucide-react';
 
 // ============================================================================
@@ -19,6 +19,7 @@ import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSprea
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import { queryClient } from '../../services/data/dataService';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -62,15 +63,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
-        setShowExportMenu(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  useClickOutside(exportMenuRef, () => setShowExportMenu(false));
 
   const handleSync = async () => {
     try {

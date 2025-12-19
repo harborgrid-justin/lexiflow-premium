@@ -16,26 +16,12 @@
  * import { StatusDot, Currency } from './components/common/primitives';
  */
 
-export {
-  StatusDot,
-  Currency,
-  DateText,
-  FileIcon,
-  LoadingSpinner,
-  TagList,
-  SectionHeader,
-  TruncatedText,
-  MetricCard
-} from './primitives';
-
-export type {
-  StatusDotProps,
-  CurrencyProps,
-  DateTextProps,
-  FileIconProps,
-  LoadingSpinnerProps,
-  TagListProps,
-  SectionHeaderProps,
-  TruncatedTextProps,
-  MetricCardProps
-} from './primitives';
+export { StatusDot, type StatusDotProps } from './primitives/StatusDot';
+export { Currency, type CurrencyProps } from './primitives/Currency';
+export { DateText, type DateTextProps } from './primitives/DateText';
+export { FileIcon, type FileIconProps } from './primitives/FileIcon';
+export { LoadingSpinner, type LoadingSpinnerProps } from './primitives/LoadingSpinner';
+export { TagList, type TagListProps } from './primitives/TagList';
+export { SectionHeader, type SectionHeaderProps } from './primitives/SectionHeader';
+export { TruncatedText, type TruncatedTextProps } from './primitives/TruncatedText';
+export { MetricCard, type MetricCardProps } from './primitives/MetricCard';

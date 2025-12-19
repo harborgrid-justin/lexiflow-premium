@@ -25,15 +25,41 @@ export class QueryWorkbenchService {
     let rowsAffected = 0;
 
     try {
-      // Security: Only allow SELECT, EXPLAIN, and WITH queries
+      // Security: Strict query validation
       const queryUpper = dto.query.trim().toUpperCase();
+      
+      // Only allow SELECT, EXPLAIN, and WITH queries
       if (!queryUpper.startsWith('SELECT') && 
           !queryUpper.startsWith('EXPLAIN') && 
           !queryUpper.startsWith('WITH')) {
         throw new BadRequestException('Only SELECT, EXPLAIN, and WITH queries are allowed');
       }
-
-      result = await this.dataSource.query(dto.query);
+      
+      // Block dangerous keywords
+      const dangerousKeywords = ['DROP', 'DELETE', 'TRUNCATE', 'ALTER', 'CREATE', 'INSERT', 'UPDATE', 'GRANT', 'REVOKE'];
+      const hasUnsafeKeyword = dangerousKeywords.some(keyword => 
+        new RegExp(`\\b${keyword}\\b`, 'i').test(dto.query)
+      );
+      
+      if (hasUnsafeKeyword) {
+        throw new BadRequestException('Query contains prohibited keywords');
+      }
+      
+      // Block multiple statements (semicolon not at end)
+      const statements = dto.query.split(';').filter(s => s.trim());
+      if (statements.length > 1) {
+        throw new BadRequestException('Multiple statements not allowed');
+      }
+      
+      // Execute with timeout
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Query timeout after 30 seconds')), 30000)
+      );
+      
+      result = await Promise.race([
+        this.dataSource.query(dto.query),
+        timeoutPromise
+      ]);
       rowsAffected = Array.isArray(result) ? result.length : 0;
     } catch (err) {
       success = false;

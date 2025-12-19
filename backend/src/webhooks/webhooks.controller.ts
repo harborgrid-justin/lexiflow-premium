@@ -11,14 +11,14 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { WebhooksService } from './webhooks.service';
 import { CreateWebhookDto, UpdateWebhookDto } from './dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @ApiTags('Webhooks')
-@Public() // Allow public access for development
+
 @Controller('webhooks')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -30,6 +30,8 @@ export class WebhooksController {
   @ApiResponse({ status: 201, description: 'Webhook created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(
     @Body() createWebhookDto: CreateWebhookDto,
     @CurrentUser() user: any,
@@ -42,6 +44,7 @@ export class WebhooksController {
   @ApiOperation({ summary: 'List all webhooks' })
   @ApiResponse({ status: 200, description: 'List of webhooks' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
     @CurrentUser() user: any,
   ) {
@@ -54,6 +57,7 @@ export class WebhooksController {
   @ApiResponse({ status: 200, description: 'Webhook details' })
   @ApiResponse({ status: 404, description: 'Webhook not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(
     @Param('id') id: string,
     @CurrentUser() user: any,
@@ -67,6 +71,8 @@ export class WebhooksController {
   @ApiResponse({ status: 200, description: 'Webhook updated successfully' })
   @ApiResponse({ status: 404, description: 'Webhook not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('id') id: string,
     @Body() updateWebhookDto: UpdateWebhookDto,
@@ -82,6 +88,7 @@ export class WebhooksController {
   @ApiResponse({ status: 204, description: 'Webhook deleted successfully' })
   @ApiResponse({ status: 404, description: 'Webhook not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(
     @Param('id') id: string,
     @CurrentUser() user: any,
@@ -95,6 +102,9 @@ export class WebhooksController {
   @ApiResponse({ status: 200, description: 'Test event sent' })
   @ApiResponse({ status: 404, description: 'Webhook not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
   async test(
     @Param('id') id: string,
     // @CurrentUser() user: any,
@@ -109,6 +119,7 @@ export class WebhooksController {
   @ApiResponse({ status: 200, description: 'Webhook deliveries' })
   @ApiResponse({ status: 404, description: 'Webhook not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async getDeliveries(
     @Param('id') id: string,
     // @CurrentUser() user: any,

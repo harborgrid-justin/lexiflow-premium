@@ -1,74 +1,122 @@
-// Validate required environment variables in production
-const validateRequiredEnvVars = () => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  const requiredInProduction = [
-    'JWT_SECRET',
-    'JWT_REFRESH_SECRET',
-    'DB_PASSWORD',
-  ];
+import * as Joi from 'joi';
 
-  if (isProduction) {
-    const missing = requiredInProduction.filter((key) => !process.env[key]);
-    if (missing.length > 0) {
-      throw new Error(
-        `Missing required environment variables for production: ${missing.join(', ')}`,
-      );
-    }
-  }
-};
+// Validate ALL environment variables with Joi schema
+const envSchema = Joi.object({
+  NODE_ENV: Joi.string()
+    .valid('development', 'production', 'test')
+    .default('development'),
+  PORT: Joi.number().port().default(5000),
+  API_PREFIX: Joi.string().default('api/v1'),
 
-validateRequiredEnvVars();
+  // Database - all required except defaults
+  DATABASE_URL: Joi.string().uri().optional(),
+  DB_HOST: Joi.string().hostname().default('localhost'),
+  DB_PORT: Joi.number().port().default(5432),
+  DB_DATABASE: Joi.string().default('lexiflow'),
+  DB_USERNAME: Joi.string().default('lexiflow_admin'),
+  DB_PASSWORD: Joi.string().required(), // CRITICAL: Always required
+  DB_SSL: Joi.string().valid('true', 'false').default('false'),
+  DB_SSL_REJECT_UNAUTHORIZED: Joi.string().valid('true', 'false').default('true'),
+  DB_LOGGING: Joi.string().valid('true', 'false').default('false'),
 
-export default () => ({
-  nodeEnv: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT, 10) || 5000,
-  apiPrefix: process.env.API_PREFIX || 'api/v1',
-
-  // Database
-  database: {
-    url: process.env.DATABASE_URL,
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
-    name: process.env.DB_DATABASE || 'lexiflow',
-    user: process.env.DB_USERNAME || 'lexiflow_admin',
-    password: process.env.DB_PASSWORD, // Required - no default
-    ssl: process.env.DB_SSL === 'true',
-    sslRejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',
-    logging: process.env.DB_LOGGING === 'true',
-  },
-
-  // JWT - secrets required, no defaults
-  jwt: {
-    secret: process.env.JWT_SECRET, // Required - no default
-    expiresIn: process.env.JWT_EXPIRES_IN || '900', // 15 minutes in seconds
-    refreshSecret: process.env.JWT_REFRESH_SECRET, // Required - no default
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '604800', // 7 days in seconds
-  },
-
-  // File Storage
-  storage: {
-    uploadPath: process.env.UPLOAD_PATH || './uploads',
-    maxFileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 52428800, // 50MB
-  },
+  // JWT - CRITICAL: Always required
+  JWT_SECRET: Joi.string().min(32).required(),
+  JWT_EXPIRES_IN: Joi.string().default('900'),
+  JWT_REFRESH_SECRET: Joi.string().min(32).required(),
+  JWT_REFRESH_EXPIRES_IN: Joi.string().default('604800'),
 
   // Redis
-  redis: {
-    url: process.env.REDIS_URL,
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT, 10) || 6379,
-    password: process.env.REDIS_PASSWORD,
-    username: process.env.REDIS_USERNAME || 'default',
+  REDIS_HOST: Joi.string().hostname().default('localhost'),
+  REDIS_PORT: Joi.number().port().default(6379),
+  REDIS_PASSWORD: Joi.string().optional(),
+  REDIS_DB: Joi.number().integer().min(0).default(0),
+
+  // Storage
+  UPLOAD_PATH: Joi.string().default('./uploads'),
+  MAX_FILE_SIZE: Joi.number().positive().default(52428800), // 50MB
+  ALLOWED_FILE_TYPES: Joi.string().default(
+    'pdf,doc,docx,xls,xlsx,txt,jpg,jpeg,png',
+  ),
+
+  // CORS
+  CORS_ORIGINS: Joi.string().default('http://localhost:5173'),
+
+  // Rate Limiting
+  THROTTLE_TTL: Joi.number().positive().default(60),
+  THROTTLE_LIMIT: Joi.number().positive().default(10),
+
+  // Email (if configured)
+  SMTP_HOST: Joi.string().hostname().optional(),
+  SMTP_PORT: Joi.number().port().optional(),
+  SMTP_USER: Joi.string().email().optional(),
+  SMTP_PASSWORD: Joi.string().optional(),
+  SMTP_FROM: Joi.string().email().optional(),
+}).unknown(true); // Allow other env vars not in schema
+
+const { error, value: validatedEnv } = envSchema.validate(process.env, {
+  abortEarly: false,
+  stripUnknown: false,
+});
+
+if (error) {
+  throw new Error(
+    `Environment validation failed:\n${error.details.map((d) => `  - ${d.message}`).join('\n')}`,
+  );
+}
+
+export default () => ({
+  nodeEnv: validatedEnv.NODE_ENV,
+  port: validatedEnv.PORT,
+  apiPrefix: validatedEnv.API_PREFIX,
+
+  // Database - validated and type-safe
+  database: {
+    url: validatedEnv.DATABASE_URL,
+    host: validatedEnv.DB_HOST,
+    port: validatedEnv.DB_PORT,
+    name: validatedEnv.DB_DATABASE,
+    user: validatedEnv.DB_USERNAME,
+    password: validatedEnv.DB_PASSWORD,
+    ssl: validatedEnv.DB_SSL === 'true',
+    sslRejectUnauthorized: validatedEnv.DB_SSL_REJECT_UNAUTHORIZED === 'true',
+    logging: validatedEnv.DB_LOGGING === 'true',
   },
 
-  // CORS - restrict in production
+  // JWT - validated min 32 chars
+  jwt: {
+    secret: validatedEnv.JWT_SECRET,
+    expiresIn: validatedEnv.JWT_EXPIRES_IN,
+    refreshSecret: validatedEnv.JWT_REFRESH_SECRET,
+    refreshExpiresIn: validatedEnv.JWT_REFRESH_EXPIRES_IN,
+  },
+
+  // File Storage - validated defaults
+  storage: {
+    uploadPath: validatedEnv.UPLOAD_PATH,
+    maxFileSize: validatedEnv.MAX_FILE_SIZE,
+  },
+
+  // Redis - validated
+  redis: {
+    url: validatedEnv.REDIS_URL,
+    host: validatedEnv.REDIS_HOST,
+    port: validatedEnv.REDIS_PORT,
+    password: validatedEnv.REDIS_PASSWORD,
+    username: validatedEnv.REDIS_USERNAME || 'default',
+  },
+
+  // CORS - use validated origins
   cors: {
-    origin: process.env.CORS_ORIGIN || (process.env.NODE_ENV === 'production' ? undefined : (origin, callback) => {
-      if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    }),
+    origin:
+      validatedEnv.NODE_ENV === 'production'
+        ? validatedEnv.CORS_ORIGINS.split(',')
+        : (origin, callback) => {
+            if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
+              callback(null, true);
+            } else {
+              callback(new Error('Not allowed by CORS'));
+            }
+          },
     credentials: true,
   },
 

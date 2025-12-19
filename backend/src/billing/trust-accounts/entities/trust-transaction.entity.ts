@@ -4,6 +4,7 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  VersionColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/base/base.entity';
 import { Case } from '../../../cases/entities/case.entity';

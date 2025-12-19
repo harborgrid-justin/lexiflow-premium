@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Database, RefreshCw, Trash2, Plus, Info, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { db } from '../../../db';
+import { db } from '../../../services/data/db';
 import { useQuery } from '../../../services/infrastructure/queryClient';
 
 export const DatabaseManagement: React.FC = () => {

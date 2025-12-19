@@ -117,7 +117,7 @@ export class InvoicesApiService {
   }
 
   /**
-   * Delete an invoice (soft delete)
+   * Delete an invoice
    * DELETE /api/v1/billing/invoices/:id
    */
   async delete(id: string): Promise<void> {

@@ -37,7 +37,7 @@ import { DataService } from '../../services/data/dataService';
 import { GeminiService, BriefCritique } from '../../services/features/research/geminiService';
 import { AnalysisEngine } from '../../services/features/analysis/analysisEngine';
 import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // ============================================================================
 // TYPES & INTERFACES

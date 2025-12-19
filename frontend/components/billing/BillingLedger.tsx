@@ -9,10 +9,11 @@ import { DataService } from '../../services/data/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { useWindow } from '../../context/WindowContext';
 import { Formatters } from '../../utils/formatters';
+import { getTodayString } from '../../utils/dateUtils';
 import { OperatingLedger } from '../practice/finance/OperatingLedger';
 import { TrustLedger } from '../practice/finance/TrustLedger';
 import { useNotify } from '../../hooks/useNotify';
@@ -64,7 +65,7 @@ export const BillingLedger: React.FC = () => {
                   <div className="flex gap-4">
                       <div className="flex-1">
                           <label className="block text-xs font-bold text-slate-500 mb-1">Date</label>
-                          <input type="date" className="w-full border rounded p-2 text-sm" defaultValue={new Date().toISOString().split('T')[0]} aria-label="Date" />
+                          <input type="date" className="w-full border rounded p-2 text-sm" defaultValue={getTodayString()} aria-label="Date" />
                       </div>
                       <div className="flex-1">
                           <label className="block text-xs font-bold text-slate-500 mb-1">Amount</label>

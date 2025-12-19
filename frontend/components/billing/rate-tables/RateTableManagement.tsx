@@ -8,6 +8,8 @@ import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '@hooks/useNotify';
+import { useModalState } from '@hooks';
+import { getTodayString } from '@utils/dateUtils';
 
 interface RateTable {
   id: string;

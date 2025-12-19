@@ -9,7 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { filterClauses } from './clauseList.utils';
 import { useQuery } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { VirtualList } from '../common/VirtualList';
 import { EmptyState } from '../common/EmptyState';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '../../config/master.config';

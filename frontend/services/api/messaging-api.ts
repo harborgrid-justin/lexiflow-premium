@@ -26,32 +26,101 @@ export interface MessageFilters {
   priority?: Message['priority'];
 }
 
-export class MessagingApiService {
-  private readonly baseUrl = '/messaging';
+export interface Conversation {
+  id: string;
+  participants: string[];
+  subject?: string;
+  lastMessage?: Message;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  role?: string;
+  avatar?: string;
+}
+
+export class MessagingApiService {
+  private readonly baseUrl = '/messenger';
+
+  // Health check
+  async health(): Promise<{ status: string; service: string }> {
+    return apiClient.get<{ status: string; service: string }>(this.baseUrl);
+  }
+
+  // Contacts
+  async getContacts(filters?: Record<string, any>): Promise<Contact[]> {
+    return apiClient.get<Contact[]>(`${this.baseUrl}/contacts`, filters);
+  }
+
+  // Conversations
+  async getConversations(filters?: Record<string, any>): Promise<Conversation[]> {
+    return apiClient.get<Conversation[]>(`${this.baseUrl}/conversations`, filters);
+  }
+
+  async getConversation(id: string): Promise<Conversation> {
+    return apiClient.get<Conversation>(`${this.baseUrl}/conversations/${id}`);
+  }
+
+  async createConversation(data: {
+    participants: string[];
+    subject?: string;
+    initialMessage?: string;
+  }): Promise<Conversation> {
+    return apiClient.post<Conversation>(`${this.baseUrl}/conversations`, data);
+  }
+
+  async updateConversation(id: string, data: Partial<Conversation>): Promise<Conversation> {
+    return apiClient.put<Conversation>(`${this.baseUrl}/conversations/${id}`, data);
+  }
+
+  async deleteConversation(id: string): Promise<void> {
+    return apiClient.delete(`${this.baseUrl}/conversations/${id}`);
+  }
+
+  // Messages
+  async getMessages(conversationId: string): Promise<Message[]> {
+    return apiClient.get<Message[]>(`${this.baseUrl}/conversations/${conversationId}/messages`);
+  }
+
+  async sendMessage(data: {
+    conversationId: string;
+    body: string;
+    priority?: Message['priority'];
+    attachments?: string[];
+  }): Promise<Message> {
+    return apiClient.post<Message>(`${this.baseUrl}/messages`, data);
+  }
+
+  async markAsRead(messageId: string): Promise<Message> {
+    return apiClient.post<Message>(`${this.baseUrl}/messages/${messageId}/mark-read`, {});
+  }
+
+  async getUnreadCount(): Promise<{ count: number }> {
+    return apiClient.get<{ count: number }>(`${this.baseUrl}/unread-count`);
+  }
+
+  // Legacy methods for backward compatibility
   async getAll(filters?: MessageFilters): Promise<Message[]> {
-    const params = new URLSearchParams();
-    if (filters?.threadId) params.append('threadId', filters.threadId);
-    if (filters?.read !== undefined) params.append('read', String(filters.read));
-    if (filters?.priority) params.append('priority', filters.priority);
-    const queryString = params.toString();
-    const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Message[]>(url);
+    // Deprecated - use getConversations() instead
+    return apiClient.get<Message[]>(`${this.baseUrl}/conversations`, filters);
   }
 
   async getById(id: string): Promise<Message> {
-    return apiClient.get<Message>(`${this.baseUrl}/${id}`);
+    // Deprecated - use getConversation() instead
+    return apiClient.get<Message>(`${this.baseUrl}/conversations/${id}`);
   }
 
   async send(data: Partial<Message>): Promise<Message> {
-    return apiClient.post<Message>(this.baseUrl, data);
-  }
-
-  async markAsRead(id: string): Promise<Message> {
-    return apiClient.patch<Message>(`${this.baseUrl}/${id}/read`, {});
+    // Deprecated - use sendMessage() instead
+    return this.sendMessage(data as any);
   }
 
   async delete(id: string): Promise<void> {
-    return apiClient.delete(`${this.baseUrl}/${id}`);
+    // Deprecated - use deleteConversation() instead
+    return this.deleteConversation(id);
   }
 }

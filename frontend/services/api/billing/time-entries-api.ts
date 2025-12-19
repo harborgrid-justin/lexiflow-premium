@@ -88,6 +88,15 @@ export class TimeEntriesApiService {
   }
 
   /**
+   * Get time entries for a specific user
+   * GET /api/v1/billing/time-entries/user/:userId
+   */
+  async getByUser(userId: string): Promise<TimeEntry[]> {
+    const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/user/${userId}`);
+    return response.data;
+  }
+
+  /**
    * Create a new time entry
    * POST /api/v1/billing/time-entries
    */

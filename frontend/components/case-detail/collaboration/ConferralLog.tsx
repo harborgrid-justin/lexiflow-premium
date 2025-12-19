@@ -21,6 +21,8 @@ import { Modal } from '../../common/Modal';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useQuery, useMutation, queryClient } from '../../../services/infrastructure/queryClient';
+import { useModalState } from '../../../hooks';
+import { getTodayString } from '../../../utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
@@ -36,11 +38,11 @@ interface ConferralLogProps {
 
 export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
   const { theme } = useTheme();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const conferralModal = useModalState();
   const [newSession, setNewSession] = useState<Partial<ConferralSession>>({
     method: 'Phone',
     result: 'Pending',
-    date: new Date().toISOString().split('T')[0]
+    date: getTodayString()
   });
 
   // Enterprise Data Access

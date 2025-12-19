@@ -23,11 +23,13 @@ import { SignaturePad } from '../common/SignaturePad';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useNotify } from '../../hooks/useNotify';
+import { useModalState } from '../../hooks';
+import { getTodayString } from '../../utils/dateUtils';
 
 // Services & Types
 import { ChainService } from '../../services/infrastructure/chainService';
 import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 import { DataService } from '../../services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
 import { evidenceQueryKeys } from '../../services/infrastructure/queryKeys';
@@ -41,9 +43,9 @@ interface EvidenceChainOfCustodyProps {
 export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ selectedItem, onCustodyUpdate }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const custodyModal = useModalState();
   const [newEvent, setNewEvent] = useState<Partial<ChainOfCustodyEvent>>({
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayString(),
     action: CustodyActionType.TRANSFER_TO_STORAGE,
     actor: 'Current User'
   });

@@ -19,7 +19,7 @@ import { CheckSquare, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 // Services & Data
 import { useQuery } from '../../services/infrastructure/queryClient';
 import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/dataService';
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';

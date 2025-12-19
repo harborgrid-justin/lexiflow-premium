@@ -5,7 +5,7 @@
   "main": "dist/src/main.js",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "start:dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 nest start --watch",

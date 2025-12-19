@@ -17,7 +17,7 @@ import { Plus, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 import { STORES } from '../../services/data/db';
 

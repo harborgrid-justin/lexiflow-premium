@@ -22,7 +22,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';

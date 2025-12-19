@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+export { queryClient } from '../services/infrastructure/queryClient';
 import { queryClient } from '../services/infrastructure/queryClient';
 import type { 
   QueryKey, 
@@ -14,7 +15,7 @@ export function useQuery<T>(
   options: UseQueryOptions<T> = {}
 ) {
   const { staleTime = 60000, enabled = true, initialData } = options;
-  const hashedKey = useMemo(() => queryClient.hashKey(key), [JSON.stringify(key)]);
+  const hashedKey = useMemo(() => queryClient.hashKey(key), [key]);
 
   const [state, setState] = useState<QueryState<T>>(() => {
     const cached = queryClient.getQueryState<T>(key);

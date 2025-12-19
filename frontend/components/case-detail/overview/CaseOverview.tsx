@@ -23,7 +23,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { useCaseOverview } from '../../../hooks/useCaseOverview';
 
 // Internal Dependencies - Services & Utils

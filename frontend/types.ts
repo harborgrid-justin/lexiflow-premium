@@ -14,6 +14,7 @@ export * from './types/legal-research';
 export * from './types/type-mappings';
 export * from './types/bluebook';
 export * from './types/analytics';
+export * from './types/compliance-risk';
 
 export interface PaginatedResponse<T> {
   data: T[];

@@ -48,7 +48,7 @@ import { useModalState } from '../../hooks';
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
 import { getTodayString } from '../../utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 

@@ -437,10 +437,17 @@ export class AuthService {
     const user = await this.usersService.findByEmailWithPassword(email);
 
     if (!user) {
+      this.logger.warn(`User not found: ${email}`);
       return null;
     }
 
+    this.logger.debug(`Found user: ${user.email}, has passwordHash: ${!!user.passwordHash}, hash length: ${user.passwordHash?.length || 0}`);
+    this.logger.debug(`Password received length: ${password?.length || 0}, first 3 chars: ${password?.substring(0, 3)}`);
+    this.logger.debug(`Hash starts with: ${user.passwordHash?.substring(0, 20)}`);
+    
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+
+    this.logger.debug(`Password validation result: ${isPasswordValid}`);
 
     if (!isPasswordValid) {
       return null;

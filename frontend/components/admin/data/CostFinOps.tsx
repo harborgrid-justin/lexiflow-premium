@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, A
 
 import { useTheme } from '../../../context/ThemeContext';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { CostMetric, CostForecast } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { Card } from '../../common/Card';

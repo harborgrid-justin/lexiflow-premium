@@ -28,7 +28,7 @@ import { RiskMeter } from '../common/RiskMeter';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { useNotify } from '../../hooks/useNotify';
 import { useWindow } from '../../context/WindowContext';
 

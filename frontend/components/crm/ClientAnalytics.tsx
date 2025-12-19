@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { useChartTheme } from '../common/ChartHelpers';
 
 export const ClientAnalytics: React.FC = () => {

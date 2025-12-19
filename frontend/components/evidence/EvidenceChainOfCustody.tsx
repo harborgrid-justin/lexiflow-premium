@@ -28,7 +28,7 @@ import { getTodayString } from '../../utils/dateUtils';
 
 // Services & Types
 import { ChainService } from '../../services/infrastructure/chainService';
-import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { DataService } from '../../services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';

@@ -14,7 +14,7 @@ import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from '
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';

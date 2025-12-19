@@ -6,7 +6,7 @@ import { EmptyState } from '../common/EmptyState';
 import { SystemNotification } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/data/db';
 

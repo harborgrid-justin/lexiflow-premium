@@ -4,7 +4,7 @@ import { Server, HardDrive, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { VirtualList } from '../../common/VirtualList';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
 
 interface DataFile {

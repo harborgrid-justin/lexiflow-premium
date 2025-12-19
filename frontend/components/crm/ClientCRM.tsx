@@ -9,7 +9,7 @@ import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
 import { Button } from '../common/Button';
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';

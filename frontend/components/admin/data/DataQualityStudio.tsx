@@ -5,7 +5,7 @@ import { JSX } from 'react/jsx-runtime';
 
 import { useTheme } from '../../../context/ThemeContext';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataAnomaly, QualityMetricHistory } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';

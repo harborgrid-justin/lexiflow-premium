@@ -9,6 +9,21 @@ async function addColumns() {
     await client.connect();
     console.log('✅ Connected to database');
     
+    // First, create the user status enum type if it doesn't exist
+    console.log('\n🔧 Creating user_status enum type...');
+    try {
+      await client.query(`
+        DO $$ BEGIN
+          CREATE TYPE user_status_enum AS ENUM ('active', 'inactive', 'suspended', 'pending');
+        EXCEPTION
+          WHEN duplicate_object THEN null;
+        END $$;
+      `);
+      console.log('  ✅ user_status_enum type ready');
+    } catch (error) {
+      console.log(`  ⚠️  Error creating enum: ${error.message}`);
+    }
+    
     // First, check what columns currently exist
     const existingColumns = await client.query(`
       SELECT column_name, data_type 
@@ -39,7 +54,8 @@ async function addColumns() {
       { name: 'last_login_at', type: 'timestamp' },
       { name: 'is_verified', type: 'boolean DEFAULT false' },
       { name: 'two_factor_enabled', type: 'boolean DEFAULT false' },
-      { name: 'totp_secret', type: 'varchar' }
+      { name: 'totp_secret', type: 'varchar' },
+      { name: 'status', type: "user_status_enum DEFAULT 'active'", isEnum: true }
     ];
     
     console.log('\n🔧 Adding missing columns...');

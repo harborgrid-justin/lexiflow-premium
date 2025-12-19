@@ -21,7 +21,7 @@ import { RiskDetail } from './risk/RiskDetail';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';

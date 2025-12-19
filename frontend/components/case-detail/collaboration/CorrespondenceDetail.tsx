@@ -19,7 +19,7 @@ import { TaskCreationModal } from '../../common/TaskCreationModal';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useNotify } from '../../../hooks/useNotify';
-import { useMutation } from '../../../services/infrastructure/queryClient';
+import { useMutation } from '../../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';

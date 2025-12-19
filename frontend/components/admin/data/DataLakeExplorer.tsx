@@ -6,7 +6,7 @@ import { Folder, File, HardDrive, Search, Download, MoreHorizontal, FileText, Im
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataLakeItem } from '../../../types';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';

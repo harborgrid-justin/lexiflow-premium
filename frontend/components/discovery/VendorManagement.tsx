@@ -46,7 +46,7 @@ import { useModalState } from '../../hooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 

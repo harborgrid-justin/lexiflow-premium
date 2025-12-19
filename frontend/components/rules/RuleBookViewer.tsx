@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useTransition } from 'react';
 import { LegalRule } from '../../types';
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/data/db';
 import { useTheme } from '../../context/ThemeContext';

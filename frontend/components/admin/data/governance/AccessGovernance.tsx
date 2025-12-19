@@ -7,7 +7,7 @@ import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { RolePermission, PermissionLevel } from '../../../../types';
-import { useQuery, useMutation, queryClient } from '../../../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
 import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 

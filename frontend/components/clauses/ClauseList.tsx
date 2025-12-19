@@ -8,7 +8,7 @@ import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { filterClauses } from './clauseList.utils';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { VirtualList } from '../common/VirtualList';
 import { EmptyState } from '../common/EmptyState';

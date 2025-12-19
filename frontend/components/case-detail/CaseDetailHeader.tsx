@@ -20,7 +20,7 @@ import { ClientPortalModal } from '../crm/ClientPortalModal';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';

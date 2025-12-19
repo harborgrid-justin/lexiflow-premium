@@ -5,7 +5,7 @@ import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useNotify } from '../../hooks/useNotify';
 
 interface CRMPipelineProps {

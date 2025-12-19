@@ -18,7 +18,7 @@ import { Search, Shield, Plus } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context

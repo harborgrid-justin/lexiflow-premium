@@ -11,14 +11,14 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { ExternalLink, Landmark, Loader2 } from 'lucide-react';
+import { ExternalLink, Landmark } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 

@@ -18,7 +18,7 @@ import { ClauseList as ClausePanel } from '../clauses/ClauseList';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '../../services/features/research/geminiService';

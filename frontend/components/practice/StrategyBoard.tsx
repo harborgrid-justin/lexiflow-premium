@@ -18,7 +18,7 @@ import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-re
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 

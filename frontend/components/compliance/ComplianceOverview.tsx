@@ -8,7 +8,7 @@ import { cn } from '../../utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { DataService } from '../../services/data/dataService';
 import { useChartTheme } from '../common/ChartHelpers';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { Loader2 } from 'lucide-react';
 import { ComplianceMetrics } from '../../types';
 

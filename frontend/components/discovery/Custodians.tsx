@@ -11,7 +11,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { useModalState } from '../../hooks';
 import { useSelection } from '../../hooks/useSelectionState';
 import { getTodayString } from '../../utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/data/dataService';
 

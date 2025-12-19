@@ -7,7 +7,7 @@ import { cn } from '../../utils/cn';
 import { useModalState } from '../../hooks';
 import { DataService } from '../../services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleading-types';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/data/db';
 import { VirtualGrid } from '../common/VirtualGrid';

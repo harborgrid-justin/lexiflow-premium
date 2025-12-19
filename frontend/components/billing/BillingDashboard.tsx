@@ -17,7 +17,7 @@ import { RefreshCw } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useMutation } from '../../services/infrastructure/queryClient';
+import { useMutation } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 
 // Hooks

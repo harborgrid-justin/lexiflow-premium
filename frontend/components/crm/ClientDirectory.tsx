@@ -9,7 +9,7 @@ import { Currency } from '../common/Primitives';
 import { Lock, MoreVertical } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
-import { useMutation } from '../../services/infrastructure/queryClient';
+import { useMutation } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 import { useNotify } from '../../hooks/useNotify';
 import { useClients } from '../../hooks/useDomainData';

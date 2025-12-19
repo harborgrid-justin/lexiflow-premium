@@ -6,7 +6,7 @@ import { cn } from '../../../utils/cn';
 import { useFilterAndSearch } from '../../../hooks/useFilterAndSearch';
 import { SignalChecker } from './research/SignalChecker';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
 import { STORES } from '../../../services/data/db';
 import { Citation } from '../../../types';

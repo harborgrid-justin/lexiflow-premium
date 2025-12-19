@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../services/infrastructure/queryClient';
+import { useQuery } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/features/documents/documentService';
 import { PDFViewer } from '../../common/PDFViewer';

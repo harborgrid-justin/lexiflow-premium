@@ -26,7 +26,7 @@ import { Input, TextArea } from '../common/Inputs';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { useWindow } from '../../context/WindowContext';
 
 // Services & Utils

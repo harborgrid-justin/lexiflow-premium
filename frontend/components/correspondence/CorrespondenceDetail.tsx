@@ -8,7 +8,7 @@ import { cn } from '../../utils/cn';
 import { TaskCreationModal } from '../common/TaskCreationModal';
 import { DataService } from '../../services/data/dataService';
 import { useNotify } from '../../hooks/useNotify';
-import { useMutation } from '../../services/infrastructure/queryClient';
+import { useMutation } from '../../hooks/useQueryHooks';
 import { correspondenceQueryKeys } from '../../services/infrastructure/queryKeys';
 import { ServiceStatus, CommunicationStatus } from '../../types/enums';
 import { useBlobRegistry } from '../../hooks/useBlobRegistry';

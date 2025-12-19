@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DataDictionaryItem } from '../../../../types';
 import { DataService } from '../../../../services/data/dataService';
-import { useMutation } from '../../../../services/infrastructure/queryClient';
+import { useMutation } from '../../../../hooks/useQueryHooks';
 import { Button } from '../../../common/Button';
 import { Card } from '../../../common/Card';
 import { Input, TextArea } from '../../../common/Inputs';

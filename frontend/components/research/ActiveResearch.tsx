@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GeminiService } from '../../services/features/research/geminiService';
 import { ResearchSession, UserId } from '../../types';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/data/dataService';
 import { ResearchSidebar } from './ResearchSidebar';

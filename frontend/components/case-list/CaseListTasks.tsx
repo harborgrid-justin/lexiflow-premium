@@ -25,7 +25,7 @@ import { LazyLoader } from '../common/LazyLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useModalState } from '../../hooks';
 
 // Services & Utils

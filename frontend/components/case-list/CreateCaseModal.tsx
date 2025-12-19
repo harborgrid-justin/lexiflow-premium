@@ -28,7 +28,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 // Services
 import { DataService } from '../../services/data/dataService';
-import { queryClient } from '../../services/infrastructure/queryClient';
+import { queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { STORES } from '../../services/data/db';
 

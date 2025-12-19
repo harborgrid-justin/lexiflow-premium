@@ -30,7 +30,7 @@ import { DataService } from '../../services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';

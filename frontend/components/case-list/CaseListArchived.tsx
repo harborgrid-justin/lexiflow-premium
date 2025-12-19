@@ -26,7 +26,7 @@ import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { useModalState } from '../../hooks/useModalState';
 
 // Services & Utils

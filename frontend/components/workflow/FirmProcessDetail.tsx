@@ -9,7 +9,7 @@ import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { ErrorState } from '../common/ErrorState';
 
 interface FirmProcessDetailProps {

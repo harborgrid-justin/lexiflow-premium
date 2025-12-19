@@ -10,7 +10,7 @@ import { MOCK_USERS } from '../../data/models/user';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-import { useQuery } from '../../services/infrastructure/queryClient';
+import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';

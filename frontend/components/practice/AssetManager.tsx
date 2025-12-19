@@ -18,7 +18,7 @@ import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } 
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context

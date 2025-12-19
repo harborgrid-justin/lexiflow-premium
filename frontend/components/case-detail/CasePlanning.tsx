@@ -20,7 +20,7 @@ import { GanttTimeline } from './planning/GanttTimeline';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useNotify } from '../../hooks/useNotify';
 import { useModalState } from '../../hooks';
 

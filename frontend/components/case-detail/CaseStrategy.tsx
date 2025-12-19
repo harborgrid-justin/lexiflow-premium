@@ -22,7 +22,7 @@ import { StrategySection } from './strategy/StrategySection';
 import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 import { useModalState } from '../../hooks';
-import { useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useMutation, queryClient } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';

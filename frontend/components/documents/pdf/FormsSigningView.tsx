@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../types';
 import { DataService } from '../../../services/data/dataService';
-import { useQuery, queryClient } from '../../../services/infrastructure/queryClient';
+import { useQuery, queryClient } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DocumentService } from '../../../services/features/documents/documentService';
 import { PDFViewer } from '../../common/PDFViewer';

@@ -18,7 +18,7 @@ import { Mail, MapPin, Plus, Filter, Send, Inbox, ShieldCheck } from 'lucide-rea
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery, useMutation } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { correspondenceQueryKeys } from '../../services/infrastructure/queryKeys';
 
 // Hooks & Context

@@ -6,7 +6,7 @@ import { Wand2, Play, CheckCircle, Hash, Phone, Calendar, Type, MoreHorizontal, 
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { CleansingRule } from '../../../../types';
-import { useMutation, useQuery } from '../../../../services/infrastructure/queryClient';
+import { useMutation, useQuery } from '../../../../hooks/useQueryHooks';
 import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
 

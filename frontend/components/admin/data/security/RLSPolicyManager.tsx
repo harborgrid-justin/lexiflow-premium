@@ -5,7 +5,7 @@ import { cn } from '../../../../utils/cn';
 import { Button } from '../../../common/Button';
 import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';
 import { RLSPolicy } from '../../../../types';
-import { useQuery, useMutation, queryClient } from '../../../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../../utils/queryKeys';
 import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';

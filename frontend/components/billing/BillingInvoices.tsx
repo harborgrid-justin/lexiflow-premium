@@ -18,7 +18,7 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context

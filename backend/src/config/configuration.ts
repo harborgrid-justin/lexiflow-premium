@@ -6,7 +6,7 @@ const envSchema = Joi.object({
     .valid('development', 'production', 'test')
     .default('development'),
   PORT: Joi.number().port().default(5000),
-  API_PREFIX: Joi.string().default('api/v1'),
+  API_PREFIX: Joi.string().default('/api/v1'),
 
   // Database - all required except defaults
   DATABASE_URL: Joi.string().uri().optional(),

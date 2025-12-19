@@ -282,7 +282,7 @@ class ApiClient {
    */
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     try {
-      // Health endpoint is at root level, not under /api/v1
+      // Health endpoint is at root level, not under API_PREFIX
       const response = await fetch(`${API_BASE_URL}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

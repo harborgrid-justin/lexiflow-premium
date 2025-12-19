@@ -8,6 +8,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import * as MasterConfig from './config/master.config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import * as path from 'path';
 import configuration from './config/configuration';
 import resourceLimitsConfig from './config/resource-limits.config';
 import { getDatabaseConfig } from './config/database.config';
@@ -151,7 +152,7 @@ if (isRedisEnabled) {
     // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: path.resolve(__dirname, '../.env'),
       load: [configuration, resourceLimitsConfig],
     }),
 

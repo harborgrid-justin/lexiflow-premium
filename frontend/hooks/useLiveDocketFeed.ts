@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER } from '../config/master.config';
+import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER, WS_URL } from '../config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -141,7 +141,7 @@ export function useLiveDocketFeed({
       
       // In real implementation:
       /*
-      const wsUrl = `wss://api.lexiflow.com/docket/live?courtId=${courtId}&caseId=${caseId}`;
+      const wsUrl = `${WS_URL}/docket/live?courtId=${courtId}&caseId=${caseId}`;
       const ws = new WebSocket(wsUrl);
       
       ws.onopen = () => {

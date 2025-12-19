@@ -84,11 +84,11 @@ const MatterManagement: React.FC = () => {
   };
 
   const handleCreateMatter = () => {
-    navigate(`${PATHS.MATTER_MANAGEMENT}/new`);
+    navigate(`${PATHS.MATTERS}/new`);
   };
 
   const handleMatterClick = (matterId: string) => {
-    navigate(`${PATHS.MATTER_MANAGEMENT}/${matterId}`);
+    navigate(`${PATHS.MATTERS}/${matterId}`);
   };
 
   const getStatusColor = (status: MatterStatus): string => {

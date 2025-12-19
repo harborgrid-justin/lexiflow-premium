@@ -2,6 +2,7 @@ import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnom
 import { db, STORES } from '../data/db';
 import { ChainService } from '../infrastructure/chainService';
 import { MOCK_API_SPEC } from '../../data/mockApiSpec';
+import { API_PREFIX } from '../../config/network/api.config';
 import { delay } from '../../utils/async';
 
 export const AdminService = {
@@ -50,7 +51,7 @@ export const AdminService = {
     // Data Platform - ETL Pipelines
     getPipelines: async (): Promise<PipelineJob[]> => { 
         try {
-            const response = await fetch('/api/v1/admin/pipelines', {
+            const response = await fetch(`${API_PREFIX}/admin/pipelines`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
                 },
@@ -91,7 +92,7 @@ export const AdminService = {
     getConnectors: async (): Promise<Connector[]> => {
         try {
             // Fetch from backend data-sources API
-            const response = await fetch('/api/v1/integrations/data-sources', {
+            const response = await fetch(`${API_PREFIX}/integrations/data-sources`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
                 },

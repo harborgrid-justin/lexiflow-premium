@@ -54,7 +54,7 @@ export interface PACERConnection {
 export class PACERApiService {
   /**
    * Sync docket entries from PACER for a specific case
-   * POST /api/v1/integrations/pacer/sync
+   * POST ${API_PREFIX}/integrations/pacer/sync
    */
   async syncDocket(params: PACERDocketSearchParams): Promise<PACERSyncResult> {
     return apiClient.post<PACERSyncResult>('/integrations/pacer/sync', params);
@@ -62,7 +62,7 @@ export class PACERApiService {
 
   /**
    * Test PACER credentials and connection
-   * POST /api/v1/integrations/pacer/test
+   * POST ${API_PREFIX}/integrations/pacer/test
    */
   async testConnection(config: PACERConfig): Promise<{ success: boolean; message: string }> {
     return apiClient.post<{ success: boolean; message: string }>('/integrations/pacer/test', config);
@@ -70,7 +70,7 @@ export class PACERApiService {
 
   /**
    * Get PACER connection configuration
-   * GET /api/v1/integrations/pacer/config
+   * GET ${API_PREFIX}/integrations/pacer/config
    */
   async getConfig(): Promise<PACERConnection> {
     return apiClient.get<PACERConnection>('/integrations/pacer/config');
@@ -78,7 +78,7 @@ export class PACERApiService {
 
   /**
    * Update PACER connection configuration
-   * PUT /api/v1/integrations/pacer/config
+   * PUT ${API_PREFIX}/integrations/pacer/config
    */
   async updateConfig(config: Partial<PACERConnection>): Promise<PACERConnection> {
     return apiClient.put<PACERConnection>('/integrations/pacer/config', config);
@@ -86,7 +86,7 @@ export class PACERApiService {
 
   /**
    * Get PACER sync history for a case
-   * GET /api/v1/integrations/pacer/history/:caseId
+   * GET ${API_PREFIX}/integrations/pacer/history/:caseId
    */
   async getSyncHistory(caseId: string): Promise<PACERSyncResult[]> {
     return apiClient.get<PACERSyncResult[]>(`/integrations/pacer/history/${caseId}`);
@@ -94,7 +94,7 @@ export class PACERApiService {
 
   /**
    * Schedule automatic PACER sync for a case
-   * POST /api/v1/integrations/pacer/schedule
+   * POST ${API_PREFIX}/integrations/pacer/schedule
    */
   async scheduleSyncforCase(
     caseId: string,
@@ -106,3 +106,4 @@ export class PACERApiService {
     });
   }
 }
+

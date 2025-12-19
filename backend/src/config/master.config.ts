@@ -58,7 +58,7 @@ export const REDIS_RATE_LIMIT_TTL = 60; // 1 minute
 // SERVER CONFIGURATION
 // =============================================================================
 export const PORT = 3000;
-export const API_PREFIX = 'api/v1';
+export const API_PREFIX = '/api/v1';
 export const API_VERSION = '1.0.0';
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const ENABLE_GRACEFUL_SHUTDOWN = true;

@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 
 export enum MatterStatus {
-  INTAKE = 'ACTIVE', // Database uses 'ACTIVE' - no 'INTAKE' in DB enum
   ACTIVE = 'ACTIVE',
   PENDING = 'PENDING',
   ON_HOLD = 'ON_HOLD',
@@ -21,7 +20,6 @@ export enum MatterType {
   LITIGATION = 'LITIGATION',
   TRANSACTIONAL = 'TRANSACTIONAL',
   ADVISORY = 'ADVISORY',
-  COMPLIANCE = 'CORPORATE', // No COMPLIANCE in DB, map to CORPORATE
   INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
   EMPLOYMENT = 'EMPLOYMENT',
   REAL_ESTATE = 'REAL_ESTATE',
@@ -53,7 +51,7 @@ export class Matter {
   @Column({
     type: 'enum',
     enum: MatterStatus,
-    default: MatterStatus.INTAKE,
+    default: MatterStatus.ACTIVE,
   })
   status: MatterStatus;
 

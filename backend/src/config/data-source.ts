@@ -9,8 +9,8 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       url: process.env.DATABASE_URL,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: process.env.NODE_ENV === 'development',
-      migrationsRun: process.env.NODE_ENV === 'production',
+      synchronize: false, // CRITICAL: Use migrations instead to prevent data loss
+      migrationsRun: false,
       logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
       maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
       ssl: {
@@ -33,8 +33,8 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       database: process.env.DB_DATABASE || 'lexiflow_db',
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      synchronize: process.env.NODE_ENV === 'development',
-      migrationsRun: process.env.NODE_ENV === 'production',
+      synchronize: false, // CRITICAL: Use migrations instead to prevent data loss
+      migrationsRun: false,
       logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
       maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
       ssl: process.env.DB_SSL === 'true'

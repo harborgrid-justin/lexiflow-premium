@@ -40,12 +40,19 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
 
   const handleVerifyChain = async () => {
       setIsVerifying(true);
-      await new Promise(r => setTimeout(r, DEBUG_API_SIMULATION_DELAY_MS));
-      const result = await ChainService.verifyChain(localLogs);
-      setVerifyResult(result);
-      if (!result.isValid) addToast(`Integrity Check Failed at Block #${result.brokenIndex + 1}`, 'error');
-      else addToast('Ledger Integrity Verified', 'success');
-      setIsVerifying(false);
+      try {
+          await new Promise(r => setTimeout(r, DEBUG_API_SIMULATION_DELAY_MS));
+          const result = await ChainService.verifyChain(localLogs);
+          setVerifyResult(result);
+          if (!result.isValid) addToast(`Integrity Check Failed at Block #${result.brokenIndex + 1}`, 'error');
+          else addToast('Ledger Integrity Verified', 'success');
+      } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+          addToast(`Verification failed: ${errorMsg}`, 'error');
+          console.error('Chain verification error:', error);
+      } finally {
+          setIsVerifying(false);
+      }
   };
 
   const handleExport = () => {

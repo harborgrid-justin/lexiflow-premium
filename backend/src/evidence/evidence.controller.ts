@@ -4,8 +4,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { EvidenceService } from './evidence.service';
 import { EvidenceItem, EvidenceType, EvidenceStatus } from './entities/evidence-item.entity';
 import { ChainOfCustodyEvent } from './entities/chain-of-custody-event.entity';
-import { CreateEvidenceDto } from './dto/create-evidence.dto';
-import { UpdateEvidenceDto } from './dto/update-evidence.dto';
+import { CreateEvidenceItemDto } from './dto/create-evidence.dto';
+import { UpdateEvidenceItemDto } from './dto/update-evidence.dto';
 import { CreateChainOfCustodyDto } from './dto/create-chain-of-custody.dto';
 import { TransferCustodyDto } from './dto/transfer-custody.dto';
 
@@ -23,7 +23,7 @@ export class EvidenceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() dto: CreateEvidenceDto): Promise<EvidenceItem> {
+  async create(@Body() dto: CreateEvidenceItemDto): Promise<EvidenceItem> {
     return this.evidenceService.create(dto);
   }
 
@@ -122,7 +122,7 @@ export class EvidenceController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('id') id: string,
-    @Body() dto: UpdateEvidenceDto,
+    @Body() dto: UpdateEvidenceItemDto,
   ): Promise<EvidenceItem> {
     return this.evidenceService.update(id, dto);
   }

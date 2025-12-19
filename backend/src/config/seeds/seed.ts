@@ -16,6 +16,11 @@ async function bootstrap() {
   console.log('LexiFlow Database Seeding');
   console.log('===========================================\n');
 
+  // Override synchronize to false for fresh database seeding
+  // (prevents TypeORM from trying to drop non-existent indexes)
+  const originalEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'production';
+  
   const dataSource = AppDataSource;
 
   try {
@@ -72,6 +77,9 @@ async function bootstrap() {
     console.error('\n❌ Error seeding database:', error);
     process.exit(1);
   } finally {
+    // Restore original NODE_ENV
+    process.env.NODE_ENV = originalEnv;
+    
     // Close connection
     if (dataSource.isInitialized) {
       await dataSource.destroy();

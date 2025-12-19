@@ -3,8 +3,8 @@ import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagg
 import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { AiOpsService } from './ai-ops.service';
-import { GetEmbeddingsQueryDto, StoreEmbeddingDto, SearchSimilarDto } from './dto/embedding.dto';
-import { RegisterModelDto, UpdateModelDto } from './dto/model.dto';
+import { GetEmbeddingsQueryDto, StoreAiOpsEmbeddingDto, SearchSimilarDto } from './dto/embedding.dto';
+import { RegisterAiOpsModelDto, UpdateAiOpsModelDto } from './dto/model.dto';
 
 @ApiTags('AI Operations')
 @ApiBearerAuth('JWT-auth')
@@ -31,7 +31,7 @@ export class AiOpsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async storeEmbedding(@Body() dto: StoreEmbeddingDto) {
+  async storeEmbedding(@Body() dto: StoreAiOpsEmbeddingDto) {
     return await this.aiOpsService.storeEmbedding(dto);
   }
 
@@ -63,7 +63,7 @@ export class AiOpsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async registerModel(@Body() dto: RegisterModelDto) {
+  async registerModel(@Body() dto: RegisterAiOpsModelDto) {
     return await this.aiOpsService.registerModel(dto);
   }
 
@@ -74,7 +74,7 @@ export class AiOpsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateModel(@Param('id') id: string, @Body() dto: UpdateModelDto) {
+  async updateModel(@Param('id') id: string, @Body() dto: UpdateAiOpsModelDto) {
     return await this.aiOpsService.updateModel(id, dto);
   }
 

@@ -7,7 +7,7 @@
 import React from 'react';
 import { Server, Database, HardDrive } from 'lucide-react';
 import { useBackendHealth } from '../../hooks/useBackendHealth';
-import { useDataSource } from '../../context/DataSourceContext';
+import { useDataSource } from '../../context/DataSourceContext.tsx';
 
 interface BackendStatusIndicatorProps {
   showLabel?: boolean;

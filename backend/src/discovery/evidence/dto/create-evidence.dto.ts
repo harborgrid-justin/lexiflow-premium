@@ -1,7 +1,7 @@
 import { IsString, IsOptional, IsEnum, IsArray, IsNumber, IsBoolean, IsUUID } from 'class-validator';
 import { EvidenceType, AdmissibilityStatus, AuthenticationMethod, HearsayStatus } from '../entities/evidence.entity';
 
-export class CreateEvidenceDto {
+export class CreateDiscoveryEvidenceDto {
   @IsString()
   caseId: string;
 

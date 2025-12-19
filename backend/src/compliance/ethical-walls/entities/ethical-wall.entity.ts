@@ -13,7 +13,6 @@ export enum EthicalWallStatus {
 @Entity('ethical_walls')
 @Index(['caseId'])
 @Index(['status'])
-@Index(['createdBy'])
 export class EthicalWall extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
   caseId: string;
@@ -49,9 +48,6 @@ export class EthicalWall extends BaseEntity {
 
   @Column({ name: 'expiration_date', type: 'date', nullable: true })
   expirationDate: Date;
-
-  @Column({ name: 'created_by', type: 'uuid' })
-  createdBy: string;
 
   @Column({ name: 'approved_by', type: 'uuid', nullable: true })
   approvedBy: string;

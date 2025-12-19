@@ -1,7 +1,7 @@
 import { IsString, IsArray, IsNumber, IsInt, IsOptional, IsNotEmpty, ArrayMinSize } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class StoreEmbeddingDto {
+export class StoreDataOpsEmbeddingDto {
   @ApiProperty({ description: 'Entity type (e.g., case, document, pleading)' })
   @IsString()
   @IsNotEmpty()

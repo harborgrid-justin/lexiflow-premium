@@ -1,11 +1,13 @@
 /**
  * Query Types - Shared type definitions for query system
- * 
- * Purpose: Centralize type definitions
- * Extracted from: queryClient.ts
+ * Optimized for React 18 and Optimistic Updates
  */
 
 export type QueryKey = string | readonly unknown[];
+
+/**
+ * Enhanced QueryFunction to support native fetch AbortSignals
+ */
 export type QueryFunction<T> = (signal: AbortSignal) => Promise<T>;
 
 export interface QueryState<T> {
@@ -26,15 +28,24 @@ export interface UseQueryOptions<T> {
   cacheBypass?: boolean;
 }
 
+/**
+ * MutationContext is primarily used to store "previousData" 
+ * for rollback logic during optimistic updates.
+ */
 export interface MutationContext {
+  previousData?: any;
   [key: string]: any;
 }
 
 export interface UseMutationOptions<T, V> {
-  onSuccess?: (data: T, variables: V, context?: MutationContext) => void;
-  onError?: (error: Error, variables: V, context?: MutationContext) => void;
-  onMutate?: (variables: V) => Promise<MutationContext | void> | MutationContext | void;
-  onSettled?: (data: T | undefined, error: Error | null, variables: V, context?: MutationContext) => void;
+  onSuccess?: (data: T, variables: V, context: MutationContext) => void;
+  onError?: (error: Error, variables: V, context: MutationContext) => void;
+  /**
+   * onMutate is the core of Optimistic Updates. 
+   * It should return a context object containing the snapshot of data before the change.
+   */
+  onMutate?: (variables: V) => Promise<MutationContext> | MutationContext;
+  onSettled?: (data: T | undefined, error: Error | null, variables: V, context: MutationContext) => void;
   invalidateKeys?: QueryKey[];
 }
 

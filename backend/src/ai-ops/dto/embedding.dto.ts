@@ -28,7 +28,7 @@ export class GetEmbeddingsQueryDto {
   limit?: number;
 }
 
-export class StoreEmbeddingDto {
+export class StoreAiOpsEmbeddingDto {
   @ApiProperty({ description: 'Entity type' })
   @IsString()
   @IsNotEmpty()

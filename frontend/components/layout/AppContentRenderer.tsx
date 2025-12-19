@@ -43,7 +43,7 @@ const CaseDetail = lazy(() => import('../case-detail/CaseDetail').then(m => ({ d
 // ========================================
 interface AppContentRendererProps {
   activeView: AppView;
-  currentUser: User;
+  currentUser?: User;
   selectedCase: any | null; 
   handleSelectCase: (c: any) => void;
   handleSelectCaseById: (id: string) => void;
@@ -83,7 +83,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
   const moduleDef = ModuleRegistry.getModule(activeView);
 
   if (moduleDef) {
-    if (moduleDef.requiresAdmin && currentUser.role !== 'Administrator' && currentUser.role !== 'Senior Partner') {
+    if (moduleDef.requiresAdmin && (!currentUser || (currentUser.role !== 'Administrator' && currentUser.role !== 'Senior Partner'))) {
       return (
         <div className="flex flex-col justify-center items-center h-full text-slate-500 animate-fade-in">
           <div className="bg-red-50 p-6 rounded-full mb-4 border border-red-100">
@@ -122,7 +122,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     
     if (activeView === PATHS.DOCUMENTS || activeView === PATHS.JURISDICTION) {
       dynamicProps.currentUser = currentUser;
-      dynamicProps.currentUserRole = currentUser.role;
+      dynamicProps.currentUserRole = currentUser?.role;
     }
 
     return (

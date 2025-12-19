@@ -15,8 +15,8 @@ import {
 import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth  , ApiResponse }from '@nestjs/swagger';
 import { EvidenceService } from './evidence.service';
-import { CreateEvidenceDto } from './dto/create-evidence.dto';
-import { UpdateEvidenceDto } from './dto/update-evidence.dto';
+import { CreateDiscoveryEvidenceDto } from './dto/create-evidence.dto';
+import { UpdateDiscoveryEvidenceDto } from './dto/update-evidence.dto';
 import { QueryEvidenceDto } from './dto/query-evidence.dto';
 import { Evidence } from './entities/evidence.entity';
 
@@ -68,7 +68,7 @@ export class EvidenceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() createEvidenceDto: CreateEvidenceDto): Promise<Evidence> {
+  async create(@Body() createEvidenceDto: CreateDiscoveryEvidenceDto): Promise<Evidence> {
     return this.evidenceService.create(createEvidenceDto);
   }
 
@@ -79,7 +79,7 @@ export class EvidenceController {
   @ApiResponse({ status: 404, description: 'Resource not found' })
   async update(
     @Param('id') id: string,
-    @Body() updateEvidenceDto: UpdateEvidenceDto,
+    @Body() updateEvidenceDto: UpdateDiscoveryEvidenceDto,
   ): Promise<Evidence> {
     return this.evidenceService.update(id, updateEvidenceDto);
   }
@@ -91,7 +91,7 @@ export class EvidenceController {
   @ApiResponse({ status: 404, description: 'Resource not found' })
   async patch(
     @Param('id') id: string,
-    @Body() updateEvidenceDto: UpdateEvidenceDto,
+    @Body() updateEvidenceDto: UpdateDiscoveryEvidenceDto,
   ): Promise<Evidence> {
     return this.evidenceService.update(id, updateEvidenceDto);
   }

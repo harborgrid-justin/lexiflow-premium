@@ -3,6 +3,17 @@ import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+// Get current directory for tsconfigRootDir
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// DEBUGGING: Uncomment to see resolved paths
+// console.log('[ESLint Debug] Frontend config loaded');
+// console.log('[ESLint Debug] tsconfigRootDir:', __dirname);
+// console.log('[ESLint Debug] tsconfig path:', __dirname + '/tsconfig.json');
 
 export default tseslint.config(
   js.configs.recommended,
@@ -16,7 +27,13 @@ export default tseslint.config(
         ...globals.node,
       },
       parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
         ecmaFeatures: { jsx: true },
+        
+        // Enterprise debugging options
+        EXPERIMENTAL_useProjectService: false,
+        debugLevel: process.env.ESLINT_DEBUG ? ['typescript-eslint'] : undefined,
       },
     },
     plugins: {

@@ -19,7 +19,6 @@ import * as MasterConfig from '../config/master.config';
  * Compatible with Kubernetes liveness/readiness probes
  */
 @ApiTags('Health')
-
 @Controller('health')
 export class HealthController {
   constructor(
@@ -31,13 +30,12 @@ export class HealthController {
     // private telemetry: TelemetryHealthIndicator,
   ) {}
 
+  @Public()
   @Get()
   @HealthCheck()
   @ApiOperation({ summary: 'Comprehensive health check' })
   @ApiResponse({ status: 200, description: 'Service is healthy' })
   @ApiResponse({ status: 503, description: 'Service is unhealthy' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
   check() {
     return this.health.check([
       // Database health
@@ -64,24 +62,22 @@ export class HealthController {
     ]);
   }
 
+  @Public()
   @Get('liveness')
   @HealthCheck()
   @ApiOperation({ summary: 'Kubernetes liveness probe' })
   @ApiResponse({ status: 200, description: 'Service is alive' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
   checkLiveness() {
     return this.health.check([
       () => this.memory.checkHeap('memory_heap', 400 * 1024 * 1024),
     ]);
   }
 
+  @Public()
   @Get('readiness')
   @HealthCheck()
   @ApiOperation({ summary: 'Kubernetes readiness probe' })
   @ApiResponse({ status: 200, description: 'Service is ready' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
   checkReadiness() {
     return this.health.check([
       () => this.db.pingCheck('database', { timeout: MasterConfig.HEALTH_CHECK_TIMEOUT_MS }),

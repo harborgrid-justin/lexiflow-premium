@@ -47,34 +47,6 @@ export * from './useArrayState';
 export * from './useSelectionState';
 
 // ============================================================================
-// DEPRECATED HOOKS (for backward compatibility - remove in v2.0)
-// ============================================================================
-
-/**
- * @deprecated Use useListNavigation with mode='simple' instead
- * Will be removed in v2.0
- */
-export { useKeyboardNav } from './useListNavigation';
-
-/**
- * @deprecated Use useListNavigation with mode='full' instead
- * Will be removed in v2.0
- */
-export { useKeyboardNavigation } from './useListNavigation';
-
-/**
- * @deprecated Use useBackendHealth instead
- * Will be removed in v2.0
- */
-export { useBackendDiscovery } from './useBackendDiscovery';
-
-/**
- * @deprecated Use useDocumentManager with enableDragDrop option instead
- * Will be removed in v2.0
- */
-export { useDocumentDragDrop } from './useDocumentDragDrop';
-
-// ============================================================================
 // DOMAIN SPECIFIC HOOKS
 // ============================================================================
 export * from './useCalendarView';

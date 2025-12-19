@@ -37,24 +37,24 @@ export function useSessionStorage<T>(key: string, initialValue: T): [T, React.Di
 
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to sessionStorage.
-  const setValue = (value: T | ((val: T) => T)) => {
+  const setValue = React.useCallback((value: T | ((val: T) => T)) => {
     try {
-      // Allow value to be a function so we have same API as useState
-      const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
-      
-      // Save state
-      setStoredValue(valueToStore);
-      
-      // Save to local storage
-      if (typeof window !== 'undefined') {
-        window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
-      }
+      // Use functional update to avoid depending on storedValue
+      setStoredValue((prev) => {
+        const valueToStore = value instanceof Function ? value(prev) : value;
+        
+        // Save to session storage
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+        
+        return valueToStore;
+      });
     } catch (error) {
       // A more advanced implementation would handle the error case
       console.warn(`Error saving sessionStorage key "${key}":`, error);
     }
-  };
+  }, [key]);
 
   useEffect(() => {
     // Sync state if storage changes in another tab (optional for session, but good practice)

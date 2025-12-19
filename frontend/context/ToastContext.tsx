@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -41,8 +40,17 @@ const PRIORITY_MAP: Record<ToastType, number> = {
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const queueRef = useRef<Toast[]>([]);
+  const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
   const MAX_VISIBLE_TOASTS = 3;
   const MAX_QUEUE_SIZE = 50; // Maximum queued toasts to prevent memory leaks
+
+  // Cleanup all timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutIdsRef.current.forEach(id => clearTimeout(id));
+      timeoutIdsRef.current.clear();
+    };
+  }, []);
 
   const processQueue = useCallback(() => {
     setToasts(prev => {
@@ -54,11 +62,15 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (a.priority !== b.priority) return b.priority - a.priority;
                 return a.timestamp - b.timestamp;
             });
-            
+
             const nextToast = queueRef.current.shift();
             if (nextToast) {
-                 // Auto-dismiss logic
-                 setTimeout(() => removeToast(nextToast.id), nextToast.type === 'error' ? NOTIFICATION_ERROR_DISMISS_MS : NOTIFICATION_AUTO_DISMISS_MS);
+                 // Auto-dismiss logic with cleanup tracking
+                 const timeoutId = setTimeout(() => {
+                   removeToast(nextToast.id);
+                   timeoutIdsRef.current.delete(timeoutId);
+                 }, nextToast.type === 'error' ? NOTIFICATION_ERROR_DISMISS_MS : NOTIFICATION_AUTO_DISMISS_MS);
+                 timeoutIdsRef.current.add(timeoutId);
                  return [...prev, nextToast];
             }
         }

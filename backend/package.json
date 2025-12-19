@@ -25,7 +25,11 @@
     "migration:show": "npm run typeorm -- migration:show -d src/config/data-source.ts",
     "seed": "ts-node src/config/seeds/seed.ts",
     "seed:test": "ts-node src/config/seeds/seed.ts --env=test",
+    "db:clean": "ts-node scripts/clean-db.ts",
+    "db:sync": "ts-node scripts/sync-schema.ts",
+    "db:schema": "npm run db:clean && npm run db:sync",
     "db:reset": "npm run migration:revert && npm run migration:run && npm run seed",
+    "db:fresh": "npm run db:clean && npm run seed",
     "db:test": "ts-node src/scripts/test-db-connection.ts"
   },
   "keywords": [],

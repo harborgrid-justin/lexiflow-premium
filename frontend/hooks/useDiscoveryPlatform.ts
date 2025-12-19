@@ -27,15 +27,16 @@ import { useSessionStorage } from './useSessionStorage';
 import { useNotify } from './useNotify';
 
 // Utils & Constants
-import { getParentTabForView, getFirstTabOfParent } from '../components/discovery/layout/DiscoveryNavigation';
+import { getParentTabForView, getFirstTabOfParent, isDetailView } from '../utils/discoveryNavigation';
 
 // Types
 import { DiscoveryRequest } from '../types';
+import type { DiscoveryView } from '../utils/discoveryNavigation';
 
 // ============================================================================
-// TYPES & INTERFACES
+// RE-EXPORTS (for backwards compatibility)
 // ============================================================================
-export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
+export type { DiscoveryView } from '../utils/discoveryNavigation';
 
 // ============================================================================
 // HOOK
@@ -84,7 +85,7 @@ export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string
   }, [setActiveTab]);
   
   const handleBack = useCallback(() => {
-    if (['doc_viewer', 'response', 'production_wizard'].includes(activeTab)) {
+    if (isDetailView(activeTab)) {
         const parent = getParentTabForView(activeTab);
         setActiveTab(parent.subTabs[0].id as DiscoveryView);
     } else {

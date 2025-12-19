@@ -96,7 +96,7 @@ export class CaseStrategy {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })

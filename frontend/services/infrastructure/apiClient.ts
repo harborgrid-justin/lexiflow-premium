@@ -55,14 +55,14 @@ class ApiClient {
   /**
    * Get stored authentication token
    */
-  private getAuthToken(): string | null {
+  public getAuthToken(): string | null {
     return localStorage.getItem(this.authTokenKey);
   }
 
   /**
    * Get stored refresh token
    */
-  private getRefreshToken(): string | null {
+  public getRefreshToken(): string | null {
     return localStorage.getItem(this.refreshTokenKey);
   }
 

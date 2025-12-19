@@ -2,17 +2,14 @@
  * @module hooks/useAppController
  * @category Hooks - Application
  * @description Main application controller hook managing navigation, case selection, user context, global search,
- * sidebar state, and app initialization. Handles DB initialization with background seeding, case context
- * restoration from session storage, neural command execution, global search with AI intent parsing,
- * holographic window management, and view navigation with deep linking support.
- * 
- * NO THEME USAGE: Application-level state management hook
+ * sidebar state, and app initialization. 
+ * * NO THEME USAGE: Application-level state management hook
  */
 
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useCallback, useEffect, useTransition } from 'react';
+import { useState, useCallback, useEffect, useTransition, useRef } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -58,65 +55,89 @@ export const useAppController = () => {
   
   // App Initialization State
   const [isAppLoading, setIsAppLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [appStatusMessage, setAppStatusMessage] = useState('Initializing Secure Data Layer...');
 
-  const { data: users = [] } = useUsers();
-  const currentUser = users[currentUserIndex];
+  // CRITICAL: Prevent double-initialization in React 18 Strict Mode
+  const isInitialized = useRef(false);
 
+  // Domain Data
+  const { data: users = [] } = useUsers();
+  
+  const currentUser = users[currentUserIndex] || {
+    id: 'temp-user',
+    email: 'loading@lexiflow.com',
+    firstName: 'Loading',
+    lastName: 'User',
+    role: 'user' as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  // ==========================================================================
+  // INITIALIZATION LOGIC
+  // ==========================================================================
   useEffect(() => {
+    // If we've already started or finished init, skip the second execution
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+
     const init = async () => {
         try {
+            console.log('[useAppController] Starting initialization...');
             const backendApiEnabled = isBackendApiEnabled();
             
             if (backendApiEnabled) {
-                // Backend API mode - check if backend is available
                 setAppStatusMessage('Connecting to backend API...');
                 try {
                     await apiClient.healthCheck();
-                    setAppStatusMessage('Backend API connected successfully');
+                    
+                    const existingToken = apiClient.getAuthToken();
+                    if (!existingToken) {
+                        setAppStatusMessage('Authenticating...');
+                        // Auto-login logic (Dev Mode)
+                        const loginResponse = await apiClient.post<{ accessToken: string; refreshToken: string }>('/auth/login', {
+                            email: 'admin@lexiflow.com',
+                            password: 'Password123!'
+                        });
+                        apiClient.setAuthTokens(loginResponse.accessToken, loginResponse.refreshToken);
+                        setIsAuthenticated(true);
+                        console.log('✅ Auto-login successful');
+                    } else {
+                        setIsAuthenticated(true);
+                    }
                     setIsAppLoading(false);
                 } catch (apiError) {
-                    console.error("Backend API not available:", apiError);
-                    setAppStatusMessage('Backend API not available. Please start the backend server.');
-                    setIsAppLoading(false);
-                    addToast('Backend API not available. Switching to offline mode.', 'warning');
-                    // Optionally switch back to IndexedDB mode
+                    console.error("Backend API error:", apiError);
+                    setAppStatusMessage('Backend not available. Switching to local mode.');
                     localStorage.setItem('VITE_USE_BACKEND_API', 'false');
+                    window.location.reload();
                 }
             } else {
-                // IndexedDB mode - initialize local database
+                // IndexedDB mode
                 await db.init();
-                
-                // The app is interactive once the DB connection is established.
-                // Hide the main loading screen immediately.
                 setIsAppLoading(false);
                 
-                // Check if we need to seed data in the background.
                 const count = await db.count(STORES.CASES);
                 if (count === 0) {
-                    addToast('Setting up for first-time use. Data will appear shortly.', 'info');
-                    // Run the seeder, but don't await it.
+                    addToast('Setting up for first-time use...', 'info');
                     Seeder.seed(db).then(() => {
-                        addToast('Initial data loaded successfully!', 'success');
-                        // Invalidate all queries to trigger a UI refresh with the new data.
+                        addToast('Initial data loaded!', 'success');
                         queryClient.invalidate(''); 
-                    }).catch((e) => {
-                        console.error("Background seeding failed", e);
-                        addToast('Failed to load initial data. Please refresh.', 'error');
-                    });
+                    }).catch(e => console.error("Seeding failed", e));
                 }
             }
         } catch (e) {
-            console.error("Failed to initialize application:", e);
+            console.error("Initialization failed:", e);
             setAppStatusMessage('Error initializing application.');
-            // Ensure the loading screen is hidden even on error.
             setIsAppLoading(false); 
         }
     };
-    init();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
+    init();
+  }, [addToast]);
+
+  // Restore Case Context when ID changes
   useEffect(() => {
     if (selectedCaseId) {
         const loadCase = async () => {
@@ -129,15 +150,18 @@ export const useAppController = () => {
               }
             } catch (e) {
               console.error("Failed to restore case context", e);
-              addToast("Error restoring case context.", "error");
             }
         };
         loadCase();
     } else {
       setSelectedCase(null);
     }
-  }, [selectedCaseId, addToast, setSelectedCaseId]);
+  }, [selectedCaseId, setSelectedCaseId, addToast]);
 
+  // ==========================================================================
+  // CALLBACK HANDLERS
+  // ==========================================================================
+  
   const handleSelectCaseById = useCallback((caseId: string) => {
     startTransition(async () => {
         const found = await DataService.cases.getById(caseId);
@@ -147,8 +171,6 @@ export const useAppController = () => {
             setInitialTab(undefined); 
             setActiveView(PATHS.CASES);
             addToast(`Context switched to ${found.title}`, 'info');
-        } else {
-            addToast(`Case ${caseId} not found`, 'error');
         }
     });
   }, [setSelectedCaseId, addToast, setActiveView]);
@@ -183,12 +205,9 @@ export const useAppController = () => {
             setSelectedCase(found);
             setSelectedCaseId(caseId);
             setActiveView(PATHS.CASES);
-            addToast(`Opening ${found.title} > ${tab}`, 'info');
-        } else {
-            addToast(`Case ${caseId} not found`, 'error');
         }
     });
-  }, [setSelectedCaseId, addToast, setActiveView]);
+  }, [setSelectedCaseId, setActiveView]);
 
   const handleSearchResultClick = useCallback((result: GlobalSearchResult) => {
     startTransition(() => {
@@ -210,26 +229,13 @@ export const useAppController = () => {
             const deepLinkTab = HolographicRouting.resolveTab(moduleId, intent.context);
             setInitialTab(deepLinkTab);
             handleNavigation(moduleId);
-            const destName = deepLinkTab ? `${intent.targetModule} / ${deepLinkTab}` : intent.targetModule;
-            addToast(`Navigating to ${destName}...`, 'info');
         }
       }
-      
       if ((intent.action === 'NAVIGATE' || intent.action === 'SEARCH') && intent.entityId) {
           handleSelectCaseById(intent.entityId);
       }
-      
-      if (intent.action === 'CREATE' && intent.context) {
-          if (selectedCase) {
-             setInitialTab('Drafting');
-             addToast('Opening Drafting Tools...', 'success');
-          } else {
-             handleNavigation(PATHS.CASES);
-             addToast('Please select a case first to start drafting.', 'warning');
-          }
-      }
     });
-  }, [addToast, handleSelectCaseById, selectedCase, handleNavigation]);
+  }, [handleSelectCaseById, handleNavigation]);
 
   const handleSwitchUser = useCallback(() => {
     startTransition(() => {
@@ -274,6 +280,6 @@ export const useAppController = () => {
     initialTab,
     isAppLoading,
     appStatusMessage,
+    isAuthenticated
   };
 };
-

@@ -15,17 +15,26 @@ export type { SyncContextType };
 const MAX_RETRIES = 3;
 const BASE_DELAY = 1000;
 
+// Type for mutation handler functions
+type MutationHandler = (payload: unknown) => Promise<unknown>;
+
 // Registry of handlers to replay mutations
 // In a real app, these would likely import specific service methods directly
-const MUTATION_HANDLERS: Record<string, (payload: any) => Promise<any>> = {
-    'CASE_CREATE': (p) => DataService.cases.add(p),
-    'CASE_UPDATE': (p) => DataService.cases.update(p.id, p.data),
-    'TASK_ADD': (p) => DataService.tasks.add(p),
-    'TASK_UPDATE': (p) => DataService.tasks.update(p.id, p.data),
-    'DOC_UPLOAD': (p) => DataService.documents.add(p), // Assuming payload is metadata
-    'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p),
+const MUTATION_HANDLERS: Record<string, MutationHandler> = {
+    'CASE_CREATE': (p) => DataService.cases.add(p as Parameters<typeof DataService.cases.add>[0]),
+    'CASE_UPDATE': (p) => {
+        const payload = p as { id: string; data: Record<string, unknown> };
+        return DataService.cases.update(payload.id, payload.data);
+    },
+    'TASK_ADD': (p) => DataService.tasks.add(p as Parameters<typeof DataService.tasks.add>[0]),
+    'TASK_UPDATE': (p) => {
+        const payload = p as { id: string; data: Record<string, unknown> };
+        return DataService.tasks.update(payload.id, payload.data);
+    },
+    'DOC_UPLOAD': (p) => DataService.documents.add(p as Parameters<typeof DataService.documents.add>[0]),
+    'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p as Parameters<typeof DataService.billing.addTimeEntry>[0]),
     // Default fallback for demo visualization
-    'DEFAULT': async (p) => new Promise(resolve => setTimeout(resolve, 1000))
+    'DEFAULT': async () => new Promise(resolve => setTimeout(resolve, 1000))
 };
 
 export const SyncProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -79,11 +88,11 @@ export const SyncProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Process next immediately
         processQueue();
 
-    } catch (err: any) {
+    } catch (err) {
         console.error(`[Sync] Failed ${mutation.type}:`, err);
-        
+
         const newRetryCount = mutation.retryCount + 1;
-        const errorMsg = err.message || 'Unknown error';
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error';
 
         if (newRetryCount >= MAX_RETRIES) {
             // Permanent Failure
@@ -143,7 +152,7 @@ export const SyncProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, [addToast, processQueue, refreshCounts]);
 
-  const performMutation = async (type: string, payload: any, apiCall: () => Promise<any>) => {
+  const performMutation = async <T = unknown>(type: string, payload: T, apiCall: () => Promise<T>) => {
     if (isOnline) {
       try {
         await apiCall();

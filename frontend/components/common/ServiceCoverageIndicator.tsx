@@ -1,6 +1,6 @@
 import React from 'react';
 import { Database, Cloud, CheckCircle, XCircle } from 'lucide-react';
-import { useDataSource } from '../../context/DataSourceContext';
+import { useDataSource } from '../../context/DataSourceContext.tsx';
 
 interface ServiceCoverageProps {
   className?: string;

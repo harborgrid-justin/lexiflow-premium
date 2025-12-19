@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Evidence } from './entities/evidence.entity';
-import { CreateEvidenceDto } from './dto/create-evidence.dto';
-import { UpdateEvidenceDto } from './dto/update-evidence.dto';
+import { CreateDiscoveryEvidenceDto } from './dto/create-evidence.dto';
+import { UpdateDiscoveryEvidenceDto } from './dto/update-evidence.dto';
 import { QueryEvidenceDto } from './dto/query-evidence.dto';
 
 @Injectable()
@@ -50,7 +50,7 @@ export class EvidenceService {
     return evidence;
   }
 
-  async create(createEvidenceDto: CreateEvidenceDto): Promise<Evidence> {
+  async create(createEvidenceDto: CreateDiscoveryEvidenceDto): Promise<Evidence> {
     const evidence = this.evidenceRepository.create({
       ...createEvidenceDto,
       trackingUuid: createEvidenceDto.trackingUuid || crypto.randomUUID(),
@@ -58,7 +58,7 @@ export class EvidenceService {
     return this.evidenceRepository.save(evidence);
   }
 
-  async update(id: string, updateEvidenceDto: UpdateEvidenceDto): Promise<Evidence> {
+  async update(id: string, updateEvidenceDto: UpdateDiscoveryEvidenceDto): Promise<Evidence> {
     await this.findOne(id);
     await this.evidenceRepository.update(id, updateEvidenceDto);
     return this.findOne(id);

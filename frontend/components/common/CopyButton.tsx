@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
 
 // ============================================================================
@@ -39,11 +39,20 @@ interface CopyButtonProps {
 export const CopyButton: React.FC<CopyButtonProps> = ({ text, label = "Copy", variant = "secondary", size = "sm" }) => {
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
     setCopied(true);
-    setTimeout(() => setCopied(false), NOTIFICATION_AUTO_DISMISS_MS);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setCopied(false), NOTIFICATION_AUTO_DISMISS_MS);
   };
 
   return (

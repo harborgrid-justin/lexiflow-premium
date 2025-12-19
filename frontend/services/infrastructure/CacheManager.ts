@@ -12,7 +12,7 @@
  * - Touch/access tracking
  */
 
-import type { QueryState } from './QueryTypes';
+import type { QueryState } from './queryTypes';
 
 export interface CacheStats {
   cacheSize: number;

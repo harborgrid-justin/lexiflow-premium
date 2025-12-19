@@ -50,7 +50,7 @@ interface AppHeaderProps {
   globalSearch: string;
   setGlobalSearch: (s: string) => void;
   onGlobalSearch: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  currentUser: UserType;
+  currentUser?: UserType;
   onSwitchUser: () => void;
   onSearchResultClick?: (result: GlobalSearchResult) => void;
   onNeuralCommand?: (intent: IntentResult) => void;
@@ -133,16 +133,16 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
         <div className={cn("h-8 w-px mx-1", theme.border.default)}></div>
 
-        <button 
-            className={cn("flex items-center gap-3 pl-2 pr-1 py-1 rounded-lg transition-colors group", `hover:${theme.surface.highlight}`)} 
+        <button
+            className={cn("flex items-center gap-3 pl-2 pr-1 py-1 rounded-lg transition-colors group", `hover:${theme.surface.highlight}`)}
             onClick={onSwitchUser}
             title="Switch User Profile"
         >
             <div className="text-right hidden md:block">
-                <p className={cn("text-xs font-bold leading-tight", theme.text.primary)}>{currentUser.name}</p>
-                <p className={cn("text-[10px] uppercase font-medium tracking-wide", theme.text.secondary)}>{currentUser.role}</p>
+                <p className={cn("text-xs font-bold leading-tight", theme.text.primary)}>{currentUser?.name || 'Guest'}</p>
+                <p className={cn("text-[10px] uppercase font-medium tracking-wide", theme.text.secondary)}>{currentUser?.role || 'User'}</p>
             </div>
-            <UserAvatar name={currentUser.name} size="sm" className="shadow-sm" />
+            <UserAvatar name={currentUser?.name || 'Guest'} size="sm" className="shadow-sm" />
         </button>
       </div>
     </div>

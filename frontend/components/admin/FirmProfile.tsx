@@ -11,15 +11,15 @@
 
 import React, { useState } from 'react';
 import { 
-  Building2, Mail, Phone, Globe, MapPin, Upload, Save, 
+  Building2, Mail, MapPin, Upload, Save,
   Edit2, Users, Briefcase, CheckCircle, AlertCircle 
 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useTheme } from '@/context';
+import { cn } from '@/utils';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Input } from '../common/Inputs';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks';
 
 interface FirmDetails {
   name: string;

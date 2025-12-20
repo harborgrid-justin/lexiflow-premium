@@ -50,9 +50,9 @@ export const PrivilegeLog: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+shift+p': () => {
-      notify.info('Add new privilege log entry (to be implemented)');
-    }
+      'mod+shift+p': () => {
+          notify.info('Add new privilege log entry (to be implemented)');
+      }
   });
 
   if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;

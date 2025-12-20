@@ -134,18 +134,18 @@ const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
 
   // Keyboard shortcuts for power users
   useKeyboardShortcuts([
-    {
-      key: 'n',
-      ctrlOrCmd: true,
-      action: onIntakeClick,
-      description: 'Log new evidence'
-    },
-    {
-      key: 'f',
-      ctrlOrCmd: true,
-      action: () => filtersToggle.toggle(),
-      description: 'Toggle filters'
-    }
+      {
+          key: 'n',
+          ctrlOrCmd: true,
+          action: onIntakeClick,
+          description: 'Log new evidence'
+      },
+      {
+          key: 'f',
+          ctrlOrCmd: true,
+          action: () => filtersToggle.toggle(),
+          description: 'Toggle filters'
+      }
   ]);
 
   return (

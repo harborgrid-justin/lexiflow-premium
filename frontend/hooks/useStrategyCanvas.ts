@@ -361,20 +361,20 @@ export function useStrategyCanvas({
 
   // Keyboard Shortcuts
   useKeyboardShortcuts({
-    onUndo: undo,
-    onRedo: redo,
-    onDelete: () => selectedNodeId && deleteNode(selectedNodeId),
-    onDuplicate: () => {
-      if (selectedNodeId) {
-        const node = nodes.find(n => n.id === selectedNodeId);
-        if (node) {
-          addNode(node.type, node.x + CANVAS_CONSTANTS.DUPLICATE_OFFSET, node.y + CANVAS_CONSTANTS.DUPLICATE_OFFSET, node.label);
-        }
-      }
-    },
-    onZoomIn: () => setScale(s => Math.min(CANVAS_CONSTANTS.MAX_ZOOM, s + CANVAS_CONSTANTS.ZOOM_STEP)),
-    onZoomOut: () => setScale(s => Math.max(CANVAS_CONSTANTS.MIN_ZOOM, s - CANVAS_CONSTANTS.ZOOM_STEP)),
-    onZoomReset: () => setScale(CANVAS_CONSTANTS.DEFAULT_ZOOM),
+      onUndo: undo,
+      onRedo: redo,
+      onDelete: () => selectedNodeId && deleteNode(selectedNodeId),
+      onDuplicate: () => {
+          if (selectedNodeId) {
+              const node = nodes.find(n => n.id === selectedNodeId);
+              if (node) {
+                  addNode(node.type, node.x + CANVAS_CONSTANTS.DUPLICATE_OFFSET, node.y + CANVAS_CONSTANTS.DUPLICATE_OFFSET, node.label);
+              }
+          }
+      },
+      onZoomIn: () => setScale(s => Math.min(CANVAS_CONSTANTS.MAX_ZOOM, s + CANVAS_CONSTANTS.ZOOM_STEP)),
+      onZoomOut: () => setScale(s => Math.max(CANVAS_CONSTANTS.MIN_ZOOM, s - CANVAS_CONSTANTS.ZOOM_STEP)),
+      onZoomReset: () => setScale(CANVAS_CONSTANTS.DEFAULT_ZOOM),
   });
 
   return {

@@ -94,9 +94,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
           // Persist to backend via DataService
           await DataService.cases.add(newCase);
           
-          // Force immediate refetch by setting data directly to trigger UI update
-          // This is more reliable than relying on cache invalidation
-          window.location.reload(); // Temporary: force full refresh
+          // Invalidate cache to trigger refetch
+          queryClient.invalidate(['cases']);
           
           // Notify parent component
           onSave(newCase);

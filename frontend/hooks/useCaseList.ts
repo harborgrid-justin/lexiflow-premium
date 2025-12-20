@@ -38,10 +38,8 @@ export const useCaseList = () => {
 
   const filteredCases = useMemo(() => {
     if (!cases || cases.length === 0) {
-      console.log('[useCaseList] No cases to filter');
       return [];
     }
-    console.log('[useCaseList] Filtering cases:', cases);
     const lowerSearch = debouncedSearchTerm.toLowerCase();
     const filtered = cases.filter(c => {
       const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
@@ -52,10 +50,8 @@ export const useCaseList = () => {
         c.id?.toLowerCase().includes(lowerSearch);
       const matchesDate = (!dateFrom || c.filingDate >= dateFrom) && (!dateTo || c.filingDate <= dateTo);
       
-      console.log(`[useCaseList] Case ${c.title}: status=${matchesStatus}, type=${matchesType}, search=${matchesSearch}, date=${matchesDate}`);
       return matchesStatus && matchesType && matchesSearch && matchesDate;
     });
-    console.log('[useCaseList] Filtered result:', filtered);
     return filtered;
   }, [cases, statusFilter, typeFilter, debouncedSearchTerm, dateFrom, dateTo]);
 

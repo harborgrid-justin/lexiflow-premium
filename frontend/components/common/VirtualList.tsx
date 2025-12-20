@@ -67,15 +67,25 @@ const VirtualListComponent = <T extends any>(
       requestAnimationFrame(() => {
           for (const entry of entries) {
              if (entry.contentRect) {
-                setContainerHeight(entry.contentRect.height);
+                const newHeight = entry.contentRect.height;
+                if (newHeight > 0) {
+                  setContainerHeight(newHeight);
+                }
              }
           }
       });
     });
 
     observer.observe(containerRef.current);
-    // Initial set
-    setContainerHeight(containerRef.current.clientHeight);
+    // Initial set - use setTimeout to ensure layout has completed
+    setTimeout(() => {
+      if (containerRef.current) {
+        const initialHeight = containerRef.current.clientHeight;
+        if (initialHeight > 0) {
+          setContainerHeight(initialHeight);
+        }
+      }
+    }, 0);
 
     return () => observer.disconnect();
   }, []);
@@ -85,7 +95,8 @@ const VirtualListComponent = <T extends any>(
   
   const overscan = 5; 
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  const safeHeight = containerHeight || 600; 
+  // Use measured height if available, otherwise use a large default to render all items initially
+  const safeHeight = containerHeight > 0 ? containerHeight : 2000; 
   const visibleNodeCount = Math.ceil(safeHeight / itemHeight) + 2 * overscan;
   const endIndex = Math.min(safeItems.length, startIndex + visibleNodeCount);
 
@@ -130,7 +141,11 @@ const VirtualListComponent = <T extends any>(
     <div 
       ref={containerRef}
       className={cn("overflow-y-auto relative custom-scrollbar will-change-scroll scroll-smooth", className)}
-      style={{ height: typeof height === 'number' ? `${height}px` : '100%', contain: 'strict' }}
+      style={{ 
+        height: typeof height === 'number' ? `${height}px` : height, 
+        minHeight: typeof height === 'string' ? '400px' : undefined,
+        contain: 'strict' 
+      }}
       onScroll={handleScroll}
     >
       <div style={{ height: totalItemsHeight + (footer ? 60 : 0), position: 'relative' }}>

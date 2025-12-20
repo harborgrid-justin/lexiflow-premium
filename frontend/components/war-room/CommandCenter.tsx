@@ -80,18 +80,23 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
   // ============================================================================
   // MAIN RENDER
   // ============================================================================
+  // Skeleton component
+  const Skeleton = ({ className = '' }: { className?: string }) => (
+    <div className={`animate-pulse bg-slate-200 rounded ${className}`} />
+  );
+
   return (
     <div className="space-y-6 animate-fade-in">
-        {/* Countdown & Status */}
+        {/* Trial Status - Skeleton Loader */}
         <Card className={cn("p-6", theme.surface.raised, "border-2", theme.primary.border)}>
             <div className="flex justify-between items-center">
-                <div>
-                    <h3 className={cn("text-lg font-bold", theme.text.primary)}>Trial Countdown: 3 Days</h3>
-                    <p className={cn("text-sm", theme.text.secondary)}>Current Status: <span className="font-semibold text-green-500">Ready</span></p>
+                <div className="space-y-3 flex-1">
+                    <Skeleton className="h-6 w-48" />
+                    <Skeleton className="h-4 w-32" />
                 </div>
-                <div className="text-right">
-                    <p className={cn("text-2xl font-bold", theme.text.primary)}>Day 1 of 5</p>
-                    <p className={cn("text-sm", theme.text.secondary)}>Jury Selection Complete</p>
+                <div className="text-right space-y-3">
+                    <Skeleton className="h-8 w-24" />
+                    <Skeleton className="h-4 w-36" />
                 </div>
             </div>
         </Card>
@@ -137,26 +142,18 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
             </Card>
             <Card title={<div className="flex items-center gap-2"><AlertCircle className="h-5 w-5" /> Critical Alerts</div>}>
                     <div className="space-y-3">
-                        <div className={cn("p-3 rounded-lg flex items-start gap-3 border-amber-500", theme.surface.highlight, "border")}>
-                            <AlertTriangle className={cn("h-5 w-5 mt-0.5 text-amber-500")} />
-                            <div>
-                                <p className={cn("font-semibold", theme.text.primary)}>Witness Unavailability</p>
-                                <p className={cn("text-sm", theme.text.secondary)}>Dr. Eva Rostova has a conflict on Day 3. Mitigation required.</p>
-                                <button onClick={() => onNavigate('witnesses', { witnessId: 'W-003' })} className={cn("text-sm font-semibold mt-1 flex items-center gap-1", theme.primary.text)}>
-                                    View Witness <ArrowRight className="h-3 w-3"/>
-                                </button>
+                        {/* Skeleton loaders for alerts */}
+                        {[...Array(2)].map((_, i) => (
+                            <div key={i} className={cn("p-3 rounded-lg flex items-start gap-3", theme.surface.highlight, "border", theme.border.default)}>
+                                <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
+                                <div className="flex-1 space-y-2">
+                                    <Skeleton className="h-4 w-3/4" />
+                                    <Skeleton className="h-3 w-full" />
+                                    <Skeleton className="h-3 w-5/6" />
+                                    <Skeleton className="h-6 w-24 mt-2" />
+                                </div>
                             </div>
-                        </div>
-                         <div className={cn("p-3 rounded-lg flex items-start gap-3 border-red-500", theme.surface.highlight, "border")}>
-                            <AlertTriangle className={cn("h-5 w-5 mt-0.5 text-red-500")} />
-                            <div>
-                                <p className={cn("font-semibold", theme.text.primary)}>Evidence Challenge</p>
-                                <p className={cn("text-sm", theme.text.secondary)}>Opposing counsel has filed a motion to exclude Exhibit P-78.</p>
-                                <button onClick={() => onNavigate('evidence')} className={cn("text-sm font-semibold mt-1 flex items-center gap-1", theme.primary.text)}>
-                                    Review Evidence <ArrowRight className="h-3 w-3"/>
-                                </button>
-                            </div>
-                        </div>
+                        ))}
                     </div>
             </Card>
         </div>

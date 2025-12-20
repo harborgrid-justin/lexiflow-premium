@@ -143,7 +143,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
 
   return (
     <div className="space-y-4 h-full flex flex-col">
-      {isModalOpen && <TaskCreationModal isOpen={true} onClose={() => setIsModalOpen(false)} onSave={handleAddTask} />}
+      {taskModal.isOpen && <TaskCreationModal isOpen={true} onClose={taskModal.close} onSave={handleAddTask} />}
       
       <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
@@ -162,7 +162,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
                 <option value="High Priority">High Priority</option>
             </select>
             <button 
-              onClick={() => setIsModalOpen(true)}
+              onClick={taskModal.open}
               className={cn("flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors", theme.primary.DEFAULT, theme.text.inverse, theme.primary.hover)}
             >
               <Plus className="h-4 w-4 mr-2"/> Add Task

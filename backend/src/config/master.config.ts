@@ -9,7 +9,7 @@
 // =============================================================================
 
 // Core Database Settings
-export const DB_SYNCHRONIZE = true; // CRITICAL: Keep false to prevent data loss
+export const DB_SYNCHRONIZE = false; // CRITICAL: Keep false to prevent data loss
 export const DB_MIGRATIONS_RUN = false;
 export const DB_LOGGING = process.env.NODE_ENV !== 'production';
 export const DB_SSL = true;

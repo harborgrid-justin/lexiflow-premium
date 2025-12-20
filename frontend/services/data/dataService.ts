@@ -314,7 +314,10 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
   
-  messenger: DataSourceRouter.createPropertyDescriptor(null, () => import('../domain/MessengerDomain').then(m => m.MessengerService)),
+  messenger: { 
+    get: () => import('../domain/MessengerDomain').then(m => m.MessengerService),
+    enumerable: true 
+  },
   
   calendar: DataSourceRouter.createPropertyDescriptor('calendar', () => import('../domain/CalendarDomain').then(m => m.CalendarService)),
   
@@ -328,7 +331,10 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
   
-  warRoom: DataSourceRouter.createPropertyDescriptor(null, () => import('../domain/WarRoomDomain').then(m => m.WarRoomService)),
+  warRoom: { 
+    get: () => import('../domain/WarRoomDomain').then(m => m.WarRoomService),
+    enumerable: true 
+  },
   
   research: { 
     get: () => import('../domain/ResearchDomain').then(m => m.ResearchService),

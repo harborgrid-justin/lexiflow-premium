@@ -29,7 +29,6 @@ async function seedAdmin() {
       await client.query(
         `UPDATE users 
          SET password_hash = $1,
-             "password" = $1,
              status = 'active',
              "isActive" = true,
              "isVerified" = true,
@@ -45,7 +44,6 @@ async function seedAdmin() {
       await client.query(`
         INSERT INTO users (
           email,
-          password,
           password_hash,
           "firstName",
           "lastName",
@@ -56,7 +54,7 @@ async function seedAdmin() {
           first_name,
           last_name
         ) VALUES (
-          $1, $2, $2, $3, $4, $5, $6, $7, $8, $3, $4
+          $1, $2, $3, $4, $5, $6, $7, $8, $3, $4
         )
       `, [
         'admin@lexiflow.com',

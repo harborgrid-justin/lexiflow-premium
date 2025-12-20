@@ -123,11 +123,21 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
     return Array.isArray(allCasesRaw) ? allCasesRaw : [];
   }, [allCasesRaw]);
 
-  const { data: trialData, isLoading } = useQuery(
+  const { data: trialData, isLoading, isError, error } = useQuery(
       [STORES.CASES, currentCaseId, 'warRoom'],
-      () => DataService.warRoom.getData(currentCaseId),
+      async () => {
+        const warRoomService = await DataService.warRoom;
+        return warRoomService.getData(currentCaseId);
+      },
       { enabled: !!currentCaseId }
   );
+
+  // Log errors for debugging
+  useEffect(() => {
+    if (isError) {
+      console.error('[WarRoom] Failed to load war room data:', error);
+    }
+  }, [isError, error]);
 
   // ============================================================================
   // MEMOIZED VALUES
@@ -189,6 +199,23 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
 
   if (isLoading) {
     return <LazyLoader message="Initializing War Room..." />;
+  }
+
+  if (isError) {
+    return (
+      <div className={cn("h-full flex flex-col items-center justify-center p-6", theme.background)}>
+        <div className="text-center">
+          <Target className={cn("h-12 w-12 mx-auto mb-4 opacity-20 text-red-500")} />
+          <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>Failed to Load War Room</h3>
+          <p className={cn("text-sm mb-4", theme.text.secondary)}>
+            {error instanceof Error ? error.message : 'An error occurred while loading war room data.'}
+          </p>
+          <Button variant="primary" size="sm" onClick={() => window.location.reload()}>
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   if (!trialData) {

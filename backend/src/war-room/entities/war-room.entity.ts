@@ -21,20 +21,20 @@ export class Advisor {
   @Column({ nullable: true })
   specialty: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'case_id', nullable: true })
   caseId: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ default: true })
+  @Column({ name: 'is_active', default: true })
   isActive: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
 
@@ -56,6 +56,7 @@ export class Expert {
   name: string;
 
   @Column({
+    name: 'expert_type',
     type: 'enum',
     enum: ExpertType,
     default: ExpertType.OTHER
@@ -68,26 +69,26 @@ export class Expert {
   @Column({ nullable: true })
   phone: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'hourly_rate', type: 'decimal', precision: 10, scale: 2, nullable: true })
   hourlyRate: number;
 
   @Column({ nullable: true })
   credentials: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'case_id', nullable: true })
   caseId: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
-  @Column({ default: true })
+  @Column({ name: 'is_active', default: true })
   isActive: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
 
@@ -96,11 +97,11 @@ export class CaseStrategy {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'case_id', nullable: true })
   caseId: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case: Case;
 
   @Column({ type: 'text', nullable: true })
@@ -109,15 +110,15 @@ export class CaseStrategy {
   @Column({ type: 'text', nullable: true })
   approach: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'key_arguments', type: 'text', nullable: true })
   keyArguments: string;
 
   @Column({ type: 'json', nullable: true })
   notes: any;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

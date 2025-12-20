@@ -14,13 +14,16 @@ interface PipelineListProps {
 export const PipelineList: React.FC<PipelineListProps> = ({ pipelines, selectedJob, onSelectJob }) => {
   const { theme } = useTheme();
 
+  // Ensure pipelines is always an array
+  const pipelinesArray = Array.isArray(pipelines) ? pipelines : [];
+
   return (
     <div className={cn(
         "flex-1 p-6 overflow-y-auto space-y-4 w-full lg:w-1/2 lg:border-r transition-all duration-300", 
         theme.border.default,
         selectedJob ? "hidden lg:block" : "block"
     )}>
-        {pipelines.map((p) => (
+        {pipelinesArray.map((p) => (
             <div 
                 key={p.id} 
                 onClick={() => onSelectJob(p)}

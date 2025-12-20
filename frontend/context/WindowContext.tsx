@@ -271,7 +271,7 @@ export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
                 {/* Content */}
                 <div className="flex-1 h-full relative pointer-events-auto overflow-hidden">
-                    <ErrorBoundary>
+                    <ErrorBoundary scope={`Window-${win.id}`}>
                       {win.component}
                     </ErrorBoundary>
                 </div>

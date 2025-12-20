@@ -21,7 +21,9 @@ export const ParallelTasksManager: React.FC = () => {
       () => DataService.tasks.getAll()
   );
 
-  const tasks = allTasks.filter(t => t.status === 'In Progress' || t.status === 'Pending').slice(0, 4);
+  // Ensure allTasks is always an array to prevent .filter() errors
+  const tasksArray = Array.isArray(allTasks) ? allTasks : [];
+  const tasks = tasksArray.filter(t => t.status === 'In Progress' || t.status === 'Pending').slice(0, 4);
 
   if (isLoading) return <AdaptiveLoader contentType="list" shimmer itemCount={4} />;
 

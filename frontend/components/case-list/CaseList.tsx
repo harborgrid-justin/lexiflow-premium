@@ -77,7 +77,8 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   const caseListData = useCaseList();
   const { 
     isModalOpen, 
-    setIsModalOpen, 
+    openModal, 
+    closeModal, 
     statusFilter, 
     setStatusFilter, 
     typeFilter, 
@@ -103,7 +104,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   };
 
   const handleCreateCase = (newCase: Case) => {
-    setIsModalOpen(false);
+    closeModal();
     // Case is created via DataService in the modal's onSave handler
     // Query invalidation happens automatically
   };
@@ -167,7 +168,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
 
   return (
     <>
-      {isModalOpen && <CreateCaseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleCreateCase} />}
+      {isModalOpen && <CreateCaseModal isOpen={isModalOpen} onClose={closeModal} onSave={handleCreateCase} />}
       
       <TabbedPageLayout
         pageTitle="Matter Management"
@@ -175,7 +176,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
         pageActions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm" icon={Download}>Export</Button>
-            <Button variant="primary" size="sm" icon={Plus} onClick={() => setIsModalOpen(true)}>
+            <Button variant="primary" size="sm" icon={Plus} onClick={openModal}>
               New Case
             </Button>
           </div>

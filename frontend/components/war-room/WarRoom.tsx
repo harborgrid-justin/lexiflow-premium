@@ -105,7 +105,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // ============================================================================
   const [activeTab, setActiveTab] = useState<WarRoomView>('command');
   const [defcon, setDefcon] = useState<'normal' | 'elevated' | 'critical'>('elevated');
-  const [currentCaseId, setCurrentCaseId] = useState(caseId || '25-1229');
+  const [currentCaseId, setCurrentCaseId] = useState<string>(caseId || '');
   const [selectedWitnessId, setSelectedWitnessId] = useState<string | null>(null);
 
   // ============================================================================
@@ -171,10 +171,17 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   }, [caseId]);
 
   useEffect(() => {
-      if (!caseId && allCases.length > 0 && !allCases.find(c => c.id === currentCaseId)) {
-          setCurrentCaseId(allCases[0].id);
+      if (!caseId && allCases.length > 0) {
+          if (!currentCaseId || !allCases.find(c => c.id === currentCaseId)) {
+              setCurrentCaseId(allCases[0].id);
+          }
       }
   }, [allCases, currentCaseId, caseId]);
+
+  // Get the current case object for display
+  const currentCase = useMemo(() => {
+      return allCases.find(c => c.id === currentCaseId);
+  }, [allCases, currentCaseId]);
   
   useEffect(() => {
       if (initialTab) setActiveTab(initialTab);
@@ -253,12 +260,12 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                     {defcon === 'normal' && <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">READY</span>}
                 </div>
                 
-                {/* Case Selector (Hidden if caseId prop provided) */}
-                {!caseId && (
+                {/* Case Info or Selector */}
+                {!caseId && currentCase ? (
                     <div className="mt-2 flex items-center gap-3">
                         <div className="relative group">
                             <select 
-                                value={currentCaseId} 
+                                value={currentCaseId || ''} 
                                 onChange={(e) => setCurrentCaseId(e.target.value)}
                                 className={cn(
                                     "appearance-none bg-transparent font-semibold text-sm pr-6 py-1 outline-none cursor-pointer border-b border-dashed transition-colors hover:border-solid max-w-[300px] md:max-w-[500px] truncate",
@@ -274,7 +281,12 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                             </select>
                             <ChevronDown className={cn("absolute right-0 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)}/>
                         </div>
-                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.text.tertiary, theme.border.default)}>{currentCaseId}</span>
+                        <span className={cn("text-sm font-mono px-1.5 py-0.5 rounded border", theme.surface.highlight, theme.text.tertiary, theme.border.default)}>{currentCase.caseNumber}</span>
+                    </div>
+                ) : caseId && currentCase && (
+                    <div className="mt-2">
+                        <p className={cn("font-semibold text-lg", theme.text.primary)}>{currentCase.title}</p>
+                        <p className={cn("text-sm font-mono", theme.text.secondary)}>{currentCase.caseNumber}</p>
                     </div>
                 )}
             </div>

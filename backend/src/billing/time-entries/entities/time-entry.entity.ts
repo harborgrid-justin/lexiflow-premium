@@ -78,8 +78,8 @@ export class TimeEntry extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   billable: boolean;
 
-  @Column({ type: 'uuid', nullable: true })
-  invoiceId: string;
+  // @Column({ type: 'uuid', nullable: true })
+  // invoiceId: string; // TODO: Add migration for this column
 
   @Column({ type: 'uuid', nullable: true })
   rateTableId: string;

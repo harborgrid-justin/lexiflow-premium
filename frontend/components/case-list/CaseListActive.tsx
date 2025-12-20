@@ -128,9 +128,15 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   );
 
   const prefetchCaseDetails = useCallback((caseId: string) => {
-    queryClient.fetch([STORES.DOCUMENTS, caseId], () => DataService.documents.getByCaseId(caseId));
-    queryClient.fetch([STORES.TASKS, caseId], () => DataService.tasks.getByCaseId(caseId));
-    queryClient.fetch([STORES.BILLING, caseId], () => DataService.billing.getTimeEntries(caseId));
+    // Prefetch case-related data on hover for better UX
+    // Wrapped in try-catch to prevent errors from missing API methods
+    try {
+      if (DataService.documents?.getByCaseId) {
+        queryClient.fetch([STORES.DOCUMENTS, caseId], () => DataService.documents.getByCaseId(caseId));
+      }
+    } catch (error) {
+      // Silently fail - prefetch is optional
+    }
   }, []);
 
   const handleArchiveCase = (c: Case) => {

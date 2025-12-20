@@ -18,20 +18,20 @@ import { Download, ShieldCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks';
 
 // Components
-import { Button } from '../common/Button';
+import { Button } from '@/components';
 import { LazyLoader } from '../common/LazyLoader';
-import { TabbedPageLayout } from '../layout/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components';
 import { DashboardContent } from './DashboardContent';
 
 // Utils & Config
-import { cn } from '../../utils/cn';
-import { DASHBOARD_TAB_CONFIG } from '../../config/tabs.config';
+import { cn } from '@/utils';
+import { DASHBOARD_TAB_CONFIG } from '@/config';
 
 // Types
-import type { User } from '../../types';
+import type { User } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -51,11 +51,11 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, currentUser }) => {
   const [isPending, startTransition] = useTransition();
-  const [activeTab, _setActiveTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
+  const [activeTab] = useSessionStorage<string>('dashboard_active_tab', initialTab || 'overview');
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        _setActiveTab(tab);
+        setActiveTab(tab);
     });
   };
 

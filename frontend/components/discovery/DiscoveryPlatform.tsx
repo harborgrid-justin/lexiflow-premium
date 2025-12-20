@@ -128,16 +128,16 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+d': () => setActiveTab('dashboard'),
-    'mod+r': () => setActiveTab('requests'),
-    'mod+p': () => setActiveTab('privilege'),
-    'mod+h': () => setActiveTab('holds'),
-    'mod+e': () => setActiveTab('esi'),
-    'escape': () => {
-      if (isWizardView) {
-        handleBackToDashboard();
+      'mod+d': () => setActiveTab('dashboard'),
+      'mod+r': () => setActiveTab('requests'),
+      'mod+p': () => setActiveTab('privilege'),
+      'mod+h': () => setActiveTab('holds'),
+      'mod+e': () => setActiveTab('esi'),
+      'escape': () => {
+          if (isWizardView) {
+              handleBackToDashboard();
+          }
       }
-    }
   });
 
   const handleSaveResponse = async (reqId: string, text: string) => {

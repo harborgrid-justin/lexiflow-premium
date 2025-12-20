@@ -51,8 +51,8 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
  * Hook for keyboard shortcuts
  */
 export function useKeyboardShortcuts(
-  handlers: KeyboardShortcutHandlers,
-  enabled: boolean = true
+    handlers: { "mod+s": () => void; "mod+g": () => void; escape: () => void },
+    enabled: boolean = true
 ): void {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {

@@ -65,11 +65,11 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+w': () => setActiveTab('wip'),
-    'mod+i': () => setActiveTab('invoices'),
-    'mod+e': () => setActiveTab('expenses'),
-    'mod+l': () => setActiveTab('ledger'),
-    'mod+t': () => setActiveTab('trust')
+      'mod+w': () => setActiveTab('wip'),
+      'mod+i': () => setActiveTab('invoices'),
+      'mod+e': () => setActiveTab('expenses'),
+      'mod+l': () => setActiveTab('ledger'),
+      'mod+t': () => setActiveTab('trust')
   });
 
   const { mutate: syncFinancials, isLoading: isSyncing } = useMutation(

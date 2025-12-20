@@ -112,14 +112,14 @@ const BillingWIPComponent: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+n': () => {
-      notify.info('New time entry form (to be implemented)');
-    },
-    'mod+g': () => {
-      if (selectedIds.size > 0) {
-        handleGenerateClick();
+      'mod+n': () => {
+          notify.info('New time entry form (to be implemented)');
+      },
+      'mod+g': () => {
+          if (selectedIds.size > 0) {
+              handleGenerateClick();
+          }
       }
-    }
   });
 
   const filteredEntries = useMemo(() => {

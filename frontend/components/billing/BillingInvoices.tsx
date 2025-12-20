@@ -59,12 +59,12 @@ const BillingInvoicesComponent: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+s': () => {
-      notify.info('Send selected invoice (to be implemented)');
-    },
-    'mod+p': () => {
-      notify.info('Mark invoice as paid (to be implemented)');
-    }
+      'mod+s': () => {
+          notify.info('Send selected invoice (to be implemented)');
+      },
+      'mod+p': () => {
+          notify.info('Mark invoice as paid (to be implemented)');
+      }
   });
 
   const { mutate: sendInvoice, isLoading: isSending } = useMutation(

@@ -11,29 +11,29 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { CheckSquare, ArrowRight, Loader2 } from 'lucide-react';
+import {CheckSquare, ArrowRight, Loader2} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '../../hooks/useQueryHooks';
-import { DataService } from '../../services/data/dataService';
-import { STORES } from '../../services/data/db';
+import {useQuery} from '@hooks/useQueryHooks.ts';
+import {DataService} from '@/services';
+import {STORES} from '@/services';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import {useTheme} from '@/context';
 
 // Components
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
-import { NotificationCenter } from '../workflow/NotificationCenter';
+import {Card} from '@/components';
+import {Button} from '@/components';
+import {NotificationCenter} from '@/components';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import {cn} from '@/utils';
 
 // Types
-import type { User, WorkflowTask, CalendarEventItem } from '../../types';
+import type {User, WorkflowTask, CalendarEventItem} from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -49,24 +49,24 @@ interface PersonalWorkspaceProps {
 // COMPONENT
 // ============================================================================
 
-export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
-    const { theme } = useTheme();
+export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, currentUser}) => {
+    const {theme} = useTheme();
 
-    const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
+    const {data: allTasks = [], isLoading: tasksLoading, error: tasksError} = useQuery<WorkflowTask[]>(
         [STORES.TASKS, 'all'],
         DataService.tasks.getAll
     );
-    
-    const { data: allEvents = [], isLoading: eventsLoading, error: eventsError } = useQuery<CalendarEventItem[]>(
+
+    const {data: allEvents = [], isLoading: eventsLoading, error: eventsError} = useQuery<CalendarEventItem[]>(
         ['calendar', 'all'],
         DataService.calendar.getEvents
     );
-    
+
     // Ensure allTasks and allEvents are arrays even if API fails
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
     const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
-    
-    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && t.status !== 'completed');
+
+    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && !(t.status === 'completed'));
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
 
     const isLoading = tasksLoading || eventsLoading;
@@ -97,16 +97,21 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                         <>
                             <Card title="My Priority Tasks" className="lg:col-span-2">
                                 <div className="space-y-4">
-                                    {myTasks.length === 0 && <p className="text-center text-sm text-slate-500 py-8">No pending tasks assigned to you.</p>}
+                                    {myTasks.length === 0 &&
+                                        <p className="text-center text-sm text-slate-500 py-8">No pending tasks assigned
+                                            to you.</p>}
                                     {myTasks.map((task, i) => (
-                                        <div key={i} className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
+                                        <div key={i}
+                                             className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                                             <div className="flex items-start gap-4">
-                                                <div className={cn("p-2 rounded-full", task.priority === 'High' ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600")}>
+                                                <div
+                                                    className={cn("p-2 rounded-full", task.priority === 'High' ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600")}>
                                                     <CheckSquare className="h-5 w-5"/>
                                                 </div>
                                                 <div>
                                                     <h4 className={cn("font-bold text-sm", theme.text.primary)}>{task.title}</h4>
-                                                    <p className={cn("text-xs", theme.text.secondary)}>{task.caseId} • Due: {task.dueDate}</p>
+                                                    <p className={cn("text-xs", theme.text.secondary)}>{task.caseId} •
+                                                        Due: {task.dueDate}</p>
                                                 </div>
                                             </div>
                                             <Button size="sm" variant="ghost" icon={ArrowRight}>Start</Button>
@@ -114,14 +119,17 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                     ))}
                                 </div>
                             </Card>
-                            
+
                             <Card title="Upcoming Meetings">
                                 <div className="space-y-3">
-                                    {myMeetings.slice(0,2).map((event, i) => (
-                                         <div key={i} className={cn("flex items-center gap-3 p-3 rounded border-l-4 bg-slate-50", theme.border.default, event.priority === 'High' ? "border-l-red-500" : "border-l-blue-500")}>
+                                    {myMeetings.slice(0, 2).map((event, i) => (
+                                        <div key={i}
+                                             className={cn("flex items-center gap-3 p-3 rounded border-l-4 bg-slate-50", theme.border.default, event.priority === 'High' ? "border-l-red-500" : "border-l-blue-500")}>
                                             <div className="text-center w-12">
-                                                <span className="block text-xs font-bold text-slate-500">{new Date(event.date).toLocaleString('default', { month: 'short' }).toUpperCase()}</span>
-                                                <span className="block text-lg font-bold text-slate-900">{new Date(event.date).getDate()}</span>
+                                                <span
+                                                    className="block text-xs font-bold text-slate-500">{new Date(event.date).toLocaleString('default', {month: 'short'}).toUpperCase()}</span>
+                                                <span
+                                                    className="block text-lg font-bold text-slate-900">{new Date(event.date).getDate()}</span>
                                             </div>
                                             <div>
                                                 <p className="text-sm font-bold text-slate-900">{event.title}</p>
@@ -129,15 +137,17 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                             </div>
                                         </div>
                                     ))}
-                                     {myMeetings.length === 0 && <p className="text-center text-sm text-slate-500 py-4">No upcoming meetings.</p>}
+                                    {myMeetings.length === 0 &&
+                                        <p className="text-center text-sm text-slate-500 py-4">No upcoming
+                                            meetings.</p>}
                                 </div>
                             </Card>
                         </>
                     )}
-                    
+
                     {activeTab === 'notifications' && (
                         <div className="lg:col-span-2">
-                            <NotificationCenter />
+                            <NotificationCenter/>
                         </div>
                     )}
                 </>

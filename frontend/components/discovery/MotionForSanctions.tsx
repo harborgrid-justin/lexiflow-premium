@@ -1,19 +1,23 @@
 
 import React, { useState } from 'react';
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { Gavel, AlertTriangle, Plus, FileWarning } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { DataService } from '../../services/data/dataService';
-import { SanctionMotion } from '../../types';
-import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-import { STORES } from '../../services/data/db';
+import { Card } from '@/components';
+import { Button } from '@/components';
+import { Badge } from '@/components';
+import { Gavel, Plus, FileWarning } from 'lucide-react';
+import { useTheme } from '@/context';
+import { cn } from '@/utils';
+import { DataService } from '@/services';
+import { SanctionMotion } from '@/types';
+import { useQuery, useMutation } from '@hooks/useQueryHooks.ts';
+import { STORES } from '@/services';
 import { queryKeys } from '../../utils/queryKeys';
-import { useModalState } from '../../hooks';
-import { Modal } from '../common/Modal';
-import { Input, TextArea } from '../common/Inputs';
+import { useModalState } from '@/hooks';
+import { Modal } from '@/components';
+import { Input, TextArea } from '@/components';
+
+function setIsModalOpen() {
+
+}
 
 export const MotionForSanctions: React.FC = () => {
   const { theme } = useTheme();
@@ -39,14 +43,15 @@ export const MotionForSanctions: React.FC = () => {
           id: `sanc-${Date.now()}`,
           caseId: 'General',
           title: newMotion.title,
-          ruleBasis: newMotion.ruleBasis as any || 'Rule 37(a)',
+          ruleBasis: newMotion.ruleBasis as never || 'Rule 37(a)',
           status: 'Draft',
           relatedRequestId: newMotion.relatedRequestId || '',
           description: newMotion.description || ''
-      } as SanctionMotion);
+      } as unknown as SanctionMotion);
   };
 
-  return (
+    let isModalOpen;
+    return (
     <div className="space-y-6 animate-fade-in">
         <div className={cn("p-6 rounded-lg border flex justify-between items-center", theme.status.error.bg, theme.status.error.border)}>
              <div>
@@ -55,7 +60,7 @@ export const MotionForSanctions: React.FC = () => {
                  </h3>
                  <p className={cn("text-sm", theme.status.error.text)}>Track enforcement actions for discovery non-compliance.</p>
              </div>
-             <Button variant="danger" icon={Plus} onClick={() => setIsModalOpen(true)}>File Motion</Button>
+             <Button variant="danger" icon={Plus} onClick={() => setIsModalOpen()}>File Motion</Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -81,7 +86,7 @@ export const MotionForSanctions: React.FC = () => {
             )}
         </div>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Draft Sanctions Motion">
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen()} title="Draft Sanctions Motion">
             <div className="p-6 space-y-4">
                 <Input label="Motion Title" value={newMotion.title || ''} onChange={e => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
                 <div>

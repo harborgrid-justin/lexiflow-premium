@@ -84,13 +84,13 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+n': () => {
-      // Navigate to new request form
-      onNavigate('requests');
-    },
-    'mod+f': () => {
-      filtersToggle.toggle();
-    }
+      'mod+n': () => {
+          // Navigate to new request form
+          onNavigate('requests');
+      },
+      'mod+f': () => {
+          filtersToggle.toggle();
+      }
   });
 
   const renderRow = useCallback((req: DiscoveryRequest) => {

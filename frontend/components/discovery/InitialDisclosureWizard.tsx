@@ -4,7 +4,7 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Stepper } from '../common/Stepper';
 import { Input, TextArea } from '../common/Inputs';
-import { Users, FileText, Calculator, ShieldCheck, CheckCircle } from 'lucide-react';
+import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useNotify } from '../../hooks/useNotify';

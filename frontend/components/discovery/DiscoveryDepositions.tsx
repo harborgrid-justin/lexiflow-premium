@@ -17,28 +17,28 @@ import { Mic2, Calendar, FileText, CheckSquare, Video, MapPin, User, Plus } from
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { TaskCreationModal } from '../common/TaskCreationModal';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components';
+import { Button } from '@/components';
+import { Badge } from '@/components';
+import { TaskCreationModal } from '@/components';
 import { Modal } from '../common/Modal';
-import { Input, TextArea } from '../common/Inputs';
+import { Input, TextArea } from '@/components';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-import { useWindow } from '../../context/WindowContext';
+import { useTheme } from '@/context';
+import { useQuery, useMutation } from '@hooks/useQueryHooks.ts';
+import { useWindow } from '@/context';
 
 // Services & Utils
-import { DataService } from '../../services/data/dataService';
-import { cn } from '../../utils/cn';
-import { STORES } from '../../services/data/db';
+import { DataService } from '@/services';
+import { cn } from '@/utils';
+import { STORES } from '@/services';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Deposition, CaseId, UUID } from '../../types';
+import { Deposition, CaseId, UUID } from '@/types';
 
 export const DiscoveryDepositions: React.FC = () => {
   const { theme } = useTheme();

@@ -17,13 +17,16 @@ export const TaskDependencyManager: React.FC = () => {
       () => DataService.tasks.getAll()
   );
 
+  // Ensure tasks is always an array
+  const tasksArray = Array.isArray(tasks) ? tasks : [];
+
   // Real dependency derivation
   const dependencies = React.useMemo(() => {
       // Filter tasks that have dependencies or are dependencies of others
       // For visualization, we'll just take a chain of tasks if they exist, 
       // or create a synthetic chain from tasks sorted by due date if no explicit dependencies exist (fallback for demo data)
       
-      const tasksWithDeps = tasks.filter(t => t.dependencies && t.dependencies.length > 0);
+      const tasksWithDeps = tasksArray.filter(t => t.dependencies && t.dependencies.length > 0);
       
       if (tasksWithDeps.length > 0) {
           // If we have real dependencies, use them. 
@@ -39,7 +42,7 @@ export const TaskDependencyManager: React.FC = () => {
       }
 
       // Fallback: Sort by due date and show as a sequence
-      const sortedTasks = [...tasks]
+      const sortedTasks = [...tasksArray]
         .filter(t => t.status !== 'Done' && t.status !== 'Completed')
         .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
         .slice(0, 5);
@@ -52,7 +55,7 @@ export const TaskDependencyManager: React.FC = () => {
               type: isCompleted ? 'completed' : isActive ? 'active' : 'locked'
           };
       });
-  }, [tasks]);
+  }, [tasksArray]);
 
   if (isLoading) return <AdaptiveLoader contentType="list" shimmer itemCount={4} />;
 

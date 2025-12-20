@@ -45,9 +45,10 @@ export const useSecureMessenger = () => {
   // Initial Data Fetch
   useEffect(() => {
       const loadData = async () => {
+          const messengerService = await DataService.messenger;
           const [convs, conts] = await Promise.all([
-              DataService.messenger.getConversations(),
-              DataService.messenger.getContacts()
+              messengerService.getConversations(),
+              messengerService.getContacts()
           ]);
           setConversations(convs);
           setContactsList(conts);

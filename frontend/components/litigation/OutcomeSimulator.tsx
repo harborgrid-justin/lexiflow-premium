@@ -100,7 +100,7 @@ export const OutcomeSimulator: React.FC = () => {
         </div>
       </Card>
 
-      <Card className="lg:col-span-2 flex flex-col h-full">
+      <Card className="lg:col-span-2 flex flex-col">
          <div className="flex justify-between items-start mb-6">
             <div>
                 <h3 className={cn("text-lg font-bold", theme.text.primary)}>Settlement Value Forecast</h3>
@@ -114,7 +114,7 @@ export const OutcomeSimulator: React.FC = () => {
             </div>
          </div>
 
-         <div className="flex-1 min-h-[300px]">
+         <div className="flex-1" style={{ minHeight: '300px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>

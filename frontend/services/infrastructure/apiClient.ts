@@ -4,6 +4,7 @@
  */
 
 import { API_BASE_URL, API_PREFIX } from '../../config/master.config';
+import { keysToCamel, keysToSnake } from '../../utils/caseConverter';
 
 const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
 
@@ -152,7 +153,10 @@ class ApiClient {
       return {} as T;
     }
 
-    return response.json();
+    const jsonData = await response.json();
+    
+    // Convert snake_case keys to camelCase for frontend consumption
+    return keysToCamel<T>(jsonData);
   }
 
   /**

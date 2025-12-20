@@ -91,7 +91,7 @@ export const FormsSigningView: React.FC = () => {
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {
             setActiveField(field);
-            setSignModalOpen(true);
+            signModal.open();
         }
     };
 
@@ -104,7 +104,7 @@ export const FormsSigningView: React.FC = () => {
             await DataService.documents.update(documentSelection.selected.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
             documentSelection.select(updatedDoc);
-            setSignModalOpen(false);
+            signModal.close();
             setActiveField(null);
             notify.success("Document Signed");
         }
@@ -125,7 +125,7 @@ export const FormsSigningView: React.FC = () => {
             await DataService.documents.update(documentSelection.selected.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
             documentSelection.select(updatedDoc);
-            setIsSendModalOpen(false);
+            sendModal.close();
             notify.success(`'${documentSelection.selected.title}' sent for signature.`);
         }
     };
@@ -208,7 +208,7 @@ export const FormsSigningView: React.FC = () => {
                             </PDFViewer>
                         </div>
                          <div className={cn("p-4 border-t", theme.border.default)}>
-                            <Button className="w-full" icon={Send} onClick={() => setIsSendModalOpen(true)}>Send for Signature</Button>
+                            <Button className="w-full" icon={Send} onClick={sendModal.open}>Send for Signature</Button>
                         </div>
                     </>
                 ) : (
@@ -220,18 +220,18 @@ export const FormsSigningView: React.FC = () => {
             </div>
 
             {/* Modals */}
-            <Modal isOpen={signModalOpen} onClose={() => setSignModalOpen(false)} title="Sign Document" size="sm">
+            <Modal isOpen={signModal.isOpen} onClose={signModal.close} title="Sign Document" size="sm">
                 <div className="p-6">
                     <p className={cn("text-sm mb-4", theme.text.secondary)}>Draw your signature below to sign this field.</p>
                     <SignaturePad value={false} onChange={handleSignatureSave} label="Draw Signature" subtext="I certify this signature is valid."/>
                 </div>
             </Modal>
-            <Modal isOpen={isSendModalOpen} onClose={() => setIsSendModalOpen(false)} title="Send for Signature" size="md">
+            <Modal isOpen={sendModal.isOpen} onClose={sendModal.close} title="Send for Signature" size="md">
                 <div className="p-6 space-y-4">
                     <input className={cn("w-full p-2 border rounded", theme.border.default)} placeholder="Recipient Email..."/>
                     <textarea className={cn("w-full p-2 border rounded h-24", theme.border.default)} placeholder="Optional message..."/>
                     <div className="flex justify-end gap-2">
-                        <Button variant="secondary" onClick={() => setIsSendModalOpen(false)}>Cancel</Button>
+                        <Button variant="secondary" onClick={sendModal.close}>Cancel</Button>
                         <Button variant="primary" icon={Send} onClick={handleSend}>Send</Button>
                     </div>
                 </div>

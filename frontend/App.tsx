@@ -121,13 +121,13 @@ const App: React.FC = () => {
     <ErrorBoundary scope="AppRoot">
       <ToastProvider>
         <SyncProvider>
-          <WindowProvider>
-            <DataSourceProvider>
-              <ThemeProvider>
+          <DataSourceProvider>
+            <ThemeProvider>
+              <WindowProvider>
                 <InnerApp />
-              </ThemeProvider>
-            </DataSourceProvider>
-          </WindowProvider>
+              </WindowProvider>
+            </ThemeProvider>
+          </DataSourceProvider>
         </SyncProvider>
       </ToastProvider>
     </ErrorBoundary>

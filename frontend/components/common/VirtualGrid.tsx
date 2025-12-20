@@ -127,7 +127,7 @@ export function VirtualGrid<T>({
     <div 
       ref={containerRef}
       className={cn("overflow-y-auto relative custom-scrollbar will-change-scroll h-full", className)}
-      style={{ height: height }}
+      style={{ height: typeof height === 'number' ? `${height}px` : height }}
       onScroll={handleScroll}
     >
       <div style={{ height: Math.max(totalHeight, containerSize.height), position: 'relative' }}>

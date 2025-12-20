@@ -38,51 +38,47 @@ const DiscoveryCharts: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card title="EDRM Data Funnel" className="lg:col-span-2">
-            <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={funnelData} layout="horizontal" barCategoryGap="20%">
-                        <XAxis 
-                        dataKey="name" 
-                        fontSize={12} 
-                        tickLine={false} 
-                        axisLine={false} 
-                        tick={{fill: chartTheme.text}} 
-                        />
-                        <Tooltip 
-                        cursor={{fill: 'transparent'}} 
-                        formatter={(value: any) => value.toLocaleString()} 
-                        contentStyle={chartTheme.tooltipStyle}
-                        />
-                        <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v:any) => (funnelData.find((d: any) => d.value === v) as any)?.label }}>
-                        {funnelData.map((entry: any, index: number) => (
-                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index]} />
-                        ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={256}>
+                <BarChart data={funnelData} layout="horizontal" barCategoryGap="20%">
+                    <XAxis 
+                    dataKey="name" 
+                    fontSize={12} 
+                    tickLine={false} 
+                    axisLine={false} 
+                    tick={{fill: chartTheme.text}} 
+                    />
+                    <Tooltip 
+                    cursor={{fill: 'transparent'}} 
+                    formatter={(value: any) => value.toLocaleString()} 
+                    contentStyle={chartTheme.tooltipStyle}
+                    />
+                    <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v:any) => (funnelData.find((d: any) => d.value === v) as any)?.label }}>
+                    {funnelData.map((entry: any, index: number) => (
+                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index]} />
+                    ))}
+                    </Bar>
+                </BarChart>
+            </ResponsiveContainer>
         </Card>
 
         <Card title="Custodian Volume">
-            <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={custodianData} layout="vertical" margin={{ left: 20 }}>
-                        <XAxis type="number" hide />
-                        <YAxis 
-                        dataKey="name" 
-                        type="category" 
-                        fontSize={11} 
-                        width={60} 
-                        tick={{fill: chartTheme.text}} 
-                        />
-                        <Tooltip 
-                        cursor={{fill: 'transparent'}} 
-                        contentStyle={chartTheme.tooltipStyle}
-                        />
-                        <Bar dataKey="docs" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={256}>
+                <BarChart data={custodianData} layout="vertical" margin={{ left: 20 }}>
+                    <XAxis type="number" hide />
+                    <YAxis 
+                    dataKey="name" 
+                    type="category" 
+                    fontSize={11} 
+                    width={60} 
+                    tick={{fill: chartTheme.text}} 
+                    />
+                    <Tooltip 
+                    cursor={{fill: 'transparent'}} 
+                    contentStyle={chartTheme.tooltipStyle}
+                    />
+                    <Bar dataKey="docs" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
+                </BarChart>
+            </ResponsiveContainer>
         </Card>
     </div>
   );

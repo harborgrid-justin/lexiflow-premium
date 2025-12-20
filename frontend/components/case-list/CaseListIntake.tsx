@@ -22,6 +22,7 @@ import { KanbanBoard, KanbanColumn, KanbanCard } from '../common/Kanban';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
 import { Button } from '../common/Button';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -87,7 +88,7 @@ export const CaseListIntake: React.FC = () => {
               const current = queryClient.getQueryState<any[]>(['crm', 'leads'])?.data || [];
               queryClient.setQueryData(['crm', 'leads'], [...current, newLead]);
               success('Lead added successfully');
-              setIsLeadModalOpen(false);
+              leadModal.close();
               setNewLead({});
           },
           onError: (error: Error) => {
@@ -110,7 +111,7 @@ export const CaseListIntake: React.FC = () => {
   };
 
   const handleAddLead = () => {
-      setIsLeadModalOpen(true);
+      leadModal.open();
   };
 
   const handleSaveLead = () => {
@@ -187,7 +188,7 @@ export const CaseListIntake: React.FC = () => {
       </KanbanBoard>
 
       {/* Lead Intake Modal */}
-      <Modal isOpen={isLeadModalOpen} onClose={() => setIsLeadModalOpen(false)} title="New Lead Intake">
+      <Modal isOpen={leadModal.isOpen} onClose={leadModal.close} title="New Lead Intake">
         <div className="p-6 space-y-4">
           <Input 
             label="Client Name" 
@@ -232,7 +233,7 @@ export const CaseListIntake: React.FC = () => {
             onChange={(e) => setNewLead({...newLead, notes: e.target.value})} 
           />
           <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
-            <Button variant="ghost" onClick={() => setIsLeadModalOpen(false)}>Cancel</Button>
+            <Button variant="ghost" onClick={leadModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleSaveLead}>Add Lead</Button>
           </div>
         </div>

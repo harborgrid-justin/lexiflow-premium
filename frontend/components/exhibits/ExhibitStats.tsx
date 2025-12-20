@@ -68,39 +68,35 @@ export const ExhibitStats: React.FC<ExhibitStatsProps> = ({ exhibits }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card title="Admissibility Status">
-                <div className="h-64 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                            <Pie 
-                                data={statusData} 
-                                innerRadius={60} 
-                                outerRadius={80} 
-                                paddingAngle={5} 
-                                dataKey="value"
-                            >
-                                {statusData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                            <Legend verticalAlign="bottom" height={36}/>
-                        </PieChart>
-                    </ResponsiveContainer>
-                </div>
+                <ResponsiveContainer width="100%" height={256}>
+                    <PieChart>
+                        <Pie 
+                            data={statusData} 
+                            innerRadius={60} 
+                            outerRadius={80} 
+                            paddingAngle={5} 
+                            dataKey="value"
+                        >
+                            {statusData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend verticalAlign="bottom" height={36}/>
+                    </PieChart>
+                </ResponsiveContainer>
             </Card>
 
             <Card title="Exhibits by Party">
-                <div className="h-64 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={partyData} layout="vertical" margin={{ left: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                            <XAxis type="number" hide />
-                            <YAxis dataKey="name" type="category" width={80} tick={{fontSize: 12}} />
-                            <Tooltip cursor={{fill: 'transparent'}} />
-                            <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={30} />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+                <ResponsiveContainer width="100%" height={256}>
+                    <BarChart data={partyData} layout="vertical" margin={{ left: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                        <XAxis type="number" hide />
+                        <YAxis dataKey="name" type="category" width={80} tick={{fontSize: 12}} />
+                        <Tooltip cursor={{fill: 'transparent'}} />
+                        <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={30} />
+                    </BarChart>
+                </ResponsiveContainer>
             </Card>
         </div>
     </div>

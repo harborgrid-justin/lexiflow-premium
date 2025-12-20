@@ -1,19 +1,55 @@
 /**
- * MessengerDomain - Placeholder implementation
- * TODO: Implement full domain service
+ * MessengerDomain - Backend API integration
+ * @updated 2025-12-19
  */
 
-// Placeholder service - returns empty arrays/objects for compatibility
+import { api } from '../api';
+
 export const MessengerService = {
-  getAll: async () => [],
-  getById: async (id: string) => null,
-  add: async (item: any) => item,
-  update: async (id: string, updates: any) => updates,
-  delete: async (id: string) => true,
+  getAll: async () => {
+    // For messenger, getAll returns conversations
+    return api.messaging.getConversations();
+  },
   
-  // Additional messenger-specific methods
-  getConversations: async () => [],
-  getContacts: async () => [],
-  sendMessage: async (conversationId: string, message: any) => message,
-  createConversation: async (conversation: any) => conversation,
+  getById: async (id: string) => {
+    return api.messaging.getConversation(id);
+  },
+  
+  add: async (item: any) => {
+    return api.messaging.createConversation(item);
+  },
+  
+  update: async (id: string, updates: any) => {
+    return api.messaging.updateConversation(id, updates);
+  },
+  
+  delete: async (id: string) => {
+    await api.messaging.deleteConversation(id);
+    return true;
+  },
+  
+  // Messenger-specific methods
+  getConversations: async (filters?: any) => {
+    return api.messaging.getConversations(filters);
+  },
+  
+  getContacts: async (filters?: any) => {
+    return api.messaging.getContacts(filters);
+  },
+  
+  sendMessage: async (data: { conversationId: string; body: string; priority?: any; attachments?: string[] }) => {
+    return api.messaging.sendMessage(data);
+  },
+  
+  createConversation: async (data: { participants: string[]; subject?: string; initialMessage?: string }) => {
+    return api.messaging.createConversation(data);
+  },
+  
+  getMessages: async (conversationId: string) => {
+    return api.messaging.getMessages(conversationId);
+  },
+  
+  markAsRead: async (messageId: string) => {
+    return api.messaging.markAsRead(messageId);
+  },
 };

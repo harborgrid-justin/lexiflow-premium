@@ -65,33 +65,29 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card title="Task Completion Velocity">
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={analytics.completion} margin={DEFAULT_MARGINS}>
-              <CartesianGrid {...gridConfig} />
-              <XAxis dataKey="name" {...axisConfig} />
-              <YAxis {...axisConfig} />
-              <Tooltip {...tooltipConfig} />
-              <Bar dataKey="completed" fill={chartTheme.colors.primary} radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width="100%" height={256}>
+          <BarChart data={analytics.completion} margin={DEFAULT_MARGINS}>
+            <CartesianGrid {...gridConfig} />
+            <XAxis dataKey="name" {...axisConfig} />
+            <YAxis {...axisConfig} />
+            <Tooltip {...tooltipConfig} />
+            <Bar dataKey="completed" fill={chartTheme.colors.primary} radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </Card>
 
       <Card title="SLA Health Status">
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie data={analytics.status} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
-                {analytics.status.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip {...tooltipConfig} />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width="100%" height={256}>
+          <PieChart>
+            <Pie data={analytics.status} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+              {analytics.status.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip {...tooltipConfig} />
+            <Legend verticalAlign="bottom" height={36} iconType="circle" />
+          </PieChart>
+        </ResponsiveContainer>
       </Card>
     </div>
   );

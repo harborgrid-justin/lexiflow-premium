@@ -101,13 +101,22 @@ class QueryClient {
 
   public invalidate(keyPattern: string | QueryKey): void {
     const search = typeof keyPattern === 'string' ? keyPattern : this.hashKey(keyPattern);
+    const invalidatedKeys: string[] = [];
+    
     this.cache.forEach((state, key) => {
       if (key.includes(search)) {
+        // Mark as stale
         this.cache.set(key, { ...state, dataUpdatedAt: 0 });
-        this.notify(key, this.cache.get(key)!);
+        invalidatedKeys.push(key);
       }
     });
+    
     this.notifyGlobal();
+    
+    // Log for debugging
+    if (invalidatedKeys.length > 0) {
+      console.debug(`[QueryClient] Invalidated ${invalidatedKeys.length} queries matching: ${search}`);
+    }
   }
 
   private notify(hashedKey: string, state: QueryState<any>): void {

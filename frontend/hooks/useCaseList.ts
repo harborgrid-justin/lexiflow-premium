@@ -37,18 +37,26 @@ export const useCaseList = () => {
   }, [casesResponse]);
 
   const filteredCases = useMemo(() => {
-    if (!cases || cases.length === 0) return [];
+    if (!cases || cases.length === 0) {
+      console.log('[useCaseList] No cases to filter');
+      return [];
+    }
+    console.log('[useCaseList] Filtering cases:', cases);
     const lowerSearch = debouncedSearchTerm.toLowerCase();
-    return cases.filter(c => {
+    const filtered = cases.filter(c => {
       const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
       const matchesType = typeFilter === 'All' || c.matterType === typeFilter;
       const matchesSearch = lowerSearch === '' || 
-        c.title.toLowerCase().includes(lowerSearch) || 
-        c.client.toLowerCase().includes(lowerSearch) ||
-        c.id.toLowerCase().includes(lowerSearch);
+        c.title?.toLowerCase().includes(lowerSearch) || 
+        c.client?.toLowerCase().includes(lowerSearch) ||
+        c.id?.toLowerCase().includes(lowerSearch);
       const matchesDate = (!dateFrom || c.filingDate >= dateFrom) && (!dateTo || c.filingDate <= dateTo);
+      
+      console.log(`[useCaseList] Case ${c.title}: status=${matchesStatus}, type=${matchesType}, search=${matchesSearch}, date=${matchesDate}`);
       return matchesStatus && matchesType && matchesSearch && matchesDate;
     });
+    console.log('[useCaseList] Filtered result:', filtered);
+    return filtered;
   }, [cases, statusFilter, typeFilter, debouncedSearchTerm, dateFrom, dateTo]);
 
   const resetFilters = () => {

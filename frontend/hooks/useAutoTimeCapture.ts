@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useAutoTimeCapture
  * @category Hooks - Time Tracking
  * @description Passive time tracking hook monitoring user activity (mousemove, keydown) with idle

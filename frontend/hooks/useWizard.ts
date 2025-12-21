@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useWizard
  * @category Hooks - UI Utilities
  * @description Multi-step wizard navigation hook with next/back/goTo controls and boundary helpers.

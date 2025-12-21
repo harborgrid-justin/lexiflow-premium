@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useMultiSelection
  * @category Hooks - UI Utilities
  * @description Simplified multi-selection hook with toggle, select all, and clear functionality.

@@ -11,6 +11,7 @@ import { PropertyPanel } from './PropertyPanel';
 import { DataService } from '../../../services/data/dataService';
 import { useNotify } from '../../../hooks/useNotify';
 import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 
@@ -313,3 +314,4 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
     </div>
   );
 };
+

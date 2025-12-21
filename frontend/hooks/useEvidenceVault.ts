@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useEvidenceVault
  * @category Hooks - Evidence Management
  * @description Evidence vault management hook with view routing, comprehensive filtering, chain of custody
@@ -20,7 +20,7 @@ import { useState, useMemo, useEffect } from 'react';
 // Services & Data
 import { DataService } from '../services/data/dataService';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 
 // Types
 import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '../types';
@@ -59,7 +59,7 @@ export const useEvidenceVault = (caseId?: string) => {
   // Enterprise Query: Fetch evidence. If caseId provided, filter at source or via selector.
   // Here we fetch all and filter client-side for the demo, but in prod this would be a specific API call.
   const { data: allEvidenceItems = [], isLoading } = useQuery<EvidenceItem[]>(
-      [STORES.EVIDENCE, 'all'],
+      queryKeys.evidence.all(),
       DataService.evidence.getAll
   );
 
@@ -71,12 +71,12 @@ export const useEvidenceVault = (caseId?: string) => {
   // Mutations for transactional integrity
   const { mutate: addEvidence } = useMutation(
       DataService.evidence.add,
-      { invalidateKeys: [[STORES.EVIDENCE, 'all']] }
+      { invalidateKeys: [queryKeys.evidence.all()] }
   );
 
   const { mutate: updateEvidence } = useMutation(
       (item: EvidenceItem) => DataService.evidence.update(item.id, item),
-      { invalidateKeys: [[STORES.EVIDENCE, 'all']] }
+      { invalidateKeys: [queryKeys.evidence.all()] }
   );
   
   const [filters, setFilters] = useState<EvidenceFilters>({

@@ -2,11 +2,14 @@
 import React from 'react';
 import { Clock, HardDrive, Database } from 'lucide-react';
 import { MetricTile } from '../../../common/RefactoredCommon';
-import { ArchiveStats } from '../../../../types';
 
 interface BackupMetricsProps {
     latestCreated?: string;
-    stats?: ArchiveStats;
+    stats?: {
+        totalSnapshots: number;
+        totalSize: number;
+        activeSchedules: number;
+    };
 }
 
 export const BackupMetrics: React.FC<BackupMetricsProps> = ({ latestCreated, stats }) => {
@@ -20,16 +23,16 @@ export const BackupMetrics: React.FC<BackupMetricsProps> = ({ latestCreated, sta
             trendUp={true}
         />
         <MetricTile 
-            label="Cold Storage Usage" 
-            value={stats?.totalSize || '...'} 
+            label="Total Snapshots" 
+            value={stats?.totalSnapshots.toString() || '0'} 
             icon={HardDrive} 
-            trend={`${stats?.objectCount.toLocaleString()} Objects`}
+            trend={`${(stats?.totalSize || 0)} bytes`}
         />
         <MetricTile 
-            label="Monthly Cost" 
-            value={`$${stats?.monthlyCost.toFixed(2)}`} 
+            label="Active Schedules" 
+            value={stats?.activeSchedules.toString() || '0'} 
             icon={Database} 
-            trend="Optimized"
+            trend="Automated"
             trendUp={true}
         />
     </div>

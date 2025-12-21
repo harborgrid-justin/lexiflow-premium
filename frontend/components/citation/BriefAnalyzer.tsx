@@ -37,6 +37,7 @@ import { DataService } from '../../services/data/dataService';
 import { GeminiService, BriefCritique } from '../../services/features/research/geminiService';
 import { AnalysisEngine, ConflictResult } from '../../services/features/analysis/analysisEngine';
 import { cn } from '../../utils/cn';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // ============================================================================
@@ -328,4 +329,5 @@ export const BriefAnalyzer: React.FC = () => {
 };
 
 export default BriefAnalyzer;
+
 

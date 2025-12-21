@@ -3,6 +3,7 @@ import { LegalRule } from '../../types';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
@@ -159,3 +160,4 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
     </div>
   );
 };
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useGlobalQueryStatus
  * @category Hooks - Data Management
  * @description Global query fetching status hook subscribing to QueryClient updates. Tracks if

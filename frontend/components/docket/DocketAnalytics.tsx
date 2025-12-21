@@ -29,6 +29,7 @@ import { Card } from '../common/Card';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -135,4 +136,5 @@ export const DocketAnalytics: React.FC = () => {
     </div>
   );
 };
+
 

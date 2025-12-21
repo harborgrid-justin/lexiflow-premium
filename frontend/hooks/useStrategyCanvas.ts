@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useStrategyCanvas.ts
  * 
  * Custom hook encapsulating all Strategy Canvas interaction logic.

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useCalendarView
  * @category Hooks - Calendar
  * @description Calendar view state management hook with month navigation, event loading, and day-based

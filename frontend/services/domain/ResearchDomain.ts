@@ -1,8 +1,9 @@
-/**
+﻿/**
  * ResearchDomain - Legal research and citation service
  * Provides case law search, statute lookup, citation validation, and related case discovery
  */
 
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 
@@ -62,7 +63,7 @@ export const ResearchService = {
     const mockStatutes = [
       { id: 'fed-rule-26', title: 'Fed. R. Civ. P. 26', citation: 'FRCP 26', snippet: 'Discovery scope and limits' },
       { id: 'fed-rule-56', title: 'Fed. R. Civ. P. 56', citation: 'FRCP 56', snippet: 'Summary judgment' },
-      { id: '28-usc-1331', title: '28 U.S.C. § 1331', citation: '28 USC 1331', snippet: 'Federal question jurisdiction' },
+      { id: '28-usc-1331', title: '28 U.S.C. Â§ 1331', citation: '28 USC 1331', snippet: 'Federal question jurisdiction' },
     ];
     
     return mockStatutes

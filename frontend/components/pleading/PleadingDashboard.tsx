@@ -9,6 +9,7 @@ import { DataService } from '../../services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleading-types';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { VirtualGrid } from '../common/VirtualGrid';
 import { Modal } from '../common/Modal';
@@ -159,4 +160,5 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         </div>
     );
 };
+
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useDomainData
  * @category Hooks - Data Access
  * @description Centralized domain-specific data fetching hooks with standardized cache keys. Provides
@@ -11,7 +11,7 @@
 // ============================================================================
 // Services & Data
 import { DataService } from '../services/data/dataService';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 
 // CRITICAL FIX: Import useQuery from the Hooks layer, not the Infrastructure layer
 import { useQuery } from './useQueryHooks'; 
@@ -29,44 +29,44 @@ import {
 
 // --- CORE LEGAL ---
 export const useCases = () => 
-    useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
+    useQuery<Case[]>(queryKeys.cases.all(), () => DataService.cases.getAll());
 
 export const useDocuments = () => 
-    useQuery<LegalDocument[]>([STORES.DOCUMENTS, 'all'], () => DataService.documents.getAll());
+    useQuery<LegalDocument[]>(queryKeys.documents.all(), () => DataService.documents.getAll());
 
 export const useDocket = () => 
-    useQuery<DocketEntry[]>([STORES.DOCKET, 'all'], () => DataService.docket.getAll());
+    useQuery<DocketEntry[]>(queryKeys.docket.all(), () => DataService.docket.getAll());
 
 export const useTasks = () => 
-    useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], () => DataService.tasks.getAll());
+    useQuery<WorkflowTask[]>(queryKeys.tasks.all(), () => DataService.tasks.getAll());
 
 export const useEvidence = () => 
-    useQuery<EvidenceItem[]>([STORES.EVIDENCE, 'all'], () => DataService.evidence.getAll());
+    useQuery<EvidenceItem[]>(queryKeys.evidence.all(), () => DataService.evidence.getAll());
 
 export const useExhibits = (caseId?: string) => 
     useQuery<TrialExhibit[]>(
-        [STORES.EXHIBITS, caseId || 'all'],
+        queryKeys.exhibits.byCaseId(caseId || "all"),
         () => DataService.trial.getExhibits(caseId)
     );
 
 export const useStaff = () => 
-    useQuery<any[]>([STORES.STAFF, 'all'], () => DataService.hr.getStaff());
+    useQuery<any[]>(queryKeys.staff.all(), () => DataService.hr.getStaff());
 
 export const useClients = () => 
-    useQuery<Client[]>([STORES.CLIENTS, 'all'], () => DataService.clients.getAll());
+    useQuery<Client[]>(queryKeys.clients.all(), () => DataService.clients.getAll());
 
 export const useUsers = () => 
-    useQuery<User[]>([STORES.USERS, 'all'], () => DataService.users.getAll());
+    useQuery<User[]>(queryKeys.users.all(), () => DataService.users.getAll());
 
 export const useProjects = (caseId: string) => 
     useQuery<Project[]>(
-        [STORES.PROJECTS, caseId], 
+        queryKeys.projects.byCaseId(caseId), 
         () => DataService.projects.getByCaseId(caseId)
     );
 
 export const useConversations = () => 
     useQuery<Conversation[]>(
-        [STORES.CONVERSATIONS, 'all'], 
+        ['conversations', 'all'], 
         () => DataService.messenger.getConversations()
     );
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useDebounce
  * @category Hooks - Performance
  * @description Debounces value changes with configurable delay using setTimeout. Commonly used

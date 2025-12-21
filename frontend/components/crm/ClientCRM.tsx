@@ -13,6 +13,7 @@ import { useQuery } from '../../hooks/useQueryHooks';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '../layout/TabbedPageLayout';
 import { LazyLoader } from '../common/LazyLoader';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { cn } from '../../utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '../../config/tabs.config';
@@ -78,4 +79,5 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
 };
 
 export default ClientCRM;
+
 

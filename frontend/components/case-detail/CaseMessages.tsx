@@ -23,6 +23,7 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { cn } from '../../utils/cn';
 
@@ -149,4 +150,5 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
     </div>
   );
 };
+
 

@@ -19,6 +19,7 @@ import { Plus, Loader2 } from 'lucide-react';
 // Services & Data
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -257,4 +258,5 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     );
 };
 export default PleadingBuilder;
+
 

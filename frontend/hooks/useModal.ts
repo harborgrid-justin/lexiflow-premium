@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useModal
  * @category Hooks - UI Utilities
  * @description Modal state hook with typed data payload support. Manages isOpen state and optional

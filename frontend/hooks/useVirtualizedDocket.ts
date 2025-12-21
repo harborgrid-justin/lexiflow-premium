@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useVirtualizedDocket
  * @category Hooks - Performance
  * @description Custom virtualization hook with dynamic height estimation and row measurement caching

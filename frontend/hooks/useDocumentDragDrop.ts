@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useDocumentDragDrop
  * @category Hooks - Document Management
  * 
@@ -30,7 +30,7 @@ import React, { useState, useRef } from 'react';
 // Services & Data
 import { DocumentService } from '../services/features/documents/documentService';
 import { queryClient } from '../services/infrastructure/queryClient';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 
 // Hooks & Context
 import { useNotify } from './useNotify';
@@ -76,7 +76,7 @@ export const useDocumentDragDrop = (currentFolder: string) => {
                         caseId: 'General' as CaseId
                     });
                 }
-                queryClient.invalidate([STORES.DOCUMENTS, 'all']);
+                queryClient.invalidate(queryKeys.documents.all());
                 notify.success(`Uploaded ${e.dataTransfer.files.length} documents.`);
              } catch (error) {
                  notify.error("Failed to upload dropped files.");

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useCanvasDrag
  * @category Hooks - Canvas Interaction
  * @description Canvas drag-and-drop hook supporting pan (with middle mouse, shift, or meta keys)

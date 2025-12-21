@@ -1,10 +1,11 @@
-/**
+﻿/**
  * @module services/queryKeys
  * @description Type-safe query key factory for React Query
  * Provides consistent cache key generation and prevents typos
  */
 
-import { STORES } from '../data/db';
+// DEPRECATED: Use queryKeys from utils/queryKeys.ts instead
+// This file should be removed and references updated
 import type { CaseId, DocumentId, UserId } from '../../types';
 
 /**
@@ -12,7 +13,7 @@ import type { CaseId, DocumentId, UserId } from '../../types';
  * Hierarchical structure: all > lists > detail
  */
 export const correspondenceKeys = {
-  all: [STORES.COMMUNICATIONS] as const,
+  all: [COMMUNICATIONS] as const,
   lists: () => [...correspondenceKeys.all, 'list'] as const,
   list: (filters?: CorrespondenceFilters) => 
     [...correspondenceKeys.lists(), filters] as const,
@@ -29,7 +30,7 @@ export const correspondenceKeys = {
  * Service Jobs query keys factory
  */
 export const serviceJobKeys = {
-  all: [STORES.SERVICE_JOBS] as const,
+  all: [SERVICE_JOBS] as const,
   lists: () => [...serviceJobKeys.all, 'list'] as const,
   list: (filters?: ServiceJobFilters) => 
     [...serviceJobKeys.lists(), filters] as const,
@@ -75,7 +76,7 @@ export interface ServiceJobFilters {
  * Hierarchical structure supporting inventory, custody, and forensics
  */
 export const evidenceKeys = {
-  all: [STORES.EVIDENCE] as const,
+  all: [EVIDENCE] as const,
   lists: () => [...evidenceKeys.all, 'list'] as const,
   list: (filters?: EvidenceFilters) => 
     [...evidenceKeys.lists(), filters] as const,
@@ -144,39 +145,39 @@ export const discoveryKeys = {
   
   // ESI (Electronically Stored Information)
   esi: {
-    all: [STORES.DISCOVERY_EXT_ESI] as const,
-    list: (filters?: any) => [STORES.DISCOVERY_EXT_ESI, 'list', filters] as const,
-    detail: (id: string) => [STORES.DISCOVERY_EXT_ESI, id] as const,
-    byCase: (caseId: CaseId) => [STORES.DISCOVERY_EXT_ESI, 'byCase', caseId] as const,
-    byStatus: (status: string) => [STORES.DISCOVERY_EXT_ESI, 'byStatus', status] as const,
+    all: [DISCOVERY_EXT_ESI] as const,
+    list: (filters?: any) => [DISCOVERY_EXT_ESI, 'list', filters] as const,
+    detail: (id: string) => [DISCOVERY_EXT_ESI, id] as const,
+    byCase: (caseId: CaseId) => [DISCOVERY_EXT_ESI, 'byCase', caseId] as const,
+    byStatus: (status: string) => [DISCOVERY_EXT_ESI, 'byStatus', status] as const,
   },
   
   // Productions
   productions: {
-    all: [STORES.DISCOVERY_EXT_PROD] as const,
-    list: (filters?: any) => [STORES.DISCOVERY_EXT_PROD, 'list', filters] as const,
-    detail: (id: string) => [STORES.DISCOVERY_EXT_PROD, id] as const,
-    config: () => [STORES.DISCOVERY_EXT_PROD, 'config'] as const,
-    byCase: (caseId: CaseId) => [STORES.DISCOVERY_EXT_PROD, 'byCase', caseId] as const,
+    all: [DISCOVERY_EXT_PROD] as const,
+    list: (filters?: any) => [DISCOVERY_EXT_PROD, 'list', filters] as const,
+    detail: (id: string) => [DISCOVERY_EXT_PROD, id] as const,
+    config: () => [DISCOVERY_EXT_PROD, 'config'] as const,
+    byCase: (caseId: CaseId) => [DISCOVERY_EXT_PROD, 'byCase', caseId] as const,
   },
   
   // Privilege Log
   privilege: {
-    all: [STORES.PRIVILEGE_LOG] as const,
-    list: (filters?: any) => [STORES.PRIVILEGE_LOG, 'list', filters] as const,
-    detail: (id: string) => [STORES.PRIVILEGE_LOG, id] as const,
-    byCase: (caseId: CaseId) => [STORES.PRIVILEGE_LOG, 'byCase', caseId] as const,
-    byPrivilegeType: (type: string) => [STORES.PRIVILEGE_LOG, 'byType', type] as const,
+    all: [PRIVILEGE_LOG] as const,
+    list: (filters?: any) => [PRIVILEGE_LOG, 'list', filters] as const,
+    detail: (id: string) => [PRIVILEGE_LOG, id] as const,
+    byCase: (caseId: CaseId) => [PRIVILEGE_LOG, 'byCase', caseId] as const,
+    byPrivilegeType: (type: string) => [PRIVILEGE_LOG, 'byType', type] as const,
   },
   
   // Legal Holds
   holds: {
-    all: [STORES.LEGAL_HOLDS] as const,
-    list: (filters?: any) => [STORES.LEGAL_HOLDS, 'list', filters] as const,
-    detail: (id: string) => [STORES.LEGAL_HOLDS, id] as const,
-    byCase: (caseId: CaseId) => [STORES.LEGAL_HOLDS, 'byCase', caseId] as const,
-    byStatus: (status: string) => [STORES.LEGAL_HOLDS, 'byStatus', status] as const,
-    byCustodian: (custodian: string) => [STORES.LEGAL_HOLDS, 'byCustodian', custodian] as const,
+    all: [LEGAL_HOLDS] as const,
+    list: (filters?: any) => [LEGAL_HOLDS, 'list', filters] as const,
+    detail: (id: string) => [LEGAL_HOLDS, id] as const,
+    byCase: (caseId: CaseId) => [LEGAL_HOLDS, 'byCase', caseId] as const,
+    byStatus: (status: string) => [LEGAL_HOLDS, 'byStatus', status] as const,
+    byCustodian: (custodian: string) => [LEGAL_HOLDS, 'byCustodian', custodian] as const,
   },
 } as const;
 
@@ -192,7 +193,7 @@ export const discoveryQueryKeys = {
  * Hierarchical structure supporting WIP, invoices, expenses, trust accounts, and financial reporting
  */
 export const billingKeys = {
-  all: [STORES.BILLING] as const,
+  all: [BILLING] as const,
   lists: () => [...billingKeys.all, 'list'] as const,
   list: (filters?: BillingFilters) => 
     [...billingKeys.lists(), filters] as const,

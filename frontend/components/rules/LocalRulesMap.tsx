@@ -8,6 +8,7 @@ import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 export const LocalRulesMap: React.FC = () => {
@@ -80,4 +81,5 @@ export const LocalRulesMap: React.FC = () => {
     </div>
   );
 };
+
 

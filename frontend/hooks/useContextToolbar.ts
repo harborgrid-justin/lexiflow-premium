@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useContextToolbar
  * @category Hooks
  * @description Context-sensitive toolbar that adapts based on selection and user behavior.

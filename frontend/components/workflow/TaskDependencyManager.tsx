@@ -6,6 +6,7 @@ import { cn } from '../../utils/cn';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 export const TaskDependencyManager: React.FC = () => {
@@ -99,4 +100,5 @@ export const TaskDependencyManager: React.FC = () => {
     </div>
   );
 };
+
 

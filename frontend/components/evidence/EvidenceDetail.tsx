@@ -31,6 +31,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 // Services & Types
 import { DataService } from '../../services/data/dataService';
 import { useMutation, queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 
@@ -169,3 +170,4 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
     </div>
   );
 };
+

@@ -19,6 +19,7 @@ import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } 
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -236,4 +237,5 @@ export const AssetManager: React.FC = () => {
     </div>
   );
 };
+
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useAutoSave
  * @description Auto-save hook with race condition prevention
  */

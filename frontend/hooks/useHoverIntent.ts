@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useHoverIntent
  * @category Hooks - UI Utilities
  * @description Hover intent hook with configurable timeout delay before triggering onHover callback.

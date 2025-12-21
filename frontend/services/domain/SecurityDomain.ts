@@ -1,3 +1,4 @@
+﻿// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 
 export const SecurityService = {

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useIntersectionObserver
  * @category Hooks - Performance
  * @description Intersection Observer hook for lazy loading and visibility tracking. Supports

@@ -29,6 +29,7 @@ import { DataService } from '../../services/data/dataService';
 import { GeminiService } from '../../services/features/research/geminiService';
 import { cn } from '../../utils/cn';
 import { sanitizeHtml } from '../../utils/sanitize';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // ============================================================================
@@ -136,4 +137,5 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
     </div>
   );
 };
+
 

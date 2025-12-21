@@ -12,6 +12,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { AddStaffModal } from './AddStaffModal';
 import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { useStaff } from '../../../hooks/useDomainData';
 import { useModalState } from '../../../hooks';

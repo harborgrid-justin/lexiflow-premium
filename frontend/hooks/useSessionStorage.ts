@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useSessionStorage
  * @category Hooks - Storage
  * @description Session storage hook with useState-like API, automatic serialization/deserialization,

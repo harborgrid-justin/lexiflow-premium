@@ -20,6 +20,7 @@ import { BookOpen, Users, TrendingUp, Search } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -156,4 +157,5 @@ export const KnowledgeAnalytics: React.FC = () => {
     </div>
   );
 };
+
 

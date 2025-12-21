@@ -1,10 +1,10 @@
-
+﻿
 import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '../types';
 import { GeminiService } from '../services/features/research/geminiService';
 import { DataService } from '../services/data/dataService';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 import { useNotify } from './useNotify';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../config/features/features.config';
 
@@ -21,31 +21,31 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   
   // 1. Documents
   const { data: documents = [], isLoading: loadingDocs } = useQuery<LegalDocument[]>(
-    [STORES.DOCUMENTS, caseData.id],
+    queryKeys.documents.byCaseId(caseData.id),
     () => DataService.documents.getByCaseId(caseData.id)
   );
 
   // 2. Tasks / Workflow
   const { data: allTasks = [] } = useQuery<WorkflowTask[]>(
-    [STORES.TASKS, caseData.id],
+    queryKeys.tasks.byCaseId(caseData.id),
     () => DataService.tasks.getByCaseId(caseData.id)
   );
 
   // 3. Billing
   const { data: billingEntries = [] } = useQuery<TimeEntry[]>(
-    [STORES.BILLING, caseData.id],
+    queryKeys.billing.timeEntries(),
     () => DataService.billing.getTimeEntries({ caseId: caseData.id })
   );
 
   // 4. Motions
   const { data: motions = [] } = useQuery<Motion[]>(
-    [STORES.MOTIONS, caseData.id],
+    queryKeys.motions.byCaseId(caseData.id),
     () => DataService.motions.getByCaseId(caseData.id)
   );
 
   // 5. Projects
   const { data: projects = [] } = useQuery<Project[]>(
-    [STORES.PROJECTS, caseData.id],
+    queryKeys.projects.byCaseId(caseData.id),
     () => DataService.projects.getByCaseId(caseData.id)
   );
 
@@ -102,7 +102,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
 
   const { mutate: updateDocuments } = useMutation(
       (doc: LegalDocument) => DataService.documents.update(doc.id, doc),
-      { invalidateKeys: [[STORES.DOCUMENTS, caseData.id]] }
+      { invalidateKeys: [queryKeys.documents.byCaseId(caseData.id)] }
   );
 
   const handleAnalyze = async (doc: LegalDocument) => {
@@ -140,24 +140,24 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   };
 
   const setDocumentsWrapper = (updater: LegalDocument[] | ((prev: LegalDocument[] | undefined) => LegalDocument[])) => {
-     queryClient.setQueryData<LegalDocument[]>([STORES.DOCUMENTS, caseData.id], updater);
+     queryClient.setQueryData<LegalDocument[]>(queryKeys.documents.byCaseId(caseData.id), updater);
   };
   
   const setBillingWrapper = (updater: TimeEntry[] | ((prev: TimeEntry[] | undefined) => TimeEntry[])) => {
-      queryClient.setQueryData<TimeEntry[]>([STORES.BILLING, caseData.id], updater);
+      queryClient.setQueryData<TimeEntry[]>(queryKeys.billing.timeEntries(), updater);
   };
 
   // Compatibility wrappers for the existing UI that expects addProject callbacks
   const addProject = async (project: Project) => {
       // Optimistic update
-      queryClient.setQueryData([STORES.PROJECTS, caseData.id], [...projects, project]);
+      queryClient.setQueryData(queryKeys.projects.byCaseId(caseData.id), [...projects, project]);
   };
 
   const addTaskToProject = (projectId: string, task: WorkflowTask) => {
       // Logic handled in components via direct DB calls mostly, 
       // but this forces a refresh of the projects query
-      queryClient.invalidate([STORES.PROJECTS, caseData.id]);
-      queryClient.invalidate([STORES.TASKS, caseData.id]);
+      queryClient.invalidate(queryKeys.projects.byCaseId(caseData.id));
+      queryClient.invalidate(queryKeys.tasks.byCaseId(caseData.id));
   };
 
   const updateProjectTaskStatus = (projectId: string, taskId: string) => {

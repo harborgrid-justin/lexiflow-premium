@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useReadAnalytics
  * @category Hooks - Analytics
  * @description Viewport-based read tracking with IntersectionObserver. Monitors time spent visible (50% threshold),

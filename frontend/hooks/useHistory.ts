@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useHistory
  * @description State-based undo/redo functionality with command pattern
  * 

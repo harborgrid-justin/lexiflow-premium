@@ -1,4 +1,5 @@
-import { Client, Case, EntityId, CaseId, UserId } from '../../types';
+﻿import { Client, Case, EntityId, CaseId, UserId } from '../../types';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
 import { SystemEventType } from "../../types/integration-types";

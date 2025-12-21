@@ -6,10 +6,11 @@ import { Button } from '../../../common/Button';
 import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { RolePermission, PermissionLevel } from '../../../../types';
+import { queryKeys } from '../../../../utils/queryKeys';
 import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
 import { DataService } from '../../../../services/data/dataService';
 import { useNotify } from '../../../../hooks/useNotify';
+import { RolePermission, PermissionLevel } from '../../../../types';
 
 export const AccessGovernance: React.FC = () => {
   const { theme } = useTheme();
@@ -27,7 +28,7 @@ export const AccessGovernance: React.FC = () => {
   const { mutate: updatePermission } = useMutation(
       DataService.admin.updatePermission,
       {
-          onSuccess: (data) => {
+          onSuccess: (data: RolePermission) => {
               queryClient.invalidate(queryKeys.admin.permissions());
               notify.info(`Permission updated: ${data.role} -> ${data.resource}`);
           }

@@ -22,6 +22,7 @@ import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertT
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -160,3 +161,4 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
     </div>
   );
 };
+

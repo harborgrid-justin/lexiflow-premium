@@ -20,6 +20,7 @@ import { cn } from '../../../utils/cn';
 // Services & Types
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { EvidenceItem } from '../../../types';
 

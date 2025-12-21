@@ -19,6 +19,7 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -230,4 +231,5 @@ const BillingInvoicesComponent: React.FC = () => {
 
 // Export memoized component
 export const BillingInvoices = React.memo(BillingInvoicesComponent);
+
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useCommandHistory.ts
  * 
  * React hook for imperative command pattern with undo/redo operations.

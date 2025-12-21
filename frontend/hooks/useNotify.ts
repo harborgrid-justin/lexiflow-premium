@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useNotify
  * @category Hooks - UI Utilities
  * @description Toast notification convenience hook wrapping ToastContext with semantic methods

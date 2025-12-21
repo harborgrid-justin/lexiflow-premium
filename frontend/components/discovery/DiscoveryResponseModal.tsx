@@ -11,6 +11,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useNotify } from '../../hooks/useNotify';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -133,3 +134,4 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
 };
 
 export default DiscoveryResponseModal;
+

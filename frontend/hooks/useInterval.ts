@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useInterval
  * @category Hooks - Timers
  * @description setInterval hook with automatic cleanup and stable callback references. Callback

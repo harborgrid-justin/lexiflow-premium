@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useSLAMonitoring.ts
  * 
  * Custom hook for real-time SLA monitoring

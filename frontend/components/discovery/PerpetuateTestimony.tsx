@@ -7,6 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 export const PerpetuateTestimony: React.FC = () => {
@@ -62,4 +63,5 @@ export const PerpetuateTestimony: React.FC = () => {
 };
 
 export default PerpetuateTestimony;
+
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useListNavigation
  * @category Hooks - Keyboard Navigation
  * @description Unified keyboard navigation hook supporting both simple dropdown/modal navigation

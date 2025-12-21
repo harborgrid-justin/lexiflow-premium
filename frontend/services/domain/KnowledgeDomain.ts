@@ -1,5 +1,6 @@
-import { WikiArticle, Precedent, QAItem } from '../../types';
+﻿import { WikiArticle, Precedent, QAItem } from '../../types';
 import { delay } from '../../utils/async';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 
 export class KnowledgeRepository {

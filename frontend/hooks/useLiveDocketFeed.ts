@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useLiveDocketFeed
  * @category Hooks - Real-time
  * @description WebSocket connection hook for live docket feed with reconnection logic

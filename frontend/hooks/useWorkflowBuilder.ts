@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useWorkflowBuilder
  * @category Hooks - Workflow
  * @description Generic workflow builder hook managing nodes, connections, and visual graph structure. Supports

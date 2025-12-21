@@ -20,6 +20,7 @@ import { Plus, Download } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -86,4 +87,5 @@ export const FinancialCenter: React.FC = () => {
     </div>
   );
 };
+
 

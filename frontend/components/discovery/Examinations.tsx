@@ -8,6 +8,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { Examination } from '../../types';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { Modal } from '../common/Modal';
@@ -125,3 +126,4 @@ export const Examinations: React.FC = () => {
 };
 
 export default Examinations;
+

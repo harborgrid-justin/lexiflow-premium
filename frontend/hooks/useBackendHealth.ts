@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useBackendHealth Hook
  * 
  * Provides reactive access to backend service health and availability status.

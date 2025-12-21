@@ -1,4 +1,5 @@
-import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '../../types';
+﻿import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '../../types';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
 import { SystemEventType } from "../../types/integration-types";

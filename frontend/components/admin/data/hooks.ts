@@ -32,8 +32,6 @@ export function useDataSourceConnections() {
     DataService.sources.getConnections,
     {
       staleTime: 0,
-      cacheTime: 0,
-      refetchOnMount: true,
       refetchOnWindowFocus: false,
     }
   );
@@ -59,10 +57,10 @@ export function useDataSourceConnections() {
         const previous = queryClient.getQueryState(['admin', 'sources', 'connections'])?.data;
         
         // Optimistic update: set status to 'syncing'
-        queryClient.setQueryData(
+        queryClient.setQueryData<DataSourceConnection[]>(
           ['admin', 'sources', 'connections'], 
-          (old: DataSourceConnection[] | undefined) => 
-            old?.map(c => c.id === id ? { ...c, status: 'syncing' as const } : c)
+          (old) => 
+            old?.map(c => c.id === id ? { ...c, status: 'syncing' as const } : c) || []
         );
         
         return { previous };
@@ -70,10 +68,10 @@ export function useDataSourceConnections() {
       onSuccess: (_data, id: string) => {
         // Simulate sync completion after 2 seconds
         setTimeout(() => {
-          queryClient.setQueryData(
+          queryClient.setQueryData<DataSourceConnection[]>(
             ['admin', 'sources', 'connections'], 
-            (old: DataSourceConnection[] | undefined) => 
-              old?.map(c => c.id === id ? { ...c, status: 'active' as const, lastSync: 'Just now' } : c)
+            (old) => 
+              old?.map(c => c.id === id ? { ...c, status: 'active' as const, lastSync: 'Just now' } : c) || []
           );
         }, 2000);
       }
@@ -85,9 +83,9 @@ export function useDataSourceConnections() {
     DataService.sources.deleteConnection, 
     {
       onSuccess: (_result, id: string) => {
-        queryClient.setQueryData(
+        queryClient.setQueryData<DataSourceConnection[]>(
           ['admin', 'sources', 'connections'], 
-          (old: DataSourceConnection[] | undefined) => old?.filter(c => c.id !== id)
+          (old) => old?.filter(c => c.id !== id) || []
         );
       }
     }

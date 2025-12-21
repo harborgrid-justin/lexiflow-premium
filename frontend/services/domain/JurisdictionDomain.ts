@@ -1,4 +1,5 @@
-
+﻿
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 import { JurisdictionAPI } from '../api/jurisdiction-api';
@@ -39,11 +40,11 @@ export const JurisdictionService = {
             console.warn('Backend API unavailable, using mock data');
             await delay(100);
             return [
-                { id: 'reg1', name: 'FTC', desc: 'Federal Trade Commission', ref: '15 U.S.C. § 41', iconColor: 'text-blue-600' },
-                { id: 'reg2', name: 'SEC', desc: 'Securities & Exchange Commission', ref: '15 U.S.C. § 78d', iconColor: 'text-green-600' },
-                { id: 'reg3', name: 'EPA', desc: 'Environmental Protection Agency', ref: '42 U.S.C. § 4321', iconColor: 'text-emerald-600' },
-                { id: 'reg4', name: 'FCC', desc: 'Federal Communications Commission', ref: '47 U.S.C. § 151', iconColor: 'text-purple-600' },
-                { id: 'reg5', name: 'EEOC', desc: 'Equal Employment Opportunity Comm.', ref: '42 U.S.C. § 2000e', iconColor: 'text-rose-600' },
+                { id: 'reg1', name: 'FTC', desc: 'Federal Trade Commission', ref: '15 U.S.C. Â§ 41', iconColor: 'text-blue-600' },
+                { id: 'reg2', name: 'SEC', desc: 'Securities & Exchange Commission', ref: '15 U.S.C. Â§ 78d', iconColor: 'text-green-600' },
+                { id: 'reg3', name: 'EPA', desc: 'Environmental Protection Agency', ref: '42 U.S.C. Â§ 4321', iconColor: 'text-emerald-600' },
+                { id: 'reg4', name: 'FCC', desc: 'Federal Communications Commission', ref: '47 U.S.C. Â§ 151', iconColor: 'text-purple-600' },
+                { id: 'reg5', name: 'EEOC', desc: 'Equal Employment Opportunity Comm.', ref: '42 U.S.C. Â§ 2000e', iconColor: 'text-rose-600' },
             ];
         }
     },

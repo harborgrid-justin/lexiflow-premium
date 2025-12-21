@@ -19,6 +19,7 @@ import { X, MapPin, Mail, Globe, ShieldAlert, Link, Briefcase, GitBranch } from 
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -172,4 +173,5 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
     </div>
   );
 };
+
 

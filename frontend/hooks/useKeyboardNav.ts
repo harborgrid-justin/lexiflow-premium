@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useKeyboardNav
  * @category Hooks - Keyboard Navigation
  * @description Keyboard navigation hook for dropdown/list components with arrow keys, Enter to select,

@@ -7,6 +7,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
@@ -191,4 +192,5 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   );
 };
 export default PleadingDesigner;
+
 

@@ -26,6 +26,7 @@ import { useWindow } from '../../../context/WindowContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { cn } from '../../../utils/cn';
 
@@ -141,3 +142,4 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
     </div>
   );
 };
+

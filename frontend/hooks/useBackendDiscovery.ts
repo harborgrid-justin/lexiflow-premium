@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useBackendDiscovery Hook
  * 
  * @deprecated Use useBackendHealth instead to avoid naming confusion with legal discovery domain.

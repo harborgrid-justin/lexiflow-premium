@@ -20,7 +20,7 @@ import { MotionModal } from './MotionModal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
 import { useNotify } from '../../../hooks/useNotify';
 import { useWindow } from '../../../context/WindowContext';
 
@@ -38,14 +38,14 @@ interface CaseMotionsProps {
   documents?: LegalDocument[];
 }
 
-export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, documents = [] }) => {
+export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, _caseTitle, documents = [] }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const { openWindow, closeWindow } = useWindow();
   const [taskModalMotion, setTaskModalMotion] = useState<Motion | null>(null);
   
   // Query Motions specific to this case
-  const { data: motions = [], isLoading } = useQuery<Motion[]>(
+  const { data: motions = [], isLoading: _isLoading } = useQuery<Motion[]>(
     [STORES.MOTIONS, caseId],
     () => DataService.motions.getByCaseId(caseId)
   );
@@ -74,6 +74,7 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
       id: `mot-${Date.now()}` as MotionId,
       caseId: caseId as CaseId,
       title: motionData.title,
+      description: motionData.description || '',
       type: motionData.type as MotionType,
       status: motionData.status as MotionStatus,
       assignedAttorney: 'Current User',

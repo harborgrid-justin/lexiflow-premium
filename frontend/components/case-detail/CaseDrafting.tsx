@@ -13,7 +13,7 @@ import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { AdvancedEditor } from '../AdvancedEditor';
+import { AdvancedEditor } from '../documents/AdvancedEditor';
 import { ClauseList as ClausePanel } from '../clauses/ClauseList';
 
 // Internal Dependencies - Hooks & Context
@@ -29,7 +29,7 @@ import { cn } from '../../utils/cn';
 // Types & Interfaces
 import { Clause } from '../../types';
 
-const ClauseHistoryModal = lazy(() => import('../ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
+const ClauseHistoryModal = lazy(() => import('../clauses/ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
 interface CaseDraftingProps {
   caseTitle: string;

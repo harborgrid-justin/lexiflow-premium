@@ -70,7 +70,7 @@ export const OverviewSidebar: React.FC<OverviewSidebarProps> = ({
                 <h4 className={cn("font-bold text-sm flex items-center", theme.text.primary)}>
                     <Link className={cn("h-3 w-3 mr-2 shrink-0", theme.text.link)}/> Linked Matters
                 </h4>
-                <button onClick={onShowLinkModal} className={cn("p-1 rounded transition-colors", `hover:${theme.surface.highlight}`, theme.primary.text)}>
+                <button onClick={onShowLinkModal} className={cn("p-1 rounded transition-colors", `hover:${theme.surface.highlight}`, theme.primary.text)} aria-label="Add linked matter">
                     <Plus className="h-4 w-4"/>
                 </button>
             </div>

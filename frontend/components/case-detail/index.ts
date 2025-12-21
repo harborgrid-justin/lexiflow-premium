@@ -1,5 +1,6 @@
 
-export * from './CaseOverview';
+// Core exports
+export * from './overview/CaseOverview';
 export * from './CaseDocuments';
 export * from './CaseWorkflow';
 export * from './CaseDrafting';

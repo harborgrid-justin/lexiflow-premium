@@ -10,18 +10,14 @@
 
 // External Dependencies
 import React from 'react';
-import { Loader2, FolderOpen, Plus } from 'lucide-react';
+import { Loader2, FolderOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { EvidenceInventory } from '../evidence/EvidenceInventory';
 import { EmptyState } from '../common/EmptyState';
-import { Button } from '../common/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useEvidenceVault } from '../../hooks/useEvidenceVault';
-
-// Types & Interfaces
-import { EvidenceItem } from '../../types'; 
+import { useEvidenceVault } from '../../hooks/useEvidenceVault'; 
 
 interface CaseEvidenceProps {
   caseId: string;
@@ -36,7 +32,7 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
     filters, 
     setFilters, 
     handleItemClick, 
-    handleIntakeComplete 
+    handleIntakeComplete: _handleIntakeComplete 
   } = useEvidenceVault(caseId);
 
   // isLoading can be derived from the hook's underlying useQuery if needed,

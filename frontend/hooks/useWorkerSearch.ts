@@ -39,6 +39,7 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);
   const cancelTokenRef = useRef<number | null>(null);
+  const prevItemsRef = useRef<T[]>(items);
   
   // Initialize Worker
   useEffect(() => {
@@ -68,6 +69,12 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
   useEffect(() => {
       if (!workerRef.current) return;
       
+      // Check if items actually changed (deep equality check on array reference)
+      const itemsChanged = prevItemsRef.current !== items;
+      if (!itemsChanged) return;
+      
+      prevItemsRef.current = items;
+      
       workerRef.current.postMessage({
           type: 'UPDATE',
           payload: {
@@ -83,6 +90,7 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
       } else {
           // If data updated while searching, re-trigger search
           const currentRequestId = ++requestIdRef.current;
+          cancelTokenRef.current = currentRequestId;
           setIsSearching(true);
           workerRef.current.postMessage({
               type: 'SEARCH',

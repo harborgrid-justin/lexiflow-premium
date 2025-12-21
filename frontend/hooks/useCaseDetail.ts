@@ -6,6 +6,7 @@ import { DataService } from '../services/data/dataService';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { STORES } from '../services/data/db';
 import { useNotify } from './useNotify';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '../config/features/features.config';
 
 export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') => {
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -33,7 +34,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   // 3. Billing
   const { data: billingEntries = [] } = useQuery<TimeEntry[]>(
     [STORES.BILLING, caseData.id],
-    () => DataService.billing.getTimeEntries(caseData.id)
+    () => DataService.billing.getTimeEntries({ caseId: caseData.id })
   );
 
   // 4. Motions
@@ -53,7 +54,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
 
   // Derived Stages from Tasks (Simulating workflow engine)
   const stages = useMemo(() => {
-    if (allTasks.length === 0) return [];
+    if (!Array.isArray(allTasks) || allTasks.length === 0) return [];
     // In a real app, stages would be their own entity. 
     // Here we map a mock stage structure
     return [
@@ -68,22 +69,31 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
     const events: TimelineEvent[] = [];
     events.push({ id: 'init', date: caseData.filingDate, title: 'Case Filed', type: 'milestone', description: `Filed in ${caseData.court}` });
     
-    documents.forEach(d => {
-        events.push({ id: d.id, date: d.uploadDate, title: `Doc Upload: ${d.title}`, type: 'document', description: d.summary || d.type, relatedId: d.id });
-    });
+    // Ensure documents is an array before iterating
+    if (Array.isArray(documents)) {
+      documents.forEach(d => {
+          events.push({ id: d.id, date: d.uploadDate, title: `Doc Upload: ${d.title}`, type: 'document', description: d.summary || d.type, relatedId: d.id });
+      });
+    }
     
-    billingEntries.forEach(b => {
-        events.push({ id: b.id, date: b.date, title: 'Billable Time Logged', type: 'billing', description: `${(b.duration/60).toFixed(1)}h - ${b.description}`, relatedId: b.id });
-    });
+    // Ensure billingEntries is an array before iterating
+    if (Array.isArray(billingEntries)) {
+      billingEntries.forEach(b => {
+          events.push({ id: b.id, date: b.date, title: 'Billable Time Logged', type: 'billing', description: `${(b.duration/60).toFixed(1)}h - ${b.description}`, relatedId: b.id });
+      });
+    }
 
-    motions.forEach(m => {
-        if(m.filingDate) {
-            events.push({ id: `mot-file-${m.id}`, date: m.filingDate, title: `Motion Filed: ${m.title}`, type: 'motion', description: `Type: ${m.type} | Status: ${m.status}`, relatedId: m.id });
-        }
-        if(m.hearingDate) {
-            events.push({ id: `mot-hear-${m.id}`, date: m.hearingDate, title: `Hearing Scheduled: ${m.title}`, type: 'hearing', description: `Court Appearance Required`, relatedId: m.id });
-        }
-    });
+    // Ensure motions is an array before iterating
+    if (Array.isArray(motions)) {
+      motions.forEach(m => {
+          if(m.filingDate) {
+              events.push({ id: `mot-file-${m.id}`, date: m.filingDate, title: `Motion Filed: ${m.title}`, type: 'motion', description: `Type: ${m.type} | Status: ${m.status}`, relatedId: m.id });
+          }
+          if(m.hearingDate) {
+              events.push({ id: `mot-hear-${m.id}`, date: m.hearingDate, title: `Hearing Scheduled: ${m.title}`, type: 'hearing', description: `Court Appearance Required`, relatedId: m.id });
+          }
+      });
+    }
 
     return events.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [caseData, documents, billingEntries, motions]);

@@ -24,6 +24,29 @@ type ValidationResult<T> =
   | { success: true; data: T }
   | { success: false; error: { errors: Array<{ path: string; message: string }> } };
 
+// Discovery filter types
+export interface ProductionConfig {
+  batesPrefix?: string;
+  startNumber?: number;
+  confidentialityDesignation?: string;
+  format?: string;
+}
+
+export interface ESISource {
+  name?: string;
+  type?: string;
+  custodian?: string;
+  dateRange?: { from: string; to: string };
+}
+
+export interface DiscoveryFilters {
+  search?: string;
+  status?: string;
+  type?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}
+
 // Helper validators
 const isValidDate = (date: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(date);
 const isValidDateTime = (date: string): boolean => /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d{3})?Z)?$/.test(date);
@@ -195,51 +218,65 @@ const validateLegalHold = (data: any): ValidationResult<Partial<LegalHold>> => {
  * Production Config Validator
  * Validates production settings including Bates numbering
  */
-const validateProductionConfig = (data: any): ValidationResult<any> => {
+const validateProductionConfig = (data: unknown): ValidationResult<ProductionConfig> => {
   const errors: Array<{ path: string; message: string }> = [];
+  const config: ProductionConfig = {};
   
-  const batesPrefix = data.batesPrefix ? data.batesPrefix.trim() : '';
+  if (!data || typeof data !== 'object') {
+    errors.push({ path: 'data', message: 'Invalid production config data' });
+    return { success: false, error: { errors } };
+  }
+  
+  const input = data as Record<string, unknown>;
+  
+  const batesPrefix = input.batesPrefix && typeof input.batesPrefix === 'string' ? input.batesPrefix.trim() : '';
   if (!batesPrefix) {
     errors.push({ path: 'batesPrefix', message: 'Bates prefix is required' });
   } else if (!isValidBatesPrefix(batesPrefix)) {
     errors.push({ path: 'batesPrefix', message: 'Invalid Bates prefix format (A-Z, 0-9, _, - only, max 10 chars)' });
+  } else {
+    config.batesPrefix = batesPrefix;
   }
   
-  const startNumber = parseInt(data.startNumber);
+  const startNumber = typeof input.startNumber === 'number' ? input.startNumber : parseInt(String(input.startNumber || ''));
   if (isNaN(startNumber) || startNumber < 1) {
     errors.push({ path: 'startNumber', message: 'Start number must be a positive integer' });
   } else if (startNumber > 999999999) {
     errors.push({ path: 'startNumber', message: 'Start number too large (max 999999999)' });
+  } else {
+    config.startNumber = startNumber;
   }
   
   const validFormats = ['PDF', 'Native', 'TIFF'];
-  if (!validFormats.includes(data.format)) {
+  if (input.format && typeof input.format === 'string' && validFormats.includes(input.format)) {
+    config.format = input.format;
+  } else {
     errors.push({ path: 'format', message: 'Invalid format (must be PDF, Native, or TIFF)' });
-  }
-  
-  if (typeof data.includeLoadFile !== 'boolean') {
-    errors.push({ path: 'includeLoadFile', message: 'includeLoadFile must be boolean' });
-  }
-  
-  if (typeof data.ocr !== 'boolean') {
-    errors.push({ path: 'ocr', message: 'ocr must be boolean' });
   }
   
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
   
-  return { success: true, data };
+  return { success: true, data: config };
 };
 
 /**
  * ESI Source Validator
  * Validates ESI source configuration
  */
-const validateESISource = (data: any): ValidationResult<any> => {
+const validateESISource = (data: unknown): ValidationResult<ESISource> => {
   const errors: Array<{ path: string; message: string }> = [];
+  const source: ESISource = {};
   
-  const name = data.name ? sanitizeString(data.name) : '';
+  if (!data || typeof data !== 'object') {
+    errors.push({ path: 'data', message: 'Invalid ESI source data' });
+    return { success: false, error: { errors } };
+  }
+  
+  const input = data as Record<string, unknown>;
+  
+  const name = input.name && typeof input.name === 'string' ? sanitizeString(input.name) : '';
   if (!name) {
     errors.push({ path: 'name', message: 'Source name is required' });
   } else if (name.length > 200) {
@@ -278,7 +315,7 @@ const validateESISource = (data: any): ValidationResult<any> => {
  * Discovery Filter Validator
  * Validates filter parameters to prevent injection attacks
  */
-const validateDiscoveryFilters = (data: any): ValidationResult<any> => {
+const validateDiscoveryFilters = (data: unknown): ValidationResult<DiscoveryFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
   
   if (data.search && typeof data.search === 'string') {
@@ -318,15 +355,15 @@ export const validateLegalHoldSafe = (data: unknown): ValidationResult<Partial<L
   return validateLegalHold(data);
 };
 
-export const validateProductionConfigSafe = (data: unknown): ValidationResult<any> => {
+export const validateProductionConfigSafe = (data: unknown): ValidationResult<ProductionConfig> => {
   return validateProductionConfig(data);
 };
 
-export const validateESISourceSafe = (data: unknown): ValidationResult<any> => {
+export const validateESISourceSafe = (data: unknown): ValidationResult<ESISource> => {
   return validateESISource(data);
 };
 
-export const validateDiscoveryFiltersSafe = (data: unknown): ValidationResult<any> => {
+export const validateDiscoveryFiltersSafe = (data: unknown): ValidationResult<DiscoveryFilters> => {
   return validateDiscoveryFilters(data);
 };
 

@@ -1,3 +1,8 @@
+/**
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.playbooks.getAll() with queryKeys.playbooks.all() instead
+ * This file provides type definitions and seed data for backend.
+ */
 
 export interface PlaybookStage {
   name: string;

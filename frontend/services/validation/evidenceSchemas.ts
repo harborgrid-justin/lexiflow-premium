@@ -23,6 +23,16 @@ type ValidationResult<T> =
   | { success: true; data: T }
   | { success: false; error: { errors: Array<{ path: string; message: string }> } };
 
+// Evidence filter type for validation
+export interface EvidenceFilters {
+  search?: string;
+  category?: string;
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  tags?: string[];
+}
+
 // Helper validators
 const isValidDate = (date: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(date);
 const isValidUUID = (uuid: string): boolean => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uuid);
@@ -169,29 +179,44 @@ const validateCustodyEvent = (data: any): ValidationResult<ChainOfCustodyEvent> 
  * Evidence Filter Validator
  * Validates filter parameters to prevent injection attacks
  */
-const validateEvidenceFilters = (data: any): ValidationResult<any> => {
+const validateEvidenceFilters = (data: unknown): ValidationResult<EvidenceFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
+  const filters: EvidenceFilters = {};
   
-  if (data.search && typeof data.search === 'string') {
-    const search = sanitizeString(data.search);
-    if (search.length > 200) {
-      errors.push({ path: 'search', message: 'Search query too long' });
+  if (data && typeof data === 'object') {
+    const input = data as Record<string, unknown>;
+    
+    if (input.search && typeof input.search === 'string') {
+      const search = sanitizeString(input.search);
+      if (search.length > 200) {
+        errors.push({ path: 'search', message: 'Search query too long' });
+      } else {
+        filters.search = search;
+      }
     }
-  }
-  
-  if (data.dateFrom && !isValidDate(data.dateFrom) && data.dateFrom !== '') {
-    errors.push({ path: 'dateFrom', message: 'Invalid date format' });
-  }
-  
-  if (data.dateTo && !isValidDate(data.dateTo) && data.dateTo !== '') {
-    errors.push({ path: 'dateTo', message: 'Invalid date format' });
+    
+    if (input.dateFrom && typeof input.dateFrom === 'string') {
+      if (!isValidDate(input.dateFrom) && input.dateFrom !== '') {
+        errors.push({ path: 'dateFrom', message: 'Invalid date format' });
+      } else {
+        filters.dateFrom = input.dateFrom;
+      }
+    }
+    
+    if (input.dateTo && typeof input.dateTo === 'string') {
+      if (!isValidDate(input.dateTo) && input.dateTo !== '') {
+        errors.push({ path: 'dateTo', message: 'Invalid date format' });
+      } else {
+        filters.dateTo = input.dateTo;
+      }
+    }
   }
   
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
   
-  return { success: true, data };
+  return { success: true, data: filters };
 };
 
 /**
@@ -205,7 +230,7 @@ export const validateCustodyEventSafe = (data: unknown): ValidationResult<ChainO
   return validateCustodyEvent(data);
 };
 
-export const validateEvidenceFiltersSafe = (data: unknown): ValidationResult<any> => {
+export const validateEvidenceFiltersSafe = (data: unknown): ValidationResult<EvidenceFilters> => {
   return validateEvidenceFilters(data);
 };
 

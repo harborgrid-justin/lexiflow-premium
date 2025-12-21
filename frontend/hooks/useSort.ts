@@ -26,7 +26,7 @@ interface SortConfig<T> {
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useSort = <T extends Record<string, any>>(items: T[], initialKey: keyof T, initialDirection: Direction = 'asc') => {
+export const useSort = <T extends Record<string, unknown>>(items: T[], initialKey: keyof T, initialDirection: Direction = 'asc') => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T>>({
     key: initialKey,
     direction: initialDirection,

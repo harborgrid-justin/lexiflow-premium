@@ -64,7 +64,7 @@ export interface UseFilterAndSearchReturn<T> {
  * });
  * ```
  */
-export const useFilterAndSearch = <T extends Record<string, any>>({
+export const useFilterAndSearch = <T extends Record<string, unknown>>({
   items,
   config,
   initialCategory = 'All',

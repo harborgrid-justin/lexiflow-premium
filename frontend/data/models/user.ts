@@ -1,6 +1,11 @@
 
 import { User, UserId, OrgId, GroupId } from '../../types';
 
+/**
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.users.getAll() with queryKeys.users.all() instead
+ * This constant is only for seeding and testing purposes.
+ */
 export const MOCK_USERS: User[] = [
   // Primary Admin User - Matched to XML Party Data
   { 

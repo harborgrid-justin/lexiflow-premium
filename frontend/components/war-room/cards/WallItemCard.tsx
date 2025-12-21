@@ -28,9 +28,19 @@ import { cn } from '../../../utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+
+/** Wall item for visual wall display */
+interface WallItem {
+    id: string;
+    type: string;
+    title: string;
+    date?: string;
+    hot?: boolean;
+}
+
 interface WallItemCardProps {
     /** The wall item data to display. */
-    item: any;
+    item: WallItem;
     /** Callback when the view button is clicked. */
     onView: () => void;
 }

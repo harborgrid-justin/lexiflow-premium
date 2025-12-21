@@ -24,7 +24,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
-import { Case } from '../../../types';
+import { Case, TimeEntry } from '../../../types';
 
 interface CaseOverviewModalsProps {
   caseData: Case;
@@ -35,7 +35,7 @@ interface CaseOverviewModalsProps {
   showTransferModal: boolean;
   setShowTransferModal: (v: boolean) => void;
   availableCases: Case[];
-  onSaveTime: (entry: any) => void;
+  onSaveTime: (entry: TimeEntry) => void;
   onLinkCase: (c: Case) => void;
   onTransfer: () => void;
 }

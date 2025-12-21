@@ -56,7 +56,7 @@ export interface Case extends BaseEntity {
   linkedCaseIds?: CaseId[];
   leadCaseId?: CaseId;
   isConsolidated?: boolean;
-  associatedCases?: any[];
+  associatedCases?: { caseId: CaseId; relationship: string }[];
   
   // Litigation details
   arguments: LegalArgument[];
@@ -81,8 +81,8 @@ export interface Case extends BaseEntity {
   // Metadata
   matterType: MatterType;
   matterSubType?: string;
-  pacerData?: any;
-  metadata?: Record<string, any>; // Backend: jsonb field
+  pacerData?: PacerData;
+  metadata?: Record<string, unknown>; // Backend: jsonb field
   isArchived: boolean; // Backend field (default: false)
   projects?: Project[];
   
@@ -217,3 +217,18 @@ export interface Matter extends BaseEntity {
   conflictCheckStatus?: 'pending' | 'cleared' | 'conflict' | 'waived';
 }
 
+/**
+ * PACER case data structure
+ */
+export interface PacerData {
+  docketNumber?: string;
+  court?: string;
+  filingDate?: string;
+  caseType?: string;
+  nature?: string;
+  jurisdiction?: string;
+  assigned?: { judge?: string; magistrate?: string };
+  parties?: Array<{ name: string; type: string; role: string }>;
+  docket?: Array<{ date: string; number: string; description: string }>;
+  metadata?: Record<string, unknown>;
+}

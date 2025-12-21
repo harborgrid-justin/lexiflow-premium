@@ -12,8 +12,7 @@ import { VirtualList } from '../common/VirtualList';
 import { useWindow } from '../../context/WindowContext';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { AuditLogControls } from './audit/AuditLogControls';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
 
@@ -26,7 +25,7 @@ export const AdminAuditLog: React.FC<AdminAuditLogProps> = () => {
   const { addToast } = useToast();
   const { openWindow, closeWindow } = useWindow();
 
-  const { data: logs = [], isLoading } = useQuery<AuditLogEntry[]>([STORES.LOGS, 'all'], () => DataService.admin.getLogs());
+  const { data: logs = [], isLoading } = useQuery<AuditLogEntry[]>(['audit-logs', 'all'], () => DataService.admin.getLogs());
   
   const [localLogs, setLocalLogs] = useState<ChainedLogEntry[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);

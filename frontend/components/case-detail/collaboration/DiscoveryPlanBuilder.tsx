@@ -23,8 +23,7 @@ import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
@@ -41,7 +40,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
 
   // Enterprise Data Access
   const { data: plans = [], isLoading } = useQuery<JointPlan[]>(
-      [STORES.JOINT_PLANS, caseId],
+      ['joint-plans', caseId],
       () => DataService.collaboration.getPlans(caseId)
   );
 
@@ -49,7 +48,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
 
   const { mutate: updatePlan } = useMutation(
       DataService.collaboration.updatePlan,
-      { invalidateKeys: [[STORES.JOINT_PLANS, caseId]] }
+      { invalidateKeys: [['joint-plans', caseId]] }
   );
 
   const handleEditSection = (section: PlanSection) => {

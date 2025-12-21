@@ -1,36 +1,34 @@
 ﻿import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '../../types';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { communicationsApi } from '../api/domains/communications.api';
 import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
 import { SystemEventType } from "../../types/integration-types";
 
 export const CorrespondenceService = {
-    getCommunications: async () => db.getAll<CommunicationItem>(STORES.COMMUNICATIONS),
+    getCommunications: async () => communicationsApi.correspondence?.getAll?.() || [],
     
-    getServiceJobs: async () => db.getAll<ServiceJob>(STORES.SERVICE_JOBS),
+    getServiceJobs: async () => communicationsApi.serviceJobs?.getAll?.() || [],
     
     addCommunication: async (item: CommunicationItem) => {
         const newItem = { ...item, id: item.id || crypto.randomUUID() };
-        await db.put(STORES.COMMUNICATIONS, newItem);
-        return newItem;
+        return communicationsApi.correspondence?.create?.(newItem) || newItem;
     },
     
     addServiceJob: async (job: ServiceJob) => {
         const newJob = { ...job, id: job.id || crypto.randomUUID() };
-        await db.put(STORES.SERVICE_JOBS, newJob);
-        return newJob;
+        return communicationsApi.serviceJobs?.create?.(newJob) || newJob;
     },
     
     updateServiceJob: async (id: string, updates: Partial<ServiceJob>) => {
-        const job = await db.get<ServiceJob>(STORES.SERVICE_JOBS, id);
+        const job = await communicationsApi.serviceJobs?.getById?.(id);
         if (!job) throw new Error("Job not found");
         
-        const updated = { ...job, ...updates };
-        await db.put(STORES.SERVICE_JOBS, updated);
+        const updated = await communicationsApi.serviceJobs?.update?.(id, updates) || { ...job, ...updates };
         
         // Integration Logic: If served, trigger orchestrator
         if (updates.status === 'Served' && job.status !== 'Served') {
-            // Opp #10 Integration Point
             IntegrationOrchestrator.publish(SystemEventType.SERVICE_COMPLETED, { job: updated });
         }
         

@@ -29,8 +29,7 @@ import { MetricCard } from '../common/Primitives';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../utils/cn';
 
 // Types
@@ -48,7 +47,7 @@ export const CaseListMisc: React.FC = () => {
 
     // Fetch cases for different operations
     const { data: activeCases = [] } = useQuery<Case[]>(
-        [STORES.CASES, 'active'],
+        ['cases', 'active'],
         async () => {
             const all = await DataService.cases.getAll();
             return all.filter((c: Case) => c.status !== 'Closed' && c.status !== 'Archived');
@@ -56,7 +55,7 @@ export const CaseListMisc: React.FC = () => {
     );
 
     const { data: archivedCases = [] } = useQuery<Case[]>(
-        [STORES.CASES, 'archived'],
+        ['cases', 'archived'],
         async () => {
             const all = await DataService.cases.getAll();
             return all.filter((c: Case) => c.status === 'Archived');
@@ -71,7 +70,7 @@ export const CaseListMisc: React.FC = () => {
             return DataService.cases.update(caseId, { status: 'Archived' });
         },
         {
-            invalidateKeys: [[STORES.CASES]],
+            invalidateKeys: [['cases']],
             onSuccess: () => notify.success('Case archived successfully'),
             onError: () => notify.error('Failed to archive case')
         }
@@ -85,7 +84,7 @@ export const CaseListMisc: React.FC = () => {
             return DataService.cases.update(caseId, { status: 'Active' });
         },
         {
-            invalidateKeys: [[STORES.CASES]],
+            invalidateKeys: [['cases']],
             onSuccess: () => notify.success('Case restored successfully'),
             onError: () => notify.error('Failed to restore case')
         }

@@ -25,8 +25,7 @@ import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
@@ -42,19 +41,19 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
   
   // Enterprise Data Access
   const { data: risks = [], isLoading } = useQuery<Risk[]>(
-      [STORES.RISKS, caseData.id],
+      ['risks', caseData.id],
       () => DataService.risks.getByCaseId(caseData.id)
   );
 
   const { mutate: addRisk } = useMutation(
       DataService.risks.add,
-      { invalidateKeys: [[STORES.RISKS, caseData.id]] }
+      { invalidateKeys: [['risks', caseData.id]] }
   );
 
   const { mutate: updateRisk } = useMutation(
       (updated: Risk) => DataService.risks.update(updated.id, updated),
       { 
-          invalidateKeys: [[STORES.RISKS, caseData.id]],
+          invalidateKeys: [['risks', caseData.id]],
           onSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`)
       }
   );
@@ -62,7 +61,7 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
   const { mutate: deleteRisk } = useMutation(
       DataService.risks.delete,
       { 
-          invalidateKeys: [[STORES.RISKS, caseData.id]],
+          invalidateKeys: [['risks', caseData.id]],
           onSuccess: (_, id) => closeWindow(`risk-detail-${id}`) 
       }
   );

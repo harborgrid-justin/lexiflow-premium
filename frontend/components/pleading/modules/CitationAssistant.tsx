@@ -8,8 +8,7 @@ import { SignalChecker } from './research/SignalChecker';
 import { DataService } from '../../../services/data/dataService';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { Citation } from '../../../types';
 
 interface CitationAssistantProps {
@@ -21,7 +20,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
 
   // Cross-Module Integration: Fetching from Research/Citation Domain
   const { data: citations = [] } = useQuery<Citation[]>(
-    [STORES.CITATIONS, 'all'],
+    ['citations', 'all'],
     DataService.citations.getAll
   );
 

@@ -26,11 +26,10 @@ interface ApiKey {
   createdBy: string;
 }
 
-const mockApiKeys: ApiKey[] = [
-  { id: '1', name: 'Production API Key', key: 'lxf_prod_xxxxxxxxxxxxxxxxxxxx', prefix: 'lxf_prod', scopes: ['read:cases', 'write:cases', 'read:documents'], status: 'Active', lastUsed: '2024-01-15T10:30:00Z', createdAt: '2023-06-15', createdBy: 'Admin User' },
-  { id: '2', name: 'Integration Key - Slack', key: 'lxf_int_yyyyyyyyyyyyyyyyyyyy', prefix: 'lxf_int', scopes: ['read:notifications'], status: 'Active', lastUsed: '2024-01-14T16:45:00Z', createdAt: '2023-08-20', createdBy: 'John Smith' },
-  { id: '3', name: 'Legacy API Key', key: 'lxf_leg_zzzzzzzzzzzzzzzzzzzz', prefix: 'lxf_leg', scopes: ['read:cases'], status: 'Revoked', createdAt: '2022-10-01', createdBy: 'Admin User' },
-];
+/**
+ * @deprecated Mock data - use backend API via DataService.admin
+ */
+const mockApiKeys: ApiKey[] = [];
 
 const availableScopes = [
   { id: 'read:cases', label: 'Read Cases', description: 'View case information' },
@@ -47,13 +46,10 @@ export const ApiKeyManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   
-  // Use backend API instead of mock data
+  // Fetch API keys from backend
   const { data: apiKeys = [], isLoading, refetch } = useQuery<ApiKey[]>(
-    ['admin', 'api-keys'],
-    async () => {
-      // TODO: Replace with actual backend API call when endpoint is ready
-      return [];
-    }
+    queryKeys.admin.apiKeys?.() || ['admin', 'apiKeys'],
+    () => DataService.admin.getApiKeys?.()
   );
   
   const createModal = useModalState();
@@ -71,6 +67,20 @@ export const ApiKeyManagement: React.FC = () => {
     }
     return key;
   };
+
+  const createMutation = useMutation(
+    (data: { name: string; scopes: string[]; expiresAt?: string }) => 
+      DataService.admin.createApiKey?.(data),
+    {
+      onSuccess: () => {
+        refetch();
+        notify.success('API key created successfully');
+      },
+      onError: () => {
+        notify.error('Failed to create API key');
+      }
+    }
+  );
 
   const handleCreate = async () => {
     if (!formData.name || !formData.scopes.length) {

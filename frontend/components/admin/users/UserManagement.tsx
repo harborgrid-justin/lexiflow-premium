@@ -26,24 +26,19 @@ interface UserData {
   createdAt: string;
 }
 
-const mockUsers: UserData[] = [
-  { id: '1', email: 'admin@lexiflow.com', firstName: 'Admin', lastName: 'User', role: 'Administrator', status: 'Active', lastLogin: '2024-01-15T10:30:00Z', createdAt: '2023-01-01' },
-  { id: '2', email: 'partner@lexiflow.com', firstName: 'John', lastName: 'Smith', role: 'Senior Partner', status: 'Active', lastLogin: '2024-01-14T16:45:00Z', createdAt: '2023-03-15' },
-  { id: '3', email: 'associate@lexiflow.com', firstName: 'Sarah', lastName: 'Johnson', role: 'Associate', status: 'Active', lastLogin: '2024-01-15T09:15:00Z', createdAt: '2023-06-20' },
-  { id: '4', email: 'paralegal@lexiflow.com', firstName: 'Mike', lastName: 'Brown', role: 'Paralegal', status: 'Inactive', createdAt: '2023-08-10' },
-];
+/**
+ * @deprecated Mock data - use backend API via DataService.users
+ */
+const mockUsers: UserData[] = [];
 
 export const UserManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   
-  // Use backend API instead of mock data
+  // Fetch users from backend API
   const { data: users = [], isLoading, refetch } = useQuery<UserData[]>(
-    ['admin', 'users'],
-    async () => {
-      // TODO: Replace with actual backend API call when endpoint is ready
-      return [];
-    }
+    queryKeys.users.all(),
+    () => DataService.users.getAll()
   );
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,12 +60,11 @@ export const UserManagement: React.FC = () => {
       return;
     }
     try {
-      // TODO: Call backend API to create user
-      // await DataService.admin.createUser(formData);
+      await DataService.users.add(formData);
+      await refetch();
       createModal.close();
       setFormData({});
       notify.success('User created successfully');
-      await refetch();
     } catch (error) {
       notify.error('Failed to create user');
     }

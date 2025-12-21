@@ -31,8 +31,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 // Services & Types
 import { DataService } from '../../services/data/dataService';
 import { useMutation, queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../types';
 
 interface EvidenceDetailProps {
@@ -102,7 +101,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
           return exhibit;
       },
       {
-          invalidateKeys: [[STORES.EVIDENCE, 'all'], [STORES.EXHIBITS, 'all']],
+          invalidateKeys: [['evidence', 'all'], ['exhibits', 'all']],
           onSuccess: (exhibit) => {
               notify.success(`Evidence promoted to Exhibit ${exhibit.exhibitNumber}. Admissibility updated.`);
           }

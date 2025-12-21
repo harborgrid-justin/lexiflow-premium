@@ -21,15 +21,14 @@ import { cn } from '../../../utils/cn';
 // Services & Types
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../../utils/queryKeys';
 import { EvidenceItem } from '../../../types';
 
 export const RelevanceAnalysis: React.FC = () => {
     const { theme } = useTheme();
     const { data: evidence = [] } = useQuery<EvidenceItem[]>(
-        [STORES.EVIDENCE, 'all'],
+        ['evidence', 'all'],
         DataService.evidence.getAll
     );
     

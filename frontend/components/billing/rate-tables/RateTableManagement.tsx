@@ -11,6 +11,9 @@ import { useNotify } from '@hooks/useNotify';
 import { useModalState } from '@hooks';
 import { useSelection } from '@hooks/useSelectionState';
 import { getTodayString } from '@utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '@hooks/useQueryHooks';
+import { queryKeys } from '@utils/queryKeys';
+import { DataService } from '@services/data/dataService';
 
 interface RateTable {
   id: string;
@@ -25,90 +28,73 @@ interface RateTable {
   createdAt: string;
 }
 
-const mockRateTables: RateTable[] = [
-  {
-    id: '1',
-    name: 'Standard Client Rates 2024',
-    description: 'Default billing rates for standard clients',
-    defaultRate: 350,
-    currency: 'USD',
-    status: 'Active',
-    effectiveDate: '2024-01-01',
-    rates: [
-      { role: 'Senior Partner', rate: 650 },
-      { role: 'Partner', rate: 550 },
-      { role: 'Associate', rate: 350 },
-      { role: 'Paralegal', rate: 175 },
-    ],
-    createdAt: '2023-12-15',
-  },
-  {
-    id: '2',
-    name: 'Premium Client Rates',
-    description: 'Rates for premium/enterprise clients',
-    defaultRate: 450,
-    currency: 'USD',
-    status: 'Active',
-    effectiveDate: '2024-01-01',
-    rates: [
-      { role: 'Senior Partner', rate: 750 },
-      { role: 'Partner', rate: 650 },
-      { role: 'Associate', rate: 450 },
-      { role: 'Paralegal', rate: 225 },
-    ],
-    createdAt: '2023-12-15',
-  },
-];
+/**
+ * @deprecated Mock data - use backend API via DataService.rateTables
+ */
+const mockRateTables: RateTable[] = [];
 
 export const RateTableManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [rateTables, setRateTables] = useState<RateTable[]>(mockRateTables);
+  
+  // Fetch rate tables from backend API
+  const { data: rateTables = [], isLoading, refetch } = useQuery<RateTable[]>(
+    queryKeys.billing.rateTables?.() || ['billing', 'rateTables'],
+    () => DataService.rateTables.getAll()
+  );
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
   const tableSelection = useSelection<RateTable>();
   const [formData, setFormData] = useState<Partial<RateTable>>({ rates: [] });
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!formData.name || !formData.defaultRate) {
       notify.error('Name and default rate are required');
       return;
     }
-    const newTable: RateTable = {
-      id: `rate-${Date.now()}`,
-      name: formData.name,
-      description: formData.description || '',
-      defaultRate: formData.defaultRate,
-      currency: 'USD',
-      status: 'Draft',
-      effectiveDate: formData.effectiveDate || new Date().toISOString().split('T')[0],
-      rates: formData.rates || [],
-      createdAt: new Date().toISOString().split('T')[0],
-    };
-    setRateTables([...rateTables, newTable]);
-    createModal.close();
-    setFormData({ rates: [] });
-    notify.success('Rate table created successfully');
+    try {
+      const newTable: Partial<RateTable> = {
+        name: formData.name,
+        description: formData.description || '',
+        defaultRate: formData.defaultRate,
+        currency: 'USD',
+        status: 'Draft',
+        effectiveDate: formData.effectiveDate || new Date().toISOString().split('T')[0],
+        rates: formData.rates || [],
+      };
+      await DataService.rateTables.add(newTable);
+      await refetch();
+      createModal.close();
+      setFormData({ rates: [] });
+      notify.success('Rate table created successfully');
+    } catch (error) {
+      notify.error('Failed to create rate table');
+    }
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!tableSelection.selected) return;
-    setRateTables(rateTables.map(t =>
-      t.id === tableSelection.selected!.id ? { ...t, ...formData } : t
-    ));
-    editModal.close();
+    try {
+      await DataService.rateTables.update(tableSelection.selected.id, formData);
+      await refetch();
+      editModal.close();
     tableSelection.deselect();
     setFormData({ rates: [] });
     notify.success('Rate table updated successfully');
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!tableSelection.selected) return;
-    setRateTables(rateTables.filter(t => t.id !== tableSelection.selected!.id));
-    deleteModal.close();
-    tableSelection.deselect();
-    notify.success('Rate table deleted successfully');
+    try {
+      await DataService.rateTables.delete(tableSelection.selected.id);
+      await refetch();
+      deleteModal.close();
+      tableSelection.clearSelection();
+      notify.success('Rate table deleted successfully');
+    } catch (error) {
+      notify.error('Failed to delete rate table');
+    }
   };
 
   const openEditModal = (table: RateTable) => {

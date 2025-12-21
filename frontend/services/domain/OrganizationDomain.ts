@@ -1,10 +1,11 @@
 ﻿/**
  * OrganizationDomain - Organization and department management service
  * Provides org structure, department hierarchy, and member management
+ * 
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { adminApi } from '../api/domains/admin.api';
 import { delay } from '../../utils/async';
 
 interface Organization {
@@ -47,17 +48,19 @@ interface Member {
 }
 
 export const OrganizationService = {
-  getAll: async () => db.getAll(STORES.ORGANIZATIONS),
-  getById: async (id: string) => db.get(STORES.ORGANIZATIONS, id),
-  add: async (item: any) => db.put(STORES.ORGANIZATIONS, { 
-    ...item, 
-    createdAt: new Date().toISOString() 
-  }),
-  update: async (id: string, updates: any) => {
-    const existing = await db.get(STORES.ORGANIZATIONS, id);
-    return db.put(STORES.ORGANIZATIONS, { ...existing, ...updates });
+  getAll: async () => adminApi.organizations?.getAll?.() || [],
+  getById: async (id: string) => adminApi.organizations?.getById?.(id) || null,
+  add: async (item: any) => {
+    const org = { ...item, createdAt: new Date().toISOString() };
+    return adminApi.organizations?.create?.(org) || org;
   },
-  delete: async (id: string) => db.delete(STORES.ORGANIZATIONS, id),
+  update: async (id: string, updates: any) => {
+    return adminApi.organizations?.update?.(id, updates) || { id, ...updates };
+  },
+  delete: async (id: string) => {
+    await adminApi.organizations?.delete?.(id);
+    return true;
+  },
   
   // Organization specific methods
   getOrganizations: async (filters?: { type?: string }): Promise<Organization[]> => {

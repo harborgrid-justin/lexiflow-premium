@@ -19,8 +19,7 @@ import { X, MapPin, Mail, Globe, ShieldAlert, Link, Briefcase, GitBranch } from 
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -56,12 +55,12 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
 
   // Efficient Caching using useQuery
   const { data: entity, isLoading: isLoadingEntity } = useQuery<LegalEntity | undefined>(
-      [STORES.ENTITIES, entityId],
+      ['entities', entityId],
       () => DataService.entities.getById(entityId)
   );
 
   const { data: relationships = [], isLoading: _isLoadingRels } = useQuery<EntityRelationship[]>(
-      [STORES.RELATIONSHIPS, entityId],
+      ['relationships', entityId],
       () => DataService.entities.getRelationships(entityId)
   );
 

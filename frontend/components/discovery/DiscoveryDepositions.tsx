@@ -32,8 +32,7 @@ import { useWindow } from '../../context/WindowContext';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -48,14 +47,14 @@ export const DiscoveryDepositions: React.FC = () => {
 
   // Enterprise Data Access
   const { data: depositions = [] } = useQuery<Deposition[]>(
-      [STORES.DISCOVERY_EXT_DEPO, 'all'],
+      ['discovery-depositions', 'all'],
       () => DataService.discovery.getDepositions()
   );
 
   const { mutate: scheduleDeposition } = useMutation(
       DataService.discovery.addDeposition,
       {
-          invalidateKeys: [[STORES.DISCOVERY_EXT_DEPO, 'all']],
+          invalidateKeys: [['discovery-depositions', 'all']],
           onSuccess: () => {
               closeWindow('schedule-depo');
               setNewDepo({});

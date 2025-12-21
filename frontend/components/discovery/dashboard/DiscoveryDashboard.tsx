@@ -7,8 +7,7 @@ import { DataService } from '../../../services/data/dataService';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../../utils/queryKeys';
 import DiscoveryMetrics from './DiscoveryMetrics';
 import DiscoveryCharts from './DiscoveryCharts';
@@ -23,9 +22,9 @@ const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) =
   const { theme } = useTheme();
 
   // Parallel Queries for Dashboard Stats
-  const { data: requests = [] } = useQuery<DiscoveryRequest[]>([STORES.REQUESTS, 'all'], () => DataService.discovery.getRequests());
-  const { data: holds = [] } = useQuery<LegalHold[]>([STORES.LEGAL_HOLDS, 'all'], () => DataService.discovery.getLegalHolds());
-  const { data: privilegeLog = [] } = useQuery<PrivilegeLogEntry[]>([STORES.PRIVILEGE_LOG, 'all'], () => DataService.discovery.getPrivilegeLog());
+  const { data: requests = [] } = useQuery<DiscoveryRequest[]>(['requests', 'all'], () => DataService.discovery.getRequests());
+  const { data: holds = [] } = useQuery<LegalHold[]>(['legal-holds', 'all'], () => DataService.discovery.getLegalHolds());
+  const { data: privilegeLog = [] } = useQuery<PrivilegeLogEntry[]>(['privilege-log', 'all'], () => DataService.discovery.getPrivilegeLog());
 
   const stats = {
       pendingRequests: requests.filter(r => r.status === 'Served').length,

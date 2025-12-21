@@ -27,8 +27,7 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -45,7 +44,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
 
   // Enterprise Data Access
   const { data: recentConflicts = [], isLoading } = useQuery<ConflictCheck[]>(
-      [STORES.CONFLICTS, 'recent'],
+      ['conflicts', 'recent'],
       async () => {
           const all = await DataService.compliance.getConflicts();
           // Return flagged or recent items
@@ -64,7 +63,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
       if (!searchTerm) return;
       await DataService.compliance.runConflictCheck(searchTerm);
       // Invalidate query to refresh list
-      // queryClient.invalidate([STORES.CONFLICTS]); 
+      // queryClient.invalidate(['conflicts']); // Removed IndexedDB reference 
       // (Assuming automatic refresh via query key or parent re-render in real app)
   };
 

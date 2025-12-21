@@ -12,8 +12,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { AddStaffModal } from './AddStaffModal';
 import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { useStaff } from '../../../hooks/useDomainData';
 import { useModalState } from '../../../hooks';
 import { getTodayString } from '../../../utils/dateUtils';
@@ -33,14 +32,14 @@ export const HRManager: React.FC = () => {
   const { mutate: addStaff } = useMutation(
       DataService.hr.addStaff,
       { 
-          invalidateKeys: [[STORES.STAFF, 'all'], [STORES.USERS, 'all']], // Invalidate both staff and users
+          invalidateKeys: [['staff', 'all'], ['users', 'all']], // Invalidate both staff and users
           onSuccess: () => addStaffModal.close()
       }
   );
 
   const { mutate: deleteStaff } = useMutation(
       DataService.hr.deleteStaff,
-      { invalidateKeys: [[STORES.STAFF, 'all']] }
+      { invalidateKeys: [['staff', 'all']] }
   );
 
   const handleAddStaff = (newStaff: Partial<StaffMember>) => {

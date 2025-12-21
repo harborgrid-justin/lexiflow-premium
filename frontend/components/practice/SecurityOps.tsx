@@ -19,8 +19,7 @@ import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-r
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -47,7 +46,7 @@ export const SecurityOps: React.FC = () => {
     const [fileName, setFileName] = useState('');
 
     const { data: malwareSignatures = [] } = useQuery<string[]>(
-        [STORES.MALWARE_SIGNATURES, 'all'],
+        ['malware-signatures', 'all'],
         DataService.security.getMalwareSignatures
     );
 

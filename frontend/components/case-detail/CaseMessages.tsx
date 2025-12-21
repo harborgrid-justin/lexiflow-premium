@@ -23,8 +23,7 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
@@ -44,12 +43,12 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   
   // Enterprise Data Fetching
   const { data: conversation, isLoading: isLoadingConversation } = useQuery<Conversation | undefined>(
-    [STORES.CONVERSATIONS, conversationId],
+    ['conversations', conversationId],
     () => DataService.messenger.getConversationById(conversationId)
   );
 
   const { data: users = [], isLoading: isLoadingUsers } = useQuery<User[]>(
-    [STORES.USERS, 'all'],
+    ['users', 'all'],
     DataService.users.getAll
   );
 
@@ -127,7 +126,11 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
       {/* Input Area */}
       <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
          <div className="flex items-center gap-3">
-            <button className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}>
+            <button 
+              className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
+              aria-label="Attach file"
+              title="Attach file"
+            >
                 <Paperclip className="h-5 w-5"/>
             </button>
             <div className="flex-1 relative">

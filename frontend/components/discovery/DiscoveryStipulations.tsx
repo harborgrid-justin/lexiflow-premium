@@ -49,8 +49,7 @@ import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
 import { getTodayString } from '../../utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -90,14 +89,14 @@ export const DiscoveryStipulations: React.FC = () => {
   // HOOKS - Data Fetching
   // ==========================================================================
   const { data: stipulations = [] } = useQuery<StipulationRequest[]>(
-      [STORES.STIPULATIONS, 'all'],
+      ['stipulations', 'all'],
       () => DataService.discovery.getStipulations()
   );
 
   const { mutate: addStip } = useMutation(
       DataService.discovery.addStipulation,
       {
-          invalidateKeys: [[STORES.STIPULATIONS, 'all']],
+          invalidateKeys: [['stipulations', 'all']],
           onSuccess: () => {
               setIsModalOpen(false);
               setNewStip({ status: 'Pending' });
@@ -113,7 +112,7 @@ export const DiscoveryStipulations: React.FC = () => {
           return DataService.discovery.addStipulation({ ...existing, status });
       },
       {
-          invalidateKeys: [[STORES.STIPULATIONS, 'all']],
+          invalidateKeys: [['stipulations', 'all']],
           onSuccess: (_, variables) => {
               notify.success(`Stipulation ${variables.status.toLowerCase()}.`);
           },

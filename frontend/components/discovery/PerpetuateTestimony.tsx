@@ -2,19 +2,24 @@
 import React from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
-import { Clock, AlertTriangle, FileText, Loader2 } from 'lucide-react';
+import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
+
+interface Petition {
+  id: string;
+  title: string;
+  date: string;
+}
 
 export const PerpetuateTestimony: React.FC = () => {
   const { theme } = useTheme();
 
   // Use dynamic query instead of static placeholder
-  const { data: petitions = [], isLoading } = useQuery<any[]>(
+  const { data: petitions = [], isLoading } = useQuery<Petition[]>(
       ['discovery', 'petitions'],
       DataService.discovery.getPetitions
   );

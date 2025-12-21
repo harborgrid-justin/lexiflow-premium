@@ -34,8 +34,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -88,7 +87,7 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, caseId || 'all'], 
+      ['requests', caseId || 'all'], 
       () => DataService.discovery.getRequests(caseId) 
   );
 

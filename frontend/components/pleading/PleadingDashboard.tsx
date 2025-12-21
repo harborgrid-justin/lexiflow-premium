@@ -9,8 +9,7 @@ import { DataService } from '../../services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../types/pleading-types';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { VirtualGrid } from '../common/VirtualGrid';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Inputs';
@@ -28,17 +27,17 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
     const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
     
     const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
-        [STORES.PLEADINGS, caseId || 'all'],
+        ['pleadings', caseId || 'all'],
         () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
     );
 
     const { data: cases = [] } = useQuery<Case[]>(
-        [STORES.CASES, 'all'],
+        ['cases', 'all'],
         DataService.cases.getAll
     );
     
     const { data: templates = [] } = useQuery<PleadingTemplate[]>(
-        [STORES.PLEADING_TEMPLATES, 'all'],
+        ['pleading-templates', 'all'],
         () => DataService.pleadings.getTemplates()
     );
 

@@ -1,16 +1,18 @@
 ﻿import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
 import { delay } from '../../utils/async';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { authApi } from '../api/domains/auth.api';
 import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
 
 const CURRENT_USER_ID = 'usr-admin-justin';
 export const ProfileDomain = {
     getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
-        // In a real app, this comes from session. Here we fetch the admin user from DB.
-        const user = await db.get<any>(STORES.USERS, CURRENT_USER_ID);
+        // Get user from backend API
+        const user = await authApi.users?.getCurrent?.();
         
-        // Fallback if DB is empty or user missing (e.g. before seed)
+        // Fallback if backend unavailable
         if (!user) {
              return {
                 id: 'usr-guest' as UserId,

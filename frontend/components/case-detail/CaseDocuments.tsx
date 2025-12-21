@@ -26,8 +26,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { DocumentService } from '../../services/features/documents/documentService';
 import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { IntegrationOrchestrator } from '../../services/integration/integrationOrchestrator';
 import { cn } from '../../utils/cn';

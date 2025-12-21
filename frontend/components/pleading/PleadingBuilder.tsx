@@ -19,8 +19,7 @@ import { Plus, Loader2 } from 'lucide-react';
 // Services & Data
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
@@ -53,6 +52,7 @@ const PleadingFilingQueue = lazy(() => import('./PleadingFilingQueue').then(m =>
 const PleadingAnalytics = lazy(() => import('./PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
 
 import { PleadingBuilderProps } from './types';
+import { queryKeys } from '@/utils/queryKeys';
 
 export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, caseId }) => {
     const { theme } = useTheme();
@@ -66,11 +66,11 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
 
     // Data fetching
     const { data: pleadings = [], isLoading: pleadingsLoading } = useQuery<PleadingDocument[]>(
-        [STORES.PLEADINGS, caseId || 'all'],
+        ['pleadings', caseId || 'all'],
         () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
     );
-    const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
-    const { data: templates = [] } = useQuery<PleadingTemplate[]>([STORES.PLEADING_TEMPLATES, 'all'], () => DataService.pleadings.getTemplates());
+    const { data: cases = [] } = useQuery<Case[]>(['cases', 'all'], () => DataService.cases.getAll());
+    const { data: templates = [] } = useQuery<PleadingTemplate[]>(['pleading-templates', 'all'], () => DataService.pleadings.getTemplates());
 
     const { mutate: createPleading, isLoading: isCreating } = useMutation(
         async (data: { templateId: string; caseId: string; title: string; userId: string }) => {
@@ -218,8 +218,9 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                 <Input label="Document Title" value={newDocData.title} onChange={e => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" required />
                 {!caseId && (
                 <div>
-                    <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
+                    <label htmlFor="case-select" className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
                     <select 
+                        id="case-select"
                         className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newDocData.caseId}
                         onChange={e => setNewDocData({...newDocData, caseId: e.target.value})}
@@ -230,8 +231,9 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                 </div>
                 )}
                 <div>
-                    <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
+                    <label htmlFor="template-select" className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
                     <select 
+                        id="template-select"
                         className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newDocData.templateId}
                         onChange={e => setNewDocData({...newDocData, templateId: e.target.value})}

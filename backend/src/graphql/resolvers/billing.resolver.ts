@@ -10,28 +10,42 @@ import {
 } from '../inputs/billing.input';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
+import { BillingService } from '../../billing/billing.service';
+import { TimeEntriesService } from '../../billing/time-entries/time-entries.service';
+import { InvoicesService } from '../../billing/invoices/invoices.service';
+import { RateTablesService } from '../../billing/rate-tables/rate-tables.service';
+import { FeeAgreementsService } from '../../billing/fee-agreements/fee-agreements.service';
 
 @Resolver(() => TimeEntryType)
 export class BillingResolver {
-  // Inject BillingService here
-  // constructor(private billingService: BillingService) {}
+  constructor(
+    private billingService: BillingService,
+    private timeEntriesService: TimeEntriesService,
+    private invoicesService: InvoicesService,
+    private rateTablesService: RateTablesService,
+    private feeAgreementsService: FeeAgreementsService,
+  ) {}
 
   @Query(() => [TimeEntryType], { name: 'timeEntries' })
   @UseGuards(GqlAuthGuard)
   async getTimeEntries(
     @Args('filter', { nullable: true }) filter?: TimeEntryFilterInput,
   ): Promise<TimeEntryType[]> {
-    // TODO: Implement with BillingService
-    // return this.billingService.findAllTimeEntries(filter);
-    return [];
+    if (filter?.caseId) {
+      return this.billingService.findTimeEntriesByCaseId(filter.caseId) as any;
+    }
+    return this.billingService.findAllTimeEntries() as any;
   }
 
   @Query(() => TimeEntryType, { name: 'timeEntry', nullable: true })
   @UseGuards(GqlAuthGuard)
   async getTimeEntry(@Args('id', { type: () => ID }) id: string): Promise<TimeEntryType | null> {
-    // TODO: Implement with BillingService
-    // return this.billingService.findOneTimeEntry(id);
-    return null;
+    try {
+      const timeEntry = await this.timeEntriesService.findOne(id);
+      return timeEntry as any;
+    } catch (error) {
+      return null;
+    }
   }
 
   @Mutation(() => TimeEntryType)
@@ -40,9 +54,12 @@ export class BillingResolver {
     @Args('input') input: CreateTimeEntryInput,
     @CurrentUser() user: any,
   ): Promise<TimeEntryType> {
-    // TODO: Implement with BillingService
-    // return this.billingService.createTimeEntry(input, user);
-    throw new Error('Not implemented');
+    const timeEntryData = {
+      ...input,
+      userId: user?.id || 'system',
+    };
+    const timeEntry = await this.billingService.createTimeEntry(timeEntryData);
+    return timeEntry as any;
   }
 
   @Mutation(() => TimeEntryType)
@@ -52,9 +69,8 @@ export class BillingResolver {
     @Args('input') input: UpdateTimeEntryInput,
     @CurrentUser() user: any,
   ): Promise<TimeEntryType> {
-    // TODO: Implement with BillingService
-    // return this.billingService.updateTimeEntry(id, input, user);
-    throw new Error('Not implemented');
+    const timeEntry = await this.billingService.updateTimeEntry(id, input);
+    return timeEntry as any;
   }
 
   @Mutation(() => Boolean)
@@ -63,10 +79,8 @@ export class BillingResolver {
     @Args('id', { type: () => ID }) id: string,
     @CurrentUser() user: any,
   ): Promise<boolean> {
-    // TODO: Implement with BillingService
-    // await this.billingService.deleteTimeEntry(id, user);
-    // return true;
-    throw new Error('Not implemented');
+    await this.billingService.deleteTimeEntry(id);
+    return true;
   }
 
   @Query(() => [InvoiceType], { name: 'invoices' })
@@ -74,17 +88,19 @@ export class BillingResolver {
   async getInvoices(
     @Args('filter', { nullable: true }) filter?: InvoiceFilterInput,
   ): Promise<InvoiceType[]> {
-    // TODO: Implement with BillingService
-    // return this.billingService.findAllInvoices(filter);
-    return [];
+    // For now return all - can add filter support later
+    return this.billingService.findAllInvoices() as any;
   }
 
   @Query(() => InvoiceType, { name: 'invoice', nullable: true })
   @UseGuards(GqlAuthGuard)
   async getInvoice(@Args('id', { type: () => ID }) id: string): Promise<InvoiceType | null> {
-    // TODO: Implement with BillingService
-    // return this.billingService.findOneInvoice(id);
-    return null;
+    try {
+      const invoice = await this.billingService.findInvoiceById(id);
+      return invoice as any;
+    } catch (error) {
+      return null;
+    }
   }
 
   @Mutation(() => InvoiceType)
@@ -93,9 +109,12 @@ export class BillingResolver {
     @Args('input') input: CreateInvoiceInput,
     @CurrentUser() user: any,
   ): Promise<InvoiceType> {
-    // TODO: Implement with BillingService
-    // return this.billingService.createInvoice(input, user);
-    throw new Error('Not implemented');
+    const invoiceData = {
+      ...input,
+      createdBy: user?.id || 'system',
+    };
+    const invoice = await this.billingService.createInvoice(invoiceData);
+    return invoice as any;
   }
 
   @Mutation(() => InvoiceType)
@@ -104,9 +123,8 @@ export class BillingResolver {
     @Args('id', { type: () => ID }) id: string,
     @CurrentUser() user: any,
   ): Promise<InvoiceType> {
-    // TODO: Implement with BillingService
-    // return this.billingService.sendInvoice(id, user);
-    throw new Error('Not implemented');
+    const invoice = await this.billingService.sendInvoice(id);
+    return invoice as any;
   }
 
   @Mutation(() => InvoiceType)
@@ -116,16 +134,15 @@ export class BillingResolver {
     @Args('paidDate', { type: () => Date }) paidDate: Date,
     @CurrentUser() user: any,
   ): Promise<InvoiceType> {
-    // TODO: Implement with BillingService
-    // return this.billingService.markInvoicePaid(id, paidDate, user);
-    throw new Error('Not implemented');
+    const invoice = await this.billingService.markInvoicePaid(id);
+    return invoice as any;
   }
 
   @Query(() => [RateTableType], { name: 'rateTables' })
   @UseGuards(GqlAuthGuard)
   async getRateTables(): Promise<RateTableType[]> {
-    // TODO: Implement with BillingService
-    return [];
+    const rateTables = await this.rateTablesService.findAll();
+    return rateTables as any;
   }
 
   @Query(() => [FeeAgreementType], { name: 'feeAgreements' })
@@ -133,7 +150,11 @@ export class BillingResolver {
   async getFeeAgreements(
     @Args('caseId', { type: () => ID, nullable: true }) caseId?: string,
   ): Promise<FeeAgreementType[]> {
-    // TODO: Implement with BillingService
-    return [];
+    const agreements = await this.feeAgreementsService.findAll();
+    // Filter by caseId if provided
+    if (caseId) {
+      return agreements.filter((a: any) => a.caseId === caseId) as any;
+    }
+    return agreements as any;
   }
 }

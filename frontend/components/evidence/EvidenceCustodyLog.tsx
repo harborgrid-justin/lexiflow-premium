@@ -20,8 +20,7 @@ import { cn } from '../../utils/cn';
 // Services & Types
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { EvidenceItem } from '../../types';
 
 export const EvidenceCustodyLog: React.FC = () => {
@@ -30,7 +29,7 @@ export const EvidenceCustodyLog: React.FC = () => {
 
   // Enterprise Data Access: Fetch from the main evidence store to ensure consistency
   const { data: evidence = [] } = useQuery<EvidenceItem[]>(
-      [STORES.EVIDENCE, 'all'],
+      ['evidence', 'all'],
       DataService.evidence.getAll
   );
 

@@ -19,8 +19,7 @@ import { Package, Download, Plus, FileText, Share2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -51,11 +50,11 @@ export const DiscoveryProductions: React.FC<DiscoveryProductionsProps> = () => {
 
   // Enterprise Data Access
   const { data: productions = [] } = useQuery<ProductionSet[]>(
-      [STORES.DISCOVERY_EXT_PROD, 'all'],
+      ['discovery-productions', 'all'],
       () => DataService.discovery.getProductions()
   );
 
-  const { mutate: downloadVolume, isLoading: isDownloading } = useMutation(
+  const { mutate: downloadVolume, isLoading: _isDownloading } = useMutation(
       DataService.discovery.downloadProduction,
       {
           onSuccess: (url) => {

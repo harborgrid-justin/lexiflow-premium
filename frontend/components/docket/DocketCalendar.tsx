@@ -19,8 +19,7 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 import { 
@@ -41,7 +40,7 @@ export const DocketCalendar: React.FC = () => {
 
   // Enterprise Data Access: Shared cache with DocketSheet
   const { data: entriesData } = useQuery<DocketEntry[]>(
-      [STORES.DOCKET, 'all'],
+      ['docket', 'all'],
       DataService.docket.getAll
   );
 

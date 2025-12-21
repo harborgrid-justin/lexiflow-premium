@@ -8,15 +8,14 @@ import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 export const LocalRulesMap: React.FC = () => {
   const { theme } = useTheme();
 
   // Fetch state jurisdictions dynamically
   const { data: jurisdictions = [], isLoading } = useQuery<any[]>(
-      [STORES.JURISDICTIONS, 'state'],
+      ['jurisdictions', 'state'],
       DataService.jurisdiction.getState
   );
 

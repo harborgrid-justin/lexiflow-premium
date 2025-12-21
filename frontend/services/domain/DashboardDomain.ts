@@ -1,10 +1,10 @@
 ﻿/**
  * DashboardDomain - Dashboard widgets and metrics service
  * Provides dashboard configuration, widget management, and real-time metrics
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { analyticsApi } from '../api/domains/analytics.api';
 import { delay } from '../../utils/async';
 
 interface DashboardWidget {

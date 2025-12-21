@@ -26,8 +26,7 @@ import { useWindow } from '../../../context/WindowContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
@@ -47,7 +46,7 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   
   // Query Motions specific to this case
   const { data: motions = [], isLoading } = useQuery<Motion[]>(
-    [STORES.MOTIONS, caseId],
+    ['motions', caseId],
     () => DataService.motions.getByCaseId(caseId)
   );
 
@@ -55,7 +54,7 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   const { mutate: addMotion } = useMutation(
     DataService.motions.add,
     { 
-        invalidateKeys: [[STORES.MOTIONS, caseId]],
+        invalidateKeys: [['motions', caseId]],
         onSuccess: () => closeWindow('new-motion-modal')
     }
   );

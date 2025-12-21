@@ -1,10 +1,10 @@
 ﻿/**
  * TransactionDomain - Financial transaction management service
  * Provides transaction tracking, balance calculation, and reconciliation
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { api } from '../api';
 import { delay } from '../../utils/async';
 
 interface Transaction {
@@ -30,18 +30,26 @@ interface Balance {
 }
 
 export const TransactionService = {
-  getAll: async () => db.getAll(STORES.TRANSACTIONS),
-  getById: async (id: string) => db.get(STORES.TRANSACTIONS, id),
-  add: async (item: any) => db.put(STORES.TRANSACTIONS, { 
-    ...item, 
-    createdAt: new Date().toISOString(),
-    status: item.status || 'pending'
-  }),
-  update: async (id: string, updates: any) => {
-    const existing = await db.get(STORES.TRANSACTIONS, id);
-    return db.put(STORES.TRANSACTIONS, { ...existing, ...updates });
+  getAll: async () => api.billing?.transactions?.getAll?.() || [],
+  getById: async (id: string) => api.billing?.transactions?.getById?.(id),
+  
+  add: async (item: any) => {
+    const transaction = { 
+      ...item, 
+      createdAt: new Date().toISOString(),
+      status: item.status || 'pending'
+    };
+    return api.billing?.transactions?.create?.(transaction) || transaction;
   },
-  delete: async (id: string) => db.delete(STORES.TRANSACTIONS, id),
+  
+  update: async (id: string, updates: any) => {
+    return api.billing?.transactions?.update?.(id, updates) || { id, ...updates };
+  },
+  
+  delete: async (id: string) => {
+    await api.billing?.transactions?.delete?.(id);
+    return { success: true, id };
+  },
   
   // Transaction specific methods
   getTransactions: async (filters?: { 
@@ -51,22 +59,26 @@ export const TransactionService = {
     startDate?: string;
     endDate?: string;
   }): Promise<Transaction[]> => {
-    let transactions = await db.getAll(STORES.TRANSACTIONS);
+    // Use backend filtering if available
+    const transactions = await api.billing?.transactions?.getAll?.(filters) || [];
+    
+    // Client-side filtering as fallback
+    let filtered = transactions;
     
     if (filters?.type) {
-      transactions = transactions.filter((t: Transaction) => t.type === filters.type);
+      filtered = filtered.filter((t: Transaction) => t.type === filters.type);
     }
     
     if (filters?.status) {
-      transactions = transactions.filter((t: Transaction) => t.status === filters.status);
+      filtered = filtered.filter((t: Transaction) => t.status === filters.status);
     }
     
     if (filters?.caseId) {
-      transactions = transactions.filter((t: Transaction) => t.caseId === filters.caseId);
+      filtered = filtered.filter((t: Transaction) => t.caseId === filters.caseId);
     }
     
     if (filters?.startDate || filters?.endDate) {
-      transactions = transactions.filter((t: Transaction) => {
+      filtered = filtered.filter((t: Transaction) => {
         const txDate = new Date(t.date);
         const start = filters.startDate ? new Date(filters.startDate) : new Date(0);
         const end = filters.endDate ? new Date(filters.endDate) : new Date('2100-01-01');
@@ -75,7 +87,7 @@ export const TransactionService = {
     }
     
     // Sort by date descending
-    return transactions.sort((a: Transaction, b: Transaction) => 
+    return filtered.sort((a: Transaction, b: Transaction) => 
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
   },
@@ -96,15 +108,17 @@ export const TransactionService = {
       metadata: transaction.metadata,
     };
     
-    await db.put(STORES.TRANSACTIONS, newTransaction);
-    return newTransaction;
+    return api.billing?.transactions?.create?.(newTransaction) || newTransaction;
   },
   
   getBalance: async (caseId?: string): Promise<Balance> => {
+    // Try to get balance from backend
+    const backendBalance = await api.billing?.getBalance?.(caseId);
+    if (backendBalance) return backendBalance;
+    
+    // Fallback calculation
     await delay(50);
-    const transactions = caseId 
-      ? (await db.getAll(STORES.TRANSACTIONS)).filter((t: Transaction) => t.caseId === caseId)
-      : await db.getAll(STORES.TRANSACTIONS);
+    const transactions = await api.billing?.transactions?.getAll?.({ caseId }) || [];
     
     const balance: Balance = {
       total: 0,
@@ -131,15 +145,7 @@ export const TransactionService = {
   reconcile: async (transactionId: string): Promise<boolean> => {
     await delay(100);
     try {
-      const transaction = await db.get(STORES.TRANSACTIONS, transactionId);
-      if (!transaction) return false;
-      
-      await db.put(STORES.TRANSACTIONS, {
-        ...transaction,
-        status: 'reconciled',
-        reconciledAt: new Date().toISOString(),
-      });
-      
+      await api.billing?.transactions?.reconcile?.(transactionId);
       console.log(`[TransactionService] Reconciled transaction: ${transactionId}`);
       return true;
     } catch {

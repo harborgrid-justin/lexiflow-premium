@@ -186,7 +186,7 @@ export class TimeEntriesService {
   async bill(id: string, invoiceId: string, billedBy: string): Promise<TimeEntry> {
     const timeEntry = await this.findOne(id);
     timeEntry.status = TimeEntryStatus.BILLED;
-    // timeEntry.invoiceId = invoiceId; // TODO: Add invoiceId column via migration
+    timeEntry.invoiceId = invoiceId; // Link time entry to invoice
     timeEntry.billedBy = billedBy;
     timeEntry.billedAt = new Date();
     return await this.timeEntryRepository.save(timeEntry);

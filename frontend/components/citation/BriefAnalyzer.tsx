@@ -37,8 +37,7 @@ import { DataService } from '../../services/data/dataService';
 import { GeminiService, BriefCritique } from '../../services/features/research/geminiService';
 import { AnalysisEngine, ConflictResult } from '../../services/features/analysis/analysisEngine';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -60,8 +59,8 @@ export const BriefAnalyzer: React.FC = () => {
   const [conflicts, setConflicts] = useState<ConflictResult[]>([]);
 
   // Load Data Dependencies
-  const { data: authorityDb = [] } = useQuery<Citation[]>([STORES.CITATIONS, 'all'], () => DataService.citations.getAll());
-  const { data: allCases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
+  const { data: authorityDb = [] } = useQuery<Citation[]>(['citations', 'all'], () => DataService.citations.getAll());
+  const { data: allCases = [] } = useQuery<Case[]>(['cases', 'all'], () => DataService.cases.getAll());
 
   // Mutations
   const { mutate: _addToLibrary } = useMutation(
@@ -226,7 +225,7 @@ export const BriefAnalyzer: React.FC = () => {
                         { id: 'nexus', label: 'Nexus', icon: Network }
                     ]}
                     activeTab={activeTab}
-                    onChange={(t) => setActiveTab(t as any)}
+                    onChange={(t) => setActiveTab(t as 'authority' | 'strategy' | 'nexus')}
                     variant="underline"
                     className="border-none"
                  />

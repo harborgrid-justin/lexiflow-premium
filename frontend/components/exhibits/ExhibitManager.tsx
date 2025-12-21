@@ -12,8 +12,8 @@
 // ============================================================================
 import React, { useState, useEffect } from 'react';
 import { 
-  StickyNote, Filter, Layers, Users, Printer, Plus, Search, 
-  BarChart2, PenTool, Layout, Grid, List, Loader2 
+  Filter, Layers, Users, Printer, Plus, Search, 
+  BarChart2, PenTool, Grid, List, Loader2 
 } from 'lucide-react';
 
 // ============================================================================
@@ -36,9 +36,7 @@ import { useToggle } from '../../hooks/useToggle';
 import { CaseId, TrialExhibit } from '../../types';
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
-import { queryKeys } from '../../utils/queryKeys';
+// ✅ Migrated to backend API (2025-12-21)
 import { getTodayString } from '../../utils/dateUtils';
 
 interface ExhibitManagerProps {
@@ -56,7 +54,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
   // Enterprise Data Access
   // Using caseId in query key ensures React Query manages cache independently per case
   const { data: exhibitsData = [], isLoading, error, refetch } = useQuery<TrialExhibit[]>(
-      [STORES.EXHIBITS, caseId || 'all'],
+      ['exhibits', caseId || 'all'],
       DataService.exhibits.getAll
   );
 
@@ -65,7 +63,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
 
   const { mutate: addExhibit } = useMutation(
       DataService.exhibits.add,
-      { invalidateKeys: [[STORES.EXHIBITS, caseId || 'all']] }
+      { invalidateKeys: [['exhibits', caseId || 'all']] }
   );
 
   useEffect(() => {
@@ -223,8 +221,8 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
                         </div>
                         <div className="flex gap-2">
                             <div className={cn("flex p-1 rounded-lg border", theme.border.default, theme.surface.default)}>
-                                <button onClick={() => setViewMode('list')} className={cn("p-1.5 rounded transition-colors", viewMode === 'list' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><List className="h-4 w-4"/></button>
-                                <button onClick={() => setViewMode('grid')} className={cn("p-1.5 rounded transition-colors", viewMode === 'grid' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><Grid className="h-4 w-4"/></button>
+                                <button onClick={() => setViewMode('list')} title="List view" aria-label="Switch to list view" className={cn("p-1.5 rounded transition-colors", viewMode === 'list' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><List className="h-4 w-4"/></button>
+                                <button onClick={() => setViewMode('grid')} title="Grid view" aria-label="Switch to grid view" className={cn("p-1.5 rounded transition-colors", viewMode === 'grid' ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}><Grid className="h-4 w-4"/></button>
                             </div>
                             <Button variant="secondary" icon={Filter} onClick={filtersToggle.toggle}>Filter</Button>
                         </div>

@@ -26,8 +26,7 @@ import { useModalState } from '../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { Pathfinding } from '../../utils/pathfinding';
 import { cn } from '../../utils/cn';
 
@@ -55,23 +54,23 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
 
   // Data Queries
   const { data: phases = [] } = useQuery<CasePhase[]>(
-      [STORES.CASES, caseData.id, 'phases'], 
+      ['cases', caseData.id, 'phases'], 
       () => DataService.phases.getByCaseId(caseData.id)
   );
   const { data: tasks = [] } = useQuery<WorkflowTask[]>(
-      [STORES.TASKS, caseData.id], 
+      ['tasks', caseData.id], 
       () => DataService.tasks.getByCaseId(caseData.id)
   );
   
   const { mutate: updateTask } = useMutation(
       (task: WorkflowTask) => DataService.tasks.update(task.id, task), 
       { 
-          invalidateKeys: [[STORES.TASKS, caseData.id]], 
+          invalidateKeys: [['tasks', caseData.id]], 
           // Optimistic Update
           onSuccess: (updatedTask) => {
-              const current = queryClient.getQueryState<WorkflowTask[]>([STORES.TASKS, caseData.id])?.data || [];
+              const current = queryClient.getQueryState<WorkflowTask[]>(['tasks', caseData.id])?.data || [];
               const newTasks = current.map(t => t.id === updatedTask.id ? updatedTask : t);
-              queryClient.setQueryData([STORES.TASKS, caseData.id], newTasks);
+              queryClient.setQueryData(['tasks', caseData.id], newTasks);
           }
       }
   );

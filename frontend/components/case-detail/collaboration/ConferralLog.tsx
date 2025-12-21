@@ -27,8 +27,7 @@ import { getTodayString } from '../../../utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
@@ -50,14 +49,14 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
 
   // Enterprise Data Access
   const { data: sessions = [], isLoading } = useQuery<ConferralSession[]>(
-      [STORES.CONFERRALS, caseId],
+      ['conferrals', caseId],
       () => DataService.collaboration.getConferrals(caseId)
   );
 
   const { mutate: addSession } = useMutation(
       DataService.collaboration.addConferral,
       {
-          invalidateKeys: [[STORES.CONFERRALS, caseId]],
+          invalidateKeys: [['conferrals', caseId]],
           onSuccess: () => {
               setIsModalOpen(false);
               setNewSession({ method: 'Phone', result: 'Pending', date: new Date().toISOString().split('T')[0] });

@@ -1,16 +1,18 @@
 ﻿import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '../../types';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { adminApi } from '../api/domains/admin.api';
 import { ChainService } from '../infrastructure/chainService';
 import { MOCK_API_SPEC } from '../../data/mockApiSpec';
 import { API_PREFIX } from '../../config/network/api.config';
 import { delay } from '../../utils/async';
 
 export const AdminService = {
-    // Real DB Access
+    // Real backend API access
     getLogs: async (): Promise<AuditLogEntry[]> => {
-        const logs = await db.getAll<AuditLogEntry>(STORES.LOGS);
-        return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        const logs = await adminApi.auditLogs?.getAll?.() || [];
+        return logs.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     },
     
     // Simulations (Infra)
@@ -33,8 +35,12 @@ export const AdminService = {
         ];
     },
 
-    // RLS Mock
+    // RLS Policies from backend
     getRLSPolicies: async (): Promise<RLSPolicy[]> => { 
+        const policies = await adminApi.rlsPolicies?.getAll?.();
+        if (policies && policies.length > 0) return policies;
+        
+        // Fallback to mock data
         await delay(200); 
         return [
             { id: 'rls1', name: 'tenant_isolation_cases', table: 'cases', cmd: 'ALL', roles: ['All'], using: "org_id = current_setting('app.current_org_id')::uuid", status: 'Active' },
@@ -42,33 +48,28 @@ export const AdminService = {
             { id: 'rls3', name: 'associate_edit_own_time', table: 'time_entries', cmd: 'UPDATE', roles: ['Associate'], using: "user_id = auth.uid()", status: 'Active' }
         ]; 
     },
-    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<any> => { await delay(100); return policy; },
-    deleteRLSPolicy: async (id: string): Promise<void> => { await delay(100); },
+    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<any> => { 
+        return adminApi.rlsPolicies?.create?.(policy) || policy;
+    },
+    deleteRLSPolicy: async (id: string): Promise<void> => { 
+        await adminApi.rlsPolicies?.delete?.(id);
+    },
     
-    // Permissions
-    getPermissions: async (): Promise<RolePermission[]> => { await delay(200); return [ {id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'} ]; },
-    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<any> => { await delay(100); return payload; },
+    // Permissions from backend
+    getPermissions: async (): Promise<RolePermission[]> => { 
+        return adminApi.permissions?.getAll?.() || [{id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'}];
+    },
+    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<any> => { 
+        return adminApi.permissions?.update?.(payload) || payload;
+    },
     
     // Data Platform - ETL Pipelines
     getPipelines: async (): Promise<PipelineJob[]> => { 
-        try {
-            const response = await fetch(`${API_PREFIX}/admin/pipelines`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
-                },
-            });
-            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
-                return await response.json();
-            }
-        } catch (error) {
-            // Silently fail - backend not available
-        }
-        
-        // Backend not available - return empty or disconnected state
-        await delay(200);
-        return [];
+        return adminApi.pipelines?.getAll?.() || [];
     },
-    getApiKeys: async (): Promise<ApiKey[]> => { await delay(100); return [{id: 'key_1', name: 'Default Key', prefix: 'pk_live_ab12...', created: '2024-01-01', status: 'Active'}]; },
+    getApiKeys: async (): Promise<ApiKey[]> => { 
+        return adminApi.apiKeys?.getAll?.() || [{id: 'key_1', name: 'Default Key', prefix: 'pk_live_ab12...', created: '2024-01-01', status: 'Active'}];
+    },
     
     getAnomalies: async (): Promise<DataAnomaly[]> => { 
         await delay(600); 

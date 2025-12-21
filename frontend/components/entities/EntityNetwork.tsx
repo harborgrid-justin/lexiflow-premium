@@ -19,8 +19,7 @@ import { Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -35,6 +34,7 @@ import { DisjointSet } from '../../utils/datastructures/disjointSet';
 
 // Types
 import { LegalEntity, EntityRelationship } from '../../types';
+// ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -52,11 +52,11 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
   const { theme } = useTheme();
 
   const { data: relationships = [], isLoading } = useQuery<EntityRelationship[]>(
-      [STORES.RELATIONSHIPS, 'all'],
+      ['relationships', 'all'],
       () => DataService.entities.getRelationships('all') // Mocked to fetch all
   );
   
-  const { nodes, links, components } = useMemo(() => {
+  const { nodes, links: _links, components } = useMemo(() => {
     if (isLoading || entities.length === 0) return { nodes: [], links: [], components: [] };
     
     // 1. Initialize Disjoint Set

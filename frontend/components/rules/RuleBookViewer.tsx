@@ -3,8 +3,7 @@ import { LegalRule } from '../../types';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { Bookmark, Share2, ExternalLink, BookOpen, Scale, FileText, History, Loader2, Search } from 'lucide-react';

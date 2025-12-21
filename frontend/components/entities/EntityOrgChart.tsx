@@ -18,8 +18,7 @@ import { Building2, User, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services/Data
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { useQuery } from '../../hooks/useQueryHooks';
 
 // Hooks & Context
@@ -44,7 +43,7 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
   
   // Enterprise Data Access
   const { data: fetchedEntities = [], isLoading } = useQuery<LegalEntity[]>(
-      [STORES.ENTITIES, 'all'],
+      ['entities', 'all'],
       DataService.entities.getAll,
       { enabled: !propEntities }
   );

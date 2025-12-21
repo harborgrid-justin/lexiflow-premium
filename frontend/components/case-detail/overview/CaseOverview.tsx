@@ -28,8 +28,7 @@ import { useCaseOverview } from '../../../hooks/useCaseOverview';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
@@ -56,12 +55,12 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
   } = useCaseOverview(caseData, onTimeEntryAdded, onNavigateToCase);
 
   const { data: parties = [] } = useQuery<Party[]>(
-      [STORES.CASES, caseData.id, 'parties'],
+      ['cases', caseData.id, 'parties'],
       () => DataService.cases.getParties(caseData.id),
       { initialData: caseData.parties || [] }
   );
   
-  const activeProjects = caseData.projects?.filter(p => p.status === 'Active') || [];
+  const activeProjects = caseData.projects?.filter(p => p.status === 'In Progress') || [];
 
   return (
     <div className="space-y-6">
@@ -71,7 +70,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
           showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal}
           showTransferModal={showTransferModal} setShowTransferModal={setShowTransferModal}
           availableCases={availableCases}
-          onSaveTime={handleSaveTime}
+          onSaveTime={(entry) => handleSaveTime(entry as any)}
           onLinkCase={handleLinkCase}
           onTransfer={handleTransferToAppeal}
       />

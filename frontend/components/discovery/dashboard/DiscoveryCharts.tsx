@@ -6,8 +6,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { useChartTheme } from '../../common/ChartHelpers';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { Loader2 } from 'lucide-react';
 
 // Map theme colors to chart
@@ -29,12 +28,12 @@ const DiscoveryCharts: React.FC = () => {
   const chartTheme = useChartTheme();
   
   const { data: funnelData = [], isLoading: funnelLoading } = useQuery<FunnelDataItem[]>(
-      [STORES.DISCOVERY_FUNNEL_STATS, 'main'],
+      ['discovery-funnel-stats', 'main'],
       DataService.discovery.getFunnelStats as never
   );
   
   const { data: custodianData = [], isLoading: custodianLoading } = useQuery<CustodianDataItem[]>(
-      [STORES.DISCOVERY_CUSTODIAN_STATS, 'main'],
+      ['discovery-custodian-stats', 'main'],
       DataService.discovery.getCustodianStats as never
   );
 

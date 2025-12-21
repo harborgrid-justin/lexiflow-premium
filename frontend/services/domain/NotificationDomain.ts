@@ -1,10 +1,11 @@
 ﻿/**
  * NotificationDomain - Real-time notification and alert service
  * Provides notification management, read/unread tracking, and channel subscriptions
+ * 
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { communicationsApi } from '../api/domains/communications.api';
 import { delay } from '../../utils/async';
 
 interface Notification {
@@ -21,22 +22,27 @@ interface Notification {
 const SUBSCRIPTIONS_KEY = 'lexiflow_notification_subscriptions';
 
 export const NotificationService = {
-  getAll: async () => db.getAll(STORES.NOTIFICATIONS),
-  getById: async (id: string) => db.get(STORES.NOTIFICATIONS, id),
-  add: async (item: any) => db.put(STORES.NOTIFICATIONS, { 
-    ...item, 
-    timestamp: item.timestamp || new Date().toISOString(),
-    read: false 
-  }),
-  update: async (id: string, updates: any) => {
-    const existing = await db.get(STORES.NOTIFICATIONS, id);
-    return db.put(STORES.NOTIFICATIONS, { ...existing, ...updates });
+  getAll: async () => communicationsApi.notifications?.getAll?.() || [],
+  getById: async (id: string) => communicationsApi.notifications?.getById?.(id) || null,
+  add: async (item: any) => {
+    const notification = {
+      ...item,
+      timestamp: item.timestamp || new Date().toISOString(),
+      read: false
+    };
+    return communicationsApi.notifications?.create?.(notification) || notification;
   },
-  delete: async (id: string) => db.delete(STORES.NOTIFICATIONS, id),
+  update: async (id: string, updates: any) => {
+    return communicationsApi.notifications?.update?.(id, updates) || { id, ...updates };
+  },
+  delete: async (id: string) => {
+    await communicationsApi.notifications?.delete?.(id);
+    return true;
+  },
   
   // Notification specific methods
   getNotifications: async (filters?: { read?: boolean; type?: string; limit?: number }): Promise<Notification[]> => {
-    let notifications = await db.getAll(STORES.NOTIFICATIONS);
+    let notifications = await communicationsApi.notifications?.getAll?.() || [];
     
     // Apply filters
     if (filters?.read !== undefined) {
@@ -71,12 +77,12 @@ export const NotificationService = {
   
   markAllAsRead: async (): Promise<boolean> => {
     try {
-      const notifications = await db.getAll(STORES.NOTIFICATIONS);
+      const notifications = await communicationsApi.notifications?.getAll?.() || [];
       const unread = notifications.filter((n: Notification) => !n.read);
       
       await Promise.all(
         unread.map((n: Notification) => 
-          db.put(STORES.NOTIFICATIONS, { ...n, read: true })
+          communicationsApi.notifications?.update?.(n.id, { read: true })
         )
       );
       
@@ -87,7 +93,7 @@ export const NotificationService = {
   },
   
   getUnreadCount: async (): Promise<number> => {
-    const notifications = await db.getAll(STORES.NOTIFICATIONS);
+    const notifications = await communicationsApi.notifications?.getAll?.() || [];
     return notifications.filter((n: Notification) => !n.read).length;
   },
   

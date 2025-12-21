@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useProgress
  * @category Hooks
  * @description Track operation progress with ETA calculation and step management.

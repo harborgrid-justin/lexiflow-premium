@@ -6,7 +6,7 @@ import { StatusBadge } from '../../../common/RefactoredCommon';
 import { Database, Clock, Download, Archive } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { BackupSnapshot, SnapshotType } from '../../../../types';
+import { BackupSnapshot } from '../../../../services/api/data-platform/backups-api';
 
 interface SnapshotListProps {
   snapshots: BackupSnapshot[];
@@ -17,7 +17,7 @@ interface SnapshotListProps {
 export const SnapshotList: React.FC<SnapshotListProps> = ({ snapshots, isLoading, onRestore }) => {
   const { theme } = useTheme();
 
-  const getSnapshotIcon = (type: SnapshotType) => {
+  const getSnapshotIcon = (type: string) => {
       if (type === 'Full') return <Database className="h-4 w-4 text-purple-600" />;
       return <Clock className="h-4 w-4 text-blue-600" />;
   };
@@ -50,7 +50,7 @@ export const SnapshotList: React.FC<SnapshotListProps> = ({ snapshots, isLoading
                             </div>
                         </TableCell>
                         <TableCell>{snap.type}</TableCell>
-                        <TableCell className={cn("text-xs", theme.text.secondary)}>{new Date(snap.created).toLocaleString()}</TableCell>
+                        <TableCell className={cn("text-xs", theme.text.secondary)}>{new Date(snap.createdAt).toLocaleString()}</TableCell>
                         <TableCell className="font-mono text-xs">{snap.size}</TableCell>
                         <TableCell><StatusBadge status={snap.status}/></TableCell>
                         <TableCell className="text-right">

@@ -27,6 +27,7 @@ import { useModalState } from '../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { Scheduler } from '../../utils/scheduler';
 import { cn } from '../../utils/cn';
@@ -323,4 +324,5 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
     </div>
   );
 };
+
 

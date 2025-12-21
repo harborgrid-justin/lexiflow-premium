@@ -9,6 +9,7 @@ import { DataService } from '../../services/data/dataService';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { useWindow } from '../../context/WindowContext';
@@ -217,4 +218,5 @@ export const BillingLedger: React.FC = () => {
     </div>
   );
 };
+
 

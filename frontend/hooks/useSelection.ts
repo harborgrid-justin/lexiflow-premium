@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useSelection
  * @category Hooks - UI Utilities
  * @description Multi-select hook with single toggle, range selection (Shift+Click), and select all

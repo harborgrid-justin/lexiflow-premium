@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useAdaptiveLoading
  * @category Hooks
  * @description Smart loading state management with stale-while-revalidate pattern.

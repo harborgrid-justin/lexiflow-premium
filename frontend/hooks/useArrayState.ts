@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useArrayState.ts
  * 
  * Reusable hook for managing array state with common operations

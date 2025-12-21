@@ -13,6 +13,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useModalState } from '../../hooks';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { filterRules } from './utils';
@@ -193,3 +194,4 @@ export const JurisdictionLocalRules: React.FC = () => {
     </div>
   );
 };
+

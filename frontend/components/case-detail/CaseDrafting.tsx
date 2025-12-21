@@ -23,6 +23,7 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '../../services/features/research/geminiService';
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { cn } from '../../utils/cn';
 
@@ -167,4 +168,5 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
     </div>
   );
 };
+
 

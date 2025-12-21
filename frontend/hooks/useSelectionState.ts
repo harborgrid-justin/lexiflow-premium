@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useSelection.ts
  * 
  * Reusable hook for managing item selection state

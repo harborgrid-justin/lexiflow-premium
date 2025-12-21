@@ -8,6 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 export const NotificationCenter: React.FC = () => {
@@ -86,4 +87,5 @@ export const NotificationCenter: React.FC = () => {
     </div>
   );
 };
+
 

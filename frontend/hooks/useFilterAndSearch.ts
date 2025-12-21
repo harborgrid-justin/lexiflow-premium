@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useFilterAndSearch.ts
  * 
  * Reusable hook for filtering and searching collections

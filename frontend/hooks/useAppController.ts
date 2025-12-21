@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useAppController
  * @category Hooks - Application
  * @description Main application controller hook managing navigation, case selection, user context, global search,
@@ -18,7 +18,7 @@ import { useState, useCallback, useEffect, useTransition, useRef } from 'react';
 import { DataService } from '../services/data/dataService';
 import { ModuleRegistry } from '../services/infrastructure/moduleRegistry';
 import { HolographicRouting } from '../services/infrastructure/holographicRouting';
-import { db, STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 import { Seeder } from '../services/data/dbSeeder';
 import { queryClient } from '../services/infrastructure/queryClient';
 import { GlobalSearchResult } from '../services/search/searchService';
@@ -102,7 +102,7 @@ export const useAppController = () => {
                         });
                         apiClient.setAuthTokens(loginResponse.accessToken, loginResponse.refreshToken);
                         setIsAuthenticated(true);
-                        console.log('✅ Auto-login successful');
+                        console.log('âœ… Auto-login successful');
                     } else {
                         setIsAuthenticated(true);
                     }
@@ -114,17 +114,20 @@ export const useAppController = () => {
                     window.location.reload();
                 }
             } else {
-                // IndexedDB mode
-                await db.init();
+                // IndexedDB mode (DEPRECATED - for development only)
+                console.warn('IndexedDB mode is deprecated. Please use backend API.');
+                // TODO: Remove IndexedDB fallback once backend is fully integrated
                 setIsAppLoading(false);
                 
-                const count = await db.count(STORES.CASES);
-                if (count === 0) {
-                    addToast('Setting up for first-time use...', 'info');
-                    Seeder.seed(db).then(() => {
-                        addToast('Initial data loaded!', 'success');
-                        queryClient.invalidate(''); 
-                    }).catch(e => console.error("Seeding failed", e));
+                // Check if data exists via backend API
+                try {
+                    const casesCount = await DataService.cases.getAll().then(cases => cases.length);
+                    if (casesCount === 0) {
+                        addToast('No data found. Backend seeding may be required.', 'info');
+                    }
+                } catch (e) {
+                    console.error("Failed to check for existing data", e);
+                    addToast('Unable to connect to backend API', 'error');
                 }
             }
         } catch (e) {

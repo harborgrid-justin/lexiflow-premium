@@ -28,6 +28,7 @@ import { Case } from '../../types';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { WorkflowView } from './types';
 
@@ -232,4 +233,5 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
     </ErrorBoundary>
   );
 };
+
 

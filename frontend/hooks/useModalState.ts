@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useModalState.ts
  * 
  * Reusable hook for managing modal open/close state

@@ -36,6 +36,7 @@ import { useToggle } from '../../hooks/useToggle';
 import { CaseId, TrialExhibit } from '../../types';
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { getTodayString } from '../../utils/dateUtils';
@@ -241,3 +242,4 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
     </div>
   );
 };
+

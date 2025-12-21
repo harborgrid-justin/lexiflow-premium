@@ -20,6 +20,7 @@ import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X 
 import { DocumentService } from '../../../services/features/documents/documentService';
 import { DataService } from '../../../services/data/dataService';
 import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 
@@ -195,3 +196,4 @@ export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({
     </div>
   );
 };
+

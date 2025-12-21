@@ -32,6 +32,7 @@ import { useWindow } from '../../context/WindowContext';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -189,3 +190,4 @@ export const DiscoveryDepositions: React.FC = () => {
 };
 
 export default DiscoveryDepositions;
+

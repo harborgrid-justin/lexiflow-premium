@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useDocumentManager
  * @category Hooks - Document Management
  * @description Enterprise document management hook with worker-based full-text search, folder/module filtering,
@@ -24,7 +24,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { DataService } from '../services/data/dataService';
 import { DocumentService } from '../services/features/documents/documentService';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 
 // Hooks & Context
 import { useWorkerSearch } from './useWorkerSearch';
@@ -61,7 +61,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
 
   // Enterprise Data Access
   const { data: documents = [], isLoading } = useQuery<LegalDocument[]>(
-    [STORES.DOCUMENTS, 'all'],
+    queryKeys.documents.all(),
     () => DataService.documents.getAll()
   );
 
@@ -91,7 +91,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
         return DataService.documents.update(payload.id, payload.updates);
     },
     {
-        invalidateKeys: [[STORES.DOCUMENTS, 'all']],
+        invalidateKeys: [queryKeys.documents.all()],
         // Optimistic Update support could be added here for even faster UI
     }
   );
@@ -106,7 +106,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
 
   // Compatibility layer for legacy components that set state manually
   const setDocuments = (newDocs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])) => {
-      queryClient.setQueryData([STORES.DOCUMENTS, 'all'], newDocs);
+      queryClient.setQueryData(queryKeys.documents.all(), newDocs);
   };
 
   const handleRestore = async (version: DocumentVersion) => {
@@ -207,7 +207,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
             caseId: 'General' as CaseId
           });
         }
-        queryClient.invalidate([STORES.DOCUMENTS, 'all']);
+        queryClient.invalidate(queryKeys.documents.all());
         notify.success(`Uploaded ${e.dataTransfer.files.length} document${e.dataTransfer.files.length > 1 ? 's' : ''}.`);
       } catch (error) {
         notify.error("Failed to upload dropped files.");

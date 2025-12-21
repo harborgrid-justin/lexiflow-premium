@@ -1,8 +1,8 @@
-/**
+﻿/**
  * @module hooks/useSort
  * @category Hooks - Data Utilities
  * @description Sorting hook with configurable initial key and direction. Provides memoized sorted
- * items array and requestSort function for toggling sort direction (asc ↔ desc) on column clicks.
+ * items array and requestSort function for toggling sort direction (asc â†” desc) on column clicks.
  * Uses Array.sort with generic comparison logic.
  * 
  * NO THEME USAGE: Utility hook for sorting logic

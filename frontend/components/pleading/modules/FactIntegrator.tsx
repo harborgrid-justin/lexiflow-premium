@@ -3,6 +3,7 @@ import React from 'react';
 import { TimelineEvent } from '../../../types';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
 import { Flag, Calendar, Plus, Loader2, Link } from 'lucide-react';
@@ -69,3 +70,4 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
     </div>
   );
 };
+

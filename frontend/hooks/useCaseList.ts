@@ -1,9 +1,9 @@
-
+﻿
 import { useState, useMemo } from 'react';
 import { DataService } from '../services/data/dataService';
 import { Case } from '../types';
 import { useQuery } from '../hooks/useQueryHooks';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 import { useDebounce } from './useDebounce';
 import { useModalState } from './useModalState';
 import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
@@ -25,7 +25,7 @@ export const useCaseList = () => {
     isLoading, 
     isError 
   } = useQuery<Case[] | { data: Case[] }>(
-    [STORES.CASES, 'all'], 
+    queryKeys.cases.all(), 
     () => DataService.cases.getAll(),
     { staleTime: 30000 } 
   );

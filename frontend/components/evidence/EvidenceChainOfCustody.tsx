@@ -29,6 +29,7 @@ import { getTodayString } from '../../utils/dateUtils';
 // Services & Types
 import { ChainService } from '../../services/infrastructure/chainService';
 import { useMutation, queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { DataService } from '../../services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
@@ -257,4 +258,5 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
     </div>
   );
 };
+
 

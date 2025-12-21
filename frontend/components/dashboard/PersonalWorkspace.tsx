@@ -19,6 +19,7 @@ import { CheckSquare, ArrowRight, Loader2 } from 'lucide-react';
 // Services & Data
 import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -145,4 +146,5 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
         </div>
     );
 };
+
 

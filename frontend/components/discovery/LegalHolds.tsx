@@ -32,6 +32,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { discoveryQueryKeys } from '../../services/infrastructure/queryKeys';
 import { LegalHoldStatusEnum } from '../../types/enums';
@@ -203,3 +204,4 @@ export const LegalHolds: React.FC = () => {
 };
 
 export default LegalHolds;
+

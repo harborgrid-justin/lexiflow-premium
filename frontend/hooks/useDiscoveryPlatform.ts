@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useDiscoveryPlatform
  * @category Hooks - Discovery
  * @description Discovery platform state management hook with tab navigation, request tracking, deadline
@@ -20,7 +20,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 // Services & Data
 import { DataService } from '../services/data/dataService';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';
@@ -53,7 +53,7 @@ export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string
 
   // Data Fetching
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, caseId || 'all'], 
+      queryKeys.discovery.byCaseId(caseId || 'all'), 
       () => DataService.discovery.getRequests(caseId) 
   );
 
@@ -96,7 +96,7 @@ export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string
 
   const handleSaveResponse = useCallback(async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
-      queryClient.invalidate([STORES.REQUESTS, caseId || 'all']);
+      queryClient.invalidate(queryKeys.discovery.byCaseId(caseId || 'all'));
       notify.success(`Response saved for ${reqId}.`);
       setActiveTab('requests');
   }, [caseId, notify, setActiveTab]);

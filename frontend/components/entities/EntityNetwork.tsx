@@ -19,6 +19,7 @@ import { Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -116,4 +117,5 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
     </div>
   );
 };
+
 

@@ -1,4 +1,5 @@
-import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '../../types';
+﻿import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '../../types';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { ChainService } from '../infrastructure/chainService';
 import { MOCK_API_SPEC } from '../../data/mockApiSpec';

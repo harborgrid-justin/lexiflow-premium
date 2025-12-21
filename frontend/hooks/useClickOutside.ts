@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useClickOutside
  * @category Hooks - UI Utilities
  * @description Detects clicks outside a referenced element and triggers handler callback. Listens

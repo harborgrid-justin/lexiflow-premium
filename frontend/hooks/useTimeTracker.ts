@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useTimeTracker.ts
  * 
  * Custom hook for time tracking functionality

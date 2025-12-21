@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useSecureMessenger
  * @category Hooks - Messaging
  * @description Secure messenger hook managing conversations, messages, contacts, and file attachments

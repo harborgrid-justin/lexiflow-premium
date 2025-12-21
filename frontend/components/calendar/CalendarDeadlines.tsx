@@ -19,6 +19,7 @@ import { AlertCircle } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Components
@@ -101,4 +102,5 @@ export const CalendarDeadlines: React.FC = () => {
     </div>
   );
 };
+
 

@@ -18,6 +18,7 @@ import { Building2, User, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services/Data
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { useQuery } from '../../hooks/useQueryHooks';
 
@@ -106,4 +107,5 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
     </div>
   );
 };
+
 

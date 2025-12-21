@@ -1,5 +1,6 @@
-import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
+﻿import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
 import { delay } from '../../utils/async';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
 

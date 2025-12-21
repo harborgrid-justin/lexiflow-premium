@@ -1,8 +1,9 @@
-/**
+﻿/**
  * OrganizationDomain - Organization and department management service
  * Provides org structure, department hierarchy, and member management
  */
 
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 

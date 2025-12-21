@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useScrollLock
  * @category Hooks - UI Utilities
  * @description Scroll lock hook managing document overflow with lock stacking for nested modals/overlays.

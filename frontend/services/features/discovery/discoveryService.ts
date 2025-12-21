@@ -10,6 +10,7 @@
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // Services & Data
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from './db';
 import { delay } from '../utils/async';
 // Types

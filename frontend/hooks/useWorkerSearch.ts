@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useWorkerSearch
  * @category Hooks - Search
  * @description Worker-based full-text search hook with race condition protection via request IDs. Manages

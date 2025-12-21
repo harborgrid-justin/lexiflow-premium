@@ -19,6 +19,7 @@ import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-r
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -125,4 +126,5 @@ export const SecurityOps: React.FC = () => {
         </div>
     );
 };
+
 

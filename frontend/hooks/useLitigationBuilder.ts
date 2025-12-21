@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useLitigationBuilder
  * @category Hooks - Litigation
  * @description Specialized litigation strategy workflow builder with playbook loading, node/connection
@@ -20,7 +20,7 @@ import { useState, useCallback } from 'react';
 // Services & Data
 import { DataService } from '../services/data/dataService';
 import { useQuery, useMutation } from './useQueryHooks';
-import { STORES } from '../services/data/db';
+import { queryKeys } from '../utils/queryKeys';
 import { GraphValidationService } from '../services/search/graphValidationService';
 import { DateCalculationService } from '../services/infrastructure/dateCalculationService';
 
@@ -60,7 +60,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const notify = useNotify();
 
-  const { data: cases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
+  const { data: cases = [] } = useQuery<Case[]>(queryKeys.cases.all(), () => DataService.cases.getAll());
 
   // Auto-save draft to localStorage
   useAutoSave({

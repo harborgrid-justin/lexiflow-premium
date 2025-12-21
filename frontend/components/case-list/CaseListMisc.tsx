@@ -29,6 +29,7 @@ import { MetricCard } from '../common/Primitives';
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { cn } from '../../utils/cn';
 
@@ -244,3 +245,4 @@ export const CaseListMisc: React.FC = () => {
 };
 
 export default CaseListMisc;
+

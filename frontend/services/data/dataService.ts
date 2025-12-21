@@ -25,6 +25,8 @@ import { RepositoryRegistry } from './repositories/RepositoryRegistry';
 // API & DATABASE
 // ========================================
 import { api, isBackendApiEnabled } from '../api';
+// DEPRECATED: IndexedDB fallback - only used for legacy repository creation
+// TODO: Remove once all repositories migrated to backend API
 import { STORES, db } from './db';
 
 // ========================================

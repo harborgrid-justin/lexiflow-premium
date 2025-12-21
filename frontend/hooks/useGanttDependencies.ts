@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useGanttDependencies
  * @category Hooks
  * @description Manages Gantt chart dependencies with critical path calculation and cascade updates.

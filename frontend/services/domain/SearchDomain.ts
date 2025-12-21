@@ -1,8 +1,9 @@
-/**
+﻿/**
  * SearchDomain - Global search and indexing service
  * Provides full-text search across all entities, recent searches, and document indexing
  */
 
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 

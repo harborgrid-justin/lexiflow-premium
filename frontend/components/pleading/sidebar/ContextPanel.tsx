@@ -6,6 +6,7 @@ import { Button } from '../../common/Button';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DataService } from '../../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { useDebounce } from '../../../hooks/useDebounce';
 import { DocketEntry } from '../../../types';
@@ -217,3 +218,4 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
 };
 
 export default ContextPanel;
+

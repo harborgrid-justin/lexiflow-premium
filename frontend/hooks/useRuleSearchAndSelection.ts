@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useRuleSearchAndSelection
  * @category Hooks - Rules Platform
  * @description Complex rule search and hierarchical navigation hook with debounced search, auto-expansion

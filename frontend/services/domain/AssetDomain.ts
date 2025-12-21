@@ -1,8 +1,9 @@
-/**
+﻿/**
  * AssetDomain - Asset and equipment management service
  * Provides asset tracking, assignment, and maintenance scheduling
  */
 
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useSettlementSimulation.ts
  * 
  * Custom hook for Monte Carlo settlement simulation

@@ -1,4 +1,5 @@
-
+﻿
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 import { CostMetric, CostForecast } from '../../types';

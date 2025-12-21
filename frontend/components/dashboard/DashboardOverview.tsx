@@ -18,6 +18,7 @@ import React, { useState, useEffect } from 'react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Components
@@ -110,4 +111,5 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
     </div>
   );
 };
+
 

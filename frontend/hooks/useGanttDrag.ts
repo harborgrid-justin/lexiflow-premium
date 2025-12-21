@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useGanttDrag
  * @category Hooks - Workflow Management
  * @description Gantt chart drag-and-drop hook with move and resize modes (left/right handles).

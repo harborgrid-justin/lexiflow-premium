@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useNexusGraph
  * @category Hooks - Graph Visualization
  * @description Force-directed graph physics hook using Web Worker for non-blocking simulation. Creates blob

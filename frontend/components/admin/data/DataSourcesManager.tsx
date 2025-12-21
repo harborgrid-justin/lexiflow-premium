@@ -279,7 +279,6 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
     DataService.sources.getConnections,
     {
       staleTime: 0,
-      refetchOnMount: true,
       refetchOnWindowFocus: false,
     }
   );
@@ -808,7 +807,7 @@ const IndexedDBView: React.FC = () => {
     try {
       const data = await db.getAll(storeName);
       console.log(`Loaded ${data?.length || 0} records from ${storeName}:`, data);
-      setStoreData(data || []);
+      setStoreData((data as StoreRecord[]) || []);
     } catch (error) {
       console.error('Error loading store data:', error);
       setStoreData([]);

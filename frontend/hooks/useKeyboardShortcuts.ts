@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useKeyboardShortcuts.ts
  * 
  * React hook for managing keyboard shortcuts in canvas operations.

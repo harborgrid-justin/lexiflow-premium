@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useCaseOverview
  * @category Hooks - Case Management
  * @description Case overview management hook with time tracking, case linking, and appeal transfer workflows.

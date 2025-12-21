@@ -5,7 +5,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../../types';
+import { BackupSnapshot } from '../../../services/api/data-platform/backups-api';
 import { useNotify } from '../../../hooks/useNotify';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { SnapshotList } from './backup/SnapshotList';

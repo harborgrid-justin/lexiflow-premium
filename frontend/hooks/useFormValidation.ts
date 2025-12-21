@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useFormValidation
  * @category Hooks
  * @description Real-time form validation with debounced checks and progress tracking.

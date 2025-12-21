@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useToggle
  * @category Hooks - UI Utilities
  * @description Simple boolean toggle hook with convenience methods for open, close, and toggle

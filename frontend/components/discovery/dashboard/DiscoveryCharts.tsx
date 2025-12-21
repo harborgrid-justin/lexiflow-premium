@@ -6,6 +6,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { useChartTheme } from '../../common/ChartHelpers';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../../services/data/db';
 import { Loader2 } from 'lucide-react';
 
@@ -95,3 +96,4 @@ const DiscoveryCharts: React.FC = () => {
 };
 
 export default DiscoveryCharts;
+

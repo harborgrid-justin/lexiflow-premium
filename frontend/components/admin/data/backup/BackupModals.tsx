@@ -5,12 +5,12 @@ import { Button } from '../../../common/Button';
 import { Clock, Database, AlertCircle } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
-import { BackupSnapshot, SnapshotType } from '../../../../types';
+import { BackupSnapshot } from '../../../../services/api/data-platform/backups-api';
 
 interface CreateSnapshotModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSnapshot: (type: SnapshotType) => void;
+    onSnapshot: (type: string) => void;
     isCreating: boolean;
 }
 
@@ -67,7 +67,7 @@ export const RestoreSnapshotModal: React.FC<RestoreSnapshotModalProps> = ({ snap
                     <div>
                         <h4 className={cn("text-sm font-bold", theme.status.error.text)}>Warning: Destructive Action</h4>
                         <p className={cn("text-xs mt-1", theme.status.error.text)}>
-                            Restoring from <strong>{snapshot.id}</strong> will overwrite current data. Any changes made after {new Date(snapshot.created).toLocaleString()} will be lost.
+                            Restoring from <strong>{snapshot.id}</strong> will overwrite current data. Any changes made after {new Date(snapshot.createdAt).toLocaleString()} will be lost.
                         </p>
                     </div>
                 </div>

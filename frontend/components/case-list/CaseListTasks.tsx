@@ -31,6 +31,7 @@ import { useModalState } from '../../hooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
@@ -197,3 +198,4 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
     </div>
   );
 };
+

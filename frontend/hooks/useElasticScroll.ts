@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useElasticScroll
  * @category Hooks
  * @description Physics-based elastic scrolling with momentum, boundaries, and smooth anchors.

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useBlobRegistry
  * @category Hooks - Memory Management
  * @description Blob URL lifecycle management hook preventing memory leaks from Blob/File object URLs.

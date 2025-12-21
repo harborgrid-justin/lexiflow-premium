@@ -26,6 +26,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { DocumentService } from '../../services/features/documents/documentService';
 import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 import { IntegrationOrchestrator } from '../../services/integration/integrationOrchestrator';
@@ -207,4 +208,5 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
     </div>
   );
 };
+
 

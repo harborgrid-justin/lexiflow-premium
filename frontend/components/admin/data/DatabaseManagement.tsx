@@ -22,7 +22,7 @@ export const DatabaseManagement: React.FC = () => {
       version: 1,
       mode: 'readwrite',
       totalStores: 0,
-      stores: []
+      stores: [] as Array<{ name: string; count: number }>
     });
   });
 

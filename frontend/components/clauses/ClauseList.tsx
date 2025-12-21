@@ -9,6 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { filterClauses } from './clauseList.utils';
 import { useQuery } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 import { VirtualList } from '../common/VirtualList';
 import { EmptyState } from '../common/EmptyState';
@@ -86,4 +87,5 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
     );
 };
 export default ClauseList;
+
 

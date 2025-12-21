@@ -1,8 +1,9 @@
-/**
+﻿/**
  * CollaborationDomain - Team collaboration and workspace management
  * Provides workspaces, comments, invitations, and resource sharing
  */
 
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { db, STORES } from '../data/db';
 import { delay } from '../../utils/async';
 

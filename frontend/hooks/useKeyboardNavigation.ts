@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @module hooks/useKeyboardNavigation
  * @category Hooks - Accessibility
  * @description Keyboard navigation hook for docket entries with arrow keys, Enter, and Space

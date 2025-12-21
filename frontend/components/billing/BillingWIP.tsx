@@ -19,6 +19,7 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
+// TODO: Migrate to backend API - IndexedDB deprecated
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -276,4 +277,5 @@ const BillingWIPComponent: React.FC = () => {
 
 // Export memoized component
 export const BillingWIP = React.memo(BillingWIPComponent);
+
 

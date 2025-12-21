@@ -297,6 +297,7 @@ Object.defineProperties(DataServiceBase, {
   playbooks: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.TEMPLATES)),
   clauses: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.CLAUSES)),
   rules: DataSourceRouter.createPropertyDescriptor(null, () => legacyRepositoryRegistry.getOrCreate(STORES.RULES)),
+  groups: DataSourceRouter.createPropertyDescriptor('groups', () => legacyRepositoryRegistry.getOrCreate('groups')),
   
   // Complex domain services with embedded logic (kept for backward compatibility)
   // TODO: Extract these into proper domain services in future refactoring

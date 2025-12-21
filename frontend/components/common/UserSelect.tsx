@@ -24,7 +24,6 @@ import { UserAvatar } from './UserAvatar';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
-import { MOCK_USERS } from '../../data/models/user';
 
 // ============================================================================
 // TYPES & INTERFACES

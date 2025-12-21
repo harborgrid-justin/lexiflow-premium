@@ -28,7 +28,7 @@ import { Button } from '../common/Button';
 import { cn } from '../../utils/cn';
 
 // Types
-import type { WarRoomData } from '../../types';
+import type { WarRoomData, LegalDocument } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -44,7 +44,7 @@ interface BinderSection {
   id: string;
   title: string;
   icon: React.ElementType;
-  documents: any[];
+  documents: LegalDocument[];
 }
 
 // ============================================================================

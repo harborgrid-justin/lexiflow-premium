@@ -9,6 +9,7 @@ import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '../common/Tabs';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
+import type { ThemeTokens } from '../../theme/tokens';
 
 // ============================================================================
 // TYPES
@@ -16,14 +17,14 @@ import { cn } from '../../utils/cn';
 type WorkflowTab = 'tasks' | 'dependencies' | 'approvals' | 'history';
 
 interface KPIDashboardProps {
-  theme: any;
+  theme: ThemeTokens;
 }
 
 interface WorkflowContentProps {
   activeTab: WorkflowTab;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
-  theme: any;
+  theme: ThemeTokens;
 }
 
 // ============================================================================
@@ -31,7 +32,7 @@ interface WorkflowContentProps {
 // ============================================================================
 const WORKFLOW_TABS: WorkflowTab[] = ['tasks', 'dependencies', 'approvals', 'history'];
 
-const TAB_COMPONENTS: Record<WorkflowTab, React.FC<any>> = {
+const TAB_COMPONENTS: Record<WorkflowTab, React.FC<Record<string, unknown>>> = {
   tasks: ParallelTasksManager,
   dependencies: TaskDependencyManager,
   approvals: ApprovalWorkflow,

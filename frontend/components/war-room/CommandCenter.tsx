@@ -48,7 +48,7 @@ interface CommandCenterProps {
   /** The comprehensive data object for the war room. */
   warRoomData: WarRoomData;
   /** Callback function to handle navigation to other views. */
-  onNavigate: (view: string, context?: any) => void;
+  onNavigate: (view: string, context?: Record<string, unknown>) => void;
 }
 
 // ============================================================================

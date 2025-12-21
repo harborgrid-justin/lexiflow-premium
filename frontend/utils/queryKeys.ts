@@ -343,6 +343,26 @@ export const queryKeys = {
     approvals: () => ['workflows', 'approvals'] as const,
     analytics: () => ['workflows', 'analytics'] as const,
   },
+
+  // Playbooks
+  playbooks: {
+    all: () => ['playbooks', 'all'] as const,
+    detail: (id: string) => ['playbooks', 'detail', id] as const,
+    byType: (type: string) => ['playbooks', 'byType', type] as const,
+  },
+
+  // Organizations
+  organizations: {
+    all: () => ['organizations', 'all'] as const,
+    detail: (id: string) => ['organizations', 'detail', id] as const,
+  },
+
+  // Groups
+  groups: {
+    all: () => ['groups', 'all'] as const,
+    detail: (id: string) => ['groups', 'detail', id] as const,
+    byOrganization: (orgId: string) => ['groups', 'byOrganization', orgId] as const,
+  },
 } as const;
 
 /**

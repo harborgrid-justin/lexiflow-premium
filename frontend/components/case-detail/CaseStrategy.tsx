@@ -55,14 +55,14 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   
   const strategyModal = useModalState();
   const [modalType, setModalType] = useState<'Citation' | 'Argument' | 'Defense'>('Citation');
-  const [newItem, setNewItem] = useState<any>({});
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [newItem, setNewItem] = useState<Partial<Citation | LegalArgument | Defense>>({});
+  const [editingItem, setEditingItem] = useState<Citation | LegalArgument | Defense | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{type: string; id: string} | null>(null);
 
   // Mutation for saving strategy items
   const { mutate: saveStrategyItem, isLoading: isSaving } = useMutation(
-    async ({ type, item }: { type: string; item: any }) => {
+    async ({ type, item }: { type: string; item: Citation | LegalArgument | Defense }) => {
       const itemWithMeta = {
         ...item,
         type,
@@ -125,10 +125,10 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     }
 
     const id = editingItem?.id || crypto.randomUUID();
-    let itemToSave: any;
+    let itemToSave: Citation | LegalArgument | Defense;
 
     if (modalType === 'Citation') {
-      itemToSave = { ...newItem, id, relevance: newItem.relevance || 'Medium' as const };
+      itemToSave = { ...newItem, id, relevance: newItem.relevance || 'Medium' as const } as Citation;
       if (editingItem) {
         setCitations(citations.map(c => c.id === id ? itemToSave : c));
       } else {
@@ -165,7 +165,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     setEditingItem(null);
   };
 
-  const handleEdit = (type: 'Citation' | 'Argument' | 'Defense', item: any) => {
+  const handleEdit = (type: 'Citation' | 'Argument' | 'Defense', item: Citation | LegalArgument | Defense) => {
     setModalType(type);
     setEditingItem(item);
     setNewItem(item);

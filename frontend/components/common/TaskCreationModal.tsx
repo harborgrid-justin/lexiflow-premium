@@ -20,7 +20,7 @@ import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
 import { queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-import { MOCK_USERS } from '../../data/models/user';
+import { useQuery } from '../../hooks/useQueryHooks';
 
 // Hooks & Context
 import { useNotify } from '../../hooks/useNotify';
@@ -33,7 +33,7 @@ import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
 
 // Types
-import { WorkflowTask, TaskId, ProjectId, CaseId } from '../../types';
+import { WorkflowTask, TaskId, ProjectId, CaseId, User } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -53,6 +53,13 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   isOpen, onClose, initialTitle, relatedModule, relatedItemId, relatedItemTitle, projects = [], onSave 
 }) => {
   const notify = useNotify();
+  
+  // Fetch users from backend API
+  const { data: users = [] } = useQuery<User[]>(
+    queryKeys.users.all(),
+    () => DataService.users.getAll()
+  );
+  
   const [task, setTask] = useState<Partial<WorkflowTask>>({
     title: initialTitle || '',
     priority: 'Medium',
@@ -118,7 +125,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                   label="Assignee"
                   value={task.assignee || ''}
                   onChange={(val) => setTask({...task, assignee: val})}
-                  options={MOCK_USERS}
+                  options={users}
                 />
             </div>
             <div>

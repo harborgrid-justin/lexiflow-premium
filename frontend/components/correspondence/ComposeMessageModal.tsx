@@ -5,8 +5,7 @@ import { Button } from '../common/Button';
 import { Input, TextArea } from '../common/Inputs';
 import { UserSelect } from '../common/UserSelect';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
-import { CommunicationItem, CommunicationType, UserId } from '../../types';
-import { MOCK_USERS } from '../../data/models/user';
+import { CommunicationItem, CommunicationType, UserId, User } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
@@ -30,6 +29,13 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
   const { theme } = useTheme();
   const notify = useNotify();
   const { registerBlob, getBlob, removeBlob } = useBlobRegistry();
+  
+  // Fetch users from backend API
+  const { data: users = [] } = useQuery<User[]>(
+    queryKeys.users.all(),
+    () => DataService.users.getAll()
+  );
+  
   const [formData, setFormData] = useState<Partial<CommunicationItem>>({
     type: 'Email',
     direction: 'Outbound',

@@ -6,13 +6,19 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import { SimulationEngine } from '../utils/simulationEngine';
+import { SimulationEngine, SimulationMetrics as EngineMetrics } from '../utils/simulationEngine';
 import { Scheduler } from '../utils/scheduler';
 
 interface SimulationMetrics {
   ev: number;    // Expected value
   p25: number;   // 25th percentile (conservative)
   p75: number;   // 75th percentile (aggressive)
+}
+
+interface SimulationResult {
+  range: string;
+  count: number;
+  value: number;
 }
 
 interface SimulationParams {
@@ -41,7 +47,7 @@ export const useSettlementSimulation = (options: UseSettlementSimulationOptions 
   });
 
   const [isCalculating, setIsCalculating] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SimulationResult[]>([]);
   const [metrics, setMetrics] = useState<SimulationMetrics>({ 
     ev: 0, 
     p25: 0, 

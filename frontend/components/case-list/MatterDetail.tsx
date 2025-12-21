@@ -17,7 +17,7 @@ import {
   AlertCircle,
   Clock
 } from 'lucide-react';
-import { MatterForm } from './MatterForm';
+import { MatterForm } from './matter-form';
 import { PATHS } from '../../config/paths.config';
 
 export const MatterDetail: React.FC = () => {

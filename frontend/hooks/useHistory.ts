@@ -135,12 +135,12 @@ export function useHistory<T>({
  * Factory functions for common text editing commands
  */
 export const TextCommands = {
-  updateContent: <T extends { content: string }>(
+  updateContent: <T extends { content: string }, TState = unknown>(
     id: string,
     newContent: string,
-    getSectionById: (state: any, id: string) => T | undefined,
-    updateSection: (state: any, id: string, updates: Partial<T>) => any
-  ): HistoryCommand<any> => {
+    getSectionById: (state: TState, id: string) => T | undefined,
+    updateSection: (state: TState, id: string, updates: Partial<T>) => TState
+  ): HistoryCommand<TState> => {
     let oldContent: string;
 
     return {

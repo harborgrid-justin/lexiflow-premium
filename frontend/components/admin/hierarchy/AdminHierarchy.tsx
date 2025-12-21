@@ -8,14 +8,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
 import { queryKeys } from '../../../utils/queryKeys';
-
-// Directly import from models
-import { MOCK_ORGS } from '../../../data/models/organization';
-import { MOCK_GROUPS } from '../../../data/models/group';
-import { MOCK_USERS } from '../../../data/models/user';
 
 export const AdminHierarchy: React.FC = () => {
   const { theme } = useTheme();
@@ -23,34 +16,25 @@ export const AdminHierarchy: React.FC = () => {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
-  // Enterprise Data Access - Using MOCK_ORGS, MOCK_GROUPS, MOCK_USERS directly for demo
-  const { data: orgs = MOCK_ORGS, isLoading: loadingOrgs } = useQuery<Organization[]>(
-      [STORES.ORGS, 'all'],
-      DataService.organization.getOrgs // This service will likely use the same mock data or actual DB in prod
+  // Fetch organizations from backend API
+  const { data: orgs = [], isLoading: loadingOrgs } = useQuery<Organization[]>(
+    queryKeys.organizations.all(),
+    () => DataService.organizations.getAll()
   );
 
-  const { data: groups = MOCK_GROUPS, isLoading: loadingGroups } = useQuery<Group[]>(
-      [STORES.GROUPS, 'all'],
-      DataService.organization.getGroups // Same here
+  // Fetch groups from backend API
+  const { data: groups = [], isLoading: loadingGroups } = useQuery<Group[]>(
+    queryKeys.groups.all(),
+    () => DataService.groups.getAll()
   );
 
-  // The staff list is currently mocked via HR.getStaff, which itself uses MOCK_STAFF
-  // We explicitly use MOCK_USERS here to simplify the demo and directly link to hierarchical users
-  const staff = MOCK_USERS; 
+  // Fetch users from backend API
+  const { data: users = [], isLoading: loadingUsers } = useQuery<UserType[]>(
+    queryKeys.users.all(),
+    () => DataService.users.getAll()
+  );
 
-  // Transform Staff to User
-  const users: UserType[] = React.useMemo(() => staff.map(s => ({
-      id: s.id,
-      name: s.name,
-      email: s.email,
-      role: s.role,
-      office: 'Main',
-      orgId: 'org-1', // Assuming default org for internal users in mock
-      groupIds: ['g-1'],
-      userType: 'Internal'
-  })), [staff]);
-
-  const isLoading = loadingOrgs || loadingGroups; // Adjusted to not include staffLoading since it's direct mock_users
+  const isLoading = loadingOrgs || loadingGroups || loadingUsers;
 
   // Derived State
   const orgGroups = groups.filter(g => g.orgId === selectedOrgId);

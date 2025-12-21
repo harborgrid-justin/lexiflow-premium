@@ -127,7 +127,10 @@ const createPhysicsWorker = () => {
   return worker;
 };
 
-export const useNexusGraph = (containerRef: React.RefObject<HTMLDivElement>, initialData: { nodes: any[], links: any[] }) => {
+export const useNexusGraph = (
+  containerRef: React.RefObject<HTMLDivElement>, 
+  initialData: { nodes: SimulationNode[], links: { source: string; target: string }[] }
+) => {
   const physicsState = useRef({
     buffer: new Float32Array(0),
     links: [] as NexusLink[],

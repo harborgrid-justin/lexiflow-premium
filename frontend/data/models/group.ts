@@ -1,6 +1,11 @@
 
 import { Group, GroupId, OrgId } from '../../types';
 
+/**
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.groups.getAll() with queryKeys.groups.all() instead
+ * This constant is only for seeding and testing purposes.
+ */
 export const MOCK_GROUPS: Group[] = [
   // LexiFlow Groups
   { id: 'g-1' as GroupId, orgId: 'org-1' as OrgId, name: 'Litigation Team A', description: 'Primary Civil Litigation Unit', permissions: ['case_view', 'case_edit', 'billing_log'] },

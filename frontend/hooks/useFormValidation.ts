@@ -18,11 +18,11 @@ import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
 // TYPES & INTERFACES
 // ============================================================================
 
-export type ValidationRule<T = any> = {
+export type ValidationRule<T = unknown> = {
   /** Rule name for identification */
   name: string;
   /** Validation function returning error message or null */
-  validate: (value: T, allValues?: Record<string, any>) => string | null | Promise<string | null>;
+  validate: (value: T, allValues?: Record<string, unknown>) => string | null | Promise<string | null>;
   /** Debounce delay in milliseconds (default: 300) */
   debounce?: number;
   /** Run validation on mount */

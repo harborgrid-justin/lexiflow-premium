@@ -16,6 +16,11 @@ import { Search, Globe, CheckCircle, Layers } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+// Services & Data
+import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../hooks/useQueryHooks';
+import { queryKeys } from '../../utils/queryKeys';
+
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
@@ -26,7 +31,7 @@ import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
-import { LITIGATION_PLAYBOOKS, Playbook } from '../../data/mockLitigationPlaybooks';
+import { Playbook } from '../../data/mockLitigationPlaybooks';
 import { filterPlaybooks, extractCategories, getDifficultyColor, getDifficultyBorderColor } from './utils';
 
 // Types
@@ -43,11 +48,17 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
 
-  const categories = extractCategories(LITIGATION_PLAYBOOKS);
+  // Fetch playbooks from backend API
+  const { data: playbooks = [], isLoading } = useQuery<Playbook[]>(
+    queryKeys.playbooks.all(),
+    () => DataService.playbooks.getAll()
+  );
+
+  const categories = extractCategories(playbooks);
   
   const filteredPlaybooks = useMemo(() => 
-    filterPlaybooks(LITIGATION_PLAYBOOKS, searchTerm, selectedCategory, selectedDifficulty),
-    [searchTerm, selectedCategory, selectedDifficulty]
+    filterPlaybooks(playbooks, searchTerm, selectedCategory, selectedDifficulty),
+    [playbooks, searchTerm, selectedCategory, selectedDifficulty]
   );
 
   const handleOpenPlaybook = (pb: Playbook) => {
@@ -124,6 +135,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         placeholder="Search 50+ litigation strategies..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        disabled={isLoading}
                     />
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
@@ -131,6 +143,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
+                        disabled={isLoading}
                     >
                         {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
@@ -138,6 +151,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedDifficulty}
                         onChange={(e) => setSelectedDifficulty(e.target.value)}
+                        disabled={isLoading}
                     >
                         <option value="All">All Difficulties</option>
                         <option value="Low">Low Complexity</option>
@@ -150,15 +164,24 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
 
         {/* Content Grid */}
         <div className="flex-1 overflow-hidden p-4 bg-slate-50 dark:bg-black/20">
-            <VirtualGrid 
-                items={filteredPlaybooks}
-                itemHeight={340}
-                itemWidth={320}
-                height="100%"
-                gap={16}
-                renderItem={renderPlaybookCard}
-                emptyMessage="No playbooks match your criteria."
-            />
+            {isLoading ? (
+                <div className={cn("flex items-center justify-center h-full", theme.text.secondary)}>
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p>Loading playbooks...</p>
+                    </div>
+                </div>
+            ) : (
+                <VirtualGrid 
+                    items={filteredPlaybooks}
+                    itemHeight={340}
+                    itemWidth={320}
+                    height="100%"
+                    gap={16}
+                    renderItem={renderPlaybookCard}
+                    emptyMessage="No playbooks match your criteria."
+                />
+            )}
         </div>
     </div>
   );

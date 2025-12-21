@@ -16,7 +16,7 @@ import { useState, useCallback } from 'react';
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useModal = <T = any>(initialState: boolean = false) => {
+export const useModal = <T = unknown>(initialState: boolean = false) => {
   const [isOpen, setIsOpen] = useState(initialState);
   const [data, setData] = useState<T | null>(null);
 

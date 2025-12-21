@@ -39,7 +39,7 @@ export interface MultiSelection<T> {
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useMultiSelection = <T = any>(
+export const useMultiSelection = <T = unknown>(
   initialSelection: T[] = [],
   compareFn: (a: T, b: T) => boolean = (a, b) => a === b
 ): MultiSelection<T> => {
@@ -113,7 +113,7 @@ export interface SingleSelection<T> {
   isSelected: (item: T) => boolean;
 }
 
-export const useSingleSelection = <T = any>(
+export const useSingleSelection = <T = unknown>(
   initialSelection: T | null = null,
   compareFn: (a: T, b: T) => boolean = (a, b) => a === b
 ): SingleSelection<T> => {

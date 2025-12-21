@@ -24,9 +24,10 @@ import { Scheduler } from '../utils/scheduler';
 
 // Types
 import { Conversation, Message, Attachment } from '../types';
+import { Contact } from '../services/api/messaging-api';
 
 // Re-export types for consumers
-export type { Conversation, Message, Attachment };
+export type { Conversation, Message, Attachment, Contact };
 
 // ============================================================================
 // HOOK
@@ -34,7 +35,7 @@ export type { Conversation, Message, Attachment };
 export const useSecureMessenger = () => {
   const [view, setView] = useState<'chats' | 'contacts' | 'files' | 'archived'>('chats');
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [contactsList, setContactsList] = useState<any[]>([]);
+  const [contactsList, setContactsList] = useState<Contact[]>([]);
   const [allFiles, setAllFiles] = useState<Attachment[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');

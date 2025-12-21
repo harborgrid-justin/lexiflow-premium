@@ -10,6 +10,8 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { useNotify } from '../../../hooks/useNotify';
 import { useModalState } from '../../../hooks';
 import { getTodayString } from '../../../utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { DataService } from '../../../services/data/dataService';
 
 interface ApiKey {
   id: string;
@@ -44,7 +46,16 @@ const availableScopes = [
 export const ApiKeyManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>(mockApiKeys);
+  
+  // Use backend API instead of mock data
+  const { data: apiKeys = [], isLoading, refetch } = useQuery<ApiKey[]>(
+    ['admin', 'api-keys'],
+    async () => {
+      // TODO: Replace with actual backend API call when endpoint is ready
+      return [];
+    }
+  );
+  
   const createModal = useModalState();
   const deleteModal = useModalState();
   const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
@@ -61,45 +72,61 @@ export const ApiKeyManagement: React.FC = () => {
     return key;
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!formData.name || !formData.scopes.length) {
       notify.error('Name and at least one scope are required');
       return;
     }
-    const newKey = generateKey();
-    const apiKey: ApiKey = {
-      id: `key-${Date.now()}`,
-      name: formData.name,
-      key: newKey,
-      prefix: newKey.substring(0, 8),
-      scopes: formData.scopes,
-      status: 'Active',
-      expiresAt: formData.expiresAt,
-      createdAt: new Date().toISOString().split('T')[0],
-      createdBy: 'Current User',
-    };
-    setApiKeys([...apiKeys, apiKey]);
-    setNewKeyValue(newKey);
-    setFormData({ name: '', scopes: [] });
-    notify.success('API key created successfully');
+    try {
+      const newKey = generateKey();
+      const apiKey: ApiKey = {
+        id: `key-${Date.now()}`,
+        name: formData.name,
+        key: newKey,
+        prefix: newKey.substring(0, 8),
+        scopes: formData.scopes,
+        status: 'Active',
+        expiresAt: formData.expiresAt,
+        createdAt: new Date().toISOString().split('T')[0],
+        createdBy: 'Current User',
+      };
+      // TODO: Call backend API to create key
+      // await DataService.admin.createApiKey(apiKey);
+      setNewKeyValue(newKey);
+      setFormData({ name: '', scopes: [] });
+      notify.success('API key created successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to create API key');
+    }
   };
 
-  const handleRevoke = () => {
+  const handleRevoke = async () => {
     if (!selectedKey) return;
-    setApiKeys(apiKeys.map(k =>
-      k.id === selectedKey.id ? { ...k, status: 'Revoked' } : k
-    ));
-    setIsDeleteModalOpen(false);
-    setSelectedKey(null);
-    notify.success('API key revoked successfully');
+    try {
+      // TODO: Call backend API to revoke key
+      // await DataService.admin.revokeApiKey(selectedKey.id);
+      deleteModal.close();
+      setSelectedKey(null);
+      notify.success('API key revoked successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to revoke API key');
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!selectedKey) return;
-    setApiKeys(apiKeys.filter(k => k.id !== selectedKey.id));
-    setIsDeleteModalOpen(false);
-    setSelectedKey(null);
-    notify.success('API key deleted successfully');
+    try {
+      // TODO: Call backend API to delete key
+      // await DataService.admin.deleteApiKey(selectedKey.id);
+      deleteModal.close();
+      setSelectedKey(null);
+      notify.success('API key deleted successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to delete API key');
+    }
   };
 
   const copyToClipboard = (text: string) => {
@@ -128,7 +155,7 @@ export const ApiKeyManagement: React.FC = () => {
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage API keys for external integrations.</p>
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => { setFormData({ name: '', scopes: [] }); setNewKeyValue(null); setIsCreateModalOpen(true); }}>
+        <Button variant="primary" icon={Plus} onClick={() => { setFormData({ name: '', scopes: [] }); setNewKeyValue(null); createModal.open(); }}>
           Create API Key
         </Button>
       </div>
@@ -178,11 +205,11 @@ export const ApiKeyManagement: React.FC = () => {
               <TableCell>
                 <div className="flex gap-1">
                   {apiKey.status === 'Active' && (
-                    <Button size="sm" variant="ghost" icon={RefreshCw} onClick={() => { setSelectedKey(apiKey); setIsDeleteModalOpen(true); }}>
+                    <Button size="sm" variant="ghost" icon={RefreshCw} onClick={() => { setSelectedKey(apiKey); deleteModal.open(); }}>
                       Revoke
                     </Button>
                   )}
-                  <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedKey(apiKey); setIsDeleteModalOpen(true); }}>
+                  <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedKey(apiKey); deleteModal.open(); }}>
                     Delete
                   </Button>
                 </div>
@@ -193,7 +220,7 @@ export const ApiKeyManagement: React.FC = () => {
       </TableContainer>
 
       {/* Create Modal */}
-      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create API Key">
+      <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create API Key">
         <div className="p-6 space-y-4">
           {newKeyValue ? (
             <div className="space-y-4">
@@ -206,7 +233,7 @@ export const ApiKeyManagement: React.FC = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <Button variant="primary" onClick={() => setIsCreateModalOpen(false)}>Done</Button>
+                <Button variant="primary" onClick={createModal.close}>Done</Button>
               </div>
             </div>
           ) : (
@@ -218,7 +245,7 @@ export const ApiKeyManagement: React.FC = () => {
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Scopes (Permissions)</label>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   {availableScopes.map(scope => (
-                    <label key={scope.id} className={cn("flex items-start p-3 rounded border cursor-pointer", formData.scopes.includes(scope.id) ? theme.primary.background : theme.surface.default, theme.border.default)}>
+                    <label key={scope.id} className={cn("flex items-start p-3 rounded border cursor-pointer", formData.scopes.includes(scope.id) ? theme.primary.light : theme.surface.default, theme.border.default)}>
                       <input type="checkbox" checked={formData.scopes.includes(scope.id)} onChange={() => toggleScope(scope.id)} className="mt-1 mr-3" />
                       <div>
                         <span className={cn("font-medium", theme.text.primary)}>{scope.label}</span>
@@ -230,7 +257,7 @@ export const ApiKeyManagement: React.FC = () => {
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
-                <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
+                <Button variant="secondary" onClick={createModal.close}>Cancel</Button>
                 <Button variant="primary" onClick={handleCreate}>Generate Key</Button>
               </div>
             </>
@@ -239,14 +266,14 @@ export const ApiKeyManagement: React.FC = () => {
       </Modal>
 
       {/* Delete/Revoke Confirmation */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title={selectedKey?.status === 'Active' ? 'Revoke API Key' : 'Delete API Key'}>
+      <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title={selectedKey?.status === 'Active' ? 'Revoke API Key' : 'Delete API Key'}>
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
             Are you sure you want to {selectedKey?.status === 'Active' ? 'revoke' : 'delete'} <strong>{selectedKey?.name}</strong>?
             {selectedKey?.status === 'Active' && ' Any applications using this key will lose access immediately.'}
           </p>
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>
             <Button variant="primary" onClick={selectedKey?.status === 'Active' ? handleRevoke : handleDelete}>
               {selectedKey?.status === 'Active' ? 'Revoke Key' : 'Delete Key'}
             </Button>

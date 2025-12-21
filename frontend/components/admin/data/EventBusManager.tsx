@@ -142,8 +142,8 @@ export const EventBusManager: React.FC = () => {
                         </code>
                         <Badge
                           variant={
-                            event.status === 'delivered' ? 'green' :
-                            event.status === 'pending' ? 'yellow' : 'red'
+                            event.status === 'delivered' ? 'success' :
+                            event.status === 'pending' ? 'warning' : 'error'
                           }
                         >
                           {event.status}

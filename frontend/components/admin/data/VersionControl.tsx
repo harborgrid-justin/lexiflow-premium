@@ -132,7 +132,7 @@ export const VersionControl: React.FC<VersionControlProps> = ({ initialTab = 'hi
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className={cn("font-semibold", theme.text.primary)}>{entry.action}</span>
-                          <Badge variant="gray">{entry.entity}</Badge>
+                          <Badge variant="neutral">{entry.entity}</Badge>
                           <code className={cn("text-xs", theme.text.tertiary)}>{entry.entityId}</code>
                         </div>
                         <p className={cn("text-sm mb-1", theme.text.secondary)}>{entry.changes}</p>
@@ -181,8 +181,8 @@ export const VersionControl: React.FC<VersionControlProps> = ({ initialTab = 'hi
                             </code>
                             <Badge
                               variant={
-                                branch.status === 'active' ? 'green' :
-                                branch.status === 'merged' ? 'blue' : 'gray'
+                                branch.status === 'active' ? 'success' :
+                                branch.status === 'merged' ? 'info' : 'neutral'
                               }
                             >
                               {branch.status}

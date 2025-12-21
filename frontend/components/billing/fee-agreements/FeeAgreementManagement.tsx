@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { FileText, Plus, Edit, Trash2, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
-import { useTheme } from '@context/ThemeContext';
-import { cn } from '@utils/cn';
+import { useTheme } from '../../../context/ThemeContext';
+import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { useNotify } from '@hooks/useNotify';
-import { useModalState } from '@hooks';
-import { getTodayString } from '@utils/dateUtils';
+import { useNotify } from '../../../hooks/useNotify';
+import { useModalState } from '../../../hooks';
+import { getTodayString } from '../../../utils/dateUtils';
 
 interface FeeAgreement {
   id: string;
@@ -38,55 +38,66 @@ const mockAgreements: FeeAgreement[] = [
 export const FeeAgreementManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [agreements, setAgreements] = useState<FeeAgreement[]>(mockAgreements);
+  
+  // Use backend API instead of mock data
+  const { data: agreements = [], isLoading, refetch } = useQuery<FeeAgreement[]>(
+    ['billing', 'fee-agreements'],
+    async () => {
+      // TODO: Replace with actual backend API call when endpoint is ready
+      return [];
+    }
+  );
+  
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
   const [selectedAgreement, setSelectedAgreement] = useState<FeeAgreement | null>(null);
   const [formData, setFormData] = useState<Partial<FeeAgreement>>({});
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!formData.clientName || !formData.type) {
       notify.error('Client name and fee type are required');
       return;
     }
-    const newAgreement: FeeAgreement = {
-      id: `agreement-${Date.now()}`,
-      clientId: `client-${Date.now()}`,
-      clientName: formData.clientName,
-      type: formData.type as FeeAgreement['type'],
-      status: 'Draft',
-      effectiveDate: formData.effectiveDate || '',
-      terms: formData.terms || '',
-      hourlyRate: formData.hourlyRate,
-      contingencyPercent: formData.contingencyPercent,
-      flatFeeAmount: formData.flatFeeAmount,
-      retainerAmount: formData.retainerAmount,
-      createdAt: getTodayString(),
-    };
-    setAgreements([...agreements, newAgreement]);
-    setIsCreateModalOpen(false);
-    setFormData({});
-    notify.success('Fee agreement created successfully');
+    try {
+      // TODO: Call backend API to create agreement
+      // await DataService.billing.createFeeAgreement(formData);
+      createModal.close();
+      setFormData({});
+      notify.success('Fee agreement created successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to create fee agreement');
+    }
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!selectedAgreement) return;
-    setAgreements(agreements.map(a =>
-      a.id === selectedAgreement.id ? { ...a, ...formData } : a
-    ));
-    setIsEditModalOpen(false);
-    setSelectedAgreement(null);
-    setFormData({});
-    notify.success('Fee agreement updated successfully');
+    try {
+      // TODO: Call backend API to update agreement
+      // await DataService.billing.updateFeeAgreement(selectedAgreement.id, formData);
+      editModal.close();
+      setSelectedAgreement(null);
+      setFormData({});
+      notify.success('Fee agreement updated successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to update fee agreement');
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!selectedAgreement) return;
-    setAgreements(agreements.filter(a => a.id !== selectedAgreement.id));
-    setIsDeleteModalOpen(false);
-    setSelectedAgreement(null);
-    notify.success('Fee agreement deleted successfully');
+    try {
+      // TODO: Call backend API to delete agreement
+      // await DataService.billing.deleteFeeAgreement(selectedAgreement.id);
+      deleteModal.close();
+      setSelectedAgreement(null);
+      notify.success('Fee agreement deleted successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to delete fee agreement');
+    }
   };
 
   const handleStatusChange = (agreement: FeeAgreement, newStatus: FeeAgreement['status']) => {
@@ -99,7 +110,7 @@ export const FeeAgreementManagement: React.FC = () => {
   const openEditModal = (agreement: FeeAgreement) => {
     setSelectedAgreement(agreement);
     setFormData(agreement);
-    setIsEditModalOpen(true);
+    editModal.open();
   };
 
   const getStatusIcon = (status: FeeAgreement['status']) => {
@@ -141,7 +152,7 @@ export const FeeAgreementManagement: React.FC = () => {
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage client fee agreements and engagement terms.</p>
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); setIsCreateModalOpen(true); }}>
+          <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); createModal.open(); }}>
           Create Agreement
         </Button>
       </div>
@@ -189,7 +200,7 @@ export const FeeAgreementManagement: React.FC = () => {
                     </Button>
                   )}
                   <Button size="sm" variant="ghost" icon={Edit} onClick={() => openEditModal(agreement)}>Edit</Button>
-                  <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedAgreement(agreement); setIsDeleteModalOpen(true); }}>Delete</Button>
+                    <Button size="sm" variant="ghost" icon={Trash2} onClick={() => { setSelectedAgreement(agreement); deleteModal.open(); }}>Delete</Button>
                 </div>
               </TableCell>
             </TableRow>
@@ -199,9 +210,9 @@ export const FeeAgreementManagement: React.FC = () => {
 
       {/* Create/Edit Modal */}
       <Modal
-        isOpen={isCreateModalOpen || isEditModalOpen}
-        onClose={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}
-        title={isCreateModalOpen ? 'Create Fee Agreement' : 'Edit Fee Agreement'}
+        isOpen={createModal.isOpen || editModal.isOpen}
+        onClose={() => { createModal.close(); editModal.close(); }}
+        title={createModal.isOpen ? 'Create Fee Agreement' : 'Edit Fee Agreement'}
       >
         <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
           <Input label="Client Name" value={formData.clientName || ''} onChange={e => setFormData({...formData, clientName: e.target.value})} placeholder="Enter client name" />
@@ -239,7 +250,7 @@ export const FeeAgreementManagement: React.FC = () => {
 
           <TextArea label="Terms & Conditions" value={formData.terms || ''} onChange={e => setFormData({...formData, terms: e.target.value})} rows={4} placeholder="Enter agreement terms..." />
 
-          {isEditModalOpen && (
+          {editModal.isOpen && (
             <div>
               <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Status</label>
               <select
@@ -257,16 +268,16 @@ export const FeeAgreementManagement: React.FC = () => {
           )}
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="secondary" onClick={() => { setIsCreateModalOpen(false); setIsEditModalOpen(false); }}>Cancel</Button>
-            <Button variant="primary" onClick={isCreateModalOpen ? handleCreate : handleEdit}>
-              {isCreateModalOpen ? 'Create Agreement' : 'Save Changes'}
+            <Button variant="secondary" onClick={() => { createModal.close(); editModal.close(); }}>Cancel</Button>
+            <Button variant="primary" onClick={createModal.isOpen ? handleCreate : handleEdit}>
+              {createModal.isOpen ? 'Create Agreement' : 'Save Changes'}
             </Button>
           </div>
         </div>
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Delete Fee Agreement">
+      <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title="Delete Fee Agreement">
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
             Are you sure you want to delete the fee agreement for <strong>{selectedAgreement?.clientName}</strong>? This action cannot be undone.

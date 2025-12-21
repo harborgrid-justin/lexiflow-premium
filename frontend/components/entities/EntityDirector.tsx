@@ -19,8 +19,7 @@ import { Search, Plus } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -66,7 +65,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
 
   // Enterprise Data Access
   const { data: entities = [] } = useQuery<LegalEntity[]>(
-      [STORES.ENTITIES, 'all'],
+      ['entities', 'all'],
       DataService.entities.getAll
   );
 

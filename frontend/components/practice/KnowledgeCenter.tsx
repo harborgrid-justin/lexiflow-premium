@@ -19,8 +19,7 @@ import { BookOpen, FileText, GraduationCap, Users, BarChart3 } from 'lucide-reac
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -47,7 +46,7 @@ export const KnowledgeCenter: React.FC = () => {
     const [activeTab, setActiveTab] = useState('wiki');
 
     const { data: cleTracker = [] } = useQuery<any[]>(
-        [STORES.CLE_TRACKING, 'all'],
+        ['cle-tracking', 'all'],
         DataService.operations.getCleTracking
     );
 

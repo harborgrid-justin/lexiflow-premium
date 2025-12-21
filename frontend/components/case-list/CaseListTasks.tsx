@@ -31,8 +31,7 @@ import { useModalState } from '../../hooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -49,7 +48,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const [filter, setFilter] = useState('All');
   const { theme } = useTheme();
 
-  const { data: tasks = [], isLoading, refetch, error } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], () => DataService.tasks.getAll());
+  const { data: tasks = [], isLoading, refetch, error } = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
   
   const { mutate: addTask } = useMutation(DataService.tasks.add, {
       onSuccess: () => queryClient.invalidate(queryKeys.tasks.all())

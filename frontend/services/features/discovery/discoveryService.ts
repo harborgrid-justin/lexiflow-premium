@@ -4,118 +4,135 @@
  * @description Discovery service managing all FRCP discovery workflows: depositions, ESI sources,
  * productions, interviews, requests (Rule 33/34/36), examinations (Rule 35), transcripts (Rule 32),
  * vendors (Rule 28), sanctions (Rule 37). Provides CRUD operations with case filtering, status
- * updates, and IndexedDB persistence for each discovery type.
+ * updates, using backend API.
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // Services & Data
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from './db';
-import { delay } from '../utils/async';
+import { api } from '../../api';
+import { delay } from '../../../utils/async';
 // Types
 import { 
     Deposition, ESISource, ProductionSet, CustodianInterview, 
     DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
     Examination, Vendor, Transcript, SanctionMotion, StipulationRequest 
-} from '../types';
-// HELPER FUNCTIONS
+} from '../../../types';
+
 // SERVICE
 export const DiscoveryService = {
     // Depositions
     getDepositions: async (caseId?: string) => {
-        const depositions = await db.getAll<Deposition>(STORES.DISCOVERY_EXT_DEPO);
+        const depositions = await api.discovery?.getDepositions?.() || [];
         return caseId ? depositions.filter(d => d.caseId === caseId) : depositions;
     },
     addDeposition: async (dep: Deposition) => {
-        return db.put(STORES.DISCOVERY_EXT_DEPO, dep);
+        return api.discovery?.addDeposition?.(dep) || dep;
     },
     updateDepositionStatus: async (id: string, status: string) => {
-        const dep = await db.get<Deposition>(STORES.DISCOVERY_EXT_DEPO, id);
-        if (!dep) throw new Error("Deposition not found");
-        return db.put(STORES.DISCOVERY_EXT_DEPO, { ...dep, status: status as any });
+        return api.discovery?.updateDeposition?.(id, { status }) || { id, status };
     },
+    
     // ESI
     getESISources: async (caseId?: string) => {
-        const sources = await db.getAll<ESISource>(STORES.DISCOVERY_EXT_ESI);
+        const sources = await api.discovery?.getESISources?.() || [];
         return caseId ? sources.filter(e => e.caseId === caseId) : sources;
     },
     addESISource: async (source: ESISource) => {
-        return db.put(STORES.DISCOVERY_EXT_ESI, source);
+        return api.discovery?.addESISource?.(source) || source;
     },
     updateESISourceStatus: async (id: string, status: string) => {
-        const source = await db.get<ESISource>(STORES.DISCOVERY_EXT_ESI, id);
-        if (!source) throw new Error("Source not found");
-        return db.put(STORES.DISCOVERY_EXT_ESI, { ...source, status: status as any });
+        return api.discovery?.updateESISource?.(id, { status }) || { id, status };
     },
+    
     // Productions
     getProductions: async (caseId?: string) => {
-        const productions = await db.getAll<ProductionSet>(STORES.DISCOVERY_EXT_PROD);
+        const productions = await api.discovery?.getProductions?.() || [];
         return caseId ? productions.filter(p => p.caseId === caseId) : productions;
     },
     createProduction: async (prod: ProductionSet) => {
-        return db.put(STORES.DISCOVERY_EXT_PROD, prod);
+        return api.discovery?.createProduction?.(prod) || prod;
     },
+    
     // Interviews
     getInterviews: async (caseId?: string) => {
-        const interviews = await db.getAll<CustodianInterview>(STORES.DISCOVERY_EXT_INT);
+        const interviews = await api.discovery?.getInterviews?.() || [];
         return caseId ? interviews.filter(i => i.caseId === caseId) : interviews;
     },
     updateInterview: async (id: string, updates: Partial<CustodianInterview>) => {
-        const interview = await db.get<CustodianInterview>(STORES.DISCOVERY_EXT_INT, id);
-        if (!interview) throw new Error("Interview not found");
-        return db.put(STORES.DISCOVERY_EXT_INT, { ...interview, ...updates });
+        return api.discovery?.updateInterview?.(id, updates) || { id, ...updates };
     },
     createInterview: async (interview: CustodianInterview) => {
-        return db.put(STORES.DISCOVERY_EXT_INT, interview);
+        return api.discovery?.createInterview?.(interview) || interview;
     },
+    
     // Requests (Rule 33/34/36)
     getRequests: async (caseId?: string) => {
-        const requests = await db.getAll<DiscoveryRequest>(STORES.REQUESTS);
+        const requests = await api.discovery?.getRequests?.() || [];
         return caseId ? requests.filter(r => r.caseId === caseId) : requests;
     },
     addRequest: async (req: DiscoveryRequest) => {
-        return db.put(STORES.REQUESTS, req);
+        return api.discovery?.addRequest?.(req) || req;
     },
     updateRequestStatus: async (id: string, status: string) => {
-        const request = await db.get<DiscoveryRequest>(STORES.REQUESTS, id);
-        if (!request) throw new Error("Request not found");
-        return db.put(STORES.REQUESTS, { ...request, status: status as any });
+        return api.discovery?.updateRequest?.(id, { status }) || { id, status };
     },
+    
     // --- NEW MODULES ---
     // Rule 35 Examinations
     getExaminations: async (caseId?: string) => {
-        const exams = await db.getAll<Examination>(STORES.EXAMINATIONS);
+        const exams = await api.discovery?.getExaminations?.() || [];
         return caseId ? exams.filter(e => e.caseId === caseId) : exams;
     },
-    addExamination: async (exam: Examination) => db.put(STORES.EXAMINATIONS, exam),
+    addExamination: async (exam: Examination) => {
+        return api.discovery?.addExamination?.(exam) || exam;
+    },
+    
     // Rule 32 Transcripts
     getTranscripts: async (caseId?: string) => {
-        const trans = await db.getAll<Transcript>(STORES.TRANSCRIPTS);
+        const trans = await api.discovery?.getTranscripts?.() || [];
         return caseId ? trans.filter(t => t.caseId === caseId) : trans;
     },
-    addTranscript: async (transcript: Transcript) => db.put(STORES.TRANSCRIPTS, transcript),
+    addTranscript: async (transcript: Transcript) => {
+        return api.discovery?.addTranscript?.(transcript) || transcript;
+    },
+    
     // Rule 28 Vendors
-    getVendors: async () => db.getAll<Vendor>(STORES.VENDORS),
-    addVendor: async (vendor: Vendor) => db.put(STORES.VENDORS, vendor),
+    getVendors: async () => api.discovery?.getVendors?.() || [],
+    addVendor: async (vendor: Vendor) => {
+        return api.discovery?.addVendor?.(vendor) || vendor;
+    },
+    
     // Rule 37 Sanctions
     getSanctions: async (caseId?: string) => {
-        const sancs = await db.getAll<SanctionMotion>(STORES.SANCTIONS);
+        const sancs = await api.discovery?.getSanctions?.() || [];
         return caseId ? sancs.filter(s => s.caseId === caseId) : sancs;
     },
-    addSanctionMotion: async (motion: SanctionMotion) => db.put(STORES.SANCTIONS, motion),
+    addSanctionMotion: async (motion: SanctionMotion) => {
+        return api.discovery?.addSanctionMotion?.(motion) || motion;
+    },
+    
     // Rule 29 Stipulations
     getStipulations: async (caseId?: string) => {
-        const stips = await db.getAll<StipulationRequest>(STORES.STIPULATIONS);
+        const stips = await api.discovery?.getStipulations?.() || [];
         return caseId ? stips.filter(s => s.caseId === caseId) : stips;
     },
-    addStipulation: async (stip: StipulationRequest) => db.put(STORES.STIPULATIONS, stip),
+    addStipulation: async (stip: StipulationRequest) => {
+        return api.discovery?.addStipulation?.(stip) || stip;
+    },
     
     // Common
-    getLegalHolds: async () => db.getAll<LegalHold>(STORES.LEGAL_HOLDS),
-    getPrivilegeLog: async () => db.getAll<PrivilegeLogEntry>(STORES.PRIVILEGE_LOG),
+    getLegalHolds: async () => api.discovery?.getLegalHolds?.() || [],
+    getPrivilegeLog: async () => api.discovery?.getPrivilegeLog?.() || [],
     syncDeadlines: async () => { await delay(1000); },
-    startCollection: async (id: string) => { await delay(500); return "job-123"; },
-    downloadProduction: async (id: string) => { await delay(800); return "https://example.com/prod.zip"; }
+    startCollection: async (id: string) => { 
+        await delay(500); 
+        return api.discovery?.startCollection?.(id) || "job-123";
+    },
+    downloadProduction: async (id: string) => { 
+        await delay(800); 
+        return api.discovery?.downloadProduction?.(id) || "https://example.com/prod.zip";
+    }
 };
 

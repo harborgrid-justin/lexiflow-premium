@@ -1,37 +1,20 @@
-﻿
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+﻿/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
 import { delay } from '../../utils/async';
 import { JurisdictionAPI } from '../api/jurisdiction-api';
 
 export const JurisdictionService = {
     getAll: async () => {
-        try {
-            return await JurisdictionAPI.getAll();
-        } catch (error) {
-            console.warn('Backend API unavailable, using IndexedDB fallback');
-            return db.getAll(STORES.JURISDICTIONS);
-        }
+        return await JurisdictionAPI.getAll() || [];
     },
     
     getFederal: async () => {
-        try {
-            return await JurisdictionAPI.getFederal();
-        } catch (error) {
-            console.warn('Backend API unavailable, using IndexedDB fallback');
-            const all = await db.getAll<any>(STORES.JURISDICTIONS);
-            return all.filter((j: any) => j.system === 'Federal');
-        }
+        return await JurisdictionAPI.getFederal() || [];
     },
     
     getState: async () => {
-        try {
-            return await JurisdictionAPI.getState();
-        } catch (error) {
-            console.warn('Backend API unavailable, using IndexedDB fallback');
-            const all = await db.getAll<any>(STORES.JURISDICTIONS);
-            return all.filter((j: any) => j.system === 'State');
-        }
+        return await JurisdictionAPI.getState() || [];
     },
     getRegulatoryBodies: async () => {
         try {

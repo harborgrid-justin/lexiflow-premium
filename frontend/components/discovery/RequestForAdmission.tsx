@@ -8,8 +8,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { DiscoveryRequest } from '../../types';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 export const RequestForAdmission: React.FC = () => {
@@ -17,7 +16,7 @@ export const RequestForAdmission: React.FC = () => {
 
   // Reuse requests store but filter for Admissions
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, 'all'],
+      ['requests', 'all'],
       DataService.discovery.getRequests
   );
 

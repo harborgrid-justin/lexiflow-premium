@@ -29,8 +29,7 @@ import { getTodayString } from '../../utils/dateUtils';
 // Services & Types
 import { ChainService } from '../../services/infrastructure/chainService';
 import { useMutation, queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { DataService } from '../../services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../types';
 import { evidenceQueryKeys } from '../../services/infrastructure/queryKeys';

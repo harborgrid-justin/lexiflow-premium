@@ -8,8 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 export const NotificationCenter: React.FC = () => {
   const { theme } = useTheme();
@@ -42,9 +41,9 @@ export const NotificationCenter: React.FC = () => {
     },
     {
         onSuccess: (id) => {
-            const current = queryClient.getQueryState<SystemNotification[]>([STORES.NOTIFICATIONS, 'all'])?.data || [];
+            const current = queryClient.getQueryState<SystemNotification[]>(queryKeys.notifications.all())?.data || [];
             const updated = current.filter(n => n.id !== id);
-            queryClient.setQueryData([STORES.NOTIFICATIONS, 'all'], updated);
+            queryClient.setQueryData(queryKeys.notifications.all(), updated);
         }
     }
   );

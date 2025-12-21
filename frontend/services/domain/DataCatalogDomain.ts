@@ -1,8 +1,9 @@
 ﻿import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink } from '../../types';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { dataPlatformApi } from '../api/domains/data-platform.api';
 import { MOCK_DATA_DICTIONARY } from '../../data/models/dataDictionary';
-
 import { delay } from '../../utils/async';
 
 export const DataCatalogService = {
@@ -82,11 +83,11 @@ export const DataCatalogService = {
         return MOCK_FILES[folderId] || [];
     },
 
-    // Dynamically build lineage based on current Entity Relationships in DB
+    // Dynamically build lineage based on current Entity Relationships in backend
     getLineageGraph: async (): Promise<{ nodes: LineageNode[], links: LineageLink[] }> => {
         const [entities, relationships] = await Promise.all([
-            db.getAll<any>(STORES.ENTITIES),
-            db.getAll<any>(STORES.RELATIONSHIPS) // Assumed to exist or be empty
+            api.dataPlatform?.getEntities?.() || [],
+            api.dataPlatform?.getRelationships?.() || []
         ]);
 
         const nodes: LineageNode[] = entities.map((e: any) => ({

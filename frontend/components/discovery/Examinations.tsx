@@ -8,8 +8,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { Examination } from '../../types';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { Modal } from '../common/Modal';
 import { Input, TextArea } from '../common/Inputs';
@@ -22,14 +21,14 @@ export const Examinations: React.FC = () => {
   const [newExam, setNewExam] = useState<Partial<Examination>>({});
 
   const { data: exams = [] } = useQuery<Examination[]>(
-      [STORES.EXAMINATIONS, 'all'],
+      ['examinations', 'all'],
       () => DataService.discovery.getExaminations()
   );
 
   const { mutate: addExam } = useMutation(
       DataService.discovery.addExamination,
       {
-          invalidateKeys: [[STORES.EXAMINATIONS, 'all']],
+          invalidateKeys: [['examinations', 'all']],
           onSuccess: () => {
               examModal.close();
               setNewExam({});

@@ -6,8 +6,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { AuditLogEntry } from '../../types';
 import { useQuery, queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { VirtualList } from '../common/VirtualList';
 import { AuditEvent } from './types';
@@ -17,7 +16,7 @@ export const AuditTrailViewer: React.FC = () => {
 
   // Performance Engine: useQuery
   const { data: logs = [], isLoading } = useQuery<AuditLogEntry[]>(
-      [STORES.LOGS, 'all'],
+      queryKeys.logs.all(),
       DataService.admin.getLogs
   );
 

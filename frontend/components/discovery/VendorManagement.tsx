@@ -47,8 +47,7 @@ import { useModalState } from '../../hooks';
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -94,16 +93,16 @@ export const VendorManagement: React.FC = () => {
   // HOOKS - Data Fetching
   // ==========================================================================
   const { data: vendors = [] } = useQuery<Vendor[]>(
-      [STORES.VENDORS, 'all'],
+      ['vendors', 'all'],
       () => DataService.discovery.getVendors()
   );
 
   const { mutate: addVendor } = useMutation(
       DataService.discovery.addVendor,
       {
-          invalidateKeys: [[STORES.VENDORS, 'all']],
+          invalidateKeys: [['vendors', 'all']],
           onSuccess: () => {
-              setIsModalOpen(false);
+              vendorModal.close();
               setNewVendor({});
           }
       }
@@ -151,7 +150,7 @@ export const VendorManagement: React.FC = () => {
         <Button
           variant="primary"
           icon={Plus}
-          onClick={() => setIsModalOpen(true)}
+          onClick={vendorModal.open}
         >
           Add Vendor
         </Button>
@@ -201,10 +200,10 @@ export const VendorManagement: React.FC = () => {
       </TableContainer>
 
       {/* Add Vendor Modal */}
-      {isModalOpen && (
+      {vendorModal.isOpen && (
         <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={vendorModal.isOpen}
+          onClose={vendorModal.close}
           title="Add New Vendor"
         >
           <div className="space-y-4">
@@ -221,13 +220,14 @@ export const VendorManagement: React.FC = () => {
             </div>
 
             <div>
-              <label className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
+              <label htmlFor="vendor-service-type" className={`block text-sm font-medium ${theme.text.primary} mb-1`}>
                 Service Type
               </label>
               <select
+                id="vendor-service-type"
                 className={`w-full h-10 px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all ${theme.surface.input} ${theme.border.default} ${theme.text.primary} ${theme.border.focused}`}
                 value={newVendor.serviceType || 'Court Reporting'}
-                onChange={(e) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as any }))}
+                onChange={(e) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as typeof SERVICE_TYPES[number]['value'] }))}
               >
                 {SERVICE_TYPES.map(type => (
                   <option key={type.value} value={type.value}>{type.label}</option>
@@ -272,7 +272,7 @@ export const VendorManagement: React.FC = () => {
             <div className="flex justify-end gap-2 pt-4">
               <Button
                 variant="secondary"
-                onClick={() => setIsModalOpen(false)}
+                onClick={vendorModal.close}
               >
                 Cancel
               </Button>

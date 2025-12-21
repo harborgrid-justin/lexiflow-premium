@@ -28,8 +28,7 @@ import { Case } from '../../types';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { useNotify } from '../../hooks/useNotify';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { WorkflowView } from './types';
 
 interface MasterWorkflowProps {
@@ -55,12 +54,12 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   
   // Enterprise Data Access
   const { data: cases = [], isLoading: casesLoading, isError: casesError, refetch: refetchCases } = useQuery<Case[]>(
-      [STORES.CASES, 'all'],
+      ['cases', 'all'],
       DataService.cases.getAll
   );
 
   const { data: firmProcesses = [], isLoading: procsLoading, isError: procsError, refetch: refetchProcesses } = useQuery<any[]>(
-      [STORES.PROCESSES, 'all'],
+      ['processes', 'all'],
       async () => {
         // Use WorkflowRepository directly since API service doesn't have getProcesses
         const { WorkflowRepository } = await import('../../services/data/repositories/WorkflowRepository');
@@ -69,7 +68,7 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   );
 
   const { data: tasks = [] } = useQuery<WorkflowTask[]>(
-      [STORES.TASKS, 'all'],
+      ['tasks', 'all'],
       () => DataService.tasks.getAll()
   );
 

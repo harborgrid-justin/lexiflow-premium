@@ -28,15 +28,24 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
+
+// Types
+interface Expert {
+  id: string;
+  name: string;
+  specialty: string;
+  rate: number;
+  readiness: number;
+  reports: number;
+}
 
 export const CaseListExperts: React.FC = () => {
   const { theme } = useTheme();
   
   // Performance Engine: Caching
-  const { data: experts = [], isLoading } = useQuery<any[]>(
-      [STORES.ADVISORS, 'experts'],
+  const { data: experts = [], isLoading } = useQuery<Expert[]>(
+      ['advisors', 'experts'],
       DataService.warRoom.getExperts
   );
 

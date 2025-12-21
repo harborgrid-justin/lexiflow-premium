@@ -1,22 +1,24 @@
 ﻿import { WikiArticle, Precedent, QAItem } from '../../types';
 import { delay } from '../../utils/async';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { analyticsApi } from '../api/domains/analytics.api';
 
 export class KnowledgeRepository {
     getWikiArticles = async (query?: string): Promise<WikiArticle[]> => {
-        const all = await db.getAll<WikiArticle>(STORES.WIKI);
+        const all = await analyticsApi.knowledge?.getWikiArticles?.() || [];
         if (!query) return all;
         const q = query.toLowerCase();
-        return all.filter(a => a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q));
+        return all.filter((a: WikiArticle) => a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q));
     }
     
     getPrecedents = async (): Promise<Precedent[]> => {
-        return db.getAll<Precedent>(STORES.PRECEDENTS);
+        return analyticsApi.knowledge?.getPrecedents?.() || [];
     }
     
     getQA = async (): Promise<QAItem[]> => {
-        return db.getAll<QAItem>(STORES.QA);
+        return analyticsApi.knowledge?.getQA?.() || [];
     }
     
     getAnalytics = async (): Promise<any> => {

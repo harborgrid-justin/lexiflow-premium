@@ -26,8 +26,7 @@ import {
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -113,7 +112,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // DATA FETCHING
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
-      [STORES.CASES, 'all'],
+      ['cases', 'all'],
       DataService.cases.getAll,
       { enabled: !caseId }
   );
@@ -125,7 +124,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   }, [allCasesRaw]);
 
   const { data: trialData, isLoading, isError, error } = useQuery(
-      [STORES.CASES, currentCaseId, 'warRoom'],
+      ['cases', currentCaseId, 'warRoom'],
       async () => {
         const warRoomService = await DataService.warRoom;
         return warRoomService.getData(currentCaseId);

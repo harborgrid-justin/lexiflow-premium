@@ -27,8 +27,7 @@ import { useModalState } from '../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { Scheduler } from '../../utils/scheduler';
 import { cn } from '../../utils/cn';
 
@@ -51,7 +50,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
   const [grouped, setGrouped] = useState<Record<string, Party[]>>({});
   const [deletePartyId, setDeletePartyId] = useState<string | null>(null);
 
-  const { data: orgs = [] } = useQuery<Organization[]>([STORES.ORGS, 'all'], () => DataService.organization.getOrgs());
+  const { data: orgs = [] } = useQuery<Organization[]>(['organizations', 'all'], () => DataService.organization.getOrgs());
 
   useEffect(() => {
     Scheduler.defer(() => {

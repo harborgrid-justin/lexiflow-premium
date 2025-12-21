@@ -29,8 +29,7 @@ import { Card } from '../common/Card';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Types & Interfaces
@@ -41,7 +40,7 @@ export const DocketAnalytics: React.FC = () => {
   
   // Enterprise Data Access
   const { data: entries = [] } = useQuery<DocketEntry[]>(
-      [STORES.DOCKET, 'all'],
+      ['docket', 'all'],
       DataService.docket.getAll
   );
 

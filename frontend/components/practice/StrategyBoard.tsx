@@ -19,8 +19,7 @@ import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-re
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -45,7 +44,7 @@ export const StrategyBoard: React.FC = () => {
     const [activeTab, setActiveTab] = useState('okr');
 
     const { data: okrs = [] } = useQuery<any[]>(
-        [STORES.OKRS, 'all'],
+        ['okrs', 'all'],
         DataService.operations.getOkrs
     );
 

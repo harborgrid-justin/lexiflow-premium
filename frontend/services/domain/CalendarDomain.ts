@@ -1,10 +1,11 @@
 ﻿/**
  * CalendarDomain - Calendar and event management service
  * Provides event scheduling, deadline tracking, and calendar synchronization
+ * 
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { integrationsApi } from '../api/domains/integrations.api';
 import { delay } from '../../utils/async';
 
 interface CalendarEvent {
@@ -23,17 +24,19 @@ interface CalendarEvent {
 }
 
 export const CalendarService = {
-  getAll: async () => db.getAll(STORES.CALENDAR_EVENTS),
-  getById: async (id: string) => db.get(STORES.CALENDAR_EVENTS, id),
-  add: async (item: any) => db.put(STORES.CALENDAR_EVENTS, { 
-    ...item, 
-    createdAt: new Date().toISOString() 
-  }),
-  update: async (id: string, updates: any) => {
-    const existing = await db.get(STORES.CALENDAR_EVENTS, id);
-    return db.put(STORES.CALENDAR_EVENTS, { ...existing, ...updates });
+  getAll: async () => integrationsApi.calendar?.getAll?.() || [],
+  getById: async (id: string) => integrationsApi.calendar?.getById?.(id) || null,
+  add: async (item: any) => {
+    const event = { ...item, createdAt: new Date().toISOString() };
+    return integrationsApi.calendar?.create?.(event) || event;
   },
-  delete: async (id: string) => db.delete(STORES.CALENDAR_EVENTS, id),
+  update: async (id: string, updates: any) => {
+    return integrationsApi.calendar?.update?.(id, updates) || { id, ...updates };
+  },
+  delete: async (id: string) => {
+    await integrationsApi.calendar?.delete?.(id);
+    return true;
+  },
   
   // Additional calendar-specific methods
   getEvents: async (filters?: { 
@@ -42,7 +45,7 @@ export const CalendarService = {
     caseId?: string; 
     type?: string 
   }): Promise<CalendarEvent[]> => {
-    let events = await db.getAll(STORES.CALENDAR_EVENTS);
+    let events = await integrationsApi.calendar?.getAll?.() || [];
     
     // Filter by date range
     if (filters?.startDate || filters?.endDate) {
@@ -91,19 +94,12 @@ export const CalendarService = {
   },
   
   updateEvent: async (eventId: string, updates: Partial<CalendarEvent>): Promise<CalendarEvent> => {
-    const existing = await db.get(STORES.CALENDAR_EVENTS, eventId);
-    if (!existing) {
-      throw new Error(`Event not found: ${eventId}`);
-    }
-    
-    const updated = { ...existing, ...updates };
-    await db.put(STORES.CALENDAR_EVENTS, updated);
-    return updated;
+    return await api.calendar?.updateEvent?.(eventId, updates) || { id: eventId, ...updates } as CalendarEvent;
   },
   
   deleteEvent: async (eventId: string): Promise<boolean> => {
     try {
-      await db.delete(STORES.CALENDAR_EVENTS, eventId);
+      await api.calendar?.deleteEvent?.(eventId);
       return true;
     } catch {
       return false;

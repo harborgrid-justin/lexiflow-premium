@@ -1,10 +1,10 @@
 ﻿/**
  * StrategyDomain - Litigation strategy and risk analysis service
  * Provides strategy creation, risk assessment, and tactical recommendations
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { litigationApi } from '../api/domains/litigation.api';
 import { delay } from '../../utils/async';
 
 interface Strategy {

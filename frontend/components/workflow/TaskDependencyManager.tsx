@@ -6,8 +6,7 @@ import { cn } from '../../utils/cn';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 export const TaskDependencyManager: React.FC = () => {
   const { theme } = useTheme();

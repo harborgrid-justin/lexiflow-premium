@@ -3,8 +3,7 @@ import React from 'react';
 import { Target, GripVertical, CheckCircle, ArrowRight } from 'lucide-react';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../../utils/queryKeys';
 import { Case, LegalArgument } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';

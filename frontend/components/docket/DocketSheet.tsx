@@ -39,8 +39,7 @@ import { useToggle } from '../../hooks/useToggle';
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { IdGenerator } from '../../utils/idGenerator';
 
@@ -65,7 +64,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
 
   // --- ENTERPRISE DATA ACCESS ---
   const { data: docketEntries = [], refetch, isLoading } = useQuery<DocketEntry[]>(
-      [STORES.DOCKET, 'all'],
+      ['docket', 'all'],
       async () => {
         const result = await DataService.docket.getAll();
         // Handle both array and paginated response formats
@@ -78,7 +77,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   );
 
   const { data: casesData = [] } = useQuery<Case[]>(
-      [STORES.CASES, 'all'],
+      ['cases', 'all'],
       async () => {
         const result = await DataService.cases.getAll();
         return Array.isArray(result) ? result : [];
@@ -95,7 +94,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const { mutate: addEntry } = useMutation(
       DataService.docket.add,
       { 
-          invalidateKeys: [[STORES.DOCKET, 'all']],
+          invalidateKeys: [['docket', 'all']],
           onSuccess: () => {
               addModal.close();
           }
@@ -122,7 +121,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const { mutate: deleteEntry } = useMutation(
       DataService.docket.delete,
       {
-          invalidateKeys: [[STORES.DOCKET, 'all']]
+          invalidateKeys: [['docket', 'all']]
       }
   );
 

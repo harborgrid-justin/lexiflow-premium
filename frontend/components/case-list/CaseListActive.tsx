@@ -40,8 +40,7 @@ import { useModalState } from '../../hooks/useModalState';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -133,7 +132,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
     // Wrapped in try-catch to prevent errors from missing API methods
     try {
       if (DataService.documents?.getByCaseId) {
-        queryClient.fetch([STORES.DOCUMENTS, caseId], () => DataService.documents.getByCaseId(caseId));
+        queryClient.fetch(['documents', caseId], () => DataService.documents.getByCaseId(caseId));
       }
     } catch (error) {
       // Silently fail - prefetch is optional

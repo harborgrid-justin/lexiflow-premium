@@ -1,10 +1,10 @@
 ﻿/**
  * DataSourceDomain - External data source integration service
  * Provides connection management, synchronization, and data source testing
+ * ✅ Migrated to backend API (2025-12-21)
  */
 
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+import { dataPlatformApi } from '../api/domains/data-platform.api';
 import { delay } from '../../utils/async';
 
 interface DataSource {

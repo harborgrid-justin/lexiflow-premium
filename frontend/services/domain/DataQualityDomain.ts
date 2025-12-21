@@ -1,9 +1,10 @@
 ﻿
 import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataProfile, Case } from '../../types';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { dataPlatformApi } from '../api/domains/data-platform.api';
 import { yieldToMain } from '../../utils/apiUtils';
-
 import { delay } from '../../utils/async';
 
 export class DataQualityService {

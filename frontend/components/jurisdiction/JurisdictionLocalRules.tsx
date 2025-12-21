@@ -13,8 +13,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useModalState } from '../../hooks';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { filterRules } from './utils';
 
@@ -28,7 +27,7 @@ export const JurisdictionLocalRules: React.FC = () => {
 
   // Enterprise Data Access
   const { data: rules = [] } = useQuery<LegalRule[]>(
-      [STORES.RULES, 'all'],
+      ['rules', 'all'],
       DataService.rules.getAll
   );
 
@@ -47,7 +46,7 @@ export const JurisdictionLocalRules: React.FC = () => {
         }
     },
     {
-        invalidateKeys: [[STORES.RULES, 'all']],
+        invalidateKeys: [['rules', 'all']],
         onSuccess: () => {
             ruleModal.close();
             setEditingRule({});
@@ -57,7 +56,7 @@ export const JurisdictionLocalRules: React.FC = () => {
 
   const { mutate: deleteRule } = useMutation(
       DataService.rules.delete,
-      { invalidateKeys: [[STORES.RULES, 'all']] }
+      { invalidateKeys: [['rules', 'all']] }
   );
 
   const handleSave = () => {

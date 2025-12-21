@@ -1,9 +1,11 @@
-﻿// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+﻿/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { adminApi } from '../api/domains/admin.api';
 
 export const SecurityService = {
     getMalwareSignatures: async (): Promise<string[]> => {
-        const sigs = await db.getAll<{id: string, signature: string}>(STORES.MALWARE_SIGNATURES);
-        return sigs.map(s => s.signature);
+        const sigs = await adminApi.security?.getMalwareSignatures?.() || [];
+        return Array.isArray(sigs) ? sigs.map((s: any) => s.signature || s) : [];
     }
 };

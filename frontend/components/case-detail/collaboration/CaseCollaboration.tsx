@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
@@ -24,8 +24,7 @@ import { useQuery } from '../../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
@@ -41,7 +40,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
 
   // Enterprise Data Access
   const { data: stipulations = [], isLoading: loadingStips } = useQuery<StipulationRequest[]>(
-      [STORES.STIPULATIONS, 'all'], // In real app, filter by caseId
+      ['stipulations', 'all'], // In real app, filter by caseId
       DataService.collaboration.getStipulations,
       { enabled: activeView === 'stipulations' }
   );

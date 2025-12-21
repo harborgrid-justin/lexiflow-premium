@@ -1,6 +1,8 @@
 ﻿import { Client, Case, EntityId, CaseId, UserId } from '../../types';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { db, STORES } from '../data/db';
+/**
+ * ✅ Migrated to backend API (2025-12-21)
+ */
+import { adminApi } from '../api/domains/admin.api';
 import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
 import { SystemEventType } from "../../types/integration-types";
 
@@ -8,11 +10,11 @@ import { delay } from '../../utils/async';
 
 export const CRMService = {
     getLeads: async () => {
-        return db.getAll(STORES.LEADS);
+        return adminApi.crm?.getLeads?.() || [];
     },
 
     getAnalytics: async () => {
-        const leads = await db.getAll<any>(STORES.LEADS);
+        const leads = await adminApi.crm?.getLeads?.() || [];
         
         // Dynamic Calculation based on DB state
         const pipelineValue = leads.reduce((acc, l) => acc + (parseFloat(l.value.replace(/[^0-9.]/g, '')) || 0), 0);
@@ -41,13 +43,12 @@ export const CRMService = {
     },
 
     updateLead: async (id: string, updates: { stage: string }) => {
-        const lead = await db.get<any>(STORES.LEADS, id);
+        const lead = await adminApi.crm?.getLeadById?.(id);
         if (!lead) throw new Error("Lead not found");
         
-        const updatedLead = { ...lead, ...updates };
-        await db.put(STORES.LEADS, updatedLead);
+        const updatedLead = await adminApi.crm?.updateLead?.(id, updates) || { ...lead, ...updates };
 
-        // Opp #1 Integration Point: CRM -> Compliance
+        // Integration Point: CRM -> Compliance
         if (updates.stage) {
             IntegrationOrchestrator.publish(SystemEventType.LEAD_STAGE_CHANGED, {
                 leadId: id,

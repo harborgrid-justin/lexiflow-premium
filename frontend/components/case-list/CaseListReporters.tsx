@@ -27,14 +27,13 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 export const CaseListReporters: React.FC = () => {
   const { theme } = useTheme();
   
   const { data: reporters = [] } = useQuery(
-      [STORES.REPORTERS, 'all'],
+      ['reporters', 'all'],
       DataService.discovery.getReporters
   );
 

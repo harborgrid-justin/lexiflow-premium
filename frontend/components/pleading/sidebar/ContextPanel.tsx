@@ -6,8 +6,7 @@ import { Button } from '../../common/Button';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../utils/queryKeys';
 import { DataService } from '../../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { useDebounce } from '../../../hooks/useDebounce';
 import { DocketEntry } from '../../../types';
 import { SEARCH_DEBOUNCE_MS } from '../../../config/master.config';
@@ -34,25 +33,25 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
 
   // Fetch case data
   const { data: caseData, isLoading: caseLoading } = useQuery(
-    [STORES.CASES, caseId],
+    ['cases', caseId],
     () => DataService.cases.getById(caseId)
   );
 
   // Fetch evidence for the case
   const { data: evidence = [], isLoading: evidenceLoading } = useQuery<any[]>(
-    [STORES.EVIDENCE, caseId],
+    ['evidence', caseId],
     () => DataService.evidence.getByCaseId(caseId)
   );
 
   // Fetch docket entries
   const { data: docketEntries = [], isLoading: docketLoading } = useQuery<DocketEntry[]>(
-    [STORES.DOCKET, caseId],
+    ['docket', caseId],
     () => DataService.docket.getByCaseId(caseId)
   );
 
   // Fetch documents
   const { data: documents = [], isLoading: documentsLoading } = useQuery<any[]>(
-    [STORES.DOCUMENTS, caseId],
+    ['documents', caseId],
     () => DataService.documents?.getByCaseId?.(caseId) || Promise.resolve([])
   );
 

@@ -8,8 +8,7 @@ import { InterviewModal } from './interviews/InterviewModal';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { useModalState } from '../../hooks';
 
@@ -19,14 +18,14 @@ export const DiscoveryInterviews: React.FC = () => {
 
   // Enterprise Data Access
   const { data: interviews = [] } = useQuery<CustodianInterview[]>(
-      [STORES.DISCOVERY_EXT_INT, 'all'],
+      ['discovery-interviews', 'all'],
       () => DataService.discovery.getInterviews()
   );
 
   const { mutate: createInterview } = useMutation(
       DataService.discovery.createInterview,
       {
-          invalidateKeys: [[STORES.DISCOVERY_EXT_INT, 'all']],
+          invalidateKeys: [['discovery-interviews', 'all']],
           onSuccess: () => interviewModal.close()
       }
   );
@@ -43,6 +42,10 @@ export const DiscoveryInterviews: React.FC = () => {
           notes: newInterview.notes
       });
   };
+
+    // Remove this entire block - not needed with useModalState
+
+    // Remove this - using interviewModal from useModalState instead
 
   return (
     <div className="space-y-6 animate-fade-in">

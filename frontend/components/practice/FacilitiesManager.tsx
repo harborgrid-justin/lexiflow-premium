@@ -19,8 +19,7 @@ import { MapPin, Key, Wrench, Grid, Users, Plus, CheckCircle, AlertTriangle, Loa
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
@@ -45,12 +44,12 @@ export const FacilitiesManager: React.FC = () => {
     const [activeTab, setActiveTab] = useState('locations');
 
     const { data: tickets = [], isLoading: ticketsLoading } = useQuery<any[]>(
-        [STORES.MAINTENANCE_TICKETS, 'all'],
+        ['maintenance-tickets', 'all'],
         DataService.operations.getMaintenanceTickets
     );
     
     const { data: locations = [], isLoading: locationsLoading } = useQuery<any[]>(
-        [STORES.FACILITIES, 'all'],
+        ['facilities', 'all'],
         DataService.operations.getFacilities
     );
 

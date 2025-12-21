@@ -9,8 +9,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { filterClauses } from './clauseList.utils';
 import { useQuery } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { VirtualList } from '../common/VirtualList';
 import { EmptyState } from '../common/EmptyState';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '../../config/master.config';
@@ -25,7 +24,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
     const { data: clauses = [], isLoading } = useQuery<Clause[]>(
-        [STORES.CLAUSES, 'all'],
+        ['clauses', 'all'],
         DataService.clauses.getAll
     );
 

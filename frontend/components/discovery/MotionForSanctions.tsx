@@ -9,8 +9,7 @@ import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
 import { SanctionMotion } from '../../types';
 import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '../../utils/queryKeys';
 import { useModalState } from '../../hooks';
 import { Modal } from '../common/Modal';
@@ -22,14 +21,14 @@ export const MotionForSanctions: React.FC = () => {
   const [newMotion, setNewMotion] = useState<Partial<SanctionMotion>>({});
 
   const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
-      [STORES.SANCTIONS, 'all'],
+      queryKeys.discovery.sanctions(),
       () => DataService.discovery.getSanctions()
   );
 
   const { mutate: addSanction } = useMutation(
       DataService.discovery.addSanctionMotion,
       {
-          invalidateKeys: [[STORES.SANCTIONS, 'all']],
+          invalidateKeys: [queryKeys.discovery.sanctions()],
           onSuccess: () => { sanctionModal.close(); setNewMotion({}); }
       }
   );

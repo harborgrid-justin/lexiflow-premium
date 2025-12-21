@@ -29,8 +29,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '../../utils/cn';
 
 // Types
@@ -51,7 +50,7 @@ export const PleadingFilingQueue: React.FC = () => {
     const notify = useNotify();
 
     const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
-        [STORES.PLEADINGS, 'filing-queue'],
+        ['pleadings', 'filing-queue'],
         async () => {
             const all = await DataService.pleadings.getAll();
             // Filter for finalized pleadings ready for filing
@@ -69,7 +68,7 @@ export const PleadingFilingQueue: React.FC = () => {
             return DataService.pleadings.update(pleadingId, { status: 'Filed' });
         },
         {
-            invalidateKeys: [[STORES.PLEADINGS]],
+            invalidateKeys: [['pleadings']],
             onSuccess: () => notify.success('Filing submitted successfully'),
             onError: () => notify.error('Failed to submit filing')
         }

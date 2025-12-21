@@ -1,16 +1,16 @@
 
 import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
-import { STORES } from '../../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 import { Category } from './EntitySidebar';
 
 export const useAdminData = (activeCategory: Category) => {
   // Independent Queries
-  const usersQuery = useQuery([STORES.USERS, 'all'], () => DataService.users.getAll());
-  const casesQuery = useQuery([STORES.CASES, 'all'], () => DataService.cases.getAll());
-  const clientsQuery = useQuery([STORES.CLIENTS, 'all'], () => DataService.clients.getAll());
-  const clausesQuery = useQuery([STORES.CLAUSES, 'all'], () => DataService.clauses.getAll());
-  const docsQuery = useQuery([STORES.DOCUMENTS, 'all'], () => DataService.documents.getAll());
+  const usersQuery = useQuery(['users', 'all'], () => DataService.users.getAll());
+  const casesQuery = useQuery(['cases', 'all'], () => DataService.cases.getAll());
+  const clientsQuery = useQuery(['clients', 'all'], () => DataService.clients.getAll());
+  const clausesQuery = useQuery(['clauses', 'all'], () => DataService.clauses.getAll());
+  const docsQuery = useQuery(['documents', 'all'], () => DataService.documents.getAll());
 
   const dataMap = {
       users: usersQuery.data || [],
@@ -31,10 +31,10 @@ export const useAdminData = (activeCategory: Category) => {
     {
         onSuccess: (savedItem, variables) => {
             const key = [
-                variables.category === 'users' ? STORES.USERS : 
-                variables.category === 'cases' ? STORES.CASES : 
-                variables.category === 'clients' ? STORES.CLIENTS :
-                variables.category === 'clauses' ? STORES.CLAUSES : STORES.DOCUMENTS,
+                variables.category === 'users' ? 'users' : 
+                variables.category === 'cases' ? 'cases' : 
+                variables.category === 'clients' ? 'clients' :
+                variables.category === 'clauses' ? 'clauses' : 'documents',
                 'all'
             ];
             
@@ -57,10 +57,10 @@ export const useAdminData = (activeCategory: Category) => {
       {
           onSuccess: (id, variables) => {
             const key = [
-                variables.category === 'users' ? STORES.USERS : 
-                variables.category === 'cases' ? STORES.CASES : 
-                variables.category === 'clients' ? STORES.CLIENTS :
-                variables.category === 'clauses' ? STORES.CLAUSES : STORES.DOCUMENTS,
+                variables.category === 'users' ? 'users' : 
+                variables.category === 'cases' ? 'cases' : 
+                variables.category === 'clients' ? 'clients' :
+                variables.category === 'clauses' ? 'clauses' : 'documents',
                 'all'
             ];
             const currentData = queryClient.getQueryState<any[]>(key)?.data || [];

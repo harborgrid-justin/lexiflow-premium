@@ -27,15 +27,14 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 export const CaseListTrust: React.FC = () => {
   const { theme } = useTheme();
   
   // Performance Engine: Caching
   const { data: trustLedger = [], isLoading } = useQuery<any[]>(
-      [STORES.TRUST, 'all'],
+      ['trust', 'all'],
       () => DataService.billing.getTrustAccounts()
   );
 

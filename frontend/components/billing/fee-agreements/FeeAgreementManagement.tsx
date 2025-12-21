@@ -10,6 +10,9 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { useNotify } from '../../../hooks/useNotify';
 import { useModalState } from '../../../hooks';
 import { getTodayString } from '../../../utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '../../../services/data/dataService';
 
 interface FeeAgreement {
   id: string;
@@ -28,24 +31,19 @@ interface FeeAgreement {
   createdAt: string;
 }
 
-const mockAgreements: FeeAgreement[] = [
-  { id: '1', clientId: 'client-1', clientName: 'Acme Corporation', type: 'Hourly', status: 'Active', effectiveDate: '2024-01-01', terms: 'Standard hourly billing at agreed rates', hourlyRate: 450, createdAt: '2023-12-15' },
-  { id: '2', clientId: 'client-2', clientName: 'Smith Family Trust', type: 'Contingency', status: 'Active', effectiveDate: '2024-01-15', terms: '33% of recovery, expenses advanced', contingencyPercent: 33, createdAt: '2024-01-10' },
-  { id: '3', clientId: 'client-3', clientName: 'Tech Startup Inc', type: 'Retainer', status: 'Pending Signature', effectiveDate: '2024-02-01', terms: 'Monthly retainer with rollover hours', retainerAmount: 5000, createdAt: '2024-01-20' },
-  { id: '4', clientId: 'client-4', clientName: 'John Doe', type: 'Flat Fee', status: 'Draft', effectiveDate: '', terms: 'Fixed fee for specific matter', flatFeeAmount: 15000, createdAt: '2024-01-25' },
-];
+/**
+ * @deprecated Mock data - use backend API via DataService.feeAgreements
+ */
+const mockAgreements: FeeAgreement[] = [];
 
 export const FeeAgreementManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   
-  // Use backend API instead of mock data
+  // Fetch fee agreements from backend API
   const { data: agreements = [], isLoading, refetch } = useQuery<FeeAgreement[]>(
-    ['billing', 'fee-agreements'],
-    async () => {
-      // TODO: Replace with actual backend API call when endpoint is ready
-      return [];
-    }
+    queryKeys.billing.feeAgreements?.() || ['billing', 'feeAgreements'],
+    () => DataService.feeAgreements.getAll()
   );
   
   const createModal = useModalState();
@@ -60,12 +58,11 @@ export const FeeAgreementManagement: React.FC = () => {
       return;
     }
     try {
-      // TODO: Call backend API to create agreement
-      // await DataService.billing.createFeeAgreement(formData);
+      await DataService.feeAgreements.add(formData);
+      await refetch();
       createModal.close();
       setFormData({});
       notify.success('Fee agreement created successfully');
-      await refetch();
     } catch (error) {
       notify.error('Failed to create fee agreement');
     }
@@ -74,13 +71,12 @@ export const FeeAgreementManagement: React.FC = () => {
   const handleEdit = async () => {
     if (!selectedAgreement) return;
     try {
-      // TODO: Call backend API to update agreement
-      // await DataService.billing.updateFeeAgreement(selectedAgreement.id, formData);
+      await DataService.feeAgreements.update(selectedAgreement.id, formData);
+      await refetch();
       editModal.close();
       setSelectedAgreement(null);
       setFormData({});
       notify.success('Fee agreement updated successfully');
-      await refetch();
     } catch (error) {
       notify.error('Failed to update fee agreement');
     }
@@ -89,12 +85,11 @@ export const FeeAgreementManagement: React.FC = () => {
   const handleDelete = async () => {
     if (!selectedAgreement) return;
     try {
-      // TODO: Call backend API to delete agreement
-      // await DataService.billing.deleteFeeAgreement(selectedAgreement.id);
+      await DataService.feeAgreements.delete(selectedAgreement.id);
+      await refetch();
       deleteModal.close();
       setSelectedAgreement(null);
       notify.success('Fee agreement deleted successfully');
-      await refetch();
     } catch (error) {
       notify.error('Failed to delete fee agreement');
     }

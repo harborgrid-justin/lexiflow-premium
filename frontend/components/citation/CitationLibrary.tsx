@@ -34,8 +34,7 @@ import { useWorkerSearch } from '../../hooks/useWorkerSearch';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// TODO: Migrate to backend API - IndexedDB deprecated
-import { STORES } from '../../services/data/db';
+// ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -50,7 +49,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
     const [searchTerm, setSearchTerm] = useState('');
 
     const { data: citations, isLoading } = useQuery<Citation[]>(
-        [STORES.CITATIONS, 'all'],
+        ['citations', 'all'],
         DataService.citations.getAll
     );
 

@@ -20,7 +20,6 @@ import { ProjectModal } from './ProjectModal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useModalState } from '../../../hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../../services/data/dataService';
@@ -42,7 +41,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
   projects: initialProjects, onAddProject, onAddTask, onUpdateTaskStatus, onNavigateToModule 
 }) => {
   const { theme } = useTheme();
-  const projectModal = useModalState();
+  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [newTaskModalProjectId, setNewTaskModalProjectId] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   
@@ -61,17 +60,20 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
 
 
   const handleCreateProject = async (newProjectData: Partial<Project>) => {
-    if (!newProjectData.title) return;
+    if (!newProjectData.name) return;
     
     const project: Project = {
       id: `proj-${Date.now()}` as ProjectId,
       caseId: (initialProjects[0]?.caseId || 'General') as CaseId,
-      title: newProjectData.title,
+      name: newProjectData.name,
       description: newProjectData.description,
-      status: newProjectData.status as any,
-      priority: newProjectData.priority as any,
-      lead: newProjectData.lead,
+      status: (newProjectData.status || 'Not Started') as 'Not Started' | 'In Progress' | 'On Hold' | 'Completed' | 'Cancelled',
+      priority: (newProjectData.priority || 'Medium') as 'Low' | 'Medium' | 'High' | 'Urgent',
+      completionPercentage: 0,
+      startDate: newProjectData.startDate,
       dueDate: newProjectData.dueDate,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       tasks: []
     };
     

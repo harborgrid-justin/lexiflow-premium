@@ -32,7 +32,7 @@ import { Scheduler } from '../../utils/scheduler';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
-import { Party, PartyId, Organization } from '../../types';
+import { Party, PartyId, Organization, CaseId } from '../../types';
 
 interface CasePartiesProps {
   parties?: Party[];
@@ -76,7 +76,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
         // Edit
         newParties = newParties.map(p => p.id === currentParty.id ? { ...p, ...currentParty } as Party : p);
     } else {
-        // Add
+        // Add - use existing party's caseId or empty string as fallback
+        const caseId = (parties.length > 0 ? parties[0].caseId : '') as CaseId;
         const newParty: Party = {
             id: `p-${Date.now()}` as PartyId,
             name: currentParty.name,
@@ -90,7 +91,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             phone: currentParty.phone,
             email: currentParty.email,
             representationType: currentParty.representationType,
-            attorneys: currentParty.attorneys
+            attorneys: currentParty.attorneys,
+            caseId
         };
         newParties.push(newParty);
     }
@@ -139,6 +141,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                 className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                 value={groupBy}
                 onChange={(e) => setGroupBy(e.target.value as GroupByOption)}
+                aria-label="Group parties by"
             >
                 <option value="none">No Grouping</option>
                 <option value="group">Group by Party Type</option>
@@ -222,8 +225,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                             </TableCell>
                             <TableCell className="text-right">
                                 <div className="flex justify-end gap-2">
-                                    <button onClick={() => openEdit(party)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}><Edit2 className="h-4 w-4"/></button>
-                                    <button onClick={() => handleDelete(party.id)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`, `hover:${theme.status.error.text}`)}><Trash2 className="h-4 w-4"/></button>
+                                    <button type="button" onClick={() => openEdit(party)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)} title="Edit party" aria-label="Edit party"><Edit2 className="h-4 w-4"/></button>
+                                    <button type="button" onClick={() => handleDelete(party.id)} className={cn("p-1 rounded transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`, `hover:${theme.status.error.text}`)} title="Delete party" aria-label="Delete party"><Trash2 className="h-4 w-4"/></button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -242,8 +245,8 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
               <Input label="Name" value={currentParty.name || ''} onChange={e => setCurrentParty({...currentParty, name: e.target.value})} placeholder="e.g. John Doe or Acme Corp"/>
               <div className="grid grid-cols-2 gap-4">
                   <div>
-                      <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
-                      <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={e => setCurrentParty({...currentParty, role: e.target.value})}>
+                      <label htmlFor="partyRole" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
+                      <select id="partyRole" aria-label="Party Role" className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={e => setCurrentParty({...currentParty, role: e.target.value})}>
                           <option value="">Select Role...</option>
                           <option value="Plaintiff">Plaintiff</option>
                           <option value="Defendant">Defendant</option>
@@ -254,8 +257,10 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                       </select>
                   </div>
                   <div>
-                      <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
+                      <label htmlFor="partyType" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                       <select 
+                        id="partyType"
+                        aria-label="Party Type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={currentParty.type || 'Individual'}
                         onChange={e => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
@@ -283,8 +288,10 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
               
               {currentParty.type === 'Corporation' && (
                   <div>
-                      <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Link to Organization (Internal DB)</label>
+                      <label htmlFor="linkedOrgId" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Link to Organization (Internal DB)</label>
                       <select 
+                        id="linkedOrgId"
+                        aria-label="Link to Organization"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
                         value={currentParty.linkedOrgId || ''} 
                         onChange={e => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}

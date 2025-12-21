@@ -26,9 +26,19 @@ export class BillingRepository extends Repository<TimeEntry> {
     }
     
     // --- Time & WIP ---
-    async getTimeEntries(caseId?: string) {
+    async getTimeEntries(filters?: { caseId?: string; userId?: string; page?: number; limit?: number } | string) {
       const allEntries = await this.getAll();
-      return caseId ? allEntries.filter(e => e.caseId === caseId) : allEntries;
+      // Support both old string signature and new filters object for backward compatibility
+      if (typeof filters === 'string') {
+        return allEntries.filter(e => e.caseId === filters);
+      }
+      if (filters?.caseId) {
+        return allEntries.filter(e => e.caseId === filters.caseId);
+      }
+      if (filters?.userId) {
+        return allEntries.filter(e => e.userId === filters.userId || e.createdBy === filters.userId);
+      }
+      return allEntries;
     }
     
     async addTimeEntry(entry: TimeEntry) {

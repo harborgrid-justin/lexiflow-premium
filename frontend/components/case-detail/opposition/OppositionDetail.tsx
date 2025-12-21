@@ -10,11 +10,21 @@
 
 // External Dependencies
 import React from 'react';
-import { X, FileText, ExternalLink, ShieldAlert, Gavel, Scale, Activity } from 'lucide-react';
+import { X, FileText, Gavel, Scale, Activity } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Button } from '../../common/Button';
-import { OppositionEntity } from './OppositionList';
+
+// Internal Dependencies - Types
+export interface OppositionEntity {
+  id: string;
+  name: string;
+  role: string;
+  firm: string;
+  status: string;
+  aggression: 'High' | 'Medium' | 'Low';
+  notes: string;
+}
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
@@ -34,7 +44,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
     <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Entity Dossier</h4>
-            <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
+            <button onClick={onClose} aria-label="Close opposition detail panel" className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">

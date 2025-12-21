@@ -35,14 +35,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
   const [newProject, setNewProject] = useState<Partial<Project>>({
     title: '',
     description: '',
-    status: 'Planning',
+    status: 'Not Started',
     priority: 'Medium',
     lead: 'Current User'
   });
 
   const handleSave = () => {
     onSave(newProject);
-    setNewProject({ title: '', description: '', status: 'Planning', priority: 'Medium', lead: 'Current User' });
+    setNewProject({ name: '', description: '', status: 'Not Started', priority: 'Medium' });
   };
 
   return (
@@ -67,12 +67,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
             <select 
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.status}
-              onChange={e => setNewProject({...newProject, status: e.target.value as any})}
+              onChange={e => setNewProject({...newProject, status: e.target.value as Project['status']})}
+              aria-label="Project status"
             >
-              <option value="Planning">Planning</option>
-              <option value="Active">Active</option>
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
               <option value="On Hold">On Hold</option>
               <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
           </div>
           <div>
@@ -80,12 +82,13 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
             <select 
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.priority}
-              onChange={e => setNewProject({...newProject, priority: e.target.value as any})}
+              onChange={e => setNewProject({...newProject, priority: e.target.value as Project['priority']})}
+              aria-label="Project priority"
             >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
-              <option value="Critical">Critical</option>
+              <option value="Urgent">Urgent</option>
             </select>
           </div>
         </div>

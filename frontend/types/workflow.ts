@@ -2,23 +2,11 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  BaseEntity, UserId, TaskId, ProjectId, 
+  WorkflowTemplateId, CaseId
 } from './primitives';
-import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
-import { LucideIcon } from 'lucide-react';
-import type { FC, LazyExoticComponent } from 'react';
+import { TaskDependencyType, UserRole, StageStatus } from './enums';
+
 
 // --- CLUSTER 6: WORKFLOW & AUTOMATION ---
 // Backend Task entity enums (from tasks/dto/create-task.dto.ts)
@@ -37,7 +25,7 @@ export enum TaskPriorityBackend {
   CRITICAL = 'Critical' // Backend uses CRITICAL not URGENT
 }
 
-export interface WorkflowTask extends BaseEntity { 
+export interface WorkflowTask extends Omit<BaseEntity, 'createdBy'> { 
   id: TaskId;
   // Core fields (EXACTLY aligned with backend Task entity)
   title: string;
@@ -48,7 +36,7 @@ export interface WorkflowTask extends BaseEntity {
   
   // Assignment (backend field names)
   assignedTo?: string; // Backend: assigned_to (uuid)
-  createdBy?: string; // Backend: created_by (uuid)
+  createdBy?: string; // Backend: created_by (uuid) - overrides BaseEntity.createdBy which is UserId
   
   // Relationships
   caseId?: CaseId; // Backend: case_id (uuid, nullable)
@@ -107,7 +95,12 @@ export interface Project extends BaseEntity {
   
   // Content
   notes?: string; // Backend: text
-  tasks?: Array<{ // Backend: jsonb
+  tasks?: Array<{
+    title: string;
+    priority: string;
+    assignee: string;
+    relatedModule: ((module: string) => void) | undefined;
+    actionLabel: string; // Backend: jsonb
     id: string;
     name: string;
     assignedTo?: string;
@@ -121,7 +114,7 @@ export interface Project extends BaseEntity {
     completedDate?: string;
     status: string;
   }>;
-  metadata?: Record<string, any>; // Backend: jsonb
+  metadata?: Record<string, unknown>; // Backend: jsonb
   
   // Frontend-specific (legacy)
   title?: string; // Alias for name

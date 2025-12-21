@@ -71,7 +71,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
     <div className={cn("border-b sticky top-0 z-20 shadow-sm shrink-0 backdrop-blur-sm bg-opacity-90", theme.surface.default, theme.border.default)}>
         <div className="px-4 md:px-6 py-4">
             <div className="flex items-start gap-4">
-                <button onClick={onBack} className={cn("mt-1 p-1.5 rounded-md transition-colors border shadow-sm shrink-0", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>
+                <button onClick={onBack} title="Back to cases" aria-label="Back to case list" className={cn("mt-1 p-1.5 rounded-md transition-colors border shadow-sm shrink-0", theme.surface.default, theme.border.default, theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                     <ArrowLeft className="h-5 w-5" />
                 </button>
                 <div className="flex-1 min-w-0">
@@ -109,8 +109,8 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                             <Button variant="outline" size="sm" className="hidden sm:flex" icon={ArrowUpRight} onClick={handleOpenPortal}>Client Portal</Button>
                             <button 
                                 className={cn("lg:hidden p-2 rounded-full", theme.text.secondary, `hover:${theme.surface.highlight}`)}
-                                onClick={onShowTimeline}
-                            >
+                                onClick={onShowTimeline}                                title="View timeline"
+                                aria-label="Open case timeline"                            >
                                 <Calendar className="h-6 w-6"/>
                             </button>
                         </div>

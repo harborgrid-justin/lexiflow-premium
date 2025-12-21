@@ -1,6 +1,20 @@
 import { DiscoveryRequest } from '../../types';
 
-export type DiscoveryView = 'dashboard' | 'requests' | 'privilege' | 'holds' | 'plan' | 'doc_viewer' | 'response' | 'production_wizard' | 'productions' | 'depositions' | 'esi' | 'interviews';
+export type DiscoveryView = 
+  | 'dashboard'
+  | 'requests'
+  | 'privilege'
+  | 'holds'
+  | 'plan'
+  | 'doc_viewer'
+  | 'response'
+  | 'production_wizard'
+  | 'productions'
+  | 'depositions'
+  | 'esi'
+  | 'interviews'
+  | 'custodians'
+  | 'examinations';
 
 export interface DiscoveryPlatformProps {
     initialTab?: DiscoveryView;

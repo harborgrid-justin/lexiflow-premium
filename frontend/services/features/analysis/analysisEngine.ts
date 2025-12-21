@@ -25,6 +25,9 @@ export interface ExtractionResult {
 export interface ConflictResult {
   entity: string;
   potentialMatches: { caseId: string; caseTitle: string; role: string }[];
+  type?: 'client' | 'party' | 'position';
+  description?: string;
+  severity?: 'low' | 'medium' | 'high' | 'critical';
 }
 
 // ============================================================================

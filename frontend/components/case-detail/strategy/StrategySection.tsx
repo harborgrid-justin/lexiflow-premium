@@ -10,7 +10,7 @@
 
 // External Dependencies
 import React from 'react';
-import { ExternalLink, BookOpen, CheckCircle, Box, Scale, AlertTriangle, X } from 'lucide-react';
+import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Card } from '../../common/Card';
@@ -138,7 +138,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                 {type === 'Defense' && (
                     <div className={cn("flex justify-between items-center pt-2 border-t", theme.border.default)}>
                         <span className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>{(typedItem as Defense).type}</span>
-                        <button className={cn("transition-colors", theme.text.tertiary, `hover:${theme.text.link}`)}><ExternalLink className="h-3 w-3"/></button>
+                        <button aria-label="View external defense details" className={cn("transition-colors", theme.text.tertiary, `hover:${theme.text.link}`)}><ExternalLink className="h-3 w-3"/></button>
                     </div>
                 )}
               </div>

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Clause } from '../../types';
+import { Clause, ClauseVersion } from '../../types';
 import { History, ArrowLeftRight, X } from 'lucide-react';
 import { DiffViewer } from '../common/DiffViewer';
 import { useTheme } from '../../context/ThemeContext';
@@ -30,7 +30,7 @@ export const ClauseHistoryModal: React.FC<ClauseHistoryModalProps> = ({ clause, 
             History: {clause.name}
           </h3>
           <div className="flex items-center space-x-2">
-            {clause.versions.length > 1 && (
+            {clause.versions && clause.versions.length > 1 && (
               <button
                 onClick={() => setCompareMode(!compareMode)}
                 className={cn(
@@ -50,35 +50,37 @@ export const ClauseHistoryModal: React.FC<ClauseHistoryModalProps> = ({ clause, 
         </div>
 
         <div className="flex-1 overflow-y-auto p-6">
-          {compareMode && clause.versions.length >= 2 ? (
+          {compareMode && clause.versions && clause.versions.length >= 2 ? (
             <div className="h-96">
                 <DiffViewer 
-                    oldText={clause.versions[1].content || ''} 
-                    newText={clause.versions[0].content || ''} 
-                    oldLabel={`Version ${clause.versions[1].version}`}
-                    newLabel={`Version ${clause.versions[0].version} (Current)`}
+                    oldText={(clause.versions[1] as ClauseVersion)?.content || ''} 
+                    newText={(clause.versions[0] as ClauseVersion)?.content || ''} 
+                    oldLabel={`Version ${(clause.versions[1] as ClauseVersion)?.version || 'N/A'}`}
+                    newLabel={`Version ${(clause.versions[0] as ClauseVersion)?.version || 'N/A'} (Current)`}
                 />
             </div>
           ) : (
             <div className="space-y-4">
-              {clause.versions.map((v) => (
-                <div key={v.id || v.version} className={cn("border rounded-lg p-4 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>
+              {clause.versions?.map((v) => {
+                const version = v as ClauseVersion;
+                return (
+                <div key={version.id || version.version} className={cn("border rounded-lg p-4 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <span className={cn(
                           "inline-flex items-center px-2 py-0.5 rounded text-xs font-bold mr-2",
-                          v.version === clause.version // Assuming current is latest
+                          version.version === clause.version // Assuming current is latest
                             ? cn(theme.status.success.bg, theme.status.success.text) 
                             : cn(theme.surface.highlight, theme.text.secondary)
                       )}>
-                        v{v.version}
+                        v{version.version}
                       </span>
-                      <span className={cn("text-xs", theme.text.tertiary)}>Edited by {v.author} on {v.updatedAt}</span>
+                      <span className={cn("text-xs", theme.text.tertiary)}>Edited by {version.author} on {version.updatedAt}</span>
                     </div>
                   </div>
-                  <p className={cn("text-sm font-serif leading-relaxed", theme.text.primary)}>{v.content}</p>
+                  <p className={cn("text-sm font-serif leading-relaxed", theme.text.primary)}>{version.content}</p>
                 </div>
-              ))}
+              )})}
             </div>
           )}
         </div>

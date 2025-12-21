@@ -29,7 +29,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useToggle } from '../../hooks/useToggle';
-import { DiscoveryView } from './types';
 
 // Utils
 import { cn } from '../../utils/cn';

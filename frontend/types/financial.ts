@@ -2,23 +2,11 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
-} from './primitives';
+  BaseEntity, UserId, 
+  EntityId, 
+  CaseId, Money} from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
-import { LucideIcon } from 'lucide-react';
-import type { FC, LazyExoticComponent } from 'react';
+  BillingModel,  LedesActivityCode} from './enums';
 
 // --- CLUSTER 3: FINANCIAL & BILLING ---
 export interface FeeAgreement { type: BillingModel; rate?: Money; contingencyPercent?: number; retainerRequired?: Money; splitRules?: SplitBillingRule[]; }

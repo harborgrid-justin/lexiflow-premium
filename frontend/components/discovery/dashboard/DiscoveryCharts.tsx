@@ -7,24 +7,34 @@ import { useChartTheme } from '../../common/ChartHelpers';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
 import { STORES } from '../../../services/data/db';
-import { queryKeys } from '../../../utils/queryKeys';
 import { Loader2 } from 'lucide-react';
 
 // Map theme colors to chart
 const CHART_COLORS = ['#94a3b8', '#64748b', '#3b82f6', '#22c55e'];
 
+interface FunnelDataItem {
+  name: string;
+  value: number;
+  label: string;
+}
+
+interface CustodianDataItem {
+  name: string;
+  docs: number;
+}
+
 const DiscoveryCharts: React.FC = () => {
-  const { mode } = useTheme();
+  const { mode: _mode } = useTheme();
   const chartTheme = useChartTheme();
   
-  const { data: funnelData = [], isLoading: funnelLoading } = useQuery(
+  const { data: funnelData = [], isLoading: funnelLoading } = useQuery<FunnelDataItem[]>(
       [STORES.DISCOVERY_FUNNEL_STATS, 'main'],
-      DataService.discovery.getFunnelStats as any
+      DataService.discovery.getFunnelStats as never
   );
   
-  const { data: custodianData = [], isLoading: custodianLoading } = useQuery(
+  const { data: custodianData = [], isLoading: custodianLoading } = useQuery<CustodianDataItem[]>(
       [STORES.DISCOVERY_CUSTODIAN_STATS, 'main'],
-      DataService.discovery.getCustodianStats as any
+      DataService.discovery.getCustodianStats as never
   );
 
   if (funnelLoading || custodianLoading) {
@@ -49,11 +59,11 @@ const DiscoveryCharts: React.FC = () => {
                     />
                     <Tooltip 
                     cursor={{fill: 'transparent'}} 
-                    formatter={(value: any) => value.toLocaleString()} 
+                    formatter={(value: number | string | undefined) => typeof value === 'number' ? value.toLocaleString() : (value ?? '')} 
                     contentStyle={chartTheme.tooltipStyle}
                     />
-                    <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v:any) => (funnelData.find((d: any) => d.value === v) as any)?.label }}>
-                    {funnelData.map((entry: any, index: number) => (
+                    <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v: unknown) => typeof v === 'number' ? (funnelData.find((d: FunnelDataItem) => d.value === v)?.label ?? '') : '' }}>
+                    {funnelData.map((entry: FunnelDataItem, index: number) => (
                         <Cell key={`cell-${index}`} fill={CHART_COLORS[index]} />
                     ))}
                     </Bar>

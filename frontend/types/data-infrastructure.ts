@@ -1,6 +1,8 @@
 // types/data-infrastructure.ts
 // Data Platform Infrastructure Types
 
+import { BaseEntity } from "@lexiflow/shared-types/dist/entities/base.entity";
+
 export interface SchemaTable { 
   name: string; 
   x: number; 

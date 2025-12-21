@@ -2,21 +2,19 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
-} from './primitives';
+  BaseEntity, UserId, GroupId, 
+  
+  CaseId} from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
+  
+  RiskCategory
+  
+  
+  
+  
+  
+  
+  } from './enums';
 
 // Backend Risk entity enums (from risks/dto/create-risk.dto.ts)
 export enum RiskImpact {
@@ -37,7 +35,8 @@ export enum RiskStatusEnum {
   OPEN = 'Open',
   MONITORING = 'Monitoring',
   MITIGATED = 'Mitigated',
-  CLOSED = 'Closed'
+  CLOSED = 'Closed',
+  IDENTIFIED = "IDENTIFIED"
 }
 
 export interface Risk extends BaseEntity { 

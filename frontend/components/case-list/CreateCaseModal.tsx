@@ -107,7 +107,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
           onClose();
       } catch (error) {
           console.error('Failed to create case:', error);
-          // TODO: Show error notification to user
+          notify.error('Failed to create case. Please check your input and try again.');
       }
   };
 

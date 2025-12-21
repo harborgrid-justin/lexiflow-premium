@@ -32,8 +32,7 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
         {Array.from({ length: rows }).map((_, i) => (
           <div
             key={i}
-            className={cn("hidden md:flex items-center px-6 border-b", theme.border.default)}
-            style={{ height: 72 }}
+            className={cn("hidden md:flex items-center px-6 border-b h-[72px]", theme.border.default)}
           >
             {/* Sequence */}
             <div className="w-20 shrink-0">
@@ -73,8 +72,7 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
           {Array.from({ length: rows }).map((_, i) => (
             <div
               key={i}
-              className={cn("p-4 rounded-lg border", theme.border.default, theme.surface.default)}
-              style={{ height: 140 }}
+              className={cn("p-4 rounded-lg border h-[140px]", theme.border.default, theme.surface.default)}
             >
               <div className="flex justify-between items-start mb-3">
                 <div className="flex gap-2">
@@ -129,7 +127,7 @@ export const DocketCalendarSkeleton: React.FC = () => {
       {/* Calendar Grid */}
       <div className={cn("flex-1 p-px grid grid-cols-7 gap-px overflow-y-auto", theme.surface.highlight)}>
         {/* Day Headers */}
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, _i) => (
           <div key={day} className={cn("p-2 text-center border-b", theme.surface.highlight, theme.border.default)}>
             <div className="w-8 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto" />
           </div>

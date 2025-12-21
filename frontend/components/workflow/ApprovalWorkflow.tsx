@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { CheckCircle, XCircle, Clock, User, Shield } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
@@ -24,7 +24,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
   const { theme } = useTheme();
   
   // Load approvals from IndexedDB via useQuery when not provided as props
-  const { data: internalRequests = [] } = useQuery(
+  const { data: internalRequests = [] } = useQuery<ApprovalRequest[]>(
     queryKeys.workflowsExtended.approvals(),
     () => DataService.workflow.getApprovals(),
     { enabled: !propRequests }

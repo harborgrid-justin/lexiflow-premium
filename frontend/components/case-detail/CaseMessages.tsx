@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import React from 'react';
 import { Send, Paperclip, Lock, Shield, FileText, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components

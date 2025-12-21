@@ -3,7 +3,7 @@ import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Button } from '../common/Button';
 import { AdaptiveLoader } from '../common/AdaptiveLoader';
-import { ExternalLink, Clock, Loader2 } from 'lucide-react';
+import { ExternalLink, Clock } from 'lucide-react';
 import { SearchToolbar } from '../common/SearchToolbar';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';

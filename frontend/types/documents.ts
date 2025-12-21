@@ -2,23 +2,10 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  BaseEntity, UserId, GroupId, DocumentId, CaseId
 } from './primitives';
-import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
-import { LucideIcon } from 'lucide-react';
-import type { FC, LazyExoticComponent } from 'react';
+import { OcrStatus } from './enums';
+
 
 // --- CLUSTER 4: DOCUMENTS & DISCOVERY ---
 export interface LegalDocument extends BaseEntity { 
@@ -59,7 +46,7 @@ export interface LegalDocument extends BaseEntity {
   
   // Organization
   tags: string[]; // Backend: simple-array
-  customFields?: Record<string, any>; // Backend: jsonb
+  customFields?: Record<string, unknown>; // Backend: jsonb
   folderId?: string;
   sourceModule?: string;
   
@@ -77,7 +64,7 @@ export interface LegalDocument extends BaseEntity {
   
   // E-signature
   signingStatus?: { recipient: string; status: 'Sent' | 'Viewed' | 'Signed'; signedAt?: string }[];
-  formFields?: any[];
+  formFields?: unknown[];
   
   // Dates (backend compatibility)
   uploadDate: string; // Maps to createdAt

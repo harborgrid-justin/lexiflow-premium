@@ -48,7 +48,7 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
     const id = addNode(type, x, y);
     setSelectedNodeId(id);
     propertiesToggle.open();
-  }, [pan, scale, addNode]);
+  }, [pan.x, pan.y, scale, addNode, propertiesToggle]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (draggingNodeId && canvasRef.current) {
@@ -84,9 +84,7 @@ export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = (
               duration: '2 Weeks',
               tags: ['Draft'],
               auditReady: false,
-              stages: nodes.filter(n => n.type === 'Task').map(n => n.label),
-              // @ts-ignore - Storing graph data for restoration
-              graphData: { nodes, connections }
+              stages: nodes.filter(n => n.type === 'Task').map(n => n.label)
           };
           
           await DataService.workflow.saveTemplate(template);

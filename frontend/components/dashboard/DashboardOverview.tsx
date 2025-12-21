@@ -30,7 +30,8 @@ import { LazyLoader } from '../common/LazyLoader';
 import { Scheduler } from '../../utils/scheduler';
 
 // Types
-import type { WorkflowTask } from '../../types';
+import type { WorkflowTask, ChartDataPoint, TaskId, CaseId } from '../../types';
+import { TaskStatusBackend } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -40,16 +41,30 @@ interface DashboardOverviewProps {
   onSelectCase: (caseId: string) => void;
 }
 
+interface ActiveProject {
+  id: TaskId;
+  title: string;
+  case: string | CaseId;
+  progress: number;
+  status: TaskStatusBackend;
+  due: string;
+}
+
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCase }) => {
   // Enterprise Data Access: Parallel Queries with Caching
-  const { data: stats, isLoading: statsLoading } = useQuery(['dashboard', 'stats'], () => DataService.dashboard.getStats());
+  const { data: stats, isLoading: statsLoading } = useQuery<{
+    activeCases: number;
+    pendingMotions: number;
+    billableHours: number;
+    highRisks: number;
+  } | null>(['dashboard', 'stats'], () => DataService.dashboard.getStats());
   const { data: tasks = [] } = useQuery<WorkflowTask[]>([STORES.TASKS, 'all'], () => DataService.tasks.getAll());
-  const { data: chartData = [] } = useQuery(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
-  const { data: rawAlerts = [] } = useQuery(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
+  const { data: chartData = [] } = useQuery<ChartDataPoint[]>(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
+  const { data: rawAlerts = [] } = useQuery<any[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
 
   // Transform alerts to match DashboardAlert type
   const alerts = rawAlerts.map((alert: any, index: number) => ({
@@ -61,14 +76,14 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   }));
 
   // Optimization: Defer heavy processing of tasks to idle time
-  const [activeProjects, setActiveProjects] = useState<any[]>([]);
+  const [activeProjects, setActiveProjects] = useState<ActiveProject[]>([]);
 
   useEffect(() => {
       if (tasks.length > 0) {
           // Process heavy filtering/mapping in idle time to unblock initial paint
           Scheduler.defer(() => {
               const processed = tasks
-                  .filter((t) => t.priority === 'High' && t.status !== 'Done')
+                  .filter((t) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
                   .slice(0, 5)
                   .map((t) => ({
                       id: t.id,
@@ -76,7 +91,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
                       case: t.caseId || 'General',
                       progress: t.status === 'In Progress' ? 50 : 10,
                       status: t.status,
-                      due: t.dueDate
+                      due: t.dueDate || 'No due date'
                   }));
               setActiveProjects(processed);
           });

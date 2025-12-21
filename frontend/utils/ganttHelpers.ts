@@ -20,6 +20,10 @@ export const GanttHelpers = {
      * Calculates CSS positioning style for a Gantt task bar.
      */
     getTaskStyle: (task: WorkflowTask, viewStartDate: Date, pixelsPerDay: number) => {
+        if (!task.dueDate) {
+            // Return default hidden style if no due date
+            return { left: '0px', width: '20px', display: 'none' as const };
+        }
         const due = new Date(task.dueDate).getTime();
         let start;
         

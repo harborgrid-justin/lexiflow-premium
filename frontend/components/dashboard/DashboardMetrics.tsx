@@ -1,5 +1,6 @@
 /**
- * @module components/dashboard/DashboardMetrics
+
+* @module components/dashboard/DashboardMetrics
  * @category Dashboard
  * @description Live-updating metrics cards displaying key firm statistics with
  * real-time simulation and trend indicators.

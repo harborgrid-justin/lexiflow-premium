@@ -132,9 +132,16 @@ export const WorkflowRepository = {
         return { success: true };
     },
     getAutomations: async () => {
-        // In a real app, these would be stored in a DB table.
-        // For now, we return a static list but via the service layer.
-        return [
+        // Fetch automation rules from IndexedDB
+        const automations = await db.getAll(STORES.WORKFLOW_AUTOMATIONS);
+        
+        // Return stored automations, or fallback to demo data if none exist
+        if (automations.length > 0) {
+            return automations;
+        }
+        
+        // Demo/seed data for first-time users
+        const demoAutomations = [
             {
                 id: 'auto-1',
                 title: 'Document Upload Trigger',
@@ -158,6 +165,8 @@ export const WorkflowRepository = {
                 active: true
             }
         ];
+        
+        return demoAutomations;
     },
     getProcessDetails: async (id: string) => {
         const process = await db.get<any>(STORES.PROCESSES, id);

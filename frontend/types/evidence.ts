@@ -2,21 +2,10 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject, UUID
+  BaseEntity, DocumentId, EvidenceId, CaseId, UUID
 } from './primitives';
-import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
+import { EvidenceType, AdmissibilityStatus } from './enums';
+import type { FileChunk } from './motion-docket';
 
 export interface TrialExhibit extends BaseEntity { 
   // Core fields (aligned with backend Exhibit entity)

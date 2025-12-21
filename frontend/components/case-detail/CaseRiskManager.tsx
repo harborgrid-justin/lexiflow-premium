@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState } from 'react';
+import React from 'react';
 import { ShieldAlert, Plus, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
@@ -21,7 +21,7 @@ import { RiskDetail } from './risk/RiskDetail';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 import { useWindow } from '../../context/WindowContext';
-import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '../../services/data/dataService';
@@ -29,7 +29,7 @@ import { STORES } from '../../services/data/db';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
-import { Case, Risk } from '../../types';
+import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '../../types';
 
 interface CaseRiskManagerProps {
   caseData: Case;
@@ -54,7 +54,7 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
       (updated: Risk) => DataService.risks.update(updated.id, updated),
       { 
           invalidateKeys: [[STORES.RISKS, caseData.id]],
-          onSuccess: (data) => closeWindow(`risk-detail-${data.id}`)
+          onSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`)
       }
   );
 
@@ -73,9 +73,9 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
       title: 'New Risk',
       description: '',
       category: 'Legal',
-      probability: 'Medium',
-      impact: 'Medium',
-      status: 'Identified',
+      probability: RiskProbability.MEDIUM,
+      impact: RiskImpact.MEDIUM,
+      status: RiskStatusEnum.IDENTIFIED,
       dateIdentified: new Date().toISOString().split('T')[0],
       lastUpdated: new Date().toISOString().split('T')[0]
     };

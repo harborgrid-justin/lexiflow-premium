@@ -13,8 +13,8 @@
 // ============================================================================
 import React, { useState, useMemo } from 'react';
 import { 
-  FileText, Search, Loader2, BrainCircuit, ShieldAlert, CheckCircle2, 
-  AlertTriangle, Scale, BookOpen, ArrowRight, Network, Plus, Save, ExternalLink
+  FileText, Loader2, BrainCircuit, 
+  Scale, Network, Save, ExternalLink
 } from 'lucide-react';
 
 // ============================================================================
@@ -35,20 +35,20 @@ import { useWindow } from '../../context/WindowContext';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { GeminiService, BriefCritique } from '../../services/features/research/geminiService';
-import { AnalysisEngine } from '../../services/features/analysis/analysisEngine';
+import { AnalysisEngine, ConflictResult } from '../../services/features/analysis/analysisEngine';
 import { cn } from '../../utils/cn';
 import { STORES } from '../../services/data/db';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation, Case, BriefAnalysisSession } from '../../types';
+import { Citation, Case } from '../../types';
 import { sanitizeHtml } from './utils';
 
 export const BriefAnalyzer: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const { openWindow, closeWindow } = useWindow();
+  const { openWindow, closeWindow: _closeWindow } = useWindow();
   const [text, setText] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeTab, setActiveTab] = useState<'authority' | 'strategy' | 'nexus'>('authority');
@@ -56,14 +56,14 @@ export const BriefAnalyzer: React.FC = () => {
   // Results State
   const [extractedCitations, setExtractedCitations] = useState<string[]>([]);
   const [critique, setCritique] = useState<BriefCritique | null>(null);
-  const [conflicts, setConflicts] = useState<any[]>([]);
+  const [conflicts, setConflicts] = useState<ConflictResult[]>([]);
 
   // Load Data Dependencies
   const { data: authorityDb = [] } = useQuery<Citation[]>([STORES.CITATIONS, 'all'], () => DataService.citations.getAll());
   const { data: allCases = [] } = useQuery<Case[]>([STORES.CASES, 'all'], () => DataService.cases.getAll());
 
   // Mutations
-  const { mutate: addToLibrary } = useMutation(
+  const { mutate: _addToLibrary } = useMutation(
       DataService.citations.quickAdd,
       {
           onSuccess: (citation) => {
@@ -116,9 +116,17 @@ export const BriefAnalyzer: React.FC = () => {
           winId,
           'Brief Analysis Report',
           <div className="p-6 bg-white h-full overflow-y-auto">
-              <div className="mb-6 border-b pb-4">
-                  <h2 className="text-2xl font-bold">AI Critique Results</h2>
-                  <p className="text-sm text-slate-500">Generated on {new Date().toLocaleString()}</p>
+              <div className="mb-6 border-b pb-4 flex justify-between items-center">
+                  <div>
+                      <h2 className="text-2xl font-bold">AI Critique Results</h2>
+                      <p className="text-sm text-slate-500">Generated on {new Date().toLocaleString()}</p>
+                  </div>
+                  <button 
+                      onClick={() => handleCloseAnalysisWindow(winId)}
+                      className="text-slate-400 hover:text-slate-600"
+                  >
+                      ✕
+                  </button>
               </div>
               <div className="grid grid-cols-2 gap-6 mb-6">
                   <Card title="Strength Score">
@@ -150,6 +158,11 @@ export const BriefAnalyzer: React.FC = () => {
           };
       });
   }, [extractedCitations, authorityDb]);
+
+  // Cleanup function for closing windows
+  const handleCloseAnalysisWindow = (windowId: string) => {
+      _closeWindow(windowId);
+  };
 
   return (
     <div className="h-full flex flex-col lg:flex-row gap-6 animate-fade-in">
@@ -226,7 +239,88 @@ export const BriefAnalyzer: React.FC = () => {
                          <p className="text-xs mt-2">AI will extract citations, check signals, and critique arguments.</p>
                      </div>
                  )}
-                 {/* ... existing result rendering ... */}
+                 
+                 {/* Authority Tab Content */}
+                 {activeTab === 'authority' && matchedAuthorities.length > 0 && (
+                     <div className="space-y-4">
+                         <h4 className={cn("font-semibold text-sm", theme.text.primary)}>Citation Verification</h4>
+                         {matchedAuthorities.map((item, idx) => (
+                             <Card key={idx} className="p-3">
+                                 <div className="flex justify-between items-start gap-2">
+                                     <div className="flex-1">
+                                         <p className={cn("text-sm font-mono", theme.text.secondary)}>{item.text}</p>
+                                         {item.match ? (
+                                             <div className={cn("mt-2 text-xs", theme.status.success.text)}>
+                                                 ✓ Verified in database: {item.match.signal || 'N/A'}
+                                             </div>
+                                         ) : (
+                                             <div className={cn("mt-2 text-xs", theme.status.warning.text)}>
+                                                 ⚠ Not found in citation database
+                                             </div>
+                                         )}
+                                     </div>
+                                     {!item.match && (
+                                         <Button 
+                                             size="sm" 
+                                             variant="outline"
+                                             onClick={() => _addToLibrary({ 
+                                                 id: `cite-${Date.now()}-${idx}`,
+                                                 citation: item.text,
+                                                 signal: 'unknown',
+                                                 createdAt: new Date().toISOString(),
+                                                 updatedAt: new Date().toISOString(),
+                                                 userId: 'current-user' as any
+                                             })}
+                                         >
+                                             Add to Library
+                                         </Button>
+                                     )}
+                                 </div>
+                             </Card>
+                         ))}
+                     </div>
+                 )}
+                 
+                 {/* Strategy Tab Content */}
+                 {activeTab === 'strategy' && critique && (
+                     <div className="space-y-4">
+                         <Card title="Strength Assessment">
+                             <RiskMeter value={critique.score} type="strength" />
+                         </Card>
+                         <Card title="Strengths">
+                             <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.status.success.text)}>
+                                 {critique.strengths.map((s, i) => <li key={i}>{s}</li>)}
+                             </ul>
+                         </Card>
+                         <Card title="Weaknesses">
+                             <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.status.error.text)}>
+                                 {critique.weaknesses.map((w, i) => <li key={i}>{w}</li>)}
+                             </ul>
+                         </Card>
+                         <Card title="Recommendations">
+                             <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.text.secondary)}>
+                                 {critique.suggestions.map((s, i) => <li key={i}>{s}</li>)}
+                             </ul>
+                         </Card>
+                     </div>
+                 )}
+                 
+                 {/* Nexus Tab Content */}
+                 {activeTab === 'nexus' && conflicts.length > 0 && (
+                     <div className="space-y-4">
+                         <h4 className={cn("font-semibold text-sm", theme.text.primary)}>Internal Case Conflicts</h4>
+                         {conflicts.map((conflict, idx) => (
+                             <Card key={idx} className="p-3">
+                                 <div className={cn("text-sm font-semibold mb-1", theme.status.warning.text)}>
+                                     {conflict.type === 'client' ? 'Client Conflict' : 
+                                      conflict.type === 'party' ? 'Party Conflict' : 'Position Conflict'}
+                                 </div>
+                                 <p className={cn("text-xs", theme.text.secondary)}>{conflict.description}</p>
+                                 <p className={cn("text-xs mt-2", theme.text.tertiary)}>Risk: {conflict.severity}</p>
+                             </Card>
+                         ))}
+                     </div>
+                 )}
              </div>
         </div>
     </div>

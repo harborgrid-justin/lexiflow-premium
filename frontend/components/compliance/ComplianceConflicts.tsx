@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { Search, Plus, User, Filter, Download } from 'lucide-react';
+import { Plus, User, Filter, Download } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

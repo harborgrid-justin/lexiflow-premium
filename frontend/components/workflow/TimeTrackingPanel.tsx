@@ -10,7 +10,7 @@ import { useTimeTracker } from '../../hooks/useTimeTracker';
 interface TimerDisplayProps {
   isActive: boolean;
   formattedTime: string;
-  theme: any;
+  theme: ReturnType<typeof useTheme>['theme'];
 }
 
 interface TimerControlsProps {

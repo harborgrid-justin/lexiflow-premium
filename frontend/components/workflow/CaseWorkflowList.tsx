@@ -70,7 +70,10 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
                         <span className={cn("font-bold", theme.text.primary)}>{progress}%</span>
                       </div>
                       <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
-                        <div className={`h-2 rounded-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : theme.primary.DEFAULT}`} style={{ width: `${progress}%` }}></div>
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : theme.primary.DEFAULT}`} 
+                          style={{ '--progress-width': `${progress}%` } as React.CSSProperties}
+                        ></div>
                       </div>
                   </div>
                   

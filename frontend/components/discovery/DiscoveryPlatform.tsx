@@ -12,8 +12,7 @@
 // ============================================================================
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { 
-  MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
-  Mic2, Database, Package, ClipboardList, FileText
+  Plus, Users, Clock
 } from 'lucide-react';
 
 // ============================================================================
@@ -65,11 +64,16 @@ import { DiscoveryRequestsSkeleton, PrivilegeLogSkeleton, LegalHoldsSkeleton, ES
 const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
+  const [activeTab, _setActiveTab] = useSessionStorage<DiscoveryView>(
       caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab', 
       initialTab || 'dashboard'
   );
   const [contextId, setContextId] = useState<string | null>(null);
+  
+  // Wrap setActiveTab to match expected type signature
+  const setActiveTab = useCallback((tab: DiscoveryView) => {
+    _setActiveTab(tab);
+  }, [_setActiveTab]);
 
   // Reset to dashboard if we're on a wizard view but have no context
   useEffect(() => {
@@ -90,15 +94,13 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
       DataService.discovery.syncDeadlines,
       {
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           onSuccess: () => {
               notify.success("Synced discovery deadlines with court calendar.");
               queryClient.invalidate(queryKeys.discovery.all());
               queryClient.invalidate(queryKeys.calendar.events());
           },
           onError: (error) => {
-              notify.error('Failed to sync deadlines after 3 attempts. Please try again later.');
+              notify.error('Failed to sync deadlines. Please try again later.');
               console.error('Sync error:', error);
           }
       }
@@ -113,7 +115,7 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   [activeTab]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
-    setActiveTab(getFirstTabOfParent(parentId));
+    setActiveTab(getFirstTabOfParent(parentId) as DiscoveryView);
   }, [setActiveTab]);
   
   const handleNavigate = (targetView: DiscoveryView, id?: string) => {
@@ -126,19 +128,44 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
     setContextId(null);
   };
 
-  // Keyboard shortcuts
-  useKeyboardShortcuts({
-    'mod+d': () => setActiveTab('dashboard'),
-    'mod+r': () => setActiveTab('requests'),
-    'mod+p': () => setActiveTab('privilege'),
-    'mod+h': () => setActiveTab('holds'),
-    'mod+e': () => setActiveTab('esi'),
-    'escape': () => {
-      if (isWizardView) {
+  // Calculate wizard view state
+  const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
+
+  // Keyboard shortcuts for quick navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in inputs
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+        return;
+      }
+
+      const isMod = e.ctrlKey || e.metaKey;
+      
+      if (isMod && e.key === 'd') {
+        e.preventDefault();
+        setActiveTab('dashboard');
+      } else if (isMod && e.key === 'r') {
+        e.preventDefault();
+        setActiveTab('requests');
+      } else if (isMod && e.key === 'p') {
+        e.preventDefault();
+        setActiveTab('privilege');
+      } else if (isMod && e.key === 'h') {
+        e.preventDefault();
+        setActiveTab('holds');
+      } else if (isMod && e.key === 'e') {
+        e.preventDefault();
+        setActiveTab('esi');
+      } else if (e.key === 'Escape' && isWizardView) {
+        e.preventDefault();
         handleBackToDashboard();
       }
-    }
-  });
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isWizardView, setActiveTab, handleBackToDashboard]);
 
   const handleSaveResponse = async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
@@ -147,8 +174,6 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
       alert(`Response saved for ${reqId}. Status updated to Responded.`);
       setActiveTab('requests');
   };
-
-  const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
 
   const tabContentMap = useMemo(() => ({
     'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} />,

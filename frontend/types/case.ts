@@ -2,23 +2,24 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, MatterId, Money, JurisdictionObject
+  BaseEntity, UserId, OrgId, 
+  EntityId, PartyId, 
+  CaseId, MatterId, Money, JurisdictionObject
 } from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType, MatterStatus, MatterPriority, PracticeArea, BillingArrangement
+  CaseStatus, MatterType, BillingModel,
+  
+  
+  
+  
+  
+  
+  
+  MatterStatus, MatterPriority, BillingArrangement
 } from './enums';
-import { LucideIcon } from 'lucide-react';
-import type { FC, LazyExoticComponent } from 'react';
+import { FeeAgreement } from './financial';
+import { Citation, LegalArgument, Defense } from './legal-research';
+import { Project } from './workflow';
 
 // --- CLUSTER 2: CASE & LITIGATION ---
 export interface Case extends BaseEntity { 
@@ -193,8 +194,8 @@ export interface Matter extends BaseEntity {
   customFields?: Record<string, any>; // Backend: customfields jsonb
   
   // Metadata (backend exact fields)
-  createdBy: string; // Backend: createdby varchar (required)
-  updatedBy?: string; // Backend: updatedby varchar
+  createdBy: UserId; // Backend: createdby varchar (required)
+  updatedBy?: UserId; // Backend: updatedby varchar
   
   // Legacy aliases for backward compatibility
   type?: MatterType; // Alias for matterType

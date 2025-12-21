@@ -10,7 +10,6 @@ import { Input, TextArea } from '../common/Inputs';
 import { useNotify } from '../../hooks/useNotify';
 import { useModalState } from '../../hooks';
 import { useSelection } from '../../hooks/useSelectionState';
-import { getTodayString } from '../../utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 import { DataService } from '../../services/data/dataService';
@@ -29,41 +28,12 @@ interface Custodian {
   updatedAt: string;
 }
 
-// Mock data for custodians
-const mockCustodians: Custodian[] = [
-  {
-    id: 'cust-1',
-    caseId: 'case-1',
-    name: 'John Smith',
-    email: 'john.smith@company.com',
-    department: 'Engineering',
-    role: 'Senior Developer',
-    status: 'On Hold',
-    legalHoldId: 'hold-1',
-    notes: 'Key custodian for source code repository',
-    createdAt: '2024-01-15',
-    updatedAt: '2024-01-15'
-  },
-  {
-    id: 'cust-2',
-    caseId: 'case-1',
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@company.com',
-    department: 'Legal',
-    role: 'General Counsel',
-    status: 'Active',
-    notes: 'Primary contact for legal matters',
-    createdAt: '2024-01-10',
-    updatedAt: '2024-01-12'
-  }
-];
-
 export const Custodians: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   
   // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
-  const { data: custodians = [], isLoading } = useQuery(
+  const { data: custodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
     queryKeys.discoveryExtended.custodians(),
     () => DataService.custodians.getAll()
   );
@@ -168,9 +138,9 @@ export const Custodians: React.FC = () => {
     switch (status) {
       case 'Active': return 'success';
       case 'On Hold': return 'warning';
-      case 'Released': return 'default';
+      case 'Released': return 'neutral';
       case 'Pending': return 'info';
-      default: return 'default';
+      default: return 'neutral';
     }
   };
 

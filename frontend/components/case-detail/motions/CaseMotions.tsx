@@ -38,14 +38,14 @@ interface CaseMotionsProps {
   documents?: LegalDocument[];
 }
 
-export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, _caseTitle, documents = [] }) => {
+export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, documents = [] }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const { openWindow, closeWindow } = useWindow();
   const [taskModalMotion, setTaskModalMotion] = useState<Motion | null>(null);
   
   // Query Motions specific to this case
-  const { data: motions = [], isLoading: _isLoading } = useQuery<Motion[]>(
+  const { data: motions = [], isLoading } = useQuery<Motion[]>(
     [STORES.MOTIONS, caseId],
     () => DataService.motions.getByCaseId(caseId)
   );
@@ -120,7 +120,9 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, _caseTitle, do
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
           <h3 className={cn("text-lg font-bold", theme.text.primary)}>Motion Practice</h3>
-          <p className={cn("text-sm", theme.text.secondary)}>Track filings, opposition deadlines, and hearings.</p>
+          <p className={cn("text-sm", theme.text.secondary)}>
+            {caseTitle ? `${caseTitle} - ` : ''}Track filings, opposition deadlines, and hearings.
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" size="sm" icon={RefreshCw} onClick={() => syncCalendar(undefined)} isLoading={isSyncing}>Sync Calendar</Button>
@@ -128,7 +130,14 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, _caseTitle, do
         </div>
       </div>
 
-      <MotionList motions={motions} onTaskClick={setTaskModalMotion} />
+      {isLoading ? (
+        <div className={cn("flex items-center justify-center py-12", theme.text.tertiary)}>
+          <RefreshCw className="h-6 w-6 animate-spin mr-2" />
+          Loading motions...
+        </div>
+      ) : (
+        <MotionList motions={motions} onTaskClick={setTaskModalMotion} />
+      )}
     </div>
   );
 };

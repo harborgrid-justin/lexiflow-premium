@@ -11,10 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import {
-  Search, Scale, BookOpen, ScrollText, BarChart3, Gavel, Users, TrendingUp,
-  BrainCircuit, Map, Calculator, FileText, Bookmark, Library
-} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

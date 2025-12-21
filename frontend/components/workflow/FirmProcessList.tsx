@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import { MoreHorizontal, Search } from 'lucide-react';
+import { MoreHorizontal, Play, Search } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { EmptyState } from '../common/EmptyState';
@@ -47,7 +47,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                 </div>
                 <div className="flex items-center gap-2">
                     <Badge variant={bp.status === 'Active' ? 'success' : bp.status === 'Idle' ? 'neutral' : 'warning'}>{bp.status}</Badge>
-                    <button className={cn(theme.text.tertiary, `hover:${theme.text.secondary}`)} onClick={(e) => e.stopPropagation()}><MoreHorizontal className="h-4 w-4"/></button>
+                    <button className={cn(theme.text.tertiary, `hover:${theme.text.secondary}`)} onClick={(e) => e.stopPropagation()} aria-label="Process options"><MoreHorizontal className="h-4 w-4"/></button>
                 </div>
             </div>
             
@@ -67,7 +67,10 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                     <span>{Math.round((bp.completed / bp.tasks) * 100)}%</span>
                     </div>
                     <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surface.highlight)}>
-                    <div className={cn("h-1.5 rounded-full animate-progress", theme.primary.DEFAULT)} style={{ width: `${(bp.completed / bp.tasks) * 100}%` }}></div>
+                    <div 
+                      className={cn("h-1.5 rounded-full transition-all", theme.primary.DEFAULT)} 
+                      style={{ width: `${(bp.completed / bp.tasks) * 100}%` }}
+                    ></div>
                     </div>
                 </div>
                 )}

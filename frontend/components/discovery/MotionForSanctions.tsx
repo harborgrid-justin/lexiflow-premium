@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Gavel, AlertTriangle, Plus, FileWarning } from 'lucide-react';
+import { Gavel, Plus, FileWarning } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
@@ -55,7 +55,7 @@ export const MotionForSanctions: React.FC = () => {
                  </h3>
                  <p className={cn("text-sm", theme.status.error.text)}>Track enforcement actions for discovery non-compliance.</p>
              </div>
-             <Button variant="danger" icon={Plus} onClick={() => setIsModalOpen(true)}>File Motion</Button>
+             <Button variant="danger" icon={Plus} onClick={sanctionModal.open}>File Motion</Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -81,7 +81,7 @@ export const MotionForSanctions: React.FC = () => {
             )}
         </div>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Draft Sanctions Motion">
+        <Modal isOpen={sanctionModal.isOpen} onClose={sanctionModal.close} title="Draft Sanctions Motion">
             <div className="p-6 space-y-4">
                 <Input label="Motion Title" value={newMotion.title || ''} onChange={e => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
                 <div>

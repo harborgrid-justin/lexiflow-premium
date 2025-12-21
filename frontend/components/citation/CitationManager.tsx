@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, Suspense, lazy, useTransition } from 'react';
+import React, { Suspense, lazy, useTransition } from 'react';
 import { Plus, BookOpen, FileText } from 'lucide-react';
 
 // ============================================================================
@@ -32,7 +32,7 @@ import { cn } from '../../utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { Citation } from '../../types';
-import { CitationView, CitationManagerProps } from './types';
+import { CitationManagerProps } from './types';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));
@@ -63,11 +63,11 @@ export const CitationManager: React.FC<CitationManagerProps> = ({ caseId }) => {
   const renderContent = () => {
     switch (activeView) {
       case 'library':
-        return <CitationLibrary onSelect={citationSelection.select} />;
+        return <CitationLibrary onSelect={citationSelection.select} caseId={caseId} />;
       case 'analyzer':
         return <BriefAnalyzer />;
       default:
-        return <CitationLibrary onSelect={citationSelection.select} />;
+        return <CitationLibrary onSelect={citationSelection.select} caseId={caseId} />;
     }
   };
 

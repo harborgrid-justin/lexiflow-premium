@@ -45,7 +45,7 @@ interface GraphOverlayProps {
 // COMPONENT
 // ============================================================================
 
-export const GraphOverlay: React.FC<GraphOverlayProps> = ({ scale, setScale, onReheat, isStable, nodeCount }) => {
+export const GraphOverlay: React.FC<GraphOverlayProps> = ({ scale: _scale, setScale, onReheat, isStable, nodeCount }) => {
   const { theme } = useTheme();
 
   return (

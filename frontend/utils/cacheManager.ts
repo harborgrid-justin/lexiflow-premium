@@ -23,6 +23,8 @@
  * ```
  */
 
+import { QUERY_CACHE_MAX_SIZE, QUERY_CACHE_STALE_TIME_MS } from "@/config/database/cache.config";
+
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -274,7 +276,7 @@ class CacheRegistry {
     if (!this.caches.has(name)) {
       this.caches.set(name, new CacheManager<K, V>(options));
     }
-    return this.caches.get(name)!;
+    return this.caches.get(name)! as CacheManager<K, V>;
   }
 
   dispose(name: string): void {

@@ -102,14 +102,6 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
       }, 100);
   };
 
-  const _handleFix = (id: number): void => {
-      setAnomalies(prev => prev.map(a => a.id === id ? { ...a, status: 'Fixing' } : a));
-      // Simulate API call
-      setTimeout(() => {
-          setAnomalies(prev => prev.map(a => a.id === id ? { ...a, status: 'Fixed' } : a));
-      }, 1500);
-  };
-
   if (isLoading) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
 
   return (

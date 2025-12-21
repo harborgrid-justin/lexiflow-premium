@@ -128,6 +128,7 @@ export const STORES = {
   
   // Legacy/Frontend-only stores (no backend equivalent yet)
   WORKFLOWS: 'workflows', // Frontend-only workflow instances (templates are in TEMPLATES)
+  WORKFLOW_AUTOMATIONS: 'workflow_automations', // Workflow automation rules (triggers, conditions, actions)
   PROCESSES: 'firm_processes',
   JUDGES: 'judge_profiles',
   COUNSEL: 'opposing_counsel',

@@ -9,7 +9,10 @@ export const TemplateActions: React.FC = () => {
 
   return (
     <div className="relative group inline-block">
-      <button className={cn("p-2 rounded transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
+      <button 
+        className={cn("p-2 rounded transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}
+        aria-label="Template actions menu"
+      >
         <MoreHorizontal className="h-5 w-5" />
       </button>
       <div className={cn("absolute right-0 top-full mt-1 w-32 border rounded-lg shadow-lg hidden group-hover:block z-20 py-1", theme.surface.default, theme.border.default)}>

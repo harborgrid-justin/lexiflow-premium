@@ -303,11 +303,15 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
       );
       return { previous };
     },
-    onSuccess: (_data: unknown, id: string) => {
+    onSuccess: (data: unknown, id: string) => {
       setTimeout(() => { // Simulate sync time completion for UX
         queryClient.setQueryData(['admin', 'sources', 'connections'], (old: DataConnection[] | undefined) =>
           old?.map(c => c.id === id ? { ...c, status: 'active' as ConnectionStatus, lastSync: 'Just now' } : c)
         );
+        // Notify user with sync details if available
+        if (data && typeof data === 'object' && 'recordsSynced' in data) {
+          notify.success(`Synced ${(data as any).recordsSynced} records successfully`);
+        }
       }, 2000);
     }
   });

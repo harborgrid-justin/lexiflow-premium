@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { X, MapPin, Mail, Phone, Globe, ShieldAlert, Link, Briefcase } from 'lucide-react';
+import { X, MapPin, Mail, Globe, ShieldAlert, Link, Briefcase, GitBranch } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -27,6 +27,7 @@ import { useTheme } from '../../context/ThemeContext';
 // Components
 import { Button } from '../common/Button';
 import { Tabs } from '../common/Tabs';
+import { EmptyState } from '../common/EmptyState';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -58,7 +59,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
       () => DataService.entities.getById(entityId)
   );
 
-  const { data: relationships = [], isLoading: isLoadingRels } = useQuery<EntityRelationship[]>(
+  const { data: relationships = [], isLoading: _isLoadingRels } = useQuery<EntityRelationship[]>(
       [STORES.RELATIONSHIPS, entityId],
       () => DataService.entities.getRelationships(entityId)
   );
@@ -80,7 +81,7 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
         <div className={cn("p-6 border-b", theme.surface.highlight, theme.border.default)}>
             <div className="flex justify-between items-start mb-4">
                 <h2 className={cn("text-2xl font-bold", theme.text.primary)}>{entity.name}</h2>
-                <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}><X className="h-5 w-5"/></button>
+                <button onClick={onClose} aria-label="Close entity profile" className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}><X className="h-5 w-5"/></button>
             </div>
             <div className="flex gap-2 mb-4">
                 {entity.roles.map(r => <span key={r} className={cn("px-2 py-0.5 rounded text-xs font-bold uppercase", theme.status.info.bg, theme.status.info.text)}>{r}</span>)}

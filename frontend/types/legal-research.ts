@@ -2,21 +2,18 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
-} from './primitives';
+  BaseEntity, UserId, DocumentId, EvidenceId
+  } from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
+  
+  
+  
+  
+  
+  
+  LegalRuleType
+  } from './enums';
+import { SearchResult } from '@/services/api/search/search-api';
 
 export interface Citation extends BaseEntity {
   // Backend: citations table
@@ -28,6 +25,7 @@ export interface Citation extends BaseEntity {
   documentId?: string; // Backend: uuid
   status: string; // Backend: varchar (default: 'Valid')
   shepards?: any; // Backend: json
+  signal?: string; // Signal indicator (e.g., 'positive', 'negative', 'warning')
   
   // Frontend-specific (legacy)
   type?: string; // Deprecated

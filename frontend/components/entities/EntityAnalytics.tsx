@@ -24,9 +24,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { MetricCard } from '../common/Primitives';
 import { Card } from '../common/Card';
 
-// Utils & Constants
-import { cn } from '../../utils/cn';
-
 // Types
 import { LegalEntity } from '../../types';
 

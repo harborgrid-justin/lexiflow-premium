@@ -105,6 +105,23 @@ export const DiscoveryStipulations: React.FC = () => {
       }
   );
 
+  const { mutate: updateStipStatus } = useMutation(
+      async ({ id, status }: { id: string; status: string }) => {
+          const existing = stipulations.find(s => s.id === id);
+          if (!existing) throw new Error('Stipulation not found');
+          return DataService.discovery.addStipulation({ ...existing, status });
+      },
+      {
+          invalidateKeys: [[STORES.STIPULATIONS, 'all']],
+          onSuccess: (_, variables) => {
+              notify.success(`Stipulation ${variables.status.toLowerCase()}.`);
+          },
+          onError: () => {
+              notify.error('Failed to update stipulation status.');
+          }
+      }
+  );
+
   // ==========================================================================
   // CALLBACKS - Event Handlers
   // ==========================================================================
@@ -122,8 +139,7 @@ export const DiscoveryStipulations: React.FC = () => {
   };
 
   const handleStatusChange = (id: string, newStatus: string) => {
-      // Implementation for status change would go here
-      notify.info(`Status change to ${newStatus} not yet implemented`);
+      updateStipStatus({ id, status: newStatus });
   };
 
   // ==========================================================================

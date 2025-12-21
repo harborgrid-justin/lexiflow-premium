@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Lock, CheckCircle, Shield, Plus, Users, Briefcase } from 'lucide-react';
+import { Lock, CheckCircle, Plus, Users, Briefcase } from 'lucide-react';
 import { EthicalWall } from '../../types';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
@@ -46,7 +46,7 @@ export const ComplianceWalls: React.FC<ComplianceWallsProps> = ({ walls }) => {
 
                 <div className="flex flex-col sm:flex-row gap-6 md:border-l pl-0 md:pl-6 border-slate-100 dark:border-slate-800">
                     <div>
-                        <span className={cn("text-xs font-bold uppercase mb-2 block flex items-center", theme.text.secondary)}>
+                        <span className={cn("text-xs font-bold uppercase mb-2 flex items-center", theme.text.secondary)}>
                             <Lock className="h-3 w-3 mr-1"/> Restricted
                         </span>
                         <div className="flex flex-wrap gap-1 max-w-[200px]">
@@ -56,7 +56,7 @@ export const ComplianceWalls: React.FC<ComplianceWallsProps> = ({ walls }) => {
                         </div>
                     </div>
                     <div>
-                        <span className={cn("text-xs font-bold uppercase mb-2 block flex items-center", theme.text.secondary)}>
+                        <span className={cn("text-xs font-bold uppercase mb-2 flex items-center", theme.text.secondary)}>
                             <Users className="h-3 w-3 mr-1"/> Authorized
                         </span>
                         <div className="flex flex-wrap gap-1 max-w-[200px]">

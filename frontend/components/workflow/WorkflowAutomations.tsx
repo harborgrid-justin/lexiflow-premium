@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
-import { Zap, Clock, Plus, Loader2, AlertTriangle } from 'lucide-react';
+import React from 'react';
+import { Zap, Clock, Plus } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -38,7 +38,7 @@ export const WorkflowAutomations: React.FC = () => {
   const { theme } = useTheme();
   
   // Load automations from IndexedDB via useQuery for accurate, cached data
-  const { data: automations = [], isLoading } = useQuery(
+  const { data: automations = [], isLoading } = useQuery<any[]>(
     queryKeys.workflowsExtended.automations(),
     () => DataService.workflow.getAutomations()
   );

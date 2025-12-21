@@ -9,9 +9,9 @@
 // ============================================================================
 import React, { useState, useMemo, useCallback } from 'react';
 import {
-  BookOpen, Upload, Download, CheckCircle, AlertCircle, Copy, Trash2,
-  FileText, Plus, Wand2, Settings, Eye, EyeOff, Filter, ArrowRight,
-  Table, FileDown, Loader2, Info, AlertTriangle, CheckCircle2
+  BookOpen, Upload, Copy, Trash2,
+  Plus, Wand2, Settings, Eye, EyeOff, Filter,
+  Table, FileDown, Info, AlertTriangle, CheckCircle2
 } from 'lucide-react';
 
 // ============================================================================
@@ -126,7 +126,7 @@ export const BluebookFormatter: React.FC = () => {
       const newResults: FormattingResult[] = lines.map(line => {
         const citation = BluebookParser.parse(line);
         const formatted = citation
-          ? Formatter.format(citation, { italicizeCaseNames, useSmallCaps, format: formatStyle })
+          ? Formatter.format(citation, { italicizeCaseNames, useSmallCaps, format: formatStyle.toLowerCase() as "full" | "short" })
           : line;
 
         return {
@@ -418,16 +418,18 @@ U.S. Const. amend. XIV, § 1"
               {isProcessing ? 'Processing...' : 'Format Citations'}
             </Button>
 
-            <label>
+            <label className="inline-block cursor-pointer">
               <input
                 type="file"
                 accept=".txt"
                 onChange={handleFileUpload}
                 className="hidden"
               />
-              <Button variant="outline" icon={Upload} as="span">
-                Upload File
-              </Button>
+              <div className="inline-block">
+                <Button variant="outline" icon={Upload}>
+                  Upload File
+                </Button>
+              </div>
             </label>
 
             <Button variant="outline" icon={Plus} onClick={handleAddSamples}>
@@ -476,6 +478,7 @@ U.S. Const. amend. XIV, § 1"
                 <select
                   value={formatStyle}
                   onChange={(e) => setFormatStyle(e.target.value as CitationFormat)}
+                  title="Select citation format style"
                   className={cn(
                     "w-full px-3 py-1.5 rounded border text-sm",
                     theme.surface.default,
@@ -504,7 +507,8 @@ U.S. Const. amend. XIV, § 1"
               <Filter className="h-4 w-4 text-slate-500" />
               <select
                 value={filterType}
-                onChange={(e) => setFilterType(e.target.value as any)}
+                onChange={(e) => setFilterType(e.target.value as BluebookCitationType | 'ALL')}
+                title="Filter citations by type"
                 className={cn(
                   "px-3 py-1.5 rounded border text-sm",
                   theme.surface.default,
@@ -589,7 +593,7 @@ U.S. Const. amend. XIV, § 1"
                       ) : (
                         <AlertTriangle className="h-4 w-4 text-red-600 flex-shrink-0" />
                       )}
-                      <Badge variant="secondary" size="sm">
+                      <Badge variant="neutral">
                         {result.citation?.type || 'Unknown'}
                       </Badge>
                     </div>

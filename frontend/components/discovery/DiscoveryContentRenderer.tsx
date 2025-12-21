@@ -1,3 +1,20 @@
+/**
+ * @module components/discovery/DiscoveryContentRenderer
+ * @category Discovery
+ * @description Content router for Discovery Platform - maps activeTab to appropriate component.
+ * 
+ * ROUTING STRUCTURE:
+ * - Main tab views: dashboard, requests, depositions, esi, productions, interviews, privilege, holds
+ * - Additional views: custodians, examinations, plan
+ * - Wizard/Detail views: doc_viewer, response, production_wizard
+ * 
+ * EXPORTED UTILITIES:
+ * Workflow components (InitialDisclosureWizard, MotionToCompelBuilder, etc.) are exported
+ * for use by parent components, action buttons, or future routing extensions.
+ * 
+ * NO THEME USAGE: Pure routing logic
+ */
+
 import React, { lazy, Suspense } from 'react';
 import { DiscoveryRequest } from '../../types';
 import { DiscoveryView } from '../../hooks/useDiscoveryPlatform';
@@ -16,15 +33,15 @@ const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions'));
 const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
 const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 
-// Helper components that might be used internally or in future routes
-const InitialDisclosureWizard = lazy(() => import('./InitialDisclosureWizard'));
-const MotionToCompelBuilder = lazy(() => import('./MotionToCompelBuilder'));
-const DiscoveryStipulations = lazy(() => import('./DiscoveryStipulations'));
-const RequestForAdmission = lazy(() => import('./RequestForAdmission'));
-const Examinations = lazy(() => import('./Examinations'));
-const TranscriptManager = lazy(() => import('./TranscriptManager'));
-const VendorManagement = lazy(() => import('./VendorManagement'));
-const PerpetuateTestimony = lazy(() => import('./PerpetuateTestimony'));
+// Utility & Workflow Components - Available for specialized views or action buttons
+export const InitialDisclosureWizard = lazy(() => import('./InitialDisclosureWizard'));
+export const MotionToCompelBuilder = lazy(() => import('./MotionToCompelBuilder'));
+export const DiscoveryStipulations = lazy(() => import('./DiscoveryStipulations'));
+export const RequestForAdmission = lazy(() => import('./RequestForAdmission'));
+export const Examinations = lazy(() => import('./Examinations'));
+export const TranscriptManager = lazy(() => import('./TranscriptManager'));
+export const VendorManagement = lazy(() => import('./VendorManagement'));
+export const PerpetuateTestimony = lazy(() => import('./PerpetuateTestimony'));
 
 interface DiscoveryContentRendererProps {
   activeTab: DiscoveryView;
@@ -46,7 +63,7 @@ export const DiscoveryContentRenderer: React.FC<DiscoveryContentRendererProps> =
 
   // Main Tab Views
   switch(activeTab) {
-    case 'dashboard': return <DiscoveryDashboard />;
+    case 'dashboard': return <DiscoveryDashboard onNavigate={onNavigate} />;
     case 'requests': return <DiscoveryRequests items={requests} onNavigate={onNavigate} />;
     case 'depositions': return <DiscoveryDepositions />;
     case 'esi': return <DiscoveryESI />;
@@ -54,8 +71,10 @@ export const DiscoveryContentRenderer: React.FC<DiscoveryContentRendererProps> =
     case 'interviews': return <DiscoveryInterviews />;
     case 'privilege': return <PrivilegeLog />;
     case 'holds': return <LegalHolds />;
-    // Add other main views here
-    default: return <DiscoveryDashboard />;
+    case 'custodians': return <Suspense fallback={<LazyLoader message="Loading custodian interviews..." />}><DiscoveryInterviews /></Suspense>;
+    case 'examinations': return <Suspense fallback={<LazyLoader message="Loading examinations..." />}><Examinations /></Suspense>;
+    case 'plan': return <Suspense fallback={<LazyLoader message="Loading discovery plan..." />}><DiscoveryStipulations /></Suspense>;
+    default: return <DiscoveryDashboard onNavigate={onNavigate} />;
   }
 };
 

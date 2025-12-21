@@ -42,9 +42,9 @@ export const DescriptionList: React.FC<{ children: React.ReactNode; className?: 
 export const DescriptionItem: React.FC<DescriptionItemProps> = ({ label, value, className = '' }) => {
   const { theme } = useTheme();
   return (
-    <div className={className}>
+    <dl className={className}>
       <dt className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>{label}</dt>
       <dd className={cn("text-sm font-medium break-words", theme.text.primary)}>{value}</dd>
-    </div>
+    </dl>
   );
 };

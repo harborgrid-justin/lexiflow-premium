@@ -1,16 +1,15 @@
 
 import React from 'react';
-import { GitMerge, MoreHorizontal, User, Loader2, ListTodo } from 'lucide-react';
+import { GitMerge, MoreHorizontal, User, ListTodo } from 'lucide-react';
 import { TaskWorkflowBadges } from './TaskWorkflowBadges';
 import { EmptyState } from '../common/EmptyState';
 import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';
-import { WorkflowTask } from '../../types';
+import { WorkflowTask, TaskStatusBackend } from '../../types';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-import { STORES } from '../../services/data/db';
 
 export const ParallelTasksManager: React.FC = () => {
   const { theme } = useTheme();
@@ -23,7 +22,7 @@ export const ParallelTasksManager: React.FC = () => {
 
   // Ensure allTasks is always an array to prevent .filter() errors
   const tasksArray = Array.isArray(allTasks) ? allTasks : [];
-  const tasks = tasksArray.filter(t => t.status === 'In Progress' || t.status === 'Pending').slice(0, 4);
+  const tasks = tasksArray.filter(t => t.status === TaskStatusBackend.IN_PROGRESS || t.status === TaskStatusBackend.TODO).slice(0, 4);
 
   if (isLoading) return <AdaptiveLoader contentType="list" shimmer itemCount={4} />;
 
@@ -51,7 +50,7 @@ export const ParallelTasksManager: React.FC = () => {
               <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
               <div className="flex justify-between items-start mb-2">
                 <span className={cn("text-[10px] uppercase font-bold tracking-wider truncate max-w-[100px]", theme.text.tertiary)}>{task.relatedModule || 'General'} Track</span>
-                <button className={cn(theme.text.tertiary, `hover:${theme.text.primary}`)}><MoreHorizontal className="h-4 w-4"/></button>
+                <button type="button" aria-label="Task options" className={cn(theme.text.tertiary, `hover:${theme.text.primary}`)}><MoreHorizontal className="h-4 w-4"/></button>
               </div>
               <h4 className={cn("font-bold text-sm mb-3", theme.text.primary)}>{task.title}</h4>
               

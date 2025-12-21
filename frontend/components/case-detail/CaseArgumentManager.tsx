@@ -10,7 +10,7 @@
 
 // External Dependencies
 import React, { useState } from 'react';
-import { Target, Plus, Filter, Search } from 'lucide-react';
+import { Target, Plus, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Button } from '../common/Button';
@@ -99,6 +99,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
                     className={cn("text-sm bg-transparent outline-none py-1.5", theme.text.primary)}
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
+                    aria-label="Filter arguments by status"
                 >
                     <option value="All">All Status</option>
                     <option value="Active">Active</option>

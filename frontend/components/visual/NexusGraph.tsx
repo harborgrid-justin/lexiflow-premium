@@ -25,7 +25,7 @@ import { GraphOverlay } from './GraphOverlay';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
-import { NODE_STRIDE, SimulationNode } from '../../utils/nexusPhysics';
+import { NODE_STRIDE } from '../../utils/nexusPhysics';
 import { buildGraphData, getNodeStrokeColor, getNodeRadius, getNodeLabelYOffset } from './utils';
 
 // Types

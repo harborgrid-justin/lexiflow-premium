@@ -10,6 +10,6 @@ export const getUsageData = (clauses: Clause[]) => [...clauses]
   .sort((a, b) => b.usageCount - a.usageCount)
   .slice(0, 5)
   .map(c => ({
-    name: c.name.length > 20 ? c.name.substring(0, 20) + '...' : c.name,
+    name: c.name && c.name.length > 20 ? c.name.substring(0, 20) + '...' : (c.name || ''),
     usage: c.usageCount
   }));

@@ -18,4 +18,5 @@ export interface CitationDetailProps {
 
 export interface CitationLibraryProps {
   onSelect: (citation: Citation) => void;
+  caseId?: string;
 }

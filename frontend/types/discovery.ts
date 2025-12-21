@@ -2,20 +2,11 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  BaseEntity, DocumentId, MotionId, CaseId
 } from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
+  DiscoveryType, DiscoveryStatus,
+  ConferralResult, ConferralMethod
 } from './enums';
 
 export interface DiscoveryRequest extends BaseEntity { caseId: CaseId; type: DiscoveryType; propoundingParty: string; respondingParty: string; serviceDate: string; dueDate: string; status: DiscoveryStatus; title: string; description: string; }

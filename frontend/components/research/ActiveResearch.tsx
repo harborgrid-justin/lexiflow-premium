@@ -11,6 +11,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { performSearch } from './research.utils';
 import { useWindow } from '../../context/WindowContext';
+import { queryClient } from '../../services/queryClient';
 
 export const ActiveResearch: React.FC = () => {
   const { theme } = useTheme();
@@ -20,7 +21,7 @@ export const ActiveResearch: React.FC = () => {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   
   // Load research history from IndexedDB via useQuery for accurate, cached data
-  const { data: history = [] } = useQuery(
+  const { data: history = [] } = useQuery<ResearchSession[]>(
     queryKeys.research.history(),
     () => DataService.research.getHistory()
   );
@@ -30,7 +31,7 @@ export const ActiveResearch: React.FC = () => {
     setIsLoading(true);
     try {
         const { newSession, updatedHistory } = await performSearch(query, history);
-        setHistory(updatedHistory);
+        queryClient.invalidate(queryKeys.research.history());
         setActiveSessionId(newSession.id);
         setQuery('');
     } catch (error) {

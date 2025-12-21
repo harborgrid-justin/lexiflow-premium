@@ -2,20 +2,12 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  BaseEntity, DocumentId, EvidenceId,
+  MotionId, DocketId, CaseId
 } from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
+  MotionType, MotionStatus, MotionOutcome,
+  DocketEntryType
 } from './enums';
 
 export interface SearchResult { id: string; title: string; url?: string; type?: string; snippet?: string; }
@@ -49,13 +41,13 @@ export interface Motion extends BaseEntity {
   documents?: DocumentId[]; // Frontend legacy
   
   // Decision and outcome
-  ruling?: any; // Backend: jsonb
+  ruling?: unknown; // Backend: jsonb
   decision?: string; // Backend: text
   relief?: string; // Backend: text
   outcome?: MotionOutcome; // Frontend-specific
   
   // Response
-  opposingPartyResponse?: any; // Backend: jsonb
+  opposingPartyResponse?: unknown; // Backend: jsonb
   
   // Frontend-specific fields
   oppositionDueDate?: string;
@@ -114,12 +106,12 @@ export interface DocketEntry extends BaseEntity {
     name: string;
     documentNumber?: string;
   }>;
-  metadata?: Record<string, any>; // Backend: jsonb
+  metadata?: Record<string, unknown>; // Backend: jsonb
   
   // Frontend-specific fields
   title?: string; // Alias for description
   structuredData?: DocketEntryStructuredData;
-  triggersDeadlines?: any[];
+  triggersDeadlines?: unknown[];
   docLink?: string; // Alias for documentUrl
   syncMetadata?: { pacerId: string; lastPolled: string; checksum: string };
 }

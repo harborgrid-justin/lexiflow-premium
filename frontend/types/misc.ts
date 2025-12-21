@@ -19,6 +19,11 @@ import {
 } from './enums';
 import { LucideIcon } from 'lucide-react';
 import type { FC, LazyExoticComponent } from 'react';
+import type { Case, Party } from './case';
+import type { Motion, DocketEntry } from './motion-docket';
+import type { EvidenceItem } from './evidence';
+import type { LegalDocument } from './documents';
+import type { WorkflowTask } from './workflow';
 
 export interface Attachment { 
   id?: string;
@@ -148,7 +153,7 @@ export interface ProductionSet {
 
 export interface RealizationStat { id?: string; name: string; value: number; color: string; }
 
-export interface ServiceJob extends BaseEntity { caseId: CaseId; requestorId: UserId; documentTitle: string; targetPerson: string; targetAddress: string; serverName: string; method: ServiceMethod; mailType?: string; trackingNumber?: string; addressedTo?: string; status: ServiceStatus; dueDate: string; attempts: number; servedDate?: string; gpsCoordinates?: string; notes?: string; signerName?: string; attemptHistory?: { date: string; result: string; lat?: number; long?: number }[]; }
+export interface ServiceJob extends BaseEntity { caseId: CaseId; requestorId: UserId; documentTitle: string; targetPerson: string; targetAddress: string; serverName: string; method: ServiceMethod; mailType?: string; trackingNumber?: string; addressedTo?: string; status: keyof typeof ServiceStatus; dueDate: string; attempts: number; servedDate?: string; gpsCoordinates?: string; notes?: string; signerName?: string; attemptHistory?: { date: string; result: string; lat?: number; long?: number }[]; }
 
 export interface StaffMember {
   id: string;

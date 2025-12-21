@@ -2,23 +2,11 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  BaseEntity, DocumentId, CaseId
 } from './primitives';
-import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
 
-export interface Pleading extends BaseEntity {
+
+export interface Pleading extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   // Core fields (aligned with backend Pleading entity)
   title: string; // Backend: varchar (required)
   description?: string; // Backend: text, nullable
@@ -35,13 +23,13 @@ export interface Pleading extends BaseEntity {
   judge?: string; // Backend: varchar
   parties?: string[]; // Backend: simple-array
   summary?: string; // Backend: text
-  customFields?: Record<string, any>; // Backend: jsonb
+  customFields?: Record<string, unknown>; // Backend: jsonb
   tags?: string[]; // Backend: simple-array
-  createdBy?: string; // Backend: uuid
-  updatedBy?: string; // Backend: uuid
+  createdBy?: string; // Backend: uuid - overrides BaseEntity.createdBy
+  updatedBy?: string; // Backend: uuid - overrides BaseEntity.updatedBy
 }
 
-export interface Clause extends BaseEntity { 
+export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> { 
   // Core fields (aligned with backend Clause entity)
   title: string; // Backend: varchar (required)
   name?: string; // Frontend legacy alias
@@ -49,18 +37,18 @@ export interface Clause extends BaseEntity {
   description?: string; // Backend: text, nullable
   category: 'general' | 'contract' | 'motion' | 'pleading' | 'discovery' | 'custom' | string; // Backend: enum ClauseCategory
   tags?: string[]; // Backend: simple-array
-  variables?: Record<string, any>; // Backend: jsonb
+  variables?: Record<string, unknown>; // Backend: jsonb
   isActive?: boolean; // Backend: boolean, default true
   usageCount: number; // Backend: int, default 0
   lastUsedAt?: string; // Backend: timestamp
-  createdBy?: string; // Backend: uuid
-  updatedBy?: string; // Backend: uuid
-  metadata?: any; // Backend field
+  createdBy?: string; // Backend: uuid - overrides BaseEntity.createdBy
+  updatedBy?: string; // Backend: uuid - overrides BaseEntity.updatedBy
+  metadata?: unknown; // Backend field
   // Frontend legacy fields
   version?: number;
   lastUpdated?: string;
   riskRating?: string;
-  versions?: any[];
+  versions?: unknown[];
   embedding?: number[];
 }
 

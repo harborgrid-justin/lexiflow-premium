@@ -43,7 +43,7 @@ export const TaskReassignmentPanel: React.FC = () => {
           <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>From User</label>
           <div className={cn("flex items-center border rounded-md px-3 py-2", theme.surface.default, theme.border.default)}>
             <User className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
-            <select className={cn("bg-transparent w-full text-sm outline-none", theme.text.primary)}>
+            <select className={cn("bg-transparent w-full text-sm outline-none", theme.text.primary)} aria-label="From User">
               <option>James Doe</option>
               <option>Sarah Jenkins</option>
             </select>
@@ -56,7 +56,7 @@ export const TaskReassignmentPanel: React.FC = () => {
           <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>To User</label>
           <div className={cn("flex items-center border rounded-md px-3 py-2", theme.surface.default, theme.border.default)}>
             <User className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
-            <select className={cn("bg-transparent w-full text-sm outline-none", theme.text.primary)}>
+            <select className={cn("bg-transparent w-full text-sm outline-none", theme.text.primary)} aria-label="To User">
               <option>Alexandra H.</option>
               <option>Paralegal Pool</option>
             </select>

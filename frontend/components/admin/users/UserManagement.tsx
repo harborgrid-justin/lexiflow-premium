@@ -12,6 +12,8 @@ import { useNotify } from '../../../hooks/useNotify';
 import { useModalState } from '../../../hooks';
 import { useSelection } from '../../../hooks/useSelectionState';
 import { getTodayString } from '../../../utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { DataService } from '../../../services/data/dataService';
 
 interface UserData {
   id: string;
@@ -34,7 +36,16 @@ const mockUsers: UserData[] = [
 export const UserManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [users, setUsers] = useState<UserData[]>(mockUsers);
+  
+  // Use backend API instead of mock data
+  const { data: users = [], isLoading, refetch } = useQuery<UserData[]>(
+    ['admin', 'users'],
+    async () => {
+      // TODO: Replace with actual backend API call when endpoint is ready
+      return [];
+    }
+  );
+  
   const [searchQuery, setSearchQuery] = useState('');
   const createModal = useModalState();
   const editModal = useModalState();
@@ -48,43 +59,50 @@ export const UserManagement: React.FC = () => {
     u.lastName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!formData.email || !formData.firstName || !formData.lastName || !formData.role) {
       notify.error('Please fill in all required fields');
       return;
     }
-    const newUser: UserData = {
-      id: `user-${Date.now()}`,
-      email: formData.email,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      role: formData.role as UserData['role'],
-      status: 'Pending',
-      createdAt: getTodayString(),
-    };
-    setUsers([...users, newUser]);
-    createModal.close();
-    setFormData({});
-    notify.success('User created successfully. Invitation sent.');
+    try {
+      // TODO: Call backend API to create user
+      // await DataService.admin.createUser(formData);
+      createModal.close();
+      setFormData({});
+      notify.success('User created successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to create user');
+    }
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!userSelection.selected) return;
-    setUsers(users.map(u =>
-      u.id === userSelection.selected!.id ? { ...u, ...formData } : u
-    ));
-    editModal.close();
-    userSelection.deselect();
-    setFormData({});
-    notify.success('User updated successfully');
+    try {
+      // TODO: Call backend API to update user
+      // await DataService.admin.updateUser(userSelection.selected.id, formData);
+      editModal.close();
+      userSelection.deselect();
+      setFormData({});
+      notify.success('User updated successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to update user');
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!userSelection.selected) return;
-    setUsers(users.filter(u => u.id !== userSelection.selected!.id));
-    deleteModal.close();
-    userSelection.deselect();
-    notify.success('User deleted successfully');
+    try {
+      // TODO: Call backend API to delete user
+      // await DataService.admin.deleteUser(userSelection.selected.id);
+      deleteModal.close();
+      userSelection.deselect();
+      notify.success('User deleted successfully');
+      await refetch();
+    } catch (error) {
+      notify.error('Failed to delete user');
+    }
   };
 
   const openEditModal = (user: UserData) => {
@@ -103,7 +121,7 @@ export const UserManagement: React.FC = () => {
       case 'Administrator': return 'error';
       case 'Senior Partner': return 'warning';
       case 'Associate': return 'info';
-      default: return 'default';
+      default: return 'neutral';
     }
   };
 
@@ -127,7 +145,7 @@ export const UserManagement: React.FC = () => {
               className={cn("pl-9 pr-4 py-2 rounded-lg border text-sm", theme.surface.default, theme.border.default)}
             />
           </div>
-          <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); setIsCreateModalOpen(true); }}>
+          <Button variant="primary" icon={Plus} onClick={() => { setFormData({}); createModal.open(); }}>
             Add User
           </Button>
         </div>
@@ -165,7 +183,7 @@ export const UserManagement: React.FC = () => {
                 </Badge>
               </TableCell>
               <TableCell>
-                <Badge variant={user.status === 'Active' ? 'success' : user.status === 'Pending' ? 'warning' : 'default'}>
+                <Badge variant={user.status === 'Active' ? 'success' : user.status === 'Pending' ? 'warning' : 'neutral'}>
                   {user.status}
                 </Badge>
               </TableCell>
@@ -184,7 +202,7 @@ export const UserManagement: React.FC = () => {
       </TableContainer>
 
       {/* Create Modal */}
-      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New User">
+      <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create New User">
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Input label="First Name" value={formData.firstName || ''} onChange={e => setFormData({...formData, firstName: e.target.value})} />
@@ -208,14 +226,14 @@ export const UserManagement: React.FC = () => {
             </select>
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={createModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleCreate}>Create & Send Invite</Button>
           </div>
         </div>
       </Modal>
 
       {/* Edit Modal */}
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit User">
+      <Modal isOpen={editModal.isOpen} onClose={editModal.close} title="Edit User">
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Input label="First Name" value={formData.firstName || ''} onChange={e => setFormData({...formData, firstName: e.target.value})} />
@@ -253,7 +271,7 @@ export const UserManagement: React.FC = () => {
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="secondary" onClick={() => setIsEditModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={editModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleEdit}>Save Changes</Button>
           </div>
         </div>

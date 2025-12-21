@@ -14,13 +14,23 @@ export const DatabaseManagement: React.FC = () => {
   const incrementModal = useModalState();
   const resetModal = useModalState();
 
-  const { data: dbInfo, refetch } = useQuery(['db', 'info'], () => db.getDbInfo());
+  // Note: getDbInfo, incrementVersion, resetDatabase methods need to be implemented in DatabaseManager
+  const { data: dbInfo, refetch } = useQuery(['db', 'info'], () => {
+    // Temporary stub until db.getDbInfo() is implemented
+    return Promise.resolve({
+      name: 'LexiFlow DB',
+      version: 1,
+      mode: 'readwrite',
+      totalStores: 0,
+      stores: []
+    });
+  });
 
   const handleIncrementVersion = async () => {
     setIsProcessing(true);
     try {
-      const newVersion = await db.incrementVersion();
-      setMessage({ type: 'success', text: `Database version incremented to ${newVersion}. Reload the page to apply.` });
+      // await db.incrementVersion(); // TODO: Implement this method
+      setMessage({ type: 'info', text: `Version increment not yet implemented` });
       await refetch();
     } catch (error) {
       setMessage({ type: 'error', text: `Failed to increment version: ${error}` });
@@ -32,8 +42,8 @@ export const DatabaseManagement: React.FC = () => {
   const handleResetDatabase = async () => {
     setIsProcessing(true);
     try {
-      await db.resetDatabase();
-      setMessage({ type: 'success', text: 'Database reset successfully. Reloading...' });
+      // await db.resetDatabase(); // TODO: Implement this method
+      setMessage({ type: 'info', text: 'Database reset not yet implemented' });
       setTimeout(() => window.location.reload(), 1500);
     } catch (error) {
       setMessage({ type: 'error', text: `Failed to reset database: ${error}` });

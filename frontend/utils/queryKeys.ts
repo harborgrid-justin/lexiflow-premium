@@ -14,115 +14,115 @@
  * queryClient.invalidate(queryKeys.cases.all());
  * queryClient.invalidate(queryKeys.cases.detail(caseId));
  * ```
+ * 
+ * Note: Migrated from STORES constants to plain strings for backend API compatibility.
  */
-
-import { STORES } from '../services/data/db';
 
 export const queryKeys = {
   // Cases
   cases: {
-    all: () => [STORES.CASES, 'all'] as const,
-    lists: () => [STORES.CASES, 'list'] as const,
-    list: (filters: string) => [STORES.CASES, 'list', filters] as const,
-    detail: (id: string) => [STORES.CASES, 'detail', id] as const,
-    byStatus: (status: string) => [STORES.CASES, 'byStatus', status] as const,
-    byCaseId: (caseId: string) => [STORES.CASES, 'byCaseId', caseId] as const,
+    all: () => ['cases', 'all'] as const,
+    lists: () => ['cases', 'list'] as const,
+    list: (filters: string) => ['cases', 'list', filters] as const,
+    detail: (id: string) => ['cases', 'detail', id] as const,
+    byStatus: (status: string) => ['cases', 'byStatus', status] as const,
+    byCaseId: (caseId: string) => ['cases', 'byCaseId', caseId] as const,
   },
 
   // Documents
   documents: {
-    all: () => [STORES.DOCUMENTS, 'all'] as const,
-    lists: () => [STORES.DOCUMENTS, 'list'] as const,
-    list: (filters: string) => [STORES.DOCUMENTS, 'list', filters] as const,
-    detail: (id: string) => [STORES.DOCUMENTS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.DOCUMENTS, 'byCaseId', caseId] as const,
+    all: () => ['documents', 'all'] as const,
+    lists: () => ['documents', 'list'] as const,
+    list: (filters: string) => ['documents', 'list', filters] as const,
+    detail: (id: string) => ['documents', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['documents', 'byCaseId', caseId] as const,
   },
 
   // Docket Entries
   docket: {
-    all: () => [STORES.DOCKET, 'all'] as const,
-    lists: () => [STORES.DOCKET, 'list'] as const,
-    detail: (id: string) => [STORES.DOCKET, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.DOCKET, 'byCaseId', caseId] as const,
+    all: () => ['docket', 'all'] as const,
+    lists: () => ['docket', 'list'] as const,
+    detail: (id: string) => ['docket', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['docket', 'byCaseId', caseId] as const,
   },
 
   // Evidence
   evidence: {
-    all: () => [STORES.EVIDENCE, 'all'] as const,
-    lists: () => [STORES.EVIDENCE, 'list'] as const,
-    detail: (id: string) => [STORES.EVIDENCE, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.EVIDENCE, 'byCaseId', caseId] as const,
+    all: () => ['evidence', 'all'] as const,
+    lists: () => ['evidence', 'list'] as const,
+    detail: (id: string) => ['evidence', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['evidence', 'byCaseId', caseId] as const,
   },
 
   // Pleadings
   pleadings: {
-    all: () => [STORES.PLEADINGS, 'all'] as const,
-    lists: () => [STORES.PLEADINGS, 'list'] as const,
-    detail: (id: string) => [STORES.PLEADINGS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.PLEADINGS, 'byCaseId', caseId] as const,
+    all: () => ['pleadings', 'all'] as const,
+    lists: () => ['pleadings', 'list'] as const,
+    detail: (id: string) => ['pleadings', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['pleadings', 'byCaseId', caseId] as const,
   },
 
   // Tasks
   tasks: {
-    all: () => [STORES.TASKS, 'all'] as const,
-    lists: () => [STORES.TASKS, 'list'] as const,
-    detail: (id: string) => [STORES.TASKS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.TASKS, 'byCaseId', caseId] as const,
-    byStatus: (status: string) => [STORES.TASKS, 'byStatus', status] as const,
+    all: () => ['tasks', 'all'] as const,
+    lists: () => ['tasks', 'list'] as const,
+    detail: (id: string) => ['tasks', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['tasks', 'byCaseId', caseId] as const,
+    byStatus: (status: string) => ['tasks', 'byStatus', status] as const,
   },
 
   // Time Entries
   timeEntries: {
-    all: () => [STORES.TIME_ENTRIES, 'all'] as const,
-    lists: () => [STORES.TIME_ENTRIES, 'list'] as const,
-    detail: (id: string) => [STORES.TIME_ENTRIES, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.TIME_ENTRIES, 'byCaseId', caseId] as const,
+    all: () => ['time-entries', 'all'] as const,
+    lists: () => ['time-entries', 'list'] as const,
+    detail: (id: string) => ['time-entries', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['time-entries', 'byCaseId', caseId] as const,
   },
 
   // Invoices
   invoices: {
-    all: () => [STORES.INVOICES, 'all'] as const,
-    lists: () => [STORES.INVOICES, 'list'] as const,
-    detail: (id: string) => [STORES.INVOICES, 'detail', id] as const,
-    byStatus: (status: string) => [STORES.INVOICES, 'byStatus', status] as const,
+    all: () => ['invoices', 'all'] as const,
+    lists: () => ['invoices', 'list'] as const,
+    detail: (id: string) => ['invoices', 'detail', id] as const,
+    byStatus: (status: string) => ['invoices', 'byStatus', status] as const,
   },
 
   // HR/Employees
   employees: {
-    all: () => [STORES.STAFF, 'all'] as const,
-    lists: () => [STORES.STAFF, 'list'] as const,
-    detail: (id: string) => [STORES.STAFF, 'detail', id] as const,
+    all: () => ['staff', 'all'] as const,
+    lists: () => ['staff', 'list'] as const,
+    detail: (id: string) => ['staff', 'detail', id] as const,
   },
 
   // Clients
   clients: {
-    all: () => [STORES.CLIENTS, 'all'] as const,
-    lists: () => [STORES.CLIENTS, 'list'] as const,
-    detail: (id: string) => [STORES.CLIENTS, 'detail', id] as const,
+    all: () => ['clients', 'all'] as const,
+    lists: () => ['clients', 'list'] as const,
+    detail: (id: string) => ['clients', 'detail', id] as const,
   },
 
   // Users
   users: {
-    all: () => [STORES.USERS, 'all'] as const,
-    lists: () => [STORES.USERS, 'list'] as const,
-    detail: (id: string) => [STORES.USERS, 'detail', id] as const,
+    all: () => ['users', 'all'] as const,
+    lists: () => ['users', 'list'] as const,
+    detail: (id: string) => ['users', 'detail', id] as const,
   },
 
   // Notifications
   notifications: {
-    all: () => [STORES.NOTIFICATIONS, 'all'] as const,
-    unread: () => [STORES.NOTIFICATIONS, 'unread'] as const,
-    byUser: (userId: string) => [STORES.NOTIFICATIONS, 'byUser', userId] as const,
+    all: () => ['notifications', 'all'] as const,
+    unread: () => ['notifications', 'unread'] as const,
+    byUser: (userId: string) => ['notifications', 'byUser', userId] as const,
   },
 
   // Workflows
   workflows: {
-    all: () => [STORES.WORKFLOWS, 'all'] as const,
-    lists: () => [STORES.WORKFLOWS, 'list'] as const,
-    detail: (id: string) => [STORES.WORKFLOWS, 'detail', id] as const,
-    processes: () => [STORES.WORKFLOWS, 'processes'] as const,
-    tasks: () => [STORES.TASKS, 'tasks'] as const,
-    templates: () => [STORES.WORKFLOWS, 'templates'] as const,
+    all: () => ['workflows', 'all'] as const,
+    lists: () => ['workflows', 'list'] as const,
+    detail: (id: string) => ['workflows', 'detail', id] as const,
+    processes: () => ['workflows', 'processes'] as const,
+    tasks: () => ['tasks', 'tasks'] as const,
+    templates: () => ['workflows', 'templates'] as const,
   },
 
   // Dashboard
@@ -134,37 +134,37 @@ export const queryKeys = {
 
   // Discovery
   discovery: {
-    all: () => [STORES.REQUESTS, 'all'] as const,
-    detail: (id: string) => [STORES.REQUESTS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.REQUESTS, 'byCaseId', caseId] as const,
+    all: () => ['requests', 'all'] as const,
+    detail: (id: string) => ['requests', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['requests', 'byCaseId', caseId] as const,
   },
 
   // Exhibits
   exhibits: {
-    all: () => [STORES.EXHIBITS, 'all'] as const,
-    detail: (id: string) => [STORES.EXHIBITS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.EXHIBITS, 'byCaseId', caseId] as const,
+    all: () => ['exhibits', 'all'] as const,
+    detail: (id: string) => ['exhibits', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['exhibits', 'byCaseId', caseId] as const,
   },
 
   // Motions
   motions: {
-    all: () => [STORES.MOTIONS, 'all'] as const,
-    detail: (id: string) => [STORES.MOTIONS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.MOTIONS, 'byCaseId', caseId] as const,
+    all: () => ['motions', 'all'] as const,
+    detail: (id: string) => ['motions', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['motions', 'byCaseId', caseId] as const,
   },
 
   // Projects
   projects: {
-    all: () => [STORES.PROJECTS, 'all'] as const,
-    detail: (id: string) => [STORES.PROJECTS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.PROJECTS, 'byCaseId', caseId] as const,
+    all: () => ['projects', 'all'] as const,
+    detail: (id: string) => ['projects', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['projects', 'byCaseId', caseId] as const,
   },
 
   // Risks
   risks: {
-    all: () => [STORES.RISKS, 'all'] as const,
-    detail: (id: string) => [STORES.RISKS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.RISKS, 'byCaseId', caseId] as const,
+    all: () => ['risks', 'all'] as const,
+    detail: (id: string) => ['risks', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['risks', 'byCaseId', caseId] as const,
   },
 
   // War Room
@@ -174,14 +174,14 @@ export const queryKeys = {
 
   // Calendar
   calendar: {
-    events: () => [STORES.CALENDAR_EVENTS, 'events'] as const,
-    event: (id: string) => [STORES.CALENDAR_EVENTS, 'event', id] as const,
+    events: () => ['calendar-events', 'events'] as const,
+    event: (id: string) => ['calendar-events', 'event', id] as const,
   },
 
   // Logs
   logs: {
-    all: () => [STORES.LOGS, 'all'] as const,
-    byEntity: (entityType: string, entityId: string) => [STORES.LOGS, 'byEntity', entityType, entityId] as const,
+    all: () => ['logs', 'all'] as const,
+    byEntity: (entityType: string, entityId: string) => ['logs', 'byEntity', entityType, entityId] as const,
   },
 
   // Admin
@@ -222,66 +222,66 @@ export const queryKeys = {
 
   // Jurisdictions
   jurisdictions: {
-    state: () => [STORES.JURISDICTIONS, 'state'] as const,
-    federal: () => [STORES.JURISDICTIONS, 'federal'] as const,
-    rules: () => [STORES.RULES, 'all'] as const,
+    state: () => ['jurisdictions', 'state'] as const,
+    federal: () => ['jurisdictions', 'federal'] as const,
+    rules: () => ['rules', 'all'] as const,
   },
 
   // Knowledge
   knowledge: {
-    wiki: () => [STORES.WIKI, 'all'] as const,
-    qa: () => [STORES.QA, 'all'] as const,
-    qaAnalytics: () => [STORES.QA, 'analytics'] as const,
-    precedents: () => [STORES.PRECEDENTS, 'all'] as const,
-    cleTracking: () => [STORES.CLE_TRACKING, 'all'] as const,
+    wiki: () => ['wiki', 'all'] as const,
+    qa: () => ['qa', 'all'] as const,
+    qaAnalytics: () => ['qa', 'analytics'] as const,
+    precedents: () => ['precedents', 'all'] as const,
+    cleTracking: () => ['cle-tracking', 'all'] as const,
   },
 
   // Practice Management
   practice: {
-    okrs: () => [STORES.OKRS, 'all'] as const,
-    vendorContracts: () => [STORES.VENDOR_CONTRACTS, 'all'] as const,
-    rfps: () => [STORES.RFPS, 'all'] as const,
-    vendorDirectory: () => [STORES.VENDOR_DIRECTORY, 'all'] as const,
-    maintenanceTickets: () => [STORES.MAINTENANCE_TICKETS, 'all'] as const,
-    facilities: () => [STORES.FACILITIES, 'all'] as const,
-    malwareSignatures: () => [STORES.MALWARE_SIGNATURES, 'all'] as const,
+    okrs: () => ['okrs', 'all'] as const,
+    vendorContracts: () => ['vendor-contracts', 'all'] as const,
+    rfps: () => ['rfps', 'all'] as const,
+    vendorDirectory: () => ['vendor-directory', 'all'] as const,
+    maintenanceTickets: () => ['maintenance-tickets', 'all'] as const,
+    facilities: () => ['facilities', 'all'] as const,
+    malwareSignatures: () => ['malware-signatures', 'all'] as const,
   },
 
   // Staff
   staff: {
-    all: () => [STORES.STAFF, 'all'] as const,
-    detail: (id: string) => [STORES.STAFF, 'detail', id] as const,
+    all: () => ['staff', 'all'] as const,
+    detail: (id: string) => ['staff', 'detail', id] as const,
   },
 
   // Sanctions
   sanctions: {
-    all: () => [STORES.SANCTIONS, 'all'] as const,
+    all: () => ['sanctions', 'all'] as const,
   },
 
   // Clauses
   clauses: {
-    all: () => [STORES.CLAUSES, 'all'] as const,
-    detail: (id: string) => [STORES.CLAUSES, 'detail', id] as const,
+    all: () => ['clauses', 'all'] as const,
+    detail: (id: string) => ['clauses', 'detail', id] as const,
   },
 
   // Citations
   citations: {
-    all: () => [STORES.CITATIONS, 'all'] as const,
+    all: () => ['citations', 'all'] as const,
   },
 
   // Pleading Templates
   pleadingTemplates: {
-    all: () => [STORES.PLEADING_TEMPLATES, 'all'] as const,
+    all: () => ['pleading-templates', 'all'] as const,
   },
 
   // Processes
   processes: {
-    all: () => [STORES.PROCESSES, 'all'] as const,
+    all: () => ['processes', 'all'] as const,
   },
 
   // Advisors/Experts
   advisors: {
-    experts: () => [STORES.ADVISORS, 'experts'] as const,
+    experts: () => ['advisors', 'experts'] as const,
   },
 
   // Research
@@ -292,11 +292,11 @@ export const queryKeys = {
 
   // Expenses
   expenses: {
-    all: () => [STORES.EXPENSES, 'all'] as const,
-    lists: () => [STORES.EXPENSES, 'list'] as const,
-    detail: (id: string) => [STORES.EXPENSES, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.EXPENSES, 'byCaseId', caseId] as const,
-    unbilled: (caseId: string) => [STORES.EXPENSES, 'unbilled', caseId] as const,
+    all: () => ['expenses', 'all'] as const,
+    lists: () => ['expenses', 'list'] as const,
+    detail: (id: string) => ['expenses', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['expenses', 'byCaseId', caseId] as const,
+    unbilled: (caseId: string) => ['expenses', 'unbilled', caseId] as const,
   },
 
   // Trust Accounts
@@ -325,19 +325,19 @@ export const queryKeys = {
 
   // Discovery custodians
   discoveryExtended: {
-    all: () => [STORES.REQUESTS, 'all'] as const,
-    detail: (id: string) => [STORES.REQUESTS, 'detail', id] as const,
-    byCaseId: (caseId: string) => [STORES.REQUESTS, 'byCaseId', caseId] as const,
+    all: () => ['requests', 'all'] as const,
+    detail: (id: string) => ['requests', 'detail', id] as const,
+    byCaseId: (caseId: string) => ['requests', 'byCaseId', caseId] as const,
     custodians: () => ['discovery', 'custodians'] as const,
   },
 
   // Workflows extended
   workflowsExtended: {
-    all: () => [STORES.WORKFLOWS, 'all'] as const,
-    lists: () => [STORES.WORKFLOWS, 'list'] as const,
-    detail: (id: string) => [STORES.WORKFLOWS, 'detail', id] as const,
-    processes: () => [STORES.WORKFLOWS, 'processes'] as const,
-    tasks: () => [STORES.TASKS, 'tasks'] as const,
+    all: () => ['workflows', 'all'] as const,
+    lists: () => ['workflows', 'list'] as const,
+    detail: (id: string) => ['workflows', 'detail', id] as const,
+    processes: () => ['workflows', 'processes'] as const,
+    tasks: () => ['tasks', 'tasks'] as const,
     automations: () => ['workflows', 'automations'] as const,
     settings: () => ['workflows', 'settings'] as const,
     approvals: () => ['workflows', 'approvals'] as const,

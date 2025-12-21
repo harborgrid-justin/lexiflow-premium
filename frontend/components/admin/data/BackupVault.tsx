@@ -77,12 +77,12 @@ export const BackupVault: React.FC = () => {
                 <p className={cn("text-sm", theme.text.secondary)}>Point-in-time recovery for entire cluster. RPO: 15min / RTO: 30min.</p>
             </div>
             <div className="flex gap-2">
-                <Button variant="outline" icon={RefreshCw} onClick={() => queryClient.invalidate(queryKeys.backup.all())}>Refresh</Button>
+                <Button variant="outline" icon={RefreshCw} onClick={() => queryClient.invalidate(['backups'])}>Refresh</Button>
                 <Button variant="primary" icon={Play} onClick={() => setIsSnapshotModalOpen(true)}>Trigger Snapshot</Button>
             </div>
         </div>
 
-        <BackupMetrics latestCreated={snapshots.length > 0 ? snapshots[0].created : undefined} stats={stats} />
+        <BackupMetrics latestCreated={snapshots.length > 0 ? snapshots[0].createdAt : undefined} stats={stats} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Snapshots Table */}
@@ -99,8 +99,8 @@ export const BackupVault: React.FC = () => {
                          <div className="flex items-center gap-3">
                              <Server className={cn("h-8 w-8 text-blue-500")}/>
                              <div>
-                                 <p className={cn("font-bold", theme.text.primary)}>{stats?.glacierTier}</p>
-                                 <p className={cn("text-xs", theme.text.secondary)}>Retention: {stats?.retentionPolicy}</p>
+                                 <p className={cn("font-bold", theme.text.primary)}>{(stats as any)?.glacierTier || 'Standard'}</p>
+                                 <p className={cn("text-xs", theme.text.secondary)}>Retention: {(stats as any)?.retentionPolicy || '30 days'}</p>
                              </div>
                          </div>
                          <div className={cn("h-2 w-full rounded-full overflow-hidden", theme.border.default)}>
@@ -137,7 +137,7 @@ export const BackupVault: React.FC = () => {
         <RestoreSnapshotModal 
             snapshot={restoreModalOpen}
             onClose={() => setRestoreModalOpen(null)}
-            onRestore={() => restoreModalOpen && restoreSnapshot(restoreModalOpen.id)}
+            onRestore={() => restoreModalOpen && restoreSnapshot({ id: restoreModalOpen.id, target: 'primary' })}
             isRestoring={isRestoring}
         />
     </div>

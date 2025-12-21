@@ -14,6 +14,8 @@ import { useQuery } from '../../../hooks/useQueryHooks';
 import { ErrorState } from '../../common/ErrorState';
 import { WebhooksApiService } from '../../../services/api/webhooks-api';
 
+const webhooksApi = new WebhooksApiService();
+
 interface WebhookConfig {
   id: string;
   name: string;
@@ -40,7 +42,7 @@ export const WebhookManagement: React.FC = () => {
   
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
-    const response = await WebhooksApiService.getAll();
+    const response = await webhooksApi.getAll();
     return response.items.map((item: any) => ({
       id: item.id,
       name: item.name,
@@ -68,7 +70,7 @@ export const WebhookManagement: React.FC = () => {
       return;
     }
     try {
-      await WebhooksApiService.create({
+      await webhooksApi.create({
         name: formData.name,
         url: formData.url,
         events: formData.events,
@@ -87,7 +89,7 @@ export const WebhookManagement: React.FC = () => {
   const handleEdit = async () => {
     if (!webhookSelection.selected) return;
     try {
-      await WebhooksApiService.update(webhookSelection.selected.id, formData);
+      await webhooksApi.update(webhookSelection.selected.id, formData);
       await refetch();
       editModal.close();
       webhookSelection.deselect();
@@ -102,7 +104,7 @@ export const WebhookManagement: React.FC = () => {
   const handleDelete = async () => {
     if (!webhookSelection.selected) return;
     try {
-      await WebhooksApiService.delete(webhookSelection.selected.id);
+      await webhooksApi.delete(webhookSelection.selected.id);
       await refetch();
       deleteModal.close();
       webhookSelection.deselect();
@@ -116,7 +118,7 @@ export const WebhookManagement: React.FC = () => {
   const handleTest = async () => {
     if (!webhookSelection.selected) return;
     try {
-      const result = await WebhooksApiService.test(webhookSelection.selected.id);
+      const result = await webhooksApi.test(webhookSelection.selected.id);
       setTestResult({
         success: result.success,
         message: result.message || (result.success ? 'Webhook responded successfully' : 'Webhook failed'),
@@ -202,7 +204,7 @@ export const WebhookManagement: React.FC = () => {
                   <Badge variant="info">{webhook.events.length} events</Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={webhook.status === 'Active' ? 'success' : webhook.status === 'Error' ? 'error' : 'default'}>
+                  <Badge variant={webhook.status === 'Active' ? 'success' : webhook.status === 'Error' ? 'error' : 'neutral'}>
                     {webhook.status === 'Error' && <AlertCircle className="h-3 w-3 mr-1" />}
                     {webhook.status}
                   </Badge>
@@ -238,7 +240,7 @@ export const WebhookManagement: React.FC = () => {
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Events to Subscribe</label>
             <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {availableEvents.map(event => (
-                <label key={event} className={cn("flex items-center p-2 rounded border cursor-pointer", formData.events?.includes(event) ? theme.primary.background : theme.surface.default, theme.border.default)}>
+                <label key={event} className={cn("flex items-center p-2 rounded border cursor-pointer", formData.events?.includes(event) ? theme.primary.light : theme.surface.default, theme.border.default)}>
                   <input type="checkbox" checked={formData.events?.includes(event)} onChange={() => toggleEvent(event)} className="mr-2" />
                   <span className="text-sm">{event}</span>
                 </label>
@@ -259,7 +261,7 @@ export const WebhookManagement: React.FC = () => {
       <Modal isOpen={testModal.isOpen} onClose={testModal.close} title="Test Webhook">
         <div className="p-6">
           <p className={cn("mb-4", theme.text.secondary)}>
-            Send a test payload to: <code className={cn("px-2 py-1 rounded text-sm", theme.surface.highlight)}>{selectedWebhook?.url}</code>
+            Send a test payload to: <code className={cn("px-2 py-1 rounded text-sm", theme.surface.highlight)}>{webhookSelection.selected?.url}</code>
           </p>
           {testResult && (
             <div className={cn("p-4 rounded-lg mb-4 flex items-center gap-2", testResult.success ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800')}>

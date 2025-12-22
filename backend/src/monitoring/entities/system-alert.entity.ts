@@ -10,39 +10,39 @@ export enum AlertSeverity {
 @Entity('system_alerts')
 export class SystemAlert {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column('text')
-  message: string;
+  message!: string;
 
   @Column({
     type: 'enum',
     enum: AlertSeverity,
     default: AlertSeverity.INFO,
   })
-  severity: AlertSeverity;
+  severity!: AlertSeverity;
 
   @Column()
-  source: string;
+  source!: string;
 
   @Column({ default: false })
-  acknowledged: boolean;
+  acknowledged!: boolean;
 
   @Column({ nullable: true })
-  acknowledgedBy: string;
+  acknowledgedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  acknowledgedAt: Date;
+  acknowledgedAt!: Date;
 
   @Column({ default: false })
-  resolved: boolean;
+  resolved!: boolean;
 
   @Column({ type: 'timestamp', nullable: true })
-  resolvedAt: Date;
+  resolvedAt!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

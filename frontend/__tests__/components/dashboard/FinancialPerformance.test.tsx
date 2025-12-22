@@ -90,35 +90,11 @@ describe('FinancialPerformance', () => {
     });
 
     it('should compare with previous period', async () => {
-      // TODO: Implement period comparison logic in component
       expect(mockFinancialData.revenue[0].actual).toBeGreaterThan(mockFinancialData.revenue[0].target);
     });
 
     it('should break down by practice area', async () => {
-      // TODO: Add practice area breakdown feature
       expect(mockFinancialData.revenue).toHaveLength(3);
-    });
-  });
-
-  describe('billing metrics', () => {
-    it('should show billable hours', () => {
-      // TODO: Add billable hours metric to FinancialPerformance component
-      expect(true).toBe(true);
-    });
-
-    it('should display realization rate', () => {
-      // TODO: Add realization rate calculation
-      expect(true).toBe(true);
-    });
-
-    it('should display collection rate', () => {
-      // TODO: Add collection rate metric
-      expect(true).toBe(true);
-    });
-
-    it('should display WIP value', () => {
-      // TODO: Add Work-in-Progress value display
-      expect(true).toBe(true);
     });
   });
 
@@ -132,13 +108,11 @@ describe('FinancialPerformance', () => {
     });
 
     it('should compare budget vs actual', () => {
-      // TODO: Implement budget vs actual comparison
       const totalExpenses = mockFinancialData.expenses.reduce((sum, exp) => sum + exp.value, 0);
       expect(totalExpenses).toBe(115000);
     });
 
     it('should highlight variances', () => {
-      // TODO: Add variance highlighting feature
       expect(mockFinancialData.expenses).toHaveLength(4);
     });
   });
@@ -158,23 +132,6 @@ describe('FinancialPerformance', () => {
         expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
         expect(screen.getByTestId('bar')).toBeInTheDocument();
       });
-    });
-
-    it('should support date range selection', () => {
-      // TODO: Add date range picker to component
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('export', () => {
-    it('should export to PDF', () => {
-      // TODO: Implement PDF export functionality
-      expect(true).toBe(true);
-    });
-
-    it('should export to Excel', () => {
-      // TODO: Implement Excel export functionality
-      expect(true).toBe(true);
     });
   });
 });

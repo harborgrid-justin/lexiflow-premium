@@ -20,15 +20,15 @@ export enum ComplianceStatus {
 export class CreateComplianceCheckDto {
   @ApiProperty({ description: 'Check type', enum: ComplianceCheckType })
   @IsEnum(ComplianceCheckType)
-  checkType: ComplianceCheckType;
+  checkType!: ComplianceCheckType;
 
   @ApiProperty({ description: 'Target entity ID (case, client, document, etc.)' })
   @IsUUID()
-  entityId: string;
+  entityId!: string;
 
   @ApiProperty({ description: 'Entity type (case, client, document, etc.)' })
   @IsString()
-  entityType: string;
+  entityType!: string;
 
   @ApiProperty({ description: 'Assigned reviewer ID', required: false })
   @IsOptional()

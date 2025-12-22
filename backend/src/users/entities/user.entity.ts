@@ -38,16 +38,16 @@ export enum UserStatus {
 export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   @Index()
-  email: string;
+  email!: string;
 
   @Column({ name: 'password_hash', type: 'varchar', length: 255, nullable: true })
-  passwordHash: string;
+  passwordHash!: string;
 
   @Column({ name: 'first_name', type: 'varchar', length: 100 })
-  firstName: string;
+  firstName!: string;
 
   @Column({ name: 'last_name', type: 'varchar', length: 100 })
-  lastName: string;
+  lastName!: string;
 
   @Column({
     type: 'enum',
@@ -55,7 +55,7 @@ export class User extends BaseEntity {
     default: UserRole.STAFF
   })
   @Index()
-  role: UserRole;
+  role!: UserRole;
 
   @Column({
     type: 'enum',
@@ -63,47 +63,47 @@ export class User extends BaseEntity {
     default: UserStatus.ACTIVE
   })
   @Index()
-  status: UserStatus;
+  status!: UserStatus;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  phone: string;
+  phone!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  title: string;
+  title!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  department: string;
+  department!: string;
 
   @Column({ type: 'text', array: true, default: '{}' })
-  permissions: string[];
+  permissions!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  preferences: Record<string, any>;
+  preferences!: Record<string, any>;
 
   @Column({ name: 'avatar_url', type: 'varchar', length: 500, nullable: true })
-  avatarUrl: string;
+  avatarUrl!: string;
 
   @Column({ name: 'last_login_at', type: 'timestamp', nullable: true })
-  lastLoginAt: Date;
+  lastLoginAt!: Date;
 
   @Column({ name: 'is_verified', type: 'boolean', default: false })
-  emailVerified: boolean;
+  emailVerified!: boolean;
 
   @Column({ name: 'two_factor_enabled', type: 'boolean', default: false })
-  twoFactorEnabled: boolean;
+  twoFactorEnabled!: boolean;
 
   @Column({ name: 'totp_secret', type: 'varchar', length: 255, nullable: true })
-  totpSecret: string;
+  totpSecret!: string;
 
   @OneToOne(() => UserProfile, (profile) => profile.user)
-  profile: UserProfile;
+  profile!: UserProfile;
 
   @OneToMany(() => Session, (session) => session.user)
-  sessions: Session[];
+  sessions!: Session[];
 
   @OneToMany(() => TimeEntry, (timeEntry) => timeEntry.user)
-  timeEntries: TimeEntry[];
+  timeEntries!: TimeEntry[];
 
   @OneToMany(() => CaseTeamMember, (caseTeamMember) => caseTeamMember.user)
-  caseTeamMemberships: CaseTeamMember[];
+  caseTeamMemberships!: CaseTeamMember[];
 }

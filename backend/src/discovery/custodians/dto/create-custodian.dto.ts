@@ -13,19 +13,19 @@ import { CustodianStatus } from '../entities/custodian.entity';
 
 export class CreateCustodianDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(200)
-  firstName: string;
+  firstName!: string;
 
   @IsString()
   @MaxLength(200)
-  lastName: string;
+  lastName!: string;
 
   @IsString()
   @MaxLength(400)
-  fullName: string;
+  fullName!: string;
 
   @IsOptional()
   @IsEmail()
@@ -126,5 +126,5 @@ export class CreateCustodianDto {
   assignedTo?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

@@ -3,10 +3,10 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Entity('backup_schedules')
 export class BackupSchedule {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
   cronExpression: string; // Cron schedule
@@ -15,23 +15,23 @@ export class BackupSchedule {
   type: string; // 'full', 'incremental'
 
   @Column('simple-array', { nullable: true })
-  databases: string[];
+  databases!: string[];
 
   @Column({ default: true })
-  enabled: boolean;
+  enabled!: boolean;
 
   @Column({ default: 7 })
-  retentionDays: number;
+  retentionDays!: number;
 
   @Column({ type: 'timestamp', nullable: true })
-  lastRun: Date;
+  lastRun!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  nextRun: Date;
+  nextRun!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

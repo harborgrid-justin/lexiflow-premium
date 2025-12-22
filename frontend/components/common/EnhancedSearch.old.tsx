@@ -229,7 +229,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
         };
       })
       .filter((r): r is NonNullable<typeof r> => r !== null)
-      .sort((a, b) => (b?.score || 0) - (a?.score || 0))
+      .sort((a: any, b: any) => (b?.score || 0) - (a?.score || 0))
       .slice(0, maxSuggestions);
     
     return results;

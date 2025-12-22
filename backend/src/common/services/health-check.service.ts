@@ -73,9 +73,11 @@ export class HealthCheckService {
         responseTime,
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       return {
         status: 'down',
-        message: error.message,
+        message: message,
       };
     }
   }
@@ -93,9 +95,11 @@ export class HealthCheckService {
         responseTime,
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       return {
         status: 'down',
-        message: error.message,
+        message: message,
       };
     }
   }
@@ -115,9 +119,11 @@ export class HealthCheckService {
         responseTime,
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       return {
         status: 'down',
-        message: error.message,
+        message: message,
       };
     }
   }
@@ -139,9 +145,11 @@ export class HealthCheckService {
         },
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       return {
         status: 'down',
-        message: error.message,
+        message: message,
       };
     }
   }

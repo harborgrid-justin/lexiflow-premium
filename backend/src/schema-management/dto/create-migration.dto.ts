@@ -5,17 +5,17 @@ export class CreateMigrationDto {
   @ApiProperty({ description: 'Migration name' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'SQL up migration' })
   @IsString()
   @IsNotEmpty()
-  up: string;
+  up!: string;
 
   @ApiProperty({ description: 'SQL down migration' })
   @IsString()
   @IsNotEmpty()
-  down: string;
+  down!: string;
 
   @ApiPropertyOptional({ description: 'Migration description' })
   @IsString()
@@ -27,7 +27,7 @@ export class CreateSnapshotDto {
   @ApiProperty({ description: 'Snapshot name' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: 'Snapshot description' })
   @IsString()
@@ -43,7 +43,7 @@ export class CreateTableDto {
   @ApiProperty({ description: 'Table name' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Table columns' })
   @IsNotEmpty()

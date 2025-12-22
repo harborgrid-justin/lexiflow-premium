@@ -5,11 +5,11 @@
  * Replaces 50+ instances of useState<T[]>([])
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Dispatch, SetStateAction } from 'react';
 
 export interface UseArrayStateReturn<T> {
   items: T[];
-  setItems: React.Dispatch<React.SetStateAction<T[]>>;
+  setItems: Dispatch<SetStateAction<T[]>>;
   add: (item: T) => void;
   remove: (predicate: (item: T) => boolean) => void;
   update: (predicate: (item: T) => boolean, updates: Partial<T>) => void;

@@ -14,7 +14,7 @@ export class CreateDocumentDto {
   @ApiProperty({ description: 'Document title' })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Document description' })
   @IsString()
@@ -24,17 +24,17 @@ export class CreateDocumentDto {
   @ApiProperty({ enum: DocumentType, description: 'Document type' })
   @IsEnum(DocumentType)
   @IsNotEmpty()
-  type: DocumentType;
+  type!: DocumentType;
 
   @ApiProperty({ description: 'Case ID' })
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Creator user ID' })
   @IsUUID()
   @IsNotEmpty()
-  creatorId: string;
+  creatorId!: string;
 
   @ApiPropertyOptional({ enum: DocumentStatus, description: 'Document status', default: DocumentStatus.DRAFT })
   @IsEnum(DocumentStatus)

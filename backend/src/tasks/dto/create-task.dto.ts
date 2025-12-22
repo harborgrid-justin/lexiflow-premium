@@ -20,7 +20,7 @@ export enum TaskPriority {
 export class CreateTaskDto {
   @ApiProperty({ description: 'Task title' })
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Task description' })
   @IsString()
@@ -29,11 +29,11 @@ export class CreateTaskDto {
 
   @ApiProperty({ enum: TaskStatus, default: TaskStatus.TODO })
   @IsEnum(TaskStatus)
-  status: TaskStatus;
+  status!: TaskStatus;
 
   @ApiProperty({ enum: TaskPriority, default: TaskPriority.MEDIUM })
   @IsEnum(TaskPriority)
-  priority: TaskPriority;
+  priority!: TaskPriority;
 
   @ApiPropertyOptional({ description: 'Due date' })
   @IsDateString()

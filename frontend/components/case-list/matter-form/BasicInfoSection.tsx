@@ -37,7 +37,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <input
           type="text"
           value={formData.matterNumber}
-          onChange={(e) => onChange('matterNumber', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('matterNumber', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Auto-generated if empty"
         />
@@ -48,7 +48,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="matterType"
           value={formData.matterType}
-          onChange={(e) => onChange('matterType', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('matterType', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           {MATTER_TYPES.map(type => (
@@ -62,7 +62,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <input
           type="text"
           value={formData.title}
-          onChange={(e) => onChange('title', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('title', e.target.value)}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.title ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}
@@ -75,7 +75,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description</label>
         <textarea
           value={formData.description}
-          onChange={(e) => onChange('description', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('description', e.target.value)}
           rows={3}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Detailed matter description"
@@ -87,7 +87,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="status"
           value={formData.status}
-          onChange={(e) => onChange('status', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('status', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           {MATTER_STATUSES.map(status => (
@@ -101,7 +101,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="priority"
           value={formData.priority}
-          onChange={(e) => onChange('priority', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('priority', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           {MATTER_PRIORITIES.map(priority => (
@@ -115,7 +115,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="practiceArea"
           value={formData.practiceArea}
-          onChange={(e) => onChange('practiceArea', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('practiceArea', e.target.value)}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.practiceArea ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}

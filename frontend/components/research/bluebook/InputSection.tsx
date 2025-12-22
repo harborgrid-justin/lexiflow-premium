@@ -37,7 +37,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
       <div className="space-y-4">
         <textarea
           value={inputText}
-          onChange={(e) => onInputChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onInputChange(e.target.value)}
           placeholder={`Enter citations here, one per line...
 
 Example:

@@ -3,35 +3,35 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('communications')
 export class Communication {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  caseId: string;
+  caseId!: string;
 
   @Column()
-  type: string;
+  type!: string;
 
   @Column()
-  subject: string;
+  subject!: string;
 
   @Column('text')
-  body: string;
+  body!: string;
 
   @Column()
-  sender: string;
+  sender!: string;
 
   @Column('jsonb')
-  recipients: string[];
+  recipients!: string[];
 
   @Column({ default: 'draft' })
-  status: string;
+  status!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  sentAt: Date;
+  sentAt!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

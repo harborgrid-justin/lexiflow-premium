@@ -108,7 +108,7 @@ export const JurisdictionLocalRules: React.FC = () => {
           <TableHead className="text-right">Actions</TableHead>
         </TableHeader>
         <TableBody>
-          {filteredRules.map((r) => (
+          {filteredRules.map((r: any) => (
             <TableRow key={r.id}>
               <TableCell className={cn("font-bold whitespace-nowrap", theme.text.primary)}>{r.code}</TableCell>
               <TableCell>
@@ -144,7 +144,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                     label="Rule Code" 
                     placeholder="e.g. L.R. 7-3" 
                     value={editingRule.code || ''}
-                    onChange={e => setEditingRule({...editingRule, code: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, code: e.target.value})}
                   />
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Jurisdiction Type</label>
@@ -152,7 +152,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                         title="Select jurisdiction type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={editingRule.type || 'Local'}
-                        onChange={e => setEditingRule({...editingRule, type: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, type: e.target.value as any})}
                       >
                           <option value="FRCP">Federal (FRCP)</option>
                           <option value="FRAP">Appellate (FRAP)</option>
@@ -166,14 +166,14 @@ export const JurisdictionLocalRules: React.FC = () => {
                 label="Rule Name / Title" 
                 placeholder="e.g. Conference of the Parties" 
                 value={editingRule.name || ''}
-                onChange={e => setEditingRule({...editingRule, name: e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, name: e.target.value})}
               />
               <TextArea 
                 label="Summary / Requirements" 
                 rows={4}
                 placeholder="Brief summary of the rule's requirement..."
                 value={editingRule.summary || ''}
-                onChange={e => setEditingRule({...editingRule, summary: e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, summary: e.target.value})}
               />
               <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.default)}>
                   <Button variant="secondary" onClick={ruleModal.close}>Cancel</Button>

@@ -11,7 +11,7 @@ export class CreateBackupSnapshotDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiProperty({ 
     description: 'Backup type',
@@ -19,7 +19,7 @@ export class CreateBackupSnapshotDto {
   })
   @IsString()
   @IsNotEmpty()
-  type: string;
+  type!: string;
 
   @ApiPropertyOptional({ 
     description: 'Database name',

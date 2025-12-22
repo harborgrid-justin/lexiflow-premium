@@ -13,7 +13,7 @@ export class CreateMessageDto {
     example: 'I have reviewed the discovery documents and have some concerns.',
   })
   @IsString()
-  content: string;
+  content!: string;
 
   @ApiProperty({
     description: 'Message type',

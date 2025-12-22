@@ -12,14 +12,14 @@ export enum OCRStatus {
 @Index(['status', 'createdAt'])
 export class OCRJob {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
   @Index()
-  documentId: string;
+  documentId!: string;
 
   @Column({ type: 'varchar', length: 500 })
-  filePath: string;
+  filePath!: string;
 
   @Column({
     type: 'enum',
@@ -27,35 +27,35 @@ export class OCRJob {
     default: OCRStatus.PENDING
   })
   @Index()
-  status: OCRStatus;
+  status!: OCRStatus;
 
   @Column({ type: 'text', nullable: true })
-  extractedText: string;
+  extractedText!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ type: 'int', nullable: true })
-  pageCount: number;
+  pageCount!: number;
 
   @Column({ type: 'int', default: 0 })
-  processedPages: number;
+  processedPages!: number;
 
   @Column({ type: 'float', nullable: true })
-  confidence: number;
+  confidence!: number;
 
   @Column({ type: 'text', nullable: true })
-  errorMessage: string;
+  errorMessage!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  startedAt: Date;
+  startedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  completedAt: Date;
+  completedAt!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

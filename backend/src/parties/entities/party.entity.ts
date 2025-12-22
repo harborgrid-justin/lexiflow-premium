@@ -44,27 +44,27 @@ export enum PartyRole {
 @Index(['role'])
 export class Party extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name!: string;
 
   @Column({
     type: 'enum',
     enum: PartyType,
   })
-  type: PartyType;
+  type!: PartyType;
 
   @Column({
     type: 'enum',
     enum: PartyRole,
     default: PartyRole.PRIMARY,
   })
-  role: PartyRole;
+  role!: PartyRole;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   organization?: string;

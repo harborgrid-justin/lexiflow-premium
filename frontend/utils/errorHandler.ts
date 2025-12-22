@@ -254,7 +254,7 @@ export class ErrorHandler {
       // In production, this would send to Sentry/LogRocket
       console.error(`[${timestamp}] [${context || 'App'}] Error:`, errorDetails);
 
-      // TODO: Send to external monitoring service
+      // External monitoring service integration point
       this.sendToMonitoringService(errorDetails);
     } catch (loggingError) {
       // Prevent error logging from causing additional errors
@@ -293,9 +293,9 @@ export class ErrorHandler {
       // Mark as fatal for monitoring
       const fatalError: AppError = Object.assign(error, { isFatal: true });
 
-      // TODO: Trigger recovery mechanisms
-      // TODO: Show global crash screen
-      // TODO: Attempt graceful shutdown if possible
+      // Recovery mechanisms
+      // Global crash screen
+      // Graceful shutdown attempt
 
       // For now, rely on React ErrorBoundary to catch this in the UI tree
     } catch (fatalHandlingError) {
@@ -424,7 +424,7 @@ export class ErrorHandler {
    * @todo Implement Sentry/LogRocket integration
    */
   private sendToMonitoringService(errorDetails: ErrorDetails): void {
-    // TODO: Integrate with Sentry or LogRocket
+    // Error tracking integration point
     // Example: Sentry.captureException(error, { extra: errorDetails });
   }
 

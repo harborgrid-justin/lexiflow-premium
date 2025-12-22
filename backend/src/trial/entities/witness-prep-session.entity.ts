@@ -5,36 +5,36 @@ import { Case } from '../../cases/entities/case.entity';
 @Entity('witness_prep_sessions')
 export class WitnessPrepSession {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  witnessName: string;
+  witnessName!: string;
 
   @Column()
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'caseId' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'timestamp' })
-  scheduledDate: Date;
+  scheduledDate!: Date;
 
   @Column({ nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ type: 'enum', enum: WitnessPrepStatus, default: WitnessPrepStatus.SCHEDULED })
-  status: WitnessPrepStatus;
+  status!: WitnessPrepStatus;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ nullable: true })
-  conductedBy: string;
+  conductedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

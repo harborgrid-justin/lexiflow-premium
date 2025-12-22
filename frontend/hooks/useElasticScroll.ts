@@ -4,7 +4,7 @@
  * @description Physics-based elastic scrolling with momentum, boundaries, and smooth anchors.
  */
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Scroll physics configuration

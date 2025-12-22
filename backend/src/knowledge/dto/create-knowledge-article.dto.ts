@@ -4,11 +4,11 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateKnowledgeArticleDto {
   @ApiProperty({ description: 'Article title' })
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Article content' })
   @IsString()
-  content: string;
+  content!: string;
 
   @ApiPropertyOptional({ description: 'Category' })
   @IsString()

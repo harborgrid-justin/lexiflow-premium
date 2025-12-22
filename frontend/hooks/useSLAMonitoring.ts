@@ -10,6 +10,7 @@ import { useQuery } from '../hooks/useQueryHooks';
 import { DataService } from '../services/data/dataService';
 import { queryKeys } from '../utils/queryKeys';
 import { useInterval } from './useInterval';
+import { Task } from '../types';
 
 export interface SLAItem {
   id: string;
@@ -65,8 +66,8 @@ export const useSLAMonitoring = (options: UseSLAMonitoringOptions = {}) => {
   useEffect(() => {
     if (tasks.length > 0) {
       const items = tasks
-        .filter(t => t.dueDate && t.status !== 'Done' && t.status !== 'Completed')
-        .map(t => {
+        .filter((t: Task) => t.dueDate && t.status !== 'Done' && t.status !== 'Completed')
+        .map((t: Task) => {
           const dueTime = new Date(t.dueDate).getTime();
           const { status, progress } = calculateSLAStatus(dueTime);
           

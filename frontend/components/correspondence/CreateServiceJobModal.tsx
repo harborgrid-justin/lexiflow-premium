@@ -115,7 +115,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                         aria-label="Select case"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
-                        onChange={(e) => setFormData({...formData, caseId: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, caseId: e.target.value as any})}
                     >
                         <option value="">Select Case...</option>
                         {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -130,7 +130,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                             aria-label="Select document to serve"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={formData.documentTitle || ''}
-                            onChange={(e) => setFormData({...formData, documentTitle: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, documentTitle: e.target.value})}
                         >
                             <option value="">Select Document...</option>
                             {docs.map(d => <option key={d.id} value={d.title}>{d.title}</option>)}
@@ -138,7 +138,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     ) : (
                         <Input 
                              value={formData.documentTitle || ''} 
-                             onChange={(e) => setFormData({...formData, documentTitle: e.target.value})}
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, documentTitle: e.target.value})}
                              placeholder="Or type document name..."
                              disabled={false}
                         />
@@ -155,7 +155,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                                     aria-label="Select mail service"
                                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                     value={formData.mailType || ''}
-                                    onChange={(e) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
                                 >
                                     <option value="">Select Service...</option>
                                     <option value="USPS Certified RR">USPS Certified w/ Return Receipt</option>
@@ -169,14 +169,14 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                                 label="Tracking Number"
                                 placeholder="e.g. 7023 0000..."
                                 value={formData.trackingNumber || ''}
-                                onChange={(e) => setFormData({...formData, trackingNumber: e.target.value})}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, trackingNumber: e.target.value})}
                             />
                         </div>
                         <Input 
                              label="Addressed To (Specific Name)"
                              placeholder="Name on envelope"
                              value={formData.addressedTo || ''}
-                             onChange={(e) => setFormData({...formData, addressedTo: e.target.value})}
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, addressedTo: e.target.value})}
                         />
                     </>
                 )}
@@ -185,14 +185,14 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     label="Target Party / Entity" 
                     placeholder="e.g. Registered Agent for Corp Inc." 
                     value={formData.targetPerson || ''} 
-                    onChange={(e) => setFormData({...formData, targetPerson: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, targetPerson: e.target.value})}
                 />
 
                 <Input 
                     label="Service Address" 
                     placeholder="Full street address" 
                     value={formData.targetAddress || ''} 
-                    onChange={(e) => setFormData({...formData, targetAddress: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, targetAddress: e.target.value})}
                 />
                 
                 {formData.method === 'Process Server' && (
@@ -201,13 +201,13 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                             label="Vendor / Process Server" 
                             placeholder="e.g. ABC Legal" 
                             value={formData.serverName || ''} 
-                            onChange={(e) => setFormData({...formData, serverName: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, serverName: e.target.value})}
                         />
                         <Input 
                             label="Due Date" 
                             type="date"
                             value={formData.dueDate || ''} 
-                            onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, dueDate: e.target.value})}
                         />
                     </div>
                 )}
@@ -217,7 +217,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                         label="Target Delivery Date" 
                         type="date"
                         value={formData.dueDate || ''} 
-                        onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, dueDate: e.target.value})}
                     />
                 )}
 
@@ -226,7 +226,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     rows={3} 
                     placeholder={formData.method === 'Mail' ? "Notes on enclosure..." : "e.g. Best time to serve is morning..."}
                     value={formData.notes || ''}
-                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, notes: e.target.value})}
                 />
             </div>
 

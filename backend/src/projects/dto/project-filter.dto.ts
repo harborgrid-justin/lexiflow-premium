@@ -49,9 +49,9 @@ export class ProjectFilterDto {
 }
 
 export class PaginatedProjectResponseDto {
-  data: unknown[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  data!: unknown[];
+  total!: number;
+  page!: number;
+  limit!: number;
+  totalPages!: number;
 }

@@ -141,7 +141,7 @@ export const PleadingFilingQueue: React.FC = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {pleadings.map((item) => {
+                        {pleadings.map((item: any) => {
                             const status = getFilingStatus(item as FilingQueueItem);
                             return (
                                 <TableRow key={item.id}>

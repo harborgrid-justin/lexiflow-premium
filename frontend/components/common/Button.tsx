@@ -25,14 +25,15 @@ import { cn } from '../../utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'icon';
   icon?: React.ElementType;
   isLoading?: boolean;
-}
+  children?: React.ReactNode;
+};
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   variant = 'primary',
   size = 'md',
   icon: Icon,
@@ -41,7 +42,7 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   disabled,
   ...props
-}) => {
+}: ButtonProps) => {
   const { theme } = useTheme();
 
   const baseStyles = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed rounded-md gap-2 border shadow-sm";

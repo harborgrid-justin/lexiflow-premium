@@ -120,7 +120,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             setPdfDoc(doc);
             setPageNum(1);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("Error loading PDF:", err);
         if (isMounted.current) setError("Failed to load document. File may be corrupted or restricted.");
       } finally {

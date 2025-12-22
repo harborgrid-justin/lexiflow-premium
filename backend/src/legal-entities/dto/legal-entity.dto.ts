@@ -12,11 +12,11 @@ interface LegalEntityRelationship {
 export class CreateLegalEntityDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ enum: LegalEntityType })
   @IsEnum(LegalEntityType)
-  entityType: LegalEntityType;
+  entityType!: LegalEntityType;
 
   @ApiProperty({ required: false })
   @IsString()

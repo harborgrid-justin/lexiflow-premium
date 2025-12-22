@@ -22,7 +22,7 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score: p
         if (issues.length === 0) return 100;
         const errorWeight = 10;
         const warningWeight = 5;
-        const penalty = issues.reduce((acc, issue) => acc + (issue.type === 'error' ? errorWeight : issue.type === 'warning' ? warningWeight : 0), 0);
+        const penalty = issues.reduce((acc: any, issue) => acc + (issue.type === 'error' ? errorWeight : issue.type === 'warning' ? warningWeight : 0), 0);
         return Math.max(0, 100 - penalty);
     }, [issues]);
 

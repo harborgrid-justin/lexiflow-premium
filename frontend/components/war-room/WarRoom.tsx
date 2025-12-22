@@ -193,7 +193,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // ============================================================================
   const activeParentTab = useMemo(
     () =>
-      PARENT_TABS.find((p) => p.subTabs.some((s) => s.id === activeTab)) ||
+      PARENT_TABS.find((p: any) => p.subTabs.some((s) => s.id === activeTab)) ||
       PARENT_TABS[0],
     [activeTab],
   );
@@ -202,7 +202,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // EVENT HANDLERS
   // ============================================================================
   const handleParentTabChange = useCallback((parentId: string) => {
-    const parent = PARENT_TABS.find((p) => p.id === parentId);
+    const parent = PARENT_TABS.find((p: any) => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
       setActiveTab(parent.subTabs[0].id as WarRoomView);
     }
@@ -224,7 +224,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
 
   useEffect(() => {
     if (!caseId && allCases.length > 0) {
-      if (!currentCaseId || !allCases.find((c) => c.id === currentCaseId)) {
+      if (!currentCaseId || !allCases.find((c: any) => c.id === currentCaseId)) {
         setCurrentCaseId(allCases[0].id);
       }
     }
@@ -232,7 +232,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
 
   // Get the current case object for display
   const currentCase = useMemo(() => {
-    return allCases.find((c) => c.id === currentCaseId);
+    return allCases.find((c: any) => c.id === currentCaseId);
   }, [allCases, currentCaseId]);
 
   useEffect(() => {
@@ -341,7 +341,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
           </p>
           <select
             value={currentCaseId}
-            onChange={(e) => setCurrentCaseId(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentCaseId(e.target.value)}
             className={cn(
               "p-2 border rounded-md outline-none",
               theme.surface.default,
@@ -349,7 +349,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
               theme.text.primary,
             )}
           >
-            {allCases.map((c) => (
+            {allCases.map((c: any) => (
               <option key={c.id} value={c.id}>
                 {c.title}
               </option>
@@ -403,7 +403,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                 <div className="relative group">
                   <select
                     value={currentCaseId || ""}
-                    onChange={(e) => setCurrentCaseId(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentCaseId(e.target.value)}
                     className={cn(
                       "appearance-none bg-transparent font-semibold text-sm pr-6 py-1 outline-none cursor-pointer border-b border-dashed transition-colors hover:border-solid max-w-[300px] md:max-w-[500px] truncate",
                       theme.text.secondary,
@@ -412,7 +412,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                       `hover:${theme.border.default}`,
                     )}
                   >
-                    {allCases.map((c) => (
+                    {allCases.map((c: any) => (
                       <option key={c.id} value={c.id}>
                         {c.title}
                       </option>

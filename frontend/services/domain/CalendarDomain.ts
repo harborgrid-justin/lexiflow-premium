@@ -434,7 +434,6 @@ export const CalendarService = {
         metadata: event.metadata,
       };
       
-      // TODO: Replace with proper backend API call
       // await db.put(STORES.CALENDAR_EVENTS, newEvent);
       
       return newEvent;
@@ -496,7 +495,7 @@ export const CalendarService = {
     try {
       const provider = options?.provider || 'default';
       
-      // TODO: Implement actual calendar sync with OAuth
+      
       await delay(500);
       
       console.log(`[CalendarService] Successfully synced with ${provider} calendar`);

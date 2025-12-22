@@ -89,7 +89,7 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
                         <WorkflowQuickActions caseId={c.id} onAction={(action) => console.log(action, c.id)} />
                         {onManageWorkflow && (
                             <button 
-                                onClick={(e) => { e.stopPropagation(); onManageWorkflow(c.id); }}
+                                onClick={(e: React.MouseEvent) => { e.stopPropagation(); onManageWorkflow(c.id); }}
                                 className={cn("p-1 rounded transition-colors ml-1", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface.default}`)}
                                 title="Manage Workflow Engine"
                             >

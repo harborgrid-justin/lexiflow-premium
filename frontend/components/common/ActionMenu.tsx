@@ -47,7 +47,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
       <button 
-        onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
+        onClick={(e: React.MouseEvent) => { e.stopPropagation(); setIsOpen(!isOpen); }}
         className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.secondary}`)}
         aria-label="More actions"
         aria-expanded={isOpen}
@@ -63,7 +63,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
               return (
                 <button
                   key={index}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
                     action.onClick();
                     setIsOpen(false);

@@ -4,32 +4,32 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Index(['userId', 'expiresAt'])
 export class RefreshToken {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
   @Index()
-  userId: string;
+  userId!: string;
 
   @Column({ type: 'text' })
-  token: string;
+  token!: string;
 
   @Column({ type: 'timestamp' })
   @Index()
-  expiresAt: Date;
+  expiresAt!: Date;
 
   @Column({ type: 'boolean', default: false })
   @Index()
-  revoked: boolean;
+  revoked!: boolean;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  userAgent: string;
+  userAgent!: string;
 
   @Column({ type: 'varchar', length: 45, nullable: true })
-  ipAddress: string;
+  ipAddress!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

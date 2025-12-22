@@ -6,12 +6,19 @@ import { Button } from '../../../common/Button';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 
+interface GovernanceRule {
+  id: string;
+  name: string;
+  status: string;
+  impact: string;
+}
+
 interface GovernanceDashboardProps {
-  rules: unknown[];
+  rules: GovernanceRule[];
   isScanning: boolean;
   scanProgress: number;
   handleScan: () => void;
-  setEditingRule: (rule: unknown) => void;
+  setEditingRule: (rule: GovernanceRule) => void;
 }
 
 export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ 

@@ -3,17 +3,17 @@ import { TransactionType } from '../entities/trust-transaction.entity';
 
 export class CreateTransactionDto {
   @IsEnum(TransactionType)
-  transactionType: TransactionType;
+  transactionType!: TransactionType;
 
   @IsString()
-  transactionDate: string;
+  transactionDate!: string;
 
   @IsNumber()
   @Min(0.01)
-  amount: number;
+  amount!: number;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsOptional()
   @IsString()
@@ -55,13 +55,13 @@ export class CreateTransactionDto {
 export class DepositDto {
   @IsNumber()
   @Min(0.01)
-  amount: number;
+  amount!: number;
 
   @IsString()
-  transactionDate: string;
+  transactionDate!: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsOptional()
   @IsString()
@@ -83,13 +83,13 @@ export class DepositDto {
 export class WithdrawalDto {
   @IsNumber()
   @Min(0.01)
-  amount: number;
+  amount!: number;
 
   @IsString()
-  transactionDate: string;
+  transactionDate!: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsOptional()
   @IsString()

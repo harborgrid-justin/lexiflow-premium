@@ -10,37 +10,37 @@ export enum MonitoringMetricType {
 @Entity('monitoring_metrics')
 export class MonitoringMetric {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'enum', enum: MonitoringMetricType })
-  type: MonitoringMetricType;
+  type!: MonitoringMetricType;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'float' })
-  value: number;
+  value!: number;
 
   @Column({ nullable: true })
-  unit: string;
+  unit!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: any;
 
   @CreateDateColumn()
-  recordedAt: Date;
+  recordedAt!: Date;
 }
 
 @Entity('monitoring_alerts')
 export class MonitoringAlert {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text' })
-  message: string;
+  message!: string;
 
   @Column({ type: 'varchar', length: 20 })
   severity: 'info' | 'warning' | 'error' | 'critical';
@@ -49,17 +49,17 @@ export class MonitoringAlert {
   status: 'active' | 'acknowledged' | 'resolved';
 
   @Column({ nullable: true })
-  source: string;
+  source!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   context: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  acknowledgedAt: Date;
+  acknowledgedAt!: Date;
 
   @Column({ nullable: true })
-  acknowledgedBy: string;
+  acknowledgedBy!: string;
 }

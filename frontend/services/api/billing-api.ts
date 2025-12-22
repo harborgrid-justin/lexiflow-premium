@@ -196,35 +196,35 @@ export class BillingApiService {
         if (!entry.date) {
             throw new Error('[BillingApiService.addTimeEntry] date is required');
         }
-        if (!entry.duration && !entry.hours) {
-            throw new Error('[BillingApiService.addTimeEntry] duration or hours is required');
+        if (!entry.duration) {
+            throw new Error('[BillingApiService.addTimeEntry] duration is required');
         }
 
         try {
             // Transform frontend TimeEntry to backend CreateTimeEntryDto
             const createDto = {
                 caseId: entry.caseId,
-                userId: entry.userId || entry.createdBy,
+                userId: entry.userId || (entry as any).createdBy,
                 date: entry.date, // Should be ISO date string YYYY-MM-DD
-                duration: entry.duration || entry.hours, // In hours
-                description: entry.description || entry.notes,
-                activity: entry.activity || entry.taskDescription,
+                duration: entry.duration, // In hours
+                description: entry.description,
+                activity: entry.activity,
                 ledesCode: entry.ledesCode,
-                rate: entry.rate || entry.hourlyRate || 0,
+                rate: entry.rate || 0,
                 status: entry.status,
                 billable: entry.billable !== false, // Default to true if not specified
                 rateTableId: entry.rateTableId,
                 internalNotes: entry.internalNotes,
                 taskCode: entry.taskCode,
             };
-            
+
             // Remove undefined values
             Object.keys(createDto).forEach(key => {
-                if (createDto[key] === undefined) {
-                    delete createDto[key];
+                if ((createDto as any)[key] === undefined) {
+                    delete (createDto as any)[key];
                 }
             });
-            
+
             return await apiClient.post<TimeEntry>('/billing/time-entries', createDto);
         } catch (error) {
             console.error('[BillingApiService.addTimeEntry] Error:', error);

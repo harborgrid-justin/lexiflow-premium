@@ -35,96 +35,96 @@ export enum TransactionStatus {
 export class TrustTransaction extends BaseEntity {
   @Column({ name: 'trust_account_id', type: 'uuid' })
   @Index()
-  trustAccountId: string;
+  trustAccountId!: string;
 
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case)
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'client_id', type: 'uuid', nullable: true })
-  clientId: string;
+  clientId!: string;
 
   @Column({
     name: 'transaction_type',
     type: 'enum',
     enum: TransactionType,
   })
-  transactionType: TransactionType;
+  transactionType!: TransactionType;
 
   @Column({ name: 'transaction_date', type: 'date' })
   @Index()
-  transactionDate: Date;
+  transactionDate!: Date;
 
   @Column({ type: 'decimal', precision: 15, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ name: 'balance_after', type: 'decimal', precision: 15, scale: 2 })
-  balanceAfter: number;
+  balanceAfter!: number;
 
   @Column({ type: 'varchar', length: 500 })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: TransactionStatus,
     default: TransactionStatus.PENDING,
   })
-  status: TransactionStatus;
+  status!: TransactionStatus;
 
   @Column({ name: 'reference_number', type: 'varchar', length: 100, nullable: true })
-  referenceNumber: string;
+  referenceNumber!: string;
 
   @Column({ name: 'check_number', type: 'varchar', length: 100, nullable: true })
-  checkNumber: string;
+  checkNumber!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  payee: string;
+  payee!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  payor: string;
+  payor!: string;
 
   @Column({ name: 'payment_method', type: 'varchar', length: 100, nullable: true })
-  paymentMethod: string;
+  paymentMethod!: string;
 
   @Column({ name: 'related_invoice_id', type: 'uuid', nullable: true })
-  relatedInvoiceId: string;
+  relatedInvoiceId!: string;
 
   @Column({ name: 'related_transaction_id', type: 'uuid', nullable: true })
-  relatedTransactionId: string;
+  relatedTransactionId!: string;
 
   @Column({ name: 'approved_by', type: 'uuid', nullable: true })
-  approvedBy: string;
+  approvedBy!: string;
 
   @Column({ name: 'approved_at', type: 'timestamp', nullable: true })
-  approvedAt: Date;
+  approvedAt!: Date;
 
   @Column({ type: 'boolean', default: false })
-  reconciled: boolean;
+  reconciled!: boolean;
 
   @Column({ name: 'reconciled_date', type: 'date', nullable: true })
-  reconciledDate: Date;
+  reconciledDate!: Date;
 
   @Column({ name: 'reconciled_by', type: 'uuid', nullable: true })
-  reconciledBy: string;
+  reconciledBy!: string;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'simple-array', nullable: true })
-  attachments: string[];
+  attachments!: string[];
 
   @Column({ name: 'document_path', type: 'varchar', length: 500, nullable: true })
-  documentPath: string;
+  documentPath!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 }

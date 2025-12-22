@@ -9,7 +9,7 @@ export class CreateWitnessDto {
   })
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ 
     description: 'Witness name',
@@ -19,7 +19,7 @@ export class CreateWitnessDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiProperty({ 
     description: 'Type of witness',
@@ -28,7 +28,7 @@ export class CreateWitnessDto {
   })
   @IsEnum(WitnessType)
   @IsNotEmpty()
-  witnessType: WitnessType;
+  witnessType!: WitnessType;
 
   @ApiPropertyOptional({ 
     description: 'Witness status',

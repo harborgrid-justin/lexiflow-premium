@@ -82,7 +82,9 @@ export class SearchService {
         facets: await this.generateFacets(results),
       };
     } catch (error) {
-      this.logger.error(`Search error: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Search error: ${message}`, stack);
       throw error;
     }
   }

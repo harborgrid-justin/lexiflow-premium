@@ -25,7 +25,7 @@ export const AccessMatrix: React.FC = () => {
   const { mutate: updatePermission } = useMutation(
       DataService.admin.updatePermission,
       {
-          onSuccess: (data) => {
+          onSuccess: (data: { role: string; resource: string }) => {
               queryClient.invalidate(queryKeys.admin.permissions());
               notify.info(`Permission updated: ${data.role} -> ${data.resource}`);
           }

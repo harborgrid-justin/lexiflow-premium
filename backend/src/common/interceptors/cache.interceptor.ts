@@ -55,7 +55,9 @@ export class CacheInterceptor implements NestInterceptor {
         }),
       );
     } catch (error) {
-      this.logger.error(`Cache error: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Cache error: ${message}`, stack);
       return next.handle();
     }
   }

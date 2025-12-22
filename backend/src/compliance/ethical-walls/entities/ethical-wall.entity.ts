@@ -15,97 +15,97 @@ export enum EthicalWallStatus {
 @Index(['status'])
 export class EthicalWall extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'wall_name', type: 'varchar', length: 500 })
-  wallName: string;
+  wallName!: string;
 
   @Column({ type: 'text' })
-  description: string;
+  description!: string;
 
   @Column({ name: 'restricted_users', type: 'jsonb' })
-  restrictedUsers: string[];
+  restrictedUsers!: string[];
 
   @Column({ name: 'allowed_users', type: 'jsonb', nullable: true })
-  allowedUsers: string[];
+  allowedUsers!: string[];
 
   @Column({ type: 'text' })
-  reason: string;
+  reason!: string;
 
   @Column({
     type: 'enum',
     enum: EthicalWallStatus,
     default: EthicalWallStatus.ACTIVE,
   })
-  status: EthicalWallStatus;
+  status!: EthicalWallStatus;
 
   @Column({ name: 'effective_date', type: 'date' })
-  effectiveDate: Date;
+  effectiveDate!: Date;
 
   @Column({ name: 'expiration_date', type: 'date', nullable: true })
-  expirationDate: Date;
+  expirationDate!: Date;
 
   @Column({ name: 'approved_by', type: 'uuid', nullable: true })
-  approvedBy: string;
+  approvedBy!: string;
 
   @Column({ name: 'approval_date', type: 'date', nullable: true })
-  approvalDate: Date;
+  approvalDate!: Date;
 
   @Column({ type: 'jsonb', nullable: true })
-  restrictions: Record<string, any>;
+  restrictions!: Record<string, any>;
 
   @Column({ name: 'access_limitations', type: 'jsonb', nullable: true })
-  accessLimitations: Record<string, any>;
+  accessLimitations!: Record<string, any>;
 
   @Column({ name: 'communication_restrictions', type: 'jsonb', nullable: true })
-  communicationRestrictions: string[];
+  communicationRestrictions!: string[];
 
   @Column({ name: 'physical_separation_required', type: 'boolean', default: true })
-  physicalSeparationRequired: boolean;
+  physicalSeparationRequired!: boolean;
 
   @Column({ name: 'physical_separation_details', type: 'text', nullable: true })
-  physicalSeparationDetails: string;
+  physicalSeparationDetails!: string;
 
   @Column({ name: 'document_access_restricted', type: 'boolean', default: true })
-  documentAccessRestricted: boolean;
+  documentAccessRestricted!: boolean;
 
   @Column({ name: 'restricted_documents', type: 'jsonb', nullable: true })
-  restrictedDocuments: string[];
+  restrictedDocuments!: string[];
 
   @Column({ name: 'restricted_systems', type: 'jsonb', nullable: true })
-  restrictedSystems: string[];
+  restrictedSystems!: string[];
 
   @Column({ name: 'electronic_barriers_implemented', type: 'boolean', default: false })
-  electronicBarriersImplemented: boolean;
+  electronicBarriersImplemented!: boolean;
 
   @Column({ name: 'electronic_barrier_details', type: 'text', nullable: true })
-  electronicBarrierDetails: string;
+  electronicBarrierDetails!: string;
 
   @Column({ name: 'conflict_check_id', type: 'uuid', nullable: true })
-  conflictCheckId: string;
+  conflictCheckId!: string;
 
   @Column({ name: 'related_matter_id', type: 'uuid', nullable: true })
-  relatedMatterId: string;
+  relatedMatterId!: string;
 
   @Column({ name: 'notice_to_clients', type: 'text', nullable: true })
-  noticeToClients: string;
+  noticeToClients!: string;
 
   @Column({ name: 'client_consent_obtained', type: 'boolean', default: false })
-  clientConsentObtained: boolean;
+  clientConsentObtained!: boolean;
 
   @Column({ name: 'consent_date', type: 'date', nullable: true })
-  consentDate: Date;
+  consentDate!: Date;
 
   @Column({ name: 'consent_document_path', type: 'varchar', length: 500, nullable: true })
-  consentDocumentPath: string;
+  consentDocumentPath!: string;
 
   @Column({ name: 'monitoring_procedures', type: 'jsonb', nullable: true })
-  monitoringProcedures: Record<string, any>;
+  monitoringProcedures!: Record<string, any>;
 
   @Column({ name: 'compliance_officer_id', type: 'uuid', nullable: true })
-  complianceOfficerId: string;
+  complianceOfficerId!: string;
 }

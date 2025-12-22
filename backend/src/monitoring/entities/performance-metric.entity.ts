@@ -4,23 +4,23 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, Index } from 
 @Index(['metricName', 'timestamp'])
 export class PerformanceMetric {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  metricName: string;
+  metricName!: string;
 
   @Column('float')
-  value: number;
+  value!: number;
 
   @Column({ nullable: true })
-  unit: string;
+  unit!: string;
 
   @Column('jsonb', { nullable: true })
-  tags: Record<string, any>;
+  tags!: Record<string, any>;
 
   @Column({ type: 'timestamp' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

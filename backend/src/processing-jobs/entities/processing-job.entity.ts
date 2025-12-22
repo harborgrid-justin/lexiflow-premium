@@ -13,52 +13,52 @@ import { JobType, JobStatus } from '../dto/job-status.dto';
 @Index(['type'])
 export class ProcessingJob {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({
     type: 'enum',
     enum: JobType,
   })
-  type: JobType;
+  type!: JobType;
 
   @Column({
     type: 'enum',
     enum: JobStatus,
     default: JobStatus.PENDING,
   })
-  status: JobStatus;
+  status!: JobStatus;
 
   @Column({ type: 'uuid' })
   @Index()
-  documentId: string;
+  documentId!: string;
 
   @Column({ type: 'int', default: 0 })
-  progress: number;
+  progress!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  parameters: Record<string, any>;
+  parameters!: Record<string, any>;
 
   @Column({ type: 'jsonb', nullable: true })
-  result: Record<string, any>;
+  result!: Record<string, any>;
 
   @Column({ type: 'text', nullable: true })
-  error: string;
+  error!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  startedAt: Date;
+  startedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  completedAt: Date;
+  completedAt!: Date;
 
   @Column({ type: 'int', nullable: true })
-  processingTime: number;
+  processingTime!: number;
 
   @Column({ type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 }

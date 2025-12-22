@@ -106,7 +106,7 @@ export const ShardingVisualizer: React.FC = () => {
                     <div className="space-y-4">
                         <div>
                             <label className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Data Key</label>
-                            <input value={key} onChange={e => setKey(e.target.value)} className={cn("w-full p-2 border rounded font-mono text-sm", theme.surface.input, theme.border.default, theme.text.primary)} />
+                            <input value={key} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKey(e.target.value)} className={cn("w-full p-2 border rounded font-mono text-sm", theme.surface.input, theme.border.default, theme.text.primary)} />
                         </div>
                         <div className="flex items-center justify-center gap-4 text-center">
                             <Database className={cn("h-8 w-8", theme.text.primary)}/>

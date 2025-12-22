@@ -28,54 +28,54 @@ export class DiscoveryAnalyticsQueryDto {
 
 export class DiscoveryFunnelDto {
   @ApiProperty({ description: 'Total discovery requests sent' })
-  requestsSent: number;
+  requestsSent!: number;
 
   @ApiProperty({ description: 'Requests awaiting response' })
-  requestsPending: number;
+  requestsPending!: number;
 
   @ApiProperty({ description: 'Requests with partial responses' })
-  requestsPartiallyResponded: number;
+  requestsPartiallyResponded!: number;
 
   @ApiProperty({ description: 'Requests fully responded' })
-  requestsFullyResponded: number;
+  requestsFullyResponded!: number;
 
   @ApiProperty({ description: 'Requests with objections' })
-  requestsWithObjections: number;
+  requestsWithObjections!: number;
 
   @ApiProperty({ description: 'Documents produced' })
-  documentsProduced: number;
+  documentsProduced!: number;
 
   @ApiProperty({ description: 'Documents reviewed' })
-  documentsReviewed: number;
+  documentsReviewed!: number;
 
   @ApiProperty({ description: 'Documents privileged' })
-  documentsPrivileged: number;
+  documentsPrivileged!: number;
 
   @ApiProperty({ description: 'Documents responsive' })
-  documentsResponsive: number;
+  documentsResponsive!: number;
 
   @ApiProperty({ description: 'Average response time in days' })
-  avgResponseTime: number;
+  avgResponseTime!: number;
 
   @ApiProperty({ description: 'Completion percentage' })
-  completionPercentage: number;
+  completionPercentage!: number;
 
   @ApiProperty({ description: 'Funnel stages breakdown' })
-  stages: FunnelStage[];
+  stages!: FunnelStage[];
 }
 
 export class FunnelStage {
   @ApiProperty({ description: 'Stage name' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Item count at this stage' })
-  count: number;
+  count!: number;
 
   @ApiProperty({ description: 'Percentage of total' })
-  percentage: number;
+  percentage!: number;
 
   @ApiProperty({ description: 'Average time in stage (days)' })
-  avgTimeInStage: number;
+  avgTimeInStage!: number;
 
   @ApiProperty({ description: 'Stage status' })
   status: 'on-track' | 'delayed' | 'at-risk';
@@ -83,16 +83,16 @@ export class FunnelStage {
 
 export class DiscoveryTimelineDto {
   @ApiProperty({ description: 'Timeline events' })
-  events: TimelineEvent[];
+  events!: TimelineEvent[];
 
   @ApiProperty({ description: 'Critical path items' })
-  criticalPath: TimelineEvent[];
+  criticalPath!: TimelineEvent[];
 
   @ApiProperty({ description: 'Upcoming milestones' })
-  upcomingMilestones: Milestone[];
+  upcomingMilestones!: Milestone[];
 
   @ApiProperty({ description: 'Overdue items count' })
-  overdueCount: number;
+  overdueCount!: number;
 
   @ApiProperty({ description: 'Discovery cutoff date' })
   discoveryCutoff?: Date;
@@ -106,16 +106,16 @@ export class DiscoveryTimelineDto {
 
 export class TimelineEvent {
   @ApiProperty({ description: 'Event ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Event type' })
   type: 'request' | 'response' | 'production' | 'deposition' | 'motion' | 'deadline';
 
   @ApiProperty({ description: 'Event title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Event date' })
-  date: Date;
+  date!: Date;
 
   @ApiProperty({ description: 'Associated case ID' })
   caseId?: string;
@@ -127,79 +127,79 @@ export class TimelineEvent {
   details?: string;
 
   @ApiProperty({ description: 'Is critical path item' })
-  isCritical: boolean;
+  isCritical!: boolean;
 }
 
 export class Milestone {
   @ApiProperty({ description: 'Milestone name' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Due date' })
-  dueDate: Date;
+  dueDate!: Date;
 
   @ApiProperty({ description: 'Days until due' })
-  daysUntil: number;
+  daysUntil!: number;
 
   @ApiProperty({ description: 'Completion percentage' })
-  completionPercentage: number;
+  completionPercentage!: number;
 
   @ApiProperty({ description: 'Status' })
   status: 'on-track' | 'at-risk' | 'overdue';
 
   @ApiProperty({ description: 'Dependencies' })
-  dependencies: string[];
+  dependencies!: string[];
 }
 
 export class CaseDiscoveryMetricsDto {
   @ApiProperty({ description: 'Case ID' })
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Total requests sent' })
-  requestsSent: number;
+  requestsSent!: number;
 
   @ApiProperty({ description: 'Total requests received' })
-  requestsReceived: number;
+  requestsReceived!: number;
 
   @ApiProperty({ description: 'Response rate percentage' })
-  responseRate: number;
+  responseRate!: number;
 
   @ApiProperty({ description: 'Documents produced' })
-  documentsProduced: number;
+  documentsProduced!: number;
 
   @ApiProperty({ description: 'Documents received' })
-  documentsReceived: number;
+  documentsReceived!: number;
 
   @ApiProperty({ description: 'Depositions scheduled' })
-  depositionsScheduled: number;
+  depositionsScheduled!: number;
 
   @ApiProperty({ description: 'Depositions completed' })
-  depositionsCompleted: number;
+  depositionsCompleted!: number;
 
   @ApiProperty({ description: 'Average response time in days' })
-  avgResponseTime: number;
+  avgResponseTime!: number;
 
   @ApiProperty({ description: 'Objections filed' })
-  objectionsCount: number;
+  objectionsCount!: number;
 
   @ApiProperty({ description: 'Motions to compel filed' })
-  motionsToCompel: number;
+  motionsToCompel!: number;
 
   @ApiProperty({ description: 'Discovery disputes count' })
-  disputesCount: number;
+  disputesCount!: number;
 
   @ApiProperty({ description: 'ESI sources identified' })
-  esiSourcesCount: number;
+  esiSourcesCount!: number;
 
   @ApiProperty({ description: 'Total discovery cost' })
-  totalCost: number;
+  totalCost!: number;
 
   @ApiProperty({ description: 'Cost per document' })
-  costPerDocument: number;
+  costPerDocument!: number;
 }
 
 export class DiscoveryProductionVolumeDto {
   @ApiProperty({ description: 'Total documents' })
-  totalDocuments: number;
+  totalDocuments!: number;
 
   @ApiProperty({ description: 'Documents by type' })
   documentsByType: { [type: string]: number };
@@ -208,7 +208,7 @@ export class DiscoveryProductionVolumeDto {
   documentsByCustodian: { [custodian: string]: number };
 
   @ApiProperty({ description: 'Documents by date range' })
-  documentsByDateRange: DateRangeVolume[];
+  documentsByDateRange!: DateRangeVolume[];
 
   @ApiProperty({ description: 'File size statistics' })
   fileSizeStats: {
@@ -218,29 +218,29 @@ export class DiscoveryProductionVolumeDto {
   };
 
   @ApiProperty({ description: 'Production batches' })
-  productionBatches: ProductionBatch[];
+  productionBatches!: ProductionBatch[];
 }
 
 export class DateRangeVolume {
   @ApiProperty({ description: 'Date range label' })
-  range: string;
+  range!: string;
 
   @ApiProperty({ description: 'Document count' })
-  count: number;
+  count!: number;
 
   @ApiProperty({ description: 'Percentage of total' })
-  percentage: number;
+  percentage!: number;
 }
 
 export class ProductionBatch {
   @ApiProperty({ description: 'Batch number' })
-  batchNumber: string;
+  batchNumber!: string;
 
   @ApiProperty({ description: 'Production date' })
-  productionDate: Date;
+  productionDate!: Date;
 
   @ApiProperty({ description: 'Document count' })
-  documentCount: number;
+  documentCount!: number;
 
   @ApiProperty({ description: 'Status' })
   status: 'pending' | 'produced' | 'supplemented';

@@ -92,7 +92,7 @@ export const NotificationPanel: React.FC = () => {
               {notification.title}
             </h4>
             <button
-              onClick={(e) => {
+              onClick={(e: React.MouseEvent) => {
                 e.stopPropagation();
                 NotificationService.remove(notification.id);
               }}
@@ -135,7 +135,7 @@ export const NotificationPanel: React.FC = () => {
               {notification.actions.map((action, idx) => (
                 <button
                   key={idx}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
                     action.onClick();
                     NotificationService.remove(notification.id);

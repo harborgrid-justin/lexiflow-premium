@@ -5,42 +5,42 @@ import { Case } from '../../cases/entities/case.entity';
 @Entity('risks')
 export class Risk {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'enum', enum: RiskImpact })
-  impact: RiskImpact;
+  impact!: RiskImpact;
 
   @Column({ type: 'enum', enum: RiskProbability })
-  probability: RiskProbability;
+  probability!: RiskProbability;
 
   @Column({ type: 'enum', enum: RiskStatus, default: RiskStatus.OPEN })
-  status: RiskStatus;
+  status!: RiskStatus;
 
   @Column({ nullable: true })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'caseId' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'text', nullable: true })
-  mitigationStrategy: string;
+  mitigationStrategy!: string;
 
   @Column({ type: 'decimal', precision: 3, scale: 1, nullable: true })
-  riskScore: number;
+  riskScore!: number;
 
   @Column({ nullable: true })
-  identifiedBy: string;
+  identifiedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -29,15 +29,15 @@ export const useAdminData = (activeCategory: Category) => {
         return payload.item;
     },
     {
-        onSuccess: (savedItem, variables) => {
+        onSuccess: (savedItem: any, variables) => {
             const key = [
-                variables.category === 'users' ? 'users' : 
-                variables.category === 'cases' ? 'cases' : 
+                variables.category === 'users' ? 'users' :
+                variables.category === 'cases' ? 'cases' :
                 variables.category === 'clients' ? 'clients' :
                 variables.category === 'clauses' ? 'clauses' : 'documents',
                 'all'
             ];
-            
+
             const currentData = queryClient.getQueryState<any[]>(key)?.data || [];
             let newData;
             if (variables.isNew) {

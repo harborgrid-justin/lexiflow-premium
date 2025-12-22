@@ -79,7 +79,9 @@ export class EmailService implements OnModuleInit {
 
       this.logger.log(`Email sent to: ${mailOptions.to}`);
     } catch (error) {
-      this.logger.error(`Failed to send email: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to send email: ${message}`, stack);
       throw error;
     }
   }

@@ -3,32 +3,32 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Entity('reports')
 export class Report {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  type: string;
+  type!: string;
 
   @Column({ nullable: true })
-  templateId: string;
+  templateId!: string;
 
   @Column('simple-json', { nullable: true })
   parameters: any;
 
   @Column({ nullable: true })
-  filePath: string;
+  filePath!: string;
 
   @Column({ nullable: true })
-  userId: string;
+  userId!: string;
 
   @Column({ default: 'pending' })
-  status: string;
+  status!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

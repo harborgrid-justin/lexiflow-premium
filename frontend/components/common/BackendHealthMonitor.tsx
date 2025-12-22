@@ -92,7 +92,7 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
           className={cn(
             "w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col",
             theme.surface.default

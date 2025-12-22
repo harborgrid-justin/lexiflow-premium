@@ -3,32 +3,32 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeor
 @Entity('data_versions')
 export class DataVersion {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  entityType: string;
+  entityType!: string;
 
   @Column()
-  entityId: string;
+  entityId!: string;
 
   @Column()
-  version: number;
+  version!: number;
 
   @Column('jsonb')
-  data: Record<string, any>;
+  data!: Record<string, any>;
 
   @Column({ nullable: true })
-  branch: string;
+  branch!: string;
 
   @Column({ nullable: true })
-  tag: string;
+  tag!: string;
 
   @Column('text', { nullable: true })
-  commitMessage: string;
+  commitMessage!: string;
 
   @Column({ nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

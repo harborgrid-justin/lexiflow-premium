@@ -97,7 +97,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         <TableHead>Status</TableHead>
                     </TableHeader>
                     <TableBody>
-                        {entries.length > 0 ? entries.map((e) => (
+                        {entries.length > 0 ? entries.map((e: any) => (
                             <TableRow key={e.id}>
                                 <TableCell className={cn("font-mono", theme.text.secondary)}>{e.date}</TableCell>
                                 <TableCell className={cn("font-medium", theme.text.primary)}>{e.description}</TableCell>

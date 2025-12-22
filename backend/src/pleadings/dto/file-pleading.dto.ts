@@ -9,12 +9,12 @@ export class FilePleadingDto {
   @ApiProperty({ description: 'Name of person filing' })
   @IsString()
   @IsNotEmpty()
-  filedBy: string;
+  filedBy!: string;
 
   @ApiProperty({ description: 'Date of filing' })
   @IsDateString()
   @IsNotEmpty()
-  filedDate: string;
+  filedDate!: string;
 
   @ApiPropertyOptional({ description: 'Court name' })
   @IsString()

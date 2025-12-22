@@ -29,114 +29,114 @@ export enum ExaminationStatus {
 @Entity('examinations')
 export class Examination {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @Column({ type: 'varchar', length: 300 })
-  examinationTitle: string;
+  examinationTitle!: string;
 
   @Column({
     type: 'enum',
     enum: ExaminationType,
   })
-  type: ExaminationType;
+  type!: ExaminationType;
 
   @Column({
     type: 'enum',
     enum: ExaminationStatus,
     default: ExaminationStatus.REQUESTED,
   })
-  status: ExaminationStatus;
+  status!: ExaminationStatus;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'varchar', length: 300 })
-  examinee: string;
+  examinee!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  examiner: string;
+  examiner!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  examinerOrganization: string;
+  examinerOrganization!: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  examinerSpecialty: string;
+  examinerSpecialty!: string;
 
   @Column({ type: 'date', nullable: true })
-  requestDate: Date;
+  requestDate!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  scheduledDate: Date;
+  scheduledDate!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  completedDate: Date;
+  completedDate!: Date;
 
   @Column({ type: 'int', nullable: true })
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  requestingParty: string;
+  requestingParty!: string;
 
   @Column({ type: 'text', nullable: true })
-  purpose: string;
+  purpose!: string;
 
   @Column({ type: 'text', nullable: true })
-  scope: string;
+  scope!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  conditions: string[];
+  conditions!: string[];
 
   @Column({ type: 'text', nullable: true })
-  findings: string;
+  findings!: string;
 
   @Column({ type: 'text', nullable: true })
-  conclusions: string;
+  conclusions!: string;
 
   @Column({ type: 'boolean', default: false })
-  isReportReceived: boolean;
+  isReportReceived!: boolean;
 
   @Column({ type: 'date', nullable: true })
-  reportReceivedDate: Date;
+  reportReceivedDate!: Date;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  reportPath: string;
+  reportPath!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  estimatedCost: number;
+  estimatedCost!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  actualCost: number;
+  actualCost!: number;
 
   @Column({ type: 'text', nullable: true })
-  disputeReason: string;
+  disputeReason!: string;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ type: 'uuid', nullable: true })
-  assignedAttorney: string;
+  assignedAttorney!: string;
 
   @Column({ type: 'uuid' })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 }

@@ -29,7 +29,9 @@ export class ReportProcessorService {
         downloadUrl: `/reports/download/${Date.now()}`,
       };
     } catch (error) {
-      this.logger.error(`Report generation failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Report generation failed: ${message}`, stack);
       throw error;
     }
   }
@@ -44,7 +46,9 @@ export class ReportProcessorService {
       this.logger.log(`Scheduled report completed: ${job.data.reportType}`);
       return { success: true };
     } catch (error) {
-      this.logger.error(`Scheduled report failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Scheduled report failed: ${message}`, stack);
       throw error;
     }
   }

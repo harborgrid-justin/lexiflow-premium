@@ -85,6 +85,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
               exhibitNumber: `PX-${Date.now().toString().slice(-3)}`, // Auto-gen number
               title: selectedItem.title,
               description: selectedItem.description,
+              type: 'Document', // Default type
               fileType: selectedItem.fileType || 'PDF',
               party: 'Plaintiff', // Default, user would edit later
               status: 'Marked',

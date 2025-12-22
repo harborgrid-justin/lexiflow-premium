@@ -61,7 +61,7 @@ export const PropertyPanel: React.FC<PropertyPanelProps> = ({ section, onUpdate 
                 <TextArea 
                     rows={6}
                     value={section.content}
-                    onChange={(e) => onUpdate({ content: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ content: e.target.value })}
                     className="font-serif text-sm"
                 />
             </div>

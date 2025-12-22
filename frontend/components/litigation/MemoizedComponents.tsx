@@ -16,7 +16,7 @@ interface MemoizedNodeProps {
   isSelected: boolean;
   isDragging: boolean;
   onMouseDown: (e: React.MouseEvent, id: string) => void;
-  theme: unknown;
+  theme: any;
 }
 
 /**
@@ -63,7 +63,7 @@ interface MemoizedConnectionProps {
   fromNode: TypedWorkflowNode | undefined;
   toNode: TypedWorkflowNode | undefined;
   onSelect: (id: string) => void;
-  theme: unknown;
+  theme: any;
 }
 
 /**

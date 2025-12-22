@@ -100,7 +100,9 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
               }
           });
       }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Intentionally only depend on data changes, not query/fields
+  // Query changes are handled in separate effect below to avoid re-indexing on every keystroke
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- Separated concerns: data updates vs query updates
   }, [items, fieldsKey, idKey]); 
 
   // Dispatch Search Task (Only when query changes) with cancellation

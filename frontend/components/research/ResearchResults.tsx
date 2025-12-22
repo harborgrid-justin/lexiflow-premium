@@ -26,7 +26,7 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
             if (index.current < text.length) {
                 // Add chunks for faster "streaming" feel
                 const chunk = text.slice(index.current, index.current + 3);
-                setDisplayedText((prev) => prev + chunk);
+                setDisplayedText((prev: any) => prev + chunk);
                 index.current += 3;
             } else {
                 clearInterval(intervalId);

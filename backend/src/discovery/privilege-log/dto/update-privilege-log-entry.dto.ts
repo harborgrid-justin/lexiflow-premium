@@ -115,5 +115,5 @@ export class UpdatePrivilegeLogEntryDto {
   reviewedBy?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

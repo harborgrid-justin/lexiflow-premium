@@ -12,7 +12,7 @@ export class CreateOrganizationDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ 
     description: 'Full legal name',
@@ -31,7 +31,7 @@ export class CreateOrganizationDto {
   })
   @IsEnum(OrganizationType)
   @IsNotEmpty()
-  organizationType: OrganizationType;
+  organizationType!: OrganizationType;
 
   @ApiPropertyOptional({ 
     description: 'Tax identification number',

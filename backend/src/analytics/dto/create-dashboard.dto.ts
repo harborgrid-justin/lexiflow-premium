@@ -14,7 +14,7 @@ export class CreateDashboardDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Dashboard description' })
   @IsString()

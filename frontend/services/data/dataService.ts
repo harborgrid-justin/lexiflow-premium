@@ -319,7 +319,12 @@ import { repositoryRegistry as legacyRepositoryRegistry } from '../core/Reposito
 //                          ╚═══════════════════════╝
 // ═══════════════════════════════════════════════════════════════════════════
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * Internal base object for DataService facade.
+ * Uses `any` for property descriptors added via Object.defineProperties.
+ * Type safety is enforced at the property access level through the descriptors.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required for dynamic property descriptor pattern
 const DataServiceBase: Record<string, any> = {};
 
 Object.defineProperties(DataServiceBase, {

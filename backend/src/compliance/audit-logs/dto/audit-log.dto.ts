@@ -1,17 +1,17 @@
 export class AuditLogDto {
-  id: string;
-  userId: string;
-  userName: string;
-  action: AuditAction;
-  entityType: AuditEntityType;
-  entityId: string;
+  id!: string;
+  userId!: string;
+  userName!: string;
+  action!: AuditAction;
+  entityType!: AuditEntityType;
+  entityId!: string;
   entityName?: string;
   changes?: Record<string, unknown>;
   metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
-  timestamp: Date;
-  organizationId: string;
+  timestamp!: Date;
+  organizationId!: string;
 }
 
 export enum AuditAction {
@@ -54,17 +54,17 @@ export class QueryAuditLogsDto {
 }
 
 export class CreateAuditLogDto {
-  userId: string;
-  userName: string;
-  action: AuditAction;
-  entityType: AuditEntityType;
-  entityId: string;
+  userId!: string;
+  userName!: string;
+  action!: AuditAction;
+  entityType!: AuditEntityType;
+  entityId!: string;
   entityName?: string;
   changes?: Record<string, unknown>;
   metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
-  organizationId: string;
+  organizationId!: string;
 }
 
 export class ExportAuditLogsDto {

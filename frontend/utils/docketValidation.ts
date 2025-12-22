@@ -37,16 +37,18 @@ export interface DocketValidationWarning {
  */
 export function isValidStructuredData(data: unknown): data is DocketEntryStructuredData {
   if (!data || typeof data !== 'object') return false;
-  
+
+  const record = data as Record<string, unknown>;
+
   // Required fields
-  if (typeof data.actionType !== 'string' || !data.actionType.trim()) return false;
-  if (typeof data.actionVerb !== 'string' || !data.actionVerb.trim()) return false;
-  
+  if (typeof record.actionType !== 'string' || !record.actionType.trim()) return false;
+  if (typeof record.actionVerb !== 'string' || !record.actionVerb.trim()) return false;
+
   // Optional fields - must be strings if present
-  if (data.documentTitle !== undefined && typeof data.documentTitle !== 'string') return false;
-  if (data.filer !== undefined && typeof data.filer !== 'string') return false;
-  if (data.additionalText !== undefined && typeof data.additionalText !== 'string') return false;
-  
+  if (record.documentTitle !== undefined && typeof record.documentTitle !== 'string') return false;
+  if (record.filer !== undefined && typeof record.filer !== 'string') return false;
+  if (record.additionalText !== undefined && typeof record.additionalText !== 'string') return false;
+
   return true;
 }
 

@@ -10,7 +10,7 @@ interface WorkflowQuickActionsProps {
 
 export const WorkflowQuickActions: React.FC<WorkflowQuickActionsProps> = ({ caseId: _caseId, onAction }) => {
   return (
-    <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+    <div className="flex gap-1" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
       <Button size="sm" variant="ghost" className="h-8 px-2 text-slate-500 hover:text-green-600" title="Start Next Task" onClick={() => onAction('start')}>
         <Play className="h-4 w-4" />
       </Button>

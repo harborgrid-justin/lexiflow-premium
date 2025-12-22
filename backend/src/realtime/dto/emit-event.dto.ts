@@ -11,11 +11,11 @@ export enum EventType {
 export class EmitEventDto {
   @ApiProperty({ description: 'Event type', enum: EventType })
   @IsEnum(EventType)
-  type: EventType;
+  type!: EventType;
 
   @ApiProperty({ description: 'Event name' })
   @IsString()
-  event: string;
+  event!: string;
 
   @ApiProperty({ description: 'Room/Channel name', required: false })
   @IsOptional()
@@ -24,7 +24,7 @@ export class EmitEventDto {
 
   @ApiProperty({ description: 'Event data' })
   @IsObject()
-  data: Record<string, unknown>;
+  data!: Record<string, unknown>;
 
   @ApiProperty({ description: 'Target user ID', required: false })
   @IsOptional()

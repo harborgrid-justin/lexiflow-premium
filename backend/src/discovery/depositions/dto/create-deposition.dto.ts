@@ -15,11 +15,11 @@ import { DepositionMethod } from '../entities/deposition.entity';
 
 export class CreateDepositionDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(300)
-  deponentName: string;
+  deponentName!: string;
 
   @IsOptional()
   @IsString()
@@ -32,7 +32,7 @@ export class CreateDepositionDto {
   deponentOrganization?: string;
 
   @IsEnum(DepositionMethod)
-  method: DepositionMethod;
+  method!: DepositionMethod;
 
   @IsOptional()
   @IsDateString()
@@ -93,5 +93,5 @@ export class CreateDepositionDto {
   assignedAttorney?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

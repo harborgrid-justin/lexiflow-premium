@@ -88,7 +88,7 @@ export const BillingLedger: React.FC = () => {
                           accept=".pdf,.jpg,.jpeg,.png"
                           className="w-full border rounded p-2 text-sm"
                           aria-label="Receipt or Invoice"
-                          onChange={(e) => {
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                               const file = e.target.files?.[0];
                               if (file) {
                                   if (file.size > 5 * 1024 * 1024) {
@@ -165,7 +165,7 @@ export const BillingLedger: React.FC = () => {
                               setReceiptFile(null);
                               setReceiptPreview(null);
                               closeWindow(winId);
-                          } catch (err) {
+                          } catch (err: unknown) {
                               notifyError('Failed to log transaction');
                               console.error('Transaction error:', err);
                           }

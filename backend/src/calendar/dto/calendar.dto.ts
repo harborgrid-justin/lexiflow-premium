@@ -13,19 +13,19 @@ export enum CalendarEventType {
 export class CreateCalendarEventDto {
   @ApiProperty()
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({ enum: CalendarEventType })
   @IsEnum(CalendarEventType)
-  eventType: CalendarEventType;
+  eventType!: CalendarEventType;
 
   @ApiProperty()
   @IsDateString()
-  startDate: string;
+  startDate!: string;
 
   @ApiProperty()
   @IsDateString()
-  endDate: string;
+  endDate!: string;
 
   @ApiPropertyOptional()
   @IsString()

@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('templates')
 export class Template {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  type: string;
+  type!: string;
 
   @Column()
-  subject: string;
+  subject!: string;
 
   @Column('text')
-  body: string;
+  body!: string;
 
   @Column('jsonb', { default: [] })
-  variables: string[];
+  variables!: string[];
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

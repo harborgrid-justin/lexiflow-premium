@@ -35,77 +35,77 @@ export enum PleadingStatus {
 @Index(['filedDate'])
 export class Pleading extends BaseEntity {
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: PleadingType,
   })
-  type: PleadingType;
+  type!: PleadingType;
 
   @Column({ name: 'case_id', type: 'uuid' })
   @Index()
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'document_id', type: 'uuid', nullable: true })
-  documentId: string;
+  documentId!: string;
 
   @Column({
     type: 'enum',
     enum: PleadingStatus,
     default: PleadingStatus.DRAFT,
   })
-  status: PleadingStatus;
+  status!: PleadingStatus;
 
   @Column({ name: 'filed_date', type: 'timestamp', nullable: true })
-  filedDate: Date;
+  filedDate!: Date;
 
   @Column({ name: 'filed_by', nullable: true })
-  filedBy: string;
+  filedBy!: string;
 
   @Column({ name: 'court_name', nullable: true })
-  courtName: string;
+  courtName!: string;
 
   @Column({ name: 'case_number', nullable: true })
-  caseNumber: string;
+  caseNumber!: string;
 
   @Column({ name: 'docket_number', nullable: true })
-  docketNumber: string;
+  docketNumber!: string;
 
   @Column({ name: 'hearing_date', type: 'timestamp', nullable: true })
-  hearingDate: Date;
+  hearingDate!: Date;
 
   @Column({ name: 'served_date', type: 'timestamp', nullable: true })
-  servedDate: Date;
+  servedDate!: Date;
 
   @Column({ name: 'service_method', nullable: true })
-  serviceMethod: string;
+  serviceMethod!: string;
 
   @Column({ nullable: true })
-  judge: string;
+  judge!: string;
 
   @Column({ type: 'simple-array', nullable: true })
-  parties: string[];
+  parties!: string[];
 
   @Column({ type: 'text', nullable: true })
-  summary: string;
+  summary!: string;
 
   @Column({ name: 'custom_fields', type: 'jsonb', nullable: true })
-  customFields: Record<string, any>;
+  customFields!: Record<string, any>;
 
   @Column({ type: 'simple-array', nullable: true })
-  tags: string[];
+  tags!: string[];
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 }

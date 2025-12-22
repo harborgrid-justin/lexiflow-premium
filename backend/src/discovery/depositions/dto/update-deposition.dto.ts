@@ -132,5 +132,5 @@ export class UpdateDepositionDto {
   assignedAttorney?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

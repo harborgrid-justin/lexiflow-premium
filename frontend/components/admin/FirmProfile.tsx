@@ -98,7 +98,8 @@ export const FirmProfile: React.FC = () => {
       }
       // Handle nested updates
       const newData = { ...prev };
-      let current: unknown = newData;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let current: any = newData;
       for (let i = 0; i < keys.length - 1; i++) {
         current[keys[i]] = { ...current[keys[i]] };
         current = current[keys[i]];
@@ -180,19 +181,19 @@ export const FirmProfile: React.FC = () => {
             <Input 
               label="Firm Name"
               value={firmDetails.name}
-              onChange={(e) => updateField('name', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('name', e.target.value)}
               disabled={!isEditing}
             />
             <Input 
               label="Legal Name"
               value={firmDetails.legalName}
-              onChange={(e) => updateField('legalName', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('legalName', e.target.value)}
               disabled={!isEditing}
             />
             <Input 
               label="Tax ID / EIN"
               value={firmDetails.taxId}
-              onChange={(e) => updateField('taxId', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('taxId', e.target.value)}
               disabled={!isEditing}
               type="password"
             />
@@ -200,14 +201,14 @@ export const FirmProfile: React.FC = () => {
               <Input 
                 label="Founded Year"
                 value={firmDetails.foundedYear.toString()}
-                onChange={(e) => updateField('foundedYear', parseInt(e.target.value) || 0)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('foundedYear', parseInt(e.target.value) || 0)}
                 disabled={!isEditing}
                 type="number"
               />
               <Input 
                 label="Attorney Count"
                 value={firmDetails.attorneyCount.toString()}
-                onChange={(e) => updateField('attorneyCount', parseInt(e.target.value) || 0)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('attorneyCount', parseInt(e.target.value) || 0)}
                 disabled={!isEditing}
                 type="number"
               />
@@ -221,20 +222,20 @@ export const FirmProfile: React.FC = () => {
             <Input 
               label="Website"
               value={firmDetails.website}
-              onChange={(e) => updateField('website', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('website', e.target.value)}
               disabled={!isEditing}
             />
             <Input 
               label="Main Email"
               value={firmDetails.email}
-              onChange={(e) => updateField('email', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('email', e.target.value)}
               disabled={!isEditing}
               type="email"
             />
             <Input 
               label="Main Phone"
               value={firmDetails.phone}
-              onChange={(e) => updateField('phone', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('phone', e.target.value)}
               disabled={!isEditing}
             />
           </div>
@@ -246,20 +247,20 @@ export const FirmProfile: React.FC = () => {
             <Input 
               label="Street Address"
               value={firmDetails.address.street}
-              onChange={(e) => updateField('address.street', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.street', e.target.value)}
               disabled={!isEditing}
             />
             <div className="grid grid-cols-2 gap-4">
               <Input 
                 label="City"
                 value={firmDetails.address.city}
-                onChange={(e) => updateField('address.city', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.city', e.target.value)}
                 disabled={!isEditing}
               />
               <Input 
                 label="State"
                 value={firmDetails.address.state}
-                onChange={(e) => updateField('address.state', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.state', e.target.value)}
                 disabled={!isEditing}
               />
             </div>
@@ -267,13 +268,13 @@ export const FirmProfile: React.FC = () => {
               <Input 
                 label="ZIP Code"
                 value={firmDetails.address.zip}
-                onChange={(e) => updateField('address.zip', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.zip', e.target.value)}
                 disabled={!isEditing}
               />
               <Input 
                 label="Country"
                 value={firmDetails.address.country}
-                onChange={(e) => updateField('address.country', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.country', e.target.value)}
                 disabled={!isEditing}
               />
             </div>

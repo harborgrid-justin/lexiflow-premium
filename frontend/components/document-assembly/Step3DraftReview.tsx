@@ -87,7 +87,7 @@ export const Step3DraftReview: React.FC<Step3DraftReviewProps> = ({
           ref={textAreaRef}
           value={result}
           readOnly={isStreaming}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             if (textAreaRef.current) {
               textAreaRef.current.value = e.target.value;
             }

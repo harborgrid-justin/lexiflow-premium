@@ -32,7 +32,15 @@ export * from './useModal';
 export * from './useNotify';
 export * from './useReadAnalytics';
 export * from './useScrollLock';
-export * from './useSelection';
+// Multi-selection hook (primary selection hook with shift-click support)
+export {
+  useSelection as useMultiRowSelection,
+  type UseSelectionReturn as UseMultiRowSelectionReturn
+} from './useSelection';
+// Single-item selection hooks
+export { useSelection as useSingleSelection, useMultiSelection, type UseMultiSelectionReturn } from './useSelectionState';
+export type { UseSelectionReturn as UseSingleSelectionReturn } from './useSelectionState';
+
 export * from './useSessionStorage';
 export * from './useSort';
 export * from './useToggle';
@@ -44,7 +52,6 @@ export * from './useSLAMonitoring';
 export * from './useFilterAndSearch';
 export * from './useModalState';
 export * from './useArrayState';
-export * from './useSelectionState';
 
 // ============================================================================
 // DOMAIN SPECIFIC HOOKS

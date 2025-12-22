@@ -19,19 +19,19 @@ export enum ConfidenceLevel {
 
 export class OutcomePredictionDto {
   @ApiProperty({ description: 'Case ID' })
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Predicted outcome', enum: PredictedOutcome })
-  predictedOutcome: PredictedOutcome;
+  predictedOutcome!: PredictedOutcome;
 
   @ApiProperty({ description: 'Confidence level', enum: ConfidenceLevel })
-  confidenceLevel: ConfidenceLevel;
+  confidenceLevel!: ConfidenceLevel;
 
   @ApiProperty({ description: 'Confidence score (0-100)' })
   @IsNumber()
   @Min(0)
   @Max(100)
-  confidenceScore: number;
+  confidenceScore!: number;
 
   @ApiProperty({ description: 'Probability breakdown by outcome' })
   probabilities: {
@@ -39,10 +39,10 @@ export class OutcomePredictionDto {
   };
 
   @ApiProperty({ description: 'Factors influencing the prediction' })
-  influencingFactors: InfluencingFactor[];
+  influencingFactors!: InfluencingFactor[];
 
   @ApiProperty({ description: 'Similar historical cases analyzed' })
-  similarCasesCount: number;
+  similarCasesCount!: number;
 
   @ApiProperty({ description: 'Predicted settlement range (if applicable)' })
   settlementRange?: {
@@ -55,53 +55,53 @@ export class OutcomePredictionDto {
   predictedDuration?: number;
 
   @ApiProperty({ description: 'Risk factors' })
-  riskFactors: RiskFactor[];
+  riskFactors!: RiskFactor[];
 
   @ApiProperty({ description: 'Recommendation summary' })
-  recommendations: string[];
+  recommendations!: string[];
 
   @ApiProperty({ description: 'Model version used' })
-  modelVersion: string;
+  modelVersion!: string;
 
   @ApiProperty({ description: 'Analysis timestamp' })
-  analyzedAt: Date;
+  analyzedAt!: Date;
 }
 
 export class InfluencingFactor {
   @ApiProperty({ description: 'Factor name' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Factor description' })
-  description: string;
+  description!: string;
 
   @ApiProperty({ description: 'Impact weight (-1 to 1)' })
   @IsNumber()
   @Min(-1)
   @Max(1)
-  weight: number;
+  weight!: number;
 
   @ApiProperty({ description: 'Impact direction' })
   impact: 'positive' | 'negative' | 'neutral';
 
   @ApiProperty({ description: 'Explanation' })
-  explanation: string;
+  explanation!: string;
 }
 
 export class RiskFactor {
   @ApiProperty({ description: 'Risk category' })
-  category: string;
+  category!: string;
 
   @ApiProperty({ description: 'Risk level' })
   level: 'low' | 'medium' | 'high' | 'critical';
 
   @ApiProperty({ description: 'Risk description' })
-  description: string;
+  description!: string;
 
   @ApiProperty({ description: 'Mitigation strategies' })
   mitigationStrategies?: string[];
 
   @ApiProperty({ description: 'Probability percentage' })
-  probability: number;
+  probability!: number;
 }
 
 export class AnalyzeOutcomeDto {
@@ -109,7 +109,7 @@ export class AnalyzeOutcomeDto {
     description: 'Case ID to analyze',
   })
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @ApiPropertyOptional({
     description: 'Include detailed factor analysis',
@@ -139,28 +139,28 @@ export class AnalyzeOutcomeDto {
 
 export class SimilarCaseDto {
   @ApiProperty({ description: 'Case ID' })
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Case number' })
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiProperty({ description: 'Case title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Similarity score (0-100)' })
-  similarityScore: number;
+  similarityScore!: number;
 
   @ApiProperty({ description: 'Actual outcome' })
-  outcome: string;
+  outcome!: string;
 
   @ApiProperty({ description: 'Duration in days' })
-  duration: number;
+  duration!: number;
 
   @ApiProperty({ description: 'Settlement amount (if applicable)' })
   settlementAmount?: number;
 
   @ApiProperty({ description: 'Matching factors' })
-  matchingFactors: string[];
+  matchingFactors!: string[];
 
   @ApiProperty({ description: 'Judge name' })
   judge?: string;
@@ -171,7 +171,7 @@ export class SimilarCaseDto {
 
 export class PredictionAccuracyDto {
   @ApiProperty({ description: 'Overall accuracy percentage' })
-  overallAccuracy: number;
+  overallAccuracy!: number;
 
   @ApiProperty({ description: 'Accuracy by confidence level' })
   accuracyByConfidence: {
@@ -192,11 +192,11 @@ export class PredictionAccuracyDto {
   };
 
   @ApiProperty({ description: 'Total predictions made' })
-  totalPredictions: number;
+  totalPredictions!: number;
 
   @ApiProperty({ description: 'Total validated predictions' })
-  validatedPredictions: number;
+  validatedPredictions!: number;
 
   @ApiProperty({ description: 'Last model update' })
-  lastModelUpdate: Date;
+  lastModelUpdate!: Date;
 }

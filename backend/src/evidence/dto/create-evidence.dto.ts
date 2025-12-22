@@ -7,12 +7,12 @@ export class CreateEvidenceItemDto {
   @ApiProperty({ description: 'Case ID this evidence belongs to' })
   @IsString()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Evidence identifier/number' })
   @IsString()
   @IsNotEmpty()
-  evidenceNumber: string;
+  evidenceNumber!: string;
 
   @ApiPropertyOptional({ description: 'Evidence title' })
   @IsString()
@@ -22,11 +22,11 @@ export class CreateEvidenceItemDto {
   @ApiProperty({ description: 'Evidence description' })
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
 
   @ApiProperty({ enum: EvidenceType, description: 'Type of evidence' })
   @IsEnum(EvidenceType)
-  evidenceType: EvidenceType;
+  evidenceType!: EvidenceType;
 
   @ApiPropertyOptional({ enum: EvidenceStatus, description: 'Current status', default: EvidenceStatus.COLLECTED })
   @IsOptional()

@@ -60,5 +60,5 @@ export class TimeEntryFilterDto {
 
 export class BulkCreateTimeEntryDto {
   @Type(() => CreateTimeEntryDto)
-  entries: CreateTimeEntryDto[];
+  entries!: CreateTimeEntryDto[];
 }

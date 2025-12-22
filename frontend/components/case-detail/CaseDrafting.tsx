@@ -95,7 +95,7 @@ export const CaseDrafting: React.FC<CaseDraftingProps> = ({
              </button>
              <input
                 value={draftPrompt}
-                onChange={(e) => setDraftPrompt(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDraftPrompt(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && onDraft()}
                 placeholder="Describe a clause or section to draft (e.g. 'Force Majeure for a pandemic')..."
                 className={cn("flex-1 bg-transparent border-none outline-none text-sm placeholder:text-slate-400", theme.text.primary)}

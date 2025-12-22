@@ -11,15 +11,15 @@ export enum MetricType {
 export class RecordMetricDto {
   @ApiProperty({ description: 'Metric name' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Metric type', enum: MetricType })
   @IsEnum(MetricType)
-  type: MetricType;
+  type!: MetricType;
 
   @ApiProperty({ description: 'Metric value' })
   @IsNumber()
-  value: number;
+  value!: number;
 
   @ApiProperty({ description: 'Metric labels', required: false })
   @IsOptional()

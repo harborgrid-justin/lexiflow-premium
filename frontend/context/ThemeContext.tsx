@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, useMe
 import { tokens, ThemeMode } from '../theme/tokens';
 import { DEFAULT_THEME, THEME_STORAGE_KEY } from '../config/master.config';
 
-interface ThemeContextType {
+export interface ThemeContextType {
   mode: ThemeMode;
   toggleTheme: () => void;
   setTheme: (mode: ThemeMode) => void;
@@ -13,7 +13,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const useTheme = () => {
+export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');

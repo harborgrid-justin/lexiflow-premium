@@ -3,10 +3,10 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Entity('ai_models')
 export class AIModel {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
   type: string; // 'embedding', 'classification', 'generation', etc.
@@ -15,23 +15,23 @@ export class AIModel {
   provider: string; // 'openai', 'google', 'anthropic', etc.
 
   @Column()
-  version: string;
+  version!: string;
 
   @Column('jsonb')
-  configuration: Record<string, any>;
+  configuration!: Record<string, any>;
 
   @Column({ default: true })
-  active: boolean;
+  active!: boolean;
 
   @Column({ type: 'bigint', default: 0 })
-  usageCount: number;
+  usageCount!: number;
 
   @Column({ type: 'timestamp', nullable: true })
-  lastUsed: Date;
+  lastUsed!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

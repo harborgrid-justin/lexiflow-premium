@@ -88,6 +88,10 @@ export class LegalEntitiesApiService {
     return apiClient.get<EntityRelationship[]>(`${this.baseUrl}/${id}/relationships`);
   }
 
+  async getAllRelationships(): Promise<EntityRelationship[]> {
+    return apiClient.get<EntityRelationship[]>(`${this.baseUrl}/relationships`);
+  }
+
   async getStats(): Promise<{
     total: number;
     active: number;

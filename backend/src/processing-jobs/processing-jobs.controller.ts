@@ -4,11 +4,15 @@ import {
   Post,
   Param,
   Query,
+  Head,
+  HttpCode,
+  HttpStatus,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { JobType, JobStatus } from './dto/job-status.dto';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Processing Jobs')
 @ApiBearerAuth('JWT-auth')
@@ -16,6 +20,16 @@ import { JobType, JobStatus } from './dto/job-status.dto';
 @Controller('processing-jobs')
 export class ProcessingJobsController {
   constructor(private readonly processingJobsService: ProcessingJobsService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'processing-jobs' };
+  }
 
   @Get()
   @ApiOperation({ summary: 'List all processing jobs' })

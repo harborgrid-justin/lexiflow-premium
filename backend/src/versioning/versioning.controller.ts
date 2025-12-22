@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation  , ApiResponse }from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { VersioningService } from './versioning.service';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Versioning')
 @ApiBearerAuth('JWT-auth')
@@ -10,6 +11,16 @@ import { VersioningService } from './versioning.service';
 @Controller('versioning')
 export class VersioningController {
   constructor(private readonly versioningService: VersioningService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'versioning' };
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

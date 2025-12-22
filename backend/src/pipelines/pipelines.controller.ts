@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { PipelinesService } from './pipelines.service';
 import { CreatePipelineDto, UpdatePipelineDto } from './dto/create-pipeline.dto';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Pipelines')
 @ApiBearerAuth('JWT-auth')
@@ -11,6 +12,16 @@ import { CreatePipelineDto, UpdatePipelineDto } from './dto/create-pipeline.dto'
 @Controller('pipelines')
 export class PipelinesController {
   constructor(private readonly pipelinesService: PipelinesService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'pipelines' };
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all pipelines' })

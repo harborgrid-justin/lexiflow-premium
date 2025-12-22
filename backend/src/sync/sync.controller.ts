@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation  , ApiResponse }from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { SyncService } from './sync.service';
 import { SyncStatus } from './entities/sync-queue.entity';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Sync')
 @ApiBearerAuth('JWT-auth')
@@ -11,6 +12,16 @@ import { SyncStatus } from './entities/sync-queue.entity';
 @Controller('sync')
 export class SyncController {
   constructor(private readonly syncService: SyncService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'sync' };
+  }
 
   @Get('status')
   @ApiOperation({ summary: 'Get sync status' })

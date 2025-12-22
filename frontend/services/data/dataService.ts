@@ -117,6 +117,7 @@ import { STORES } from './db';
 import { CaseRepository, PhaseRepository } from '../domain/CaseDomain';
 import { DocketRepository } from '../domain/DocketDomain';
 import { KnowledgeRepository } from '../domain/KnowledgeDomain';
+import { CalendarService } from '../domain/CalendarDomain';
 
 // Compliance & Security Services
 import { ComplianceService } from '../domain/ComplianceDomain';
@@ -755,7 +756,10 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.calendar
    * @features Event scheduling, court dates, deadlines
    */
-  calendar: DataSourceRouter.createPropertyDescriptor('calendar', () => import('../domain/CalendarDomain').then(m => m.CalendarService)),
+  calendar: { 
+    get: () => CalendarService,
+    enumerable: true 
+  },
   
   /**
    * Collaboration API - Team collaboration tools

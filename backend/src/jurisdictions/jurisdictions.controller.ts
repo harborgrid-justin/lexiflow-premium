@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { JurisdictionsService } from './jurisdictions.service';
 import { CreateJurisdictionDto } from './dto/create-jurisdiction.dto';
@@ -10,6 +10,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Jurisdictions')
 @ApiBearerAuth('JWT-auth')
@@ -18,6 +19,16 @@ import { UserRole } from '../users/entities/user.entity';
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class JurisdictionsController {
   constructor(private readonly jurisdictionsService: JurisdictionsService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'jurisdictions' };
+  }
 
   // ============================================================================
   // JURISDICTIONS

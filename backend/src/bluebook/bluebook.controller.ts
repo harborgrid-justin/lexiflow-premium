@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, Head, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { BluebookService } from './bluebook.service';
 import {
@@ -6,6 +6,7 @@ import {
   BatchFormatDto,
   ValidateCitationDto,
 } from './dto/format-citation.dto';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Bluebook Citation Formatter')
 @ApiBearerAuth('JWT-auth')
@@ -13,6 +14,16 @@ import {
 @Controller('bluebook')
 export class BluebookController {
   constructor(private readonly bluebookService: BluebookService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'bluebook' };
+  }
 
   @Post('parse')
   @HttpCode(HttpStatus.OK)

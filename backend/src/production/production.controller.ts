@@ -6,18 +6,30 @@ import {
   Patch,
   Param,
   Delete,
+  Head,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiResponse }from '@nestjs/swagger';
+import { ApiResponse, ApiOperation }from '@nestjs/swagger';
 import { ProductionService } from './production.service';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 import { ProductionStatus } from '../discovery/productions/entities/production.entity';
+import { Public } from '../common/decorators/public.decorator';
 
 
 @Controller('production')
 export class ProductionController {
   constructor(private readonly productionService: ProductionService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'production' };
+  }
 
   @Post()
   @ApiResponse({ status: 400, description: 'Invalid request data' })

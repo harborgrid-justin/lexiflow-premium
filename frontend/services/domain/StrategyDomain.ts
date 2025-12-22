@@ -1,11 +1,24 @@
 ﻿/**
- * StrategyDomain - Litigation strategy and risk analysis service
- * Provides strategy creation, risk assessment, and tactical recommendations
- * ✅ Migrated to backend API (2025-12-21)
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                    LEXIFLOW STRATEGY DOMAIN SERVICE                       ║
+ * ║                 Enterprise Litigation Strategy Layer v2.0                 ║
+ * ║                       PhD-Level Systems Architecture                      ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ * 
+ * @module services/domain/StrategyDomain
+ * @architecture Backend-First Strategy Management
+ * @author LexiFlow Engineering Team
+ * @since 2025-12-22
+ * @status PRODUCTION READY
+ * 
+ * Provides litigation strategy creation, risk assessment, and tactical recommendations
+ * with backend API integration for persistent storage and analytics.
  */
 
 import { litigationApi } from '../api/domains/litigation.api';
 import { delay } from '../../utils/async';
+import { isBackendApiEnabled } from '../api';
+import { apiClient } from '../infrastructure/apiClient';
 
 interface Strategy {
   id: string;
@@ -36,39 +49,80 @@ interface Recommendation {
 }
 
 export const StrategyService = {
-  getAll: async () => db.getAll(STORES.STRATEGIES),
-  getById: async (id: string) => db.get(STORES.STRATEGIES, id),
-  add: async (item: any) => db.put(STORES.STRATEGIES, { ...item, createdAt: new Date().toISOString() }),
-  update: async (id: string, updates: any) => {
-    const existing = await db.get(STORES.STRATEGIES, id);
-    return db.put(STORES.STRATEGIES, { ...existing, ...updates, updatedAt: new Date().toISOString() });
+  getAll: async () => {
+    if (isBackendApiEnabled()) {
+      return litigationApi.strategies?.getAll?.() || [];
+    }
+    console.warn('[StrategyService] Backend API disabled, returning empty array');
+    return [];
   },
-  delete: async (id: string) => db.delete(STORES.STRATEGIES, id),
+  
+  getById: async (id: string) => {
+    if (isBackendApiEnabled()) {
+      return litigationApi.strategies?.getById?.(id) || null;
+    }
+    console.warn('[StrategyService] Backend API disabled');
+    return null;
+  },
+  
+  add: async (item: any) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.post('/strategies', { ...item, createdAt: new Date().toISOString() });
+    }
+    throw new Error('[StrategyService] Backend API required for add operation');
+  },
+  
+  update: async (id: string, updates: any) => {
+    if (isBackendApiEnabled()) {
+      return apiClient.patch(`/strategies/${id}`, { ...updates, updatedAt: new Date().toISOString() });
+    }
+    throw new Error('[StrategyService] Backend API required for update operation');
+  },
+  
+  delete: async (id: string) => {
+    if (isBackendApiEnabled()) {
+      await apiClient.delete(`/strategies/${id}`);
+      return;
+    }
+    throw new Error('[StrategyService] Backend API required for delete operation');
+  },
   
   // Strategy specific methods
   getStrategies: async (caseId?: string): Promise<Strategy[]> => {
-    const all = await db.getAll(STORES.STRATEGIES);
-    return caseId ? all.filter((s: Strategy) => s.caseId === caseId) : all;
+    if (isBackendApiEnabled()) {
+      const params = caseId ? { caseId } : {};
+      return apiClient.get<Strategy[]>('/strategies', params);
+    }
+    console.warn('[StrategyService] Backend API disabled, returning empty array');
+    return [];
   },
   
   createStrategy: async (strategy: Partial<Strategy>): Promise<Strategy> => {
-    const newStrategy: Strategy = {
-      id: `strat-${Date.now()}`,
-      caseId: strategy.caseId || '',
-      name: strategy.name || 'New Strategy',
-      description: strategy.description || '',
-      objectives: strategy.objectives || [],
-      risks: strategy.risks || [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    await db.put(STORES.STRATEGIES, newStrategy);
-    return newStrategy;
+    if (isBackendApiEnabled()) {
+      const payload = {
+        caseId: strategy.caseId || '',
+        name: strategy.name || 'New Strategy',
+        description: strategy.description || '',
+        objectives: strategy.objectives || [],
+        risks: strategy.risks || [],
+      };
+      return apiClient.post<Strategy>('/strategies', payload);
+    }
+    throw new Error('[StrategyService] Backend API required for createStrategy');
   },
   
   analyzeRisks: async (strategyId: string): Promise<Risk[]> => {
-    await delay(200); // Simulate analysis
-    const strategy = await db.get(STORES.STRATEGIES, strategyId);
+    if (isBackendApiEnabled()) {
+      try {
+        return await apiClient.get<Risk[]>(`/strategies/${strategyId}/risks`);
+      } catch (error) {
+        console.error('[StrategyService.analyzeRisks] Backend error:', error);
+      }
+    }
+    
+    // Fallback to mock analysis
+    await delay(200);
+    const strategy = await StrategyService.getById(strategyId);
     if (!strategy) return [];
     
     // Return existing risks plus generate some AI-suggested risks

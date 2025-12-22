@@ -171,23 +171,47 @@ export class WorkerPool {
     console.log(`[WorkerPool] Successfully created ${this.workers.length}/${this.size} workers`);
   }
 
+  // =============================================================================
+  // WORKER ACQUISITION & RELEASE
+  // =============================================================================
+
   /**
    * Acquire a worker from the pool
+   * Returns immediately if worker is available, otherwise queues the request
+   * 
    * @param timeout - Maximum time to wait for a worker (ms)
-   * @returns Promise that resolves with an available worker
+   * @returns Promise<Worker> - Resolves with an available worker
+   * @throws Error if pool is terminated or timeout exceeded
+   * 
+   * @example
+   * // Without timeout
+   * const worker = await pool.acquire();
+   * 
+   * // With 5 second timeout
+   * const worker = await pool.acquire(5000);
+   * 
+   * @algorithm
+   * 1. Check if pool is terminated → reject
+   * 2. If worker available → pop from available array, resolve immediately
+   * 3. Otherwise → queue request and wait for release
+   * 4. If timeout specified → reject after timeout if still queued
+   * 
+   * @performance
+   * - Available worker: O(1) immediate resolution
+   * - Queued request: O(1) queue insertion + O(n) timeout cleanup
    */
   acquire(timeout?: number): Promise<Worker> {
     if (this.isTerminated) {
-      return Promise.reject(new Error('Worker pool has been terminated'));
+      return Promise.reject(new Error('[WorkerPool.acquire] Worker pool has been terminated'));
     }
 
-    // If worker is immediately available
+    // Fast path: worker is immediately available
     if (this.available.length > 0) {
       const worker = this.available.pop()!;
       return Promise.resolve(worker);
     }
 
-    // Otherwise, queue the request
+    // Slow path: queue the request
     return new Promise<Worker>((resolve, reject) => {
       const task: WorkerTask<Worker> = { resolve, reject, timeout };
       this.queue.push(task);
@@ -198,7 +222,7 @@ export class WorkerPool {
           const index = this.queue.indexOf(task);
           if (index !== -1) {
             this.queue.splice(index, 1);
-            reject(new Error(`Worker acquisition timed out after ${timeout}ms`));
+            reject(new Error(`[WorkerPool.acquire] Worker acquisition timed out after ${timeout}ms`));
           }
         }, timeout);
       }
@@ -207,7 +231,23 @@ export class WorkerPool {
 
   /**
    * Release a worker back to the pool
+   * If tasks are queued, immediately assigns worker to next task
+   * Otherwise returns worker to available pool
+   * 
    * @param worker - The worker to release
+   * 
+   * @example
+   * const worker = await pool.acquire();
+   * // ... use worker ...
+   * pool.release(worker);
+   * 
+   * @algorithm
+   * 1. If pool terminated → terminate worker and return
+   * 2. If queue has tasks → pop task, resolve with worker
+   * 3. Otherwise → return worker to available pool
+   * 
+   * @performance
+   * O(1) for all operations (queue shift, array push)
    */
   release(worker: Worker): void {
     if (this.isTerminated) {
@@ -220,23 +260,53 @@ export class WorkerPool {
       const task = this.queue.shift()!;
       task.resolve(worker);
     } else {
-      // Otherwise, return to available pool
+      // Otherwise, return to available pool (prevent duplicates)
       if (!this.available.includes(worker)) {
         this.available.push(worker);
       }
     }
   }
 
+  // =============================================================================
+  // HIGH-LEVEL TASK EXECUTION
+  // =============================================================================
+
   /**
    * Execute a task using a worker from the pool
+   * Automatically acquires worker, executes task, and releases worker
+   * 
+   * @template T - Return type of the task
    * @param task - Function that receives a worker and returns a promise
-   * @param timeout - Maximum time to wait for worker (ms)
-   * @returns Promise that resolves with the task result
+   * @param timeout - Maximum time to wait for worker acquisition (ms)
+   * @returns Promise<T> - Resolves with task result
+   * @throws Error if acquisition times out or task fails
+   * 
+   * @example
+   * const result = await pool.execute(async (worker) => {
+   *   return new Promise((resolve) => {
+   *     worker.onmessage = (e) => resolve(e.data);
+   *     worker.postMessage({ action: 'hash', data: '...' });
+   *   });
+   * });
+   * 
+   * @performance
+   * - Worker acquisition: O(1) if available, O(n) if queued
+   * - Task execution: Depends on task
+   * - Worker release: O(1)
+   * 
+   * @security
+   * - Worker always released (even on error)
+   * - Errors propagated to caller
+   * - No worker leaks from pool
    */
   async execute<T>(
     task: (worker: Worker) => Promise<T>,
     timeout?: number
   ): Promise<T> {
+    if (typeof task !== 'function') {
+      throw new Error('[WorkerPool.execute] Task must be a function');
+    }
+
     const worker = await this.acquire(timeout);
     
     try {
@@ -244,51 +314,105 @@ export class WorkerPool {
       this.release(worker);
       return result;
     } catch (error) {
-      this.release(worker);
+      this.release(worker); // Always release, even on error
       throw error;
     }
   }
 
   /**
    * Execute multiple tasks in parallel using the pool
+   * Distributes tasks across available workers automatically
+   * 
+   * @template T - Return type of the tasks
    * @param tasks - Array of task functions
-   * @returns Promise that resolves with all results
+   * @returns Promise<T[]> - Resolves with all results in order
+   * @throws Error if any task fails (fails fast)
+   * 
+   * @example
+   * const hashes = await pool.executeAll([
+   *   (worker) => hashData(worker, data1),
+   *   (worker) => hashData(worker, data2),
+   *   (worker) => hashData(worker, data3)
+   * ]);
+   * 
+   * @performance
+   * - Parallelism: Limited by pool size
+   * - Coordination: Promise.all (fails fast)
+   * - Memory: O(n) where n = number of tasks
    */
   async executeAll<T>(
     tasks: Array<(worker: Worker) => Promise<T>>
   ): Promise<T[]> {
+    if (!Array.isArray(tasks)) {
+      throw new Error('[WorkerPool.executeAll] Tasks must be an array');
+    }
+    
     return Promise.all(tasks.map(task => this.execute(task)));
   }
 
+  // =============================================================================
+  // LIFECYCLE MANAGEMENT
+  // =============================================================================
+
   /**
    * Terminate all workers and clear the pool
+   * Rejects all queued tasks and terminates all worker threads
+   * 
+   * @example
+   * pool.terminate();
+   * 
+   * @algorithm
+   * 1. Mark pool as terminated
+   * 2. Reject all queued tasks with error
+   * 3. Terminate each worker thread
+   * 4. Clear all internal arrays
+   * 
+   * @warning
+   * This operation is irreversible. Create a new pool if needed.
    */
   terminate(): void {
-    if (this.isTerminated) return;
+    if (this.isTerminated) {
+      console.warn('[WorkerPool.terminate] Pool already terminated');
+      return;
+    }
     
     this.isTerminated = true;
     
     // Reject all queued tasks
     this.queue.forEach(task => {
-      task.reject(new Error('Worker pool terminated'));
+      task.reject(new Error('[WorkerPool] Pool terminated while task was queued'));
     });
     this.queue = [];
     
     // Terminate all workers
+    let terminatedCount = 0;
     this.workers.forEach(worker => {
       try {
         worker.terminate();
+        terminatedCount++;
       } catch (error) {
         console.error('[WorkerPool] Error terminating worker:', error);
       }
     });
     
+    console.log(`[WorkerPool] Terminated ${terminatedCount}/${this.workers.length} workers`);
+    
     this.workers = [];
     this.available = [];
   }
 
+  // =============================================================================
+  // MONITORING & HEALTH
+  // =============================================================================
+
   /**
-   * Get pool statistics
+   * Get pool statistics for monitoring
+   * 
+   * @returns Object with pool metrics
+   * 
+   * @example
+   * const stats = pool.getStats();
+   * console.log(`Workers: ${stats.busy}/${stats.size} busy, ${stats.queued} queued`);
    */
   getStats(): {
     size: number;
@@ -305,7 +429,14 @@ export class WorkerPool {
   }
 
   /**
-   * Check if pool is healthy (has workers available)
+   * Check if pool is healthy (has workers and not terminated)
+   * 
+   * @returns boolean - True if pool can accept tasks
+   * 
+   * @example
+   * if (pool.isHealthy()) {
+   *   await pool.execute(task);
+   * }
    */
   isHealthy(): boolean {
     return !this.isTerminated && this.workers.length > 0;

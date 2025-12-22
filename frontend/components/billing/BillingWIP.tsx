@@ -18,7 +18,7 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { DataService } from '../../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
 import { STORES } from '../../services/data/db';
 
 // Hooks & Context
@@ -26,7 +26,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useNotify } from '../../hooks/useNotify';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
-import { useMultiSelection } from '../../hooks/useSelectionState';
 import { useCallback } from 'react';
 
 // Components
@@ -101,14 +100,19 @@ const BillingWIPComponent: React.FC = () => {
   );
 
   // Auto-save draft time entry
-  useAutoSave({
-    data: draftEntry,
-    onSave: useCallback(async (entry: Partial<TimeEntry>) => {
-      if (!entry || !entry.description) return;
-      localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
-    }, []),
-    delay: 2000
-  });
+  useAutoSave(
+    draftEntry ? JSON.stringify(draftEntry) : '',
+    'billing-wip-draft',
+    2000,
+    {
+      data: draftEntry,
+      onSave: useCallback(async (entry: Partial<TimeEntry>) => {
+        if (!entry || !entry.description) return;
+        localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
+      }, []),
+      delay: 2000
+    }
+  );
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -228,6 +232,7 @@ const BillingWIPComponent: React.FC = () => {
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         checked={filteredEntries.length > 0 && selectedIds.size === filteredEntries.length}
                         onChange={toggleAll}
+                        aria-label="Select all time entries"
                     />
                 </TableHead>
                 <TableHead>Date</TableHead>
@@ -247,6 +252,7 @@ const BillingWIPComponent: React.FC = () => {
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                 checked={selectedIds.has(entry.id)}
                                 onChange={() => toggleSelection(entry.id)}
+                                aria-label={`Select time entry for ${entry.caseId}`}
                             />
                         </TableCell>
                         <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{entry.date}</TableCell>

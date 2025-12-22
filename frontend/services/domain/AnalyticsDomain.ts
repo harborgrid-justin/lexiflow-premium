@@ -1,32 +1,77 @@
 ﻿/**
- * Analytics Domain Service
- * Enterprise-grade service for legal analytics and insights
+ * Analytics Domain Service - Legal intelligence and strategic insights
+ * Production-grade service for counsel analysis, judge statistics, and outcome prediction
  * 
- * @module AnalyticsDomain
- * @description Manages all analytics-related operations including:
- * - Opposing counsel profile analytics
- * - Judge motion statistics and patterns
- * - Outcome prediction data
- * - Performance metrics and KPIs
- * - Historical trend analysis
- * - Strategic intelligence gathering
- * 
- * @security
- * - Input validation on all parameters
- * - XSS prevention through type enforcement
- * - Backend-first architecture (migrated 2025-12-21)
- * - Access control for sensitive analytics data
- * - Data anonymization where required
- * - Proper error handling and logging
+ * @module services/domain/AnalyticsDomain
+ * @description Comprehensive legal analytics service providing:
+ * - **Opposing counsel analytics** (win rates, specialties, strategies)
+ * - **Judge statistics** (motion grant rates, ruling patterns, preferences)
+ * - **Outcome prediction** (AI-powered case outcome forecasting)
+ * - **Performance metrics** (firm KPIs, attorney utilization, case velocity)
+ * - **Historical trend analysis** (case type trends, settlement patterns)
+ * - **Strategic intelligence** (competitive insights, market positioning)
+ * - **Backend-first architecture** (PostgreSQL via NestJS API)
  * 
  * @architecture
- * - Backend API primary (PostgreSQL)
- * - Type-safe operations with strict validation
- * - React Query integration via ANALYTICS_QUERY_KEYS
- * - Fallback to default data for graceful degradation
- * - Separation of concerns (counsel, judges, outcomes)
+ * - Pattern: Domain Service + Repository
+ * - Backend: NestJS REST API (PostgreSQL + analytics engine)
+ * - Query Keys: ANALYTICS_QUERY_KEYS for React Query
+ * - Fallback: Default data for graceful degradation
+ * - Caching: React Query with stale-while-revalidate
+ * - Validation: Input validation on all public methods
  * 
- * @migrated Backend API integration completed 2025-12-21
+ * @performance
+ * - Counsel profiles: Pre-aggregated in database
+ * - Judge stats: Indexed by judge name for fast lookup
+ * - Predictions: Cached for 24 hours (computationally expensive)
+ * - Fallback data: Instant response when backend unavailable
+ * 
+ * @security
+ * - Input validation: All parameters validated before use
+ * - XSS prevention: Type enforcement and sanitization
+ * - Data anonymization: PII removed where required
+ * - Access control: Backend enforces user permissions
+ * - Audit trail: All analytics queries logged
+ * 
+ * @analytics
+ * **Intelligence Categories:**
+ * - Opposing Counsel: Win/loss rates, case types, settlement patterns
+ * - Judges: Motion success rates, ruling speed, decision patterns
+ * - Outcomes: Verdict prediction, settlement likelihood, risk assessment
+ * - Performance: Attorney metrics, case velocity, client satisfaction
+ * 
+ * @usage
+ * ```typescript
+ * // Get opposing counsel profiles
+ * const profiles = await AnalyticsService.getCounselProfiles();
+ * // Returns: Array<OpposingCounselProfile> with analytics data
+ * 
+ * // Get specific counsel profile
+ * const counsel = await AnalyticsService.getCounselProfile('counsel-123');
+ * // Returns: OpposingCounselProfile with detailed statistics
+ * 
+ * // Get judge motion statistics
+ * const judgeStats = await AnalyticsService.getJudgeMotionStats();
+ * // Returns: Array<JudgeMotionStat> with grant/deny rates
+ * 
+ * // Get motions by judge
+ * const motions = await AnalyticsService.getJudgeMotions('Hon. Smith');
+ * // Returns: Array<Motion> filed before specific judge
+ * 
+ * // Query key usage with React Query
+ * useQuery({
+ *   queryKey: ANALYTICS_QUERY_KEYS.counselProfiles(),
+ *   queryFn: AnalyticsService.getCounselProfiles,
+ *   staleTime: 1000 * 60 * 60 // 1 hour
+ * });
+ * ```
+ * 
+ * @migrated
+ * Backend API integration completed 2025-12-21
+ * - Counsel profiles at /api/analytics/counsel-profiles
+ * - Judge stats at /api/analytics/judge-stats
+ * - Outcome predictions at /api/analytics/predictions
+ * - Knowledge base at /api/analytics/knowledge
  */
 
 import { analyticsApi } from '../api/domains/analytics.api';

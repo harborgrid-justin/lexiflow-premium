@@ -4,4 +4,4 @@ export { AdminPanelContent } from './AdminPanelContent';
 export { AdminAuditLog } from './AdminAuditLog';
 export { AdminSecurity } from './AdminSecurity';
 export { FirmProfile } from './FirmProfile';
-export { SecurityCompliance } from './SecurityCompliance';
+export { SecurityCompliance } from './security/SecurityCompliance';

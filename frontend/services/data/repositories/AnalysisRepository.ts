@@ -23,7 +23,8 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
     constructor() {
         super(STORES.ANALYSIS);
         this.useBackend = isBackendApiEnabled();
-        console.log(`[AnalysisRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);\n    }
+        console.log(`[AnalysisRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);
+    }
 
     private validateId(id: string, methodName: string): void {
         if (!id || typeof id !== 'string' || id.trim() === '') {

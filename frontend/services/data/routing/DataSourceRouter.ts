@@ -20,7 +20,7 @@ export interface DataSource<T = any> {
   get?: (id: string) => Promise<T | undefined>;
   add?: (item: T) => Promise<T>;
   update?: (id: string, updates: Partial<T>) => Promise<T>;
-  delete?: (id: string) => Promise<{ success: boolean; id: string }>;
+  delete?: (id: string) => Promise<void> | Promise<{ success: boolean; id: string }>;
   [key: string]: any; // Allow additional methods
 }
 
@@ -79,7 +79,7 @@ export class DataSourceRouter {
    */
   static createPropertyDescriptor<T>(
     apiPath: string | null,
-    fallbackFactory: () => DataSource<T>
+    fallbackFactory: () => any
   ): PropertyDescriptor {
     return {
       get: () => {

@@ -77,7 +77,7 @@ describe('IntegrationOrchestrator', () => {
 
     describe('LEAD_STAGE_CHANGED event', () => {
       it('should trigger conflict check on Engagement stage', async () => {
-        const { DataService } = await import('../../services/dataService');
+        const { DataService } = await import('../../services/data/dataService');
 
         const result = await IntegrationOrchestrator.publish(
           SystemEventType.LEAD_STAGE_CHANGED,

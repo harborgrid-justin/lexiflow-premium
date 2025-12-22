@@ -38,9 +38,21 @@
  */
 
 import { API_BASE_URL, API_PREFIX } from '../../config/master.config';
-import { keysToCamel, keysToSnake } from '../../utils/caseConverter';
+import { keysToCamel } from '../../utils/caseConverter';
 
 const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
+
+/**
+ * Vite environment variables type definition
+ */
+interface ImportMetaEnv {
+  readonly VITE_AUTH_TOKEN_KEY?: string;
+  readonly VITE_AUTH_REFRESH_TOKEN_KEY?: string;
+}
+
+interface _ImportMeta {
+  readonly env: ImportMetaEnv;
+}
 
 /**
  * Structured API error response
@@ -109,8 +121,8 @@ class ApiClient {
 
   constructor() {
     this.baseURL = BASE_URL;
-    this.authTokenKey = (import.meta as any).env?.VITE_AUTH_TOKEN_KEY || 'lexiflow_auth_token';
-    this.refreshTokenKey = (import.meta as any).env?.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token';
+    this.authTokenKey = import.meta.env?.VITE_AUTH_TOKEN_KEY || 'lexiflow_auth_token';
+    this.refreshTokenKey = import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token';
     this.logInitialization();
   }
 
@@ -248,16 +260,6 @@ class ApiClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest', // CSRF protection
-      ...(customHeaders as Record<string, string>),
-    };
-
-    const token = this.getAuthToken();
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return headers;
-  }
       ...(customHeaders as Record<string, string>),
     };
 
@@ -435,7 +437,7 @@ class ApiClient {
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
-  async put<T>(endpoint: string, data?: any): Promise<T> {
+  async put<T>(endpoint: string, data?: unknown): Promise<T> {
     this.validateEndpoint(endpoint, 'put');
     this.validateData(data, 'put');
     try {
@@ -461,7 +463,7 @@ class ApiClient {
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
-  async patch<T>(endpoint: string, data?: any): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown): Promise<T> {
     this.validateEndpoint(endpoint, 'patch');
     this.validateData(data, 'patch');
     try {
@@ -515,7 +517,7 @@ class ApiClient {
    * @returns Promise<T> - Parsed response data
    * @throws Error if validation fails or upload fails
    */
-  async upload<T>(endpoint: string, file: File, additionalData?: Record<string, any>): Promise<T> {
+  async upload<T>(endpoint: string, file: File, additionalData?: Record<string, unknown>): Promise<T> {
     this.validateEndpoint(endpoint, 'upload');
     if (!file || !(file instanceof File)) {
       throw new Error('[ApiClient.upload] Invalid file parameter');

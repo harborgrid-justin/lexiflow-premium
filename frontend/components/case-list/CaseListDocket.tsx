@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'lucide-react';
 
 // ============================================================================
@@ -43,6 +43,18 @@ interface CaseListDocketProps {
   onSelectCase?: (c: Case) => void;
 }
 
+interface DocketItem {
+  id: string;
+  date: string;
+  time: string;
+  matter: string;
+  caseId: string;
+  event: string;
+  type: string;
+  location: string;
+  priority: string;
+}
+
 export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) => {
   const { theme } = useTheme();
 
@@ -69,7 +81,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
       const safeCases = Array.isArray(cases) ? cases : [];
       const safeDocket = Array.isArray(docket) ? docket : [];
       
-      const items: any[] = [];
+      const items: DocketItem[] = [];
 
       // Add docket entries
       safeDocket.forEach(d => {
@@ -116,7 +128,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
     }
   };
   
-  const renderRow = (item: any) => (
+  const renderRow = (item: DocketItem) => (
       <div key={item.id} className={cn("flex items-center border-b h-[64px] px-6 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>
           <div className={cn("w-1/4 font-bold whitespace-nowrap", theme.text.primary)}>
                 <div className="flex items-center">

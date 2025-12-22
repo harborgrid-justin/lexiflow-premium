@@ -16,11 +16,13 @@ export interface UseAutoSaveOptions<T> {
   onError?: (error: Error) => void;
 }
 
-export function useAutoSave<T>(draftResponse: string, p0: string, p1: number, data: UseAutoSaveOptions<T>) {
+export function useAutoSave<T>(options: UseAutoSaveOptions<T>) {
   const saveInProgressRef = useRef(false);
   const pendingSaveRef = useRef(false);
-  const lastSavedDataRef = useRef<T>(data);
+  const lastSavedDataRef = useRef<T>(options.data);
   const mountedRef = useRef(true);
+  
+  const { data, onSave, delay = FORM_AUTO_SAVE_DELAY_MS, enabled = true, onSuccess, onError } = options;
 
   useEffect(() => {
     mountedRef.current = true;

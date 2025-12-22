@@ -5,7 +5,7 @@ import { queryKeys } from '../../utils/queryKeys';
 import { queryClient } from '../../services/infrastructure/queryClient';
 import { Matter } from '../../types';
 import { ArrowLeft } from 'lucide-react';
-import { MatterForm } from './matter-form';
+import { MatterForm } from './matter-form/MatterForm';
 import { PATHS } from '../../config/paths.config';
 
 export const NewMatter: React.FC = () => {

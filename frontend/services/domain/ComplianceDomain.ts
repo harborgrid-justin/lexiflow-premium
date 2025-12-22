@@ -1,32 +1,77 @@
 ﻿/**
- * Compliance Domain Service
- * Enterprise-grade service for compliance management and risk assessment
+ * Compliance Domain Service - Enterprise compliance, risk, and regulatory management
+ * Production-grade service for conflict checks, ethical walls, and policy enforcement
  * 
- * @module ComplianceDomain
- * @description Manages all compliance-related operations including:
- * - Risk statistics and metrics
- * - Conflict check management
- * - Ethical wall enforcement
- * - Policy compliance tracking
- * - Regulatory audit support
- * - Compliance scoring and reporting
- * 
- * @security
- * - Input validation on all parameters
- * - XSS prevention through type enforcement
- * - Backend-first architecture (migrated 2025-12-21)
- * - Access control for sensitive compliance data
- * - Audit trail for all compliance operations
- * - Proper error handling and logging
+ * @module services/domain/ComplianceDomain
+ * @description Comprehensive compliance management service providing:
+ * - **Risk statistics and metrics** (severity-based aggregation)
+ * - **Conflict check management** (client/party conflict detection)
+ * - **Ethical wall enforcement** (information barrier controls)
+ * - **Policy compliance tracking** (regulatory adherence monitoring)
+ * - **Audit trail support** (compliance operation logging)
+ * - **Compliance scoring** (risk assessment and reporting)
+ * - **Backend-first architecture** (PostgreSQL via NestJS API)
  * 
  * @architecture
- * - Backend API primary (PostgreSQL)
- * - Type-safe operations with strict validation
- * - React Query integration via COMPLIANCE_QUERY_KEYS
- * - Event-driven integration for compliance workflows
- * - Separation of concerns (risks, conflicts, walls, policies)
+ * - Pattern: Domain Service + Repository
+ * - Backend: NestJS REST API (PostgreSQL)
+ * - Query Keys: COMPLIANCE_QUERY_KEYS for React Query
+ * - Integration: Event-driven via IntegrationOrchestrator
+ * - Validation: Input validation on all public methods
+ * - Error handling: Try-catch with console logging
  * 
- * @migrated Backend API integration completed 2025-12-21
+ * @performance
+ * - Risk stats: O(n) aggregation over risk collection
+ * - Conflict checks: Backend-indexed lookups
+ * - Ethical walls: Cached group membership checks
+ * - Metrics: Pre-aggregated in database
+ * 
+ * @security
+ * - Input validation: All parameters validated before use
+ * - XSS prevention: Type enforcement and sanitization
+ * - Access control: Backend enforces user permissions
+ * - Audit trail: All compliance operations logged
+ * - Data isolation: User context via JWT authentication
+ * 
+ * @compliance
+ * **Regulatory Frameworks Supported:**
+ * - ABA Model Rules of Professional Conduct
+ * - State bar association ethics rules
+ * - Conflict of interest regulations
+ * - Information barrier requirements (ethical walls)
+ * - Client confidentiality protections
+ * 
+ * @usage
+ * ```typescript
+ * // Get risk statistics for dashboard
+ * const riskStats = await ComplianceService.getRiskStats();
+ * // Returns: [{ name: 'High Risk', value: 2, color: '#ef4444' }, ...]
+ * 
+ * // Check for conflicts
+ * const conflicts = await ComplianceService.checkConflicts('client-123');
+ * // Returns: Array<ConflictCheck> with identified conflicts
+ * 
+ * // Get ethical walls
+ * const walls = await ComplianceService.getEthicalWalls();
+ * // Returns: Array<EthicalWall> with active information barriers
+ * 
+ * // Get compliance metrics
+ * const metrics = await ComplianceService.getComplianceMetrics();
+ * // Returns: ComplianceMetrics with scores and risk counts
+ * 
+ * // Query key usage with React Query
+ * useQuery({
+ *   queryKey: COMPLIANCE_QUERY_KEYS.riskStats(),
+ *   queryFn: ComplianceService.getRiskStats
+ * });
+ * ```
+ * 
+ * @migrated
+ * Backend API integration completed 2025-12-21
+ * - Conflict checks migrated to /api/conflict-checks
+ * - Ethical walls migrated to /api/compliance/ethical-walls
+ * - Risk stats awaiting backend implementation (TODO)
+ * - Metrics endpoint available at /api/compliance/metrics
  */
 
 import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics, CaseId, GroupId, UserId } from '../../types';

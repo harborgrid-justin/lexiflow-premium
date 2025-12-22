@@ -87,7 +87,7 @@ function validateEventType(type: string, methodName: string): void {
  * Validate event payload parameter
  * @private
  */
-function validatePayload(payload: any, type: string, methodName: string): void {
+function validatePayload(payload: unknown, type: string, methodName: string): void {
   if (payload === undefined || payload === null) {
     throw new Error(`[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`);
   }
@@ -148,7 +148,7 @@ export const IntegrationOrchestrator = {
             console.log(`[IntegrationOrchestrator] Event ${type} completed:`, {
                 success: result.success,
                 actions: result.triggeredActions.length,
-                errors: result.errors.length
+                errors: result.errors?.length ?? 0
             });
             
             return result;
@@ -182,5 +182,6 @@ export const IntegrationOrchestrator = {
             console.error('[IntegrationOrchestrator.getStats] Error:', error);
             return { handlerCount: 0, handlers: [] };
         }
+    }
 };
 

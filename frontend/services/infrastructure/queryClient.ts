@@ -33,7 +33,7 @@
  */
 
 import { hashQueryKey } from '../utils/queryUtils';
-import type { QueryKey, QueryFunction, QueryState } from './QueryTypes';
+import type { QueryKey, QueryFunction, QueryState } from './queryTypes';
 
 /**
  * QueryClient Class
@@ -233,7 +233,7 @@ class QueryClient {
     const cached = this.cache.get(hashedKey) as QueryState<T> | undefined;
     
     // Return cached data if fresh
-    if (cached?.status === 'success' && (Date.now() - cached.dataUpdatedAt < staleTime)) {
+    if (cached?.status === 'success' && cached.data !== undefined && (Date.now() - cached.dataUpdatedAt < staleTime)) {
       return cached.data;
     }
 
@@ -261,8 +261,10 @@ class QueryClient {
       })
       .catch(err => {
         this.inflight.delete(hashedKey);
+        const cachedState = this.cache.get(hashedKey) as QueryState<T> | undefined;
         const errorState: QueryState<T> = {
-          ...(this.cache.get(hashedKey) || { data: undefined, dataUpdatedAt: 0 }),
+          data: cachedState?.data,
+          dataUpdatedAt: cachedState?.dataUpdatedAt ?? 0,
           status: 'error',
           error: err instanceof Error ? err : new Error(String(err)),
           isFetching: false

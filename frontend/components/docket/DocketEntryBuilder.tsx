@@ -31,7 +31,7 @@ import { DeadlineEngine } from '../../services/features/deadlines/deadlineEngine
 import { IdGenerator } from '../../utils/idGenerator';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId } from '../../types';
+import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../types';
 
 interface DocketEntryBuilderProps {
   initialData?: Partial<DocketEntry>;

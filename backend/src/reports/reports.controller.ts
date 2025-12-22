@@ -5,8 +5,7 @@ import {
   Delete,
   Param,
   Body,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';

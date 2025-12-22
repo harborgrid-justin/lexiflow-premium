@@ -240,11 +240,11 @@ const validateEvidenceItem = (data: unknown): ValidationResult<Partial<EvidenceI
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
-  
-  return { 
-    success: true, 
+
+  return {
+    success: true,
     data: {
-      ...data,
+      ...(data && typeof data === 'object' ? data : {}),
       title,
       description,
       collectedBy,
@@ -289,11 +289,11 @@ const validateCustodyEvent = (data: unknown): ValidationResult<ChainOfCustodyEve
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
-  
-  return { 
-    success: true, 
+
+  return {
+    success: true,
     data: {
-      ...data,
+      ...(data && typeof data === 'object' ? data : {}),
       actor,
       notes
     }

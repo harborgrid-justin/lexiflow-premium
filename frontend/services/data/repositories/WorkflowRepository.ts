@@ -45,9 +45,10 @@ export const WorkflowRepository = {
             
             // Calculate status distribution
             const now = new Date();
-            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.status !== TaskStatusBackend.COMPLETED && new Date(t.dueDate) < now).length;
+            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.status !== TaskStatusBackend.COMPLETED && t.dueDate && new Date(t.dueDate) < now).length;
             const atRisk = tasks.filter(t => {
                 if (t.status === TaskStatusBackend.COMPLETED || t.status === TaskStatusBackend.COMPLETED) return false;
+                if (!t.dueDate) return false;
                 const due = new Date(t.dueDate);
                 const diffHours = (due.getTime() - now.getTime()) / (1000 * 60 * 60);
                 return diffHours > 0 && diffHours < 48; // Due within 48 hours

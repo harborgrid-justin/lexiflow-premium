@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse }from '@nestjs/swagger';
 import { CasePhasesService } from './case-phases.service';
 import { CreateCasePhaseDto } from './dto/create-case-phase.dto';
 import { UpdateCasePhaseDto } from './dto/update-case-phase.dto';

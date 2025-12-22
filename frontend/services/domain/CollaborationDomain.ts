@@ -49,27 +49,30 @@ interface Share {
 export const CollaborationService = {
   getAll: async () => db.getAll(STORES.WORKSPACES),
   getById: async (id: string) => db.get(STORES.WORKSPACES, id),
-  add: async (item: unknown) => db.put(STORES.WORKSPACES, { 
-    ...item, 
+  add: async (item: unknown) => db.put(STORES.WORKSPACES, {
+    ...(item && typeof item === 'object' ? item : {}),
     createdAt: new Date().toISOString(),
     members: item.members || []
   }),
   update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.WORKSPACES, id);
-    return db.put(STORES.WORKSPACES, { ...existing, ...updates });
+    return db.put(STORES.WORKSPACES, {
+      ...(existing && typeof existing === 'object' ? existing : {}),
+      ...(updates && typeof updates === 'object' ? updates : {})
+    });
   },
   delete: async (id: string) => db.delete(STORES.WORKSPACES, id),
   
   // Collaboration specific methods
   getWorkspaces: async (userId?: string): Promise<Workspace[]> => {
-    const workspaces = await db.getAll(STORES.WORKSPACES);
-    
+    const workspaces = await db.getAll<Workspace>(STORES.WORKSPACES);
+
     if (userId) {
-      return workspaces.filter((w: Workspace) => 
+      return workspaces.filter((w: Workspace) =>
         w.ownerId === userId || w.members.includes(userId)
       );
     }
-    
+
     return workspaces;
   },
   
@@ -108,10 +111,10 @@ export const CollaborationService = {
   
   getComments: async (resourceId: string): Promise<Comment[]> => {
     await delay(50);
-    const comments = await db.getAll(STORES.COMMENTS);
+    const comments = await db.getAll<Comment>(STORES.COMMENTS);
     return comments
       .filter((c: Comment) => c.resourceId === resourceId)
-      .sort((a: Comment, b: Comment) => 
+      .sort((a: Comment, b: Comment) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
   },

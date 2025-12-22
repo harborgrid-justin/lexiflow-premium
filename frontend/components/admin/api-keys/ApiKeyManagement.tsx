@@ -12,6 +12,7 @@ import { useModalState } from '../../../hooks';
 import { getTodayString } from '../../../utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
+import { queryKeys } from '../../../utils/queryKeys';
 
 interface ApiKey {
   id: string;
@@ -48,8 +49,8 @@ export const ApiKeyManagement: React.FC = () => {
   
   // Fetch API keys from backend
   const { data: apiKeys = [], isLoading, refetch } = useQuery<ApiKey[]>(
-    queryKeys.admin.apiKeys?.() || ['admin', 'apiKeys'],
-    () => DataService.admin.getApiKeys?.()
+    ['admin', 'apiKeys'],
+    () => DataService.admin.getApiKeys?.() || Promise.resolve([])
   );
   
   const createModal = useModalState();

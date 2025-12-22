@@ -203,7 +203,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   }, [items]);
 
   // Close dropdown when clicking outside
-  useClickOutside(dropdownRef, () => {
+  useClickOutside(dropdownRef as React.RefObject<HTMLElement>, () => {
     setActiveDropdown(null);
     setShowRecentDropdown(false);
   });

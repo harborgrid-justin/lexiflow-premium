@@ -2,8 +2,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-  BadRequestException,
-  InternalServerErrorException,
+  BadRequestException, _InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';

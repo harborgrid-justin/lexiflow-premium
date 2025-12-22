@@ -74,7 +74,7 @@ export const CaseListIntake: React.FC = () => {
   const { mutate: addLead } = useMutation(
       async (leadData: unknown) => {
           const lead = {
-              ...leadData,
+              ...(leadData && typeof leadData === 'object' ? leadData : {}),
               id: crypto.randomUUID(),
               stage: 'New Lead',
               createdAt: new Date().toISOString(),

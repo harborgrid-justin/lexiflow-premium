@@ -13,11 +13,11 @@ interface BillingDashboardContentProps {
 }
 
 export const BillingDashboardContent: React.FC<BillingDashboardContentProps> = ({ activeTab, navigateTo }) => {
-    switch (activeTab) {
+    switch (activeTab as string) {
         case 'overview': return <BillingOverview onNavigate={navigateTo} />;
         case 'invoices': return <BillingInvoices />;
         case 'wip': return <BillingWIP />;
-        case 'expenses': 
+        case 'expenses':
         case 'trust':
             return <BillingLedger />;
         case 'analytics': return <Analytics />;

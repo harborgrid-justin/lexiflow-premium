@@ -52,7 +52,7 @@ export class ProductionService {
 
   async update(id: string, updateProductionDto: UpdateProductionDto): Promise<Production> {
     await this.findOne(id);
-    await this.productionRepository.update(id, { ...updateProductionDto });
+    await this.productionRepository.update(id, { ...updateProductionDto, ...(updateProductionDto.metadata ? { metadata: JSON.stringify(updateProductionDto.metadata) } : {}) });
     return this.findOne(id);
   }
 

@@ -57,7 +57,7 @@ export class CommunicationsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  renderTemplate(@Param('templateId') templateId: string, @Body() variables: { caseNumber: string; clientName: string; }) {
+  renderTemplate(@Param('templateId') _templateId: string, @Body() _variables: { caseNumber: string; clientName: string; }) {
     throw new Error('Method not implemented.');
   }
 
@@ -71,7 +71,7 @@ export class CommunicationsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  scheduleMessage(@Param('id') id: string, @Body() scheduleDto: { scheduledAt: Date; }) {
+  scheduleMessage(@Param('id') _id: string, @Body() _scheduleDto: { scheduledAt: Date; }) {
     throw new Error('Method not implemented.');
   }
 

@@ -384,7 +384,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             };
 
             const updates: Partial<EvidenceItem> = {
-                currentCustodian: custodian,
+                custodian: custodian,
                 chainOfCustody: [...(item.chainOfCustody || []), custodyEntry as any]
             };
 

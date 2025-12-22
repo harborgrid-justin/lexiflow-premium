@@ -225,7 +225,7 @@ export class JudgeStatsService {
 
       // Mock data
       const stats: JudgeCaseDurationDto = {
-        judgeId,
+        judgeId: _judgeId,
         judgeName: 'Hon. Sarah Johnson',
         avgDuration: 285,
         medianDuration: 265,

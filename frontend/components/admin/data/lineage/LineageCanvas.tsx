@@ -40,7 +40,7 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ data }) => {
     }, [data]);
 
     // Use Worker-based physics hook
-    const { nodesMeta, physicsState, reheat } = useNexusGraph(containerRef, graphData as { nodes: SimulationNode[], links: { source: string; target: string }[] });
+    const { nodesMeta, physicsState, reheat } = useNexusGraph(containerRef as React.RefObject<HTMLDivElement>, graphData as { nodes: SimulationNode[], links: { source: string; target: string }[] });
 
     useEffect(() => {
         let frameId: number;

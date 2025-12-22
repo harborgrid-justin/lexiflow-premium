@@ -29,7 +29,7 @@ export interface Pleading extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   updatedBy?: string; // Backend: uuid - overrides BaseEntity.updatedBy
 }
 
-export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> { 
+export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   // Core fields (aligned with backend Clause entity)
   title: string; // Backend: varchar (required)
   name?: string; // Frontend legacy alias
@@ -48,8 +48,17 @@ export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   version?: number;
   lastUpdated?: string;
   riskRating?: string;
-  versions?: Array<{ version: number; content: string; createdAt: string }>;
+  versions?: ClauseVersion[];
   embedding?: number[];
+}
+
+export interface ClauseVersion {
+  id?: string;
+  version: number;
+  content: string;
+  author: string;
+  updatedAt: string;
+  createdAt?: string;
 }
 
 export interface PlanSection { id: string; title: string; content: string; status: 'Agreed' | 'Disputed'; opposingComments?: string; }

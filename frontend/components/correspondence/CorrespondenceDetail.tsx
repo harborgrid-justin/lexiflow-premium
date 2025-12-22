@@ -60,9 +60,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
           invalidateKeys: [
               correspondenceQueryKeys.correspondence.lists(),
               correspondenceQueryKeys.serviceJobs.lists()
-          ],
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000) // Exponential backoff
+          ]
       }
   );
 
@@ -82,9 +80,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
               notify.error('Failed to update service job');
               console.error('Update error:', error);
           },
-          invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()],
-          retry: 2,
-          retryDelay: (attemptIndex) => 1000 * 2 ** attemptIndex
+          invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()]
       }
   );
 

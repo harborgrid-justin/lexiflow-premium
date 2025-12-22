@@ -45,14 +45,14 @@ export * from './RiskMeter';
 export * from './RuleSelector';
 export * from './SearchToolbar';
 export * from './SignaturePad';
-export * from './SplitView';
+// export * from './SplitView';  // Removed - use SplitView from './layout' instead to avoid duplicate
 export * from './Stats';
 export * from './StatusBadge';
 export * from './Stepper';
 export * from './SwipeableItem';
 export * from './TabNavigation';
 export * from './Table';
-export * from './Tabs';
+export { Tabs } from './Tabs';  // Explicit export to avoid TabItem conflict with TabNavigation
 export * from './TagInput';
 export * from './TaskCreationModal';
 export * from './TimeEntryModal';

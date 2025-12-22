@@ -25,7 +25,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
-import { Motion, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
+import { Motion, MotionType, LegalDocument, MotionId, CaseId, DocumentId } from '../../../types';
 
 interface MotionModalProps {
   isOpen: boolean;
@@ -74,10 +74,11 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
 
   const handleToggleDoc = (docId: string) => {
     const currentDocs = newMotion.documents || [];
-    if (currentDocs.includes(docId)) {
-        setNewMotion({ ...newMotion, documents: currentDocs.filter(d => d !== docId) });
+    const typedDocId = docId as DocumentId;
+    if (currentDocs.includes(typedDocId)) {
+        setNewMotion({ ...newMotion, documents: currentDocs.filter(d => d !== typedDocId) });
     } else {
-        setNewMotion({ ...newMotion, documents: [...currentDocs, docId] });
+        setNewMotion({ ...newMotion, documents: [...currentDocs, typedDocId] });
     }
   };
 

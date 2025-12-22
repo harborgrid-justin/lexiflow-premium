@@ -30,7 +30,7 @@ export const aggregateFilingActivity = (entries: DocketEntry[]) => {
     // Use for loop for better performance on large datasets
     for (let i = 0; i < entries.length; i++) {
         const e = entries[i];
-        const date = new Date(e.date);
+        const date = new Date(e.date || e.entryDate || e.dateFiled);
         const month = date.toLocaleString('default', { month: 'short' });
         if (stats[month]) {
             if (e.type === 'Order') stats[month].orders++;

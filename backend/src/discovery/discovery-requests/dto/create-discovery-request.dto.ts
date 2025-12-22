@@ -6,8 +6,7 @@ import {
   IsNumber,
   IsArray,
   IsUUID,
-  MaxLength,
-  ValidateNested,
+  MaxLength, ValidateNested,
 } from 'class-validator';
 import { DiscoveryRequestType } from '../entities/discovery-request.entity';
 

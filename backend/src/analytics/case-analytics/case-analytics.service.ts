@@ -1,5 +1,4 @@
 import { Injectable, Logger} from '@nestjs/common';
-import { Repository, Between } from 'typeorm';
 import {
   CaseMetricsQueryDto,
   CaseMetricsDto,
@@ -23,7 +22,7 @@ export class CaseAnalyticsService {
    * Get overall case metrics
    */
   async getCaseMetrics(query: CaseMetricsQueryDto): Promise<CaseMetricsDto> {
-    const { startDate, endDate, practiceArea, status, period } = query;
+    // Query filters available but not used in mock implementation
 
     try {
       // Mock implementation - replace with actual database queries

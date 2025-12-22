@@ -182,15 +182,20 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           if (onPageLoad) onPageLoad({ width: displayWidth, height: displayHeight });
       }
 
-      const transform = outputScale !== 1 
-        ? [outputScale, 0, 0, outputScale, 0, 0] 
+      const transform = outputScale !== 1
+        ? [outputScale, 0, 0, outputScale, 0, 0]
         : undefined;
 
-      const renderContext = {
-        canvasContext: context,
-        transform: transform,
-        viewport: viewport,
-      };
+      const renderContext: pdfjsLib.RenderParameters = transform
+        ? {
+            canvasContext: context,
+            transform: transform,
+            viewport: viewport,
+          }
+        : {
+            canvasContext: context,
+            viewport: viewport,
+          };
 
       const newTask = page.render(renderContext);
       renderTaskRef.current = newTask;

@@ -193,7 +193,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // ============================================================================
   const activeParentTab = useMemo(
     () =>
-      PARENT_TABS.find((p: any) => p.subTabs.some((s) => s.id === activeTab)) ||
+      PARENT_TABS.find((p: any) => p.subTabs.some((s: any) => s.id === activeTab)) ||
       PARENT_TABS[0],
     [activeTab],
   );

@@ -12,7 +12,13 @@ export const useAdminData = (activeCategory: Category) => {
   const clausesQuery = useQuery(['clauses', 'all'], () => DataService.clauses.getAll());
   const docsQuery = useQuery(['documents', 'all'], () => DataService.documents.getAll());
 
-  const dataMap = {
+  const dataMap: {
+      users: any[];
+      cases: any[];
+      clients: any[];
+      clauses: any[];
+      documents: any[];
+  } = {
       users: usersQuery.data || [],
       cases: casesQuery.data || [],
       clients: clientsQuery.data || [],

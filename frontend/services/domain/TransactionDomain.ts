@@ -34,16 +34,19 @@ export const TransactionService = {
   getById: async (id: string) => api.billing?.transactions?.getById?.(id),
   
   add: async (item: unknown) => {
-    const transaction = { 
-      ...item, 
+    const transaction = {
+      ...(item && typeof item === 'object' ? item : {}),
       createdAt: new Date().toISOString(),
       status: item.status || 'pending'
     };
     return api.billing?.transactions?.create?.(transaction) || transaction;
   },
-  
+
   update: async (id: string, updates: unknown) => {
-    return api.billing?.transactions?.update?.(id, updates) || { id, ...updates };
+    return api.billing?.transactions?.update?.(id, updates) || {
+      id,
+      ...(updates && typeof updates === 'object' ? updates : {})
+    };
   },
   
   delete: async (id: string) => {

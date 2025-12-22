@@ -36,7 +36,8 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
 
   const updateItem = (setter: unknown, list: unknown[], index: number, field: string, value: string) => {
       const newList = [...list];
-      newList[index] = { ...newList[index], [field]: value };
+      const currentItem = newList[index];
+      newList[index] = currentItem && typeof currentItem === 'object' ? { ...currentItem, [field]: value } : { [field]: value };
       setter(newList);
   };
 

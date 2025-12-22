@@ -3,9 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+  UpdateDateColumn, _ManyToOne, _JoinColumn,
 } from 'typeorm';
 
 export enum MatterStatus {

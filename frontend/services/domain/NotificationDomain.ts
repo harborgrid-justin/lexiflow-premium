@@ -26,14 +26,17 @@ export const NotificationService = {
   getById: async (id: string) => communicationsApi.notifications?.getById?.(id) || null,
   add: async (item: unknown) => {
     const notification = {
-      ...item,
+      ...(item && typeof item === 'object' ? item : {}),
       timestamp: item.timestamp || new Date().toISOString(),
       read: false
     };
     return communicationsApi.notifications?.create?.(notification) || notification;
   },
   update: async (id: string, updates: unknown) => {
-    return communicationsApi.notifications?.update?.(id, updates) || { id, ...updates };
+    return communicationsApi.notifications?.update?.(id, updates) || {
+      id,
+      ...(updates && typeof updates === 'object' ? updates : {})
+    };
   },
   delete: async (id: string) => {
     await communicationsApi.notifications?.delete?.(id);
@@ -42,27 +45,27 @@ export const NotificationService = {
   
   // Notification specific methods
   getNotifications: async (filters?: { read?: boolean; type?: string; limit?: number }): Promise<Notification[]> => {
-    let notifications = await communicationsApi.notifications?.getAll?.() || [];
-    
+    let notifications = (await communicationsApi.notifications?.getAll?.() || []) as Notification[];
+
     // Apply filters
     if (filters?.read !== undefined) {
       notifications = notifications.filter((n: Notification) => n.read === filters.read);
     }
-    
+
     if (filters?.type) {
       notifications = notifications.filter((n: Notification) => n.type === filters.type);
     }
-    
+
     // Sort by timestamp descending
-    notifications.sort((a: Notification, b: Notification) => 
+    notifications.sort((a: Notification, b: Notification) =>
       new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
-    
+
     // Apply limit
     if (filters?.limit) {
       notifications = notifications.slice(0, filters.limit);
     }
-    
+
     return notifications;
   },
   
@@ -77,15 +80,15 @@ export const NotificationService = {
   
   markAllAsRead: async (): Promise<boolean> => {
     try {
-      const notifications = await communicationsApi.notifications?.getAll?.() || [];
+      const notifications = (await communicationsApi.notifications?.getAll?.() || []) as Notification[];
       const unread = notifications.filter((n: Notification) => !n.read);
-      
+
       await Promise.all(
-        unread.map((n: Notification) => 
+        unread.map((n: Notification) =>
           communicationsApi.notifications?.update?.(n.id, { read: true })
         )
       );
-      
+
       return true;
     } catch {
       return false;
@@ -93,7 +96,7 @@ export const NotificationService = {
   },
   
   getUnreadCount: async (): Promise<number> => {
-    const notifications = await communicationsApi.notifications?.getAll?.() || [];
+    const notifications = (await communicationsApi.notifications?.getAll?.() || []) as Notification[];
     return notifications.filter((n: Notification) => !n.read).length;
   },
   

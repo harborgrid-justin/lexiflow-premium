@@ -529,7 +529,7 @@ export const SyncEngine = {
     if (type.includes('UPDATE') && oldPayload) {
         patch = createPatch(oldPayload, payload);
         // If no changes, skip enqueue
-        if (Object.keys(patch).length === 0) return { id: '', type, payload, timestamp: 0, status: 'pending', retryCount: 0 };
+        if (patch && typeof patch === 'object' && Object.keys(patch).length === 0) return { id: '', type, payload, timestamp: 0, status: 'pending', retryCount: 0 };
     }
 
     const mutation: Mutation = {

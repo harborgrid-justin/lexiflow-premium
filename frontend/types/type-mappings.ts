@@ -33,12 +33,15 @@ export enum BackendCaseType {
  * - 'Appeal' is a process stage, not a case type, so it maps to CIVIL by default
  */
 export const MATTER_TYPE_TO_CASE_TYPE: Record<MatterType, BackendCaseType> = {
-  'Litigation': BackendCaseType.CIVIL,
-  'M&A': BackendCaseType.CORPORATE,
-  'IP': BackendCaseType.INTELLECTUAL_PROPERTY,
-  'Real Estate': BackendCaseType.REAL_ESTATE,
-  'General': BackendCaseType.CIVIL, // Default mapping, may need context-specific override
-  'Appeal': BackendCaseType.CIVIL, // Appeals can be any type, defaulting to Civil
+  [MatterType.LITIGATION]: BackendCaseType.CIVIL,
+  [MatterType.TRANSACTIONAL]: BackendCaseType.CORPORATE,
+  [MatterType.INTELLECTUAL_PROPERTY]: BackendCaseType.INTELLECTUAL_PROPERTY,
+  [MatterType.REAL_ESTATE]: BackendCaseType.REAL_ESTATE,
+  [MatterType.ADVISORY]: BackendCaseType.CIVIL,
+  [MatterType.COMPLIANCE]: BackendCaseType.CORPORATE,
+  [MatterType.EMPLOYMENT]: BackendCaseType.LABOR,
+  [MatterType.CORPORATE]: BackendCaseType.CORPORATE,
+  [MatterType.OTHER]: BackendCaseType.CIVIL,
 };
 
 /**
@@ -47,17 +50,17 @@ export const MATTER_TYPE_TO_CASE_TYPE: Record<MatterType, BackendCaseType> = {
  * Note: Multiple backend types can map to the same frontend type
  */
 export const CASE_TYPE_TO_MATTER_TYPE: Partial<Record<BackendCaseType, MatterType>> = {
-  [BackendCaseType.CIVIL]: 'Litigation',
-  [BackendCaseType.CRIMINAL]: 'Litigation',
-  [BackendCaseType.FAMILY]: 'Litigation',
-  [BackendCaseType.BANKRUPTCY]: 'General',
-  [BackendCaseType.IMMIGRATION]: 'General',
-  [BackendCaseType.INTELLECTUAL_PROPERTY]: 'IP',
-  [BackendCaseType.CORPORATE]: 'M&A',
-  [BackendCaseType.REAL_ESTATE]: 'Real Estate',
-  [BackendCaseType.LABOR]: 'Litigation',
-  [BackendCaseType.ENVIRONMENTAL]: 'General',
-  [BackendCaseType.TAX]: 'General',
+  [BackendCaseType.CIVIL]: MatterType.LITIGATION,
+  [BackendCaseType.CRIMINAL]: MatterType.LITIGATION,
+  [BackendCaseType.FAMILY]: MatterType.LITIGATION,
+  [BackendCaseType.BANKRUPTCY]: MatterType.OTHER,
+  [BackendCaseType.IMMIGRATION]: MatterType.OTHER,
+  [BackendCaseType.INTELLECTUAL_PROPERTY]: MatterType.INTELLECTUAL_PROPERTY,
+  [BackendCaseType.CORPORATE]: MatterType.CORPORATE,
+  [BackendCaseType.REAL_ESTATE]: MatterType.REAL_ESTATE,
+  [BackendCaseType.LABOR]: MatterType.EMPLOYMENT,
+  [BackendCaseType.ENVIRONMENTAL]: MatterType.OTHER,
+  [BackendCaseType.TAX]: MatterType.OTHER,
 };
 
 /**

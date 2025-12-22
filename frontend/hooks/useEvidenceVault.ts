@@ -398,7 +398,7 @@ export const useEvidenceVault = (caseId?: string) => {
       const updatedItem: EvidenceItem = {
         ...selectedItem,
         chainOfCustody: [newEvent, ...selectedItem.chainOfCustody],
-        currentCustodian: newEvent.custodian
+        custodian: newEvent.custodian
       };
       
       // Optimistic UI update

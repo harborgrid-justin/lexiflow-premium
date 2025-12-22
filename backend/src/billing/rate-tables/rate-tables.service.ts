@@ -146,7 +146,7 @@ export class RateTablesService {
 
     // If no user-specific rate found, return from default table
     const defaultTable = rateTables.find((t) => t.isDefault);
-    if (defaultTable && defaultTable.rates.length > 0) {
+    if (defaultTable && defaultTable.rates.length > 0 && defaultTable.rates[0]) {
       return { rate: defaultTable.rates[0].rate, rateTableId: defaultTable.id };
     }
 

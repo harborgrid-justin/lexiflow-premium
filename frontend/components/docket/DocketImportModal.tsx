@@ -75,12 +75,16 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
                 }
                 
                 setParsedData(fallbackResult);
-                setParseConfidence(fallbackResult.confidence);
+                // Map numeric confidence (0-100) to string levels
+                const confidenceLevel: 'high' | 'medium' | 'low' =
+                    fallbackResult.confidence >= 80 ? 'high' :
+                    fallbackResult.confidence >= 50 ? 'medium' : 'low';
+                setParseConfidence(confidenceLevel);
                 setParseWarnings(fallbackResult.warnings);
-                
-                const confidenceMessage = fallbackResult.confidence === 'high' 
-                    ? 'Parsed docket with high confidence' 
-                    : fallbackResult.confidence === 'medium'
+
+                const confidenceMessage = confidenceLevel === 'high'
+                    ? 'Parsed docket with high confidence'
+                    : confidenceLevel === 'medium'
                     ? 'Parsed docket with medium confidence - please review carefully'
                     : 'Parsed docket with low confidence - manual review required';
                     

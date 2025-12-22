@@ -225,11 +225,11 @@ const validateLegalHold = (data: unknown): ValidationResult<Partial<LegalHold>> 
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
-  
-  return { 
-    success: true, 
+
+  return {
+    success: true,
     data: {
-      ...data,
+      ...(data && typeof data === 'object' ? data : {}),
       custodian,
       dept
     }

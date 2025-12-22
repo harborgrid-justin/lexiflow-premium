@@ -8,8 +8,7 @@ import {
   Param,
   Query,
   HttpCode,
-  HttpStatus,
-  UseGuards,
+  HttpStatus, UseGuards,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { DiscoveryRequestsService } from './discovery-requests.service';

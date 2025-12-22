@@ -50,10 +50,10 @@ export const WorkflowConfig: React.FC = () => {
   return (
     <Card title="Workflow Automation Settings">
       <div className="space-y-4">
-        {settings.map((setting, i) => (
+        {settings.map((setting: any, i: number) => (
           <div key={i} className={cn("flex items-center justify-between p-3 border-b last:border-0", theme.border.default)}>
             <span className={cn("text-sm font-medium", theme.text.primary)}>{setting.label}</span>
-            <button 
+            <button
                 onClick={() => toggleSetting(i)}
                 className={cn("text-2xl transition-colors", setting.enabled ? theme.primary.text : theme.text.tertiary)}
             >

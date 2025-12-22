@@ -68,8 +68,8 @@ export const LegalHolds: React.FC = () => {
               if (previousHolds) {
                   queryClient.setQueryData<LegalHold[]>(
                       discoveryQueryKeys.discovery.holds.all,
-                      previousHolds.map(h => 
-                          h.id === holdId 
+                      previousHolds.map((h: LegalHold) =>
+                          h.id === holdId
                               ? { ...h, status: LegalHoldStatusEnum.ACKNOWLEDGED }
                               : h
                       )
@@ -78,9 +78,6 @@ export const LegalHolds: React.FC = () => {
               
               return { previousHolds };
           },
-          // Retry logic: 3 attempts with exponential backoff
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           onError: (err, holdId, context) => {
               // Rollback on error
               if (context?.previousHolds) {

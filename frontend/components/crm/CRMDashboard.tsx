@@ -203,7 +203,7 @@ export const CRMDashboard: React.FC = () => {
                   </div>
                 </div>
                 <span className={cn("text-xs font-mono", theme.text.tertiary)}>
-                  {dateToShow ? new Date(dateToShow).toLocaleDateString() : 'N/A'}
+                  {dateToShow && (typeof dateToShow === 'string' || typeof dateToShow === 'number' || dateToShow instanceof Date) ? new Date(dateToShow as string | number | Date).toLocaleDateString() : 'N/A'}
                 </span>
               </div>
               );

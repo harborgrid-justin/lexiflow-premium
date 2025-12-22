@@ -22,7 +22,7 @@ export const NotificationPanel: React.FC = () => {
 
   // Subscribe to notifications
   useEffect(() => {
-    const unsubscribe = NotificationService.subscribe((notifications) => {
+    const unsubscribe = NotificationService.subscribe((notifications: Notification[]) => {
       setNotifications(notifications);
       setGroupedNotifications(NotificationService.getGrouped());
     });
@@ -132,7 +132,7 @@ export const NotificationPanel: React.FC = () => {
           {/* Action Buttons */}
           {notification.actions && notification.actions.length > 0 && (
             <div className="flex items-center gap-2 mt-3">
-              {notification.actions.map((action, idx) => (
+              {notification.actions.map((action: any, idx: number) => (
                 <button
                   key={idx}
                   onClick={(e: React.MouseEvent) => {

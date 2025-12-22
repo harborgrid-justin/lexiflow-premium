@@ -20,9 +20,7 @@ export const MOCK_INVOICES: Invoice[] = [
         paidAmount: 0,
         balanceDue: 15450.00,
         timeCharges: 15450.00,
-        lineItems: [],
-        timeEntries: [],
-        expenses: []
+        expenseCharges: 0
     },
     {
         id: 'INV-2024-002' as UUID,
@@ -42,9 +40,7 @@ export const MOCK_INVOICES: Invoice[] = [
         paidAmount: 42000.50,
         balanceDue: 0,
         timeCharges: 42000.50,
-        lineItems: [],
-        timeEntries: [],
-        expenses: []
+        expenseCharges: 0
     },
     {
         id: 'INV-2024-003' as UUID,
@@ -64,8 +60,6 @@ export const MOCK_INVOICES: Invoice[] = [
         paidAmount: 0,
         balanceDue: 8500.00,
         timeCharges: 8500.00,
-        lineItems: [],
-        timeEntries: [],
-        expenses: []
+        expenseCharges: 0
     },
 ];

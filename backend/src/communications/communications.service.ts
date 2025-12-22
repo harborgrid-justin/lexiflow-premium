@@ -58,9 +58,8 @@ export class CommunicationsService {
     if (!result) {
       throw new Error('Failed to save communication');
     }
-    const result = Array.isArray(saved) ? saved[0] : saved;
     this.logger.log(`Communication created successfully with ID: ${result.id}`);
-        return result;
+    return result;
   }
 
   async send(id: string): Promise<Communication> {
@@ -151,11 +150,11 @@ export class CommunicationsService {
 
   async updateTemplate(id: string, data: any): Promise<Template> {
     const template = await this.getTemplateById(id);
+    Object.assign(template, data);
+    const saved = await this.templateRepository.save(template);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) throw new Error('Failed to update template');
     return result;
-    const saved = await this.templateRepository.save(template);
-    return Array.isArray(saved) ? saved[0] : saved;
   }
 
   async deleteTemplate(id: string): Promise<void> {
@@ -208,9 +207,5 @@ export class CommunicationsService {
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) throw new Error('Failed to create communication');
     return result;
-    if (!result) {
-      throw new Error('Failed to save communication');
-    }
-    return Array.isArray(saved) ? saved[0] : saved;
   }
 }

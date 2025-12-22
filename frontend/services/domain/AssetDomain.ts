@@ -35,14 +35,17 @@ interface MaintenanceRecord {
 export const AssetService = {
   getAll: async () => db.getAll(STORES.ASSETS),
   getById: async (id: string) => db.get(STORES.ASSETS, id),
-  add: async (item: unknown) => db.put(STORES.ASSETS, { 
-    ...item, 
+  add: async (item: unknown) => db.put(STORES.ASSETS, {
+    ...(item && typeof item === 'object' ? item : {}),
     status: item.status || 'available',
-    createdAt: new Date().toISOString() 
+    createdAt: new Date().toISOString()
   }),
   update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.ASSETS, id);
-    return db.put(STORES.ASSETS, { ...existing, ...updates });
+    return db.put(STORES.ASSETS, {
+      ...(existing && typeof existing === 'object' ? existing : {}),
+      ...(updates && typeof updates === 'object' ? updates : {})
+    });
   },
   delete: async (id: string) => db.delete(STORES.ASSETS, id),
   
@@ -52,20 +55,20 @@ export const AssetService = {
     status?: string; 
     assignedTo?: string 
   }): Promise<Asset[]> => {
-    let assets = await db.getAll(STORES.ASSETS);
-    
+    let assets = await db.getAll<Asset>(STORES.ASSETS);
+
     if (filters?.type) {
       assets = assets.filter((a: Asset) => a.type === filters.type);
     }
-    
+
     if (filters?.status) {
       assets = assets.filter((a: Asset) => a.status === filters.status);
     }
-    
+
     if (filters?.assignedTo) {
       assets = assets.filter((a: Asset) => a.assignedTo === filters.assignedTo);
     }
-    
+
     return assets;
   },
   
@@ -115,10 +118,10 @@ export const AssetService = {
   
   getMaintenanceHistory: async (assetId: string): Promise<MaintenanceRecord[]> => {
     await delay(50);
-    const records = await db.getAll(STORES.MAINTENANCE_RECORDS);
+    const records = await db.getAll<MaintenanceRecord>(STORES.MAINTENANCE_RECORDS);
     return records
       .filter((r: MaintenanceRecord) => r.assetId === assetId)
-      .sort((a: MaintenanceRecord, b: MaintenanceRecord) => 
+      .sort((a: MaintenanceRecord, b: MaintenanceRecord) =>
         new Date(b.performedAt).getTime() - new Date(a.performedAt).getTime()
       );
   },

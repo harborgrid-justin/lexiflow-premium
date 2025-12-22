@@ -44,7 +44,7 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, p
   const [showHistory, setShowHistory] = useState(false);
   const history = SearchService.getHistory();
 
-  useClickOutside(containerRef, () => setShowHistory(false));
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setShowHistory(false));
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

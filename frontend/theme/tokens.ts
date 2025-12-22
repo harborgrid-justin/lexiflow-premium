@@ -288,3 +288,6 @@ export const tokens = {
     slow: 'transition-all duration-500 ease-in-out'
   }
 };
+
+// Export ThemeTokens type for type safety
+export type ThemeTokens = typeof tokens;

@@ -112,4 +112,26 @@ export class AnalyticsDashboardService {
       filters: query
     };
   }
+
+  async getStats(query: any): Promise<any> {
+    // Query parameters available for statistics
+
+    return {
+      totalCases: 0,
+      totalRevenue: 0,
+      totalHours: 0,
+      activeUsers: 0,
+      filters: query
+    };
+  }
+
+  async getRecentAlerts(limit?: number): Promise<any> {
+    const alertLimit = limit || 10;
+
+    return {
+      alerts: [],
+      total: 0,
+      limit: alertLimit
+    };
+  }
 }

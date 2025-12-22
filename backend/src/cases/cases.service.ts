@@ -6,7 +6,7 @@ import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
 import { PaginatedCaseResponseDto, CaseResponseDto } from './dto/case-response.dto';
-import { TransactionManagerService } from '../common/services/transaction-manager.service';
+
 import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
@@ -14,7 +14,6 @@ export class CasesService {
   constructor(
     @InjectRepository(Case)
     private readonly caseRepository: Repository<Case>,
-    private transactionManager: TransactionManagerService,
   ) {}
 
   async findAll(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
@@ -160,17 +159,21 @@ export class CasesService {
       }
     }
 
-    await this.caseRepository.update(id, { ...updateCaseDto });
+    const { metadata, ...restDto } = updateCaseDto;
+    await this.caseRepository.update(id, {
+      ...restDto,
+      ...(metadata ? { metadata: JSON.stringify(metadata) } : {})
+    });
     return this.findOne(id);
   }
 
   async remove(id: string): Promise<void> {
-    const _caseEntity = await this.findOne(id);
+    await this.findOne(id);
     await this.caseRepository.softDelete(id);
   }
 
   async archive(id: string): Promise<CaseResponseDto> {
-    const _caseEntity = await this.findOne(id);
+    await this.findOne(id);
     await this.caseRepository.update(id, { isArchived: true });
     return this.findOne(id);
   }

@@ -71,7 +71,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       {
           key: 's',
           cmd: true,
-          callback: (e) => {
+          callback: (e: KeyboardEvent) => {
               e.preventDefault();
               if (isOpen) {
                   handleSend();
@@ -180,7 +180,6 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
           recipient: formData.recipient,
           preview: body.substring(0, 150) + (body.length > 150 ? '...' : ''),
           hasAttachment: attachments.length > 0,
-          attachmentIds: attachments.map(a => a.id),
           status: CommunicationStatus.SENT,
           isPrivileged: formData.isPrivileged || false
       };

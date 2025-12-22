@@ -268,9 +268,8 @@ export class TaskRepository extends Repository<WorkflowTask> {
         // Integration Point: Publish event when task is completed
         if (updates.status === 'completed' || updates.status === 'done' || updates.status === TaskStatusBackend.COMPLETED || updates.status === TaskStatusBackend.COMPLETED) {
             try {
-                await IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { 
-                    task: result,
-                    completedAt: new Date().toISOString()
+                await IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, {
+                    task: result
                 });
             } catch (eventError) {
                 console.warn('[TaskRepository] Failed to publish integration event', eventError);
@@ -331,8 +330,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
             // Update task status
             const completed = await this.update(id, {
                 status: TaskStatusBackend.COMPLETED,
-                completedAt: new Date().toISOString(),
-                progress: 100
+                completionPercentage: 100
             });
 
             return completed;
@@ -413,12 +411,11 @@ export class TaskRepository extends Repository<WorkflowTask> {
             throw new Error('[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)');
         }
 
-        const updates: Partial<WorkflowTask> = { progress };
+        const updates: Partial<WorkflowTask> = { completionPercentage: progress };
 
         // Auto-complete if progress reaches 100%
         if (progress === 100) {
             updates.status = TaskStatusBackend.COMPLETED;
-            updates.completedAt = new Date().toISOString();
         }
 
         return await this.update(id, updates);

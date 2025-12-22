@@ -85,9 +85,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
           onSuccess: () => {
               composeModal.close();
               setComposeInitialData(undefined);
-          },
-          retry: 2,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
+          }
       }
   );
 
@@ -95,9 +93,7 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
       DataService.correspondence.addServiceJob,
       {
           invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()],
-          onSuccess: () => serviceJobModal.close(),
-          retry: 2,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000)
+          onSuccess: () => serviceJobModal.close()
       }
   );
 

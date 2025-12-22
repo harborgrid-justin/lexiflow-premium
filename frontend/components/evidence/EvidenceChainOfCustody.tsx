@@ -82,9 +82,6 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           return { updatedItem, chainedLog };
       },
       {
-          // Exponential backoff retry: 3 attempts, max 30s delay
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           // Optimistic update: immediately show new event in UI
           onMutate: async (payload) => {
               // Cancel outgoing refetches

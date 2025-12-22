@@ -18,7 +18,7 @@ import { UpdateDepositionDto } from './dto/update-deposition.dto';
 import { QueryDepositionDto } from './dto/query-deposition.dto';
 
 
-@Controller('discovery/depositions')
+@Controller('depositions')
 export class DepositionsController {
   constructor(private readonly depositionsService: DepositionsService) {}
 

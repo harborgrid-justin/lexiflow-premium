@@ -46,7 +46,9 @@ export class LegalHoldsApiService {
     if (filters?.custodianId) params.append('custodianId', filters.custodianId);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<LegalHold[]>(url);
+    const response = await apiClient.get<{ items: LegalHold[] }>(url);
+    // Backend returns paginated response {items, total, page, limit, totalPages}
+    return Array.isArray(response) ? response : response.items || [];
   }
 
   async getById(id: string): Promise<LegalHold> {

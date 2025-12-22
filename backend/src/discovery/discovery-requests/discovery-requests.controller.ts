@@ -17,7 +17,7 @@ import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';
 import { QueryDiscoveryRequestDto } from './dto/query-discovery-request.dto';
 
 
-@Controller('discovery/requests')
+@Controller('discovery-requests')
 export class DiscoveryRequestsController {
   constructor(
     private readonly discoveryRequestsService: DiscoveryRequestsService,

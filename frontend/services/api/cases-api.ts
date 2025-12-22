@@ -180,13 +180,13 @@ export class CasesApiService {
   }
 
   async getAll(filters?: { status?: string; type?: string; page?: number; limit?: number; sortBy?: string; order?: string }): Promise<Case[]> {
-    const response = await apiClient.get<PaginatedResponse<Case>>('/cases', filters);
+    const response = await apiClient.get<{ items: Case[] } | Case[]>('/cases', filters);
     
-    // Backend returns nested structure: { success, data: { data: [], total, page, ... }, meta }
+    // Backend returns paginated response {items, total, page, limit, totalPages}
     // Handle both paginated response format and direct array format
     const casesArray = Array.isArray(response) 
       ? response 
-      : (response as unknown as { data?: Case[] }).data || [];
+      : (response as { items: Case[] }).items || [];
     
     // Transform each case to use frontend status values and ensure all required fields
     return casesArray.map((c: unknown) => {

@@ -17,7 +17,7 @@ import { UpdateExaminationDto } from './dto/update-examination.dto';
 import { QueryExaminationDto } from './dto/query-examination.dto';
 
 
-@Controller('discovery/examinations')
+@Controller('examinations')
 export class ExaminationsController {
   constructor(private readonly examinationsService: ExaminationsService) {}
 

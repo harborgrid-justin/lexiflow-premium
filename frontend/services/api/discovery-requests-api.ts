@@ -47,7 +47,9 @@ export class DiscoveryRequestsApiService {
     if (filters?.status) params.append('status', filters.status);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<DiscoveryRequest[]>(url);
+    const response = await apiClient.get<{ items: DiscoveryRequest[] }>(url);
+    // Backend returns paginated response {items, total, page, limit, totalPages}
+    return Array.isArray(response) ? response : response.items || [];
   }
 
   async getById(id: string): Promise<DiscoveryRequest> {

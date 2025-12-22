@@ -19,7 +19,7 @@ import { QueryLegalHoldDto } from './dto/query-legal-hold.dto';
 import { ReleaseLegalHoldDto } from './dto/release-legal-hold.dto';
 
 
-@Controller('discovery/legal-holds')
+@Controller('legal-holds')
 export class LegalHoldsController {
   constructor(private readonly legalHoldsService: LegalHoldsService) {}
 

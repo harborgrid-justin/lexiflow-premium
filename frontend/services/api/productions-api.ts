@@ -52,7 +52,9 @@ export class ProductionsApiService {
     if (filters?.type) params.append('type', filters.type);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Production[]>(url);
+    const response = await apiClient.get<{ items: Production[] }>(url);
+    // Backend returns paginated response {items, total, page, limit, totalPages}
+    return Array.isArray(response) ? response : response.items || [];
   }
 
   async getById(id: string): Promise<Production> {

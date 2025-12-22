@@ -8,7 +8,7 @@ export enum ReportFormat {
   JSON = 'json',
 }
 
-export class GenerateReportDto {
+export class GenerateComplianceReportDto {
   @ApiProperty({ description: 'Case ID to generate report for' })
   @IsUUID()
   caseId!: string;

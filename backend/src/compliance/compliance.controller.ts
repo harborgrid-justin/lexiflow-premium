@@ -5,7 +5,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { RunCheckDto, GenerateReportDto, ExportAuditLogsDto } from './dto';
+import { RunCheckDto, GenerateComplianceReportDto, ExportAuditLogsDto } from './dto';
 
 @ApiTags('Compliance')
 @ApiBearerAuth('JWT-auth')
@@ -121,7 +121,7 @@ export class ComplianceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async generateComplianceReport(@Body() reportDto: GenerateReportDto) {
+  async generateComplianceReport(@Body() reportDto: GenerateComplianceReportDto) {
     try {
       const score = await this.complianceService.getComplianceScore(reportDto.caseId);
       return { report: score, format: reportDto.format };

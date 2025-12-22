@@ -49,7 +49,7 @@ export * from './domain/ComplianceDomain';
 export * from './domain/CRMDomain';
 export * from './domain/DataCatalogDomain';
 export * from './domain/DataQualityDomain';
-export { DocketEntryWithVersion, DocketRepository } from './domain/DocketDomain';  // Explicit export to avoid VersionConflictError duplicate with PleadingRepository
+export { type DocketEntryWithVersion, DocketRepository } from './domain/DocketDomain';  // Explicit export to avoid VersionConflictError duplicate with PleadingRepository
 export * from './domain/JurisdictionDomain';
 export * from './domain/KnowledgeDomain';
 export * from './domain/MarketingDomain';

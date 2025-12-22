@@ -87,7 +87,7 @@ export * from './docket-api';
 export * from './document-versions-api';
 export * from './documents-api';
 export * from './esi-sources-api';
-export { EthicalWallsApiService, EthicalWallFilters } from './ethical-walls-api';  // Explicit export to avoid EthicalWall conflict with compliance-api
+export { EthicalWallsApiService, type EthicalWallFilters, type EthicalWall } from './ethical-walls-api';  // Explicit export to avoid EthicalWall conflict with compliance-api
 export * from './evidence-api';
 export * from './examinations-api';
 export * from './exhibits-api';

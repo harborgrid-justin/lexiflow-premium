@@ -1,113 +1,118 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Integration } from './entities/integration.entity';
+import { CreateIntegrationDto } from './dto/create-integration.dto';
+import { UpdateIntegrationDto } from './dto/update-integration.dto';
 
 @Injectable()
 export class IntegrationsService {
-  private integrations: Map<string, any> = new Map();
+  constructor(
+    @InjectRepository(Integration)
+    private readonly integrationRepository: Repository<Integration>,
+  ) {}
 
-  findById(id: string) {
+  findById(id: string): Promise<Integration | null> {
     return this.findOne(id);
   }
   
-  delete(id: string) {
+  delete(id: string): Promise<void> {
     return this.remove(id);
   }
   
-  async connect(id: string, credentials: { accessToken: string; refreshToken: string; }) {
+  async connect(id: string, credentials: { accessToken: string; refreshToken: string }): Promise<Integration> {
     const integration = await this.findOne(id);
-    integration.status = 'active';
+    integration.status = 'active' as any;
     integration.credentials = credentials;
     integration.lastSyncedAt = new Date();
-    this.integrations.set(id, integration);
-    return integration;
+    return this.integrationRepository.save(integration);
   }
   
-  async disconnect(id: string) {
+  async disconnect(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
-    integration.status = 'disconnected';
-    integration.credentials = null;
-    this.integrations.set(id, integration);
-    return integration;
+    integration.status = 'disconnected' as any;
+    integration.credentials = undefined;
+    return this.integrationRepository.save(integration);
   }
   
-  async refreshCredentials(id: string) {
+  async refreshCredentials(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
     if (integration.status !== 'active') {
       throw new BadRequestException('Integration must be active to refresh credentials');
     }
     integration.credentials = { accessToken: 'refreshed-token', refreshToken: 'refreshed-refresh' };
     integration.lastSyncedAt = new Date();
-    this.integrations.set(id, integration);
-    return integration;
+    return this.integrationRepository.save(integration);
   }
   
-  async sync(id: string) {
+  async sync(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
     if (!integration.syncEnabled) {
       throw new BadRequestException('Sync is not enabled for this integration');
     }
     integration.lastSyncedAt = new Date();
-    this.integrations.set(id, integration);
-    return integration;
+    return this.integrationRepository.save(integration);
   }
   
-  async setSyncEnabled(id: string, enabled: boolean) {
+  async setSyncEnabled(id: string, enabled: boolean): Promise<Integration> {
     const integration = await this.findOne(id);
     integration.syncEnabled = enabled;
-    this.integrations.set(id, integration);
-    return integration;
+    return this.integrationRepository.save(integration);
   }
   
-  async updateConfig(id: string, newConfig: any) {
+  async updateConfig(id: string, newConfig: Record<string, unknown>): Promise<Integration> {
     const integration = await this.findOne(id);
-    integration.config = newConfig;
-    this.integrations.set(id, integration);
-    return integration;
+    const updated = {
+      ...integration,
+      config: newConfig,
+    };
+    return this.integrationRepository.save(updated);
   }
   
-  findByType(type: string) {
-    return Array.from(this.integrations.values()).filter(i => i.type === type);
+  async findByType(type: string): Promise<Integration[]> {
+    return this.integrationRepository.find({ where: { type } });
   }
   
-  findByProvider(provider: string) {
-    return Array.from(this.integrations.values()).filter(i => i.provider === provider);
+  async findByProvider(provider: string): Promise<Integration[]> {
+    return this.integrationRepository.find({ where: { provider } });
   }
   
-  testConnection(_id: string) {
+  testConnection(_id: string): { success: boolean; message: string; latency: number } {
     return { success: true, message: 'Connection successful', latency: 50 };
   }
   
-  getSyncHistory(_id: string) {
+  getSyncHistory(_id: string): any[] {
     return [];
   }
   
-  async findAll(): Promise<any[]> { return Array.from(this.integrations.values()); }
-  async findOne(id: string): Promise<any> {
-    const integration = this.integrations.get(id);
+  async findAll(): Promise<Integration[]> {
+    return this.integrationRepository.find();
+  }
+
+  async findOne(id: string): Promise<Integration> {
+    const integration = await this.integrationRepository.findOne({ where: { id } });
     if (!integration) {
-      const { NotFoundException } = require('@nestjs/common');
       throw new NotFoundException(`Integration with ID ${id} not found`);
     }
     return integration;
   }
-  async create(createDto: any, userId: string): Promise<any> { 
-    const integration = { id: 'int-' + Date.now(), ...createDto, userId };
-    this.integrations.set(integration.id, integration);
-    return integration;
+
+  async create(createDto: CreateIntegrationDto, userId: string): Promise<Integration> {
+    const integration = this.integrationRepository.create({
+      ...createDto,
+      userId,
+    });
+    return this.integrationRepository.save(integration);
   }
-  async update(id: string, updateDto: any): Promise<any> {
+
+  async update(id: string, updateDto: UpdateIntegrationDto): Promise<Integration> {
     const integration = await this.findOne(id);
-    const updated = {
-      ...integration,
-      name: updateDto.name ?? integration.name,
-      type: updateDto.type ?? integration.type,
-      provider: updateDto.provider ?? integration.provider,
-      config: updateDto.config ?? integration.config,
-    };
-    this.integrations.set(id, updated);
-    return updated;
+    const updated = this.integrationRepository.merge(integration, updateDto);
+    return this.integrationRepository.save(updated);
   }
+
   async remove(id: string): Promise<void> {
-    await this.findOne(id);
-    this.integrations.delete(id);
+    const integration = await this.findOne(id);
+    await this.integrationRepository.remove(integration);
   }
 }

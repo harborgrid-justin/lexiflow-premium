@@ -82,34 +82,34 @@ export class TimeEntry extends BaseEntity {
   @Column({ name: 'rate_table_id', type: 'uuid', nullable: true })
   rateTableId!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'internal_notes', type: 'text', nullable: true })
   internalNotes!: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'task_code', type: 'varchar', length: 255, nullable: true })
   taskCode!: string;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   discount!: number; // percentage
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ name: 'discounted_total', type: 'decimal', precision: 10, scale: 2, nullable: true })
   discountedTotal!: number;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'approved_by', type: 'uuid', nullable: true })
   approvedBy!: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'approved_at', type: 'timestamp', nullable: true })
   approvedAt!: Date;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'billed_by', type: 'uuid', nullable: true })
   billedBy!: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'billed_at', type: 'timestamp', nullable: true })
   billedAt!: Date;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'phase_code', type: 'varchar', length: 50, nullable: true })
   phaseCode!: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'expense_category', type: 'varchar', length: 50, nullable: true })
   expenseCategory!: string;
 
   // Note: createdAt, updatedAt, createdBy, updatedBy, and deletedAt are inherited from BaseEntity

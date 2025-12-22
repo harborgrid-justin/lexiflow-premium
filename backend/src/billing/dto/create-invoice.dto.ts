@@ -31,7 +31,7 @@ class InvoiceLineItemDto {
   amount!: number;
 }
 
-export class CreateInvoiceDto {
+export class CreateSimpleInvoiceDto {
   @ApiProperty({ description: 'Case ID' })
   @IsUUID()
   caseId!: string;

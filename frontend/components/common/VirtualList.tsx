@@ -93,6 +93,20 @@ const VirtualListComponent = <T extends any>(
   const safeItems = items || [];
   const totalItemsHeight = safeItems.length * itemHeight;
   
+  // Safety check for invalid height calculations
+  if (!itemHeight || itemHeight <= 0 || !Number.isFinite(itemHeight)) {
+    console.error('[VirtualList] Invalid itemHeight:', itemHeight);
+    return (
+      <div 
+        ref={containerRef}
+        className={cn("flex items-center justify-center text-sm h-full overflow-hidden", className, theme.text.tertiary)} 
+        style={{ height: typeof height === 'number' ? `${height}px` : height }}
+      >
+        Error: Invalid item height
+      </div>
+    );
+  }
+  
   const overscan = 5; 
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   // Use measured height if available, otherwise use a large default to render all items initially
@@ -148,7 +162,7 @@ const VirtualListComponent = <T extends any>(
       }}
       onScroll={handleScroll}
     >
-      <div style={{ height: totalItemsHeight + (footer ? 60 : 0), position: 'relative' }}>
+      <div style={{ height: Number.isFinite(totalItemsHeight) ? totalItemsHeight + (footer ? 60 : 0) : 0, position: 'relative' }}>
         {visibleItems.map(({ index, data, top }) => (
           <div 
             key={resolveKey(data, index)}

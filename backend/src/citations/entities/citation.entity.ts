@@ -34,9 +34,9 @@ export class Citation {
   @Column({ type: 'json', nullable: true })
   shepards: any;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }

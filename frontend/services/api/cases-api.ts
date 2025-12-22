@@ -26,14 +26,67 @@
  */
 
 import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
-import type { 
-  Case, 
-  DocketEntry, 
-  LegalDocument, 
-  EvidenceItem,
-  TimeEntry,
-  User,
-} from '../../types';
+import type { Case } from '../../types';
+
+/**
+ * Backend case data structure (from API response)
+ */
+interface _BackendCase {
+  id: string;
+  title: string;
+  caseNumber?: string;
+  description?: string;
+  status: string;
+  practiceArea?: string;
+  type?: string;
+  jurisdiction?: string;
+  court?: string;
+  judge?: string;
+  filingDate?: string;
+  clientId?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Create case DTO for backend API
+ */
+interface CreateCaseDto {
+  title: string;
+  caseNumber?: string;
+  description?: string;
+  type?: string;
+  status?: string;
+  practiceArea?: string;
+  jurisdiction?: string;
+  court?: string;
+  judge?: string;
+  filingDate?: Date;
+  clientId?: string;
+}
+
+/**
+ * Archived case response structure
+ */
+interface ArchivedCase {
+  id: string;
+  date: string;
+  title: string;
+  client: string;
+  outcome: string;
+}
+
+/**
+ * Search filter parameters
+ */
+interface SearchFilters {
+  status?: string;
+  type?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  order?: string;
+  [key: string]: string | number | undefined;
+}
 
 /**
  * Query keys for React Query integration
@@ -99,8 +152,9 @@ export class CasesApiService {
             throw new Error(`[CasesApiService.${methodName}] Invalid ${paramName} parameter`);
         }
     }
+
   // Map backend status to frontend CaseStatus enum
-  private mapBackendStatusToFrontend(backendStatus: string): string {
+  private mapBackendStatusToFrontend = (backendStatus: string): string => {
     const backendToFrontendStatusMap: Record<string, string> = {
       'pending': 'Pre-Filing',
       'Open': 'Open',
@@ -116,19 +170,23 @@ export class CasesApiService {
   }
 
   // Transform case data from backend to frontend format
-  private transformCase(backendCase: unknown): Case {
+  private transformCase = (backendCase: unknown): Case => {
+    const caseData = backendCase && typeof backendCase === 'object' ? backendCase as Record<string, unknown> : {};
     return {
-      ...(backendCase && typeof backendCase === 'object' ? backendCase : {}),
-      status: this.mapBackendStatusToFrontend(backendCase.status),
-      matterType: backendCase.practiceArea || 'General',
-    };
+      ...caseData,
+      status: this.mapBackendStatusToFrontend(typeof caseData.status === 'string' ? caseData.status : 'Active') as Case['status'],
+      matterType: (caseData.practiceArea || 'General') as Case['matterType'],
+    } as Case;
   }
 
   async getAll(filters?: { status?: string; type?: string; page?: number; limit?: number; sortBy?: string; order?: string }): Promise<Case[]> {
     const response = await apiClient.get<PaginatedResponse<Case>>('/cases', filters);
     
     // Backend returns nested structure: { success, data: { data: [], total, page, ... }, meta }
-    const casesArray = response.data?.data || response.data || [];
+    // Handle both paginated response format and direct array format
+    const casesArray = Array.isArray(response) 
+      ? response 
+      : (response as unknown as { data?: Case[] }).data || [];
     
     // Transform each case to use frontend status values and ensure all required fields
     return casesArray.map((c: unknown) => {
@@ -209,7 +267,7 @@ export class CasesApiService {
     };
 
     // Transform frontend Case to backend CreateCaseDto
-    const createDto: unknown = {
+    const createDto: CreateCaseDto = {
       title: caseData.title,
       caseNumber: caseData.caseNumber || `CASE-${Date.now()}`,
       description: caseData.description,
@@ -222,13 +280,14 @@ export class CasesApiService {
       // Convert ISO string to Date object if present
       filingDate: caseData.filingDate ? new Date(caseData.filingDate) : undefined,
       // Optional: only include clientId if available
-      ...(caseData.clientId && { clientId: caseData.clientId }),
+      ...(caseData.clientId && { clientId: caseData.clientId as string }),
     };
 
     // Remove undefined values
-    Object.keys(createDto as Record<string, any>).forEach(key => {
-      if ((createDto as any)[key] === undefined) {
-        delete (createDto as any)[key];
+    Object.keys(createDto).forEach((key) => {
+      const typedKey = key as keyof CreateCaseDto;
+      if (createDto[typedKey] === undefined) {
+        delete createDto[typedKey];
       }
     });
 
@@ -309,7 +368,7 @@ export class CasesApiService {
      * @example
      * const results = await service.search('Smith', { status: 'Active' });
      */
-    async search(query: string, filters?: Record<string, any>): Promise<Case[]> {
+    async search(query: string, filters?: SearchFilters): Promise<Case[]> {
         this.validateString(query, 'query', 'search');
 
         try {
@@ -328,13 +387,13 @@ export class CasesApiService {
      * @returns Promise<any[]> Archived cases
      * @throws Error if fetch fails
      */
-    async getArchived(filters?: { page?: number; limit?: number }): Promise<any[]> {
+    async getArchived(filters?: { page?: number; limit?: number }): Promise<ArchivedCase[]> {
         try {
             // Try backend first, fallback to local filtering
             try {
                 const response = await apiClient.get<PaginatedResponse<unknown>>('/cases/archived', filters);
-                return response.data.map(c => this.transformCase(c));
-            } catch (error) {
+                return response.data.map(c => this.transformCase(c) as unknown as ArchivedCase);
+            } catch {
                 console.warn('[CasesApiService] Archived endpoint unavailable, falling back to status filter');
                 // Fallback: filter locally by status
                 const allCases = await this.getAll({ status: 'Closed' });

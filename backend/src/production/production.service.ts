@@ -62,13 +62,13 @@ export class ProductionService {
     await this.findOne(id);
     const updateData: Partial<Production> = { ...updateProductionDto } as Partial<Production>;
     if (updateProductionDto.metadata) {
-      updateData.metadata = updateProductionDto.metadata;
+      updateData.metadata = updateProductionDto.metadata as any;
     }
     // Handle searchCriteria separately for TypeORM compatibility
     if ('searchCriteria' in updateProductionDto) {
-      updateData.searchCriteria = updateProductionDto.searchCriteria as Record<string, unknown> | undefined;
+      updateData.searchCriteria = updateProductionDto.searchCriteria as any;
     }
-    await this.productionRepository.update(id, updateData);
+    await this.productionRepository.update(id, updateData as any);
     return this.findOne(id);
   }
 

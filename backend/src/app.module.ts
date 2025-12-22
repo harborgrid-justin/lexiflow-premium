@@ -98,6 +98,7 @@ import { WarRoomModule } from './war-room/war-room.module';
 import { AnalyticsDashboardModule } from './analytics-dashboard/analytics-dashboard.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { JurisdictionsModule } from './jurisdictions/jurisdictions.module';
+import { LegalEntitiesModule } from './legal-entities/legal-entities.module';
 
 // Data Platform Modules - Production Infrastructure
 import { SchemaManagementModule } from './schema-management/schema-management.module';
@@ -265,6 +266,7 @@ if (isRedisEnabled) {
     AnalyticsDashboardModule,
     JurisdictionsModule,
     KnowledgeModule,
+    LegalEntitiesModule,
 
     // Data Platform - Production Infrastructure
     SchemaManagementModule,

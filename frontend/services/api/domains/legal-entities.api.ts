@@ -64,8 +64,8 @@ export class LegalEntitiesApiService {
     
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    const response = await apiClient.get<{ data: LegalEntityApi[] }>(url);
-    return response.data || [];
+    const response = await apiClient.get<LegalEntityApi[]>(url);
+    return Array.isArray(response) ? response : [];
   }
 
   async getById(id: string): Promise<LegalEntityApi> {

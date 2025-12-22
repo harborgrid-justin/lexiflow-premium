@@ -496,14 +496,14 @@ type Mutation {
   addTeamMember(input: AddTeamMemberInput!): CaseType!
   changePassword(input: ChangePasswordInput!): Boolean!
   createCase(input: CreateCaseInput!): CaseType!
-  createDeposition(input: CreateDepositionInput!): DepositionType!
+  createDeposition(_input: CreateDepositionInput!): DepositionType!
   createDiscoveryRequest(input: CreateDiscoveryRequestInput!): DiscoveryRequestType!
   createDocketEntry(input: CreateDocketEntryInput!): CaseType!
   createDocumentVersion(input: CreateDocumentVersionInput!): DocumentType!
   createInvoice(input: CreateInvoiceInput!): InvoiceType!
   createLegalHold(input: CreateLegalHoldInput!): LegalHoldType!
   createMotion(input: CreateMotionInput!): CaseType!
-  createPrivilegeLogEntry(input: CreatePrivilegeLogEntryInput!): PrivilegeLogEntryType!
+  createPrivilegeLogEntry(_input: CreatePrivilegeLogEntryInput!): PrivilegeLogEntryType!
   createTimeEntry(input: CreateTimeEntryInput!): TimeEntryType!
   deleteCase(id: ID!): Boolean!
   deleteDocument(id: ID!): Boolean!
@@ -513,13 +513,13 @@ type Mutation {
   generateDocumentDownloadUrl(id: ID!): String!
   login(input: LoginInput!): AuthPayload!
   logout: Boolean!
-  markInvoicePaid(id: ID!, paidDate: DateTime!): InvoiceType!
+  markInvoicePaid(_paidDate: DateTime!, id: ID!): InvoiceType!
   refreshToken(refreshToken: String!): String!
   register(input: RegisterInput!): AuthPayload!
   releaseLegalHold(id: ID!): LegalHoldType!
   sendInvoice(id: ID!): InvoiceType!
   updateCase(id: ID!, input: UpdateCaseInput!): CaseType!
-  updateDeposition(id: ID!, input: UpdateDepositionInput!): DepositionType!
+  updateDeposition(_id: ID!, _input: UpdateDepositionInput!): DepositionType!
   updateDiscoveryRequest(id: ID!, input: UpdateDiscoveryRequestInput!): DiscoveryRequestType!
   updateDocument(id: ID!, input: UpdateDocumentInput!): DocumentType!
   updateTimeEntry(id: ID!, input: UpdateTimeEntryInput!): TimeEntryType!
@@ -539,6 +539,10 @@ input PaginationInput {
   before: String
   first: Int = 20
   last: Int
+  limit: Int = 10
+  page: Int = 1
+  sortBy: String
+  sortOrder: String = "ASC"
 }
 
 type PartyType {
@@ -567,18 +571,18 @@ type Query {
   case(id: ID!): CaseType
   caseMetrics: CaseMetrics!
   cases(filter: CaseFilterInput, pagination: PaginationInput): CaseConnection!
-  deposition(id: ID!): DepositionType
-  depositions(caseId: ID!): [DepositionType!]!
+  deposition(_id: ID!): DepositionType
+  depositions(_caseId: ID!): [DepositionType!]!
   discoveryRequest(id: ID!): DiscoveryRequestType
   discoveryRequests(caseId: ID!): [DiscoveryRequestType!]!
   document(id: ID!): DocumentType
   documents(filter: DocumentFilterInput, pagination: PaginationInput): DocumentConnection!
   feeAgreements(caseId: ID): [FeeAgreementType!]!
   invoice(id: ID!): InvoiceType
-  invoices(filter: InvoiceFilterInput): [InvoiceType!]!
+  invoices(_filter: InvoiceFilterInput): [InvoiceType!]!
   legalHolds(caseId: ID!): [LegalHoldType!]!
   me: UserType!
-  privilegeLog(caseId: ID!): [PrivilegeLogEntryType!]!
+  privilegeLog(_caseId: ID!): [PrivilegeLogEntryType!]!
   rateTables: [RateTableType!]!
   timeEntries(filter: TimeEntryFilterInput): [TimeEntryType!]!
   timeEntry(id: ID!): TimeEntryType
@@ -606,7 +610,7 @@ input RegisterInput {
 }
 
 type Subscription {
-  caseUpdated(id: ID!): CaseType!
+  caseUpdated(_id: ID!): CaseType!
 }
 
 input TimeEntryFilterInput {
@@ -723,6 +727,7 @@ input UploadDocumentInput {
 
 input UserFilterInput {
   department: String
+  isActive: Boolean
   role: [String!]
   search: String
   status: [String!]

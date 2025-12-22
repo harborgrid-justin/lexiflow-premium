@@ -9,6 +9,7 @@ import { STORES } from '../db';
 import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
 import { SystemEventType } from '../../../types/integration-types';
 import { isBackendApiEnabled } from '../../integration/apiConfig';
+import { LegalEntitiesApiService } from '../../api/domains/legal-entities.api';
 
 export const ENTITY_QUERY_KEYS = {
     all: () => ['entities'] as const,
@@ -19,10 +20,12 @@ export const ENTITY_QUERY_KEYS = {
 
 export class EntityRepository extends Repository<LegalEntity> {
     private useBackend: boolean;
+    private legalEntitiesApi: LegalEntitiesApiService;
 
     constructor() {
         super(STORES.ENTITIES);
         this.useBackend = isBackendApiEnabled();
+        this.legalEntitiesApi = new LegalEntitiesApiService();
         console.log(`[EntityRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);
     }
 
@@ -33,16 +36,65 @@ export class EntityRepository extends Repository<LegalEntity> {
     }
 
     override async getAll(): Promise<LegalEntity[]> {
+        if (this.useBackend) {
+            try {
+                const entities = await this.legalEntitiesApi.getAll();
+                // Transform API format to frontend format
+                return entities.map(e => ({
+                    ...e,
+                    type: this.mapEntityType(e.entityType),
+                } as LegalEntity));
+            } catch (error) {
+                console.error('[EntityRepository] Backend API unavailable', error);
+                return await super.getAll();
+            }
+        }
         return await super.getAll();
+    }
+
+    private mapEntityType(apiType: string): string {
+        const typeMap: Record<string, string> = {
+            'individual': 'Individual',
+            'corporation': 'Corporation',
+            'llc': 'LLC',
+            'partnership': 'Partnership',
+            'trust': 'Trust',
+            'estate': 'Estate',
+            'nonprofit': 'Nonprofit',
+            'government': 'Government',
+            'foreign_entity': 'Foreign Entity',
+            'other': 'Other'
+        };
+        return typeMap[apiType] || apiType;
     }
 
     override async getById(id: string): Promise<LegalEntity | undefined> {
         this.validateId(id, 'getById');
+        if (this.useBackend) {
+            try {
+                const entity = await this.legalEntitiesApi.getById(id);
+                return {
+                    ...entity,
+                    type: this.mapEntityType(entity.entityType),
+                } as LegalEntity;
+            } catch (error) {
+                console.error('[EntityRepository] Backend API unavailable', error);
+                return await super.getById(id);
+            }
+        }
         return await super.getById(id);
     }
     
-    async getRelationships(_id: string): Promise<any[]> {
-        this.validateId(_id, 'getRelationships');
+    async getRelationships(id: string): Promise<any[]> {
+        this.validateId(id, 'getRelationships');
+        if (this.useBackend && id !== 'all') {
+            try {
+                return await this.legalEntitiesApi.getRelationships(id);
+            } catch (error) {
+                console.error('[EntityRepository] Backend API unavailable', error);
+                return [];
+            }
+        }
         // Mocked for now, in real app this would query a relationship table
         return [];
     }

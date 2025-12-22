@@ -21,13 +21,16 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
   const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch entities with type 'Individual' and role 'Alumni'
-  const { data: allAlumni = [] } = useQuery<LegalEntity[]>(
+  const { data: allAlumni } = useQuery<LegalEntity[]>(
     queryKeys.adminExtended.judgeProfiles(), // Reusing existing key pattern
     () => DataService.entities.getAll()
   );
 
+  // Safety check: ensure allAlumni is always an array
+  const safeAlumni = Array.isArray(allAlumni) ? allAlumni : [];
+
   // Filter for alumni (individuals with specific metadata or roles)
-  const alumni = allAlumni.filter(entity => 
+  const alumni = safeAlumni.filter(entity => 
     entity.type === 'Individual' && 
     (entity.roles?.includes('Alumni') || entity.tags?.includes('alumni'))
   ).filter(person => 

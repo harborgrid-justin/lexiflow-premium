@@ -13,6 +13,11 @@ import { BillingResolver } from './resolvers/billing.resolver';
 import { DiscoveryResolver } from './resolvers/discovery.resolver';
 import { DataLoaderModule } from './dataloaders/dataloader.module';
 import { BillingModule } from '../billing/billing.module';
+import { CasesModule } from '../cases/cases.module';
+import { DocumentsModule } from '../documents/documents.module';
+import { UsersModule } from '../users/users.module';
+import { AuthModule } from '../auth/auth.module';
+import { DiscoveryModule } from '../discovery/discovery.module';
 
 @Module({
   imports: [
@@ -58,6 +63,11 @@ import { BillingModule } from '../billing/billing.module';
     }),
     DataLoaderModule,
     BillingModule,
+    CasesModule,
+    DocumentsModule,
+    UsersModule,
+    AuthModule,
+    DiscoveryModule,
   ],
   providers: [
     // Custom scalars

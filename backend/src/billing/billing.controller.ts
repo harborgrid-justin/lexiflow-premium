@@ -5,8 +5,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { CreateInvoiceDto } from './dto/create-invoice.dto';
-import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { CreateSimpleInvoiceDto } from './dto/create-invoice.dto';
+import { UpdateSimpleInvoiceDto } from './dto/update-invoice.dto';
 import { CreateTimeEntryDto } from './time-entries/dto/create-time-entry.dto';
 import { UpdateTimeEntryDto } from './time-entries/dto/update-time-entry.dto';
 import { CreateExpenseDto } from './expenses/dto/create-expense.dto';
@@ -49,7 +49,7 @@ export class BillingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createInvoice(@Body() createDto: CreateInvoiceDto) {
+  async createInvoice(@Body() createDto: CreateSimpleInvoiceDto) {
     return this.billingService.createInvoice(createDto);
   }
 
@@ -62,7 +62,7 @@ export class BillingController {
   @ApiParam({ name: 'id', description: 'Invoice ID' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateInvoice(@Param('id') id: string, @Body() updateDto: UpdateInvoiceDto) {
+  async updateInvoice(@Param('id') id: string, @Body() updateDto: UpdateSimpleInvoiceDto) {
     return this.billingService.updateInvoice(id, updateDto);
   }
 

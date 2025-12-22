@@ -25,7 +25,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         const result = await super.update(id, updates);
         
         // Opp #3 Integration Point
-        if (updates.status === 'Done' || updates.status === 'Completed') {
+        if (updates.status === 'completed' || updates.status === 'done') {
              IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { task: result });
         }
         

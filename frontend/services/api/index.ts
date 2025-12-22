@@ -49,6 +49,92 @@ export * from './domains/data-platform.api';
 export * from './domains/hr.api';
 export * from './domains/legal-entities.api';
 
+// ==================== STANDALONE API SERVICES ====================
+// Export individual API service classes
+export * from './ai-ops-api';
+export * from './analytics-api';
+export * from './analytics-dashboard-api';
+export * from './api-keys-api';
+export * from './audit-logs-api';
+export * from './auth-api';
+export * from './backups-api';
+export * from './billing-analytics-api';
+export * from './billing-api';
+export * from './bluebook-api';
+export * from './calendar-api';
+export * from './case-analytics-api';
+export * from './case-phases-api';
+export * from './case-teams-api';
+export * from './cases-api';
+export * from './citations-api';
+export * from './clauses-api';
+export * from './clients-api';
+export * from './communications-api';
+export * from './compliance-api';
+export * from './compliance-reporting-api';
+export * from './conflict-checks-api';
+export * from './correspondence-api';
+export * from './custodian-interviews-api';
+export * from './custodians-api';
+export * from './dashboard-api';
+// export * from './data-platform-api'; // Already exported via data-platform.api domain
+export * from './data-sources-api';
+export * from './depositions-api';
+export * from './discovery-analytics-api';
+export * from './discovery-api';
+export * from './discovery-requests-api';
+export * from './docket-api';
+export * from './document-versions-api';
+export * from './documents-api';
+export * from './esi-sources-api';
+export * from './ethical-walls-api';
+export * from './evidence-api';
+export * from './examinations-api';
+export * from './exhibits-api';
+export * from './external-api-api';
+export * from './fee-agreements-api';
+export * from './health-api';
+export * from './hr-api';
+export * from './integrations-api';
+export * from './judge-stats-api';
+export * from './jurisdiction-api';
+export * from './knowledge-api';
+export * from './legal-holds-api';
+export * from './matters-api';
+export * from './messaging-api';
+export * from './metrics-api';
+export * from './monitoring-api';
+export * from './motions-api';
+export * from './notifications-api';
+export * from './ocr-api';
+export * from './organizations-api';
+export * from './outcome-predictions-api';
+export * from './parties-api';
+export * from './permissions-api';
+// export * from './pipelines-api'; // Exported via data-platform-api
+export * from './pleadings-api';
+export * from './privilege-log-api';
+export * from './productions-api';
+export * from './projects-api';
+// export * from './query-workbench-api'; // Exported via data-platform-api
+export * from './rate-tables-api';
+export * from './reports-api';
+export * from './risks-api';
+export * from './rls-policies-api';
+// export * from './schema-management-api'; // Exported via data-platform-api
+export * from './service-jobs-api';
+export * from './sync-api';
+export * from './tasks-api';
+export * from './token-blacklist-admin-api';
+export * from './trial-api';
+export * from './trust-accounts-api';
+export * from './users-api';
+export * from './versioning-api';
+export * from './war-room-api';
+export * from './webhooks-api';
+export * from './witnesses-api';
+export * from './workflow-api';
+
 // Import domain APIs for consolidated export
 import { authApi as authDomain } from './domains/auth.api';
 import { litigationApi as litigationDomain } from './domains/litigation.api';

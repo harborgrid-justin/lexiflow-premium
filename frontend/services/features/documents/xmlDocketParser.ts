@@ -11,11 +11,11 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { yieldToMain } from "../utils/apiUtils";
+import { yieldToMain } from "../../../utils/apiUtils";
 
 // Types
-import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId } from "../types";
-import { PacerCase, PacerParty, PacerJurisdictionType } from "../types/pacer";
+import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId } from "../../../types";
+import { PacerCase, PacerParty, PacerJurisdictionType } from "../../../types/pacer";
 
 // ============================================================================
 // SERVICE
@@ -122,8 +122,9 @@ export const XmlDocketParser = {
           
           parties.push({
             id: `p-xml-${i}` as PartyId,
+            caseId: (caseInfo.id || `case-${Date.now()}`) as CaseId,
             name: name,
-            role: typeStr.trim(),
+            role: typeStr.trim() || 'Other',
             contact: attorney?.getAttribute("email") || attorney?.getAttribute("personalPhone") || "",
             type: type,
             counsel: attorney ? `${attorney.getAttribute("firstName") || ''} ${attorney.getAttribute("lastName") || ''}`.trim() : undefined,
@@ -182,10 +183,12 @@ export const XmlDocketParser = {
             type: type,
             title: text.substring(0, 150) + (text.length > 150 ? '...' : ''),
             description: text,
-            filedBy: text.toLowerCase().includes("plaintiff") || text.toLowerCase().includes("appellant") ? "Appellant/Plaintiff" : 
-                     text.toLowerCase().includes("defendant") || text.toLowerCase().includes("appellee") ? "Appellee/Defendant" : "Court",
+            filedBy: text.toLowerCase().includes("plaintiff") || text.toLowerCase().includes("appellant") ? "Appellant/Plaintiff" :
+              text.toLowerCase().includes("defendant") || text.toLowerCase().includes("appellee") ? "Appellee/Defendant" : "Court",
             docLink: docLink,
-            isSealed: text.toUpperCase().includes("SEALED")
+            isSealed: text.toUpperCase().includes("SEALED"),
+            dateFiled: "",
+            entryDate: ""
           });
 
           // Yield every 50 entries

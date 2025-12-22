@@ -23,7 +23,7 @@ export interface ComplianceCheck {
   updatedAt?: string;
 }
 
-export interface EthicalWall {
+export interface ComplianceEthicalWall {
   id: string;
   name: string;
   reason: string;
@@ -60,24 +60,24 @@ export class ComplianceApiService {
   }
 
   // Ethical Walls
-  async getEthicalWalls(): Promise<EthicalWall[]> {
-    return apiClient.get<EthicalWall[]>(`${this.baseUrl}/ethical-walls`);
+  async getEthicalWalls(): Promise<ComplianceEthicalWall[]> {
+    return apiClient.get<ComplianceEthicalWall[]>(`${this.baseUrl}/ethical-walls`);
   }
 
-  async getEthicalWallById(id: string): Promise<EthicalWall> {
-    return apiClient.get<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}`);
+  async getEthicalWallById(id: string): Promise<ComplianceEthicalWall> {
+    return apiClient.get<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls/${id}`);
   }
 
-  async createEthicalWall(data: Partial<EthicalWall>): Promise<EthicalWall> {
-    return apiClient.post<EthicalWall>(`${this.baseUrl}/ethical-walls`, data);
+  async createEthicalWall(data: Partial<ComplianceEthicalWall>): Promise<ComplianceEthicalWall> {
+    return apiClient.post<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls`, data);
   }
 
-  async updateEthicalWall(id: string, data: Partial<EthicalWall>): Promise<EthicalWall> {
-    return apiClient.put<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}`, data);
+  async updateEthicalWall(id: string, data: Partial<ComplianceEthicalWall>): Promise<ComplianceEthicalWall> {
+    return apiClient.put<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls/${id}`, data);
   }
 
-  async liftEthicalWall(id: string): Promise<EthicalWall> {
-    return apiClient.post<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}/lift`, {});
+  async liftEthicalWall(id: string): Promise<ComplianceEthicalWall> {
+    return apiClient.post<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls/${id}/lift`, {});
   }
 
   async deleteEthicalWall(id: string): Promise<void> {

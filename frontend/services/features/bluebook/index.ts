@@ -6,8 +6,8 @@
 
 export { BluebookParser } from './bluebookParser';
 export { BluebookFormatter } from './bluebookFormatter';
-export { bluebookApi } from '../api/bluebook-api';
+export { bluebookApi } from '../../api/bluebook-api';
 
 // Re-export types
-export * from '../../types/bluebook';
+export * from '../../../types/bluebook';
 

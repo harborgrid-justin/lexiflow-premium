@@ -20,7 +20,6 @@ import type {
   DocumentLock,
   WSMessageType,
   WSMessage,
-  CollaborationEvent,
   CollaborationConfig
 } from './collaboration/types';
 

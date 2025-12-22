@@ -5,7 +5,7 @@
 
 import { apiClient } from '../infrastructure/apiClient';
 
-export interface SystemHealth {
+export interface AdminSystemHealth {
   status: 'healthy' | 'degraded' | 'down';
   timestamp: string;
   services: {
@@ -21,7 +21,7 @@ export interface SystemHealth {
   };
 }
 
-export interface PerformanceMetric {
+export interface AdminPerformanceMetric {
   id: string;
   metricName: string;
   value: number;
@@ -33,18 +33,18 @@ export interface PerformanceMetric {
 export class MonitoringApiService {
   private readonly baseUrl = '/monitoring';
 
-  async getHealth(): Promise<SystemHealth> {
-    return apiClient.get<SystemHealth>(`${this.baseUrl}/health`);
+  async getHealth(): Promise<AdminSystemHealth> {
+    return apiClient.get<AdminSystemHealth>(`${this.baseUrl}/health`);
   }
 
-  async getMetrics(filters?: { metricName?: string; startTime?: string; endTime?: string }): Promise<PerformanceMetric[]> {
+  async getMetrics(filters?: { metricName?: string; startTime?: string; endTime?: string }): Promise<AdminPerformanceMetric[]> {
     const params = new URLSearchParams();
     if (filters?.metricName) params.append('metricName', filters.metricName);
     if (filters?.startTime) params.append('startTime', filters.startTime);
     if (filters?.endTime) params.append('endTime', filters.endTime);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}/metrics?${queryString}` : `${this.baseUrl}/metrics`;
-    return apiClient.get<PerformanceMetric[]>(url);
+    return apiClient.get<AdminPerformanceMetric[]>(url);
   }
 
   async ping(): Promise<{ status: string; timestamp: string }> {

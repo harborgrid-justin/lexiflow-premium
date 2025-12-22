@@ -6,9 +6,9 @@
 
 import {
   BluebookCitation,
-  BluebookCaseReporter,
-  BluebookStatuteCitation,
-  BluebookJournalCitation
+  CaseCitation,
+  StatuteCitation,
+  PeriodicalCitation
 } from '../../../types/bluebook';
 
 interface FormattingOptions {

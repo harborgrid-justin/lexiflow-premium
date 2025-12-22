@@ -9,7 +9,7 @@ export class EntityRepository extends Repository<LegalEntity> {
         super(STORES.ENTITIES);
     }
     
-    async getRelationships(id: string) {
+    async getRelationships(_id: string) {
         // Mocked for now, in real app this would query a relationship table
         return [];
     }

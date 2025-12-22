@@ -173,4 +173,28 @@ export class MattersApiService {
   async search(query: string): Promise<Matter[]> {
     return apiClient.get<Matter[]>(`${this.baseUrl}/search`, { q: query });
   }
+
+  /**
+   * Get matters by status
+   */
+  async getByStatus(status: string): Promise<Matter[]> {
+    return this.getAll({ status });
+  }
+
+  /**
+   * Get matters by client
+   */
+  async getByClient(clientId: string): Promise<Matter[]> {
+    return this.getAll({ clientId });
+  }
+
+  /**
+   * Get matters by attorney
+   */
+  async getByAttorney(leadAttorneyId: string): Promise<Matter[]> {
+    return this.getAll({ leadAttorneyId });
+  }
 }
+
+// Export singleton instance
+export const mattersApi = new MattersApiService();

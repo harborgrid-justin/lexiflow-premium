@@ -1,61 +1,172 @@
 /**
  * @module services/ruleService
  * @category Services - Rules Platform
- * @description Legal rules service with localStorage persistence. Provides CRUD operations for legal
- * rules with search filtering by code/name/type, initialization from mock data, and StorageUtils
- * integration for persistence across sessions.
+ * @description Legal rules service with backend API integration. Provides CRUD operations for legal
+ * rules with search filtering, connected to jurisdiction rules endpoint.
+ * ✅ Backend-connected with query keys (2025-12-21)
+ * 
+ * @example
+ * ```tsx
+ * import { RuleService, ruleQueryKeys } from './services/features/legal/ruleService';
+ * import { useQuery, useMutation } from './hooks/useQueryHooks';
+ * 
+ * // Fetch all rules
+ * const { data: rules } = useQuery(ruleQueryKeys.all(), () => RuleService.getAll());
+ * 
+ * // Search rules
+ * const { data: searchResults } = useQuery(
+ *   ruleQueryKeys.search(searchQuery),
+ *   () => RuleService.search(searchQuery)
+ * );
+ * 
+ * // Create new rule
+ * const createMutation = useMutation(
+ *   (newRule) => RuleService.add(newRule),
+ *   { onSuccess: () => queryClient.invalidate(ruleQueryKeys.all()) }
+ * );
+ * ```
  */
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Utils & Constants
-import { StorageUtils, STORAGE_KEYS } from '../utils/storage';
-import { MOCK_RULES } from '../data/models/legalRule';
+// API & Query Keys
+import { api } from '../../api';
+import { queryKeys } from '../../../utils/queryKeys';
+import { queryClient } from '../../infrastructure/queryClient';
 
 // Types
-import { LegalRule } from '../types';
+import { LegalRule } from '../../../types';
+import type { JurisdictionRule, CreateJurisdictionRuleDto } from '../../api/jurisdiction-api';
 
 // ============================================================================
-// MODULE STATE
+// TYPE MAPPING UTILITIES
 // ============================================================================
-// Initialize from Storage
-let dbRules: LegalRule[] = StorageUtils.get(STORAGE_KEYS.RULES, [...MOCK_RULES]);
+/**
+ * Maps JurisdictionRule from backend to LegalRule for frontend
+ */
+function mapToLegalRule(rule: JurisdictionRule): LegalRule {
+  return {
+    id: rule.id,
+    code: rule.code,
+    name: rule.name,
+    type: rule.type as LegalRule['type'],
+    description: rule.description || '',
+    jurisdiction: rule.jurisdiction?.name || rule.jurisdictionId || 'Unknown',
+    effectiveDate: rule.effectiveDate || new Date().toISOString(),
+    source: rule.fullText || '',
+    url: rule.url,
+    createdAt: rule.createdAt || new Date().toISOString(),
+    updatedAt: rule.updatedAt || new Date().toISOString(),
+  };
+}
+
+/**
+ * Maps LegalRule to CreateJurisdictionRuleDto for backend
+ */
+function mapToCreateDto(rule: Omit<LegalRule, 'id'>): CreateJurisdictionRuleDto {
+  return {
+    jurisdictionId: rule.jurisdiction || 'default',
+    code: rule.code,
+    name: rule.name,
+    type: rule.type as JurisdictionRule['type'],
+    description: rule.description,
+    effectiveDate: rule.effectiveDate,
+    fullText: rule.source,
+    url: rule.url,
+  };
+}
 
 // ============================================================================
 // SERVICE
 // ============================================================================
 export const RuleService = {
+  /**
+   * Get all legal rules from backend
+   */
   getAll: async (): Promise<LegalRule[]> => {
-    return [...dbRules];
+    const rules = await api.jurisdiction.getRules();
+    return rules.map(mapToLegalRule);
   },
 
-  search: async (query: string): Promise<LegalRule[]> => {
-    const lower = query.toLowerCase();
-    return dbRules.filter(r => 
-      r.code.toLowerCase().includes(lower) || 
-      r.name.toLowerCase().includes(lower) ||
-      r.type.toLowerCase().includes(lower)
-    );
+  /**
+   * Search legal rules by query string
+   */
+  search: async (query: string, jurisdictionId?: string): Promise<LegalRule[]> => {
+    const rules = await api.jurisdiction.searchRules(query, jurisdictionId);
+    return rules.map(mapToLegalRule);
   },
 
+  /**
+   * Get a specific rule by ID
+   */
+  getById: async (id: string): Promise<LegalRule | null> => {
+    const rule = await api.jurisdiction.getRuleById(id);
+    return rule ? mapToLegalRule(rule) : null;
+  },
+
+  /**
+   * Add a new legal rule
+   */
   add: async (rule: Omit<LegalRule, 'id'>): Promise<LegalRule> => {
-    const newRule = { ...rule, id: `rule-${Date.now()}` };
-    dbRules = [newRule, ...dbRules];
-    StorageUtils.set(STORAGE_KEYS.RULES, dbRules);
-    return newRule;
+    const dto = mapToCreateDto(rule);
+    const created = await api.jurisdiction.createRule(dto);
+    
+    if (!created) {
+      throw new Error('Failed to create rule');
+    }
+    
+    // Invalidate relevant queries
+    queryClient.invalidate(queryKeys.jurisdiction.rules());
+    
+    return mapToLegalRule(created);
   },
 
+  /**
+   * Update an existing legal rule
+   */
   update: async (id: string, updates: Partial<LegalRule>): Promise<LegalRule> => {
-    dbRules = dbRules.map(r => r.id === id ? { ...r, ...updates } as LegalRule : r);
-    StorageUtils.set(STORAGE_KEYS.RULES, dbRules);
-    const updated = dbRules.find(r => r.id === id);
-    if (!updated) throw new Error('Rule not found');
-    return updated;
+    const updateDto: Partial<Omit<CreateJurisdictionRuleDto, 'jurisdictionId'>> = {};
+    
+    if (updates.code) updateDto.code = updates.code;
+    if (updates.name) updateDto.name = updates.name;
+    if (updates.type) updateDto.type = updates.type as JurisdictionRule['type'];
+    if (updates.description) updateDto.description = updates.description;
+    if (updates.effectiveDate) updateDto.effectiveDate = updates.effectiveDate;
+    if (updates.source) updateDto.fullText = updates.source;
+    if (updates.url) updateDto.url = updates.url;
+    
+    const updated = await api.jurisdiction.updateRule(id, updateDto);
+    
+    if (!updated) {
+      throw new Error('Failed to update rule');
+    }
+    
+    // Invalidate relevant queries
+    queryClient.invalidate(queryKeys.jurisdiction.rules());
+    queryClient.invalidate(queryKeys.jurisdiction.detail(id));
+    
+    return mapToLegalRule(updated);
   },
 
+  /**
+   * Delete a legal rule
+   */
   delete: async (id: string): Promise<void> => {
-    dbRules = dbRules.filter(r => r.id !== id);
-    StorageUtils.set(STORAGE_KEYS.RULES, dbRules);
-  }
+    const success = await api.jurisdiction.deleteRule(id);
+    
+    if (!success) {
+      throw new Error('Failed to delete rule');
+    }
+    
+    // Invalidate relevant queries
+    queryClient.invalidate(queryKeys.jurisdiction.rules());
+  },
+};
+
+// Export query keys for use in components
+export const ruleQueryKeys = {
+  all: () => queryKeys.jurisdiction.rules(),
+  detail: (id: string) => queryKeys.jurisdiction.detail(id),
+  search: (query: string) => [...queryKeys.jurisdiction.rules(), 'search', query] as const,
 };

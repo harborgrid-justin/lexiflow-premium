@@ -17,7 +17,7 @@ import { Plus, Download } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-nimport { DataService } from '../../services/data/dataService';
+import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
@@ -44,6 +44,10 @@ export const FinancialCenter: React.FC = () => {
   // Enterprise Data Hooks
   const { data: expenses } = useQuery(queryKeys.expenses.all(), () => DataService.expenses.getAll());
   const { data: trustAccounts } = useQuery(queryKeys.trust.all(), () => DataService.billing.getTrustAccounts());
+
+  // Ensure expenses is always an array
+  const expensesList = Array.isArray(expenses) ? expenses : [];
+  const trustAccountsList = Array.isArray(trustAccounts) ? trustAccounts : [];
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -79,9 +83,9 @@ export const FinancialCenter: React.FC = () => {
       </div>
 
       {activeTab === 'operating' ? (
-        <OperatingLedger expenses={expenses || []} />
+        <OperatingLedger expenses={expensesList} />
       ) : (
-        <TrustLedger trustAccounts={trustAccounts || []} />
+        <TrustLedger trustAccounts={trustAccountsList} />
       )}
     </div>
   );

@@ -36,6 +36,7 @@ export const queryKeys = {
     list: (filters: string) => ['documents', 'list', filters] as const,
     detail: (id: string) => ['documents', 'detail', id] as const,
     byCaseId: (caseId: string) => ['documents', 'byCaseId', caseId] as const,
+    templates: () => ['documents', 'templates'] as const,
   },
 
   // Docket Entries
@@ -384,6 +385,24 @@ export const queryKeys = {
     byEntity: (entityId: string) => ['ubo', 'byEntity', entityId] as const,
     register: () => ['ubo', 'register'] as const,
     stats: () => ['ubo', 'stats'] as const,
+  },
+
+  // Jurisdictions & Legal Rules
+  jurisdiction: {
+    all: () => ['jurisdictions', 'all'] as const,
+    detail: (id: string) => ['jurisdictions', 'detail', id] as const,
+    rules: () => ['jurisdictions', 'rules'] as const,
+    rulesByJurisdiction: (jurisdictionId: string) => ['jurisdictions', jurisdictionId, 'rules'] as const,
+    localRules: () => ['jurisdictions', 'local-rules'] as const,
+  },
+
+  // Bluebook Citations
+  bluebook: {
+    all: () => ['bluebook', 'all'] as const,
+    history: (documentId?: string) => documentId ? ['bluebook', 'history', documentId] as const : ['bluebook', 'history'] as const,
+    templates: (type?: string) => type ? ['bluebook', 'templates', type] as const : ['bluebook', 'templates'] as const,
+    parse: (citation: string) => ['bluebook', 'parse', citation] as const,
+    validate: (citation: string) => ['bluebook', 'validate', citation] as const,
   },
 } as const;
 

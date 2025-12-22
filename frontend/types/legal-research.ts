@@ -43,7 +43,22 @@ export interface ResearchSession extends BaseEntity { userId: UserId; query: str
 
 export interface BriefAnalysisSession extends BaseEntity { textSnapshot: string; extractedCitations: string[]; riskScore: number; strengths: string[]; weaknesses: string[]; suggestions: string[]; missingAuthority: string[]; timestamp: string; }
 
-export interface LegalRule extends BaseEntity { code: string; name: string; type: LegalRuleType; level?: string; summary?: string; text?: string; parentId?: string; children?: LegalRule[]; structuredContent?: any; }
+export interface LegalRule extends BaseEntity { 
+  code: string; 
+  name: string; 
+  type: LegalRuleType; 
+  description?: string;
+  jurisdiction?: string;
+  effectiveDate?: string;
+  source?: string;
+  url?: string;
+  level?: string; 
+  summary?: string; 
+  text?: string; 
+  parentId?: string; 
+  children?: LegalRule[]; 
+  structuredContent?: any; 
+}
 
 export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: any[]; }
 

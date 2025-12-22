@@ -116,9 +116,6 @@ export * from './features/research/geminiService';
 // Bluebook (keep organized exports)
 export * from './features/bluebook';
 
-// Collaboration (keep organized exports)
-export * from './features/collaboration';
-
 // ==================== AI SERVICES ====================
 export * from './ai/prompts';
 export * from './ai/schemas';

@@ -269,7 +269,21 @@ export type ConferralMethod = 'Email' | 'Phone' | 'In-Person' | 'Video Conferenc
 export type TaskStatus = 'Pending' | 'In Progress' | 'Review' | 'Done' | 'Completed';
 export type StageStatus = 'Pending' | 'Active' | 'Completed';
 
-export type LegalRuleType = 'FRE' | 'FRCP' | 'FRAP' | 'Local' | 'State';
+// Legal Rule Types - aligned with backend JurisdictionRule types
+export type LegalRuleType = 
+  | 'Procedural' 
+  | 'Evidentiary' 
+  | 'Civil' 
+  | 'Criminal' 
+  | 'Administrative' 
+  | 'Local' 
+  | 'Standing Order' 
+  | 'Practice Guide'
+  // Legacy types for backward compatibility
+  | 'FRE' 
+  | 'FRCP' 
+  | 'FRAP' 
+  | 'State';
 
 export type EntityType = 'Individual' | 'Corporation' | 'Court' | 'Government' | 'Vendor' | 'Law Firm';
 export type EntityRole = 'Client' | 'Opposing Counsel' | 'Judge' | 'Expert' | 'Witness' | 'Staff' | 'Prospect';

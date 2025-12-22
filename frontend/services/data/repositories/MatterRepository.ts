@@ -1,9 +1,9 @@
 // services/repositories/MatterRepository.ts
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { Matter, MatterId } from '../../../types';
-import { mattersApi } from '../../../api';
-import { isBackendApiEnabled } from '../../../api';
+import { Matter, MatterId, MatterStatus } from '../../../types';
+import { mattersApi } from '../../api/matters-api';
+import { isBackendApiEnabled } from '../../integration/apiConfig';
 
 export class MatterRepository extends Repository<Matter> {
   private useBackend: boolean;
@@ -130,7 +130,10 @@ export class MatterRepository extends Repository<Matter> {
       }
     }
     const allMatters = await this.getAll();
-    return allMatters.filter(matter => matter.responsibleAttorneyId === leadAttorneyId);
+    return allMatters.filter(matter => 
+      matter.leadAttorneyId === leadAttorneyId || 
+      matter.responsibleAttorneyId === leadAttorneyId
+    );
   }
 
   /**
@@ -158,27 +161,27 @@ export class MatterRepository extends Repository<Matter> {
     return allMatters.filter(matter => 
       matter.title.toLowerCase().includes(lowerQuery) ||
       matter.matterNumber.toLowerCase().includes(lowerQuery) ||
-      matter.clientName.toLowerCase().includes(lowerQuery) ||
+      matter.clientName?.toLowerCase().includes(lowerQuery) ||
       matter.description?.toLowerCase().includes(lowerQuery)
     );
   }
 
   /**
-   * Get active matters (not archived, not closed)
+   * Get active matters (not closed)
    */
   async getActive(): Promise<Matter[]> {
     const allMatters = await this.getAll();
     return allMatters.filter(matter => 
-      !matter.isArchived && 
-      matter.status !== 'closed'
+      matter.status !== MatterStatus.CLOSED &&
+      matter.status !== MatterStatus.ARCHIVED
     );
   }
 
   /**
-   * Get matters in intake
+   * Get matters in intake (backend maps INTAKE to ACTIVE status)
    */
   async getIntake(): Promise<Matter[]> {
-    return this.getByStatus('intake');
+    return this.getByStatus(MatterStatus.INTAKE);
   }
 
   /**
@@ -216,17 +219,17 @@ export class MatterRepository extends Repository<Matter> {
   }
 
   /**
-   * Archive a matter
+   * Archive a matter (set status to ARCHIVED)
    */
   async archive(id: MatterId): Promise<Matter> {
-    return this.update(id, { isArchived: true } as Partial<Matter>);
+    return this.update(id, { status: MatterStatus.ARCHIVED });
   }
 
   /**
-   * Restore an archived matter
+   * Restore an archived matter (set status back to ACTIVE)
    */
   async restore(id: MatterId): Promise<Matter> {
-    return this.update(id, { isArchived: false } as Partial<Matter>);
+    return this.update(id, { status: MatterStatus.ACTIVE });
   }
 }
 

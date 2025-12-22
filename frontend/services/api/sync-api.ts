@@ -5,7 +5,7 @@
 
 import { apiClient } from '../infrastructure/apiClient';
 
-export interface SyncStatus {
+export interface AdminSyncStatus {
   lastSyncAt?: string;
   nextSyncAt?: string;
   status: 'idle' | 'syncing' | 'error';
@@ -13,7 +13,7 @@ export interface SyncStatus {
   conflicts: number;
 }
 
-export interface SyncConflict {
+export interface AdminSyncConflict {
   id: string;
   entityType: string;
   entityId: string;
@@ -37,16 +37,16 @@ export interface SyncResult {
 export class SyncApiService {
   private readonly baseUrl = '/sync';
 
-  async getStatus(): Promise<SyncStatus> {
-    return apiClient.get<SyncStatus>(`${this.baseUrl}/status`);
+  async getStatus(): Promise<AdminSyncStatus> {
+    return apiClient.get<AdminSyncStatus>(`${this.baseUrl}/status`);
   }
 
   async triggerSync(): Promise<SyncResult> {
     return apiClient.post<SyncResult>(`${this.baseUrl}/trigger`, {});
   }
 
-  async getConflicts(): Promise<SyncConflict[]> {
-    return apiClient.get<SyncConflict[]>(`${this.baseUrl}/conflicts`);
+  async getConflicts(): Promise<AdminSyncConflict[]> {
+    return apiClient.get<AdminSyncConflict[]>(`${this.baseUrl}/conflicts`);
   }
 
   async resolveConflict(conflictId: string, resolution: 'local' | 'remote' | 'merge', mergedData?: any): Promise<void> {

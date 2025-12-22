@@ -1,5 +1,4 @@
 import { Injectable} from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
 import { validatePagination } from '../../common/utils/query-validation.util';
 
@@ -26,7 +25,7 @@ export class MessagingService {
   /**
    * Get all conversations for a user
    */
-  async findAllConversations(userId: string, pageParam?: number, limitParam?: number) {
+  async findAllConversations(_userId: string, pageParam?: number, limitParam?: number) {
     const { page, limit } = validatePagination(pageParam, limitParam, 50);
     // Implementation will use actual entity repositories
     return {
@@ -43,10 +42,11 @@ export class MessagingService {
   /**
    * Get a specific conversation by ID
    */
-  async findConversationById(conversationId: string, userId: string) { // Verify user has access to this conversation
+  async findConversationById(conversationId: string, _userId: string) {
+    // Verify user has access to this conversation
     // Implementation will query conversation repository
     return {
-      id: _conversationId,
+      id: conversationId,
       title: 'Sample Conversation',
       type: 'direct',
       participants: [],
@@ -72,7 +72,7 @@ export class MessagingService {
   /**
    * Delete a conversation
    */
-  async deleteConversation(conversationId: string, userId: string) {
+  async deleteConversation(_conversationId: string, _userId: string) {
     // Verify user has permission to delete
     // Soft delete the conversation
     return { deleted: true };
@@ -81,9 +81,10 @@ export class MessagingService {
   /**
    * Get messages for a conversation
    */
-  async findMessages(conversationId: string, userId: string, query: MessageQueryDto) { // Verify user has access to conversation
+  async findMessages(_conversationId: string, _userId: string, query: MessageQueryDto) {
+    // Verify user has access to conversation
     // Fetch messages with pagination
-    const { page = 1, limit = 50, _afterDate, _beforeDate } = query;
+    const { page = 1, limit = 50 } = query;
 
     return {
       data: [],
@@ -108,7 +109,8 @@ export class MessagingService {
     // Create and save message
     // Trigger WebSocket event for real-time delivery
     return {
-      id: 'msg-' + Date.now(), _conversationId,
+      id: 'msg-' + Date.now(),
+      conversationId,
       ...createDto,
       senderId,
       createdAt: new Date(),
@@ -119,10 +121,11 @@ export class MessagingService {
   /**
    * Mark a message as read
    */
-  async markMessageAsRead(messageId: string, userId: string) { // Update message read status
+  async markMessageAsRead(messageId: string, userId: string) {
+    // Update message read status
     // Trigger read receipt event via WebSocket
     return {
-      _messageId,
+      messageId,
       readBy: [userId],
       readAt: new Date(),
     };
@@ -131,7 +134,7 @@ export class MessagingService {
   /**
    * Delete a message
    */
-  async deleteMessage(messageId: string, userId: string) {
+  async deleteMessage(_messageId: string, _userId: string) {
     // Verify user owns the message or has permission
     // Soft delete the message
     return { deleted: true };

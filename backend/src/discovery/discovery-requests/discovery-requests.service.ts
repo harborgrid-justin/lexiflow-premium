@@ -1,6 +1,6 @@
 import {
   Injectable,
-  NotFoundException, BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull} from 'typeorm';
@@ -124,8 +124,8 @@ export class DiscoveryRequestsService {
 
     const stats = {
       total: requests.length,
-      byType: {},
-      byStatus: {},
+      byType: {} as Record<string, number>,
+      byStatus: {} as Record<string, number>,
       overdue: 0,
       dueThisWeek: 0,
     };

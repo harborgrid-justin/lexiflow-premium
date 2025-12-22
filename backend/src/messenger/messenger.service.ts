@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Conversation } from './entities/conversation.entity';
 import { Message } from './entities/message.entity';
 import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
+import { GetContactsDto } from './dto/get-contacts.dto';
 
 @Injectable()
 export class MessengerService {
@@ -20,6 +21,15 @@ export class MessengerService {
     }
     const conversation = this.conversationRepository.create(createDto);
     return await this.conversationRepository.save(conversation);
+  }
+
+  async getContacts(_userId: string, _query: GetContactsDto): Promise<{ data: any[]; total: number }> {
+    // Mock implementation for now - in production this would query a users/contacts table
+
+    // Return empty result set for now
+    // TODO: Implement actual contact fetching from users table
+    // In production: const { page = 1, limit = 50 } = query; skip = (page - 1) * limit for pagination
+    return { data: [], total: 0 };
   }
 
   async findAllConversations(userId: string, query: any): Promise<{ data: Conversation[]; total: number }> {

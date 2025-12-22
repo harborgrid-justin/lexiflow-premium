@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+// TODO: Install @types/supertest: npm i --save-dev @types/supertest
+import request from 'supertest';
 
 export class E2ETestHelper {
   /**

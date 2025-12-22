@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SearchEntityType } from './search-query.dto';
 
+export interface SearchFacets {
+  entityTypes?: Record<string, number>;
+  practiceAreas?: Record<string, number>;
+  statuses?: Record<string, number>;
+}
+
 export class SearchHighlight {
   @ApiProperty({ description: 'Field name where match was found' })
   field!: string;
@@ -61,11 +67,7 @@ export class SearchResultDto {
   executionTime!: number;
 
   @ApiProperty({ description: 'Facets for filtering' })
-  facets?: {
-    entityTypes?: { [key: string]: number };
-    practiceAreas?: { [key: string]: number };
-    statuses?: { [key: string]: number };
-  };
+  facets?: SearchFacets;
 }
 
 export class SearchSuggestionItem {

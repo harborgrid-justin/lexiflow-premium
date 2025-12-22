@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Evidence } from './entities/evidence.entity';
 import { CreateDiscoveryEvidenceDto } from './dto/create-evidence.dto';
 import { UpdateDiscoveryEvidenceDto } from './dto/update-evidence.dto';

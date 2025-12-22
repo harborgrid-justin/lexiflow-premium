@@ -38,7 +38,7 @@ export const seedInvoices = async (dataSource: DataSource) => {
     invoice.caseId = aCase.id;
     invoice.client = client;
     invoice.clientName = client.name;
-    invoice.matterDescription = aCase.description;
+    invoice.matterDescription = aCase.description || '';
     invoice.invoiceDate = faker.date.past();
     invoice.dueDate = faker.date.future();
     invoice.billingModel = faker.helpers.arrayElement(Object.values(BillingModel));

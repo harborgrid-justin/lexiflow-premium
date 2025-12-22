@@ -16,8 +16,8 @@ interface PacerConfig {
 }
 
 @Injectable()
-export class PacerService { private readonly logger = new Logger(PacerService.name);
-  private readonly _pacerBaseUrl = process.env.PACER_BASE_URL || 'https://pacer.uscourts.gov';
+export class PacerService {
+  private readonly logger = new Logger(PacerService.name);
   private readonly pacerUsername = process.env.PACER_USERNAME;
   private readonly pacerPassword = process.env.PACER_PASSWORD;
   private config: PacerConfig = {
@@ -46,7 +46,7 @@ export class PacerService { private readonly logger = new Logger(PacerService.na
         {
           caseNumber: searchDto.caseNumber || '1:23-cv-12345',
           title: 'Smith v. Jones',
-          court: searchDto._court || 'USDC Northern District of California',
+          court: searchDto.court || 'USDC Northern District of California',
           filingDate: new Date('2023-06-15'),
           caseType: 'Civil',
           nature: 'Contract Dispute',
@@ -65,7 +65,7 @@ export class PacerService { private readonly logger = new Logger(PacerService.na
         },
         { caseNumber: '2:24-cr-00987',
           title: 'USA v. Doe',
-          court: searchDto._court || 'USDC Southern District of New York',
+          court: searchDto.court || 'USDC Southern District of New York',
           filingDate: new Date('2024-01-10'),
           caseType: 'Criminal',
           nature: 'Fraud',
@@ -98,7 +98,7 @@ export class PacerService { private readonly logger = new Logger(PacerService.na
       return {
         caseNumber: syncDto.caseNumber,
         title: 'Sample Case from PACER (Synced)',
-        court: syncDto._court,
+        court: syncDto.court,
         filingDate: new Date(),
         caseType: 'Civil',
         nature: 'Contract Dispute',
@@ -145,14 +145,15 @@ export class PacerService { private readonly logger = new Logger(PacerService.na
    * Get docket sheet for a case
    */
   async getDocketSheet(caseNumber: string, court: string): Promise<any> {
-    this.logger.log(`Getting docket sheet for ${caseNumber} in ${ _court}`);
+    this.logger.log(`Getting docket sheet for ${caseNumber} in ${court}`);
 
     try {
       // Mock PACER API integration
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       return {
-        caseNumber, _court,
+        caseNumber,
+        court,
         entries: [
             { date: '2024-01-01', description: 'Case Filed', number: 1 },
             { date: '2024-01-02', description: 'Summons Issued', number: 2 },
@@ -243,7 +244,7 @@ export class PacerService { private readonly logger = new Logger(PacerService.na
   async scheduleSyncForCase(
     caseId: string,
     caseNumber: string,
-    court?: string,
+    _court?: string, // Unused but kept for API compatibility
   ): Promise<{
     success: boolean;
     message: string;

@@ -48,7 +48,8 @@ export function parseSize(sizeString: string): number {
     throw new Error(`Unknown unit: ${unit}`);
   }
 
-  return Math.floor(value * units[unit]);
+  const unitValue = units[unit as keyof typeof units];
+  return Math.floor(value * unitValue!);
 }
 
 /**
@@ -129,7 +130,7 @@ export function formatPath(filePath: string, maxLength: number = 50): string {
   const parts = filePath.split('/');
   if (parts.length <= 2) return truncate(filePath, maxLength);
 
-  const fileName = parts[parts.length - 1] ?? '' || '';
+  const fileName = (parts[parts.length - 1] ?? '') || '';
   const firstPart = parts[0] || '';
   const remainingLength = maxLength - fileName.length - firstPart.length - 6; // 6 for '/...//'
 

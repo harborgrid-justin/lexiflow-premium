@@ -73,6 +73,9 @@ export class UserFilterInput {
 
   @Field({ nullable: true })
   department?: string;
+
+  @Field({ nullable: true })
+  isActive?: boolean;
 }
 
 @InputType()

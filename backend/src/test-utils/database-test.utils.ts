@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
+import { DataSource, ObjectLiteral } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 /**
@@ -112,7 +112,7 @@ export class DatabaseTestUtils {
 /**
  * Helper to create a test repository
  */
-export function createTestRepository<T>(dataSource: DataSource, entity: any) {
+export function createTestRepository<T extends ObjectLiteral>(dataSource: DataSource, entity: any) {
   return dataSource.getRepository<T>(entity);
 }
 

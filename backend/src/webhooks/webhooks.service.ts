@@ -88,7 +88,7 @@ export class WebhooksService {
    * Delete a webhook
    */
   async remove(id: string, userId: string): Promise<void> {
-    const __webhook = await this.findOne(id, userId);
+    await this.findOne(id, userId);
     this.webhooks.delete(id);
     this.logger.log(`Webhook deleted: ${id}`);
   }
@@ -187,9 +187,10 @@ export class WebhooksService {
       delivery.error = error.message;
 
       if (delivery.attempts < this.maxRetries) {
-        delivery.nextRetryAt = new Date(
-          Date.now() + this.retryDelays[delivery.attempts - 1],
-        );
+        const retryDelay = this.retryDelays[delivery.attempts - 1];
+        if (retryDelay !== undefined) {
+          delivery.nextRetryAt = new Date(Date.now() + retryDelay);
+        }
       }
 
       this.logger.error(

@@ -1,6 +1,6 @@
 import {
   Injectable,
-  NotFoundException, BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
@@ -136,8 +136,8 @@ export class DepositionsService {
 
     const stats = {
       total: depositions.length,
-      byType: {},
-      byStatus: {},
+      byType: {} as Record<string, number>,
+      byStatus: {} as Record<string, number>,
       totalCost: 0,
       transcriptsPending: 0,
       upcoming: 0,

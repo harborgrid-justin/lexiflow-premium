@@ -12,7 +12,6 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
 import { BillingService } from '../../billing/billing.service';
 import { TimeEntriesService } from '../../billing/time-entries/time-entries.service';
-import { InvoicesService } from '../../billing/invoices/invoices.service';
 import { RateTablesService } from '../../billing/rate-tables/rate-tables.service';
 import { FeeAgreementsService } from '../../billing/fee-agreements/fee-agreements.service';
 import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
@@ -22,7 +21,6 @@ export class BillingResolver {
   constructor(
     private billingService: BillingService,
     private timeEntriesService: TimeEntriesService,
-    private invoicesService: InvoicesService,
     private rateTablesService: RateTablesService,
     private feeAgreementsService: FeeAgreementsService,
   ) {}

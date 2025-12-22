@@ -38,7 +38,7 @@ export class RlsPoliciesService {
     // Apply filters
     if (query.table) {
       policies = policies.filter(
-        (policy) => policy.table.toLowerCase() === query.table.toLowerCase(),
+        (policy) => policy.table.toLowerCase() === query.table!.toLowerCase(),
       );
     }
     if (query.operation) {
@@ -100,7 +100,7 @@ export class RlsPoliciesService {
   }
 
   async remove(id: string): Promise<void> {
-    const // __policy = await this.findOne(id);
+    await this.findOne(id); // Verify policy exists
     this.rlsPolicies.delete(id);
   }
 

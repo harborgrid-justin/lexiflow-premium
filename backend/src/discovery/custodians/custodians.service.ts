@@ -123,7 +123,7 @@ export class CustodiansService {
 
     const stats = {
       total: custodians.length,
-      byStatus: {},
+      byStatus: {} as Record<string, number>,
       keyPlayers: 0,
       onLegalHold: 0,
       interviewed: 0,

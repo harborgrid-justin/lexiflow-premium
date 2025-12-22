@@ -93,7 +93,7 @@ export class CommunicationsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  getDeliveryStatus(@Param('id') commId: string) {
+  getDeliveryStatus(@Param('id') _commId: string) {
     throw new Error('Method not implemented.');
   }
 }

@@ -267,13 +267,11 @@ export class ProcessingJobsService {
   }
 
   async setResult(id: string, result: any): Promise<ProcessingJob> {
-    const __job = await this.findOne(id);
     await this.jobRepository.update(id, { result, status: JobStatus.COMPLETED, completedAt: new Date() });
     return this.findOne(id);
   }
 
   async setError(id: string, errorMessage: string): Promise<ProcessingJob> {
-    const __job = await this.findOne(id);
     await this.jobRepository.update(id, { error: errorMessage, status: JobStatus.FAILED, completedAt: new Date() });
     return this.findOne(id);
   }

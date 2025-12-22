@@ -41,8 +41,8 @@ export class CasePhasesService {
     const { metadata, ...restDto } = updateCasePhaseDto;
     await this.casePhaseRepository.update(id, {
       ...restDto,
-      ...(metadata ? { metadata: JSON.stringify(metadata) } : {})
-    });
+      ...(metadata ? { metadata: JSON.stringify(metadata) as any } : {})
+    } as any);
     return this.findOne(id);
   }
 

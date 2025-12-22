@@ -49,7 +49,7 @@ export interface UploadResult {
 export class FileUploadService { private readonly logger = new Logger(FileUploadService.name);
   private readonly UPLOAD_DIR = PathsConfig.UPLOAD_DIR;
   private readonly MAX_FILE_SIZE = MasterConfig.FILE_MAX_SIZE;
-  private readonly // __CHUNK_SIZE = MasterConfig.FILE_CHUNK_SIZE;
+  // private readonly CHUNK_SIZE = MasterConfig.FILE_CHUNK_SIZE;
 
   constructor() {
     this.ensureUploadDir();

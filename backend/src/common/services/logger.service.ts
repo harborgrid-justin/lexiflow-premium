@@ -6,7 +6,7 @@ import * as path from 'path';
 @Injectable()
 export class LoggerService {
   private logger: winston.Logger;
-  private context: string;
+  private context: string = 'App';
 
   constructor(private readonly configService: ConfigService) {
     const logLevel = this.configService.get('LOG_LEVEL', 'info');

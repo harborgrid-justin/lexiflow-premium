@@ -48,7 +48,6 @@ export class EthicalWallGuard implements CanActivate {
     entityId: string;
   } | null {
     // Extract from URL params
-    const __params = request._params;
     const url = request.url;
 
     // Pattern matching for common entity routes

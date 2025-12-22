@@ -40,7 +40,6 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
       await userRepository.save(user);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding user ${userData.email}:`, message);
     }
   }

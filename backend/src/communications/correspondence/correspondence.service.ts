@@ -1,5 +1,4 @@
 import { Injectable} from '@nestjs/common';
-import { Repository } from 'typeorm';
 import {
   CreateCorrespondenceDto,
   UpdateCorrespondenceDto,
@@ -29,9 +28,10 @@ export class CorrespondenceService {
   /**
    * Get all correspondence with filters
    */
-  async findAll(query: CorrespondenceQueryDto, userId: string) { const { page = 1, limit = 20, _type, _status, _caseId } = query;
+  async findAll(query: CorrespondenceQueryDto, _userId: string) {
+    const { page = 1, limit = 20 } = query;
 
-    // Implementation will filter by type, _status, _caseId, and user permissions
+    // Implementation will filter by type, status, caseId, and user permissions
     return {
       data: [],
       pagination: {
@@ -46,9 +46,10 @@ export class CorrespondenceService {
   /**
    * Get correspondence by ID
    */
-  async findById(id: string, userId: string) { // Verify user has permission to view
+  async findById(id: string, _userId: string) {
+    // Verify user has permission to view
     return {
-      _id,
+      id,
       type: 'letter',
       subject: 'Sample Correspondence',
       body: 'Correspondence content...',
@@ -75,10 +76,11 @@ export class CorrespondenceService {
   /**
    * Update correspondence
    */
-  async update(id: string, updateDto: UpdateCorrespondenceDto, userId: string) { // Verify user has permission
+  async update(id: string, updateDto: UpdateCorrespondenceDto, _userId: string) {
+    // Verify user has permission
     // Cannot update if already sent
     return {
-      _id,
+      id,
       ...updateDto,
       updatedAt: new Date(),
     };
@@ -87,7 +89,7 @@ export class CorrespondenceService {
   /**
    * Delete correspondence
    */
-  async delete(id: string, userId: string) {
+  async delete(_id: string, _userId: string) {
     // Verify user has permission
     // Soft delete the correspondence
     return { deleted: true };
@@ -96,25 +98,27 @@ export class CorrespondenceService {
   /**
    * Send correspondence
    */
-  async send(id: string, userId: string) { // Verify correspondence exists and user has permission
+  async send(id: string, userId: string) {
+    // Verify correspondence exists and user has permission
     // Update status to 'sent'
     // Trigger email/postal service integration
     // Create audit log entry
 
     return {
-      _id,
+      id,
       status: CorrespondenceStatus.SENT,
       sentAt: new Date(),
-      sentBy: _userId,
+      sentBy: userId,
     };
   }
 
   /**
    * Get correspondence history for a case
    */
-  async getCaseHistory(caseId: string, userId: string) { // Get all correspondence related to a case
+  async getCaseHistory(caseId: string, _userId: string) {
+    // Get all correspondence related to a case
     return {
-      _caseId,
+      caseId,
       correspondence: [],
       total: 0,
     };
@@ -123,10 +127,11 @@ export class CorrespondenceService {
   /**
    * Track delivery status
    */
-  async updateDeliveryStatus(id: string, status: CorrespondenceStatus, metadata?: any) { // Update delivery status
+  async updateDeliveryStatus(id: string, status: CorrespondenceStatus, metadata?: any) {
+    // Update delivery status
     // Can be called by email/postal service webhooks
     return {
-      _id,
+      id,
       status,
       deliveredAt: new Date(),
       metadata,

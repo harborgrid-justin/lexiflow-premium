@@ -68,10 +68,11 @@ export class DocumentsService {
         this.logger.error('Failed to create document', error);
         // Transaction will auto-rollback on error
         // Cleanup uploaded file if DB save fails
-        if (file && document.filePath) {
+        const fp = (document as any).filePath;
+        if (file && fp) {
           try {
-            await this.fileStorageService.deleteFile(document.filePath);
-            this.logger.log(`Cleaned up uploaded file: ${document.filePath}`);
+            await this.fileStorageService.deleteFile(fp);
+            this.logger.log(`Cleaned up uploaded file: ${fp}`);
           } catch (cleanupError) {
             this.logger.warn('Failed to cleanup uploaded file during rollback', cleanupError);
           }
@@ -192,7 +193,9 @@ export class DocumentsService {
     const document = await this.findOne(id);
 
     Object.assign(document, updateDocumentDto);
-    document.updatedBy = userId;
+    if (userId) {
+      document.updatedBy = userId;
+    }
 
     const updatedDocument = await this.documentRepository.save(document);
     this.logger.log(`Document updated: ${id}`);

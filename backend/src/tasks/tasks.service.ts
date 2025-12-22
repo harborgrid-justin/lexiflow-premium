@@ -2,7 +2,7 @@ import { Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere} from 'typeorm';
 import { Task } from './entities/task.entity';
-import { CreateTaskDto, TaskStatus } from './dto/create-task.dto';
+import { CreateTaskDto, TaskStatus, TaskPriority } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
 import { sanitizeSearchQuery } from '../common/utils/query-validation.util';
@@ -37,7 +37,9 @@ export class TasksService {
     const where: FindOptionsWhere<Task> = {};
     
     if (status) where.status = status;
-    if (priority) where.priority = priority as any;
+    if (priority && Object.values(TaskPriority).includes(priority as TaskPriority)) {
+      where.priority = priority as TaskPriority;
+    }
     if (caseId) where.caseId = caseId;
     if (assignedTo) where.assignedTo = assignedTo;
 

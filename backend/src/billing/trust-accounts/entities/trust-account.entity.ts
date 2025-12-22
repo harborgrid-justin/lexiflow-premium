@@ -28,13 +28,14 @@ export class TrustAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ name: 'account_number', type: 'varchar', length: 100, unique: true })
   accountNumber: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ name: 'account_name', type: 'varchar', length: 255 })
   accountName: string;
 
   @Column({
+    name: 'account_type',
     type: 'enum',
     enum: TrustAccountType,
     default: TrustAccountType.CLIENT_TRUST,
@@ -45,7 +46,7 @@ export class TrustAccount {
   @Index()
   clientId: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ name: 'client_name', type: 'varchar', length: 255 })
   clientName: string;
 
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
@@ -66,28 +67,28 @@ export class TrustAccount {
   @Index()
   status: TrustAccountStatus;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ name: 'bank_name', type: 'varchar', length: 255, nullable: true })
   bankName: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ name: 'bank_account_number', type: 'varchar', length: 100, nullable: true })
   bankAccountNumber: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'routing_number', type: 'varchar', length: 50, nullable: true })
   routingNumber: string;
 
   @Column({ type: 'text', nullable: true })
   purpose: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'opened_date', type: 'date', nullable: true })
   openedDate: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'closed_date', type: 'date', nullable: true })
   closedDate: string;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  @Column({ name: 'minimum_balance', type: 'decimal', precision: 12, scale: 2, default: 0 })
   minimumBalance: number;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'interest_bearing', type: 'boolean', default: false })
   interestBearing: boolean;
 
   @Column({ type: 'text', nullable: true })
@@ -96,7 +97,7 @@ export class TrustAccount {
   @VersionColumn()
   version: number;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'responsible_attorney', type: 'uuid', nullable: true })
   responsibleAttorney: string;
 
   @CreateDateColumn({ name: 'created_at' })

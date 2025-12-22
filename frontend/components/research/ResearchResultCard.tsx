@@ -14,7 +14,7 @@ interface ResearchResultCardProps {
 
 export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, onView }) => {
     const { theme } = useTheme();
-    const { ref, isRead, duration } = useReadAnalytics(source.id, {
+    const { ref, isRead, duration: _duration } = useReadAnalytics(source.id, {
         thresholdMs: 2000, // Mark as "read" after 2 seconds
         onRead: (id, readDuration) => console.log(`[Analytics] User read search result ${id} for ${readDuration}ms`)
     });

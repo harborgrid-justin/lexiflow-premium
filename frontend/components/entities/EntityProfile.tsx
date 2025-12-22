@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { X, MapPin, Mail, Globe, ShieldAlert, Link, Briefcase, GitBranch } from 'lucide-react';
+import { X, MapPin, Mail, ShieldAlert, Link, Briefcase, GitBranch } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

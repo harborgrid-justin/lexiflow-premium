@@ -30,7 +30,7 @@ export const EvidenceCustodyLog: React.FC = () => {
   // Enterprise Data Access: Fetch from the main evidence store to ensure consistency
   const { data: evidence = [] } = useQuery<EvidenceItem[]>(
       ['evidence', 'all'],
-      DataService.evidence.getAll
+      () => DataService.evidence.getAll()
   );
 
   // Flatten custody events from all evidence items

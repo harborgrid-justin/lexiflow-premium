@@ -11,7 +11,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { performSearch } from './research.utils';
 import { useWindow } from '../../context/WindowContext';
-import { queryClient } from '../../services/queryClient';
+import { queryClient } from '../../services/infrastructure/queryClient';
 
 export const ActiveResearch: React.FC = () => {
   const { theme } = useTheme();

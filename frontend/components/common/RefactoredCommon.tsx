@@ -16,6 +16,10 @@
  * import { CentredLoader, EmptyListState } from './components/common/layout';
  */
 
+import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
+import { cn } from '../../utils/cn';
+
 // Re-export StatusBadge for compatibility
 export { StatusBadge } from './StatusBadge';
 

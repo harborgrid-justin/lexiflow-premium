@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { FileText, Clock } from 'lucide-react';
+import { FileText, Clock, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -32,8 +32,28 @@ import { PleadingDraftsProps } from './types';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdit }) => {
+export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdit, isLoading }) => {
     const { theme } = useTheme();
+
+    if (isLoading) {
+        return (
+            <div className="h-full flex items-center justify-center">
+                <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
+            </div>
+        );
+    }
+
+    if (pleadings.length === 0) {
+        return (
+            <div className="h-full flex items-center justify-center">
+                <div className={cn("text-center py-12", theme.text.tertiary)}>
+                    <FileText className="h-16 w-16 mx-auto mb-4 opacity-20" />
+                    <p className="text-sm">No pleadings found.</p>
+                    <p className="text-xs mt-2 opacity-60">Create a new pleading to get started.</p>
+                </div>
+            </div>
+        );
+    }
 
     const renderItem = (item: PleadingDocument) => (
         <div 

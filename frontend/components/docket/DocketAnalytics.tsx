@@ -80,7 +80,7 @@ export const DocketAnalytics: React.FC = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card title="Filing Volume & Orders">
-          <div style={{ height: '288px' }}>
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={filingActivity} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                 <XAxis dataKey="month" fontSize={12} tickLine={false} axisLine={false} />
@@ -95,7 +95,7 @@ export const DocketAnalytics: React.FC = () => {
         </Card>
 
         <Card title="Motion Outcomes (Trends)">
-          <div style={{ height: '288px' }}>
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -107,7 +107,7 @@ export const DocketAnalytics: React.FC = () => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {judgeRulings.map((entry, index) => (
+                  {judgeRulings.map((entry: { name: string; value: number; color: string }, index: number) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>

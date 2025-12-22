@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Bookmark, FileText, Scale, Loader2, BookmarkMinus } from 'lucide-react';
+import { Bookmark, FileText, Scale, BookmarkMinus } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { EmptyState } from '../common/EmptyState';
 import { AdaptiveLoader } from '../common/AdaptiveLoader';

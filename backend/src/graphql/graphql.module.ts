@@ -12,6 +12,7 @@ import { UserResolver } from './resolvers/user.resolver';
 import { BillingResolver } from './resolvers/billing.resolver';
 import { DiscoveryResolver } from './resolvers/discovery.resolver';
 import { DataLoaderModule } from './dataloaders/dataloader.module';
+import { BillingModule } from '../billing/billing.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { DataLoaderModule } from './dataloaders/dataloader.module';
       },
     }),
     DataLoaderModule,
+    BillingModule,
   ],
   providers: [
     // Custom scalars

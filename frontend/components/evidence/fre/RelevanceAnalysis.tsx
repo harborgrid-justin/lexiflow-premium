@@ -22,14 +22,13 @@ import { cn } from '../../../utils/cn';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
 import { EvidenceItem } from '../../../types';
 
 export const RelevanceAnalysis: React.FC = () => {
     const { theme } = useTheme();
     const { data: evidence = [] } = useQuery<EvidenceItem[]>(
         ['evidence', 'all'],
-        DataService.evidence.getAll
+        () => DataService.evidence.getAll()
     );
     
     // Mock state for selected item
@@ -39,7 +38,10 @@ export const RelevanceAnalysis: React.FC = () => {
         <div className="space-y-6">
             <div className={cn("flex items-center gap-3 p-2 rounded-lg border", theme.surface.default, theme.border.default)}>
                 <Filter className={cn("h-4 w-4", theme.text.secondary)}/>
-                <select className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
+                <select 
+                    className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}
+                    aria-label="Select evidence to analyze"
+                >
                     <option value="">Select Evidence to Analyze...</option>
                     {evidence.map(e => <option key={e.id} value={e.id}>{e.title}</option>)}
                 </select>

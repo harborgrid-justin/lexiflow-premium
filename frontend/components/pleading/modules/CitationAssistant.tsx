@@ -65,7 +65,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
                     >
                         <Plus className="h-3 w-3" /> Insert
                     </button>
-                    <button className={cn("p-1 rounded text-slate-400 hover:text-blue-600")}>
+                    <button title="Open citation in new tab" className={cn("p-1 rounded text-slate-400 hover:text-blue-600")}>
                         <ExternalLink className="h-3.5 w-3.5" />
                     </button>
                 </div>

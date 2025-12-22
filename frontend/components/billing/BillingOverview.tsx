@@ -108,9 +108,10 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
       {/* Main Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="WIP vs Billed (Top Clients)" subtitle="Revenue potential by client">
-          <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <div className="h-72" style={{ minHeight: '288px' }}>
+            {wipData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid}/>
                 <XAxis 
                     dataKey="name" 
@@ -136,11 +137,21 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                 <Bar dataKey="wip" stackId="a" fill={chartTheme.colors.primary} name="WIP (Unbilled)" radius={[4, 4, 0, 0]} isAnimationActive={true} />
               </BarChart>
             </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center text-slate-400">
+                <div className="text-center">
+                  <DollarSign className="h-12 w-12 mx-auto mb-2 opacity-20" />
+                  <p className="text-sm">No WIP data available</p>
+                </div>
+              </div>
+            )}
           </div>
         </Card>
 
         <Card title="Realization Breakdown" subtitle="Collection efficiency analysis">
-            <div className="h-72 flex flex-col items-center justify-center relative">
+            <div className="h-72 flex flex-col items-center justify-center relative" style={{ minHeight: '288px' }}>
+              {realizationData.length > 0 ? (
+                <>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Pie 
@@ -165,6 +176,13 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                     <p className={cn("text-3xl font-bold", theme.text.primary)}>92%</p>
                     <p className={cn("text-xs uppercase", theme.text.tertiary)}>Collected</p>
                 </div>
+                </>
+              ) : (
+                <div className="text-center text-slate-400">
+                  <Calculator className="h-12 w-12 mx-auto mb-2 opacity-20" />
+                  <p className="text-sm">No realization data available</p>
+                </div>
+              )}
             </div>
         </Card>
       </div>

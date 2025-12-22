@@ -172,7 +172,7 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar (Filters) - Only visible in List Mode */}
         {activeTab === 'list' && (
-            <div className={cn("w-64 border-r flex flex-col shrink-0 hidden md:flex", theme.border.default, theme.surface.raised)}>
+            <div className={cn("w-64 border-r flex-col shrink-0 hidden md:flex", theme.border.default, theme.surface.raised)}>
                 <div className="p-4 border-b">
                     <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Binders</h4>
                     <div className="space-y-1">

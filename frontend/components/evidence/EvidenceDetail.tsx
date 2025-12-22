@@ -113,7 +113,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div className="flex items-center gap-4">
-          <button onClick={handleBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
+          <button title="Go back" onClick={handleBack} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
             <ArrowLeft className="h-6 w-6" />
           </button>
           <div>

@@ -160,7 +160,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     // Persist to DataService
     saveStrategyItem({ type: modalType, item: itemToSave });
     
-    setIsModalOpen(false);
+    strategyModal.close();
     setNewItem({});
     setEditingItem(null);
   };
@@ -169,7 +169,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     setModalType(type);
     setEditingItem(item);
     setNewItem(item);
-    setIsModalOpen(true);
+    strategyModal.open();
   };
 
   const handleDelete = (type: 'Citation' | 'Argument' | 'Defense', id: string) => {
@@ -191,9 +191,9 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
           <p className={cn("text-sm", theme.text.secondary)}>Manage case law, affirmative arguments, and defenses.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => { setModalType('Citation'); setIsModalOpen(true); }} icon={Plus}>Citation</Button>
-          <Button variant="outline" size="sm" onClick={() => { setModalType('Argument'); setIsModalOpen(true); }} icon={Plus}>Argument</Button>
-          <Button variant="outline" size="sm" onClick={() => { setModalType('Defense'); setIsModalOpen(true); }} icon={Plus}>Defense</Button>
+          <Button variant="outline" size="sm" onClick={() => { setModalType('Citation'); strategyModal.open(); }} icon={Plus}>Citation</Button>
+          <Button variant="outline" size="sm" onClick={() => { setModalType('Argument'); strategyModal.open(); }} icon={Plus}>Argument</Button>
+          <Button variant="outline" size="sm" onClick={() => { setModalType('Defense'); strategyModal.open(); }} icon={Plus}>Defense</Button>
         </div>
       </div>
 
@@ -229,7 +229,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
         />
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditingItem(null); setNewItem({}); }} title={`${editingItem ? 'Edit' : 'Add'} ${modalType}`}>
+      <Modal isOpen={strategyModal.isOpen} onClose={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }} title={`${editingItem ? 'Edit' : 'Add'} ${modalType}`}>
         <div className="p-6 space-y-4">
             <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={e => setNewItem({...newItem, title: e.target.value, citation: e.target.value})} />
             
@@ -247,7 +247,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={e => setNewItem({...newItem, description: e.target.value})} />
             
             <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
-                <Button variant="ghost" onClick={() => { setIsModalOpen(false); setEditingItem(null); setNewItem({}); }}>Cancel</Button>
+                <Button variant="ghost" onClick={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }}>Cancel</Button>
                 <Button variant="primary" onClick={handleSave} disabled={isSaving}>
                   {isSaving ? 'Saving...' : `${editingItem ? 'Update' : 'Save'} ${modalType}`}
                 </Button>

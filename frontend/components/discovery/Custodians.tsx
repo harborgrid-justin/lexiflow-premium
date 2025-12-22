@@ -287,6 +287,7 @@ export const Custodians: React.FC = () => {
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Status</label>
             <select
+              title="Select custodian status"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.status || ''}
               onChange={e => setFormData({...formData, status: e.target.value as Custodian['status']})}

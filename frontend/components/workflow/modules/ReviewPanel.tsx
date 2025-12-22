@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { MessageSquare, CheckCircle, User, Clock, Send, MessagesSquare } from 'lucide-react';
+import { MessageSquare, CheckCircle, Send, MessagesSquare } from 'lucide-react';
 import { PleadingComment } from '../../../types/pleading-types';
 import { EmptyState } from '../../common/EmptyState';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/data/dataService';
-import { WorkflowTask, TaskId, CaseId, UserId } from '../../../types';
+import { WorkflowTask, TaskId, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
 
 interface ReviewPanelProps {
   comments: PleadingComment[];
@@ -26,8 +26,8 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
           id: `t-${Date.now()}` as TaskId,
           title: 'Review Pleading Draft',
           caseId: caseId as CaseId,
-          status: 'Pending',
-          priority: 'High',
+          status: TaskStatusBackend.TODO,
+          priority: TaskPriorityBackend.HIGH,
           assignee: 'Senior Partner',
           assigneeId: 'usr-partner-alex' as UserId,
           dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],

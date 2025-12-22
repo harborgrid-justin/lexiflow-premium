@@ -27,6 +27,7 @@ import { useTheme } from '../../context/ThemeContext';
 // Components
 import { NexusGraph } from '../visual/NexusGraph';
 import { Card } from '../common/Card';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';

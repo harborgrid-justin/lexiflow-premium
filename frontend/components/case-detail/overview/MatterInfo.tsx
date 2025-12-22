@@ -64,7 +64,7 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
 
   return (
     <Card title="Matter Particulars" className={cn("border-t-4", theme.primary.border)}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
             {items.filter((item): item is InfoItem => Boolean(item)).map((item, i) => (
                 <div key={i} className="min-w-0">
                     <dt className={cn("text-xs font-bold uppercase mb-1 truncate", theme.text.tertiary)}>{item.label}</dt>
@@ -81,20 +81,25 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
                 <dd className={cn("text-sm leading-relaxed max-h-32 overflow-y-auto custom-scrollbar", theme.text.secondary)}>{caseData.description}</dd>
             </div>
             
-            {(caseData.origJudgmentDate || caseData.noticeOfAppealDate || caseData.solDate) && (
-                <div className={cn("col-span-1 sm:col-span-2 flex flex-wrap gap-4 p-2 rounded text-xs border", theme.surface.highlight, theme.border.subtle, theme.text.secondary)}>
-                   {caseData.origJudgmentDate && (
-                       <span className="flex items-center"><Gavel className="h-3 w-3 mr-1 opacity-50"/> <strong>Orig. Judgment:</strong>&nbsp;{caseData.origJudgmentDate}</span>
-                   )}
-                   {caseData.noticeOfAppealDate && (
-                       <span className="flex items-center"><AlertCircle className="h-3 w-3 mr-1 opacity-50"/> <strong>Notice of Appeal:</strong>&nbsp;{caseData.noticeOfAppealDate}</span>
-                   )}
-                   {caseData.solDate && (
-                       <span className={cn("flex items-center", theme.status.error.text)}><AlertCircle className="h-3 w-3 mr-1"/> <strong>SOL Expiry:</strong>&nbsp;{caseData.solDate}</span>
-                   )}
+            {caseData.origJudgmentDate && (
+                <div className="min-w-0">
+                   <dt className={cn("text-xs font-bold uppercase mb-1 flex items-center", theme.text.tertiary)}><Gavel className="h-3 w-3 mr-1 opacity-50"/>Orig. Judgment</dt>
+                   <dd className={cn("text-sm", theme.text.secondary)}>{caseData.origJudgmentDate}</dd>
                 </div>
             )}
-        </div>
+            {caseData.noticeOfAppealDate && (
+                <div className="min-w-0">
+                   <dt className={cn("text-xs font-bold uppercase mb-1 flex items-center", theme.text.tertiary)}><AlertCircle className="h-3 w-3 mr-1 opacity-50"/>Notice of Appeal</dt>
+                   <dd className={cn("text-sm", theme.text.secondary)}>{caseData.noticeOfAppealDate}</dd>
+                </div>
+            )}
+            {caseData.solDate && (
+                <div className="min-w-0">
+                   <dt className={cn("text-xs font-bold uppercase mb-1 flex items-center", theme.status.error.text)}><AlertCircle className="h-3 w-3 mr-1"/>SOL Expiry</dt>
+                   <dd className={cn("text-sm", theme.status.error.text)}>{caseData.solDate}</dd>
+                </div>
+            )}
+        </dl>
     </Card>
   );
 };

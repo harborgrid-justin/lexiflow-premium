@@ -95,8 +95,8 @@ export { useDragToReorder } from './useDragToReorder';
 export type { DraggableItem, UseDragToReorderOptions, UseDragToReorderReturn } from './useDragToReorder';
 
 // Gantt Dependencies
-export { useGanttDependencies } from './useGanttDependencies';
-export type { TaskDependency, DependencyType, GanttTask, ValidationResult, CriticalPath, UseGanttDependenciesReturn } from './useGanttDependencies';
+export { useGanttDependencies } from './gantt';
+export type { TaskDependency, DependencyType, GanttTask, ValidationResult, CriticalPath, UseGanttDependenciesReturn } from './gantt';
 
 // Context Toolbar
 export { useContextToolbar } from './useContextToolbar';

@@ -67,7 +67,11 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
   setActiveView,
   initialTab
 }) => {
-  if (selectedCase) {
+  // Only show CaseDetail when we have a valid case with an ID
+  // This prevents showing CaseDetail with empty/undefined case data
+  const hasValidCase = selectedCase && selectedCase.id;
+  
+  if (hasValidCase) {
     return (
       <Suspense fallback={<LazyLoader message="Initializing Case Context & Workspace..." />}>
         <CaseDetail 

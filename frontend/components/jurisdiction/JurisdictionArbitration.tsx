@@ -3,6 +3,7 @@ import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';

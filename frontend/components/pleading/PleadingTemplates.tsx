@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { LayoutTemplate, ArrowRight } from 'lucide-react';
+import { LayoutTemplate, ArrowRight, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -32,8 +32,28 @@ import { PleadingTemplatesProps } from './types';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates, onCreateFromTemplate }) => {
+export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates, onCreateFromTemplate, isLoading }) => {
     const { theme } = useTheme();
+
+    if (isLoading) {
+        return (
+            <div className="h-full flex items-center justify-center">
+                <Loader2 className="animate-spin h-8 w-8 text-purple-600" />
+            </div>
+        );
+    }
+
+    if (templates.length === 0) {
+        return (
+            <div className="h-full flex items-center justify-center">
+                <div className={cn("text-center py-12", theme.text.tertiary)}>
+                    <LayoutTemplate className="h-16 w-16 mx-auto mb-4 opacity-20" />
+                    <p className="text-sm">No templates available.</p>
+                    <p className="text-xs mt-2 opacity-60">Templates will appear here once configured.</p>
+                </div>
+            </div>
+        );
+    }
 
     const renderItem = (template: PleadingTemplate) => (
         <div className="p-2 h-full w-full">

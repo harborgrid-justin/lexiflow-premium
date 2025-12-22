@@ -103,11 +103,11 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
           </h3>
           <div className="flex items-center gap-2">
             {windowId && (
-                <button onClick={handleMinimize} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
+                <button title="Minimize window" onClick={handleMinimize} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                     <Minus className="h-5 w-5" />
                 </button>
             )}
-            <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
+            <button title="Close window" onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                 <X className="h-5 w-5" />
             </button>
           </div>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card } from '../common/Card';
 import { Scale, AlertTriangle, FileText, Loader2 } from 'lucide-react';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 import { DataService } from '../../services/data/dataService';

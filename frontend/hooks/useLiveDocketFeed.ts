@@ -21,6 +21,9 @@ export interface LiveDocketFeedConfig {
   reconnectAttempts?: number;
   reconnectDelay?: number;
   onEntry?: (entry: any) => void;
+  onNewEntry?: (entry: any) => void;
+  reconnectInterval?: number;
+  maxReconnectAttempts?: number;
 }
 
 export interface LiveDocketFeedResult {
@@ -29,6 +32,7 @@ export interface LiveDocketFeedResult {
   error: string | null;
   connect: () => void;
   disconnect: () => void;
+  reconnect: () => void;
   lastUpdate: Date | null;
   entriesReceived: number;
 }
@@ -51,7 +55,10 @@ export function useLiveDocketFeed({
   enabled = false,
   reconnectAttempts = DEFAULT_RECONNECT_ATTEMPTS,
   reconnectDelay = DEFAULT_RECONNECT_DELAY,
-  onEntry
+  onEntry,
+  onNewEntry,
+  reconnectInterval,
+  maxReconnectAttempts
 }: LiveDocketFeedConfig = {}): LiveDocketFeedResult {
   const [status, setStatus] = useState<ConnectionStatus>('disconnected');
   const [error, setError] = useState<string | null>(null);
@@ -155,6 +162,9 @@ export function useLiveDocketFeed({
           if (onEntry) {
             onEntry(entry);
           }
+          if (onNewEntry) {
+            onNewEntry(entry);
+          }
           setLastUpdate(new Date());
           setEntriesReceived(prev => prev + 1);
         } catch (e) {
@@ -247,6 +257,7 @@ export function useLiveDocketFeed({
     error,
     connect,
     disconnect,
+    reconnect: connect,
     lastUpdate,
     entriesReceived
   };

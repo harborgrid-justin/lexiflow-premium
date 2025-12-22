@@ -56,6 +56,7 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
                         min="0" max="100" 
                         value={argument.strength} 
                         onChange={(e) => onUpdate({ ...argument, strength: parseInt(e.target.value) })}
+                        title="Adjust argument strength"
                         className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                     />
                     <span className={cn("text-lg font-bold w-12 text-right", theme.text.primary)}>{argument.strength}%</span>

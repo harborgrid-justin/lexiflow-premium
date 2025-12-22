@@ -92,14 +92,14 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
       setDraggingNodeId(id);
       setSelectedNodeId(id);
       setSelectedConnectionId(null);
-      setIsPropertiesOpen(true);
+      propertiesToggle.open();
     }
   };
 
   const handleSelectConnection = (id: string) => {
     setSelectedNodeId(null);
     setSelectedConnectionId(id);
-    setIsPropertiesOpen(true);
+    propertiesToggle.open();
   };
   
   const handleBackgroundClick = () => {

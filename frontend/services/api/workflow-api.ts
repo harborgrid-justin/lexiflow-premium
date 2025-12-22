@@ -105,4 +105,8 @@ export class WorkflowApiService {
   async cancelWorkflow(id: string): Promise<WorkflowInstance> {
     return apiClient.post<WorkflowInstance>(`${this.baseUrl}/instances/${id}/cancel`, {});
   }
+
+  async syncEngine(): Promise<{ success: boolean; message: string }> {
+    return apiClient.post<{ success: boolean; message: string }>(`${this.baseUrl}/sync`, {});
+  }
 }

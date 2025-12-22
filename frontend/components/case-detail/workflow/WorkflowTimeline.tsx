@@ -75,6 +75,7 @@ return (
                                 <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center hover:border-blue-500", theme.surface.default, theme.border.default)}>
                                     <button 
                                         onClick={() => onToggleTask(stage.id, task.id)}
+                                        title={task.status === 'Done' ? 'Mark as incomplete' : 'Mark as complete'}
                                         className={cn(
                                             "shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors hover:border-blue-500",
                                             task.status === 'Done' 

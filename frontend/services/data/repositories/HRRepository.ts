@@ -5,40 +5,50 @@ import { SystemEventType } from "../../../types/integration-types";
 
 export const HRRepository = {
     getStaff: async () => {
-        // Fetch staff and their time entries to calculate utilization
-        const [staff, timeEntries] = await Promise.all([
-            db.getAll<StaffMember>(STORES.STAFF),
-            db.getAll<TimeEntry>(STORES.BILLING)
-        ]);
+        try {
+            // Fetch staff and their time entries to calculate utilization
+            const [staff, timeEntries] = await Promise.all([
+                db.getAll<StaffMember>(STORES.STAFF),
+                db.getAll<TimeEntry>(STORES.BILLING)
+            ]);
 
-        return staff.map(s => {
-            // Filter entries for this user
-            // Note: In real app we'd filter by current year/period
-            const userEntries = timeEntries.filter(t => t.userId === s.userId);
-            const totalHours = userEntries.reduce((acc, t) => acc + (t.duration / 60), 0);
-            
-            // Calculate utilization (Billable / Target)
-            // Assuming target is annual, normalized for YTD
-            const utilization = s.billableTarget > 0 
-                ? Math.min(100, Math.round((totalHours / (s.billableTarget / 4)) * 100)) // Divide target by 4 for ~Q1 view
-                : 0;
+            return staff.map(s => {
+                // Filter entries for this user
+                // Note: In real app we'd filter by current year/period
+                const userEntries = timeEntries.filter(t => t.userId === s.userId);
+                const totalHours = userEntries.reduce((acc, t) => acc + (t.duration / 60), 0);
+                
+                // Calculate utilization (Billable / Target)
+                // Assuming target is annual, normalized for YTD
+                const utilization = s.billableTarget > 0 
+                    ? Math.min(100, Math.round((totalHours / (s.billableTarget / 4)) * 100)) // Divide target by 4 for ~Q1 view
+                    : 0;
 
-            return {
-                ...s,
-                currentBillable: Math.round(totalHours),
-                utilizationRate: utilization
-            };
-        });
+                return {
+                    ...s,
+                    currentBillable: Math.round(totalHours),
+                    utilizationRate: utilization
+                };
+            });
+        } catch (error) {
+            console.warn('[HRRepository] getStaff failed, returning empty array:', error);
+            return [];
+        }
     },
 
     getUtilizationMetrics: async () => {
-        const staff = await HRRepository.getStaff();
-        return staff.map(s => ({ 
-            name: s.name, 
-            role: s.role, 
-            utilization: s.utilizationRate, 
-            cases: 5 // Mock case count for now
-        }));
+        try {
+            const staff = await HRRepository.getStaff();
+            return staff.map(s => ({ 
+                name: s.name, 
+                role: s.role, 
+                utilization: s.utilizationRate, 
+                cases: 5 // Mock case count for now
+            }));
+        } catch (error) {
+            console.warn('[HRRepository] getUtilizationMetrics failed, returning empty array:', error);
+            return [];
+        }
     },
 
     addStaff: async (staff: StaffMember) => {

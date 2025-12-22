@@ -23,18 +23,18 @@ export class WorkflowTemplate {
     durationDays?: number;
   }>;
 
-  @Column({ default: true })
+  @Column({ name: 'is_active', default: true })
   isActive: boolean;
 
-  @Column({ nullable: true })
+  @Column({ name: 'created_by', nullable: true })
   createdBy: string;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'usage_count', type: 'int', default: 0 })
   usageCount: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

@@ -2,6 +2,7 @@
 import React from 'react';
 import { FileText, Download, Eye, Calendar, Loader2 } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { useTheme } from '../../context/ThemeContext';

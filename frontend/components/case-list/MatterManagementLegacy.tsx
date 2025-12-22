@@ -1,5 +1,5 @@
 // components/matter-management/MatterManagement.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Briefcase, Plus, Search, Filter, ChevronDown, Archive, 
@@ -7,6 +7,8 @@ import {
   Building2, Gavel, Calendar, Tag, TrendingUp, Settings
 } from 'lucide-react';
 import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../hooks/useQueryHooks';
+import { queryKeys } from '../../utils/queryKeys';
 import { Matter, MatterStatus, MatterTypeEnum, MatterPriority } from '../../types';
 import { PATHS } from '../../config/paths.config';
 
@@ -19,46 +21,23 @@ interface MatterStatistics {
 
 const MatterManagement: React.FC = () => {
   const navigate = useNavigate();
-  const [matters, setMatters] = useState<Matter[]>([]);
-  const [filteredMatters, setFilteredMatters] = useState<Matter[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedPriority, setSelectedPriority] = useState<string>('all');
-  const [statistics, setStatistics] = useState<MatterStatistics | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  useEffect(() => {
-    loadMatters();
-    loadStatistics();
-  }, []);
+  // ✅ Migrated to backend API with queryKeys (2025-12-21)
+  const { data: matters = [], isLoading: loading } = useQuery<Matter[]>(
+    queryKeys.matters.all(),
+    () => DataService.matters.getAll()
+  );
 
-  useEffect(() => {
-    filterMatters();
-  }, [matters, searchTerm, selectedStatus, selectedPriority]);
+  const { data: statistics = null } = useQuery<MatterStatistics | null>(
+    queryKeys.matters.statistics(),
+    () => DataService.matters.getStatistics()
+  );
 
-  const loadMatters = async () => {
-    try {
-      setLoading(true);
-      const allMatters = await DataService.matters.getAll();
-      setMatters(allMatters);
-    } catch (error) {
-      console.error('Failed to load matters:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadStatistics = async () => {
-    try {
-      const stats = await DataService.matters.getStatistics();
-      setStatistics(stats);
-    } catch (error) {
-      console.error('Failed to load statistics:', error);
-    }
-  };
-
-  const filterMatters = () => {
+  const filteredMatters = useMemo(() => {
     let filtered = [...matters];
 
     // Filter by search term
@@ -80,8 +59,8 @@ const MatterManagement: React.FC = () => {
       filtered = filtered.filter(matter => matter.priority === selectedPriority);
     }
 
-    setFilteredMatters(filtered);
-  };
+    return filtered;
+  }, [matters, searchTerm, selectedStatus, selectedPriority]);
 
   const handleCreateMatter = () => {
     navigate(`${PATHS.MATTERS}/new`);

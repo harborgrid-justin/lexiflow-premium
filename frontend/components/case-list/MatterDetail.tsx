@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DataService } from '../../services/data/dataService';
+import { useQuery, useMutation } from '../../hooks/useQueryHooks';
+import { queryKeys } from '../../utils/queryKeys';
+import { queryClient } from '../../services/infrastructure/queryClient';
 import { Matter, MatterStatus, MatterPriority } from '../../types';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { useModalState } from '../../hooks/useModalState';
@@ -26,55 +29,51 @@ export const MatterDetail: React.FC = () => {
   const navigate = (path: string) => {
     window.location.hash = `#/${path}`;
   };
-  const [matter, setMatter] = useState<Matter | null>(null);
-  const [loading, setLoading] = useState(true);
+  
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const deleteModal = useModalState();
 
-  useEffect(() => {
-    if (matterId) {
-      loadMatter();
-    }
-  }, [matterId]);
+  // ✅ Migrated to backend API with queryKeys (2025-12-21)
+  const { data: matter, isLoading: loading, error } = useQuery<Matter | null>(
+    queryKeys.matters.byId(matterId!),
+    () => DataService.matters.getById(matterId!),
+    { enabled: !!matterId }
+  );
 
-  const loadMatter = async () => {
-    try {
-      setLoading(true);
-      const matterData = await DataService.matters.getById(matterId!);
-      if (matterData) {
-        setMatter(matterData);
-      } else {
+  const updateMutation = useMutation(
+    (data: Partial<Matter>) => DataService.matters.update(matterId!, data),
+    {
+      onSuccess: () => {
+        queryClient.invalidate(queryKeys.matters.byId(matterId!));
+        queryClient.invalidate(queryKeys.matters.all());
+        setEditing(false);
+      }
+    }
+  );
+
+  const deleteMutation = useMutation(
+    () => DataService.matters.delete(matterId!),
+    {
+      onSuccess: () => {
         navigate(PATHS.MATTERS);
       }
-    } catch (error) {
-      console.error('Failed to load matter:', error);
-      navigate(PATHS.MATTERS);
-    } finally {
-      setLoading(false);
     }
-  };
+  );
+
+  // Redirect if matter not found
+  if (error || (!loading && !matter)) {
+    navigate(PATHS.MATTERS);
+    return null;
+  }
 
   const handleSave = async (matterData: Partial<Matter>) => {
-    try {
-      const updated = await DataService.matters.update(matterId!, matterData);
-      setMatter(updated);
-      setEditing(false);
-    } catch (error) {
-      console.error('Failed to update matter:', error);
-      throw error;
-    }
+    await updateMutation.mutateAsync(matterData);
   };
 
   const handleDelete = async () => {
-    try {
-      setDeleting(true);
-      await DataService.matters.delete(matterId!);
-      navigate(PATHS.MATTERS);
-    } catch (error) {
-      console.error('Failed to delete matter:', error);
-      setDeleting(false);
-    }
+    setDeleting(true);
+    await deleteMutation.mutateAsync();
   };
 
   const formatCurrency = (amount?: number) => {

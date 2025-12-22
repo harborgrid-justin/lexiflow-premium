@@ -54,7 +54,7 @@ export const EventBusManager: React.FC = () => {
 
   return (
     <div className={cn("h-full flex flex-col overflow-hidden", theme.background)}>
-      <div className="p-6 border-b shrink-0" style={{ borderColor: theme.border.default }}>
+      <div className={cn("p-6 border-b shrink-0", theme.border.default)}>
         <div className="flex items-center justify-between mb-2">
           <h2 className={cn("text-2xl font-bold", theme.text.primary)}>Event Bus</h2>
           <div className="flex items-center gap-2">

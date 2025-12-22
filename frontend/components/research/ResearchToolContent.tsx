@@ -8,7 +8,6 @@ const SavedAuthorities = lazy(() => import('./SavedAuthorities').then(m => ({ de
 const JurisdictionSettings = lazy(() => import('./JurisdictionSettings').then(m => ({ default: m.JurisdictionSettings })));
 const ShepardizingTool = lazy(() => import('./ShepardizingTool').then(m => ({ default: m.ShepardizingTool })));
 const ClauseLibrary = lazy(() => import('../clauses/ClauseLibrary'));
-const BluebookFormatter = lazy(() => import('./BluebookFormatter'));
 
 interface ResearchToolContentProps {
   activeView: string;
@@ -17,13 +16,12 @@ interface ResearchToolContentProps {
   setSelectedClause: (c: Clause | null) => void;
 }
 
-export const ResearchToolContent: React.FC<ResearchToolContentProps> = ({ activeView, caseId, selectedClause, setSelectedClause }) => {
+export const ResearchToolContent: React.FC<ResearchToolContentProps> = ({ activeView, caseId: _caseId, selectedClause: _selectedClause, setSelectedClause: _setSelectedClause }) => {
     switch (activeView) {
         case 'active': return <ActiveResearch />;
         case 'history': return <ResearchHistory />;
         case 'saved': return <SavedAuthorities />;
         case 'shepardize': return <ShepardizingTool />;
-        case 'bluebook': return <BluebookFormatter />;
         case 'library': return <ClauseLibrary onSelectClause={() => {}} />;
         case 'settings': return <JurisdictionSettings />;
         default: return <ActiveResearch />;

@@ -86,9 +86,9 @@ export const DocketCalendar: React.FC = () => {
           </div>
         </div>
         <div className={cn("flex gap-1 p-1 rounded-md border", theme.surface.default, theme.border.default)}>
-          <button onClick={prevMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}><ChevronLeft className="h-5 w-5" /></button>
+          <button title="Previous month" onClick={prevMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}><ChevronLeft className="h-5 w-5" /></button>
           <button onClick={() => setCurrentDate(new Date())} className={cn("px-3 text-sm font-medium rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}>Today</button>
-          <button onClick={nextMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}><ChevronRight className="h-5 w-5" /></button>
+          <button title="Next month" onClick={nextMonth} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`)}><ChevronRight className="h-5 w-5" /></button>
         </div>
       </div>
 

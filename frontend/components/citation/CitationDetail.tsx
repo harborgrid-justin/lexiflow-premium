@@ -70,7 +70,7 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
     <div className={cn("h-full flex flex-col border-l shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Authority Detail</h4>
-            <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
+            <button title="Close panel" onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">

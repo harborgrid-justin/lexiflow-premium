@@ -56,7 +56,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         <p className="text-2xl font-mono font-bold mt-1">${unbilledTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                     </div>
                     <div className="w-full bg-slate-700 h-1 mt-4 rounded-full overflow-hidden">
-                        <div className={cn("h-full", theme.action.primary.bg)} style={{width: '65%'}}></div>
+                        <div className={cn("h-full w-[65%]", theme.action.primary.bg)}></div>
                     </div>
                 </div>
                 <div className={cn("p-5 rounded-lg shadow-sm flex flex-col justify-between border", theme.surface.default, theme.border.default)}>

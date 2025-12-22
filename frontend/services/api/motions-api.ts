@@ -46,7 +46,10 @@ export class MotionsApiService {
   }
 
   async getByCaseId(caseId: string): Promise<Motion[]> {
-    return this.getAll({ caseId });
+    // Use the correct backend endpoint: /motions/case/:caseId
+    const result = await apiClient.get<Motion[]>(`${this.baseUrl}/case/${caseId}`);
+    // Ensure we always return an array
+    return Array.isArray(result) ? result : [];
   }
 
   async create(data: Partial<Motion>): Promise<Motion> {

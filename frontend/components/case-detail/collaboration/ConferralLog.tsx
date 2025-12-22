@@ -175,6 +175,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Method</label>
               <select 
+                title="Select conferral method"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.method}
                 onChange={e => setNewSession({...newSession, method: e.target.value as any})}
@@ -206,6 +207,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Outcome</label>
               <select 
+                title="Select conferral outcome"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.result}
                 onChange={e => setNewSession({...newSession, result: e.target.value as any})}

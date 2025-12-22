@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useMemo, useCallback } from 'react';
-import { MapPin, User, FileText, CheckCircle, AlertCircle, Clock, Truck, Package } from 'lucide-react';
+import { MapPin, User, Truck } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -49,7 +49,7 @@ interface ServiceTrackerProps {
 export const ServiceTracker: React.FC<ServiceTrackerProps> = React.memo(({ jobs, onSelect, selectedId }) => {
   const { theme } = useTheme();
 
-  const getMethodIcon = useCallback((method: string, mailType?: string) => {
+  const getMethodIcon = useCallback((method: string, _mailType?: string) => {
       if (method === 'Mail') return <Truck className="h-4 w-4 text-purple-600"/>;
       return <User className="h-4 w-4 text-blue-600"/>;
   }, []);

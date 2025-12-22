@@ -52,21 +52,33 @@ export const CommunicationLog: React.FC<CommunicationLogProps> = React.memo(({ i
   const [focusedIndex, setFocusedIndex] = useState(0);
 
   // Keyboard navigation
-  useKeyboardShortcuts({
-    ArrowDown: () => {
-      const newIndex = Math.min(focusedIndex + 1, items.length - 1);
-      setFocusedIndex(newIndex);
-    },
-    ArrowUp: () => {
-      const newIndex = Math.max(focusedIndex - 1, 0);
-      setFocusedIndex(newIndex);
-    },
-    Enter: () => {
-      if (items[focusedIndex]) {
-        onSelect(items[focusedIndex]);
+  useKeyboardShortcuts([
+      {
+          key: 'ArrowDown',
+          callback: () => {
+              const newIndex = Math.min(focusedIndex + 1, items.length - 1);
+              setFocusedIndex(newIndex);
+          },
+          description: 'Move down'
+      },
+      {
+          key: 'ArrowUp',
+          callback: () => {
+              const newIndex = Math.max(focusedIndex - 1, 0);
+              setFocusedIndex(newIndex);
+          },
+          description: 'Move up'
+      },
+      {
+          key: 'Enter',
+          callback: () => {
+              if (items[focusedIndex]) {
+                  onSelect(items[focusedIndex]);
+              }
+          },
+          description: 'Open item'
       }
-    }
-  });
+  ]);
 
   // Memoized render function
   const renderRow = useCallback((item: CommunicationItem) => (

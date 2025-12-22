@@ -20,7 +20,7 @@ import { DashboardOverview } from './DashboardOverview';
 import { PersonalWorkspace } from './PersonalWorkspace';
 
 // Types
-import type { User } from '../../types';
+import type { User } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -12,7 +12,8 @@
 // ============================================================================
 import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { 
-  Plus, Users, Clock
+  MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
+  Mic2, Database, Package, ClipboardList, FileText
 } from 'lucide-react';
 
 // ============================================================================
@@ -34,7 +35,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 // Services & Utils
 import { DataService } from '../../services/data/dataService';
 import { cn } from '../../utils/cn';
-// ✅ Migrated to backend API (2025-12-21)
+import { STORES } from '../../services/data/db';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
@@ -64,16 +65,11 @@ import { DiscoveryRequestsSkeleton, PrivilegeLogSkeleton, LegalHoldsSkeleton, ES
 const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const [activeTab, _setActiveTab] = useSessionStorage<DiscoveryView>(
+  const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
       caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab', 
       initialTab || 'dashboard'
   );
   const [contextId, setContextId] = useState<string | null>(null);
-  
-  // Wrap setActiveTab to match expected type signature
-  const setActiveTab = useCallback((tab: DiscoveryView) => {
-    _setActiveTab(tab);
-  }, [_setActiveTab]);
 
   // Reset to dashboard if we're on a wizard view but have no context
   useEffect(() => {
@@ -87,20 +83,22 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      ['requests', caseId || 'all'], 
+      [STORES.REQUESTS, caseId || 'all'], 
       () => DataService.discovery.getRequests(caseId) 
   );
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
       DataService.discovery.syncDeadlines,
       {
+          retry: 3,
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           onSuccess: () => {
               notify.success("Synced discovery deadlines with court calendar.");
               queryClient.invalidate(queryKeys.discovery.all());
               queryClient.invalidate(queryKeys.calendar.events());
           },
           onError: (error) => {
-              notify.error('Failed to sync deadlines. Please try again later.');
+              notify.error('Failed to sync deadlines after 3 attempts. Please try again later.');
               console.error('Sync error:', error);
           }
       }
@@ -115,7 +113,7 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   [activeTab]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
-    setActiveTab(getFirstTabOfParent(parentId) as DiscoveryView);
+    setActiveTab(getFirstTabOfParent(parentId));
   }, [setActiveTab]);
   
   const handleNavigate = (targetView: DiscoveryView, id?: string) => {
@@ -128,44 +126,19 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
     setContextId(null);
   };
 
-  // Calculate wizard view state
-  const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
-
-  // Keyboard shortcuts for quick navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger shortcuts when typing in inputs
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
-        return;
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+      'mod+d': () => setActiveTab('dashboard'),
+      'mod+r': () => setActiveTab('requests'),
+      'mod+p': () => setActiveTab('privilege'),
+      'mod+h': () => setActiveTab('holds'),
+      'mod+e': () => setActiveTab('esi'),
+      'escape': () => {
+          if (isWizardView) {
+              handleBackToDashboard();
+          }
       }
-
-      const isMod = e.ctrlKey || e.metaKey;
-      
-      if (isMod && e.key === 'd') {
-        e.preventDefault();
-        setActiveTab('dashboard');
-      } else if (isMod && e.key === 'r') {
-        e.preventDefault();
-        setActiveTab('requests');
-      } else if (isMod && e.key === 'p') {
-        e.preventDefault();
-        setActiveTab('privilege');
-      } else if (isMod && e.key === 'h') {
-        e.preventDefault();
-        setActiveTab('holds');
-      } else if (isMod && e.key === 'e') {
-        e.preventDefault();
-        setActiveTab('esi');
-      } else if (e.key === 'Escape' && isWizardView) {
-        e.preventDefault();
-        handleBackToDashboard();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isWizardView, setActiveTab, handleBackToDashboard]);
+  });
 
   const handleSaveResponse = async (reqId: string, text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
@@ -174,6 +147,8 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
       alert(`Response saved for ${reqId}. Status updated to Responded.`);
       setActiveTab('requests');
   };
+
+  const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
 
   const tabContentMap = useMemo(() => ({
     'dashboard': <DiscoveryDashboard onNavigate={handleNavigate} />,
@@ -268,5 +243,4 @@ export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = (props) => (
 );
 
 export default DiscoveryPlatform;
-
 

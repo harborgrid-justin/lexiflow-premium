@@ -19,7 +19,7 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
-// ✅ Migrated to backend API (2025-12-21)
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -102,7 +102,7 @@ const BillingWIPComponent: React.FC = () => {
 
   // Auto-save draft time entry
   useAutoSave({
-    data: draftEntry ?? {},
+    data: draftEntry,
     onSave: useCallback(async (entry: Partial<TimeEntry>) => {
       if (!entry || !entry.description) return;
       localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
@@ -112,13 +112,14 @@ const BillingWIPComponent: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    onSave: () => {
-      if (selectedIds.size > 0) {
-        handleGenerateClick();
-      } else {
-        notify.info('Select entries to generate invoice');
+      'mod+n': () => {
+          notify.info('New time entry form (to be implemented)');
+      },
+      'mod+g': () => {
+          if (selectedIds.size > 0) {
+              handleGenerateClick();
+          }
       }
-    }
   });
 
   const filteredEntries = useMemo(() => {
@@ -224,7 +225,6 @@ const BillingWIPComponent: React.FC = () => {
                 <TableHead className="w-10">
                     <input 
                         type="checkbox" 
-                        title="Select all entries"
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         checked={filteredEntries.length > 0 && selectedIds.size === filteredEntries.length}
                         onChange={toggleAll}
@@ -244,7 +244,6 @@ const BillingWIPComponent: React.FC = () => {
                         <TableCell>
                             <input 
                                 type="checkbox" 
-                                title="Select entry"
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                 checked={selectedIds.has(entry.id)}
                                 onChange={() => toggleSelection(entry.id)}
@@ -277,5 +276,4 @@ const BillingWIPComponent: React.FC = () => {
 
 // Export memoized component
 export const BillingWIP = React.memo(BillingWIPComponent);
-
 

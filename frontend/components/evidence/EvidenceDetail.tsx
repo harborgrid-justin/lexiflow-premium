@@ -51,29 +51,29 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
   
   // Keyboard shortcuts for evidence detail operations
   useKeyboardShortcuts([
-    {
-      key: 'l',
-      ctrlOrCmd: true,
-      action: () => setActiveTab('custody'),
-      description: 'Log custody transfer'
-    },
-    {
-      key: 'v',
-      ctrlOrCmd: true,
-      action: () => setActiveTab('forensics'),
-      description: 'View forensics'
-    },
-    {
-      key: 'o',
-      ctrlOrCmd: true,
-      action: () => setActiveTab('overview'),
-      description: 'View overview'
-    },
-    {
-      key: 'Escape',
-      action: handleBack,
-      description: 'Go back to inventory'
-    }
+      {
+          key: 'l',
+          ctrlOrCmd: true,
+          action: () => setActiveTab('custody'),
+          description: 'Log custody transfer'
+      },
+      {
+          key: 'v',
+          ctrlOrCmd: true,
+          action: () => setActiveTab('forensics'),
+          description: 'View forensics'
+      },
+      {
+          key: 'o',
+          ctrlOrCmd: true,
+          action: () => setActiveTab('overview'),
+          description: 'View overview'
+      },
+      {
+          key: 'Escape',
+          action: handleBack,
+          description: 'Go back to inventory'
+      }
   ]);
 
   const { mutate: promoteToExhibit, isLoading: isPromoting } = useMutation(

@@ -103,14 +103,14 @@ export const LegalHolds: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+h': () => {
-      // Open new hold form
-      notify.info('New legal hold form (to be implemented)');
-    },
-    'mod+a': () => {
-      // View all holds
-      notify.info('Viewing all legal holds');
-    }
+      'mod+h': () => {
+          // Open new hold form
+          notify.info('New legal hold form (to be implemented)');
+      },
+      'mod+a': () => {
+          // View all holds
+          notify.info('Viewing all legal holds');
+      }
   });
 
   if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;

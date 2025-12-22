@@ -37,12 +37,41 @@ export class JurisdictionsService {
     totalPages: number;
   }> {
     const skip = (page - 1) * limit;
-    const [data, total] = await this.jurisdictionRepository.findAndCount({
-      relations: ['rules'],
-      order: { system: 'ASC', region: 'ASC', name: 'ASC' },
-      skip,
-      take: limit,
-    });
+    
+    // Use query builder to select only existing columns
+    const queryBuilder = this.jurisdictionRepository
+      .createQueryBuilder('jurisdiction')
+      .leftJoinAndSelect('jurisdiction.rules', 'rules')
+      .select([
+        'jurisdiction.id',
+        'jurisdiction.name',
+        'jurisdiction.system',
+        'jurisdiction.type',
+        'jurisdiction.region',
+        'jurisdiction.description',
+        'jurisdiction.website',
+        'jurisdiction.code',
+        'jurisdiction.metadata',
+        'jurisdiction.createdAt',
+        'jurisdiction.updatedAt',
+        'rules.id',
+        'rules.code',
+        'rules.name',
+        'rules.type',
+        'rules.description',
+        'rules.fullText',
+        'rules.url',
+        'rules.citations',
+        'rules.effectiveDate',
+        'rules.isActive'
+      ])
+      .orderBy('jurisdiction.system', 'ASC')
+      .addOrderBy('jurisdiction.region', 'ASC')
+      .addOrderBy('jurisdiction.name', 'ASC')
+      .skip(skip)
+      .take(limit);
+
+    const [data, total] = await queryBuilder.getManyAndCount();
 
     return {
       data,
@@ -54,10 +83,34 @@ export class JurisdictionsService {
   }
 
   async findById(id: string): Promise<Jurisdiction> {
-    const jurisdiction = await this.jurisdictionRepository.findOne({
-      where: { id },
-      relations: ['rules']
-    });
+    const jurisdiction = await this.jurisdictionRepository
+      .createQueryBuilder('jurisdiction')
+      .leftJoinAndSelect('jurisdiction.rules', 'rules')
+      .select([
+        'jurisdiction.id',
+        'jurisdiction.name',
+        'jurisdiction.system',
+        'jurisdiction.type',
+        'jurisdiction.region',
+        'jurisdiction.description',
+        'jurisdiction.website',
+        'jurisdiction.code',
+        'jurisdiction.metadata',
+        'jurisdiction.createdAt',
+        'jurisdiction.updatedAt',
+        'rules.id',
+        'rules.code',
+        'rules.name',
+        'rules.type',
+        'rules.description',
+        'rules.fullText',
+        'rules.url',
+        'rules.citations',
+        'rules.effectiveDate',
+        'rules.isActive'
+      ])
+      .where('jurisdiction.id = :id', { id })
+      .getOne();
     
     if (!jurisdiction) {
       throw new NotFoundException(`Jurisdiction with ID ${id} not found`);
@@ -67,23 +120,70 @@ export class JurisdictionsService {
   }
 
   async findBySystem(system: JurisdictionSystem): Promise<Jurisdiction[]> {
-    return this.jurisdictionRepository.find({
-      where: { system },
-      relations: ['rules'],
-      order: { region: 'ASC', name: 'ASC' }
-    });
+    return this.jurisdictionRepository
+      .createQueryBuilder('jurisdiction')
+      .leftJoinAndSelect('jurisdiction.rules', 'rules')
+      .select([
+        'jurisdiction.id',
+        'jurisdiction.name',
+        'jurisdiction.system',
+        'jurisdiction.type',
+        'jurisdiction.region',
+        'jurisdiction.description',
+        'jurisdiction.website',
+        'jurisdiction.code',
+        'jurisdiction.metadata',
+        'jurisdiction.createdAt',
+        'jurisdiction.updatedAt',
+        'rules.id',
+        'rules.code',
+        'rules.name',
+        'rules.type',
+        'rules.description',
+        'rules.fullText',
+        'rules.url',
+        'rules.citations',
+        'rules.effectiveDate',
+        'rules.isActive'
+      ])
+      .where('jurisdiction.system = :system', { system })
+      .orderBy('jurisdiction.region', 'ASC')
+      .addOrderBy('jurisdiction.name', 'ASC')
+      .getMany();
   }
 
   async search(query: string): Promise<Jurisdiction[]> {
-    return this.jurisdictionRepository.find({
-      where: [
-        { name: Like(`%${query}%`) },
-        { code: Like(`%${query}%`) },
-        { region: Like(`%${query}%`) }
-      ],
-      relations: ['rules'],
-      order: { name: 'ASC' }
-    });
+    return this.jurisdictionRepository
+      .createQueryBuilder('jurisdiction')
+      .leftJoinAndSelect('jurisdiction.rules', 'rules')
+      .select([
+        'jurisdiction.id',
+        'jurisdiction.name',
+        'jurisdiction.system',
+        'jurisdiction.type',
+        'jurisdiction.region',
+        'jurisdiction.description',
+        'jurisdiction.website',
+        'jurisdiction.code',
+        'jurisdiction.metadata',
+        'jurisdiction.createdAt',
+        'jurisdiction.updatedAt',
+        'rules.id',
+        'rules.code',
+        'rules.name',
+        'rules.type',
+        'rules.description',
+        'rules.fullText',
+        'rules.url',
+        'rules.citations',
+        'rules.effectiveDate',
+        'rules.isActive'
+      ])
+      .where('jurisdiction.name ILIKE :query', { query: `%${query}%` })
+      .orWhere('jurisdiction.code ILIKE :query', { query: `%${query}%` })
+      .orWhere('jurisdiction.region ILIKE :query', { query: `%${query}%` })
+      .orderBy('jurisdiction.name', 'ASC')
+      .getMany();
   }
 
   async update(id: string, updateDto: UpdateJurisdictionDto): Promise<Jurisdiction> {

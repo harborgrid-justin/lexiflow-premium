@@ -14,46 +14,46 @@ export enum RuleType {
 
 @Entity('jurisdiction_rules')
 export class JurisdictionRule {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', name: 'jurisdictionId' })
   jurisdictionId: string;
 
   @ManyToOne(() => Jurisdiction, jurisdiction => jurisdiction.rules, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'jurisdictionId' })
   jurisdiction: Jurisdiction;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, name: 'code' })
   code: string; // e.g., "FRCP 26", "Evidence Rule 401"
 
-  @Column({ type: 'varchar', length: 500 })
+  @Column({ type: 'varchar', length: 500, name: 'name' })
   name: string;
 
-  @Column({ type: 'enum', enum: RuleType })
+  @Column({ type: 'enum', enum: RuleType, name: 'type' })
   type: RuleType;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', nullable: true, name: 'description' })
   description: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', nullable: true, name: 'fullText' })
   fullText: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true, name: 'url' })
   url: string;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column({ type: 'simple-json', nullable: true, name: 'citations' })
   citations: string[];
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date', nullable: true, name: 'effectiveDate' })
   effectiveDate: Date;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'boolean', default: true, name: 'isActive' })
   isActive: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'createdAt' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updatedAt' })
   updatedAt: Date;
 }

@@ -56,4 +56,22 @@ export class AnalyticsDashboardApiService {
   async delete(id: string): Promise<void> {
     return apiClient.delete(`${this.baseUrl}/${id}`);
   }
+
+  // Dashboard KPIs and Metrics
+  async getKPIs(params: { period?: string }): Promise<any> {
+    const queryString = new URLSearchParams(params as any).toString();
+    return apiClient.get(`/analytics/dashboard/kpis?${queryString}`);
+  }
+
+  async getTeamPerformance(params: Record<string, any>): Promise<any> {
+    return apiClient.get('/analytics/dashboard/team/performance', params);
+  }
+
+  async getFinancialMetrics(params: Record<string, any>): Promise<any> {
+    return apiClient.get('/analytics/dashboard/financial', params);
+  }
+
+  async exportReport(format: string, params: Record<string, any>): Promise<any> {
+    return apiClient.post('/analytics/dashboard/export', { format, ...params });
+  }
 }

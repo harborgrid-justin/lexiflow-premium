@@ -164,8 +164,8 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
         <AdvisorySidebar 
-            activeCategory={activeCategory} 
-            onSelectCategory={setActiveCategory}
+            activeCategory={category} 
+            onSelectCategory={setCategory}
             counts={{
                 all: advisors.length,
                 experts: advisors.filter(a => a.role === 'Expert Witness').length,
@@ -245,7 +245,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
             <Button variant="ghost" onClick={() => { setFilterRole('all'); setFilterSpecialty('all'); setFilterStatus('all'); }}>
               Clear Filters
             </Button>
-            <Button variant="primary" onClick={() => setIsFilterOpen(false)}>
+            <Button variant="primary" onClick={filterToggle.close}>
               Apply
             </Button>
           </div>

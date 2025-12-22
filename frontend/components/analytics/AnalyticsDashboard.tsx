@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy, useTransition } from 'react';
+import React, { Suspense, useTransition, useState } from 'react';
 import { Download } from 'lucide-react';
 
 // ============================================================================
@@ -26,27 +26,24 @@ import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 import { useTheme } from '../../context/ThemeContext';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 
+// Services
+import { api } from '../../services/api';
+
 // Utils & Config
 import { cn } from '../../utils/cn';
 import { ANALYTICS_TAB_CONFIG } from '../../config/tabs.config';
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-type AnalyticsView = 'judge' | 'counsel' | 'prediction';
 
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
 /**
- * AnalyticsDashboard - Predictive intelligence hub for litigation strategy
+ * AnalyticsDashboard - Business intelligence and predictive analytics
  * 
  * Features:
- * - Judge analytics with ruling patterns and tendencies
- * - Opposing counsel behavioral analysis
- * - Case outcome predictions using historical data
- * - Monte Carlo settlement simulations
+ * - Business Intelligence (Firm Metrics, Practice Groups, Attorney Performance, Financial KPIs)
+ * - Predictive Models (Case Outcome Predictions)
+ * - Export Report functionality
  */
 export const AnalyticsDashboard: React.FC = () => {
   // ==========================================================================
@@ -54,7 +51,8 @@ export const AnalyticsDashboard: React.FC = () => {
   // ==========================================================================
   const { theme } = useTheme();
   const [isPending, startTransition] = useTransition();
-  const [activeTab, _setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'judge');
+  const [activeTab, _setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'intel.firm');
+  const [isExporting, setIsExporting] = useState(false);
 
   // ==========================================================================
   // CALLBACKS - Event Handlers
@@ -69,6 +67,29 @@ export const AnalyticsDashboard: React.FC = () => {
     });
   };
 
+  /**
+   * Handles export report functionality
+   */
+  const handleExportReport = async () => {
+    setIsExporting(true);
+    try {
+      const response = await api.analytics.analyticsDashboard.exportReport('pdf', {
+        reportType: 'full-analytics',
+        startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        endDate: new Date().toISOString(),
+      });
+      
+      // In a real implementation, this would trigger a download
+      console.log('Report generated:', response);
+      alert('Report export functionality will be available soon.');
+    } catch (error) {
+      console.error('Failed to export report:', error);
+      alert('Failed to export report. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   // ==========================================================================
   // MAIN RENDER
   // ==========================================================================
@@ -77,14 +98,24 @@ export const AnalyticsDashboard: React.FC = () => {
     <TabbedPageLayout
       pageTitle="Analytics & Prediction"
       pageSubtitle="Data-driven insights for litigation strategy and outcome modeling."
-      pageActions={<Button variant="outline" size="sm" icon={Download}>Export Report</Button>}
+      pageActions={
+        <Button 
+          variant="outline" 
+          size="sm" 
+          icon={Download}
+          onClick={handleExportReport}
+          disabled={isExporting}
+        >
+          {isExporting ? 'Exporting...' : 'Export Report'}
+        </Button>
+      }
       tabConfig={ANALYTICS_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Analytics Module..." />}>
           <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            <AnalyticsDashboardContent activeTab={activeTab as AnalyticsView} />
+            <AnalyticsDashboardContent activeTab={activeTab} />
           </div>
       </Suspense>
     </TabbedPageLayout>

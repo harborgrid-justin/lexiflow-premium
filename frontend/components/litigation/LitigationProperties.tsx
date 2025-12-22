@@ -37,7 +37,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
             <Input 
                 label="Stage / Motion Name"
                 value={selectedNode!.label}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode!.id, { label: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode!.id, { label: e.target.value })}
             />
 
             {selectedNode!.type === 'Decision' && (
@@ -48,7 +48,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
                             type="range" 
                             min="0" max="100" 
                             value={selectedNode!.config.probability || 50}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, probability: parseInt(e.target.value) } })}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, probability: parseInt(e.target.value) } })}
                             className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                         />
                         <span className="font-mono text-sm font-bold w-12 text-right">{selectedNode!.config.probability || 50}%</span>
@@ -61,7 +61,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
                 rows={4}
                 placeholder="Why are we filing this? What is the probability of success?"
                 value={selectedNode!.config.description || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, description: e.target.value } })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, description: e.target.value } })}
             />
         </div>
         <div className={cn("pt-4 mt-auto border-t flex flex-col gap-2", theme.border.default)}>
@@ -77,7 +77,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
         <Input 
             label="Condition / Label"
             value={selectedConnection!.label || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateConnection(selectedConnection!.id, { label: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateConnection(selectedConnection!.id, { label: e.target.value })}
             placeholder="e.g., Granted, Default"
         />
         <div className={cn("text-xs p-2 rounded border", theme.surface.highlight, theme.border.default)}>

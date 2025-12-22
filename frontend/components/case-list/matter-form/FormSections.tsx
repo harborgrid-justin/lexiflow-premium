@@ -20,7 +20,7 @@ export const ClientSection: React.FC<ClientSectionProps> = ({ formData, errors, 
         <input
           type="text"
           value={formData.clientName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('clientName', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('clientName', e.target.value)}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.clientName ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}
@@ -34,7 +34,7 @@ export const ClientSection: React.FC<ClientSectionProps> = ({ formData, errors, 
         <input
           type="text"
           value={formData.clientContact}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('clientContact', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('clientContact', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Primary contact person"
         />
@@ -61,7 +61,7 @@ export const AttorneySection: React.FC<AttorneySectionProps> = ({ formData, erro
         <input
           type="text"
           value={formData.leadAttorneyName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('leadAttorneyName', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('leadAttorneyName', e.target.value)}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.leadAttorneyName ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}
@@ -75,7 +75,7 @@ export const AttorneySection: React.FC<AttorneySectionProps> = ({ formData, erro
         <input
           type="text"
           value={formData.originatingAttorneyName || ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('originatingAttorneyName', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('originatingAttorneyName', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Attorney who brought in the matter"
         />
@@ -103,7 +103,7 @@ export const DatesSection: React.FC<DatesSectionProps> = ({ formData, errors, on
           id="opened_date"
           type="date"
           value={formData.openedDate ? formData.openedDate.split('T')[0] : ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('openedDate', e.target.value ? new Date(e.target.value).toISOString() : '')}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('openedDate', e.target.value ? new Date(e.target.value).toISOString() : '')}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.openedDate ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}
@@ -117,7 +117,7 @@ export const DatesSection: React.FC<DatesSectionProps> = ({ formData, errors, on
           id="target_close_date"
           type="date"
           value={formData.targetCloseDate ? formData.targetCloseDate.split('T')[0] : ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('targetCloseDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('targetCloseDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         />
       </div>
@@ -128,7 +128,7 @@ export const DatesSection: React.FC<DatesSectionProps> = ({ formData, errors, on
           id="statute_of_limitations"
           type="date"
           value={formData.statute_of_limitations ? formData.statute_of_limitations.split('T')[0] : ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('statute_of_limitations', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('statute_of_limitations', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         />
       </div>
@@ -153,7 +153,7 @@ export const BillingSection: React.FC<BillingSectionProps> = ({ formData, onChan
         <select
           id="billingType"
           value={formData.billingType}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('billingType', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('billingType', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           <option value="Hourly">Hourly</option>
@@ -168,7 +168,7 @@ export const BillingSection: React.FC<BillingSectionProps> = ({ formData, onChan
         <input
           type="number"
           value={formData.hourlyRate || ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('hourlyRate', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('hourlyRate', e.target.value ? Number(e.target.value) : undefined)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="$ per hour"
         />
@@ -179,7 +179,7 @@ export const BillingSection: React.FC<BillingSectionProps> = ({ formData, onChan
         <input
           type="number"
           value={formData.budgetAmount || ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('budgetAmount', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('budgetAmount', e.target.value ? Number(e.target.value) : undefined)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Total budget"
         />
@@ -190,7 +190,7 @@ export const BillingSection: React.FC<BillingSectionProps> = ({ formData, onChan
         <input
           type="number"
           value={formData.retainerAmount || ''}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('retainerAmount', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('retainerAmount', e.target.value ? Number(e.target.value) : undefined)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Initial retainer"
         />

@@ -81,13 +81,13 @@ export class Production {
   totalPages!: number;
 
   @Column({ type: 'bigint', nullable: true })
-  totalSize: number; // in bytes
+  totalSize!: number; // in bytes
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   outputPath!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  volumes: Array<{
+  volumes!: Array<{
     volumeNumber: number;
     volumeName: string;
     documentCount: number;
@@ -102,7 +102,7 @@ export class Production {
   includeRedactions!: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
-  searchCriteria!: Record<string, any>;
+  searchCriteria!: Record<string, unknown>;
 
   @Column({ type: 'text', nullable: true })
   productionNotes!: string;
@@ -117,7 +117,7 @@ export class Production {
   productionCost!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ type: 'uuid', nullable: true })
   assignedTo!: string;

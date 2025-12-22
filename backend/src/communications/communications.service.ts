@@ -8,13 +8,13 @@ import { Template } from './entities/template.entity';
 export class CommunicationsService {
   private readonly logger = new Logger(CommunicationsService.name);
 
-  scheduleMessage(scheduleMessage: any) {
+  _scheduleMessage(_scheduleMessage: any) {
     throw new Error('Method not implemented.');
   }
-  getScheduledMessages(getScheduledMessages: any) {
+  _getScheduledMessages(_getScheduledMessages: any) {
     throw new Error('Method not implemented.');
   }
-  getDeliveryStatus(getDeliveryStatus: any) {
+  _getDeliveryStatus(_getDeliveryStatus: any) {
     throw new Error('Method not implemented.');
   }
   

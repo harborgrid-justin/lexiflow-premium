@@ -88,7 +88,7 @@ export class WebhooksService {
    * Delete a webhook
    */
   async remove(id: string, userId: string): Promise<void> {
-    const webhook = await this.findOne(id, userId);
+    const _webhook = await this.findOne(id, userId);
     this.webhooks.delete(id);
     this.logger.log(`Webhook deleted: ${id}`);
   }

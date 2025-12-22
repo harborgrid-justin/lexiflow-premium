@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository} from 'typeorm';
 import { WorkflowTemplate } from './entities/workflow-template.entity';
 import { CreateWorkflowTemplateDto, WorkflowCategory } from './dto/create-workflow-template.dto';
 import { UpdateWorkflowTemplateDto } from './dto/update-workflow-template.dto';
@@ -110,7 +110,7 @@ export class WorkflowService {
     await this.workflowRepository.save(workflow);
 
     // Generate tasks from stages
-    const tasks = workflow.stages.map((stage, index) => ({
+    const tasks = workflow.stages.map((stage, _index) => ({
       title: stage.name,
       description: stage.description || '',
       caseId,

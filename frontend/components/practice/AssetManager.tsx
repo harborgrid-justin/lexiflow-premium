@@ -196,7 +196,7 @@ export const AssetManager: React.FC = () => {
 
       <Modal isOpen={addModal.isOpen} onClose={addModal.close} title="Register Asset">
           <div className="p-6 space-y-4">
-              <Input label="Item Name" value={newAsset.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, name: e.target.value})} placeholder="e.g. MacBook Pro M3"/>
+              <Input label="Item Name" value={newAsset.name || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewAsset({...newAsset, name: e.target.value})} placeholder="e.g. MacBook Pro M3"/>
               <div className="grid grid-cols-2 gap-4">
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
@@ -204,19 +204,19 @@ export const AssetManager: React.FC = () => {
                         title="Select asset type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newAsset.type}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, type: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewAsset({...newAsset, type: e.target.value as any})}
                       >
                           <option value="Hardware">Hardware</option>
                           <option value="Software">Software</option>
                           <option value="Mobile">Mobile</option>
                       </select>
                   </div>
-                  <Input label="Serial Number" value={newAsset.serialNumber || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, serialNumber: e.target.value})}/>
+                  <Input label="Serial Number" value={newAsset.serialNumber || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewAsset({...newAsset, serialNumber: e.target.value})}/>
               </div>
-              <Input label="Assigned To" value={newAsset.assignedTo || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, assignedTo: e.target.value})} placeholder="Employee Name"/>
+              <Input label="Assigned To" value={newAsset.assignedTo || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewAsset({...newAsset, assignedTo: e.target.value})} placeholder="Employee Name"/>
               <div className="grid grid-cols-2 gap-4">
-                   <Input label="Purchase Date" type="date" value={newAsset.purchaseDate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, purchaseDate: e.target.value})}/>
-                   <Input label="Value" type="number" value={newAsset.value || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, value: Number(e.target.value)})}/>
+                   <Input label="Purchase Date" type="date" value={newAsset.purchaseDate || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewAsset({...newAsset, purchaseDate: e.target.value})}/>
+                   <Input label="Value" type="number" value={newAsset.value || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewAsset({...newAsset, value: Number(e.target.value)})}/>
               </div>
               <ConfirmDialog
                 isOpen={deleteModal.isOpen}

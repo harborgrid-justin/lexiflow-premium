@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsDateString, IsEnum, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsDateString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetCaseMetricsDto {

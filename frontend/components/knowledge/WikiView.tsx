@@ -86,7 +86,7 @@ export const WikiView: React.FC = () => {
                 className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface.default, theme.border.default)}
                 placeholder="Search articles..."
                 value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>

@@ -73,8 +73,6 @@ export class BillingAnalyticsService {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
-      const message = error instanceof Error ? message : 'Unknown error';
-      const stack = error instanceof Error ? stack : undefined;
       this.logger.error(`Error getting billing metrics: ${message}`, stack);
       throw error;
     }
@@ -132,8 +130,6 @@ export class BillingAnalyticsService {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
-      const message = error instanceof Error ? message : 'Unknown error';
-      const stack = error instanceof Error ? stack : undefined;
       this.logger.error(`Error getting billing trends: ${message}`, stack);
       throw error;
     }
@@ -180,8 +176,6 @@ export class BillingAnalyticsService {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
-      const message = error instanceof Error ? message : 'Unknown error';
-      const stack = error instanceof Error ? stack : undefined;
       this.logger.error(`Error getting WIP aging: ${message}`, stack);
       throw error;
     }
@@ -248,8 +242,6 @@ export class BillingAnalyticsService {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
-      const message = error instanceof Error ? message : 'Unknown error';
-      const stack = error instanceof Error ? stack : undefined;
       this.logger.error(`Error getting AR aging: ${message}`, stack);
       throw error;
     }
@@ -367,8 +359,6 @@ export class BillingAnalyticsService {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
-      const message = error instanceof Error ? message : 'Unknown error';
-      const stack = error instanceof Error ? stack : undefined;
       this.logger.error(`Error getting realization analysis: ${message}`, stack);
       throw error;
     }

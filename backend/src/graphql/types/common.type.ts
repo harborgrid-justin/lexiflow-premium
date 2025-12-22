@@ -4,64 +4,64 @@ import { UserType } from './user.type';
 @ObjectType()
 export class NotificationType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  message: string;
+  message!: string;
 
   @Field({ nullable: true })
   link?: string;
 
   @Field(() => Boolean)
-  read: boolean;
+  read!: boolean;
 
   @Field(() => UserType)
-  recipient: UserType;
+  recipient!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class MessageType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  content: string;
+  content!: string;
 
   @Field({ nullable: true })
   conversationId?: string;
 
   @Field(() => UserType)
-  sender: UserType;
+  sender!: UserType;
 
   @Field(() => Boolean)
-  read: boolean;
+  read!: boolean;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class SearchResultItem {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field({ nullable: true })
   description?: string;
@@ -70,82 +70,82 @@ export class SearchResultItem {
   snippet?: string;
 
   @Field()
-  score: number;
+  score!: number;
 
   @Field({ nullable: true })
   url?: string;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class SearchResult {
   @Field(() => [SearchResultItem])
-  items: SearchResultItem[];
+  items!: SearchResultItem[];
 
   @Field()
-  totalCount: number;
+  totalCount!: number;
 
   @Field()
-  took: number;
+  took!: number;
 }
 
 @ObjectType()
 export class DashboardData {
   @Field()
-  totalCases: number;
+  totalCases!: number;
 
   @Field()
-  activeCases: number;
+  activeCases!: number;
 
   @Field()
-  totalDocuments: number;
+  totalDocuments!: number;
 
   @Field()
-  pendingTasks: number;
+  pendingTasks!: number;
 
   @Field()
-  upcomingDeadlines: number;
+  upcomingDeadlines!: number;
 
   @Field()
-  recentActivity: string;
+  recentActivity!: string;
 
   @Field(() => [ActivityItem])
-  activities: ActivityItem[];
+  activities!: ActivityItem[];
 }
 
 @ObjectType()
 export class ActivityItem {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field(() => UserType)
-  user: UserType;
+  user!: UserType;
 
   @Field(() => Date)
-  timestamp: Date;
+  timestamp!: Date;
 }
 
 @ObjectType()
 export class AuditLogEntry {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  action: string;
+  action!: string;
 
   @Field()
-  entityType: string;
+  entityType!: string;
 
   @Field()
-  entityId: string;
+  entityId!: string;
 
   @Field({ nullable: true })
   oldValue?: string;
@@ -160,8 +160,8 @@ export class AuditLogEntry {
   userAgent?: string;
 
   @Field(() => UserType)
-  user: UserType;
+  user!: UserType;
 
   @Field(() => Date)
-  timestamp: Date;
+  timestamp!: Date;
 }

@@ -671,7 +671,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         avgProgress: number;
     }> {
         try {
-            let tasks = caseId ? await this.getByCaseId(caseId) : await this.getAll();
+            const tasks = caseId ? await this.getByCaseId(caseId) : await this.getAll();
             
             const byStatus: Record<string, number> = {};
             const byPriority: Record<string, number> = {};

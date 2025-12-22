@@ -8,7 +8,6 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,

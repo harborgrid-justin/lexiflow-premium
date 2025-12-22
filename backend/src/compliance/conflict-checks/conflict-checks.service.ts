@@ -130,7 +130,7 @@ export class ConflictChecksService {
 
   private async performConflictCheck(dto: RunConflictCheckDto): Promise<ConflictResult[]> {
     const conflicts: ConflictResult[] = [];
-    const targetNameLower = dto.targetName.toLowerCase();
+    const _targetNameLower = dto.targetName.toLowerCase();
 
     // Perform different types of checks based on checkType
     switch (dto.checkType) {

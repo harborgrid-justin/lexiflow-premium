@@ -58,7 +58,7 @@ const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, cas
                 <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Drafting Goal</label>
                 <TextArea 
                     value={prompt}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
                     placeholder="e.g., Draft an introduction arguing that the court lacks personal jurisdiction..."
                     rows={4}
                     className={theme.surface.default}

@@ -88,7 +88,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
           )} 
           placeholder="Enter name or entity..." 
           value={searchTerm}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
         <Button variant="primary" className="absolute right-2 top-2 bottom-2 px-6 rounded-full font-medium transition-colors" onClick={handleSearch}>Search</Button>

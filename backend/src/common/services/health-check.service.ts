@@ -17,7 +17,7 @@ export interface HealthCheckResult {
 
 @Injectable()
 export class HealthCheckService {
-  private readonly logger = new Logger(HealthCheckService.name);
+  private readonly _logger = new Logger(HealthCheckService.name);
   private readonly startTime: number = Date.now();
 
   async check(): Promise<HealthCheckResult> {
@@ -74,7 +74,7 @@ export class HealthCheckService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       return {
         status: 'down',
         message: message,
@@ -96,7 +96,7 @@ export class HealthCheckService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       return {
         status: 'down',
         message: message,
@@ -120,7 +120,7 @@ export class HealthCheckService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       return {
         status: 'down',
         message: message,
@@ -146,7 +146,7 @@ export class HealthCheckService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       return {
         status: 'down',
         message: message,

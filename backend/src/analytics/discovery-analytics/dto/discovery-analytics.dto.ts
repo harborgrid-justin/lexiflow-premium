@@ -78,7 +78,7 @@ export class FunnelStage {
   avgTimeInStage!: number;
 
   @ApiProperty({ description: 'Stage status' })
-  status: 'on-track' | 'delayed' | 'at-risk';
+  status!: 'on-track' | 'delayed' | 'at-risk';
 }
 
 export class DiscoveryTimelineDto {
@@ -101,7 +101,7 @@ export class DiscoveryTimelineDto {
   daysUntilCutoff?: number;
 
   @ApiProperty({ description: 'Overall status' })
-  overallStatus: 'on-schedule' | 'delayed' | 'critical';
+  overallStatus!: 'on-schedule' | 'delayed' | 'critical';
 }
 
 export class TimelineEvent {
@@ -109,7 +109,7 @@ export class TimelineEvent {
   id!: string;
 
   @ApiProperty({ description: 'Event type' })
-  type: 'request' | 'response' | 'production' | 'deposition' | 'motion' | 'deadline';
+  type!: 'request' | 'response' | 'production' | 'deposition' | 'motion' | 'deadline';
 
   @ApiProperty({ description: 'Event title' })
   title!: string;
@@ -121,7 +121,7 @@ export class TimelineEvent {
   caseId?: string;
 
   @ApiProperty({ description: 'Status' })
-  status: 'completed' | 'pending' | 'overdue' | 'upcoming';
+  status!: 'completed' | 'pending' | 'overdue' | 'upcoming';
 
   @ApiProperty({ description: 'Details' })
   details?: string;
@@ -144,7 +144,7 @@ export class Milestone {
   completionPercentage!: number;
 
   @ApiProperty({ description: 'Status' })
-  status: 'on-track' | 'at-risk' | 'overdue';
+  status!: 'on-track' | 'at-risk' | 'overdue';
 
   @ApiProperty({ description: 'Dependencies' })
   dependencies!: string[];
@@ -202,16 +202,16 @@ export class DiscoveryProductionVolumeDto {
   totalDocuments!: number;
 
   @ApiProperty({ description: 'Documents by type' })
-  documentsByType: { [type: string]: number };
+  documentsByType!: { [type: string]: number };
 
   @ApiProperty({ description: 'Documents by custodian' })
-  documentsByCustodian: { [custodian: string]: number };
+  documentsByCustodian!: { [custodian: string]: number };
 
   @ApiProperty({ description: 'Documents by date range' })
   documentsByDateRange!: DateRangeVolume[];
 
   @ApiProperty({ description: 'File size statistics' })
-  fileSizeStats: {
+  fileSizeStats!: {
     totalBytes: number;
     avgBytes: number;
     totalGB: number;
@@ -243,5 +243,5 @@ export class ProductionBatch {
   documentCount!: number;
 
   @ApiProperty({ description: 'Status' })
-  status: 'pending' | 'produced' | 'supplemented';
+  status!: 'pending' | 'produced' | 'supplemented';
 }

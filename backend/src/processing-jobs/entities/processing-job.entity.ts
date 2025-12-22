@@ -36,10 +36,10 @@ export class ProcessingJob {
   progress!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  parameters!: Record<string, any>;
+  parameters!: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
-  result!: Record<string, any>;
+  result!: Record<string, unknown>;
 
   @Column({ type: 'text', nullable: true })
   error!: string;

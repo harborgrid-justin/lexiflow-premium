@@ -1,5 +1,4 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import axios from 'axios';
 import { PacerSearchDto, PacerIntegrationSyncDto, PacerCase } from './dto';
 
 /**

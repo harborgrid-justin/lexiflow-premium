@@ -55,7 +55,7 @@ export class Message extends BaseEntity {
   isDeleted!: boolean;
 
   @Column({ name: 'read_by', type: 'jsonb', nullable: true })
-  readBy: Record<string, any>[];
+  readBy!: Record<string, unknown>[];
 
   @Column({ name: 'read_count', type: 'integer', default: 0 })
   readCount!: number;
@@ -73,13 +73,13 @@ export class Message extends BaseEntity {
   isForwarded!: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
-  attachments: Record<string, any>[];
+  attachments!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
   mentions!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  reactions: Record<string, any>[];
+  reactions!: Record<string, unknown>[];
 
   @Column({ name: 'is_pinned', type: 'boolean', default: false })
   isPinned!: boolean;
@@ -100,5 +100,5 @@ export class Message extends BaseEntity {
   systemMessageType!: string;
 
   @Column({ name: 'link_previews', type: 'jsonb', nullable: true })
-  linkPreviews: Record<string, any>[];
+  linkPreviews!: Record<string, unknown>[];
 }

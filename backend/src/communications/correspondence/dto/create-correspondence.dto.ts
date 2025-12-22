@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, IsArray, IsDateString } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsArray} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum CorrespondenceType {

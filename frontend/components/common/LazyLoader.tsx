@@ -35,7 +35,13 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }
   useEffect(() => {
     // Adaptive Loading: Check connection type
     if ('connection' in navigator) {
-        const conn = (navigator as any).connection;
+        const nav = navigator as Navigator & {
+          connection?: {
+            saveData?: boolean;
+            effectiveType?: string;
+          };
+        };
+        const conn = nav.connection;
         if (conn && (conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === '3g')) {
             setIsLowBandwidth(true);
         }
@@ -58,7 +64,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }
     <div className="h-full w-full p-6 space-y-6 overflow-hidden" role="status" aria-live="polite" aria-label={message}>
       {/* Skeleton Metrics Row - Matches MetricCard height ~120px */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-pulse">
-        {[1, 2, 3, 4].map((i: any) => (
+        {[1, 2, 3, 4].map((i: number) => (
           <div key={i} className={cn("h-32 rounded-xl border shadow-sm relative overflow-hidden", theme.surface.default, theme.border.default)}>
              <div className={cn("absolute inset-0 bg-gradient-to-r from-transparent via-current to-transparent opacity-10 animate-shimmer", theme.surface.highlight)} style={{ backgroundSize: '200% 100%' }}></div>
           </div>

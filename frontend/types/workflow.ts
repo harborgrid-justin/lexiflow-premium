@@ -2,8 +2,8 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, TaskId, ProjectId, 
-  WorkflowTemplateId, CaseId
+  BaseEntity, UserId, TaskId, ProjectId,
+  WorkflowTemplateId, CaseId, MetadataRecord, JsonValue
 } from './primitives';
 import { TaskDependencyType, UserRole, StageStatus } from './enums';
 
@@ -88,7 +88,7 @@ export interface WorkflowProcess extends BaseEntity {
   ownerId?: UserId;
   stages?: WorkflowStage[];
   tasks?: WorkflowTask[];
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 // Workflow Analytics Types
@@ -172,8 +172,8 @@ export interface TaskHistory {
   userId: string;
   userName?: string;
   action: 'created' | 'updated' | 'status_changed' | 'assigned' | 'commented' | 'completed' | 'deleted';
-  previousValue?: unknown;
-  newValue?: unknown;
+  previousValue?: JsonValue;
+  newValue?: JsonValue;
   timestamp: string;
   description?: string;
 }
@@ -209,7 +209,7 @@ export interface TemplateDocument extends BaseEntity {
   createdBy?: UserId;
   modifiedBy?: UserId;
   usageCount?: number;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 export interface Project extends BaseEntity { 
   id: ProjectId;
@@ -256,7 +256,7 @@ export interface Project extends BaseEntity {
     completedDate?: string;
     status: string;
   }>;
-  metadata?: Record<string, unknown>; // Backend: jsonb
+  metadata?: MetadataRecord; // Backend: jsonb
   
   // Frontend-specific (legacy)
   title?: string; // Alias for name

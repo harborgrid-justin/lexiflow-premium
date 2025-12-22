@@ -11,7 +11,7 @@ import { TokenStorageService, RefreshTokenData, ResetTokenData, MfaTokenData } f
 
 describe('TokenStorageService', () => {
   let service: TokenStorageService;
-  let configService: ConfigService;
+  let _configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

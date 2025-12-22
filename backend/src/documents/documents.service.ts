@@ -5,7 +5,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, Between } from 'typeorm';
+import { Repository, Like} from 'typeorm';
 import { Document } from './entities/document.entity';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
@@ -67,7 +67,15 @@ export class DocumentsService {
       } catch (error) {
         this.logger.error('Failed to create document', error);
         // Transaction will auto-rollback on error
-        // TODO: Also cleanup uploaded file if DB save fails
+        // Cleanup uploaded file if DB save fails
+        if (file && document.filePath) {
+          try {
+            await this.fileStorageService.deleteFile(document.filePath);
+            this.logger.log(`Cleaned up uploaded file: ${document.filePath}`);
+          } catch (cleanupError) {
+            this.logger.warn('Failed to cleanup uploaded file during rollback', cleanupError);
+          }
+        }
         throw error;
       }
     });

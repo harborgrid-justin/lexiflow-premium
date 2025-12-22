@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsEnum, IsDateString } from 'class-validator';
+import { IsOptional, IsEnum, IsDateString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum PeriodType {

@@ -267,7 +267,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
               theme.text.primary,
             )}
             value={draftResponse}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDraftResponse(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDraftResponse(e.target.value)}
             placeholder="Draft your legal response here..."
           />
         </div>

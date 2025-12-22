@@ -1,7 +1,10 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { IntegrationsService } from './integrations.service';
+import { CreateIntegrationDto } from './dto/create-integration.dto';
+import { UpdateIntegrationDto } from './dto/update-integration.dto';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiTags('integrations')
 @ApiBearerAuth()
@@ -36,9 +39,10 @@ export class IntegrationsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() integrationData: any) {
-    // TODO: Extract userId from authenticated user (e.g., from request.user)
-    const userId = 'temp-user-id'; // Placeholder until proper auth integration
+  async create(
+    @Body() integrationData: CreateIntegrationDto,
+    @CurrentUser('id') userId: string,
+  ) {
     return this.integrationsService.create(integrationData, userId);
   }
 
@@ -49,7 +53,7 @@ export class IntegrationsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async update(@Param('id') id: string, @Body() updateData: any) {
+  async update(@Param('id') id: string, @Body() updateData: UpdateIntegrationDto) {
     return this.integrationsService.update(id, updateData);
   }
 

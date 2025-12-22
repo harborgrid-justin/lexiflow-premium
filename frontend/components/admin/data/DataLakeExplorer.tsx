@@ -130,7 +130,7 @@ export function DataLakeExplorer(): React.ReactElement {
                                         <input 
                                             type="checkbox" 
                                             checked={selection.includes(item.id)}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                                 if(e.target.checked) {setSelection([...selection, item.id]);}
                                                 else {setSelection(selection.filter(id => id !== item.id));}
                                             }}

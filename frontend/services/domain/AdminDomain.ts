@@ -11,24 +11,75 @@ import { delay } from '../../utils/async';
 export const AdminService = {
     // Real backend API access
     getLogs: async (): Promise<AuditLogEntry[]> => {
-        const response = await adminApi.auditLogs?.getAll?.() || { data: [] };
-        // Handle paginated response from backend
-        const logs = Array.isArray(response) ? response : (response as any)?.data || [];
-        return logs.sort((a: unknown, b: unknown) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        try {
+            const response = await adminApi.auditLogs?.getAll?.();
+            if (!response) return [];
+
+            // Handle paginated response from backend
+            const logs: AuditLogEntry[] = Array.isArray(response) ? response :
+                (response && typeof response === 'object' && 'data' in response ? (response as { data: AuditLogEntry[] }).data : []);
+
+            return logs.sort((a: AuditLogEntry, b: AuditLogEntry) =>
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+        } catch (error) {
+            console.error('[AdminService.getLogs] Error fetching audit logs:', error);
+            return [];
+        }
     },
     
-    // Simulations (Infra)
-    getIntegrations: async () => { 
-        await delay(500); 
+    // Integrations from backend
+    getIntegrations: async (): Promise<Array<{ id: string; name: string; type: string; status: string; icon: string; color: string }>> => {
+        try {
+            // Use integrations API from backend
+            const response = await fetch(`${API_PREFIX}/integrations`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                },
+            });
+
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+                const integrations = await response.json();
+                return integrations.map((int: { id: string; name: string; type: string; status: string }) => ({
+                    id: int.id,
+                    name: int.name,
+                    type: int.type,
+                    status: int.status,
+                    icon: int.name.charAt(0).toUpperCase(),
+                    color: int.status === 'Connected' ? 'bg-blue-600' : int.status === 'Error' ? 'bg-red-600' : 'bg-gray-600'
+                }));
+            }
+        } catch (error) {
+            console.error('[AdminService.getIntegrations] Backend unavailable:', error);
+        }
+
+        // Fallback to mock data for development
+        await delay(500);
         return [
             { id: 'int1', name: 'Outlook 365', type: 'Email & Calendar', status: 'Connected', icon: 'O', color: 'bg-blue-600' },
             { id: 'int2', name: 'Salesforce', type: 'CRM', status: 'Error', icon: 'S', color: 'bg-sky-500' },
             { id: 'int3', name: 'QuickBooks', type: 'Accounting', status: 'Disconnected', icon: 'Q', color: 'bg-green-600' },
             { id: 'int4', name: 'Clio', type: 'Practice Mgmt', status: 'Connected', icon: 'C', color: 'bg-indigo-600' },
-        ]; 
+        ];
     },
 
-    getSecuritySettings: async () => { 
+    getSecuritySettings: async (): Promise<Array<{ id: string; label: string; desc: string; type: string; enabled: boolean }>> => {
+        try {
+            // Attempt to fetch from backend
+            const response = await fetch(`${API_PREFIX}/admin/security-settings`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                },
+            });
+
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('[AdminService.getSecuritySettings] Backend unavailable:', error);
+        }
+
+        // Fallback to default security settings
         await delay(300);
         return [
             { id: 'sec1', label: 'Require MFA', desc: 'All internal users must use 2-factor authentication.', type: 'Lock', enabled: true },
@@ -73,20 +124,55 @@ export const AdminService = {
         return adminApi.apiKeys?.getAll?.() || [{id: 'key_1', name: 'Default Key', prefix: 'pk_live_ab12...', created: '2024-01-01', status: 'Active'}];
     },
     
-    getAnomalies: async (): Promise<DataAnomaly[]> => { 
-        await delay(600); 
+    getAnomalies: async (): Promise<DataAnomaly[]> => {
+        try {
+            // Use data quality API endpoint
+            const response = await fetch(`${API_PREFIX}/data-platform/anomalies`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                },
+            });
+
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('[AdminService.getAnomalies] Backend unavailable:', error);
+        }
+
+        // Fallback to mock data for development
+        await delay(600);
         return [
             { id: 1, table: 'clients', field: 'email', issue: 'Invalid Format', count: 12, sample: 'john-doe@', status: 'Detected', severity: 'High'},
             { id: 2, table: 'cases', field: 'status', issue: 'Inconsistent Casing', count: 5, sample: 'closed', status: 'Fixed', severity: 'Low'},
             { id: 3, table: 'documents', field: 'metadata', issue: 'Missing Author', count: 142, sample: 'NULL', status: 'Detected', severity: 'Medium'},
-        ]; 
+        ];
     },
     
-    getDataDomains: async () => { await delay(200); return [
-        { name: 'Legal', count: 12, desc: 'Core case and litigation data.'},
-        { name: 'Finance', count: 8, desc: 'Billing, invoices, and trust accounts.' },
-        { name: 'HR', count: 4, desc: 'Staff, roles, and performance data.' },
-    ]; },
+    getDataDomains: async (): Promise<Array<{ name: string; count: number; desc: string }>> => {
+        try {
+            // Use data platform API endpoint
+            const response = await fetch(`${API_PREFIX}/data-platform/domains`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                },
+            });
+
+            if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('[AdminService.getDataDomains] Backend unavailable:', error);
+        }
+
+        // Fallback to default domains
+        await delay(200);
+        return [
+            { name: 'Legal', count: 12, desc: 'Core case and litigation data.'},
+            { name: 'Finance', count: 8, desc: 'Billing, invoices, and trust accounts.' },
+            { name: 'HR', count: 4, desc: 'Staff, roles, and performance data.' },
+        ];
+    },
     
     getTenantConfig: async (): Promise<TenantConfig> => {
         await delay(100);

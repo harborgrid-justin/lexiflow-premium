@@ -81,7 +81,7 @@ async function testConnection() {
     process.exit(0);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    const stack = error instanceof Error ? error.stack : undefined;
+    const _stack = error instanceof Error ? error._stack : undefined;
     console.error('❌ Connection failed:', message);
     
     if (message.includes('ENOTFOUND')) {

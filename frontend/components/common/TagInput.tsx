@@ -68,7 +68,7 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, sugge
           )}
           placeholder={placeholder}
           value={input}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
         <Plus className={cn("absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />

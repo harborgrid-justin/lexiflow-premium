@@ -40,7 +40,7 @@ export class OcrService {
       this.logger.log('Tesseract OCR worker initialized successfully');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.warn('Failed to initialize OCR worker - OCR features will be unavailable', error instanceof Error ? message : error);
       this.worker = null;
     }
@@ -92,8 +92,8 @@ export class OcrService {
 
       return result;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _message = error instanceof Error ? error._message : 'Unknown error';
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error('OCR processing failed', error);
       throw error;
     }
@@ -104,7 +104,7 @@ export class OcrService {
    */
   async extractTextFromBuffer(
     buffer: Buffer,
-    languages: string[] = ['eng'],
+    _languages: string[] = ['eng'],
   ): Promise<string> {
     if (!this.ocrEnabled || !this.worker) {
       throw new Error('OCR service is not enabled or not initialized');
@@ -117,8 +117,8 @@ export class OcrService {
 
       return text.trim();
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _message = error instanceof Error ? error._message : 'Unknown error';
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error('Text extraction failed', error);
       throw error;
     }
@@ -140,8 +140,8 @@ export class OcrService {
       try {
         await this.worker.terminate();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
+        const _message = error instanceof Error ? error._message : 'Unknown error';
+        const _stack = error instanceof Error ? error._stack : undefined;
         this.logger.warn('Error terminating OCR worker', error);
       }
       this.worker = null;
@@ -177,14 +177,14 @@ export class OcrService {
     };
   }
 
-  async detectLanguage(data: any): Promise<any> {
+  async detectLanguage(_data: any): Promise<any> {
     return {
       language: 'eng',
       confidence: 0.95,
     };
   }
 
-  async extractStructuredData(documentId: string, options: any): Promise<any> {
+  async extractStructuredData(documentId: string, _options: any): Promise<any> {
     return {
       documentId,
       data: {},

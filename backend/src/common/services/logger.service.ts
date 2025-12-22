@@ -1,4 +1,4 @@
-import { Injectable, Logger as NestLogger, Scope } from '@nestjs/common';
+import { Injectable, Logger as Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as winston from 'winston';
 import * as path from 'path';

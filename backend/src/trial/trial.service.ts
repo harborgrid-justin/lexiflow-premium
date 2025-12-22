@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, Between } from 'typeorm';
+import { Repository, FindOptionsWhere} from 'typeorm';
 import { TrialEvent } from './entities/trial-event.entity';
 import { WitnessPrepSession } from './entities/witness-prep-session.entity';
 import { CreateTrialEventDto } from './dto/create-trial-event.dto';
 import { UpdateTrialEventDto } from './dto/update-trial-event.dto';
 import { CreateWitnessPrepDto } from './dto/create-witness-prep.dto';
 import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
-import { validateDateRange, validatePagination, validateSortField, validateSortOrder, applySafeSort } from '../common/utils/query-validation.util';
+import { validateDateRange, validatePagination} from '../common/utils/query-validation.util';
 
 @Injectable()
 export class TrialService {

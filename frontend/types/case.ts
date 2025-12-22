@@ -2,9 +2,9 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, OrgId, 
-  EntityId, PartyId, 
-  CaseId, MatterId, Money, JurisdictionObject
+  BaseEntity, UserId, OrgId,
+  EntityId, PartyId,
+  CaseId, MatterId, Money, JurisdictionObject, MetadataRecord, JsonValue
 } from './primitives';
 import {
   CaseStatus, MatterType, BillingModel,
@@ -82,7 +82,7 @@ export interface Case extends BaseEntity {
   matterType: MatterType;
   matterSubType?: string;
   pacerData?: PacerData;
-  metadata?: Record<string, unknown>; // Backend: jsonb field
+  metadata?: MetadataRecord; // Backend: jsonb field
   isArchived: boolean; // Backend field (default: false)
   projects?: Project[];
   
@@ -116,7 +116,7 @@ export interface Party extends BaseEntity {
   
   // Additional data
   notes?: string; // Backend: text
-  metadata?: Record<string, any>; // Backend: jsonb
+  metadata?: MetadataRecord; // Backend: jsonb
   
   // Frontend-specific (legacy)
   contact?: string;
@@ -124,7 +124,7 @@ export interface Party extends BaseEntity {
   linkedOrgId?: OrgId;
   representationType?: string;
   attorneys?: Attorney[];
-  pacerData?: unknown;
+  pacerData?: JsonValue;
   aliases?: string[];
   taxId?: string;
 }
@@ -178,7 +178,7 @@ export interface Matter extends BaseEntity {
   
   // Tags & Opposing Party
   tags?: string[]; // Backend: jsonb
-  opposingCounsel?: unknown; // Backend: opposingcounsel jsonb
+  opposingCounsel?: JsonValue; // Backend: opposingcounsel jsonb
   
   // Conflict Check (backend exact fields)
   conflictCheckCompleted: boolean; // Backend: conflictcheckcompleted boolean (default: false)
@@ -187,11 +187,11 @@ export interface Matter extends BaseEntity {
   
   // Resources & Location
   officeLocation?: string; // Backend: officelocation varchar
-  relatedMatterIds?: unknown; // Backend: relatedmatterids jsonb
+  relatedMatterIds?: JsonValue; // Backend: relatedmatterids jsonb
   
   // Notes & Custom Fields
   internalNotes?: string; // Backend: internalnotes text
-  customFields?: Record<string, any>; // Backend: customfields jsonb
+  customFields?: MetadataRecord; // Backend: customfields jsonb
   
   // Metadata (backend exact fields)
   createdBy: UserId; // Backend: createdby varchar (required)
@@ -230,5 +230,5 @@ export interface PacerData {
   assigned?: { judge?: string; magistrate?: string };
   parties?: Array<{ name: string; type: string; role: string }>;
   docket?: Array<{ date: string; number: string; description: string }>;
-  metadata?: Record<string, unknown>;
+  metadata?: MetadataRecord;
 }

@@ -1,6 +1,5 @@
 import { Controller, Get, Query, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { ComplianceReportingService } from './compliance-reporting.service';
 import {
   GenerateAccessReportDto,

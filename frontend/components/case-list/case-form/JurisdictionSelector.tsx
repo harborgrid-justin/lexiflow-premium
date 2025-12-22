@@ -96,7 +96,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
             <select
                 className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                 value={value || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
                 disabled={disabled}
             >
                 <option value="">{placeholder}</option>

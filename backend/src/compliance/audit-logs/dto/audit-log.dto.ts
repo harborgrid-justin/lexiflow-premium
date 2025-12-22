@@ -68,7 +68,7 @@ export class CreateAuditLogDto {
 }
 
 export class ExportAuditLogsDto {
-  format: 'csv' | 'json' | 'pdf';
+  format!: 'csv' | 'json' | 'pdf';
   startDate?: Date;
   endDate?: Date;
   userId?: string;

@@ -44,7 +44,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ wordCount, onCmd, 
   return (
     <div className={cn("flex items-center gap-1 p-2 border-b flex-wrap", theme.surface.highlight, theme.border.default)}>
       <div className={cn("flex items-center gap-0.5 border-r pr-2 mr-2", theme.border.default)}>
-        <select className={cn("bg-transparent text-sm font-medium h-8 border-none outline-none cursor-pointer rounded px-1 transition-colors", theme.text.primary, `hover:${theme.surface.default}`)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onCmd('formatBlock', e.target.value)}>
+        <select className={cn("bg-transparent text-sm font-medium h-8 border-none outline-none cursor-pointer rounded px-1 transition-colors", theme.text.primary, `hover:${theme.surface.default}`)} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onCmd('formatBlock', e.target.value)}>
             <option value="p">Normal</option>
             <option value="h2">Heading 1</option>
             <option value="h3">Heading 2</option>

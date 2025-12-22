@@ -59,5 +59,5 @@ export class ChainOfCustodyEvent extends BaseEntity {
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 }

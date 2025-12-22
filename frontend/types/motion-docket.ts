@@ -3,7 +3,7 @@
 
 import {
   BaseEntity, DocumentId, EvidenceId,
-  MotionId, DocketId, CaseId
+  MotionId, DocketId, CaseId, MetadataRecord, JsonValue
 } from './primitives';
 import {
   MotionType, MotionStatus, MotionOutcome,
@@ -41,13 +41,13 @@ export interface Motion extends BaseEntity {
   documents?: DocumentId[]; // Frontend legacy
   
   // Decision and outcome
-  ruling?: unknown; // Backend: jsonb
+  ruling?: JsonValue; // Backend: jsonb
   decision?: string; // Backend: text
   relief?: string; // Backend: text
   outcome?: MotionOutcome; // Frontend-specific
-  
+
   // Response
-  opposingPartyResponse?: unknown; // Backend: jsonb
+  opposingPartyResponse?: JsonValue; // Backend: jsonb
   
   // Frontend-specific fields
   oppositionDueDate?: string;
@@ -106,12 +106,12 @@ export interface DocketEntry extends BaseEntity {
     name: string;
     documentNumber?: string;
   }>;
-  metadata?: Record<string, unknown>; // Backend: jsonb
+  metadata?: MetadataRecord; // Backend: jsonb
   
   // Frontend-specific fields
   title?: string; // Alias for description
   structuredData?: DocketEntryStructuredData;
-  triggersDeadlines?: unknown[];
+  triggersDeadlines?: Array<{ type: string; date: string; description?: string }>;
   docLink?: string; // Alias for documentUrl
   syncMetadata?: { pacerId: string; lastPolled: string; checksum: string };
 }

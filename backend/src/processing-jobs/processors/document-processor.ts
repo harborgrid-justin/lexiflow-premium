@@ -74,7 +74,7 @@ export class DocumentProcessor {
       this.logger.log(`OCR job completed: ${jobId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error(`OCR job failed: ${jobId}`, error);
       await this.processingJobsService.updateJobStatus(
         jobId,
@@ -88,7 +88,7 @@ export class DocumentProcessor {
 
   @Process(JobType.METADATA_EXTRACTION)
   async handleMetadataExtractionJob(job: Job): Promise<void> {
-    const { jobId, documentId } = job.data;
+    const { jobId, _documentId } = job.data;
 
     try {
       this.logger.log(`Processing metadata extraction job: ${jobId}`);
@@ -112,7 +112,7 @@ export class DocumentProcessor {
       this.logger.log(`Metadata extraction job completed: ${jobId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error(`Metadata extraction job failed: ${jobId}`, error);
       await this.processingJobsService.updateJobStatus(
         jobId,
@@ -126,7 +126,7 @@ export class DocumentProcessor {
 
   @Process(JobType.REDACTION)
   async handleRedactionJob(job: Job): Promise<void> {
-    const { jobId, documentId, parameters } = job.data;
+    const { jobId, _documentId, _parameters } = job.data;
 
     try {
       this.logger.log(`Processing redaction job: ${jobId}`);
@@ -150,7 +150,7 @@ export class DocumentProcessor {
       this.logger.log(`Redaction job completed: ${jobId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error(`Redaction job failed: ${jobId}`, error);
       await this.processingJobsService.updateJobStatus(
         jobId,

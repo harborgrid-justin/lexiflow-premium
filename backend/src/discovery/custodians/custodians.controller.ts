@@ -10,8 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { CustodiansService } from './custodians.service';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';

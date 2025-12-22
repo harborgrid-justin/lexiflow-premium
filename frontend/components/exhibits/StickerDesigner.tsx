@@ -109,7 +109,7 @@ export const StickerDesigner: React.FC = () => {
                             <input 
                                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                                 value={config.prefix}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, prefix: e.target.value})}
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, prefix: e.target.value})}
                             />
                         </div>
                         <div>
@@ -118,7 +118,7 @@ export const StickerDesigner: React.FC = () => {
                                 type="number"
                                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                                 value={config.startNumber}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, startNumber: parseInt(e.target.value)})}
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, startNumber: parseInt(e.target.value)})}
                             />
                         </div>
                     </div>
@@ -128,7 +128,7 @@ export const StickerDesigner: React.FC = () => {
                         <input 
                             className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                             value={config.footer}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, footer: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, footer: e.target.value})}
                         />
                     </div>
 

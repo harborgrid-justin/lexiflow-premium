@@ -3,10 +3,10 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class LoginInput {
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 
   @Field({ nullable: true })
   mfaCode?: string;
@@ -15,16 +15,16 @@ export class LoginInput {
 @InputType()
 export class RegisterInput {
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 
   @Field()
-  firstName: string;
+  firstName!: string;
 
   @Field()
-  lastName: string;
+  lastName!: string;
 
   @Field({ nullable: true })
   phone?: string;
@@ -78,8 +78,8 @@ export class UserFilterInput {
 @InputType()
 export class ChangePasswordInput {
   @Field()
-  currentPassword: string;
+  currentPassword!: string;
 
   @Field()
-  newPassword: string;
+  newPassword!: string;
 }

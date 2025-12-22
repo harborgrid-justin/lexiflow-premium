@@ -56,10 +56,10 @@ export class EthicalWall extends BaseEntity {
   approvalDate!: Date;
 
   @Column({ type: 'jsonb', nullable: true })
-  restrictions!: Record<string, any>;
+  restrictions!: Record<string, unknown>;
 
   @Column({ name: 'access_limitations', type: 'jsonb', nullable: true })
-  accessLimitations!: Record<string, any>;
+  accessLimitations!: Record<string, unknown>;
 
   @Column({ name: 'communication_restrictions', type: 'jsonb', nullable: true })
   communicationRestrictions!: string[];
@@ -104,7 +104,7 @@ export class EthicalWall extends BaseEntity {
   consentDocumentPath!: string;
 
   @Column({ name: 'monitoring_procedures', type: 'jsonb', nullable: true })
-  monitoringProcedures!: Record<string, any>;
+  monitoringProcedures!: Record<string, unknown>;
 
   @Column({ name: 'compliance_officer_id', type: 'uuid', nullable: true })
   complianceOfficerId!: string;

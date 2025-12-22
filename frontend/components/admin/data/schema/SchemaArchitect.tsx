@@ -178,19 +178,19 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
 
         <Modal isOpen={isColumnModalOpen} onClose={() => setIsColumnModalOpen(false)} title={editingColumn?.columnName ? `Edit Column` : `Add Column to ${editingColumn?.tableName}`}>
             <div className="p-6 space-y-4">
-                <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
+                <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>
-                <Input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
+                <Input label="Foreign Key (optional)" value={editingColumn?.data.fk || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, fk: e.target.value}} : null)} placeholder="e.g. users.id"/>
                 <div className="grid grid-cols-2 gap-4 pt-2">
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.notNull || false} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, notNull: e.target.checked}} : null)}/> Not Null</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.unique || false} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, unique: e.target.checked}} : null)}/> Unique</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.pk || false} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, pk: e.target.checked}} : null)}/> Primary Key</label>
-                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.index || false} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, index: e.target.checked}} : null)}/> Create Index</label>
+                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.notNull || false} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, notNull: e.target.checked}} : null)}/> Not Null</label>
+                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.unique || false} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, unique: e.target.checked}} : null)}/> Unique</label>
+                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.pk || false} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, pk: e.target.checked}} : null)}/> Primary Key</label>
+                    <label className="flex items-center"><input type="checkbox" className="mr-2" checked={editingColumn?.data.index || false} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, index: e.target.checked}} : null)}/> Create Index</label>
                 </div>
                 <div className="flex justify-end gap-2 pt-4 border-t mt-4">
                     <Button variant="secondary" onClick={() => setIsColumnModalOpen(false)}>Cancel</Button>

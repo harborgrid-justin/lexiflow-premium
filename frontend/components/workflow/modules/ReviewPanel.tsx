@@ -99,7 +99,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
                     className={cn("w-full pl-3 pr-10 py-2 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     placeholder="Add comment..."
                     value={newComment}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewComment(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewComment(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && submitComment()}
                 />
                 <button onClick={submitComment} className="absolute right-2 top-1/2 -translate-y-1.2 text-blue-600 hover:text-blue-700">

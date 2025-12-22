@@ -32,7 +32,7 @@ export interface Metric {
  */
 @Injectable()
 export class MetricsService {
-  private readonly logger = new Logger(MetricsService.name);
+  private readonly _logger = new Logger(MetricsService.name);
   private metrics: Map<string, Metric[]> = new Map();
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -120,8 +120,8 @@ export class MetricsService {
   /**
    * Get metrics as JSON (for REST API)
    */
-  getMetricsJson(): Record<string, any> {
-    const result: Record<string, any> = {
+  getMetricsJson(): Record<string, unknown> {
+    const result: Record<string, unknown> = {
       counters: {},
       gauges: {},
       timestamp: new Date().toISOString(),

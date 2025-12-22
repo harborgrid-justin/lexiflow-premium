@@ -107,9 +107,9 @@ export class WebhooksController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async test(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user?.id || 'temp-user-id'; // Fallback for development
+    const userId = user.sub;
     return this.webhooksService.test(id, userId);
   }
 
@@ -121,9 +121,9 @@ export class WebhooksController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getDeliveries(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user?.id || 'temp-user-id'; // Fallback for development
+    const userId = user.sub;
     return this.webhooksService.getDeliveries(id, userId);
   }
 }

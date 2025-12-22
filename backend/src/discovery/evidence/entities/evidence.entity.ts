@@ -80,7 +80,7 @@ export class Evidence extends BaseEntity {
   trackingUuid!: string;
 
   @Column({ name: 'chain_of_custody', type: 'json', nullable: true })
-  chainOfCustody: {
+  chainOfCustody!: {
     id: string;
     date: string;
     action: string;

@@ -6,7 +6,6 @@ import {
   Query,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { JobType, JobStatus } from './dto/job-status.dto';

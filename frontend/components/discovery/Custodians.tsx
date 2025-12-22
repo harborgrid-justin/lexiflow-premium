@@ -220,34 +220,34 @@ export const Custodians: React.FC = () => {
           <Input
             label="Full Name"
             value={formData.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})}
             placeholder="Enter custodian's full name"
           />
           <Input
             label="Email Address"
             type="email"
             value={formData.email || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, email: e.target.value})}
             placeholder="custodian@company.com"
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Department"
               value={formData.department || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, department: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, department: e.target.value})}
               placeholder="e.g., Engineering"
             />
             <Input
               label="Role / Title"
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, role: e.target.value})}
               placeholder="e.g., Senior Developer"
             />
           </div>
           <TextArea
             label="Notes"
             value={formData.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
             placeholder="Additional notes about this custodian..."
             rows={3}
           />
@@ -264,24 +264,24 @@ export const Custodians: React.FC = () => {
           <Input
             label="Full Name"
             value={formData.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})}
           />
           <Input
             label="Email Address"
             type="email"
             value={formData.email || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, email: e.target.value})}
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Department"
               value={formData.department || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, department: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, department: e.target.value})}
             />
             <Input
               label="Role / Title"
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, role: e.target.value})}
             />
           </div>
           <div>
@@ -290,7 +290,7 @@ export const Custodians: React.FC = () => {
               title="Select custodian status"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.status || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, status: e.target.value as Custodian['status']})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, status: e.target.value as Custodian['status']})}
             >
               <option value="Pending">Pending</option>
               <option value="Active">Active</option>
@@ -301,7 +301,7 @@ export const Custodians: React.FC = () => {
           <TextArea
             label="Notes"
             value={formData.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
             rows={3}
           />
           <div className="flex justify-end gap-2 pt-4">

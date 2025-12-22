@@ -213,7 +213,7 @@ export const VendorManagement: React.FC = () => {
               </label>
               <Input
                 value={newVendor.name || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVendor(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewVendor(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Enter vendor name"
                 required
               />
@@ -227,7 +227,7 @@ export const VendorManagement: React.FC = () => {
                 id="vendor-service-type"
                 className={`w-full h-10 px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all ${theme.surface.input} ${theme.border.default} ${theme.text.primary} ${theme.border.focused}`}
                 value={newVendor.serviceType || 'Court Reporting'}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as typeof SERVICE_TYPES[number]['value'] }))}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as typeof SERVICE_TYPES[number]['value'] }))}
               >
                 {SERVICE_TYPES.map(type => (
                   <option key={type.value} value={type.value}>{type.label}</option>
@@ -241,7 +241,7 @@ export const VendorManagement: React.FC = () => {
               </label>
               <Input
                 value={newVendor.contactName || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVendor(prev => ({ ...prev, contactName: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewVendor(prev => ({ ...prev, contactName: e.target.value }))}
                 placeholder="Enter contact person"
               />
             </div>
@@ -252,7 +252,7 @@ export const VendorManagement: React.FC = () => {
               </label>
               <Input
                 value={newVendor.phone || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVendor(prev => ({ ...prev, phone: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewVendor(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="Enter phone number"
               />
             </div>
@@ -264,7 +264,7 @@ export const VendorManagement: React.FC = () => {
               <Input
                 type="email"
                 value={newVendor.email || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVendor(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewVendor(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="Enter email address"
               />
             </div>

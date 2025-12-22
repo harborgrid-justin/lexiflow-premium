@@ -70,6 +70,6 @@ export interface ConflictCheck extends BaseEntity { entityName: string; date: st
 
 export interface EthicalWall extends BaseEntity { caseId: CaseId; title: string; restrictedGroups: GroupId[]; authorizedUsers: UserId[]; status: string; }
 
-export interface AuditLogEntry extends BaseEntity { timestamp: string; userId: UserId; user: string; action: string; resource: string; ip: string; hash?: string; prevHash?: string; previousValue?: unknown; newValue?: unknown; }
+export interface AuditLogEntry extends BaseEntity { timestamp: string; userId: UserId; user: string; action: string; resource: string; ip: string; hash?: string; prevHash?: string; previousValue?: JsonValue; newValue?: JsonValue; }
 
 export interface FirmAsset extends BaseEntity { name: string; type: string; assignedTo: string; status: string; purchaseDate: string; value: number; serialNumber?: string; }

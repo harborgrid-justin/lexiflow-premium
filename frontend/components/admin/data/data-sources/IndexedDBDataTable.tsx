@@ -39,7 +39,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
           type="text"
           placeholder="Search records..."
           value={searchTerm}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
           className={cn(
             "w-full px-4 py-2 rounded-lg border",
             theme.border.default,

@@ -1,6 +1,6 @@
 // types/pleadingTypes.ts
 
-import { BaseEntity, CaseId, UserId, EvidenceId, MotionId } from './primitives';
+import { BaseEntity, CaseId, UserId, EvidenceId, MotionId, MetadataRecord } from './primitives';
 
 export type PleadingSectionType = 
   | 'Caption' 
@@ -26,7 +26,7 @@ export interface PleadingSection {
   linkedArgumentId?: string;
   
   complianceIssues?: string[];
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 export interface PleadingComment {

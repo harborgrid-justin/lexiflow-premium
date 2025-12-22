@@ -1,14 +1,15 @@
 /**
  * workflow-types.ts
- * 
+ *
  * Shared workflow and litigation types used across services, hooks, and components.
  * Extracted from components to avoid circular dependencies.
- * 
+ *
  * @module types/workflow-types
  */
 
 import React from 'react';
 import { Play, Square, Layout, GitBranch, Clock, CheckCircle, BoxSelect, Calendar, Milestone, MessageSquare } from 'lucide-react';
+import { MetadataRecord } from './primitives';
 
 export type NodeType = 'Start' | 'Task' | 'Decision' | 'Parallel' | 'Delay' | 'End' | 'Phase' | 'Event' | 'Milestone' | 'Comment';
 
@@ -25,7 +26,7 @@ export interface WorkflowNode {
   y: number;
   width?: number;
   height?: number;
-  config: Record<string, any>;
+  config: MetadataRecord;
   ports?: Port[];
   parentId?: string; // For grouping
   linkedEntityId?: string;

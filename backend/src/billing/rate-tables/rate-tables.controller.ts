@@ -10,8 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { RateTablesService } from './rate-tables.service';
 import { CreateRateTableDto } from './dto/create-rate-table.dto';
 import { UpdateRateTableDto } from './dto/update-rate-table.dto';

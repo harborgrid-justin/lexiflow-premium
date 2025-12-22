@@ -2,9 +2,9 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, 
-  EntityId, 
-  CaseId, Money} from './primitives';
+  BaseEntity, UserId,
+  EntityId,
+  CaseId, Money, MetadataRecord} from './primitives';
 import {
   BillingModel,  LedesActivityCode} from './enums';
 
@@ -259,10 +259,10 @@ export interface Client extends BaseEntity {
   retainerBalance?: number; // Backend: retainer_balance decimal(15,2)
   
   // Extensibility
-  customFields?: Record<string, any>; // Backend: jsonb
+  customFields?: Record<string, unknown>; // Backend: jsonb
   tags?: string[]; // Backend: jsonb
   notes?: string; // Backend: text
-  metadata?: Record<string, any>; // Backend: jsonb
+  metadata?: MetadataRecord; // Backend: jsonb
   
   // Client Portal
   portalToken?: string; // Backend: portal_token varchar(500)

@@ -1,17 +1,17 @@
 export class EthicalWallDto {
-  id: string;
-  name: string;
-  description: string;
+  id!: string;
+  name!: string;
+  description!: string;
   restrictedUsers!: string[];
   restrictedEntities!: RestrictedEntity[];
-  reason: string;
-  createdBy: string;
-  createdByName: string;
+  reason!: string;
+  createdBy!: string;
+  createdByName!: string;
   createdAt!: Date;
   updatedAt!: Date;
   expiresAt?: Date;
   status!: EthicalWallStatus;
-  organizationId: string;
+  organizationId!: string;
 }
 
 export enum EthicalWallStatus {
@@ -27,15 +27,15 @@ export interface RestrictedEntity {
 }
 
 export class CreateEthicalWallDto {
-  name: string;
-  description: string;
+  name!: string;
+  description!: string;
   restrictedUsers!: string[];
   restrictedEntities!: RestrictedEntity[];
-  reason: string;
-  createdBy: string;
-  createdByName: string;
+  reason!: string;
+  createdBy!: string;
+  createdByName!: string;
   expiresAt?: Date;
-  organizationId: string;
+  organizationId!: string;
 }
 
 export class UpdateEthicalWallDto {
@@ -58,13 +58,13 @@ export class QueryEthicalWallsDto {
 }
 
 export class CheckEthicalWallDto {
-  userId: string;
-  entityType: string;
-  entityId: string;
+  userId!: string;
+  entityType!: string;
+  entityId!: string;
 }
 
 export class EthicalWallCheckResult {
-  blocked: boolean;
+  blocked!: boolean;
   walls!: EthicalWallDto[];
   message?: string;
 }

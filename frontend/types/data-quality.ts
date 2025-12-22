@@ -38,7 +38,7 @@ export interface CleansingRule {
   name: string; 
   targetField: string; 
   operation: 'Trim' | 'Uppercase' | 'FormatPhone' | 'FormatDate' | 'RemoveSpecialChars' | 'CustomRegex' | 'Lowercase'; 
-  parameters?: unknown; 
+  parameters?: MetadataRecord; 
   isActive: boolean; 
 }
 

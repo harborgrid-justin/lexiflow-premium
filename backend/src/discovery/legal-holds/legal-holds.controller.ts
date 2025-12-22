@@ -11,8 +11,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { LegalHoldsService } from './legal-holds.service';
 import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';

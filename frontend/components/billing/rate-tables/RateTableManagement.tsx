@@ -197,13 +197,13 @@ export const RateTableManagement: React.FC = () => {
           <Input
             label="Table Name"
             value={formData.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})}
             placeholder="e.g., Standard Client Rates 2024"
           />
           <Input
             label="Description"
             value={formData.description || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, description: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, description: e.target.value})}
             placeholder="Brief description of this rate table"
           />
           <div className="grid grid-cols-2 gap-4">
@@ -211,13 +211,13 @@ export const RateTableManagement: React.FC = () => {
               label="Default Rate ($/hr)"
               type="number"
               value={formData.defaultRate || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, defaultRate: parseFloat(e.target.value)})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, defaultRate: parseFloat(e.target.value)})}
             />
             <Input
               label="Effective Date"
               type="date"
               value={formData.effectiveDate || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, effectiveDate: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, effectiveDate: e.target.value})}
             />
           </div>
 
@@ -233,14 +233,14 @@ export const RateTableManagement: React.FC = () => {
                   <Input
                     placeholder="Role name"
                     value={rate.role}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateRate(index, 'role', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateRate(index, 'role', e.target.value)}
                     className="flex-1"
                   />
                   <Input
                     type="number"
                     placeholder="Rate"
                     value={rate.rate}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateRate(index, 'rate', parseFloat(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateRate(index, 'rate', parseFloat(e.target.value))}
                     className="w-24"
                   />
                   <Button size="sm" variant="ghost" icon={Trash2} onClick={() => removeRate(index)} />

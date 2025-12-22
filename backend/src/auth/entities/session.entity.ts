@@ -69,7 +69,7 @@ export class Session extends BaseEntity {
   revocationReason!: string;
 
   @Column({ name: 'metadata', type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   // Relations
   @ManyToOne(() => User, (user) => user.sessions, { onDelete: 'CASCADE' })

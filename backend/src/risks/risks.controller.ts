@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { RisksService } from './risks.service';
 import { CreateRiskDto, RiskImpact, RiskProbability } from './dto/create-risk.dto';

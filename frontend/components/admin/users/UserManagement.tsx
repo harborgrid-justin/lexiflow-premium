@@ -135,7 +135,7 @@ export const UserManagement: React.FC = () => {
               type="text"
               placeholder="Search users..."
               value={searchQuery}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchQuery(e.target.value)}
               className={cn("pl-9 pr-4 py-2 rounded-lg border text-sm", theme.surface.default, theme.border.default)}
             />
           </div>
@@ -199,16 +199,16 @@ export const UserManagement: React.FC = () => {
       <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create New User">
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, firstName: e.target.value})} />
-            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, lastName: e.target.value})} />
+            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, firstName: e.target.value})} />
+            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, lastName: e.target.value})} />
           </div>
-          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})} />
+          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, email: e.target.value})} />
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Role</label>
             <select
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
               aria-label="Role"
             >
               <option value="">Select role...</option>
@@ -230,17 +230,17 @@ export const UserManagement: React.FC = () => {
       <Modal isOpen={editModal.isOpen} onClose={editModal.close} title="Edit User">
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, firstName: e.target.value})} />
-            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, lastName: e.target.value})} />
+            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, firstName: e.target.value})} />
+            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, lastName: e.target.value})} />
           </div>
-          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})} />
+          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, email: e.target.value})} />
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Role</label>
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.role || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
                 aria-label="Role"
               >
                 <option value="Administrator">Administrator</option>
@@ -255,7 +255,7 @@ export const UserManagement: React.FC = () => {
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, status: e.target.value as UserData['status']})}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, status: e.target.value as UserData['status']})}
                 aria-label="Status"
               >
                 <option value="Active">Active</option>

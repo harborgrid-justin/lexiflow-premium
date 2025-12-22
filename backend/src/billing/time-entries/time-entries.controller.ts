@@ -10,7 +10,6 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { TimeEntriesService } from './time-entries.service';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';

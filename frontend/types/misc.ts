@@ -3,8 +3,8 @@
 
 import {
   BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId,
+  WorkflowTemplateId, CaseId, Money, JurisdictionObject, MetadataRecord, JsonValue
 } from './primitives';
 import {
   CaseStatus, UserRole, MatterType, BillingModel,
@@ -128,7 +128,7 @@ export interface JudgeProfile extends BaseEntity {
   standingOrders?: string[];
   localRules?: string[];
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 // Counsel Analysis Types
@@ -164,7 +164,7 @@ export interface CounselProfile extends BaseEntity {
   commonOpponents?: string[];
   preferredExperts?: string[];
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 // Prediction & Analysis Types
@@ -213,7 +213,7 @@ export interface OutcomePredictionData {
   recommendations: string[];
   alternativeStrategies?: string[];
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 // Analysis Session Types
@@ -234,7 +234,7 @@ export interface AnalysisSession extends BaseEntity {
   modelUsed?: string;
   confidence?: number;
   processingTime?: number;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 export interface LegalEntity extends BaseEntity { id: EntityId; name: string; type: EntityType; roles: EntityRole[]; email?: string; phone?: string; website?: string; address?: string; city?: string; state?: string; country?: string; taxId?: string; company?: string; title?: string; barNumber?: string; jurisdiction?: string; status: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased'; riskScore: number; tags: string[]; notes?: string; linkedUserId?: UserId; avatar?: string; externalIds?: Record<string, string>; aliases?: string[]; }
@@ -284,7 +284,7 @@ export interface ParsedDocket {
   caseInfo: Partial<Case>;
   parties: Party[];
   docketEntries: DocketEntry[];
-  deadlines?: unknown[];
+  deadlines?: Array<{ type: string; date: string; description?: string }>;
 }
 
 export interface ProductionSet {

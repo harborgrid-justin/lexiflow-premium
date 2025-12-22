@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, ILike } from 'typeorm';
+import { Repository} from 'typeorm';
 import { Case } from './entities/case.entity';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
@@ -165,12 +165,12 @@ export class CasesService {
   }
 
   async remove(id: string): Promise<void> {
-    const caseEntity = await this.findOne(id);
+    const _caseEntity = await this.findOne(id);
     await this.caseRepository.softDelete(id);
   }
 
   async archive(id: string): Promise<CaseResponseDto> {
-    const caseEntity = await this.findOne(id);
+    const _caseEntity = await this.findOne(id);
     await this.caseRepository.update(id, { isArchived: true });
     return this.findOne(id);
   }

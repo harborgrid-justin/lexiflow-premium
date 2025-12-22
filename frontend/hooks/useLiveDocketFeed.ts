@@ -107,55 +107,14 @@ export function useLiveDocketFeed({
     setError(null);
     
     try {
-      // NOTE: In production, this would be a real WebSocket URL
-      // For this implementation, we'll simulate WebSocket behavior
-      
-      // Simulate connection delay
-      setTimeout(() => {
-        setStatus('connected');
-        resetReconnectState();
-        
-        // Simulate receiving entries periodically
-        const simulationInterval = setInterval(() => {
-          if (onEntry) {
-            const mockEntry = {
-              id: `dk-live-${Date.now()}`,
-              sequenceNumber: Math.floor(Math.random() * 1000),
-              caseId: caseId || 'CASE-LIVE',
-              courtId: courtId || 'COURT-LIVE',
-              date: new Date().toISOString().split('T')[0],
-              type: ['Filing', 'Order', 'Notice'][Math.floor(Math.random() * 3)],
-              title: 'LIVE: New Docket Entry',
-              description: 'Simulated live feed entry',
-              filedBy: 'Court Clerk',
-              isSealed: false
-            };
-            
-            onEntry(mockEntry);
-            setLastUpdate(new Date());
-            setEntriesReceived(prev => prev + 1);
-          }
-        }, 5000); // Every 5 seconds
-        
-        // Store cleanup function
-        wsRef.current = {
-          close: () => {
-            clearInterval(simulationInterval);
-            setStatus('disconnected');
-          }
-        } as any;
-      }, 1000);
-      
-      // In real implementation:
-      /*
-      const wsUrl = `${WS_URL}/docket/live?courtId=${courtId}&caseId=${caseId}`;
+      const wsUrl = `${WS_URL}/docket/live?courtId=${courtId || ''}&caseId=${caseId || ''}`;
       const ws = new WebSocket(wsUrl);
-      
+
       ws.onopen = () => {
         setStatus('connected');
         resetReconnectState();
       };
-      
+
       ws.onmessage = (event) => {
         try {
           const entry = JSON.parse(event.data);
@@ -171,20 +130,20 @@ export function useLiveDocketFeed({
           console.error('Failed to parse WebSocket message:', e);
         }
       };
-      
-      ws.onerror = (event) => {
+
+      ws.onerror = () => {
         setError('WebSocket connection error');
         setStatus('error');
       };
-      
+
       ws.onclose = (event) => {
         setStatus('disconnected');
-        
+
         // Attempt reconnection if not a normal close
         if (!event.wasClean && reconnectCountRef.current < reconnectAttempts) {
           reconnectCountRef.current++;
           const delay = getNextReconnectDelay();
-          
+
           reconnectTimeoutRef.current = setTimeout(() => {
             connect();
           }, delay);
@@ -192,15 +151,14 @@ export function useLiveDocketFeed({
           setError(`Failed to reconnect after ${reconnectAttempts} attempts`);
         }
       };
-      
+
       wsRef.current = ws;
-      */
-      
+
     } catch (e) {
       setError(`Connection failed: ${e instanceof Error ? e.message : 'Unknown error'}`);
       setStatus('error');
     }
-  }, [courtId, caseId, onEntry, reconnectAttempts, getNextReconnectDelay, resetReconnectState]);
+  }, [courtId, caseId, onEntry, onNewEntry, reconnectAttempts, getNextReconnectDelay, resetReconnectState]);
   
   /**
    * Disconnect from WebSocket

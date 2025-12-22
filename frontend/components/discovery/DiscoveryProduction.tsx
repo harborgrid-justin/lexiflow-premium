@@ -143,15 +143,15 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Bates Numbering</label>
                             <div className="flex gap-2">
-                                <input className={cn("w-20 p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} placeholder="Prefix" value={config.batesPrefix} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, batesPrefix: e.target.value})} />
-                                <input className={cn("flex-1 p-2 border rounded text-sm font-mono", theme.surface.default, theme.border.default, theme.text.primary)} type="number" value={config.startNumber} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, startNumber: parseInt(e.target.value)})} />
+                                <input className={cn("w-20 p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} placeholder="Prefix" value={config.batesPrefix} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, batesPrefix: e.target.value})} />
+                                <input className={cn("flex-1 p-2 border rounded text-sm font-mono", theme.surface.default, theme.border.default, theme.text.primary)} type="number" value={config.startNumber} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, startNumber: parseInt(e.target.value)})} />
                             </div>
                             <p className={cn("text-xs mt-1", theme.text.tertiary)}>Next: {config.batesPrefix}{String(config.startNumber).padStart(6, '0')}</p>
                         </div>
                         
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Format</label>
-                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.format} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, format: e.target.value})}>
+                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.format} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, format: e.target.value})}>
                                 <option value="PDF">PDF + Text</option>
                                 <option value="Native">Native Only</option>
                                 <option value="TIFF">TIFF (Single Page)</option>
@@ -160,18 +160,18 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
                         <div className="space-y-2 pt-2">
                             <label className={cn("flex items-center text-sm cursor-pointer", theme.text.primary)}>
-                                <input type="checkbox" className="mr-2 rounded text-blue-600" checked={config.includeLoadFile} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, includeLoadFile: e.target.checked})} />
+                                <input type="checkbox" className="mr-2 rounded text-blue-600" checked={config.includeLoadFile} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, includeLoadFile: e.target.checked})} />
                                 Include Load File (.dat/.opt)
                             </label>
                             <label className={cn("flex items-center text-sm cursor-pointer", theme.text.primary)}>
-                                <input type="checkbox" className="mr-2 rounded text-blue-600" checked={config.ocr} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, ocr: e.target.checked})} />
+                                <input type="checkbox" className="mr-2 rounded text-blue-600" checked={config.ocr} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, ocr: e.target.checked})} />
                                 Perform OCR if missing
                             </label>
                         </div>
 
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Confidentiality Stamp</label>
-                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.stampConfidential} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, stampConfidential: e.target.value})}>
+                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.stampConfidential} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({...config, stampConfidential: e.target.value})}>
                                 <option value="None">None</option>
                                 <option value="CONFIDENTIAL">CONFIDENTIAL</option>
                                 <option value="ATTORNEY EYES ONLY">ATTORNEY EYES ONLY</option>

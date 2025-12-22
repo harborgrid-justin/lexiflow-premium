@@ -1,4 +1,3 @@
-import { DataSource } from 'typeorm';
 import dataSource from '../data-source';
 import { seedUsers } from './user.seed';
 import { seedClients } from './client.seed';

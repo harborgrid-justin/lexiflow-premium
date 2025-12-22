@@ -173,7 +173,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
               type="checkbox"
               className={cn("mr-2 rounded focus:ring-2 focus:ring-blue-500", theme.action.primary.text)}
               checked={logAsEvidence}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogAsEvidence(e.target.checked)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLogAsEvidence(e.target.checked)}
             />
             <ShieldCheck className={cn("h-4 w-4 mr-1", logAsEvidence ? theme.text.link : theme.text.tertiary)} />
             Log as Evidence

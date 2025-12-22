@@ -150,7 +150,7 @@ export class Client extends BaseEntity {
   retainerBalance!: number;
 
   @Column({ name: 'custom_fields', type: 'jsonb', nullable: true })
-  customFields!: Record<string, any>;
+  customFields!: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
   tags!: string[];
@@ -159,7 +159,7 @@ export class Client extends BaseEntity {
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ name: 'portal_token', type: 'varchar', length: 500, nullable: true })
   portalToken!: string;

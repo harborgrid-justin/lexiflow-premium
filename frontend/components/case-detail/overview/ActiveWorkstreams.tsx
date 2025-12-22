@@ -56,7 +56,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
                                 aria-valuemax={100}
                                 aria-label={`Progress for ${proj.title}`}
                             >
-                                {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width required for progress */}
+                                { }
                                 <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: `${pct}%` }}></div>
                             </div>
                         </div>

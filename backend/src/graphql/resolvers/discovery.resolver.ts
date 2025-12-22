@@ -44,7 +44,7 @@ export class DiscoveryResolver {
   @UseGuards(GqlAuthGuard)
   async createDiscoveryRequest(
     @Args('input') input: CreateDiscoveryRequestInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DiscoveryRequestType> {
     const request = await this.discoveryService.createRequest(input as any);
     return request as any;
@@ -55,7 +55,7 @@ export class DiscoveryResolver {
   async updateDiscoveryRequest(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateDiscoveryRequestInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DiscoveryRequestType> {
     const request = await this.discoveryService.updateRequest(id, input as any);
     return request as any;
@@ -63,7 +63,7 @@ export class DiscoveryResolver {
 
   @Query(() => [DepositionType], { name: 'depositions' })
   @UseGuards(GqlAuthGuard)
-  async getDepositions(@Args('caseId', { type: () => ID }) caseId: string): Promise<DepositionType[]> {
+  async getDepositions(@Args('_caseId', { type: () => ID }) _caseId: string): Promise<DepositionType[]> {
     // Note: Depositions are not directly implemented in the current DiscoveryService
     // This would require a separate Depositions service or module
     return [];
@@ -71,7 +71,7 @@ export class DiscoveryResolver {
 
   @Query(() => DepositionType, { name: 'deposition', nullable: true })
   @UseGuards(GqlAuthGuard)
-  async getDeposition(@Args('id', { type: () => ID }) id: string): Promise<DepositionType | null> {
+  async getDeposition(@Args('_id', { type: () => ID }) _id: string): Promise<DepositionType | null> {
     // Note: Depositions are not directly implemented in the current DiscoveryService
     return null;
   }
@@ -79,8 +79,8 @@ export class DiscoveryResolver {
   @Mutation(() => DepositionType)
   @UseGuards(GqlAuthGuard)
   async createDeposition(
-    @Args('input') input: CreateDepositionInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @Args('_input') _input: CreateDepositionInput,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DepositionType> {
     // Note: Depositions are not directly implemented in the current DiscoveryService
     throw new Error('Deposition functionality requires additional service implementation');
@@ -89,9 +89,9 @@ export class DiscoveryResolver {
   @Mutation(() => DepositionType)
   @UseGuards(GqlAuthGuard)
   async updateDeposition(
-    @Args('id', { type: () => ID }) id: string,
-    @Args('input') input: UpdateDepositionInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @Args('_id', { type: () => ID }) _id: string,
+    @Args('_input') _input: UpdateDepositionInput,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DepositionType> {
     // Note: Depositions are not directly implemented in the current DiscoveryService
     throw new Error('Deposition functionality requires additional service implementation');
@@ -108,7 +108,7 @@ export class DiscoveryResolver {
   @UseGuards(GqlAuthGuard)
   async createLegalHold(
     @Args('input') input: CreateLegalHoldInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<LegalHoldType> {
     const hold = await this.discoveryService.createHold(input as any);
     return hold as any;
@@ -118,7 +118,7 @@ export class DiscoveryResolver {
   @UseGuards(GqlAuthGuard)
   async releaseLegalHold(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<LegalHoldType> {
     const hold = await this.discoveryService.releaseHold(id);
     return hold as any;
@@ -126,7 +126,7 @@ export class DiscoveryResolver {
 
   @Query(() => [PrivilegeLogEntryType], { name: 'privilegeLog' })
   @UseGuards(GqlAuthGuard)
-  async getPrivilegeLog(@Args('caseId', { type: () => ID }) caseId: string): Promise<PrivilegeLogEntryType[]> {
+  async getPrivilegeLog(@Args('_caseId', { type: () => ID }) _caseId: string): Promise<PrivilegeLogEntryType[]> {
     // Note: Privilege log is not directly implemented in the current DiscoveryService
     // This would require additional service methods for full implementation
     return [];
@@ -135,8 +135,8 @@ export class DiscoveryResolver {
   @Mutation(() => PrivilegeLogEntryType)
   @UseGuards(GqlAuthGuard)
   async createPrivilegeLogEntry(
-    @Args('input') input: CreatePrivilegeLogEntryInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @Args('_input') _input: CreatePrivilegeLogEntryInput,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<PrivilegeLogEntryType> {
     // Note: Privilege log is not directly implemented in the current DiscoveryService
     throw new Error('Privilege log functionality requires additional service implementation');

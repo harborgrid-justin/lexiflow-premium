@@ -1,12 +1,13 @@
 ﻿/**
  * OrganizationDomain - Organization and department management service
  * Provides org structure, department hierarchy, and member management
- * 
+ *
  * ✅ Migrated to backend API (2025-12-21)
  */
 
 import { adminApi } from '../api/domains/admin.api';
 import { delay } from '../../utils/async';
+import { STORES, db } from '../data/db';
 
 interface Organization {
   id: string;

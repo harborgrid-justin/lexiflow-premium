@@ -59,7 +59,7 @@ export class DiscoveryController {
   @ApiResponse({ status: 200, description: 'List of discovery requests' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  findAll(@Query() query?: QueryDiscoveryRequestDto) {
+  findAll(@Query() _query?: QueryDiscoveryRequestDto) {
     return this.discoveryService.findAllRequests();
   }
 

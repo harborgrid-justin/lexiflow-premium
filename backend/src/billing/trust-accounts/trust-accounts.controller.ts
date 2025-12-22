@@ -12,7 +12,7 @@ import {
   Head,
 } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse }from '@nestjs/swagger';
 import { TrustAccountsService } from './trust-accounts.service';
 import { CreateTrustAccountDto } from './dto/create-trust-account.dto';
 import { UpdateTrustAccountDto } from './dto/update-trust-account.dto';

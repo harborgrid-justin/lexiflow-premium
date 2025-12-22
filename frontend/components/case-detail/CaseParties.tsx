@@ -140,7 +140,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             <select 
                 className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                 value={groupBy}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroupBy(e.target.value as GroupByOption)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setGroupBy(e.target.value as GroupByOption)}
                 aria-label="Group parties by"
             >
                 <option value="none">No Grouping</option>
@@ -242,11 +242,11 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
 
       <Modal isOpen={partyModal.isOpen} onClose={partyModal.close} title={currentParty.id ? 'Edit Party' : 'Add New Party'}>
           <div className="p-6 space-y-4">
-              <Input label="Name" value={currentParty.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, name: e.target.value})} placeholder="e.g. John Doe or Acme Corp"/>
+              <Input label="Name" value={currentParty.name || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, name: e.target.value})} placeholder="e.g. John Doe or Acme Corp"/>
               <div className="grid grid-cols-2 gap-4">
                   <div>
                       <label htmlFor="partyRole" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
-                      <select id="partyRole" aria-label="Party Role" className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, role: e.target.value})}>
+                      <select id="partyRole" aria-label="Party Role" className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, role: e.target.value})}>
                           <option value="">Select Role...</option>
                           <option value="Plaintiff">Plaintiff</option>
                           <option value="Defendant">Defendant</option>
@@ -263,7 +263,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                         aria-label="Party Type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={currentParty.type || 'Individual'}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
                       >
                           <option value="Individual">Individual</option>
                           <option value="Corporation">Corporation</option>
@@ -272,18 +272,18 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                   </div>
               </div>
               
-              <Input label="Party Group" value={currentParty.partyGroup || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, partyGroup: e.target.value})} placeholder="e.g. Class Reps, Subsidiaries"/>
+              <Input label="Party Group" value={currentParty.partyGroup || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, partyGroup: e.target.value})} placeholder="e.g. Class Reps, Subsidiaries"/>
 
               <div className="grid grid-cols-2 gap-4">
-                  <Input label="Email" value={currentParty.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, email: e.target.value})} />
-                  <Input label="Phone" value={currentParty.phone || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, phone: e.target.value})} />
+                  <Input label="Email" value={currentParty.email || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, email: e.target.value})} />
+                  <Input label="Phone" value={currentParty.phone || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, phone: e.target.value})} />
               </div>
-              <Input label="Address" value={currentParty.address || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, address: e.target.value})} />
+              <Input label="Address" value={currentParty.address || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, address: e.target.value})} />
 
-              <Input label="Representation Type" value={currentParty.representationType || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, representationType: e.target.value})} placeholder="e.g. Pro Se, Retained" />
+              <Input label="Representation Type" value={currentParty.representationType || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, representationType: e.target.value})} placeholder="e.g. Pro Se, Retained" />
               
               {!(currentParty.attorneys && Array.isArray(currentParty.attorneys) && currentParty.attorneys.length > 0) && (
-                  <Input label="Legal Counsel (Simple String)" value={currentParty.counsel || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, counsel: e.target.value})} placeholder="Firm or Attorney Name"/>
+                  <Input label="Legal Counsel (Simple String)" value={currentParty.counsel || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, counsel: e.target.value})} placeholder="Firm or Attorney Name"/>
               )}
               
               {currentParty.type === 'Corporation' && (
@@ -294,7 +294,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                         aria-label="Link to Organization"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
                         value={currentParty.linkedOrgId || ''} 
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}
                       >
                           <option value="">No Link</option>
                           {orgs.map(org => (

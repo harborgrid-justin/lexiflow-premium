@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNotEmpty, MaxLength, IsBoolean, IsUUID, IsEmail, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, MaxLength, IsBoolean, IsUUID} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum ExpertType {

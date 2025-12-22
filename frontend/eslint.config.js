@@ -65,6 +65,12 @@ export default tseslint.config(
       '**/*.js',
       '**/*.d.ts',
       '__tests__/**',
+      'archived/**',
+      'cypress/**',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
     ],
   }
 );

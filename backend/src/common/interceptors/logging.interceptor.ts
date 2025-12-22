@@ -36,7 +36,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap({
-        next: (data) => {
+        next: (_data) => {
           const responseTime = Date.now() - now;
           this.logger.log(
             `Response: ${method} ${url} - ${responseTime}ms - Success`,

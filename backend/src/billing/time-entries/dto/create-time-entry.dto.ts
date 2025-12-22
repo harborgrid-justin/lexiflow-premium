@@ -1,5 +1,4 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsBoolean, IsEnum, Min, Max } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsNumber, IsOptional, IsBoolean, IsEnum, Min, Max } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { TimeEntryStatus } from '../entities/time-entry.entity';
 
@@ -23,7 +22,7 @@ export class CreateTimeEntryDto {
     example: '2025-12-15'
   })
   @IsString()
-  date: string; // ISO date string YYYY-MM-DD
+  date!: string; // ISO date string YYYY-MM-DD
 
   @ApiProperty({
     description: 'Duration in hours (0.01 to 24)',
@@ -34,7 +33,7 @@ export class CreateTimeEntryDto {
   @IsNumber()
   @Min(0.01)
   @Max(24)
-  duration: number; // in hours
+  duration!: number; // in hours
 
   @ApiProperty({
     description: 'Description of work performed',

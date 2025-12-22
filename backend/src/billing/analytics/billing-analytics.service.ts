@@ -24,7 +24,7 @@ export class BillingAnalyticsService {
   ) {}
 
   async getWipStats(filterDto: AnalyticsFilterDto): Promise<WipStatsResponse> {
-    const { firmId, caseId, userId, startDate, endDate } = filterDto;
+    const { _firmId, caseId, userId, startDate, endDate } = filterDto;
 
     // Build queries for unbilled time entries
     let timeQuery = this.timeEntryRepository
@@ -179,7 +179,7 @@ export class BillingAnalyticsService {
   }
 
   async getRealizationRates(filterDto: AnalyticsFilterDto): Promise<RealizationResponse> {
-    const { startDate, endDate, userId } = filterDto;
+    const { startDate, endDate, _userId } = filterDto;
 
     let invoiceQuery = this.invoiceRepository
       .createQueryBuilder('inv')
@@ -283,7 +283,7 @@ export class BillingAnalyticsService {
     };
   }
 
-  async getArAging(filterDto: AnalyticsFilterDto): Promise<ArAgingResponse> {
+  async getArAging(_filterDto: AnalyticsFilterDto): Promise<ArAgingResponse> {
     const today = new Date();
 
     const invoices = await this.invoiceRepository.find({

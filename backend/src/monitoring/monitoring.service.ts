@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, MoreThan } from 'typeorm';
+import { Repository, MoreThan } from 'typeorm';
 import { PerformanceMetric } from './entities/performance-metric.entity';
 import { SystemAlert, AlertSeverity } from './entities/system-alert.entity';
 
@@ -17,7 +17,7 @@ export class MonitoringService {
     metricName: string;
     value: number;
     unit?: string;
-    tags?: Record<string, any>;
+    tags?: Record<string, unknown>;
   }): Promise<PerformanceMetric> {
     const metric = this.metricRepository.create({
       ...data,

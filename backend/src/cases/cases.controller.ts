@@ -9,11 +9,10 @@ import {
   Query,
   HttpCode,
   HttpStatus,
-  UseGuards,
+  _UseGuards,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';

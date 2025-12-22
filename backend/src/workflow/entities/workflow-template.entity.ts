@@ -16,7 +16,7 @@ export class WorkflowTemplate {
   category!: WorkflowCategory;
 
   @Column({ type: 'json' })
-  stages: Array<{
+  stages!: Array<{
     name: string;
     description?: string;
     order: number;

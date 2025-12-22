@@ -115,7 +115,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
             <div className="w-full max-w-md relative">
                 <SearchInputBar 
                     value={searchTerm} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)} 
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)} 
                     placeholder="Search entities..." 
                 />
                 {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
@@ -123,7 +123,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
             <select 
                 className={cn("p-2 border rounded text-sm outline-none bg-transparent ml-4", theme.border.default, theme.text.primary)}
                 value={filterType}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterType(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilterType(e.target.value)}
             >
                 <option value="All">All Types</option>
                 <option value="Individual">Individuals</option>

@@ -23,7 +23,7 @@ export class ExecuteOperationDto {
     example: { text: 'Document content to summarize' },
   })
   @IsObject()
-  input!: Record<string, any>;
+  input!: Record<string, unknown>;
 }
 
 export class GetOperationsQueryDto {

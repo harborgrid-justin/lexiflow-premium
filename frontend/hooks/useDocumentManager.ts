@@ -698,7 +698,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
 
         try {
           await DocumentService.uploadDocument(file, {
-            sourceModule: currentFolder === 'root' ? 'General' : (currentFolder as any),
+            sourceModule: currentFolder === 'root' ? 'General' : currentFolder,
             caseId: 'General' as CaseId
           });
           successCount++;

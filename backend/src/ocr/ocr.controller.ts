@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { OcrService } from './ocr.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';

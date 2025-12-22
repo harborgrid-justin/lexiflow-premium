@@ -51,7 +51,7 @@ export class AuditLogInterceptor implements NestInterceptor {
     method: string,
     url: string,
     response: any,
-    user: any,
+    _user: any,
   ): {
     action: AuditAction;
     entityType: AuditEntityType;

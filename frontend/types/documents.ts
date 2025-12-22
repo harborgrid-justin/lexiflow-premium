@@ -46,7 +46,7 @@ export interface LegalDocument extends BaseEntity {
   
   // Organization
   tags: string[]; // Backend: simple-array
-  customFields?: Record<string, unknown>; // Backend: jsonb
+  customFields?: MetadataRecord; // Backend: jsonb
   folderId?: string;
   sourceModule?: string;
   
@@ -64,7 +64,7 @@ export interface LegalDocument extends BaseEntity {
   
   // E-signature
   signingStatus?: { recipient: string; status: 'Sent' | 'Viewed' | 'Signed'; signedAt?: string }[];
-  formFields?: unknown[];
+  formFields?: Array<{ name: string; type: string; value: JsonValue }>;
   
   // Dates (backend compatibility)
   uploadDate: string; // Maps to createdAt

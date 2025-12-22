@@ -99,7 +99,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                 <select 
                     className={cn("pl-6 pr-2 py-1 text-xs border rounded bg-transparent outline-none appearance-none cursor-pointer", theme.border.default, theme.text.primary)}
                     value={filterType}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterType(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilterType(e.target.value)}
                     aria-label="Filter events by type"
                 >
                     <option value="All">All Types</option>

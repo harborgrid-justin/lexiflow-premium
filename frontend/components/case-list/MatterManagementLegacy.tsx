@@ -186,7 +186,7 @@ const MatterManagement: React.FC = () => {
                 type="text"
                 placeholder="Search by title, matter number, or client..."
                 value={searchTerm}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -197,7 +197,7 @@ const MatterManagement: React.FC = () => {
               <Filter className="h-5 w-5 text-gray-400" />
               <select
                 value={selectedStatus}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedStatus(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSelectedStatus(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">All Status</option>
@@ -211,7 +211,7 @@ const MatterManagement: React.FC = () => {
 
             <select
               value={selectedPriority}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedPriority(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSelectedPriority(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Priority</option>

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThan, Not, IsNull } from 'typeorm';
+import { Repository, LessThan, Not} from 'typeorm';
 import { DiscoveryRequest, DiscoveryRequestStatus } from './discovery-requests/entities/discovery-request.entity';
 import { LegalHold, LegalHoldStatus } from './legal-holds/entities/legal-hold.entity';
 import { Custodian } from './custodians/entities/custodian.entity';

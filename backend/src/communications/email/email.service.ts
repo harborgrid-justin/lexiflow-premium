@@ -51,7 +51,7 @@ export class EmailService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error(`Failed to send email: ${message}`);
       return {
         success: false,
@@ -66,7 +66,7 @@ export class EmailService {
   async sendTemplateEmail(options: {
     to: string | string[];
     template: string;
-    context: Record<string, any>;
+    context: Record<string, unknown>;
     subject: string;
     from?: string;
     cc?: string[];
@@ -85,7 +85,7 @@ export class EmailService {
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error(`Failed to send template email: ${message}`);
       return {
         success: false,
@@ -223,7 +223,7 @@ export class EmailService {
    * Send bulk emails
    */
   async sendBulkEmails(
-    recipients: Array<{ email: string; context: Record<string, any> }>,
+    recipients: Array<{ email: string; context: Record<string, unknown> }>,
     template: string,
     subject: string,
   ): Promise<{ sent: number; failed: number; errors: any[] }> {
@@ -261,7 +261,7 @@ export class EmailService {
    */
   private async renderTemplate(
     templateName: string,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): Promise<string> {
     // Load template file
     // Render with context using template engine
@@ -280,7 +280,7 @@ export class EmailService {
   /**
    * Validate email address
    */
-  private isValidEmail(email: string): boolean {
+  private _isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }

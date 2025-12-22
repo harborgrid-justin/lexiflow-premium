@@ -6,5 +6,5 @@ export interface DocumentMetadata {
   wordCount?: number;
   language?: string;
   tags?: string[];
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }

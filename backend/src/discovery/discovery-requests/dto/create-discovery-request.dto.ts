@@ -7,9 +7,8 @@ import {
   IsArray,
   IsUUID,
   MaxLength,
-  ValidateNested,
+  _ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { DiscoveryRequestType } from '../entities/discovery-request.entity';
 
 export class CreateDiscoveryRequestDto {

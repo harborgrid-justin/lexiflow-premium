@@ -113,7 +113,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                                title="Select meet and confer date"
                                className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                value={meetConferDate}
-                               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMeetConferDate(e.target.value)}
+                               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMeetConferDate(e.target.value)}
                            />
                        </div>
                        <Button size="sm" variant="outline" icon={MessageSquare}>View Conferral Log</Button>

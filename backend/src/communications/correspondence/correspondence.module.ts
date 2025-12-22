@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CorrespondenceController } from './correspondence.controller';
 import { CorrespondenceService } from './correspondence.service';
 

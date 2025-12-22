@@ -6,12 +6,11 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
+  _Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { ProductionService } from './production.service';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 import { ProductionStatus } from '../discovery/productions/entities/production.entity';

@@ -48,6 +48,7 @@
 
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../types';
 import { delay } from '../../utils/async';
+import { BackupsApiService } from '../api/backups-api';
 
 // =============================================================================
 // REACT QUERY KEYS
@@ -102,7 +103,7 @@ function validateSnapshotId(id: unknown, methodName: string): void {
  * In-memory simulation of backup state for development
  * @private
  */
-let mockSnapshots: BackupSnapshot[] = [
+const mockSnapshots: BackupSnapshot[] = [
   { 
     id: 'snap-auto-001', 
     name: 'Daily Automated Backup', 
@@ -142,25 +143,37 @@ let mockSnapshots: BackupSnapshot[] = [
 export const BackupService = {
   /**
    * Get all backup snapshots
-   * 
+   *
    * @returns Promise<BackupSnapshot[]> - Array of snapshots sorted by creation date (newest first)
    * @throws Error if retrieval fails
-   * 
+   *
    * @example
    * const snapshots = await BackupService.getSnapshots();
    * console.log(`Found ${snapshots.length} snapshots`);
    */
   getSnapshots: async (): Promise<BackupSnapshot[]> => {
     try {
-      // const snapshots = await backupApi.getSnapshots();
-      
-      await delay(200);
-      return [...mockSnapshots].sort((a, b) => 
+      const backupApi = new BackupsApiService();
+      const backups = await backupApi.getAll();
+
+      // Transform backend Backup to BackupSnapshot format
+      return backups.map((backup): BackupSnapshot => ({
+        id: backup.id,
+        name: backup.name,
+        type: backup.type === 'full' ? 'Full' : backup.type === 'incremental' ? 'Incremental' : 'Differential',
+        created: backup.startedAt,
+        size: backup.size ? `${(backup.size / (1024 * 1024 * 1024)).toFixed(2)} GB` : 'Unknown',
+        status: backup.status === 'completed' ? 'Completed' : backup.status === 'in_progress' ? 'In Progress' : 'Failed'
+      })).sort((a, b) =>
         new Date(b.created).getTime() - new Date(a.created).getTime()
       );
     } catch (error) {
-      console.error('[BackupService.getSnapshots] Error:', error);
-      throw error;
+      console.error('[BackupService.getSnapshots] Backend unavailable, using fallback data:', error);
+      // Fallback to mock data for development
+      await delay(200);
+      return [...mockSnapshots].sort((a, b) =>
+        new Date(b.created).getTime() - new Date(a.created).getTime()
+      );
     }
   },
 
@@ -195,15 +208,15 @@ export const BackupService = {
 
   /**
    * Create a new backup snapshot
-   * 
+   *
    * @param type - Snapshot type (Full, Incremental, or Differential)
    * @returns Promise<BackupSnapshot> - Newly created snapshot
    * @throws Error if validation fails or snapshot creation fails
-   * 
+   *
    * @example
    * const snapshot = await BackupService.createSnapshot('Full');
    * console.log(`Created snapshot: ${snapshot.id}`);
-   * 
+   *
    * @performance
    * - Full backup: ~1.5-2s
    * - Incremental: ~500ms
@@ -212,22 +225,23 @@ export const BackupService = {
   createSnapshot: async (type: SnapshotType): Promise<BackupSnapshot> => {
     try {
       validateSnapshotType(type, 'createSnapshot');
-      
-      // const snapshot = await backupApi.createSnapshot({ type });
-      
-      await delay(1500);
-      
-      const newSnap: BackupSnapshot = {
-        id: `snap-man-${Date.now()}`,
+
+      const backupApi = new BackupsApiService();
+      const backup = await backupApi.create({
         name: `Manual ${type} Backup`,
+        type: type.toLowerCase() as 'full' | 'incremental' | 'differential'
+      });
+
+      const newSnap: BackupSnapshot = {
+        id: backup.id,
+        name: backup.name,
         type: type,
-        created: new Date().toISOString(),
-        size: type === 'Full' ? '452 GB' : type === 'Incremental' ? '150 MB' : '2.8 GB',
-        status: 'Completed'
+        created: backup.startedAt,
+        size: backup.size ? `${(backup.size / (1024 * 1024 * 1024)).toFixed(2)} GB` :
+               type === 'Full' ? '452 GB' : type === 'Incremental' ? '150 MB' : '2.8 GB',
+        status: backup.status === 'completed' ? 'Completed' : 'In Progress'
       };
-      
-      mockSnapshots = [newSnap, ...mockSnapshots];
-      
+
       console.log(`[BackupService] Created ${type} snapshot: ${newSnap.id}`);
       return newSnap;
     } catch (error) {
@@ -239,15 +253,15 @@ export const BackupService = {
   /**
    * Restore system to a snapshot
    * Performs rollback to specified snapshot state
-   * 
+   *
    * @param id - Snapshot ID to restore
    * @returns Promise<boolean> - True if restoration succeeded
    * @throws Error if validation fails or restoration fails
-   * 
+   *
    * @example
    * const success = await BackupService.restoreSnapshot('snap-auto-001');
    * if (success) console.log('Restoration complete');
-   * 
+   *
    * @warning
    * This operation is destructive and will overwrite current data.
    * Ensure proper backups are in place before restoration.
@@ -255,19 +269,11 @@ export const BackupService = {
   restoreSnapshot: async (id: string): Promise<boolean> => {
     try {
       validateSnapshotId(id, 'restoreSnapshot');
-      
-      // Verify snapshot exists
-      const snapshot = mockSnapshots.find(s => s.id === id);
-      if (!snapshot) {
-        throw new Error(`[BackupService.restoreSnapshot] Snapshot not found: ${id}`);
-      }
-      
-      // const result = await backupApi.restoreSnapshot(id);
-      
-      await delay(3000);
-      console.log(`[BackupService] Restoring cluster state to snapshot ${id}...`);
-      console.log(`[BackupService] Snapshot type: ${snapshot.type}, Size: ${snapshot.size}`);
-      
+
+      const backupApi = new BackupsApiService();
+      await backupApi.restore(id);
+
+      console.log(`[BackupService] Successfully restored snapshot ${id}`);
       return true;
     } catch (error) {
       console.error('[BackupService.restoreSnapshot] Error:', error);

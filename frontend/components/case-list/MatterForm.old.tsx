@@ -169,7 +169,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.matterNumber}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('matterNumber', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('matterNumber', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Auto-generated if empty"
             />
@@ -182,7 +182,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="matterType"
               value={formData.matterType || formData.type || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('matterType', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('matterType', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               {Object.values(MatterType).map(type => (
@@ -198,7 +198,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('title', e.target.value)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
                 errors.title ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
@@ -213,7 +213,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <textarea
               value={formData.description}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('description', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('description', e.target.value)}
               rows={3}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Detailed matter description"
@@ -227,7 +227,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="status"
               value={formData.status}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('status', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('status', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               {Object.values(MatterStatus).map(status => (
@@ -242,7 +242,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <select
               value={formData.priority}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('priority', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('priority', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               {Object.values(MatterPriority).map(priority => (
@@ -257,7 +257,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <select
               value={formData.practiceArea}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('practiceArea', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('practiceArea', e.target.value)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
                 errors.practiceArea ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
@@ -285,7 +285,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.clientName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('clientName', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('clientName', e.target.value)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
                 errors.clientName ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
@@ -301,7 +301,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.clientContact}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('clientContact', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('clientContact', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Primary contact person"
             />
@@ -323,7 +323,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.leadAttorneyName || formData.responsibleAttorneyName || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('leadAttorneyName', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('leadAttorneyName', e.target.value)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
                 errors.leadAttorneyName ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
@@ -339,7 +339,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.originatingAttorneyName || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('originatingAttorneyName', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('originatingAttorneyName', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Attorney who brought in the matter"
             />
@@ -360,7 +360,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="conflictCheckStatus"
               value={formData.conflictCheckStatus}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('conflictCheckStatus', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('conflictCheckStatus', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               <option value="pending">Pending</option>
@@ -378,7 +378,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               id="conflictCheckDate"
               type="date"
               value={formData.conflictCheckDate ? formData.conflictCheckDate.split('T')[0] : ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('conflictCheckDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('conflictCheckDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Select conflict check date"
             />
@@ -390,7 +390,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <textarea
               value={formData.conflictCheckNotes}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('conflictCheckNotes', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('conflictCheckNotes', e.target.value)}
               rows={2}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Notes about conflict check results"
@@ -414,7 +414,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               id="intakeDate"
               type="date"
               value={formData.intakeDate ? formData.intakeDate.split('T')[0] : ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('intakeDate', new Date(e.target.value).toISOString())}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('intakeDate', new Date(e.target.value).toISOString())}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             />
           </div>
@@ -427,7 +427,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               id="openedDate"
               type="date"
               value={formData.openedDate ? formData.openedDate.split('T')[0] : ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('openedDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('openedDate', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
                 errors.openedDate ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
@@ -443,7 +443,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               id="statuteOfLimitations"
               type="date"
               value={formData.statute_of_limitations ? formData.statute_of_limitations.split('T')[0] : ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('statute_of_limitations', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('statute_of_limitations', e.target.value ? new Date(e.target.value).toISOString() : undefined)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             />
           </div>
@@ -464,7 +464,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="billingType"
               value={formData.billingType || formData.billingArrangement || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('billingType', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('billingType', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               <option value="Hourly">Hourly</option>
@@ -483,7 +483,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               <input
                 type="number"
                 value={formData.hourlyRate || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('hourlyRate', e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('hourlyRate', e.target.value ? parseFloat(e.target.value) : undefined)}
                 className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
                 placeholder="0.00"
                 step="0.01"
@@ -499,7 +499,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               <input
                 type="number"
                 value={formData.flatFee || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('flatFee', e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('flatFee', e.target.value ? parseFloat(e.target.value) : undefined)}
                 className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
                 placeholder="0.00"
                 step="0.01"
@@ -515,7 +515,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               <input
                 type="number"
                 value={formData.contingencyPercentage || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('contingencyPercentage', e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('contingencyPercentage', e.target.value ? parseFloat(e.target.value) : undefined)}
                 className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
                 placeholder="0.00"
                 step="0.01"
@@ -532,7 +532,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="number"
               value={formData.estimatedValue || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('estimatedValue', e.target.value ? parseFloat(e.target.value) : undefined)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('estimatedValue', e.target.value ? parseFloat(e.target.value) : undefined)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="0.00"
               step="0.01"
@@ -546,7 +546,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="number"
               value={formData.budgetAmount || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('budgetAmount', e.target.value ? parseFloat(e.target.value) : undefined)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('budgetAmount', e.target.value ? parseFloat(e.target.value) : undefined)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="0.00"
               step="0.01"
@@ -560,7 +560,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="number"
               value={formData.retainerAmount || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('retainerAmount', e.target.value ? parseFloat(e.target.value) : undefined)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('retainerAmount', e.target.value ? parseFloat(e.target.value) : undefined)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="0.00"
               step="0.01"
@@ -582,7 +582,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.courtName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('courtName', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('courtName', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="e.g., Superior Court of California"
             />
@@ -595,7 +595,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <input
               type="text"
               value={formData.judgeAssigned}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('judgeAssigned', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('judgeAssigned', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Judge name"
             />
@@ -615,7 +615,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
               id="newTag"
               type="text"
               value={newTag}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTag(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewTag(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
               className="flex-1 px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Add tags (e.g., high-value, urgent, settlement)"

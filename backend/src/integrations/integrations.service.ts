@@ -72,11 +72,11 @@ export class IntegrationsService {
     return Array.from(this.integrations.values()).filter(i => i.provider === provider);
   }
   
-  testConnection(id: string) {
+  testConnection(_id: string) {
     return { success: true, message: 'Connection successful', latency: 50 };
   }
   
-  getSyncHistory(id: string) {
+  getSyncHistory(_id: string) {
     return [];
   }
   

@@ -84,7 +84,7 @@ export class DocumentResolver {
   @UseGuards(GqlAuthGuard)
   async deleteDocument(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<boolean> {
     await this.documentService.remove(id);
     return true;
@@ -94,7 +94,7 @@ export class DocumentResolver {
   @UseGuards(GqlAuthGuard)
   async createDocumentVersion(
     @Args('input') input: CreateDocumentVersionInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<DocumentType> {
     // Note: Creating versions would require updating the document with new version info
     // This would need additional service methods for full implementation
@@ -106,7 +106,7 @@ export class DocumentResolver {
   @UseGuards(GqlAuthGuard)
   async generateDocumentDownloadUrl(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<string> {
     // Generate a temporary download URL
     // In production, this would generate a signed URL with expiration

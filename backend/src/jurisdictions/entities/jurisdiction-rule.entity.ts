@@ -25,7 +25,7 @@ export class JurisdictionRule {
   jurisdiction!: Jurisdiction;
 
   @Column({ type: 'varchar', length: 100, name: 'code' })
-  code: string; // e.g., "FRCP 26", "Evidence Rule 401"
+  code!: string; // e.g., "FRCP 26", "Evidence Rule 401"
 
   @Column({ type: 'varchar', length: 500, name: 'name' })
   name!: string;

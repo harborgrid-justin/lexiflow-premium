@@ -9,10 +9,10 @@ export class BackupSchedule {
   name!: string;
 
   @Column()
-  cronExpression: string; // Cron schedule
+  cronExpression!: string; // Cron schedule
 
   @Column()
-  type: string; // 'full', 'incremental'
+  type!: string; // 'full', 'incremental'
 
   @Column('simple-array', { nullable: true })
   databases!: string[];

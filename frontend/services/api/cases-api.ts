@@ -342,11 +342,15 @@ export class CasesApiService {
                 const casesArray = Array.isArray(allCases) ? allCases : [];
                 return casesArray.map(c => ({
                     id: c.id,
-        date: c.dateTerminated || c.filingDate,
-        title: c.title,
-        client: c.client,
-        outcome: c.status
-      }));
+                    date: c.dateTerminated || c.filingDate,
+                    title: c.title,
+                    client: c.client,
+                    outcome: c.status
+                }));
+            }
+        } catch (error) {
+            console.error('[CasesApiService.getArchived] Error:', error);
+            throw new Error('Failed to get archived cases');
+        }
     }
-  }
 }

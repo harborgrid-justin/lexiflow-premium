@@ -11,7 +11,9 @@ import { delay } from '../../utils/async';
 export const AdminService = {
     // Real backend API access
     getLogs: async (): Promise<AuditLogEntry[]> => {
-        const logs = await adminApi.auditLogs?.getAll?.() || [];
+        const response = await adminApi.auditLogs?.getAll?.() || { data: [] };
+        // Handle paginated response from backend
+        const logs = Array.isArray(response) ? response : (response as any)?.data || [];
         return logs.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     },
     

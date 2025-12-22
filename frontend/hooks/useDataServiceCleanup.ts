@@ -81,8 +81,12 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
   const [stats, setStats] = React.useState(() => ({
     repositoryCount: 0,
     totalListeners: 0,
-    singletonCount: 0,
+    refactoredSingletons: 0,
+    legacyRepositories: 0,
+    totalRepositories: 0,
+    estimatedMemoryKB: 0,
     repositories: [] as Array<{ name: string; listeners: number }>,
+    refactoredKeys: [] as string[],
   }));
 
   React.useEffect(() => {

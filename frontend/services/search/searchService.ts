@@ -194,30 +194,30 @@ class GlobalSearchEngine {
 
                 // Fetch all data domains in parallel with error isolation
                 const [cases, clients, tasks, evidence, users, docs, docket, motions, clauses, rules] = await Promise.all([
-                    DataService.cases.getAll().catch(err => { console.warn('Cases fetch failed:', err); return []; }),
-                    DataService.clients.getAll().catch(err => { console.warn('Clients fetch failed:', err); return []; }),
-                    DataService.tasks.getAll().catch(err => { console.warn('Tasks fetch failed:', err); return []; }),
-                    DataService.evidence.getAll().catch(err => { console.warn('Evidence fetch failed:', err); return []; }),
-                    DataService.users.getAll().catch(err => { console.warn('Users fetch failed:', err); return []; }),
-                    DataService.documents.getAll().catch(err => { console.warn('Documents fetch failed:', err); return []; }),
-                    DataService.docket.getAll().catch(err => { console.warn('Docket fetch failed:', err); return []; }),
-                    DataService.motions.getAll().catch(err => { console.warn('Motions fetch failed:', err); return []; }),
-                    DataService.clauses.getAll().catch(err => { console.warn('Clauses fetch failed:', err); return []; }),
-                    DataService.rules.getAll().catch(err => { console.warn('Rules fetch failed:', err); return []; })
+                    DataService.cases.getAll().catch((err: unknown) => { console.warn('Cases fetch failed:', err); return []; }),
+                    DataService.clients.getAll().catch((err: unknown) => { console.warn('Clients fetch failed:', err); return []; }),
+                    DataService.tasks.getAll().catch((err: unknown) => { console.warn('Tasks fetch failed:', err); return []; }),
+                    DataService.evidence.getAll().catch((err: unknown) => { console.warn('Evidence fetch failed:', err); return []; }),
+                    DataService.users.getAll().catch((err: unknown) => { console.warn('Users fetch failed:', err); return []; }),
+                    DataService.documents.getAll().catch((err: unknown) => { console.warn('Documents fetch failed:', err); return []; }),
+                    DataService.docket.getAll().catch((err: unknown) => { console.warn('Docket fetch failed:', err); return []; }),
+                    DataService.motions.getAll().catch((err: unknown) => { console.warn('Motions fetch failed:', err); return []; }),
+                    DataService.clauses.getAll().catch((err: unknown) => { console.warn('Clauses fetch failed:', err); return []; }),
+                    DataService.rules.getAll().catch((err: unknown) => { console.warn('Rules fetch failed:', err); return []; })
                 ]);
 
                 // Normalize data into flat search objects
                 const searchItems: GlobalSearchResult[] = [
-                    ...cases.map(c => ({ id: c.id, type: 'case' as const, title: c.title, subtitle: `${c.id} • ${c.client}`, data: c })),
-                    ...clients.map(c => ({ id: c.id, type: 'client' as const, title: c.name, subtitle: `Client • ${c.industry}`, data: c })),
-                    ...tasks.map(t => ({ id: t.id, type: 'task' as const, title: t.title, subtitle: `Task • Due: ${t.dueDate}`, data: t })),
-                    ...evidence.map(e => ({ id: e.id, type: 'evidence' as const, title: e.title, subtitle: `Evidence • ${e.type}`, data: e })),
-                    ...users.map(u => ({ id: u.id, type: 'user' as const, title: u.name, subtitle: `${u.role} • ${u.office}`, data: u })),
-                    ...docs.map(d => ({ id: d.id, type: 'document' as const, title: d.title, subtitle: `Doc • ${d.type}`, data: d })),
-                    ...docket.map(d => ({ id: d.id, type: 'docket' as const, title: d.title, subtitle: `Docket #${d.sequenceNumber}`, data: d })),
-                    ...motions.map(m => ({ id: m.id, type: 'motion' as const, title: m.title, subtitle: `Motion • ${m.status}`, data: m })),
-                    ...clauses.map(c => ({ id: c.id, type: 'clause' as const, title: c.name, subtitle: `Clause • ${c.category}`, data: c })),
-                    ...rules.map(r => ({ id: r.id, type: 'rule' as const, title: `${r.code} - ${r.name}`, subtitle: `Rule • ${r.type}`, data: r }))
+                    ...cases.map((c: Case) => ({ id: c.id, type: 'case' as const, title: c.title, subtitle: `${c.id} • ${c.client}`, data: c })),
+                    ...clients.map((c: Client) => ({ id: c.id, type: 'client' as const, title: c.name, subtitle: `Client • ${c.industry}`, data: c })),
+                    ...tasks.map((t: WorkflowTask) => ({ id: t.id, type: 'task' as const, title: t.title, subtitle: `Task • Due: ${t.dueDate}`, data: t })),
+                    ...evidence.map((e: EvidenceItem) => ({ id: e.id, type: 'evidence' as const, title: e.title, subtitle: `Evidence • ${e.type}`, data: e })),
+                    ...users.map((u: User) => ({ id: u.id, type: 'user' as const, title: u.name, subtitle: `${u.role} • ${u.office}`, data: u })),
+                    ...docs.map((d: LegalDocument) => ({ id: d.id, type: 'document' as const, title: d.title, subtitle: `Doc • ${d.type}`, data: d })),
+                    ...docket.map((d: DocketEntry) => ({ id: d.id, type: 'docket' as const, title: d.title, subtitle: `Docket #${d.sequenceNumber}`, data: d })),
+                    ...motions.map((m: Motion) => ({ id: m.id, type: 'motion' as const, title: m.title, subtitle: `Motion • ${m.status}`, data: m })),
+                    ...clauses.map((c: Clause) => ({ id: c.id, type: 'clause' as const, title: c.name, subtitle: `Clause • ${c.category}`, data: c })),
+                    ...rules.map((r: LegalRule) => ({ id: r.id, type: 'rule' as const, title: `${r.code} - ${r.name}`, subtitle: `Rule • ${r.type}`, data: r }))
                 ];
 
                 // Send to worker for indexing
@@ -351,11 +351,12 @@ export const SearchService = {
         }
     },
 
-    /**
-     * Check if search index is ready
-     * 
-     * @returns boolean - True if hydrated and ready to search
-     */
-    isReady(): boolean {
-        return engine.isReady();
-    }
+        /**
+         * Check if search index is ready
+         * 
+         * @returns boolean - True if hydrated and ready to search
+         */
+        isReady(): boolean {
+            return engine.isReady();
+        }
+    };

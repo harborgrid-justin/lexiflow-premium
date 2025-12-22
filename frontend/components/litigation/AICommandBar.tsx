@@ -15,7 +15,8 @@ import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { GeminiService } from '../../services/features/research/geminiService';
 import { useNotify } from '../../hooks/useNotify';
-import { AIValidationService } from '../../services/data/dataService';
+// AIValidationService import removed - not exported from dataService
+// import { AIValidationService } from '../../services/data/dataService';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {

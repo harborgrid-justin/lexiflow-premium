@@ -124,7 +124,20 @@ import type {
 } from './collaboration/types';
 
 /**
+ * Union type for all possible WebSocket message payloads
+ */
+type WSMessagePayload = 
+  | UserPresence 
+  | CursorPosition 
+  | CollaborativeEdit 
+  | Omit<DocumentLock, 'lockedAt' | 'expiresAt'>
+  | DocumentLock
+  | { documentId: string }
+  | { userId: string };
+
+/**
  * Real-Time Collaboration Service
+ * Manages WebSocket connection, presence, cursors, locks, and edits
  */
 export class CollaborationService extends EventEmitter {
   private ws: WebSocket | null = null;
@@ -140,12 +153,29 @@ export class CollaborationService extends EventEmitter {
   private activityTimer: NodeJS.Timeout | null = null;
   private isConnected = false;
 
+  /**
+   * Initialize collaboration service
+   * 
+   * @param userId - Current user ID
+   * @param userName - Current user display name
+   * @param config - Optional configuration overrides
+   * @throws Error if userId or userName is invalid
+   */
   constructor(
     userId: string,
     userName: string,
     config: CollaborationConfig = {}
   ) {
     super();
+    
+    // Validate parameters
+    if (!userId || typeof userId !== 'string') {
+      throw new Error('[CollaborationService] Invalid userId parameter');
+    }
+    if (!userName || typeof userName !== 'string') {
+      throw new Error('[CollaborationService] Invalid userName parameter');
+    }
+    
     this.currentUserId = userId;
     this.currentUserName = userName;
     this.config = {
@@ -157,21 +187,69 @@ export class CollaborationService extends EventEmitter {
       lockTimeout: config.lockTimeout ?? 600000 // 10 minutes
     };
 
+    console.log(`[CollaborationService] Initialized for user: ${userName} (${userId})`);
     this.startActivityMonitoring();
   }
 
+  // =============================================================================
+  // VALIDATION (Private)
+  // =============================================================================
+
+  /**
+   * Validate document ID parameter
+   * @private
+   */
+  private validateDocumentId(documentId: string, methodName: string): void {
+    if (!documentId || typeof documentId !== 'string') {
+      throw new Error(`[CollaborationService.${methodName}] Invalid documentId parameter`);
+    }
+  }
+
+  /**
+   * Validate WebSocket connection
+   * @private
+   */
+  private validateConnection(methodName: string): void {
+    if (!this.ws || !this.isConnected) {
+      throw new Error(`[CollaborationService.${methodName}] Not connected to collaboration server`);
+    }
+  }
+
+  /**
+   * Validate edit operation
+   * @private
+   */
+  private validateEdit(edit: Partial<CollaborativeEdit>, methodName: string): void {
+    if (!edit || typeof edit !== 'object') {
+      throw new Error(`[CollaborationService.${methodName}] Invalid edit parameter`);
+    }
+    if (!edit.type || !['insert', 'delete', 'replace'].includes(edit.type as string)) {
+      throw new Error(`[CollaborationService.${methodName}] Invalid edit type`);
+    }
+  }
+
+  // =============================================================================
+  // CONNECTION MANAGEMENT
+  // =============================================================================
+
   /**
    * Connect to collaboration server
+   * Establishes WebSocket connection with automatic reconnection
+   * 
+   * @returns Promise<void> - Resolves when connected
+   * @throws Error if connection fails
    */
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
+        console.log(`[CollaborationService] Connecting to ${this.config.wsUrl}...`);
         this.ws = new WebSocket(this.config.wsUrl);
 
         this.ws.onopen = () => {
           this.isConnected = true;
           this.reconnectAttempts = 0;
           this.emit('connected');
+          console.log('[CollaborationService] Connected successfully');
           
           // Send initial presence
           this.broadcastPresence('active');
@@ -184,12 +262,12 @@ export class CollaborationService extends EventEmitter {
             const message: WSMessage = JSON.parse(event.data);
             this.handleMessage(message);
           } catch (error) {
-            console.error('Failed to parse WebSocket message:', error);
+            console.error('[CollaborationService] Failed to parse message:', error);
           }
         };
 
         this.ws.onerror = (error) => {
-          console.error('WebSocket error:', error);
+          console.error('[CollaborationService] WebSocket error:', error);
           this.emit('error', error);
           reject(error);
         };
@@ -197,9 +275,11 @@ export class CollaborationService extends EventEmitter {
         this.ws.onclose = () => {
           this.isConnected = false;
           this.emit('disconnected');
+          console.log('[CollaborationService] Connection closed');
           this.attemptReconnect();
         };
       } catch (error) {
+        console.error('[CollaborationService.connect] Error:', error);
         reject(error);
       }
     });
@@ -260,7 +340,7 @@ export class CollaborationService extends EventEmitter {
   /**
    * Send message to server
    */
-  private send(type: WSMessageType, payload: any): void {
+  private send(type: WSMessageType, payload: WSMessagePayload): void {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
       console.warn('WebSocket not connected, queuing message');
       return;

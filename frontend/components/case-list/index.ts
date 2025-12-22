@@ -21,5 +21,5 @@ export * from './CaseListToolbar';
 export { MatterModule } from './MatterModule';
 export { MatterManagement } from './MatterManagement';
 export { MatterDetail } from './MatterDetail';
-export { MatterForm } from './MatterForm';
+export { MatterForm } from './matter-form/MatterForm';
 export { NewMatter } from './NewMatter';

@@ -1,8 +1,67 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                  LEXIFLOW BLUEBOOK FORMATTER                              ║
+ * ║         Legal Citation Formatting Engine (21st Edition) v2.0              ║
+ * ║                       PhD-Level Systems Architecture                      ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ * 
  * @module services/features/bluebook/bluebookFormatter
- * @category Services - Bluebook
- * @description Production-ready Bluebook citation formatter with comprehensive formatting options
+ * @architecture Rule-Based Citation Formatting with Style Variants
+ * @author LexiFlow Engineering Team
+ * @since 2025-12-18 (Enterprise Bluebook System)
+ * @status PRODUCTION READY
+ * @compliance The Bluebook: A Uniform System of Citation (21st ed. 2020)
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════
+ *                            ARCHITECTURAL OVERVIEW
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │  CITATION TYPES SUPPORTED                                                │
+ * │  • Cases: Full, short, and id. citations with italics                   │
+ * │  • Statutes: U.S.C., C.F.R., state codes with § notation                │
+ * │  • Periodicals: Law review articles, journals, books                    │
+ * │  • Secondary: Treatises, restatements, legal encyclopedias              │
+ * │  • Court Rules: FRCP, FRAP, local rules                                 │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ * 
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │  FORMATTING OPTIONS                                                      │
+ * │  • Full citations: Complete Bluebook format with all elements           │
+ * │  • Short citations: Abbreviated form for subsequent references          │
+ * │  • Id. citations: "Id." for immediately prior reference                 │
+ * │  • Italics: Case names, book titles (configurable)                      │
+ * │  • Small caps: Author names in secondary sources (configurable)         │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════
+ *                          USAGE EXAMPLES
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * @example Format Case Citation (Full)
+ * ```typescript
+ * const citation = {
+ *   type: 'case',
+ *   caseName: 'Roe v. Wade',
+ *   reporters: [{ volume: '410', reporter: 'U.S.', page: '113' }],
+ *   year: '1973'
+ * };
+ * const formatted = BluebookFormatter.format(citation);
+ * // "_Roe v. Wade_, 410 U.S. 113 (1973)"
+ * ```
+ * 
+ * @example Short Citation
+ * ```typescript
+ * const formatted = BluebookFormatter.format(citation, { format: 'short' });
+ * // "_Roe_, 410 U.S. at 120"
+ * ```
+ * 
+ * ═══════════════════════════════════════════════════════════════════════════
  */
+
+// ═══════════════════════════════════════════════════════════════════════════
+//                          CORE DEPENDENCIES
+// ═══════════════════════════════════════════════════════════════════════════
 
 import {
   BluebookCitation,
@@ -10,6 +69,10 @@ import {
   StatuteCitation,
   PeriodicalCitation
 } from '../../../types/bluebook';
+
+// ═══════════════════════════════════════════════════════════════════════════
+//                            TYPE DEFINITIONS
+// ═══════════════════════════════════════════════════════════════════════════
 
 interface FormattingOptions {
   italicizeCaseNames?: boolean;

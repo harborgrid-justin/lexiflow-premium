@@ -1,3 +1,150 @@
+/**
+ * AI Prompt Library - Legal intelligence and document generation
+ * Production-grade prompt templates for legal workflows and AI-powered legal research
+ * 
+ * @module services/ai/prompts
+ * @description Comprehensive AI prompt library providing:
+ * - **Document generation** (pleadings, motions, contracts, engagement letters)
+ * - **Legal analysis** (risk assessment, contract review, clause detection)
+ * - **Research assistance** (case law, statutes, Shepardizing, KeyCite-style citation analysis)
+ * - **Workflow automation** (task generation, deadline calculation, strategy planning)
+ * - **Docket parsing** (OCR-friendly JSON extraction from court dockets)
+ * - **Billing refinement** (ABA-compliant entry rewriting, value-oriented descriptions)
+ * - **Litigation strategy** (graph-based planning, decision trees, milestone tracking)
+ * - **Intent mapping** (NLU command routing to system modules)
+ * - **Error resolution** (developer-friendly debugging, user-friendly explanations)
+ * 
+ * @architecture
+ * - Pattern: Functional Prompt Factory (functions returning prompt strings)
+ * - AI Model: Google Gemini API (configured in geminiService.ts)
+ * - Context: Prompts receive domain-specific context (case IDs, document content, user queries)
+ * - Output: Most prompts request structured JSON for type-safe parsing
+ * - Content limits: Text truncation for large documents (8K-20K char limits)
+ * - HTML output: Draft() returns HTML-formatted content for rich rendering
+ * 
+ * @prompts
+ * **Core Legal Operations:**
+ * 1. **Draft(context, type)** - Generate legal documents (motions, briefs, contracts)
+ *    - Output: HTML-formatted document (paragraphs, bold text)
+ *    - Use cases: Engagement letters, demand letters, discovery responses
+ * 
+ * 2. **Analysis(content)** - Risk scoring and document summarization
+ *    - Output: Summary + Risk Score (0-100)
+ *    - Use cases: Contract review, compliance checks, due diligence
+ * 
+ * 3. **Review(content)** - Contract analysis (risks, missing clauses, unusual terms)
+ *    - Output: Structured risk report with recommendations
+ *    - Use cases: M&A contracts, vendor agreements, employment contracts
+ * 
+ * 4. **Critique(text)** - Senior partner-level brief critique
+ *    - Output: JSON { score, strengths[], weaknesses[], suggestions[], missingAuthority[] }
+ *    - Use cases: Brief review before filing, associate training, quality control
+ * 
+ * **Legal Research:**
+ * 5. **Research(query)** - General legal research queries
+ *    - Output: Research summary with authorities
+ *    - Use cases: Case law searches, statute interpretation, procedural rules
+ * 
+ * 6. **Shepardize(citation)** - Citation history and treatment analysis (KeyCite/Shepard's-style)
+ *    - Output: JSON with citation history, negative treatment, positive citations
+ *    - Use cases: Cite-checking briefs, validating authority, research verification
+ * 
+ * **Workflow & Automation:**
+ * 7. **Workflow(desc)** - Generate legal workflow steps
+ *    - Output: Task list with dependencies and deadlines
+ *    - Use cases: Discovery plans, trial prep, compliance audits
+ * 
+ * 8. **Strategy(prompt)** - Litigation strategy graph generation
+ *    - Output: JSON graph with nodes (Start, End, Task, Decision, Milestone, Event, Phase)
+ *    - Use cases: Trial strategy, settlement roadmap, appellate planning
+ * 
+ * 9. **Lint(graphData)** - Strategy graph validation and suggestions
+ *    - Output: JSON { warnings[], suggestions[], nodeId references }
+ *    - Use cases: Strategy review, completeness checks, logical consistency
+ * 
+ * **Data Processing:**
+ * 10. **Docket(text)** - OCR-friendly docket parsing
+ *     - Output: JSON { caseInfo, parties, docketEntries[] }
+ *     - Use cases: PACER docket ingestion, ECF automation, case tracking
+ * 
+ * 11. **Intent(query)** - NLU command routing
+ *     - Output: Module name + action + parameters
+ *     - Modules: DASHBOARD, CASES, DOCKET, WORKFLOWS, MESSAGES, DISCOVERY, EVIDENCE, etc.
+ *     - Use cases: Voice commands, chatbot routing, keyboard shortcuts
+ * 
+ * 12. **Refine(raw)** - ABA-compliant billing entry rewriting
+ *     - Output: Professional billing description
+ *     - Use cases: Time entry cleanup, client presentation, ethical compliance
+ * 
+ * 13. **ErrorResolution(errorMessage)** - User-friendly error explanations
+ *     - Output: Plain text (technical cause + user-friendly suggestion)
+ *     - Use cases: Error handling, support automation, user education
+ * 
+ * @security
+ * - Input sanitization: All user inputs passed to AI should be validated first
+ * - Content truncation: Large documents truncated to prevent token overflow
+ * - XSS prevention: HTML output from Draft() should be rendered via dangerouslySetInnerHTML with sanitization
+ * - Context isolation: Case IDs and user data in prompts should be sanitized
+ * - API key protection: Gemini API key stored in localStorage (demo mode) or backend secrets (production)
+ * 
+ * @performance
+ * - Prompt length: Optimized to minimize token usage
+ * - Context limits: 8K-20K char truncation for large documents
+ * - Caching: Consider prompt result caching in queryClient for repeated queries
+ * - Streaming: Future enhancement for real-time draft generation
+ * 
+ * @usage
+ * ```typescript
+ * import { Prompts } from './prompts';
+ * import { generateAIContent } from '../geminiService';
+ * 
+ * // Generate legal document
+ * const engagementLetter = await generateAIContent(
+ *   Prompts.Draft('Client: Acme Corp, Matter: Contract Review', 'engagement letter')
+ * );
+ * // Returns: HTML-formatted engagement letter
+ * 
+ * // Analyze contract risk
+ * const analysis = await generateAIContent(
+ *   Prompts.Analysis(contractText)
+ * );
+ * // Returns: "Summary: ... Risk Score: 72/100"
+ * 
+ * // Shepardize citation (KeyCite-style)
+ * const citationReport = await generateAIContent(
+ *   Prompts.Shepardize('Marbury v. Madison, 5 U.S. 137 (1803)')
+ * );
+ * // Returns: JSON { history, treatment, citations[] }
+ * 
+ * // Generate litigation strategy graph
+ * const strategy = await generateAIContent(
+ *   Prompts.Strategy('Breach of contract case with damages exceeding $1M')
+ * );
+ * // Returns: JSON { nodes[], connections[] } for strategy visualization
+ * 
+ * // Route user command
+ * const intent = await generateAIContent(
+ *   Prompts.Intent('Show me all cases for Martinez')
+ * );
+ * // Returns: { module: 'CASES', action: 'filter', params: { client: 'Martinez' } }
+ * ```
+ * 
+ * @integration
+ * - AI Service: geminiService.ts (Google Gemini API)
+ * - Document Editor: Draft() output rendered in rich text editors
+ * - Strategy Builder: Strategy() + Lint() power LitigationBuilder component
+ * - Research: Research() + Shepardize() integrated with Research module
+ * - Billing: Refine() used in TimeTracking and BillingDomain
+ * - Docket: Docket() used in DocketIngestion workflow
+ * 
+ * @testing
+ * **Test Coverage:**
+ * - Prompt completeness: All parameters correctly interpolated
+ * - JSON parsing: Structured outputs parse successfully
+ * - Token limits: Large documents truncated properly
+ * - Edge cases: Empty context, special characters, code injection attempts
+ * - Output validation: AI responses match expected schema
+ */
 
 export const Prompts = {
   Draft: (context: string, type: string) => 

@@ -59,6 +59,8 @@ function generateId(): string {
   return `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
+import { NOTIFICATION_MAX_DISPLAY } from '../../config/master.config';
+
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
@@ -659,6 +661,15 @@ export const notify = {
   /**
    * Notification with Undo action (success type, 5s duration)
    */
+  withUndo: (title: string, message: string, onUndo: () => void, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
+    return NotificationService.add({
+      title,
+      message,
+      type: 'success',
+      priority: 'normal',
+      duration: 5000,
+      actions: [
+        {
           label: 'Undo',
           onClick: onUndo,
           variant: 'primary',

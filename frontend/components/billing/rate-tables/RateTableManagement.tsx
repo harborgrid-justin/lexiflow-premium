@@ -8,7 +8,7 @@ import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 import { useNotify } from '@hooks/useNotify';
-import { useModalState } from '@hooks';
+import { useModalState } from '@hooks/useModalState';
 import { useSelection } from '@hooks/useSelectionState';
 import { getTodayString } from '@utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '@hooks/useQueryHooks';
@@ -79,9 +79,13 @@ export const RateTableManagement: React.FC = () => {
       await DataService.rateTables.update(tableSelection.selected.id, formData);
       await refetch();
       editModal.close();
-    tableSelection.deselect();
-    setFormData({ rates: [] });
-    notify.success('Rate table updated successfully');
+      tableSelection.deselect();
+      setFormData({ rates: [] });
+      notify.success('Rate table updated successfully');
+    } catch (error) {
+      console.error('[RateTableManagement.handleEdit] Error:', error);
+      notify.error('Failed to update rate table');
+    }
   };
 
   const handleDelete = async () => {

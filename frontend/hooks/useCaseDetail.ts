@@ -21,32 +21,37 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   
   // 1. Documents
   const { data: documents = [], isLoading: loadingDocs } = useQuery<LegalDocument[]>(
-    queryKeys.documents.byCaseId(caseData.id),
-    () => DataService.documents.getByCaseId(caseData.id)
+    queryKeys.documents.byCaseId(caseData?.id),
+    () => DataService.documents.getByCaseId(caseData.id),
+    { enabled: !!caseData?.id }
   );
 
   // 2. Tasks / Workflow
   const { data: allTasks = [] } = useQuery<WorkflowTask[]>(
-    queryKeys.tasks.byCaseId(caseData.id),
-    () => DataService.tasks.getByCaseId(caseData.id)
+    queryKeys.tasks.byCaseId(caseData?.id),
+    () => DataService.tasks.getByCaseId(caseData.id),
+    { enabled: !!caseData?.id }
   );
 
   // 3. Billing
   const { data: billingEntries = [] } = useQuery<TimeEntry[]>(
     queryKeys.billing.timeEntries(),
-    () => DataService.billing.getTimeEntries({ caseId: caseData.id })
+    () => DataService.billing.getTimeEntries({ caseId: caseData.id }),
+    { enabled: !!caseData?.id }
   );
 
   // 4. Motions
   const { data: motions = [] } = useQuery<Motion[]>(
-    queryKeys.motions.byCaseId(caseData.id),
-    () => DataService.motions.getByCaseId(caseData.id)
+    queryKeys.motions.byCaseId(caseData?.id),
+    () => DataService.motions.getByCaseId(caseData.id),
+    { enabled: !!caseData?.id }
   );
 
   // 5. Projects
   const { data: projects = [] } = useQuery<Project[]>(
-    queryKeys.projects.byCaseId(caseData.id),
-    () => DataService.projects.getByCaseId(caseData.id)
+    queryKeys.projects.byCaseId(caseData?.id),
+    () => DataService.projects.getByCaseId(caseData.id),
+    { enabled: !!caseData?.id }
   );
 
   // Local state for parties (as they are often edited locally before save)

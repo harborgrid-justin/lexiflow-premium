@@ -191,7 +191,11 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   });
 
   const sortedEntries = useMemo(() => {
-      return [...filteredEntries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      return [...filteredEntries].sort((a, b) => {
+          const dateA = a.date || a.entryDate || a.dateFiled;
+          const dateB = b.date || b.entryDate || b.dateFiled;
+          return new Date(dateB).getTime() - new Date(dateA).getTime();
+      });
   }, [filteredEntries]);
 
   const renderLinkedText = (text: string) => {

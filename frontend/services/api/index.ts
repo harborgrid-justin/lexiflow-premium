@@ -47,6 +47,7 @@ export * from './domains/analytics.api';
 export * from './domains/admin.api';
 export * from './domains/data-platform.api';
 export * from './domains/hr.api';
+export * from './domains/legal-entities.api';
 
 // Import domain APIs for consolidated export
 import { authApi as authDomain } from './domains/auth.api';
@@ -62,6 +63,7 @@ import { analyticsApi as analyticsDomain } from './domains/analytics.api';
 import { adminApi as adminDomain } from './domains/admin.api';
 import { dataPlatformApi as dataPlatformDomain } from './domains/data-platform.api';
 import { hrApi as hrDomain } from './domains/hr.api';
+import { LegalEntitiesApiService } from './domains/legal-entities.api';
 
 export const api = {
   auth: authDomain.auth,
@@ -152,6 +154,7 @@ export const api = {
   schemaManagement: dataPlatformDomain.schemaManagement,
   queryWorkbench: dataPlatformDomain.queryWorkbench,
   hr: hrDomain.hr,
+  legalEntities: new LegalEntitiesApiService(),
 } as const;
 
 export default api;

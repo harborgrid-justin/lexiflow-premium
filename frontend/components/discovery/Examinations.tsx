@@ -105,7 +105,7 @@ export const Examinations: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                      <div>
                          <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                         <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={e => setNewExam({...newExam, type: e.target.value as any})}>
+                         <select title="Select examination type" className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={e => setNewExam({...newExam, type: e.target.value as any})}>
                              <option value="">Select...</option>
                              <option value="Physical">Physical</option>
                              <option value="Mental">Mental</option>

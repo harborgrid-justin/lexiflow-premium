@@ -33,11 +33,11 @@ export class PipelinesService {
     page?: number;
     limit?: number;
   }) {
-    const { type, status, page = 1, limit = 50 } = filters || {};
+    const { status, page = 1, limit = 50 } = filters || {};
     
     const queryBuilder = this.pipelineRepository.createQueryBuilder('pipeline');
 
-    if (type) queryBuilder.andWhere('pipeline.type = :type', { type });
+    // Note: type field doesn't exist in entity, removed filter
     if (status) queryBuilder.andWhere('pipeline.status = :status', { status });
 
     const [data, total] = await queryBuilder

@@ -45,6 +45,7 @@ export class TrustAccountsController {
   }
 
   @Get()
+  @Public()
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(

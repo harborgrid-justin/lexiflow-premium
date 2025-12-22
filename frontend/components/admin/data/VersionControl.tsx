@@ -91,7 +91,7 @@ export const VersionControl: React.FC<VersionControlProps> = ({ initialTab = 'hi
 
   return (
     <div className={cn("h-full flex flex-col overflow-hidden", theme.background)}>
-      <div className="p-6 border-b shrink-0" style={{ borderColor: theme.border.default }}>
+      <div className={cn("p-6 border-b shrink-0", theme.border.default)}>
         <h2 className={cn("text-2xl font-bold mb-2", theme.text.primary)}>Version Control</h2>
         <p className={cn("text-sm", theme.text.secondary)}>
           Track changes, manage branches, and version your data configurations.
@@ -136,7 +136,7 @@ export const VersionControl: React.FC<VersionControlProps> = ({ initialTab = 'hi
                           <code className={cn("text-xs", theme.text.tertiary)}>{entry.entityId}</code>
                         </div>
                         <p className={cn("text-sm mb-1", theme.text.secondary)}>{entry.changes}</p>
-                        <div className="flex items-center gap-4 text-xs" style={{ color: theme.text.tertiary }}>
+                        <div className={cn("flex items-center gap-4 text-xs", theme.text.tertiary)}>
                           <span className="flex items-center gap-1">
                             <User className="h-3 w-3" />
                             {entry.user}
@@ -230,7 +230,7 @@ export const VersionControl: React.FC<VersionControlProps> = ({ initialTab = 'hi
                           <Badge variant="purple">{tag.version}</Badge>
                         </div>
                         <p className={cn("text-sm mb-2", theme.text.secondary)}>{tag.description}</p>
-                        <div className="flex items-center gap-4 text-xs" style={{ color: theme.text.tertiary }}>
+                        <div className={cn("flex items-center gap-4 text-xs", theme.text.tertiary)}>
                           <span className="flex items-center gap-1">
                             <User className="h-3 w-3" />
                             {tag.author}

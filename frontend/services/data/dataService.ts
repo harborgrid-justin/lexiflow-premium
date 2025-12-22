@@ -226,7 +226,7 @@ Object.defineProperties(DataServiceBase, {
   // Local-only repositories (no backend equivalent yet)
   discovery: { get: () => getDiscoveryRepository(), enumerable: true },
   analysis: { get: () => getAnalysisRepository(), enumerable: true },
-  entities: { get: () => getEntitiesRepository(), enumerable: true },
+  entities: DataSourceRouter.createPropertyDescriptor('legalEntities', getEntitiesRepository),
   phases: { get: () => getPhaseRepository(), enumerable: true },
   
   // Hybrid repositories (backend preferred, complex fallback)

@@ -28,6 +28,7 @@ import { useTheme } from '../../context/ThemeContext';
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
 import { Badge } from '../common/Badge';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';

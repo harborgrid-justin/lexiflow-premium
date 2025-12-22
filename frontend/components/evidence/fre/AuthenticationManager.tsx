@@ -29,7 +29,7 @@ export const AuthenticationManager: React.FC = () => {
     const { theme } = useTheme();
     const { data: evidence = [] } = useQuery<EvidenceItem[]>(
         ['evidence', 'all'],
-        DataService.evidence.getAll
+        () => DataService.evidence.getAll()
     );
 
     const stats = {
@@ -62,7 +62,7 @@ export const AuthenticationManager: React.FC = () => {
                             <TableCell className={cn("font-mono", theme.text.secondary)}>{item.id}</TableCell>
                             <TableCell className={cn("font-medium", theme.text.primary)}>{item.title}</TableCell>
                             <TableCell>
-                                <select className={cn("text-xs p-1 border rounded", theme.surface.default, theme.border.default)}>
+                                <select title="Select authentication method" className={cn("text-xs p-1 border rounded", theme.surface.default, theme.border.default)}>
                                     <option>Pending</option>
                                     <option>Self-Authenticated</option>
                                     <option>Testimony</option>

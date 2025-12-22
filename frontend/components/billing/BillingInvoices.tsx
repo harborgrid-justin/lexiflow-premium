@@ -59,11 +59,8 @@ const BillingInvoicesComponent: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+s': () => {
+    onSave: () => {
       notify.info('Send selected invoice (to be implemented)');
-    },
-    'mod+p': () => {
-      notify.info('Mark invoice as paid (to be implemented)');
     }
   });
 
@@ -136,7 +133,7 @@ const BillingInvoicesComponent: React.FC = () => {
 
   const filteredInvoices = useMemo(() => {
       return invoices.filter(inv => {
-        const matchesSearch = inv.client.toLowerCase().includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = (inv.client?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = filterStatus === 'All' || inv.status === filterStatus;
         return matchesSearch && matchesStatus;
       });
@@ -160,6 +157,7 @@ const BillingInvoicesComponent: React.FC = () => {
                     <div className={cn("flex items-center px-3 py-1.5 border rounded-md", theme.surface.highlight, theme.border.default)}>
                         <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
                         <select 
+                            title="Filter by status"
                             className={cn("bg-transparent text-sm outline-none border-none cursor-pointer", theme.text.primary)}
                             value={filterStatus}
                             onChange={(e) => setFilterStatus(e.target.value)}

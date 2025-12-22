@@ -27,7 +27,6 @@ import {
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -50,6 +49,7 @@ const TrialBinder = lazy(() => import('./TrialBinder').then(m => ({ default: m.T
 const AdvisoryBoard = lazy(() => import('./AdvisoryBoard').then(m => ({ default: m.AdvisoryBoard })));
 const OppositionManager = lazy(() => import('./OppositionManager').then(m => ({ default: m.OppositionManager })));
 const WarRoomSidebar = lazy(() => import('./WarRoomSidebar').then(m => ({ default: m.WarRoomSidebar })));
+const WarRoomManager = lazy(() => import('./WarRoomManager').then(m => ({ default: m.WarRoomManager })));
 
 
 // ============================================================================
@@ -123,7 +123,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
     return Array.isArray(allCasesRaw) ? allCasesRaw : [];
   }, [allCasesRaw]);
 
-  const { data: trialData, isLoading, isError, error } = useQuery(
+  const { data: trialData, isLoading, status, error } = useQuery(
       ['cases', currentCaseId, 'warRoom'],
       async () => {
         const warRoomService = await DataService.warRoom;
@@ -131,6 +131,8 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
       },
       { enabled: !!currentCaseId }
   );
+
+  const isError = status === 'error';
 
   // Log errors for debugging
   useEffect(() => {
@@ -227,20 +229,9 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
 
   if (!trialData) {
       return (
-          <div className={cn("h-full flex flex-col items-center justify-center p-6", theme.background)}>
-               <div className="text-center">
-                   <Target className={cn("h-12 w-12 mx-auto mb-4 opacity-20", theme.text.tertiary)} />
-                   <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>Select a Matter</h3>
-                   <p className={cn("text-sm mb-4", theme.text.secondary)}>Choose a case to enter the War Room.</p>
-                   <select 
-                        value={currentCaseId} 
-                        onChange={(e) => setCurrentCaseId(e.target.value)}
-                        className={cn("p-2 border rounded-md outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
-                    >
-                        {allCases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-                    </select>
-               </div>
-          </div>
+          <Suspense fallback={<LazyLoader message="Loading War Room..." />}>
+              <WarRoomManager onSelectCase={setCurrentCaseId} />
+          </Suspense>
       );
   }
 
@@ -267,6 +258,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                             <select 
                                 value={currentCaseId || ''} 
                                 onChange={(e) => setCurrentCaseId(e.target.value)}
+                                aria-label="Select case for War Room"
                                 className={cn(
                                     "appearance-none bg-transparent font-semibold text-sm pr-6 py-1 outline-none cursor-pointer border-b border-dashed transition-colors hover:border-solid max-w-[300px] md:max-w-[500px] truncate",
                                     theme.text.secondary,

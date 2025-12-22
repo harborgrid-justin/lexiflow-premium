@@ -15,8 +15,13 @@ import type {
 
 export class BillingApiService {
   async getTimeEntries(filters?: { caseId?: string; userId?: string; page?: number; limit?: number }): Promise<TimeEntry[]> {
-    const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries', filters);
-    return response.data;
+    // Backend has separate endpoints: /time-entries (all) and /time-entries/case/:caseId (by case)
+    if (filters?.caseId) {
+      const response = await apiClient.get<PaginatedResponse<TimeEntry>>(`/billing/time-entries/case/${filters.caseId}`);
+      return Array.isArray(response) ? response : (response.data || []);
+    }
+    const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries');
+    return Array.isArray(response) ? response : (response.data || []);
   }
 
   async getTimeEntryById(id: string): Promise<TimeEntry> {
@@ -80,10 +85,11 @@ export class BillingApiService {
     await apiClient.delete(`/billing/time-entries/${id}`);
   }
 
-  async getTrustAccounts(filters?: { page?: number; limit?: number }): Promise<any[]> {
+  async getTrustAccounts(filters?: { clientId?: string; status?: string }): Promise<any[]> {
     try {
-      const response = await apiClient.get<PaginatedResponse<any>>('/billing/trust-accounts', filters);
-      return response.data;
+      // Backend returns array directly, not paginated
+      const response = await apiClient.get<any[]>('/billing/trust-accounts', filters);
+      return Array.isArray(response) ? response : [];
     } catch (error) {
       // Fallback to empty array if endpoint doesn't exist yet
       console.warn('Trust accounts endpoint not available, returning empty array');

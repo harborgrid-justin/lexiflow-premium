@@ -77,6 +77,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Category</label>
                         <select 
+                            title="Select risk category"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.category}
                             onChange={(e) => onUpdate({ ...risk, category: e.target.value as RiskCategory })}
@@ -90,6 +91,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
                         <select 
+                            title="Select risk status"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.status}
                             onChange={(e) => onUpdate({ ...risk, status: e.target.value as RiskStatus })}
@@ -185,7 +187,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
         </div>
 
         <div className={cn("p-4 border-t flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
-            <button onClick={() => onDelete(risk.id)} className="text-red-600 hover:bg-red-50 p-2 rounded transition-colors">
+            <button onClick={() => onDelete(risk.id)} title="Delete risk" className="text-red-600 hover:bg-red-50 p-2 rounded transition-colors">
                 <Trash2 className="h-5 w-5"/>
             </button>
             <Button variant="primary" icon={Save} onClick={() => { onClose(); }}>Save Changes</Button>

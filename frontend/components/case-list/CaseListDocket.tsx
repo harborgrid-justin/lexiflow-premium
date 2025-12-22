@@ -67,26 +67,46 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
       // Ensure arrays
       const safeMotions = Array.isArray(motions) ? motions : [];
       const safeCases = Array.isArray(cases) ? cases : [];
+      const safeDocket = Array.isArray(docket) ? docket : [];
       
       const items: any[] = [];
 
+      // Add docket entries
+      safeDocket.forEach(d => {
+        const relatedCase = safeCases.find(c => c.id === d.caseId);
+        items.push({
+          id: `d-${d.id}`,
+          date: d.date || d.dateFiled || d.entryDate,
+          time: d.time || 'N/A',
+          matter: relatedCase?.title || d.caseId,
+          caseId: d.caseId,
+          event: d.description || d.entry || 'Docket Entry',
+          type: d.entryType || 'Entry',
+          location: d.location || 'N/A',
+          priority: d.priority || 'Medium'
+        });
+      });
+
+      // Add motions with hearing dates
       safeMotions.forEach(m => {
         if (m.hearingDate) {
           const relatedCase = safeCases.find(c => c.id === m.caseId);
           items.push({
-            id: `h-${m.id}`, date: m.hearingDate, time: '09:00 AM', matter: relatedCase?.title || m.caseId,
-            caseId: m.caseId, event: `Hearing: ${m.title}`, type: 'Hearing', location: relatedCase?.court || 'TBD', priority: 'High'
+            id: `h-${m.id}`,
+            date: m.hearingDate,
+            time: m.hearingTime || '09:00 AM',
+            matter: relatedCase?.title || m.caseId,
+            caseId: m.caseId,
+            event: `Hearing: ${m.title}`,
+            type: 'Hearing',
+            location: relatedCase?.court || 'TBD',
+            priority: 'High'
           });
         }
       });
-      
-      items.push(
-        { id: 'd-1', date: '2024-03-30', time: '11:59 PM', matter: 'Martinez v. TechCorp', caseId: 'C-2024-001', event: 'Discovery Cutoff', type: 'Deadline', location: 'N/A', priority: 'Critical' },
-        { id: 'd-2', date: '2024-04-15', time: '05:00 PM', matter: 'In Re: OmniGlobal', caseId: 'C-2024-112', event: 'Expert Disclosure', type: 'Filing', location: 'E-File', priority: 'Medium' }
-      );
 
       return items.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  }, [isLoading, motions, cases]);
+  }, [isLoading, motions, cases, docket]);
 
 
   const handleNav = (caseId: string) => {
@@ -153,13 +173,23 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
                 <div className="w-1/4">Type</div>
              </div>
              <div className="flex-1 relative">
-                <VirtualList 
-                    items={allDocketItems}
-                    height="100%"
-                    itemHeight={64}
-                    renderItem={renderRow}
-                    emptyMessage="No upcoming docket events."
-                />
+                {allDocketItems.length === 0 ? (
+                  <div className={cn("flex items-center justify-center h-full", theme.text.tertiary)}>
+                    <div className="text-center py-12">
+                      <Calendar className="h-16 w-16 mx-auto mb-4 opacity-20" />
+                      <p className="text-sm">No upcoming docket events.</p>
+                      <p className="text-xs mt-2 opacity-60">Add entries or link a docket to get started.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <VirtualList 
+                      items={allDocketItems}
+                      height="100%"
+                      itemHeight={64}
+                      renderItem={renderRow}
+                      emptyMessage="No upcoming docket events."
+                  />
+                )}
              </div>
           </div>
       )}

@@ -102,6 +102,7 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
            </div>
            <div className="relative">
              <textarea
+                placeholder="AI-generated response will appear here..."
                 className={cn("w-full h-64 p-4 border rounded-lg text-sm font-mono leading-relaxed focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.default, theme.border.default, theme.text.primary)}
                 value={draftResponse || initialDraft}
                 onChange={(e) => setDraftResponse(e.target.value)}

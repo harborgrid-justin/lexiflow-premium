@@ -15,11 +15,13 @@ export interface PleadingDesignerProps {
 export interface PleadingDraftsProps {
     pleadings: PleadingDocument[];
     onEdit: (doc: PleadingDocument) => void;
+    isLoading?: boolean;
 }
 
 export interface PleadingTemplatesProps {
     templates: PleadingTemplate[];
     onCreateFromTemplate: (template: PleadingTemplate) => void;
+    isLoading?: boolean;
 }
 
 export interface AIDraftingAssistantProps {

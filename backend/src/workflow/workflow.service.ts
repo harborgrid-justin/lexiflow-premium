@@ -9,6 +9,15 @@ import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../co
 
 @Injectable()
 export class WorkflowService {
+  // Map camelCase fields to database column names
+  private readonly columnMap: Record<string, string> = {
+    usageCount: 'usage_count',
+    isActive: 'is_active',
+    createdBy: 'created_by',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  };
+
   constructor(
     @InjectRepository(WorkflowTemplate)
     private readonly workflowRepository: Repository<WorkflowTemplate>,
@@ -36,7 +45,7 @@ export class WorkflowService {
     const queryBuilder = this.workflowRepository.createQueryBuilder('workflow');
 
     if (category) queryBuilder.andWhere('workflow.category = :category', { category });
-    if (isActive !== undefined) queryBuilder.andWhere('workflow.isActive = :isActive', { isActive });
+    if (isActive !== undefined) queryBuilder.andWhere('workflow.is_active = :isActive', { isActive });
     
     const sanitizedSearch = sanitizeSearchQuery(search);
     if (sanitizedSearch) {
@@ -49,8 +58,11 @@ export class WorkflowService {
     const safeSortField = validateSortField('workflow', sortBy, 'usageCount');
     const safeSortOrder = validateSortOrder(sortOrder, 'DESC');
 
+    // Map camelCase to snake_case for database column
+    const dbColumnName = this.columnMap[safeSortField] || safeSortField;
+
     const [data, total] = await queryBuilder
-      .orderBy(`workflow.${safeSortField}`, safeSortOrder)
+      .orderBy(`workflow.${dbColumnName}`, safeSortOrder)
       .skip(calculateOffset(page, limit))
       .take(limit)
       .getManyAndCount();

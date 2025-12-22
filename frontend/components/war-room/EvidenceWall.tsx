@@ -65,7 +65,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   // HOOKS & CONTEXT
   // ============================================================================
   const { theme } = useTheme();
-  const { openWindow, closeWindow } = useWindow();
+  const { openWindow } = useWindow();
 
   // ============================================================================
   // STATE MANAGEMENT

@@ -83,7 +83,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                 />
             </div>
             <div className="flex items-center gap-2">
-                <button onClick={onClose} className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
+                <button onClick={onClose} title="Close argument" className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                     <X className="h-5 w-5"/>
                 </button>
             </div>
@@ -137,7 +137,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between">
                                             <p className={cn("text-sm font-bold hover:underline cursor-pointer", theme.text.link)}>{cit.citation}</p>
-                                            <button onClick={() => toggleLink(id, 'citation')} className={cn("opacity-0 group-hover:opacity-100 hover:text-red-500", theme.text.tertiary)}><Trash2 className="h-4 w-4"/></button>
+                                            <button onClick={() => toggleLink(id, 'citation')} title="Remove citation" className={cn("opacity-0 group-hover:opacity-100 hover:text-red-500", theme.text.tertiary)}><Trash2 className="h-4 w-4"/></button>
                                         </div>
                                         <p className={cn("text-xs font-medium", theme.text.primary)}>{cit.title}</p>
                                         <p className={cn("text-xs mt-1 italic", theme.text.secondary)}>{cit.description}</p>
@@ -184,7 +184,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between">
                                             <p className={cn("text-sm font-bold", theme.text.primary)}>{ev.title}</p>
-                                            <button onClick={() => toggleLink(id, 'evidence')} className={cn("opacity-0 group-hover:opacity-100 hover:text-red-500", theme.text.tertiary)}><Trash2 className="h-4 w-4"/></button>
+                                            <button onClick={() => toggleLink(id, 'evidence')} title="Remove evidence" className={cn("opacity-0 group-hover:opacity-100 hover:text-red-500", theme.text.tertiary)}><Trash2 className="h-4 w-4"/></button>
                                         </div>
                                         <p className={cn("text-xs mt-1", theme.text.secondary)}>{ev.description}</p>
                                         <div className="flex gap-2 mt-2">

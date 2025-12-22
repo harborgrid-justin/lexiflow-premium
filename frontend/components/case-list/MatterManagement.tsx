@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { DataService } from '../../services/data/dataService';
+import { useQuery } from '../../hooks/useQueryHooks';
+import { queryKeys } from '../../utils/queryKeys';
 import { Matter, MatterStatus, MatterPriority, MatterType, PracticeArea } from '../../types';
 import { 
   Plus, 
@@ -22,9 +24,7 @@ export const MatterManagement: React.FC = () => {
   const navigate = (path: string) => {
     window.location.hash = `#/${path}`;
   };
-  const [matters, setMatters] = useState<Matter[]>([]);
-  const [filteredMatters, setFilteredMatters] = useState<Matter[]>([]);
-  const [loading, setLoading] = useState(true);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<MatterStatus | 'all'>('all');
   const [priorityFilter, setPriorityFilter] = useState<MatterPriority | 'all'>('all');
@@ -32,27 +32,13 @@ export const MatterManagement: React.FC = () => {
   const [practiceAreaFilter, setPracticeAreaFilter] = useState<PracticeArea | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    loadMatters();
-  }, []);
+  // ✅ Migrated to backend API with queryKeys (2025-12-21)
+  const { data: matters = [], isLoading: loading } = useQuery<Matter[]>(
+    queryKeys.matters.all(),
+    () => DataService.matters.getAll()
+  );
 
-  useEffect(() => {
-    applyFilters();
-  }, [matters, searchTerm, statusFilter, priorityFilter, typeFilter, practiceAreaFilter]);
-
-  const loadMatters = async () => {
-    try {
-      setLoading(true);
-      const allMatters = await DataService.matters.getAll();
-      setMatters(allMatters);
-    } catch (error) {
-      console.error('Failed to load matters:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const applyFilters = () => {
+  const filteredMatters = useMemo(() => {
     let filtered = [...matters];
 
     // Search filter
@@ -86,8 +72,8 @@ export const MatterManagement: React.FC = () => {
       filtered = filtered.filter(matter => matter.practiceArea === practiceAreaFilter);
     }
 
-    setFilteredMatters(filtered);
-  };
+    return filtered;
+  }, [matters, searchTerm, statusFilter, priorityFilter, typeFilter, practiceAreaFilter]);
 
   const getStatusIcon = (status: MatterStatus) => {
     switch (status) {
@@ -153,6 +139,7 @@ export const MatterManagement: React.FC = () => {
     return {
       total: matters.length,
       active: matters.filter(m => m.status === MatterStatus.ACTIVE).length,
+      intake: matters.filter(m => m.status === MatterStatus.INTAKE).length,
       urgent: matters.filter(m => m.priority === MatterPriority.URGENT).length,
       totalValue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0)
     };

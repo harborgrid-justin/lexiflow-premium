@@ -88,7 +88,7 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
         <div className={cn("w-72 border-r flex flex-col", theme.border.default, theme.surface.highlight)}>
             <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default)}>
                 <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>Binder Sections</h3>
-                <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
+                <button title="Add section" className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}>
                     <Plus className="h-4 w-4"/>
                 </button>
             </div>
@@ -148,7 +148,7 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                                     </div>
                                     <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Button size="sm" variant="ghost">View</Button>
-                                        <button className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}>
+                                        <button title="More options" className={cn("p-2 rounded transition-colors", theme.text.tertiary, `hover:${theme.text.primary}`)}>
                                             <MoreVertical className="h-4 w-4"/>
                                         </button>
                                     </div>

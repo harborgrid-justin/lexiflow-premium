@@ -27,7 +27,7 @@ export const OriginalsManager: React.FC = () => {
     const { theme } = useTheme();
     const { data: evidence = [] } = useQuery<EvidenceItem[]>(
         ['evidence', 'all'],
-        DataService.evidence.getAll
+        () => DataService.evidence.getAll()
     );
 
     return (

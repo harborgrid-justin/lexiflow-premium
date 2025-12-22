@@ -27,7 +27,7 @@ export const HearsayAnalyzer: React.FC = () => {
     const { theme } = useTheme();
     const { data: evidence = [] } = useQuery<EvidenceItem[]>(
         ['evidence', 'all'],
-        DataService.evidence.getAll
+        () => DataService.evidence.getAll()
     );
     
     // Mock analysis results
@@ -41,7 +41,7 @@ export const HearsayAnalyzer: React.FC = () => {
         <div className="space-y-6">
             <div className={cn("p-4 rounded-lg border flex items-center gap-3", theme.surface.default, theme.border.default)}>
                 <FileText className={cn("h-5 w-5", theme.text.secondary)}/>
-                <select className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
+                <select title="Select document to analyze" className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}>
                     <option value="">Select Document to Analyze...</option>
                     {evidence.map(e => <option key={e.id} value={e.id}>{e.title}</option>)}
                 </select>
@@ -53,7 +53,7 @@ export const HearsayAnalyzer: React.FC = () => {
                     <div key={stmt.id} className={cn("p-3 border-b last:border-0", theme.border.default)}>
                         <p className={cn("italic text-sm", theme.text.primary)}>"{stmt.text}"</p>
                         <div className="flex justify-between items-center mt-2">
-                            <select className={cn("text-xs p-1 border rounded", theme.surface.highlight, theme.border.default)}>
+                            <select title="Select hearsay exception" className={cn("text-xs p-1 border rounded", theme.surface.highlight, theme.border.default)}>
                                 <option>{stmt.exception}</option>
                                 <option>FRE 803(1) Present Sense Impression</option>
                                 <option>FRE 803(3) Then-Existing Condition</option>

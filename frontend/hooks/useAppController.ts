@@ -190,10 +190,10 @@ export const useAppController = () => {
 
   const handleNavigation = useCallback((view: AppView) => {
       startTransition(() => {
-          if (view !== PATHS.CASES) {
-             setSelectedCase(null);
-             setSelectedCaseId(null);
-          }
+          // Always clear case selection when navigating, including to Cases view
+          // This allows users to return to the case list by clicking Cases in sidebar
+          setSelectedCase(null);
+          setSelectedCaseId(null);
           setActiveView(view);
           setInitialTab(undefined);
           setIsSidebarOpen(false);
@@ -254,7 +254,8 @@ export const useAppController = () => {
           setSelectedCase(null);
           setSelectedCaseId(null);
           setInitialTab(undefined);
-          setActiveView(PATHS.DASHBOARD);
+          // Return to Cases list instead of Dashboard for better UX
+          setActiveView(PATHS.CASES);
       });
   }, [setSelectedCaseId, setActiveView]);
 

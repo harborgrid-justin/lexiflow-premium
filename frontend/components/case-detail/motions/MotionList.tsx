@@ -33,6 +33,9 @@ interface MotionListProps {
 
 export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) => {
   const { theme } = useTheme();
+  
+  // Safety check: ensure motions is always an array
+  const safeMotions = Array.isArray(motions) ? motions : [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -68,7 +71,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
             <TableHead className="text-right">Actions</TableHead>
           </TableHeader>
           <TableBody>
-            {motions.map(motion => (
+            {safeMotions.map(motion => (
               <TableRow key={motion.id}>
                 <TableCell className={cn("font-medium flex items-center", theme.text.primary)}>
                   <Gavel className={cn("h-4 w-4 mr-2", theme.text.tertiary)} />
@@ -126,7 +129,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
-        {motions.map(motion => (
+        {safeMotions.map(motion => (
           <div key={motion.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-2">
               <h4 className={cn("font-bold text-sm flex items-center gap-2", theme.text.primary)}>
@@ -164,7 +167,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
             </div>
           </div>
         ))}
-        {motions.length === 0 && (
+        {safeMotions.length === 0 && (
           <div className={cn("text-center py-8 italic rounded-lg", theme.surface.highlight, theme.text.tertiary)}>No active motions.</div>
         )}
       </div>

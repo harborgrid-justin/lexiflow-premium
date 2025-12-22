@@ -44,7 +44,7 @@ const JurisdictionManager = lazyWithPreload(() => import('../components/jurisdic
 const CalendarView = lazyWithPreload(() => import('../components/calendar/CalendarView').then(m => ({ default: m.CalendarView })));
 const RulesPlatform = lazyWithPreload(() => import('../components/rules/RulesPlatform'));
 const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager'));
-const PleadingBuilder = lazyWithPreload(() => import('../components/pleading/PleadingBuilder'));
+const PleadingBuilder = lazyWithPreload(() => import('../components/pleading/PleadingBuilder').then(m => ({ default: m.default || m.PleadingBuilder })));
 const KnowledgeBase = lazyWithPreload(() => import('../components/knowledge/KnowledgeBase'));
 const LitigationBuilder = lazyWithPreload(() => import('../components/litigation/LitigationBuilder'));
 const ClauseLibrary = lazyWithPreload(() => import('../components/clauses/ClauseLibrary'));

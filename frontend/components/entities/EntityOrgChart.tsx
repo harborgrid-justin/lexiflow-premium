@@ -24,6 +24,9 @@ import { useQuery } from '../../hooks/useQueryHooks';
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
 
+// Components
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
+
 // Utils & Constants
 import { cn } from '../../utils/cn';
 

@@ -54,6 +54,7 @@ export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'stre
         </div>
       )}
       <div className={cn("w-full rounded-full h-2 overflow-hidden", theme.surface.highlight)}>
+        {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width and color required for risk visualization */}
         <div 
           className="h-full rounded-full transition-all duration-500" 
           style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundColor: getColor(value) }} 

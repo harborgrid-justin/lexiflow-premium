@@ -110,6 +110,7 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                            <label className={cn("text-xs font-bold", theme.text.primary)}>Conference Date</label>
                            <input 
                                type="date" 
+                               title="Select meet and confer date"
                                className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                value={meetConferDate}
                                onChange={(e) => setMeetConferDate(e.target.value)}

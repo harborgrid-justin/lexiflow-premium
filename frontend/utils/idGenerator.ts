@@ -68,6 +68,14 @@ export const IdGenerator = {
     return generateSecureId('party') as any; // Will be properly typed as PartyId
   },
 
+  staff: () => {
+    return generateSecureId('staff');
+  },
+
+  stipulation: () => {
+    return generateSecureId('stip');
+  },
+
   generic: (prefix: string): string => {
     return generateSecureId(prefix);
   }

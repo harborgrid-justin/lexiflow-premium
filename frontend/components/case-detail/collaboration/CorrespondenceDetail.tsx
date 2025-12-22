@@ -169,7 +169,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
             <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>
                 {type === 'communication' ? 'Message Details' : 'Service Job'}
             </h4>
-            <button onClick={onClose} className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
+            <button onClick={onClose} title="Close details" className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)}><X className="h-4 w-4"/></button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -235,6 +235,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                 <div>
                                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Current Status</label>
                                     <select 
+                                        title="Select current status"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
                                         onChange={(e) => setNewStatus(e.target.value as any)}
@@ -249,6 +250,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Date</label>
                                     <input 
                                         type="date" 
+                                        title="Select delivery date"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={deliveryDate}
                                         onChange={(e) => setDeliveryDate(e.target.value)}

@@ -47,7 +47,8 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   // Query Motions specific to this case
   const { data: motions = [], isLoading } = useQuery<Motion[]>(
     ['motions', caseId],
-    () => DataService.motions.getByCaseId(caseId)
+    () => DataService.motions.getByCaseId(caseId),
+    { enabled: !!caseId }
   );
 
   // Mutation to add motion and invalidate cache

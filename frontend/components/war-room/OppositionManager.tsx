@@ -200,6 +200,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
             <select 
+              title="Filter by role"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterRole}
               onChange={e => setFilterRole(e.target.value)}
@@ -215,6 +216,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Firm</label>
             <select 
+              title="Filter by firm"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterFirm}
               onChange={e => setFilterFirm(e.target.value)}
@@ -229,6 +231,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
             <select 
+              title="Filter by status"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}

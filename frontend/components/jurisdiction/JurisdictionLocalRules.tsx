@@ -123,8 +123,8 @@ export const JurisdictionLocalRules: React.FC = () => {
               <TableCell className={cn("text-xs max-w-sm truncate", theme.text.secondary)} title={r.summary}>{r.summary}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                    <button onClick={() => openEdit(r)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}><Edit2 className="h-4 w-4"/></button>
-                    <button onClick={() => handleDelete(r.id)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.status.error.text}`, `hover:${theme.status.error.bg}`)}><Trash2 className="h-4 w-4"/></button>
+                    <button title="Edit rule" onClick={() => openEdit(r)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}><Edit2 className="h-4 w-4"/></button>
+                    <button title="Delete rule" onClick={() => handleDelete(r.id)} className={cn("p-1.5 rounded transition-colors", theme.text.secondary, `hover:${theme.status.error.text}`, `hover:${theme.status.error.bg}`)}><Trash2 className="h-4 w-4"/></button>
                 </div>
               </TableCell>
             </TableRow>
@@ -149,6 +149,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Jurisdiction Type</label>
                       <select 
+                        title="Select jurisdiction type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={editingRule.type || 'Local'}
                         onChange={e => setEditingRule({...editingRule, type: e.target.value as any})}

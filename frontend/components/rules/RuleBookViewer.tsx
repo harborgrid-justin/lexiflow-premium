@@ -3,6 +3,7 @@ import { LegalRule } from '../../types';
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
+import { AdaptiveLoader } from '../common/AdaptiveLoader';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';

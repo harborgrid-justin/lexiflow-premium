@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { DataService } from '../../services/data/dataService';
+import { useMutation, useQuery } from '../../hooks/useQueryHooks';
+import { queryKeys } from '../../utils/queryKeys';
+import { queryClient } from '../../services/infrastructure/queryClient';
 import { Matter } from '../../types';
 import { ArrowLeft } from 'lucide-react';
 import { MatterForm } from './matter-form';
@@ -11,25 +14,37 @@ export const NewMatter: React.FC = () => {
   };
   const [saving, setSaving] = useState(false);
 
+  // ✅ Migrated to backend API with queryKeys (2025-12-21)
+  const { data: existingMatters = [] } = useQuery<Matter[]>(
+    queryKeys.matters.all(),
+    () => DataService.matters.getAll()
+  );
+
+  const createMutation = useMutation(
+    (data: Matter) => DataService.matters.add(data),
+    {
+      onSuccess: (newMatter) => {
+        queryClient.invalidate(queryKeys.matters.all());
+        if (newMatter && newMatter.id) {
+          navigate(`${PATHS.MATTERS}/${newMatter.id}`);
+        } else {
+          navigate(PATHS.MATTERS);
+        }
+      }
+    }
+  );
+
   const handleSave = async (matterData: Partial<Matter>) => {
     setSaving(true);
     try {
       // Generate matter number if not provided
       if (!matterData.matterNumber) {
         const year = new Date().getFullYear();
-        const count = (await DataService.matters.getAll()).length + 1;
+        const count = existingMatters.length + 1;
         matterData.matterNumber = `M${year}-${String(count).padStart(4, '0')}`;
       }
 
-      const newMatter = await DataService.matters.add(matterData as Matter);
-      
-      // Ensure we have a valid ID before navigating
-      if (newMatter && newMatter.id) {
-        navigate(`${PATHS.MATTERS}/${newMatter.id}`);
-      } else {
-        console.error('Matter created but no ID returned:', newMatter);
-        navigate(PATHS.MATTERS); // Navigate to list instead
-      }
+      await createMutation.mutateAsync(matterData as Matter);
     } catch (error) {
       console.error('Failed to create matter:', error);
       throw error;

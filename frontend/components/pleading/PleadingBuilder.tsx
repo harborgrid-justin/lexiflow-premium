@@ -19,7 +19,8 @@ import { Plus, Loader2 } from 'lucide-react';
 // Services & Data
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
-// ✅ Migrated to backend API (2025-12-21)
+import { queryKeys } from '../../utils/queryKeys';
+// ✅ Migrated to backend API with queryKeys (2025-12-21)
 
 // Hooks & Context
 import { useSessionStorage } from '../../hooks/useSessionStorage';
@@ -52,7 +53,6 @@ const PleadingFilingQueue = lazy(() => import('./PleadingFilingQueue').then(m =>
 const PleadingAnalytics = lazy(() => import('./PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
 
 import { PleadingBuilderProps } from './types';
-import { queryKeys } from '@/utils/queryKeys';
 
 export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, caseId }) => {
     const { theme } = useTheme();
@@ -64,13 +64,19 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
     const { success: notifySuccess, error: notifyError } = useNotify();
 
-    // Data fetching
+    // Data fetching with queryKeys
     const { data: pleadings = [], isLoading: pleadingsLoading } = useQuery<PleadingDocument[]>(
-        ['pleadings', caseId || 'all'],
+        caseId ? queryKeys.pleadings.byCaseId(caseId) : queryKeys.pleadings.all(),
         () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
     );
-    const { data: cases = [] } = useQuery<Case[]>(['cases', 'all'], () => DataService.cases.getAll());
-    const { data: templates = [] } = useQuery<PleadingTemplate[]>(['pleading-templates', 'all'], () => DataService.pleadings.getTemplates());
+    const { data: cases = [] } = useQuery<Case[]>(
+        queryKeys.cases.all(),
+        () => DataService.cases.getAll()
+    );
+    const { data: templates = [], isLoading: templatesLoading } = useQuery<PleadingTemplate[]>(
+        queryKeys.pleadingTemplates.all(),
+        () => DataService.pleadings.getTemplates()
+    );
 
     const { mutate: createPleading, isLoading: isCreating } = useMutation(
         async (data: { templateId: string; caseId: string; title: string; userId: string }) => {
@@ -154,13 +160,11 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
     };
 
     const renderContent = () => {
-        if(pleadingsLoading) return <LazyLoader message="Loading Pleadings..." />;
-
         switch (activeTab) {
             case 'drafts':
-                return <PleadingDrafts pleadings={pleadings} onEdit={handleEdit} />;
+                return <PleadingDrafts pleadings={pleadings} onEdit={handleEdit} isLoading={pleadingsLoading} />;
             case 'templates':
-                return <PleadingTemplates templates={templates} onCreateFromTemplate={handleCreateNew} />;
+                return <PleadingTemplates templates={templates} onCreateFromTemplate={handleCreateNew} isLoading={templatesLoading} />;
             case 'clauses':
                 return <ClauseLibrary onSelectClause={(clause: any) => {
                     notifySuccess(`Clause "${clause.name}" added to editor`);

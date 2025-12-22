@@ -139,6 +139,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
                     className={cn("w-full p-3 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-100 min-h-[100px]", theme.border.default, theme.surface.default, theme.text.primary)}
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
+                    placeholder="Enter section content..."
                   />
                   <div className="flex justify-end gap-2 mt-2">
                     <Button size="sm" variant="ghost" onClick={() => setEditingSectionId(null)}>Cancel</Button>
@@ -150,6 +151,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
                   <p className={cn("text-sm whitespace-pre-wrap leading-relaxed", theme.text.secondary)}>{section.content}</p>
                   <button 
                     onClick={() => handleEditSection(section)}
+                    title="Edit section"
                     className={cn("absolute top-0 right-0 opacity-0 group-hover:opacity-100 p-1 rounded transition-opacity", theme.text.primary, `hover:${theme.primary.light}`)}
                   >
                     <Edit2 className="h-4 w-4"/>

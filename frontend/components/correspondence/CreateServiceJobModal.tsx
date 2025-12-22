@@ -23,7 +23,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
   const { theme } = useTheme();
   const notify = useNotify();
   const [formData, setFormData] = useState<Partial<ServiceJob>>({
-    status: ServiceStatus.DRAFT,
+    status: 'DRAFT' as ServiceStatus,
     attempts: 0,
     method: 'Process Server'
   });
@@ -85,7 +85,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
       }
       
       onSave(newJob);
-      setFormData({ status: ServiceStatus.DRAFT, attempts: 0, method: 'Process Server' });
+      setFormData({ status: 'DRAFT' as ServiceStatus, attempts: 0, method: 'Process Server' });
       setValidationErrors({});
   };
 
@@ -109,8 +109,10 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
 
             <div className="grid grid-cols-1 gap-4">
                 <div>
-                    <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Case</label>
+                    <label htmlFor="case-select" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Case</label>
                     <select 
+                        id="case-select"
+                        aria-label="Select case"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
                         onChange={(e) => setFormData({...formData, caseId: e.target.value as any})}
@@ -121,9 +123,11 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                 </div>
 
                 <div>
-                    <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Document to Serve</label>
+                    <label htmlFor="document-select" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Document to Serve</label>
                     {formData.caseId ? (
                         <select 
+                            id="document-select"
+                            aria-label="Select document to serve"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={formData.documentTitle || ''}
                             onChange={(e) => setFormData({...formData, documentTitle: e.target.value})}
@@ -145,8 +149,10 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     <>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Mail Service</label>
+                                <label htmlFor="mail-service-select" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Mail Service</label>
                                 <select
+                                    id="mail-service-select"
+                                    aria-label="Select mail service"
                                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                     value={formData.mailType || ''}
                                     onChange={(e) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}

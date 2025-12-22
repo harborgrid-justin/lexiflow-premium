@@ -142,8 +142,8 @@ export const AssetManager: React.FC = () => {
             </Badge>
         </div>
         <div className="w-[10%] flex justify-end gap-2">
-             <button className="p-1 text-blue-600 hover:bg-blue-50 rounded"><Edit2 className="h-4 w-4"/></button>
-             <button onClick={() => handleDelete(asset.id)} className="p-1 text-red-600 hover:bg-red-50 rounded"><Trash2 className="h-4 w-4"/></button>
+             <button title="Edit asset" className="p-1 text-blue-600 hover:bg-blue-50 rounded"><Edit2 className="h-4 w-4"/></button>
+             <button title="Delete asset" onClick={() => handleDelete(asset.id)} className="p-1 text-red-600 hover:bg-red-50 rounded"><Trash2 className="h-4 w-4"/></button>
         </div>
     </div>
   );
@@ -201,6 +201,7 @@ export const AssetManager: React.FC = () => {
                   <div>
                       <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                       <select 
+                        title="Select asset type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newAsset.type}
                         onChange={e => setNewAsset({...newAsset, type: e.target.value as any})}

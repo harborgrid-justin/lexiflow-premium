@@ -95,11 +95,14 @@ export const FeeAgreementManagement: React.FC = () => {
     }
   };
 
-  const handleStatusChange = (agreement: FeeAgreement, newStatus: FeeAgreement['status']) => {
-    setAgreements(agreements.map(a =>
-      a.id === agreement.id ? { ...a, status: newStatus } : a
-    ));
-    notify.success(`Agreement status updated to ${newStatus}`);
+  const handleStatusChange = async (agreement: FeeAgreement, newStatus: FeeAgreement['status']) => {
+    try {
+      await DataService.feeAgreements.update(agreement.id, { status: newStatus });
+      await refetch();
+      notify.success(`Agreement status updated to ${newStatus}`);
+    } catch (error) {
+      notify.error('Failed to update agreement status');
+    }
   };
 
   const openEditModal = (agreement: FeeAgreement) => {
@@ -215,6 +218,7 @@ export const FeeAgreementManagement: React.FC = () => {
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Fee Type</label>
             <select
+              title="Select fee type"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.type || ''}
               onChange={e => setFormData({...formData, type: e.target.value as FeeAgreement['type']})}
@@ -249,6 +253,7 @@ export const FeeAgreementManagement: React.FC = () => {
             <div>
               <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Status</label>
               <select
+                title="Select agreement status"
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
                 onChange={e => setFormData({...formData, status: e.target.value as FeeAgreement['status']})}
@@ -278,7 +283,7 @@ export const FeeAgreementManagement: React.FC = () => {
             Are you sure you want to delete the fee agreement for <strong>{selectedAgreement?.clientName}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleDelete}>Delete Agreement</Button>
           </div>
         </div>

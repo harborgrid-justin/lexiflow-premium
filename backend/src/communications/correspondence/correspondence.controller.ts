@@ -34,9 +34,8 @@ import {
  * @class CorrespondenceController
  */
 @ApiTags('Correspondence')
-
-@Controller('communications')
-// @UseGuards(JwtAuthGuard) // Will be enabled once auth module is ready
+@Controller('correspondence')
+@Public()
 @ApiBearerAuth()
 export class CorrespondenceController {
   constructor(private readonly correspondenceService: CorrespondenceService) {}

@@ -197,6 +197,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
             <select 
+              title="Filter by role"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterRole}
               onChange={e => setFilterRole(e.target.value)}
@@ -211,6 +212,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Specialty</label>
             <select 
+              title="Filter by specialty"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterSpecialty}
               onChange={e => setFilterSpecialty(e.target.value)}
@@ -227,6 +229,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
             <select 
+              title="Filter by status"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}

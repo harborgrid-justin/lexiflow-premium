@@ -137,6 +137,7 @@ export const queryKeys = {
     all: () => ['requests', 'all'] as const,
     detail: (id: string) => ['requests', 'detail', id] as const,
     byCaseId: (caseId: string) => ['requests', 'byCaseId', caseId] as const,
+    sanctions: () => ['discovery', 'sanctions'] as const,
   },
 
   // Exhibits
@@ -170,6 +171,8 @@ export const queryKeys = {
   // War Room
   warRoom: {
     data: (caseId: string) => ['warRoom', caseId] as const,
+    advisors: (caseId: string) => ['warRoom', 'advisors', caseId] as const,
+    opposition: (caseId: string) => ['warRoom', 'opposition', caseId] as const,
   },
 
   // Calendar
@@ -218,6 +221,7 @@ export const queryKeys = {
   billing: {
     invoices: () => ['billing', 'invoices'] as const,
     timeEntries: () => ['billing', 'timeEntries'] as const,
+    feeAgreements: () => ['billing', 'feeAgreements'] as const,
   },
 
   // Jurisdictions

@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect, useMemo } from 'react';
-import { FileText, CheckCircle, Clock, ArrowLeft, Plus, Link as LinkIcon, AlertCircle } from 'lucide-react';
+import { FileText, ArrowLeft, Plus, Link as LinkIcon } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -26,7 +26,6 @@ import { useModalState } from '../../hooks';
 import { Card } from '../common/Card';
 import { UserAvatar } from '../common/UserAvatar';
 import { Button } from '../common/Button';
-import { Modal } from '../common/Modal';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
@@ -52,7 +51,7 @@ interface WitnessPrepProps {
 // COMPONENT
 // ============================================================================
 
-export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, initialWitnessId, onClearSelection }) => {
+export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId: _caseId, warRoomData, initialWitnessId, onClearSelection }) => {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================
@@ -100,7 +99,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
               {/* Witness Header */}
               <div className={cn("flex justify-between items-start p-6 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                   <div className="flex items-center gap-6">
-                      <button onClick={handleCloseDetail} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
+                      <button onClick={handleCloseDetail} title="Go back to witness list" className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}>
                           <ArrowLeft className="h-6 w-6"/>
                       </button>
                       <UserAvatar name={activeWitness.name} size="xl"/>
@@ -132,7 +131,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                   </Card>
 
                   {/* Right: Exhibit Bundle */}
-                  <Card title="Witness Bundle (Exhibits)" action={<Button size="sm" variant="outline" icon={Plus} onClick={() => setIsLinkModalOpen(true)}>Link Exhibit</Button>} className="flex flex-col h-full">
+                  <Card title="Witness Bundle (Exhibits)" action={<Button size="sm" variant="outline" icon={Plus} onClick={() => linkModal.open()}>Link Exhibit</Button>} className="flex flex-col h-full">
                       <div className="space-y-3 overflow-y-auto flex-1 pr-2">
                           <div className={cn("text-center py-8 italic", theme.text.tertiary)}>No exhibits linked yet.</div>
                       </div>
@@ -164,6 +163,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId, warRoomData, i
                                 <span className="font-bold">{w.prep}%</span>
                             </div>
                             <div className={cn("w-full h-1.5 rounded-full", theme.surface.highlight)}>
+                                {/* eslint-disable-next-line @lexiflow/no-inline-styles -- Dynamic width requires inline style */}
                                 <div className={cn("h-1.5 rounded-full transition-all bg-blue-500")} style={{ width: `${w.prep}%` }}></div>
                             </div>
                         </div>

@@ -16,7 +16,7 @@ export const ResearchSidebar: React.FC<ResearchSidebarProps> = ({
   const { theme } = useTheme();
 
   return (
-    <div className={cn("w-80 border-r flex flex-col hidden md:flex shrink-0", theme.surface.default, theme.border.default)}>
+    <div className={cn("w-80 border-r hidden md:flex md:flex-col shrink-0", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b font-bold text-xs uppercase tracking-wide", theme.border.default, theme.text.tertiary)}>
             Recent Sessions
         </div>

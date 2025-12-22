@@ -155,6 +155,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase
 
         {/* Realization Progress Bar */}
         <div className="w-full bg-black/20 h-1.5 rounded-full mt-4 overflow-hidden">
+          {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width required for progress */}
           <div 
             className="bg-blue-500 h-1.5 rounded-full transition-all duration-500" 
             style={{ width: `${billingStats?.realization}%` }}

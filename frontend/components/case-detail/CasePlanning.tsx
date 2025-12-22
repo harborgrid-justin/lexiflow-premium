@@ -67,7 +67,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
       { 
           invalidateKeys: [['tasks', caseData.id]], 
           // Optimistic Update
-          onSuccess: (updatedTask) => {
+          onSuccess: (updatedTask: WorkflowTask) => {
               const current = queryClient.getQueryState<WorkflowTask[]>(['tasks', caseData.id])?.data || [];
               const newTasks = current.map(t => t.id === updatedTask.id ? updatedTask : t);
               queryClient.setQueryData(['tasks', caseData.id], newTasks);
@@ -108,9 +108,9 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
   return (
     <div className={cn("h-full flex flex-col overflow-hidden animate-fade-in", theme.background)}>
       <TaskCreationModal 
-          isOpen={isTaskModalOpen} 
-          onClose={() => setIsTaskModalOpen(false)} 
-          onSave={(task) => { notify.success("Task added"); setIsTaskModalOpen(false); }} 
+          isOpen={taskModal.isOpen} 
+          onClose={() => taskModal.close()} 
+          onSave={(task) => { notify.success("Task added"); taskModal.close(); }} 
       />
 
       <div className={cn("p-4 border-b flex flex-col md:flex-row gap-4 justify-between shrink-0", theme.surface.default, theme.border.default)}>
@@ -138,7 +138,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
                       </button>
                   ))}
               </div>
-              <Button variant="primary" icon={Plus} onClick={() => setIsTaskModalOpen(true)}>Add Task</Button>
+              <Button variant="primary" icon={Plus} onClick={() => taskModal.open()}>Add Task</Button>
           </div>
       </div>
 
@@ -150,7 +150,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
               activeTaskId={activeTaskId} 
               onTogglePhase={togglePhase} 
               onHoverTask={setActiveTaskId} 
-              onAddTask={() => setIsTaskModalOpen(true)}
+              onAddTask={() => taskModal.open()}
           />
           <GanttTimeline 
               phases={phases} 

@@ -211,6 +211,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                     <select 
+                        title="Select message type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.type}
                         onChange={(e) => setFormData({...formData, type: e.target.value as CommunicationType})}
@@ -224,6 +225,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Matter Reference</label>
                     <select 
+                        title="Select case reference"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
                         onChange={(e) => setFormData({...formData, caseId: e.target.value})}
@@ -277,6 +279,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                                 </div>
                                 <button 
                                     onClick={() => handleRemoveAttachment(att.id)}
+                                    title="Remove attachment"
                                     className="p-1 hover:bg-slate-100 rounded"
                                 >
                                     <X className="h-3 w-3 text-slate-400"/>

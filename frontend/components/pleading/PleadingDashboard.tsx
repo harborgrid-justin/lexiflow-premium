@@ -46,7 +46,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         {
             onSuccess: (newDoc) => {
                 createModal.close();
-                onCreate(newDoc);
+                onCreate(newDoc as PleadingDocument);
             }
         }
     );
@@ -101,7 +101,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             <PageHeader 
                 title="Pleading Builder" 
                 subtitle="Draft complaints, motions, and orders with automated formatting and case integration."
-                actions={<Button variant="primary" icon={Plus} onClick={() => setIsCreateModalOpen(true)}>New Pleading</Button>}
+                actions={<Button variant="primary" icon={Plus} onClick={createModal.open}>New Pleading</Button>}
             />
             
             <div className="flex-1 overflow-hidden border-t pt-4">
@@ -115,13 +115,14 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                 />
             </div>
 
-            <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Pleading">
+            <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create New Pleading">
                 <div className="p-6 space-y-4">
                     <Input label="Document Title" value={newDocData.title} onChange={e => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
                     
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
                         <select 
+                            title="Select related case"
                             className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={newDocData.caseId}
                             onChange={e => setNewDocData({...newDocData, caseId: e.target.value})}
@@ -151,7 +152,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                     </div>
 
                     <div className="flex justify-end pt-4 gap-2">
-                        <Button variant="secondary" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
+                        <Button variant="secondary" onClick={createModal.close}>Cancel</Button>
                         <Button variant="primary" onClick={handleCreateSubmit} disabled={!newDocData.title || !newDocData.caseId || !newDocData.templateId}>Create Draft</Button>
                     </div>
                 </div>

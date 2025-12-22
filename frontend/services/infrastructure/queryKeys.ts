@@ -13,7 +13,7 @@ import type { CaseId, DocumentId, UserId } from '../../types';
  * Hierarchical structure: all > lists > detail
  */
 export const correspondenceKeys = {
-  all: [COMMUNICATIONS] as const,
+  all: ['communications'] as const,
   lists: () => [...correspondenceKeys.all, 'list'] as const,
   list: (filters?: CorrespondenceFilters) => 
     [...correspondenceKeys.lists(), filters] as const,
@@ -30,7 +30,7 @@ export const correspondenceKeys = {
  * Service Jobs query keys factory
  */
 export const serviceJobKeys = {
-  all: [SERVICE_JOBS] as const,
+  all: ['service-jobs'] as const,
   lists: () => [...serviceJobKeys.all, 'list'] as const,
   list: (filters?: ServiceJobFilters) => 
     [...serviceJobKeys.lists(), filters] as const,
@@ -76,7 +76,7 @@ export interface ServiceJobFilters {
  * Hierarchical structure supporting inventory, custody, and forensics
  */
 export const evidenceKeys = {
-  all: [EVIDENCE] as const,
+  all: ['evidence'] as const,
   lists: () => [...evidenceKeys.all, 'list'] as const,
   list: (filters?: EvidenceFilters) => 
     [...evidenceKeys.lists(), filters] as const,
@@ -145,39 +145,39 @@ export const discoveryKeys = {
   
   // ESI (Electronically Stored Information)
   esi: {
-    all: [DISCOVERY_EXT_ESI] as const,
-    list: (filters?: any) => [DISCOVERY_EXT_ESI, 'list', filters] as const,
-    detail: (id: string) => [DISCOVERY_EXT_ESI, id] as const,
-    byCase: (caseId: CaseId) => [DISCOVERY_EXT_ESI, 'byCase', caseId] as const,
-    byStatus: (status: string) => [DISCOVERY_EXT_ESI, 'byStatus', status] as const,
+    all: ['discovery-esi'] as const,
+    list: (filters?: any) => ['discovery-esi', 'list', filters] as const,
+    detail: (id: string) => ['discovery-esi', id] as const,
+    byCase: (caseId: CaseId) => ['discovery-esi', 'byCase', caseId] as const,
+    byStatus: (status: string) => ['discovery-esi', 'byStatus', status] as const,
   },
   
   // Productions
   productions: {
-    all: [DISCOVERY_EXT_PROD] as const,
-    list: (filters?: any) => [DISCOVERY_EXT_PROD, 'list', filters] as const,
-    detail: (id: string) => [DISCOVERY_EXT_PROD, id] as const,
-    config: () => [DISCOVERY_EXT_PROD, 'config'] as const,
-    byCase: (caseId: CaseId) => [DISCOVERY_EXT_PROD, 'byCase', caseId] as const,
+    all: ['discovery-productions'] as const,
+    list: (filters?: any) => ['discovery-productions', 'list', filters] as const,
+    detail: (id: string) => ['discovery-productions', id] as const,
+    config: () => ['discovery-productions', 'config'] as const,
+    byCase: (caseId: CaseId) => ['discovery-productions', 'byCase', caseId] as const,
   },
   
   // Privilege Log
   privilege: {
-    all: [PRIVILEGE_LOG] as const,
-    list: (filters?: any) => [PRIVILEGE_LOG, 'list', filters] as const,
-    detail: (id: string) => [PRIVILEGE_LOG, id] as const,
-    byCase: (caseId: CaseId) => [PRIVILEGE_LOG, 'byCase', caseId] as const,
-    byPrivilegeType: (type: string) => [PRIVILEGE_LOG, 'byType', type] as const,
+    all: ['privilege-log'] as const,
+    list: (filters?: any) => ['privilege-log', 'list', filters] as const,
+    detail: (id: string) => ['privilege-log', id] as const,
+    byCase: (caseId: CaseId) => ['privilege-log', 'byCase', caseId] as const,
+    byPrivilegeType: (type: string) => ['privilege-log', 'byType', type] as const,
   },
   
   // Legal Holds
   holds: {
-    all: [LEGAL_HOLDS] as const,
-    list: (filters?: any) => [LEGAL_HOLDS, 'list', filters] as const,
-    detail: (id: string) => [LEGAL_HOLDS, id] as const,
-    byCase: (caseId: CaseId) => [LEGAL_HOLDS, 'byCase', caseId] as const,
-    byStatus: (status: string) => [LEGAL_HOLDS, 'byStatus', status] as const,
-    byCustodian: (custodian: string) => [LEGAL_HOLDS, 'byCustodian', custodian] as const,
+    all: ['legal-holds'] as const,
+    list: (filters?: any) => ['legal-holds', 'list', filters] as const,
+    detail: (id: string) => ['legal-holds', id] as const,
+    byCase: (caseId: CaseId) => ['legal-holds', 'byCase', caseId] as const,
+    byStatus: (status: string) => ['legal-holds', 'byStatus', status] as const,
+    byCustodian: (custodian: string) => ['legal-holds', 'byCustodian', custodian] as const,
   },
 } as const;
 
@@ -193,7 +193,7 @@ export const discoveryQueryKeys = {
  * Hierarchical structure supporting WIP, invoices, expenses, trust accounts, and financial reporting
  */
 export const billingKeys = {
-  all: [BILLING] as const,
+  all: ['billing'] as const,
   lists: () => [...billingKeys.all, 'list'] as const,
   list: (filters?: BillingFilters) => 
     [...billingKeys.lists(), filters] as const,

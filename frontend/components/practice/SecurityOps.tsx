@@ -92,7 +92,7 @@ export const SecurityOps: React.FC = () => {
             
             <Card title="Malware Signature Scanner (Suffix Tree)">
                  <div className={cn("p-8 border-2 border-dashed rounded-lg text-center cursor-pointer relative", theme.border.default, `hover:${theme.primary.border}`)}>
-                    <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileScan} />
+                    <input type="file" title="Select file to scan" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileScan} />
                     {isScanning ? (
                         <>
                             <Loader2 className={cn("h-12 w-12 mx-auto mb-4 animate-spin", theme.primary.text)}/>

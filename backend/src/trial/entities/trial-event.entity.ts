@@ -5,36 +5,36 @@ import { Case } from '../../cases/entities/case.entity';
 @Entity('trial_events')
 export class TrialEvent {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'enum', enum: TrialEventType })
-  type: TrialEventType;
+  type!: TrialEventType;
 
   @Column({ type: 'timestamp' })
-  date: Date;
+  date!: Date;
 
   @Column({ nullable: true })
-  location: string;
+  location!: string;
 
   @Column()
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'caseId' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'simple-array', nullable: true })
-  attendees: string[];
+  attendees!: string[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

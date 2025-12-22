@@ -178,7 +178,7 @@ export const BriefAnalyzer: React.FC = () => {
                 className={cn("flex-1 w-full p-6 font-serif text-base leading-relaxed outline-none resize-none", theme.text.primary, theme.surface.input)}
                 placeholder="Paste your brief, motion, or opposing counsel's filing here for analysis..."
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
             />
             <div className={cn("p-4 border-t flex justify-between", theme.border.default, theme.surface.highlight)}>
                  <div className="flex gap-2">

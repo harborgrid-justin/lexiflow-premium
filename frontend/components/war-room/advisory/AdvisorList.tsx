@@ -84,8 +84,8 @@ export const AdvisorList: React.FC<AdvisorListProps> = ({ advisors, onSelect, se
                                 <div>
                                     <p className={cn("font-bold text-sm", theme.text.primary)}>{adv.name}</p>
                                     <div className="flex items-center gap-2 mt-0.5">
-                                        <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={(e) => { e.stopPropagation(); window.location.href=`mailto:${adv.email}`; }}><Mail className="h-3 w-3"/></button>
-                                        <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={(e) => { e.stopPropagation(); }}><Phone className="h-3 w-3"/></button>
+                                        <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); window.location.href=`mailto:${adv.email}`; }}><Mail className="h-3 w-3"/></button>
+                                        <button className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); }}><Phone className="h-3 w-3"/></button>
                                     </div>
                                 </div>
                             </div>

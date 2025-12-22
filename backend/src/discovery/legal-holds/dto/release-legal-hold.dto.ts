@@ -2,15 +2,15 @@ import { IsString, IsOptional, IsUUID, IsDateString } from 'class-validator';
 
 export class ReleaseLegalHoldDto {
   @IsDateString()
-  releaseDate: string;
+  releaseDate!: string;
 
   @IsString()
-  releaseReason: string;
+  releaseReason!: string;
 
   @IsOptional()
   @IsString()
   releaseNotes?: string;
 
   @IsUUID()
-  releasedBy: string;
+  releasedBy!: string;
 }

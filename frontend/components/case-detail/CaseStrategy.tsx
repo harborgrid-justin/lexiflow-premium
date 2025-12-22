@@ -231,12 +231,12 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
       <Modal isOpen={strategyModal.isOpen} onClose={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }} title={`${editingItem ? 'Edit' : 'Add'} ${modalType}`}>
         <div className="p-6 space-y-4">
-            <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={e => setNewItem({...newItem, title: e.target.value, citation: e.target.value})} />
+            <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItem({...newItem, title: e.target.value, citation: e.target.value})} />
             
             {modalType === 'Defense' && (
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} onChange={e => setNewItem({...newItem, type: e.target.value})} aria-label="Defense Type">
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItem({...newItem, type: e.target.value})} aria-label="Defense Type">
                         <option value="Affirmative">Affirmative</option>
                         <option value="Procedural">Procedural</option>
                         <option value="Factual">Factual</option>
@@ -244,7 +244,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
                 </div>
             )}
 
-            <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={e => setNewItem({...newItem, description: e.target.value})} />
+            <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItem({...newItem, description: e.target.value})} />
             
             <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
                 <Button variant="ghost" onClick={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }}>Cancel</Button>

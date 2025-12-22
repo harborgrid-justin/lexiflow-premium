@@ -43,7 +43,7 @@ export const WebhookManagement: React.FC = () => {
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
     const response = await webhooksApi.getAll();
-    return response.items.map((item: unknown) => ({
+    return response.items.map((item: any) => ({
       id: item.id,
       name: item.name,
       url: item.url,
@@ -232,9 +232,9 @@ export const WebhookManagement: React.FC = () => {
         title={createModal.isOpen ? 'Create Webhook' : 'Edit Webhook'}
       >
         <div className="p-6 space-y-4">
-          <Input label="Webhook Name" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g., Case Update Notification" />
-          <Input label="Endpoint URL" value={formData.url || ''} onChange={e => setFormData({...formData, url: e.target.value})} placeholder="https://api.example.com/webhook" />
-          <Input label="Secret (optional)" value={formData.secret || ''} onChange={e => setFormData({...formData, secret: e.target.value})} placeholder="Shared secret for signature verification" />
+          <Input label="Webhook Name" value={formData.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Case Update Notification" />
+          <Input label="Endpoint URL" value={formData.url || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, url: e.target.value})} placeholder="https://api.example.com/webhook" />
+          <Input label="Secret (optional)" value={formData.secret || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, secret: e.target.value})} placeholder="Shared secret for signature verification" />
 
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Events to Subscribe</label>

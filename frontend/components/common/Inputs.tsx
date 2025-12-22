@@ -25,12 +25,12 @@ import { cn } from '../../utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   error?: string;
-}
+};
 
-export const Input: React.FC<InputProps> = ({ label, error, className = '', ...props }) => {
+export const Input = ({ label, error, className = '', ...props }: InputProps) => {
   const { theme, mode } = useTheme();
   
   return (

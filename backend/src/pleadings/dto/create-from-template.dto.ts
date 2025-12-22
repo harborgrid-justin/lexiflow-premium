@@ -5,20 +5,20 @@ export class CreateFromTemplateDto {
   @ApiProperty({ description: 'Template ID to use' })
   @IsNotEmpty()
   @IsUUID()
-  templateId: string;
+  templateId!: string;
 
   @ApiProperty({ description: 'Case ID to associate with' })
   @IsNotEmpty()
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Title for the new pleading' })
   @IsNotEmpty()
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'User ID creating the pleading' })
   @IsNotEmpty()
   @IsString()
-  userId: string;
+  userId!: string;
 }

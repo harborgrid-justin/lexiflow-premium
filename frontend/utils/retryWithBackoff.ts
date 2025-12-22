@@ -75,14 +75,18 @@ export async function retryWithBackoff<T>(
  */
 export function isRetryableError(error: unknown): boolean {
   // Network errors
-  if (error.name === 'NetworkError' || error.name === 'TypeError') {
-    return true;
+  if (error && typeof error === 'object' && 'name' in error) {
+    const errorName = (error as { name: string }).name;
+    if (errorName === 'NetworkError' || errorName === 'TypeError') {
+      return true;
+    }
   }
 
   // HTTP status codes that should be retried
-  if (error.status) {
+  if (error && typeof error === 'object' && 'status' in error) {
+    const errorStatus = (error as { status: number }).status;
     const retryableStatuses = [408, 429, 500, 502, 503, 504];
-    return retryableStatuses.includes(error.status);
+    return retryableStatuses.includes(errorStatus);
   }
 
   return false;

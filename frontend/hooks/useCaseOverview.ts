@@ -41,9 +41,9 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     useEffect(() => {
         const loadRelated = async () => {
             const allCases = await DataService.cases.getAll();
-            const linked = allCases.filter(c => caseData.linkedCaseIds?.includes(c.id));
+            const linked = allCases.filter((c: Case) => caseData.linkedCaseIds?.includes(c.id));
             setLinkedCases(linked);
-            const available = allCases.filter(c => c.id !== caseData.id && !caseData.linkedCaseIds?.includes(c.id));
+            const available = allCases.filter((c: Case) => c.id !== caseData.id && !caseData.linkedCaseIds?.includes(c.id));
             setAvailableCases(available);
         };
         loadRelated();

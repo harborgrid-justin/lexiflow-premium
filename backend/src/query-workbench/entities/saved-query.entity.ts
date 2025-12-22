@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('saved_queries')
 export class SavedQuery {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'text' })
-  query: string;
+  query!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  tags: string[];
+  tags!: string[];
 
   @Column({ type: 'boolean', default: false })
-  isShared: boolean;
+  isShared!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

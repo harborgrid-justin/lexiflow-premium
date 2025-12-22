@@ -15,45 +15,45 @@ export enum RuleType {
 @Entity('jurisdiction_rules')
 export class JurisdictionRule {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid', name: 'jurisdictionId' })
-  jurisdictionId: string;
+  jurisdictionId!: string;
 
   @ManyToOne(() => Jurisdiction, jurisdiction => jurisdiction.rules, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'jurisdictionId' })
-  jurisdiction: Jurisdiction;
+  jurisdiction!: Jurisdiction;
 
   @Column({ type: 'varchar', length: 100, name: 'code' })
   code: string; // e.g., "FRCP 26", "Evidence Rule 401"
 
   @Column({ type: 'varchar', length: 500, name: 'name' })
-  name: string;
+  name!: string;
 
   @Column({ type: 'enum', enum: RuleType, name: 'type' })
-  type: RuleType;
+  type!: RuleType;
 
   @Column({ type: 'text', nullable: true, name: 'description' })
-  description: string;
+  description!: string;
 
   @Column({ type: 'text', nullable: true, name: 'fullText' })
-  fullText: string;
+  fullText!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true, name: 'url' })
-  url: string;
+  url!: string;
 
   @Column({ type: 'simple-json', nullable: true, name: 'citations' })
-  citations: string[];
+  citations!: string[];
 
   @Column({ type: 'date', nullable: true, name: 'effectiveDate' })
-  effectiveDate: Date;
+  effectiveDate!: Date;
 
   @Column({ type: 'boolean', default: true, name: 'isActive' })
-  isActive: boolean;
+  isActive!: boolean;
 
   @CreateDateColumn({ name: 'createdAt' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updatedAt' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

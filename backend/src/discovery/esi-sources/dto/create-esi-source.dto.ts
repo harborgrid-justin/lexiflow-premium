@@ -13,14 +13,14 @@ import { ESISourceType } from '../entities/esi-source.entity';
 
 export class CreateESISourceDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(300)
-  sourceName: string;
+  sourceName!: string;
 
   @IsEnum(ESISourceType)
-  sourceType: ESISourceType;
+  sourceType!: ESISourceType;
 
   @IsOptional()
   @IsString()
@@ -111,5 +111,5 @@ export class CreateESISourceDto {
   assignedTo?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

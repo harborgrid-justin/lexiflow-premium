@@ -4,5 +4,5 @@ import { ApiProperty } from '@nestjs/swagger';
 export class GetFileDto {
   @ApiProperty({ description: 'File ID or path' })
   @IsString()
-  fileId: string;
+  fileId!: string;
 }

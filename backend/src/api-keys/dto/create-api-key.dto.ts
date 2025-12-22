@@ -11,7 +11,7 @@ export enum ApiKeyScope {
 export class CreateApiKeyDto {
   @ApiProperty({ description: 'Name for the API key' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Description of the API key purpose', required: false })
   @IsOptional()
@@ -26,7 +26,7 @@ export class CreateApiKeyDto {
   })
   @IsArray()
   @IsEnum(ApiKeyScope, { each: true })
-  scopes: ApiKeyScope[];
+  scopes!: ApiKeyScope[];
 
   @ApiProperty({ description: 'Expiration date for the API key', required: false })
   @IsOptional()

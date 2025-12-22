@@ -30,7 +30,7 @@ export class Project extends BaseEntity {
   case?: Case;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name!: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
@@ -40,14 +40,14 @@ export class Project extends BaseEntity {
     enum: ProjectStatus,
     default: ProjectStatus.NOT_STARTED,
   })
-  status: ProjectStatus;
+  status!: ProjectStatus;
 
   @Column({
     type: 'enum',
     enum: ProjectPriority,
     default: ProjectPriority.MEDIUM,
   })
-  priority: ProjectPriority;
+  priority!: ProjectPriority;
 
   @Column({ name: 'start_date', type: 'date', nullable: true })
   startDate?: Date;
@@ -65,7 +65,7 @@ export class Project extends BaseEntity {
   assignedTeamId?: string;
 
   @Column({ name: 'completion_percentage', type: 'decimal', precision: 5, scale: 2, default: 0 })
-  completionPercentage: number;
+  completionPercentage!: number;
 
   @Column({ name: 'estimated_hours', type: 'decimal', precision: 12, scale: 2, nullable: true })
   estimatedHours?: number;

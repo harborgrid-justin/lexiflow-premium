@@ -30,7 +30,7 @@ export const StandardizationConsole: React.FC = () => {
     const { mutate: runJob } = useMutation(
         DataService.quality.runCleansingJob,
         {
-            onSuccess: (stats) => {
+            onSuccess: (stats: {processed: number, fixed: number}) => {
                 setLastRunStats(stats);
                 setIsRunning(false);
                 notify.success(`Standardization Complete. Fixed ${stats.fixed} records.`);

@@ -5,7 +5,7 @@ export class OcrRequestDto {
   @ApiProperty({ description: 'Document ID to process' })
   @IsUUID()
   @IsNotEmpty()
-  documentId: string;
+  documentId!: string;
 
   @ApiPropertyOptional({ description: 'Languages to detect', type: [String], default: ['eng'] })
   @IsArray()
@@ -19,12 +19,12 @@ export class OcrRequestDto {
 }
 
 export class OcrResultDto {
-  documentId: string;
-  text: string;
-  confidence: number;
-  language: string;
-  pageCount: number;
-  wordCount: number;
-  processedAt: Date;
-  processingTime: number;
+  documentId!: string;
+  text!: string;
+  confidence!: number;
+  language!: string;
+  pageCount!: number;
+  wordCount!: number;
+  processedAt!: Date;
+  processingTime!: number;
 }

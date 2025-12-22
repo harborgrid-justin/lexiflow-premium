@@ -71,9 +71,9 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
   // DERIVED STATE & MEMOIZED VALUES
   // ============================================================================
   const exhibitsTotal = warRoomData.evidence?.length || 0;
-  const exhibitsAdmitted = warRoomData.evidence?.filter((e) => e.status === 'Admitted').length || 0;
+  const exhibitsAdmitted = warRoomData.evidence?.filter((e: any) => e.status === 'Admitted').length || 0;
   const witnessCount = warRoomData.witnesses?.length || 0;
-  const tasksDue = warRoomData.tasks?.filter((t) => t.priority === 'High' && t.status !== 'Done').length || 0;
+  const tasksDue = warRoomData.tasks?.filter((t: any) => t.priority === 'High' && t.status !== 'Done').length || 0;
   const recentDocket = warRoomData.docket?.slice().reverse().slice(0, 5) || [];
   const sanctionsCount = sanctions.length;
 
@@ -133,7 +133,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomDat
                             <li key={index} className={cn("flex items-start justify-between text-sm", theme.text.secondary)}>
                                 <div className="flex-1 pr-4">
                                     <p className={cn("font-medium", theme.text.primary)}>{entry.description}</p>
-                                    <span className="text-xs">{new Date(entry.date).toLocaleDateString()} - Doc #{index + 1}</span>
+                                    <span className="text-xs">{new Date(entry.date as string).toLocaleDateString()} - Doc #{index + 1}</span>
                                 </div>
                                 <span className={cn("text-xs font-mono px-2 py-1 rounded", theme.surface.highlight, theme.border.default)}>{entry.type}</span>
                             </li>

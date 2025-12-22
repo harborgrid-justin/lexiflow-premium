@@ -47,7 +47,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
                         className={cn("w-full pl-9 pr-3 py-1.5 text-xs border rounded-md outline-none", theme.surface.input, theme.border.default, theme.text.primary)}
                         placeholder="Search case context..."
                         value={search}
-                        onChange={e => setSearch(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                     />
                 </div>
                 <Tabs 

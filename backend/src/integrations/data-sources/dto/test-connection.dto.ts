@@ -10,15 +10,15 @@ export enum DataSourceType {
 export class TestConnectionDto {
   @IsEnum(DataSourceType)
   @IsNotEmpty()
-  type: DataSourceType;
+  type!: DataSourceType;
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsString()
   @IsNotEmpty()
-  host: string;
+  host!: string;
 
   @IsNumber()
   @IsOptional()

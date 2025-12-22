@@ -136,7 +136,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
                 </tr>
               </thead>
               <tbody className={cn("divide-y", theme.surface.default, theme.border.default)}>
-                {[1, 2, 3, 4, 5].map((i) => (
+                {[1, 2, 3, 4, 5].map((i: any) => (
                   <tr key={i}>
                     <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-mono", theme.text.secondary)}>BP-{2040+i}</td>
                     <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-medium", theme.text.primary)}>Client Onboarding: Acme Corp</td>

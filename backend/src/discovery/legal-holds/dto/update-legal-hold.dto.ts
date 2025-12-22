@@ -131,5 +131,5 @@ export class UpdateLegalHoldDto {
   releasedBy?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

@@ -11,7 +11,7 @@ export class CreatePerformanceMetricDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  metricName: string;
+  metricName!: string;
 
   @ApiProperty({ 
     description: 'Metric value',
@@ -20,7 +20,7 @@ export class CreatePerformanceMetricDto {
   @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
-  value: number;
+  value!: number;
 
   @ApiPropertyOptional({ 
     description: 'Unit of measurement',

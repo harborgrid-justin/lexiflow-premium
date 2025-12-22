@@ -8,7 +8,7 @@
 import React from 'react';
 import { Plus, X, RefreshCw, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme, ThemeContextType } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { ConnectionCard } from './ConnectionCard';
 import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
@@ -44,13 +44,15 @@ export const CloudDatabaseView: React.FC = () => {
 };
 
 interface CloudDatabaseContentProps {
-  theme: unknown;
+  theme: ThemeContextType['theme'];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
   selectedProvider: string | null;
   setSelectedProvider: (value: string | null) => void;
-  formData: unknown;
-  setFormData: (value: unknown) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFormData: (value: any) => void;
   resetForm: () => void;
 }
 
@@ -201,7 +203,7 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
 interface ProviderSelectionProps {
   providers: readonly DataProvider[];
   onSelect: (id: string) => void;
-  theme: unknown;
+  theme: ThemeContextType['theme'];
 }
 
 const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSelect, theme }) => (
@@ -227,12 +229,14 @@ const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSele
 interface ConnectionFormProps {
   selectedProvider: string;
   providers: readonly DataProvider[];
-  formData: unknown;
-  setFormData: (value: unknown) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFormData: (value: any) => void;
   onCancel: () => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;
-  theme: unknown;
+  theme: ThemeContextType['theme'];
 }
 
 const ConnectionForm: React.FC<ConnectionFormProps> = ({
@@ -270,7 +274,7 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
           required
           className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
           value={formData.name}
-          onChange={e => setFormData({...formData, name: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
           placeholder="e.g. Production Warehouse"
         />
       </div>
@@ -283,7 +287,7 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
           required
           className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
           value={formData.host}
-          onChange={e => setFormData({...formData, host: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, host: e.target.value})}
           placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
         />
       </div>

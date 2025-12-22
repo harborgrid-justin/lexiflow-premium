@@ -58,7 +58,7 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
     });
 
     // Page estimate (no pageLimit in type, use reasonable default)
-    const estimatedPages = Math.ceil(sections.reduce((acc, s) => acc + (s.content?.length || 0), 0) / 3000);
+    const estimatedPages = Math.ceil(sections.reduce((acc: any, s) => acc + (s.content?.length || 0), 0) / 3000);
     const pageLimit = 25; // Default page limit
     results.push({
       id: 'pageLimit',

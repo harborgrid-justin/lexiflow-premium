@@ -219,7 +219,7 @@ export const useEvidenceVault = (caseId?: string) => {
    */
   const evidenceItems = useMemo(() => {
       if (!caseId) return allEvidenceItems;
-      return allEvidenceItems.filter(e => e.caseId === caseId);
+      return allEvidenceItems.filter((e: EvidenceItem) => e.caseId === caseId);
   }, [allEvidenceItems, caseId]);
 
   // ============================================================================
@@ -440,7 +440,7 @@ export const useEvidenceVault = (caseId?: string) => {
    */
   const filteredItems = useMemo(() => {
     try {
-      return evidenceItems.filter(e => {
+      return evidenceItems.filter((e: EvidenceItem) => {
         // Search filter: Multi-field text search
         const matchesSearch = !filters.search || 
           e.title?.toLowerCase().includes(filters.search.toLowerCase()) || 
@@ -473,10 +473,10 @@ export const useEvidenceVault = (caseId?: string) => {
         // Location filter: Partial match
         const matchesLocation = !filters.location || 
           e.location?.toLowerCase().includes(filters.location.toLowerCase());
-        
+
         // Tags filter: Array intersection
-        const matchesTags = !filters.tags || 
-          e.tags?.some(t => t.toLowerCase().includes(filters.tags.toLowerCase()));
+        const matchesTags = !filters.tags ||
+          e.tags?.some((t: string) => t.toLowerCase().includes(filters.tags.toLowerCase()));
         
         // Collector filter: Partial match
         const matchesCollectedBy = !filters.collectedBy || 

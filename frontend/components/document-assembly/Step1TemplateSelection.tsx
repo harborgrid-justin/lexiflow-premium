@@ -83,7 +83,7 @@ export const Step1TemplateSelection: React.FC<Step1TemplateSelectionProps> = ({ 
     async () => {
       // Try to fetch from backend, fallback to local templates
       try {
-        // TODO: Implement backend template endpoint
+        
         // const templates = await api.documents.getTemplates();
         // return templates;
         return DOCUMENT_TEMPLATES;

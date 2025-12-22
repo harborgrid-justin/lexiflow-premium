@@ -5,20 +5,20 @@ import { TeamMemberRole } from '../entities/case-team.entity';
 export class CreateCaseTeamDto {
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  userId: string;
+  userId!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @IsEnum(TeamMemberRole)
   @IsNotEmpty()
-  role: TeamMemberRole;
+  role!: TeamMemberRole;
 
   @IsEmail()
   @IsOptional()

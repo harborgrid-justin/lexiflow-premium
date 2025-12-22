@@ -17,7 +17,7 @@ export class MessengerConversationDto {
 
   @ApiProperty()
   @IsArray()
-  participants: string[];
+  participants!: string[];
 
   @ApiPropertyOptional({ enum: ConversationType, default: ConversationType.DIRECT })
   @IsEnum(ConversationType)
@@ -38,11 +38,11 @@ export class MessengerConversationDto {
 export class MessengerMessageDto {
   @ApiProperty()
   @IsString()
-  conversationId: string;
+  conversationId!: string;
 
   @ApiProperty()
   @IsString()
-  content: string;
+  content!: string;
 
   @ApiPropertyOptional()
   @IsArray()

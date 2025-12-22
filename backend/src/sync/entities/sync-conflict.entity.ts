@@ -3,35 +3,35 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeor
 @Entity('sync_conflicts')
 export class SyncConflict {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  entityType: string;
+  entityType!: string;
 
   @Column()
-  entityId: string;
+  entityId!: string;
 
   @Column('jsonb')
-  localVersion: Record<string, any>;
+  localVersion!: Record<string, any>;
 
   @Column('jsonb')
-  remoteVersion: Record<string, any>;
+  remoteVersion!: Record<string, any>;
 
   @Column()
   conflictType: string; // 'update', 'delete', 'concurrent'
 
   @Column({ default: false })
-  resolved: boolean;
+  resolved!: boolean;
 
   @Column({ nullable: true })
   resolution: string; // 'local', 'remote', 'merge'
 
   @Column({ nullable: true })
-  resolvedBy: string;
+  resolvedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  resolvedAt: Date;
+  resolvedAt!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

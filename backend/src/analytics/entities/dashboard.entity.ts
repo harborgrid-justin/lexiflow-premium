@@ -3,26 +3,26 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('dashboards')
 export class Dashboard {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column('text', { nullable: true })
-  description: string;
+  description!: string;
 
   @Column('jsonb', { default: [] })
-  widgets: any[];
+  widgets!: any[];
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column({ default: false })
-  isPublic: boolean;
+  isPublic!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

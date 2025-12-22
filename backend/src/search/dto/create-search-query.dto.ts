@@ -16,7 +16,7 @@ export class CreateSearchQueryDto {
   })
   @IsString()
   @IsNotEmpty()
-  query: string;
+  query!: string;
 
   @ApiPropertyOptional({ 
     description: 'Entity type being searched',

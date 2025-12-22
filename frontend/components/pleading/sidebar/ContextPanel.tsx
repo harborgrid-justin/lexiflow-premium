@@ -146,7 +146,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
             type="text"
             placeholder="Search facts..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
             className={cn(
               "w-full pl-9 pr-3 py-2 text-sm rounded-md border",
               theme.surface.input, theme.border.default, theme.text.primary,

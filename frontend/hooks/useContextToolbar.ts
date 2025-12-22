@@ -5,7 +5,11 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { LucideIcon } from 'lucide-react';
+
+/**
+ * Icon type - can be any React component
+ */
+export type IconComponent = React.ComponentType<{ className?: string; size?: number }>;
 
 /**
  * Toolbar action definition
@@ -13,7 +17,7 @@ import { LucideIcon } from 'lucide-react';
 export interface ToolbarAction {
   id: string;
   label: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   onClick: () => void;
   category?: 'edit' | 'format' | 'insert' | 'view' | 'custom';
   shortcut?: string;

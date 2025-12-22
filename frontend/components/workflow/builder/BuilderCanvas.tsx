@@ -263,7 +263,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
               const markerId = isSelected ? 'arrow-selected' : isDenied ? 'arrow-denied' : isGranted ? 'arrow-granted' : 'arrow-default';
 
               return (
-                <g key={conn.id} className="cursor-pointer" onClick={(e) => { e.stopPropagation(); onSelectConnection(conn.id); }}>
+                <g key={conn.id} className="cursor-pointer" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelectConnection(conn.id); }}>
                   <path d={path} stroke={strokeColor} strokeWidth={isSelected ? 4 : 2} fill="none" className="transition-all" markerEnd={`url(#${markerId})`} />
                   <path d={path} stroke="transparent" strokeWidth="12" fill="none" />
                   {conn.label && (

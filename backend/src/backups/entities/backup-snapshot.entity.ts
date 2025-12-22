@@ -3,13 +3,13 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeor
 @Entity('backup_snapshots')
 export class BackupSnapshot {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column()
   type: string; // 'full', 'incremental', 'differential'
@@ -24,14 +24,14 @@ export class BackupSnapshot {
   status: string; // 'pending', 'in_progress', 'completed', 'failed'
 
   @Column('jsonb', { nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  expiresAt: Date;
+  expiresAt!: Date;
 }

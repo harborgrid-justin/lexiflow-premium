@@ -44,13 +44,13 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     hourlyRate: matter?.hourlyRate,
     flatFee: matter?.flatFee,
     contingencyPercentage: matter?.contingencyPercentage,
-    tags: matter?.tags || [],
-    jurisdictions: matter?.jurisdictions || [],
+    tags: matter?.tags || [] as string[],
+    jurisdictions: matter?.jurisdictions || [] as string[],
     courtName: matter?.courtName || '',
     judgeAssigned: matter?.judgeAssigned || '',
-    opposingCounsel: matter?.opposingCounsel || [],
-    teamMembers: matter?.teamMembers || [],
-    customFields: matter?.customFields || {},
+    opposingCounsel: matter?.opposingCounsel || [] as string[],
+    teamMembers: matter?.teamMembers || [] as string[],
+    customFields: matter?.customFields || {} as Record<string, unknown>,
     ...(matter || {})
   });
 

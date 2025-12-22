@@ -3,10 +3,10 @@ import { EvidenceType, AdmissibilityStatus, AuthenticationMethod, HearsayStatus 
 
 export class CreateDiscoveryEvidenceDto {
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
-  title: string;
+  title!: string;
 
   @IsEnum(EvidenceType)
   @IsOptional()

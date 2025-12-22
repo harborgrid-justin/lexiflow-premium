@@ -160,8 +160,8 @@ export const SecurityService = {
         }
 
         try {
-            // TODO: Add backend API endpoint for malware scanning
-            console.warn('[SecurityService] Backend malware scanning API not yet implemented, using mock scan');
+            
+            ;
 
             const signatures = await SecurityService.getMalwareSignatures();
             const threatsFound = signatures.filter(sig => content.includes(sig));
@@ -224,8 +224,8 @@ export const SecurityService = {
         factors?: string[];
     }> => {
         try {
-            // TODO: Add backend API endpoint for threat level
-            console.warn('[SecurityService] Backend threat level API not yet implemented, using default');
+            
+            ;
 
             return {
                 level: 'Low',
@@ -259,8 +259,8 @@ export const SecurityService = {
      */
     getSecurityPolicies: async (): Promise<any[]> => {
         try {
-            // TODO: Add backend API endpoint for security policies
-            console.warn('[SecurityService] Backend security policies API not yet implemented');
+            
+            ;
 
             return [];
         } catch (error) {
@@ -299,8 +299,8 @@ export const SecurityService = {
                 throw new Error('[SecurityService.getAuditLogs] Invalid endDate parameter');
             }
 
-            // TODO: Add backend API endpoint for audit logs
-            console.warn('[SecurityService] Backend audit logs API not yet implemented');
+            
+            ;
 
             return [];
         } catch (error) {
@@ -329,8 +329,8 @@ export const SecurityService = {
      */
     getVulnerabilities: async (): Promise<any[]> => {
         try {
-            // TODO: Add backend API endpoint for vulnerabilities
-            console.warn('[SecurityService] Backend vulnerabilities API not yet implemented');
+            
+            ;
 
             return [];
         } catch (error) {

@@ -19,15 +19,15 @@ export enum DiscoveryStatus {
 export class CreateDiscoveryRequestDto {
   @ApiProperty({ description: 'Case ID' })
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Discovery type', enum: DiscoveryType })
   @IsEnum(DiscoveryType)
-  type: DiscoveryType;
+  type!: DiscoveryType;
 
   @ApiProperty({ description: 'Request title' })
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Request description', required: false })
   @IsOptional()
@@ -46,7 +46,7 @@ export class CreateDiscoveryRequestDto {
 
   @ApiProperty({ description: 'Due date' })
   @IsDateString()
-  dueDate: string;
+  dueDate!: string;
 
   @ApiProperty({ description: 'Assigned attorney ID', required: false })
   @IsOptional()

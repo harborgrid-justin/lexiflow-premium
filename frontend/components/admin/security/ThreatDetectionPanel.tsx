@@ -39,7 +39,7 @@ export const ThreatDetectionPanel: React.FC<ThreatDetectionPanelProps> = ({ onCh
           <div className="flex gap-2">
             <Input
               value={testIp}
-              onChange={(e) => setTestIp(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTestIp(e.target.value)}
               placeholder="Enter IP address (e.g., 192.168.1.1)"
               onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
             />

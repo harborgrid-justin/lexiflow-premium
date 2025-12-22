@@ -46,46 +46,46 @@ export class JudgeStatsQueryDto {
 
 export class JudgeStatsDto {
   @ApiProperty({ description: 'Judge ID' })
-  judgeId: string;
+  judgeId!: string;
 
   @ApiProperty({ description: 'Judge name' })
-  judgeName: string;
+  judgeName!: string;
 
   @ApiProperty({ description: 'Court name' })
-  court: string;
+  court!: string;
 
   @ApiProperty({ description: 'Total cases presided' })
-  totalCases: number;
+  totalCases!: number;
 
   @ApiProperty({ description: 'Active cases count' })
-  activeCases: number;
+  activeCases!: number;
 
   @ApiProperty({ description: 'Average case duration in days' })
-  avgCaseDuration: number;
+  avgCaseDuration!: number;
 
   @ApiProperty({ description: 'Median case duration in days' })
-  medianCaseDuration: number;
+  medianCaseDuration!: number;
 
   @ApiProperty({ description: 'Overall plaintiff win rate percentage' })
-  plaintiffWinRate: number;
+  plaintiffWinRate!: number;
 
   @ApiProperty({ description: 'Overall defendant win rate percentage' })
-  defendantWinRate: number;
+  defendantWinRate!: number;
 
   @ApiProperty({ description: 'Settlement rate percentage' })
-  settlementRate: number;
+  settlementRate!: number;
 
   @ApiProperty({ description: 'Trial rate percentage' })
-  trialRate: number;
+  trialRate!: number;
 
   @ApiProperty({ description: 'Motion grant rate statistics' })
-  motionGrantRates: MotionGrantRate[];
+  motionGrantRates!: MotionGrantRate[];
 
   @ApiProperty({ description: 'Cases by outcome' })
   casesByOutcome: { [outcome: string]: number };
 
   @ApiProperty({ description: 'Average days to ruling on motions' })
-  avgDaysToRuling: number;
+  avgDaysToRuling!: number;
 
   @ApiProperty({ description: 'Disposition methods breakdown' })
   dispositionMethods: { [method: string]: number };
@@ -93,88 +93,88 @@ export class JudgeStatsDto {
 
 export class MotionGrantRate {
   @ApiProperty({ description: 'Motion type', enum: MotionType })
-  motionType: MotionType;
+  motionType!: MotionType;
 
   @ApiProperty({ description: 'Total motions of this type' })
-  totalMotions: number;
+  totalMotions!: number;
 
   @ApiProperty({ description: 'Granted motions count' })
-  granted: number;
+  granted!: number;
 
   @ApiProperty({ description: 'Denied motions count' })
-  denied: number;
+  denied!: number;
 
   @ApiProperty({ description: 'Partially granted count' })
-  partiallyGranted: number;
+  partiallyGranted!: number;
 
   @ApiProperty({ description: 'Grant rate percentage' })
-  grantRate: number;
+  grantRate!: number;
 
   @ApiProperty({ description: 'Denial rate percentage' })
-  denialRate: number;
+  denialRate!: number;
 
   @ApiProperty({ description: 'Average days to decision' })
-  avgDaysToDecision: number;
+  avgDaysToDecision!: number;
 }
 
 export class JudgeMotionStatsDto {
   @ApiProperty({ description: 'Judge ID' })
-  judgeId: string;
+  judgeId!: string;
 
   @ApiProperty({ description: 'Judge name' })
-  judgeName: string;
+  judgeName!: string;
 
   @ApiProperty({ description: 'Motion statistics by type' })
-  motionStats: MotionGrantRate[];
+  motionStats!: MotionGrantRate[];
 
   @ApiProperty({ description: 'Overall motion grant rate' })
-  overallGrantRate: number;
+  overallGrantRate!: number;
 
   @ApiProperty({ description: 'Total motions analyzed' })
-  totalMotions: number;
+  totalMotions!: number;
 
   @ApiProperty({ description: 'Trending data for motion grants' })
-  trends: MotionTrendDataPoint[];
+  trends!: MotionTrendDataPoint[];
 }
 
 export class MotionTrendDataPoint {
   @ApiProperty({ description: 'Period label' })
-  period: string;
+  period!: string;
 
   @ApiProperty({ description: 'Motion type' })
-  motionType: MotionType;
+  motionType!: MotionType;
 
   @ApiProperty({ description: 'Grant rate for period' })
-  grantRate: number;
+  grantRate!: number;
 
   @ApiProperty({ description: 'Number of motions' })
-  count: number;
+  count!: number;
 }
 
 export class JudgeCaseDurationDto {
   @ApiProperty({ description: 'Judge ID' })
-  judgeId: string;
+  judgeId!: string;
 
   @ApiProperty({ description: 'Judge name' })
-  judgeName: string;
+  judgeName!: string;
 
   @ApiProperty({ description: 'Average duration in days' })
-  avgDuration: number;
+  avgDuration!: number;
 
   @ApiProperty({ description: 'Median duration in days' })
-  medianDuration: number;
+  medianDuration!: number;
 
   @ApiProperty({ description: 'Minimum duration in days' })
-  minDuration: number;
+  minDuration!: number;
 
   @ApiProperty({ description: 'Maximum duration in days' })
-  maxDuration: number;
+  maxDuration!: number;
 
   @ApiProperty({ description: 'Standard deviation' })
-  stdDeviation: number;
+  stdDeviation!: number;
 
   @ApiProperty({ description: 'Duration by case type' })
-  durationByType: DurationByType[];
+  durationByType!: DurationByType[];
 
   @ApiProperty({ description: 'Duration percentiles' })
   percentiles: {
@@ -187,34 +187,34 @@ export class JudgeCaseDurationDto {
 
 export class DurationByType {
   @ApiProperty({ description: 'Case type' })
-  caseType: string;
+  caseType!: string;
 
   @ApiProperty({ description: 'Average duration' })
-  avgDuration: number;
+  avgDuration!: number;
 
   @ApiProperty({ description: 'Number of cases' })
-  caseCount: number;
+  caseCount!: number;
 }
 
 export class JudgeListItemDto {
   @ApiProperty({ description: 'Judge ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Judge name' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Court name' })
-  court: string;
+  court!: string;
 
   @ApiProperty({ description: 'Total cases' })
-  totalCases: number;
+  totalCases!: number;
 
   @ApiProperty({ description: 'Average case duration' })
-  avgDuration: number;
+  avgDuration!: number;
 
   @ApiProperty({ description: 'Plaintiff win rate' })
-  plaintiffWinRate: number;
+  plaintiffWinRate!: number;
 
   @ApiProperty({ description: 'Last updated' })
-  lastUpdated: Date;
+  lastUpdated!: Date;
 }

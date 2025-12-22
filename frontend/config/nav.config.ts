@@ -5,11 +5,11 @@
  * Includes icons, labels, categories, and permission requirements.
  */
 
-import { 
-  LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale, 
-  Calendar, Book, DollarSign, Users, BarChart3, Settings, 
-  FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch, 
-  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool, Milestone
+import {
+  LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale,
+  Calendar, Book, DollarSign, Users, BarChart3, Settings,
+  FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch,
+  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool, Milestone, LucideIcon
 } from 'lucide-react';
 import { AppView, NavCategory } from '../types';
 import { PATHS } from './paths.config';
@@ -17,7 +17,7 @@ import { PATHS } from './paths.config';
 export interface NavItemConfig {
   id: AppView;
   label: string;
-  icon: unknown;
+  icon: LucideIcon;
   category: NavCategory;
   requiresAdmin?: boolean;
 }

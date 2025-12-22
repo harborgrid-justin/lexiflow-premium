@@ -7,7 +7,7 @@ export class SearchEmbeddingsDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsNumber({}, { each: true })
-  embedding: number[];
+  embedding!: number[];
 
   @ApiPropertyOptional({ description: 'Maximum number of results', default: 10, minimum: 1, maximum: 100 })
   @IsOptional()

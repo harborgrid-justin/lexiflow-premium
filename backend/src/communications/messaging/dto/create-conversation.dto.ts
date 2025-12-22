@@ -22,7 +22,7 @@ export class CreateConversationDto {
     example: ConversationType.CASE_RELATED,
   })
   @IsEnum(ConversationType)
-  type: ConversationType;
+  type!: ConversationType;
 
   @ApiProperty({
     description: 'Array of participant user IDs',
@@ -31,7 +31,7 @@ export class CreateConversationDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsString({ each: true })
-  participantIds: string[];
+  participantIds!: string[];
 
   @ApiProperty({
     description: 'Related case ID (optional)',

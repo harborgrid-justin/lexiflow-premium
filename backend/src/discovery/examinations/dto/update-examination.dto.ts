@@ -132,5 +132,5 @@ export class UpdateExaminationDto {
   assignedAttorney?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

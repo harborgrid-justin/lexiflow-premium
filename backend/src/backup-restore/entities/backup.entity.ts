@@ -3,13 +3,13 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity('schema_backups')
 export class SchemaBackup {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'jsonb' })
   schema: any;
@@ -18,17 +18,17 @@ export class SchemaBackup {
   data: any;
 
   @Column({ type: 'bigint' })
-  sizeBytes: number;
+  sizeBytes!: number;
 
   @Column({ type: 'boolean', default: false })
-  includesData: boolean;
+  includesData!: boolean;
 
   @Column({ nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  expiresAt: Date;
+  expiresAt!: Date;
 }

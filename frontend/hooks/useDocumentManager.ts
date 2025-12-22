@@ -592,7 +592,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
         return;
       }
 
-      const newTags = doc.tags.filter(t => t !== tag);
+      const newTags = doc.tags.filter((t: string) => t !== tag);
       updateDocument(docId, { tags: newTags });
       
       console.log(`[useDocumentManager] Tag removed from ${docId}: ${tag}`);

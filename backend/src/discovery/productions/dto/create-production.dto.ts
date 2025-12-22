@@ -13,11 +13,11 @@ import { ProductionFormat } from '../entities/production.entity';
 
 export class CreateProductionDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(300)
-  productionName: string;
+  productionName!: string;
 
   @IsOptional()
   @IsString()
@@ -25,7 +25,7 @@ export class CreateProductionDto {
   productionNumber?: string;
 
   @IsEnum(ProductionFormat)
-  format: ProductionFormat;
+  format!: ProductionFormat;
 
   @IsOptional()
   @IsString()
@@ -85,5 +85,5 @@ export class CreateProductionDto {
   assignedTo?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

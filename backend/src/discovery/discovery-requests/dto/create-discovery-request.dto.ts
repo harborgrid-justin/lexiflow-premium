@@ -14,14 +14,14 @@ import { DiscoveryRequestType } from '../entities/discovery-request.entity';
 
 export class CreateDiscoveryRequestDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsEnum(DiscoveryRequestType)
-  type: DiscoveryRequestType;
+  type!: DiscoveryRequestType;
 
   @IsString()
   @MaxLength(500)
-  title: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
@@ -74,5 +74,5 @@ export class CreateDiscoveryRequestDto {
   assignedTo?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

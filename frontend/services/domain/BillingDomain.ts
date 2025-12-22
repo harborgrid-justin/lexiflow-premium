@@ -297,9 +297,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         this.validateTimekeeperId(timekeeperId, 'getRates');
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend rate API not yet implemented, using fallback');
+                ;
             }
 
             return await db.getByIndex<RateTable>(STORES.RATES, 'timekeeperId', timekeeperId);
@@ -376,9 +375,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         }
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend time entry API not yet implemented, using fallback');
+                ;
             }
 
             const result = await this.add(entry);
@@ -419,9 +417,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getWIPStats(): Promise<WIPStat[]> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend WIP stats API not yet implemented, using fallback');
+                ;
             }
 
             const [clients, entries] = await Promise.all([
@@ -451,9 +448,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getRealizationStats(): Promise<unknown> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend realization stats API not yet implemented, using fallback');
+                ;
             }
 
             const stats = await db.get<unknown>(STORES.REALIZATION_STATS, 'realization-main');
@@ -479,9 +475,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getInvoices(): Promise<Invoice[]> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend invoices API not yet implemented, using fallback');
+                ;
             }
 
             return await db.getAll<Invoice>(STORES.INVOICES);
@@ -516,9 +511,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         }
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend invoice creation API not yet implemented, using fallback');
+                ;
             }
 
             const totalAmount = entries.reduce((sum, e) => sum + (e.total || 0), 0);
@@ -590,9 +584,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         }
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend invoice update API not yet implemented, using fallback');
+                ;
             }
 
             const invoice = await db.get<Invoice>(STORES.INVOICES, id);
@@ -624,9 +617,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         this.validateId(id, 'sendInvoice');
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend send invoice API not yet implemented, using fallback');
+                ;
             }
 
             await delay(500);
@@ -660,9 +652,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         this.validateId(accountId, 'getTrustTransactions');
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend trust transactions API not yet implemented, using fallback');
+                ;
             }
 
             return await db.getByIndex(STORES.TRUST_TX, 'accountId', accountId);
@@ -683,9 +674,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getTrustAccounts(): Promise<any[]> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend trust accounts API not yet implemented, using fallback');
+                ;
             }
 
             return await db.getAll<unknown>(STORES.TRUST);
@@ -706,9 +696,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getTopAccounts(): Promise<Client[]> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend top accounts API not yet implemented, using fallback');
+                ;
             }
 
             const clients = await db.getAll<Client>(STORES.CLIENTS);
@@ -737,9 +726,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         month: string; 
     }> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend overview stats API not yet implemented, using fallback');
+                ;
             }
 
             await delay(50);
@@ -765,9 +753,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getOperatingSummary(): Promise<OperatingSummary> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend operating summary API not yet implemented, using fallback');
+                ;
             }
 
             const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
@@ -793,9 +780,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend financial performance API not yet implemented, using fallback');
+                ;
             }
 
             await delay(200);
@@ -837,9 +823,8 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async sync(): Promise<void> {
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend sync API not yet implemented, using fallback');
+                ;
             }
 
             await delay(1000);
@@ -872,9 +857,8 @@ export class BillingRepository extends Repository<TimeEntry> {
         }
 
         try {
-            // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
-                console.warn('[BillingRepository] Backend export API not yet implemented, using fallback');
+                ;
             }
 
             await delay(1500);

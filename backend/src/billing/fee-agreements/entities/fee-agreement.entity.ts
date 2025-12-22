@@ -29,30 +29,30 @@ export enum FeeAgreementStatus {
 @Index(['caseId', 'status'])
 export class FeeAgreement {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 100, unique: true })
-  agreementNumber: string;
+  agreementNumber!: string;
 
   @Column({ name: 'client_id', type: 'uuid' })
   @Index()
-  clientId: string;
+  clientId!: string;
 
   @Column({ type: 'varchar', length: 255 })
-  clientName: string;
+  clientName!: string;
 
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
   @Index()
-  caseId: string;
+  caseId!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  matterDescription: string;
+  matterDescription!: string;
 
   @Column({
     type: 'enum',
     enum: FeeAgreementType,
   })
-  agreementType: FeeAgreementType;
+  agreementType!: FeeAgreementType;
 
   @Column({
     type: 'enum',
@@ -60,68 +60,68 @@ export class FeeAgreement {
     default: FeeAgreementStatus.DRAFT,
   })
   @Index()
-  status: FeeAgreementStatus;
+  status!: FeeAgreementStatus;
 
   @Column({ type: 'date' })
-  effectiveDate: string;
+  effectiveDate!: string;
 
   @Column({ type: 'date', nullable: true })
-  terminationDate: string;
+  terminationDate!: string;
 
   // Hourly billing fields
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  standardRate: number;
+  standardRate!: number;
 
   @Column({ type: 'uuid', nullable: true })
-  rateTableId: string;
+  rateTableId!: string;
 
   // Fixed fee fields
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  fixedFeeAmount: number;
+  fixedFeeAmount!: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   paymentSchedule: string; // e.g., "Monthly", "Upon Completion", "Milestone-based"
 
   // Contingency fields
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  contingencyPercentage: number;
+  contingencyPercentage!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  minimumRecovery: number;
+  minimumRecovery!: number;
 
   // Retainer fields
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  retainerAmount: number;
+  retainerAmount!: number;
 
   @Column({ type: 'boolean', default: false })
-  retainerRefundable: boolean;
+  retainerRefundable!: boolean;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   retainerReplenishment: string; // e.g., "Monthly", "Quarterly", "As needed"
 
   // Subscription fields
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  monthlyFee: number;
+  monthlyFee!: number;
 
   @Column({ type: 'integer', nullable: true })
-  includedHours: number;
+  includedHours!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  overageRate: number;
+  overageRate!: number;
 
   // Expense handling
   @Column({ type: 'boolean', default: true })
-  expensesBillable: boolean;
+  expensesBillable!: boolean;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   expenseMarkup: number; // percentage
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  expenseCap: number;
+  expenseCap!: number;
 
   // Billing terms
   @Column({ type: 'integer', default: 30 })
-  paymentTermsDays: number;
+  paymentTermsDays!: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   billingFrequency: string; // e.g., "Monthly", "Bi-weekly", "Upon completion"
@@ -130,44 +130,44 @@ export class FeeAgreement {
   latePaymentRate: number; // percentage
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  discountPercentage: number;
+  discountPercentage!: number;
 
   @Column({ type: 'text', nullable: true })
-  scopeOfWork: string;
+  scopeOfWork!: string;
 
   @Column({ type: 'text', nullable: true })
-  terms: string;
+  terms!: string;
 
   @Column({ type: 'text', nullable: true })
-  specialProvisions: string;
+  specialProvisions!: string;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  documentUrl: string;
+  documentUrl!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  signedDate: Date;
+  signedDate!: Date;
 
   @Column({ type: 'uuid', nullable: true })
-  signedBy: string;
+  signedBy!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  responsibleAttorney: string;
+  responsibleAttorney!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 }

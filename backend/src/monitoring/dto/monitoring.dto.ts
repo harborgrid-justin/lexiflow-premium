@@ -36,11 +36,11 @@ export class RecordMetricDto {
   @ApiProperty({ description: 'Metric name' })
   @IsString()
   @IsNotEmpty()
-  metricName: string;
+  metricName!: string;
 
   @ApiProperty({ description: 'Metric value' })
   @IsNumber()
-  value: number;
+  value!: number;
 
   @ApiPropertyOptional({ description: 'Metric unit' })
   @IsOptional()
@@ -82,25 +82,25 @@ export class CreateAlertDto {
   @ApiProperty({ description: 'Alert title' })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Alert message' })
   @IsString()
   @IsNotEmpty()
-  message: string;
+  message!: string;
 
   @ApiProperty({ enum: AlertSeverity, description: 'Alert severity' })
   @IsEnum(AlertSeverity)
-  severity: AlertSeverity;
+  severity!: AlertSeverity;
 
   @ApiProperty({ description: 'Alert source/component' })
   @IsString()
   @IsNotEmpty()
-  source: string;
+  source!: string;
 }
 
 export class AcknowledgeAlertDto {
   @ApiProperty({ description: 'User ID acknowledging the alert' })
   @IsString()
-  userId: string;
+  userId!: string;
 }

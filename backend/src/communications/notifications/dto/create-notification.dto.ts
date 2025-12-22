@@ -26,28 +26,28 @@ export class CreateNotificationDto {
     example: NotificationType.CASE_UPDATE,
   })
   @IsEnum(NotificationType)
-  type: NotificationType;
+  type!: NotificationType;
 
   @ApiProperty({
     description: 'Notification title',
     example: 'New Document Filed',
   })
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({
     description: 'Notification message',
     example: 'A new motion has been filed in Case #12345',
   })
   @IsString()
-  message: string;
+  message!: string;
 
   @ApiProperty({
     description: 'User ID to receive notification',
     example: 'user-123',
   })
   @IsString()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({
     description: 'Priority level',

@@ -21,23 +21,23 @@ export enum ExhibitStatus {
 export class CreateExhibitDto {
   @ApiProperty()
   @IsString()
-  exhibitNumber: string;
+  exhibitNumber!: string;
 
   @ApiProperty()
   @IsString()
-  description: string;
+  description!: string;
 
   @ApiProperty({ enum: ExhibitType })
   @IsEnum(ExhibitType)
-  type: ExhibitType;
+  type!: ExhibitType;
 
   @ApiProperty({ enum: ExhibitStatus, default: ExhibitStatus.DRAFT })
   @IsEnum(ExhibitStatus)
-  status: ExhibitStatus;
+  status!: ExhibitStatus;
 
   @ApiProperty()
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @ApiPropertyOptional()
   @IsString()

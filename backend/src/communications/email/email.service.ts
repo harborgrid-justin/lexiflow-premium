@@ -50,10 +50,12 @@ export class EmailService {
         messageId: 'msg-' + Date.now(),
       };
     } catch (error) {
-      this.logger.error(`Failed to send email: ${error.message}`);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to send email: ${message}`);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   }
@@ -82,10 +84,12 @@ export class EmailService {
         html,
       });
     } catch (error) {
-      this.logger.error(`Failed to send template email: ${error.message}`);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to send template email: ${message}`);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   }

@@ -58,12 +58,12 @@ const BusinessIntelligenceSkeleton: React.FC = () => {
   return (
     <div className="space-y-6 p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map((i) => (
+        {[1, 2, 3, 4].map((i: any) => (
           <div key={i} className={cn("h-32 rounded-lg animate-pulse", theme.surface.raised)} />
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {[1, 2].map((i) => (
+        {[1, 2].map((i: any) => (
           <div key={i} className={cn("h-64 rounded-lg animate-pulse", theme.surface.raised)} />
         ))}
       </div>

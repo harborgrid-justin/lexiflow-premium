@@ -28,80 +28,80 @@ export enum WitnessStatus {
 @Index(['status'])
 export class Witness extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name!: string;
 
   @Column({
     name: 'witness_type',
     type: 'enum',
     enum: WitnessType,
   })
-  witnessType: WitnessType;
+  witnessType!: WitnessType;
 
   @Column({
     type: 'enum',
     enum: WitnessStatus,
     default: WitnessStatus.IDENTIFIED,
   })
-  status: WitnessStatus;
+  status!: WitnessStatus;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  email: string;
+  email!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  phone: string;
+  phone!: string;
 
   @Column({ name: 'alternate_phone', type: 'varchar', length: 50, nullable: true })
-  alternatePhone: string;
+  alternatePhone!: string;
 
   @Column({ type: 'text', nullable: true })
-  address: string;
+  address!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  occupation: string;
+  occupation!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  employer: string;
+  employer!: string;
 
   @Column({ name: 'relevance_to_case', type: 'text', nullable: true })
-  relevanceToCase: string;
+  relevanceToCase!: string;
 
   @Column({ name: 'expected_testimony', type: 'text', nullable: true })
-  expectedTestimony: string;
+  expectedTestimony!: string;
 
   @Column({ name: 'key_facts', type: 'text', nullable: true })
-  keyFacts: string;
+  keyFacts!: string;
 
   @Column({ name: 'topics_of_testimony', type: 'jsonb', nullable: true })
-  topicsOfTestimony: string[];
+  topicsOfTestimony!: string[];
 
   @Column({ name: 'retained_by', type: 'varchar', length: 255, nullable: true })
-  retainedBy: string;
+  retainedBy!: string;
 
   @Column({ name: 'is_expert', type: 'boolean', default: false })
-  isExpert: boolean;
+  isExpert!: boolean;
 
   @Column({ name: 'expert_qualifications', type: 'text', nullable: true })
-  expertQualifications: string;
+  expertQualifications!: string;
 
   @Column({ name: 'expertise_area', type: 'varchar', length: 500, nullable: true })
-  expertiseArea: string;
+  expertiseArea!: string;
 
   @Column({ name: 'expert_opinion', type: 'text', nullable: true })
-  expertOpinion: string;
+  expertOpinion!: string;
 
   @Column({ name: 'cv_path', type: 'varchar', length: 500, nullable: true })
-  cvPath: string;
+  cvPath!: string;
 
   @Column({ name: 'expert_report_path', type: 'varchar', length: 500, nullable: true })
-  expertReportPath: string;
+  expertReportPath!: string;
 
   @Column({ name: 'hourly_rate', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  hourlyRate: number;
+  hourlyRate!: number;
 }

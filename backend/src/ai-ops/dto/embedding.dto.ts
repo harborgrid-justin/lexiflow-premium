@@ -32,28 +32,28 @@ export class StoreAiOpsEmbeddingDto {
   @ApiProperty({ description: 'Entity type' })
   @IsString()
   @IsNotEmpty()
-  entityType: string;
+  entityType!: string;
 
   @ApiProperty({ description: 'Entity ID' })
   @IsString()
   @IsNotEmpty()
-  entityId: string;
+  entityId!: string;
 
   @ApiProperty({ description: 'Content' })
   @IsString()
   @IsNotEmpty()
-  content: string;
+  content!: string;
 
   @ApiProperty({ description: 'Embedding vector', type: [Number] })
   @IsArray()
   @ArrayMinSize(1)
   @IsNumber({}, { each: true })
-  embedding: number[];
+  embedding!: number[];
 
   @ApiProperty({ description: 'Model name' })
   @IsString()
   @IsNotEmpty()
-  model: string;
+  model!: string;
 
   @ApiPropertyOptional({ description: 'Metadata', type: Object })
   @IsOptional()
@@ -65,7 +65,7 @@ export class SearchSimilarDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsNumber({}, { each: true })
-  embedding: number[];
+  embedding!: number[];
 
   @ApiPropertyOptional({ description: 'Max results', default: 10 })
   @IsOptional()

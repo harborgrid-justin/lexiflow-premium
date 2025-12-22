@@ -63,7 +63,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   const templates = Array.isArray(templatesData) ? templatesData : [];
   
   // Use useFilterAndSearch hook for unified filtering
-  const { filteredItems: filteredTemplates, searchQuery, setSearchQuery, category, setCategory, categories } = useFilterAndSearch({
+  const { filteredItems: filteredTemplates, searchQuery, setSearchQuery, category, setCategory, categories } = useFilterAndSearch<WorkflowTemplateData>({
     items: templates,
     config: {
       categoryField: 'category',
@@ -120,7 +120,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
             )}
             placeholder="Search templates..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>

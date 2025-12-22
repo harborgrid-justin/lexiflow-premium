@@ -117,8 +117,8 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
             <div className={cn("flex-1 p-6 overflow-y-auto border-r", theme.border.default)}>
                 <div className="space-y-6 max-w-2xl">
                     <div className="grid grid-cols-1 gap-6">
-                        <Input label="Rule Name" value={rule.name} onChange={e => setRule({...rule, name: e.target.value})} placeholder="e.g. Email Format Validation" />
-                        <TextArea label="Description" value={rule.description} onChange={e => setRule({...rule, description: e.target.value})} rows={2} placeholder="Describe the business logic..." />
+                        <Input label="Rule Name" value={rule.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRule({...rule, name: e.target.value})} placeholder="e.g. Email Format Validation" />
+                        <TextArea label="Description" value={rule.description} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRule({...rule, description: e.target.value})} rows={2} placeholder="Describe the business logic..." />
                         
                         <div className="grid grid-cols-2 gap-6">
                             <div>
@@ -145,7 +145,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                 <select 
                                     className={cn("w-full p-2 border rounded-md text-sm outline-none", theme.border.default, theme.surface.default, theme.text.primary)}
                                     value={rule.action}
-                                    onChange={(e) => setRule({...rule, action: e.target.value as any})}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRule({...rule, action: e.target.value as any})}
                                 >
                                     <option value="Block">Block Operation</option>
                                     <option value="Warn">Warning Only</option>
@@ -169,12 +169,12 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                         className={cn("flex-1 p-2 text-sm border rounded", theme.border.default, theme.surface.highlight, theme.text.primary)} 
                                         placeholder="Field (e.g. email)"
                                         value={cond.field}
-                                        onChange={e => updateCondition(cond.id, 'field', e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateCondition(cond.id, 'field', e.target.value)}
                                     />
                                     <select 
                                         className={cn("w-32 p-2 text-sm border rounded", theme.border.default, theme.surface.default, theme.text.primary)}
                                         value={cond.operator}
-                                        onChange={e => updateCondition(cond.id, 'operator', e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateCondition(cond.id, 'operator', e.target.value)}
                                     >
                                         <option value="=">=</option>
                                         <option value="!=">!=</option>
@@ -187,7 +187,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                         className={cn("flex-1 p-2 text-sm border rounded", theme.border.default, theme.surface.default, theme.text.primary)} 
                                         placeholder="Value"
                                         value={cond.value}
-                                        onChange={e => updateCondition(cond.id, 'value', e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateCondition(cond.id, 'value', e.target.value)}
                                     />
                                     <button onClick={() => removeCondition(cond.id)} className="text-slate-400 hover:text-red-500 p-1">
                                         <Trash2 className="h-4 w-4"/>

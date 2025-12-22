@@ -25,25 +25,25 @@ export enum JurisdictionType {
 @Entity('jurisdictions')
 export class Jurisdiction {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 255, name: 'name' })
-  name: string;
+  name!: string;
 
   @Column({ type: 'enum', enum: JurisdictionSystem, name: 'system' })
-  system: JurisdictionSystem;
+  system!: JurisdictionSystem;
 
   @Column({ type: 'enum', enum: JurisdictionType, name: 'type' })
-  type: JurisdictionType;
+  type!: JurisdictionType;
 
   @Column({ type: 'varchar', length: 255, nullable: true, name: 'region' })
   region: string; // Circuit, State, Country, etc.
 
   @Column({ type: 'text', nullable: true, name: 'description' })
-  description: string;
+  description!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true, name: 'website' })
-  website: string;
+  website!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true, name: 'rulesUrl', select: false })
   rulesUrl?: string;
@@ -61,11 +61,11 @@ export class Jurisdiction {
   };
 
   @OneToMany(() => JurisdictionRule, rule => rule.jurisdiction, { cascade: true })
-  rules: JurisdictionRule[];
+  rules!: JurisdictionRule[];
 
   @CreateDateColumn({ name: 'createdAt' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updatedAt' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

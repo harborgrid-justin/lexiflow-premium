@@ -172,12 +172,12 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
 
         <Modal isOpen={permModal.isOpen} onClose={permModal.close} title="Grant Granular Permission" size="md">
             <div className="p-6 space-y-4">
-                <Input label="Resource Identifier" placeholder="e.g. billing.invoices" value={newPerm.resource || ''} onChange={e => setNewPerm({...newPerm, resource: e.target.value})} />
+                <Input label="Resource Identifier" placeholder="e.g. billing.invoices" value={newPerm.resource || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({...newPerm, resource: e.target.value})} />
                 
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Action</label>
-                        <select className="w-full p-2 border rounded text-sm" value={newPerm.action} onChange={e => setNewPerm({...newPerm, action: e.target.value as any})}>
+                        <select className="w-full p-2 border rounded text-sm" value={newPerm.action} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({...newPerm, action: e.target.value as any})}>
                             <option value="read">Read</option>
                             <option value="create">Create</option>
                             <option value="update">Update</option>
@@ -188,7 +188,7 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
                     </div>
                     <div>
                         <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Effect</label>
-                        <select className="w-full p-2 border rounded text-sm" value={newPerm.effect} onChange={e => setNewPerm({...newPerm, effect: e.target.value as any})}>
+                        <select className="w-full p-2 border rounded text-sm" value={newPerm.effect} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({...newPerm, effect: e.target.value as any})}>
                             <option value="Allow">Allow</option>
                             <option value="Deny">Deny</option>
                         </select>
@@ -198,14 +198,14 @@ export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile 
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-xs font-bold uppercase mb-1 text-slate-500">Scope</label>
-                        <select className="w-full p-2 border rounded text-sm" value={newPerm.scope} onChange={e => setNewPerm({...newPerm, scope: e.target.value as any})}>
+                        <select className="w-full p-2 border rounded text-sm" value={newPerm.scope} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({...newPerm, scope: e.target.value as any})}>
                             <option value="Global">Global</option>
                             <option value="Region">Region</option>
                             <option value="Office">Office</option>
                             <option value="Personal">Personal</option>
                         </select>
                     </div>
-                    <Input type="date" label="Expiration (Optional)" value={newPerm.expiration || ''} onChange={e => setNewPerm({...newPerm, expiration: e.target.value})} />
+                    <Input type="date" label="Expiration (Optional)" value={newPerm.expiration || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPerm({...newPerm, expiration: e.target.value})} />
                 </div>
 
                 <div className="flex justify-end pt-4 border-t mt-2 gap-2">

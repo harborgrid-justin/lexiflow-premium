@@ -82,13 +82,13 @@ export const DiscoveryDepositions: React.FC = () => {
           'schedule-depo',
           'Schedule Deposition',
           <div className="p-6 space-y-4 bg-white">
-                <Input label="Witness Name" value={newDepo.witnessName || ''} onChange={e => setNewDepo({...newDepo, witnessName: e.target.value})} placeholder="e.g. Jane Doe"/>
+                <Input label="Witness Name" value={newDepo.witnessName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, witnessName: e.target.value})} placeholder="e.g. Jane Doe"/>
                 <div className="grid grid-cols-2 gap-4">
-                    <Input label="Date" type="date" value={newDepo.date || ''} onChange={e => setNewDepo({...newDepo, date: e.target.value})}/>
-                    <Input label="Location" value={newDepo.location || ''} onChange={e => setNewDepo({...newDepo, location: e.target.value})} placeholder="e.g. Remote (Zoom)"/>
+                    <Input label="Date" type="date" value={newDepo.date || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, date: e.target.value})}/>
+                    <Input label="Location" value={newDepo.location || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, location: e.target.value})} placeholder="e.g. Remote (Zoom)"/>
                 </div>
-                <Input label="Court Reporter / Vendor" value={newDepo.courtReporter || ''} onChange={e => setNewDepo({...newDepo, courtReporter: e.target.value})} placeholder="e.g. Veritext"/>
-                <TextArea label="Prep Notes" value={newDepo.prepNotes || ''} onChange={e => setNewDepo({...newDepo, prepNotes: e.target.value})} placeholder="Key topics to cover..."/>
+                <Input label="Court Reporter / Vendor" value={newDepo.courtReporter || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, courtReporter: e.target.value})} placeholder="e.g. Veritext"/>
+                <TextArea label="Prep Notes" value={newDepo.prepNotes || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, prepNotes: e.target.value})} placeholder="Key topics to cover..."/>
                 <div className="flex justify-end pt-4">
                     <Button variant="primary" onClick={handleSchedule}>Save Schedule</Button>
                 </div>

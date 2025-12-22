@@ -191,8 +191,8 @@ const BillingWIPComponent: React.FC = () => {
       }
   }, [selectedIds, filteredEntries]);
 
-  const totalUnbilled = filteredEntries.reduce((acc, curr) => acc + curr.total, 0);
-  const selectedTotal = filteredEntries.filter(e => selectedIds.has(e.id)).reduce((acc, curr) => acc + curr.total, 0);
+  const totalUnbilled = filteredEntries.reduce((acc: any, curr) => acc + curr.total, 0);
+  const selectedTotal = filteredEntries.filter(e => selectedIds.has(e.id)).reduce((acc: any, curr) => acc + curr.total, 0);
 
   return (
     <div className="space-y-6 animate-fade-in">

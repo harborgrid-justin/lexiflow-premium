@@ -19,16 +19,16 @@ export enum JobStatus {
 
 export class JobStatusDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty({ enum: JobType })
-  type: JobType;
+  type!: JobType;
 
   @ApiProperty({ enum: JobStatus })
-  status: JobStatus;
+  status!: JobStatus;
 
   @ApiProperty()
-  documentId: string;
+  documentId!: string;
 
   @ApiProperty({ required: false })
   progress?: number;
@@ -40,7 +40,7 @@ export class JobStatusDto {
   error?: string;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty({ required: false })
   completedAt?: Date;

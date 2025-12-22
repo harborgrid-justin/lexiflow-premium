@@ -14,7 +14,7 @@ interface TrustLedgerProps {
 export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
   const { theme } = useTheme();
   
-  const totalLiability = trustAccounts.reduce((acc, curr) => acc + curr.balance, 0);
+  const totalLiability = trustAccounts.reduce((acc: any, curr) => acc + curr.balance, 0);
 
   return (
     <div className="space-y-6">

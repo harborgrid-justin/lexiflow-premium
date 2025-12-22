@@ -4,16 +4,16 @@ import { PartyType, PartyRole } from '../entities/party.entity';
 export class CreatePartyDto {
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @IsEnum(PartyType)
   @IsNotEmpty()
-  type: PartyType;
+  type!: PartyType;
 
   @IsEnum(PartyRole)
   @IsOptional()

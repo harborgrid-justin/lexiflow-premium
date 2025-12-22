@@ -4,7 +4,7 @@ import { Shield, LayoutList, GitCommit, RefreshCw, Skull, ShieldCheck, Loader2, 
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { IntegrityReport } from '../services/infrastructure/chainService';
+import { IntegrityReport } from '../../../services/infrastructure/chainService';
 
 interface AuditLogControlsProps {
     viewMode: 'table' | 'visual';

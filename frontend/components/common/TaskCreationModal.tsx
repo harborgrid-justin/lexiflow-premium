@@ -115,7 +115,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
             label="Task Title" 
             placeholder="e.g. Review Document" 
             value={task.title} 
-            onChange={e => setTask({...task, title: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, title: e.target.value})}
             autoFocus
         />
         
@@ -136,7 +136,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                         type="date"
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.dueDate}
-                        onChange={e => setTask({...task, dueDate: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, dueDate: e.target.value})}
                         aria-label="Due Date"
                     />
                 </div>
@@ -149,7 +149,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 <select 
                     className="w-full px-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                     value={task.priority}
-                    onChange={e => setTask({...task, priority: e.target.value as any})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, priority: e.target.value as any})}
                     aria-label="Priority"
                 >
                     <option value="Low">Low</option>
@@ -164,7 +164,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                     <select 
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.projectId}
-                        onChange={e => setTask({...task, projectId: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, projectId: e.target.value as any})}
                         aria-label="Link to Project"
                     >
                         <option value="">-- No Project --</option>
@@ -189,7 +189,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
             rows={3} 
             placeholder="Add specific instructions for the assignee..."
             value={task.description || ''}
-            onChange={e => setTask({...task, description: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, description: e.target.value})}
         />
 
         <div className="pt-4 flex justify-end gap-3 border-t border-slate-100">

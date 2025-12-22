@@ -13,11 +13,11 @@ export enum ExpertType {
 export class CreateAdvisorDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -43,15 +43,15 @@ export class CreateAdvisorDto {
 export class CreateExpertDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ enum: ExpertType })
   @IsEnum(ExpertType)
-  expertType: ExpertType;
+  expertType!: ExpertType;
 
   @ApiProperty()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiPropertyOptional()
   @IsString()

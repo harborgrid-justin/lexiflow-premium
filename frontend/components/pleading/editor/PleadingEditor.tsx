@@ -299,7 +299,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                                      // Save PDF
                                      pdf.save(`${document.title.replace(/\s+/g, '-')}.pdf`);
                                      notifySuccess('PDF exported successfully');
-                                 } catch (err) {
+                                 } catch (err: unknown) {
                                      notifyError('Failed to export PDF');
                                      console.error('Export error:', err);
                                  }

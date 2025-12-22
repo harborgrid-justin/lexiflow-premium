@@ -6,7 +6,7 @@ import { History, FileText, Scale } from 'lucide-react';
 interface RuleContentDisplayProps {
   selectedRule: LegalRule;
   activeTab: string;
-  theme: unknown;
+  theme: any;
 }
 
 export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selectedRule, activeTab, theme }) => {

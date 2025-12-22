@@ -4,16 +4,16 @@ import { WorkflowCategory } from '../dto/create-workflow-template.dto';
 @Entity('workflow_templates')
 export class WorkflowTemplate {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'enum', enum: WorkflowCategory })
-  category: WorkflowCategory;
+  category!: WorkflowCategory;
 
   @Column({ type: 'json' })
   stages: Array<{
@@ -24,17 +24,17 @@ export class WorkflowTemplate {
   }>;
 
   @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'created_by', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'usage_count', type: 'int', default: 0 })
-  usageCount: number;
+  usageCount!: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

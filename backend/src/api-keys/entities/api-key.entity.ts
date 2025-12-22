@@ -9,44 +9,44 @@ export enum ApiKeyScope {
 @Entity('api_keys')
 export class ApiKey {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column()
-  keyPrefix: string;
+  keyPrefix!: string;
 
   @Column()
-  keyHash: string;
+  keyHash!: string;
 
   @Column({ type: 'simple-array' })
-  scopes: ApiKeyScope[];
+  scopes!: ApiKeyScope[];
 
   @Column({ type: 'timestamp', nullable: true })
-  expiresAt: Date;
+  expiresAt!: Date;
 
   @Column({ default: 1000 })
-  rateLimit: number;
+  rateLimit!: number;
 
   @Column({ type: 'timestamp', nullable: true })
-  lastUsedAt: Date;
+  lastUsedAt!: Date;
 
   @Column({ default: 0 })
-  requestCount: number;
+  requestCount!: number;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -25,7 +25,7 @@ import { Input } from '../common/Inputs';
 import { Button } from '../common/Button';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme, ThemeContextType } from '../../context/ThemeContext';
 import { useChartTheme } from '../common/ChartHelpers';
 import { useSettlementSimulation } from '../../hooks/useSettlementSimulation';
 
@@ -44,20 +44,22 @@ interface SimulationParametersPanelProps {
   onHighChange: (value: number) => void;
   onLiabilityProbChange: (value: number) => void;
   onRunSimulation: () => void;
-  theme: unknown;
+  theme: ThemeContextType['theme'];
 }
 
 interface SimulationResultsChartProps {
-  results: unknown[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  results: any[];
   metrics: { ev: number; p25: number; p75: number };
   iterations: number;
-  theme: unknown;
-  chartTheme: unknown;
+  theme: ThemeContextType['theme'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  chartTheme: any;
 }
 
 interface SimulationMetricsDisplayProps {
   metrics: { ev: number; p25: number; p75: number };
-  theme: unknown;
+  theme: ThemeContextType['theme'];
 }
 
 // ============================================================================
@@ -88,13 +90,13 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
         label="Low Estimate ($)" 
         type="number" 
         value={low} 
-        onChange={e => onLowChange(Number(e.target.value))} 
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLowChange(Number(e.target.value))} 
       />
       <Input 
         label="High Estimate ($)" 
         type="number" 
         value={high} 
-        onChange={e => onHighChange(Number(e.target.value))} 
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onHighChange(Number(e.target.value))} 
       />
       <div>
         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>
@@ -105,7 +107,7 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
           min="0" 
           max="100" 
           value={liabilityProb} 
-          onChange={e => onLiabilityProbChange(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLiabilityProbChange(Number(e.target.value))}
           className="w-full"
         />
       </div>

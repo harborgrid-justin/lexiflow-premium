@@ -51,30 +51,30 @@ export enum MotionStatus {
 @Index(['filingDate'])
 export class Motion extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'varchar', length: 255 })
-  title: string;
+  title!: string;
 
   @Column({
     type: 'enum',
     enum: MotionType,
   })
-  type: MotionType;
+  type!: MotionType;
 
   @Column({
     type: 'enum',
     enum: MotionStatus,
     default: MotionStatus.DRAFT,
   })
-  status: MotionStatus;
+  status!: MotionStatus;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ name: 'filed_by', type: 'varchar', length: 255, nullable: true })
   filedBy?: string;
@@ -83,10 +83,10 @@ export class Motion extends BaseEntity {
   filedDate?: Date;
 
   @Column({ name: 'filing_date', type: 'date', nullable: true })
-  filingDate: Date;
+  filingDate!: Date;
 
   @Column({ name: 'hearing_date', type: 'date', nullable: true })
-  hearingDate: Date;
+  hearingDate!: Date;
 
   @Column({ name: 'response_deadline', type: 'date', nullable: true })
   responseDeadline?: Date;
@@ -107,7 +107,7 @@ export class Motion extends BaseEntity {
   opposingPartyResponse?: any;
 
   @Column({ name: 'decision_date', type: 'date', nullable: true })
-  decisionDate: Date;
+  decisionDate!: Date;
 
   @Column({ type: 'text', nullable: true })
   relief?: string;

@@ -13,7 +13,7 @@ export enum WorkflowCategory {
 export class WorkflowStageDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -21,7 +21,7 @@ export class WorkflowStageDto {
   description?: string;
 
   @ApiProperty()
-  order: number;
+  order!: number;
 
   @ApiPropertyOptional()
   durationDays?: number;
@@ -30,7 +30,7 @@ export class WorkflowStageDto {
 export class CreateWorkflowTemplateDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -39,13 +39,13 @@ export class CreateWorkflowTemplateDto {
 
   @ApiProperty({ enum: WorkflowCategory })
   @IsEnum(WorkflowCategory)
-  category: WorkflowCategory;
+  category!: WorkflowCategory;
 
   @ApiProperty({ type: [WorkflowStageDto] })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => WorkflowStageDto)
-  stages: WorkflowStageDto[];
+  stages!: WorkflowStageDto[];
 
   @ApiPropertyOptional()
   @IsString()

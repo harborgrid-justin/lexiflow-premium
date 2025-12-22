@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('analytics_events')
 export class AnalyticsEvent {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  eventType: string;
+  eventType!: string;
 
   @Column()
-  entityType: string;
+  entityType!: string;
 
   @Column()
-  entityId: string;
+  entityId!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column('jsonb', { nullable: true })
   metadata: any;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

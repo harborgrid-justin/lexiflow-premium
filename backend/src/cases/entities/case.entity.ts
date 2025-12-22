@@ -45,10 +45,10 @@ export enum CaseStatus {
 @Index(['isArchived'])
 export class Case extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
-  title: string;
+  title!: string;
 
   @Column({ name: 'case_number', type: 'varchar', length: 100, unique: true })
-  caseNumber: string;
+  caseNumber!: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
@@ -58,14 +58,14 @@ export class Case extends BaseEntity {
     enum: CaseType,
     default: CaseType.CIVIL,
   })
-  type: CaseType;
+  type!: CaseType;
 
   @Column({
     type: 'enum',
     enum: CaseStatus,
     default: CaseStatus.OPEN,
   })
-  status: CaseStatus;
+  status!: CaseStatus;
 
   @Column({ name: 'practice_area', type: 'varchar', length: 255, nullable: true })
   practiceArea?: string;
@@ -98,7 +98,7 @@ export class Case extends BaseEntity {
   metadata?: Record<string, any>;
 
   @Column({ name: 'is_archived', type: 'boolean', default: false })
-  isArchived: boolean;
+  isArchived!: boolean;
 
   @Column({ name: 'client_id', type: 'uuid', nullable: true })
   clientId?: string;
@@ -108,11 +108,11 @@ export class Case extends BaseEntity {
   client?: Client;
 
   @OneToMany(() => EvidenceItem, (evidenceItem) => evidenceItem.case)
-  evidenceItems: EvidenceItem[];
+  evidenceItems!: EvidenceItem[];
 
   @OneToMany(() => ConflictCheck, (conflictCheck) => conflictCheck.case)
-  conflictChecks: ConflictCheck[];
+  conflictChecks!: ConflictCheck[];
 
   @OneToMany(() => Party, (party) => party.case)
-  parties: Party[];
+  parties!: Party[];
 }

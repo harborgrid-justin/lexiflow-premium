@@ -18,59 +18,59 @@ export enum CustodianStatus {
 @Entity('custodians')
 export class Custodian {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @Column({ type: 'varchar', length: 200 })
-  firstName: string;
+  firstName!: string;
 
   @Column({ type: 'varchar', length: 200 })
-  lastName: string;
+  lastName!: string;
 
   @Column({ type: 'varchar', length: 400 })
-  fullName: string;
+  fullName!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  email: string;
+  email!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  phone: string;
+  phone!: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  department: string;
+  department!: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  title: string;
+  title!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  organization: string;
+  organization!: string;
 
   @Column({
     type: 'enum',
     enum: CustodianStatus,
     default: CustodianStatus.IDENTIFIED,
   })
-  status: CustodianStatus;
+  status!: CustodianStatus;
 
   @Column({ type: 'date', nullable: true })
-  dateIdentified: Date;
+  dateIdentified!: Date;
 
   @Column({ type: 'date', nullable: true })
-  dateNotified: Date;
+  dateNotified!: Date;
 
   @Column({ type: 'date', nullable: true })
-  dateInterviewed: Date;
+  dateInterviewed!: Date;
 
   @Column({ type: 'date', nullable: true })
-  dataCollectionDate: Date;
+  dataCollectionDate!: Date;
 
   @Column({ type: 'boolean', default: false })
-  isKeyPlayer: boolean;
+  isKeyPlayer!: boolean;
 
   @Column({ type: 'text', nullable: true })
-  relevance: string;
+  relevance!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   dataSources: Array<{
@@ -81,19 +81,19 @@ export class Custodian {
   }>;
 
   @Column({ type: 'boolean', default: false })
-  isOnLegalHold: boolean;
+  isOnLegalHold!: boolean;
 
   @Column({ type: 'uuid', nullable: true })
-  legalHoldId: string;
+  legalHoldId!: string;
 
   @Column({ type: 'date', nullable: true })
-  legalHoldDate: Date;
+  legalHoldDate!: Date;
 
   @Column({ type: 'date', nullable: true })
-  legalHoldReleasedDate: Date;
+  legalHoldReleasedDate!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  acknowledgedAt: Date;
+  acknowledgedAt!: Date;
 
   @Column({ type: 'jsonb', nullable: true })
   interviews: Array<{
@@ -103,26 +103,26 @@ export class Custodian {
   }>;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ type: 'uuid', nullable: true })
-  assignedTo: string;
+  assignedTo!: string;
 
   @Column({ type: 'uuid' })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 }

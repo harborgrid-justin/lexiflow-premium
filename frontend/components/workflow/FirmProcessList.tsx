@@ -47,7 +47,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                 </div>
                 <div className="flex items-center gap-2">
                     <Badge variant={bp.status === 'Active' ? 'success' : bp.status === 'Idle' ? 'neutral' : 'warning'}>{bp.status}</Badge>
-                    <button className={cn(theme.text.tertiary, `hover:${theme.text.secondary}`)} onClick={(e) => e.stopPropagation()} aria-label="Process options"><MoreHorizontal className="h-4 w-4"/></button>
+                    <button className={cn(theme.text.tertiary, `hover:${theme.text.secondary}`)} onClick={(e: React.MouseEvent) => e.stopPropagation()} aria-label="Process options"><MoreHorizontal className="h-4 w-4"/></button>
                 </div>
             </div>
             
@@ -82,7 +82,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                 )}
             </div>
 
-            <div className={cn("p-3 border-t flex gap-2", theme.border.default)} onClick={(e) => e.stopPropagation()}>
+            <div className={cn("p-3 border-t flex gap-2", theme.border.default)} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                 <Button variant="ghost" size="sm" className={cn("flex-1 text-xs", theme.text.secondary)} onClick={() => onSelectProcess && onSelectProcess(bp.id)}>Logs</Button>
                 <Button variant="outline" size="sm" className="flex-1 text-xs" onClick={() => onSelectProcess && onSelectProcess(bp.id)}>Config</Button>
                 {bp.status !== 'Active' && <Button variant="primary" size="sm" className="flex-1 text-xs" icon={Play}>Start</Button>}

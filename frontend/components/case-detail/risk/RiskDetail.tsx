@@ -70,7 +70,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                 <Input 
                     label="Risk Title" 
                     value={risk.title} 
-                    onChange={(e) => onUpdate({ ...risk, title: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...risk, title: e.target.value })}
                 />
                 
                 <div className="grid grid-cols-2 gap-4">
@@ -80,7 +80,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                             title="Select risk category"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.category}
-                            onChange={(e) => onUpdate({ ...risk, category: e.target.value as RiskCategory })}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...risk, category: e.target.value as RiskCategory })}
                         >
                             <option value="Legal">Legal</option>
                             <option value="Financial">Financial</option>
@@ -94,7 +94,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                             title="Select risk status"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.status}
-                            onChange={(e) => onUpdate({ ...risk, status: e.target.value as RiskStatus })}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...risk, status: e.target.value as RiskStatus })}
                         >
                             <option value="Identified">Identified</option>
                             <option value="Mitigated">Mitigated</option>
@@ -108,7 +108,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     label="Description" 
                     rows={3}
                     value={risk.description}
-                    onChange={(e) => onUpdate({ ...risk, description: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...risk, description: e.target.value })}
                 />
             </div>
 
@@ -181,7 +181,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     )}
                     placeholder="Outline steps to reduce probability or impact..."
                     value={risk.mitigationPlan || ''}
-                    onChange={(e) => onUpdate({ ...risk, mitigationPlan: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...risk, mitigationPlan: e.target.value })}
                 />
             </div>
         </div>

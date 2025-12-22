@@ -69,7 +69,7 @@ export const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
                     <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors group-focus-within:text-blue-500", theme.text.tertiary)} />
                     <input 
                         value={searchTerm} 
-                        onChange={(e) => setSearchTerm(e.target.value)} 
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)} 
                         placeholder="Search by name, tag, or content..." 
                         className={cn(
                             "w-full pl-10 pr-4 py-2 border rounded-md text-sm outline-none transition-all",

@@ -22,32 +22,32 @@ export class CreateInvoiceItemDto {
   @ApiProperty({ description: 'Invoice ID' })
   @IsUUID()
   @IsNotEmpty()
-  invoiceId: string;
+  invoiceId!: string;
 
   @ApiProperty({ enum: InvoiceItemType, description: 'Type of invoice item' })
   @IsEnum(InvoiceItemType)
   @IsNotEmpty()
-  type: InvoiceItemType;
+  type!: InvoiceItemType;
 
   @ApiProperty({ description: 'Description of the invoice item' })
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
 
   @ApiProperty({ description: 'Quantity (e.g., hours, units)', minimum: 0 })
   @IsNumber()
   @Min(0)
-  quantity: number;
+  quantity!: number;
 
   @ApiProperty({ description: 'Rate per unit', minimum: 0 })
   @IsNumber()
   @Min(0)
-  rate: number;
+  rate!: number;
 
   @ApiProperty({ description: 'Total amount (quantity * rate)', minimum: 0 })
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 
   @ApiPropertyOptional({ description: 'Associated time entry ID' })
   @IsUUID()

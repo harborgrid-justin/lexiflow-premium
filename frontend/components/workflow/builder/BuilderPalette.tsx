@@ -39,7 +39,7 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
             { type: 'Delay', desc: 'Time-based Wait' }, 
             { type: 'Parallel', desc: 'Split Execution' }, 
             { type: 'End', desc: 'Terminate Flow' }
-          ].map((item) => (
+          ].map((item: any) => (
             <div 
               key={item.type}
               draggable

@@ -12,7 +12,7 @@ export class CreateLegalEntityDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiProperty({ 
     description: 'Type of legal entity',
@@ -21,7 +21,7 @@ export class CreateLegalEntityDto {
   })
   @IsEnum(LegalEntityType)
   @IsNotEmpty()
-  entityType: LegalEntityType;
+  entityType!: LegalEntityType;
 
   @ApiPropertyOptional({ 
     description: 'Full legal name',

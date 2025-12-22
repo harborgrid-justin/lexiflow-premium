@@ -12,36 +12,36 @@ export enum JobStatus {
 @Entity('etl_jobs')
 export class ETLJob {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  pipelineId: string;
+  pipelineId!: string;
 
   @ManyToOne(() => ETLPipeline)
   @JoinColumn({ name: 'pipelineId' })
-  pipeline: ETLPipeline;
+  pipeline!: ETLPipeline;
 
   @Column({ type: 'enum', enum: JobStatus, default: JobStatus.PENDING })
-  status: JobStatus;
+  status!: JobStatus;
 
   @Column({ type: 'int', nullable: true })
-  recordsProcessed: number;
+  recordsProcessed!: number;
 
   @Column({ type: 'int', nullable: true })
-  recordsFailed: number;
+  recordsFailed!: number;
 
   @Column({ type: 'int', nullable: true })
-  durationMs: number;
+  durationMs!: number;
 
   @Column({ type: 'text', nullable: true })
-  error: string;
+  error!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metrics: any;
 
   @CreateDateColumn()
-  startedAt: Date;
+  startedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  completedAt: Date;
+  completedAt!: Date;
 }

@@ -134,7 +134,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         className={cn("w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.highlight, theme.border.default, theme.text.primary)}
                         placeholder="Search 50+ litigation strategies..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                         disabled={isLoading}
                     />
                 </div>
@@ -143,7 +143,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         title="Filter by category"
                         className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedCategory(e.target.value)}
                         disabled={isLoading}
                     >
                         {categories.map(c => <option key={c} value={c}>{c}</option>)}
@@ -152,7 +152,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         title="Filter by difficulty"
                         className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedDifficulty}
-                        onChange={(e) => setSelectedDifficulty(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedDifficulty(e.target.value)}
                         disabled={isLoading}
                     >
                         <option value="All">All Difficulties</option>

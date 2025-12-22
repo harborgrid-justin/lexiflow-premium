@@ -5,16 +5,16 @@ import { MotionType, MotionStatus } from '../entities/motion.entity';
 export class CreateMotionDto {
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  title: string;
+  title!: string;
 
   @IsEnum(MotionType)
   @IsNotEmpty()
-  type: MotionType;
+  type!: MotionType;
 
   @IsEnum(MotionStatus)
   @IsOptional()

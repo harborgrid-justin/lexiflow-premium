@@ -19,7 +19,7 @@ import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
 import { StandardizationConsole } from './quality/StandardizationConsole';
 
 // Helper function for severity styling
-const getSeverityClassName = (severity: string, theme: unknown) => {
+const getSeverityClassName = (severity: string, theme: any) => {
   switch (severity.toLowerCase()) {
     case 'critical':
       return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';

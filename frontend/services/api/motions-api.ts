@@ -72,8 +72,8 @@ export class MotionsApiService {
     
     // Remove undefined values
     Object.keys(createDto).forEach(key => {
-      if (createDto[key] === undefined) {
-        delete createDto[key];
+      if ((createDto as any)[key] === undefined) {
+        delete (createDto as any)[key];
       }
     });
     

@@ -55,34 +55,34 @@ export class CaseMetricsQueryDto {
 
 export class CaseMetricsDto {
   @ApiProperty({ description: 'Total number of cases' })
-  totalCases: number;
+  totalCases!: number;
 
   @ApiProperty({ description: 'Active cases count' })
-  activeCases: number;
+  activeCases!: number;
 
   @ApiProperty({ description: 'Closed cases count' })
-  closedCases: number;
+  closedCases!: number;
 
   @ApiProperty({ description: 'Win rate percentage' })
-  winRate: number;
+  winRate!: number;
 
   @ApiProperty({ description: 'Loss rate percentage' })
-  lossRate: number;
+  lossRate!: number;
 
   @ApiProperty({ description: 'Settlement rate percentage' })
-  settlementRate: number;
+  settlementRate!: number;
 
   @ApiProperty({ description: 'Average case duration in days' })
-  avgCaseDuration: number;
+  avgCaseDuration!: number;
 
   @ApiProperty({ description: 'Median case duration in days' })
-  medianCaseDuration: number;
+  medianCaseDuration!: number;
 
   @ApiProperty({ description: 'Average case value' })
-  avgCaseValue: number;
+  avgCaseValue!: number;
 
   @ApiProperty({ description: 'Total revenue generated' })
-  totalRevenue: number;
+  totalRevenue!: number;
 
   @ApiProperty({ description: 'Cases by status breakdown' })
   casesByStatus: { [status: string]: number };
@@ -96,107 +96,107 @@ export class CaseMetricsDto {
 
 export class CaseTrendDataPoint {
   @ApiProperty({ description: 'Period label' })
-  period: string;
+  period!: string;
 
   @ApiProperty({ description: 'Number of new cases' })
-  newCases: number;
+  newCases!: number;
 
   @ApiProperty({ description: 'Number of closed cases' })
-  closedCases: number;
+  closedCases!: number;
 
   @ApiProperty({ description: 'Win rate for period' })
-  winRate: number;
+  winRate!: number;
 
   @ApiProperty({ description: 'Average duration for period' })
-  avgDuration: number;
+  avgDuration!: number;
 
   @ApiProperty({ description: 'Revenue for period' })
-  revenue: number;
+  revenue!: number;
 }
 
 export class CaseSpecificMetricsDto {
   @ApiProperty({ description: 'Case ID' })
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Case number' })
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiProperty({ description: 'Case title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Days since case opened' })
-  daysOpen: number;
+  daysOpen!: number;
 
   @ApiProperty({ description: 'Total billable hours' })
-  totalHours: number;
+  totalHours!: number;
 
   @ApiProperty({ description: 'Total billed amount' })
-  totalBilled: number;
+  totalBilled!: number;
 
   @ApiProperty({ description: 'Total collected amount' })
-  totalCollected: number;
+  totalCollected!: number;
 
   @ApiProperty({ description: 'Realization rate percentage' })
-  realizationRate: number;
+  realizationRate!: number;
 
   @ApiProperty({ description: 'Number of documents' })
-  documentCount: number;
+  documentCount!: number;
 
   @ApiProperty({ description: 'Number of motions filed' })
-  motionCount: number;
+  motionCount!: number;
 
   @ApiProperty({ description: 'Number of hearings' })
-  hearingCount: number;
+  hearingCount!: number;
 
   @ApiProperty({ description: 'Number of depositions' })
-  depositionCount: number;
+  depositionCount!: number;
 
   @ApiProperty({ description: 'Team utilization rate' })
-  teamUtilization: number;
+  teamUtilization!: number;
 
   @ApiProperty({ description: 'Upcoming deadlines count' })
-  upcomingDeadlines: number;
+  upcomingDeadlines!: number;
 
   @ApiProperty({ description: 'Overdue tasks count' })
-  overdueTasks: number;
+  overdueTasks!: number;
 
   @ApiProperty({ description: 'Activity timeline' })
-  activityTimeline: ActivityDataPoint[];
+  activityTimeline!: ActivityDataPoint[];
 }
 
 export class ActivityDataPoint {
   @ApiProperty({ description: 'Date of activity' })
-  date: string;
+  date!: string;
 
   @ApiProperty({ description: 'Activity type' })
-  type: string;
+  type!: string;
 
   @ApiProperty({ description: 'Activity description' })
-  description: string;
+  description!: string;
 
   @ApiProperty({ description: 'Associated value/count' })
-  value: number;
+  value!: number;
 }
 
 export class PracticeAreaBreakdownDto {
   @ApiProperty({ description: 'Practice area name' })
-  practiceArea: string;
+  practiceArea!: string;
 
   @ApiProperty({ description: 'Number of cases' })
-  caseCount: number;
+  caseCount!: number;
 
   @ApiProperty({ description: 'Active cases' })
-  activeCases: number;
+  activeCases!: number;
 
   @ApiProperty({ description: 'Total revenue' })
-  revenue: number;
+  revenue!: number;
 
   @ApiProperty({ description: 'Win rate percentage' })
-  winRate: number;
+  winRate!: number;
 
   @ApiProperty({ description: 'Average case duration' })
-  avgDuration: number;
+  avgDuration!: number;
 
   @ApiProperty({ description: 'Percentage of total cases' })
-  percentage: number;
+  percentage!: number;
 }

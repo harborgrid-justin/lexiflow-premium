@@ -29,86 +29,86 @@ export enum PrivilegeStatus {
 @Index(['status'])
 export class PrivilegeLogEntry extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'privilege_log_number', type: 'varchar', length: 100 })
-  privilegeLogNumber: string;
+  privilegeLogNumber!: string;
 
   @Column({ name: 'bates_number', type: 'varchar', length: 100, nullable: true })
-  batesNumber: string;
+  batesNumber!: string;
 
   @Column({ name: 'document_id', type: 'uuid', nullable: true })
-  documentId: string;
+  documentId!: string;
 
   @Column({ name: 'document_description', type: 'text', nullable: true })
-  documentDescription: string;
+  documentDescription!: string;
 
   @Column({ name: 'document_date', type: 'date', nullable: true })
-  documentDate: Date;
+  documentDate!: Date;
 
   @Column({ name: 'document_type', type: 'varchar', length: 100, nullable: true })
-  documentType: string;
+  documentType!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  author: string;
+  author!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  sender: string;
+  sender!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  recipients: string[];
+  recipients!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  cc: string[];
+  cc!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  bcc: string[];
+  bcc!: string[];
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  subject: string;
+  subject!: string;
 
   @Column({
     name: 'privilege_type',
     type: 'enum',
     enum: PrivilegeType,
   })
-  privilegeType: PrivilegeType;
+  privilegeType!: PrivilegeType;
 
   @Column({ name: 'privilege_description', type: 'text', nullable: true })
-  privilegeDescription: string;
+  privilegeDescription!: string;
 
   @Column({ name: 'privilege_basis', type: 'text', nullable: true })
-  privilegeBasis: string;
+  privilegeBasis!: string;
 
   @Column({
     type: 'enum',
     enum: PrivilegeStatus,
     default: PrivilegeStatus.CLAIMED,
   })
-  status: PrivilegeStatus;
+  status!: PrivilegeStatus;
 
   @Column({ name: 'reviewed_by', type: 'uuid', nullable: true })
-  reviewedBy: string;
+  reviewedBy!: string;
 
   @Column({ name: 'review_date', type: 'timestamp', nullable: true })
-  reviewDate: Date;
+  reviewDate!: Date;
 
   @Column({ name: 'date_challenged', type: 'date', nullable: true })
-  dateChallenged: Date;
+  dateChallenged!: Date;
 
   @Column({ name: 'is_redacted', type: 'boolean', default: false })
-  isRedacted: boolean;
+  isRedacted!: boolean;
 
   @Column({ name: 'page_count', type: 'integer', nullable: true })
-  pageCount: number;
+  pageCount!: number;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

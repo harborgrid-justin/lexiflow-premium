@@ -3,16 +3,16 @@
  * All tab configurations for various modules in one reusable file
  */
 
-import { 
-  LayoutDashboard, Users, GitPullRequest, BarChart3, ShieldAlert, Lock, 
-  ScrollText, Database, GitMerge, Archive, Terminal, Book, Radio, 
-  Sparkles, Repeat, Network, DollarSign, Table, Code, Activity, History, 
-  FileText, Key, BarChart2, FileSearch, AlertOctagon, Layers, GitCommit, 
-  HardDrive, Cloud, CheckSquare, Bell, PieChart, Folder, Clock, Star, 
-  LayoutTemplate, FileSignature, Eraser, Cpu, Box, Plus, BookOpen, 
-  GraduationCap, Library, Send, Search, Scale, Gavel, Map, Settings, 
-  GitCompare, Briefcase, UserPlus, BrainCircuit, TrendingUp, Wallet, 
-  ShieldCheck, Link, Server, Bookmark, Building2
+import {
+  LayoutDashboard, Users, GitPullRequest, BarChart3, ShieldAlert, Lock,
+  ScrollText, Database, GitMerge, Archive, Terminal, Book, Radio,
+  Sparkles, Repeat, Network, DollarSign, Table, Code, Activity, History,
+  FileText, Key, BarChart2, FileSearch, AlertOctagon, Layers, GitCommit,
+  HardDrive, Cloud, CheckSquare, Bell, PieChart, Folder, Clock, Star,
+  LayoutTemplate, FileSignature, Eraser, Cpu, Box, Plus, BookOpen,
+  GraduationCap, Library, Send, Search, Scale, Gavel, Map, Settings,
+  GitCompare, Briefcase, UserPlus, BrainCircuit, TrendingUp, Wallet,
+  ShieldCheck, Link, Server, Bookmark, Building2, LucideIcon
 } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
 import { PlatformView } from '../components/admin/data/AdminDatabaseControl';
@@ -27,11 +27,11 @@ export type KnowledgeView = 'wiki' | 'precedents' | 'qa' | 'analytics' | 'cle';
 export type RulesView = 'dashboard' | 'federal_evidence' | 'federal_civil' | 'local' | 'standing_orders' | 'compare' | 'search';
 export type BillingView = 'dashboard' | 'timekeeper' | 'reports' | 'trust' | 'settings' | 'analytics';
 
-type MenuItem = {
+export type MenuItem = {
   id: PlatformView;
   label: string;
-  icon: unknown;
-  children?: { id: PlatformView; label: string; icon: any }[];
+  icon: LucideIcon;
+  children?: { id: PlatformView; label: string; icon: LucideIcon }[];
 };
 
 // =============================================================================

@@ -3,26 +3,26 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('compliance_checks')
 export class ComplianceCheck {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  caseId: string;
+  caseId!: string;
 
   @Column()
-  ruleId: string;
+  ruleId!: string;
 
   @Column()
-  status: string;
+  status!: string;
 
   @Column({ type: 'timestamp' })
-  checkedAt: Date;
+  checkedAt!: Date;
 
   @Column('jsonb', { nullable: true })
   details: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

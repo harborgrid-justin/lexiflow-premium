@@ -39,7 +39,7 @@ const UTILIZATION_TARGET = 85;
  */
 const calculateAverageUtilization = (staffList: StaffMember[]): number => {
   if (staffList.length === 0) return 0;
-  const totalUtilization = staffList.reduce((acc, s) => acc + (s.utilizationRate || 0), 0);
+  const totalUtilization = staffList.reduce((acc: any, s) => acc + (s.utilizationRate || 0), 0);
   return Math.round(totalUtilization / staffList.length);
 };
 
@@ -152,7 +152,7 @@ export const HRManager: React.FC = () => {
   // ==========================================================================
   // COMPUTED VALUES
   // ==========================================================================
-  const totalBillable = staffList.reduce((acc, s) => acc + (s.currentBillable || 0), 0);
+  const totalBillable = staffList.reduce((acc: any, s) => acc + (s.currentBillable || 0), 0);
   const averageUtilization = calculateAverageUtilization(staffList);
   const isOnTrackUtilization = averageUtilization >= UTILIZATION_TARGET;
   const staffToDeleteName = staffToDelete 

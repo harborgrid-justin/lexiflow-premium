@@ -88,7 +88,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                         </div>
                                         <TextArea 
                                             value={formData.description} 
-                                            onChange={e => setFormData({...formData, description: e.target.value})} 
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, description: e.target.value})} 
                                             rows={4}
                                         />
                                     </div>
@@ -104,7 +104,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                             <select 
                                                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                                 value={formData.domain}
-                                                onChange={e => setFormData({...formData, domain: e.target.value as any})}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, domain: e.target.value as any})}
                                             >
                                                 <option value="Legal">Legal</option>
                                                 <option value="Finance">Finance</option>
@@ -146,7 +146,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                                     type="checkbox" 
                                                     className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
                                                     checked={formData.isPII}
-                                                    onChange={e => setFormData({...formData, isPII: e.target.checked})}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, isPII: e.target.checked})}
                                                 />
                                             </div>
                                             <p className={cn("text-xs", theme.status.error.text)}>Checking this enforces column-level encryption and strict access logging.</p>
@@ -154,7 +154,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                         <Input 
                                             label="Data Steward / Owner" 
                                             value={formData.owner} 
-                                            onChange={e => setFormData({...formData, owner: e.target.value})}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, owner: e.target.value})}
                                         />
                                     </div>
                                 </div>

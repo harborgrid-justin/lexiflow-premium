@@ -18,19 +18,19 @@ export enum TimeOffStatus {
 export class CreateTimeOffDto {
   @ApiProperty()
   @IsString()
-  employeeId: string;
+  employeeId!: string;
 
   @ApiProperty({ enum: TimeOffType })
   @IsEnum(TimeOffType)
-  type: TimeOffType;
+  type!: TimeOffType;
 
   @ApiProperty()
   @IsDateString()
-  startDate: string;
+  startDate!: string;
 
   @ApiProperty()
   @IsDateString()
-  endDate: string;
+  endDate!: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -39,5 +39,5 @@ export class CreateTimeOffDto {
 
   @ApiProperty({ enum: TimeOffStatus, default: TimeOffStatus.PENDING })
   @IsEnum(TimeOffStatus)
-  status: TimeOffStatus;
+  status!: TimeOffStatus;
 }

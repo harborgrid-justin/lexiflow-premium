@@ -102,7 +102,7 @@ class CollectionQueue {
       await new Promise(resolve => setTimeout(resolve, DEBUG_API_SIMULATION_DELAY_MS * 2));
       
       this.onProgress?.(id, ESICollectionStatusEnum.COLLECTED);
-    } catch (err) {
+    } catch (err: unknown) {
       this.onProgress?.(id, ESICollectionStatusEnum.ERROR);
       throw err;
     }

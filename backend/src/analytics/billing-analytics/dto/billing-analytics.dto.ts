@@ -59,132 +59,132 @@ export class BillingAnalyticsQueryDto {
 
 export class BillingMetricsDto {
   @ApiProperty({ description: 'Total billable hours' })
-  totalBillableHours: number;
+  totalBillableHours!: number;
 
   @ApiProperty({ description: 'Total non-billable hours' })
-  totalNonBillableHours: number;
+  totalNonBillableHours!: number;
 
   @ApiProperty({ description: 'Total billed amount' })
-  totalBilled: number;
+  totalBilled!: number;
 
   @ApiProperty({ description: 'Total collected amount' })
-  totalCollected: number;
+  totalCollected!: number;
 
   @ApiProperty({ description: 'Work in progress (WIP) value' })
-  wipValue: number;
+  wipValue!: number;
 
   @ApiProperty({ description: 'Accounts receivable (AR) value' })
-  arValue: number;
+  arValue!: number;
 
   @ApiProperty({ description: 'Realization rate percentage' })
-  realizationRate: number;
+  realizationRate!: number;
 
   @ApiProperty({ description: 'Collection rate percentage' })
-  collectionRate: number;
+  collectionRate!: number;
 
   @ApiProperty({ description: 'Utilization rate percentage' })
-  utilizationRate: number;
+  utilizationRate!: number;
 
   @ApiProperty({ description: 'Average billing rate' })
-  avgBillingRate: number;
+  avgBillingRate!: number;
 
   @ApiProperty({ description: 'Revenue by practice area' })
   revenueByPracticeArea: { [area: string]: number };
 
   @ApiProperty({ description: 'Revenue by attorney' })
-  revenueByAttorney: AttorneyRevenue[];
+  revenueByAttorney!: AttorneyRevenue[];
 
   @ApiProperty({ description: 'Billing trends' })
-  trends: BillingTrendDataPoint[];
+  trends!: BillingTrendDataPoint[];
 }
 
 export class AttorneyRevenue {
   @ApiProperty({ description: 'Attorney ID' })
-  attorneyId: string;
+  attorneyId!: string;
 
   @ApiProperty({ description: 'Attorney name' })
-  attorneyName: string;
+  attorneyName!: string;
 
   @ApiProperty({ description: 'Billable hours' })
-  billableHours: number;
+  billableHours!: number;
 
   @ApiProperty({ description: 'Total billed' })
-  totalBilled: number;
+  totalBilled!: number;
 
   @ApiProperty({ description: 'Total collected' })
-  totalCollected: number;
+  totalCollected!: number;
 
   @ApiProperty({ description: 'Realization rate' })
-  realizationRate: number;
+  realizationRate!: number;
 
   @ApiProperty({ description: 'Utilization rate' })
-  utilizationRate: number;
+  utilizationRate!: number;
 }
 
 export class BillingTrendDataPoint {
   @ApiProperty({ description: 'Period label' })
-  period: string;
+  period!: string;
 
   @ApiProperty({ description: 'Billable hours' })
-  billableHours: number;
+  billableHours!: number;
 
   @ApiProperty({ description: 'Amount billed' })
-  billed: number;
+  billed!: number;
 
   @ApiProperty({ description: 'Amount collected' })
-  collected: number;
+  collected!: number;
 
   @ApiProperty({ description: 'Realization rate' })
-  realizationRate: number;
+  realizationRate!: number;
 
   @ApiProperty({ description: 'New WIP' })
-  newWip: number;
+  newWip!: number;
 
   @ApiProperty({ description: 'New AR' })
-  newAr: number;
+  newAr!: number;
 }
 
 export class WipAgingDto {
   @ApiProperty({ description: 'Total WIP value' })
-  totalWip: number;
+  totalWip!: number;
 
   @ApiProperty({ description: 'Current (0-30 days)' })
-  current: number;
+  current!: number;
 
   @ApiProperty({ description: '31-60 days' })
-  days31to60: number;
+  days31to60!: number;
 
   @ApiProperty({ description: '61-90 days' })
-  days61to90: number;
+  days61to90!: number;
 
   @ApiProperty({ description: '91-120 days' })
-  days91to120: number;
+  days91to120!: number;
 
   @ApiProperty({ description: 'Over 120 days' })
-  over120: number;
+  over120!: number;
 
   @ApiProperty({ description: 'WIP by case' })
-  wipByCases: CaseWip[];
+  wipByCases!: CaseWip[];
 
   @ApiProperty({ description: 'Average WIP age in days' })
-  avgWipAge: number;
+  avgWipAge!: number;
 }
 
 export class CaseWip {
   @ApiProperty({ description: 'Case ID' })
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Case number' })
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiProperty({ description: 'Client name' })
-  clientName: string;
+  clientName!: string;
 
   @ApiProperty({ description: 'WIP value' })
-  wipValue: number;
+  wipValue!: number;
 
   @ApiProperty({ description: 'Age in days' })
-  ageInDays: number;
+  ageInDays!: number;
 
   @ApiProperty({ description: 'Last billed date' })
   lastBilledDate?: Date;
@@ -195,45 +195,45 @@ export class CaseWip {
 
 export class ArAgingDto {
   @ApiProperty({ description: 'Total AR value' })
-  totalAr: number;
+  totalAr!: number;
 
   @ApiProperty({ description: 'Current (0-30 days)' })
-  current: number;
+  current!: number;
 
   @ApiProperty({ description: '31-60 days' })
-  days31to60: number;
+  days31to60!: number;
 
   @ApiProperty({ description: '61-90 days' })
-  days61to90: number;
+  days61to90!: number;
 
   @ApiProperty({ description: '91-120 days' })
-  days91to120: number;
+  days91to120!: number;
 
   @ApiProperty({ description: 'Over 120 days' })
-  over120: number;
+  over120!: number;
 
   @ApiProperty({ description: 'AR by client' })
-  arByClient: ClientAr[];
+  arByClient!: ClientAr[];
 
   @ApiProperty({ description: 'Average AR age in days' })
-  avgArAge: number;
+  avgArAge!: number;
 
   @ApiProperty({ description: 'Days sales outstanding (DSO)' })
-  dso: number;
+  dso!: number;
 }
 
 export class ClientAr {
   @ApiProperty({ description: 'Client ID' })
-  clientId: string;
+  clientId!: string;
 
   @ApiProperty({ description: 'Client name' })
-  clientName: string;
+  clientName!: string;
 
   @ApiProperty({ description: 'AR value' })
-  arValue: number;
+  arValue!: number;
 
   @ApiProperty({ description: 'Age in days' })
-  ageInDays: number;
+  ageInDays!: number;
 
   @ApiProperty({ description: 'Last payment date' })
   lastPaymentDate?: Date;
@@ -247,13 +247,13 @@ export class ClientAr {
 
 export class RealizationAnalysisDto {
   @ApiProperty({ description: 'Overall realization rate' })
-  overallRate: number;
+  overallRate!: number;
 
   @ApiProperty({ description: 'Realization by practice area' })
-  byPracticeArea: PracticeAreaRealization[];
+  byPracticeArea!: PracticeAreaRealization[];
 
   @ApiProperty({ description: 'Realization by attorney' })
-  byAttorney: AttorneyRealization[];
+  byAttorney!: AttorneyRealization[];
 
   @ApiProperty({ description: 'Write-off analysis' })
   writeOffAnalysis: {
@@ -272,37 +272,37 @@ export class RealizationAnalysisDto {
 
 export class PracticeAreaRealization {
   @ApiProperty({ description: 'Practice area' })
-  practiceArea: string;
+  practiceArea!: string;
 
   @ApiProperty({ description: 'Standard fees' })
-  standardFees: number;
+  standardFees!: number;
 
   @ApiProperty({ description: 'Billed fees' })
-  billedFees: number;
+  billedFees!: number;
 
   @ApiProperty({ description: 'Collected fees' })
-  collectedFees: number;
+  collectedFees!: number;
 
   @ApiProperty({ description: 'Realization rate' })
-  realizationRate: number;
+  realizationRate!: number;
 }
 
 export class AttorneyRealization {
   @ApiProperty({ description: 'Attorney ID' })
-  attorneyId: string;
+  attorneyId!: string;
 
   @ApiProperty({ description: 'Attorney name' })
-  attorneyName: string;
+  attorneyName!: string;
 
   @ApiProperty({ description: 'Standard rate' })
-  standardRate: number;
+  standardRate!: number;
 
   @ApiProperty({ description: 'Average billed rate' })
-  avgBilledRate: number;
+  avgBilledRate!: number;
 
   @ApiProperty({ description: 'Realization rate' })
-  realizationRate: number;
+  realizationRate!: number;
 
   @ApiProperty({ description: 'Total write-offs' })
-  totalWriteOffs: number;
+  totalWriteOffs!: number;
 }

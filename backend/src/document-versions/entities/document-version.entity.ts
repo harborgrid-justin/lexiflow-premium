@@ -13,60 +13,60 @@ import { Document } from '../../documents/entities/document.entity';
 export class DocumentVersion extends BaseEntity {
   @Column({ name: 'document_id', type: 'uuid' })
   @Index()
-  documentId: string;
+  documentId!: string;
 
   @ManyToOne(() => Document, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'document_id' })
-  document: Document;
+  document!: Document;
 
   @Column({ type: 'int' })
-  version: number;
+  version!: number;
 
   @Column()
-  filename: string;
+  filename!: string;
 
   @Column({ name: 'file_path' })
-  filePath: string;
+  filePath!: string;
 
   @Column({ name: 'mime_type' })
-  mimeType: string;
+  mimeType!: string;
 
   @Column({ name: 'file_size', type: 'bigint' })
-  fileSize: number;
+  fileSize!: number;
 
   @Column()
-  checksum: string;
+  checksum!: string;
 
   @Column({ name: 'change_description', type: 'text', nullable: true })
-  changeDescription: string;
+  changeDescription!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ name: 'full_text_content', type: 'text', nullable: true })
-  fullTextContent: string;
+  fullTextContent!: string;
 
   @Column({ name: 'page_count', type: 'int', nullable: true })
-  pageCount: number;
+  pageCount!: number;
 
   @Column({ name: 'word_count', type: 'int', nullable: true })
-  wordCount: number;
+  wordCount!: number;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'is_major_version', type: 'boolean', default: false })
-  isMajorVersion: boolean;
+  isMajorVersion!: boolean;
 
   @Column({ name: 'is_current_version', type: 'boolean', default: false })
-  isCurrentVersion: boolean;
+  isCurrentVersion!: boolean;
 
   @Column({ name: 'comparison_data', type: 'jsonb', nullable: true })
-  comparisonData: Record<string, any>;
+  comparisonData!: Record<string, any>;
 
   @Column({ name: 'previous_version_id', type: 'uuid', nullable: true })
-  previousVersionId: string;
+  previousVersionId!: string;
 
   @Column({ name: 'next_version_id', type: 'uuid', nullable: true })
-  nextVersionId: string;
+  nextVersionId!: string;
 }

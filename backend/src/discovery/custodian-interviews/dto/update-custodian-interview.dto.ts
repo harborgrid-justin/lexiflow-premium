@@ -129,5 +129,5 @@ export class UpdateCustodianInterviewDto {
   conductedBy?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

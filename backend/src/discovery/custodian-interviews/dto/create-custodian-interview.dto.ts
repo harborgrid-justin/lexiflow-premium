@@ -13,20 +13,20 @@ import { InterviewType } from '../entities/custodian-interview.entity';
 
 export class CreateCustodianInterviewDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsUUID()
-  custodianId: string;
+  custodianId!: string;
 
   @IsString()
   @MaxLength(300)
-  custodianName: string;
+  custodianName!: string;
 
   @IsEnum(InterviewType)
-  type: InterviewType;
+  type!: InterviewType;
 
   @IsDateString()
-  scheduledDate: string;
+  scheduledDate!: string;
 
   @IsOptional()
   @IsString()
@@ -73,5 +73,5 @@ export class CreateCustodianInterviewDto {
   conductedBy?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

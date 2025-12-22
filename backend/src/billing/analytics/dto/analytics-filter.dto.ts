@@ -27,9 +27,9 @@ export class AnalyticsFilterDto {
 }
 
 export class WipStatsResponse {
-  totalWip: number;
-  unbilledTime: number;
-  unbilledExpenses: number;
+  totalWip!: number;
+  unbilledTime!: number;
+  unbilledExpenses!: number;
   wipByCase: Array<{
     caseId: string;
     caseName: string;
@@ -77,14 +77,14 @@ export class RealizationResponse {
 }
 
 export class OperatingSummaryResponse {
-  totalRevenue: number;
-  totalExpenses: number;
-  netIncome: number;
-  outstandingAR: number;
-  averageCollectionDays: number;
-  activeMatters: number;
-  billableHours: number;
-  averageHourlyRate: number;
+  totalRevenue!: number;
+  totalExpenses!: number;
+  netIncome!: number;
+  outstandingAR!: number;
+  averageCollectionDays!: number;
+  activeMatters!: number;
+  billableHours!: number;
+  averageHourlyRate!: number;
   revenueByMonth: Array<{
     month: string;
     revenue: number;
@@ -99,7 +99,7 @@ export class OperatingSummaryResponse {
 }
 
 export class ArAgingResponse {
-  totalAR: number;
+  totalAR!: number;
   current: number;        // Not yet due
   days30: number;         // 1-30 days overdue
   days60: number;         // 31-60 days overdue

@@ -181,7 +181,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
         return <CaseCollaboration caseData={caseData} />;
       
       case 'Motions':
-        return <CaseMotions caseId={caseData.id} />;
+        return <CaseMotions caseId={caseData.id} caseTitle={caseData.title} />;
       
       case 'Discovery':
         return <CaseDiscovery caseId={caseData.id} />;

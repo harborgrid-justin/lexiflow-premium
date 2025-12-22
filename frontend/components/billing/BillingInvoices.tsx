@@ -162,7 +162,7 @@ const BillingInvoicesComponent: React.FC = () => {
                         <select 
                             className={cn("bg-transparent text-sm outline-none border-none cursor-pointer", theme.text.primary)}
                             value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterStatus(e.target.value)}
                         >
                             <option value="All">All Statuses</option>
                             <option value="Draft">Draft</option>

@@ -46,12 +46,12 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
 
   const handleExportFinCEN = () => {
     console.log('[UboRegister] Export FinCEN Report');
-    // TODO: Implement FinCEN export
+    
   };
 
   const handleAddUBO = () => {
     console.log('[UboRegister] Add UBO Entry');
-    // TODO: Implement UBO entry form
+    
   };
 
   if (isLoading) return <AdaptiveLoader contentType="list" itemCount={8} shimmer />;

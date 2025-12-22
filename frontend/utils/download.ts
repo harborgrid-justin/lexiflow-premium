@@ -21,19 +21,24 @@ export function downloadJSON(data: unknown, filename: string = 'data.json'): voi
 
 export function downloadCSV(data: unknown[], filename: string = 'data.csv'): void {
   if (data.length === 0) return;
-  
-  const headers = Object.keys(data[0]);
+
+  // Type guard for record types
+  const firstRow = data[0];
+  if (!firstRow || typeof firstRow !== 'object' || Array.isArray(firstRow)) return;
+
+  const headers = Object.keys(firstRow);
   const csvRows = [
     headers.join(','),
-    ...data.map(row =>
-      headers.map(header => {
-        const value = row[header];
+    ...data.map((row: unknown) => {
+      if (!row || typeof row !== 'object' || Array.isArray(row)) return '';
+      return headers.map(header => {
+        const value = (row as Record<string, unknown>)[header];
         const escaped = String(value).replace(/"/g, '""');
         return `"${escaped}"`;
-      }).join(',')
-    )
+      }).join(',');
+    }).filter(row => row !== '')
   ];
-  
+
   const content = csvRows.join('\n');
   downloadFile(content, filename, 'text/csv');
 }

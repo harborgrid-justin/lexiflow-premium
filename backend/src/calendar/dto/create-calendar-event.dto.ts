@@ -10,7 +10,7 @@ export class CreateCalendarEventDto {
   })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiProperty({ 
     description: 'Type of calendar event',
@@ -19,7 +19,7 @@ export class CreateCalendarEventDto {
   })
   @IsEnum(CalendarEventType)
   @IsNotEmpty()
-  eventType: CalendarEventType;
+  eventType!: CalendarEventType;
 
   @ApiProperty({ 
     description: 'Start date and time',
@@ -28,7 +28,7 @@ export class CreateCalendarEventDto {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  startDate: Date;
+  startDate!: Date;
 
   @ApiProperty({ 
     description: 'End date and time',
@@ -37,7 +37,7 @@ export class CreateCalendarEventDto {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  endDate: Date;
+  endDate!: Date;
 
   @ApiPropertyOptional({ 
     description: 'Event description'

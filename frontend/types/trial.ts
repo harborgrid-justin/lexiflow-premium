@@ -21,7 +21,31 @@ import { LucideIcon } from 'lucide-react';
 import type { FC, LazyExoticComponent } from 'react';
 
 // --- CLUSTER 5: TRIAL & STRATEGY ---
-export interface Juror extends BaseEntity { caseId: CaseId; name: string; status: 'Panel' | 'Seated' | 'Struck' | 'Alternate'; strikeParty?: 'Plaintiff' | 'Defense'; notes?: string; demographics?: any; }
+export interface Juror extends BaseEntity { 
+  caseId: CaseId; 
+  jurorNumber?: string;
+  name: string; 
+  status: 'Panel' | 'Seated' | 'Struck' | 'Alternate' | 'Dismissed'; 
+  strikeParty?: 'Plaintiff' | 'Defense'; 
+  strikeReason?: string;
+  peremptoryStrike?: boolean;
+  causeStrike?: string;
+  notes?: string; 
+  demographics?: {
+    age?: number;
+    gender?: string;
+    occupation?: string;
+    education?: string;
+    maritalStatus?: string;
+    zipCode?: string;
+  };
+  questionnaire?: Record<string, any>;
+  biasIndicators?: string[];
+  rating?: number; // 1-10 scale
+  seatedDate?: string;
+  struckDate?: string;
+}
+
 export interface Witness extends BaseEntity { 
   caseId: CaseId; 
   name: string; 
@@ -42,7 +66,15 @@ export interface Witness extends BaseEntity {
   interviewedAt?: string;
   subpoenaedAt?: string;
   deposedAt?: string;
+  testifiedAt?: string;
   metadata?: Record<string, any>;
+  // Expert witness specific
+  cvUrl?: string;
+  hourlyRate?: number;
+  retainerAmount?: number;
+  opinions?: string[];
+  reportsSubmitted?: string[];
+  dauberChallengeRisk?: 'Low' | 'Medium' | 'High';
 }
 export interface DepositionDesignation { id: string; depositionId: string; pageStart: number; lineStart: number; pageEnd: number; lineEnd: number; party: string; objection?: string; ruling?: string; }
 export interface OpeningStatement extends BaseEntity { caseId: CaseId; sections: { title: string; durationMinutes: number; linkedExhibitIds: string[] }[]; }

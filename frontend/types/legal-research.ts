@@ -47,17 +47,47 @@ export interface LegalRule extends BaseEntity {
   code: string; 
   name: string; 
   type: LegalRuleType; 
+  category?: string;
   description?: string;
   jurisdiction?: string;
+  jurisdictionId?: string;
+  court?: string;
   effectiveDate?: string;
+  expiryDate?: string;
   source?: string;
   url?: string;
   level?: string; 
   summary?: string; 
   text?: string; 
+  fullText?: string;
   parentId?: string; 
   children?: LegalRule[]; 
-  structuredContent?: any; 
+  relatedRules?: string[];
+  tags?: string[];
+  status?: 'Active' | 'Superseded' | 'Repealed' | 'Draft';
+  // Hierarchical structure
+  section?: string;
+  subsection?: string;
+  paragraph?: string;
+  // Citations & references
+  citations?: Array<{
+    title: string;
+    citation: string;
+    year?: number;
+  }>;
+  amendments?: Array<{
+    date: string;
+    description: string;
+    effectiveDate?: string;
+  }>;
+  interpretations?: string[];
+  exceptions?: string[];
+  // Metadata
+  structuredContent?: any;
+  searchableText?: string;
+  usageCount?: number;
+  lastVerified?: string;
+  metadata?: Record<string, any>;
 }
 
 export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: any[]; }

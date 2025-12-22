@@ -89,7 +89,152 @@ export interface EntityRelationship extends BaseEntity { sourceId: EntityId; tar
 export interface JudgeMotionStat { name: string; grant: number; deny: number; }
 
 export interface JudgeProfile extends BaseEntity {
-motionStats: never[]; name: string; court: string; grantRateDismiss: number; grantRateSummary: number; avgCaseDuration: number; tendencies: string[]; 
+  name: string; 
+  court: string; 
+  jurisdiction?: string;
+  appointedBy?: string;
+  yearsOnBench?: number;
+  priorExperience?: string;
+  // Motion statistics
+  motionStats: Array<{
+    motionType: string;
+    granted: number;
+    denied: number;
+    totalRuled: number;
+    grantRate: number;
+  }>;
+  grantRateDismiss: number; 
+  grantRateSummary: number; 
+  grantRateDiscovery?: number;
+  grantRateSanctions?: number;
+  // Case statistics
+  avgCaseDuration: number; 
+  casesAssigned?: number;
+  casesResolved?: number;
+  trialRate?: number;
+  settlementRate?: number;
+  // Behavioral tendencies
+  tendencies: string[];
+  rulingPatterns?: string[];
+  preferredProcedures?: string[];
+  strictness?: 'Lenient' | 'Moderate' | 'Strict';
+  // Additional context
+  notableRulings?: Array<{
+    caseTitle: string;
+    year: number;
+    summary: string;
+    citation?: string;
+  }>;
+  standingOrders?: string[];
+  localRules?: string[];
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+// Counsel Analysis Types
+export interface CounselProfile extends BaseEntity {
+  name: string;
+  firm: string;
+  jurisdiction?: string;
+  yearsOfPractice?: number;
+  practiceAreas?: string[];
+  // Performance metrics
+  settlementRate: number;
+  trialRate: number;
+  winRate?: number;
+  avgSettlementAmount?: number;
+  avgSettlementVariance: number;
+  // Strategy patterns
+  aggressiveness?: 'Low' | 'Medium' | 'High';
+  motionFrequency?: number;
+  discoveryTactics?: string[];
+  negotiationStyle?: string;
+  // Historical data
+  casesHandled?: number;
+  casesWon?: number;
+  casesLost?: number;
+  casesSettled?: number;
+  notableVerdicts?: Array<{
+    case: string;
+    outcome: string;
+    amount?: number;
+    year: number;
+  }>;
+  // Opposing counsel insights
+  commonOpponents?: string[];
+  preferredExperts?: string[];
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+// Prediction & Analysis Types
+export interface OutcomePredictionData {
+  caseId: CaseId;
+  predictionDate: string;
+  modelVersion?: string;
+  // Probability estimates
+  settlementProbability: number;
+  trialProbability: number;
+  dismissalProbability: number;
+  plaintiffWinProbability?: number;
+  defendantWinProbability?: number;
+  // Value predictions
+  estimatedSettlementRange: {
+    low: number;
+    median: number;
+    high: number;
+    confidence: number;
+  };
+  estimatedVerdictRange?: {
+    low: number;
+    median: number;
+    high: number;
+    confidence: number;
+  };
+  // Risk factors
+  riskFactors: Array<{
+    factor: string;
+    impact: 'Low' | 'Medium' | 'High';
+    description: string;
+  }>;
+  strengthFactors: Array<{
+    factor: string;
+    impact: 'Low' | 'Medium' | 'High';
+    description: string;
+  }>;
+  // Timelines
+  estimatedDurationMonths: number;
+  estimatedCostRange: {
+    low: number;
+    median: number;
+    high: number;
+  };
+  // Recommendations
+  recommendations: string[];
+  alternativeStrategies?: string[];
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+// Analysis Session Types
+export interface AnalysisSession extends BaseEntity {
+  caseId?: CaseId;
+  userId: UserId;
+  sessionType: 'Brief' | 'Case' | 'Motion' | 'Discovery' | 'Trial' | 'General';
+  startTime: string;
+  endTime?: string;
+  duration?: number; // minutes
+  // Session data
+  inputData?: string;
+  outputData?: string;
+  findings?: string[];
+  recommendations?: string[];
+  riskScore?: number;
+  // AI/ML metadata
+  modelUsed?: string;
+  confidence?: number;
+  processingTime?: number;
+  metadata?: Record<string, any>;
 }
 
 export interface LegalEntity extends BaseEntity { id: EntityId; name: string; type: EntityType; roles: EntityRole[]; email?: string; phone?: string; website?: string; address?: string; city?: string; state?: string; country?: string; taxId?: string; company?: string; title?: string; barNumber?: string; jurisdiction?: string; status: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased'; riskScore: number; tags: string[]; notes?: string; linkedUserId?: UserId; avatar?: string; externalIds?: Record<string, string>; aliases?: string[]; }
@@ -124,7 +269,10 @@ export interface NexusNodeData {
   status?: string;
 }
 
-export interface OpposingCounselProfile extends BaseEntity { name: string; firm: string; settlementRate: number; trialRate: number; avgSettlementVariance: number; }
+// Alias for backward compatibility
+export interface OpposingCounselProfile extends CounselProfile {}
+
+// Full counsel profile - defined above in comprehensive section
 
 export interface OutcomePredictionData {
   subject: string;

@@ -6,7 +6,7 @@ import {
   IsNumber,
   IsArray,
   IsUUID,
-  IsBoolean,
+  _IsBoolean,
   MaxLength,
 } from 'class-validator';
 import { ExaminationType } from '../entities/examination.entity';

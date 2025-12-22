@@ -1,4 +1,4 @@
-import { IsString, IsUUID, IsEnum, IsOptional, IsBoolean, IsInt, IsDate, IsObject, MaxLength, Min } from 'class-validator';
+import { IsString, IsUUID, IsEnum, IsOptional, IsBoolean, IsDate, IsObject, MaxLength} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ProductionFormat } from '../../discovery/productions/entities/production.entity';
 

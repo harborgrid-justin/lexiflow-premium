@@ -72,7 +72,7 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
                   <span className={cn("font-bold", theme.text.link)}>{progress}%</span>
               </div>
               <div className={cn("w-full rounded-full h-2.5", theme.surface.highlight)}>
-                  {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width required for progress */}
+                  { }
                   <div className={cn("h-2.5 rounded-full transition-all duration-1000 ease-out", theme.action.primary.bg)} style={{ width: `${progress}%` }}></div>
               </div>
           </div>

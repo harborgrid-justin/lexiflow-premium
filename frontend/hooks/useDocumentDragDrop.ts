@@ -72,7 +72,7 @@ export const useDocumentDragDrop = (currentFolder: string) => {
              try {
                 for (let i = 0; i < e.dataTransfer.files.length; i++) {
                     await DocumentService.uploadDocument(e.dataTransfer.files[i], {
-                        sourceModule: currentFolder === 'root' ? 'General' : currentFolder as any,
+                        sourceModule: currentFolder === 'root' ? 'General' : currentFolder,
                         caseId: 'General' as CaseId
                     });
                 }

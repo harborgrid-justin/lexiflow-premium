@@ -61,7 +61,7 @@ export class Clause extends BaseEntity {
   tags!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  variables!: Record<string, any>;
+  variables!: Record<string, unknown>;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive!: boolean;
@@ -111,5 +111,5 @@ export class Clause extends BaseEntity {
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 }

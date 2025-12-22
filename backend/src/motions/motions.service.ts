@@ -36,7 +36,7 @@ export class MotionsService {
     return this.motionRepository.save(motion);
   }
 
-  async update(id: string, updateMotionDto: UpdateMotionDto, userId?: string): Promise<Motion> {
+  async update(id: string, updateMotionDto: UpdateMotionDto, _userId?: string): Promise<Motion> {
     const motion = await this.findOne(id);
     Object.assign(motion, updateMotionDto);
     // Note: updatedBy tracking handled by BaseEntity updatedAt

@@ -3,8 +3,8 @@
 
 import {
   BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId, 
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject
+  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId,
+  WorkflowTemplateId, CaseId, Money, JurisdictionObject, MetadataRecord
 } from './primitives';
 import {
   CaseStatus, UserRole, MatterType, BillingModel,
@@ -39,7 +39,7 @@ export interface Juror extends BaseEntity {
     maritalStatus?: string;
     zipCode?: string;
   };
-  questionnaire?: Record<string, any>;
+  questionnaire?: MetadataRecord;
   biasIndicators?: string[];
   rating?: number; // 1-10 scale
   seatedDate?: string;
@@ -67,7 +67,7 @@ export interface Witness extends BaseEntity {
   subpoenaedAt?: string;
   deposedAt?: string;
   testifiedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
   // Expert witness specific
   cvUrl?: string;
   hourlyRate?: number;

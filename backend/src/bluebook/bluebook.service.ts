@@ -85,7 +85,7 @@ export class BluebookService {
    * Format a parsed citation
    */
   formatCitation(parsed: any, options: any = {}): string {
-    const { italicizeCaseNames = true, useSmallCaps = true } = options;
+    const { italicizeCaseNames = true, _useSmallCaps = true } = options;
 
     switch (parsed.type) {
       case 'CASE':

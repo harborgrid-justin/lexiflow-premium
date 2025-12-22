@@ -15,7 +15,7 @@ export class DataVersion {
   version!: number;
 
   @Column('jsonb')
-  data!: Record<string, any>;
+  data!: Record<string, unknown>;
 
   @Column({ nullable: true })
   branch!: string;

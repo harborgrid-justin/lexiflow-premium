@@ -1,10 +1,10 @@
 import {
   Injectable,
   NotFoundException,
-  BadRequestException,
+  _BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
+import { Repository} from 'typeorm';
 import { DiscoveryRequest } from './entities/discovery-request.entity';
 import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
 import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';

@@ -1,7 +1,7 @@
 // types/system.ts
 // System Configuration & Infrastructure Types
 
-import { BaseEntity, UserId, OrgId, GroupId, EntityId } from './primitives';
+import { BaseEntity, UserId, OrgId, GroupId, EntityId, MetadataRecord, JsonValue } from './primitives';
 import { UserRole, OrganizationType } from './enums';
 
 export interface TenantConfig {
@@ -143,7 +143,7 @@ export interface Organization extends BaseEntity {
   stockSymbol?: string; // Backend: stock_symbol varchar(20)
   parentOrganizationId?: string; // Backend: parent_organization_id uuid
   notes?: string; // Backend: text
-  metadata?: Record<string, any>; // Backend: jsonb
+  metadata?: MetadataRecord; // Backend: jsonb
   
   // Legacy aliases for backward compatibility
   type?: OrganizationType; // Deprecated - use organizationType
@@ -203,7 +203,7 @@ export interface Group extends BaseEntity {
 export interface FeatureFlag extends BaseEntity { 
   key: string; 
   enabled: boolean; 
-  rules?: unknown; 
+  rules?: Array<{ id: string; name: string; content: string }>; 
   description: string; 
 }
 
@@ -221,7 +221,7 @@ export type AccessScope = 'Global' | 'Region' | 'Office' | 'Personal';
 export interface AccessCondition {
   type: 'Time' | 'Location' | 'Device' | 'Network';
   operator: 'Equals' | 'NotEquals' | 'Between' | 'Includes';
-  value: unknown;
+  value: JsonValue;
 }
 
 export interface GranularPermission {

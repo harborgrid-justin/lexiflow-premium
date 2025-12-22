@@ -101,20 +101,20 @@ export const Examinations: React.FC = () => {
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Order Rule 35 Examination">
             <div className="p-6 space-y-4">
-                <Input label="Examinee Name" value={newExam.examinee || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewExam({...newExam, examinee: e.target.value})}/>
+                <Input label="Examinee Name" value={newExam.examinee || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewExam({...newExam, examinee: e.target.value})}/>
                 <div className="grid grid-cols-2 gap-4">
                      <div>
                          <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                         <select title="Select examination type" className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewExam({...newExam, type: e.target.value as any})}>
+                         <select title="Select examination type" className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)} value={newExam.type} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewExam({...newExam, type: e.target.value as any})}>
                              <option value="">Select...</option>
                              <option value="Physical">Physical</option>
                              <option value="Mental">Mental</option>
                          </select>
                      </div>
-                     <Input type="date" label="Date" value={newExam.date || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewExam({...newExam, date: e.target.value})}/>
+                     <Input type="date" label="Date" value={newExam.date || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewExam({...newExam, date: e.target.value})}/>
                 </div>
-                <Input label="Examiner (Doctor)" value={newExam.doctorName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewExam({...newExam, doctorName: e.target.value})}/>
-                <TextArea label="Good Cause Statement" placeholder="Detail why condition is in controversy..." value={newExam.goodCause || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewExam({...newExam, goodCause: e.target.value})} rows={3}/>
+                <Input label="Examiner (Doctor)" value={newExam.doctorName || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewExam({...newExam, doctorName: e.target.value})}/>
+                <TextArea label="Good Cause Statement" placeholder="Detail why condition is in controversy..." value={newExam.goodCause || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewExam({...newExam, goodCause: e.target.value})} rows={3}/>
                 <div className="flex justify-end pt-4">
                     <Button variant="primary" onClick={handleSave}>Create Order</Button>
                 </div>

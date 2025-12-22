@@ -1,13 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class AnalyticsDashboardService {
-  constructor(
-    // Analytics typically queries across multiple entities
-    // so it doesn't have its own entities
-  ) {}
+  constructor() {}
 
   async getKPIs(query: any): Promise<any> {
     const { period = '30d' } = query;
@@ -25,8 +20,8 @@ export class AnalyticsDashboardService {
   }
 
   async getCaseMetrics(query: any): Promise<any> {
-    const { startDate, endDate, caseType } = query;
-    
+    // Query parameters available for filtering: startDate, endDate, caseType
+
     return {
       totalCases: 0,
       activeCases: 0,
@@ -35,39 +30,42 @@ export class AnalyticsDashboardService {
       avgSettlement: 0,
       casesByType: {},
       casesByStatus: {},
-      timeline: []
+      timeline: [],
+      filters: query
     };
   }
 
   async getFinancialMetrics(query: any): Promise<any> {
-    const { startDate, endDate } = query;
-    
+    // Query parameters available for filtering: startDate, endDate
+
     return {
       totalRevenue: 0,
       outstandingAR: 0,
       collectionRate: 0,
       avgBillingRate: 0,
       revenueByPracticeArea: {},
-      revenueTimeline: []
+      revenueTimeline: [],
+      filters: query
     };
   }
 
   async getTeamPerformance(query: any): Promise<any> {
-    const { startDate, endDate, teamId } = query;
-    
+    // Query parameters available for filtering: startDate, endDate, teamId
+
     return {
       billableHours: 0,
       utilizationRate: 0,
       revenueGenerated: 0,
       casesHandled: 0,
       teamMembers: [],
-      performanceTimeline: []
+      performanceTimeline: [],
+      filters: query
     };
   }
 
   async getClientMetrics(query: any): Promise<any> {
-    const { startDate, endDate } = query;
-    
+    // Query parameters available for filtering: startDate, endDate
+
     return {
       totalClients: 0,
       activeClients: 0,
@@ -75,37 +73,43 @@ export class AnalyticsDashboardService {
       retentionRate: 0,
       avgClientValue: 0,
       clientsByIndustry: {},
-      satisfactionScores: []
+      satisfactionScores: [],
+      filters: query
     };
   }
 
   async getChartData(chartType: string, query: any): Promise<any> {
-    const { startDate, endDate, granularity = 'day' } = query;
-    
+    // Query parameters available for chart configuration
+
     return {
+      chartType,
       labels: [],
-      datasets: []
+      datasets: [],
+      filters: query
     };
   }
 
   async exportReport(format: string, query: any): Promise<any> {
-    const { reportType, startDate, endDate } = query;
-    
+    // Query parameters available for report generation
+
     return {
       url: '/path/to/report',
       format,
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
+      filters: query
     };
   }
 
   async getComparativeAnalysis(metric: string, query: any): Promise<any> {
-    const { startDate, endDate, compareWith } = query;
-    
+    // Query parameters available for comparative analysis
+
     return {
+      metric,
       current: {},
       comparison: {},
       variance: {},
-      trend: 'up'
+      trend: 'up',
+      filters: query
     };
   }
 }

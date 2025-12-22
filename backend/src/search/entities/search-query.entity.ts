@@ -22,7 +22,7 @@ export class SearchQuery {
   resultsCount!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  filters!: Record<string, any>;
+  filters!: Record<string, unknown>;
 
   @Column({ type: 'int', nullable: true })
   responseTimeMs!: number;

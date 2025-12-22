@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { EntityManager } from 'typeorm';
 
 /**
  * Audit Log Entry
@@ -10,8 +9,8 @@ export interface AuditLogEntry {
   action: AuditAction;
   resource: string;
   resourceId: string;
-  changes?: Record<string, any>;
-  metadata?: Record<string, any>;
+  changes?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   timestamp: Date;
@@ -98,7 +97,7 @@ export class AuditLogService {
    */
   async logLogin(
     userId: string,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
   ): Promise<void> {
     await this.log({
       userId,
@@ -116,7 +115,7 @@ export class AuditLogService {
     userId: string,
     resource: string,
     resourceId: string,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
   ): Promise<void> {
     await this.log({
       userId,
@@ -155,7 +154,7 @@ export class AuditLogService {
     userId: string,
     resource: string,
     resourceId: string,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
   ): Promise<void> {
     await this.log({
       userId,
@@ -256,8 +255,8 @@ export class AuditLogService {
     }
   }
 
-  private calculateChanges(oldData: any, newData: any): Record<string, any> {
-    const changes: Record<string, any> = {};
+  private calculateChanges(oldData: any, newData: any): Record<string, unknown> {
+    const changes: Record<string, unknown> = {};
 
     const allKeys = new Set([
       ...Object.keys(oldData || {}),

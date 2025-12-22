@@ -138,7 +138,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
                   className={cn("w-full border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none", theme.surface.highlight, theme.text.primary)}
                   placeholder="Type a secure message..."
                   value={inputText}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInputText(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 />
             </div>

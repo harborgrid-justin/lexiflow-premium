@@ -77,7 +77,7 @@ export class UserResolver {
   async updateUser(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateUserInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<UserType> {
     // Verify user has permission to update (simplified for now)
     const updatedUser = await this.userService.update(id, input as any);
@@ -99,14 +99,14 @@ export class UserResolver {
   async enableMfa(@CurrentUser() user: AuthenticatedUser): Promise<boolean> {
     // Note: This requires a verification code in production.
     // For now, just set up MFA which returns a QR code
-    const mfaSetup = await this.authService.setupMfa(user.id);
+    const _mfaSetup = await this.authService.setupMfa(user.id);
     // In a real implementation, client would scan QR and provide verification code
     throw new Error('MFA setup requires QR code scanning - use REST API endpoint');
   }
 
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
-  async disableMfa(@CurrentUser() user: AuthenticatedUser): Promise<boolean> {
+  async disableMfa(@CurrentUser() _user: AuthenticatedUser): Promise<boolean> {
     // Note: This requires a verification code for security
     throw new Error('MFA disable requires verification code - use REST API endpoint');
   }

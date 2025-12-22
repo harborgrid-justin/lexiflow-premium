@@ -183,7 +183,7 @@ export const AdvancedEditor: React.FC<AdvancedEditorProps> = ({ initialContent, 
                         className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
                         placeholder="Ask AI to rewrite selection..."
                         value={aiPrompt}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAiPrompt(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAiPrompt(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAiEdit()}
                         autoFocus
                     />

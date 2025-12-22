@@ -207,24 +207,24 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
             label="Date of Event" 
             type="date" 
             value={newEvent.date} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, date: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, date: e.target.value})} 
           />
           <Input 
             label="Action Performed" 
             value={newEvent.action || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, action: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, action: e.target.value})} 
             placeholder="e.g. Transferred to Lab, Returned to Client"
           />
           <Input 
             label="Actor / Recorder" 
             value={newEvent.actor || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, actor: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, actor: e.target.value})} 
             placeholder="Name of person performing action"
           />
           <TextArea 
             label="Notes (Optional)" 
             value={newEvent.notes || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, notes: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, notes: e.target.value})} 
             rows={3}
             placeholder="Additional details regarding the transfer/event..."
           />

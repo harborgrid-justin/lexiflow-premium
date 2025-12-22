@@ -104,7 +104,7 @@ export class EvidenceService {
       notes?: string;
     },
   ): Promise<ChainOfCustodyEvent> {
-    const evidence = await this.findOne(evidenceId);
+    const _evidence = await this.findOne(evidenceId);
 
     const event = await this.addChainOfCustodyEvent({
       evidenceId,

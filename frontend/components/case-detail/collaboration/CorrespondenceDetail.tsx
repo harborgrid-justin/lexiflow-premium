@@ -238,7 +238,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                         title="Select current status"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStatus(e.target.value as any)}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewStatus(e.target.value as any)}
                                     >
                                         <option value="Out for Service">Out for Service</option>
                                         <option value="Served">Served / Delivered</option>
@@ -253,7 +253,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                         title="Select delivery date"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={deliveryDate}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeliveryDate(e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDeliveryDate(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -265,7 +265,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                         className="w-full pl-7 p-2 text-sm border rounded bg-white" 
                                         placeholder="Name of signatory..."
                                         value={signerName}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignerName(e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSignerName(e.target.value)}
                                     />
                                 </div>
                             </div>

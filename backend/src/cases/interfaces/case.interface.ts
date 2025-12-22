@@ -16,7 +16,7 @@ export interface ICase {
   closeDate?: Date;
   assignedTeamId?: string;
   leadAttorneyId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   isArchived: boolean;
   createdAt: Date;
   updatedAt: Date;

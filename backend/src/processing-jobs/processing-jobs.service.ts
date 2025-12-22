@@ -23,7 +23,7 @@ export class ProcessingJobsService {
   async createJob(
     type: JobType,
     documentId: string,
-    parameters?: Record<string, any>,
+    parameters?: Record<string, unknown>,
     userId?: string,
   ): Promise<ProcessingJob> {
     try {
@@ -94,7 +94,7 @@ export class ProcessingJobsService {
     id: string,
     status: JobStatus,
     progress?: number,
-    result?: Record<string, any>,
+    result?: Record<string, unknown>,
     error?: string,
   ): Promise<ProcessingJob> {
     const job = await this.findOne(id);
@@ -267,13 +267,13 @@ export class ProcessingJobsService {
   }
 
   async setResult(id: string, result: any): Promise<ProcessingJob> {
-    const job = await this.findOne(id);
+    const _job = await this.findOne(id);
     await this.jobRepository.update(id, { result, status: JobStatus.COMPLETED, completedAt: new Date() });
     return this.findOne(id);
   }
 
   async setError(id: string, errorMessage: string): Promise<ProcessingJob> {
-    const job = await this.findOne(id);
+    const _job = await this.findOne(id);
     await this.jobRepository.update(id, { error: errorMessage, status: JobStatus.FAILED, completedAt: new Date() });
     return this.findOne(id);
   }

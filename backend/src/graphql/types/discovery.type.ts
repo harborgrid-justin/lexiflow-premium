@@ -33,34 +33,34 @@ registerEnumType(DepositionStatus, { name: 'DepositionStatus' });
 @ObjectType()
 export class DiscoveryRequestType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  requestNumber: string;
+  requestNumber!: string;
 
   @Field(() => DiscoveryRequestType)
-  type: DiscoveryRequestType;
+  type!: DiscoveryRequestType;
 
   @Field(() => DiscoveryRequestStatus)
-  status: DiscoveryRequestStatus;
+  status!: DiscoveryRequestStatus;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field()
-  requestingParty: string;
+  requestingParty!: string;
 
   @Field()
-  respondingParty: string;
+  respondingParty!: string;
 
   @Field(() => Date)
-  requestDate: Date;
+  requestDate!: Date;
 
   @Field(() => Date)
-  dueDate: Date;
+  dueDate!: Date;
 
   @Field(() => Date, { nullable: true })
   responseDate?: Date;
@@ -69,28 +69,28 @@ export class DiscoveryRequestType {
   documents?: DocumentType[];
 
   @Field(() => UserType)
-  assignedTo: UserType;
+  assignedTo!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class DepositionType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  deponentName: string;
+  deponentName!: string;
 
   @Field()
-  deponentRole: string;
+  deponentRole!: string;
 
   @Field(() => DepositionStatus)
-  status: DepositionStatus;
+  status!: DepositionStatus;
 
   @Field({ nullable: true })
   location?: string;
@@ -99,7 +99,7 @@ export class DepositionType {
   videoConferenceLink?: string;
 
   @Field(() => Date)
-  scheduledDate: Date;
+  scheduledDate!: Date;
 
   @Field({ nullable: true })
   duration?: number;
@@ -123,22 +123,22 @@ export class DepositionType {
   exhibits?: DocumentType[];
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class ESISourceType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field({ nullable: true })
   description?: string;
@@ -156,74 +156,74 @@ export class ESISourceType {
   dateRange?: Date;
 
   @Field(() => Boolean)
-  preserved: boolean;
+  preserved!: boolean;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class LegalHoldType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  status: string;
+  status!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field(() => Date)
-  issuedDate: Date;
+  issuedDate!: Date;
 
   @Field(() => Date, { nullable: true })
   releasedDate?: Date;
 
   @Field(() => [String])
-  custodians: string[];
+  custodians!: string[];
 
   @Field(() => [String])
-  dataSources: string[];
+  dataSources!: string[];
 
   @Field(() => UserType)
-  issuedBy: UserType;
+  issuedBy!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class PrivilegeLogEntryType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  documentId: string;
+  documentId!: string;
 
   @Field()
-  privilegeType: string;
+  privilegeType!: string;
 
   @Field()
-  author: string;
+  author!: string;
 
   @Field()
-  recipient: string;
+  recipient!: string;
 
   @Field(() => Date)
-  documentDate: Date;
+  documentDate!: Date;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field({ nullable: true })
   batesNumber?: string;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }

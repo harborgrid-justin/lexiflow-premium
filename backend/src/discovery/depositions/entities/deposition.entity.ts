@@ -103,7 +103,7 @@ export class Deposition extends BaseEntity {
   videographer!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  attendees: Array<{
+  attendees!: Array<{
     name: string;
     role: string;
     organization?: string;
@@ -137,7 +137,7 @@ export class Deposition extends BaseEntity {
   topicsDiscussed!: string[];
 
   @Column({ name: 'exhibits_used', type: 'jsonb', nullable: true })
-  exhibitsUsed: Record<string, any>[];
+  exhibitsUsed!: Record<string, unknown>[];
 
   @Column({ name: 'transcript_path', type: 'varchar', length: 500, nullable: true })
   transcriptPath!: string;

@@ -72,8 +72,8 @@ export class CaseTeamMember extends BaseEntity {
   notes?: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  permissions?: Record<string, any>;
+  permissions?: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
 import { validatePagination } from '../../common/utils/query-validation.util';

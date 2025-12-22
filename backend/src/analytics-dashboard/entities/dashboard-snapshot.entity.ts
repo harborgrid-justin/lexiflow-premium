@@ -12,17 +12,17 @@ export class DashboardSnapshot {
   userId!: string;
 
   @Column({ type: 'varchar', length: 100 })
-  snapshotType: string; // 'kpis', 'case_metrics', 'financial', 'productivity'
+  snapshotType!: string; // 'kpis', 'case_metrics', 'financial', 'productivity'
 
   @Column({ type: 'jsonb' })
-  data!: Record<string, any>;
+  data!: Record<string, unknown>;
 
   @Column({ type: 'date' })
   @Index()
   snapshotDate!: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  period: string; // '1d', '7d', '30d', '90d', '365d'
+  period!: string; // '1d', '7d', '30d', '90d', '365d'
 
   @CreateDateColumn()
   createdAt!: Date;

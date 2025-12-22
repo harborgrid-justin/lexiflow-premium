@@ -1,16 +1,16 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
-import { PaginationInput, SortInput, DateRangeInput } from './pagination.input';
+import { DateRangeInput } from './pagination.input';
 
 @InputType()
 export class CreateCaseInput {
   @Field()
-  caseNumber: string;
+  caseNumber!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field({ nullable: true })
   description?: string;
@@ -91,13 +91,13 @@ export class CaseFilterInput {
 @InputType()
 export class AddPartyInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  role: string;
+  role!: string;
 
   @Field({ nullable: true })
   email?: string;
@@ -112,13 +112,13 @@ export class AddPartyInput {
 @InputType()
 export class AddTeamMemberInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field(() => ID)
-  userId: string;
+  userId!: string;
 
   @Field()
-  role: string;
+  role!: string;
 
   @Field({ nullable: true })
   billable?: boolean;
@@ -127,19 +127,19 @@ export class AddTeamMemberInput {
 @InputType()
 export class CreateMotionInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field(() => Date)
-  filedDate: Date;
+  filedDate!: Date;
 
   @Field(() => Date, { nullable: true })
   hearingDate?: Date;
@@ -148,16 +148,16 @@ export class CreateMotionInput {
 @InputType()
 export class CreateDocketEntryInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  entryNumber: string;
+  entryNumber!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field(() => Date)
-  filedDate: Date;
+  filedDate!: Date;
 
   @Field({ nullable: true })
   filedBy?: string;

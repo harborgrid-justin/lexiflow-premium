@@ -16,7 +16,7 @@ export class PerformanceMetric {
   unit!: string;
 
   @Column('jsonb', { nullable: true })
-  tags!: Record<string, any>;
+  tags!: Record<string, unknown>;
 
   @Column({ type: 'timestamp' })
   timestamp!: Date;

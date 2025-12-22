@@ -4,22 +4,22 @@ import { DateRangeInput } from './pagination.input';
 @InputType()
 export class UploadDocumentInput {
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  documentType: string;
+  documentType!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field()
-  fileName: string;
+  fileName!: string;
 
   @Field()
-  fileSize: number;
+  fileSize!: number;
 
   @Field()
-  mimeType: string;
+  mimeType!: string;
 
   @Field({ nullable: true })
   storageKey?: string;
@@ -85,19 +85,19 @@ export class DocumentFilterInput {
 @InputType()
 export class CreateDocumentVersionInput {
   @Field(() => ID)
-  documentId: string;
+  documentId!: string;
 
   @Field()
-  fileName: string;
+  fileName!: string;
 
   @Field()
-  fileSize: number;
+  fileSize!: number;
 
   @Field()
-  mimeType: string;
+  mimeType!: string;
 
   @Field()
-  storageKey: string;
+  storageKey!: string;
 
   @Field({ nullable: true })
   changeDescription?: string;

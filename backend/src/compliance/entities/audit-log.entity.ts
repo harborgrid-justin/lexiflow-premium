@@ -70,13 +70,13 @@ export class AuditLog extends BaseEntity {
   statusCode!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  changes!: Record<string, any>;
+  changes!: Record<string, unknown>;
 
   @Column({ name: 'old_values', type: 'jsonb', nullable: true })
-  oldValues!: Record<string, any>;
+  oldValues!: Record<string, unknown>;
 
   @Column({ name: 'new_values', type: 'jsonb', nullable: true })
-  newValues!: Record<string, any>;
+  newValues!: Record<string, unknown>;
 
   @Column({ type: 'text', nullable: true })
   description!: string;

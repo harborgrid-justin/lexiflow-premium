@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository} from 'typeorm';
 import { Production, ProductionStatus } from '../discovery/productions/entities/production.entity';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 

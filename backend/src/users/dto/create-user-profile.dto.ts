@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEmail, MaxLength, IsEnum, IsPhoneNumber, IsUrl, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, MaxLength, IsEnum, IsPhoneNumber, IsUrl, IsBoolean, IsNotEmpty } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum UserPreferenceTheme {

@@ -107,7 +107,7 @@ export class EthicalWallsService {
   }
 
   async remove(id: string): Promise<void> {
-    const wall = await this.findOne(id);
+    const _wall = await this.findOne(id);
     this.ethicalWalls.delete(id);
   }
 

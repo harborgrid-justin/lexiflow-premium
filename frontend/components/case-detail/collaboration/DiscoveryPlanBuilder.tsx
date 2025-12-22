@@ -138,7 +138,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
                   <textarea 
                     className={cn("w-full p-3 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-100 min-h-[100px]", theme.border.default, theme.surface.default, theme.text.primary)}
                     value={editContent}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditContent(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditContent(e.target.value)}
                     placeholder="Enter section content..."
                   />
                   <div className="flex justify-end gap-2 mt-2">

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository} from 'typeorm';
 import { Jurisdiction, JurisdictionSystem } from './entities/jurisdiction.entity';
 import { JurisdictionRule } from './entities/jurisdiction-rule.entity';
 import { CreateJurisdictionDto } from './dto/create-jurisdiction.dto';
@@ -320,7 +320,7 @@ export class JurisdictionsService {
     const jurisdictions = result.data;
     
     // Convert to map visualization format
-    return jurisdictions.map((j, index) => ({
+    return jurisdictions.map((j, _index) => ({
       id: j.id,
       label: j.code || j.name.substring(0, 15),
       type: j.system.toLowerCase(),

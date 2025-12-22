@@ -10,7 +10,7 @@ export class SearchIndex {
 
   @Column({ type: 'varchar', length: 100 })
   @Index()
-  entityType: string; // 'case', 'document', 'client', 'pleading', etc.
+  entityType!: string; // 'case', 'document', 'client', 'pleading', etc.
 
   @Column({ type: 'uuid' })
   @Index()
@@ -23,7 +23,7 @@ export class SearchIndex {
   content!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ type: 'text', array: true, default: '{}' })
   tags!: string[];

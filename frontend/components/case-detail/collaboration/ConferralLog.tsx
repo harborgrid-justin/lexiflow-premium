@@ -162,7 +162,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             label="Subject / Topic" 
             placeholder="e.g. Discovery Dispute regarding RFP Set 2"
             value={newSession.topic || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, topic: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, topic: e.target.value})}
           />
           
           <div className="grid grid-cols-2 gap-4">
@@ -170,7 +170,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
               label="Date" 
               type="date" 
               value={newSession.date}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, date: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, date: e.target.value})}
             />
             <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Method</label>
@@ -178,7 +178,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
                 title="Select conferral method"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.method}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, method: e.target.value as any})}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, method: e.target.value as any})}
               >
                 <option>Phone</option>
                 <option>Email</option>
@@ -192,7 +192,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             label="Participants (Opposing Counsel)" 
             placeholder="e.g. Robert Smith, Jane Doe"
             value={newSession.participants?.join(', ') || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, participants: e.target.value.split(', ')})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, participants: e.target.value.split(', ')})}
           />
 
           <TextArea 
@@ -200,7 +200,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             placeholder="Summary of what was discussed..."
             rows={4}
             value={newSession.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, notes: e.target.value})}
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -210,7 +210,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
                 title="Select conferral outcome"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.result}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, result: e.target.value as any})}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, result: e.target.value as any})}
               >
                 <option value="Pending">Pending</option>
                 <option value="Agreed">Agreed</option>
@@ -222,7 +222,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
               label="Next Steps" 
               placeholder="e.g. File Motion, Send Letter"
               value={newSession.nextSteps || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, nextSteps: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, nextSteps: e.target.value})}
             />
           </div>
 

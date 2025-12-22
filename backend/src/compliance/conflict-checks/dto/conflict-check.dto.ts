@@ -1,18 +1,18 @@
 export class ConflictCheckDto {
-  id: string;
-  requestedBy: string;
-  requestedByName: string;
-  checkType: ConflictCheckType;
-  targetName: string;
+  id!: string;
+  requestedBy!: string;
+  requestedByName!: string;
+  checkType!: ConflictCheckType;
+  targetName!: string;
   targetEntity?: string;
-  conflicts: ConflictResult[];
-  status: ConflictCheckStatus;
+  conflicts!: ConflictResult[];
+  status!: ConflictCheckStatus;
   resolution?: ConflictResolution;
   waiver?: ConflictWaiver;
   notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  organizationId: string;
+  createdAt!: Date;
+  updatedAt!: Date;
+  organizationId!: string;
 }
 
 export enum ConflictCheckType {
@@ -56,27 +56,27 @@ export interface ConflictWaiver {
 }
 
 export class RunConflictCheckDto {
-  requestedBy: string;
-  requestedByName: string;
-  checkType: ConflictCheckType;
-  targetName: string;
+  requestedBy!: string;
+  requestedByName!: string;
+  checkType!: ConflictCheckType;
+  targetName!: string;
   targetEntity?: string;
   additionalNames?: string[];
   caseId?: string;
-  organizationId: string;
+  organizationId!: string;
 }
 
 export class ResolveConflictDto {
-  resolvedBy: string;
-  resolvedByName: string;
-  resolutionMethod: string;
-  notes: string;
+  resolvedBy!: string;
+  resolvedByName!: string;
+  resolutionMethod!: string;
+  notes!: string;
 }
 
 export class WaiveConflictDto {
-  waivedBy: string;
-  waivedByName: string;
-  reason: string;
+  waivedBy!: string;
+  waivedByName!: string;
+  reason!: string;
   approvedBy?: string;
 }
 

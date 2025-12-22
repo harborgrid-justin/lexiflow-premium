@@ -76,7 +76,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     label="Policy Name" 
                     placeholder="e.g. tenant_isolation_cases" 
                     value={formData.name || ''} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})}
                     autoFocus
                 />
                 <div>
@@ -84,7 +84,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.table}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, table: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, table: e.target.value})}
                     >
                         {tables.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -97,7 +97,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.cmd}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, cmd: e.target.value as SqlCmd})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, cmd: e.target.value as SqlCmd})}
                     >
                         <option value="ALL">ALL</option>
                         <option value="SELECT">SELECT</option>
@@ -136,7 +136,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                         className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-32 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                         placeholder="e.g. org_id = current_setting('app.current_org_id')::uuid"
                         value={formData.using || ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, using: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, using: e.target.value})}
                     />
                 </div>
                 <p className={cn("text-xs mt-1 italic", theme.text.tertiary)}>Boolean expression checked for existing rows.</p>
@@ -152,7 +152,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                             className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-24 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                             placeholder="Optional. e.g. status != 'Closed' OR role = 'Admin'"
                             value={formData.withCheck || ''}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, withCheck: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, withCheck: e.target.value})}
                         />
                     </div>
                     <p className={cn("text-xs mt-1 italic", theme.text.tertiary)}>Ensures new/updated rows meet criteria.</p>

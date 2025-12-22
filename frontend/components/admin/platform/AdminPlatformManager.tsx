@@ -86,7 +86,7 @@ export const AdminPlatformManager: React.FC = () => {
                 className={cn("w-full pl-10 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 placeholder={`Search ${activeCategory}...`}
                 value={searchTerm}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
               />
             </div>
             <Button variant="primary" size="sm" icon={Plus} onClick={handleCreate} className="whitespace-nowrap">Add New</Button>

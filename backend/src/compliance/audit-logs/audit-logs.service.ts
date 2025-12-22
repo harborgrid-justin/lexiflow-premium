@@ -4,7 +4,7 @@ import {
   CreateAuditLogDto,
   QueryAuditLogsDto,
   ExportAuditLogsDto,
-  AuditAction,
+  _AuditAction,
   AuditEntityType,
 } from './dto/audit-log.dto';
 

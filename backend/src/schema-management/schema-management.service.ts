@@ -137,7 +137,7 @@ export class SchemaManagementService {
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       throw new BadRequestException(`Migration failed: ${message}`);
     }
   }
@@ -162,7 +162,7 @@ export class SchemaManagementService {
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       throw new BadRequestException(`Revert failed: ${message}`);
     }
   }
@@ -234,7 +234,7 @@ export class SchemaManagementService {
     return { success: true, table: dto.name };
   }
 
-  async alterTable(tableName: string, alterations: any) {
+  async alterTable(_tableName: string, _alterations: any) {
     // Implementation for ALTER TABLE operations
     // This would handle adding/dropping columns, changing types, etc.
     throw new Error('Not implemented yet');

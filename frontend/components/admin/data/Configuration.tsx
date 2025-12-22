@@ -121,23 +121,23 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
                 <Input
                   label="Application Name"
                   value={config.appName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, appName: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, appName: e.target.value })}
                 />
                 <Input
                   label="Region"
                   value={config.region}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, region: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, region: e.target.value })}
                 />
                 <Input
                   label="Tier"
                   value={config.tier}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, tier: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, tier: e.target.value })}
                 />
                 <Input
                   label="Session Timeout (minutes)"
                   type="number"
                   value={config.sessionTimeout}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, sessionTimeout: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, sessionTimeout: e.target.value })}
                 />
               </div>
               <div className="mt-6 flex items-center gap-3">
@@ -164,20 +164,20 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
                   label="Max Upload Size (MB)"
                   type="number"
                   value={config.maxUploadSize}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, maxUploadSize: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, maxUploadSize: e.target.value })}
                 />
                 <Input
                   label="Data Retention (days)"
                   type="number"
                   value={config.retentionDays}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, retentionDays: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, retentionDays: e.target.value })}
                 />
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     id="realtime"
                     checked={config.enableRealtime}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, enableRealtime: e.target.checked })}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, enableRealtime: e.target.checked })}
                     className="h-4 w-4"
                   />
                   <label htmlFor="realtime" className={cn("text-sm", theme.text.primary)}>
@@ -189,7 +189,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
                     type="checkbox"
                     id="backups"
                     checked={config.enableBackups}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, enableBackups: e.target.checked })}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setConfig({ ...config, enableBackups: e.target.checked })}
                     className="h-4 w-4"
                   />
                   <label htmlFor="backups" className={cn("text-sm", theme.text.primary)}>

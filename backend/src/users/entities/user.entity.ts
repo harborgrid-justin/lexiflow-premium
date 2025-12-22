@@ -78,7 +78,7 @@ export class User extends BaseEntity {
   permissions!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  preferences!: Record<string, any>;
+  preferences!: Record<string, unknown>;
 
   @Column({ name: 'avatar_url', type: 'varchar', length: 500, nullable: true })
   avatarUrl!: string;

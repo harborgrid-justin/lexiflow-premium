@@ -2,15 +2,15 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, DocumentId, EvidenceId
+  BaseEntity, UserId, DocumentId, EvidenceId, MetadataRecord
   } from './primitives';
 import {
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   LegalRuleType
   } from './enums';
 import { SearchResult } from '@/services/api/search/search-api';
@@ -24,7 +24,7 @@ export interface Citation extends BaseEntity {
   caseId?: string; // Backend: uuid, FK to cases
   documentId?: string; // Backend: uuid
   status: string; // Backend: varchar (default: 'Valid')
-  shepards?: unknown; // Backend: json
+  shepards?: JsonValue; // Backend: json
   signal?: string; // Signal indicator (e.g., 'positive', 'negative', 'warning')
   
   // Frontend-specific (legacy)
@@ -83,14 +83,14 @@ export interface LegalRule extends BaseEntity {
   interpretations?: string[];
   exceptions?: string[];
   // Metadata
-  structuredContent?: unknown;
+  structuredContent?: JsonValue;
   searchableText?: string;
   usageCount?: number;
   lastVerified?: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
-export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: unknown[]; }
+export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: Array<{ name: string; tasks: string[]; duration?: string }>; }
 
 export interface WikiArticle extends BaseEntity { title: string; category: string; content: string; lastUpdated: string; isFavorite: boolean; author: string; }
 

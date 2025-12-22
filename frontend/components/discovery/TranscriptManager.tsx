@@ -90,10 +90,10 @@ export const TranscriptManager: React.FC = () => {
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Import Transcript">
             <div className="p-6 space-y-4">
-                <Input label="Deponent Name" value={newTranscript.deponent || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTranscript({...newTranscript, deponent: e.target.value})}/>
-                <Input type="date" label="Deposition Date" value={newTranscript.date || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTranscript({...newTranscript, date: e.target.value})}/>
+                <Input label="Deponent Name" value={newTranscript.deponent || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewTranscript({...newTranscript, deponent: e.target.value})}/>
+                <Input type="date" label="Deposition Date" value={newTranscript.date || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewTranscript({...newTranscript, date: e.target.value})}/>
                 <div className="flex items-center gap-2 pt-2">
-                    <input type="checkbox" id="final" className="rounded text-blue-600" checked={newTranscript.isFinal || false} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTranscript({...newTranscript, isFinal: e.target.checked})}/>
+                    <input type="checkbox" id="final" className="rounded text-blue-600" checked={newTranscript.isFinal || false} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewTranscript({...newTranscript, isFinal: e.target.checked})}/>
                     <label htmlFor="final" className={cn("text-sm", theme.text.primary)}>Is Final Certified Copy?</label>
                 </div>
                 <div className={cn("border-2 border-dashed rounded-lg p-8 text-center mt-4", theme.border.default)}>

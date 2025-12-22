@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, IsObject, IsArray } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsObject} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum PipelineType {

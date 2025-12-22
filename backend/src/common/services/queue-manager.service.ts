@@ -216,28 +216,40 @@ export class QueueManagerService {
 
   private getOrCreateQueue(queueName: string): Queue {
     if (!this.queues.has(queueName)) {
-      // In production, this would use actual Bull queue
-      // For now, create mock queue
-      this.logger.warn(`Queue ${queueName} not configured, using mock`);
-      const mockQueue = {
-        add: async () => ({ id: `mock-${Date.now()}` }),
-        addBulk: async (jobs: any[]) => jobs.map((_, i) => ({ id: `bulk-${i}` })),
-        getJob: async () => null,
-        pause: async () => {},
-        resume: async () => {},
-        getWaitingCount: async () => 0,
-        getActiveCount: async () => 0,
-        getCompletedCount: async () => 0,
-        getFailedCount: async () => 0,
-        getDelayedCount: async () => 0,
-        getPausedCount: async () => 0,
-        clean: async () => [],
-      } as any;
-
-      this.queues.set(queueName, mockQueue);
+      throw new Error(
+        `Queue "${queueName}" is not configured. ` +
+        `Please register the queue in the module imports using BullModule.registerQueue({ name: '${queueName}' }) ` +
+        `or inject it with @InjectQueue('${queueName}') in the constructor.`
+      );
     }
 
     return this.queues.get(queueName)!;
+  }
+
+  /**
+   * Register a queue instance
+   * Should be called by dependency injection when queues are provided
+   */
+  registerQueue(queueName: string, queue: Queue): void {
+    if (this.queues.has(queueName)) {
+      this.logger.warn(`Queue ${queueName} is already registered, replacing with new instance`);
+    }
+    this.queues.set(queueName, queue);
+    this.logger.log(`Registered queue: ${queueName}`);
+  }
+
+  /**
+   * Check if a queue is registered
+   */
+  hasQueue(queueName: string): boolean {
+    return this.queues.has(queueName);
+  }
+
+  /**
+   * Get all registered queue names
+   */
+  getRegisteredQueues(): string[] {
+    return Array.from(this.queues.keys());
   }
 }
 

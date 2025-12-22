@@ -100,5 +100,5 @@ export class Notification extends BaseEntity {
   isDismissed!: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 }

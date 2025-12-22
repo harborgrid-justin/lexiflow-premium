@@ -1,6 +1,5 @@
-import { IsString, IsOptional, IsEnum, IsDateString, IsArray, ValidateNested } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsDateString, IsArray} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 
 export enum TaskStatus {
   TODO = 'To Do',

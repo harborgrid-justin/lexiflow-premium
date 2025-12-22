@@ -4,7 +4,7 @@ import { validate } from 'uuid';
 
 @Injectable()
 export class ParseUUIDPipe implements PipeTransform<string, string> {
-  transform(value: string, metadata: ArgumentMetadata): string {
+  transform(value: string, _metadata: ArgumentMetadata): string {
     if (!validate(value)) {
       throw new ValidationException(`Invalid UUID format: ${value}`);
     }

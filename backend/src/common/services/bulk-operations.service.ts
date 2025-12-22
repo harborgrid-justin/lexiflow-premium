@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as MasterConfig from '../../config/master.config';
-import { EntityManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 /**
  * Bulk Operation Result

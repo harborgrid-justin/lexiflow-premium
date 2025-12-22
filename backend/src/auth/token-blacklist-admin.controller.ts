@@ -2,14 +2,13 @@ import {
   Controller,
   Get,
   Post,
-  Delete,
+  _Delete,
   Body,
   UseGuards,
   HttpCode,
   HttpStatus,
   Param,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiBearerAuth,

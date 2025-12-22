@@ -9,16 +9,16 @@ export class AIModel {
   name!: string;
 
   @Column()
-  type: string; // 'embedding', 'classification', 'generation', etc.
+  type!: string; // 'embedding', 'classification', 'generation', etc.
 
   @Column()
-  provider: string; // 'openai', 'google', 'anthropic', etc.
+  provider!: string; // 'openai', 'google', 'anthropic', etc.
 
   @Column()
   version!: string;
 
   @Column('jsonb')
-  configuration!: Record<string, any>;
+  configuration!: Record<string, unknown>;
 
   @Column({ default: true })
   active!: boolean;

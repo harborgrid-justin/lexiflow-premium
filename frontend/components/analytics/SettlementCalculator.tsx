@@ -90,13 +90,13 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
         label="Low Estimate ($)" 
         type="number" 
         value={low} 
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLowChange(Number(e.target.value))} 
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onLowChange(Number(e.target.value))} 
       />
       <Input 
         label="High Estimate ($)" 
         type="number" 
         value={high} 
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onHighChange(Number(e.target.value))} 
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onHighChange(Number(e.target.value))} 
       />
       <div>
         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>
@@ -107,7 +107,7 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
           min="0" 
           max="100" 
           value={liabilityProb} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLiabilityProbChange(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onLiabilityProbChange(Number(e.target.value))}
           className="w-full"
         />
       </div>

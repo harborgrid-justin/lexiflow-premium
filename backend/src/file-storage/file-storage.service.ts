@@ -3,14 +3,14 @@ import {
   Logger,
   NotFoundException,
   BadRequestException,
-  InternalServerErrorException,
+  _InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as PathsConfig from '../config/paths.config';
 import * as MasterConfig from '../config/master.config';
 import { mkdir, writeFile, readFile, unlink, readdir } from 'fs/promises';
-import { StorageFile, FileUploadResult } from './interfaces/storage-file.interface';
+import { FileUploadResult } from './interfaces/storage-file.interface';
 import {
   calculateChecksum,
   verifyChecksum,
@@ -21,7 +21,7 @@ import {
   isAllowedMimeType,
 } from '../common/utils/file.utils';
 import { formatBytes } from '../common/utils/format.utils';
-import { getDiskSpace, validateDiskSpace } from '../common/utils/disk.utils';
+import { validateDiskSpace } from '../common/utils/disk.utils';
 
 @Injectable()
 export class FileStorageService {
@@ -256,7 +256,7 @@ export class FileStorageService {
     };
   }
 
-  async cleanupOrphans(validDocIds: string[]): Promise<{ removed: number }> {
+  async cleanupOrphans(_validDocIds: string[]): Promise<{ removed: number }> {
     // Stub implementation
     return { removed: 0 };
   }

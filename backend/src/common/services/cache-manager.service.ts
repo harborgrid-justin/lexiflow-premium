@@ -153,7 +153,7 @@ export class CacheManagerService {
    */
   getStats(): CacheStats {
     const now = Date.now();
-    let hitCount = 0;
+    const _hitCount = 0;
     let expiredCount = 0;
 
     for (const entry of this.cache.values()) {

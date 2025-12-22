@@ -10,7 +10,6 @@ import {
   ParseUUIDPipe,
   ParseIntPipe,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';

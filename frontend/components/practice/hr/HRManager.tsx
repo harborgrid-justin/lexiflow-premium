@@ -308,7 +308,7 @@ export const HRManager: React.FC = () => {
                       </div>
                       <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}>
                         {/* Progress bar - inline style required for dynamic width */}
-                        {/* eslint-disable-next-line react/forbid-dom-props */}
+                        { }
                         <div 
                           className="bg-blue-600 h-1.5 rounded-full transition-all duration-300" 
                           style={{ width: `${Math.min(progress, 100)}%` }}

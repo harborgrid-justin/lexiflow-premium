@@ -36,11 +36,11 @@ export class PacerSearchDto {
 export class PacerIntegrationSyncDto {
   @ApiProperty({ description: 'Case number to sync from PACER' })
   @IsString()
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiProperty({ description: 'Court identifier' })
   @IsString()
-  court: string;
+  court!: string;
 }
 
 export interface PacerCase {

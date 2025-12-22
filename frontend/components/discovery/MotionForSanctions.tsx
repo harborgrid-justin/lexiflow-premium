@@ -88,16 +88,16 @@ export const MotionForSanctions: React.FC = () => {
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen()} title="Draft Sanctions Motion">
             <div className="p-6 space-y-4">
-                <Input label="Motion Title" value={newMotion.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
+                <Input label="Motion Title" value={newMotion.title || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
                 <div>
                     <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Basis</label>
-                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
+                    <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={newMotion.ruleBasis} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMotion({...newMotion, ruleBasis: e.target.value as any})}>
                         <option value="Rule 37(a)">Rule 37(a) - Compel</option>
                         <option value="Rule 37(b)">Rule 37(b) - Failure to Comply with Order</option>
                         <option value="Rule 37(c)">Rule 37(c) - Failure to Disclose/Admit</option>
                     </select>
                 </div>
-                <TextArea label="Argument Summary" value={newMotion.description || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, description: e.target.value})} rows={4} placeholder="Describe the violation..."/>
+                <TextArea label="Argument Summary" value={newMotion.description || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMotion({...newMotion, description: e.target.value})} rows={4} placeholder="Describe the violation..."/>
                 <div className="flex justify-end pt-4">
                     <Button variant="danger" onClick={handleSave}>Create Draft</Button>
                 </div>

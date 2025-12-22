@@ -68,7 +68,7 @@ export class BillingResolver {
   async updateTimeEntry(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateTimeEntryInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<TimeEntryType> {
     const timeEntry = await this.billingService.updateTimeEntry(id, input);
     return timeEntry as any;
@@ -78,7 +78,7 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async deleteTimeEntry(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<boolean> {
     await this.billingService.deleteTimeEntry(id);
     return true;
@@ -87,7 +87,7 @@ export class BillingResolver {
   @Query(() => [InvoiceType], { name: 'invoices' })
   @UseGuards(GqlAuthGuard)
   async getInvoices(
-    @Args('filter', { nullable: true }) filter?: InvoiceFilterInput,
+    @Args('_filter', { nullable: true }) _filter?: InvoiceFilterInput,
   ): Promise<InvoiceType[]> {
     // For now return all - can add filter support later
     return this.billingService.findAllInvoices() as any;
@@ -122,7 +122,7 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async sendInvoice(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<InvoiceType> {
     const invoice = await this.billingService.sendInvoice(id);
     return invoice as any;
@@ -132,8 +132,8 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async markInvoicePaid(
     @Args('id', { type: () => ID }) id: string,
-    @Args('paidDate', { type: () => Date }) paidDate: Date,
-    @CurrentUser() user: AuthenticatedUser,
+    @Args('_paidDate', { type: () => Date }) _paidDate: Date,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<InvoiceType> {
     const invoice = await this.billingService.markInvoicePaid(id);
     return invoice as any;

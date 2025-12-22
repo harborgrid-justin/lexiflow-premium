@@ -11,8 +11,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { DepositionsService } from './depositions.service';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';

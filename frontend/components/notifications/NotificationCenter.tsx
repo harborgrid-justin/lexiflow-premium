@@ -249,7 +249,7 @@ export const NotificationCenter: React.FC = () => {
               <input
                 type="checkbox"
                 checked={value}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPreferences({ ...preferences, [key]: e.target.checked })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPreferences({ ...preferences, [key]: e.target.checked })}
                 className="h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
               />
             </label>

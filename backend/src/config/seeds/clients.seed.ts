@@ -40,7 +40,7 @@ export async function seedClients(dataSource: DataSource): Promise<void> {
       await clientRepository.save(client);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       console.error(`Error seeding client:`, message);
     }
   }

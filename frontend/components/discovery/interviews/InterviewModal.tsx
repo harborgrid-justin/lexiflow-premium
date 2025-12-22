@@ -24,25 +24,25 @@ export const InterviewModal: React.FC<InterviewModalProps> = ({ isOpen, onClose,
         <Input 
           label="Custodian Name" 
           value={interview.custodianName || ''} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInterview({...interview, custodianName: e.target.value})} 
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInterview({...interview, custodianName: e.target.value})} 
           placeholder="e.g. John Doe"
         />
         <Input 
           label="Department" 
           value={interview.department || ''} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInterview({...interview, department: e.target.value})} 
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInterview({...interview, department: e.target.value})} 
           placeholder="e.g. Engineering"
         />
         <Input 
           label="Date" 
           type="date" 
           value={interview.interviewDate || ''} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInterview({...interview, interviewDate: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInterview({...interview, interviewDate: e.target.value})}
         />
         <TextArea 
           label="Notes / Agenda" 
           value={interview.notes || ''} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInterview({...interview, notes: e.target.value})} 
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInterview({...interview, notes: e.target.value})} 
           placeholder="Topics to discuss..."
         />
         <div className="flex justify-end pt-4">

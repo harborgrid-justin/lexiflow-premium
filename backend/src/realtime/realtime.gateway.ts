@@ -76,7 +76,7 @@ export enum WSEvent {
 })
 export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   private readonly logger = new Logger(RealtimeGateway.name);
   private connectedClients: Map<string, ClientInfo> = new Map();
@@ -125,7 +125,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const _stack = error instanceof Error ? error._stack : undefined;
       this.logger.error(`Authentication failed for client ${client.id}:`, message);
       client.disconnect();
     }

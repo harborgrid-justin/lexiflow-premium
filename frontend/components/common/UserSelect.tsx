@@ -52,7 +52,7 @@ export const UserSelect: React.FC<UserSelectProps> = ({ label, value, onChange, 
       <div className="relative">
         <select
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
           title={label || "Select user"}
           className={cn(
             "w-full pl-10 pr-8 py-2.5 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer",

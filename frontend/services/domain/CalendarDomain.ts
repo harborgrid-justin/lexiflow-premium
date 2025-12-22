@@ -1,7 +1,7 @@
 ﻿/**
  * @module CalendarDomain
  * @description Enterprise calendar and event management service for legal workflows
- * 
+ *
  * Provides comprehensive calendar operations including:
  * - Event scheduling (deadlines, hearings, meetings, tasks, reminders)
  * - Calendar filtering (by date range, case, event type)
@@ -9,36 +9,36 @@
  * - Recurring event management
  * - Attendee tracking
  * - Upcoming event queries
- * 
+ *
  * @architecture
  * - Pattern: Service Layer with Backend API Integration
  * - Backend: NestJS + PostgreSQL via integrationsApi.calendar
  * - Filtering: Client-side for flexibility
  * - Sync: External calendar provider integration
- * 
+ *
  * @performance
  * - Event listing: ~200ms (backend query)
  * - Filtering: O(n) where n = number of events
  * - Sorting: O(n log n) by start date
  * - Calendar sync: ~500ms per provider
- * 
+ *
  * @security
  * - Case-based access control
  * - Attendee privacy protection
  * - External calendar OAuth flow
  * - Event metadata sanitization
- * 
+ *
  * @usage
  * ```typescript
  * // Get all events
  * const events = await CalendarService.getAll();
- * 
+ *
  * // Get filtered events
- * const hearings = await CalendarService.getEvents({ 
+ * const hearings = await CalendarService.getEvents({
  *   type: 'hearing',
  *   caseId: 'case-123'
  * });
- * 
+ *
  * // Create event
  * const event = await CalendarService.createEvent({
  *   title: 'Deposition',
@@ -46,7 +46,7 @@
  *   type: 'meeting',
  *   caseId: 'case-123'
  * });
- * 
+ *
  * // Sync with external calendar
  * await CalendarService.sync({ provider: 'google' });
  * ```

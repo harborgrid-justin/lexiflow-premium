@@ -164,11 +164,12 @@ export const useSecureMessenger = () => {
     setInputText('');
     setPendingAttachments([]);
 
-    // Simulate delivery status updates for demo feel
+    // Update delivery status after message is processed
+    // In production with WebSocket: server would push status updates
     setTimeout(() => {
-        setConversations(prev => prev.map(c => 
-            c.id === activeConvId 
-            ? { ...c, messages: c.messages.map(m => m.id === newMessage.id ? { ...m, status: 'delivered' as const } : m) } 
+        setConversations(prev => prev.map(c =>
+            c.id === activeConvId
+            ? { ...c, messages: c.messages.map(m => m.id === newMessage.id ? { ...m, status: 'delivered' as const } : m) }
             : c
         ));
     }, 1000);

@@ -67,7 +67,7 @@ export const EvidenceCustodyLog: React.FC = () => {
                     className={cn("w-full pl-9 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.highlight, theme.border.default, theme.text.primary)}
                     placeholder="Search logs..."
                     value={searchTerm}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
                 />
             </div>
             <Button variant="secondary" icon={Filter}>Filter</Button>

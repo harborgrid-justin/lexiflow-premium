@@ -38,7 +38,7 @@ export class AuditLogInterceptor implements NestInterceptor {
     const startTime = Date.now();
 
     return next.handle().pipe(
-      tap(async (response) => {
+      tap(async (_response) => {
         const duration = Date.now() - startTime;
 
         try {
@@ -63,7 +63,7 @@ export class AuditLogInterceptor implements NestInterceptor {
           });
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unknown error';
-          const stack = error instanceof Error ? error.stack : undefined;
+          const _stack = error instanceof Error ? error._stack : undefined;
           this.logger.error(`Failed to log audit: ${message}`);
         }
       }),

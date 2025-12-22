@@ -381,7 +381,8 @@ export const StorageUtils = {
         if (key) {
           const item = window.localStorage.getItem(key);
           if (item) {
-            size += key.length + item.length;\n          }
+            size += key.length + item.length;
+          }
         }
       }
 

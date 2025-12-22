@@ -1,17 +1,112 @@
 /**
- * DataService - Facade for Data Access Layer
+ * DataService - Unified facade for enterprise data access layer
+ * Production-grade data access with automatic backend/local routing
  * 
- * Refactored: 2025-12-18
- * Purpose: Provides unified interface for data operations with automatic routing
- * Pattern: Facade pattern with lazy property getters
+ * @module services/data/dataService
+ * @description Comprehensive data access facade providing:
+ * - **90+ domain repositories** (cases, documents, billing, discovery, compliance, etc.)
+ * - **Automatic routing** (backend API preferred, IndexedDB fallback)
+ * - **Integration events** (automatic publish on create/update)
+ * - **Singleton management** (cached repository instances)
+ * - **Type-safe access** (full TypeScript support for all domains)
+ * - **Memory management** (cleanup utilities for app lifecycle)
+ * - **Lazy loading** (async domain services via dynamic imports)
+ * - **Backward compatibility** (legacy RepositoryFactory support)
  * 
- * This file has been refactored to extract:
- * 1. Routing logic → routing/DataSourceRouter.ts
- * 2. Integration events → integration/IntegrationEventPublisher.ts
- * 3. Singleton management → repositories/RepositoryRegistry.ts
+ * @architecture
+ * - Pattern: Facade + Singleton Registry + Router
+ * - Routing: DataSourceRouter (backend-first with fallback)
+ * - Integration: IntegrationEventPublisher (event bus notifications)
+ * - Registry: RepositoryRegistry (singleton caching)
+ * - Repositories: 60+ modular repositories + 30+ domain services
+ * - API Layer: Direct API access via `api` import
+ * - Database: IndexedDB fallback via `db` import (DEPRECATED)
  * 
- * Original: 742 lines
- * Refactored: ~200 lines (73% reduction)
+ * @performance
+ * - Repository lookup: O(1) via lazy property getters
+ * - Singleton caching: Prevents duplicate instance creation
+ * - Lazy loading: Async domain services loaded on demand
+ * - Memory efficient: cleanupDataService() for lifecycle management
+ * 
+ * @refactoring
+ * - Completed: 2025-12-18
+ * - Before: 742 lines with inline routing and events
+ * - After: 422 lines (43% reduction)
+ * - Extracted modules:
+ *   * routing/DataSourceRouter.ts - Routing logic
+ *   * integration/IntegrationEventPublisher.ts - Event publishing
+ *   * repositories/RepositoryRegistry.ts - Singleton management
+ * - Benefits: Separation of concerns, testability, maintainability
+ * 
+ * @domains
+ * **Core Entities (Backend-First):**
+ * - cases, matters (alias), docket, documents, evidence, pleadings
+ * - billing, trial, tasks, motions, clients, organizations, witnesses
+ * 
+ * **Local-Only Repositories:**
+ * - discovery, analysis, entities, phases
+ * 
+ * **Hybrid Repositories:**
+ * - hr, workflow (backend preferred, complex fallback)
+ * 
+ * **Legacy Repositories (RepositoryFactory):**
+ * - trustAccounts, billingAnalytics, reports, processingJobs
+ * - casePhases, caseTeams, parties, legalHolds, depositions
+ * - discoveryRequests, esiSources, privilegeLog, productions
+ * 
+ * **Domain Services:**
+ * - compliance, admin, correspondence, quality, catalog
+ * - backup, profile, crm, analytics, operations, security
+ * - marketing, jurisdiction, strategy, transactions, organization
+ * - messenger, calendar, notifications, collaboration, warRoom
+ * - research, dashboard, assets, sources
+ * 
+ * **Backend-Only Services:**
+ * - ocr, search, serviceJobs, messaging, complianceMain
+ * - tokenBlacklist, judgeStats, outcomePredictions
+ * - documentVersions, dataSourcesIntegration, metrics, production
+ * 
+ * @integration
+ * **Automatic Event Publishing:**
+ * - CASE_CREATED (IntegratedCaseRepository)
+ * - DOCKET_INGESTED (IntegratedDocketRepository)
+ * - DOCUMENT_UPLOADED (IntegratedDocumentRepository)
+ * - TIME_LOGGED (IntegratedBillingRepository)
+ * - All events published to IntegrationOrchestrator
+ * 
+ * @usage
+ * ```typescript
+ * // Basic CRUD operations
+ * const cases = await DataService.cases.getAll();
+ * const newCase = await DataService.cases.add(caseData);
+ * await DataService.cases.update(caseId, updates);
+ * 
+ * // Domain service access
+ * const conflicts = await DataService.compliance.checkConflicts(clientId);
+ * const stats = await DataService.analytics.getCaseStats(caseId);
+ * 
+ * // Async domain services (lazy loaded)
+ * const calendar = await DataService.calendar;
+ * const events = await calendar.getEventsForRange(start, end);
+ * 
+ * // Memory management
+ * cleanupDataService(); // Call on unmount/logout
+ * const stats = getDataServiceMemoryStats();
+ * logDataServiceMemory(); // Debug logging
+ * ```
+ * 
+ * @security
+ * - Access control: Enforced by backend API (JWT authentication)
+ * - Data isolation: User context via authentication headers
+ * - Event publishing: Server-side validation for integrations
+ * - LocalStorage: No sensitive data cached (session tokens only)
+ * 
+ * @migration
+ * **Backend API Migration Status (2025-12-18):**
+ * - ✅ 90% of domains migrated to backend API
+ * - ⚠️ IndexedDB fallback available (DEPRECATED, development only)
+ * - 🔄 Legacy repositories maintained for backward compatibility
+ * - 📋 TODO: Remove IndexedDB once 100% backend coverage achieved
  */
 
 // ========================================
@@ -380,42 +475,92 @@ export const DataService = DataServiceBase;
 // ========================================
 
 /**
- * Clear all repository caches and listeners.
- * Call this on app unmount or when switching users.
+ * Clear all repository caches and listeners
+ * Call this on app unmount or when switching users
+ * 
+ * @security Critical for preventing data leaks between user sessions
+ * 
+ * @example
+ * // On user logout
+ * cleanupDataService();
+ * 
+ * // On app unmount
+ * useEffect(() => {
+ *   return () => cleanupDataService();
+ * }, []);
  */
 export function cleanupDataService(): void {
-  RepositoryRegistry.clear();
-  legacyRepositoryRegistry.clear();
-  console.log('[DataService] All repositories and listeners cleared');
+  try {
+    RepositoryRegistry.clear();
+    legacyRepositoryRegistry.clear();
+    console.log('[DataService] All repositories and listeners cleared');
+  } catch (error) {
+    console.error('[DataService.cleanupDataService] Error:', error);
+    throw error;
+  }
 }
 
 /**
- * Get memory usage statistics for debugging.
+ * Get memory usage statistics for debugging
+ * Provides insights into repository and listener counts
+ * 
+ * @returns Object - Memory statistics with repository and listener counts
+ * 
+ * @example
+ * const stats = getDataServiceMemoryStats();
+ * console.log(`Total repos: ${stats.legacyRepositories + stats.refactoredSingletons}`);
+ * console.log(`Total listeners: ${stats.totalListeners}`);
  */
 export function getDataServiceMemoryStats() {
-  const registryStats = legacyRepositoryRegistry.getMemoryStats();
-  const singletonCount = RepositoryRegistry.size();
-  
-  return {
-    ...registryStats,
-    refactoredSingletons: singletonCount,
-    refactoredKeys: RepositoryRegistry.keys(),
-    legacyRepositories: registryStats.repositoryCount,
-  };
+  try {
+    const registryStats = legacyRepositoryRegistry.getMemoryStats();
+    const singletonCount = RepositoryRegistry.size();
+    
+    return {
+      ...registryStats,
+      refactoredSingletons: singletonCount,
+      refactoredKeys: RepositoryRegistry.keys(),
+      legacyRepositories: registryStats.repositoryCount,
+    };
+  } catch (error) {
+    console.error('[DataService.getDataServiceMemoryStats] Error:', error);
+    return {
+      refactoredSingletons: 0,
+      refactoredKeys: [],
+      legacyRepositories: 0,
+      totalListeners: 0,
+      repositories: []
+    };
+  }
 }
 
 /**
- * Log memory usage to console (useful for debugging).
+ * Log memory usage to console (useful for debugging)
+ * Formats statistics in a readable table
+ * 
+ * @example
+ * // Debug memory usage
+ * logDataServiceMemory();
+ * // Output:
+ * // [DataService] Memory Usage
+ * //   Total Repositories: 45
+ * //   Refactored Singletons: 25
+ * //   Legacy Repositories: 20
+ * //   Total Listeners: 120
+ * //   [table with repository details]
  */
 export function logDataServiceMemory(): void {
-  const stats = getDataServiceMemoryStats();
-  console.group('[DataService] Memory Usage');
-  console.log(`Total Repositories: ${stats.legacyRepositories + stats.refactoredSingletons}`);
-  console.log(`Refactored Singletons: ${stats.refactoredSingletons}`);
-  console.log(`Legacy Repositories: ${stats.legacyRepositories}`);
-  console.log(`Total Listeners: ${stats.totalListeners}`);
-  if (stats.repositories?.length > 0) {
-    console.table(stats.repositories);
+  try {
+    const stats = getDataServiceMemoryStats();
+    console.group('[DataService] Memory Usage');
+    console.log(`Total Repositories: ${stats.legacyRepositories + stats.refactoredSingletons}`);
+    console.log(`Refactored Singletons: ${stats.refactoredSingletons}`);
+    console.log(`Legacy Repositories: ${stats.legacyRepositories}`);
+    console.log(`Total Listeners: ${stats.totalListeners}`);
+    if (stats.repositories?.length > 0) {
+      console.table(stats.repositories);
+    }
+    console.groupEnd();
+  } catch (error) {
+    console.error('[DataService.logDataServiceMemory] Error:', error);
   }
-  console.groupEnd();
-}

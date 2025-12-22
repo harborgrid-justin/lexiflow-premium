@@ -1,7 +1,107 @@
 /**
- * @module services/collaborationService
- * @category Services
- * @description Real-time collaboration with live cursors, presence indicators, and conflict resolution.
+ * Real-Time Collaboration Service - Multi-user document editing with operational transformation
+ * Enterprise WebSocket-based collaboration for live cursors, presence, and conflict resolution
+ * 
+ * @module services/infrastructure/collaborationService
+ * @description Production-ready real-time collaboration service providing:
+ * - **WebSocket connection** (automatic reconnection with exponential backoff)
+ * - **Live cursors** (real-time cursor position tracking across users)
+ * - **Presence indicators** (active/idle/away status with activity monitoring)
+ * - **Document locking** (pessimistic locking for critical sections)
+ * - **Conflict detection** (operational transformation for edit conflicts)
+ * - **Activity monitoring** (automatic idle/away transitions)
+ * - **Memory management** (pending edits limited to 1000 items)
+ * - **Event-driven architecture** (EventEmitter for UI reactivity)
+ * 
+ * @architecture
+ * - Pattern: EventEmitter + WebSocket + Observer
+ * - Connection: WebSocket with automatic reconnection
+ * - State: Map-based tracking (presence, cursors, locks)
+ * - Conflict resolution: Operational transformation (OT)
+ * - Activity: Timer-based monitoring (idle: 1min, away: 5min)
+ * - Lock timeout: 10 minutes (automatic release)
+ * 
+ * @performance
+ * - Cursor updates: Throttled to prevent flooding
+ * - Presence updates: Sent only on state change
+ * - Pending edits: Limited to 1000 (FIFO eviction)
+ * - Reconnection: Exponential backoff (max 5 attempts)
+ * - Memory: Automatic cleanup on disconnect
+ * 
+ * @protocols
+ * **WebSocket Message Types:**
+ * - presence_update - User presence state change
+ * - cursor_move - Cursor position update
+ * - edit_operation - Document edit with OT metadata
+ * - lock_request - Request document lock
+ * - lock_release - Release document lock
+ * - conflict_detected - Server notifies of edit conflict
+ * 
+ * **Presence States:**
+ * - active - User actively editing (default)
+ * - idle - No activity for 1 minute
+ * - away - No activity for 5 minutes
+ * - offline - Disconnected from server
+ * 
+ * @security
+ * - Authentication: User credentials sent in initial handshake
+ * - Authorization: Server validates document access per user
+ * - Message validation: All incoming messages validated
+ * - Lock expiration: Prevents indefinite lock holds
+ * 
+ * @events
+ * Emitted by CollaborationService:
+ * - 'connected' - WebSocket connection established
+ * - 'disconnected' - WebSocket connection closed
+ * - 'error' - WebSocket or parsing error
+ * - 'presence' - User presence updated (UserPresence)
+ * - 'cursor' - Cursor position changed (CursorPosition)
+ * - 'edit' - Collaborative edit received (CollaborativeEdit)
+ * - 'conflict' - Edit conflict detected (EditConflict[])
+ * - 'lock' - Document lock status changed (DocumentLock)
+ * - 'unlock' - Document lock released (string documentId)
+ * 
+ * @usage
+ * ```typescript
+ * // Initialize service
+ * const collab = new CollaborationService('user-123', 'Jane Doe', {
+ *   wsUrl: 'wss://collab.lexiflow.com',
+ *   reconnectInterval: 2000,
+ *   maxReconnectAttempts: 5
+ * });
+ * 
+ * // Connect to server
+ * await collab.connect();
+ * 
+ * // Join document session
+ * collab.joinDocument('doc-456');
+ * 
+ * // Listen for cursor updates
+ * collab.on('cursor', (cursor: CursorPosition) => {
+ *   console.log(`${cursor.userId} moved to ${cursor.line}:${cursor.column}`);
+ * });
+ * 
+ * // Send edit
+ * collab.sendEdit('doc-456', {
+ *   type: 'insert',
+ *   content: 'Hello',
+ *   position: 42,
+ *   timestamp: Date.now()
+ * });
+ * 
+ * // Request lock
+ * const locked = await collab.requestLock('doc-456');
+ * 
+ * // Cleanup
+ * collab.leaveDocument('doc-456');
+ * collab.disconnect();
+ * ```
+ * 
+ * @limitations
+ * - Max 1000 pending edits (FIFO eviction on overflow)
+ * - Reconnection limited to 5 attempts (exponential backoff)
+ * - Lock timeout: 10 minutes (automatic release)
+ * - Activity monitoring: 1-minute idle, 5-minute away thresholds
  */
 
 import { EventEmitter } from 'events';

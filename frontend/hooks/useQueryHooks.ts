@@ -7,7 +7,7 @@ import type {
   UseQueryOptions, 
   UseMutationOptions, 
   MutationContext 
-} from '../services/infrastructure/QueryTypes';
+} from '../services/infrastructure/queryTypes';
 
 export function useQuery<T>(
   key: QueryKey, 

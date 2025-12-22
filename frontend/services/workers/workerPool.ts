@@ -1,45 +1,126 @@
 /**
- * @module services/workerPool
- * @category Services - Performance
- * @description Worker pool implementation for efficient Web Worker reuse.
- * Instead of creating new workers for each task, this pool maintains a fixed
- * number of workers and distributes tasks among them.
+ * @module WorkerPool
+ * @description Enterprise-grade Web Worker pool manager for efficient parallel processing
  * 
- * PERFORMANCE BENEFITS:
- * - Reduces worker creation overhead (each worker creation = ~50-100ms)
- * - Limits concurrent worker count (prevents CPU saturation)
- * - Reuses workers for multiple tasks (memory efficient)
+ * Provides production-ready worker pool management with:
+ * - Fixed-size worker pool with automatic distribution
+ * - Task queuing with timeout support
+ * - Worker lifecycle management (acquire/release)
  * - Automatic cleanup on page unload
+ * - Pool health monitoring and statistics
+ * - Singleton pool manager for common worker types
+ * - Development debugging helpers
  * 
- * USAGE:
+ * @architecture
+ * - Pattern: Object Pool + Queue + Singleton Manager
+ * - Pool size: navigator.hardwareConcurrency / 2 (default)
+ * - Queue: FIFO task distribution
+ * - Lifecycle: Lazy initialization \u2192 acquisition \u2192 release \u2192 termination
+ * - Manager: Centralized registry for named worker pools
+ * 
+ * @performance
+ * - Worker creation overhead: ~50-100ms (reduced via pooling)
+ * - Task distribution: O(1) for available workers, O(n) for queued
+ * - Memory: Fixed pool prevents CPU saturation
+ * - Cleanup: Automatic on page unload
+ * 
+ * @benefits
+ * - Reduces worker creation overhead (reuses existing workers)
+ * - Prevents CPU saturation via fixed pool size
+ * - Memory efficient (bounded worker count)
+ * - Automatic resource cleanup
+ * 
+ * @security
+ * - Worker termination on pool termination
+ * - Timeout support prevents hung tasks
+ * - Error isolation per worker
+ * - No worker escapes pool boundary
+ * 
+ * @usage
  * ```typescript
- * const pool = new WorkerPool(() => CryptoWorker.create(), 2);
+ * // Create pool
+ * const pool = new WorkerPool(() => new Worker('./crypto.worker.js'), 2);
  * 
  * // Execute task
- * const worker = await pool.acquire();
- * worker.postMessage({ data: 'test' });
- * worker.onmessage = (e) => {
- *   console.log(e.data);
- *   pool.release(worker);
- * };
+ * const result = await pool.execute(async (worker) => {
+ *   return new Promise((resolve) => {
+ *     worker.onmessage = (e) => resolve(e.data);
+ *     worker.postMessage({ task: 'hash', data: '...' });
+ *   });
+ * });
  * 
- * // Cleanup when done
+ * // Cleanup
  * pool.terminate();
+ * 
+ * // Or use singleton manager
+ * const cryptoPool = PoolManager.getPool('crypto', () => new Worker('./crypto.worker.js'));
  * ```
+ * 
+ * @created 2024-03-10
+ * @modified 2025-12-22
  */
 
-// ============================================================================
+// =============================================================================
 // TYPES
-// ============================================================================
+// =============================================================================
+
+/**
+ * Worker task with promise resolution callbacks
+ * @template T - Type of value returned by the task
+ */
 interface WorkerTask<T = any> {
   resolve: (value: T) => void;
   reject: (error: Error) => void;
   timeout?: number;
 }
 
-// ============================================================================
-// WORKER POOL
-// ============================================================================
+// =============================================================================
+// VALIDATION HELPERS
+// =============================================================================
+
+/**
+ * Validate worker factory parameter
+ * @private
+ */
+function validateFactory(factory: any, methodName: string): void {
+  if (typeof factory !== 'function') {
+    throw new Error(`[WorkerPool.${methodName}] Factory must be a function`);
+  }
+}
+
+/**
+ * Validate pool size parameter
+ * @private
+ */
+function validatePoolSize(size: any, methodName: string): void {
+  if (typeof size !== 'number' || size <= 0 || !Number.isInteger(size)) {
+    throw new Error(`[WorkerPool.${methodName}] Pool size must be a positive integer`);
+  }
+}
+
+/**
+ * Validate worker parameter
+ * @private
+ */
+function validateWorker(worker: any, methodName: string): void {
+  if (!worker || !(worker instanceof Worker)) {
+    throw new Error(`[WorkerPool.${methodName}] Invalid worker object`);
+  }
+}
+
+// =============================================================================
+// WORKER POOL CLASS
+// =============================================================================
+
+/**
+ * WorkerPool Class
+ * Manages a fixed-size pool of Web Workers for efficient task distribution
+ * 
+ * @example
+ * const pool = new WorkerPool(() => new Worker('./worker.js'), 4);
+ * await pool.execute(worker => sendTask(worker));
+ * pool.terminate();
+ */
 export class WorkerPool {
   private workers: Worker[] = [];
   private available: Worker[] = [];
@@ -48,17 +129,31 @@ export class WorkerPool {
 
   /**
    * Create a worker pool
-   * @param factory - Function that creates a new worker
-   * @param size - Number of workers in the pool (default: navigator.hardwareConcurrency / 2)
+   * 
+   * @param factory - Function that creates a new worker instance
+   * @param size - Number of workers in the pool (default: hardwareConcurrency / 2)
+   * @throws Error if factory is invalid or workers cannot be created
+   * 
+   * @example
+   * const pool = new WorkerPool(() => new Worker('./crypto.worker.js'), 2);
    */
   constructor(
     private factory: () => Worker,
     private size: number = Math.max(1, Math.floor((navigator.hardwareConcurrency || 4) / 2))
   ) {
+    validateFactory(factory, 'constructor');
+    validatePoolSize(size, 'constructor');
+    
     this.initialize();
   }
 
+  /**
+   * Initialize worker pool by creating worker instances
+   * @private
+   */
   private initialize(): void {
+    console.log(`[WorkerPool] Initializing pool with ${this.size} workers...`);
+    
     for (let i = 0; i < this.size; i++) {
       try {
         const worker = this.factory();
@@ -70,8 +165,10 @@ export class WorkerPool {
     }
     
     if (this.workers.length === 0) {
-      console.error('[WorkerPool] Failed to create any workers');
+      throw new Error('[WorkerPool] Failed to create any workers - pool initialization failed');
     }
+    
+    console.log(`[WorkerPool] Successfully created ${this.workers.length}/${this.size} workers`);
   }
 
   /**

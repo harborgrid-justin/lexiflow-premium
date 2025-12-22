@@ -68,7 +68,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId: _caseId, warRo
   // MEMOIZED VALUES
   // ============================================================================
   const witnesses = useMemo(() => {
-      return (warRoomData.witnesses || []).map((p) => ({
+      return (warRoomData.witnesses || []).map((p: any) => ({
           id: p.id,
           name: p.name,
           role: p.role,
@@ -124,7 +124,7 @@ export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId: _caseId, warRo
                           <textarea 
                               className={cn("w-full h-full p-4 resize-none outline-none font-serif text-base leading-relaxed border rounded-md", theme.surface.default, theme.border.default, theme.text.primary)}
                               value={outline}
-                              onChange={(e) => setOutline(e.target.value)}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOutline(e.target.value)}
                               placeholder="Draft your questions here..."
                           />
                       </div>

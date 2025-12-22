@@ -63,12 +63,12 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                         </div>
                         <div className="flex items-center gap-2">
                             {onEdit && (
-                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onEdit(cit); }} className="h-6 px-2 text-[10px]">
+                              <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEdit(cit); }} className="h-6 px-2 text-[10px]">
                                 Edit
                               </Button>
                             )}
                             {onDelete && (
-                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onDelete(cit.id); }} className="h-6 px-2 text-[10px] text-red-600 hover:text-red-700">
+                              <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDelete(cit.id); }} className="h-6 px-2 text-[10px] text-red-600 hover:text-red-700">
                                 Delete
                               </Button>
                             )}
@@ -83,7 +83,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
          </div>
       ) : (
         <>
-          {items.map((item) => {
+          {items.map((item: any) => {
             const typedItem = item as LegalArgument | Defense;
             return (
             <Card key={typedItem.id} noPadding className={`border-l-4 hover:shadow-md transition-shadow cursor-pointer ${type === 'Argument' ? 'border-l-blue-500' : 'border-l-amber-500'}`}>
@@ -94,12 +94,12 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                   </div>
                   <div className="flex items-center gap-2">
                     {onEdit && (
-                      <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onEdit(typedItem); }} className="h-7 px-2 text-xs">
+                      <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEdit(typedItem); }} className="h-7 px-2 text-xs">
                         Edit
                       </Button>
                     )}
                     {onDelete && (
-                      <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onDelete(typedItem.id); }} className="h-7 px-2 text-xs text-red-600 hover:text-red-700">
+                      <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDelete(typedItem.id); }} className="h-7 px-2 text-xs text-red-600 hover:text-red-700">
                         Delete
                       </Button>
                     )}

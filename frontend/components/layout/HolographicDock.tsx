@@ -60,14 +60,14 @@ export const HolographicDock: React.FC = () => {
           </div>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
              <button 
-                onClick={(e) => { e.stopPropagation(); restoreWindow(win.id); }} 
+                onClick={(e: React.MouseEvent) => { e.stopPropagation(); restoreWindow(win.id); }} 
                 className={cn("p-1.5 rounded-full transition-colors", theme.primary.light, theme.primary.text)}
                 title="Restore"
              >
                 <Maximize2 className="h-4 w-4"/>
              </button>
              <button 
-                onClick={(e) => { e.stopPropagation(); closeWindow(win.id); }} 
+                onClick={(e: React.MouseEvent) => { e.stopPropagation(); closeWindow(win.id); }} 
                 className={cn("p-1.5 rounded-full transition-colors", theme.action.danger.hover, theme.status.error.text)}
                 title="Close"
              >

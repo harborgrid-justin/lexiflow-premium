@@ -99,7 +99,9 @@ export class DiscoveryAnalyticsService {
 
       return funnel;
     } catch (error) {
-      this.logger.error(`Error getting discovery funnel: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting discovery funnel: ${message}`, stack);
       throw error;
     }
   }
@@ -181,7 +183,9 @@ export class DiscoveryAnalyticsService {
 
       return timeline;
     } catch (error) {
-      this.logger.error(`Error getting discovery timeline: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting discovery timeline: ${message}`, stack);
       throw error;
     }
   }
@@ -211,7 +215,9 @@ export class DiscoveryAnalyticsService {
 
       return metrics;
     } catch (error) {
-      this.logger.error(`Error getting case discovery metrics: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting case discovery metrics: ${message}`, stack);
       throw error;
     }
   }
@@ -278,7 +284,9 @@ export class DiscoveryAnalyticsService {
 
       return volume;
     } catch (error) {
-      this.logger.error(`Error getting production volume: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting production volume: ${message}`, stack);
       throw error;
     }
   }

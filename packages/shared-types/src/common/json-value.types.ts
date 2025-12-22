@@ -29,7 +29,7 @@ export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
 /**
  * Type-safe user preferences object
  */
-export interface UserPreferences extends JsonObject {
+export interface UserPreferences {
   theme?: 'light' | 'dark' | 'auto';
   language?: string;
   timezone?: string;
@@ -58,12 +58,13 @@ export interface UserPreferences extends JsonObject {
     reducedMotion?: boolean;
     screenReader?: boolean;
   };
+  [key: string]: JsonValue | undefined;
 }
 
 /**
  * Type-safe entity metadata
  */
-export interface EntityMetadata extends JsonObject {
+export interface EntityMetadata {
   source?: string;
   importedFrom?: string;
   importedAt?: string;
@@ -82,6 +83,7 @@ export interface EntityMetadata extends JsonObject {
       changes: Record<string, JsonValue>;
     }>;
   };
+  [key: string]: JsonValue | undefined;
 }
 
 /**
@@ -94,7 +96,7 @@ export interface CustomFields extends JsonObject {
 /**
  * Error details for API responses
  */
-export interface ErrorDetails extends JsonObject {
+export interface ErrorDetails {
   field?: string;
   constraint?: string;
   rejectedValue?: JsonValue;
@@ -105,6 +107,7 @@ export interface ErrorDetails extends JsonObject {
   }>;
   stackTrace?: string[];
   context?: Record<string, JsonValue>;
+  [key: string]: JsonValue | undefined;
 }
 
 /**

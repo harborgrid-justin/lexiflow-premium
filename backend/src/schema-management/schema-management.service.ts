@@ -136,7 +136,9 @@ export class SchemaManagementService {
       
       return await this.migrationRepository.save(migration);
     } catch (error) {
-      throw new BadRequestException(`Migration failed: ${error.message}`);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      throw new BadRequestException(`Migration failed: ${message}`);
     }
   }
 
@@ -159,7 +161,9 @@ export class SchemaManagementService {
       
       return await this.migrationRepository.save(migration);
     } catch (error) {
-      throw new BadRequestException(`Revert failed: ${error.message}`);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      throw new BadRequestException(`Revert failed: ${message}`);
     }
   }
 

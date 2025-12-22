@@ -2,15 +2,15 @@ export class EthicalWallDto {
   id: string;
   name: string;
   description: string;
-  restrictedUsers: string[];
-  restrictedEntities: RestrictedEntity[];
+  restrictedUsers!: string[];
+  restrictedEntities!: RestrictedEntity[];
   reason: string;
   createdBy: string;
   createdByName: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt!: Date;
+  updatedAt!: Date;
   expiresAt?: Date;
-  status: EthicalWallStatus;
+  status!: EthicalWallStatus;
   organizationId: string;
 }
 
@@ -29,8 +29,8 @@ export interface RestrictedEntity {
 export class CreateEthicalWallDto {
   name: string;
   description: string;
-  restrictedUsers: string[];
-  restrictedEntities: RestrictedEntity[];
+  restrictedUsers!: string[];
+  restrictedEntities!: RestrictedEntity[];
   reason: string;
   createdBy: string;
   createdByName: string;
@@ -65,6 +65,6 @@ export class CheckEthicalWallDto {
 
 export class EthicalWallCheckResult {
   blocked: boolean;
-  walls: EthicalWallDto[];
+  walls!: EthicalWallDto[];
   message?: string;
 }

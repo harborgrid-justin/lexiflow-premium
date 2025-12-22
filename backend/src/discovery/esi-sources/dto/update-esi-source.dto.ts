@@ -130,5 +130,5 @@ export class UpdateESISourceDto {
   assignedTo?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

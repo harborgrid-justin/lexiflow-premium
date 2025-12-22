@@ -7,7 +7,7 @@ export class CreateDocketEntryDto {
   @ApiProperty({ description: 'Case ID' })
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @ApiPropertyOptional({ description: 'Sequence number' })
   @IsInt()
@@ -30,12 +30,12 @@ export class CreateDocketEntryDto {
   @IsDate()
   @Type(() => Date)
   @IsNotEmpty()
-  entryDate: Date;
+  entryDate!: Date;
 
   @ApiProperty({ description: 'Description' })
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
 
   @ApiPropertyOptional({ enum: DocketEntryType, description: 'Entry type' })
   @IsEnum(DocketEntryType)

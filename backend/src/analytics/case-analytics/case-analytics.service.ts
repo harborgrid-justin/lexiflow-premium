@@ -90,7 +90,9 @@ export class CaseAnalyticsService {
 
       return metrics;
     } catch (error) {
-      this.logger.error(`Error getting case metrics: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting case metrics: ${message}`, stack);
       throw error;
     }
   }
@@ -165,7 +167,9 @@ export class CaseAnalyticsService {
 
       return metrics;
     } catch (error) {
-      this.logger.error(`Error getting case specific metrics: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting case specific metrics: ${message}`, stack);
       throw error;
     }
   }
@@ -301,7 +305,9 @@ export class CaseAnalyticsService {
 
       return breakdown;
     } catch (error) {
-      this.logger.error(`Error getting practice area breakdown: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting practice area breakdown: ${message}`, stack);
       throw error;
     }
   }

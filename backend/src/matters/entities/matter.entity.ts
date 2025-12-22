@@ -37,23 +37,23 @@ export enum MatterPriority {
 @Entity('matters')
 export class Matter {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'matternumber', unique: true })
-  matterNumber: string;
+  matterNumber!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: MatterStatus,
     default: MatterStatus.ACTIVE,
   })
-  status: MatterStatus;
+  status!: MatterStatus;
 
   @Column({
     name: 'type',
@@ -61,83 +61,83 @@ export class Matter {
     enum: MatterType,
     default: MatterType.OTHER,
   })
-  matterType: MatterType;
+  matterType!: MatterType;
 
   @Column({
     type: 'enum',
     enum: MatterPriority,
     default: MatterPriority.MEDIUM,
   })
-  priority: MatterPriority;
+  priority!: MatterPriority;
 
   // Client Information
   @Column({ name: 'clientid', nullable: true })
-  clientId: string;
+  clientId!: string;
 
   @Column({ name: 'clientname', nullable: true })
-  clientName: string;
+  clientName!: string;
 
   // Assignment
   @Column({ name: 'responsibleattorneyid', nullable: true })
-  leadAttorneyId: string;
+  leadAttorneyId!: string;
 
   @Column({ name: 'responsibleattorneyname', nullable: true })
-  leadAttorneyName: string;
+  leadAttorneyName!: string;
 
   @Column({ name: 'originatingattorneyid', nullable: true })
-  originatingAttorneyId: string;
+  originatingAttorneyId!: string;
 
   @Column({ name: 'originatingattorneyname', nullable: true })
-  originatingAttorneyName: string;
+  originatingAttorneyName!: string;
 
   // Jurisdictional Information
   @Column({ nullable: true })
-  jurisdiction: string;
+  jurisdiction!: string;
 
   @Column({ nullable: true })
-  venue: string;
+  venue!: string;
 
   // Financial
   @Column({ name: 'billingarrangement', nullable: true })
-  billingType: string;
+  billingType!: string;
 
   @Column({ name: 'hourlyrate', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  hourlyRate: number;
+  hourlyRate!: number;
 
   @Column({ name: 'flatfee', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  flatFee: number;
+  flatFee!: number;
 
   @Column({ name: 'contingencypercentage', type: 'decimal', precision: 5, scale: 2, nullable: true })
-  contingencyPercentage: number;
+  contingencyPercentage!: number;
 
   @Column({ name: 'retaineramount', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  retainerAmount: number;
+  retainerAmount!: number;
 
   @Column({ name: 'estimatedvalue', type: 'decimal', precision: 12, scale: 2, nullable: true })
-  estimatedValue: number;
+  estimatedValue!: number;
 
   @Column({ name: 'budgetamount', type: 'decimal', precision: 12, scale: 2, nullable: true })
-  budgetAmount: number;
+  budgetAmount!: number;
 
   // Dates
   @Column({ name: 'openeddate', type: 'date' })
-  openedDate: Date;
+  openedDate!: Date;
 
   @Column({ name: 'targetclosedate', type: 'date', nullable: true })
-  targetCloseDate: Date;
+  targetCloseDate!: Date;
 
   @Column({ name: 'actualclosedate', type: 'date', nullable: true })
-  closedDate: Date;
+  closedDate!: Date;
 
   @Column({ name: 'statuteoflimitationsdate', type: 'date', nullable: true })
-  statute_of_limitations: Date;
+  statute_of_limitations!: Date;
 
   // Practice Area & Tags
   @Column({ name: 'practicearea', nullable: true })
-  practiceArea: string;
+  practiceArea!: string;
 
   @Column({ name: 'tags', type: 'jsonb', nullable: true })
-  tags: string[];
+  tags!: string[];
 
   // Opposing Party
   @Column({ name: 'opposingcounsel', type: 'jsonb', nullable: true })
@@ -145,16 +145,16 @@ export class Matter {
 
   // Risk & Conflict
   @Column({ name: 'conflictcheckcompleted', type: 'boolean', default: false })
-  conflictCheckCompleted: boolean;
+  conflictCheckCompleted!: boolean;
 
   @Column({ name: 'conflictcheckdate', type: 'date', nullable: true })
-  conflictCheckDate: Date;
+  conflictCheckDate!: Date;
 
   @Column({ name: 'conflictchecknotes', type: 'text', nullable: true })
-  conflictCheckNotes: string;
+  conflictCheckNotes!: string;
 
   @Column({ name: 'officelocation', nullable: true })
-  officeLocation: string;
+  officeLocation!: string;
 
   // Resources
   @Column({ name: 'relatedmatterids', type: 'jsonb', nullable: true })
@@ -162,21 +162,21 @@ export class Matter {
 
   // Notes & Custom Fields
   @Column({ name: 'internalnotes', type: 'text', nullable: true })
-  internalNotes: string;
+  internalNotes!: string;
 
   @Column({ name: 'customfields', type: 'jsonb', nullable: true })
-  customFields: Record<string, any>;
+  customFields!: Record<string, any>;
 
   // Metadata
   @Column({ name: 'createdby' })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'updatedby', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @CreateDateColumn({ name: 'createdat' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updatedat' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -70,7 +70,7 @@ export const FileAttachment: React.FC<FileAttachmentProps> = ({
       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {onPreview && (
           <button 
-            onClick={(e) => { e.stopPropagation(); onPreview(); }} 
+            onClick={(e: React.MouseEvent) => { e.stopPropagation(); onPreview(); }} 
             className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
             title="Preview"
           >
@@ -78,7 +78,7 @@ export const FileAttachment: React.FC<FileAttachmentProps> = ({
           </button>
         )}
         <button 
-          onClick={(e) => { e.stopPropagation(); onDownload ? onDownload() : null; }} 
+          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDownload ? onDownload() : null; }} 
           className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
           title="Download"
         >

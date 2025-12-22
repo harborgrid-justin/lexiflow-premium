@@ -5,16 +5,16 @@ import { PhaseType, PhaseStatus } from '../entities/case-phase.entity';
 export class CreateCasePhaseDto {
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @IsEnum(PhaseType)
   @IsNotEmpty()
-  type: PhaseType;
+  type!: PhaseType;
 
   @IsEnum(PhaseStatus)
   @IsOptional()

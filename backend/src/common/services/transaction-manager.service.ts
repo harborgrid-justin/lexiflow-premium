@@ -58,13 +58,15 @@ export class TransactionManagerService {
 
       return result;
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       // Rollback on error
       await queryRunner.rollbackTransaction();
 
       const duration = Date.now() - startTime;
       this.logger.error(
-        `Transaction rolled back after ${duration}ms: ${error.message}`,
-        error.stack,
+        `Transaction rolled back after ${duration}ms: ${message}`,
+        stack,
       );
 
       throw error;
@@ -89,6 +91,8 @@ export class TransactionManagerService {
       await queryRunner.query(`RELEASE SAVEPOINT ${savepointName}`);
       return result;
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       await queryRunner.query(`ROLLBACK TO SAVEPOINT ${savepointName}`);
       throw error;
     }

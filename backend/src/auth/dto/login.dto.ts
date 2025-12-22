@@ -8,7 +8,7 @@ export class LoginDto {
     format: 'email'
   })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({
     description: 'User password (minimum 8 characters)',
@@ -18,5 +18,5 @@ export class LoginDto {
   })
   @IsString()
   @MinLength(8)
-  password: string;
+  password!: string;
 }

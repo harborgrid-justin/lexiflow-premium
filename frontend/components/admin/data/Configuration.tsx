@@ -76,8 +76,9 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
-    input.onchange = (e: unknown) => {
-      const file = e.target.files[0];
+    input.onchange = (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
@@ -120,23 +121,23 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
                 <Input
                   label="Application Name"
                   value={config.appName}
-                  onChange={(e) => setConfig({ ...config, appName: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, appName: e.target.value })}
                 />
                 <Input
                   label="Region"
                   value={config.region}
-                  onChange={(e) => setConfig({ ...config, region: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, region: e.target.value })}
                 />
                 <Input
                   label="Tier"
                   value={config.tier}
-                  onChange={(e) => setConfig({ ...config, tier: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, tier: e.target.value })}
                 />
                 <Input
                   label="Session Timeout (minutes)"
                   type="number"
                   value={config.sessionTimeout}
-                  onChange={(e) => setConfig({ ...config, sessionTimeout: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, sessionTimeout: e.target.value })}
                 />
               </div>
               <div className="mt-6 flex items-center gap-3">
@@ -163,20 +164,20 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
                   label="Max Upload Size (MB)"
                   type="number"
                   value={config.maxUploadSize}
-                  onChange={(e) => setConfig({ ...config, maxUploadSize: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, maxUploadSize: e.target.value })}
                 />
                 <Input
                   label="Data Retention (days)"
                   type="number"
                   value={config.retentionDays}
-                  onChange={(e) => setConfig({ ...config, retentionDays: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, retentionDays: e.target.value })}
                 />
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     id="realtime"
                     checked={config.enableRealtime}
-                    onChange={(e) => setConfig({ ...config, enableRealtime: e.target.checked })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, enableRealtime: e.target.checked })}
                     className="h-4 w-4"
                   />
                   <label htmlFor="realtime" className={cn("text-sm", theme.text.primary)}>
@@ -188,7 +189,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
                     type="checkbox"
                     id="backups"
                     checked={config.enableBackups}
-                    onChange={(e) => setConfig({ ...config, enableBackups: e.target.checked })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, enableBackups: e.target.checked })}
                     className="h-4 w-4"
                   />
                   <label htmlFor="backups" className={cn("text-sm", theme.text.primary)}>

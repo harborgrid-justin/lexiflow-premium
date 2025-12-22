@@ -51,7 +51,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   const recentEvents = React.useMemo(() => {
     return evidence.flatMap(e => 
       e.chainOfCustody.map(c => ({ ...c, itemTitle: e.title, itemId: e.id }))
-    ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+    ).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
   }, [evidence]);
 
   const data = [

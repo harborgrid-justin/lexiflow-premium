@@ -59,6 +59,6 @@ export const getNextTask = (caseId: string, tasks: WorkflowTask[]): string => {
   const caseTasks = tasks.filter(t => t.caseId === caseId && t.status !== 'Done' && t.status !== 'Completed');
   if (caseTasks.length === 0) return "All tasks completed";
   // Sort by due date
-  caseTasks.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+  caseTasks.sort((a: any, b: any) => new Date(a.dueDate as string).getTime() - new Date(b.dueDate as string).getTime());
   return caseTasks[0].title;
 };

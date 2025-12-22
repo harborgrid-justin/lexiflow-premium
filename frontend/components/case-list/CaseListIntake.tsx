@@ -194,7 +194,7 @@ export const CaseListIntake: React.FC = () => {
             label="Client Name" 
             placeholder="e.g., John Doe" 
             value={newLead.name || ''} 
-            onChange={(e) => setNewLead({...newLead, name: e.target.value, client: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, name: e.target.value, client: e.target.value})} 
             required
           />
           <Input 
@@ -202,7 +202,7 @@ export const CaseListIntake: React.FC = () => {
             type="email"
             placeholder="client@example.com" 
             value={newLead.contactEmail || ''} 
-            onChange={(e) => setNewLead({...newLead, contactEmail: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, contactEmail: e.target.value})} 
             required
           />
           <Input 
@@ -210,27 +210,27 @@ export const CaseListIntake: React.FC = () => {
             type="tel"
             placeholder="(555) 123-4567" 
             value={newLead.contactPhone || ''} 
-            onChange={(e) => setNewLead({...newLead, contactPhone: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, contactPhone: e.target.value})} 
           />
           <Input 
             label="Matter Title" 
             placeholder="Brief description of matter" 
             value={newLead.title || ''} 
-            onChange={(e) => setNewLead({...newLead, title: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, title: e.target.value})} 
           />
           <Input 
             label="Estimated Value" 
             type="number"
             placeholder="50000" 
             value={newLead.value?.replace(/[^0-9]/g, '') || ''} 
-            onChange={(e) => setNewLead({...newLead, value: `$${e.target.value}`})} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, value: `$${e.target.value}`})} 
           />
           <TextArea 
             label="Notes" 
             rows={4} 
             placeholder="Initial consultation notes..." 
             value={newLead.notes || ''} 
-            onChange={(e) => setNewLead({...newLead, notes: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, notes: e.target.value})} 
           />
           <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
             <Button variant="ghost" onClick={leadModal.close}>Cancel</Button>

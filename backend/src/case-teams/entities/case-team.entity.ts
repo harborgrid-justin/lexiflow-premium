@@ -22,27 +22,27 @@ export enum TeamMemberRole {
 @Index(['caseId', 'userId'], { unique: true })
 export class CaseTeamMember extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'user_id', type: 'uuid' })
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => User, (user) => user.caseTeamMemberships)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name!: string;
 
   @Column({
     type: 'enum',
     enum: TeamMemberRole,
   })
-  role: TeamMemberRole;
+  role!: TeamMemberRole;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   email?: string;
@@ -60,13 +60,13 @@ export class CaseTeamMember extends BaseEntity {
   removedDate?: Date;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'allocation_percentage', type: 'integer', default: 0 })
-  allocationPercentage: number;
+  allocationPercentage!: number;
 
   @Column({ type: 'text', nullable: true })
-  responsibilities: string;
+  responsibilities!: string;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

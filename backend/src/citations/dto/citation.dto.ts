@@ -4,15 +4,15 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateCitationDto {
   @ApiProperty()
   @IsString()
-  citation: string;
+  citation!: string;
 
   @ApiProperty()
   @IsString()
-  court: string;
+  court!: string;
 
   @ApiProperty()
   @IsNumber()
-  year: number;
+  year!: number;
 
   @ApiPropertyOptional()
   @IsString()

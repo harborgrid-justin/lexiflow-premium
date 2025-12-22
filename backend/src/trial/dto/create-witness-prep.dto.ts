@@ -11,15 +11,15 @@ export enum WitnessPrepStatus {
 export class CreateWitnessPrepDto {
   @ApiProperty()
   @IsString()
-  witnessName: string;
+  witnessName!: string;
 
   @ApiProperty()
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty()
   @IsDateString()
-  scheduledDate: string;
+  scheduledDate!: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -28,7 +28,7 @@ export class CreateWitnessPrepDto {
 
   @ApiProperty({ enum: WitnessPrepStatus, default: WitnessPrepStatus.SCHEDULED })
   @IsEnum(WitnessPrepStatus)
-  status: WitnessPrepStatus;
+  status!: WitnessPrepStatus;
 
   @ApiPropertyOptional()
   @IsString()

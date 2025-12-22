@@ -19,19 +19,19 @@ export enum EmployeeStatus {
 export class CreateEmployeeDto {
   @ApiProperty()
   @IsString()
-  firstName: string;
+  firstName!: string;
 
   @ApiProperty()
   @IsString()
-  lastName: string;
+  lastName!: string;
 
   @ApiProperty()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ enum: EmployeeRole })
   @IsEnum(EmployeeRole)
-  role: EmployeeRole;
+  role!: EmployeeRole;
 
   @ApiPropertyOptional()
   @IsString()
@@ -50,7 +50,7 @@ export class CreateEmployeeDto {
 
   @ApiProperty({ enum: EmployeeStatus, default: EmployeeStatus.ACTIVE })
   @IsEnum(EmployeeStatus)
-  status: EmployeeStatus;
+  status!: EmployeeStatus;
 
   @ApiPropertyOptional({ description: 'Hourly billing rate' })
   @IsNumber()

@@ -27,7 +27,9 @@ export class NotificationProcessorService {
       this.logger.log(`Notification sent successfully: ${job.data.type}`);
       return { success: true, notificationId: `notif-${Date.now()}` };
     } catch (error) {
-      this.logger.error(`Notification sending failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Notification sending failed: ${message}`, stack);
       throw error;
     }
   }
@@ -42,7 +44,9 @@ export class NotificationProcessorService {
       this.logger.log(`Broadcast notification completed`);
       return { success: true, recipientCount: job.data.userIds.length };
     } catch (error) {
-      this.logger.error(`Broadcast failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Broadcast failed: ${message}`, stack);
       throw error;
     }
   }

@@ -32,77 +32,77 @@ export enum ExhibitStatus {
 @Index(['exhibitType'])
 export class TrialExhibit extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'exhibit_number', type: 'varchar', length: 100 })
-  exhibitNumber: string;
+  exhibitNumber!: string;
 
   @Column({ type: 'varchar', length: 500 })
-  title: string;
+  title!: string;
 
   @Column({
     name: 'exhibit_type',
     type: 'enum',
     enum: ExhibitType,
   })
-  exhibitType: ExhibitType;
+  exhibitType!: ExhibitType;
 
   @Column({ type: 'text' })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: ExhibitStatus,
     default: ExhibitStatus.PREPARED,
   })
-  status: ExhibitStatus;
+  status!: ExhibitStatus;
 
   @Column({ name: 'offered_by', type: 'varchar', length: 255, nullable: true })
-  offeredBy: string;
+  offeredBy!: string;
 
   @Column({ name: 'date_offered', type: 'date', nullable: true })
-  dateOffered: Date;
+  dateOffered!: Date;
 
   @Column({ name: 'date_admitted', type: 'date', nullable: true })
-  dateAdmitted: Date;
+  dateAdmitted!: Date;
 
   @Column({ name: 'admitted_by', type: 'varchar', length: 255, nullable: true })
-  admittedBy: string;
+  admittedBy!: string;
 
   @Column({ name: 'purpose_of_exhibit', type: 'text', nullable: true })
-  purposeOfExhibit: string;
+  purposeOfExhibit!: string;
 
   @Column({ name: 'file_path', type: 'varchar', length: 500, nullable: true })
-  filePath: string;
+  filePath!: string;
 
   @Column({ name: 'bates_number', type: 'varchar', length: 100, nullable: true })
-  batesNumber: string;
+  batesNumber!: string;
 
   @Column({ name: 'evidence_item_id', type: 'uuid', nullable: true })
-  evidenceItemId: string;
+  evidenceItemId!: string;
 
   @Column({ name: 'document_id', type: 'uuid', nullable: true })
-  documentId: string;
+  documentId!: string;
 
   @Column({ name: 'is_stipulated', type: 'boolean', default: false })
-  isStipulated: boolean;
+  isStipulated!: boolean;
 
   @Column({ name: 'stipulation_date', type: 'date', nullable: true })
-  stipulationDate: Date;
+  stipulationDate!: Date;
 
   @Column({ name: 'stipulating_parties', type: 'jsonb', nullable: true })
-  stipulatingParties: string[];
+  stipulatingParties!: string[];
 
   @Column({ type: 'text', nullable: true })
-  objections: string;
+  objections!: string;
 
   @Column({ name: 'court_ruling', type: 'text', nullable: true })
-  courtRuling: string;
+  courtRuling!: string;
   
   @Column({ name: 'notes', type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 }

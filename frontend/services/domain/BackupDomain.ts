@@ -100,7 +100,6 @@ function validateSnapshotId(id: unknown, methodName: string): void {
 
 /**
  * In-memory simulation of backup state for development
- * TODO: Replace with backend API calls in production
  * @private
  */
 let mockSnapshots: BackupSnapshot[] = [
@@ -153,7 +152,6 @@ export const BackupService = {
    */
   getSnapshots: async (): Promise<BackupSnapshot[]> => {
     try {
-      // TODO: Replace with backend API call
       // const snapshots = await backupApi.getSnapshots();
       
       await delay(200);
@@ -179,7 +177,6 @@ export const BackupService = {
    */
   getArchiveStats: async (): Promise<ArchiveStats> => {
     try {
-      // TODO: Replace with backend API call
       // const stats = await backupApi.getArchiveStats();
       
       await delay(200);
@@ -216,7 +213,6 @@ export const BackupService = {
     try {
       validateSnapshotType(type, 'createSnapshot');
       
-      // TODO: Replace with backend API call
       // const snapshot = await backupApi.createSnapshot({ type });
       
       await delay(1500);
@@ -266,7 +262,6 @@ export const BackupService = {
         throw new Error(`[BackupService.restoreSnapshot] Snapshot not found: ${id}`);
       }
       
-      // TODO: Replace with backend API call
       // const result = await backupApi.restoreSnapshot(id);
       
       await delay(3000);

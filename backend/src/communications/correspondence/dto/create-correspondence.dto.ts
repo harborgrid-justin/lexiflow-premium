@@ -26,33 +26,33 @@ export class CreateCorrespondenceDto {
     example: CorrespondenceType.LETTER,
   })
   @IsEnum(CorrespondenceType)
-  type: CorrespondenceType;
+  type!: CorrespondenceType;
 
   @ApiProperty({
     description: 'Subject/Title',
     example: 'Motion to Dismiss - Case #12345',
   })
   @IsString()
-  subject: string;
+  subject!: string;
 
   @ApiProperty({
     description: 'Correspondence body/content',
   })
   @IsString()
-  body: string;
+  body!: string;
 
   @ApiProperty({
     description: 'Sender user ID',
   })
   @IsString()
-  senderId: string;
+  senderId!: string;
 
   @ApiProperty({
     description: 'Recipient name or entity',
     example: 'John Smith, Opposing Counsel',
   })
   @IsString()
-  recipient: string;
+  recipient!: string;
 
   @ApiProperty({
     description: 'Recipient email address',

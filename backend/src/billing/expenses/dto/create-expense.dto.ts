@@ -3,23 +3,23 @@ import { ExpenseStatus, ExpenseCategory } from '../entities/expense.entity';
 
 export class CreateExpenseDto {
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
-  userId: string;
+  userId!: string;
 
   @IsString()
-  expenseDate: string;
+  expenseDate!: string;
 
   @IsEnum(ExpenseCategory)
-  category: ExpenseCategory;
+  category!: ExpenseCategory;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 
   @IsOptional()
   @IsString()

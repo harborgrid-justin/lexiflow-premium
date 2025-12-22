@@ -18,7 +18,7 @@ export class CreateETLPipelineDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ 
     description: 'Pipeline description'
@@ -85,5 +85,5 @@ export class CreateETLPipelineDto {
   })
   @IsUUID()
   @IsNotEmpty()
-  createdBy: string;
+  createdBy!: string;
 }

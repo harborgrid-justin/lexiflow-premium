@@ -54,7 +54,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeView, se
       theme.border.default
     )}>
       <div className="flex justify-around items-center h-16 px-2">
-        {primaryNavItems.map((item) => {
+        {primaryNavItems.map((item: any) => {
           const Icon = item.icon;
           const isActive = activeView === item.id;
           

@@ -31,13 +31,13 @@ export const AcrobatToolbar: React.FC<AcrobatToolbarProps> = ({
 }) => {
   const { theme } = useTheme();
 
-  const ToolButton = ({ tool, icon: Icon, label }: { tool: PDFTool; icon: unknown; label: string }) => (
+  const ToolButton = ({ tool, icon: Icon, label }: { tool: PDFTool; icon: React.ComponentType<{ className?: string }>; label: string }) => (
     <button
       onClick={() => setActiveTool(tool)}
       className={cn(
         "p-2 rounded-md flex flex-col items-center justify-center gap-1 transition-all w-16 h-14",
-        activeTool === tool 
-          ? cn(theme.primary.light, theme.primary.text, "ring-1 shadow-inner", theme.primary.border) 
+        activeTool === tool
+          ? cn(theme.primary.light, theme.primary.text, "ring-1 shadow-inner", theme.primary.border)
           : cn(theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
       )}
       title={label}

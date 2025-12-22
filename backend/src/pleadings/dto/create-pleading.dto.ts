@@ -15,7 +15,7 @@ export class CreatePleadingDto {
   @ApiProperty({ description: 'Pleading title' })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Pleading description' })
   @IsString()
@@ -25,12 +25,12 @@ export class CreatePleadingDto {
   @ApiProperty({ enum: PleadingType, description: 'Pleading type' })
   @IsEnum(PleadingType)
   @IsNotEmpty()
-  type: PleadingType;
+  type!: PleadingType;
 
   @ApiProperty({ description: 'Case ID' })
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @ApiPropertyOptional({ description: 'Associated document ID' })
   @IsUUID()

@@ -17,7 +17,7 @@ export class CreateBackupScheduleDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiProperty({ 
     description: 'Cron expression for schedule',
@@ -25,7 +25,7 @@ export class CreateBackupScheduleDto {
   })
   @IsString()
   @IsNotEmpty()
-  cronExpression: string;
+  cronExpression!: string;
 
   @ApiProperty({ 
     description: 'Backup type',
@@ -34,7 +34,7 @@ export class CreateBackupScheduleDto {
   })
   @IsEnum(BackupType)
   @IsNotEmpty()
-  type: BackupType;
+  type!: BackupType;
 
   @ApiPropertyOptional({ 
     description: 'List of databases to backup',

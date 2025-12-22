@@ -28,12 +28,14 @@ export const MOCK_CASES: Case[] = [
     linkedCaseIds: ['1:24-cv-01442-LMB-IDD' as CaseId],
     leadCaseId: '25-1229' as CaseId,
     isConsolidated: false,
+    isArchived: false,
     parties: [
-        { 
-          id: 'p-appellant' as PartyId, 
-          name: 'Justin Jeffrey Saadein-Morales', 
-          role: 'Debtor - Appellant', 
-          type: 'Individual', 
+        {
+          id: 'p-appellant' as PartyId,
+          caseId: '25-1229' as CaseId,
+          name: 'Justin Jeffrey Saadein-Morales',
+          role: 'Debtor - Appellant',
+          type: 'Individual',
           contact: 'justin.saadein@harborgrid.com',
           address: 'P. O. Box 55268, Washington, DC 20040',
           phone: '678-650-6400',
@@ -41,13 +43,14 @@ export const MOCK_CASES: Case[] = [
           representationType: 'Pro Se',
           partyGroup: 'Debtor'
         },
-        { 
-          id: 'p-appellee' as PartyId, 
-          name: 'Westridge Swim & Racquet Club, Inc.', 
-          role: 'Creditor - Appellee', 
-          type: 'Corporation', 
+        {
+          id: 'p-appellee' as PartyId,
+          caseId: '25-1229' as CaseId,
+          name: 'Westridge Swim & Racquet Club, Inc.',
+          role: 'Creditor - Appellee',
+          type: 'Corporation',
           contact: 'info@westridge.org',
-          counsel: 'Thomas Charles Junker', 
+          counsel: 'Thomas Charles Junker',
           partyGroup: 'Creditor',
           attorneys: [
             {
@@ -86,6 +89,7 @@ export const MOCK_CASES: Case[] = [
     magistrateJudge: 'Ivan D. Davis',
     ownerId: 'usr-admin-justin' as UserId,
     linkedCaseIds: ['25-1229' as CaseId],
+    isArchived: false,
     parties: [],
     citations: [],
     arguments: [],
@@ -107,10 +111,11 @@ export const MOCK_CASES: Case[] = [
     jurisdiction: 'CA Superior Court', 
     court: 'San Francisco',
     isConsolidated: false,
+    isArchived: false,
     ownerId: 'usr-admin-justin' as UserId,
     ownerOrgId: 'org-1' as OrgId,
     parties: [
-        { id: 'p1' as PartyId, name: 'John Doe', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'john@email.com', type: 'Individual' }
+        { id: 'p1' as PartyId, caseId: 'C-2025-001' as CaseId, name: 'John Doe', role: 'Plaintiff', partyGroup: 'Class Representatives', contact: 'john@email.com', type: 'Individual' }
     ],
     citations: [],
     arguments: [],
@@ -131,6 +136,7 @@ export const MOCK_CASES: Case[] = [
     matterType: 'M&A',
     jurisdiction: 'Delaware',
     court: 'Chancery',
+    isArchived: false,
     ownerId: 'usr-partner-alex' as UserId,
     parties: [],
     citations: [],

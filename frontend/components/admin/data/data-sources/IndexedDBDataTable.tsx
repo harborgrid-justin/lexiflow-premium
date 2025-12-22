@@ -39,7 +39,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
           type="text"
           placeholder="Search records..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
           className={cn(
             "w-full px-4 py-2 rounded-lg border",
             theme.border.default,
@@ -64,7 +64,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {data.map((item: any) => (
                 <tr key={item.id} className={cn(
                   "border-b hover:bg-gray-50 dark:hover:bg-slate-800/50",
                   theme.border.default
@@ -76,7 +76,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
                     {editingId === item.id ? (
                       <textarea
                         value={JSON.stringify(editingData, null, 2)}
-                        onChange={(e) => {
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                           try {
                             setEditingData(JSON.parse(e.target.value));
                           } catch {

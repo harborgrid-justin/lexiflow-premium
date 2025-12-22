@@ -33,15 +33,6 @@ function getNestedProperty(obj: Record<string, unknown>, path: string): unknown 
 }
 
 /**
- * Escapes special regex characters in string
- * Reserved for future pattern matching
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function escapeRegExp(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/**
  * Substitutes template variables in content
  */
 export function substituteVariables(

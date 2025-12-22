@@ -48,7 +48,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
       async () => {
           const all = await DataService.compliance.getConflicts();
           // Return flagged or recent items
-          return all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+          return all.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
       }
   );
 
@@ -88,7 +88,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
           )} 
           placeholder="Enter name or entity..." 
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
         <Button variant="primary" className="absolute right-2 top-2 bottom-2 px-6 rounded-full font-medium transition-colors" onClick={handleSearch}>Search</Button>

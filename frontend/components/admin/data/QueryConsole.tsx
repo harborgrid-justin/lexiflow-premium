@@ -28,7 +28,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const [isExecuting, setIsExecuting] = useState(false);
   
   const [shareModalOpen, setShareModalOpen] = useState(false);
-  const [explainPlan, setExplainPlan] = useState<unknown>(null);
+  const [explainPlan, setExplainPlan] = useState<any>(null);
   const [isFormatting, setIsFormatting] = useState(false);
 
   // Dynamic Schema Fetching from real backend
@@ -130,7 +130,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
 
   const renderResultRow = (row: unknown, index: number) => (
       <div key={index} className={cn("flex border-b transition-colors h-8", theme.border.default, `hover:${theme.surface.highlight}`)}>
-          {Object.values(row).map((v: unknown, j) => (
+          {Object.values(row as Record<string, any>).map((v: unknown, j) => (
               <div key={j} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.default)}>
                   {String(v)}
               </div>
@@ -167,7 +167,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                     </div>
                     <textarea 
                         className={cn("flex-1 bg-transparent font-mono text-sm outline-none resize-none border-none p-4", theme.text.primary)}
-                        value={query} onChange={(e) => setQuery(e.target.value)} spellCheck={false}
+                        value={query} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuery(e.target.value)} spellCheck={false}
                     />
                 </div>
                 
@@ -207,7 +207,11 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                             </div>
                         )}
                          {activeResultsTab === 'results' && (!results || results.length === 0) && <div className={cn("p-4 text-sm text-center", theme.text.tertiary)}>No results or query not executed.</div>}
-                         {activeResultsTab === 'explain' && explainPlan && <div className={cn("p-4 text-xs font-mono whitespace-pre-wrap", theme.text.primary)}>{JSON.stringify(explainPlan, null, 2)}</div>}
+                         {activeResultsTab === 'explain' && explainPlan && (
+                           <div className={cn("p-4 text-xs font-mono whitespace-pre-wrap", theme.text.primary)}>
+                             {JSON.stringify(explainPlan, null, 2)}
+                           </div>
+                         )}
                          {activeResultsTab === 'visualize' && visualizableData && (
                              <div className="p-4 h-full">
                                  <ResponsiveContainer width="100%" height="100%">

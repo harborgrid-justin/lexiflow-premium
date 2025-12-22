@@ -22,60 +22,60 @@ export enum InvoiceItemType {
 @Index(['invoiceId', 'type'])
 export class InvoiceItem {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'invoice_id' })
   @Index()
-  invoiceId: string;
+  invoiceId!: string;
 
   @Column({
     type: 'enum',
     enum: InvoiceItemType,
   })
-  type: InvoiceItemType;
+  type!: InvoiceItemType;
 
   @Column({ type: 'date', nullable: true })
-  date: string;
+  date!: string;
 
   @Column({ type: 'varchar', length: 500 })
-  description: string;
+  description!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   quantity: number; // hours for time, units for expenses
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  rate: number;
+  rate!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ type: 'uuid', nullable: true })
-  timeEntryId: string;
+  timeEntryId!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  expenseId: string;
+  expenseId!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  userId: string;
+  userId!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  userName: string;
+  userName!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  activity: string;
+  activity!: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  ledesCode: string;
+  ledesCode!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  phaseCode: string;
+  phaseCode!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  taskCode: string;
+  taskCode!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

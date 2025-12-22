@@ -42,47 +42,47 @@ export enum RiskLevel {
 @Index(['title'])
 export class Clause extends BaseEntity {
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: ClauseCategory,
     default: ClauseCategory.GENERAL,
   })
-  category: ClauseCategory;
+  category!: ClauseCategory;
 
   @Column({ type: 'simple-array', nullable: true })
-  tags: string[];
+  tags!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
-  variables: Record<string, any>;
+  variables!: Record<string, any>;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ name: 'usage_count', type: 'int', default: 0 })
-  usageCount: number;
+  usageCount!: number;
 
   @Column({ name: 'last_used_at', type: 'timestamp', nullable: true })
-  lastUsedAt: Date;
+  lastUsedAt!: Date;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  jurisdiction: string;
+  jurisdiction!: string;
 
   @Column({ name: 'practice_area', type: 'varchar', length: 200, nullable: true })
-  practiceArea: string;
+  practiceArea!: string;
 
   @Column({
     name: 'risk_level',
@@ -90,26 +90,26 @@ export class Clause extends BaseEntity {
     enum: RiskLevel,
     default: RiskLevel.MEDIUM,
   })
-  riskLevel: RiskLevel;
+  riskLevel!: RiskLevel;
 
   @Column({ name: 'is_standard', type: 'boolean', default: false })
-  isStandard: boolean;
+  isStandard!: boolean;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  version: string;
+  version!: string;
 
   @Column({ type: 'text', nullable: true })
-  alternatives: string;
+  alternatives!: string;
 
   @Column({ name: 'legal_precedent', type: 'text', nullable: true })
-  legalPrecedent: string;
+  legalPrecedent!: string;
 
   @Column({ name: 'related_clauses', type: 'simple-array', nullable: true })
-  relatedClauses: string[];
+  relatedClauses!: string[];
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

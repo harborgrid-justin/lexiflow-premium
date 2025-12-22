@@ -32,28 +32,28 @@ export enum TimeEntryStatus {
 export class TimeEntry extends BaseEntity {
   @Column({ name: 'case_id', nullable: true })
   @Index()
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'user_id', nullable: true })
   @Index()
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => User, (user) => user.timeEntries)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 
   @Column({ type: 'date' })
-  date: Date;
+  date!: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   duration: number; // in hours
 
   @Column({ type: 'text' })
-  description: string;
+  description!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   activity: string; // e.g., "Research", "Court Appearance", "Client Meeting"
@@ -73,47 +73,47 @@ export class TimeEntry extends BaseEntity {
     default: TimeEntryStatus.DRAFT,
   })
   @Index()
-  status: TimeEntryStatus;
+  status!: TimeEntryStatus;
 
   @Column({ type: 'boolean', default: true })
-  billable: boolean;
+  billable!: boolean;
 
   @Column({ name: 'invoice_id', type: 'uuid', nullable: true })
   @Index()
   invoiceId: string; // Links time entry to invoice when billed
 
   @Column({ name: 'rate_table_id', type: 'uuid', nullable: true })
-  rateTableId: string;
+  rateTableId!: string;
 
   @Column({ type: 'text', nullable: true })
-  internalNotes: string;
+  internalNotes!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  taskCode: string;
+  taskCode!: string;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   discount: number; // percentage
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  discountedTotal: number;
+  discountedTotal!: number;
 
   @Column({ type: 'uuid', nullable: true })
-  approvedBy: string;
+  approvedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  approvedAt: Date;
+  approvedAt!: Date;
 
   @Column({ type: 'uuid', nullable: true })
-  billedBy: string;
+  billedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  billedAt: Date;
+  billedAt!: Date;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  phaseCode: string;
+  phaseCode!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  expenseCategory: string;
+  expenseCategory!: string;
 
   // Note: createdAt, updatedAt, createdBy, updatedBy, and deletedAt are inherited from BaseEntity
 }

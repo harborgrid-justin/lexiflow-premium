@@ -14,7 +14,7 @@ interface DocumentRowProps {
   setSelectedDocForHistory: (doc: LegalDocument) => void;
   setTaggingDoc: (doc: LegalDocument) => void;
   onRowClick?: (doc: LegalDocument) => void;
-  theme: unknown;
+  theme: any;
 }
 
 export const DocumentRow = React.memo<DocumentRowProps>(({ 
@@ -105,7 +105,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
             {doc.lastModified}
         </div>
         <div className="w-24 flex-shrink-0 flex justify-end">
-            <div className="flex justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                 <button className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.primary.light}`)}><Download className="h-4 w-4"/></button>
                 <button onClick={handleHistory} className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.primary.light}`)} title="View History"><Eye className="h-4 w-4"/></button>
                 <button className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.primary.text}`, `hover:${theme.primary.light}`)}><MoreVertical className="h-4 w-4"/></button>

@@ -12,7 +12,7 @@ export class CreateCaseDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  title: string;
+  title!: string;
 
   @ApiProperty({ 
     description: 'Unique case number',
@@ -22,7 +22,7 @@ export class CreateCaseDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiPropertyOptional({ 
     description: 'Case description',

@@ -18,7 +18,7 @@ export const DocumentGridCard: React.FC<DocumentGridCardProps> = ({ doc, isSelec
 
     return (
         <div 
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
                 if(e.ctrlKey || e.metaKey) onToggleSelection(doc.id, e);
                 else onPreview(doc);
             }}
@@ -33,7 +33,7 @@ export const DocumentGridCard: React.FC<DocumentGridCardProps> = ({ doc, isSelec
                 <input 
                     type="checkbox" 
                     checked={isSelected} 
-                    onChange={(e) => onToggleSelection(doc.id, e as any)} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onToggleSelection(doc.id, e as any)} 
                     className="rounded text-blue-600 cursor-pointer w-4 h-4"
                 />
             </div>

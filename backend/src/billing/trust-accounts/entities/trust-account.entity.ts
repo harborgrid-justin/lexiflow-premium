@@ -26,13 +26,13 @@ export enum TrustAccountStatus {
 @Index(['caseId', 'status'])
 export class TrustAccount {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'account_number', type: 'varchar', length: 100, unique: true })
-  accountNumber: string;
+  accountNumber!: string;
 
   @Column({ name: 'account_name', type: 'varchar', length: 255 })
-  accountName: string;
+  accountName!: string;
 
   @Column({
     name: 'account_type',
@@ -40,24 +40,24 @@ export class TrustAccount {
     enum: TrustAccountType,
     default: TrustAccountType.CLIENT_TRUST,
   })
-  accountType: TrustAccountType;
+  accountType!: TrustAccountType;
 
   @Column({ name: 'client_id', type: 'uuid' })
   @Index()
-  clientId: string;
+  clientId!: string;
 
   @Column({ name: 'client_name', type: 'varchar', length: 255 })
-  clientName: string;
+  clientName!: string;
 
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
   @Index()
-  caseId: string;
+  caseId!: string;
 
   @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
-  balance: number;
+  balance!: number;
 
   @Column({ type: 'varchar', length: 3, default: 'USD' })
-  currency: string;
+  currency!: string;
 
   @Column({
     type: 'enum',
@@ -65,53 +65,53 @@ export class TrustAccount {
     default: TrustAccountStatus.ACTIVE,
   })
   @Index()
-  status: TrustAccountStatus;
+  status!: TrustAccountStatus;
 
   @Column({ name: 'bank_name', type: 'varchar', length: 255, nullable: true })
-  bankName: string;
+  bankName!: string;
 
   @Column({ name: 'bank_account_number', type: 'varchar', length: 100, nullable: true })
-  bankAccountNumber: string;
+  bankAccountNumber!: string;
 
   @Column({ name: 'routing_number', type: 'varchar', length: 50, nullable: true })
-  routingNumber: string;
+  routingNumber!: string;
 
   @Column({ type: 'text', nullable: true })
-  purpose: string;
+  purpose!: string;
 
   @Column({ name: 'opened_date', type: 'date', nullable: true })
-  openedDate: string;
+  openedDate!: string;
 
   @Column({ name: 'closed_date', type: 'date', nullable: true })
-  closedDate: string;
+  closedDate!: string;
 
   @Column({ name: 'minimum_balance', type: 'decimal', precision: 12, scale: 2, default: 0 })
-  minimumBalance: number;
+  minimumBalance!: number;
 
   @Column({ name: 'interest_bearing', type: 'boolean', default: false })
-  interestBearing: boolean;
+  interestBearing!: boolean;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @VersionColumn()
-  version: number;
+  version!: number;
 
   @Column({ name: 'responsible_attorney', type: 'uuid', nullable: true })
-  responsibleAttorney: string;
+  responsibleAttorney!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 }

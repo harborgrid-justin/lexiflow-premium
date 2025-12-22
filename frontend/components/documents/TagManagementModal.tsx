@@ -51,7 +51,7 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                         className={cn("flex-1 px-3 py-2 border rounded-md text-sm outline-none transition-all", theme.border.default, theme.surface.default, "focus:ring-2 focus:ring-blue-500")}
                         placeholder="Type new tag name..."
                         value={newTagInput}
-                        onChange={e => setNewTagInput(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTagInput(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') handleAddTag(); }}
                     />
                     <Button size="sm" onClick={handleAddTag} disabled={!newTagInput.trim()}>Add</Button>

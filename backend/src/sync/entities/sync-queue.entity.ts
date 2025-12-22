@@ -11,42 +11,42 @@ export enum SyncStatus {
 @Entity('sync_queue')
 export class SyncQueue {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
   operation: string; // 'create', 'update', 'delete'
 
   @Column()
-  entityType: string;
+  entityType!: string;
 
   @Column()
-  entityId: string;
+  entityId!: string;
 
   @Column('jsonb')
-  payload: Record<string, any>;
+  payload!: Record<string, any>;
 
   @Column({
     type: 'enum',
     enum: SyncStatus,
     default: SyncStatus.PENDING,
   })
-  status: SyncStatus;
+  status!: SyncStatus;
 
   @Column({ default: 0 })
-  retryCount: number;
+  retryCount!: number;
 
   @Column({ nullable: true })
-  error: string;
+  error!: string;
 
   @Column({ nullable: true })
-  userId: string;
+  userId!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  syncedAt: Date;
+  syncedAt!: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

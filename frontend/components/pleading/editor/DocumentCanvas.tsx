@@ -68,7 +68,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                   <input
                     className="w-full text-center font-bold font-serif text-lg outline-none bg-transparent placeholder:text-slate-300 uppercase underline"
                     value={section.content}
-                    onChange={(e) => onUpdateSection(section.id, { content: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateSection(section.id, { content: e.target.value })}
                     aria-label="Section Heading"
                   />
               );
@@ -87,7 +87,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                   <textarea
                     className="w-full resize-none overflow-hidden bg-transparent outline-none font-serif text-base leading-relaxed h-auto min-h-[4rem]"
                     value={section.content}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         onUpdateSection(section.id, { content: e.target.value });
                         // Auto-grow
                         e.target.style.height = 'auto';
@@ -119,7 +119,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => handleKeyDown(e, section.id)}
-                onClick={(e) => { e.stopPropagation(); onSelectSection(section.id); }}
+                onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelectSection(section.id); }}
                 className={cn(
                     "relative group mb-4 p-2 transition-all border-2 border-transparent rounded focus:outline-none focus:ring-2 focus:ring-blue-500",
                     selectedSectionId === section.id ? "border-blue-400 bg-blue-50/20" : "hover:border-slate-200"

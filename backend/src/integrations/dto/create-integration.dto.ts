@@ -23,11 +23,11 @@ export enum IntegrationStatus {
 export class CreateIntegrationDto {
   @ApiProperty({ description: 'Integration name' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Integration type', enum: IntegrationType })
   @IsEnum(IntegrationType)
-  type: IntegrationType;
+  type!: IntegrationType;
 
   @ApiProperty({ description: 'Integration description', required: false })
   @IsOptional()
@@ -41,7 +41,7 @@ export class CreateIntegrationDto {
 
   @ApiProperty({ description: 'Configuration object' })
   @IsObject()
-  config: Record<string, unknown>;
+  config!: Record<string, unknown>;
 
   @ApiProperty({ description: 'Credentials object', required: false })
   @IsOptional()

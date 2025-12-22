@@ -5,7 +5,7 @@
  * WCAG 2.1 AA compliant
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -125,5 +125,5 @@ export class UpdateCustodianDto {
   assignedTo?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

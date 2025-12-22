@@ -10,7 +10,7 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
 }) => {
     // Memoize sorted sections to avoid re-sorting on every render
     const sortedSections = useMemo(() => {
-        return [...document.sections].sort((a, b) => a.order - b.order);
+        return [...document.sections].sort((a: any, b: any) => a.order - b.order);
     }, [document.sections]);
 
     // Memoize plaintiff and defendant names

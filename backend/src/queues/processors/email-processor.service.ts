@@ -28,7 +28,9 @@ export class EmailProcessorService {
       this.logger.log(`Email sent successfully to: ${job.data.to}`);
       return { success: true, messageId: `msg-${Date.now()}` };
     } catch (error) {
-      this.logger.error(`Email sending failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Email sending failed: ${message}`, stack);
       throw error;
     }
   }
@@ -48,7 +50,9 @@ export class EmailProcessorService {
       this.logger.log(`Bulk email sending completed`);
       return { success: true, results };
     } catch (error) {
-      this.logger.error(`Bulk email sending failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Bulk email sending failed: ${message}`, stack);
       throw error;
     }
   }

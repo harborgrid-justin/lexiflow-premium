@@ -41,27 +41,3 @@ export const useModalState = (initialState = false): UseModalStateReturn => {
     toggle
   };
 };
-
-/**
- * useMultipleModals - Manage multiple modal states efficiently
- * 
- * @example
- * ```tsx
- * const modals = useMultipleModals(['create', 'edit', 'delete']);
- * 
- * <Button onClick={modals.create.open}>Create</Button>
- * <Modal isOpen={modals.create.isOpen} onClose={modals.create.close}>...</Modal>
- * ```
- */
-export const useMultipleModals = <T extends string>(
-  modalNames: T[]
-): Record<T, UseModalStateReturn> => {
-  const modals = {} as Record<T, UseModalStateReturn>;
-  
-  modalNames.forEach(name => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    modals[name] = useModalState();
-  });
-  
-  return modals;
-};

@@ -40,23 +40,23 @@ export enum DeponentType {
 @Index(['status'])
 export class Deposition extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'witness_id', type: 'uuid', nullable: true })
-  witnessId: string;
+  witnessId!: string;
 
   @Column({ name: 'deponent_name', type: 'varchar', length: 300 })
-  deponentName: string;
+  deponentName!: string;
 
   @Column({ name: 'deponent_title', type: 'varchar', length: 100, nullable: true })
-  deponentTitle: string;
+  deponentTitle!: string;
 
   @Column({ name: 'deponent_organization', type: 'varchar', length: 200, nullable: true })
-  deponentOrganization: string;
+  deponentOrganization!: string;
 
   @Column({
     name: 'method',
@@ -64,7 +64,7 @@ export class Deposition extends BaseEntity {
     enum: DepositionMethod,
     default: DepositionMethod.ORAL,
   })
-  method: DepositionMethod;
+  method!: DepositionMethod;
 
   @Column({
     name: 'deponent_type',
@@ -72,35 +72,35 @@ export class Deposition extends BaseEntity {
     enum: DeponentType,
     nullable: true
   })
-  deponentType: DeponentType;
+  deponentType!: DeponentType;
 
   @Column({
     type: 'enum',
     enum: DepositionStatus,
     default: DepositionStatus.SCHEDULED,
   })
-  status: DepositionStatus;
+  status!: DepositionStatus;
 
   @Column({ name: 'scheduled_date', type: 'timestamp', nullable: true })
-  scheduledDate: Date;
+  scheduledDate!: Date;
 
   @Column({ name: 'actual_start_time', type: 'timestamp', nullable: true })
-  actualStartTime: Date;
+  actualStartTime!: Date;
 
   @Column({ name: 'actual_end_time', type: 'timestamp', nullable: true })
-  actualEndTime: Date;
+  actualEndTime!: Date;
 
   @Column({ name: 'duration_minutes', type: 'int', nullable: true })
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ name: 'court_reporter', type: 'varchar', length: 300, nullable: true })
-  courtReporter: string;
+  courtReporter!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  videographer: string;
+  videographer!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   attendees: Array<{
@@ -110,44 +110,44 @@ export class Deposition extends BaseEntity {
   }>;
 
   @Column({ type: 'text', nullable: true })
-  summary: string;
+  summary!: string;
 
   @Column({ name: 'conducted_by', type: 'varchar', length: 255, nullable: true })
-  conductedBy: string;
+  conductedBy!: string;
 
   @Column({ name: 'defended_by', type: 'varchar', length: 255, nullable: true })
-  defendedBy: string;
+  defendedBy!: string;
 
   @Column({ name: 'is_video_recorded', type: 'boolean', default: false })
-  isVideoRecorded: boolean;
+  isVideoRecorded!: boolean;
 
   @Column({ name: 'is_remote', type: 'boolean', default: false })
-  isRemote: boolean;
+  isRemote!: boolean;
 
   @Column({ name: 'remote_link', type: 'varchar', length: 500, nullable: true })
-  remoteLink: string;
+  remoteLink!: string;
 
   @Column({ name: 'deposition_notice', type: 'text', nullable: true })
-  depositionNotice: string;
+  depositionNotice!: string;
 
   @Column({ name: 'subject_matter', type: 'text', nullable: true })
-  subjectMatter: string;
+  subjectMatter!: string;
 
   @Column({ name: 'topics_discussed', type: 'jsonb', nullable: true })
-  topicsDiscussed: string[];
+  topicsDiscussed!: string[];
 
   @Column({ name: 'exhibits_used', type: 'jsonb', nullable: true })
   exhibitsUsed: Record<string, any>[];
 
   @Column({ name: 'transcript_path', type: 'varchar', length: 500, nullable: true })
-  transcriptPath: string;
+  transcriptPath!: string;
 
   @Column({ name: 'transcript_received_date', type: 'date', nullable: true })
-  transcriptReceivedDate: Date;
+  transcriptReceivedDate!: Date;
 
   @Column({ name: 'video_path', type: 'varchar', length: 500, nullable: true })
-  videoPath: string;
+  videoPath!: string;
 
   @Column({ name: 'estimated_cost', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  estimatedCost: number;
+  estimatedCost!: number;
 }

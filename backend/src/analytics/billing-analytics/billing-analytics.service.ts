@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   BillingAnalyticsQueryDto,
   BillingMetricsDto,
-  AttorneyRevenue,
   BillingTrendDataPoint,
   WipAgingDto,
   CaseWip,
@@ -72,7 +71,11 @@ export class BillingAnalyticsService {
 
       return metrics;
     } catch (error) {
-      this.logger.error(`Error getting billing metrics: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      const message = error instanceof Error ? message : 'Unknown error';
+      const stack = error instanceof Error ? stack : undefined;
+      this.logger.error(`Error getting billing metrics: ${message}`, stack);
       throw error;
     }
   }
@@ -127,7 +130,11 @@ export class BillingAnalyticsService {
 
       return trends;
     } catch (error) {
-      this.logger.error(`Error getting billing trends: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      const message = error instanceof Error ? message : 'Unknown error';
+      const stack = error instanceof Error ? stack : undefined;
+      this.logger.error(`Error getting billing trends: ${message}`, stack);
       throw error;
     }
   }
@@ -171,7 +178,11 @@ export class BillingAnalyticsService {
 
       return aging;
     } catch (error) {
-      this.logger.error(`Error getting WIP aging: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      const message = error instanceof Error ? message : 'Unknown error';
+      const stack = error instanceof Error ? stack : undefined;
+      this.logger.error(`Error getting WIP aging: ${message}`, stack);
       throw error;
     }
   }
@@ -235,7 +246,11 @@ export class BillingAnalyticsService {
 
       return aging;
     } catch (error) {
-      this.logger.error(`Error getting AR aging: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      const message = error instanceof Error ? message : 'Unknown error';
+      const stack = error instanceof Error ? stack : undefined;
+      this.logger.error(`Error getting AR aging: ${message}`, stack);
       throw error;
     }
   }
@@ -350,7 +365,11 @@ export class BillingAnalyticsService {
 
       return analysis;
     } catch (error) {
-      this.logger.error(`Error getting realization analysis: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      const message = error instanceof Error ? message : 'Unknown error';
+      const stack = error instanceof Error ? stack : undefined;
+      this.logger.error(`Error getting realization analysis: ${message}`, stack);
       throw error;
     }
   }

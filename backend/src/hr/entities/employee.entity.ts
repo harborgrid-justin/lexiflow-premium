@@ -5,46 +5,46 @@ import { TimeOffRequest } from './time-off-request.entity';
 @Entity('employees')
 export class Employee {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  firstName: string;
+  firstName!: string;
 
   @Column()
-  lastName: string;
+  lastName!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column({ type: 'enum', enum: EmployeeRole })
-  role: EmployeeRole;
+  role!: EmployeeRole;
 
   @Column({ nullable: true })
-  department: string;
+  department!: string;
 
   @Column({ nullable: true })
-  phone: string;
+  phone!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  hireDate: Date;
+  hireDate!: Date;
 
   @Column({ type: 'enum', enum: EmployeeStatus, default: EmployeeStatus.ACTIVE })
-  status: EmployeeStatus;
+  status!: EmployeeStatus;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  billingRate: number;
+  billingRate!: number;
 
   @Column({ type: 'int', nullable: true })
-  targetBillableHours: number;
+  targetBillableHours!: number;
 
   @OneToMany(() => TimeOffRequest, request => request.employee)
-  timeOffRequests: TimeOffRequest[];
+  timeOffRequests!: TimeOffRequest[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;

@@ -103,7 +103,7 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                                         )}
                                         <div className={cn("flex flex-wrap items-center gap-4 text-xs", theme.text.tertiary)}>
                                             <span className="flex items-center gap-1"><UserAvatar name={task.assignee} size="sm" className="w-4 h-4 text-[9px]"/> {task.assignee}</span>
-                                            <span className={`flex items-center gap-1 ${task.status !== 'Done' && new Date(task.dueDate) < new Date() ? 'text-red-500 font-bold' : ''}`}>
+                                            <span className={`flex items-center gap-1 ${task.status !== 'Done' && new Date(task.dueDate as string) < new Date() ? 'text-red-500 font-bold' : ''}`}>
                                                 <Clock className="h-3 w-3"/> Due: {task.dueDate}
                                             </span>
                                         </div>

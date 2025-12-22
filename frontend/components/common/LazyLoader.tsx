@@ -58,7 +58,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }
     <div className="h-full w-full p-6 space-y-6 overflow-hidden" role="status" aria-live="polite" aria-label={message}>
       {/* Skeleton Metrics Row - Matches MetricCard height ~120px */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-pulse">
-        {[1, 2, 3, 4].map((i) => (
+        {[1, 2, 3, 4].map((i: any) => (
           <div key={i} className={cn("h-32 rounded-xl border shadow-sm relative overflow-hidden", theme.surface.default, theme.border.default)}>
              <div className={cn("absolute inset-0 bg-gradient-to-r from-transparent via-current to-transparent opacity-10 animate-shimmer", theme.surface.highlight)} style={{ backgroundSize: '200% 100%' }}></div>
           </div>

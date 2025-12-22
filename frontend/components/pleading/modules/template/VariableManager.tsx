@@ -36,7 +36,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
               <input
                 className={cn("w-full text-sm p-2 border rounded outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 value={variable.value}
-                onChange={(e) => onUpdateVariable(variable.id, e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateVariable(variable.id, e.target.value)}
                 placeholder="No value set"
               />
               {variable.source !== 'Manual' && (

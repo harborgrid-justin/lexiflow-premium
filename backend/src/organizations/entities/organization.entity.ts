@@ -28,78 +28,78 @@ export enum OrganizationStatus {
 @Index(['jurisdiction'])
 export class Organization extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name!: string;
 
   @Column({ name: 'legal_name', type: 'varchar', length: 255, nullable: true })
-  legalName: string;
+  legalName!: string;
 
   @Column({
     name: 'organization_type',
     type: 'enum',
     enum: OrganizationType,
   })
-  organizationType: OrganizationType;
+  organizationType!: OrganizationType;
 
   @Column({ name: 'tax_id', type: 'varchar', length: 100, nullable: true })
-  taxId: string;
+  taxId!: string;
 
   @Column({ name: 'registration_number', type: 'varchar', length: 100, nullable: true })
-  registrationNumber: string;
+  registrationNumber!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  jurisdiction: string;
+  jurisdiction!: string;
 
   @Column({ name: 'incorporation_date', type: 'date', nullable: true })
-  incorporationDate: Date;
+  incorporationDate!: Date;
 
   @Column({ name: 'dissolution_date', type: 'date', nullable: true })
-  dissolutionDate: Date;
+  dissolutionDate!: Date;
 
   @Column({
     type: 'enum',
     enum: OrganizationStatus,
     default: OrganizationStatus.ACTIVE,
   })
-  status: OrganizationStatus;
+  status!: OrganizationStatus;
 
   @Column({ type: 'text', nullable: true })
-  address: string;
+  address!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  city: string;
+  city!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  state: string;
+  state!: string;
 
   @Column({ name: 'zip_code', type: 'varchar', length: 20, nullable: true })
-  zipCode: string;
+  zipCode!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  country: string;
+  country!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  phone: string;
+  phone!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  email: string;
+  email!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  website: string;
+  website!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  industry: string;
+  industry!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  ceo: string;
+  ceo!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  cfo: string;
+  cfo!: string;
 
   @Column({ name: 'general_counsel', type: 'varchar', length: 255, nullable: true })
-  generalCounsel: string;
+  generalCounsel!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   officers: Record<string, any>[];
@@ -114,16 +114,16 @@ export class Organization extends BaseEntity {
   members: Record<string, any>[];
 
   @Column({ name: 'registered_agent', type: 'varchar', length: 255, nullable: true })
-  registeredAgent: string;
+  registeredAgent!: string;
 
   @Column({ name: 'registered_agent_address', type: 'text', nullable: true })
-  registeredAgentAddress: string;
+  registeredAgentAddress!: string;
 
   @Column({ name: 'parent_company', type: 'varchar', length: 255, nullable: true })
-  parentCompany: string;
+  parentCompany!: string;
 
   @Column({ name: 'parent_organization_id', type: 'uuid', nullable: true })
-  parentOrganizationId: string;
+  parentOrganizationId!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   subsidiaries: Record<string, any>[];
@@ -132,19 +132,19 @@ export class Organization extends BaseEntity {
   affiliates: Record<string, any>[];
 
   @Column({ name: 'number_of_employees', type: 'integer', nullable: true })
-  numberOfEmployees: number;
+  numberOfEmployees!: number;
 
   @Column({ name: 'annual_revenue', type: 'decimal', precision: 20, scale: 2, nullable: true })
-  annualRevenue: number;
+  annualRevenue!: number;
 
   @Column({ name: 'is_publicly_traded', type: 'boolean', default: false })
-  isPubliclyTraded: boolean;
+  isPubliclyTraded!: boolean;
 
   @Column({ name: 'stock_symbol', type: 'varchar', length: 50, nullable: true })
-  stockSymbol: string;
+  stockSymbol!: string;
 
   @Column({ name: 'stock_exchange', type: 'varchar', length: 100, nullable: true })
-  stockExchange: string;
+  stockExchange!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   licenses: Record<string, any>[];
@@ -159,7 +159,7 @@ export class Organization extends BaseEntity {
   bankAccounts: Record<string, any>[];
 
   @Column({ name: 'banking_info', type: 'text', nullable: true })
-  bankingInfo: string;
+  bankingInfo!: string;
 
   @Column({ name: 'insurance_policies', type: 'jsonb', nullable: true })
   insurancePolicies: Record<string, any>[];
@@ -177,10 +177,10 @@ export class Organization extends BaseEntity {
   litigation: Record<string, any>[];
 
   @Column({ name: 'has_active_litigation', type: 'boolean', default: false })
-  hasActiveLitigation: boolean;
+  hasActiveLitigation!: boolean;
 
   @Column({ name: 'litigation_summary', type: 'text', nullable: true })
-  litigationSummary: string;
+  litigationSummary!: string;
 
   @Column({ name: 'regulatory_filings', type: 'jsonb', nullable: true })
   regulatoryFilings: Record<string, any>[];
@@ -189,8 +189,8 @@ export class Organization extends BaseEntity {
   complianceRequirements: Record<string, any>[];
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

@@ -3,19 +3,19 @@ import { TrustAccountType, TrustAccountStatus } from '../entities/trust-account.
 
 export class CreateTrustAccountDto {
   @IsString()
-  accountNumber: string;
+  accountNumber!: string;
 
   @IsString()
-  accountName: string;
+  accountName!: string;
 
   @IsEnum(TrustAccountType)
-  accountType: TrustAccountType;
+  accountType!: TrustAccountType;
 
   @IsString()
-  clientId: string;
+  clientId!: string;
 
   @IsString()
-  clientName: string;
+  clientName!: string;
 
   @IsOptional()
   @IsString()

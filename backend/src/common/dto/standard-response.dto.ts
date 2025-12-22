@@ -2,10 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class StandardResponseDto<T> {
   @ApiProperty({ example: true, description: 'Operation success status' })
-  success: boolean;
+  success!: boolean;
 
   @ApiProperty({ example: 'Operation completed successfully' })
-  message: string;
+  message!: string;
 
   @ApiProperty({ description: 'Response data' })
   data?: T;
@@ -18,7 +18,7 @@ export class StandardResponseDto<T> {
   };
 
   @ApiProperty({ example: 1639584000000, description: 'Timestamp' })
-  timestamp: number;
+  timestamp!: number;
 
   @ApiProperty({ example: 'abc-123-def', description: 'Request ID' })
   requestId?: string;

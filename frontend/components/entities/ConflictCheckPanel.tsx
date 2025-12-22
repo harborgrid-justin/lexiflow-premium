@@ -71,7 +71,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
                 className={cn("flex-1 p-4 text-lg rounded-lg border shadow-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all", theme.surface.default, theme.border.default)}
                 placeholder="Enter entity name, tax ID, or alias..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
             />
             <Button 

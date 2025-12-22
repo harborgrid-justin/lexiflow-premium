@@ -53,7 +53,7 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
 
   return (
     <div 
-      onClick={(e) => { e.stopPropagation(); onClick?.(); }}
+      onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClick?.(); }}
       className={cn(
         "group flex items-center px-2 py-1 rounded border text-xs font-medium cursor-pointer transition-all mb-1 truncate",
         variants[variant],

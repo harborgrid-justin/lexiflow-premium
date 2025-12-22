@@ -40,7 +40,7 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Argument Narrative</label>
             <TextArea 
                 value={argument.description} 
-                onChange={(e) => onUpdate({ ...argument, description: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...argument, description: e.target.value })}
                 rows={8}
                 className="font-serif text-base leading-relaxed"
                 placeholder="Detail the legal reasoning..."
@@ -55,7 +55,7 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
                         type="range" 
                         min="0" max="100" 
                         value={argument.strength} 
-                        onChange={(e) => onUpdate({ ...argument, strength: parseInt(e.target.value) })}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...argument, strength: parseInt(e.target.value) })}
                         title="Adjust argument strength"
                         className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                     />

@@ -72,7 +72,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
         } else {
           handleGenerateResponse();
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("Failed to restore draft:", err);
         handleGenerateResponse();
       }
@@ -267,7 +267,7 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
               theme.text.primary,
             )}
             value={draftResponse}
-            onChange={(e) => setDraftResponse(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDraftResponse(e.target.value)}
             placeholder="Draft your legal response here..."
           />
         </div>

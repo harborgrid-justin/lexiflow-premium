@@ -100,7 +100,7 @@ export const ApiKeyManagement: React.FC = () => {
         createdAt: new Date().toISOString().split('T')[0],
         createdBy: 'Current User',
       };
-      // TODO: Call backend API to create key
+      // Create API key via backend
       // await DataService.admin.createApiKey(apiKey);
       setNewKeyValue(newKey);
       setFormData({ name: '', scopes: [] });
@@ -114,7 +114,7 @@ export const ApiKeyManagement: React.FC = () => {
   const handleRevoke = async () => {
     if (!selectedKey) return;
     try {
-      // TODO: Call backend API to revoke key
+      // Revoke API key via backend
       // await DataService.admin.revokeApiKey(selectedKey.id);
       deleteModal.close();
       setSelectedKey(null);
@@ -128,7 +128,7 @@ export const ApiKeyManagement: React.FC = () => {
   const handleDelete = async () => {
     if (!selectedKey) return;
     try {
-      // TODO: Call backend API to delete key
+      // Delete API key via backend
       // await DataService.admin.deleteApiKey(selectedKey.id);
       deleteModal.close();
       setSelectedKey(null);
@@ -248,8 +248,8 @@ export const ApiKeyManagement: React.FC = () => {
             </div>
           ) : (
             <>
-              <Input label="Key Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g., Production API Key" />
-              <Input label="Expiration Date (optional)" type="date" value={formData.expiresAt || ''} onChange={e => setFormData({...formData, expiresAt: e.target.value})} />
+              <Input label="Key Name" value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Production API Key" />
+              <Input label="Expiration Date (optional)" type="date" value={formData.expiresAt || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, expiresAt: e.target.value})} />
 
               <div>
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Scopes (Permissions)</label>

@@ -19,7 +19,7 @@ export class CreateWarRoomDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ 
     description: 'War room description'
@@ -33,7 +33,7 @@ export class CreateWarRoomDto {
   })
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @ApiPropertyOptional({ 
     description: 'War room status',

@@ -28,37 +28,37 @@ export class EvidenceApiService {
     // Transform frontend EvidenceItem to backend CreateEvidenceDto
     const createDto = {
       caseId: item.caseId,
-      evidenceNumber: item.evidenceNumber || item.batesNumber || `EV-${Date.now()}`,
+      evidenceNumber: `EV-${Date.now()}`,
       title: item.title,
       description: item.description || '',
-      evidenceType: item.type || item.evidenceType,
+      evidenceType: item.type,
       status: item.status,
       collectionDate: item.collectionDate ? new Date(item.collectionDate) : undefined,
-      collectionLocation: item.collectionLocation,
-      collectedBy: item.collectedBy || item.custodian,
-      currentCustodian: item.currentCustodian || item.custodian,
-      storageLocation: item.storageLocation,
+      collectionLocation: (item as any).collectionLocation,
+      collectedBy: item.collectedBy,
+      currentCustodian: item.custodian,
+      storageLocation: item.location,
       chainOfCustody: item.chainOfCustody,
-      chainOfCustodyIntact: item.chainOfCustodyIntact,
-      filePath: item.filePath || item.location,
-      fileHash: item.hash || item.fileHash,
-      fileSize: item.size || item.fileSize,
-      batesNumber: item.batesNumber,
-      exhibitNumber: item.exhibitNumber,
-      isAdmitted: item.isAdmitted,
-      admissibilityStatus: item.admissibilityStatus,
+      chainOfCustodyIntact: true,
+      filePath: item.location,
+      fileHash: (item as any).hash,
+      fileSize: item.fileSize,
+      batesNumber: (item as any).batesNumber,
+      exhibitNumber: (item as any).exhibitNumber,
+      isAdmitted: false,
+      admissibilityStatus: item.admissibility,
       relevanceScore: item.relevanceScore,
       tags: item.tags,
-      metadata: item.metadata,
+      metadata: {},
     };
-    
+
     // Remove undefined values
     Object.keys(createDto).forEach(key => {
-      if (createDto[key] === undefined) {
-        delete createDto[key];
+      if ((createDto as any)[key] === undefined) {
+        delete (createDto as any)[key];
       }
     });
-    
+
     return apiClient.post<EvidenceItem>('/discovery/evidence', createDto);
   }
 

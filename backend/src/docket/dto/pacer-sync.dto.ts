@@ -4,11 +4,11 @@ import { Type } from 'class-transformer';
 export class PacerSyncDto {
   @IsUUID()
   @IsNotEmpty()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @IsNotEmpty()
-  pacerCaseNumber: string;
+  pacerCaseNumber!: string;
 
   @IsString()
   @IsOptional()
@@ -26,9 +26,9 @@ export class PacerSyncDto {
 }
 
 export class PacerSyncResultDto {
-  success: boolean;
-  entriesAdded: number;
-  entriesUpdated: number;
-  lastSyncDate: Date;
+  success!: boolean;
+  entriesAdded!: number;
+  entriesUpdated!: number;
+  lastSyncDate!: Date;
   errors?: string[];
 }

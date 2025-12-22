@@ -17,14 +17,14 @@ export class TrackEventDto {
     enum: EventType
   })
   @IsEnum(EventType)
-  eventType: EventType;
+  eventType!: EventType;
 
   @ApiProperty({ 
     description: 'Event name',
     example: 'case_created'
   })
   @IsString()
-  eventName: string;
+  eventName!: string;
 
   @ApiProperty({ 
     description: 'User ID who triggered the event',

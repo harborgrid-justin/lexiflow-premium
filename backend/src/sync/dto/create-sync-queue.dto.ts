@@ -24,7 +24,7 @@ export class CreateSyncQueueDto {
   })
   @IsEnum(SyncOperation)
   @IsNotEmpty()
-  operation: string;
+  operation!: string;
 
   @ApiProperty({ 
     description: 'Entity type being synced',
@@ -34,21 +34,21 @@ export class CreateSyncQueueDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  entityType: string;
+  entityType!: string;
 
   @ApiProperty({ 
     description: 'Entity ID being synced'
   })
   @IsString()
   @IsNotEmpty()
-  entityId: string;
+  entityId!: string;
 
   @ApiProperty({ 
     description: 'Sync payload data'
   })
   @IsObject()
   @IsNotEmpty()
-  payload: Record<string, unknown>;
+  payload!: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'Sync status',

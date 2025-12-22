@@ -5,32 +5,32 @@ export class StoreDataOpsEmbeddingDto {
   @ApiProperty({ description: 'Entity type (e.g., case, document, pleading)' })
   @IsString()
   @IsNotEmpty()
-  entityType: string;
+  entityType!: string;
 
   @ApiProperty({ description: 'Entity ID' })
   @IsString()
   @IsNotEmpty()
-  entityId: string;
+  entityId!: string;
 
   @ApiProperty({ description: 'Content being embedded' })
   @IsString()
   @IsNotEmpty()
-  content: string;
+  content!: string;
 
   @ApiProperty({ description: 'Vector embedding array', type: [Number] })
   @IsArray()
   @ArrayMinSize(1)
   @IsNumber({}, { each: true })
-  embedding: number[];
+  embedding!: number[];
 
   @ApiProperty({ description: 'Model name used for embedding' })
   @IsString()
   @IsNotEmpty()
-  model: string;
+  model!: string;
 
   @ApiProperty({ description: 'Embedding dimensions' })
   @IsInt()
-  dimensions: number;
+  dimensions!: number;
 
   @ApiPropertyOptional({ description: 'Additional metadata', type: Object })
   @IsOptional()

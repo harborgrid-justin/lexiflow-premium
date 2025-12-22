@@ -209,14 +209,14 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                                             Secured
                                         </span>
                                     </div>
-                                    <Button variant="primary" className="mt-6" onClick={(e) => { e.stopPropagation(); wizard.next(); }}>Continue</Button>
+                                    <Button variant="primary" className="mt-6" onClick={(e: React.MouseEvent) => { e.stopPropagation(); wizard.next(); }}>Continue</Button>
                                 </div>
                             ) : (
                                 <>
                                     <UploadCloud className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>
                                     <p className={cn("text-lg font-medium", theme.text.primary)}>Drop files here to upload</p>
                                     <p className={cn("text-sm mt-2", theme.text.secondary)}>Supports PDF, DOCX, MSG, JPG (Max 500MB)</p>
-                                    <Button variant="secondary" className="mt-6" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>Select Files</Button>
+                                    <Button variant="secondary" className="mt-6" onClick={(e: React.MouseEvent) => { e.stopPropagation(); fileInputRef.current?.click(); }}>Select Files</Button>
                                 </>
                             )}
                         </div>
@@ -232,7 +232,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)} 
                             placeholder="e.g. Hard Drive S/N 12345"
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
                         />
                       </div>
                       <div>
@@ -240,7 +240,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                         <select 
                             className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)}
                             value={type}
-                            onChange={(e) => setType(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setType(e.target.value)}
                         >
                             <option value="Document">Document</option>
                             <option value="Digital">Digital</option>
@@ -262,7 +262,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                              className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)} 
                              rows={4} 
                              value={description}
-                             onChange={(e) => setDescription(e.target.value)}
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
                              placeholder="Describe the item..."
                           ></textarea>
                       </div>
@@ -273,7 +273,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
                              className={cn("w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500", theme.border.default, theme.surface.default)} 
                              placeholder="Person/Entity in possession"
                              value={custodian}
-                             onChange={(e) => setCustodian(e.target.value)}
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCustodian(e.target.value)}
                           />
                       </div>
                       <div className="sm:col-span-2">

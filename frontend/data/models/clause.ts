@@ -3,7 +3,7 @@ import { Clause, UUID, UserId } from '../../types';
 
 export const MOCK_CLAUSES: Clause[] = [
     {
-      id: '1' as UUID, name: 'Indemnification (Pro-Buyer)', category: 'Liability',
+      id: '1' as UUID, title: 'Indemnification (Pro-Buyer)', name: 'Indemnification (Pro-Buyer)', category: 'Liability',
       content: 'The Seller shall indemnify, defend and hold harmless the Buyer from and against any and all losses...',
       version: 2, usageCount: 45, lastUpdated: '2024-02-10', riskRating: 'Low',
       versions: [
@@ -12,7 +12,7 @@ export const MOCK_CLAUSES: Clause[] = [
       ]
     },
     {
-      id: '2' as UUID, name: 'Non-Compete (Strict)', category: 'Employment',
+      id: '2' as UUID, title: 'Non-Compete (Strict)', name: 'Non-Compete (Strict)', category: 'Employment',
       content: 'Employee agrees not to engage in any business competing with the Company for a period of 24 months...',
       version: 1, usageCount: 12, lastUpdated: '2023-11-05', riskRating: 'High',
       versions: [
@@ -20,7 +20,7 @@ export const MOCK_CLAUSES: Clause[] = [
       ]
     },
     {
-      id: '3' as UUID, name: 'Governing Law (Delaware)', category: 'General',
+      id: '3' as UUID, title: 'Governing Law (Delaware)', name: 'Governing Law (Delaware)', category: 'General',
       content: 'This Agreement shall be governed by and construed in accordance with the internal laws of the State of Delaware.',
       version: 3, usageCount: 89, lastUpdated: '2024-01-15', riskRating: 'Low',
       versions: [

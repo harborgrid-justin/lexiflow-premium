@@ -13,7 +13,7 @@ import { apiClient } from '../../infrastructure/apiClient';
  */
 export interface QueryResult {
   success: boolean;
-  data: unknown[];
+  data: Record<string, any>[];
   executionTimeMs: number;
   rowsAffected: number;
   error?: string;

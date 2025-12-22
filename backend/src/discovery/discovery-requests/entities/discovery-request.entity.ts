@@ -36,89 +36,89 @@ export enum DiscoveryRequestStatus {
 @Index(['dueDate'])
 export class DiscoveryRequest extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({
     type: 'enum',
     enum: DiscoveryRequestType,
   })
-  type: DiscoveryRequestType;
+  type!: DiscoveryRequestType;
 
   @Column({ type: 'varchar', length: 500 })
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: DiscoveryRequestStatus,
     default: DiscoveryRequestStatus.DRAFT,
   })
-  status: DiscoveryRequestStatus;
+  status!: DiscoveryRequestStatus;
 
   @Column({ name: 'request_number', type: 'varchar', length: 50, nullable: true })
-  requestNumber: string;
+  requestNumber!: string;
 
   @Column({ name: 'date_sent', type: 'date', nullable: true })
-  dateSent: Date;
+  dateSent!: Date;
 
   @Column({ name: 'date_received', type: 'date', nullable: true })
-  dateReceived: Date;
+  dateReceived!: Date;
 
   @Column({ name: 'due_date', type: 'date', nullable: true })
-  dueDate: Date;
+  dueDate!: Date;
 
   @Column({ name: 'date_responded', type: 'date', nullable: true })
-  dateResponded: Date;
+  dateResponded!: Date;
 
   @Column({ name: 'requesting_party', type: 'varchar', length: 200, nullable: true })
-  requestingParty: string;
+  requestingParty!: string;
 
   @Column({ name: 'responding_party', type: 'varchar', length: 200, nullable: true })
-  respondingParty: string;
+  respondingParty!: string;
 
   @Column({ name: 'number_of_requests', type: 'int', default: 0 })
-  numberOfRequests: number;
+  numberOfRequests!: number;
 
   @Column({ name: 'number_of_responses', type: 'int', default: 0 })
-  numberOfResponses: number;
+  numberOfResponses!: number;
 
   @Column({ name: 'number_of_objections', type: 'int', default: 0 })
-  numberOfObjections: number;
+  numberOfObjections!: number;
 
   @Column({ name: 'request_items', type: 'jsonb', nullable: true })
-  requestItems: any[];
+  requestItems!: any[];
 
   @Column({ type: 'jsonb', nullable: true })
-  responses: any[];
+  responses!: any[];
 
   @Column({ type: 'jsonb', nullable: true })
-  objections: any[];
+  objections!: any[];
 
   // Fields from generic
   @Column({ name: 'objection_deadline', type: 'date', nullable: true })
-  objectionDeadline: Date;
+  objectionDeadline!: Date;
 
   @Column({ name: 'is_extension_granted', type: 'boolean', default: false })
-  isExtensionGranted: boolean;
+  isExtensionGranted!: boolean;
 
   @Column({ name: 'extended_due_date', type: 'date', nullable: true })
-  extendedDueDate: Date;
+  extendedDueDate!: Date;
 
   @Column({ name: 'document_path', type: 'varchar', length: 500, nullable: true })
-  documentPath: string;
+  documentPath!: string;
 
   @Column({ name: 'response_path', type: 'varchar', length: 500, nullable: true })
-  responsePath: string;
+  responsePath!: string;
 
   @Column({ name: 'related_documents', type: 'jsonb', nullable: true })
-  relatedDocuments: string[];
+  relatedDocuments!: string[];
 
   @Column({ name: 'assigned_to', type: 'uuid', nullable: true })
-  assignedTo: string;
+  assignedTo!: string;
 }

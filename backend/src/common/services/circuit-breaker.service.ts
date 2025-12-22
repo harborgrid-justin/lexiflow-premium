@@ -66,6 +66,8 @@ export class CircuitBreakerService {
       this.onSuccess(circuit, config);
       return result;
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
       this.onFailure(circuit, config, circuitName);
       throw error;
     }

@@ -8,7 +8,7 @@ export class CreateLoginAttemptDto {
   })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @ApiProperty({ 
     description: 'IP address of the attempt',
@@ -18,14 +18,14 @@ export class CreateLoginAttemptDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(45)
-  ipAddress: string;
+  ipAddress!: string;
 
   @ApiProperty({ 
     description: 'Whether login was successful'
   })
   @IsBoolean()
   @IsNotEmpty()
-  success: boolean;
+  success!: boolean;
 
   @ApiPropertyOptional({ 
     description: 'Reason for failure if unsuccessful',

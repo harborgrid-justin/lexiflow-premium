@@ -9,14 +9,14 @@ export class CreateTimeEntryDto {
     example: '123e4567-e89b-12d3-a456-426614174000'
   })
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({
     description: 'User ID',
     example: '123e4567-e89b-12d3-a456-426614174001'
   })
   @IsString()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({
     description: 'Date of time entry (ISO date string YYYY-MM-DD)',
@@ -41,7 +41,7 @@ export class CreateTimeEntryDto {
     example: 'Reviewed discovery documents and prepared response'
   })
   @IsString()
-  description: string;
+  description!: string;
 
   @ApiPropertyOptional({
     description: 'Activity type or code',
@@ -66,7 +66,7 @@ export class CreateTimeEntryDto {
   })
   @IsNumber()
   @Min(0)
-  rate: number;
+  rate!: number;
 
   @ApiPropertyOptional({
     description: 'Time entry status',

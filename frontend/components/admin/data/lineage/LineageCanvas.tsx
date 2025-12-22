@@ -6,41 +6,41 @@ import { useNexusGraph } from '../../../../hooks/useNexusGraph';
 import { Pause, Play, RefreshCw } from 'lucide-react';
 import { cn } from '../../../../utils/cn';
 import { LineageNode, LineageLink } from '../../../../types';
+import { SimulationNode } from '../../../../utils/nexusPhysics';
 
 interface LineageCanvasProps {
-    isAnimating: boolean;
-    setIsAnimating: (v: boolean) => void;
-    data?: { nodes: LineageNode[], links: LineageLink[] }; 
+    data?: { nodes: LineageNode[], links: LineageLink[] };
 }
 
-export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIsAnimating, data }) => {
+export const LineageCanvas: React.FC<LineageCanvasProps> = ({ data }) => {
     const { theme, mode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    
+    const [isAnimating, setIsAnimating] = useState(true);
+
     // Default mock data if no props provided (Fallthrough safety)
-    const [graphData, setGraphData] = useState<{ nodes: unknown[], links: unknown[] }>({ 
+    const [graphData, setGraphData] = useState<{ nodes: SimulationNode[], links: { source: string; target: string; strength?: number }[] }>({
         nodes: [
             { id: 'src1', label: 'Salesforce CRM', type: 'root' },
             { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },
             { id: 'wh1', label: 'Data Warehouse', type: 'org' },
             { id: 'rpt1', label: 'Revenue Dashboard', type: 'evidence' },
-        ], 
+        ],
         links: [
             { source: 'src1', target: 'stg1', strength: 0.8 },
             { source: 'stg1', target: 'wh1', strength: 0.8 },
             { source: 'wh1', target: 'rpt1', strength: 0.8 },
-        ] 
+        ]
     });
 
     useEffect(() => {
         if (data && data.nodes.length > 0) {
-            setGraphData(data);
+            setGraphData(data as { nodes: SimulationNode[], links: { source: string; target: string; strength?: number }[] });
         }
     }, [data]);
 
     // Use Worker-based physics hook
-    const { nodesMeta, physicsState, reheat } = useNexusGraph(containerRef, graphData);
+    const { nodesMeta, physicsState, reheat } = useNexusGraph(containerRef, graphData as { nodes: SimulationNode[], links: { source: string; target: string }[] });
 
     useEffect(() => {
         let frameId: number;

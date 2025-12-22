@@ -183,7 +183,7 @@ export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({
                     )}
                     
                     <button 
-                        onClick={(e) => { e.stopPropagation(); handleDeleteField(field.id); }}
+                        onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleDeleteField(field.id); }}
                         className={cn("absolute -top-2 -right-2 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm", theme.status.error.bg)}
                     >
                         <X className="h-3 w-3"/>

@@ -34,89 +34,89 @@ export enum ESISourceStatus {
 @Index(['status'])
 export class ESISource extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'custodian_id', type: 'uuid', nullable: true })
-  custodianId: string;
+  custodianId!: string;
 
   @Column({ name: 'custodian_name', type: 'varchar', length: 255, nullable: true })
-  custodianName: string;
+  custodianName!: string;
 
   @Column({ name: 'source_name', type: 'varchar', length: 300 })
-  sourceName: string;
+  sourceName!: string;
 
   @Column({
     name: 'source_type',
     type: 'enum',
     enum: ESISourceType,
   })
-  sourceType: ESISourceType;
+  sourceType!: ESISourceType;
 
   @Column({ name: 'source_description', type: 'text', nullable: true })
-  sourceDescription: string;
+  sourceDescription!: string;
 
   @Column({
     type: 'enum',
     enum: ESISourceStatus,
     default: ESISourceStatus.IDENTIFIED,
   })
-  status: ESISourceStatus;
+  status!: ESISourceStatus;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ name: 'data_volume', type: 'varchar', length: 100, nullable: true })
-  dataVolume: string;
+  dataVolume!: string;
 
   @Column({ name: 'item_count', type: 'integer', nullable: true })
-  itemCount: number;
+  itemCount!: number;
 
   @Column({ name: 'date_range_start', type: 'date', nullable: true })
-  dateRangeStart: Date;
+  dateRangeStart!: Date;
 
   @Column({ name: 'date_range_end', type: 'date', nullable: true })
-  dateRangeEnd: Date;
+  dateRangeEnd!: Date;
 
   @Column({ name: 'collection_method', type: 'varchar', length: 255, nullable: true })
-  collectionMethod: string;
+  collectionMethod!: string;
 
   @Column({ name: 'collection_date', type: 'timestamp', nullable: true })
-  collectionDate: Date;
+  collectionDate!: Date;
 
   @Column({ name: 'collected_by', type: 'varchar', length: 255, nullable: true })
-  collectedBy: string;
+  collectedBy!: string;
 
   @Column({ name: 'processing_method', type: 'varchar', length: 255, nullable: true })
-  processingMethod: string;
+  processingMethod!: string;
 
   @Column({ name: 'processing_date', type: 'timestamp', nullable: true })
-  processingDate: Date;
+  processingDate!: Date;
 
   @Column({ name: 'processed_by', type: 'varchar', length: 255, nullable: true })
-  processedBy: string;
+  processedBy!: string;
 
   @Column({ name: 'actual_volume', type: 'bigint', nullable: true })
-  actualVolume: number;
+  actualVolume!: number;
 
   @Column({ name: 'collection_cost', type: 'decimal', precision: 15, scale: 2, nullable: true })
-  collectionCost: number;
+  collectionCost!: number;
 
   @Column({ name: 'processing_cost', type: 'decimal', precision: 15, scale: 2, nullable: true })
-  processingCost: number;
+  processingCost!: number;
 
   @Column({ name: 'is_encrypted', type: 'boolean', default: false })
-  isEncrypted: boolean;
+  isEncrypted!: boolean;
 
   @Column({ name: 'requires_special_processing', type: 'boolean', default: false })
-  requiresSpecialProcessing: boolean;
+  requiresSpecialProcessing!: boolean;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

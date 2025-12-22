@@ -3,52 +3,52 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('vector_embeddings')
 export class VectorEmbedding {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  entityType: string;
+  entityType!: string;
 
   @Column()
-  entityId: string;
+  entityId!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({ type: 'jsonb' })
-  embedding: number[];
+  embedding!: number[];
 
   @Column()
-  model: string;
+  model!: string;
 
   @Column({ type: 'int' })
-  dimensions: number;
+  dimensions!: number;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @Entity('ai_models')
 export class AIModel {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  type: string;
+  type!: string;
 
   @Column()
-  version: string;
+  version!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'jsonb' })
   config: any;
@@ -60,8 +60,8 @@ export class AIModel {
   performance: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

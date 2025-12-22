@@ -82,7 +82,7 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
             </div>
             <div className="w-[5%] flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity">
                 <button 
-                    onClick={(e) => { e.stopPropagation(); onSelect(caseData); }} 
+                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelect(caseData); }} 
                     className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)} 
                     title="View Details"
                     tabIndex={-1}

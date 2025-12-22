@@ -34,46 +34,46 @@ export enum DocketEntryType {
 @Index(['type'])
 export class DocketEntry extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'sequence_number', type: 'int', nullable: true })
-  sequenceNumber: number;
+  sequenceNumber!: number;
 
   @Column({ name: 'docket_number', type: 'varchar', length: 100, nullable: true })
-  docketNumber: string;
+  docketNumber!: string;
 
   @Column({ name: 'date_filed', type: 'date', nullable: true })
-  dateFiled: Date;
+  dateFiled!: Date;
 
   @Column({ name: 'entry_date', type: 'date', nullable: true })
-  entryDate: Date;
+  entryDate!: Date;
 
   @Column({ type: 'text' })
-  description: string;
+  description!: string;
 
   @Column({
     type: 'enum',
     enum: DocketEntryType,
     default: DocketEntryType.FILING,
   })
-  type: DocketEntryType;
+  type!: DocketEntryType;
 
   @Column({ type: 'text', nullable: true })
-  text: string;
+  text!: string;
 
   @Column({ name: 'filed_by', type: 'varchar', length: 255, nullable: true })
-  filedBy: string;
+  filedBy!: string;
 
   @Column({ name: 'document_title', type: 'varchar', length: 255, nullable: true })
-  documentTitle: string;
+  documentTitle!: string;
 
   @Column({ name: 'document_url', type: 'varchar', length: 2048, nullable: true })
-  documentUrl: string;
+  documentUrl!: string;
 
   @Column({ name: 'document_id', type: 'uuid', nullable: true })
-  documentId: string;
+  documentId!: string;
 }

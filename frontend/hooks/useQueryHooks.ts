@@ -41,8 +41,8 @@ export function useQuery<T>(
     return unsubscribe;
   }, [hashedKey, enabled, staleTime]);
 
-  return { 
-    ...state, 
+  return {
+    ...state,
     isLoading: state.status === 'loading' || (state.isFetching && state.status === 'idle'),
     refetch: () => queryClient.fetch(key, (sig) => fnRef.current(sig), 0) 
   };
@@ -66,9 +66,9 @@ export function useMutation<T, V>(
       }
 
       const data = await mutationFn(variables);
-      
+
       options?.onSuccess?.(data, variables, context);
-      options?.invalidateKeys?.forEach(k => queryClient.invalidate(k));
+      options?.invalidateKeys?.forEach((k) => queryClient.invalidate(k));
       options?.onSettled?.(data, null, variables, context);
       
       return data;

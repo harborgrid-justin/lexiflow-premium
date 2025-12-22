@@ -5,26 +5,26 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, Index } from 
 @Index(['ipAddress', 'createdAt'])
 export class LoginAttempt {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 255 })
   @Index()
-  email: string;
+  email!: string;
 
   @Column({ type: 'varchar', length: 45 })
   @Index()
-  ipAddress: string;
+  ipAddress!: string;
 
   @Column({ type: 'boolean' })
-  success: boolean;
+  success!: boolean;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  failureReason: string;
+  failureReason!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  userAgent: string;
+  userAgent!: string;
 
   @CreateDateColumn()
   @Index()
-  createdAt: Date;
+  createdAt!: Date;
 }

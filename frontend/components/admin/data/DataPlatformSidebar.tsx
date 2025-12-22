@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
-import { PlatformView } from '../AdminDatabaseControl';
+import { PlatformView } from './AdminDatabaseControl';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
-import { DATA_PLATFORM_MENU } from '../../../config/tabs.config';
+import { DATA_PLATFORM_MENU, MenuItem } from '../../../config/tabs.config';
 import { useQuery } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
 import { TenantConfig } from '../../../types';
@@ -32,7 +32,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
       { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
 
-  const menu = useMemo(() => DATA_PLATFORM_MENU, []);
+  const menu: MenuItem[] = useMemo(() => DATA_PLATFORM_MENU, []);
 
   // Auto-expand parent if child is active
   useEffect(() => {
@@ -91,7 +91,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                 {hasChildren && (
                   <div 
                     className={cn(theme.text.tertiary, "hover:text-current transition-colors")}
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
                       toggleExpand(item.id);
                     }}
@@ -101,12 +101,12 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                 )}
               </button>
               
-              {hasChildren && isExpanded && (
+              {hasChildren && isExpanded && item.children && (
                 <div className={cn("ml-4 pl-3 border-l space-y-1 mt-1 mb-1", theme.border.default)}>
-                  {item.children?.map(sub => (
+                  {(item.children as any).map((sub: any) => (
                     <button
                       key={sub.id}
-                      onClick={() => onChange(sub.id)} 
+                      onClick={() => onChange(sub.id)}
                       className={cn(
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id

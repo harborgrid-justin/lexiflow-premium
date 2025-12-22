@@ -25,10 +25,10 @@ export class DashboardQueryDto {
 
 export class ChartDataset {
   @ApiProperty({ description: 'Dataset label' })
-  label: string;
+  label!: string;
 
   @ApiProperty({ description: 'Data values' })
-  data: number[];
+  data!: number[];
 
   @ApiProperty({ description: 'Background color' })
   backgroundColor?: string | string[];
@@ -39,29 +39,29 @@ export class ChartDataset {
 
 export class ChartData {
   @ApiProperty({ description: 'Data labels' })
-  labels: string[];
+  labels!: string[];
 
   @ApiProperty({ description: 'Datasets', type: [ChartDataset] })
-  datasets: ChartDataset[];
+  datasets!: ChartDataset[];
 }
 
 export class DashboardChart {
   @ApiProperty({ description: 'Chart ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Chart title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Chart type' })
   type: 'line' | 'bar' | 'pie' | 'doughnut' | 'area';
 
   @ApiProperty({ description: 'Chart data', type: ChartData })
-  data: ChartData;
+  data!: ChartData;
 }
 
 export class QuickStat {
   @ApiProperty({ description: 'Stat label' })
-  label: string;
+  label!: string;
 
   @ApiProperty({ description: 'Stat value' })
   value: string | number;
@@ -78,51 +78,51 @@ export class QuickStat {
 
 export class DashboardSummary {
   @ApiProperty({ description: 'Total active cases' })
-  activeCases: number;
+  activeCases!: number;
 
   @ApiProperty({ description: 'Cases won this period' })
-  casesWon: number;
+  casesWon!: number;
 
   @ApiProperty({ description: 'Total revenue this period' })
-  totalRevenue: number;
+  totalRevenue!: number;
 
   @ApiProperty({ description: 'Revenue change percentage' })
-  revenueChange: number;
+  revenueChange!: number;
 
   @ApiProperty({ description: 'Total billable hours' })
-  billableHours: number;
+  billableHours!: number;
 
   @ApiProperty({ description: 'Billable hours change percentage' })
-  hoursChange: number;
+  hoursChange!: number;
 
   @ApiProperty({ description: 'Active clients count' })
-  activeClients: number;
+  activeClients!: number;
 
   @ApiProperty({ description: 'Pending tasks count' })
-  pendingTasks: number;
+  pendingTasks!: number;
 
   @ApiProperty({ description: 'Upcoming deadlines count' })
-  upcomingDeadlines: number;
+  upcomingDeadlines!: number;
 
   @ApiProperty({ description: 'Overdue items count' })
-  overdueItems: number;
+  overdueItems!: number;
 }
 
 export class ActivityItem {
   @ApiProperty({ description: 'Activity ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Activity type' })
   type: 'case' | 'document' | 'motion' | 'billing' | 'deadline' | 'message';
 
   @ApiProperty({ description: 'Activity title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Activity description' })
-  description: string;
+  description!: string;
 
   @ApiProperty({ description: 'Timestamp' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @ApiProperty({ description: 'Related entity ID' })
   entityId?: string;
@@ -131,10 +131,10 @@ export class ActivityItem {
   entityType?: string;
 
   @ApiProperty({ description: 'User who performed the activity' })
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ description: 'User name' })
-  userName: string;
+  userName!: string;
 
   @ApiProperty({ description: 'Priority level' })
   priority?: 'low' | 'medium' | 'high' | 'urgent';
@@ -142,22 +142,22 @@ export class ActivityItem {
 
 export class KeyPerformanceIndicator {
   @ApiProperty({ description: 'KPI name' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Current value' })
-  value: number;
+  value!: number;
 
   @ApiProperty({ description: 'Target value' })
-  target: number;
+  target!: number;
 
   @ApiProperty({ description: 'Unit of measurement' })
-  unit: string;
+  unit!: string;
 
   @ApiProperty({ description: 'Trend direction' })
   trend: 'up' | 'down' | 'stable';
 
   @ApiProperty({ description: 'Change percentage' })
-  changePercentage: number;
+  changePercentage!: number;
 
   @ApiProperty({ description: 'Status indicator' })
   status: 'good' | 'warning' | 'critical';
@@ -168,7 +168,7 @@ export class KeyPerformanceIndicator {
 
 export class DashboardAlert {
   @ApiProperty({ description: 'Alert ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Alert type' })
   type: 'deadline' | 'task' | 'billing' | 'compliance' | 'system';
@@ -177,63 +177,63 @@ export class DashboardAlert {
   severity: 'info' | 'warning' | 'error' | 'critical';
 
   @ApiProperty({ description: 'Alert title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Alert message' })
-  message: string;
+  message!: string;
 
   @ApiProperty({ description: 'Related entity ID' })
   entityId?: string;
 
   @ApiProperty({ description: 'Action required' })
-  actionRequired: boolean;
+  actionRequired!: boolean;
 
   @ApiProperty({ description: 'Timestamp' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @ApiProperty({ description: 'Is read' })
-  isRead: boolean;
+  isRead!: boolean;
 }
 
 // Now define the composite class that uses the above classes
 export class DashboardDataDto {
   @ApiProperty({ description: 'Summary statistics', type: DashboardSummary })
-  summary: DashboardSummary;
+  summary!: DashboardSummary;
 
   @ApiProperty({ description: 'Recent activity feed', type: [ActivityItem] })
-  recentActivity: ActivityItem[];
+  recentActivity!: ActivityItem[];
 
   @ApiProperty({ description: 'Key performance indicators', type: [KeyPerformanceIndicator] })
-  kpis: KeyPerformanceIndicator[];
+  kpis!: KeyPerformanceIndicator[];
 
   @ApiProperty({ description: 'Alerts and notifications', type: [DashboardAlert] })
-  alerts: DashboardAlert[];
+  alerts!: DashboardAlert[];
 
   @ApiProperty({ description: 'Charts data', type: [DashboardChart] })
-  charts: DashboardChart[];
+  charts!: DashboardChart[];
 
   @ApiProperty({ description: 'Quick stats', type: [QuickStat] })
-  quickStats: QuickStat[];
+  quickStats!: QuickStat[];
 }
 
 export class CaseSummary {
   @ApiProperty({ description: 'Case ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Case number' })
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiProperty({ description: 'Case title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Client name' })
-  clientName: string;
+  clientName!: string;
 
   @ApiProperty({ description: 'Status' })
-  status: string;
+  status!: string;
 
   @ApiProperty({ description: 'Practice area' })
-  practiceArea: string;
+  practiceArea!: string;
 
   @ApiProperty({ description: 'Next deadline' })
   nextDeadline?: Date;
@@ -242,59 +242,59 @@ export class CaseSummary {
   daysUntilDeadline?: number;
 
   @ApiProperty({ description: 'Pending tasks count' })
-  pendingTasks: number;
+  pendingTasks!: number;
 
   @ApiProperty({ description: 'Last activity date' })
-  lastActivity: Date;
+  lastActivity!: Date;
 }
 
 export class MyCasesSummaryDto {
   @ApiProperty({ description: 'Total assigned cases' })
-  totalCases: number;
+  totalCases!: number;
 
   @ApiProperty({ description: 'Active cases' })
-  activeCases: number;
+  activeCases!: number;
 
   @ApiProperty({ description: 'Cases by status' })
   casesByStatus: { [status: string]: number };
 
   @ApiProperty({ description: 'Recent cases', type: [CaseSummary] })
-  recentCases: CaseSummary[];
+  recentCases!: CaseSummary[];
 
   @ApiProperty({ description: 'Cases needing attention', type: [CaseSummary] })
-  casesNeedingAttention: CaseSummary[];
+  casesNeedingAttention!: CaseSummary[];
 
   @ApiProperty({ description: 'My billable hours' })
-  myBillableHours: number;
+  myBillableHours!: number;
 
   @ApiProperty({ description: 'My utilization rate' })
-  myUtilizationRate: number;
+  myUtilizationRate!: number;
 }
 
 export class DeadlineItem {
   @ApiProperty({ description: 'Deadline ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Deadline title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Due date' })
-  dueDate: Date;
+  dueDate!: Date;
 
   @ApiProperty({ description: 'Days until due' })
-  daysUntil: number;
+  daysUntil!: number;
 
   @ApiProperty({ description: 'Is overdue' })
-  isOverdue: boolean;
+  isOverdue!: boolean;
 
   @ApiProperty({ description: 'Priority level' })
   priority: 'low' | 'medium' | 'high' | 'critical';
 
   @ApiProperty({ description: 'Case ID' })
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Case number' })
-  caseNumber: string;
+  caseNumber!: string;
 
   @ApiProperty({ description: 'Deadline type' })
   type: 'filing' | 'hearing' | 'discovery' | 'payment' | 'other';
@@ -305,27 +305,27 @@ export class DeadlineItem {
 
 export class UpcomingDeadlinesDto {
   @ApiProperty({ description: 'Deadlines list', type: [DeadlineItem] })
-  deadlines: DeadlineItem[];
+  deadlines!: DeadlineItem[];
 
   @ApiProperty({ description: 'Total deadlines count' })
-  totalCount: number;
+  totalCount!: number;
 
   @ApiProperty({ description: 'Overdue count' })
-  overdueCount: number;
+  overdueCount!: number;
 
   @ApiProperty({ description: 'This week count' })
-  thisWeekCount: number;
+  thisWeekCount!: number;
 
   @ApiProperty({ description: 'Next 30 days count' })
-  next30DaysCount: number;
+  next30DaysCount!: number;
 }
 
 export class TaskItem {
   @ApiProperty({ description: 'Task ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Task title' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Task description' })
   description?: string;
@@ -346,53 +346,53 @@ export class TaskItem {
   caseNumber?: string;
 
   @ApiProperty({ description: 'Assigned to user ID' })
-  assignedToId: string;
+  assignedToId!: string;
 
   @ApiProperty({ description: 'Assigned to user name' })
-  assignedToName: string;
+  assignedToName!: string;
 
   @ApiProperty({ description: 'Created date' })
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 export class PendingTasksDto {
   @ApiProperty({ description: 'Tasks list', type: [TaskItem] })
-  tasks: TaskItem[];
+  tasks!: TaskItem[];
 
   @ApiProperty({ description: 'Total tasks count' })
-  totalCount: number;
+  totalCount!: number;
 
   @ApiProperty({ description: 'High priority count' })
-  highPriorityCount: number;
+  highPriorityCount!: number;
 
   @ApiProperty({ description: 'Overdue count' })
-  overdueCount: number;
+  overdueCount!: number;
 }
 
 export class InvoiceSummary {
   @ApiProperty({ description: 'Invoice ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Invoice number' })
-  invoiceNumber: string;
+  invoiceNumber!: string;
 
   @ApiProperty({ description: 'Client name' })
-  clientName: string;
+  clientName!: string;
 
   @ApiProperty({ description: 'Invoice amount' })
-  amount: number;
+  amount!: number;
 
   @ApiProperty({ description: 'Amount paid' })
-  amountPaid: number;
+  amountPaid!: number;
 
   @ApiProperty({ description: 'Amount due' })
-  amountDue: number;
+  amountDue!: number;
 
   @ApiProperty({ description: 'Invoice date' })
-  invoiceDate: Date;
+  invoiceDate!: Date;
 
   @ApiProperty({ description: 'Due date' })
-  dueDate: Date;
+  dueDate!: Date;
 
   @ApiProperty({ description: 'Status' })
   status: 'draft' | 'sent' | 'partial' | 'paid' | 'overdue' | 'void';
@@ -400,29 +400,29 @@ export class InvoiceSummary {
 
 export class BillingSummaryDto {
   @ApiProperty({ description: 'Current month revenue' })
-  currentMonthRevenue: number;
+  currentMonthRevenue!: number;
 
   @ApiProperty({ description: 'Last month revenue' })
-  lastMonthRevenue: number;
+  lastMonthRevenue!: number;
 
   @ApiProperty({ description: 'Revenue change percentage' })
-  revenueChange: number;
+  revenueChange!: number;
 
   @ApiProperty({ description: 'Unbilled hours' })
-  unbilledHours: number;
+  unbilledHours!: number;
 
   @ApiProperty({ description: 'Unbilled value' })
-  unbilledValue: number;
+  unbilledValue!: number;
 
   @ApiProperty({ description: 'Outstanding invoices' })
-  outstandingInvoices: number;
+  outstandingInvoices!: number;
 
   @ApiProperty({ description: 'Outstanding amount' })
-  outstandingAmount: number;
+  outstandingAmount!: number;
 
   @ApiProperty({ description: 'Collection rate' })
-  collectionRate: number;
+  collectionRate!: number;
 
   @ApiProperty({ description: 'Recent invoices', type: [InvoiceSummary] })
-  recentInvoices: InvoiceSummary[];
+  recentInvoices!: InvoiceSummary[];
 }

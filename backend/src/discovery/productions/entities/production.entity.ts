@@ -26,65 +26,65 @@ export enum ProductionFormat {
 @Entity('productions')
 export class Production {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @Column({ type: 'varchar', length: 300 })
-  productionName: string;
+  productionName!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  productionNumber: string;
+  productionNumber!: string;
 
   @Column({
     type: 'enum',
     enum: ProductionStatus,
     default: ProductionStatus.PLANNED,
   })
-  status: ProductionStatus;
+  status!: ProductionStatus;
 
   @Column({
     type: 'enum',
     enum: ProductionFormat,
   })
-  format: ProductionFormat;
+  format!: ProductionFormat;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'varchar', length: 200, nullable: true })
-  recipientParty: string;
+  recipientParty!: string;
 
   @Column({ type: 'date', nullable: true })
-  requestDate: Date;
+  requestDate!: Date;
 
   @Column({ type: 'date', nullable: true })
-  dueDate: Date;
+  dueDate!: Date;
 
   @Column({ type: 'date', nullable: true })
-  productionDate: Date;
+  productionDate!: Date;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  batesPrefix: string;
+  batesPrefix!: string;
 
   @Column({ type: 'bigint', nullable: true })
-  batesStart: number;
+  batesStart!: number;
 
   @Column({ type: 'bigint', nullable: true })
-  batesEnd: number;
+  batesEnd!: number;
 
   @Column({ type: 'int', default: 0 })
-  totalDocuments: number;
+  totalDocuments!: number;
 
   @Column({ type: 'int', default: 0 })
-  totalPages: number;
+  totalPages!: number;
 
   @Column({ type: 'bigint', nullable: true })
   totalSize: number; // in bytes
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  outputPath: string;
+  outputPath!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   volumes: Array<{
@@ -96,44 +96,44 @@ export class Production {
   }>;
 
   @Column({ type: 'boolean', default: false })
-  includePrivilegeLog: boolean;
+  includePrivilegeLog!: boolean;
 
   @Column({ type: 'boolean', default: false })
-  includeRedactions: boolean;
+  includeRedactions!: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
-  searchCriteria: Record<string, any>;
+  searchCriteria!: Record<string, any>;
 
   @Column({ type: 'text', nullable: true })
-  productionNotes: string;
+  productionNotes!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  deliveryMethod: string;
+  deliveryMethod!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  trackingNumber: string;
+  trackingNumber!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  productionCost: number;
+  productionCost!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ type: 'uuid', nullable: true })
-  assignedTo: string;
+  assignedTo!: string;
 
   @Column({ type: 'uuid' })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 }

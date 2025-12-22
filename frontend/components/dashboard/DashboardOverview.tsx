@@ -83,9 +83,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
           // Process heavy filtering/mapping in idle time to unblock initial paint
           Scheduler.defer(() => {
               const processed = tasks
-                  .filter((t) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
+                  .filter((t: any) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
                   .slice(0, 5)
-                  .map((t) => ({
+                  .map((t: any) => ({
                       id: t.id,
                       title: t.title,
                       case: t.caseId || 'General',

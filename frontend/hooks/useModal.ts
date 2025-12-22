@@ -64,7 +64,7 @@
 // =============================================================================
 // EXTERNAL DEPENDENCIES
 // =============================================================================
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Dispatch, SetStateAction } from 'react';
 
 // =============================================================================
 // TYPES
@@ -84,7 +84,7 @@ export interface UseModalReturn<T = unknown> {
   /** Current data payload (null when closed) */
   data: T | null;
   /** Manually set data without opening modal */
-  setData: React.Dispatch<React.SetStateAction<T | null>>;
+  setData: Dispatch<SetStateAction<T | null>>;
 }
 
 // =============================================================================

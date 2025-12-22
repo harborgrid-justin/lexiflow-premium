@@ -29,7 +29,9 @@ export class DocumentProcessorService {
       );
       return { success: true, documentId: job.data.documentId };
     } catch (error) {
-      this.logger.error(`Extraction failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Extraction failed: ${message}`, stack);
       throw error;
     }
   }
@@ -45,7 +47,9 @@ export class DocumentProcessorService {
       this.logger.log(`Analysis completed for document: ${job.data.documentId}`);
       return { success: true, documentId: job.data.documentId };
     } catch (error) {
-      this.logger.error(`Analysis failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Analysis failed: ${message}`, stack);
       throw error;
     }
   }
@@ -61,7 +65,9 @@ export class DocumentProcessorService {
       this.logger.log(`Indexing completed for document: ${job.data.documentId}`);
       return { success: true, documentId: job.data.documentId };
     } catch (error) {
-      this.logger.error(`Indexing failed: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Indexing failed: ${message}`, stack);
       throw error;
     }
   }

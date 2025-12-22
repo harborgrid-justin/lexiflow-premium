@@ -21,7 +21,7 @@ export class RateEntryDto {
 
   @IsNumber()
   @Min(0)
-  rate: number;
+  rate!: number;
 
   @IsOptional()
   @IsString()
@@ -34,17 +34,17 @@ export class RateEntryDto {
 
 export class CreateRateTableDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsOptional()
   @IsString()
   description?: string;
 
   @IsString()
-  firmId: string;
+  firmId!: string;
 
   @IsString()
-  effectiveDate: string;
+  effectiveDate!: string;
 
   @IsOptional()
   @IsString()
@@ -61,7 +61,7 @@ export class CreateRateTableDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RateEntryDto)
-  rates: RateEntryDto[];
+  rates!: RateEntryDto[];
 
   @IsOptional()
   @IsString()

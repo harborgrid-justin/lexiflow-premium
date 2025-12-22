@@ -1,17 +1,17 @@
 export class RlsPolicyDto {
-  id: string;
-  name: string;
-  description: string;
-  table: string;
-  operation: RlsOperation;
-  roles: string[];
-  condition: string;
-  priority: number;
-  enabled: boolean;
-  createdBy: string;
-  createdAt: Date;
-  updatedAt: Date;
-  organizationId: string;
+  id!: string;
+  name!: string;
+  description!: string;
+  table!: string;
+  operation!: RlsOperation;
+  roles!: string[];
+  condition!: string;
+  priority!: number;
+  enabled!: boolean;
+  createdBy!: string;
+  createdAt!: Date;
+  updatedAt!: Date;
+  organizationId!: string;
 }
 
 export enum RlsOperation {
@@ -23,16 +23,16 @@ export enum RlsOperation {
 }
 
 export class CreateRlsPolicyDto {
-  name: string;
-  description: string;
-  table: string;
-  operation: RlsOperation;
-  roles: string[];
-  condition: string;
+  name!: string;
+  description!: string;
+  table!: string;
+  operation!: RlsOperation;
+  roles!: string[];
+  condition!: string;
   priority?: number;
   enabled?: boolean;
-  createdBy: string;
-  organizationId: string;
+  createdBy!: string;
+  organizationId!: string;
 }
 
 export class UpdateRlsPolicyDto {
@@ -54,15 +54,15 @@ export class QueryRlsPoliciesDto {
 }
 
 export class EvaluateRlsPolicyDto {
-  table: string;
-  operation: RlsOperation;
-  userRole: string;
-  context: Record<string, unknown>;
+  table!: string;
+  operation!: RlsOperation;
+  userRole!: string;
+  context!: Record<string, unknown>;
 }
 
 export class RlsPolicyEvaluationResult {
-  allowed: boolean;
-  appliedPolicies: RlsPolicyDto[];
+  allowed!: boolean;
+  appliedPolicies!: RlsPolicyDto[];
   finalCondition?: string;
   message?: string;
 }

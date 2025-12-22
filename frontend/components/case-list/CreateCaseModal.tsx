@@ -87,7 +87,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
           court: jurisdictionData.finalCourt,
           judge: isPreFiling ? 'Unassigned' : formData.judge,
           opposingCounsel: 'Pending',
-          parties: [], citations: [], arguments: [], defenses: []
+          parties: [], citations: [], arguments: [], defenses: [],
+          isArchived: false
       };
 
       try {

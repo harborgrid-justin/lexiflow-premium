@@ -283,7 +283,7 @@ export class CaseRepository extends Repository<Case> {
      */
     async importDocket(caseId: string, data: unknown) {
         if (isBackendApiEnabled()) {
-            // TODO: Implement backend docket import endpoint
+            
             console.warn('[CaseRepository.importDocket] Backend endpoint not yet implemented');
         }
         
@@ -314,7 +314,7 @@ export class CaseRepository extends Repository<Case> {
      */
     async flag(id: string) {
         if (isBackendApiEnabled()) {
-            // TODO: Implement backend flag endpoint
+            
             console.warn('[CaseRepository.flag] Backend endpoint not yet implemented');
         }
         

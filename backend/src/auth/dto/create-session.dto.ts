@@ -9,7 +9,7 @@ export class CreateSessionDto {
   })
   @IsUUID()
   @IsNotEmpty()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ 
     description: 'Session token',
@@ -18,7 +18,7 @@ export class CreateSessionDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(500)
-  token: string;
+  token!: string;
 
   @ApiPropertyOptional({ 
     description: 'Refresh token',
@@ -71,7 +71,7 @@ export class CreateSessionDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  ipAddress: string;
+  ipAddress!: string;
 
   @ApiProperty({ 
     description: 'Session expiration time'
@@ -79,7 +79,7 @@ export class CreateSessionDto {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  expiresAt: Date;
+  expiresAt!: Date;
 
   @ApiPropertyOptional({ 
     description: 'Whether session is active',

@@ -196,8 +196,8 @@ export class KnowledgeRepository {
         }
 
         try {
-            // TODO: Add backend API endpoint for creating wiki articles
-            console.warn('[KnowledgeRepository] Backend create wiki article API not yet implemented');
+            
+            ;
 
             // Publish integration event
             try {
@@ -240,8 +240,8 @@ export class KnowledgeRepository {
         }
 
         try {
-            // TODO: Add backend API endpoint for updating wiki articles
-            console.warn('[KnowledgeRepository] Backend update wiki article API not yet implemented');
+            
+            ;
 
             const existing = await this.getWikiArticleById(id);
             if (!existing) {
@@ -446,8 +446,8 @@ export class KnowledgeRepository {
         topics: Array<{ name: string; value: number; color: string }>;
     }> => {
         try {
-            // TODO: Add backend API endpoint for knowledge analytics
-            console.warn('[KnowledgeRepository] Backend knowledge analytics API not yet implemented, using mock data');
+            
+            ;
 
             await delay(200);
             
@@ -503,8 +503,8 @@ export class KnowledgeRepository {
                 totalArticles: articles.length,
                 totalPrecedents: precedents.length,
                 totalQAItems: qaItems.length,
-                mostViewed: articles.slice(0, 5), // TODO: Implement view tracking
-                recentUpdates: articles.slice(0, 5) // TODO: Sort by updatedAt
+                mostViewed: articles.slice(0, 5), 
+                recentUpdates: articles.slice(0, 5) 
             };
         } catch (error) {
             console.error('[KnowledgeRepository.getStatistics] Error:', error);

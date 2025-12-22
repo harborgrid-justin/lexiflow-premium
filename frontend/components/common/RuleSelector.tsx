@@ -95,7 +95,7 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
               className={cn("flex-1 px-2 py-2 text-sm outline-none bg-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
               placeholder="Search rules (e.g. 'FRCP 12')..."
               value={searchTerm}
-              onChange={e => { setSearchTerm(e.target.value); setIsOpen(true); }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSearchTerm(e.target.value); setIsOpen(true); }}
               onFocus={() => setIsOpen(true)}
               onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             />

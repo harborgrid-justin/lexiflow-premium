@@ -53,7 +53,9 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       });
       await caseRepository.save(caseEntity);
     } catch (error) {
-      console.error(`Error seeding case ${caseData.caseNumber}:`, error.message);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      console.error(`Error seeding case ${caseData.caseNumber}:`, message);
     }
   }
 

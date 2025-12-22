@@ -5,15 +5,15 @@ import { JurisdictionSystem, JurisdictionType } from '../entities/jurisdiction.e
 export class CreateJurisdictionDto {
   @ApiProperty({ description: 'Name of the jurisdiction' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ enum: JurisdictionSystem, description: 'Jurisdiction system type' })
   @IsEnum(JurisdictionSystem)
-  system: JurisdictionSystem;
+  system!: JurisdictionSystem;
 
   @ApiProperty({ enum: JurisdictionType, description: 'Jurisdiction type' })
   @IsEnum(JurisdictionType)
-  type: JurisdictionType;
+  type!: JurisdictionType;
 
   @ApiPropertyOptional({ description: 'Region (circuit, state, country)' })
   @IsString()

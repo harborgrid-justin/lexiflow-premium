@@ -90,7 +90,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
               <Badge variant={cit.relevance === 'High' ? 'success' : cit.relevance === 'Medium' ? 'info' : 'neutral'}>{cit.relevance}</Badge>
           </div>
           <div className="w-20 text-right">
-              <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100" onClick={(e) => { e.stopPropagation(); handleOpenDetail(cit); }} title="Open Details">
+              <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100" onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleOpenDetail(cit); }} title="Open Details">
                   <ExternalLink className="h-4 w-4"/>
               </Button>
           </div>
@@ -110,7 +110,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
                 <h4 className={cn("font-medium text-sm line-clamp-2", theme.text.primary)}>{cit.title}</h4>
                 <div className="flex justify-between items-center text-xs mt-1">
                     <span className={cn("font-medium", cit.relevance === 'High' ? 'text-green-600' : 'text-slate-500')}>{cit.relevance} Relevance</span>
-                    <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); handleOpenDetail(cit); }}>Details</Button>
+                    <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleOpenDetail(cit); }}>Details</Button>
                 </div>
             </div>
         </div>

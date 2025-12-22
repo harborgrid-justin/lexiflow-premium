@@ -167,7 +167,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                     </div>
                     <textarea 
                         className={cn("flex-1 bg-transparent font-mono text-sm outline-none resize-none border-none p-4", theme.text.primary)}
-                        value={query} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)} spellCheck={false}
+                        value={query} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuery(e.target.value)} spellCheck={false}
                     />
                 </div>
                 

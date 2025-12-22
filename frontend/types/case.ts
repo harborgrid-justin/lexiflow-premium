@@ -124,7 +124,7 @@ export interface Party extends BaseEntity {
   linkedOrgId?: OrgId;
   representationType?: string;
   attorneys?: Attorney[];
-  pacerData?: any;
+  pacerData?: unknown;
   aliases?: string[];
   taxId?: string;
 }
@@ -178,7 +178,7 @@ export interface Matter extends BaseEntity {
   
   // Tags & Opposing Party
   tags?: string[]; // Backend: jsonb
-  opposingCounsel?: any; // Backend: opposingcounsel jsonb
+  opposingCounsel?: unknown; // Backend: opposingcounsel jsonb
   
   // Conflict Check (backend exact fields)
   conflictCheckCompleted: boolean; // Backend: conflictcheckcompleted boolean (default: false)
@@ -187,7 +187,7 @@ export interface Matter extends BaseEntity {
   
   // Resources & Location
   officeLocation?: string; // Backend: officelocation varchar
-  relatedMatterIds?: any; // Backend: relatedmatterids jsonb
+  relatedMatterIds?: unknown; // Backend: relatedmatterids jsonb
   
   // Notes & Custom Fields
   internalNotes?: string; // Backend: internalnotes text

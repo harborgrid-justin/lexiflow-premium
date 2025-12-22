@@ -73,7 +73,7 @@ export async function retryWithBackoff<T>(
 /**
  * Checks if an error is retryable
  */
-export function isRetryableError(error: any): boolean {
+export function isRetryableError(error: unknown): boolean {
   // Network errors
   if (error.name === 'NetworkError' || error.name === 'TypeError') {
     return true;

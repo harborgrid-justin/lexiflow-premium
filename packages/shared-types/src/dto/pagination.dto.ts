@@ -3,6 +3,8 @@
  * Shared between frontend and backend
  */
 
+import { JsonValue } from '../common/json-value.types';
+
 /**
  * Paginated response wrapper
  */
@@ -27,13 +29,19 @@ export interface PaginationParams {
 }
 
 /**
- * Filter parameters
+ * Base filter parameters
  */
-export interface FilterParams {
+export interface BaseFilterParams {
   search?: string;
   startDate?: string;
   endDate?: string;
-  [key: string]: any;
+}
+
+/**
+ * Extended filter parameters with dynamic fields
+ */
+export interface FilterParams extends BaseFilterParams {
+  [key: string]: JsonValue | undefined;
 }
 
 /**

@@ -57,7 +57,7 @@ export class EvaluateRlsPolicyDto {
   table: string;
   operation: RlsOperation;
   userRole: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
 }
 
 export class RlsPolicyEvaluationResult {

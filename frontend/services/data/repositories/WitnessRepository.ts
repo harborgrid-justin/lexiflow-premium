@@ -30,7 +30,7 @@ export const WITNESS_QUERY_KEYS = {
     byStatus: (status: string) => ['witnesses', 'status', status] as const,
 } as const;
 
-export class WitnessRepository extends Repository<any> {
+export class WitnessRepository extends Repository<unknown> {
     private useBackend: boolean;
     private witnessesApi: WitnessesApiService;
 
@@ -112,7 +112,7 @@ export class WitnessRepository extends Repository<any> {
         return await super.getById(id);
     }
 
-    override async add(item: any): Promise<any> {
+    override async add(item: unknown): Promise<unknown> {
         if (!item || typeof item !== 'object') {
             throw new Error('[WitnessRepository.add] Invalid witness data');
         }
@@ -127,7 +127,7 @@ export class WitnessRepository extends Repository<any> {
         return item;
     }
 
-    override async update(id: string, updates: any): Promise<any> {
+    override async update(id: string, updates: unknown): Promise<unknown> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
@@ -139,7 +139,7 @@ export class WitnessRepository extends Repository<any> {
         return await super.update(id, updates);
     }
     
-    async updateStatus(id: string, status: string): Promise<any> {
+    async updateStatus(id: string, status: string): Promise<unknown> {
         this.validateId(id, 'updateStatus');
         if (!status || typeof status !== 'string') {
             throw new Error('[WitnessRepository.updateStatus] Invalid status');

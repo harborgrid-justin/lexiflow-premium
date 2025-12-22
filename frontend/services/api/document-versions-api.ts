@@ -42,7 +42,7 @@ export class DocumentVersionsApiService {
     return apiClient.get(`${this.baseUrl}/${id}/download`, { responseType: 'blob' });
   }
 
-  async compare(version1Id: string, version2Id: string): Promise<any> {
+  async compare(version1Id: string, version2Id: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/compare?v1=${version1Id}&v2=${version2Id}`);
   }
 

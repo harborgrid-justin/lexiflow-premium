@@ -17,7 +17,7 @@ import { PATHS } from './paths.config';
 export interface NavItemConfig {
   id: AppView;
   label: string;
-  icon: any;
+  icon: unknown;
   category: NavCategory;
   requiresAdmin?: boolean;
 }

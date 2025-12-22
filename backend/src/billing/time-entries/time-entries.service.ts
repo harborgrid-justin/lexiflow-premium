@@ -236,4 +236,76 @@ export class TimeEntriesService {
 
     return { total, billable, billed, unbilled };
   }
+
+  async approveBulk(ids: string[], approvedBy: string): Promise<{ success: boolean; approved: number }> {
+    const entries = await this.timeEntryRepository.find({
+      where: { id: In(ids), deletedAt: null },
+    });
+
+    if (entries.length === 0) {
+      return { success: false, approved: 0 };
+    }
+
+    const updated = await Promise.all(
+      entries.map((entry) =>
+        this.timeEntryRepository.save({
+          ...entry,
+          status: TimeEntryStatus.APPROVED,
+          approvedBy,
+          approvedAt: new Date(),
+        }),
+      ),
+    );
+
+    return { success: true, approved: updated.length };
+  }
+
+  async billBulk(
+    ids: string[],
+    invoiceId: string,
+    billedBy: string,
+  ): Promise<{ success: boolean; billed: number }> {
+    const entries = await this.timeEntryRepository.find({
+      where: { id: In(ids), deletedAt: null },
+    });
+
+    if (entries.length === 0) {
+      return { success: false, billed: 0 };
+    }
+
+    const updated = await Promise.all(
+      entries.map((entry) =>
+        this.timeEntryRepository.save({
+          ...entry,
+          status: TimeEntryStatus.BILLED,
+          invoiceId,
+          billedBy,
+          billedAt: new Date(),
+        }),
+      ),
+    );
+
+    return { success: true, billed: updated.length };
+  }
+
+  async deleteBulk(ids: string[]): Promise<{ success: boolean; deleted: number }> {
+    const entries = await this.timeEntryRepository.find({
+      where: { id: In(ids), deletedAt: null },
+    });
+
+    if (entries.length === 0) {
+      return { success: false, deleted: 0 };
+    }
+
+    const updated = await Promise.all(
+      entries.map((entry) =>
+        this.timeEntryRepository.save({
+          ...entry,
+          deletedAt: new Date(),
+        }),
+      ),
+    );
+
+    return { success: true, deleted: updated.length };
+  }
 }

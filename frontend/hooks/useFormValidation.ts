@@ -99,7 +99,7 @@ export interface UseFormValidationReturn<T extends Record<string, any>> {
 /**
  * Debounce helper
  */
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -382,7 +382,7 @@ export function useFormValidation<T extends Record<string, any>>({
 export const ValidationRules = {
   required: (message: string = 'This field is required'): ValidationRule => ({
     name: 'required',
-    validate: (value: any) => {
+    validate: (value: unknown) => {
       if (value === null || value === undefined) return message;
       if (typeof value === 'string' && value.trim().length === 0) return message;
       if (Array.isArray(value) && value.length === 0) return message;

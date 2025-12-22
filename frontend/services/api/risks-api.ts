@@ -84,7 +84,7 @@ export class RisksApiService {
     return apiClient.delete(`${this.baseUrl}/${id}`);
   }
 
-  async getRiskMatrix(): Promise<any> {
+  async getRiskMatrix(): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/matrix`);
   }
 }

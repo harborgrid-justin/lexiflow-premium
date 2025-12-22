@@ -38,7 +38,7 @@ export class WarRoomApiService {
   private readonly baseUrl = '/war-room';
 
   // === ADVISORS === (backend: GET/POST/DELETE /war-room/advisors)
-  async getAdvisors(query?: any): Promise<Advisor[]> {
+  async getAdvisors(query?: unknown): Promise<Advisor[]> {
     const params = new URLSearchParams(query);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}/advisors?${queryString}` : `${this.baseUrl}/advisors`;
@@ -58,7 +58,7 @@ export class WarRoomApiService {
   }
 
   // === EXPERTS === (backend: GET/POST/DELETE /war-room/experts)
-  async getExperts(query?: any): Promise<Expert[]> {
+  async getExperts(query?: unknown): Promise<Expert[]> {
     const params = new URLSearchParams(query);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}/experts?${queryString}` : `${this.baseUrl}/experts`;
@@ -78,7 +78,7 @@ export class WarRoomApiService {
   }
 
   // === WAR ROOM DATA === (backend: GET /war-room/:caseId)
-  async getWarRoomData(caseId: string): Promise<any> {
+  async getWarRoomData(caseId: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/${caseId}`);
   }
 

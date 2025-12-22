@@ -14,12 +14,12 @@ export function downloadFile(content: string, filename: string, mimeType: string
   URL.revokeObjectURL(url);
 }
 
-export function downloadJSON(data: any, filename: string = 'data.json'): void {
+export function downloadJSON(data: unknown, filename: string = 'data.json'): void {
   const content = JSON.stringify(data, null, 2);
   downloadFile(content, filename, 'application/json');
 }
 
-export function downloadCSV(data: any[], filename: string = 'data.csv'): void {
+export function downloadCSV(data: unknown[], filename: string = 'data.csv'): void {
   if (data.length === 0) return;
   
   const headers = Object.keys(data[0]);

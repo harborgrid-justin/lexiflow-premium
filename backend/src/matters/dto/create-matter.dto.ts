@@ -203,7 +203,7 @@ export class CreateMatterDto {
 
   @IsObject()
   @IsOptional()
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 
   // Metadata
   @IsString()

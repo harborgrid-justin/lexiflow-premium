@@ -73,22 +73,22 @@ export class UpdateDiscoveryRequestDto {
 
   @IsOptional()
   @IsArray()
-  requestItems?: any[];
+  requestItems?: unknown[];
 
   @IsOptional()
   @IsArray()
-  responses?: any[];
+  responses?: unknown[];
 
   @IsOptional()
   @IsArray()
-  objections?: any[];
+  objections?: unknown[];
 
   @IsOptional()
   @IsString()
   notes?: string;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsUUID()

@@ -33,8 +33,8 @@ export interface UseQueryOptions<T> {
  * for rollback logic during optimistic updates.
  */
 export interface MutationContext {
-  previousData?: any;
-  [key: string]: any;
+  previousData?: unknown;
+  [key: string]: unknown;
 }
 
 export interface UseMutationOptions<T, V> {

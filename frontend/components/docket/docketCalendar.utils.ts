@@ -33,7 +33,7 @@ export const getAllDeadlines = (entries: DocketEntry[]) => {
     );
 };
 
-export const getDeadlinesForDay = (day: number, currentDate: Date, allDeadlines: any[]) => {
+export const getDeadlinesForDay = (day: number, currentDate: Date, allDeadlines: unknown[]) => {
     const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     return allDeadlines.filter(d => d.date === dateStr);
 };

@@ -107,5 +107,5 @@ export class CreatePleadingDto {
   @ApiPropertyOptional({ description: 'Custom metadata fields' })
   @IsObject()
   @IsOptional()
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }

@@ -48,7 +48,7 @@ export type {
 } from './layout';
 
 // 10. MetricTile: Simplified metric card for dense grids
-export const MetricTile: React.FC<{ label: string, value: string | number | React.ReactNode, icon?: any, trend?: string, trendUp?: boolean, className?: string }> = ({ label, value, icon: Icon, trend, trendUp, className }) => {
+export const MetricTile: React.FC<{ label: string, value: string | number | React.ReactNode, icon?: unknown, trend?: string, trendUp?: boolean, className?: string }> = ({ label, value, icon: Icon, trend, trendUp, className }) => {
     const { theme } = useTheme();
     return (
         <div className={cn("p-4 rounded-lg border shadow-sm flex flex-col justify-between h-full", theme.surface.default, theme.border.default, className)}>

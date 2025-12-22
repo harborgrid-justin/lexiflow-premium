@@ -44,8 +44,8 @@ const CaseDetail = lazy(() => import('../case-detail/CaseDetail').then(m => ({ d
 interface AppContentRendererProps {
   activeView: AppView;
   currentUser?: User;
-  selectedCase: any | null; 
-  handleSelectCase: (c: any) => void;
+  selectedCase: unknown | null; 
+  handleSelectCase: (c: unknown) => void;
   handleSelectCaseById: (id: string) => void;
   navigateToCaseTab: (caseId: string, tab: string) => void;
   handleBackToMain: () => void;
@@ -103,7 +103,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     }
 
     const Component = moduleDef.component;
-    const dynamicProps: any = { currentUser };
+    const dynamicProps: unknown = { currentUser };
 
     if (initialTab) {
         dynamicProps.initialTab = initialTab;

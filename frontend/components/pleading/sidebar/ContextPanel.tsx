@@ -60,7 +60,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     const allFacts: CaseFact[] = [];
 
     // Add docket entries as facts
-    docketEntries.forEach((entry: any) => {
+    docketEntries.forEach((entry: unknown) => {
       allFacts.push({
         id: entry.id,
         content: `${entry.title || entry.description || 'Docket Entry'} - Filed on ${entry.filedDate ? new Date(entry.filedDate).toLocaleDateString() : 'N/A'}`,

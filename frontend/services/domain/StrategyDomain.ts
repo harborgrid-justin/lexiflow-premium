@@ -65,14 +65,14 @@ export const StrategyService = {
     return null;
   },
   
-  add: async (item: any) => {
+  add: async (item: unknown) => {
     if (isBackendApiEnabled()) {
       return apiClient.post('/strategies', { ...item, createdAt: new Date().toISOString() });
     }
     throw new Error('[StrategyService] Backend API required for add operation');
   },
   
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     if (isBackendApiEnabled()) {
       return apiClient.patch(`/strategies/${id}`, { ...updates, updatedAt: new Date().toISOString() });
     }

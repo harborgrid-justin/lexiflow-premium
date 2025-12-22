@@ -1,5 +1,6 @@
 import { UserId } from './base.entity';
 import { UserRole, UserStatus } from '../enums/user.enums';
+import { UserPreferences } from '../common/json-value.types';
 
 /**
  * User entity interface
@@ -18,7 +19,7 @@ export interface User {
   department?: string;
   barNumber?: string;
   permissions?: string[];
-  preferences?: Record<string, any>;
+  preferences?: UserPreferences;
   avatarUrl?: string;
   lastLoginAt?: string; // ISO timestamp
   emailVerified?: boolean;

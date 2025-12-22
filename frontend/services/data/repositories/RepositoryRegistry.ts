@@ -119,7 +119,7 @@ export function createRegistryFactory<T>(
 export function registerRepositories<TMap extends Record<string, any>>(
   config: { [K in keyof TMap]: () => TMap[K] }
 ): { [K in keyof TMap]: () => TMap[K] } {
-  const factories: any = {};
+  const factories: unknown = {};
   for (const [key, factory] of Object.entries(config)) {
     factories[key] = createRegistryFactory(key, factory as () => any);
   }

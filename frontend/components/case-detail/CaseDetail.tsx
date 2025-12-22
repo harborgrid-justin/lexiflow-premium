@@ -121,12 +121,12 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
   }, [setActiveTab]);
 
   // Handle adding time entry from overview
-  const handleTimeEntryAdded = useCallback((entry: any) => {
+  const handleTimeEntryAdded = useCallback((entry: unknown) => {
     setBillingEntries(prev => [...(prev || []), entry]);
   }, [setBillingEntries]);
 
   // Handle document creation callback
-  const handleDocumentCreated = useCallback((doc: any) => {
+  const handleDocumentCreated = useCallback((doc: unknown) => {
     setDocuments(prev => [...(prev || []), doc]);
   }, [setDocuments]);
 

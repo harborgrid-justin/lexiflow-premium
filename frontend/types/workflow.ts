@@ -172,8 +172,8 @@ export interface TaskHistory {
   userId: string;
   userName?: string;
   action: 'created' | 'updated' | 'status_changed' | 'assigned' | 'commented' | 'completed' | 'deleted';
-  previousValue?: any;
-  newValue?: any;
+  previousValue?: unknown;
+  newValue?: unknown;
   timestamp: string;
   description?: string;
 }

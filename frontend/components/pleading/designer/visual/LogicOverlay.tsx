@@ -37,7 +37,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
                         rect: el.getBoundingClientRect()
                     };
                 })
-                .filter(item => item !== null) as { section: any, rect: DOMRect }[];
+                .filter(item => item !== null) as { section: unknown, rect: DOMRect }[];
 
             // Optimization: Batch Calculation/Write
             const newPaths = targets.map(({ section, rect }) => {

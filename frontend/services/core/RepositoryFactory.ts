@@ -49,7 +49,7 @@ export function createRepository<T extends BaseEntity>(
  * Ensures the same repository instance is used across the application.
  */
 class RepositoryRegistry {
-  private instances: Map<string, Repository<any>> = new Map();
+  private instances: Map<string, Repository<unknown>> = new Map();
 
   /**
    * Get or create a repository instance for a given store.
@@ -162,8 +162,8 @@ export function getRepository<T extends BaseEntity>(
  */
 export function createRepositories(
   storeNames: string[]
-): Map<string, Repository<any>> {
-  const repositories = new Map<string, Repository<any>>();
+): Map<string, Repository<unknown>> {
+  const repositories = new Map<string, Repository<unknown>>();
 
   for (const storeName of storeNames) {
     repositories.set(storeName, createRepository(storeName));
@@ -194,8 +194,8 @@ export function createTypedRepositories<
   T extends Record<string, string>
 >(
   config: T
-): { [K in keyof T]: Repository<any> } {
-  const result = {} as { [K in keyof T]: Repository<any> };
+): { [K in keyof T]: Repository<unknown> } {
+  const result = {} as { [K in keyof T]: Repository<unknown> };
 
   for (const key in config) {
     if (config.hasOwnProperty(key)) {

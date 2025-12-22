@@ -7,7 +7,7 @@ import { cn } from '../../../../utils/cn';
 interface QuerySidebarProps {
   activeTab: 'schema' | 'history' | 'saved';
   setActiveTab: (tab: 'schema' | 'history' | 'saved') => void;
-  schema: any;
+  schema: unknown;
 }
 
 export const QuerySidebar: React.FC<QuerySidebarProps> = ({ activeTab, setActiveTab, schema }) => {
@@ -28,7 +28,7 @@ export const QuerySidebar: React.FC<QuerySidebarProps> = ({ activeTab, setActive
                         <Table className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/> {table}
                     </summary>
                     <div className="pl-6 pt-1 space-y-1">
-                        {details.columns.map((col: any) => (
+                        {details.columns.map((col: unknown) => (
                             <div key={col.name} className={cn("text-xs flex items-center", theme.text.secondary)}>
                             <div className={cn("w-2 h-2 rounded-full mr-2", theme.border.default, theme.surface.highlight)}></div>
                             <span className="font-mono">{col.name}</span>

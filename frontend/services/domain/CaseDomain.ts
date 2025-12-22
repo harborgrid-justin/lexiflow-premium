@@ -281,7 +281,7 @@ export class CaseRepository extends Repository<Case> {
      * @param data - Docket data payload
      * @returns Promise<boolean> - Success indicator
      */
-    async importDocket(caseId: string, data: any) {
+    async importDocket(caseId: string, data: unknown) {
         if (isBackendApiEnabled()) {
             // TODO: Implement backend docket import endpoint
             console.warn('[CaseRepository.importDocket] Backend endpoint not yet implemented');

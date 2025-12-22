@@ -96,7 +96,7 @@ export const ValidationService = {
    * @private
    * @throws Error if parameter is invalid
    */
-  validateRequired: (value: any, fieldName: string, methodName: string): void => {
+  validateRequired: (value: unknown, fieldName: string, methodName: string): void => {
     if (value === null || value === undefined) {
       throw new Error(`[ValidationService.${methodName}] ${fieldName} is required and cannot be null or undefined`);
     }
@@ -118,7 +118,7 @@ export const ValidationService = {
    * @private
    * @throws Error if array is invalid
    */
-  validateArray: (value: any[], fieldName: string, methodName: string): void => {
+  validateArray: (value: unknown[], fieldName: string, methodName: string): void => {
     if (!Array.isArray(value)) {
       throw new Error(`[ValidationService.${methodName}] ${fieldName} must be an array`);
     }

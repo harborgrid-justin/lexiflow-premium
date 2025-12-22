@@ -182,5 +182,5 @@ export class CreateOrganizationDto {
     description: 'Additional metadata'
   })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

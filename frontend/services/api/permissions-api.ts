@@ -13,7 +13,7 @@ export interface Permission {
   conditions?: {
     type: string;
     operator: string;
-    value: any;
+    value: unknown;
   }[];
   metadata?: Record<string, any>;
 }

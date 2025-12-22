@@ -59,8 +59,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   const [containerWidth, setContainerWidth] = useState<number>(0);
 
   // Refs for tracking async state
-  const renderTaskRef = useRef<any>(null);
-  const loadingTaskRef = useRef<any>(null);
+  const renderTaskRef = useRef<unknown>(null);
+  const loadingTaskRef = useRef<unknown>(null);
   const isMounted = useRef(false);
   const resizeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -196,7 +196,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       renderTaskRef.current = newTask;
 
       await newTask.promise;
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err.name !== 'RenderingCancelledException') {
         console.error("Render error:", err);
       }

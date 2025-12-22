@@ -13,7 +13,7 @@ interface DashboardWidget {
   type: string;
   title: string;
   position: { x: number; y: number; w: number; h: number };
-  config: any;
+  config: unknown;
 }
 
 interface DashboardMetrics {
@@ -28,8 +28,8 @@ interface DashboardMetrics {
 export const DashboardService = {
   getAll: async () => db.getAll(STORES.DASHBOARDS),
   getById: async (id: string) => db.get(STORES.DASHBOARDS, id),
-  add: async (item: any) => db.put(STORES.DASHBOARDS, item),
-  update: async (id: string, updates: any) => {
+  add: async (item: unknown) => db.put(STORES.DASHBOARDS, item),
+  update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.DASHBOARDS, id);
     return db.put(STORES.DASHBOARDS, { ...existing, ...updates, updatedAt: new Date().toISOString() });
   },
@@ -68,7 +68,7 @@ export const DashboardService = {
     return false;
   },
   
-  updateLayout: async (dashboardId: string, layout: any): Promise<any> => {
+  updateLayout: async (dashboardId: string, layout: unknown): Promise<unknown> => {
     const dashboard = await db.get(STORES.DASHBOARDS, dashboardId);
     const updated = { ...dashboard, layout, updatedAt: new Date().toISOString() };
     await db.put(STORES.DASHBOARDS, updated);
@@ -82,14 +82,14 @@ export const DashboardService = {
     const timeEntries = await db.getAll(STORES.TIME_ENTRIES);
     
     return {
-      activeCases: cases.filter((c: any) => c.status === 'Active').length,
-      upcomingDeadlines: cases.reduce((sum: number, c: any) => sum + (c.upcomingDeadlines?.length || 0), 0),
-      recentActivity: timeEntries.filter((t: any) => {
+      activeCases: cases.filter((c: unknown) => c.status === 'Active').length,
+      upcomingDeadlines: cases.reduce((sum: number, c: unknown) => sum + (c.upcomingDeadlines?.length || 0), 0),
+      recentActivity: timeEntries.filter((t: unknown) => {
         const date = new Date(t.date);
         const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         return date > dayAgo;
       }).length,
-      pendingTasks: tasks.filter((t: any) => t.status === 'Pending').length,
+      pendingTasks: tasks.filter((t: unknown) => t.status === 'Pending').length,
       utilizationRate: 0.78, // Mock calculation
       revenueThisMonth: 125000, // Mock calculation
     };

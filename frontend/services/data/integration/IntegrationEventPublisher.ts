@@ -94,14 +94,14 @@ export class IntegrationEventPublisher {
  * ) {}
  * ```
  */
-export function createIntegratedRepository<TBase extends new (...args: any[]) => any>(
+export function createIntegratedRepository<TBase extends new (...args: unknown[]) => any>(
   Repository: TBase,
-  publishAdd?: (item: any) => Promise<void>,
-  publishUpdate?: (id: string, item: any) => Promise<void>,
+  publishAdd?: (item: unknown) => Promise<void>,
+  publishUpdate?: (id: string, item: unknown) => Promise<void>,
   publishDelete?: (id: string) => Promise<void>
 ) {
   return class extends Repository {
-    async add(item: any): Promise<any> {
+    async add(item: unknown): Promise<unknown> {
       const result = await super.add(item);
       if (publishAdd) {
         await publishAdd(result);
@@ -109,7 +109,7 @@ export function createIntegratedRepository<TBase extends new (...args: any[]) =>
       return result;
     }
 
-    async update(id: string, updates: any): Promise<any> {
+    async update(id: string, updates: unknown): Promise<unknown> {
       const result = await super.update(id, updates);
       if (publishUpdate) {
         await publishUpdate(id, result);
@@ -117,7 +117,7 @@ export function createIntegratedRepository<TBase extends new (...args: any[]) =>
       return result;
     }
 
-    async delete(id: string): Promise<any> {
+    async delete(id: string): Promise<unknown> {
       const result = await super.delete(id);
       if (publishDelete) {
         await publishDelete(id);

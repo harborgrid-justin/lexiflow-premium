@@ -67,7 +67,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   const { data: rawAlerts = [] } = useQuery<any[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
 
   // Transform alerts to match DashboardAlert type
-  const alerts = rawAlerts.map((alert: any, index: number) => ({
+  const alerts = rawAlerts.map((alert: unknown, index: number) => ({
     id: typeof alert.id === 'number' ? alert.id : (parseInt(String(alert.id), 10) || index),
     message: alert.message,
     detail: alert.detail,

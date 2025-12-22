@@ -41,7 +41,7 @@ export class CreateReportDto {
   })
   @IsObject()
   @IsOptional()
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'File path for generated report',

@@ -63,7 +63,7 @@ const discoveryTypes = ['Production', 'Interrogatory', 'Admission', 'Deposition'
  * Discovery Request Validator
  * Validates discovery request data with FRCP compliance checks
  */
-const validateDiscoveryRequest = (data: any): ValidationResult<Partial<DiscoveryRequest>> => {
+const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<DiscoveryRequest>> => {
   const errors: Array<{ path: string; message: string }> = [];
   
   if (!data.id || typeof data.id !== 'string') {
@@ -116,7 +116,7 @@ const validateDiscoveryRequest = (data: any): ValidationResult<Partial<Discovery
  * Privilege Log Entry Validator
  * Validates FRCP 26(b)(5) privilege log entries
  */
-const validatePrivilegeLogEntry = (data: any): ValidationResult<Partial<PrivilegeLogEntry>> => {
+const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<PrivilegeLogEntry>> => {
   const errors: Array<{ path: string; message: string }> = [];
   
   if (!data.id || typeof data.id !== 'string') {
@@ -173,7 +173,7 @@ const validatePrivilegeLogEntry = (data: any): ValidationResult<Partial<Privileg
  * Legal Hold Validator
  * Validates legal hold data with preservation requirements
  */
-const validateLegalHold = (data: any): ValidationResult<Partial<LegalHold>> => {
+const validateLegalHold = (data: unknown): ValidationResult<Partial<LegalHold>> => {
   const errors: Array<{ path: string; message: string }> = [];
   
   if (!data.id || typeof data.id !== 'string') {

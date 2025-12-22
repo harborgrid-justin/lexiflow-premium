@@ -96,7 +96,7 @@ export class CacheManager<T = any> {
    * Validate value parameter
    * @private
    */
-  private validateValue(value: any, methodName: string): void {
+  private validateValue(value: unknown, methodName: string): void {
     if (value === undefined || value === null) {
       throw new Error(`[CacheManager.${methodName}] Invalid value parameter`);
     }

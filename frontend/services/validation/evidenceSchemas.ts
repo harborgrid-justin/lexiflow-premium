@@ -171,7 +171,7 @@ const custodyActions = Object.values(CustodyActionType);
  * Evidence Item Validator
  * Validates all evidence intake and update operations
  */
-const validateEvidenceItem = (data: any): ValidationResult<Partial<EvidenceItem>> => {
+const validateEvidenceItem = (data: unknown): ValidationResult<Partial<EvidenceItem>> => {
   const errors: Array<{ path: string; message: string }> = [];
   
   if (!data.id || typeof data.id !== 'string') {
@@ -258,7 +258,7 @@ const validateEvidenceItem = (data: any): ValidationResult<Partial<EvidenceItem>
  * Chain of Custody Event Validator
  * Validates custody log entries
  */
-const validateCustodyEvent = (data: any): ValidationResult<ChainOfCustodyEvent> => {
+const validateCustodyEvent = (data: unknown): ValidationResult<ChainOfCustodyEvent> => {
   const errors: Array<{ path: string; message: string }> = [];
   
   if (!data.id || typeof data.id !== 'string') {

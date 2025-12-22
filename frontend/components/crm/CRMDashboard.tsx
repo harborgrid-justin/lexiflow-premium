@@ -53,10 +53,10 @@ export const CRMDashboard: React.FC = () => {
   const leadsArray = Array.isArray(leads) ? leads : [];
 
   // Calculate dynamic metrics
-  const activeClients = clientsArray.filter((c: any) => c.status === 'Active' || c.status === 'active').length;
-  const lifetimeRevenue = clientsArray.reduce((acc: number, c: any) => acc + (c.totalBilled || 0), 0);
-  const activeMatters = casesArray.filter((c: any) => c.status !== 'Closed' && c.status !== 'closed').length;
-  const pipelineValue = leadsArray.reduce((acc: number, l: any) => {
+  const activeClients = clientsArray.filter((c: unknown) => c.status === 'Active' || c.status === 'active').length;
+  const lifetimeRevenue = clientsArray.reduce((acc: number, c: unknown) => acc + (c.totalBilled || 0), 0);
+  const activeMatters = casesArray.filter((c: unknown) => c.status !== 'Closed' && c.status !== 'closed').length;
+  const pipelineValue = leadsArray.reduce((acc: number, l: unknown) => {
     const value = parseFloat(l.value?.replace(/[^0-9.]/g, '') || '0');
     return acc + value;
   }, 0);
@@ -130,7 +130,7 @@ export const CRMDashboard: React.FC = () => {
                 <YAxis dataKey="name" type="category" width={80} tick={{fontSize: 11, fill: '#64748b'}} />
                 <Tooltip cursor={{fill: 'transparent'}} />
                 <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
-                  {analytics.industry.map((entry: any, index: number) => (
+                  {analytics.industry.map((entry: unknown, index: number) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Bar>
@@ -144,7 +144,7 @@ export const CRMDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Recent Client Interactions">
           <div className="space-y-4">
-            {casesArray.slice(0, 3).map((caseItem: any, idx: number) => (
+            {casesArray.slice(0, 3).map((caseItem: unknown, idx: number) => (
               <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
                 <div className="flex items-center gap-3">
                   <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
@@ -169,9 +169,9 @@ export const CRMDashboard: React.FC = () => {
         <Card title="Key Accounts (Top Revenue)">
           <div className="space-y-4">
             {clientsArray
-              .sort((a: any, b: any) => (b.totalBilled || 0) - (a.totalBilled || 0))
+              .sort((a: unknown, b: unknown) => (b.totalBilled || 0) - (a.totalBilled || 0))
               .slice(0, 3)
-              .map((client: any, idx: number) => (
+              .map((client: unknown, idx: number) => (
               <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface.default, theme.border.default)}>
                 <div>
                   <p className={cn("font-bold text-sm", theme.text.primary)}>{client.name}</p>

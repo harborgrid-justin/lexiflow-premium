@@ -4,12 +4,12 @@ import { NAVIGATION_ITEMS } from './nav.config';
 import { PATHS } from './paths.config';
 
 // Advanced Factory Type that includes a preload method
-type PreloadableComponent<T extends React.ComponentType<any>> = React.LazyExoticComponent<T> & {
-    preload: () => Promise<any>;
+type PreloadableComponent<T extends React.ComponentType<unknown>> = React.LazyExoticComponent<T> & {
+    preload: () => Promise<unknown>;
 };
 
 // Helper to attach preload capability to lazy imports
-function lazyWithPreload<T extends React.ComponentType<any>>(
+function lazyWithPreload<T extends React.ComponentType<unknown>>(
     factory: () => Promise<{ default: T }>
 ): PreloadableComponent<T> {
     const Component = React.lazy(factory) as PreloadableComponent<T>;
@@ -50,7 +50,7 @@ const LitigationBuilder = lazyWithPreload(() => import('../components/litigation
 const ClauseLibrary = lazyWithPreload(() => import('../components/clauses/ClauseLibrary'));
 const CitationManager = lazyWithPreload(() => import('../components/citation/CitationManager'));
 
-const COMPONENT_MAP: Record<string, React.LazyExoticComponent<any>> = {
+const COMPONENT_MAP: Record<string, React.LazyExoticComponent<unknown>> = {
   [PATHS.DASHBOARD]: Dashboard,
   [PATHS.CASES]: CaseList,
   [PATHS.MATTERS]: MatterModule,

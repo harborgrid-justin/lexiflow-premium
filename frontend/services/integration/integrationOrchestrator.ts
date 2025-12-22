@@ -153,7 +153,7 @@ export const IntegrationOrchestrator = {
             
             return result;
             
-        } catch (error: any) {
+        } catch (error: unknown) {
             const errorMsg = error instanceof Error ? error.message : String(error);
             console.error(`[IntegrationOrchestrator] Fatal error processing ${type}:`, errorMsg);
             

@@ -30,7 +30,7 @@ export type BillingView = 'dashboard' | 'timekeeper' | 'reports' | 'trust' | 'se
 type MenuItem = {
   id: PlatformView;
   label: string;
-  icon: any;
+  icon: unknown;
   children?: { id: PlatformView; label: string; icon: any }[];
 };
 

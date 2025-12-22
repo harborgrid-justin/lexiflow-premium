@@ -126,8 +126,8 @@ export interface Client {
   portalTokenExpiry?: Date;
   
   // Relationships
-  cases?: any[];
-  invoices?: any[];
+  cases?: unknown[];
+  invoices?: unknown[];
   
   // Timestamps
   createdAt?: string;
@@ -341,10 +341,10 @@ export class ClientsApiService {
    * Backend: POST /clients/:id/conflict-check
    * 
    * @param id - Client ID
-   * @returns Promise<any> Conflict check results
+   * @returns Promise<unknown> Conflict check results
    * @throws Error if validation fails or operation fails
    */
-  async runConflictCheck(id: string): Promise<any> {
+  async runConflictCheck(id: string): Promise<unknown> {
     this.validateId(id, 'runConflictCheck');
     try {
       return await apiClient.post(`${this.baseUrl}/${id}/conflict-check`, {});

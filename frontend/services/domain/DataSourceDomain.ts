@@ -17,7 +17,7 @@ interface DataSource {
   connected: boolean;
   lastSync?: string;
   syncInterval?: number;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface ConnectionStatus {
@@ -30,12 +30,12 @@ interface ConnectionStatus {
 export const DataSourceService = {
   getAll: async () => db.getAll(STORES.DATA_SOURCES),
   getById: async (id: string) => db.get(STORES.DATA_SOURCES, id),
-  add: async (item: any) => db.put(STORES.DATA_SOURCES, { 
+  add: async (item: unknown) => db.put(STORES.DATA_SOURCES, { 
     ...item, 
     connected: false,
     createdAt: new Date().toISOString() 
   }),
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.DATA_SOURCES, id);
     return db.put(STORES.DATA_SOURCES, { ...existing, ...updates });
   },
@@ -56,7 +56,7 @@ export const DataSourceService = {
     return sources;
   },
   
-  connect: async (sourceId: string, credentials: any): Promise<boolean> => {
+  connect: async (sourceId: string, credentials: unknown): Promise<boolean> => {
     await delay(300); // Simulate connection
     try {
       const source = await db.get(STORES.DATA_SOURCES, sourceId);

@@ -76,7 +76,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
-    input.onchange = (e: any) => {
+    input.onchange = (e: unknown) => {
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onload = (event) => {

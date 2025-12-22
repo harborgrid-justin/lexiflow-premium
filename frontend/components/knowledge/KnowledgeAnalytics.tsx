@@ -106,7 +106,7 @@ export const KnowledgeAnalytics: React.FC = () => {
                                 paddingAngle={5} 
                                 dataKey="value"
                             >
-                                {analytics.topics.map((entry: any, index: number) => (
+                                {analytics.topics.map((entry: unknown, index: number) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                             </Pie>

@@ -24,7 +24,7 @@ import { evidenceQueryKeys } from '../../services/infrastructure/queryKeys';
 import { queryClient } from '../../hooks/useQueryHooks';
 
 // Lazy-loaded ChainService for blockchain operations (reduces bundle size ~80KB)
-let ChainServiceModule: any = null;
+let ChainServiceModule: unknown = null;
 const loadChainService = async () => {
   if (!ChainServiceModule) {
     ChainServiceModule = await import('../../services/infrastructure/chainService');
@@ -36,8 +36,8 @@ const loadChainService = async () => {
 interface VerificationJob {
   evidenceId: string;
   hash: string;
-  resolve: (result: any) => void;
-  reject: (error: any) => void;
+  resolve: (result: unknown) => void;
+  reject: (error: unknown) => void;
 }
 
 class VerificationQueue {
@@ -105,7 +105,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
   // Check cache on mount
   useEffect(() => {
     const checkCache = async () => {
-      const cached = queryClient.getQueryData<any>(
+      const cached = queryClient.getQueryData<unknown>(
         evidenceQueryKeys.evidence.verification(selectedItem.id)
       );
       
@@ -124,7 +124,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
       setVerificationStatus('verifying');
       try {
           // Use queue to prevent overwhelming blockchain RPC
-          const result = await new Promise<any>((resolve, reject) => {
+          const result = await new Promise<unknown>((resolve, reject) => {
             verificationQueue.add({
               evidenceId: selectedItem.id,
               hash: selectedItem.blockchainHash || '',

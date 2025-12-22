@@ -49,12 +49,19 @@ export class UsersService implements OnModuleInit {
           emailVerified: true,
         });
         await this.userRepository.save(admin);
-        console.log('✅ Default admin user created successfully');
+        // Admin user created - Log only in non-production environments
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.info('[UsersService] Default admin user created successfully');
+        }
       }
     } catch (error) {
       // Silently fail if table doesn't exist yet (during initial schema creation)
       // The admin will be created on next restart or can be seeded manually
-      console.log('⏳ Skipping default admin creation - database schema not ready yet');
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.info('[UsersService] Skipping default admin creation - database schema not ready yet');
+      }
     }
   }
 

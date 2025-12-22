@@ -39,7 +39,7 @@ export class CreatePipelineDto {
 
   @ApiProperty()
   @IsObject()
-  configuration: Record<string, any>;
+  configuration: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsString()
@@ -66,7 +66,7 @@ export class UpdatePipelineDto {
   @ApiPropertyOptional()
   @IsObject()
   @IsOptional()
-  configuration?: Record<string, any>;
+  configuration?: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsString()

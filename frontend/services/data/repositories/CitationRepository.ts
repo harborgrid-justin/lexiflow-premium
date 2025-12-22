@@ -134,7 +134,7 @@ export class CitationRepository extends Repository<Citation> {
         return { checked: 150, flagged: 3 };
     }
 
-    async quickAdd(citation: any): Promise<Citation> {
+    async quickAdd(citation: unknown): Promise<Citation> {
         return this.add(citation);
     }
 

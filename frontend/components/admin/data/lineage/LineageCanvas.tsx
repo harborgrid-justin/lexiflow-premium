@@ -19,7 +19,7 @@ export const LineageCanvas: React.FC<LineageCanvasProps> = ({ isAnimating, setIs
     const canvasRef = useRef<HTMLCanvasElement>(null);
     
     // Default mock data if no props provided (Fallthrough safety)
-    const [graphData, setGraphData] = useState<{ nodes: any[], links: any[] }>({ 
+    const [graphData, setGraphData] = useState<{ nodes: unknown[], links: unknown[] }>({ 
         nodes: [
             { id: 'src1', label: 'Salesforce CRM', type: 'root' },
             { id: 'stg1', label: 'Raw Zone (S3)', type: 'org' },

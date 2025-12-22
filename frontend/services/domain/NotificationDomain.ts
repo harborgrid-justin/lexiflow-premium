@@ -16,7 +16,7 @@ interface Notification {
   read: boolean;
   timestamp: string;
   actionUrl?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 const SUBSCRIPTIONS_KEY = 'lexiflow_notification_subscriptions';
@@ -24,7 +24,7 @@ const SUBSCRIPTIONS_KEY = 'lexiflow_notification_subscriptions';
 export const NotificationService = {
   getAll: async () => communicationsApi.notifications?.getAll?.() || [],
   getById: async (id: string) => communicationsApi.notifications?.getById?.(id) || null,
-  add: async (item: any) => {
+  add: async (item: unknown) => {
     const notification = {
       ...item,
       timestamp: item.timestamp || new Date().toISOString(),
@@ -32,7 +32,7 @@ export const NotificationService = {
     };
     return communicationsApi.notifications?.create?.(notification) || notification;
   },
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     return communicationsApi.notifications?.update?.(id, updates) || { id, ...updates };
   },
   delete: async (id: string) => {

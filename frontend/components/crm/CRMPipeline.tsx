@@ -9,7 +9,7 @@ import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
 import { useNotify } from '../../hooks/useNotify';
 
 interface CRMPipelineProps {
-  leads: any[];
+  leads: unknown[];
 }
 
 export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
@@ -69,7 +69,7 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
           <KanbanColumn 
             key={stage} 
             title={stage} 
-            count={leads.filter((l: any) => l.stage === stage).length}
+            count={leads.filter((l: unknown) => l.stage === stage).length}
             isDragOver={dragOverStage === stage}
             onDrop={() => handleDrop(stage)}
             action={idx === 0 ? (
@@ -88,7 +88,7 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
               </button>
             ) : undefined}
           >
-            {leads.filter((l: any) => l.stage === stage).map((lead: any) => (
+            {leads.filter((l: unknown) => l.stage === stage).map((lead: unknown) => (
               <KanbanCard
                 key={lead.id}
                 onDragStart={(e) => handleDragStart(e, lead.id)}

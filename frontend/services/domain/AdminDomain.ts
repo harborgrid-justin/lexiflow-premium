@@ -14,7 +14,7 @@ export const AdminService = {
         const response = await adminApi.auditLogs?.getAll?.() || { data: [] };
         // Handle paginated response from backend
         const logs = Array.isArray(response) ? response : (response as any)?.data || [];
-        return logs.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        return logs.sort((a: unknown, b: unknown) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     },
     
     // Simulations (Infra)
@@ -50,7 +50,7 @@ export const AdminService = {
             { id: 'rls3', name: 'associate_edit_own_time', table: 'time_entries', cmd: 'UPDATE', roles: ['Associate'], using: "user_id = auth.uid()", status: 'Active' }
         ]; 
     },
-    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<any> => { 
+    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<unknown> => { 
         return adminApi.rlsPolicies?.create?.(policy) || policy;
     },
     deleteRLSPolicy: async (id: string): Promise<void> => { 
@@ -61,7 +61,7 @@ export const AdminService = {
     getPermissions: async (): Promise<RolePermission[]> => { 
         return adminApi.permissions?.getAll?.() || [{id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'}];
     },
-    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<any> => { 
+    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<unknown> => { 
         return adminApi.permissions?.update?.(payload) || payload;
     },
     
@@ -104,7 +104,7 @@ export const AdminService = {
             if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
                 const connections = await response.json();
                 // Transform backend response to connector format
-                return connections.map((conn: any) => ({
+                return connections.map((conn: unknown) => ({
                     id: conn.id,
                     name: conn.name,
                     type: conn.type,

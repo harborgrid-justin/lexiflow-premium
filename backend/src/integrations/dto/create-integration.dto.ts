@@ -41,12 +41,12 @@ export class CreateIntegrationDto {
 
   @ApiProperty({ description: 'Configuration object' })
   @IsObject()
-  config: Record<string, any>;
+  config: Record<string, unknown>;
 
   @ApiProperty({ description: 'Credentials object', required: false })
   @IsOptional()
   @IsObject()
-  credentials?: Record<string, any>;
+  credentials?: Record<string, unknown>;
 
   @ApiProperty({ 
     description: 'Integration status',

@@ -104,7 +104,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     }
   };
 
-  const handleChange = (field: keyof Matter, value: any) => {
+  const handleChange = (field: keyof Matter, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));

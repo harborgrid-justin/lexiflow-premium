@@ -11,7 +11,7 @@ export interface QueryExecution {
   status: 'running' | 'completed' | 'failed';
   results?: {
     columns: string[];
-    rows: any[][];
+    rows: unknown[][];
     rowCount: number;
   };
   executionTime?: number;

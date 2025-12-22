@@ -147,8 +147,8 @@ import { isBackendApiEnabled } from '../api';
 export interface Mutation {
   id: string;
   type: string;
-  payload: any;
-  patch?: any; // JSON Patch array
+  payload: unknown;
+  patch?: unknown; // JSON Patch array
   timestamp: number;
   status: 'pending' | 'syncing' | 'failed';
   retryCount: number;
@@ -218,8 +218,8 @@ const processedCache = new LinearHash<string, CacheEntry>();
  * // Returns: { age: 31 }
  * ```
  */
-const createPatch = (oldData: any, newData: any) => {
-    const patch: any = {};
+const createPatch = (oldData: unknown, newData: unknown) => {
+    const patch: unknown = {};
     for (const key in newData) {
         if (JSON.stringify(oldData[key]) !== JSON.stringify(newData[key])) {
             patch[key] = newData[key];
@@ -379,7 +379,7 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
     console.log(`[SyncEngine] Successfully synced mutation ${mutation.id} to backend`);
     return true;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     const errorMessage = error?.message || 'Unknown error';
     console.error(`[SyncEngine] Failed to sync mutation ${mutation.id}:`, errorMessage);
     
@@ -521,7 +521,7 @@ export const SyncEngine = {
    * console.log(mutation.patch); // Only changed fields
    * ```
    */
-  enqueue: (type: string, payload: any, oldPayload?: any): Mutation => {
+  enqueue: (type: string, payload: unknown, oldPayload?: unknown): Mutation => {
     const queue = SyncEngine.getQueue();
 
     // Optimization: Calculate patch if updating
@@ -870,7 +870,7 @@ export const SyncEngine = {
 
     try {
       // Fetch backend sync status
-      const response = await apiClient.get<any>('/sync/queue', {
+      const response = await apiClient.get<unknown>('/sync/queue', {
         params: { status: 'pending', limit: 100 }
       });
 
@@ -902,7 +902,7 @@ export const SyncEngine = {
         console.log(`[SyncEngine] Synced ${added} mutations from backend`);
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[SyncEngine] Failed to sync from backend:', error?.message);
     }
   },
@@ -910,7 +910,7 @@ export const SyncEngine = {
   /**
    * Gets backend sync status including conflicts and pending items.
    * 
-   * @returns {Promise<any>} Backend sync status
+   * @returns {Promise<unknown>} Backend sync status
    * 
    * @complexity O(1) - single HTTP request
    * @pure No side effects on local state
@@ -921,14 +921,14 @@ export const SyncEngine = {
    * console.log(`Pending: ${status.pending}, Conflicts: ${status.conflicts}`);
    * ```
    */
-  getBackendStatus: async (): Promise<any> => {
+  getBackendStatus: async (): Promise<unknown> => {
     if (!isBackendApiEnabled()) {
       return { pending: 0, conflicts: 0, isHealthy: true, offline: true };
     }
 
     try {
       return await apiClient.get('/sync/status');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[SyncEngine] Failed to get backend status:', error?.message);
       return { pending: 0, conflicts: 0, isHealthy: false, error: error?.message };
     }

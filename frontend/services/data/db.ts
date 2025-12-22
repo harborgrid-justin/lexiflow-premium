@@ -176,7 +176,7 @@ export class DatabaseManager {
   private titleIndex: BTree<string, string> = new BTree(DB_BTREE_ORDER);
 
   // Transaction Coalescing Buffer with size limits
-  private writeBuffer: { store: string, item: any, type: 'put' | 'delete', resolve: Function, reject: Function }[] = [];
+  private writeBuffer: { store: string, item: unknown, type: 'put' | 'delete', resolve: Function, reject: Function }[] = [];
   private flushTimer: number | null = null;
   private readonly MAX_BUFFER_SIZE = DB_MAX_BUFFER_SIZE;
   private readonly FORCE_FLUSH_THRESHOLD = DB_FORCE_FLUSH_THRESHOLD;
@@ -260,7 +260,7 @@ export class DatabaseManager {
 
   private async buildIndices() {
       setTimeout(async () => {
-        const cases = await this.getAll<any>(STORES.CASES);
+        const cases = await this.getAll<unknown>(STORES.CASES);
         cases.forEach(c => this.titleIndex.insert(c.title.toLowerCase(), c.id));
         console.log("B-Tree index for case titles built.");
       }, 500);
@@ -307,7 +307,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          return items.find((i: any) => i.id === id);
+          return items.find((i: unknown) => i.id === id);
       }
       return new Promise((resolve, reject) => {
           const transaction = this.db!.transaction([storeName], 'readonly');
@@ -351,7 +351,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          const idx = items.findIndex((i: any) => i.id === (item as any).id);
+          const idx = items.findIndex((i: unknown) => i.id === (item as any).id);
           if (idx >= 0) items[idx] = item;
           else items.push(item);
           StorageUtils.set(storeName, items);
@@ -386,7 +386,7 @@ export class DatabaseManager {
           const currentItems = StorageUtils.get<T[]>(storeName, []);
           const newItems = [...currentItems];
           items.forEach(item => {
-             const idx = newItems.findIndex((i: any) => i.id === (item as any).id);
+             const idx = newItems.findIndex((i: unknown) => i.id === (item as any).id);
              if (idx >= 0) newItems[idx] = item;
              else newItems.push(item);
           });
@@ -443,7 +443,7 @@ export class DatabaseManager {
           const items = StorageUtils.get<T[]>(storeName, []);
           const key = Array.isArray(value) ? indexName.split('_')[0] : indexName;
           const val = Array.isArray(value) ? value[0] : value; 
-          return items.filter((i: any) => i[key] === val);
+          return items.filter((i: unknown) => i[key] === val);
       }
       return new Promise((resolve, reject) => {
           const transaction = this.db!.transaction([storeName], 'readonly');

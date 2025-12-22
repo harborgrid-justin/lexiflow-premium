@@ -48,7 +48,7 @@ export class TrackEventDto {
   })
   @IsOptional()
   @IsObject()
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
 
   @ApiProperty({ 
     description: 'Event timestamp',

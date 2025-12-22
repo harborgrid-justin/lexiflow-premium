@@ -24,7 +24,7 @@ export class EmitEventDto {
 
   @ApiProperty({ description: 'Event data' })
   @IsObject()
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 
   @ApiProperty({ description: 'Target user ID', required: false })
   @IsOptional()

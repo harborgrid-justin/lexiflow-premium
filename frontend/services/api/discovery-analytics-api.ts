@@ -51,14 +51,14 @@ export class DiscoveryAnalyticsApiService {
     return apiClient.get<DiscoveryAnalytics>(`${this.baseUrl}/case/${caseId}`);
   }
 
-  async getReviewMetrics(caseId: string, userId?: string): Promise<any> {
+  async getReviewMetrics(caseId: string, userId?: string): Promise<unknown> {
     const url = userId 
       ? `${this.baseUrl}/case/${caseId}/review-metrics?userId=${userId}`
       : `${this.baseUrl}/case/${caseId}/review-metrics`;
     return apiClient.get(url);
   }
 
-  async getCostProjection(caseId: string): Promise<any> {
+  async getCostProjection(caseId: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/case/${caseId}/cost-projection`);
   }
 }

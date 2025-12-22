@@ -148,5 +148,35 @@ export class SearchController {
   async reindex(@Query() dto: ReindexDto): Promise<ReindexResultDto> {
     return this.searchService.reindex(dto);
   }
+
+  @Get('stats')
+  @ApiOperation({ summary: 'Get search statistics' })
+  @ApiResponse({
+    status: 200,
+    description: 'Search statistics',
+    schema: {
+      type: 'object',
+      properties: {
+        totalIndexed: { type: 'number', example: 15420 },
+        totalSearches: { type: 'number', example: 1893 },
+        avgSearchTime: { type: 'number', example: 0.245 },
+        popularSearches: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              query: { type: 'string' },
+              count: { type: 'number' },
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getStats() {
+    return this.searchService.getStats();
+  }
 }
 

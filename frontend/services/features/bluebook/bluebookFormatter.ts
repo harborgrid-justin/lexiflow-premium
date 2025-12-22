@@ -155,7 +155,7 @@ class BluebookFormatterClass {
   /**
    * Format a statute citation
    */
-  private formatStatute(citation: any, format: 'full' | 'short' | 'id'): string {
+  private formatStatute(citation: unknown, format: 'full' | 'short' | 'id'): string {
     if (format === 'id') {
       return 'Id.';
     }

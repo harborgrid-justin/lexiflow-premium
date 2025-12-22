@@ -79,7 +79,7 @@ export class TrustAccountsApiService {
     return apiClient.post<TrustTransaction>(`${this.baseUrl}/${accountId}/transactions`, transaction);
   }
 
-  async reconcile(accountId: string, data: { date: string; balance: number }): Promise<any> {
+  async reconcile(accountId: string, data: { date: string; balance: number }): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/${accountId}/reconcile`, data);
   }
 

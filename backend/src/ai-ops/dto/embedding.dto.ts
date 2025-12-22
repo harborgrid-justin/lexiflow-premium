@@ -57,7 +57,7 @@ export class StoreAiOpsEmbeddingDto {
 
   @ApiPropertyOptional({ description: 'Metadata', type: Object })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class SearchSimilarDto {

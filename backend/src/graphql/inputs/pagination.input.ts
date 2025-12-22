@@ -13,6 +13,18 @@ export class PaginationInput {
 
   @Field({ nullable: true })
   before?: string;
+
+  @Field(() => Int, { nullable: true, defaultValue: 1 })
+  page?: number;
+
+  @Field(() => Int, { nullable: true, defaultValue: 10 })
+  limit?: number;
+
+  @Field({ nullable: true })
+  sortBy?: string;
+
+  @Field({ nullable: true, defaultValue: 'ASC' })
+  sortOrder?: 'ASC' | 'DESC';
 }
 
 @InputType()

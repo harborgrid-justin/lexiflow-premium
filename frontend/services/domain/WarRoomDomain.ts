@@ -15,8 +15,8 @@ export const WarRoomService = {
     return api.warRoom.getWarRoomData(id);
   },
   
-  add: async (item: any) => item,
-  update: async (id: string, updates: any) => updates,
+  add: async (item: unknown) => item,
+  update: async (id: string, updates: unknown) => updates,
   delete: async (id: string) => true,
   
   // War room specific methods
@@ -25,17 +25,17 @@ export const WarRoomService = {
   },
   
   getSessions: async () => [],
-  createSession: async (session: any) => session,
+  createSession: async (session: unknown) => session,
   joinSession: async (sessionId: string) => true,
   leaveSession: async (sessionId: string) => true,
   getParticipants: async (sessionId: string) => [],
   
   // Advisors
-  getAdvisors: async (query?: any) => {
+  getAdvisors: async (query?: unknown) => {
     return api.warRoom.getAdvisors(query);
   },
   
-  createAdvisor: async (data: any) => {
+  createAdvisor: async (data: unknown) => {
     return api.warRoom.createAdvisor(data);
   },
   
@@ -44,11 +44,11 @@ export const WarRoomService = {
   },
   
   // Experts
-  getExperts: async (query?: any) => {
+  getExperts: async (query?: unknown) => {
     return api.warRoom.getExperts(query);
   },
   
-  createExpert: async (data: any) => {
+  createExpert: async (data: unknown) => {
     return api.warRoom.createExpert(data);
   },
   
@@ -61,7 +61,7 @@ export const WarRoomService = {
     return api.warRoom.getStrategy(caseId);
   },
   
-  updateStrategy: async (caseId: string, data: any) => {
+  updateStrategy: async (caseId: string, data: unknown) => {
     return api.warRoom.updateStrategy(caseId, data);
   },
 };

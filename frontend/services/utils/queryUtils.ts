@@ -51,7 +51,7 @@
  * @private
  * @throws Error if object is invalid
  */
-function validateObject(obj: any, methodName: string): void {
+function validateObject(obj: unknown, methodName: string): void {
   if (obj === undefined) {
     throw new Error(`[queryUtils.${methodName}] Object is required`);
   }
@@ -108,7 +108,7 @@ function validateQueryKey(key: string | readonly unknown[], methodName: string):
  * - Circular references handled gracefully
  * - Functions automatically excluded from comparison
  */
-export function fastDeepEqual(obj1: any, obj2: any): boolean {
+export function fastDeepEqual(obj1: unknown, obj2: unknown): boolean {
   try {
     // Fast path: reference equality
     if (obj1 === obj2) return true;
@@ -170,7 +170,7 @@ export function fastDeepEqual(obj1: any, obj2: any): boolean {
  * - Circular references marked (prevents infinite loops)
  * - No eval() or unsafe operations
  */
-export function stableStringify(obj: any, seen: WeakSet<object> = new WeakSet()): string {
+export function stableStringify(obj: unknown, seen: WeakSet<object> = new WeakSet()): string {
   try {
     // Handle primitives and null (fast path)
     if (obj === null || typeof obj !== 'object') {

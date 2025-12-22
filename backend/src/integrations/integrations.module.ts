@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Integration } from './entities/integration.entity';
 import { IntegrationsController } from './integrations.controller';
 import { IntegrationsService } from './integrations.service';
+import { PacerController } from './pacer/pacer.controller';
 import { PacerService } from './pacer/pacer.service';
 import { CalendarService } from './calendar/calendar.service';
 import { ExternalApiController } from './external-api/external-api.controller';
@@ -16,7 +17,7 @@ import { DataSourcesModule } from './data-sources/data-sources.module';
     JwtModule.register({}),
     DataSourcesModule,
   ],
-  controllers: [IntegrationsController, ExternalApiController],
+  controllers: [IntegrationsController, PacerController, ExternalApiController],
   providers: [
     IntegrationsService,
     PacerService,

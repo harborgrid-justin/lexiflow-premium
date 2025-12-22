@@ -96,7 +96,7 @@ export class CreateDocumentDto {
   @ApiPropertyOptional({ description: 'Custom metadata fields' })
   @IsObject()
   @IsOptional()
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 
   @ApiPropertyOptional({ description: 'Full text content extracted from document' })
   @IsString()

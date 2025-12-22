@@ -90,5 +90,5 @@ export class CreateInvoiceItemDto {
 
   @ApiPropertyOptional({ description: 'Additional metadata' })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

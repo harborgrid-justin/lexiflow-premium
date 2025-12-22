@@ -77,7 +77,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
         </p>
       </div>
       <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">
-        {menu.map((item: { children?: any[]; id: string; icon: React.ComponentType<{ className?: string }>; label: string }) => {
+        {menu.map((item: { children?: unknown[]; id: string; icon: React.ComponentType<{ className?: string }>; label: string }) => {
           const hasChildren = item.children && item.children.length > 0;
           const itemId = item.id as string;
           const isExpanded = expanded[itemId];

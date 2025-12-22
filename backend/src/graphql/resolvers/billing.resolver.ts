@@ -15,6 +15,7 @@ import { TimeEntriesService } from '../../billing/time-entries/time-entries.serv
 import { InvoicesService } from '../../billing/invoices/invoices.service';
 import { RateTablesService } from '../../billing/rate-tables/rate-tables.service';
 import { FeeAgreementsService } from '../../billing/fee-agreements/fee-agreements.service';
+import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
 
 @Resolver(() => TimeEntryType)
 export class BillingResolver {
@@ -52,7 +53,7 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async createTimeEntry(
     @Args('input') input: CreateTimeEntryInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<TimeEntryType> {
     const timeEntryData = {
       ...input,
@@ -67,7 +68,7 @@ export class BillingResolver {
   async updateTimeEntry(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateTimeEntryInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<TimeEntryType> {
     const timeEntry = await this.billingService.updateTimeEntry(id, input);
     return timeEntry as any;
@@ -77,7 +78,7 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async deleteTimeEntry(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<boolean> {
     await this.billingService.deleteTimeEntry(id);
     return true;
@@ -107,7 +108,7 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async createInvoice(
     @Args('input') input: CreateInvoiceInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<InvoiceType> {
     const invoiceData = {
       ...input,
@@ -121,7 +122,7 @@ export class BillingResolver {
   @UseGuards(GqlAuthGuard)
   async sendInvoice(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<InvoiceType> {
     const invoice = await this.billingService.sendInvoice(id);
     return invoice as any;
@@ -132,7 +133,7 @@ export class BillingResolver {
   async markInvoicePaid(
     @Args('id', { type: () => ID }) id: string,
     @Args('paidDate', { type: () => Date }) paidDate: Date,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<InvoiceType> {
     const invoice = await this.billingService.markInvoicePaid(id);
     return invoice as any;

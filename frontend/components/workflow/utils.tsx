@@ -12,7 +12,7 @@ import { WorkflowTask } from '../../types';
  * @deprecated Use ProcessIcon component instead
  * @see ProcessIcon in './ProcessIcon.tsx'
  */
-export const getProcessIcon = (name: string): any => {
+export const getProcessIcon = (name: string): unknown => {
   console.warn('getProcessIcon is deprecated. Use <ProcessIcon processName={name} /> instead.');
   return null;
 };

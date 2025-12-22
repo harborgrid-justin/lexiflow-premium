@@ -20,7 +20,7 @@ interface Workspace {
 interface WorkspaceSettings {
   visibility: 'private' | 'team' | 'public';
   allowGuests?: boolean;
-  notificationPreferences?: any;
+  notificationPreferences?: unknown;
 }
 
 interface Comment {
@@ -48,12 +48,12 @@ interface Share {
 export const CollaborationService = {
   getAll: async () => db.getAll(STORES.WORKSPACES),
   getById: async (id: string) => db.get(STORES.WORKSPACES, id),
-  add: async (item: any) => db.put(STORES.WORKSPACES, { 
+  add: async (item: unknown) => db.put(STORES.WORKSPACES, { 
     ...item, 
     createdAt: new Date().toISOString(),
     members: item.members || []
   }),
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.WORKSPACES, id);
     return db.put(STORES.WORKSPACES, { ...existing, ...updates });
   },

@@ -63,7 +63,7 @@ class ModuleRegistryService {
    * Intent-based Resolution: Finds the best module to handle a specific intent string.
    * This allows "fuzzy" navigation like "open billing" -> resolves to "billing" ID.
    */
-  resolveIntent(intent: string, context?: any): string | null {
+  resolveIntent(intent: string, context?: unknown): string | null {
     // 1. Direct ID match
     if (this.modules.has(intent)) return intent;
 

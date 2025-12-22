@@ -94,7 +94,7 @@ export const Seeder = {
   async seed(db: DatabaseManager) {
       console.log("Seeding Initial Data...");
       
-      const batchPut = async (store: string, data: any[]) => {
+      const batchPut = async (store: string, data: unknown[]) => {
           await db.bulkPut(store, data);
       };
       

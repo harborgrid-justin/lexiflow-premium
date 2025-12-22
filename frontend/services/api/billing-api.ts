@@ -107,7 +107,7 @@ export class BillingApiService {
      * Validate and sanitize object parameter
      * @private
      */
-    private validateObject(obj: any, paramName: string, methodName: string): void {
+    private validateObject(obj: unknown, paramName: string, methodName: string): void {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
             throw new Error(`[BillingApiService.${methodName}] Invalid ${paramName} parameter`);
         }
@@ -117,7 +117,7 @@ export class BillingApiService {
      * Validate and sanitize array parameter
      * @private
      */
-    private validateArray(arr: any[], paramName: string, methodName: string): void {
+    private validateArray(arr: unknown[], paramName: string, methodName: string): void {
         if (!arr || !Array.isArray(arr) || arr.length === 0) {
             throw new Error(`[BillingApiService.${methodName}] Invalid ${paramName} parameter`);
         }
@@ -376,7 +376,7 @@ export class BillingApiService {
      */
     async getInvoices(filters?: { caseId?: string; clientId?: string; status?: string }): Promise<any[]> {
         try {
-            const response = await apiClient.get<PaginatedResponse<any>>('/billing/invoices', filters);
+            const response = await apiClient.get<PaginatedResponse<unknown>>('/billing/invoices', filters);
             return response.data;
         } catch (error) {
             console.warn('[BillingApiService.getInvoices] Invoices endpoint not available, returning empty array');
@@ -388,14 +388,14 @@ export class BillingApiService {
      * Create a new invoice
      * 
      * @param data - Invoice data
-     * @returns Promise<any> Created invoice
+     * @returns Promise<unknown> Created invoice
      * @throws Error if validation fails or create fails
      */
-    async createInvoice(data: any): Promise<any> {
+    async createInvoice(data: unknown): Promise<unknown> {
         this.validateObject(data, 'data', 'createInvoice');
 
         try {
-            return await apiClient.post<any>('/billing/invoices', data);
+            return await apiClient.post<unknown>('/billing/invoices', data);
         } catch (error) {
             console.error('[BillingApiService.createInvoice] Error:', error);
             throw new Error('Failed to create invoice');
@@ -407,15 +407,15 @@ export class BillingApiService {
      * 
      * @param id - Invoice ID
      * @param data - Partial invoice updates
-     * @returns Promise<any> Updated invoice
+     * @returns Promise<unknown> Updated invoice
      * @throws Error if validation fails or update fails
      */
-    async updateInvoice(id: string, data: any): Promise<any> {
+    async updateInvoice(id: string, data: unknown): Promise<unknown> {
         this.validateId(id, 'updateInvoice');
         this.validateObject(data, 'data', 'updateInvoice');
 
         try {
-            return await apiClient.put<any>(`/billing/invoices/${id}`, data);
+            return await apiClient.put<unknown>(`/billing/invoices/${id}`, data);
         } catch (error) {
             console.error('[BillingApiService.updateInvoice] Error:', error);
             throw new Error(`Failed to update invoice with id: ${id}`);
@@ -426,14 +426,14 @@ export class BillingApiService {
      * Send an invoice to client
      * 
      * @param id - Invoice ID
-     * @returns Promise<any> Sent invoice
+     * @returns Promise<unknown> Sent invoice
      * @throws Error if id is invalid or send fails
      */
-    async sendInvoice(id: string): Promise<any> {
+    async sendInvoice(id: string): Promise<unknown> {
         this.validateId(id, 'sendInvoice');
 
         try {
-            return await apiClient.post<any>(`/billing/invoices/${id}/send`, {});
+            return await apiClient.post<unknown>(`/billing/invoices/${id}/send`, {});
         } catch (error) {
             console.error('[BillingApiService.sendInvoice] Error:', error);
             throw new Error(`Failed to send invoice with id: ${id}`);
@@ -482,11 +482,11 @@ export class BillingApiService {
      * Get realization statistics
      * Gracefully handles endpoint unavailability
      * 
-     * @returns Promise<any> Realization statistics
+     * @returns Promise<unknown> Realization statistics
      */
-    async getRealizationStats(): Promise<any> {
+    async getRealizationStats(): Promise<unknown> {
         try {
-            return await apiClient.get<any>('/billing/realization-stats');
+            return await apiClient.get<unknown>('/billing/realization-stats');
         } catch (error) {
             console.warn('[BillingApiService.getRealizationStats] Realization stats endpoint not available, returning default');
             return [
@@ -537,7 +537,7 @@ export class BillingApiService {
      */
     async getTopAccounts(): Promise<any[]> {
         try {
-            const response = await apiClient.get<PaginatedResponse<any>>('/clients', { sortBy: 'totalBilled', sortOrder: 'desc', limit: 4 });
+            const response = await apiClient.get<PaginatedResponse<unknown>>('/clients', { sortBy: 'totalBilled', sortOrder: 'desc', limit: 4 });
             return response.data;
         } catch (error) {
             console.warn('[BillingApiService.getTopAccounts] Top accounts endpoint not available, returning empty array');

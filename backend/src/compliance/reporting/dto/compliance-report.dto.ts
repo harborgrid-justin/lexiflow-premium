@@ -22,7 +22,7 @@ export interface DateRange {
 
 export interface ReportSummary {
   totalRecords: number;
-  metrics: Record<string, any>;
+  metrics: Record<string, unknown>;
   highlights: string[];
 }
 
@@ -81,7 +81,7 @@ export class ActivityReportData {
   byUser: Record<string, number>;
   timeline: TimelineEntry[];
   topUsers: UserActivity[];
-  recentActivities: any[];
+  recentActivities: unknown[];
 }
 
 export interface UserActivity {
@@ -108,7 +108,7 @@ export class ConflictsReportData {
   byCheckType: Record<string, number>;
   byStatus: Record<string, number>;
   timeline: TimelineEntry[];
-  criticalConflicts: any[];
+  criticalConflicts: unknown[];
 }
 
 export class GenerateEthicalWallsReportDto {
@@ -128,5 +128,5 @@ export class EthicalWallsReportData {
   restrictedEntities: number;
   byEntityType: Record<string, number>;
   timeline: TimelineEntry[];
-  walls: any[];
+  walls: unknown[];
 }

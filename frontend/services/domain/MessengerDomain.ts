@@ -15,11 +15,11 @@ export const MessengerService = {
     return api.messaging.getConversation(id);
   },
   
-  add: async (item: any) => {
+  add: async (item: unknown) => {
     return api.messaging.createConversation(item);
   },
   
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     return api.messaging.updateConversation(id, updates);
   },
   
@@ -29,15 +29,15 @@ export const MessengerService = {
   },
   
   // Messenger-specific methods
-  getConversations: async (filters?: any) => {
+  getConversations: async (filters?: unknown) => {
     return api.messaging.getConversations(filters);
   },
   
-  getContacts: async (filters?: any) => {
+  getContacts: async (filters?: unknown) => {
     return api.messaging.getContacts(filters);
   },
   
-  sendMessage: async (data: { conversationId: string; body: string; priority?: any; attachments?: string[] }) => {
+  sendMessage: async (data: { conversationId: string; body: string; priority?: unknown; attachments?: string[] }) => {
     return api.messaging.sendMessage(data);
   },
   

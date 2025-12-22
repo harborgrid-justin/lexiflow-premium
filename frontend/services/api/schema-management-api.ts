@@ -12,7 +12,7 @@ export interface SchemaInfo {
       name: string;
       type: string;
       nullable: boolean;
-      default?: any;
+      default?: unknown;
     }[];
     indexes: {
       name: string;

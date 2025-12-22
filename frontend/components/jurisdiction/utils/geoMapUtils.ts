@@ -19,8 +19,8 @@ export interface MapNode {
 /**
  * Initializes velocity for map nodes with random values
  */
-export const initializeNodeVelocity = (nodes: any[]): MapNode[] => {
-  return nodes.map((n: any) => ({ 
+export const initializeNodeVelocity = (nodes: unknown[]): MapNode[] => {
+  return nodes.map((n: unknown) => ({ 
     ...n, 
     vx: (Math.random() - 0.5) * 0.5, 
     vy: (Math.random() - 0.5) * 0.5 

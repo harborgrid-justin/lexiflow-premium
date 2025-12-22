@@ -39,7 +39,7 @@ export class CreateDashboardDto {
   @ApiPropertyOptional({ description: 'Dashboard layout configuration' })
   @IsObject()
   @IsOptional()
-  layout?: Record<string, any>;
+  layout?: Record<string, unknown>;
 
   @ApiPropertyOptional({ description: 'Widget configurations', type: [Object] })
   @IsArray()
@@ -48,14 +48,14 @@ export class CreateDashboardDto {
     id: string;
     type: string;
     title: string;
-    config: Record<string, any>;
+    config: Record<string, unknown>;
     position: { x: number; y: number; w: number; h: number };
   }>;
 
   @ApiPropertyOptional({ description: 'Dashboard filters' })
   @IsObject()
   @IsOptional()
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 
   @ApiPropertyOptional({ description: 'Refresh interval in seconds' })
   @IsOptional()
@@ -69,5 +69,5 @@ export class CreateDashboardDto {
   @ApiPropertyOptional({ description: 'Additional metadata' })
   @IsObject()
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

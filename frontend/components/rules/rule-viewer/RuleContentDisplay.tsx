@@ -6,13 +6,13 @@ import { History, FileText, Scale } from 'lucide-react';
 interface RuleContentDisplayProps {
   selectedRule: LegalRule;
   activeTab: string;
-  theme: any;
+  theme: unknown;
 }
 
 export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selectedRule, activeTab, theme }) => {
   const { mode } = theme;
 
-  const renderStructuredContent = (data: any) => {
+  const renderStructuredContent = (data: unknown) => {
     if (!data) return null;
 
     return (
@@ -68,7 +68,7 @@ export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selected
                  <div>
                      <h4 className={cn("text-sm font-bold mb-3", theme.text.primary)}>Amendments</h4>
                      <ul className="space-y-2">
-                         {data.statutory_notes.amendments.map((am: any, i: number) => (
+                         {data.statutory_notes.amendments.map((am: unknown, i: number) => (
                              <li key={i} className={cn("text-xs flex items-center p-2 border rounded hover:opacity-80", theme.surface.highlight, theme.border.default)}>
                                  <span className={cn("font-medium mr-2", theme.text.primary)}>{am.date}</span>
                                  <span className={theme.text.secondary}>Effective: {am.effective_date}</span>

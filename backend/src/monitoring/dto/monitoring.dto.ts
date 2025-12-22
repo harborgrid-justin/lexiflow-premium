@@ -50,7 +50,7 @@ export class RecordMetricDto {
   @ApiPropertyOptional({ description: 'Tags', type: Object })
   @IsOptional()
   @IsObject()
-  tags?: Record<string, any>;
+  tags?: Record<string, unknown>;
 }
 
 export class GetAlertsQueryDto {

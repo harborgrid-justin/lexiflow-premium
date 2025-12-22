@@ -7,7 +7,7 @@ export interface SchemaTable {
   name: string; 
   x: number; 
   y: number; 
-  columns: any[]; 
+  columns: unknown[]; 
 }
 
 export interface DataProfile { 
@@ -58,7 +58,7 @@ export interface Connector {
   type: string;
   status: 'Healthy' | 'Syncing' | 'Degraded' | 'Error';
   color: string;
-  icon?: any; 
+  icon?: unknown; 
 }
 
 export interface GovernanceRule {

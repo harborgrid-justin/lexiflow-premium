@@ -43,7 +43,7 @@ export const WebhookManagement: React.FC = () => {
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
     const response = await webhooksApi.getAll();
-    return response.items.map((item: any) => ({
+    return response.items.map((item: unknown) => ({
       id: item.id,
       name: item.name,
       url: item.url,

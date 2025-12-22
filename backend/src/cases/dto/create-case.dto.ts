@@ -118,7 +118,7 @@ export class CreateCaseDto {
   leadAttorneyId?: string;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'Client UUID',

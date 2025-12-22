@@ -84,7 +84,7 @@ export class PleadingsApiService {
         }
     }
 
-    private validateObject(obj: any, paramName: string, methodName: string): void {
+    private validateObject(obj: unknown, paramName: string, methodName: string): void {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
             throw new Error(`[PleadingsApiService.${methodName}] Invalid ${paramName} parameter`);
         }

@@ -239,6 +239,13 @@ export class JurisdictionsService {
     };
   }
 
+  async getAllRules(): Promise<JurisdictionRule[]> {
+    return this.ruleRepository.find({
+      relations: ['jurisdiction'],
+      order: { code: 'ASC' },
+    });
+  }
+
   async findRuleById(id: string): Promise<JurisdictionRule> {
     const rule = await this.ruleRepository.findOne({
       where: { id },

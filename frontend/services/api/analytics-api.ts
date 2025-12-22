@@ -20,8 +20,8 @@ export interface Dashboard {
   userId: string;
   name: string;
   description?: string;
-  widgets: any[];
-  layout?: any;
+  widgets: unknown[];
+  layout?: unknown;
   isPublic: boolean;
   createdAt: string;
   updatedAt: string;
@@ -64,15 +64,15 @@ export class AnalyticsApiService {
   }
 
   // Metrics
-  async getCaseMetrics(): Promise<any> {
+  async getCaseMetrics(): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/metrics/case`);
   }
 
-  async getUserActivityMetrics(): Promise<any> {
+  async getUserActivityMetrics(): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/metrics/user-activity`);
   }
 
-  async getBillingMetrics(): Promise<any> {
+  async getBillingMetrics(): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/metrics/billing`);
   }
 
@@ -116,7 +116,7 @@ export class AnalyticsApiService {
   }
 
   // Reports
-  async generateReport(params: { type: string; startDate: string; endDate: string }): Promise<any> {
+  async generateReport(params: { type: string; startDate: string; endDate: string }): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/reports/generate`, params);
   }
 }

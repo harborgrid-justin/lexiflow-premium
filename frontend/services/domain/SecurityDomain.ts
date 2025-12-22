@@ -115,7 +115,7 @@ export const SecurityService = {
             }
 
             // Normalize signatures to string array
-            const signatures = sigs.map((s: any) => {
+            const signatures = sigs.map((s: unknown) => {
                 if (typeof s === 'string') {
                     return s;
                 }

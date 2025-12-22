@@ -196,5 +196,37 @@ export class AuthController {
       verifyMfaDto.code,
     );
   }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Post('enable-mfa')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Enable MFA for current user' })
+  @ApiResponse({ status: 200, description: 'MFA setup initiated, returns QR code' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async enableMfa(@CurrentUser('id') userId: string) {
+    return this.authService.setupMfa(userId);
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Post('disable-mfa')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Disable MFA for current user' })
+  @ApiResponse({ status: 200, description: 'MFA disabled successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async disableMfa(@CurrentUser('id') userId: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user || !user.mfaEnabled) {
+      return { message: 'MFA is not enabled' };
+    }
+    await this.usersService.setMfaEnabled(userId, false);
+    await this.usersService.clearTotpSecret(userId);
+    return { message: 'MFA disabled successfully' };
+  }
 }
 

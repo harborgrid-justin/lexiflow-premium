@@ -94,7 +94,7 @@ export class CasesApiService {
      * Validate and sanitize object parameter
      * @private
      */
-    private validateObject(obj: any, paramName: string, methodName: string): void {
+    private validateObject(obj: unknown, paramName: string, methodName: string): void {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
             throw new Error(`[CasesApiService.${methodName}] Invalid ${paramName} parameter`);
         }
@@ -116,7 +116,7 @@ export class CasesApiService {
   }
 
   // Transform case data from backend to frontend format
-  private transformCase(backendCase: any): Case {
+  private transformCase(backendCase: unknown): Case {
     return {
       ...backendCase,
       status: this.mapBackendStatusToFrontend(backendCase.status),
@@ -131,7 +131,7 @@ export class CasesApiService {
     const casesArray = response.data?.data || response.data || [];
     
     // Transform each case to use frontend status values and ensure all required fields
-    return casesArray.map((c: any) => {
+    return casesArray.map((c: unknown) => {
       const transformed = this.transformCase(c);
       // Ensure required fields for Case type
       return {
@@ -209,7 +209,7 @@ export class CasesApiService {
     };
 
     // Transform frontend Case to backend CreateCaseDto
-    const createDto: any = {
+    const createDto: unknown = {
       title: caseData.title,
       caseNumber: caseData.caseNumber || `CASE-${Date.now()}`,
       description: caseData.description,
@@ -332,7 +332,7 @@ export class CasesApiService {
         try {
             // Try backend first, fallback to local filtering
             try {
-                const response = await apiClient.get<PaginatedResponse<any>>('/cases/archived', filters);
+                const response = await apiClient.get<PaginatedResponse<unknown>>('/cases/archived', filters);
                 return response.data.map(c => this.transformCase(c));
             } catch (error) {
                 console.warn('[CasesApiService] Archived endpoint unavailable, falling back to status filter');

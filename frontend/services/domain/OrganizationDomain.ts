@@ -24,7 +24,7 @@ interface OrgSettings {
   currency?: string;
   billingCycle?: 'monthly' | 'quarterly' | 'annual';
   features?: string[];
-  customization?: any;
+  customization?: unknown;
 }
 
 interface Department {
@@ -50,11 +50,11 @@ interface Member {
 export const OrganizationService = {
   getAll: async () => adminApi.organizations?.getAll?.() || [],
   getById: async (id: string) => adminApi.organizations?.getById?.(id) || null,
-  add: async (item: any) => {
+  add: async (item: unknown) => {
     const org = { ...item, createdAt: new Date().toISOString() };
     return adminApi.organizations?.create?.(org) || org;
   },
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     return adminApi.organizations?.update?.(id, updates) || { id, ...updates };
   },
   delete: async (id: string) => {

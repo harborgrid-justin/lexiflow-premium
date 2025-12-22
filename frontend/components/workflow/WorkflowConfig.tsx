@@ -20,7 +20,7 @@ export const WorkflowConfig: React.FC = () => {
   );
 
   const { mutate: updateSettings } = useMutation(
-    async (newSettings: any[]) => DataService.workflow.updateSettings(newSettings),
+    async (newSettings: unknown[]) => DataService.workflow.updateSettings(newSettings),
     {
       onSuccess: (_, variables) => {
         queryClient.invalidate(queryKeys.workflowsExtended.settings());

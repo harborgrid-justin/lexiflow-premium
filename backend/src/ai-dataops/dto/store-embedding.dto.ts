@@ -34,5 +34,5 @@ export class StoreDataOpsEmbeddingDto {
 
   @ApiPropertyOptional({ description: 'Additional metadata', type: Object })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

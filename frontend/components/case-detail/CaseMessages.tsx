@@ -109,7 +109,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
                    {msg.text}
                    {msg.attachments && (
                      <div className="mt-3 space-y-1">
-                       {msg.attachments.map((att: any) => (
+                       {msg.attachments.map((att: unknown) => (
                          <div key={att.name} className="flex items-center p-2 bg-black/10 rounded text-xs font-medium">
                             <FileText className="h-3 w-3 mr-2"/> {att.name}
                          </div>

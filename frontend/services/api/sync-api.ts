@@ -17,8 +17,8 @@ export interface AdminSyncConflict {
   id: string;
   entityType: string;
   entityId: string;
-  localVersion: any;
-  remoteVersion: any;
+  localVersion: unknown;
+  remoteVersion: unknown;
   conflictType: 'update_update' | 'update_delete' | 'create_create';
   detectedAt: string;
   resolvedAt?: string;
@@ -49,7 +49,7 @@ export class SyncApiService {
     return apiClient.get<AdminSyncConflict[]>(`${this.baseUrl}/conflicts`);
   }
 
-  async resolveConflict(conflictId: string, resolution: 'local' | 'remote' | 'merge', mergedData?: any): Promise<void> {
+  async resolveConflict(conflictId: string, resolution: 'local' | 'remote' | 'merge', mergedData?: unknown): Promise<void> {
     return apiClient.post(`${this.baseUrl}/conflicts/${conflictId}/resolve`, {
       resolution,
       mergedData,

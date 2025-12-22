@@ -189,7 +189,7 @@ export interface Jurisdiction extends BaseEntity {
     fullName?: string; // For arbitration providers
     jurisdiction?: string; // For local courts
   };
-  rules?: any[]; // Backend: OneToMany JurisdictionRule relation
+  rules?: unknown[]; // Backend: OneToMany JurisdictionRule relation
 }
 
 export interface Group extends BaseEntity { 
@@ -203,7 +203,7 @@ export interface Group extends BaseEntity {
 export interface FeatureFlag extends BaseEntity { 
   key: string; 
   enabled: boolean; 
-  rules?: any; 
+  rules?: unknown; 
   description: string; 
 }
 
@@ -221,7 +221,7 @@ export type AccessScope = 'Global' | 'Region' | 'Office' | 'Personal';
 export interface AccessCondition {
   type: 'Time' | 'Location' | 'Device' | 'Network';
   operator: 'Equals' | 'NotEquals' | 'Between' | 'Includes';
-  value: any;
+  value: unknown;
 }
 
 export interface GranularPermission {

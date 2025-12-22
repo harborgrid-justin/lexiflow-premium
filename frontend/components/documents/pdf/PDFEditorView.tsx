@@ -45,7 +45,7 @@ export const PDFEditorView: React.FC = () => {
     const [pageNum, setPageNum] = useState(1);
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
-    const [activeField, setActiveField] = useState<any>(null);
+    const [activeField, setActiveField] = useState<unknown>(null);
 
     // Select first PDF document when documents load
     useEffect(() => {
@@ -73,7 +73,7 @@ export const PDFEditorView: React.FC = () => {
         return () => { isMounted = false; };
     }, [documentSelection.selected, register]);
     
-    const handleFieldClick = (field: any) => {
+    const handleFieldClick = (field: unknown) => {
         if (field.type === 'signature' || field.type === 'initials') {
             setActiveField(field);
             setSignModalOpen(true);

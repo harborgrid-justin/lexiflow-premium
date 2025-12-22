@@ -10,5 +10,5 @@ export class CreateVersionDto {
   @ApiPropertyOptional({ description: 'Additional metadata for this version' })
   @IsObject()
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

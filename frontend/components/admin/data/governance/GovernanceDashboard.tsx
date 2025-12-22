@@ -7,11 +7,11 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 
 interface GovernanceDashboardProps {
-  rules: any[];
+  rules: unknown[];
   isScanning: boolean;
   scanProgress: number;
   handleScan: () => void;
-  setEditingRule: (rule: any) => void;
+  setEditingRule: (rule: unknown) => void;
 }
 
 export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ 

@@ -108,7 +108,7 @@ export class UpdatePrivilegeLogEntryDto {
   notes?: string;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsUUID()

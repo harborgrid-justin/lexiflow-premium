@@ -254,11 +254,11 @@ export interface Message extends BaseEntity {
 export interface ModuleDefinition {
   id: string;
   label: string;
-  component: LazyExoticComponent<any>;
+  component: LazyExoticComponent<unknown>;
   requiresAdmin?: boolean;
-  intentMatcher?: (intent: string, context: any) => boolean;
+  intentMatcher?: (intent: string, context: unknown) => boolean;
   category: NavCategory;
-  icon?: any;
+  icon?: unknown;
 }
 
 export interface NexusNodeData { 
@@ -284,7 +284,7 @@ export interface ParsedDocket {
   caseInfo: Partial<Case>;
   parties: Party[];
   docketEntries: DocketEntry[];
-  deadlines?: any[];
+  deadlines?: unknown[];
 }
 
 export interface ProductionSet {

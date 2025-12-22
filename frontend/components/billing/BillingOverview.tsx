@@ -72,7 +72,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
   const realizationData = Array.isArray(rawRealizationData) ? rawRealizationData : [];
   const topClients = Array.isArray(rawTopClients) ? rawTopClients : [];
 
-  const totalWip = wipData.reduce((acc: number, curr: any) => acc + (curr.wip || 0), 0);
+  const totalWip = wipData.reduce((acc: number, curr: unknown) => acc + (curr.wip || 0), 0);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -163,7 +163,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                             stroke="none"
                             isAnimationActive={true}
                         >
-                            {realizationData.map((e: any, index: number) => (
+                            {realizationData.map((e: unknown, index: number) => (
                                 <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
                             ))}
                         </Pie>
@@ -195,7 +195,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
             </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x dark:divide-slate-700 divide-slate-200">
-             {topClients.map((client: any) => (
+             {topClients.map((client: unknown) => (
                  <div 
                     key={client.id} 
                     className={cn("flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer")}

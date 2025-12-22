@@ -49,7 +49,7 @@ export class BackupsApiService {
   /**
    * Get all backup snapshots
    */
-  async getSnapshots(filters?: any): Promise<PaginatedResponse<BackupSnapshot>> {
+  async getSnapshots(filters?: unknown): Promise<PaginatedResponse<BackupSnapshot>> {
     try {
       return await apiClient.get<PaginatedResponse<BackupSnapshot>>('/backups/snapshots', filters);
     } catch (error) {

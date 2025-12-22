@@ -32,8 +32,8 @@ export interface ReportTemplate {
     name: string;
     type: 'string' | 'number' | 'date' | 'boolean' | 'select';
     required: boolean;
-    defaultValue?: any;
-    options?: any[];
+    defaultValue?: unknown;
+    options?: unknown[];
   }[];
   isPublic: boolean;
   metadata?: Record<string, any>;

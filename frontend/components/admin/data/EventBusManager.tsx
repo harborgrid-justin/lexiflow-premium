@@ -10,7 +10,7 @@ import { useQuery } from '../../../hooks/useQueryHooks';
 interface EventBusEvent {
   id: string;
   event: string;
-  payload: any;
+  payload: unknown;
   timestamp: string;
   source: string;
   status: 'delivered' | 'pending' | 'failed';

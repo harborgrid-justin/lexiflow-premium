@@ -7,7 +7,7 @@ import { Case, PleadingSection } from '../types';
 
 export interface TemplateContext {
   case?: Case;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -18,15 +18,15 @@ const TEMPLATE_VARIABLE_PATTERN = /\{\{([^}]+)\}\}/g;
 /**
  * Safely gets nested property from object
  */
-function getNestedProperty(obj: any, path: string): any {
+function getNestedProperty(obj: Record<string, unknown>, path: string): unknown {
   const keys = path.trim().split('.');
-  let current = obj;
+  let current: unknown = obj;
 
   for (const key of keys) {
     if (current === null || current === undefined) {
       return undefined;
     }
-    current = current[key];
+    current = (current as Record<string, unknown>)[key];
   }
 
   return current;
@@ -34,7 +34,9 @@ function getNestedProperty(obj: any, path: string): any {
 
 /**
  * Escapes special regex characters in string
+ * Reserved for future pattern matching
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function escapeRegExp(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

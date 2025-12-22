@@ -34,7 +34,7 @@ export class CreateReportTemplateDto {
   })
   @IsObject()
   @IsOptional()
-  schema?: Record<string, any>;
+  schema?: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'User ID who created the template'

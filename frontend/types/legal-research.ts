@@ -24,7 +24,7 @@ export interface Citation extends BaseEntity {
   caseId?: string; // Backend: uuid, FK to cases
   documentId?: string; // Backend: uuid
   status: string; // Backend: varchar (default: 'Valid')
-  shepards?: any; // Backend: json
+  shepards?: unknown; // Backend: json
   signal?: string; // Signal indicator (e.g., 'positive', 'negative', 'warning')
   
   // Frontend-specific (legacy)
@@ -83,14 +83,14 @@ export interface LegalRule extends BaseEntity {
   interpretations?: string[];
   exceptions?: string[];
   // Metadata
-  structuredContent?: any;
+  structuredContent?: unknown;
   searchableText?: string;
   usageCount?: number;
   lastVerified?: string;
   metadata?: Record<string, any>;
 }
 
-export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: any[]; }
+export interface Playbook extends BaseEntity { name: string; jurisdiction: string; matterType: string; stages: unknown[]; }
 
 export interface WikiArticle extends BaseEntity { title: string; category: string; content: string; lastUpdated: string; isFavorite: boolean; author: string; }
 

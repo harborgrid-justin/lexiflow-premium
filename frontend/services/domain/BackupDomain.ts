@@ -72,7 +72,7 @@ export const BACKUP_QUERY_KEYS = {
  * Validate snapshot type parameter
  * @private
  */
-function validateSnapshotType(type: any, methodName: string): void {
+function validateSnapshotType(type: unknown, methodName: string): void {
   const validTypes: SnapshotType[] = ['Full', 'Incremental', 'Differential'];
   
   if (!type || !validTypes.includes(type)) {
@@ -84,7 +84,7 @@ function validateSnapshotType(type: any, methodName: string): void {
  * Validate snapshot ID parameter
  * @private
  */
-function validateSnapshotId(id: any, methodName: string): void {
+function validateSnapshotId(id: unknown, methodName: string): void {
   if (!id || typeof id !== 'string' || id.trim() === '') {
     throw new Error(`[BackupService.${methodName}] Snapshot ID is required and must be a non-empty string`);
   }

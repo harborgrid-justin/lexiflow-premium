@@ -76,7 +76,7 @@ export class StaticDataCachingService {
     );
   }
 
-  async getJurisdictionById(id: string): Promise<Jurisdiction> {
+  async getJurisdictionById(id: string): Promise<Jurisdiction | null> {
     return this.cachingService.getOrFetch(
       `static:jurisdiction:${id}`,
       () => this.jurisdictionRepo.findOne({ where: { id } }),

@@ -37,7 +37,7 @@ import { queryKeys } from '../../utils/queryKeys';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { WorkflowTask, Case } from '../../types';
+import { WorkflowTask, Case, TaskStatusBackend } from '../../types';
 
 interface CaseListTasksProps {
   onSelectCase?: (c: Case) => void;
@@ -76,7 +76,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   
   const filteredTasks = safeTasks.filter(t => {
       if (filter === 'All') return true;
-      if (filter === 'Pending') return t.status === 'Pending' || t.status === 'In Progress';
+      if (filter === 'Pending') return t.status === TaskStatusBackend.TODO || t.status === TaskStatusBackend.IN_PROGRESS;
       if (filter === 'High Priority') return t.priority === 'High';
       return true;
   });
@@ -88,7 +88,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const handleToggle = async (id: string) => {
       const task = safeTasks.find(t => t.id === id);
       if (task) {
-          const newStatus = task.status === 'Done' ? 'Pending' : 'Done';
+          const newStatus = task.status === TaskStatusBackend.COMPLETED ? TaskStatusBackend.TODO : TaskStatusBackend.COMPLETED;
           updateTask({ id, updates: { status: newStatus as any }});
       }
   };
@@ -103,17 +103,17 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const renderRow = (t: WorkflowTask) => (
     <div key={t.id} className={cn("p-4 flex items-start transition-colors group h-[90px] border-b", theme.border.default, `hover:${theme.surface.highlight}`)}>
         <div className="pt-0.5 mr-4">
-            <input 
-                type="checkbox" 
-                className="h-5 w-5 text-blue-600 rounded border-slate-300 cursor-pointer" 
-                checked={t.status === 'Done'}
+            <input
+                type="checkbox"
+                className="h-5 w-5 text-blue-600 rounded border-slate-300 cursor-pointer"
+                checked={t.status === TaskStatusBackend.COMPLETED}
                 onChange={() => handleToggle(t.id)}
-                aria-label={`Mark ${t.title} as ${t.status === 'Done' ? 'incomplete' : 'complete'}`}
+                aria-label={`Mark ${t.title} as ${t.status === TaskStatusBackend.COMPLETED ? 'incomplete' : 'complete'}`}
             />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start">
-              <p className={cn("text-sm font-bold truncate pr-2", t.status === 'Done' ? "text-slate-400 line-through" : theme.text.primary)}>{t.title}</p>
+              <p className={cn("text-sm font-bold truncate pr-2", t.status === TaskStatusBackend.COMPLETED ? "text-slate-400 line-through" : theme.text.primary)}>{t.title}</p>
               <div className="flex items-center gap-2 shrink-0">
                 <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'neutral'}>{t.priority}</Badge>
                 {t.caseId && (
@@ -154,7 +154,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
             <select 
               className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
               value={filter} 
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value)}
               aria-label="Filter Tasks"
             >
                 <option value="All">All Tasks</option>

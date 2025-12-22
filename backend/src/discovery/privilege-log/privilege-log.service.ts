@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { PrivilegeLogEntry } from './entities/privilege-log-entry.entity';
 import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
 import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';
@@ -91,7 +91,7 @@ export class PrivilegeLogService {
 
   async findOne(id: string): Promise<PrivilegeLogEntry> {
     const entry = await this.privilegeLogRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!entry) {
@@ -121,7 +121,7 @@ export class PrivilegeLogService {
 
   async getStatistics(caseId: string) {
     const entries = await this.privilegeLogRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {
@@ -156,7 +156,7 @@ export class PrivilegeLogService {
 
   async exportLog(caseId: string): Promise<PrivilegeLogEntry[]> {
     return await this.privilegeLogRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
       order: { privilegeLogNumber: 'ASC' },
     });
   }

@@ -132,7 +132,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
                   : cn(theme.border.default, "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20")
             )} 
             value={globalSearch}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setGlobalSearch(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGlobalSearch(e.target.value)}
             onKeyDown={onInputKeyDown}
             onFocus={() => { if(globalSearch.length > 0) setShowResults(true); }}
             disabled={isProcessingIntent}

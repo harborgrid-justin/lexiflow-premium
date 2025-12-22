@@ -76,7 +76,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     label="Policy Name" 
                     placeholder="e.g. tenant_isolation_cases" 
                     value={formData.name || ''} 
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
                     autoFocus
                 />
                 <div>
@@ -84,7 +84,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.table}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, table: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, table: e.target.value})}
                     >
                         {tables.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -97,7 +97,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.cmd}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, cmd: e.target.value as SqlCmd})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, cmd: e.target.value as SqlCmd})}
                     >
                         <option value="ALL">ALL</option>
                         <option value="SELECT">SELECT</option>

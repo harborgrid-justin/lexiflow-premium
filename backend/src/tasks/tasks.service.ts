@@ -51,7 +51,8 @@ export class TasksService {
     }
 
     Object.keys(where).forEach(key => {
-      queryBuilder.andWhere(`task.${key} = :${key}`, { [key]: where[key] });
+      const typedKey = key as keyof FindOptionsWhere<Task>;
+      queryBuilder.andWhere(`task.${key} = :${key}`, { [key]: where[typedKey] });
     });
 
     const [data, total] = await queryBuilder

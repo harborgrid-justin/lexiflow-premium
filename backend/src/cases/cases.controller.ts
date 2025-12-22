@@ -9,7 +9,6 @@ import {
   Query,
   HttpCode,
   HttpStatus,
-  _UseGuards,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';

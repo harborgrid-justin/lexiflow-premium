@@ -1,6 +1,6 @@
 import {
   IsString,
-  _IsEnum,
+  IsEnum,
   IsOptional,
   IsDateString,
   IsArray,

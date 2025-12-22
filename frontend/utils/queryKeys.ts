@@ -27,6 +27,11 @@ export const queryKeys = {
     detail: (id: string) => ['cases', 'detail', id] as const,
     byStatus: (status: string) => ['cases', 'byStatus', status] as const,
     byCaseId: (caseId: string) => ['cases', 'byCaseId', caseId] as const,
+    matters: {
+      all: () => ['matters', 'all'] as const,
+      lists: () => ['matters', 'list'] as const,
+      detail: (id: string) => ['matters', 'detail', id] as const,
+    },
   },
 
   // Documents
@@ -121,6 +126,7 @@ export const queryKeys = {
     all: () => ['workflows', 'all'] as const,
     lists: () => ['workflows', 'list'] as const,
     detail: (id: string) => ['workflows', 'detail', id] as const,
+    engineDetail: (id: string) => ['workflows', 'engine', id] as const,
     processes: () => ['workflows', 'processes'] as const,
     tasks: () => ['tasks', 'tasks'] as const,
     templates: () => ['workflows', 'templates'] as const,
@@ -223,6 +229,7 @@ export const queryKeys = {
     invoices: () => ['billing', 'invoices'] as const,
     timeEntries: () => ['billing', 'timeEntries'] as const,
     feeAgreements: () => ['billing', 'feeAgreements'] as const,
+    rateTables: () => ['billing', 'rateTables'] as const,
   },
 
   // Jurisdictions
@@ -230,6 +237,13 @@ export const queryKeys = {
     state: () => ['jurisdictions', 'state'] as const,
     federal: () => ['jurisdictions', 'federal'] as const,
     rules: () => ['rules', 'all'] as const,
+  },
+
+  // Rules (for legal rules and procedures)
+  rules: {
+    all: () => ['rules', 'all'] as const,
+    detail: (id: string) => ['rules', 'detail', id] as const,
+    byJurisdiction: (jurisdictionId: string) => ['rules', 'byJurisdiction', jurisdictionId] as const,
   },
 
   // Knowledge

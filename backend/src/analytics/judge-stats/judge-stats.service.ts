@@ -1,5 +1,4 @@
 import { Injectable, Logger} from '@nestjs/common';
-import { Repository } from 'typeorm';
 import {
   JudgeStatsQueryDto,
   JudgeStatsDto,
@@ -8,7 +7,6 @@ import {
   JudgeMotionStatsDto,
   MotionTrendDataPoint,
   JudgeCaseDurationDto,
-  DurationByType,
   JudgeListItemDto,
 } from './dto/judge-stats.dto';
 
@@ -26,7 +24,7 @@ export class JudgeStatsService {
   /**
    * Get list of all judges with basic statistics
    */
-  async getJudgeList(query: JudgeStatsQueryDto): Promise<JudgeListItemDto[]> {
+  async getJudgeList(_query: JudgeStatsQueryDto): Promise<JudgeListItemDto[]> {
     try {
       // Mock implementation
       /*
@@ -198,8 +196,8 @@ export class JudgeStatsService {
    * Get case duration statistics for a judge
    */
   async getJudgeCaseDuration(
-    judgeId: string,
-    query: JudgeStatsQueryDto,
+    _judgeId: string,
+    _query: JudgeStatsQueryDto,
   ): Promise<JudgeCaseDurationDto> {
     try {
       // Mock implementation
@@ -272,8 +270,8 @@ export class JudgeStatsService {
    * Calculate motion grant rates by type
    */
   private async calculateMotionGrantRates(
-    judgeId: string,
-    query: JudgeStatsQueryDto,
+    _judgeId: string,
+    _query: JudgeStatsQueryDto,
   ): Promise<MotionGrantRate[]> {
     // Mock implementation
     /*
@@ -355,8 +353,8 @@ export class JudgeStatsService {
    * Get motion grant rate trends over time
    */
   private async getMotionTrends(
-    judgeId: string,
-    query: JudgeStatsQueryDto,
+    _judgeId: string,
+    _query: JudgeStatsQueryDto,
   ): Promise<MotionTrendDataPoint[]> {
     // Mock data
     const trends: MotionTrendDataPoint[] = [

@@ -386,7 +386,7 @@ export const SecurityCompliance: React.FC = () => {
                 <Input
                   placeholder="Enter IP Address (e.g., 192.168.1.1)"
                   value={testIp}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTestIp(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTestIp(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && checkIp()}
                 />
                 <Button variant="primary" onClick={checkIp}>
@@ -490,7 +490,7 @@ export const SecurityCompliance: React.FC = () => {
                 <Input
                   placeholder="Search logs by user, IP, or action..."
                   value={searchQuery}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchQuery(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                   className="pl-9"
                 />
               </div>

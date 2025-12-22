@@ -63,14 +63,14 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
           winId,
           `Exhibit ${ex.exhibitNumber}`,
           <div className={cn("h-full", theme.surface.default)}>
-             <DocumentPreviewPanel 
+             <DocumentPreviewPanel
                 document={{
                     id: ex.id as DocumentId,
                     title: ex.title,
-                    type: ex.fileType,
+                    type: ex.fileType || '',
                     content: ex.description || '',
-                    uploadDate: ex.dateMarked,
-                    lastModified: ex.dateMarked,
+                    uploadDate: ex.dateMarked || '',
+                    lastModified: ex.dateMarked || '',
                     tags: ex.tags || [],
                     versions: [],
                     caseId: ex.caseId,
@@ -91,7 +91,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
               {exhibits.map(ex => (
                   <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface.default, theme.border.default)}>
                       <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surface.highlight, theme.border.default)}>
-                          <FileIcon type={ex.fileType} className="h-16 w-16 opacity-30"/>
+                          <FileIcon type={ex.fileType || ''} className="h-16 w-16 opacity-30"/>
                           <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party))}>
                               {ex.exhibitNumber}
                           </div>
@@ -120,7 +120,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
                 </span>
             </div>
             <div className="w-[30%] flex items-center gap-2">
-                <FileIcon type={ex.fileType} className="h-4 w-4 opacity-70 shrink-0"/>
+                <FileIcon type={ex.fileType || ''} className="h-4 w-4 opacity-70 shrink-0"/>
                 <div className="min-w-0">
                     <p className={cn("font-medium text-sm truncate", theme.text.primary)}>{ex.title}</p>
                     <p className={cn("text-xs truncate max-w-[200px]", theme.text.tertiary)}>{ex.description}</p>

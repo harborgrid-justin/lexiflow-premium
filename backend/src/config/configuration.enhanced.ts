@@ -1,11 +1,11 @@
 export default () => ({
   // Application
   nodeEnv: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT, 10) || 3001,
-  
+  port: parseInt(process.env.PORT || '3001', 10),
+
   // CORS
   cors: {
-    origin: process.env.CORS_ORIGIN || ((origin, callback) => {
+    origin: process.env.CORS_ORIGIN || ((origin: any, callback: any) => {
       if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
         callback(null, true);
       } else {
@@ -27,7 +27,7 @@ export default () => ({
   database: {
     type: process.env.DB_TYPE || 'postgres',
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    port: parseInt(process.env.DB_PORT || '5432', 10),
     username: process.env.DB_USERNAME || 'lexiflow',
     password: process.env.DB_PASSWORD || 'lexiflow',
     database: process.env.DB_NAME || 'lexiflow',
@@ -38,16 +38,16 @@ export default () => ({
   // Redis
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
     password: process.env.REDIS_PASSWORD || '',
-    db: parseInt(process.env.REDIS_DB, 10) || 0,
-    ttl: parseInt(process.env.REDIS_TTL, 10) || 3600,
+    db: parseInt(process.env.REDIS_DB || '0', 10),
+    ttl: parseInt(process.env.REDIS_TTL || '3600', 10),
   },
 
   // File Storage
   storage: {
     uploadDir: process.env.UPLOAD_DIR || './uploads',
-    maxFileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 10485760, // 10MB
+    maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760', 10), // 10MB
     allowedMimeTypes: [
       'application/pdf',
       'application/msword',
@@ -64,7 +64,7 @@ export default () => ({
   email: {
     enabled: process.env.EMAIL_ENABLED === 'true',
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT, 10) || 587,
+    port: parseInt(process.env.SMTP_PORT || '587', 10),
     secure: process.env.SMTP_SECURE === 'true',
     user: process.env.SMTP_USER || '',
     password: process.env.SMTP_PASSWORD || '',
@@ -86,8 +86,8 @@ export default () => ({
 
   // Rate Limiting
   rateLimit: {
-    ttl: parseInt(process.env.RATE_LIMIT_TTL, 10) || 60000, // 1 minute
-    limit: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
+    ttl: parseInt(process.env.RATE_LIMIT_TTL || '60000', 10), // 1 minute
+    limit: parseInt(process.env.RATE_LIMIT_MAX || '100', 10),
   },
 
   // Logging
@@ -98,7 +98,7 @@ export default () => ({
 
   // Security
   security: {
-    bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10) || 10,
+    bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '10', 10),
     sessionSecret: process.env.SESSION_SECRET || 'lexiflow-session-secret',
     csrfEnabled: process.env.CSRF_ENABLED === 'true',
   },

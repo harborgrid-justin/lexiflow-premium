@@ -67,13 +67,25 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   const { data: rawAlerts = [] } = useQuery<any[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
 
   // Transform alerts to match DashboardAlert type
-  const alerts = rawAlerts.map((alert: unknown, index: number) => ({
-    id: typeof alert.id === 'number' ? alert.id : (parseInt(String(alert.id), 10) || index),
-    message: alert.message,
-    detail: alert.detail,
-    time: alert.time,
-    caseId: alert.caseId
-  }));
+  const alerts = rawAlerts.map((alert: unknown, index: number) => {
+    if (typeof alert !== 'object' || alert === null) {
+      return { id: index, message: '', detail: '', time: '', caseId: '' };
+    }
+    const alertId = 'id' in alert && typeof alert.id === 'number' ? alert.id :
+                    'id' in alert ? (parseInt(String(alert.id), 10) || index) : index;
+    const alertMessage = 'message' in alert ? String(alert.message) : '';
+    const alertDetail = 'detail' in alert ? String(alert.detail) : '';
+    const alertTime = 'time' in alert ? String(alert.time) : '';
+    const alertCaseId = 'caseId' in alert ? String(alert.caseId) : '';
+
+    return {
+      id: alertId,
+      message: alertMessage,
+      detail: alertDetail,
+      time: alertTime,
+      caseId: alertCaseId
+    };
+  });
 
   // Optimization: Defer heavy processing of tasks to idle time
   const [activeProjects, setActiveProjects] = useState<ActiveProject[]>([]);

@@ -45,7 +45,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
         label="Case / Matter Title" 
         placeholder={isPreFiling ? "e.g. In Re: TechCorp Investigation" : "e.g. Smith v. Jones"} 
         value={formData.title} 
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, title: e.target.value})}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, title: e.target.value})}
         autoFocus
         required
       />
@@ -53,7 +53,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
         label="Client" 
         placeholder="Client Name" 
         value={formData.client} 
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, client: e.target.value})}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, client: e.target.value})}
         required
       />
       <div className="grid grid-cols-2 gap-4">
@@ -62,7 +62,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
           <select 
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={formData.matterType}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, matterType: e.target.value as MatterType})}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, matterType: e.target.value as MatterType})}
           >
             <option value="Litigation">Litigation</option>
             <option value="Appeal">Appeal</option>
@@ -75,7 +75,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
           label="Est. Value ($)" 
           type="number"
           value={formData.value || ''} 
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, value: Number(e.target.value)})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, value: Number(e.target.value)})}
         />
       </div>
 
@@ -85,13 +85,13 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
               label="Original Case Number" 
               placeholder="e.g. 1:24-cv-00123"
               value={formData.origCaseNumber || ''} 
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, origCaseNumber: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, origCaseNumber: e.target.value})}
             />
             <Input 
               label="Assigned Judge" 
               placeholder="Presiding Judge"
               value={formData.judge || ''} 
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, judge: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, judge: e.target.value})}
             />
         </div>
       )}

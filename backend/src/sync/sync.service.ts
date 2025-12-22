@@ -103,7 +103,7 @@ export class SyncService {
   async retryFailed(ids: string[]): Promise<{ updated: number }> {
     await this.syncQueueRepository.update(
       { id: In(ids), status: SyncStatus.FAILED },
-      { status: SyncStatus.PENDING, retryCount: 0, error: null },
+      { status: SyncStatus.PENDING, retryCount: 0, error: undefined },
     );
 
     return { updated: ids.length };

@@ -338,6 +338,43 @@ class QueryClient {
   }
 
   /**
+   * Cancel queries matching pattern
+   * Aborts in-flight requests matching the pattern
+   *
+   * @param keyPattern - String pattern or query key to match
+   * @example
+   * queryClient.cancelQueries(['cases']) // Cancels all case queries
+   * queryClient.cancelQueries('cases') // Cancels queries containing 'cases'
+   */
+  public cancelQueries(keyPattern?: string | QueryKey): void {
+    try {
+      if (!keyPattern) {
+        // Cancel all in-flight queries
+        this.inflight.clear();
+        console.debug('[QueryClient] Cancelled all in-flight queries');
+        return;
+      }
+
+      const search = typeof keyPattern === 'string' ? keyPattern : this.hashKey(keyPattern);
+      const cancelledKeys: string[] = [];
+
+      this.inflight.forEach((promise, key) => {
+        if (key.includes(search)) {
+          this.inflight.delete(key);
+          cancelledKeys.push(key);
+        }
+      });
+
+      if (cancelledKeys.length > 0) {
+        console.debug(`[QueryClient] Cancelled ${cancelledKeys.length} queries matching: ${search}`);
+      }
+    } catch (error) {
+      console.error('[QueryClient.cancelQueries] Error:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get cache statistics for monitoring
    * 
    * @returns Cache statistics object

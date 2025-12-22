@@ -68,10 +68,10 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                 {individuals.map((ind, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3 relative", theme.border.default)}>
                         <div className="grid grid-cols-2 gap-4">
-                            <Input label="Name" value={ind.name} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setIndividuals, individuals, idx, 'name', e.target.value)} placeholder="e.g. John Smith" />
-                            <Input label="Contact Info" value={ind.contact} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setIndividuals, individuals, idx, 'contact', e.target.value)} placeholder="Phone or Address" />
+                            <Input label="Name" value={ind.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setIndividuals, individuals, idx, 'name', e.target.value)} placeholder="e.g. John Smith" />
+                            <Input label="Contact Info" value={ind.contact} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setIndividuals, individuals, idx, 'contact', e.target.value)} placeholder="Phone or Address" />
                         </div>
-                        <Input label="Subject of Information" value={ind.subject} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setIndividuals, individuals, idx, 'subject', e.target.value)} placeholder="e.g. Witnessed the accident" />
+                        <Input label="Subject of Information" value={ind.subject} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setIndividuals, individuals, idx, 'subject', e.target.value)} placeholder="e.g. Witnessed the accident" />
                     </div>
                 ))}
                 <Button variant="secondary" onClick={addIndividual} className="w-full">Add Another Individual</Button>
@@ -91,8 +91,8 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                  
                 {documents.map((doc, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3", theme.border.default)}>
-                        <Input label="Description / Category" value={doc.description} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setDocuments, documents, idx, 'description', e.target.value)} placeholder="e.g. Emails regarding contract negotiation" />
-                        <Input label="Location" value={doc.location} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setDocuments, documents, idx, 'location', e.target.value)} placeholder="e.g. Corporate Exchange Server" />
+                        <Input label="Description / Category" value={doc.description} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDocuments, documents, idx, 'description', e.target.value)} placeholder="e.g. Emails regarding contract negotiation" />
+                        <Input label="Location" value={doc.location} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDocuments, documents, idx, 'location', e.target.value)} placeholder="e.g. Corporate Exchange Server" />
                     </div>
                 ))}
                 <Button variant="secondary" onClick={addDocument} className="w-full">Add Document Category</Button>
@@ -113,8 +113,8 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                 {damages.map((dmg, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3", theme.border.default)}>
                         <div className="grid grid-cols-2 gap-4">
-                             <Input label="Category" value={dmg.category} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setDamages, damages, idx, 'category', e.target.value)} placeholder="e.g. Lost Profits" />
-                             <Input label="Claimed Amount" value={dmg.amount} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setDamages, damages, idx, 'amount', e.target.value)} placeholder="$0.00" />
+                             <Input label="Category" value={dmg.category} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDamages, damages, idx, 'category', e.target.value)} placeholder="e.g. Lost Profits" />
+                             <Input label="Claimed Amount" value={dmg.amount} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDamages, damages, idx, 'amount', e.target.value)} placeholder="$0.00" />
                         </div>
                         <TextArea label="Basis of Computation" value={dmg.computation} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setDamages, damages, idx, 'computation', e.target.value)} rows={2} />
                     </div>
@@ -136,10 +136,10 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                  
                 {insurance.map((ins, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3", theme.border.default)}>
-                         <Input label="Insurance Carrier" value={ins.carrier} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setInsurance, insurance, idx, 'carrier', e.target.value)} />
+                         <Input label="Insurance Carrier" value={ins.carrier} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setInsurance, insurance, idx, 'carrier', e.target.value)} />
                          <div className="grid grid-cols-2 gap-4">
-                             <Input label="Policy Number" value={ins.policyNum} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setInsurance, insurance, idx, 'policyNum', e.target.value)} />
-                             <Input label="Coverage Limit" value={ins.coverage} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setInsurance, insurance, idx, 'coverage', e.target.value)} />
+                             <Input label="Policy Number" value={ins.policyNum} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setInsurance, insurance, idx, 'policyNum', e.target.value)} />
+                             <Input label="Coverage Limit" value={ins.coverage} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setInsurance, insurance, idx, 'coverage', e.target.value)} />
                         </div>
                     </div>
                 ))}

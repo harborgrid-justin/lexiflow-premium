@@ -161,7 +161,7 @@ class DeadlineEngineClass {
   generateDeadlines(entry: DocketEntry, jurisdiction: string = 'Federal'): DeadlineComputation[] {
     const deadlines: DeadlineComputation[] = [];
     const entryDate = new Date(entry.filingDate || entry.eventDate || new Date());
-    const titleLower = entry.title.toLowerCase();
+    const titleLower = (entry.title || '').toLowerCase();
     const descLower = (entry.description || '').toLowerCase();
 
     // Find matching rules

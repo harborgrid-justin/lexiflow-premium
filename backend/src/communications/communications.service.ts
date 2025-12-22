@@ -55,8 +55,12 @@ export class CommunicationsService {
     const communication = this.communicationRepository.create(data);
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save communication');
+    }
+    const result = Array.isArray(saved) ? saved[0] : saved;
     this.logger.log(`Communication created successfully with ID: ${result.id}`);
-    return result;
+        return result;
   }
 
   async send(id: string): Promise<Communication> {
@@ -67,6 +71,10 @@ export class CommunicationsService {
     communication.status = 'sent';
     communication.sentAt = new Date();
     const saved = await this.communicationRepository.save(communication);
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save communication');
+    }
     return Array.isArray(saved) ? saved[0] : saved;
   }
 
@@ -136,12 +144,16 @@ export class CommunicationsService {
   async createTemplate(data: any): Promise<Template> {
     const template = this.templateRepository.create(data);
     const saved = await this.templateRepository.save(template);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to save template');
+    return result;
   }
 
   async updateTemplate(id: string, data: any): Promise<Template> {
     const template = await this.getTemplateById(id);
-    Object.assign(template, data);
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to update template');
+    return result;
     const saved = await this.templateRepository.save(template);
     return Array.isArray(saved) ? saved[0] : saved;
   }
@@ -193,6 +205,12 @@ export class CommunicationsService {
     });
 
     const saved = await this.communicationRepository.save(communication);
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to create communication');
+    return result;
+    if (!result) {
+      throw new Error('Failed to save communication');
+    }
     return Array.isArray(saved) ? saved[0] : saved;
   }
 }

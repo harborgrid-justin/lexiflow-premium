@@ -69,7 +69,7 @@ export async function seedTimeEntries(dataSource: DataSource): Promise<void> {
       await timeEntryRepository.save(timeEntry);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding time entry:`, message);
     }
   }

@@ -68,7 +68,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                   <input
                     className="w-full text-center font-bold font-serif text-lg outline-none bg-transparent placeholder:text-slate-300 uppercase underline"
                     value={section.content}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateSection(section.id, { content: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateSection(section.id, { content: e.target.value })}
                     aria-label="Section Heading"
                   />
               );

@@ -43,7 +43,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
                 className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 placeholder="Search saved authorities..."
                 value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             />
         </div>
       </div>

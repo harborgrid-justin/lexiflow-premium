@@ -268,7 +268,7 @@ export const NotificationPanel: React.FC = () => {
                   </button>
                 )}
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={panel.close}
                   className={cn(
                     "p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700",
                     theme.text.tertiary
@@ -311,7 +311,7 @@ export const NotificationPanel: React.FC = () => {
                 <button
                   onClick={() => {
                     NotificationService.clearAll();
-                    setIsOpen(false);
+                    panel.close();
                   }}
                   className={cn(
                     "text-sm font-medium px-3 py-1.5 rounded transition-colors",

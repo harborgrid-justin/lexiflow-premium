@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, IsNull } from 'typeorm';
 import { Expense, ExpenseStatus } from './entities/expense.entity';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
@@ -102,7 +102,7 @@ export class ExpensesService {
 
   async findOne(id: string): Promise<Expense> {
     const expense = await this.expenseRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!expense) {
@@ -114,7 +114,7 @@ export class ExpensesService {
 
   async findByCase(caseId: string): Promise<Expense[]> {
     return await this.expenseRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
       order: { expenseDate: 'DESC' },
     });
   }
@@ -173,7 +173,7 @@ export class ExpensesService {
         caseId,
         status: In([ExpenseStatus.APPROVED, ExpenseStatus.SUBMITTED]),
         billable: true,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
       order: { expenseDate: 'ASC' },
     });

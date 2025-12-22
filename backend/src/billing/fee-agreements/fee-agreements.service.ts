@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { FeeAgreement, FeeAgreementStatus } from './entities/fee-agreement.entity';
 import { CreateFeeAgreementDto } from './dto/create-fee-agreement.dto';
 import { UpdateFeeAgreementDto } from './dto/update-fee-agreement.dto';
@@ -53,7 +53,7 @@ export class FeeAgreementsService {
 
   async findOne(id: string): Promise<FeeAgreement> {
     const feeAgreement = await this.feeAgreementRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!feeAgreement) {
@@ -68,7 +68,7 @@ export class FeeAgreementsService {
       where: {
         caseId,
         status: FeeAgreementStatus.ACTIVE,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
       order: {
         effectiveDate: 'DESC',
@@ -80,7 +80,7 @@ export class FeeAgreementsService {
     return await this.feeAgreementRepository.find({
       where: {
         clientId,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
       order: {
         effectiveDate: 'DESC',
@@ -116,7 +116,7 @@ export class FeeAgreementsService {
   async terminate(id: string, terminationDate?: string): Promise<FeeAgreement> {
     const feeAgreement = await this.findOne(id);
     feeAgreement.status = FeeAgreementStatus.TERMINATED;
-    feeAgreement.terminationDate = terminationDate || new Date().toISOString().split('T')[0];
+    feeAgreement.terminationDate = (terminationDate ?? new Date().toISOString().split('T')[0]) as string;
     return await this.feeAgreementRepository.save(feeAgreement);
   }
 

@@ -1,10 +1,10 @@
 import {
   Injectable,
   NotFoundException,
-  _BadRequestException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Deposition } from './entities/deposition.entity';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';
@@ -86,7 +86,7 @@ export class DepositionsService {
 
   async findOne(id: string): Promise<Deposition> {
     const deposition = await this.depositionRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!deposition) {
@@ -132,7 +132,7 @@ export class DepositionsService {
 
   async getStatistics(caseId: string) {
     const depositions = await this.depositionRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

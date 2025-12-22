@@ -141,9 +141,9 @@ export class MonitoringService {
     return await this.alertRepository.save(alert);
   }
 
-  async acknowledgeAlert(id: string, userId: string): Promise<SystemAlert> {
+  async acknowledgeAlert(id: string, userId: string): Promise<SystemAlert | null> {
     const alert = await this.alertRepository.findOne({ where: { id } });
-    
+
     if (alert) {
       alert.acknowledged = true;
       alert.acknowledgedBy = userId;
@@ -151,18 +151,18 @@ export class MonitoringService {
       return await this.alertRepository.save(alert);
     }
 
-    return alert;
+    return null;
   }
 
-  async resolveAlert(id: string): Promise<SystemAlert> {
+  async resolveAlert(id: string): Promise<SystemAlert | null> {
     const alert = await this.alertRepository.findOne({ where: { id } });
-    
+
     if (alert) {
       alert.resolved = true;
       alert.resolvedAt = new Date();
       return await this.alertRepository.save(alert);
     }
 
-    return alert;
+    return null;
   }
 }

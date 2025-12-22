@@ -40,7 +40,7 @@ export class OcrService {
       this.logger.log('Tesseract OCR worker initialized successfully');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.warn('Failed to initialize OCR worker - OCR features will be unavailable', error instanceof Error ? message : error);
       this.worker = null;
     }
@@ -92,8 +92,8 @@ export class OcrService {
 
       return result;
     } catch (error) {
-      const _message = error instanceof Error ? error._message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __message = error instanceof Error ? error.message : 'Unknown error';
+      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error('OCR processing failed', error);
       throw error;
     }
@@ -117,8 +117,8 @@ export class OcrService {
 
       return text.trim();
     } catch (error) {
-      const _message = error instanceof Error ? error._message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __message = error instanceof Error ? error.message : 'Unknown error';
+      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error('Text extraction failed', error);
       throw error;
     }
@@ -140,8 +140,8 @@ export class OcrService {
       try {
         await this.worker.terminate();
       } catch (error) {
-        const _message = error instanceof Error ? error._message : 'Unknown error';
-        const _stack = error instanceof Error ? error._stack : undefined;
+        const __message = error instanceof Error ? error.message : 'Unknown error';
+        const __stack = error instanceof Error ? error.stack : undefined;
         this.logger.warn('Error terminating OCR worker', error);
       }
       this.worker = null;

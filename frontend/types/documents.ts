@@ -2,7 +2,7 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, GroupId, DocumentId, CaseId
+  BaseEntity, UserId, GroupId, DocumentId, CaseId, MetadataRecord, JsonValue
 } from './primitives';
 import { OcrStatus } from './enums';
 

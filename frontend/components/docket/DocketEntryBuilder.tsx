@@ -40,11 +40,14 @@ interface DocketEntryBuilderProps {
   onCancel: () => void;
 }
 
-export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({ 
-  initialData, caseParties = [], onSave, onCancel 
+export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
+  initialData, caseParties = [], onSave, onCancel
 }) => {
   const { theme } = useTheme();
   const { success: notifySuccess, error: notifyError } = useNotify();
+
+  // TODO: Fetch case data if needed for jurisdiction-based deadline calculation
+  const caseData = undefined;
 
   // Core Data
   const [date, setDate] = useState(initialData?.date || getTodayString());
@@ -136,10 +139,10 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
         const task: WorkflowTask = {
             id: IdGenerator.generic('task') as TaskId,
             title: `Review Docket Entry: ${entry.title}`,
-            status: 'Pending',
+            status: TaskStatusBackend.TODO,
             assignee: 'Current User',
             dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            priority: 'High',
+            priority: TaskPriorityBackend.HIGH,
             caseId: initialData.caseId as CaseId,
             description: `Review newly filed docket entry: ${previewText}`,
             relatedModule: 'Motions',
@@ -170,15 +173,15 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
       <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
           <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.secondary)}>Entry Metadata</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Input label="Date Filed" type="date" value={date} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDate(e.target.value)} />
-              <Input label="Internal Seq #" type="number" value={internalSeq} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInternalSeq(e.target.value)} />
-              <Input label="PACER Seq #" type="number" value={pacerSeq} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPacerSeq(e.target.value)} placeholder="Optional"/>
+              <Input label="Date Filed" type="date" value={date} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value)} />
+              <Input label="Internal Seq #" type="number" value={internalSeq} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInternalSeq(e.target.value)} />
+              <Input label="PACER Seq #" type="number" value={pacerSeq} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPacerSeq(e.target.value)} placeholder="Optional"/>
               <div>
                   <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
                   <select 
                       className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                       value={entryType}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEntryType(e.target.value as DocketEntryType)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setEntryType(e.target.value as DocketEntryType)}
                   >
                       <option value="Filing">Filing</option>
                       <option value="Order">Order</option>
@@ -189,7 +192,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
               </div>
           </div>
           <div className="mt-3 flex items-center">
-             <input type="checkbox" id="sealed" className={cn("rounded mr-2", theme.action.primary.text)} checked={isSealed} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIsSealed(e.target.checked)}/>
+             <input type="checkbox" id="sealed" className={cn("rounded mr-2", theme.action.primary.text)} checked={isSealed} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsSealed(e.target.checked)}/>
              <label htmlFor="sealed" className={cn("text-sm font-medium", theme.text.secondary)}>Seal this entry</label>
           </div>
       </div>
@@ -207,7 +210,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                  <select 
                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={structActionType}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStructActionType(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStructActionType(e.target.value)}
                  >
                      <option>Motion</option>
                      <option>Order</option>
@@ -222,7 +225,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                  <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Document Title / Target</label>
                  <Input 
                     value={structDocTitle} 
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStructDocTitle(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStructDocTitle(e.target.value)}
                     placeholder="e.g. to Dismiss Count II"
                  />
              </div>
@@ -231,7 +234,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                  <select 
                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={structVerb}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStructVerb(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStructVerb(e.target.value)}
                  >
                      <option value="filed">filed</option>
                      <option value="granting">granting</option>
@@ -248,7 +251,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                         list="parties" 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={structFiler}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStructFiler(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStructFiler(e.target.value)}
                         placeholder="Select or type..."
                     />
                     <datalist id="parties">
@@ -281,7 +284,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                   id="autoDeadlines" 
                   className={cn("rounded", theme.action.primary.text)} 
                   checked={autoGenerateDeadlines} 
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAutoGenerateDeadlines(e.target.checked)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAutoGenerateDeadlines(e.target.checked)}
               />
           </div>
           <p className={cn("text-xs", theme.text.tertiary)}>
@@ -303,7 +306,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                   type="checkbox" 
                   className={cn("mr-2 rounded", theme.action.primary.text)}
                   checked={createReviewTask}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCreateReviewTask(e.target.checked)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCreateReviewTask(e.target.checked)}
               />
               <CheckSquare className="h-4 w-4 mr-1"/> Auto-Create Review Task
           </label>

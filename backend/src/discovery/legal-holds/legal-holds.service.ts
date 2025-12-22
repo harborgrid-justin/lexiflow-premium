@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { LegalHold, LegalHoldStatus } from './entities/legal-hold.entity';
 import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';
@@ -81,7 +81,7 @@ export class LegalHoldsService {
 
   async findOne(id: string): Promise<LegalHold> {
     const legalHold = await this.legalHoldRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!legalHold) {
@@ -135,7 +135,7 @@ export class LegalHoldsService {
 
   async getStatistics(caseId: string) {
     const holds = await this.legalHoldRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

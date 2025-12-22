@@ -51,7 +51,7 @@ export class EmailService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Failed to send email: ${message}`);
       return {
         success: false,
@@ -85,7 +85,7 @@ export class EmailService {
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Failed to send template email: ${message}`);
       return {
         success: false,
@@ -230,7 +230,7 @@ export class EmailService {
     const results = {
       sent: 0,
       failed: 0,
-      errors: [],
+      errors: [] as Array<{ email: string; error?: string }>,
     };
 
     for (const recipient of recipients) {

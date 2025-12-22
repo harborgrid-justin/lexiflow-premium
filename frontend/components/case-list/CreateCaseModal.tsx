@@ -25,6 +25,7 @@ import { JurisdictionSelector } from './case-form/JurisdictionSelector';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
+import { useNotify } from '../../hooks/useNotify';
 
 // Services
 import { DataService } from '../../services/data/dataService';
@@ -52,7 +53,8 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({ isOpen, onClos
   // HOOKS & CONTEXT
   // ============================================================================
   const { theme } = useTheme();
-  
+  const notify = useNotify();
+
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================

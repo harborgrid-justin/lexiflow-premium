@@ -34,7 +34,7 @@ export class SchemaManagementService {
     
     // Get columns for each table
     const tablesWithColumns = await Promise.all(
-      tables.map(async (table) => {
+      tables.map(async (table: any) => {
         const columns = await this.getTableColumns(table.table_name);
         return {
           name: table.table_name,
@@ -77,9 +77,9 @@ export class SchemaManagementService {
     `;
     
     const pks = await this.dataSource.query(pkQuery, [tableName]);
-    const pkColumns = new Set(pks.map(pk => pk.column_name));
-    
-    return columns.map(col => ({
+    const pkColumns = new Set(pks.map((pk: any) => pk.column_name));
+
+    return columns.map((col: any) => ({
       ...col,
       pk: pkColumns.has(col.name),
       notNull: col.is_nullable === 'NO',
@@ -137,7 +137,7 @@ export class SchemaManagementService {
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       throw new BadRequestException(`Migration failed: ${message}`);
     }
   }
@@ -162,7 +162,7 @@ export class SchemaManagementService {
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       throw new BadRequestException(`Revert failed: ${message}`);
     }
   }

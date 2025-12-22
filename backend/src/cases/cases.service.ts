@@ -160,7 +160,7 @@ export class CasesService {
       }
     }
 
-    await this.caseRepository.update(id, updateCaseDto);
+    await this.caseRepository.update(id, { ...updateCaseDto });
     return this.findOne(id);
   }
 

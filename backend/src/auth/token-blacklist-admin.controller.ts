@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  _Delete,
+  Delete,
   Body,
   UseGuards,
   HttpCode,

@@ -108,3 +108,5 @@ export const FirmOperations: React.FC<FirmOperationsProps> = ({ initialTab }) =>
     </TabbedPageLayout>
   );
 };
+
+export default FirmOperations;

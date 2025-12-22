@@ -156,7 +156,7 @@ export const FormsSigningView: React.FC = () => {
                             className={cn("w-full pl-8 pr-2 py-1.5 text-xs border rounded-md outline-none", theme.surface.default, theme.border.default)}
                             placeholder="Search documents..."
                             value={searchTerm}
-                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>

@@ -2,9 +2,8 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, GroupId, 
-  
-  CaseId} from './primitives';
+  BaseEntity, UserId, GroupId,
+  CaseId, JsonValue} from './primitives';
 import {
   
   RiskCategory

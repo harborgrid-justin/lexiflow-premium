@@ -81,7 +81,7 @@ export const WarRoomManager: React.FC<WarRoomManagerProps> = ({ onSelectCase }) 
               type="text"
               placeholder="Search cases..."
               value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               className={cn(
                 "w-full pl-10 pr-4 py-2 rounded-lg border outline-none transition-colors",
                 theme.surface.default,
@@ -93,7 +93,7 @@ export const WarRoomManager: React.FC<WarRoomManagerProps> = ({ onSelectCase }) 
           </div>
           <select
             value={statusFilter}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStatusFilter(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatusFilter(e.target.value)}
             aria-label="Filter by status"
             className={cn(
               "px-4 py-2 rounded-lg border outline-none",
@@ -109,7 +109,7 @@ export const WarRoomManager: React.FC<WarRoomManagerProps> = ({ onSelectCase }) 
           </select>
           <select
             value={typeFilter}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTypeFilter(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTypeFilter(e.target.value)}
             aria-label="Filter by case type"
             className={cn(
               "px-4 py-2 rounded-lg border outline-none",

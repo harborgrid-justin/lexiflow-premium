@@ -232,9 +232,9 @@ export const WebhookManagement: React.FC = () => {
         title={createModal.isOpen ? 'Create Webhook' : 'Edit Webhook'}
       >
         <div className="p-6 space-y-4">
-          <Input label="Webhook Name" value={formData.name || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Case Update Notification" />
-          <Input label="Endpoint URL" value={formData.url || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, url: e.target.value})} placeholder="https://api.example.com/webhook" />
-          <Input label="Secret (optional)" value={formData.secret || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, secret: e.target.value})} placeholder="Shared secret for signature verification" />
+          <Input label="Webhook Name" value={formData.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Case Update Notification" />
+          <Input label="Endpoint URL" value={formData.url || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, url: e.target.value})} placeholder="https://api.example.com/webhook" />
+          <Input label="Secret (optional)" value={formData.secret || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, secret: e.target.value})} placeholder="Shared secret for signature verification" />
 
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Events to Subscribe</label>
@@ -270,7 +270,7 @@ export const WebhookManagement: React.FC = () => {
             </div>
           )}
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsTestModalOpen(false)}>Close</Button>
+            <Button variant="secondary" onClick={testModal.close}>Close</Button>
             <Button variant="primary" icon={Play} onClick={handleTest}>Send Test</Button>
           </div>
         </div>

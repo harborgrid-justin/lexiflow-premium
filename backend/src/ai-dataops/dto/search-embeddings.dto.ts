@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsInt, IsOptional, Min, Max, ArrayMinSize } from 'class-validator';
+import { IsArray, IsNumber, IsInt, IsOptional, IsString, Min, Max, ArrayMinSize } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -16,4 +16,13 @@ export class SearchEmbeddingsDto {
   @Max(100)
   @Type(() => Number)
   limit?: number = 10;
+
+  @ApiPropertyOptional({ description: 'Filter by entity type' })
+  @IsOptional()
+  @IsString()
+  entityType?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by metadata' })
+  @IsOptional()
+  metadata?: Record<string, any>;
 }

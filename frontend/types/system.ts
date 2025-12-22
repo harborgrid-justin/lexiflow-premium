@@ -275,3 +275,13 @@ export interface ExtendedUserProfile extends User {
   skills: string[];
   barAdmissions: { state: string; number: string; status: 'Active' | 'Inactive' }[];
 }
+
+export interface WebhookConfig extends BaseEntity {
+  name: string;
+  url: string;
+  events: string[];
+  status: 'Active' | 'Inactive' | 'Error';
+  secret?: string;
+  lastTriggered?: string;
+  failureCount: number;
+}

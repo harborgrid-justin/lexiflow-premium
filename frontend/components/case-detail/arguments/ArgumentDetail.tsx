@@ -78,7 +78,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                 </div>
                 <Input 
                     value={argument.title} 
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdate({ ...argument, title: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...argument, title: e.target.value })}
                     className={cn("text-lg font-bold border-transparent bg-transparent px-2 -ml-2 transition-all", theme.text.primary, `hover:${theme.surface.default}`, `hover:${theme.border.default}`, `focus:${theme.surface.default}`, `focus:${theme.border.default}`)}
                 />
             </div>

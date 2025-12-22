@@ -60,7 +60,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
       await documentRepository.save(document);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding document ${documentData.title}:`, message);
     }
   }

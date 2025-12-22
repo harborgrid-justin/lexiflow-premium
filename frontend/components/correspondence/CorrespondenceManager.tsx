@@ -109,9 +109,9 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
           callback: () => {
               if (activeTab === 'communications') {
                   setComposeInitialData(undefined);
-                  setIsComposeOpen(true);
+                  composeModal.open();
               } else {
-                  setIsServiceJobOpen(true);
+                  serviceJobModal.open();
               }
           },
           description: 'Compose new'

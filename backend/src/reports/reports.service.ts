@@ -8,13 +8,9 @@ import {
   ReportStatus,
   ReportType,
   ReportFormat,
-  FilterDefinition,
-  ParameterDefinition,
   DownloadReportDto,
-  CaseSummaryReportData,
-  BillingReportData,
 } from './dto/reports.dto';
-import { validatePagination, validateEnum, sanitizeFilters, validateDateRange } from '../common/utils/query-validation.util';
+import { validatePagination, validateDateRange } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class ReportsService {
@@ -41,7 +37,7 @@ export class ReportsService {
     return [];
   }
 
-  async getReportsByType(type: string): Promise<any[]> {
+  async getReportsByType(_type: string): Promise<any[]> {
     return [];
   }
 
@@ -282,7 +278,7 @@ export class ReportsService {
     try {
       // Mock implementation
       /*
-      const report = await this.reportRepository.findOne({
+      const _report = await this.reportRepository.findOne({
         where: { id: reportId },
       });
 
@@ -372,7 +368,7 @@ export class ReportsService {
    * Get download URL for a report
    */
   async getDownloadUrl(reportId: string): Promise<DownloadReportDto> {
-    const report = await this.getReportById(reportId);
+    const _report = await this.getReportById(reportId);
 
     if (report.status !== ReportStatus.COMPLETED) {
       throw new Error('Report is not ready for download');
@@ -449,7 +445,7 @@ export class ReportsService {
   }
 
   async findById(id: string): Promise<any> {
-    const report = this.reports.get(id);
+    const _report = this.reports.get(id);
     if (!report) {
       throw new NotFoundException(`Report with ID ${id} not found`);
     }
@@ -458,7 +454,7 @@ export class ReportsService {
 
   async generate(generateDto: any, userId: string): Promise<any> {
     const reportId = this.generateReportId();
-    const report = {
+    const _report = {
       id: reportId,
       ...generateDto,
       status: 'pending',
@@ -472,12 +468,12 @@ export class ReportsService {
   }
 
   async delete(id: string): Promise<void> {
-    const report = await this.findById(id);
+    const _report = await this.findById(id);
     this.reports.delete(id);
   }
 
   async download(id: string): Promise<any> {
-    const report = await this.findById(id);
+    const _report = await this.findById(id);
     return {
       id: report.id,
       filePath: report.filePath || `/reports/${id}.pdf`,

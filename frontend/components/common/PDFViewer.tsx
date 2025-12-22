@@ -197,7 +197,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
       await newTask.promise;
     } catch (err: unknown) {
-      if (err.name !== 'RenderingCancelledException') {
+      const errName = typeof err === 'object' && err !== null && 'name' in err ? String(err.name) : '';
+      if (errName !== 'RenderingCancelledException') {
         console.error("Render error:", err);
       }
     }

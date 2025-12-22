@@ -75,7 +75,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
           label="Client / Entity Name"
           placeholder="e.g. Acme Corp"
           value={name}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
           autoFocus
         />
         
@@ -84,13 +84,13 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
                 label="Industry"
                 placeholder="e.g. Technology"
                 value={industry}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setIndustry(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIndustry(e.target.value)}
             />
             <Input
                 label="Primary Contact"
                 placeholder="Email or Phone"
                 value={contact}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContact(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContact(e.target.value)}
             />
         </div>
 

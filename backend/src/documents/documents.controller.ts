@@ -151,7 +151,7 @@ export class DocumentsController {
     @Body() ocrRequestDto: OcrRequestDto,
   ) {
     // Verify document exists
-    const document = await this.documentsService.findOne(id);
+    const _document = await this.documentsService.findOne(id);
 
     // Create OCR processing job
     const job = await this.processingJobsService.createJob(
@@ -180,7 +180,7 @@ export class DocumentsController {
     @Body() redactionParams: any,
   ) {
     // Verify document exists
-    const document = await this.documentsService.findOne(id);
+    const _document = await this.documentsService.findOne(id);
 
     // Create redaction processing job
     const job = await this.processingJobsService.createJob(

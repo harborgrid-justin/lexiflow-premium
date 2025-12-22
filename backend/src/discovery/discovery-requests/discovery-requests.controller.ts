@@ -9,7 +9,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
-  _UseGuards,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { DiscoveryRequestsService } from './discovery-requests.service';

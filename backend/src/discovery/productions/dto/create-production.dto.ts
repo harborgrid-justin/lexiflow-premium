@@ -4,7 +4,7 @@ import {
   IsOptional,
   IsDateString,
   IsNumber,
-  _IsArray,
+  IsArray,
   IsUUID,
   IsBoolean,
   MaxLength,

@@ -15,8 +15,7 @@ import { cn } from '../../utils/cn';
 import { Button } from '../common/Button';
 import { GeminiService } from '../../services/features/research/geminiService';
 import { useNotify } from '../../hooks/useNotify';
-// AIValidationService import removed - not exported from dataService
-// import { AIValidationService } from '../../services/data/dataService';
+import { AIValidationService } from '../../services/infrastructure/aiValidationService';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
@@ -74,7 +73,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
                         className="flex-1 bg-transparent border-none outline-none text-sm p-2 placeholder:text-slate-400"
                         placeholder="Generate a strategy (e.g., 'Standard breach of contract litigation plan')"
                         value={prompt}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                     />
                     <Button

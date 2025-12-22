@@ -4,9 +4,6 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
-  _CreateDateColumn,
-  _UpdateDateColumn,
-  _VersionColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/base/base.entity';
 import { User } from '../../../users/entities/user.entity';

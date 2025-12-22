@@ -55,7 +55,7 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
               placeholder="Search alumni by name, firm, or year..." 
               className="max-w-md"
               value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
             />
             <Button variant="outline">Invite to Network</Button>
         </div>

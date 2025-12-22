@@ -126,7 +126,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
         {editingRule && (
             <Modal isOpen={true} onClose={() => setEditingRule(null)} title="Edit Rule">
                 <div className="p-6 space-y-4">
-                    <Input label="Rule Name" value={editingRule.name} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingRule({...editingRule, name: e.target.value})}/>
+                    <Input label="Rule Name" value={editingRule.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, name: e.target.value})}/>
                     <ModalFooter>
                          <Button variant="secondary" onClick={() => setEditingRule(null)}>Cancel</Button>
                          <Button variant="primary" onClick={() => setEditingRule(null)}>Save</Button>

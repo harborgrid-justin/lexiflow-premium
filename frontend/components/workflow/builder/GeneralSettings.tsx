@@ -20,7 +20,7 @@ export const GeneralSettings: React.FC<GeneralSettingsProps> = ({ templateName, 
                 <input 
                     className={cn("w-full px-3 py-2 rounded border outline-none focus:ring-2 focus:ring-blue-500", theme.background, theme.border.default, theme.text.primary)}
                     value={templateName}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTemplateName(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTemplateName(e.target.value)}
                 />
             </div>
             <div>

@@ -50,7 +50,7 @@ export class FileUploadService {
   private readonly logger = new Logger(FileUploadService.name);
   private readonly UPLOAD_DIR = PathsConfig.UPLOAD_DIR;
   private readonly MAX_FILE_SIZE = MasterConfig.FILE_MAX_SIZE;
-  private readonly _CHUNK_SIZE = MasterConfig.FILE_CHUNK_SIZE;
+  private readonly __CHUNK_SIZE = MasterConfig.FILE_CHUNK_SIZE;
 
   constructor() {
     this.ensureUploadDir();
@@ -340,7 +340,7 @@ export class FileUploadService {
       }
 
       // Additional check: validate file matches claimed MIME type
-      const _actualMimeType = this.detectMimeType(buffer, filePath);
+      const __actualMimeType = this.detectMimeType(buffer, filePath);
       const ext = path.extname(filePath).toLowerCase();
 
       // Detect executable masquerading as document
@@ -369,13 +369,13 @@ export class FileUploadService {
       this.logger.debug(`Generating thumbnail for ${fileId}`);
 
       const thumbnailFilename = `${fileId}_thumb.jpg`;
-      const _thumbnailPath = path.join(PathsConfig.THUMBNAILS_DIR, thumbnailFilename);
+      const __thumbnailPath = path.join(PathsConfig.THUMBNAILS_DIR, thumbnailFilename);
 
       // Ensure thumbnails directory exists
       await fs.mkdir(PathsConfig.THUMBNAILS_DIR, { recursive: true });
 
       // Read original image
-      const _buffer = await fs.readFile(filePath);
+      const __buffer = await fs.readFile(filePath);
 
       // For now, create a basic thumbnail by copying the file
       // In production environment, integrate with sharp library for actual resizing:

@@ -23,7 +23,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { SerializedNode, NODE_STRIDE, NexusLink, NexusPhysics } from '../utils/nexusPhysics';
+import { SerializedNode, NODE_STRIDE, NexusLink, NexusPhysics, SimulationNode } from '../utils/nexusPhysics';
 
 // ============================================================================
 // HELPER FUNCTIONS

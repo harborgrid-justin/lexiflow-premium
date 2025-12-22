@@ -63,7 +63,11 @@ export abstract class BaseRepository<T> {
   async update(id: string | number, data: QueryDeepPartialEntity<T>): Promise<T> {
     this.logger.debug(`Updating entity with ID: ${id}`);
     await this.repository.update(id, data);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Entity with ID ${id} not found after update`);
+    }
+    return updated;
   }
 
   /**

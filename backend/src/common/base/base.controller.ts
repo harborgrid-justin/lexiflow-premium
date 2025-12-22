@@ -1,12 +1,12 @@
-import { 
-  _Controller, 
-  Get, 
-  Post, 
-  Put, 
-  Delete, 
-  Body, 
-  Param, 
-  Query, 
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -17,8 +17,10 @@ import { BaseService } from './base.service';
 import { BaseRepository } from './base.repository';
 import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { StandardResponseDto } from '../dto/standard-response.dto';
+import { DeepPartial } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export abstract class BaseController<T, CreateDto, UpdateDto, S extends BaseService<T, BaseRepository<T>>> {
+export abstract class BaseController<T, CreateDto extends DeepPartial<T>, UpdateDto extends QueryDeepPartialEntity<T>, S extends BaseService<T, BaseRepository<T>>> {
   protected readonly resourceName: string;
 
   constructor(

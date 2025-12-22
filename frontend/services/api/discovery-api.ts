@@ -73,7 +73,7 @@ export class DiscoveryApiService {
     }
   }
 
-  private validateObject(obj: any, paramName: string, methodName: string): void {
+  private validateObject(obj: unknown, paramName: string, methodName: string): void {
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
       throw new Error(`[DiscoveryApiService.${methodName}] Invalid ${paramName} parameter`);
     }
@@ -143,7 +143,7 @@ export class DiscoveryApiService {
     }
   }
 
-  async getSummary(id: string): Promise<any> {
+  async getSummary(id: string): Promise<unknown> {
     this.validateId(id, 'getSummary');
     try {
       return await apiClient.get(`${this.baseUrl}/${id}/summary`);

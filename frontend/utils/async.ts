@@ -103,7 +103,7 @@ export async function retryWithBackoff<T>(
  * );
  * ```
  */
-export function debounce<T extends (...args: any[]) => Promise<any>>(
+export function debounce<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
   ms: number
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
@@ -146,7 +146,7 @@ export function debounce<T extends (...args: any[]) => Promise<any>>(
  * );
  * ```
  */
-export function throttle<T extends (...args: any[]) => Promise<any>>(
+export function throttle<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
   ms: number
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> | void {

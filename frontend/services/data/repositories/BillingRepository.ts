@@ -85,7 +85,7 @@ export class BillingRepository extends Repository<TimeEntry> {
          return stats.sort((a,b) => b.wip - a.wip).slice(0, 5);
     }
     
-    async getRealizationStats(): Promise<any> {
+    async getRealizationStats(): Promise<unknown> {
         const invoices = await this.getInvoices();
         const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
         const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
@@ -144,7 +144,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         return db.getByIndex(STORES.TRUST_TX, 'accountId', accountId);
     }
     
-    async getTrustAccounts() { return db.getAll<any>(STORES.TRUST); }
+    async getTrustAccounts() { return db.getAll<unknown>(STORES.TRUST); }
     async getTopAccounts(): Promise<Client[]> {
         const clients = await db.getAll<Client>(STORES.CLIENTS);
         return clients.sort((a, b) => b.totalBilled - a.totalBilled).slice(0, 4);

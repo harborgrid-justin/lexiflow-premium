@@ -25,7 +25,7 @@ export class RegisterAiOpsModelDto {
   @ApiProperty({ description: 'Model configuration', type: Object })
   @IsObject()
   @IsNotEmpty()
-  configuration: Record<string, any>;
+  configuration: Record<string, unknown>;
 }
 
 export class UpdateAiOpsModelDto {
@@ -47,5 +47,5 @@ export class UpdateAiOpsModelDto {
   @ApiPropertyOptional({ description: 'Model configuration', type: Object })
   @IsOptional()
   @IsObject()
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }

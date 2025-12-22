@@ -77,7 +77,7 @@ export class CheckAccessDto {
   resource: string;
   resourceId?: string;
   action: PermissionAction;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export class AccessCheckResult {

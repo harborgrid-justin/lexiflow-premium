@@ -269,7 +269,7 @@ export type WSMessageType =
  */
 export interface WSMessage {
   type: WSMessageType;
-  payload: any;
+  payload: unknown;
   timestamp: Date;
   userId: string;
 }

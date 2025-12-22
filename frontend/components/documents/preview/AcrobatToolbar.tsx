@@ -31,7 +31,7 @@ export const AcrobatToolbar: React.FC<AcrobatToolbarProps> = ({
 }) => {
   const { theme } = useTheme();
 
-  const ToolButton = ({ tool, icon: Icon, label }: { tool: PDFTool; icon: any; label: string }) => (
+  const ToolButton = ({ tool, icon: Icon, label }: { tool: PDFTool; icon: unknown; label: string }) => (
     <button
       onClick={() => setActiveTool(tool)}
       className={cn(

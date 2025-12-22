@@ -3,10 +3,12 @@
  * Shared between frontend and backend
  */
 
+import { JsonValue, ErrorDetails } from '../common/json-value.types';
+
 /**
  * Standard API response wrapper
  */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = JsonValue> {
   success: boolean;
   data?: T;
   error?: ApiError;
@@ -20,7 +22,7 @@ export interface ApiResponse<T = any> {
 export interface ApiError {
   code: string;
   message: string;
-  details?: any;
+  details?: ErrorDetails;
   stack?: string; // Only in development
 }
 
@@ -31,13 +33,16 @@ export interface ResponseMeta {
   requestId?: string;
   duration?: number;
   version?: string;
-  [key: string]: any;
+  page?: number;
+  limit?: number;
+  total?: number;
+  [key: string]: JsonValue | undefined;
 }
 
 /**
  * Success response helper type
  */
-export interface SuccessResponse<T = any> extends ApiResponse<T> {
+export interface SuccessResponse<T = JsonValue> extends ApiResponse<T> {
   success: true;
   data: T;
 }
@@ -53,9 +58,9 @@ export interface ErrorResponse extends ApiResponse<never> {
 /**
  * Batch operation result
  */
-export interface BatchOperationResult<T = any> {
+export interface BatchOperationResult<T = JsonValue> {
   succeeded: T[];
-  failed: BatchOperationError[];
+  failed: BatchOperationError<T>[];
   totalProcessed: number;
   successCount: number;
   failureCount: number;
@@ -64,7 +69,7 @@ export interface BatchOperationResult<T = any> {
 /**
  * Batch operation error item
  */
-export interface BatchOperationError {
-  item: any;
+export interface BatchOperationError<T = JsonValue> {
+  item: T;
   error: ApiError;
 }

@@ -60,14 +60,14 @@ export class CreateDiscoveryRequestDto {
 
   @IsOptional()
   @IsArray()
-  requestItems?: any[];
+  requestItems?: unknown[];
 
   @IsOptional()
   @IsString()
   notes?: string;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsUUID()

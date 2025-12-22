@@ -49,7 +49,7 @@ export class ProjectFilterDto {
 }
 
 export class PaginatedProjectResponseDto {
-  data: any[];
+  data: unknown[];
   total: number;
   page: number;
   limit: number;

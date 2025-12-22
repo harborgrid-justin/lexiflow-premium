@@ -47,8 +47,8 @@ export class CreateCaseTeamDto {
   notes?: string;
 
   @IsOptional()
-  permissions?: Record<string, any>;
+  permissions?: Record<string, unknown>;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

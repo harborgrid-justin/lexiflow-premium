@@ -97,7 +97,7 @@ export class DateCalculationService {
    * Validate Date object
    * @private
    */
-  private static validateDate(date: any, paramName: string): void {
+  private static validateDate(date: unknown, paramName: string): void {
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       throw new Error(`[DateCalculationService] Invalid ${paramName} parameter`);
     }
@@ -107,7 +107,7 @@ export class DateCalculationService {
    * Validate number parameter
    * @private
    */
-  private static validateNumber(num: any, paramName: string): void {
+  private static validateNumber(num: unknown, paramName: string): void {
     if (typeof num !== 'number' || isNaN(num)) {
       throw new Error(`[DateCalculationService] Invalid ${paramName} parameter`);
     }

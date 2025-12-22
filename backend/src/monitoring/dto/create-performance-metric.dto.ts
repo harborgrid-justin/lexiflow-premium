@@ -38,7 +38,7 @@ export class CreatePerformanceMetricDto {
   })
   @IsObject()
   @IsOptional()
-  tags?: Record<string, any>;
+  tags?: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'Metric timestamp'

@@ -52,7 +52,7 @@ export class CreateAnalyticsEventDto {
   @ApiPropertyOptional({ description: 'Event properties as JSON' })
   @IsObject()
   @IsOptional()
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
 
   @ApiPropertyOptional({ description: 'Session ID' })
   @IsString()
@@ -72,5 +72,5 @@ export class CreateAnalyticsEventDto {
   @ApiPropertyOptional({ description: 'Additional metadata' })
   @IsObject()
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

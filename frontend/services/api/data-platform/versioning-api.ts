@@ -35,7 +35,7 @@ export class VersioningApiService {
   async getHistory(
     entityType: string,
     entityId: string,
-    filters?: any,
+    filters?: unknown,
   ): Promise<PaginatedResponse<DataVersion>> {
     try {
       return await apiClient.get<PaginatedResponse<DataVersion>>(
@@ -95,8 +95,8 @@ export class VersioningApiService {
    * Compare two versions
    */
   async compareVersions(id1: string, id2: string): Promise<{
-    version1: any;
-    version2: any;
+    version1: unknown;
+    version2: unknown;
   }> {
     return await apiClient.get(`/versioning/compare/${id1}/${id2}`);
   }

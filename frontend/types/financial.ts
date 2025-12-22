@@ -129,7 +129,7 @@ export interface Employee extends BaseEntity {
   status: EmployeeStatus; // Backend: enum EmployeeStatus (default: ACTIVE)
   billingRate?: number; // Backend: decimal(10,2)
   targetBillableHours?: number; // Backend: int
-  timeOffRequests?: any[]; // Backend: OneToMany TimeOffRequest relation
+  timeOffRequests?: unknown[]; // Backend: OneToMany TimeOffRequest relation
 }
 
 // Backend: time_off_requests table (hr module)
@@ -269,8 +269,8 @@ export interface Client extends BaseEntity {
   portalTokenExpiry?: string; // Backend: portal_token_expiry timestamp
   
   // Relations (OneToMany in backend)
-  cases?: any[]; // Backend: Case[] relation
-  invoices?: any[]; // Backend: Invoice[] relation
+  cases?: unknown[]; // Backend: Case[] relation
+  invoices?: unknown[]; // Backend: Invoice[] relation
   
   // Legacy/Frontend-only fields (backward compatibility)
   matters?: CaseId[]; // Deprecated - use cases relation

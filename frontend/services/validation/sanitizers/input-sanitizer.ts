@@ -101,7 +101,7 @@ export function sanitizeArray(arr: string[]): string[] {
  * ```
  */
 export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
-  const sanitized: any = {};
+  const sanitized: unknown = {};
   
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'string') {

@@ -325,7 +325,7 @@ export class BluebookParser {
   /**
    * Parse multiple authors from string
    */
-  private static parseAuthors(authorString: string): any[] {
+  private static parseAuthors(authorString: string): unknown[] {
     const authors = authorString.split(/\s*[&,]\s*(?:and\s+)?/i);
     return authors.map(name => {
       const parts = name.trim().split(/\s+/);

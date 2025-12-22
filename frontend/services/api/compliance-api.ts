@@ -37,7 +37,7 @@ export interface ComplianceCheck {
   entityType?: string;
   results?: {
     summary: string;
-    details?: any;
+    details?: unknown;
     recommendations?: string[];
   };
   performedBy?: string;
@@ -119,7 +119,7 @@ export class ComplianceApiService {
      * Validate and sanitize object parameter
      * @private
      */
-    private validateObject(obj: any, paramName: string, methodName: string): void {
+    private validateObject(obj: unknown, paramName: string, methodName: string): void {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
             throw new Error(`[ComplianceApiService.${methodName}] Invalid ${paramName} parameter`);
         }

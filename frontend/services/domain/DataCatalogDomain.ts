@@ -90,13 +90,13 @@ export const DataCatalogService = {
             api.dataPlatform?.getRelationships?.() || []
         ]);
 
-        const nodes: LineageNode[] = entities.map((e: any) => ({
+        const nodes: LineageNode[] = entities.map((e: unknown) => ({
             id: e.id,
             label: e.name,
             type: e.type === 'Corporation' ? 'org' : 'party'
         }));
 
-        const links: LineageLink[] = relationships.map((r: any) => ({
+        const links: LineageLink[] = relationships.map((r: unknown) => ({
             source: r.sourceId,
             target: r.targetId,
             strength: r.weight || 0.5

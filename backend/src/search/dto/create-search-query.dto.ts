@@ -42,7 +42,7 @@ export class CreateSearchQueryDto {
   })
   @IsObject()
   @IsOptional()
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'Response time in milliseconds'

@@ -229,7 +229,7 @@ export class CreateClientDto {
 
   @ApiPropertyOptional({ description: 'Custom fields' })
   @IsOptional()
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 
   @ApiPropertyOptional({ description: 'Tags', type: [String] })
   @IsArray()
@@ -243,5 +243,5 @@ export class CreateClientDto {
 
   @ApiPropertyOptional({ description: 'Additional metadata' })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

@@ -8,7 +8,7 @@ import { cn } from '../../../utils/cn';
 import { Formatters } from '../../../utils/formatters';
 
 interface TrustLedgerProps {
-    trustAccounts: any[];
+    trustAccounts: unknown[];
 }
 
 export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {

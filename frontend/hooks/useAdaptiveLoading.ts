@@ -69,7 +69,7 @@ export interface UseAdaptiveLoadingReturn<T> {
 /**
  * In-flight request tracker for deduplication
  */
-const requestCache = new Map<string, Promise<any>>();
+const requestCache = new Map<string, Promise<unknown>>();
 
 /**
  * Adaptive Loading Hook

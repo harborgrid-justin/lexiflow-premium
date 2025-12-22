@@ -23,7 +23,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
 interface ParsedDocketPreviewProps {
-  parsedData: any;
+  parsedData: unknown;
   setStep: (step: number) => void;
   handleFinish: () => void;
 }
@@ -65,7 +65,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                     <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Parties Found ({parsedData.parties?.length || 0})</span>
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
-                    {parsedData.parties?.map((p: any, i: number) => (
+                    {parsedData.parties?.map((p: unknown, i: number) => (
                     <div key={i} className={cn("flex flex-col text-sm p-2 rounded border", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between">
                             <span className={cn("font-medium", theme.text.primary)}>{p.name || 'Unknown Party'}</span>
@@ -86,7 +86,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                     <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Events / Deadlines ({parsedData.deadlines?.length || 0})</span>
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
-                    {parsedData.deadlines?.length > 0 ? parsedData.deadlines.map((d: any, i: number) => (
+                    {parsedData.deadlines?.length > 0 ? parsedData.deadlines.map((d: unknown, i: number) => (
                     <div key={i} className={cn("flex justify-between items-center text-sm p-2 rounded border", theme.surface.default, theme.border.default)}>
                         <span className="text-red-600 font-medium">{d.date}</span>
                         <span className={cn("text-xs", theme.text.secondary)}>{d.title}</span>
@@ -102,7 +102,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                 <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Recent Docket Entries ({parsedData.docketEntries?.length || 0})</span>
             </div>
             <div className="max-h-64 overflow-y-auto p-2 space-y-2">
-                {parsedData.docketEntries?.slice().reverse().slice(0, 8).map((e: any, i: number) => (
+                {parsedData.docketEntries?.slice().reverse().slice(0, 8).map((e: unknown, i: number) => (
                 <div key={i} className={cn("text-sm p-2 rounded border group", theme.surface.default, theme.border.default)}>
                     <div className="flex gap-2 mb-1 justify-between">
                         <div className="flex gap-2">

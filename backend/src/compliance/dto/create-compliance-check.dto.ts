@@ -52,7 +52,7 @@ export class CreateComplianceCheckDto {
   @ApiProperty({ description: 'Check parameters', required: false })
   @IsOptional()
   @IsObject()
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 
   @ApiProperty({ description: 'Notes', required: false })
   @IsOptional()

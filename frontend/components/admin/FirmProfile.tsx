@@ -90,7 +90,7 @@ export const FirmProfile: React.FC = () => {
     }
   };
 
-  const updateField = (path: string, value: any) => {
+  const updateField = (path: string, value: unknown) => {
     setFirmDetails(prev => {
       const keys = path.split('.');
       if (keys.length === 1) {
@@ -98,7 +98,7 @@ export const FirmProfile: React.FC = () => {
       }
       // Handle nested updates
       const newData = { ...prev };
-      let current: any = newData;
+      let current: unknown = newData;
       for (let i = 0; i < keys.length - 1; i++) {
         current[keys[i]] = { ...current[keys[i]] };
         current = current[keys[i]];

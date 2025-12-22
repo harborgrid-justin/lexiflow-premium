@@ -231,7 +231,7 @@ export class DiscoveryRepository {
      */
     getCustodianStats = async (): Promise<any[]> => {
         try {
-            const stats = await db.get<any>(STORES.DISCOVERY_CUSTODIAN_STATS, 'custodian-main');
+            const stats = await db.get<unknown>(STORES.DISCOVERY_CUSTODIAN_STATS, 'custodian-main');
             return stats?.data || [];
         } catch (error) {
             console.error('[DiscoveryRepository.getCustodianStats] Error:', error);
@@ -266,7 +266,7 @@ export class DiscoveryRepository {
         }
 
         try {
-            const custodians = await db.getAll<any>(STORES.CUSTODIANS);
+            const custodians = await db.getAll<unknown>(STORES.CUSTODIANS);
             return caseId ? custodians.filter(c => c.caseId === caseId) : custodians;
         } catch (error) {
             console.error('[DiscoveryRepository.getCustodians] Error:', error);
@@ -278,10 +278,10 @@ export class DiscoveryRepository {
      * Add a new custodian
      * 
      * @param custodian - Custodian data to add
-     * @returns Promise<any> Created custodian
+     * @returns Promise<unknown> Created custodian
      * @throws Error if validation fails or create fails
      */
-    addCustodian = async (custodian: any): Promise<any> => {
+    addCustodian = async (custodian: unknown): Promise<unknown> => {
         if (!custodian || typeof custodian !== 'object') {
             throw new Error('[DiscoveryRepository.addCustodian] Invalid custodian data');
         }
@@ -306,10 +306,10 @@ export class DiscoveryRepository {
      * Update an existing custodian
      * 
      * @param custodian - Custodian data with ID
-     * @returns Promise<any> Updated custodian
+     * @returns Promise<unknown> Updated custodian
      * @throws Error if validation fails or update fails
      */
-    updateCustodian = async (custodian: any): Promise<any> => {
+    updateCustodian = async (custodian: unknown): Promise<unknown> => {
         if (!custodian?.id) {
             throw new Error('[DiscoveryRepository.updateCustodian] Custodian ID required');
         }

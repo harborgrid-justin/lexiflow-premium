@@ -1,5 +1,6 @@
 import { BaseEntity, CaseId, DocumentId, UserId } from './base.entity';
 import { DocumentStatus, DocumentType, DocumentAccessLevel } from '../enums/document.enums';
+import { CustomFields } from '../common/json-value.types';
 
 /**
  * Document entity interface
@@ -23,7 +24,7 @@ export interface Document extends BaseEntity {
   wordCount?: number;
   language?: string;
   tags?: string[];
-  customFields?: Record<string, any>;
+  customFields?: CustomFields;
   fullTextContent?: string;
   ocrProcessed?: boolean;
   ocrProcessedAt?: string; // ISO timestamp

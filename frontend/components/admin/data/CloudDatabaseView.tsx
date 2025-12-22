@@ -44,13 +44,13 @@ export const CloudDatabaseView: React.FC = () => {
 };
 
 interface CloudDatabaseContentProps {
-  theme: any;
+  theme: unknown;
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
   selectedProvider: string | null;
   setSelectedProvider: (value: string | null) => void;
-  formData: any;
-  setFormData: (value: any) => void;
+  formData: unknown;
+  setFormData: (value: unknown) => void;
   resetForm: () => void;
 }
 
@@ -201,7 +201,7 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
 interface ProviderSelectionProps {
   providers: readonly DataProvider[];
   onSelect: (id: string) => void;
-  theme: any;
+  theme: unknown;
 }
 
 const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSelect, theme }) => (
@@ -227,12 +227,12 @@ const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSele
 interface ConnectionFormProps {
   selectedProvider: string;
   providers: readonly DataProvider[];
-  formData: any;
-  setFormData: (value: any) => void;
+  formData: unknown;
+  setFormData: (value: unknown) => void;
   onCancel: () => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;
-  theme: any;
+  theme: unknown;
 }
 
 const ConnectionForm: React.FC<ConnectionFormProps> = ({

@@ -29,7 +29,7 @@ export class SearchResultItem {
   highlights: SearchHighlight[];
 
   @ApiProperty({ description: 'Additional metadata' })
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 
   @ApiProperty({ description: 'Created date' })
   createdAt: Date;

@@ -122,5 +122,5 @@ export class CreateEvidenceItemDto {
   @ApiPropertyOptional({ description: 'Additional metadata', type: Object })
   @IsOptional()
   @IsObject()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

@@ -74,7 +74,7 @@ const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
       });
   }, [textFiltered, filters]);
 
-  const handleFilterChange = useCallback((key: keyof EvidenceFilters, value: any) => {
+  const handleFilterChange = useCallback((key: keyof EvidenceFilters, value: unknown) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   }, [setFilters]);
 

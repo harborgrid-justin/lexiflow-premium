@@ -10,7 +10,7 @@ import { StorageUtils } from '../../../utils/storage';
 export const WorkflowRepository = {
     getProcesses: async () => { 
         try {
-            const procs = await db.getAll<any>(STORES.PROCESSES);
+            const procs = await db.getAll<unknown>(STORES.PROCESSES);
             return procs.length > 0 ? procs : BUSINESS_PROCESSES;
         } catch (error) {
             console.warn('[WorkflowRepository] Error fetching processes from IndexedDB, using mock data:', error);
@@ -20,7 +20,7 @@ export const WorkflowRepository = {
     
     getTemplates: async () => { 
         try {
-            const tpls = await db.getAll<any>(STORES.TEMPLATES);
+            const tpls = await db.getAll<unknown>(STORES.TEMPLATES);
             return tpls.length > 0 ? tpls : TEMPLATE_LIBRARY;
         } catch (error) {
             console.warn('[WorkflowRepository] Error fetching templates from IndexedDB, using mock data:', error);
@@ -87,7 +87,7 @@ export const WorkflowRepository = {
         ];
         return StorageUtils.get('WORKFLOW_SETTINGS', defaultSettings);
     },
-    updateSettings: async (settings: any[]) => {
+    updateSettings: async (settings: unknown[]) => {
         await delay(50);
         StorageUtils.set('WORKFLOW_SETTINGS', settings);
         return settings;
@@ -230,7 +230,7 @@ export const WorkflowRepository = {
     },
     getProcessDetails: async (id: string) => {
         try {
-            const process = await db.get<any>(STORES.PROCESSES, id);
+            const process = await db.get<unknown>(STORES.PROCESSES, id);
             // If not found in DB, check static list (for demo purposes)
             const staticProcess = BUSINESS_PROCESSES.find(p => p.id === id);
             if (process || staticProcess) {
@@ -261,7 +261,7 @@ export const WorkflowRepository = {
         try {
             await delay(800); 
             console.log(`[API] Running automation scope: ${scope}`);
-            const tasks = await db.getAll<any>(STORES.TASKS);
+            const tasks = await db.getAll<unknown>(STORES.TASKS);
             const overdue = tasks.filter(t => t.status !== 'Done' && new Date(t.dueDate) < new Date());
             if (overdue.length > 0) {
                 const notif = {

@@ -117,7 +117,7 @@ export class TrialApiService {
    * Validate and sanitize object parameter
    * @private
    */
-  private validateObject(obj: any, paramName: string, methodName: string): void {
+  private validateObject(obj: unknown, paramName: string, methodName: string): void {
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
       throw new Error(`[TrialApiService.${methodName}] Invalid ${paramName} parameter`);
     }
@@ -284,7 +284,7 @@ export class TrialApiService {
    * Create a trial event
    * 
    * @param data - Event data with trialId, eventType, scheduledAt, etc.
-   * @returns Promise<any> Created event
+   * @returns Promise<unknown> Created event
    * @throws Error if validation fails or create fails
    */
   async createEvent(data: {
@@ -293,7 +293,7 @@ export class TrialApiService {
     scheduledAt: string;
     duration?: number;
     description?: string;
-  }): Promise<any> {
+  }): Promise<unknown> {
     this.validateObject(data, 'data', 'createEvent');
     if (!data.trialId) {
       throw new Error('[TrialApiService.createEvent] trialId is required');
@@ -302,7 +302,7 @@ export class TrialApiService {
       throw new Error('[TrialApiService.createEvent] eventType is required');
     }
     try {
-      return await apiClient.post<any>(`${this.baseUrl}/events`, data);
+      return await apiClient.post<unknown>(`${this.baseUrl}/events`, data);
     } catch (error) {
       console.error('[TrialApiService.createEvent] Error:', error);
       throw new Error('Failed to create trial event');
@@ -314,7 +314,7 @@ export class TrialApiService {
    * 
    * @param id - Event ID
    * @param data - Partial event updates
-   * @returns Promise<any> Updated event
+   * @returns Promise<unknown> Updated event
    * @throws Error if validation fails or update fails
    */
   async updateEvent(id: string, data: Partial<{
@@ -322,11 +322,11 @@ export class TrialApiService {
     scheduledAt: string;
     duration?: number;
     description?: string;
-  }>): Promise<any> {
+  }>): Promise<unknown> {
     this.validateId(id, 'updateEvent');
     this.validateObject(data, 'data', 'updateEvent');
     try {
-      return await apiClient.put<any>(`${this.baseUrl}/events/${id}`, data);
+      return await apiClient.put<unknown>(`${this.baseUrl}/events/${id}`, data);
     } catch (error) {
       console.error('[TrialApiService.updateEvent] Error:', error);
       throw new Error(`Failed to update trial event with id: ${id}`);
@@ -379,7 +379,7 @@ export class TrialApiService {
    * Create a witness preparation record
    * 
    * @param data - Witness prep data with trialId, witnessId, prepDate, etc.
-   * @returns Promise<any> Created witness prep record
+   * @returns Promise<unknown> Created witness prep record
    * @throws Error if validation fails or create fails
    */
   async createWitnessPrep(data: {
@@ -389,7 +389,7 @@ export class TrialApiService {
     duration?: number;
     topics?: string[];
     notes?: string;
-  }): Promise<any> {
+  }): Promise<unknown> {
     this.validateObject(data, 'data', 'createWitnessPrep');
     if (!data.trialId) {
       throw new Error('[TrialApiService.createWitnessPrep] trialId is required');
@@ -398,7 +398,7 @@ export class TrialApiService {
       throw new Error('[TrialApiService.createWitnessPrep] witnessId is required');
     }
     try {
-      return await apiClient.post<any>(`${this.baseUrl}/witness-prep`, data);
+      return await apiClient.post<unknown>(`${this.baseUrl}/witness-prep`, data);
     } catch (error) {
       console.error('[TrialApiService.createWitnessPrep] Error:', error);
       throw new Error('Failed to create witness preparation record');

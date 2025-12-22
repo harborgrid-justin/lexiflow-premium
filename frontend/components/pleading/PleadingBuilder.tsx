@@ -166,7 +166,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
             case 'templates':
                 return <PleadingTemplates templates={templates} onCreateFromTemplate={handleCreateNew} isLoading={templatesLoading} />;
             case 'clauses':
-                return <ClauseLibrary onSelectClause={(clause: any) => {
+                return <ClauseLibrary onSelectClause={(clause: unknown) => {
                     notifySuccess(`Clause "${clause.name}" added to editor`);
                     // If there's an active pleading, we would append the clause
                     // For now, log to console for integration

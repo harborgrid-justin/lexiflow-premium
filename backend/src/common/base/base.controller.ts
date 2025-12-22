@@ -18,9 +18,9 @@ import { BaseRepository } from './base.repository';
 import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { StandardResponseDto } from '../dto/standard-response.dto';
 
-export abstract class BaseController<T, S extends BaseService<T, any>> {
+export abstract class BaseController<T, CreateDto, UpdateDto, S extends BaseService<T, BaseRepository<T>>> {
   protected readonly resourceName: string;
-  
+
   constructor(
     protected readonly service: S,
     resourceName: string,
@@ -34,7 +34,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiOperation({ summary: 'Get all resources' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: QueryPaginationDto) {
+  async findAll(@Query() query: QueryPaginationDto): Promise<StandardResponseDto<{ data: T[]; total: number; page: number; limit: number; totalPages: number }>> {
     const result = await this.service.findWithPagination(
       query.page,
       query.limit,
@@ -54,7 +54,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<StandardResponseDto<T>> {
     const data = await this.service.findById(id);
 
     return new StandardResponseDto(
@@ -73,7 +73,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() createDto: any) {
+  async create(@Body() createDto: CreateDto): Promise<StandardResponseDto<T>> {
     const data = await this.service.create(createDto);
 
     return new StandardResponseDto(
@@ -91,7 +91,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async update(@Param('id') id: string, @Body() updateDto: any) {
+  async update(@Param('id') id: string, @Body() updateDto: UpdateDto): Promise<StandardResponseDto<T>> {
     const data = await this.service.update(id, updateDto);
 
     return new StandardResponseDto(
@@ -109,7 +109,7 @@ export abstract class BaseController<T, S extends BaseService<T, any>> {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string): Promise<StandardResponseDto<undefined>> {
     await this.service.delete(id);
 
     return new StandardResponseDto(

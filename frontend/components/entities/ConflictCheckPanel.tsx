@@ -49,7 +49,7 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
           const hits = entities.filter(e => 
               e.name.toLowerCase().includes(query.toLowerCase()) ||
               e.roles.some(r => r.toLowerCase().includes(query.toLowerCase())) ||
-              (e.externalIds && Object.values(e.externalIds).some((id: any) => id.includes(query)))
+              (e.externalIds && Object.values(e.externalIds).some((id: unknown) => id.includes(query)))
           );
           setResults(hits);
           setHasSearched(true);

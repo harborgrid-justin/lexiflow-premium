@@ -56,7 +56,7 @@ export class MatterResponseDto {
   
   // Notes & Custom Fields
   internalNotes?: string;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
   
   // Metadata
   createdBy: string;

@@ -146,7 +146,7 @@ export const discoveryKeys = {
   // ESI (Electronically Stored Information)
   esi: {
     all: ['discovery-esi'] as const,
-    list: (filters?: any) => ['discovery-esi', 'list', filters] as const,
+    list: (filters?: unknown) => ['discovery-esi', 'list', filters] as const,
     detail: (id: string) => ['discovery-esi', id] as const,
     byCase: (caseId: CaseId) => ['discovery-esi', 'byCase', caseId] as const,
     byStatus: (status: string) => ['discovery-esi', 'byStatus', status] as const,
@@ -155,7 +155,7 @@ export const discoveryKeys = {
   // Productions
   productions: {
     all: ['discovery-productions'] as const,
-    list: (filters?: any) => ['discovery-productions', 'list', filters] as const,
+    list: (filters?: unknown) => ['discovery-productions', 'list', filters] as const,
     detail: (id: string) => ['discovery-productions', id] as const,
     config: () => ['discovery-productions', 'config'] as const,
     byCase: (caseId: CaseId) => ['discovery-productions', 'byCase', caseId] as const,
@@ -164,7 +164,7 @@ export const discoveryKeys = {
   // Privilege Log
   privilege: {
     all: ['privilege-log'] as const,
-    list: (filters?: any) => ['privilege-log', 'list', filters] as const,
+    list: (filters?: unknown) => ['privilege-log', 'list', filters] as const,
     detail: (id: string) => ['privilege-log', id] as const,
     byCase: (caseId: CaseId) => ['privilege-log', 'byCase', caseId] as const,
     byPrivilegeType: (type: string) => ['privilege-log', 'byType', type] as const,
@@ -173,7 +173,7 @@ export const discoveryKeys = {
   // Legal Holds
   holds: {
     all: ['legal-holds'] as const,
-    list: (filters?: any) => ['legal-holds', 'list', filters] as const,
+    list: (filters?: unknown) => ['legal-holds', 'list', filters] as const,
     detail: (id: string) => ['legal-holds', id] as const,
     byCase: (caseId: CaseId) => ['legal-holds', 'byCase', caseId] as const,
     byStatus: (status: string) => ['legal-holds', 'byStatus', status] as const,

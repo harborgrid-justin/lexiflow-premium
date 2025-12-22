@@ -80,7 +80,7 @@ export class GenerateReportDto {
   })
   @IsOptional()
   @IsObject()
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 
   @ApiPropertyOptional({
     description: 'Report parameters/options',
@@ -88,7 +88,7 @@ export class GenerateReportDto {
   })
   @IsOptional()
   @IsObject()
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 
   @ApiPropertyOptional({
     description: 'Email recipients for report delivery',
@@ -131,10 +131,10 @@ export class ReportDto {
   endDate?: Date;
 
   @ApiProperty({ description: 'Filters applied' })
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
 
   @ApiProperty({ description: 'Report parameters' })
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 
   @ApiProperty({ description: 'File size in bytes' })
   fileSize?: number;

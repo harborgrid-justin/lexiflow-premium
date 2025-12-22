@@ -150,7 +150,7 @@ export class CalendarApiService {
    * Validate and sanitize object parameter
    * @private
    */
-  private validateObject(obj: any, paramName: string, methodName: string): void {
+  private validateObject(obj: unknown, paramName: string, methodName: string): void {
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
       throw new Error(`[CalendarApiService.${methodName}] Invalid ${paramName} parameter`);
     }
@@ -322,7 +322,7 @@ export class CalendarApiService {
    * @returns Promise<CalendarEvent[]> Statute of limitations events
    * @throws Error if fetch fails
    */
-  async getStatuteOfLimitations(query?: any): Promise<CalendarEvent[]> {
+  async getStatuteOfLimitations(query?: unknown): Promise<CalendarEvent[]> {
     try {
       const params = new URLSearchParams(query);
       const queryString = params.toString();

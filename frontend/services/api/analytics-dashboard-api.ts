@@ -49,7 +49,7 @@ export class AnalyticsDashboardApiService {
     return apiClient.put<AnalyticsDashboard>(`${this.baseUrl}/${id}`, data);
   }
 
-  async getData(id: string, filters?: Record<string, any>): Promise<any> {
+  async getData(id: string, filters?: Record<string, any>): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/${id}/data`, { filters });
   }
 
@@ -58,20 +58,20 @@ export class AnalyticsDashboardApiService {
   }
 
   // Dashboard KPIs and Metrics
-  async getKPIs(params: { period?: string }): Promise<any> {
+  async getKPIs(params: { period?: string }): Promise<unknown> {
     const queryString = new URLSearchParams(params as any).toString();
     return apiClient.get(`/analytics/dashboard/kpis?${queryString}`);
   }
 
-  async getTeamPerformance(params: Record<string, any>): Promise<any> {
+  async getTeamPerformance(params: Record<string, any>): Promise<unknown> {
     return apiClient.get('/analytics/dashboard/team/performance', params);
   }
 
-  async getFinancialMetrics(params: Record<string, any>): Promise<any> {
+  async getFinancialMetrics(params: Record<string, any>): Promise<unknown> {
     return apiClient.get('/analytics/dashboard/financial', params);
   }
 
-  async exportReport(format: string, params: Record<string, any>): Promise<any> {
+  async exportReport(format: string, params: Record<string, any>): Promise<unknown> {
     return apiClient.post('/analytics/dashboard/export', { format, ...params });
   }
 }

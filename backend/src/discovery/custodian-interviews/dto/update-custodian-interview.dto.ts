@@ -122,7 +122,7 @@ export class UpdateCustodianInterviewDto {
   notes?: string;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsUUID()

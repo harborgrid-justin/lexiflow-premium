@@ -93,7 +93,7 @@ interface CalendarEvent {
   location?: string;
   allDay?: boolean;
   recurring?: boolean;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 // =============================================================================
@@ -104,7 +104,7 @@ interface CalendarEvent {
  * Validate event ID parameter
  * @private
  */
-function validateEventId(id: any, methodName: string): void {
+function validateEventId(id: unknown, methodName: string): void {
   if (!id || typeof id !== 'string' || id.trim() === '') {
     throw new Error(`[CalendarService.${methodName}] Event ID is required and must be a non-empty string`);
   }
@@ -114,7 +114,7 @@ function validateEventId(id: any, methodName: string): void {
  * Validate event type parameter
  * @private
  */
-function validateEventType(type: any, methodName: string): void {
+function validateEventType(type: unknown, methodName: string): void {
   const validTypes = ['deadline', 'hearing', 'meeting', 'task', 'reminder'];
   
   if (type && !validTypes.includes(type)) {
@@ -126,7 +126,7 @@ function validateEventType(type: any, methodName: string): void {
  * Validate date string parameter
  * @private
  */
-function validateDateString(date: any, fieldName: string, methodName: string): void {
+function validateDateString(date: unknown, fieldName: string, methodName: string): void {
   if (!date || typeof date !== 'string') {
     throw new Error(`[CalendarService.${methodName}] ${fieldName} must be an ISO 8601 date string`);
   }

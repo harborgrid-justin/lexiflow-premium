@@ -185,7 +185,7 @@ export const CRMService = {
         return updatedLead;
     },
 
-    convertLeadToClient: async (lead: any) => {
+    convertLeadToClient: async (lead: unknown) => {
         console.log(`[CRM] Converting Lead ${lead.id} to Client/Case...`);
         
         // Initialize API services

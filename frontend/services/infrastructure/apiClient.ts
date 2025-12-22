@@ -154,7 +154,7 @@ class ApiClient {
    * Validate data object parameter
    * @private
    */
-  private validateData(data: any, methodName: string): void {
+  private validateData(data: unknown, methodName: string): void {
     if (data !== undefined && data !== null && typeof data !== 'object') {
       throw new Error(`[ApiClient.${methodName}] Data must be an object or undefined`);
     }
@@ -410,7 +410,7 @@ class ApiClient {
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
-  async post<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, options?: RequestInit): Promise<T> {
     this.validateEndpoint(endpoint, 'post');
     this.validateData(data, 'post');
     try {
@@ -615,7 +615,7 @@ class ApiClient {
           error: `HTTP ${response.status}`,
         };
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         status: 'offline',
         lastChecked,

@@ -29,7 +29,7 @@ export class DataQualityService {
     
     // Optimized Profiler with single-pass aggregation and yielding
     async getProfiles(): Promise<DataProfile[]> {
-        const cases = await db.getAll<any>(STORES.CASES);
+        const cases = await db.getAll<unknown>(STORES.CASES);
         const total = cases.length;
 
         // Initialize accumulators

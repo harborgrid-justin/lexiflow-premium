@@ -22,7 +22,7 @@ export const useAdminData = (activeCategory: Category) => {
 
   // Generic Mutation Handler
   const { mutate: saveItem } = useMutation(
-    async (payload: { category: Category, item: any, isNew: boolean }) => {
+    async (payload: { category: Category, item: unknown, isNew: boolean }) => {
         // In a real app, switch on category to call specific DataService methods
         // For this mock admin panel, we just return the item to simulate success
         // Actual persistence logic would go here

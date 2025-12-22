@@ -160,6 +160,19 @@ export class JurisdictionsController {
   // RULES
   // ============================================================================
 
+  @Get('rules')
+  @ApiOperation({ summary: 'Get all jurisdiction rules' })
+  @ApiResponse({ status: 200, description: 'List of all rules' })
+  @ApiQuery({ name: 'jurisdictionId', required: false, description: 'Filter by jurisdiction' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getAllRules(@Query('jurisdictionId') jurisdictionId?: string) {
+    if (jurisdictionId) {
+      return this.jurisdictionsService.findAllRules(jurisdictionId);
+    }
+    return this.jurisdictionsService.getAllRules();
+  }
+
   @Post('rules')
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Create new jurisdiction rule' })

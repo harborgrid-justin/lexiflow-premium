@@ -16,14 +16,14 @@ export class CaseResponseDto {
   closeDate?: Date;
   assignedTeamId?: string;
   leadAttorneyId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   isArchived: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
-  parties?: any[];
-  team?: any[];
-  phases?: any[];
+  parties?: unknown[];
+  team?: unknown[];
+  phases?: unknown[];
 }
 
 export class PaginatedCaseResponseDto {

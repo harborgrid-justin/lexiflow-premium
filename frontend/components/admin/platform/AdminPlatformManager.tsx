@@ -17,7 +17,7 @@ export const AdminPlatformManager: React.FC = () => {
   const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<Category>('users');
   const [searchTerm, setSearchTerm] = useState('');
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editingItem, setEditingItem] = useState<unknown>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewItem, setIsNewItem] = useState(false);
   const deleteModal = useModalState();
@@ -31,7 +31,7 @@ export const AdminPlatformManager: React.FC = () => {
     )
   );
 
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: unknown) => {
     setEditingItem({ ...item });
     setIsNewItem(false);
     setIsModalOpen(true);
@@ -55,7 +55,7 @@ export const AdminPlatformManager: React.FC = () => {
     }
   };
 
-  const handleSave = (formData: any) => {
+  const handleSave = (formData: unknown) => {
     saveItem({ category: activeCategory, item: formData, isNew: isNewItem });
     setIsModalOpen(false);
   };

@@ -37,7 +37,7 @@ export class MattersApiService {
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
     // Backend returns { success, data: { matters, total }, meta }
     const data = response.data || response;
     return Array.isArray(data) ? data : data.matters || [];
@@ -47,7 +47,7 @@ export class MattersApiService {
    * Get matter by ID
    */
   async getById(id: MatterId): Promise<Matter> {
-    const response = await apiClient.get<any>(`${this.baseUrl}/${id}`);
+    const response = await apiClient.get<unknown>(`${this.baseUrl}/${id}`);
     return response.data || response;
   }
 
@@ -99,7 +99,7 @@ export class MattersApiService {
       userId: matter.userId || matter.createdBy || '00000000-0000-0000-0000-000000000000',
     };
 
-    const response = await apiClient.post<any>(this.baseUrl, createDto);
+    const response = await apiClient.post<unknown>(this.baseUrl, createDto);
     // Backend returns { success, data, meta } - extract the matter from data
     return response.data || response;
   }
@@ -149,7 +149,7 @@ export class MattersApiService {
       customFields: matter.customFields,
     };
 
-    const response = await apiClient.patch<any>(`${this.baseUrl}/${id}`, updateDto);
+    const response = await apiClient.patch<unknown>(`${this.baseUrl}/${id}`, updateDto);
     return response.data || response;
   }
 

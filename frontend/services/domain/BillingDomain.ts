@@ -449,14 +449,14 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @example
      * const stats = await repo.getRealizationStats();
      */
-    async getRealizationStats(): Promise<any> {
+    async getRealizationStats(): Promise<unknown> {
         try {
             // TODO: Add backend API integration when endpoint is available
             if (this.useBackend) {
                 console.warn('[BillingRepository] Backend realization stats API not yet implemented, using fallback');
             }
 
-            const stats = await db.get<any>(STORES.REALIZATION_STATS, 'realization-main');
+            const stats = await db.get<unknown>(STORES.REALIZATION_STATS, 'realization-main');
             return stats?.data || [];
         } catch (error) {
             console.error('[BillingRepository.getRealizationStats] Error:', error);
@@ -688,7 +688,7 @@ export class BillingRepository extends Repository<TimeEntry> {
                 console.warn('[BillingRepository] Backend trust accounts API not yet implemented, using fallback');
             }
 
-            return await db.getAll<any>(STORES.TRUST);
+            return await db.getAll<unknown>(STORES.TRUST);
         } catch (error) {
             console.error('[BillingRepository.getTrustAccounts] Error:', error);
             throw new Error('Failed to fetch trust accounts');

@@ -62,5 +62,5 @@ export class CreateCasePhaseDto {
   }>;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

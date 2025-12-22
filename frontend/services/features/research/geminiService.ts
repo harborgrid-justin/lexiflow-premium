@@ -211,7 +211,7 @@
  *     - Returns: JSON graph for litigation strategy visualization
  *     - Use case: Trial planning, settlement roadmap
  * 
- * 13. **lintStrategy(graphData: any): Promise<{ suggestions[] } | null>**
+ * 13. **lintStrategy(graphData: unknown): Promise<{ suggestions[] } | null>**
  *     - Returns: Logical consistency warnings for strategy graphs
  *     - Use case: Strategy review, completeness checks
  * 
@@ -515,7 +515,7 @@ export const GeminiService = {
     },
 
     // --- NEW FOR LITIGATION BUILDER ---
-    async generateStrategyFromPrompt(prompt: string): Promise<{ nodes: any[], connections: any[] } | null> {
+    async generateStrategyFromPrompt(prompt: string): Promise<{ nodes: unknown[], connections: unknown[] } | null> {
         return withRetry(async () => {
             try {
                  const response: GenerateContentResponse = await getClient().models.generateContent({
@@ -535,7 +535,7 @@ export const GeminiService = {
         });
     },
 
-    async lintStrategy(graphData: any): Promise<{ suggestions: any[] } | null> {
+    async lintStrategy(graphData: unknown): Promise<{ suggestions: unknown[] } | null> {
         return withRetry(async () => {
             try {
                  const response: GenerateContentResponse = await getClient().models.generateContent({

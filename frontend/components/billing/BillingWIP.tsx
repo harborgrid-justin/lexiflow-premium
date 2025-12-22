@@ -46,11 +46,11 @@ import { TimeEntry } from '../../types';
 // INVOICE GENERATION QUEUE
 // ============================================================================
 class InvoiceGenerationQueue {
-  private queue: Array<{ entries: TimeEntry[]; resolve: (value: any) => void; reject: (error: any) => void }> = [];
+  private queue: Array<{ entries: TimeEntry[]; resolve: (value: unknown) => void; reject: (error: unknown) => void }> = [];
   private processing = 0;
   private readonly maxConcurrent = 2; // PDF generation is CPU-intensive
 
-  async add(entries: TimeEntry[]): Promise<any> {
+  async add(entries: TimeEntry[]): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.queue.push({ entries, resolve, reject });
       this.processQueue();

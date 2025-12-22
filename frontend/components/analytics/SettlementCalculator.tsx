@@ -44,20 +44,20 @@ interface SimulationParametersPanelProps {
   onHighChange: (value: number) => void;
   onLiabilityProbChange: (value: number) => void;
   onRunSimulation: () => void;
-  theme: any;
+  theme: unknown;
 }
 
 interface SimulationResultsChartProps {
-  results: any[];
+  results: unknown[];
   metrics: { ev: number; p25: number; p75: number };
   iterations: number;
-  theme: any;
-  chartTheme: any;
+  theme: unknown;
+  chartTheme: unknown;
 }
 
 interface SimulationMetricsDisplayProps {
   metrics: { ev: number; p25: number; p75: number };
-  theme: any;
+  theme: unknown;
 }
 
 // ============================================================================

@@ -16,7 +16,7 @@ export interface ProcessingJob {
   startedAt?: string;
   completedAt?: string;
   error?: string;
-  result?: any;
+  result?: unknown;
   createdBy: string;
   createdAt: string;
 }

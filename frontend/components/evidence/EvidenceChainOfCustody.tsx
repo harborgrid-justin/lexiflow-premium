@@ -117,7 +117,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               setNewEvent({ date: new Date().toISOString().split('T')[0], action: CustodyActionType.TRANSFER_TO_STORAGE, actor: 'Current User' });
               setIsSigned(false);
           },
-          onError: (error, variables, context: any) => {
+          onError: (error, variables, context: unknown) => {
               // Rollback optimistic update on error
               if (context?.previousEvidence) {
                   queryClient.setQueryData(

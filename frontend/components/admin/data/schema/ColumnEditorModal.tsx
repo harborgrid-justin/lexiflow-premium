@@ -12,8 +12,8 @@ interface ColumnEditorModalProps {
   onSave: () => void;
   tableName?: string;
   columnName?: string;
-  data: any;
-  setData: (data: any) => void;
+  data: unknown;
+  setData: (data: unknown) => void;
 }
 
 const dataTypes = ['UUID', 'VARCHAR(255)', 'TEXT', 'INTEGER', 'BIGINT', 'NUMERIC', 'BOOLEAN', 'TIMESTAMP WITH TIME ZONE', 'DATE'];

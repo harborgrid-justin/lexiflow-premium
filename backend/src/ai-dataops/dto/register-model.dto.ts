@@ -25,5 +25,5 @@ export class RegisterDataOpsModelDto {
   @ApiPropertyOptional({ description: 'Model configuration', type: Object })
   @IsOptional()
   @IsObject()
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }

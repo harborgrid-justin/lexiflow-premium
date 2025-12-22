@@ -16,7 +16,8 @@ import { WorkflowTask } from '../types';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface GraphNode {
+// Reserved for future graph algorithm enhancements
+interface _GraphNode {
     id: string;
     duration: number; // Estimate
     neighbors: string[];

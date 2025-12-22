@@ -134,5 +134,45 @@ export class TimeEntriesController {
   async remove(@Param('id') id: string): Promise<void> {
     await this.timeEntriesService.remove(id);
   }
+
+  @Post('bulk-approve')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Approve multiple time entries' })
+  @ApiResponse({ status: 200, description: 'Time entries approved successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async approveBulk(
+    @Body('ids') ids: string[],
+    @Body('approvedBy') approvedBy: string,
+  ): Promise<{ success: boolean; approved: number }> {
+    return await this.timeEntriesService.approveBulk(ids, approvedBy);
+  }
+
+  @Post('bulk-bill')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Bill multiple time entries' })
+  @ApiResponse({ status: 200, description: 'Time entries billed successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async billBulk(
+    @Body('ids') ids: string[],
+    @Body('invoiceId') invoiceId: string,
+    @Body('billedBy') billedBy: string,
+  ): Promise<{ success: boolean; billed: number }> {
+    return await this.timeEntriesService.billBulk(ids, invoiceId, billedBy);
+  }
+
+  @Post('bulk-delete')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Delete multiple time entries' })
+  @ApiResponse({ status: 200, description: 'Time entries deleted successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async deleteBulk(@Body('ids') ids: string[]): Promise<{ success: boolean; deleted: number }> {
+    return await this.timeEntriesService.deleteBulk(ids);
+  }
 }
 

@@ -9,14 +9,14 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ApiKeysService } from './api-keys.service';
 import { CreateApiKeyDto } from './dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @ApiTags('API Keys')
 
@@ -36,7 +36,7 @@ export class ApiKeysController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(
     @Body() createApiKeyDto: CreateApiKeyDto,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
     return this.apiKeysService.create(createApiKeyDto, user.sub);
   }
@@ -46,7 +46,7 @@ export class ApiKeysController {
   @ApiResponse({ status: 200, description: 'List of API keys' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
-  async findAll(@CurrentUser() user: any) {
+  async findAll(@CurrentUser() user: JwtPayload) {
     return this.apiKeysService.findAll(user.sub);
   }
 
@@ -58,7 +58,7 @@ export class ApiKeysController {
   @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
   async findOne(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
     return this.apiKeysService.findOne(id, user.sub);
   }
@@ -72,7 +72,7 @@ export class ApiKeysController {
   @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
   async revoke(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
     await this.apiKeysService.revoke(id, user.sub);
   }
@@ -85,9 +85,18 @@ export class ApiKeysController {
   @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
   async getUsageStats(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
     return this.apiKeysService.getUsageStats(id, user.sub);
+  }
+
+  @Get('scopes')
+  @ApiOperation({ summary: 'Get available API key scopes' })
+  @ApiResponse({ status: 200, description: 'List of available scopes' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin only' })
+  async getAvailableScopes() {
+    return this.apiKeysService.getAvailableScopes();
   }
 }
 

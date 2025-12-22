@@ -48,7 +48,7 @@ export class CreateSyncQueueDto {
   })
   @IsObject()
   @IsNotEmpty()
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
 
   @ApiPropertyOptional({ 
     description: 'Sync status',

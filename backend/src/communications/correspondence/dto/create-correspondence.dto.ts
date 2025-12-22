@@ -120,5 +120,5 @@ export class CreateCorrespondenceDto {
     required: false,
   })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

@@ -17,12 +17,12 @@ export interface CitationValidation {
   isValid: boolean;
   type: string;
   errors: Array<{ field: string; message: string }>;
-  parsed: any;
+  parsed: unknown;
 }
 
 export interface CitationParseResult {
   success: boolean;
-  data: any;
+  data: unknown;
   type?: string;
   confidence?: number;
 }
@@ -64,8 +64,8 @@ export class BluebookApiService {
     citation: string;
     isValid: boolean;
     type: string;
-    errors: any[];
-    parsed: any;
+    errors: unknown[];
+    parsed: unknown;
   }> {
     return apiClient.post('/bluebook/validate', {
       citation,

@@ -16,12 +16,12 @@ import { api } from '../../api';
  * Generic data source interface that both backend and IndexedDB implement
  */
 export interface DataSource<T = any> {
-  getAll: (...args: any[]) => Promise<T[]>;
+  getAll: (...args: unknown[]) => Promise<T[]>;
   get?: (id: string) => Promise<T | undefined>;
   add?: (item: T) => Promise<T>;
   update?: (id: string, updates: Partial<T>) => Promise<T>;
   delete?: (id: string) => Promise<void> | Promise<{ success: boolean; id: string }>;
-  [key: string]: any; // Allow additional methods
+  [key: string]: unknown; // Allow additional methods
 }
 
 /**
@@ -114,7 +114,7 @@ export class DataSourceRouter {
       };
     }
   ): Record<keyof TMap, PropertyDescriptor> {
-    const descriptors: any = {};
+    const descriptors: unknown = {};
     for (const [key, { api: apiPath, fallback }] of Object.entries(config)) {
       descriptors[key] = this.createPropertyDescriptor(apiPath, fallback);
     }

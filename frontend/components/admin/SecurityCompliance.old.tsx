@@ -498,7 +498,7 @@ export const SecurityCompliance: React.FC = () => {
             <div className="flex gap-2">
               <select
                 value={filterStatus}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterStatus(e.target.value as any)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value as any)}
                 className={cn(
                   "px-3 py-2 rounded-lg border text-sm",
                   theme.surface.default,

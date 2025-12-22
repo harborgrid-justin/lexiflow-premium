@@ -19,7 +19,7 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
-// ✅ Migrated to backend API (2025-12-21)
+import { STORES } from '../../services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../context/ThemeContext';
@@ -59,9 +59,12 @@ const BillingInvoicesComponent: React.FC = () => {
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    onSave: () => {
-      notify.info('Send selected invoice (to be implemented)');
-    }
+      'mod+s': () => {
+          notify.info('Send selected invoice (to be implemented)');
+      },
+      'mod+p': () => {
+          notify.info('Mark invoice as paid (to be implemented)');
+      }
   });
 
   const { mutate: sendInvoice, isLoading: isSending } = useMutation(
@@ -133,7 +136,7 @@ const BillingInvoicesComponent: React.FC = () => {
 
   const filteredInvoices = useMemo(() => {
       return invoices.filter(inv => {
-        const matchesSearch = (inv.client?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = inv.client.toLowerCase().includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = filterStatus === 'All' || inv.status === filterStatus;
         return matchesSearch && matchesStatus;
       });
@@ -157,7 +160,6 @@ const BillingInvoicesComponent: React.FC = () => {
                     <div className={cn("flex items-center px-3 py-1.5 border rounded-md", theme.surface.highlight, theme.border.default)}>
                         <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
                         <select 
-                            title="Filter by status"
                             className={cn("bg-transparent text-sm outline-none border-none cursor-pointer", theme.text.primary)}
                             value={filterStatus}
                             onChange={(e) => setFilterStatus(e.target.value)}
@@ -228,5 +230,4 @@ const BillingInvoicesComponent: React.FC = () => {
 
 // Export memoized component
 export const BillingInvoices = React.memo(BillingInvoicesComponent);
-
 

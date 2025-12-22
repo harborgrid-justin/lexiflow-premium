@@ -103,37 +103,37 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
 
   // Keyboard shortcuts
   useKeyboardShortcuts([
-    {
-      key: 'c',
-      cmd: true,
-      callback: () => {
-        if (activeTab === 'communications') {
-          setComposeInitialData(undefined);
-          setIsComposeOpen(true);
-        } else {
-          setIsServiceJobOpen(true);
-        }
+      {
+          key: 'c',
+          cmd: true,
+          callback: () => {
+              if (activeTab === 'communications') {
+                  setComposeInitialData(undefined);
+                  setIsComposeOpen(true);
+              } else {
+                  setIsServiceJobOpen(true);
+              }
+          },
+          description: 'Compose new'
       },
-      description: 'Compose new'
-    },
-    {
-      key: 'r',
-      cmd: true,
-      callback: () => {
-        if (itemSelection.selected && activeTab === 'communications') {
-          handleReply(itemSelection.selected as CommunicationItem);
-        }
+      {
+          key: 'r',
+          cmd: true,
+          callback: () => {
+              if (itemSelection.selected && activeTab === 'communications') {
+                  handleReply(itemSelection.selected as CommunicationItem);
+              }
+          },
+          description: 'Reply to selected'
       },
-      description: 'Reply to selected'
-    },
-    {
-      key: 'Escape',
-      callback: () => {
-        inspectorToggle.close();
-        itemSelection.deselect();
-      },
-      description: 'Close inspector'
-    }
+      {
+          key: 'Escape',
+          callback: () => {
+              inspectorToggle.close();
+              itemSelection.deselect();
+          },
+          description: 'Close inspector'
+      }
   ]);
 
   useEffect(() => {

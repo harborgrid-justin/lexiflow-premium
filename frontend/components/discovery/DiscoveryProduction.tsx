@@ -85,12 +85,12 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-    'mod+p': () => {
-      handleFinalize();
-    },
-    'escape': () => {
-      onBack();
-    }
+      'mod+p': () => {
+          handleFinalize();
+      },
+      'escape': () => {
+          onBack();
+      }
   });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

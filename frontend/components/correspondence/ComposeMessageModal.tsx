@@ -68,24 +68,24 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
 
   // Keyboard shortcuts
   useKeyboardShortcuts([
-    {
-      key: 's',
-      cmd: true,
-      callback: (e) => {
-        e.preventDefault();
-        if (isOpen) {
-          handleSend();
-        }
+      {
+          key: 's',
+          cmd: true,
+          callback: (e) => {
+              e.preventDefault();
+              if (isOpen) {
+                  handleSend();
+              }
+          },
+          description: 'Send message'
       },
-      description: 'Send message'
-    },
-    {
-      key: 'Escape',
-      callback: () => {
-        if (isOpen) onClose();
-      },
-      description: 'Close modal'
-    }
+      {
+          key: 'Escape',
+          callback: () => {
+              if (isOpen) onClose();
+          },
+          description: 'Close modal'
+      }
   ], isOpen);
 
   // Effect to load initial data when modal opens

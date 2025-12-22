@@ -67,23 +67,23 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
 
   // Keyboard shortcuts for evidence operations
   useKeyboardShortcuts([
-    {
-      key: 'i',
-      ctrlOrCmd: true,
-      action: () => setView('inventory'),
-      description: 'Go to inventory'
-    },
-    {
-      key: 'n',
-      ctrlOrCmd: true,
-      action: () => setView('intake'),
-      description: 'Log new evidence'
-    },
-    {
-      key: 'Escape',
-      action: handleBack,
-      description: 'Go back'
-    }
+      {
+          key: 'i',
+          ctrlOrCmd: true,
+          action: () => setView('inventory'),
+          description: 'Go to inventory'
+      },
+      {
+          key: 'n',
+          ctrlOrCmd: true,
+          action: () => setView('intake'),
+          description: 'Log new evidence'
+      },
+      {
+          key: 'Escape',
+          action: handleBack,
+          description: 'Go back'
+      }
   ]);
 
   const activeParentTab = useMemo(() =>

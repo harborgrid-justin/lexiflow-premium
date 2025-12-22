@@ -17,28 +17,28 @@ import { Mic2, Calendar, FileText, CheckSquare, Video, MapPin, User, Plus } from
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { TaskCreationModal } from '../common/TaskCreationModal';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components';
+import { Button } from '@/components';
+import { Badge } from '@/components';
+import { TaskCreationModal } from '@/components';
 import { Modal } from '../common/Modal';
-import { Input, TextArea } from '../common/Inputs';
+import { Input, TextArea } from '@/components';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useQuery, useMutation } from '../../hooks/useQueryHooks';
-import { useWindow } from '../../context/WindowContext';
+import { useTheme } from '@/context';
+import { useQuery, useMutation } from '@hooks/useQueryHooks.ts';
+import { useWindow } from '@/context';
 
 // Services & Utils
-import { DataService } from '../../services/data/dataService';
-import { cn } from '../../utils/cn';
-// ✅ Migrated to backend API (2025-12-21)
+import { DataService } from '@/services';
+import { cn } from '@/utils';
+import { STORES } from '@/services';
 import { queryKeys } from '../../utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Deposition, CaseId, UUID } from '../../types';
+import { Deposition, CaseId, UUID } from '@/types';
 
 export const DiscoveryDepositions: React.FC = () => {
   const { theme } = useTheme();
@@ -47,14 +47,14 @@ export const DiscoveryDepositions: React.FC = () => {
 
   // Enterprise Data Access
   const { data: depositions = [] } = useQuery<Deposition[]>(
-      ['discovery-depositions', 'all'],
+      [STORES.DISCOVERY_EXT_DEPO, 'all'],
       () => DataService.discovery.getDepositions()
   );
 
   const { mutate: scheduleDeposition } = useMutation(
       DataService.discovery.addDeposition,
       {
-          invalidateKeys: [['discovery-depositions', 'all']],
+          invalidateKeys: [[STORES.DISCOVERY_EXT_DEPO, 'all']],
           onSuccess: () => {
               closeWindow('schedule-depo');
               setNewDepo({});
@@ -189,4 +189,3 @@ export const DiscoveryDepositions: React.FC = () => {
 };
 
 export default DiscoveryDepositions;
-
